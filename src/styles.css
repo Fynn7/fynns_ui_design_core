@@ -1,0 +1,7 @@
+/*
+ * Aggregated stylesheet: theme tokens + base + all component styles.
+ * Import this once if you consume the components without the JS barrel
+ * (the barrel `@fynns/ui` already imports both stylesheets for you).
+ */
+@import "./theme/theme.css";
+@import "./primitives/primitives.css";

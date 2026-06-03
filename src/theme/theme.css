@@ -1,0 +1,225 @@
+/*
+ * GENERATED FILE -- do not edit by hand.
+ * Source of truth: src/theme/tokens.ts + src/theme/motionTokens.ts
+ * Regenerate with: npm run gen:theme
+ */
+:root {
+  color-scheme: dark;
+  --fynns-color-app-bg: #031417;
+  --fynns-color-surface: #031417;
+  --fynns-color-surface-head: #021012;
+  --fynns-color-surface-muted: rgba(255, 255, 255, 0.03);
+  --fynns-color-surface-hover: rgba(255, 255, 255, 0.08);
+  --fynns-color-border: #0d2e2c;
+  --fynns-color-text: #e2f0ed;
+  --fynns-color-text-muted: #7a9e98;
+  --fynns-color-accent: #2dd4bf;
+  --fynns-color-accent-dim: #14b8a6;
+  --fynns-color-accent-soft: rgba(45, 212, 191, 0.18);
+  --fynns-color-accent-mid: rgba(45, 212, 191, 0.5);
+  --fynns-color-accent-24: rgba(45, 212, 191, 0.24);
+  --fynns-color-accent-42: rgba(45, 212, 191, 0.42);
+  --fynns-color-accent-ring: rgba(45, 212, 191, 0.4);
+  --fynns-color-success: #4ade80;
+  --fynns-color-warning: #fbbf24;
+  --fynns-color-danger: #f87171;
+  --fynns-color-danger-border: rgba(248, 113, 113, 0.5);
+  --fynns-color-info: #60a5fa;
+  --fynns-color-focus: rgba(45, 212, 191, 0.48);
+  --fynns-color-overlay: rgba(0, 0, 0, 0.48);
+  --fynns-color-toast-surface: #062126;
+  --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
+  --fynns-color-control-surface-hover: rgba(255, 255, 255, 0.05);
+  --fynns-color-flyout-item: rgba(255, 255, 255, 0.03);
+  --fynns-color-flyout-item-hover: rgba(255, 255, 255, 0.08);
+  --fynns-color-toggle-track: rgba(255, 255, 255, 0.06);
+  --fynns-color-toggle-track-hover: rgba(255, 255, 255, 0.1);
+  --fynns-space-1: 0.25rem;
+  --fynns-space-2: 0.4rem;
+  --fynns-space-3: 0.65rem;
+  --fynns-space-4: 1rem;
+  --fynns-space-5: 0.5rem;
+  --fynns-space-6: 0.7rem;
+  --fynns-space-7: 0.85rem;
+  --fynns-space-8: 0.8rem;
+  --fynns-space-9: 0.9rem;
+  --fynns-space-10: 0.15rem;
+  --fynns-space-11: 0.48rem;
+  --fynns-space-12: 0.6rem;
+  --fynns-space-13: 0.7rem;
+  --fynns-space-14: 0.92rem;
+  --fynns-space-15: 0.35rem;
+  --fynns-space-17: 2.35rem;
+  --fynns-space-18: 2.25rem;
+  --fynns-space-25: 0.45rem;
+  --fynns-space-35: 0.55rem;
+  --fynns-space-55: 0.6rem;
+  --fynns-space-65: 0.75rem;
+  --fynns-space-78: 0.78rem;
+  --fynns-space-84: 0.84rem;
+  --fynns-space-min-line: 1.2rem;
+  --fynns-size-1: 1px;
+  --fynns-size-2: 2px;
+  --fynns-size-6: 6px;
+  --fynns-size-8: 8px;
+  --fynns-size-10: 10px;
+  --fynns-size-12: 12px;
+  --fynns-size-13: 13px;
+  --fynns-size-14: 14px;
+  --fynns-size-16: 16px;
+  --fynns-size-20: 20px;
+  --fynns-size-22: 22px;
+  --fynns-size-24: 24px;
+  --fynns-size-34: 34px;
+  --fynns-size-152: 152px;
+  --fynns-size-240: 240px;
+  --fynns-size-360: 360px;
+  --fynns-radius-sm: 6px;
+  --fynns-radius-md: 8px;
+  --fynns-radius-lg: 10px;
+  --fynns-radius-flyout-glyph: 5px;
+  --fynns-radius-pill: 999px;
+  --fynns-radius-round: 50%;
+  --fynns-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --fynns-shadow-flyout: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --fynns-shadow-tooltip: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --fynns-shadow-toggle-thumb: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --fynns-font-ui: system-ui, "Segoe UI", Roboto, sans-serif;
+  --fynns-font-mono: "Cascadia Code", "Fira Code", ui-monospace, monospace;
+  --fynns-font-serif: "CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif;
+  --fynns-font-size-root: 1rem;
+  --fynns-font-size-body-small: 0.875rem;
+  --fynns-font-size-panel-heading: 0.82rem;
+  --fynns-font-size-caption: 0.75rem;
+  --fynns-font-size-form-label: 0.85rem;
+  --fynns-font-size-settings-section: 0.8rem;
+  --fynns-font-size-dialog-close: 1.35rem;
+  --fynns-font-weight-semibold: 600;
+  --fynns-font-weight-title: 650;
+  --fynns-line-height-root: 1.4;
+  --fynns-line-height-tight: 1;
+  --fynns-line-height-snug: 1.25;
+  --fynns-line-height-body: 1.45;
+  --fynns-line-height-compact: 1.35;
+  --fynns-letter-spacing-wide: 0.04em;
+  --fynns-letter-spacing-subtle: 0.01em;
+  --fynns-z-dropdown: 40;
+  --fynns-z-popover: 50;
+  --fynns-z-modal: 60;
+  --fynns-z-toast: 70;
+  --fynns-z-tooltip: 8000;
+  --fynns-duration-instant: 1ms;
+  --fynns-duration-tooltip: 120ms;
+  --fynns-duration-toggle: 140ms;
+  --fynns-duration-fast: 140ms;
+  --fynns-duration-base: 240ms;
+  --fynns-duration-slow: 360ms;
+  --fynns-duration-pointer: 420ms;
+  --fynns-duration-loop-pulse: 450ms;
+  --fynns-duration-loading-spin: 750ms;
+  --fynns-duration-presentation-hint: 1200ms;
+  --fynns-duration-loading-skeleton: 1250ms;
+  --fynns-duration-reduced-motion-spin: 2200ms;
+  --fynns-ease-standard: ease;
+  --fynns-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  --fynns-toggle-track-w: 2.2rem;
+  --fynns-toggle-track-h: 1.25rem;
+  --fynns-toggle-thumb: 0.86rem;
+  --fynns-toggle-thumb-shift: 0.92rem;
+  --fynns-toggle-track-pad-inline: 0.14rem;
+  --fynns-toggle-margin-top: 0.08em;
+  --fynns-focus-ring-width: 2px;
+  --fynns-focus-ring-offset-control: 2px;
+  --fynns-focus-ring-offset-input: 1px;
+  --fynns-layout-dialog-max-width: 22rem;
+  --fynns-layout-tooltip-max-width: min(18rem, 85vw);
+  --fynns-layout-command-palette-width: min(100%, 34rem);
+  --fynns-layout-command-palette-max-height: min(70vh, 28rem);
+  --fynns-layout-command-palette-top-padding: 12vh;
+  --fynns-scrollbar-size: 10px;
+  --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
+  --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);
+  --fynns-scrollbar-thumb-active: rgba(22, 159, 177, 0.678);
+  --fynns-scrollbar-track: transparent;
+  --fynns-scrollbar-thumb-radius: 10px;
+  --fynns-scrollbar-thumb-border: 2px;
+  --fynns-border-hairline: 1px;
+  --fynns-opacity-muted: 0.8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--fynns-font-ui);
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+  line-height: var(--fynns-line-height-root);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: var(--fynns-scrollbar-size);
+  height: var(--fynns-scrollbar-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--fynns-scrollbar-thumb);
+  border-radius: var(--fynns-scrollbar-thumb-radius);
+  border: var(--fynns-scrollbar-thumb-border) solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--fynns-scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: var(--fynns-scrollbar-thumb-active);
+}
+
+.fynns-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--fynns-duration-instant) !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--fynns-duration-instant) !important;
+    scroll-behavior: auto !important;
+  }
+}
