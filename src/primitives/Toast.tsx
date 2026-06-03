@@ -211,10 +211,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/** Compat shape for the old afs `useToast()` API. */
+export type ToastApi = {
+  showToast: (input: { message: ReactNode; level?: ToastLevel }) => void;
+};
+
 /** Compat hook mirroring the old afs `useToast().showToast({ message, level })`. */
-export function useToast() {
+export function useToast(): ToastApi {
   return {
-    showToast: ({ message, level = "message" }: { message: ReactNode; level?: ToastLevel }) =>
-      store.add(level, message),
+    showToast: ({ message, level = "message" }: { message: ReactNode; level?: ToastLevel }) => {
+      store.add(level, message);
+    },
   };
 }
