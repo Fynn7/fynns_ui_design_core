@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import {
   AlertCircleIcon,
   AlertTriangleIcon,
@@ -194,6 +194,44 @@ export function Toaster({ position = "bottom-right", className }: ToasterProps) 
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/**
+ * Declarative single toast (compat for the old `<Toast open onOpenChange>`
+ * pattern). Self-rendered, fixed bottom-center; auto-dismisses after
+ * `durationMs`. Prefer the imperative `toast.*` API for new code.
+ */
+export type ToastProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: ReactNode;
+  action?: ReactNode;
+  durationMs?: number;
+};
+
+export function Toast({ open, onOpenChange, children, action, durationMs = 6000 }: ToastProps) {
+  useEffect(() => {
+    if (!open) return;
+    const id = window.setTimeout(() => onOpenChange(false), durationMs);
+    return () => window.clearTimeout(id);
+  }, [open, durationMs, onOpenChange]);
+  if (!open) return null;
+  return (
+    <div className="fynns-toast fynns-toast--standalone" role="status">
+      <div className="fynns-toast-body">
+        <div className="fynns-toast-title">{children}</div>
+      </div>
+      {action ? <div className="fynns-toast-actions">{action}</div> : null}
+      <button
+        type="button"
+        className="fynns-toast-close"
+        aria-label="Dismiss"
+        onClick={() => onOpenChange(false)}
+      >
+        <CloseIcon size={14} />
+      </button>
     </div>
   );
 }

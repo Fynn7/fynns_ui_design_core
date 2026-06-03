@@ -1131,6 +1131,22 @@
   border-color: color-mix(in srgb, var(--fynns-color-info) 50%, var(--fynns-color-border));
 }
 
+.fynns-toast--standalone {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--fynns-z-toast);
+  max-width: min(90vw, 36rem);
+}
+
+.fynns-toast-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.35rem;
+  align-self: center;
+}
+
 .fynns-toast-icon {
   display: inline-flex;
   align-items: center;
