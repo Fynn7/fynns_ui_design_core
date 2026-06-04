@@ -30,6 +30,7 @@
   --fynns-color-toast-surface: #062126;
   --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
   --fynns-color-control-surface-hover: rgba(255, 255, 255, 0.05);
+  --fynns-color-input-fill: rgba(0, 0, 0, 0.28);
   --fynns-color-flyout-item: rgba(255, 255, 255, 0.03);
   --fynns-color-flyout-item-hover: rgba(255, 255, 255, 0.08);
   --fynns-color-toggle-track: rgba(255, 255, 255, 0.06);

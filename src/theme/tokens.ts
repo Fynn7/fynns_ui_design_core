@@ -43,6 +43,8 @@ export const COLOR_TOKENS = {
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
   "control-surface-hover": "rgba(255, 255, 255, 0.05)",
+  /** Dense text/number fields (LLM settings, Counter). */
+  "input-fill": "rgba(0, 0, 0, 0.28)",
   "flyout-item": "rgba(255, 255, 255, 0.03)",
   "flyout-item-hover": "rgba(255, 255, 255, 0.08)",
   "toggle-track": "rgba(255, 255, 255, 0.06)",

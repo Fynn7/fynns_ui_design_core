@@ -191,13 +191,13 @@
   font-family: var(--fynns-font-mono);
 }
 
-/* ---------- NumberInput ---------- */
-.fynns-number-input-wrap {
+/* ---------- Counter (field + steppers) ---------- */
+.fynns-counter {
   display: inline-flex;
   align-items: stretch;
 }
 
-.fynns-number-input {
+.fynns-counter-field {
   width: 4.25rem;
   min-width: 0;
   height: 2.3rem;
@@ -207,15 +207,18 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: none;
+  background: var(--fynns-color-input-fill);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-settings-section);
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
-.fynns-number-input-wrap:focus-within .fynns-number-input {
+.fynns-counter:focus-within .fynns-counter-field {
   box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
 }
 
-.fynns-number-input-steppers {
+.fynns-counter-steppers {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -225,19 +228,24 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: 0 var(--fynns-radius-md) var(--fynns-radius-md) 0;
   overflow: hidden;
-  background: var(--fynns-color-surface-muted);
+  background: var(--fynns-color-input-fill);
 }
 
-.fynns-number-input-step.fynns-btn--sm.fynns-btn--icon
-  + .fynns-number-input-step.fynns-btn--sm.fynns-btn--icon {
+.fynns-counter:focus-within .fynns-counter-steppers {
+  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+}
+
+.fynns-counter-step.fynns-btn--sm.fynns-btn--icon + .fynns-counter-step.fynns-btn--sm.fynns-btn--icon {
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
-.fynns-number-input-step.fynns-btn--sm.fynns-btn--icon {
+.fynns-counter-step.fynns-btn--sm.fynns-btn--icon {
   width: 100%;
-  min-height: 1.15rem;
+  min-width: 0;
+  min-height: 0;
   height: 100%;
   flex: 1;
+  padding: 0;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -245,8 +253,8 @@
   user-select: none;
 }
 
-.fynns-number-input::-webkit-outer-spin-button,
-.fynns-number-input::-webkit-inner-spin-button {
+.fynns-counter-field::-webkit-outer-spin-button,
+.fynns-counter-field::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

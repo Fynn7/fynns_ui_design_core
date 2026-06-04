@@ -70,8 +70,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
   disabled?, mainAriaLabel?, menuAriaLabel? }`.
 - **Input** / **Textarea** — native attrs + `.fynns-input`/`.fynns-textarea`.
-- **NumberInput** `{ value, onChange, min?, max?, step?, ariaLabel?, disabled? }`
-  — press-and-hold accelerating steppers.
+- **Counter** `{ value, onChange, min?, max?, step?, ariaLabel?, disabled? }` — numeric
+  field + press-and-hold steppers (`CounterRoot`, `CounterField`, `CounterSteppers`,
+  `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
 - **SearchInput** `{ leadingIcon?, wrapClassName?, ...inputAttrs }`.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox.

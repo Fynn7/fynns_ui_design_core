@@ -11,7 +11,7 @@ import {
   InfoHint,
   Input,
   Kbd,
-  NumberInput,
+  Counter,
   PanelCard,
   SearchInput,
   Select,
@@ -107,7 +107,7 @@ export function App() {
       <Section title="Inputs">
         <Input placeholder="Text input" defaultValue="" />
         <Textarea placeholder="Textarea" style={{ minHeight: "3rem", width: "16rem" }} />
-        <NumberInput value={count} onChange={setCount} min={1} max={20} ariaLabel="Count" />
+        <Counter value={count} onChange={setCount} min={1} max={20} ariaLabel="Count" />
         <SearchInput placeholder="Search..." wrapClassName="" style={{ width: "16rem" }} />
         <Select
           value={fruit}

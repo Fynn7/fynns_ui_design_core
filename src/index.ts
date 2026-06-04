@@ -21,7 +21,7 @@ export * from "./primitives/IconButton";
 export * from "./primitives/SplitButton";
 export * from "./primitives/Input";
 export * from "./primitives/Textarea";
-export * from "./primitives/NumberInput";
+export * from "./primitives/Counter";
 export * from "./primitives/SearchInput";
 export * from "./primitives/Select";
 export * from "./primitives/Combobox";
