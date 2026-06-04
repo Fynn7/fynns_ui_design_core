@@ -481,6 +481,9 @@
 
 .fynns-tooltip {
   z-index: var(--fynns-z-tooltip);
+  display: inline-block;
+  box-sizing: border-box;
+  width: max-content;
   max-width: var(--fynns-layout-tooltip-max-width);
   padding: var(--fynns-space-15) var(--fynns-space-35);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -495,6 +498,8 @@
 
 .fynns-info-hint {
   display: block;
+  width: max-content;
+  max-width: 100%;
   font-size: var(--fynns-font-size-caption);
   line-height: var(--fynns-line-height-snug);
 }

@@ -22,7 +22,7 @@ export type TooltipProps = {
  */
 export function Tooltip({ content, side = "top", children, className }: TooltipProps) {
   const [open, setOpen] = useState(false);
-  const [floatingEl, setFloatingEl] = useState<HTMLSpanElement | null>(null);
+  const [floatingEl, setFloatingEl] = useState<HTMLDivElement | null>(null);
   const anchorRef = useRef<HTMLSpanElement>(null);
   const tooltipId = useId();
   const pos = useAnchoredPosition(anchorRef.current, floatingEl, open, { side, offset: 6 });
@@ -47,7 +47,7 @@ export function Tooltip({ content, side = "top", children, className }: TooltipP
       {children}
       {open && pos
         ? createPortal(
-            <span
+            <div
               ref={setFloatingEl}
               id={tooltipId}
               role="tooltip"
@@ -60,7 +60,7 @@ export function Tooltip({ content, side = "top", children, className }: TooltipP
               }}
             >
               {content}
-            </span>,
+            </div>,
             document.body,
           )
         : null}
