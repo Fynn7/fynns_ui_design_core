@@ -182,7 +182,7 @@ export const FOCUS_TOKENS = {
 
 /** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
-  "dialog-max-width": "22rem",
+  "dialog-max-width": "32rem",
   "tooltip-max-width": "min(18rem, 85vw)",
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
