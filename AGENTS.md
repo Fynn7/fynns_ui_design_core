@@ -80,7 +80,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
   align? }`.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
-  `useAnchoredPosition(anchorEl, open, opts)`.
+  `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — flips top/bottom (or
+  left/right), auto `align` start/end near viewport edges, and clamps without
+  covering the anchor. Tooltips use `pos.side` + `pos.align` with
+  `floatingTransformForSide`.
 - **Tooltip** `{ content, side?, children }` + **TooltipProvider** (compat
   passthrough). **InfoHint** `{ content, ariaLabel?, iconSize? }`.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,

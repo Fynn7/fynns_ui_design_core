@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useAnchoredPosition, type Side } from "./Popover";
+import { floatingTransformForSide, useAnchoredPosition, type Side } from "./Popover";
 
 export type TooltipSide = Side;
 
@@ -22,9 +22,14 @@ export type TooltipProps = {
  */
 export function Tooltip({ content, side = "top", children, className }: TooltipProps) {
   const [open, setOpen] = useState(false);
+  const [floatingEl, setFloatingEl] = useState<HTMLSpanElement | null>(null);
   const anchorRef = useRef<HTMLSpanElement>(null);
   const tooltipId = useId();
-  const pos = useAnchoredPosition(anchorRef.current, open, { side, offset: 6 });
+  const pos = useAnchoredPosition(anchorRef.current, floatingEl, open, { side, offset: 6 });
+
+  useEffect(() => {
+    if (!open) setFloatingEl(null);
+  }, [open]);
 
   const show = () => setOpen(true);
   const hide = () => setOpen(false);
@@ -43,6 +48,7 @@ export function Tooltip({ content, side = "top", children, className }: TooltipP
       {open && pos
         ? createPortal(
             <span
+              ref={setFloatingEl}
               id={tooltipId}
               role="tooltip"
               className="fynns-tooltip"
@@ -50,14 +56,7 @@ export function Tooltip({ content, side = "top", children, className }: TooltipP
                 position: "fixed",
                 top: pos.top,
                 left: pos.left,
-                transform:
-                  side === "top"
-                    ? "translate(-50%, -100%)"
-                    : side === "bottom"
-                      ? "translate(-50%, 0)"
-                      : side === "left"
-                        ? "translate(-100%, -50%)"
-                        : "translate(0, -50%)",
+                transform: floatingTransformForSide(pos.side, pos.align),
               }}
             >
               {content}
