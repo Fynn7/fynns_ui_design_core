@@ -4,7 +4,12 @@ import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { CloseIcon } from "./icons";
 
-export type DialogVariant = "centered" | "command";
+export type DialogVariant = "centered" | "command" | "drawer";
+
+export type DrawerSide = "left" | "right";
+
+/** Enter/exit animation phase for sliding surfaces (drawer). */
+export type DialogDataState = "open" | "closing";
 
 const FOCUSABLE_SELECTOR =
   'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -13,21 +18,37 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
 }
 
-type DialogFrameProps = {
+export type DialogFrameProps = {
   open: boolean;
   onClose: () => void;
   variant: DialogVariant;
+  /** Drawer slide-in edge. Ignored for non-drawer variants. */
+  side?: DrawerSide;
+  /**
+   * Modal frames lock body scroll, trap focus, and render a click-dismiss
+   * scrim. Non-modal frames (e.g. a side drawer) leave the rest of the page
+   * interactive: no scroll lock, no focus trap, and a click-through overlay.
+   */
+  modal?: boolean;
+  /** Drives CSS enter/exit transitions via `data-state`. */
+  dataState?: DialogDataState;
   panelClassName?: string;
   labelledBy?: string;
   ariaLabel?: string;
   children: ReactNode;
 };
 
-/** Shared modal frame: portal + scrim + focus-trap + Esc + body scroll lock. */
-function DialogFrame({
+/**
+ * Shared frame: portal + scrim + focus-trap + Esc + body scroll lock.
+ * Low-level building block reused by `Dialog`, `DialogShell`, and `Drawer`.
+ */
+export function DialogFrame({
   open,
   onClose,
   variant,
+  side = "right",
+  modal = true,
+  dataState,
   panelClassName,
   labelledBy,
   ariaLabel,
@@ -43,13 +64,32 @@ function DialogFrame({
       const focusable = getFocusable(container);
       (focusable[0] ?? container).focus();
     }
+    if (!modal) {
+      return () => {
+        previous?.focus?.();
+      };
+    }
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prevOverflow;
       previous?.focus?.();
     };
-  }, [open]);
+  }, [open, modal]);
+
+  // Non-modal frames cannot rely on the panel's onKeyDown for Esc, because
+  // focus may live outside the panel (e.g. the list behind a side drawer).
+  useEffect(() => {
+    if (!open || modal) return;
+    const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onWindowKeyDown);
+    return () => window.removeEventListener("keydown", onWindowKeyDown);
+  }, [open, modal, onClose]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
@@ -57,7 +97,7 @@ function DialogFrame({
       onClose();
       return;
     }
-    if (event.key !== "Tab") return;
+    if (event.key !== "Tab" || !modal) return;
     const container = panelRef.current;
     if (!container) return;
     const focusable = getFocusable(container);
@@ -85,33 +125,53 @@ function DialogFrame({
 
   if (!open) return null;
 
+  const overlayVariantClass =
+    variant === "command"
+      ? "fynns-dialog-overlay--command"
+      : variant === "drawer"
+        ? "fynns-dialog-overlay--drawer"
+        : "fynns-dialog-overlay--centered";
+  const panelVariantClass =
+    variant === "command"
+      ? "fynns-dialog-panel--command"
+      : variant === "drawer"
+        ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
+        : "fynns-dialog-panel--centered";
+
   return createPortal(
     <div
       className={[
         "fynns-dialog-overlay",
-        variant === "command" ? "fynns-dialog-overlay--command" : "fynns-dialog-overlay--centered",
-      ].join(" ")}
+        overlayVariantClass,
+        modal ? "" : "fynns-dialog-overlay--nonmodal",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      data-state={dataState}
     >
-      <button
-        type="button"
-        className="fynns-dialog-scrim"
-        aria-hidden="true"
-        tabIndex={-1}
-        onClick={onClose}
-      />
+      {modal ? (
+        <button
+          type="button"
+          className="fynns-dialog-scrim"
+          aria-hidden="true"
+          tabIndex={-1}
+          onClick={onClose}
+        />
+      ) : null}
       <div
         ref={panelRef}
         className={[
           "fynns-dialog-panel",
-          variant === "command" ? "fynns-dialog-panel--command" : "fynns-dialog-panel--centered",
+          panelVariantClass,
           panelClassName ?? "",
         ]
           .filter(Boolean)
           .join(" ")}
         role="dialog"
-        aria-modal="true"
+        aria-modal={modal}
         aria-labelledby={labelledBy}
         aria-label={ariaLabel}
+        data-state={dataState}
         tabIndex={-1}
         onKeyDown={onKeyDown}
       >

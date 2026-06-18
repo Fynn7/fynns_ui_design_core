@@ -90,7 +90,16 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc. **DialogShell** is the low-level shell
-  `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`.
+  `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
+  is the shared low-level frame reused by Dialog/Drawer (`modal?`, `side?`,
+  `dataState?`).
+- **Drawer** `{ open, onClose, side?: "left"|"right", modal?, title?, visibleTitle?,
+  description?, headActions?, showCloseButton?, closeAriaLabel?, ariaLabel?,
+  className?, children }` — side sheet that slides in from `side` (default right)
+  with its own enter/exit animation. `modal` defaults to `true`; pass
+  `modal={false}` for a non-modal drawer that leaves the page behind interactive
+  (no scroll lock / focus trap / blocking scrim). Width via
+  `--fynns-layout-drawer-width`.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?, disabled? }`
   (`role="switch"`). **ToggleControl** — checkbox/radio styled as a switch.
 - **ToggleGroup** `{ options, value, onChange }` — segmented chips. **Tabs**

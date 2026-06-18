@@ -30,6 +30,7 @@ export * from "./primitives/Popover";
 export * from "./primitives/Tooltip";
 export * from "./primitives/InfoHint";
 export * from "./primitives/Dialog";
+export * from "./primitives/Drawer";
 export * from "./primitives/Switch";
 export * from "./primitives/ToggleControl";
 export * from "./primitives/ToggleGroup";
