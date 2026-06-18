@@ -859,7 +859,7 @@
 /* ---------- ToggleGroup ---------- */
 .fynns-toggle-group {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: stretch;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-sm);
@@ -879,6 +879,7 @@
   font-weight: var(--fynns-font-weight-semibold);
   letter-spacing: var(--fynns-letter-spacing-wide);
   padding: 0.4rem 0.7rem;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     background var(--fynns-duration-fast),
