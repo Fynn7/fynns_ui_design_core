@@ -185,3 +185,13 @@ export function RocketIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function ArchiveIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="3" y="3" width="18" height="5" rx="1" />
+      <path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8" />
+      <line x1="10" y1="12" x2="14" y2="12" />
+    </svg>
+  );
+}
