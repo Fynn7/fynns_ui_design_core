@@ -885,8 +885,15 @@
     color var(--fynns-duration-fast);
 }
 
+.fynns-toggle-chip:first-child {
+  border-top-left-radius: calc(var(--fynns-radius-sm) - var(--fynns-border-hairline));
+  border-bottom-left-radius: calc(var(--fynns-radius-sm) - var(--fynns-border-hairline));
+}
+
 .fynns-toggle-chip:last-child {
   border-right: none;
+  border-top-right-radius: calc(var(--fynns-radius-sm) - var(--fynns-border-hairline));
+  border-bottom-right-radius: calc(var(--fynns-radius-sm) - var(--fynns-border-hairline));
 }
 
 .fynns-toggle-chip:hover {
