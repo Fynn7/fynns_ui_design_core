@@ -133,7 +133,7 @@
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
   --fynns-layout-dialog-max-width: 32rem;
-  --fynns-layout-drawer-width: min(64rem, 92vw);
+  --fynns-layout-drawer-width: 72vw;
   --fynns-layout-tooltip-max-width: min(14rem, 85vw);
   --fynns-layout-command-palette-width: min(100%, 34rem);
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
