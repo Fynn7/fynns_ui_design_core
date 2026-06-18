@@ -45,6 +45,23 @@ export function ChevronRightIcon(props: IconProps) {
   );
 }
 
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <svg {...svgProps({ strokeWidth: 2.5, ...props })}>
