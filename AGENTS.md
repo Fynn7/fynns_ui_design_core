@@ -118,8 +118,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `CloseIcon`, `InfoIcon`, `SearchIcon`, `AlertCircleIcon`,
-  `AlertTriangleIcon`, `CheckCircleIcon`. Components also accept your own icon
-  nodes where an `icon` prop exists.
+  `AlertTriangleIcon`, `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`,
+  `TrashIcon`, `PencilIcon`, `EyeIcon`, `RocketIcon`. Components also accept your
+  own icon nodes where an `icon` prop exists.
 
 ## Adding to the system
 

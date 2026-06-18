@@ -176,7 +176,7 @@ function clampAnchorPoint(
   if (box.top < margin) dy = margin - box.top;
   if (box.bottom > vh - margin) dy = vh - margin - box.bottom;
   let top = point.top + dy;
-  let left = point.left + dx;
+  const left = point.left + dx;
   // Never slide a top/bottom tooltip down/up through the anchor (clamp dy abuse).
   if (side === "top") top = Math.min(top, anchorRect.top - offset);
   if (side === "bottom") top = Math.max(top, anchorRect.bottom + offset);
