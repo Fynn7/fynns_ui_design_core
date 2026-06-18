@@ -867,6 +867,16 @@
   background: var(--fynns-color-surface);
 }
 
+.fynns-toggle-group--full {
+  display: flex;
+  width: 100%;
+}
+
+.fynns-toggle-group--full .fynns-toggle-chip {
+  flex: 1 1 0;
+  text-align: center;
+}
+
 .fynns-toggle-chip {
   margin: 0;
   border: none;

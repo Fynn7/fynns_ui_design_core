@@ -13,6 +13,8 @@ export type ToggleGroupProps<V extends string> = {
   onChange: (value: V) => void;
   ariaLabel?: string;
   className?: string;
+  /** Stretch to fill the container width with equal-width segments. */
+  fullWidth?: boolean;
 };
 
 /**
@@ -24,10 +26,17 @@ export function ToggleGroup<V extends string>({
   onChange,
   ariaLabel,
   className,
+  fullWidth = false,
 }: ToggleGroupProps<V>) {
   return (
     <div
-      className={["fynns-toggle-group", className ?? ""].filter(Boolean).join(" ")}
+      className={[
+        "fynns-toggle-group",
+        fullWidth ? "fynns-toggle-group--full" : "",
+        className ?? "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       role="group"
       aria-label={ariaLabel}
     >
