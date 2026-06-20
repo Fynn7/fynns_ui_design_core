@@ -86,9 +86,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   covering the anchor. Tooltips use `pos.side` + `pos.align` with
   `floatingTransformForSide`.
 - **Tooltip** `{ content, side?, align?, children, className? }` + **TooltipProvider**
-  (compat passthrough). Renders a caret centered on the bubble's edge facing the
-  anchor (the bubble prefers `align="center"` so the midpoint also points at the
-  trigger). **InfoHint** `{ content, ariaLabel?, iconSize? }`.
+  (compat passthrough). Renders a caret aimed at the anchor's center, clamped
+  inside the bubble: dead-center when the bubble is centered on the anchor (the
+  default, since alignment prefers `center`), and tracking the anchor when the
+  bubble shifts to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }`.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc. **DialogShell** is the low-level shell
