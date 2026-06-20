@@ -18,11 +18,13 @@
   color: var(--fynns-color-text);
   font: inherit;
   font-size: var(--fynns-font-size-body-small);
+  white-space: nowrap;
   cursor: pointer;
   transition:
     border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    opacity var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
 .fynns-btn:hover:not(:disabled) {
@@ -1463,6 +1465,7 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text);
+  white-space: nowrap;
 }
 
 .fynns-badge-icon {
