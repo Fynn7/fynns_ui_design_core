@@ -20,9 +20,27 @@ const ESTIMATED_FLOAT_SIZE = { width: 180, height: 40 };
 
 export type FloatingSize = { width: number; height: number };
 
-/** When align is center, snap to start/end near viewport edges (wide tooltips). */
-export function resolveAlignForAnchor(anchorRect: DOMRect, vw: number, align: Align): Align {
+/**
+ * When align is center, snap to start/end near the relevant viewport edge.
+ * The cross-axis depends on `side`: top/bottom tooltips snap along X (midX vs
+ * viewport width); left/right tooltips snap along Y (midY vs viewport height).
+ * Using the wrong axis (e.g. midX for a right-side tooltip in a narrow sidebar)
+ * forces a bogus "start", which pushes the caret off the bubble's center.
+ */
+export function resolveAlignForAnchor(
+  anchorRect: DOMRect,
+  vw: number,
+  vh: number,
+  side: Side,
+  align: Align,
+): Align {
   if (align !== "center") return align;
+  if (side === "left" || side === "right") {
+    const midY = anchorRect.top + anchorRect.height / 2;
+    if (midY > vh * 0.72) return "end";
+    if (midY < vh * 0.28) return "start";
+    return "center";
+  }
   const midX = anchorRect.left + anchorRect.width / 2;
   if (midX > vw * 0.72) return "end";
   if (midX < vw * 0.28) return "start";
@@ -192,11 +210,20 @@ function clampAnchorPoint(
  * Pick placement side and anchor coordinates so the floating layer stays inside
  * the viewport. Uses measured size when available; otherwise a small estimate.
  */
-function alignCandidates(anchorRect: DOMRect, vw: number, align: Align): Align[] {
-  const resolved = resolveAlignForAnchor(anchorRect, vw, align);
+function alignCandidates(
+  anchorRect: DOMRect,
+  vw: number,
+  vh: number,
+  side: Side,
+  align: Align,
+): Align[] {
   if (align !== "center") return [align];
-  const list: Align[] = [resolved];
-  for (const extra of ["end", "start", "center"] as const) {
+  // Prefer true center so the bubble straddles the anchor and the caret lands
+  // on the bubble's midpoint. Only fall back to the edge-snapped align when a
+  // centered bubble would overflow the viewport.
+  const resolved = resolveAlignForAnchor(anchorRect, vw, vh, side, align);
+  const list: Align[] = ["center"];
+  for (const extra of [resolved, "end", "start"] as const) {
     if (!list.includes(extra)) list.push(extra);
   }
   return list;
@@ -212,7 +239,7 @@ export function resolveAnchoredPosition(
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const sides: Side[] = [preferred, OPPOSITE_SIDE[preferred]];
-  const aligns = alignCandidates(anchorRect, vw, align);
+  const aligns = alignCandidates(anchorRect, vw, vh, preferred, align);
 
   for (const trySide of sides) {
     for (const tryAlign of aligns) {
@@ -238,7 +265,7 @@ export function resolveAnchoredPosition(
   }
 
   const fallbackSide = preferred;
-  const fallbackAlign = resolveAlignForAnchor(anchorRect, vw, align);
+  const fallbackAlign = resolveAlignForAnchor(anchorRect, vw, vh, fallbackSide, align);
   const fallbackPoint = anchorPoint(anchorRect, fallbackSide, fallbackAlign, offset);
   const clamped = clampAnchorPoint(
     fallbackPoint,
