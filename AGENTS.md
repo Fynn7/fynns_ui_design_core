@@ -95,7 +95,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   }` — portal + focus-trap + scrim + Esc. **DialogShell** is the low-level shell
   `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
   is the shared low-level frame reused by Dialog/Drawer (`modal?`, `side?`,
-  `dataState?`).
+  `dataState?`). **ConfirmDialog** `{ open, onOpenChange, title, description?,
+  children?, confirmLabel?, cancelLabel?, onConfirm, onCancel?, danger?,
+  confirmDisabled?, loading?, confirmIcon?, closeAriaLabel? }` — yes/no
+  confirmation with a centered bold title, top-right close (X), and a
+  right-aligned Cancel + Confirm footer. `danger` makes Confirm destructive;
+  `loading` shows a spinner and blocks close (X/Esc/scrim). Labels default to
+  English ("Confirm"/"Cancel").
 - **Drawer** `{ open, onClose, side?: "left"|"right", modal?, title?, visibleTitle?,
   description?, headActions?, showCloseButton?, closeAriaLabel?, ariaLabel?,
   className?, children }` — side sheet that slides in from `side` (default right)

@@ -667,6 +667,32 @@
   line-height: var(--fynns-line-height-tight);
 }
 
+/* Confirm dialog: centered bold title with the close (X) kept at the right. */
+.fynns-dialog-head--centered {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.fynns-dialog-head--centered .fynns-dialog-title {
+  grid-column: 2;
+  text-align: center;
+  font-weight: var(--fynns-font-weight-bold);
+}
+
+.fynns-dialog-head--centered .fynns-dialog-close {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* Confirm dialog footer: right-aligned Cancel + Confirm buttons. */
+.fynns-dialog-foot {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--fynns-space-2);
+  padding: 0 0.85rem 1rem;
+}
+
 .fynns-dialog-description {
   margin: 0;
   padding: 0.75rem 0.85rem 0;

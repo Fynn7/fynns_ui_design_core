@@ -3,6 +3,7 @@ import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { CloseIcon } from "./icons";
+import { Spinner } from "./Loading";
 
 export type DialogVariant = "centered" | "command" | "drawer";
 
@@ -292,6 +293,88 @@ export function Dialog({
       )}
       {description ? <p className="fynns-dialog-description">{description}</p> : null}
       <div className="fynns-dialog-body">{children}</div>
+    </DialogFrame>
+  );
+}
+
+/**
+ * Confirmation dialog with a centered, bold title, a top-right close (X), and a
+ * right-aligned footer of Cancel + Confirm buttons. Use for yes/no decisions
+ * (delete, discard, etc.). The Confirm button can be made destructive via
+ * `danger`, and `loading` shows a spinner while blocking close (X/Esc/scrim).
+ */
+export type ConfirmDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: ReactNode;
+  description?: ReactNode;
+  children?: ReactNode;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm: () => void;
+  onCancel?: () => void;
+  danger?: boolean;
+  confirmDisabled?: boolean;
+  loading?: boolean;
+  confirmIcon?: ReactNode;
+  closeAriaLabel?: string;
+};
+
+export function ConfirmDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
+  onConfirm,
+  onCancel,
+  danger = false,
+  confirmDisabled = false,
+  loading = false,
+  confirmIcon,
+  closeAriaLabel = "Close",
+}: ConfirmDialogProps) {
+  const titleId = useId();
+  const cancel = () => {
+    if (loading) return;
+    if (onCancel) onCancel();
+    else onOpenChange(false);
+  };
+  return (
+    <DialogFrame open={open} onClose={cancel} variant="centered" labelledBy={titleId}>
+      <div className="fynns-dialog-head fynns-dialog-head--centered">
+        <span aria-hidden />
+        <h2 id={titleId} className="fynns-dialog-title">
+          {title}
+        </h2>
+        <Button
+          iconOnly
+          variant="ghost"
+          className="fynns-dialog-close"
+          aria-label={closeAriaLabel}
+          disabled={loading}
+          onClick={cancel}
+        >
+          <CloseIcon size={22} />
+        </Button>
+      </div>
+      {description ? <p className="fynns-dialog-description">{description}</p> : null}
+      {children ? <div className="fynns-dialog-body">{children}</div> : null}
+      <div className="fynns-dialog-foot">
+        <Button variant="ghost" onClick={cancel} disabled={loading}>
+          {cancelLabel}
+        </Button>
+        <Button
+          variant={danger ? "danger" : "primary"}
+          onClick={onConfirm}
+          disabled={loading || confirmDisabled}
+        >
+          {loading ? <Spinner label={confirmLabel} size="sm" /> : confirmIcon}
+          {confirmLabel}
+        </Button>
+      </div>
     </DialogFrame>
   );
 }
