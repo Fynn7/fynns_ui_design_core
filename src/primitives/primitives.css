@@ -1162,6 +1162,9 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
+  /* Breathing room so body content never hugs the panel edges. Matches the
+     card padding scale used across consuming apps (e.g. agents-hub `.card`). */
+  padding: var(--fynns-space-4);
 }
 
 .fynns-panel-body--no-scroll {
