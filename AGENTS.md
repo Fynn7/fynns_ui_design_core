@@ -115,6 +115,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Chips are equal-width segments: they fill the group when it is stretched (a
   flex/grid child or `fullWidth`) and stay content-width when inline. **Tabs**
   `{ tabs, activeId, onChange }`.
+- **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
+  — disclosure row; collapses content behind a clickable header (chevron rotates).
+  Controlled via `open` or uncontrolled via `defaultOpen`. `actions` sits outside
+  the toggle button. Use to keep long repeated form sections scannable.
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
 - **Panel** (sidebar `<aside>`) / **PanelCard** `{ title, actions?, fill?,

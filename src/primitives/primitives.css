@@ -1036,6 +1036,70 @@
   cursor: not-allowed;
 }
 
+/* ---------- Collapsible ---------- */
+.fynns-collapsible {
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface);
+  overflow: hidden;
+}
+
+.fynns-collapsible-head {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+}
+
+.fynns-collapsible-trigger {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  min-width: 0;
+  padding: 0.6rem 0.8rem;
+  background: transparent;
+  border: none;
+  color: var(--fynns-color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fynns-collapsible-trigger:hover {
+  background: var(--fynns-color-surface-2, rgba(127, 127, 127, 0.08));
+}
+
+.fynns-collapsible-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-collapsible-chevron {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-base, 0.2s) ease;
+}
+
+.fynns-collapsible--open .fynns-collapsible-chevron {
+  transform: rotate(180deg);
+}
+
+.fynns-collapsible-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  padding-right: 0.6rem;
+}
+
+.fynns-collapsible-body {
+  padding: var(--fynns-space-3) 0.8rem 0.8rem;
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
 /* ---------- Slider ---------- */
 .fynns-slider {
   width: 100%;
