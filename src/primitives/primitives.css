@@ -950,12 +950,11 @@
   width: 100%;
 }
 
-.fynns-toggle-group--full .fynns-toggle-chip {
-  flex: 1 1 0;
-  text-align: center;
-}
-
 .fynns-toggle-chip {
+  /* Segments share the group width equally: when the group is stretched (a flex/
+     grid child, or `--full`) the chips fill it as equal-width segments; when the
+     group sizes to its content (inline) they stay content-width. */
+  flex: 1 1 0;
   margin: 0;
   border: none;
   border-right: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -968,6 +967,7 @@
   letter-spacing: var(--fynns-letter-spacing-wide);
   padding: 0.4rem 0.7rem;
   white-space: nowrap;
+  text-align: center;
   cursor: pointer;
   transition:
     background var(--fynns-duration-fast),

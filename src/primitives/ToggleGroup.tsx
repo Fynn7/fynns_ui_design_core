@@ -13,12 +13,18 @@ export type ToggleGroupProps<V extends string> = {
   onChange: (value: V) => void;
   ariaLabel?: string;
   className?: string;
-  /** Stretch to fill the container width with equal-width segments. */
+  /**
+   * Force the group to span its container's full width. Segments are always
+   * equal-width when the group is stretched; this just opts in to stretching
+   * even when the parent would otherwise leave the group at content width.
+   */
   fullWidth?: boolean;
 };
 
 /**
  * Segmented control: a row of mutually-exclusive chips. `.fynns-toggle-group`.
+ * Chips are equal-width segments that fill the group when it is stretched (a
+ * flex/grid child or `fullWidth`), and stay content-width when it is inline.
  */
 export function ToggleGroup<V extends string>({
   options,

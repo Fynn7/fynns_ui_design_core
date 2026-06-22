@@ -111,7 +111,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-layout-drawer-width`.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?, disabled? }`
   (`role="switch"`). **ToggleControl** — checkbox/radio styled as a switch.
-- **ToggleGroup** `{ options, value, onChange }` — segmented chips. **Tabs**
+- **ToggleGroup** `{ options, value, onChange, fullWidth? }` — segmented chips.
+  Chips are equal-width segments: they fill the group when it is stretched (a
+  flex/grid child or `fullWidth`) and stay content-width when inline. **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
