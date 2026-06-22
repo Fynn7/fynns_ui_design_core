@@ -1,0 +1,30 @@
+---
+description: Use the @fynns/ui design system for all UI; style only with --fynns-* tokens; never add radix or sonner.
+globs:
+alwaysApply: true
+---
+
+# fynns UI design system
+
+This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
+`packages/fynns_ui_design_core`). It is the single source of truth for UI.
+
+## Rules
+
+- Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
+  Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
+  InfoHint, Dialog/DialogShell, Drawer, Switch, ToggleControl, ToggleGroup, Tabs,
+  Slider, Panel, PanelCard, ScrollArea, Toaster/toast, Alert banners, Spinner/
+  Skeleton/Overlay, Badge, Kbd, CommandPalette). Reach for an existing primitive
+  before writing a new control.
+- Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
+  `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
+- Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
+  primitives in the submodule instead.
+- App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
+  or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
+- If a token or component is missing, add it in the submodule
+  (`packages/fynns_ui_design_core`) and run its `npm run gen:theme`.
+
+See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
+catalog. Text must be English or German only (no CJK).
