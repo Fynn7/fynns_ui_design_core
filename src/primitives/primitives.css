@@ -186,6 +186,16 @@
   color: var(--fynns-color-text-muted);
 }
 
+/* Disabled / read-only inputs read clearly as non-editable: a darker, muted
+   surface with muted text and a not-allowed cursor (no focus ring). */
+.fynns-input:disabled,
+.fynns-input[readonly] {
+  background: var(--fynns-color-surface-head);
+  color: var(--fynns-color-text-muted);
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
 .fynns-textarea {
   min-height: 6rem;
   resize: vertical;
