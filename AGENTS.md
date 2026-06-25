@@ -9,6 +9,72 @@ repos should link here, not duplicate it.
 A dark-teal design system: canonical `--fynns-*` CSS tokens + self-developed,
 dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 
+## Design philosophy & UX principles
+
+This is the **single source of truth** for *how* UI is built across every repo
+that consumes `@fynns/ui` (agents-hub, awesome_afs_visualizer, fynns_corrector,
+fynns_cursor_db_dashboard, fynns_music_studio, the thesis `gsc-live-preview`,
+…). Distilled from those projects so the look **and the behavior** stay
+identical. Consumer repos must follow these and link here instead of restating
+them; only genuinely app-specific deviations belong in a consumer's own doc.
+
+1. **One system, no native or third-party equivalents.** Build every control
+   from `@fynns/ui`; reach for an existing primitive before writing a new one.
+   No `@radix-ui/*`, no `sonner`, no raw `<select>`/`<dialog>`/`alert()` — extend
+   the primitives instead. Drift between projects is a bug; converge on the core.
+2. **Tokens are the only styling vocabulary.** Color, space, radius, shadow,
+   font, z-index, motion — all via `var(--fynns-*)`. Never hardcode hex/rgba or
+   magic numbers. Derive translucent/variant shades with `color-mix(in srgb,
+   var(--fynns-color-*) N%, transparent)` or `var(--fynns-color-x, <fallback
+   token>)`, **not** a new hex. Missing value → add a token in `tokens.ts` and run
+   `npm run gen:theme`. App/teaching tokens stay namespaced in the app (`--afs-*`
+   automata canvas, `--dsa-*` DSA visuals); never add them to this core.
+3. **Every action is an icon button + tooltip — never `title=`.** Use
+   `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
+   `title` attribute is forbidden (browser-default styling breaks the system).
+   Tooltips also describe *dynamic* state (e.g. why a control is disabled).
+   **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
+   cover its trigger or the adjacent related content; the caret links the bubble
+   to the anchor so it need not touch the text):
+   - Icon buttons → default `side="top" align="center"`.
+   - Full-width sidebar rows (list items, group headers) → `side="right"` so the
+     bubble sits beside the row and never covers the rows above/below.
+   - Inline truncated text in main content (table cells, detail fields) → default
+     `side="top" align="start"`; never `side="right"` (it would cover the content
+     to the right).
+   - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
+4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
+   carries the `fynns-scroll` class or uses `ScrollArea`. Browser-default
+   scrollbars are the most common source of visual drift — never ship them.
+5. **Always show loading / empty / error state.** The kit is `Spinner`,
+   `PanelSkeleton`, `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
+   primitives). Prefer *layered* loading for heavy boots: an inline pre-mount
+   spinner → a full-screen `BlockingLoadingOverlay` while the engine isn't ready
+   → a scoped per-action spinner; freeze the whole UI with an overlay during a
+   blocking batch run. Color status semantically — `danger` (fatal), `warning`
+   (recoverable/render), `info` (static/notice), `success` (ok) — typically as a
+   `border-left: 3px solid var(--fynns-color-*)` or a `Badge` variant. Use
+   `Badge` variants to build the information architecture (source / mode /
+   confirmed-state), not ad-hoc colored text.
+6. **Accessibility is on by default.** `aria-label` on every icon-only control,
+   `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
+   `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
+   from `--fynns-focus`/`--fynns-color-focus`, and keyboard affordances
+   (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
+7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
+   motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already
+   honors `prefers-reduced-motion`. No hand-tuned ms or easing curves.
+8. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
+   `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
+   (side sheet) for overlays; **progressive disclosure** (reveal results only
+   once they exist); and **safety-first interactivity** — disable/refuse a
+   destructive action while it is unsafe and say why in a tooltip (e.g. disabling
+   a rescan while a conflicting process holds the file), rather than letting it
+   fail.
+9. **Language.** UI chrome / code text is **English or German only (no CJK)**.
+   The only CJK allowed is genuine user-facing deliverable *content* (e.g. a
+   report's optional `中文` section), never UI chrome.
+
 ## Hard rules (Do / Don't)
 
 - **DO** build UI from `@fynns/ui` components. Reach for an existing primitive
