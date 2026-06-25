@@ -138,8 +138,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `CpuIcon`, `MessageSquareIcon`,
-  `BarChartIcon`. Components also accept your own icon nodes where an `icon` prop
-  exists.
+  `BarChartIcon`, `StopIcon`. Components also accept your own icon nodes where an
+  `icon` prop exists.
 
 ## Adding to the system
 
