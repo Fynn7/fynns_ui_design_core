@@ -198,7 +198,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
-- **Badge** `{ variant?: "neutral"|"success"|"danger"|"info"|"accent", icon? }`.
+- **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", icon? }`.
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,

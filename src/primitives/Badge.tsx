@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-export type BadgeVariant = "neutral" | "success" | "danger" | "info" | "accent";
+export type BadgeVariant = "neutral" | "success" | "danger" | "warning" | "info" | "accent";
 
 export type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   variant?: BadgeVariant;

@@ -1673,6 +1673,11 @@
   border-color: color-mix(in srgb, var(--fynns-color-danger) 50%, var(--fynns-color-border));
 }
 
+.fynns-badge--warning {
+  color: var(--fynns-color-warning);
+  border-color: color-mix(in srgb, var(--fynns-color-warning) 50%, var(--fynns-color-border));
+}
+
 .fynns-badge--info {
   color: var(--fynns-color-info);
   border-color: color-mix(in srgb, var(--fynns-color-info) 50%, var(--fynns-color-border));
