@@ -1352,6 +1352,33 @@
   color: var(--fynns-color-text);
   box-shadow: var(--fynns-shadow-lg);
   pointer-events: auto;
+  opacity: 0;
+  will-change: opacity, transform;
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-toaster--bottom-right .fynns-toast,
+.fynns-toaster--bottom-left .fynns-toast,
+.fynns-toaster--bottom-center .fynns-toast {
+  transform: translateY(var(--fynns-size-8));
+}
+
+.fynns-toaster--top-right .fynns-toast,
+.fynns-toaster--top-left .fynns-toast,
+.fynns-toaster--top-center .fynns-toast {
+  transform: translateY(calc(-1 * var(--fynns-size-8)));
+}
+
+.fynns-toaster--bottom-right .fynns-toast[data-state="open"],
+.fynns-toaster--bottom-left .fynns-toast[data-state="open"],
+.fynns-toaster--bottom-center .fynns-toast[data-state="open"],
+.fynns-toaster--top-right .fynns-toast[data-state="open"],
+.fynns-toaster--top-left .fynns-toast[data-state="open"],
+.fynns-toaster--top-center .fynns-toast[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .fynns-toast--error {
@@ -1374,9 +1401,14 @@
   position: fixed;
   bottom: 1rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(var(--fynns-size-8));
   z-index: var(--fynns-z-toast);
   max-width: min(90vw, 36rem);
+}
+
+.fynns-toast--standalone[data-state="open"] {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .fynns-toast-actions {

@@ -156,6 +156,14 @@ export function App() {
         <Button onClick={() => toast.message("Heads up", { description: "With a description." })}>
           Toast message
         </Button>
+        <Button
+          onClick={() => {
+            toast.success("First toast");
+            toast.info("Second toast", { description: "Stacked with enter animation." });
+          }}
+        >
+          Toast stack
+        </Button>
       </Section>
 
       <Section title="Feedback">

@@ -191,7 +191,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   noScroll?, fillBody? }` / **ScrollArea** (custom scrollbar skin).
 - **Toaster** (mount once) + imperative **toast** `toast(msg, opts?)`,
   `toast.message/.success/.error/.warning/.info(msg, opts?)`, `toast.dismiss(id?)`
-  — drop-in for the `sonner` subset. **ToastProvider** + **useToast** compat.
+  — drop-in for the `sonner` subset. Enter/exit uses motion tokens (`--fynns-duration-base`,
+  `--fynns-ease-emphasized`): slides in from the toaster edge (bottom positions from below,
+  top from above) with a fade; dismiss plays the reverse before unmount. **ToastProvider** +
+  **useToast** compat; declarative `<Toast>` uses the same animation (bottom-center).
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
