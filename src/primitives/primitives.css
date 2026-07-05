@@ -1564,6 +1564,12 @@
   animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
 }
 
+/* Filled buttons use accent background — default accent ring is invisible there. */
+.fynns-btn--primary .fynns-loading-spinner-ring {
+  border-color: color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+}
+
 @keyframes fynns-spin {
   to {
     transform: rotate(360deg);
