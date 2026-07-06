@@ -20,6 +20,11 @@ on:
         required: false
         default: "fynns-ui,dependencies"
         type: string
+      typecheck_workflow:
+        description: "Consumer workflow file to run on the bump branch after push."
+        required: false
+        default: "ui-typecheck.yml"
+        type: string
 
 permissions:
   contents: write
@@ -140,6 +145,16 @@ jobs:
         shell: bash
         run: |
           git push -u origin "${BRANCH_NAME}"
+
+      - name: Trigger consumer typecheck
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.preflight.outputs.branch_name }}
+          TYPECHECK_WORKFLOW: ${{ inputs.typecheck_workflow }}
+        shell: bash
+        run: |
+          gh workflow run "${TYPECHECK_WORKFLOW}" --ref "${BRANCH_NAME}"
 
       - name: Open or update PR
         if: steps.preflight.outputs.skip_reason == ''

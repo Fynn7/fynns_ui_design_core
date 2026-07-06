@@ -42,14 +42,19 @@ not need this PAT.
 
 ## Consumer responsibilities
 
+Push-triggered bump PRs are created by GitHub Actions. Those PRs do not
+automatically trigger `pull_request` workflows when `GITHUB_TOKEN` is used, so
+the reusable bump workflow dispatches each consumer's typecheck workflow on the
+bump branch via `workflow_dispatch` after push.
+
 Each consumer repository should provide:
 
 - a `repository_dispatch` entry workflow that delegates to the reusable bump
   workflow in `fynns_ui_design_core`
 - GitHub Actions workflow permissions set to **Read and write** with
   **Allow GitHub Actions to create and approve pull requests** enabled
-- a CI check that validates the pinned submodule commit against the consumer's
-  code (for example a typecheck job)
+- a CI check workflow that validates the pinned submodule commit against the
+  consumer's code (for example `ui-typecheck.yml` with `workflow_dispatch`)
 - an auto-merge workflow that enables merge for both:
   - Dependabot `fynns_ui_design_core` bump PRs
   - `github-actions[bot]` PRs labeled `fynns-ui`
