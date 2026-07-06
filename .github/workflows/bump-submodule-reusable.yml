@@ -47,12 +47,7 @@ jobs:
       - id: labels
         shell: bash
         run: |
-          labels_json="$(python - <<'PY'
-import json
-labels = [item.strip() for item in "${{ inputs.pr_labels }}".split(",") if item.strip()]
-print(json.dumps(labels))
-PY
-)"
+          labels_json="$(printf '%s' '${{ inputs.pr_labels }}' | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$";"")) | map(select(length>0))')"
           echo "json=${labels_json}" >> "$GITHUB_OUTPUT"
 
       - id: preflight
@@ -161,35 +156,27 @@ PY
           if [ -n "${{ steps.preflight.outputs.existing_pr }}" ]; then
             pr_number="${{ steps.preflight.outputs.existing_pr }}"
           else
+            body_file="$(mktemp)"
+            {
+              echo "## Summary"
+              echo "- bump \`${SUBMODULE_PATH}\` to \`${TARGET_SHA}\`"
+              echo "- triggered automatically from \`${{ github.workflow_ref }}\`"
+              echo ""
+              echo "## Test plan"
+              echo "- [ ] CI"
+            } > "$body_file"
             pr_url="$(gh pr create \
               --base "${BASE_BRANCH}" \
               --head "${BRANCH_NAME}" \
               --title "${TITLE}" \
-              --body "$(cat <<EOF
-## Summary
-- bump \`${SUBMODULE_PATH}\` to \`${TARGET_SHA}\`
-- triggered automatically from \`${{ github.workflow_ref }}\`
-
-## Test plan
-- [ ] CI
-EOF
-)" )"
+              --body-file "$body_file")"
             pr_number="$(gh pr view "${pr_url}" --json number --jq .number)"
           fi
           echo "PR number: ${pr_number}"
 
-          PR_NUMBER="${pr_number}" python - <<'PY'
-import json
-import os
-import subprocess
-labels = json.loads(os.environ["LABELS_JSON"])
-pr_number = os.environ["PR_NUMBER"]
-for label in labels:
-    subprocess.run(
-        ["gh", "pr", "edit", pr_number, "--add-label", label],
-        check=True,
-    )
-PY
+          echo "${LABELS_JSON}" | jq -r '.[]' | while read -r label; do
+            gh pr edit "${pr_number}" --add-label "$label"
+          done
 
       - name: Enable auto-merge
         if: steps.preflight.outputs.skip_reason == ''
