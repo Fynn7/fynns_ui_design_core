@@ -1,0 +1,217 @@
+name: Reusable submodule bump
+
+on:
+  workflow_call:
+    inputs:
+      submodule_path:
+        description: "Path to the fynns_ui_design_core submodule in the consumer repo."
+        required: true
+        type: string
+      target_sha:
+        description: "fynns_ui_design_core commit SHA to pin."
+        required: true
+        type: string
+      base_branch:
+        description: "Consumer branch that should receive the bump PR."
+        required: true
+        type: string
+      pr_labels:
+        description: "Comma-separated labels for the bump PR."
+        required: false
+        default: "fynns-ui,dependencies"
+        type: string
+      typecheck_workflow:
+        description: "Consumer workflow file to run on the bump branch after push."
+        required: false
+        default: "ui-typecheck.yml"
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: fynns-ui-bump-${{ github.repository }}-${{ inputs.base_branch }}
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.base_branch }}
+          submodules: recursive
+
+      - name: Configure git author
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - id: labels
+        shell: bash
+        run: |
+          labels_json="$(printf '%s' '${{ inputs.pr_labels }}' | jq -Rc 'split(",") | map(gsub("^\\s+|\\s+$";"")) | map(select(length>0))')"
+          echo "json=${labels_json}" >> "$GITHUB_OUTPUT"
+
+      - id: preflight
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUBMODULE_PATH: ${{ inputs.submodule_path }}
+          TARGET_SHA: ${{ inputs.target_sha }}
+          BASE_BRANCH: ${{ inputs.base_branch }}
+        shell: bash
+        run: |
+          branch_name="chore/ui-bump-${TARGET_SHA:0:12}"
+          title="chore(ui): bump fynns_ui_design_core to ${TARGET_SHA:0:12}"
+          echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+
+          if ! git ls-tree "${BASE_BRANCH}" -- "${SUBMODULE_PATH}" | grep -q .; then
+            echo "skip_reason=missing_submodule" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          current_sha="$(git rev-parse "${BASE_BRANCH}:${SUBMODULE_PATH}")"
+          echo "current_sha=$current_sha" >> "$GITHUB_OUTPUT"
+          if [ "$current_sha" = "$TARGET_SHA" ]; then
+            echo "skip_reason=already_current" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          existing_pr="$(gh pr list \
+            --base "$BASE_BRANCH" \
+            --state open \
+            --search "in:title chore(ui): bump fynns_ui_design_core" \
+            --json number,headRefName \
+            --jq 'map(select(.headRefName | startswith("chore/ui-bump-"))) | first')"
+          if [ -n "$existing_pr" ] && [ "$existing_pr" != "null" ]; then
+            existing_branch="$(printf '%s' "$existing_pr" | jq -r '.headRefName')"
+            existing_number="$(printf '%s' "$existing_pr" | jq -r '.number')"
+            echo "branch_name=$existing_branch" >> "$GITHUB_OUTPUT"
+            echo "existing_pr=$existing_number" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip missing submodule
+        if: steps.preflight.outputs.skip_reason == 'missing_submodule'
+        shell: bash
+        run: |
+          {
+            echo "- skipped \`${GITHUB_REPOSITORY}\`"
+            echo "  - reason: target branch does not contain \`${{ inputs.submodule_path }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Skip up-to-date branch
+        if: steps.preflight.outputs.skip_reason == 'already_current'
+        shell: bash
+        run: |
+          {
+            echo "- skipped \`${GITHUB_REPOSITORY}\`"
+            echo "  - reason: submodule already points at \`${{ inputs.target_sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Prepare bump branch
+        if: steps.preflight.outputs.skip_reason == ''
+        shell: bash
+        run: |
+          if git ls-remote --exit-code --heads origin "${{ steps.preflight.outputs.branch_name }}" >/dev/null 2>&1; then
+            git fetch origin "${{ steps.preflight.outputs.branch_name }}:${{ steps.preflight.outputs.branch_name }}"
+            git checkout "${{ steps.preflight.outputs.branch_name }}"
+          else
+            git checkout -B "${{ steps.preflight.outputs.branch_name }}" "${{ inputs.base_branch }}"
+          fi
+
+      - name: Update submodule pointer
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          SUBMODULE_PATH: ${{ inputs.submodule_path }}
+          TARGET_SHA: ${{ inputs.target_sha }}
+        shell: bash
+        run: |
+          git -C "${SUBMODULE_PATH}" fetch origin "${TARGET_SHA}"
+          git -C "${SUBMODULE_PATH}" checkout "${TARGET_SHA}"
+          git add "${SUBMODULE_PATH}"
+          if git diff --cached --quiet; then
+            echo "No submodule change after checkout."
+            exit 0
+          fi
+          git commit -m "chore(ui): bump fynns_ui_design_core to ${TARGET_SHA:0:12}"
+
+      - name: Push bump branch
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          BRANCH_NAME: ${{ steps.preflight.outputs.branch_name }}
+        shell: bash
+        run: |
+          git push -u origin "${BRANCH_NAME}"
+
+      - name: Trigger consumer typecheck
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.preflight.outputs.branch_name }}
+          TYPECHECK_WORKFLOW: ${{ inputs.typecheck_workflow }}
+        shell: bash
+        run: |
+          gh workflow run "${TYPECHECK_WORKFLOW}" --ref "${BRANCH_NAME}"
+
+      - name: Open or update PR
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.preflight.outputs.branch_name }}
+          BASE_BRANCH: ${{ inputs.base_branch }}
+          TITLE: ${{ steps.preflight.outputs.title }}
+          TARGET_SHA: ${{ inputs.target_sha }}
+          LABELS_JSON: ${{ steps.labels.outputs.json }}
+          SUBMODULE_PATH: ${{ inputs.submodule_path }}
+        shell: bash
+        run: |
+          if [ -n "${{ steps.preflight.outputs.existing_pr }}" ]; then
+            pr_number="${{ steps.preflight.outputs.existing_pr }}"
+          else
+            body_file="$(mktemp)"
+            {
+              echo "## Summary"
+              echo "- bump \`${SUBMODULE_PATH}\` to \`${TARGET_SHA}\`"
+              echo "- triggered automatically from \`${{ github.workflow_ref }}\`"
+              echo ""
+              echo "## Test plan"
+              echo "- [ ] CI"
+            } > "$body_file"
+            pr_url="$(gh pr create \
+              --base "${BASE_BRANCH}" \
+              --head "${BRANCH_NAME}" \
+              --title "${TITLE}" \
+              --body-file "$body_file")"
+            pr_number="$(gh pr view "${pr_url}" --json number --jq .number)"
+          fi
+          echo "PR number: ${pr_number}"
+
+          echo "${LABELS_JSON}" | jq -r '.[]' | while read -r label; do
+            if ! gh label list --json name --jq '.[].name' | grep -Fxq "$label"; then
+              gh label create "$label" --color "1d76db" --description "UI submodule bump from fynns_ui_design_core"
+            fi
+            gh pr edit "${pr_number}" --add-label "$label"
+          done
+
+      - name: Enable auto-merge
+        if: steps.preflight.outputs.skip_reason == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.preflight.outputs.branch_name }}
+        shell: bash
+        run: |
+          gh pr merge --auto --squash "${BRANCH_NAME}"
+
+      - name: Append summary
+        if: steps.preflight.outputs.skip_reason == ''
+        shell: bash
+        run: |
+          {
+            echo "- bumped \`${GITHUB_REPOSITORY}\`"
+            echo "  - branch: \`${{ steps.preflight.outputs.branch_name }}\`"
+            echo "  - target: \`${{ inputs.target_sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
