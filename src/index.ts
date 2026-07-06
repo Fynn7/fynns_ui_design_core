@@ -36,6 +36,7 @@ export * from "./primitives/ToggleControl";
 export * from "./primitives/ToggleGroup";
 export * from "./primitives/Tabs";
 export * from "./primitives/Collapsible";
+export * from "./primitives/ListGroup";
 export * from "./primitives/Slider";
 export * from "./primitives/Panel";
 export * from "./primitives/PanelCard";

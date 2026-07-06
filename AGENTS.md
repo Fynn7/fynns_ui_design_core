@@ -185,6 +185,14 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   — disclosure row; collapses content behind a clickable header (chevron rotates).
   Controlled via `open` or uncontrolled via `defaultOpen`. `actions` sits outside
   the toggle button. Use to keep long repeated form sections scannable.
+- **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**
+  / **ListDisclosureToggleSpacer** / **ListTree** / **ListTreeRow** / **ListTreeSlot**
+  / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
+  compact tree chevrons, and nested branches. `ListGroupTrigger` integrates chevron
+  + title; `ListDisclosureToggle` is chevron-only for split headers or tree rows.
+- **ListRow** / **ListRowSelectable** / **ListRowBody** / **ListRowTitle** /
+  **ListRowName** / **ListRowSub** / **ListRowBadges** / **ListRowMain** —
+  selectable sidebar rows (normal and bulk-select shells).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
 - **Panel** (sidebar `<aside>`) / **PanelCard** `{ title, actions?, fill?,
