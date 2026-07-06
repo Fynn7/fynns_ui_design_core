@@ -46,6 +46,8 @@ Each consumer repository should provide:
 
 - a `repository_dispatch` entry workflow that delegates to the reusable bump
   workflow in `fynns_ui_design_core`
+- GitHub Actions workflow permissions set to **Read and write** with
+  **Allow GitHub Actions to create and approve pull requests** enabled
 - a CI check that validates the pinned submodule commit against the consumer's
   code (for example a typecheck job)
 - an auto-merge workflow that enables merge for both:
