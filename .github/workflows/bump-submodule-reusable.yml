@@ -175,6 +175,9 @@ jobs:
           echo "PR number: ${pr_number}"
 
           echo "${LABELS_JSON}" | jq -r '.[]' | while read -r label; do
+            if ! gh label list --json name --jq '.[].name' | grep -Fxq "$label"; then
+              gh label create "$label" --color "1d76db" --description "UI submodule bump from fynns_ui_design_core"
+            fi
             gh pr edit "${pr_number}" --add-label "$label"
           done
 
