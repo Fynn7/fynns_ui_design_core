@@ -12,6 +12,8 @@ projects and are easy for humans and agents to reuse.
 - **Components:** [`src/primitives/`](src/primitives) — Button, Input, Select,
   Dialog, Switch, Toast, Tooltip, and more (see [AGENTS.md](AGENTS.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
+- **Submodule propagation:** push-triggered + Dependabot fallback workflow is
+  documented in [`docs/submodule-propagation.md`](docs/submodule-propagation.md).
 
 ## Consume it (git submodule + source alias)
 

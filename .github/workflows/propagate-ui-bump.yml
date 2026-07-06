@@ -1,0 +1,80 @@
+name: Propagate UI submodule bump
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "examples/**"
+      - ".cursor/**"
+  workflow_dispatch:
+    inputs:
+      target_sha:
+        description: "Optional commit SHA to propagate. Defaults to the triggering commit."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      target_sha: ${{ steps.meta.outputs.target_sha }}
+      consumers: ${{ steps.read.outputs.consumers }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: meta
+        shell: bash
+        run: |
+          target_sha="${{ inputs.target_sha }}"
+          if [ -z "$target_sha" ]; then
+            target_sha="${GITHUB_SHA}"
+          fi
+          echo "target_sha=$target_sha" >> "$GITHUB_OUTPUT"
+      - id: read
+        shell: bash
+        run: |
+          consumers="$(jq -c . .github/ui-consumers.json)"
+          echo "consumers=$consumers" >> "$GITHUB_OUTPUT"
+
+  dispatch:
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        consumer: ${{ fromJson(needs.prepare.outputs.consumers) }}
+    steps:
+      - name: Dispatch bump workflow
+        env:
+          GH_TOKEN: ${{ secrets.FYNNS_UI_PROPAGATE_PAT }}
+          TARGET_SHA: ${{ needs.prepare.outputs.target_sha }}
+          TARGET_REPO: ${{ matrix.consumer.repo }}
+          SUBMODULE_PATH: ${{ matrix.consumer.submodule_path }}
+          BASE_BRANCH: ${{ matrix.consumer.base_branch }}
+        shell: bash
+        run: |
+          gh api "repos/${TARGET_REPO}/dispatches" \
+            --method POST \
+            -f event_type='fynns-ui-bump' \
+            -F client_payload[source_repo]="${GITHUB_REPOSITORY}" \
+            -F client_payload[sha]="${TARGET_SHA}" \
+            -F client_payload[ref]="main" \
+            -F client_payload[submodule_path]="${SUBMODULE_PATH}" \
+            -F client_payload[base_branch]="${BASE_BRANCH}"
+
+      - name: Append summary
+        env:
+          TARGET_SHA: ${{ needs.prepare.outputs.target_sha }}
+          TARGET_REPO: ${{ matrix.consumer.repo }}
+          SUBMODULE_PATH: ${{ matrix.consumer.submodule_path }}
+          BASE_BRANCH: ${{ matrix.consumer.base_branch }}
+        shell: bash
+        run: |
+          {
+            echo "- dispatched \`${TARGET_REPO}\`"
+            echo "  - submodule: \`${SUBMODULE_PATH}\`"
+            echo "  - branch: \`${BASE_BRANCH}\`"
+            echo "  - target: \`${TARGET_SHA}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

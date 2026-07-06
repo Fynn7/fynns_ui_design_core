@@ -1,0 +1,28 @@
+[
+  {
+    "repo": "Fynn7/fynns_bachelor_thesis",
+    "submodule_path": "packages/fynns_ui_design_core",
+    "base_branch": "main",
+    "notes": "The submodule currently exists on dev only; main should skip until aligned."
+  },
+  {
+    "repo": "Fynn7/awesome_afs_visualizer",
+    "submodule_path": "packages/fynns_ui_design_core",
+    "base_branch": "main"
+  },
+  {
+    "repo": "Fynn7/fynns_corrector",
+    "submodule_path": "packages/fynns_ui_design_core",
+    "base_branch": "main"
+  },
+  {
+    "repo": "Fynn7/fynns_cursor_db_dashboard",
+    "submodule_path": "packages/fynns_ui_design_core",
+    "base_branch": "master"
+  },
+  {
+    "repo": "Fynn7/agents-hub",
+    "submodule_path": "gui/packages/fynns_ui_design_core",
+    "base_branch": "main"
+  }
+]
