@@ -193,6 +193,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **ListRow** / **ListRowSelectable** / **ListRowBody** / **ListRowTitle** /
   **ListRowName** / **ListRowSub** / **ListRowBadges** / **ListRowMain** —
   selectable sidebar rows (normal and bulk-select shells).
+- **NavItem** / **NavItemLabel** / **NavItemIcon** / **NavCount** / **NavBrandButton**
+  — primary sidebar navigation buttons.
+- **TextLinkButton** — inline accent text link control.
+- **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
+- **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
+- **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
 - **Panel** (sidebar `<aside>`) / **PanelCard** `{ title, actions?, fill?,

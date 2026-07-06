@@ -1344,6 +1344,187 @@
   cursor: pointer;
 }
 
+/* ---------- App shell nav / text buttons ---------- */
+.fynns-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-2);
+  padding: var(--fynns-space-2) var(--fynns-space-3);
+  border-radius: var(--fynns-radius-md);
+  color: var(--fynns-color-text);
+  background: transparent;
+  border: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-item:hover {
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-nav-item:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-nav-item--active {
+  background: var(--fynns-color-accent-24);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-item-label {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  min-width: 0;
+}
+
+.fynns-nav-item-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-item--active .fynns-nav-item-icon {
+  color: var(--fynns-color-accent);
+}
+
+.fynns-nav-count {
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-nav-brand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  width: fit-content;
+  padding: 0 var(--fynns-space-2);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.fynns-nav-brand-btn:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-text-link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--fynns-color-accent);
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.fynns-text-link-btn:hover {
+  filter: brightness(1.08);
+}
+
+.fynns-text-link-btn:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-dotted-link-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  color: inherit;
+}
+
+.fynns-dotted-link-btn:hover {
+  text-decoration: underline;
+}
+
+.fynns-dotted-link-btn:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-dotted-link-btn--warning {
+  color: var(--fynns-color-warning);
+}
+
+.fynns-pick-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-sm);
+  overflow: hidden;
+}
+
+.fynns-pick-list-item {
+  text-align: left;
+  padding: var(--fynns-space-2) var(--fynns-space-3);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--fynns-color-border);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-caption);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  width: 100%;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-pick-list-item:hover:not(:disabled) {
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-pick-list-item:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-pick-list-item:last-child {
+  border-bottom: none;
+}
+
+.fynns-pick-list-item:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.fynns-card-open-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  width: 100%;
+}
+
+.fynns-card-open-btn:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
 /* ---------- Slider ---------- */
 .fynns-slider {
   width: 100%;
