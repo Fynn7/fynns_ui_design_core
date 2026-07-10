@@ -63,15 +63,20 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
 7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
    motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already
-   honors `prefers-reduced-motion`. No hand-tuned ms or easing curves.
-8. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
+   honors `prefers-reduced-motion`. No hand-tuned ms or easing curves. Flyouts
+   (menu, select, popover, tooltip) and centered dialogs animate enter/exit via
+   `data-state` on the shared `DialogFrame` presence lifecycle.
+8. **Elevation = brightness in dark mode.** Surfaces climb a ladder:
+   `app-bg` → `surface-1` (panels) → `surface-2` (flyouts) → `surface-3`
+   (tooltips/toasts). Higher surfaces are brighter, not darker.
+9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
    `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
    (side sheet) for overlays; **progressive disclosure** (reveal results only
    once they exist); and **safety-first interactivity** — disable/refuse a
    destructive action while it is unsafe and say why in a tooltip (e.g. disabling
    a rescan while a conflicting process holds the file), rather than letting it
    fail.
-9. **Language.** UI chrome / code text is **English or German only (no CJK)**.
+10. **Language.** UI chrome / code text is **English or German only (no CJK)**.
    The only CJK allowed is genuine user-facing deliverable *content* (e.g. a
    report's optional `中文` section), never UI chrome.
 
@@ -96,9 +101,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 
 Source of truth: [`src/theme/tokens.ts`](src/theme/tokens.ts) +
 [`src/theme/motionTokens.ts`](src/theme/motionTokens.ts). Generated CSS:
-[`src/theme/theme.css`](src/theme/theme.css) (`:root { --fynns-* }` + reset +
-scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>` (the `misc` group
-has no sub-prefix).
+[`src/theme/theme.css`](src/theme/theme.css) (`:root { --fynns-* }` + light
+override + reset + scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>`
+(the `misc` group has no sub-prefix).
+
+**Light theme:** dark is the default (no attribute). Activate light via
+`applyFynnsThemeMode("light")` from `@fynns/ui`, which sets
+`data-fynns-theme="light"` on `<html>` and overrides a subset of color/shadow/
+scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
+`fynns-theme-mode`.
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
@@ -107,22 +118,34 @@ Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
 
 Color tokens (`--fynns-color-*`):
 
-- Surfaces: `app-bg` `#031417`, `surface` `#031417`, `surface-head` `#021012`,
-  `surface-muted`, `surface-hover`, `control-surface`, `control-surface-hover`,
-  `flyout-item`, `flyout-item-hover`, `toast-surface` `#062126`.
-- Lines/text: `border` `#0d2e2c`, `text` `#e2f0ed`, `text-muted` `#7a9e98`.
-- Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-soft`, `accent-mid`,
-  `accent-24`, `accent-42`, `accent-ring`, `focus`.
+- Surfaces (elevation ladder): `app-bg` `#031417`, `surface-1` (panels),
+  `surface-2` (flyouts), `surface-3` (tooltips/toasts). Legacy aliases kept:
+  `surface`, `surface-head`, `toast-surface`. Also `surface-muted`,
+  `surface-hover`, `control-surface`, `control-surface-hover`, `flyout-item`,
+  `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
+- Lines/text: `border` `#0d2e2c`, `border-strong`, `text` `#e2f0ed`,
+  `text-muted` `#7a9e98`.
+- Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
+  `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
+  `accent-ring`, `focus`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
   `danger-border`, `info` `#60a5fa`.
 - Misc: `overlay`, `toggle-track`, `toggle-track-hover`,
   `scrollbar-thumb*` (also under the `scrollbar` group).
 
+Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
+legacy numeric keys (`--fynns-space-1` …) remain as aliases.
+
+Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
+legacy semantic keys (`caption`, `form-label`, …) remain.
+
+Shadows: `sm`, `md`, `lg`, `flyout`, `tooltip`, `toggle-thumb`, `glow-accent`,
+`glow-danger`.
+
 Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
-`--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-standard`,
-`--fynns-ease-emphasized`, `--fynns-duration-{instant,tooltip,toggle,fast,base,
-slow,pointer,loop-pulse,loading-spin,loading-skeleton,presentation-hint,
-reduced-motion-spin}`.
+`--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
+`--fynns-duration-{instant,tooltip,toggle,fast,flyout,base,slow,pointer,loop-pulse,
+loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
 
 For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
@@ -158,10 +181,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   bubble shifts to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }`.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
-  }` — portal + focus-trap + scrim + Esc. **DialogShell** is the low-level shell
+  }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in
+  via the shared frame presence lifecycle. **DialogShell** is the low-level shell
   `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
   is the shared low-level frame reused by Dialog/Drawer (`modal?`, `side?`,
-  `dataState?`). **ConfirmDialog** `{ open, onOpenChange, title, description?,
+  `dataState?`); manages enter/exit when `dataState` is omitted. **ConfirmDialog** `{ open, onOpenChange, title, description?,
   children?, confirmLabel?, cancelLabel?, onConfirm, onCancel?, danger?,
   confirmDisabled?, loading?, confirmIcon?, closeAriaLabel? }` — yes/no
   confirmation with a centered bold title, top-right close (X), and a
@@ -170,8 +194,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   English ("Confirm"/"Cancel").
 - **Drawer** `{ open, onClose, side?: "left"|"right", modal?, title?, visibleTitle?,
   description?, headActions?, showCloseButton?, closeAriaLabel?, ariaLabel?,
-  className?, children }` — side sheet that slides in from `side` (default right)
-  with its own enter/exit animation. `modal` defaults to `true`; pass
+  className?, children }` — side sheet that slides in from `side` (default right).
+  Enter/exit animation is handled by `DialogFrame`. `modal` defaults to `true`; pass
   `modal={false}` for a non-modal drawer that leaves the page behind interactive
   (no scroll lock / focus trap / blocking scrim). Width via
   `--fynns-layout-drawer-width`.

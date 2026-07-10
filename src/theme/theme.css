@@ -8,13 +8,19 @@
   --fynns-color-app-bg: #031417;
   --fynns-color-surface: #031417;
   --fynns-color-surface-head: #021012;
+  --fynns-color-surface-1: #051a1d;
+  --fynns-color-surface-2: #082225;
+  --fynns-color-surface-3: #0a2a2e;
   --fynns-color-surface-muted: rgba(255, 255, 255, 0.03);
   --fynns-color-surface-hover: rgba(255, 255, 255, 0.08);
   --fynns-color-border: #0d2e2c;
+  --fynns-color-border-strong: #164038;
   --fynns-color-text: #e2f0ed;
   --fynns-color-text-muted: #7a9e98;
   --fynns-color-accent: #2dd4bf;
   --fynns-color-accent-dim: #14b8a6;
+  --fynns-color-accent-hover: #34dfc9;
+  --fynns-color-accent-active: #26c9b3;
   --fynns-color-accent-soft: rgba(45, 212, 191, 0.18);
   --fynns-color-accent-mid: rgba(45, 212, 191, 0.5);
   --fynns-color-accent-24: rgba(45, 212, 191, 0.24);
@@ -35,6 +41,8 @@
   --fynns-color-flyout-item-hover: rgba(255, 255, 255, 0.08);
   --fynns-color-toggle-track: rgba(255, 255, 255, 0.06);
   --fynns-color-toggle-track-hover: rgba(255, 255, 255, 0.1);
+  --fynns-color-skeleton-base: rgba(255, 255, 255, 0.06);
+  --fynns-color-skeleton-sheen: rgba(255, 255, 255, 0.14);
   --fynns-space-1: 0.25rem;
   --fynns-space-2: 0.4rem;
   --fynns-space-3: 0.65rem;
@@ -58,6 +66,14 @@
   --fynns-space-65: 0.75rem;
   --fynns-space-78: 0.78rem;
   --fynns-space-84: 0.84rem;
+  --fynns-space-2xs: 0.125rem;
+  --fynns-space-xs: 0.25rem;
+  --fynns-space-sm: 0.5rem;
+  --fynns-space-md: 0.75rem;
+  --fynns-space-lg: 1rem;
+  --fynns-space-xl: 1.5rem;
+  --fynns-space-2xl: 2rem;
+  --fynns-space-3xl: 3rem;
   --fynns-space-min-line: 1.2rem;
   --fynns-size-1: 1px;
   --fynns-size-2: 2px;
@@ -81,13 +97,23 @@
   --fynns-radius-flyout-glyph: 5px;
   --fynns-radius-pill: 999px;
   --fynns-radius-round: 50%;
+  --fynns-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --fynns-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
   --fynns-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.45);
   --fynns-shadow-flyout: 0 8px 24px rgba(0, 0, 0, 0.35);
   --fynns-shadow-tooltip: 0 6px 20px rgba(0, 0, 0, 0.45);
   --fynns-shadow-toggle-thumb: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --fynns-shadow-glow-accent: 0 0 12px rgba(45, 212, 191, 0.35);
+  --fynns-shadow-glow-danger: 0 0 12px rgba(248, 113, 113, 0.35);
   --fynns-font-ui: system-ui, "Segoe UI", Roboto, sans-serif;
   --fynns-font-mono: "Cascadia Code", "Fira Code", ui-monospace, monospace;
   --fynns-font-serif: "CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif;
+  --fynns-font-size-xs: 0.75rem;
+  --fynns-font-size-sm: 0.875rem;
+  --fynns-font-size-md: 1rem;
+  --fynns-font-size-lg: 1.25rem;
+  --fynns-font-size-xl: 1.5rem;
+  --fynns-font-size-2xl: 2rem;
   --fynns-font-size-root: 1rem;
   --fynns-font-size-body-small: 0.875rem;
   --fynns-font-size-panel-heading: 0.82rem;
@@ -97,6 +123,7 @@
   --fynns-font-size-dialog-close: 1.35rem;
   --fynns-font-weight-semibold: 600;
   --fynns-font-weight-title: 650;
+  --fynns-font-weight-bold: 700;
   --fynns-line-height-root: 1.4;
   --fynns-line-height-tight: 1;
   --fynns-line-height-snug: 1.25;
@@ -113,6 +140,7 @@
   --fynns-duration-tooltip: 120ms;
   --fynns-duration-toggle: 140ms;
   --fynns-duration-fast: 140ms;
+  --fynns-duration-flyout: 160ms;
   --fynns-duration-base: 240ms;
   --fynns-duration-slow: 360ms;
   --fynns-duration-pointer: 420ms;
@@ -123,6 +151,9 @@
   --fynns-duration-reduced-motion-spin: 2200ms;
   --fynns-ease-standard: ease;
   --fynns-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  --fynns-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --fynns-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --fynns-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --fynns-toggle-track-w: 2.2rem;
   --fynns-toggle-track-h: 1.25rem;
   --fynns-toggle-thumb: 0.86rem;
@@ -148,6 +179,58 @@
   --fynns-border-hairline: 1px;
   --fynns-opacity-muted: 0.8;
 }
+:root[data-fynns-theme="light"] {
+  color-scheme: light;
+  --fynns-color-app-bg: #e8f4f2;
+  --fynns-color-surface: #e8f4f2;
+  --fynns-color-surface-head: #eef6f4;
+  --fynns-color-surface-1: #ffffff;
+  --fynns-color-surface-2: #f5fafa;
+  --fynns-color-surface-3: #ffffff;
+  --fynns-color-surface-muted: rgba(0, 0, 0, 0.03);
+  --fynns-color-surface-hover: rgba(0, 0, 0, 0.05);
+  --fynns-color-border: #c5ddd8;
+  --fynns-color-border-strong: #a8ccc4;
+  --fynns-color-text: #0d2e2c;
+  --fynns-color-text-muted: #5a7a74;
+  --fynns-color-accent: #0d9488;
+  --fynns-color-accent-dim: #0f766e;
+  --fynns-color-accent-hover: #14b8a6;
+  --fynns-color-accent-active: #0d9488;
+  --fynns-color-accent-soft: rgba(13, 148, 136, 0.12);
+  --fynns-color-accent-mid: rgba(13, 148, 136, 0.45);
+  --fynns-color-accent-24: rgba(13, 148, 136, 0.18);
+  --fynns-color-accent-42: rgba(13, 148, 136, 0.32);
+  --fynns-color-accent-ring: rgba(13, 148, 136, 0.38);
+  --fynns-color-success: #16a34a;
+  --fynns-color-warning: #d97706;
+  --fynns-color-danger: #dc2626;
+  --fynns-color-danger-border: rgba(220, 38, 38, 0.45);
+  --fynns-color-info: #2563eb;
+  --fynns-color-focus: rgba(13, 148, 136, 0.42);
+  --fynns-color-overlay: rgba(0, 0, 0, 0.32);
+  --fynns-color-toast-surface: #ffffff;
+  --fynns-color-control-surface: rgba(0, 0, 0, 0.02);
+  --fynns-color-control-surface-hover: rgba(0, 0, 0, 0.04);
+  --fynns-color-input-fill: rgba(0, 0, 0, 0.04);
+  --fynns-color-flyout-item: rgba(0, 0, 0, 0.02);
+  --fynns-color-flyout-item-hover: rgba(0, 0, 0, 0.05);
+  --fynns-color-toggle-track: rgba(0, 0, 0, 0.08);
+  --fynns-color-toggle-track-hover: rgba(0, 0, 0, 0.12);
+  --fynns-color-skeleton-base: rgba(0, 0, 0, 0.06);
+  --fynns-color-skeleton-sheen: rgba(0, 0, 0, 0.12);
+  --fynns-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --fynns-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --fynns-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --fynns-shadow-flyout: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --fynns-shadow-tooltip: 0 6px 20px rgba(0, 0, 0, 0.12);
+  --fynns-shadow-toggle-thumb: 0 1px 2px rgba(0, 0, 0, 0.15);
+  --fynns-shadow-glow-accent: 0 0 12px rgba(13, 148, 136, 0.28);
+  --fynns-shadow-glow-danger: 0 0 12px rgba(220, 38, 38, 0.28);
+  --fynns-scrollbar-thumb: rgba(90, 122, 116, 0.35);
+  --fynns-scrollbar-thumb-hover: rgba(13, 148, 136, 0.45);
+  --fynns-scrollbar-thumb-active: rgba(13, 148, 136, 0.65);
+}
 
 *,
 *::before,
@@ -172,6 +255,11 @@ body {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+::selection {
+  background: var(--fynns-color-accent-soft);
+  color: var(--fynns-color-text);
 }
 
 * {

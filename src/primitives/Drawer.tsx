@@ -1,15 +1,9 @@
 import type { ReactNode } from "react";
-import { useEffect, useId, useState } from "react";
+import { useId } from "react";
 import { Button } from "./Button";
 import { DialogFrame } from "./Dialog";
-import type { DialogDataState, DrawerSide } from "./Dialog";
+import type { DrawerSide } from "./Dialog";
 import { CloseIcon } from "./icons";
-
-/**
- * Slide duration for the enter/exit transition. Keep in sync with
- * `--fynns-duration-base` (used by the drawer CSS transition).
- */
-const DRAWER_TRANSITION_MS = 240;
 
 export type DrawerProps = {
   open: boolean;
@@ -35,9 +29,8 @@ export type DrawerProps = {
 
 /**
  * High-level side drawer with a sliding panel, standard head (title + actions
- * + close) and a scrollable body. Built on the shared `DialogFrame`; manages
- * its own enter/exit animation lifecycle so the panel slides out before it
- * unmounts.
+ * + close) and a scrollable body. Built on the shared `DialogFrame`; enter/exit
+ * animation lifecycle is managed by the frame.
  */
 export function Drawer({
   open,
@@ -55,33 +48,15 @@ export function Drawer({
   children,
 }: DrawerProps) {
   const titleId = useId();
-  const [rendered, setRendered] = useState(open);
-  const [entered, setEntered] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setRendered(true);
-      const raf = requestAnimationFrame(() => setEntered(true));
-      return () => cancelAnimationFrame(raf);
-    }
-    setEntered(false);
-    const timer = setTimeout(() => setRendered(false), DRAWER_TRANSITION_MS);
-    return () => clearTimeout(timer);
-  }, [open]);
-
-  if (!rendered) return null;
-
-  const dataState: DialogDataState = entered ? "open" : "closing";
   const showHead = visibleTitle || !!headActions || showCloseButton;
 
   return (
     <DialogFrame
-      open={rendered}
+      open={open}
       onClose={onClose}
       variant="drawer"
       side={side}
       modal={modal}
-      dataState={dataState}
       panelClassName={className}
       labelledBy={title ? titleId : undefined}
       ariaLabel={ariaLabel}

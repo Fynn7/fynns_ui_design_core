@@ -33,6 +33,7 @@ const mod = await import(
 );
 
 const rootBlock = mod.buildRootCssVarsBlock();
+const lightBlock = mod.buildLightThemeCssBlock();
 
 const BASE_CSS = `
 *,
@@ -58,6 +59,11 @@ body {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+::selection {
+  background: var(--fynns-color-accent-soft);
+  color: var(--fynns-color-text);
 }
 
 * {
@@ -120,5 +126,5 @@ const header =
   " * Regenerate with: npm run gen:theme\n" +
   " */\n";
 
-writeFileSync(outFile, `${header}${rootBlock}\n${BASE_CSS}`, "utf8");
+writeFileSync(outFile, `${header}${rootBlock}\n${lightBlock}\n${BASE_CSS}`, "utf8");
 console.log(`Wrote ${path.relative(root, outFile)}`);

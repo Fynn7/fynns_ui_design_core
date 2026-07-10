@@ -62,15 +62,21 @@ If you prefer to load only the stylesheet (no JS), import
 
 All visual values come from `--fynns-*` CSS variables defined in `theme.css`
 (generated). Never hardcode colors — reference tokens such as
-`var(--fynns-color-accent)`, `var(--fynns-space-2)`, `var(--fynns-radius-md)`.
+`var(--fynns-color-accent)`, `var(--fynns-space-sm)`, `var(--fynns-radius-md)`.
 App-specific / teaching tokens stay in the app under `--afs-*` / `--dsa-*`.
+
+**Dark** is the default. **Light** theme: call `applyFynnsThemeMode("light")`
+from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
+`restoreFynnsThemeMode()` on boot to read `localStorage`. See
+[AGENTS.md](AGENTS.md) for the full token catalog.
 
 ## Scripts
 
 - `npm run gen:theme` — regenerate `src/theme/theme.css` from the token tables.
 - `npm run typecheck` — `tsc --noEmit`.
 - `npm run lint` — ESLint.
-- `npm run gallery` — run the kitchen-sink demo in [`examples/gallery`](examples/gallery).
+- `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
+  (foundations, motion, component state matrix, dark/light toggle).
 
 ## Optional package distribution
 

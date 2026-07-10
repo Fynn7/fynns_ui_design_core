@@ -10,11 +10,19 @@
  *   - Monaco reads the palette through {@link monacoScrollbarColors}.
  */
 
-/** Authoritative scrollbar palette (hex; equals `--fynns-scrollbar-*`). */
+/** Authoritative scrollbar palette (hex; equals `--fynns-scrollbar-*` dark). */
 export const SCROLLBAR_COLORS = {
   thumb: "#6a90955b",
   thumbHover: "#169fb162",
   thumbActive: "#169fb1ad",
+  track: "transparent",
+} as const;
+
+/** Light-theme scrollbar palette (hex; equals light `--fynns-scrollbar-*`). */
+export const SCROLLBAR_COLORS_LIGHT = {
+  thumb: "#5a7a7459",
+  thumbHover: "#0d948873",
+  thumbActive: "#0d9488a6",
   track: "transparent",
 } as const;
 
@@ -40,11 +48,12 @@ export function mergeScrollSurfaceClass(
 }
 
 /** Monaco `theme.colors` entries derived from the shared palette. */
-export function monacoScrollbarColors(): Record<string, string> {
+export function monacoScrollbarColors(light = false): Record<string, string> {
+  const palette = light ? SCROLLBAR_COLORS_LIGHT : SCROLLBAR_COLORS;
   return {
-    "scrollbarSlider.background": SCROLLBAR_COLORS.thumb,
-    "scrollbarSlider.hoverBackground": SCROLLBAR_COLORS.thumbHover,
-    "scrollbarSlider.activeBackground": SCROLLBAR_COLORS.thumbActive,
+    "scrollbarSlider.background": palette.thumb,
+    "scrollbarSlider.hoverBackground": palette.thumbHover,
+    "scrollbarSlider.activeBackground": palette.thumbActive,
   };
 }
 
@@ -55,9 +64,11 @@ export function monacoScrollbarColors(): Record<string, string> {
  */
 export function applyScrollbarCssVars(
   root: HTMLElement = document.documentElement,
+  light = false,
 ): void {
-  root.style.setProperty(SCROLLBAR_CSS_VARS.thumb, SCROLLBAR_COLORS.thumb);
-  root.style.setProperty(SCROLLBAR_CSS_VARS.thumbHover, SCROLLBAR_COLORS.thumbHover);
-  root.style.setProperty(SCROLLBAR_CSS_VARS.thumbActive, SCROLLBAR_COLORS.thumbActive);
-  root.style.setProperty(SCROLLBAR_CSS_VARS.track, SCROLLBAR_COLORS.track);
+  const palette = light ? SCROLLBAR_COLORS_LIGHT : SCROLLBAR_COLORS;
+  root.style.setProperty(SCROLLBAR_CSS_VARS.thumb, palette.thumb);
+  root.style.setProperty(SCROLLBAR_CSS_VARS.thumbHover, palette.thumbHover);
+  root.style.setProperty(SCROLLBAR_CSS_VARS.thumbActive, palette.thumbActive);
+  root.style.setProperty(SCROLLBAR_CSS_VARS.track, palette.track);
 }

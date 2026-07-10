@@ -381,6 +381,7 @@ export function Popover({
       ref={setPanelEl}
       role={role}
       className={["fynns-popover", className ?? ""].filter(Boolean).join(" ")}
+      data-side={pos.side}
       style={{ position: "fixed", top: pos.top, left: pos.left }}
     >
       {children}

@@ -11,6 +11,7 @@ import "./primitives/primitives.css";
 export * from "./theme/tokens";
 export * from "./theme/motionTokens";
 export * from "./theme/scrollbar";
+export * from "./theme/themeMode";
 
 /* Icons (inline, dependency-free) */
 export * from "./primitives/icons";

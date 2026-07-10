@@ -1,5 +1,5 @@
 import type { KeyboardEvent, ReactNode } from "react";
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { CloseIcon } from "./icons";
@@ -9,8 +9,11 @@ export type DialogVariant = "centered" | "command" | "drawer";
 
 export type DrawerSide = "left" | "right";
 
-/** Enter/exit animation phase for sliding surfaces (drawer). */
+/** Enter/exit animation phase for overlay surfaces. */
 export type DialogDataState = "open" | "closing";
+
+/** Keep in sync with `--fynns-duration-base` (dialog/drawer transitions). */
+export const DIALOG_TRANSITION_MS = 240;
 
 const FOCUSABLE_SELECTOR =
   'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -31,7 +34,10 @@ export type DialogFrameProps = {
    * interactive: no scroll lock, no focus trap, and a click-through overlay.
    */
   modal?: boolean;
-  /** Drives CSS enter/exit transitions via `data-state`. */
+  /**
+   * Drives CSS enter/exit transitions via `data-state`. When omitted, the frame
+   * manages its own presence lifecycle (mount → enter → exit → unmount).
+   */
   dataState?: DialogDataState;
   panelClassName?: string;
   labelledBy?: string;
@@ -49,16 +55,38 @@ export function DialogFrame({
   variant,
   side = "right",
   modal = true,
-  dataState,
+  dataState: dataStateProp,
   panelClassName,
   labelledBy,
   ariaLabel,
   children,
 }: DialogFrameProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [rendered, setRendered] = useState(open);
+  const [entered, setEntered] = useState(false);
+  const managesPresence = dataStateProp === undefined;
 
   useEffect(() => {
-    if (!open) return;
+    if (!managesPresence) return;
+    if (open) {
+      setRendered(true);
+      const raf = requestAnimationFrame(() => setEntered(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setEntered(false);
+    const timer = setTimeout(() => setRendered(false), DIALOG_TRANSITION_MS);
+    return () => clearTimeout(timer);
+  }, [open, managesPresence]);
+
+  const visible = managesPresence ? rendered : open;
+  const resolvedDataState: DialogDataState | undefined = managesPresence
+    ? entered
+      ? "open"
+      : "closing"
+    : dataStateProp;
+
+  useEffect(() => {
+    if (!visible || resolvedDataState !== "open") return;
     const previous = document.activeElement as HTMLElement | null;
     const container = panelRef.current;
     if (container) {
@@ -76,12 +104,12 @@ export function DialogFrame({
       document.body.style.overflow = prevOverflow;
       previous?.focus?.();
     };
-  }, [open, modal]);
+  }, [visible, resolvedDataState, modal]);
 
   // Non-modal frames cannot rely on the panel's onKeyDown for Esc, because
   // focus may live outside the panel (e.g. the list behind a side drawer).
   useEffect(() => {
-    if (!open || modal) return;
+    if (!visible || modal) return;
     const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -90,7 +118,7 @@ export function DialogFrame({
     };
     window.addEventListener("keydown", onWindowKeyDown);
     return () => window.removeEventListener("keydown", onWindowKeyDown);
-  }, [open, modal, onClose]);
+  }, [visible, modal, onClose]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
@@ -124,7 +152,7 @@ export function DialogFrame({
     }
   };
 
-  if (!open) return null;
+  if (!visible) return null;
 
   const overlayVariantClass =
     variant === "command"
@@ -148,7 +176,7 @@ export function DialogFrame({
       ]
         .filter(Boolean)
         .join(" ")}
-      data-state={dataState}
+      data-state={resolvedDataState}
     >
       {modal ? (
         <button
@@ -172,7 +200,7 @@ export function DialogFrame({
         aria-modal={modal}
         aria-labelledby={labelledBy}
         aria-label={ariaLabel}
-        data-state={dataState}
+        data-state={resolvedDataState}
         tabIndex={-1}
         onKeyDown={onKeyDown}
       >
