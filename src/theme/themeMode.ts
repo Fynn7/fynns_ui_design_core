@@ -9,17 +9,16 @@ export type FynnsThemeMode = "dark" | "light";
 
 const STORAGE_KEY = "fynns-theme-mode";
 
-function resolveRoot(root?: HTMLElement): HTMLElement {
+function resolveRoot(root?: HTMLElement): HTMLElement | null {
   if (root) return root;
-  if (typeof document === "undefined") {
-    throw new Error("applyFynnsThemeMode requires a DOM (pass `root` on the server).");
-  }
+  if (typeof document === "undefined") return null;
   return document.documentElement;
 }
 
 /** Read the active theme mode from the document root. */
 export function getFynnsThemeMode(root?: HTMLElement): FynnsThemeMode {
   const el = resolveRoot(root);
+  if (!el) return "dark";
   return el.getAttribute("data-fynns-theme") === "light" ? "light" : "dark";
 }
 
@@ -29,10 +28,12 @@ export function applyFynnsThemeMode(
   opts?: { root?: HTMLElement; persist?: boolean },
 ): void {
   const el = resolveRoot(opts?.root);
-  if (mode === "light") {
-    el.setAttribute("data-fynns-theme", "light");
-  } else {
-    el.removeAttribute("data-fynns-theme");
+  if (el) {
+    if (mode === "light") {
+      el.setAttribute("data-fynns-theme", "light");
+    } else {
+      el.removeAttribute("data-fynns-theme");
+    }
   }
   if (opts?.persist !== false && typeof localStorage !== "undefined") {
     localStorage.setItem(STORAGE_KEY, mode);
