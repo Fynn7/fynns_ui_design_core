@@ -12,6 +12,12 @@ export const EASING_TOKENS = {
   standard: "ease",
   /** Emphasized ease-out for step transitions / FLIP animations. */
   emphasized: "cubic-bezier(0.22, 1, 0.36, 1)",
+  /** Expo-out for flyout enter / overlay reveal. */
+  "out": "cubic-bezier(0.16, 1, 0.3, 1)",
+  /** Symmetric ease for hover / color transitions. */
+  "in-out": "cubic-bezier(0.45, 0, 0.55, 1)",
+  /** Light overshoot for toggle thumb / micro-interactions. */
+  spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
 } as const;
 
 /** Durations. Emitted as `--fynns-duration-<key>`. */
@@ -21,6 +27,7 @@ export const DURATION_TOKENS = {
   tooltip: "120ms",
   toggle: "140ms",
   fast: "140ms",
+  flyout: "160ms",
   base: "240ms",
   slow: "360ms",
   pointer: "420ms",

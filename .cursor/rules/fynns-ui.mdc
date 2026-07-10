@@ -25,6 +25,8 @@ This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the submodule
   (`packages/fynns_ui_design_core`) and run its `npm run gen:theme`.
+- Light theme: `applyFynnsThemeMode("light")` / `restoreFynnsThemeMode()` from
+  `@fynns/ui`. Elevation ladder: `surface-1` → `surface-2` → `surface-3`.
 
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
 catalog. Text must be English or German only (no CJK).

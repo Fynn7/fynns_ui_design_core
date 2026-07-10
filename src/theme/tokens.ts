@@ -18,16 +18,31 @@ import { DURATION_TOKENS, EASING_TOKENS } from "./motionTokens";
 
 /** Surfaces, text, accents, and semantic role colors. `--fynns-color-<key>`. */
 export const COLOR_TOKENS = {
+  /** Base canvas. oklch(9% 0.02 192) */
   "app-bg": "#031417",
+  /** Legacy alias for app-bg; kept for backward compatibility. */
   surface: "#031417",
+  /** Legacy panel header; kept for backward compatibility. */
   "surface-head": "#021012",
+  /** Elevation 1 — panels, cards, dialogs. oklch(11% 0.025 192) */
+  "surface-1": "#051a1d",
+  /** Elevation 2 — menus, selects, popovers. oklch(14% 0.03 192) */
+  "surface-2": "#082225",
+  /** Elevation 3 — tooltips, toasts. oklch(17% 0.035 192) */
+  "surface-3": "#0a2a2e",
   "surface-muted": "rgba(255, 255, 255, 0.03)",
   "surface-hover": "rgba(255, 255, 255, 0.08)",
   border: "#0d2e2c",
+  /** Higher-contrast border for emphasis. oklch(22% 0.04 192) */
+  "border-strong": "#164038",
   text: "#e2f0ed",
   "text-muted": "#7a9e98",
   accent: "#2dd4bf",
   "accent-dim": "#14b8a6",
+  /** Primary hover state. oklch(78% 0.12 192) */
+  "accent-hover": "#34dfc9",
+  /** Primary pressed state. oklch(72% 0.11 192) */
+  "accent-active": "#26c9b3",
   "accent-soft": "rgba(45, 212, 191, 0.18)",
   "accent-mid": "rgba(45, 212, 191, 0.5)",
   "accent-24": "rgba(45, 212, 191, 0.24)",
@@ -40,6 +55,7 @@ export const COLOR_TOKENS = {
   info: "#60a5fa",
   focus: "rgba(45, 212, 191, 0.48)",
   overlay: "rgba(0, 0, 0, 0.48)",
+  /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
   "control-surface-hover": "rgba(255, 255, 255, 0.05)",
@@ -49,10 +65,28 @@ export const COLOR_TOKENS = {
   "flyout-item-hover": "rgba(255, 255, 255, 0.08)",
   "toggle-track": "rgba(255, 255, 255, 0.06)",
   "toggle-track-hover": "rgba(255, 255, 255, 0.1)",
+  /** Skeleton shimmer base. */
+  "skeleton-base": "rgba(255, 255, 255, 0.06)",
+  /** Skeleton shimmer highlight. */
+  "skeleton-sheen": "rgba(255, 255, 255, 0.14)",
 } as const;
 
-/** Spacing scale (rem). `--fynns-space-<key>`. */
+/**
+ * Spacing scale (rem). `--fynns-space-<key>`.
+ * Prefer the t-shirt keys (`xs`, `sm`, `md`, …) for new work; numeric keys are
+ * legacy aliases kept for backward compatibility.
+ */
 export const SPACE_TOKENS = {
+  /** T-shirt scale (preferred). */
+  "2xs": "0.125rem",
+  xs: "0.25rem",
+  sm: "0.5rem",
+  md: "0.75rem",
+  lg: "1rem",
+  xl: "1.5rem",
+  "2xl": "2rem",
+  "3xl": "3rem",
+  /** Legacy numeric keys — do not remove. */
   "1": "0.25rem",
   "15": "0.35rem",
   "2": "0.4rem",
@@ -111,10 +145,14 @@ export const RADIUS_TOKENS = {
 
 /** Elevation shadows. `--fynns-shadow-<key>`. */
 export const SHADOW_TOKENS = {
+  sm: "0 1px 3px rgba(0, 0, 0, 0.25)",
+  md: "0 4px 12px rgba(0, 0, 0, 0.35)",
   lg: "0 16px 48px rgba(0, 0, 0, 0.45)",
   flyout: "0 8px 24px rgba(0, 0, 0, 0.35)",
   tooltip: "0 6px 20px rgba(0, 0, 0, 0.45)",
   "toggle-thumb": "0 1px 2px rgba(0, 0, 0, 0.35)",
+  "glow-accent": "0 0 12px rgba(45, 212, 191, 0.35)",
+  "glow-danger": "0 0 12px rgba(248, 113, 113, 0.35)",
 } as const;
 
 /** Font stacks. `--fynns-font-<key>`. */
@@ -124,8 +162,19 @@ export const FONT_FAMILY_TOKENS = {
   serif: '"CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif',
 } as const;
 
-/** Font sizes. `--fynns-font-size-<key>`. */
+/**
+ * Font sizes. `--fynns-font-size-<key>`.
+ * Prefer the t-shirt keys for new work; semantic keys are legacy aliases.
+ */
 export const FONT_SIZE_TOKENS = {
+  /** T-shirt scale (preferred). */
+  xs: "0.75rem",
+  sm: "0.875rem",
+  md: "1rem",
+  lg: "1.25rem",
+  xl: "1.5rem",
+  "2xl": "2rem",
+  /** Legacy semantic keys — do not remove. */
   root: "1rem",
   "body-small": "0.875rem",
   "panel-heading": "0.82rem",
@@ -139,6 +188,7 @@ export const FONT_SIZE_TOKENS = {
 export const FONT_WEIGHT_TOKENS = {
   semibold: "600",
   title: "650",
+  bold: "700",
 } as const;
 
 /** Line heights. `--fynns-line-height-<key>`. */
@@ -212,6 +262,79 @@ export const MISC_TOKENS = {
   "opacity-muted": "0.8",
 } as const;
 
+/**
+ * Light-theme overrides for color, shadow, and scrollbar groups.
+ * Applied via `:root[data-fynns-theme="light"]` in the generated theme.css.
+ */
+export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
+  readonly [string, Record<string, string>]
+> = [
+  [
+    "color",
+    {
+      "app-bg": "#e8f4f2",
+      surface: "#e8f4f2",
+      "surface-head": "#eef6f4",
+      "surface-1": "#ffffff",
+      "surface-2": "#f5fafa",
+      "surface-3": "#ffffff",
+      "surface-muted": "rgba(0, 0, 0, 0.03)",
+      "surface-hover": "rgba(0, 0, 0, 0.05)",
+      border: "#c5ddd8",
+      "border-strong": "#a8ccc4",
+      text: "#0d2e2c",
+      "text-muted": "#5a7a74",
+      accent: "#0d9488",
+      "accent-dim": "#0f766e",
+      "accent-hover": "#14b8a6",
+      "accent-active": "#0d9488",
+      "accent-soft": "rgba(13, 148, 136, 0.12)",
+      "accent-mid": "rgba(13, 148, 136, 0.45)",
+      "accent-24": "rgba(13, 148, 136, 0.18)",
+      "accent-42": "rgba(13, 148, 136, 0.32)",
+      "accent-ring": "rgba(13, 148, 136, 0.38)",
+      success: "#16a34a",
+      warning: "#d97706",
+      danger: "#dc2626",
+      "danger-border": "rgba(220, 38, 38, 0.45)",
+      info: "#2563eb",
+      focus: "rgba(13, 148, 136, 0.42)",
+      overlay: "rgba(0, 0, 0, 0.32)",
+      "toast-surface": "#ffffff",
+      "control-surface": "rgba(0, 0, 0, 0.02)",
+      "control-surface-hover": "rgba(0, 0, 0, 0.04)",
+      "input-fill": "rgba(0, 0, 0, 0.04)",
+      "flyout-item": "rgba(0, 0, 0, 0.02)",
+      "flyout-item-hover": "rgba(0, 0, 0, 0.05)",
+      "toggle-track": "rgba(0, 0, 0, 0.08)",
+      "toggle-track-hover": "rgba(0, 0, 0, 0.12)",
+      "skeleton-base": "rgba(0, 0, 0, 0.06)",
+      "skeleton-sheen": "rgba(0, 0, 0, 0.12)",
+    },
+  ],
+  [
+    "shadow",
+    {
+      sm: "0 1px 3px rgba(0, 0, 0, 0.08)",
+      md: "0 4px 12px rgba(0, 0, 0, 0.1)",
+      lg: "0 16px 48px rgba(0, 0, 0, 0.12)",
+      flyout: "0 8px 24px rgba(0, 0, 0, 0.1)",
+      tooltip: "0 6px 20px rgba(0, 0, 0, 0.12)",
+      "toggle-thumb": "0 1px 2px rgba(0, 0, 0, 0.15)",
+      "glow-accent": "0 0 12px rgba(13, 148, 136, 0.28)",
+      "glow-danger": "0 0 12px rgba(220, 38, 38, 0.28)",
+    },
+  ],
+  [
+    "scrollbar",
+    {
+      thumb: "rgba(90, 122, 116, 0.35)",
+      "thumb-hover": "rgba(13, 148, 136, 0.45)",
+      "thumb-active": "rgba(13, 148, 136, 0.65)",
+    },
+  ],
+];
+
 export type ColorTokenName = keyof typeof COLOR_TOKENS;
 export type SpaceTokenName = keyof typeof SPACE_TOKENS;
 export type SizeTokenName = keyof typeof SIZE_TOKENS;
@@ -254,4 +377,15 @@ export function buildRootCssVarsBlock(): string {
     }
   }
   return `:root {\n${lines.join("\n")}\n}`;
+}
+
+/** Build the `:root[data-fynns-theme="light"] { ... }` override block. */
+export function buildLightThemeCssBlock(): string {
+  const lines: string[] = ["  color-scheme: light;"];
+  for (const [groupPrefix, table] of LIGHT_THEME_OVERRIDES) {
+    for (const [key, value] of Object.entries(table)) {
+      lines.push(`  ${fynnsVarName(groupPrefix, key)}: ${value};`);
+    }
+  }
+  return `:root[data-fynns-theme="light"] {\n${lines.join("\n")}\n}`;
 }

@@ -4,6 +4,51 @@
  * Never hardcode raw colors. Classes use the `.fynns-*` namespace.
  */
 
+/* ---------- Motion keyframes ---------- */
+@keyframes fynns-flyout-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fynns-flyout-enter-top {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fynns-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fynns-tooltip-enter-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Button ---------- */
 .fynns-btn {
   display: inline-flex;
@@ -42,6 +87,10 @@
   opacity: 0.45;
 }
 
+.fynns-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
 .fynns-btn--primary {
   background: var(--fynns-color-accent);
   border-color: var(--fynns-color-accent-dim);
@@ -49,8 +98,13 @@
 }
 
 .fynns-btn--primary:hover:not(:disabled) {
-  background: var(--fynns-color-accent);
-  filter: brightness(1.08);
+  background: var(--fynns-color-accent-hover);
+  box-shadow: var(--fynns-shadow-glow-accent);
+}
+
+.fynns-btn--primary:active:not(:disabled) {
+  background: var(--fynns-color-accent-active);
+  transform: scale(0.98);
 }
 
 .fynns-btn--danger {
@@ -162,8 +216,10 @@
   padding: 0.3rem;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface-head);
+  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
+  transform-origin: top right;
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
 }
 
 /* ---------- Input / Textarea ---------- */
@@ -179,7 +235,10 @@
 
 .fynns-input:focus,
 .fynns-input:focus-visible {
-  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+  border-color: var(--fynns-color-accent-mid);
+  box-shadow:
+    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
+    0 0 0 3px var(--fynns-color-accent-soft);
 }
 
 .fynns-input::placeholder {
@@ -227,7 +286,10 @@
 }
 
 .fynns-counter:focus-within .fynns-counter-field {
-  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+  border-color: var(--fynns-color-accent-mid);
+  box-shadow:
+    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
+    0 0 0 3px var(--fynns-color-accent-soft);
 }
 
 .fynns-counter-steppers {
@@ -244,7 +306,10 @@
 }
 
 .fynns-counter:focus-within .fynns-counter-steppers {
-  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+  border-color: var(--fynns-color-accent-mid);
+  box-shadow:
+    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
+    0 0 0 3px var(--fynns-color-accent-soft);
 }
 
 .fynns-counter-step.fynns-btn--sm.fynns-btn--icon + .fynns-counter-step.fynns-btn--sm.fynns-btn--icon {
@@ -386,10 +451,12 @@
   list-style: none;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   max-height: 14rem;
   overflow: auto;
+  transform-origin: top center;
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
 }
 
 .fynns-select-option {
@@ -447,13 +514,16 @@
   padding: 0.3rem;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface-head);
+  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
+  transform-origin: top left;
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
 }
 
 .fynns-menu--end {
   left: auto;
   right: 0;
+  transform-origin: top right;
 }
 
 .fynns-menu-item {
@@ -490,8 +560,26 @@
   z-index: var(--fynns-z-popover);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
+}
+
+.fynns-popover[data-side="top"] {
+  transform-origin: bottom center;
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-popover[data-side="bottom"] {
+  transform-origin: top center;
+}
+
+.fynns-popover[data-side="left"] {
+  transform-origin: center right;
+}
+
+.fynns-popover[data-side="right"] {
+  transform-origin: center left;
 }
 
 /* ---------- Tooltip / InfoHint ---------- */
@@ -509,7 +597,7 @@
   padding: var(--fynns-space-15) var(--fynns-space-35);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface-head);
+  background: var(--fynns-color-surface-3);
   color: var(--fynns-color-text);
   font-size: var(--fynns-font-size-caption);
   line-height: var(--fynns-line-height-snug);
@@ -519,6 +607,11 @@
      of spilling past the bubble's border. */
   white-space: normal;
   overflow-wrap: anywhere;
+  animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
+}
+
+.fynns-tooltip[data-side="bottom"] {
+  animation-name: fynns-tooltip-enter-bottom;
 }
 
 /* Caret: a rotated square straddling the bubble edge that faces the trigger,
@@ -533,7 +626,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  background: var(--fynns-color-surface-head);
+  background: var(--fynns-color-surface-3);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   pointer-events: none;
 }
@@ -598,6 +691,18 @@
   inset: 0;
   z-index: var(--fynns-z-modal);
   background: var(--fynns-color-overlay);
+  opacity: 0;
+  transition: opacity var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog-overlay[data-state="open"] {
+  opacity: 1;
+}
+
+.fynns-dialog-overlay[data-state="closing"] {
+  opacity: 0;
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
 }
 
 .fynns-dialog-overlay--centered {
@@ -631,10 +736,33 @@
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-1);
   color: var(--fynns-color-text);
   box-shadow: var(--fynns-shadow-lg);
   overflow: hidden;
+}
+
+.fynns-dialog-panel--centered,
+.fynns-dialog-panel--command {
+  opacity: 0;
+  transform: scale(0.97) translateY(8px);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog-panel--centered[data-state="open"],
+.fynns-dialog-panel--command[data-state="open"] {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.fynns-dialog-panel--centered[data-state="closing"],
+.fynns-dialog-panel--command[data-state="closing"] {
+  opacity: 0;
+  transform: scale(0.97) translateY(8px);
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
 }
 
 .fynns-dialog-panel--centered {
@@ -775,6 +903,18 @@
   .fynns-dialog-panel--drawer {
     transition: none;
   }
+
+  .fynns-dialog-overlay,
+  .fynns-dialog-panel--centered,
+  .fynns-dialog-panel--command,
+  .fynns-menu,
+  .fynns-select-list,
+  .fynns-popover,
+  .fynns-splitbtn-menu,
+  .fynns-tooltip {
+    animation: none;
+    transition: none;
+  }
 }
 
 /* ---------- Switch ---------- */
@@ -848,8 +988,8 @@
   box-shadow: var(--fynns-shadow-toggle-thumb);
   transform: translateX(0);
   transition:
-    transform var(--fynns-duration-toggle),
-    background var(--fynns-duration-toggle);
+    transform var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
 .fynns-switch--sm .fynns-switch-thumb {
@@ -921,8 +1061,8 @@
   box-shadow: var(--fynns-shadow-toggle-thumb);
   transform: translateX(0);
   transition:
-    transform var(--fynns-duration-toggle),
-    background var(--fynns-duration-toggle);
+    transform var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
 .fynns-toggle--switch:hover .fynns-toggle-track {
@@ -1037,8 +1177,9 @@
 
 .fynns-tab--active {
   color: var(--fynns-color-accent);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-1);
   border-color: var(--fynns-color-accent-dim);
+  box-shadow: inset 0 2px 0 var(--fynns-color-accent);
 }
 
 .fynns-tab:disabled {
@@ -1050,7 +1191,7 @@
 .fynns-collapsible {
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-1);
   overflow: hidden;
 }
 
@@ -1076,7 +1217,7 @@
 }
 
 .fynns-collapsible-trigger:hover {
-  background: var(--fynns-color-surface-2, rgba(127, 127, 127, 0.08));
+  background: var(--fynns-color-surface-hover);
 }
 
 .fynns-collapsible-title {
@@ -1611,7 +1752,7 @@
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface);
+  background: var(--fynns-color-surface-1);
   overflow: hidden;
 }
 
@@ -1763,7 +1904,7 @@
   padding: var(--fynns-size-10) var(--fynns-size-12);
   border-radius: var(--fynns-radius-md);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  background: var(--fynns-color-toast-surface);
+  background: var(--fynns-color-surface-3);
   color: var(--fynns-color-text);
   box-shadow: var(--fynns-shadow-lg);
   pointer-events: auto;
@@ -2002,9 +2143,9 @@
   border-radius: var(--fynns-radius-pill);
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.14),
-    rgba(255, 255, 255, 0.06)
+    var(--fynns-color-skeleton-base),
+    var(--fynns-color-skeleton-sheen),
+    var(--fynns-color-skeleton-base)
   );
   background-size: 220% 100%;
   animation: fynns-skeleton var(--fynns-duration-loading-skeleton) ease-in-out infinite;
@@ -2145,7 +2286,10 @@
 }
 
 .fynns-command-palette-input:focus {
-  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+  border-color: var(--fynns-color-accent-mid);
+  box-shadow:
+    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
+    0 0 0 3px var(--fynns-color-accent-soft);
 }
 
 .fynns-command-palette-list {
