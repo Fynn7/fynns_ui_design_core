@@ -1100,6 +1100,29 @@
   width: 100%;
 }
 
+.fynns-toggle-group--content .fynns-toggle-chip,
+.fynns-toggle-group--content .fynns-toggle-group__segment {
+  flex: 0 1 auto;
+}
+
+.fynns-toggle-group__segment {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.fynns-toggle-group__segment > .fynns-toggle-chip {
+  width: 100%;
+}
+
+.fynns-toggle-group--compact .fynns-toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.72rem;
+}
+
 .fynns-toggle-chip {
   /* Segments share the group width equally: when the group is stretched (a flex/
      grid child, or `--full`) the chips fill it as equal-width segments; when the
