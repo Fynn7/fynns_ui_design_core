@@ -604,7 +604,7 @@
   white-space: normal;
   overflow-wrap: anywhere;
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
-  /* Placement uses inline `transform`; keyframes must not override it (opacity only). */
+  /* Opacity-only enter animation; placement is absolute top/left (no transform). */
 }
 
 .fynns-tooltip--interactive {

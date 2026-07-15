@@ -1,7 +1,7 @@
 import type { CSSProperties, FocusEvent, ReactNode } from "react";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { floatingTransformForSide, useAnchoredPosition, type Align, type Side } from "./Popover";
+import { anchorTargetRect, useFloatingBoxPosition, type Align, type Side } from "./Popover";
 
 /** Keep the caret clear of the bubble's rounded corners. */
 const CARET_INSET = 12;
@@ -53,7 +53,8 @@ export function Tooltip({
   const floatingRef = useRef<HTMLDivElement | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = useId();
-  const pos = useAnchoredPosition(anchorRef.current, floatingEl, open, { side, align, offset: 6 });
+  const pos = useFloatingBoxPosition(anchorRef.current, floatingEl, open, { side, align, offset: 6 });
+  const placementReady = floatingEl != null && floatingEl.offsetWidth > 0;
   const [caretPos, setCaretPos] = useState<number | null>(null);
 
   const clearHideTimer = () => {
@@ -93,18 +94,15 @@ export function Tooltip({
     if (!open) setFloatingEl(null);
   }, [open]);
 
-  // Aim the caret at the anchor's center, clamped inside the bubble. When the
-  // bubble is centered on the anchor (the common case, since alignment prefers
-  // `center`) this lands dead-center; when the bubble had to shift to fit the
-  // viewport (e.g. an icon near the edge), the caret follows the anchor so it
-  // keeps pointing at the trigger instead of missing it.
+  // Aim the caret at the trigger's visual center (prefer the child control over
+  // the inline wrapper), clamped inside the bubble.
   useLayoutEffect(() => {
     const anchor = anchorRef.current;
     if (!open || !pos || !floatingEl || !anchor) {
       setCaretPos(null);
       return;
     }
-    const a = anchor.getBoundingClientRect();
+    const a = anchorTargetRect(anchor);
     const b = floatingEl.getBoundingClientRect();
     if (pos.side === "left" || pos.side === "right") {
       const raw = a.top + a.height / 2 - b.top;
@@ -162,7 +160,7 @@ export function Tooltip({
                 position: "fixed",
                 top: pos.top,
                 left: pos.left,
-                transform: floatingTransformForSide(pos.side, pos.align),
+                visibility: placementReady ? "visible" : "hidden",
               }}
               onMouseEnter={interactive ? show : undefined}
               onMouseLeave={interactive ? scheduleHide : undefined}

@@ -174,12 +174,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   (preferred first, then opposite, then the rest), auto `align` start/end near
   viewport edges, and **always** shifts the bubble inside the viewport margin
   without covering the anchor when a side/align combo allows it. Tooltips use
-  `pos.side` + `pos.align` with `floatingTransformForSide`.
+  `useFloatingBoxPosition` (top/left box coords, no CSS transform) plus a caret
+  aimed at the trigger's visual center.
 - **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
-  (compat passthrough). Renders a caret aimed at the anchor's center, clamped
-  inside the bubble: dead-center when the bubble is centered on the anchor (the
-  default, since alignment prefers `center`), and tracking the anchor when the
-  bubble shifts to fit the viewport. Pass **`interactive`** when the bubble
+  (compat passthrough). Renders a caret aimed at the trigger's center (preferring
+  the child control over the inline wrapper), clamped inside the bubble: dead-center
+  when the bubble is centered on the anchor (the default, since alignment prefers
+  `center`), and tracking the anchor when the bubble shifts to fit the viewport. Pass **`interactive`** when the bubble
   contains buttons or other controls (pointer events on + delayed hide while the
   cursor is over the bubble). **InfoHint** `{ content, ariaLabel?, iconSize? }`.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,

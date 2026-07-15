@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   floatingViewportRect,
   resolveAnchoredPosition,
+  resolveFloatingBox,
   type Align,
   type Side,
 } from "./Popover";
@@ -56,5 +57,26 @@ describe("resolveAnchoredPosition", () => {
     const pos = resolveAnchoredPosition(anchor, null, { side: "top", align: "center" });
     const estimated = { width: Math.min(224, VW * 0.85), height: 48 };
     assertBoxInViewport(pos, estimated);
+  });
+
+  it("centers a short tooltip on an icon button", () => {
+    const anchor = new DOMRect(500, 100, 36, 36);
+    const size = { width: 80, height: 36 };
+    const box = resolveFloatingBox(anchor, size, { side: "top", align: "center" });
+    const anchorCenterX = anchor.left + anchor.width / 2;
+    const bubbleCenterX = box.left + size.width / 2;
+    expect(Math.abs(bubbleCenterX - anchorCenterX)).toBeLessThan(1);
+    expect(box.align).toBe("center");
+  });
+
+  it("keeps caret target aligned when a short tooltip shifts for the viewport edge", () => {
+    const anchor = new DOMRect(980, 120, 36, 36);
+    const size = { width: 80, height: 36 };
+    const box = resolveFloatingBox(anchor, size, { side: "top", align: "center" });
+    const anchorCenterX = anchor.left + anchor.width / 2;
+    expect(box.left).toBeGreaterThanOrEqual(MARGIN);
+    expect(box.left + size.width).toBeLessThanOrEqual(VW - MARGIN);
+    expect(anchorCenterX).toBeGreaterThanOrEqual(box.left + 12);
+    expect(anchorCenterX).toBeLessThanOrEqual(box.left + size.width - 12);
   });
 });

@@ -18,8 +18,31 @@ const OPPOSITE_SIDE: Record<Side, Side> = {
 };
 
 /** Matches `--fynns-layout-tooltip-max-width`: min(14rem, 85vw). */
-function estimatedFloatSize(vw: number): FloatingSize {
+export function estimatedFloatSize(vw: number): FloatingSize {
   return { width: Math.min(224, vw * 0.85), height: 48 };
+}
+
+/** Prefer the visible child control over the inline trigger wrapper when measuring. */
+export function anchorTargetRect(anchorEl: HTMLElement): DOMRect {
+  const child = anchorEl.firstElementChild;
+  if (child instanceof HTMLElement) {
+    const childRect = child.getBoundingClientRect();
+    if (childRect.width > 0 && childRect.height > 0) return childRect;
+  }
+  return anchorEl.getBoundingClientRect();
+}
+
+/** Top-left viewport coordinates for the floating box (no CSS transform). */
+export function resolveFloatingBox(
+  anchorRect: DOMRect,
+  floatingSize: FloatingSize | null,
+  opts: { side?: Side; align?: Align; offset?: number } = {},
+): { top: number; left: number; side: Side; align: Align } {
+  const pos = resolveAnchoredPosition(anchorRect, floatingSize, opts);
+  const vw = window.innerWidth;
+  const size = floatingSize ?? estimatedFloatSize(vw);
+  const box = floatingViewportRect({ top: pos.top, left: pos.left }, pos.side, pos.align, size);
+  return { top: box.top, left: box.left, side: pos.side, align: pos.align };
 }
 
 export type FloatingSize = { width: number; height: number };
@@ -246,14 +269,20 @@ function alignCandidates(
   vh: number,
   side: Side,
   align: Align,
+  size: FloatingSize,
+  offset: number,
 ): Align[] {
   if (align !== "center") return [align];
   // Prefer true center so the bubble straddles the anchor and the caret lands
-  // on the bubble's midpoint. Only fall back to the edge-snapped align when a
-  // centered bubble would overflow the viewport.
+  // on the bubble's midpoint. Only fall back to edge-snapped align when a
+  // centered bubble would overflow even after viewport shift.
+  const point = anchorPoint(anchorRect, side, "center", offset);
+  const shifted = shiftIntoViewport(point, side, "center", size, vw, vh, VIEWPORT_MARGIN);
+  const centered = floatingViewportRect(shifted, side, "center", size);
+  if (fitsViewport(centered, vw, vh, VIEWPORT_MARGIN)) return ["center"];
   const resolved = resolveAlignForAnchor(anchorRect, vw, vh, side, align);
-  const list: Align[] = ["center"];
-  for (const extra of [resolved, "end", "start"] as const) {
+  const list: Align[] = [];
+  for (const extra of [resolved, "end", "start", "center"] as const) {
     if (!list.includes(extra)) list.push(extra);
   }
   return list;
@@ -273,7 +302,7 @@ export function resolveAnchoredPosition(
   let best: Candidate | null = null;
 
   for (const trySide of sideCandidates(preferred)) {
-    const aligns = alignCandidates(anchorRect, vw, vh, trySide, align);
+    const aligns = alignCandidates(anchorRect, vw, vh, trySide, align, size, offset);
     for (const tryAlign of aligns) {
       const point = anchorPoint(anchorRect, trySide, tryAlign, offset);
       const shifted = shiftIntoViewport(point, trySide, tryAlign, size, vw, vh, VIEWPORT_MARGIN);
@@ -331,11 +360,9 @@ export function useAnchoredPosition(
     }
     const compute = () => {
       const rect = anchorEl.getBoundingClientRect();
-      const layout = floatingEl?.getBoundingClientRect();
-      const floatingSize =
-        layout && layout.width > 0 && layout.height > 0
-          ? { width: Math.ceil(layout.width), height: Math.ceil(layout.height) }
-          : null;
+      const w = floatingEl?.offsetWidth ?? 0;
+      const h = floatingEl?.offsetHeight ?? 0;
+      const floatingSize = w > 0 && h > 0 ? { width: w, height: h } : null;
       setPos(resolveAnchoredPosition(rect, floatingSize, { side, align, offset }));
     };
     compute();
@@ -354,6 +381,51 @@ export function useAnchoredPosition(
   }, [anchorEl, floatingEl, open, side, align, offset]);
 
   return pos;
+}
+
+/**
+ * Like {@link useAnchoredPosition} but returns the floating box's top-left
+ * corner so consumers can position with `top`/`left` only (no CSS transform).
+ */
+export function useFloatingBoxPosition(
+  anchorEl: HTMLElement | null,
+  floatingEl: HTMLElement | null,
+  open: boolean,
+  opts: { side?: Side; align?: Align; offset?: number } = {},
+): { top: number; left: number; side: Side; align: Align } | null {
+  const { side = "bottom", align = "center", offset = 6 } = opts;
+  const [box, setBox] = useState<{ top: number; left: number; side: Side; align: Align } | null>(
+    null,
+  );
+
+  useLayoutEffect(() => {
+    if (!open || !anchorEl) {
+      setBox(null);
+      return;
+    }
+    const compute = () => {
+      const rect = anchorTargetRect(anchorEl);
+      const w = floatingEl?.offsetWidth ?? 0;
+      const h = floatingEl?.offsetHeight ?? 0;
+      const floatingSize = w > 0 && h > 0 ? { width: w, height: h } : null;
+      setBox(resolveFloatingBox(rect, floatingSize, { side, align, offset }));
+    };
+    compute();
+    const ro =
+      floatingEl && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(compute)
+        : null;
+    ro?.observe(floatingEl as Element);
+    window.addEventListener("scroll", compute, true);
+    window.addEventListener("resize", compute);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("scroll", compute, true);
+      window.removeEventListener("resize", compute);
+    };
+  }, [anchorEl, floatingEl, open, side, align, offset]);
+
+  return box;
 }
 
 export type PopoverProps = {
