@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, FocusEvent, ReactNode } from "react";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { floatingTransformForSide, useAnchoredPosition, type Align, type Side } from "./Popover";
@@ -19,24 +19,75 @@ export type TooltipProps = {
    * truncated text so the bubble hugs the text instead of floating away.
    */
   align?: TooltipAlign;
+  /**
+   * When true, the bubble accepts pointer events and stays open while the
+   * cursor moves from the trigger onto the tooltip (WCAG 1.4.13 hoverable).
+   * Use for tooltips that contain buttons or other interactive content.
+   */
+  interactive?: boolean;
   /** Single trigger element / content. Wrapped in an inline anchor. */
   children: ReactNode;
   /** Class for the inline trigger wrapper. */
   className?: string;
 };
 
+/** Grace period to cross the trigger–bubble gap before closing (ms). */
+const INTERACTIVE_HIDE_DELAY_MS = 200;
+
 /**
  * Hover / focus tooltip. Self-positioned portal bubble (replaces the radix
  * tooltip). The trigger is wrapped in an inline anchor so it also works for
  * disabled buttons (which do not emit pointer events themselves).
  */
-export function Tooltip({ content, side = "top", align = "center", children, className }: TooltipProps) {
+export function Tooltip({
+  content,
+  side = "top",
+  align = "center",
+  interactive = false,
+  children,
+  className,
+}: TooltipProps) {
   const [open, setOpen] = useState(false);
   const [floatingEl, setFloatingEl] = useState<HTMLDivElement | null>(null);
   const anchorRef = useRef<HTMLSpanElement>(null);
+  const floatingRef = useRef<HTMLDivElement | null>(null);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = useId();
   const pos = useAnchoredPosition(anchorRef.current, floatingEl, open, { side, align, offset: 6 });
   const [caretPos, setCaretPos] = useState<number | null>(null);
+
+  const clearHideTimer = () => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+  };
+
+  const show = () => {
+    clearHideTimer();
+    setOpen(true);
+  };
+
+  const hideNow = () => {
+    clearHideTimer();
+    setOpen(false);
+  };
+
+  const scheduleHide = () => {
+    if (!interactive) {
+      hideNow();
+      return;
+    }
+    clearHideTimer();
+    hideTimerRef.current = setTimeout(() => {
+      hideTimerRef.current = null;
+      const active = document.activeElement;
+      if (active && floatingRef.current?.contains(active)) return;
+      setOpen(false);
+    }, INTERACTIVE_HIDE_DELAY_MS);
+  };
+
+  useEffect(() => () => clearHideTimer(), []);
 
   useEffect(() => {
     if (!open) setFloatingEl(null);
@@ -72,27 +123,39 @@ export function Tooltip({ content, side = "top", align = "center", children, cla
         ? { top: caretPos, bottom: "auto", transform: "translateY(-50%) rotate(45deg)" }
         : { left: caretPos, right: "auto", transform: "translateX(-50%) rotate(45deg)" };
 
-  const show = () => setOpen(true);
-  const hide = () => setOpen(false);
+  const onTriggerBlur = (e: FocusEvent<HTMLSpanElement>) => {
+    if (!interactive) {
+      hideNow();
+      return;
+    }
+    const next = e.relatedTarget as Node | null;
+    if (next && floatingRef.current?.contains(next)) return;
+    scheduleHide();
+  };
 
   return (
     <span
       ref={anchorRef}
       className={["fynns-tooltip-trigger", className ?? ""].filter(Boolean).join(" ")}
       onMouseEnter={show}
-      onMouseLeave={hide}
+      onMouseLeave={scheduleHide}
       onFocus={show}
-      onBlur={hide}
+      onBlur={onTriggerBlur}
       aria-describedby={open ? tooltipId : undefined}
     >
       {children}
       {open && pos
         ? createPortal(
             <div
-              ref={setFloatingEl}
+              ref={(el) => {
+                floatingRef.current = el;
+                setFloatingEl(el);
+              }}
               id={tooltipId}
               role="tooltip"
-              className="fynns-tooltip"
+              className={["fynns-tooltip", interactive ? "fynns-tooltip--interactive" : ""]
+                .filter(Boolean)
+                .join(" ")}
               data-side={pos.side}
               data-align={pos.align}
               style={{
@@ -101,6 +164,8 @@ export function Tooltip({ content, side = "top", align = "center", children, cla
                 left: pos.left,
                 transform: floatingTransformForSide(pos.side, pos.align),
               }}
+              onMouseEnter={interactive ? show : undefined}
+              onMouseLeave={interactive ? scheduleHide : undefined}
             >
               {content}
               <span className="fynns-tooltip__caret" aria-hidden="true" style={caretStyle} />

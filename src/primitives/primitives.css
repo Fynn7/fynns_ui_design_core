@@ -610,6 +610,10 @@
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
 }
 
+.fynns-tooltip--interactive {
+  pointer-events: auto;
+}
+
 .fynns-tooltip[data-side="bottom"] {
   animation-name: fynns-tooltip-enter-bottom;
 }
