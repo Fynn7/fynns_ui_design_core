@@ -170,10 +170,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
   align? }`.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
-  `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — flips top/bottom (or
-  left/right), auto `align` start/end near viewport edges, and clamps without
-  covering the anchor. Tooltips use `pos.side` + `pos.align` with
-  `floatingTransformForSide`.
+  `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — tries all four sides
+  (preferred first, then opposite, then the rest), auto `align` start/end near
+  viewport edges, and **always** shifts the bubble inside the viewport margin
+  without covering the anchor when a side/align combo allows it. Tooltips use
+  `pos.side` + `pos.align` with `floatingTransformForSide`.
 - **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
   (compat passthrough). Renders a caret aimed at the anchor's center, clamped
   inside the bubble: dead-center when the bubble is centered on the anchor (the
