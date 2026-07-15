@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  coversAnchor,
   floatingViewportRect,
   resolveAnchoredPosition,
   resolveFloatingBox,
@@ -78,5 +79,39 @@ describe("resolveAnchoredPosition", () => {
     expect(box.left + size.width).toBeLessThanOrEqual(VW - MARGIN);
     expect(anchorCenterX).toBeGreaterThanOrEqual(box.left + 12);
     expect(anchorCenterX).toBeLessThanOrEqual(box.left + size.width - 12);
+  });
+
+  it("flips to bottom when preferred top would cover the anchor near the viewport top", () => {
+    const anchor = new DOMRect(200, 48, 28, 28);
+    const size = { width: 280, height: 52 };
+    const pos = resolveAnchoredPosition(anchor, size, { side: "top", align: "center" });
+    expect(pos.side).toBe("bottom");
+
+    const box = floatingViewportRect(
+      { top: pos.top, left: pos.left },
+      pos.side,
+      pos.align,
+      size,
+    );
+    expect(box.top).toBeGreaterThanOrEqual(anchor.bottom + 6 - 1);
+    expect(
+      coversAnchor(box, anchor, pos.side, 6),
+    ).toBe(false);
+  });
+
+  it("flips to top when preferred bottom would cover the anchor near the viewport bottom", () => {
+    const anchor = new DOMRect(200, VH - 48, 28, 28);
+    const size = { width: 220, height: 64 };
+    const pos = resolveAnchoredPosition(anchor, size, { side: "bottom", align: "center" });
+    expect(pos.side).toBe("top");
+
+    const box = floatingViewportRect(
+      { top: pos.top, left: pos.left },
+      pos.side,
+      pos.align,
+      size,
+    );
+    expect(box.bottom).toBeLessThanOrEqual(anchor.top - 6 + 1);
+    expect(coversAnchor(box, anchor, pos.side, 6)).toBe(false);
   });
 });

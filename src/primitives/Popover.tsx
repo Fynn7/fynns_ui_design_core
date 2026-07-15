@@ -308,11 +308,14 @@ export function resolveAnchoredPosition(
       const shifted = shiftIntoViewport(point, trySide, tryAlign, size, vw, vh, VIEWPORT_MARGIN);
       const box = floatingViewportRect(shifted, trySide, tryAlign, size);
       if (!fitsViewport(box, vw, vh, VIEWPORT_MARGIN)) continue;
+      // Viewport shift can push a "top" bubble down over the trigger; skip those
+      // so we flip to the opposite side (e.g. bottom + upward caret near the top edge).
+      if (coversAnchor(box, anchorRect, trySide, offset)) continue;
 
       let score = 0;
       if (trySide === preferred) score += 100;
       if (tryAlign === align || (align === "center" && tryAlign === "center")) score += 10;
-      if (!coversAnchor(box, anchorRect, trySide, offset)) score += 50;
+      score += 50;
 
       const candidate: Candidate = { ...shifted, side: trySide, align: tryAlign, score };
       if (!best || candidate.score > best.score) best = candidate;

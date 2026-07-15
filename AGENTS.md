@@ -172,8 +172,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
   `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — tries all four sides
   (preferred first, then opposite, then the rest), auto `align` start/end near
-  viewport edges, and **always** shifts the bubble inside the viewport margin
-  without covering the anchor when a side/align combo allows it. Tooltips use
+  viewport edges, shifts the bubble inside the viewport margin, and **flips to
+  the opposite side** when the preferred side would overlap the anchor after
+  clamping (e.g. a `top` tooltip near the viewport top becomes `bottom` with an
+  upward caret). Tooltips use
   `useFloatingBoxPosition` (top/left box coords, no CSS transform) plus a caret
   aimed at the trigger's visual center.
 - **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
