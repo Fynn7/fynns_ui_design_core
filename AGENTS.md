@@ -210,9 +210,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-layout-drawer-width`.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?, disabled? }`
   (`role="switch"`). **ToggleControl** — checkbox/radio styled as a switch.
-- **ToggleGroup** `{ options, value, onChange, fullWidth? }` — segmented chips.
-  Chips are equal-width segments: they fill the group when it is stretched (a
-  flex/grid child or `fullWidth`) and stay content-width when inline. **Tabs**
+- **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, segmentLayout? }`
+  — segmented chips. Options may include `tip` (per-segment tooltip) and
+  `ariaLabel`. `size="compact"` tightens padding for narrow panels;
+  `segmentLayout="content"` sizes segments to their labels instead of equal
+  widths. Chips are equal-width segments by default: they fill the group when it
+  is stretched (a flex/grid child or `fullWidth`) and stay content-width when
+  inline. **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — disclosure row; collapses content behind a clickable header (chevron rotates).

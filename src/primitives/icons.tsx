@@ -127,6 +127,30 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+/** List with checkmarks — bulk select-all (distinct from a lone check / save). */
+export function ListChecksIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m3 16 2 2 4-4" />
+      <path d="m3 10 2 2 4-4" />
+      <path d="M11 10h10" />
+      <path d="M11 16h10" />
+    </svg>
+  );
+}
+
+/** List with empty boxes — clear bulk selection. */
+export function ListUncheckedIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="3" y="8" width="5" height="5" rx="1" />
+      <rect x="3" y="14" width="5" height="5" rx="1" />
+      <path d="M11 10.5h10" />
+      <path d="M11 16.5h10" />
+    </svg>
+  );
+}
+
 export function PlusIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

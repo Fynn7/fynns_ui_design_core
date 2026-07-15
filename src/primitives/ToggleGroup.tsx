@@ -1,9 +1,13 @@
 import type { ReactNode } from "react";
+import { Fragment } from "react";
+import { Tooltip } from "./Tooltip.tsx";
 
 export type ToggleGroupOption<V extends string> = {
   value: V;
   label: ReactNode;
   ariaLabel?: string;
+  /** Hover/focus tooltip for this segment. */
+  tip?: string;
   disabled?: boolean;
 };
 
@@ -19,6 +23,13 @@ export type ToggleGroupProps<V extends string> = {
    * even when the parent would otherwise leave the group at content width.
    */
   fullWidth?: boolean;
+  /** Tighter padding and font size for narrow containers. */
+  size?: "default" | "compact";
+  /**
+   * `equal` (default): segments share width evenly when stretched.
+   * `content`: each segment sizes to its label.
+   */
+  segmentLayout?: "equal" | "content";
 };
 
 /**
@@ -33,12 +44,16 @@ export function ToggleGroup<V extends string>({
   ariaLabel,
   className,
   fullWidth = false,
+  size = "default",
+  segmentLayout = "equal",
 }: ToggleGroupProps<V>) {
   return (
     <div
       className={[
         "fynns-toggle-group",
         fullWidth ? "fynns-toggle-group--full" : "",
+        size === "compact" ? "fynns-toggle-group--compact" : "",
+        segmentLayout === "content" ? "fynns-toggle-group--content" : "",
         className ?? "",
       ]
         .filter(Boolean)
@@ -48,9 +63,8 @@ export function ToggleGroup<V extends string>({
     >
       {options.map((option) => {
         const on = option.value === value;
-        return (
+        const chip = (
           <button
-            key={option.value}
             type="button"
             className={["fynns-toggle-chip", on ? "fynns-toggle-chip--on" : ""]
               .filter(Boolean)
@@ -62,6 +76,20 @@ export function ToggleGroup<V extends string>({
           >
             {option.label}
           </button>
+        );
+
+        if (!option.tip) {
+          return <Fragment key={option.value}>{chip}</Fragment>;
+        }
+
+        return (
+          <Tooltip
+            key={option.value}
+            content={option.tip}
+            className="fynns-toggle-group__segment"
+          >
+            {chip}
+          </Tooltip>
         );
       })}
     </div>

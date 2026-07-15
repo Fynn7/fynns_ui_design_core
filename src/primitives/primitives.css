@@ -732,6 +732,7 @@
 .fynns-dialog-scrim {
   position: absolute;
   inset: 0;
+  z-index: 0;
   margin: 0;
   padding: 0;
   border: none;
@@ -739,9 +740,14 @@
   cursor: pointer;
 }
 
+.fynns-dialog-scrim--inert {
+  pointer-events: none;
+  cursor: default;
+}
+
 .fynns-dialog-panel {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -1109,6 +1115,29 @@
 .fynns-toggle-group--full {
   display: flex;
   width: 100%;
+}
+
+.fynns-toggle-group--content .fynns-toggle-chip,
+.fynns-toggle-group--content .fynns-toggle-group__segment {
+  flex: 0 1 auto;
+}
+
+.fynns-toggle-group__segment {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.fynns-toggle-group__segment > .fynns-toggle-chip {
+  width: 100%;
+}
+
+.fynns-toggle-group--compact .fynns-toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.72rem;
 }
 
 .fynns-toggle-chip {
