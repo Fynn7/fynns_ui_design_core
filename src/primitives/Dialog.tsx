@@ -34,6 +34,8 @@ export type DialogFrameProps = {
    * interactive: no scroll lock, no focus trap, and a click-through overlay.
    */
   modal?: boolean;
+  /** 为 false 时 scrim 不响应点击（避免长任务误触遮罩）。 */
+  scrimDismiss?: boolean;
   /**
    * Drives CSS enter/exit transitions via `data-state`. When omitted, the frame
    * manages its own presence lifecycle (mount → enter → exit → unmount).
@@ -55,6 +57,7 @@ export function DialogFrame({
   variant,
   side = "right",
   modal = true,
+  scrimDismiss = true,
   dataState: dataStateProp,
   panelClassName,
   labelledBy,
@@ -181,10 +184,12 @@ export function DialogFrame({
       {modal ? (
         <button
           type="button"
-          className="fynns-dialog-scrim"
+          className={["fynns-dialog-scrim", scrimDismiss ? "" : "fynns-dialog-scrim--inert"]
+            .filter(Boolean)
+            .join(" ")}
           aria-hidden="true"
           tabIndex={-1}
-          onClick={onClose}
+          onClick={scrimDismiss ? onClose : undefined}
         />
       ) : null}
       <div
@@ -329,7 +334,9 @@ export function Dialog({
  * Confirmation dialog with a centered, bold title, a top-right close (X), and a
  * right-aligned footer of Cancel + Confirm buttons. Use for yes/no decisions
  * (delete, discard, etc.). The Confirm button can be made destructive via
- * `danger`, and `loading` shows a spinner while blocking close (X/Esc/scrim).
+ * `danger`, and `loading` shows a spinner on Confirm. By default `loading` also
+ * blocks close (X/Esc/scrim/Cancel); set `blockCloseWhileLoading={false}` to
+ * keep dismiss actions enabled (e.g. long-running tasks the user may abort).
  */
 export type ConfirmDialogProps = {
   open: boolean;
@@ -344,6 +351,9 @@ export type ConfirmDialogProps = {
   danger?: boolean;
   confirmDisabled?: boolean;
   loading?: boolean;
+  blockCloseWhileLoading?: boolean;
+  /** 为 false 时长任务进行中点击遮罩不关闭（请用取消按钮）。 */
+  scrimDismiss?: boolean;
   confirmIcon?: ReactNode;
   closeAriaLabel?: string;
 };
@@ -361,17 +371,20 @@ export function ConfirmDialog({
   danger = false,
   confirmDisabled = false,
   loading = false,
+  blockCloseWhileLoading = true,
+  scrimDismiss = true,
   confirmIcon,
   closeAriaLabel = "Close",
 }: ConfirmDialogProps) {
   const titleId = useId();
+  const closeBlocked = loading && blockCloseWhileLoading;
   const cancel = () => {
-    if (loading) return;
+    if (closeBlocked) return;
     if (onCancel) onCancel();
     else onOpenChange(false);
   };
   return (
-    <DialogFrame open={open} onClose={cancel} variant="centered" labelledBy={titleId}>
+    <DialogFrame open={open} onClose={cancel} variant="centered" labelledBy={titleId} scrimDismiss={scrimDismiss}>
       <div className="fynns-dialog-head fynns-dialog-head--centered">
         <span aria-hidden />
         <h2 id={titleId} className="fynns-dialog-title">
@@ -382,7 +395,7 @@ export function ConfirmDialog({
           variant="ghost"
           className="fynns-dialog-close"
           aria-label={closeAriaLabel}
-          disabled={loading}
+          disabled={closeBlocked}
           onClick={cancel}
         >
           <CloseIcon size={22} />
@@ -391,7 +404,7 @@ export function ConfirmDialog({
       {description ? <p className="fynns-dialog-description">{description}</p> : null}
       {children ? <div className="fynns-dialog-body">{children}</div> : null}
       <div className="fynns-dialog-foot">
-        <Button variant="ghost" onClick={cancel} disabled={loading}>
+        <Button variant="ghost" onClick={cancel} disabled={closeBlocked}>
           {cancelLabel}
         </Button>
         <Button
