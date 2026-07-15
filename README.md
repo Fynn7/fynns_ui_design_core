@@ -10,7 +10,7 @@ projects and are easy for humans and agents to reuse.
   (+ [`motionTokens.ts`](src/theme/motionTokens.ts)) → generated, committed
   [`src/theme/theme.css`](src/theme/theme.css).
 - **Components:** [`src/primitives/`](src/primitives) — Button, Input, Select,
-  Dialog, Switch, Toast, Tooltip, and more (see [AGENTS.md](AGENTS.md)).
+  Card, Dialog, Switch, Toast, Tooltip, and more (see [AGENTS.md](AGENTS.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
 - **Submodule propagation:** push-triggered + Dependabot fallback workflow is
   documented in [`docs/submodule-propagation.md`](docs/submodule-propagation.md).
@@ -77,6 +77,11 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run lint` — ESLint.
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
+- `npm run sandbox` — run the interactive M3 Card aesthetic sandbox in
+  [`examples/aesthetic-sandbox`](examples/aesthetic-sandbox). Card tokens,
+  preset JSON behavior, and the authoritative API description are documented
+  in [AGENTS.md](AGENTS.md#card-gallery-and-aesthetic-sandbox).
+- `npm run sandbox:build` — production-build the standalone sandbox.
 
 ## Optional package distribution
 

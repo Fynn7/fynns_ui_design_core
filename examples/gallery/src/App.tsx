@@ -38,6 +38,7 @@ import {
 } from "@fynns/ui";
 import { Foundations } from "./Foundations";
 import { Motion } from "./Motion";
+import { Cards } from "./Cards";
 import { Row, Section } from "./galleryShared";
 
 export function App() {
@@ -92,6 +93,7 @@ export function App() {
 
       <Foundations />
       <Motion />
+      <Cards />
 
       <Section title="Buttons (state matrix)">
         <Row>

@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { Card, CardContent } from "./Card";
 
 /**
  * Card panel with a header (title + actions) and a body. `.fynns-panel*`.
@@ -32,18 +33,19 @@ export function PanelCard({
     .join(" ");
   const bodyClass = [
     "fynns-panel-body",
+    !noScroll ? "fynns-scroll" : "",
     noScroll ? "fynns-panel-body--no-scroll" : "",
     fillBody ? "fynns-panel-body--fill" : "",
   ]
     .filter(Boolean)
     .join(" ");
   return (
-    <div {...rest} className={rootClass}>
+    <Card {...rest} variant="panel" className={rootClass}>
       <div className="fynns-panel-head">
         <span className="fynns-panel-head-title">{title}</span>
         {actions ? <div className="fynns-panel-head-actions">{actions}</div> : null}
       </div>
-      <div className={bodyClass}>{children}</div>
-    </div>
+      <CardContent className={bodyClass}>{children}</CardContent>
+    </Card>
   );
 }

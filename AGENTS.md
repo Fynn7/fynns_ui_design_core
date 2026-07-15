@@ -69,9 +69,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 8. **Elevation = brightness in dark mode.** Surfaces climb a ladder:
    `app-bg` → `surface-1` (panels) → `surface-2` (flyouts) → `surface-3`
    (tooltips/toasts). Higher surfaces are brighter, not darker.
-9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
-   (side sheet) for overlays; **progressive disclosure** (reveal results only
+9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell; `Card`
+   for content and actions on one subject; `Panel`/`PanelCard` for application
+   sections; `Dialog` (centered/command) and `Drawer` (side sheet) for overlays;
+   **progressive disclosure** (reveal results only
    once they exist); and **safety-first interactivity** — disable/refuse a
    destructive action while it is unsafe and say why in a tooltip (e.g. disabling
    a rescan while a conflicting process holds the file), rather than letting it
@@ -112,9 +113,9 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 `fynns-theme-mode`.
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
-`font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
-`--fynns-opacity-muted`).
+`font-weight`, `line-height`, `letter-spacing`, `typography-role`, `card`, `z`,
+`duration`, `ease`, `toggle`, `focus`, `layout`, `scrollbar`, plus `misc`
+(`--fynns-border-hairline`, `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
 
@@ -146,6 +147,14 @@ Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,toggle,fast,flyout,base,slow,pointer,loop-pulse,
 loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
+
+Card styling is component-token driven: `--fynns-card-*` controls the three M3
+container variants plus the compatibility panel variant, shape, spacing,
+surface, outline, shadow/elevation, state-layer/ripple opacity, selection, and
+card typography aliases. `--fynns-typography-role-*` contains the discrete M3
+headline/title/body/label roles used by cards. The default card typography mode
+is `m3`; set `data-fynns-card-typography-mode="fynns"` on `<html>` to use the
+compact fynns role mapping.
 
 For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
@@ -223,10 +232,22 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
 - **CardOpenButton** — full-width card primary action area (quicklinks).
+- **Card** `{ variant?: "filled"|"elevated"|"outlined"|"panel",
+  layout?: "vertical"|"horizontal", clickable?, checkable?, checked?,
+  onCheckedChange?, dragged?, onDraggedChange?, disabled? }` — M3 card surface
+  with keyboard-operable whole-card action/selection states. Compose with
+  **CardMedia** `{ src?, alt?, orientation?, fit? }`, **CardContent**
+  `{ padding?: "default"|"compact"|"none" }`, **CardHeader**
+  `{ title, subheader?, avatar?, action?, titleAs? }`, **CardActions**
+  `{ align?, padding? }`, and **CardActionArea** `{ href?, disabled? }`.
+  `CardActionArea` owns the primary state layer and optional contained ripple;
+  keep supplemental buttons in a sibling `CardActions` to avoid nested actions.
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
 - **Panel** (sidebar `<aside>`) / **PanelCard** `{ title, actions?, fill?,
-  noScroll?, fillBody? }` / **ScrollArea** (custom scrollbar skin).
+  noScroll?, fillBody? }` — compatibility wrapper around
+  `<Card variant="panel">` that preserves `.fynns-panel*` classes and scrolling
+  behavior / **ScrollArea** (custom scrollbar skin).
 - **Toaster** (mount once) + imperative **toast** `toast(msg, opts?)`,
   `toast.message/.success/.error/.warning/.info(msg, opts?)`, `toast.dismiss(id?)`
   — drop-in for the `sonner` subset. Enter/exit uses motion tokens (`--fynns-duration-base`,
@@ -247,6 +268,18 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
+
+## Card gallery and aesthetic sandbox
+
+- `npm run gallery` shows the canonical, read-only Card compositions and state
+  matrix alongside the rest of the design system.
+- `npm run sandbox` starts `examples/aesthetic-sandbox`, a separate interactive
+  GUI for comparing variants and changing `--fynns-card-*` values. Its control
+  cards consume the same variables as the preview, so shape, spacing, surface,
+  state, and typography changes also restyle the sandbox chrome.
+- Sandbox presets are versioned JSON runtime backups. Import/export and
+  `localStorage` do not edit `tokens.ts`; promote a chosen value manually to
+  `CARD_TOKENS`, then run `npm run gen:theme`.
 
 ## Adding to the system
 

@@ -41,6 +41,7 @@ export * from "./primitives/ListGroup";
 export * from "./primitives/ShellNav";
 export * from "./primitives/Slider";
 export * from "./primitives/Panel";
+export * from "./primitives/Card";
 export * from "./primitives/PanelCard";
 export * from "./primitives/ScrollArea";
 export * from "./primitives/Toast";

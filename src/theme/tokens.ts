@@ -128,6 +128,7 @@ export const SIZE_TOKENS = {
   "22": "22px",
   "24": "24px",
   "34": "34px",
+  "72": "72px",
   "152": "152px",
   "240": "240px",
   "360": "360px",
@@ -186,6 +187,8 @@ export const FONT_SIZE_TOKENS = {
 
 /** Font weights. `--fynns-font-weight-<key>`. */
 export const FONT_WEIGHT_TOKENS = {
+  regular: "400",
+  medium: "500",
   semibold: "600",
   title: "650",
   bold: "700",
@@ -204,6 +207,123 @@ export const LINE_HEIGHT_TOKENS = {
 export const LETTER_SPACING_TOKENS = {
   wide: "0.04em",
   subtle: "0.01em",
+} as const;
+
+/**
+ * Material 3 typography roles used by cards. Each discrete value is emitted as
+ * `--fynns-typography-role-<role>-<property>` so consumers can override one
+ * axis without replacing a composite font shorthand.
+ */
+export const TYPOGRAPHY_ROLE_TOKENS = {
+  "headline-small-font": "var(--fynns-font-ui)",
+  "headline-small-size": "1.5rem",
+  "headline-small-weight": "400",
+  "headline-small-line-height": "2rem",
+  "headline-small-tracking": "0",
+  "title-large-font": "var(--fynns-font-ui)",
+  "title-large-size": "1.375rem",
+  "title-large-weight": "400",
+  "title-large-line-height": "1.75rem",
+  "title-large-tracking": "0",
+  "title-medium-font": "var(--fynns-font-ui)",
+  "title-medium-size": "1rem",
+  "title-medium-weight": "500",
+  "title-medium-line-height": "1.5rem",
+  "title-medium-tracking": "0.009375rem",
+  "body-large-font": "var(--fynns-font-ui)",
+  "body-large-size": "1rem",
+  "body-large-weight": "400",
+  "body-large-line-height": "1.5rem",
+  "body-large-tracking": "0.03125rem",
+  "body-medium-font": "var(--fynns-font-ui)",
+  "body-medium-size": "0.875rem",
+  "body-medium-weight": "400",
+  "body-medium-line-height": "1.25rem",
+  "body-medium-tracking": "0.015625rem",
+  "body-small-font": "var(--fynns-font-ui)",
+  "body-small-size": "0.75rem",
+  "body-small-weight": "400",
+  "body-small-line-height": "1rem",
+  "body-small-tracking": "0.025rem",
+  "label-large-font": "var(--fynns-font-ui)",
+  "label-large-size": "0.875rem",
+  "label-large-weight": "500",
+  "label-large-line-height": "1.25rem",
+  "label-large-tracking": "0.00625rem",
+  "label-medium-font": "var(--fynns-font-ui)",
+  "label-medium-size": "0.75rem",
+  "label-medium-weight": "500",
+  "label-medium-line-height": "1rem",
+  "label-medium-tracking": "0.03125rem",
+} as const;
+
+/**
+ * Card component tokens. M3 supplies the initial geometry and state-layer
+ * values; fynns surface, border, focus, shadow, and motion roles preserve the
+ * dark-teal identity and adapt automatically to light mode.
+ */
+export const CARD_TOKENS = {
+  radius: "12px",
+  padding: "16px",
+  "padding-compact": "12px",
+  margin: "8px",
+  gap: "12px",
+  "header-gap": "12px",
+  "actions-gap": "8px",
+  "actions-padding-block": "8px",
+  "actions-padding-inline": "16px",
+  "media-aspect-ratio": "16 / 9",
+  "media-inline-size": "40%",
+  "media-radius": "0px",
+  "border-width": "1px",
+  "border-color": "var(--fynns-color-border-strong)",
+  "focus-width": "var(--fynns-focus-ring-width)",
+  "focus-offset": "var(--fynns-focus-ring-offset-control)",
+  "surface-filled": "var(--fynns-color-surface-1)",
+  "surface-elevated": "var(--fynns-color-surface-1)",
+  "surface-outlined": "var(--fynns-color-surface-1)",
+  "surface-panel": "var(--fynns-color-surface-1)",
+  "surface-tint": "var(--fynns-color-accent)",
+  "surface-tint-opacity": "0.025",
+  "state-layer-color": "var(--fynns-color-text)",
+  "state-layer-hover": "0.08",
+  "state-layer-focus": "0.12",
+  "state-layer-pressed": "0.12",
+  "state-layer-dragged": "0.16",
+  "disabled-opacity": "0.38",
+  "ripple-opacity": "0",
+  "elevation-filled": "0",
+  "elevation-elevated": "1",
+  "elevation-outlined": "0",
+  "elevation-panel": "0",
+  "elevation-hover": "3",
+  "elevation-dragged": "8",
+  "shadow-filled": "none",
+  "shadow-elevated": "var(--fynns-shadow-sm)",
+  "shadow-outlined": "none",
+  "shadow-panel": "none",
+  "shadow-hover": "var(--fynns-shadow-md)",
+  "shadow-dragged": "var(--fynns-shadow-lg)",
+  "selected-border-color": "var(--fynns-color-accent)",
+  "selected-indicator-size": "24px",
+  "title-transform": "none",
+  "panel-title-transform": "none",
+  "typography-mode": "m3",
+  "title-font": "var(--fynns-typography-role-title-medium-font)",
+  "title-size": "var(--fynns-typography-role-title-medium-size)",
+  "title-weight": "var(--fynns-typography-role-title-medium-weight)",
+  "title-line-height": "var(--fynns-typography-role-title-medium-line-height)",
+  "title-tracking": "var(--fynns-typography-role-title-medium-tracking)",
+  "body-font": "var(--fynns-typography-role-body-medium-font)",
+  "body-size": "var(--fynns-typography-role-body-medium-size)",
+  "body-weight": "var(--fynns-typography-role-body-medium-weight)",
+  "body-line-height": "var(--fynns-typography-role-body-medium-line-height)",
+  "body-tracking": "var(--fynns-typography-role-body-medium-tracking)",
+  "label-font": "var(--fynns-typography-role-label-large-font)",
+  "label-size": "var(--fynns-typography-role-label-large-size)",
+  "label-weight": "var(--fynns-typography-role-label-large-weight)",
+  "label-line-height": "var(--fynns-typography-role-label-large-line-height)",
+  "label-tracking": "var(--fynns-typography-role-label-large-tracking)",
 } as const;
 
 /** Z-index layers. `--fynns-z-<key>`. */
@@ -340,6 +460,8 @@ export type SpaceTokenName = keyof typeof SPACE_TOKENS;
 export type SizeTokenName = keyof typeof SIZE_TOKENS;
 export type RadiusTokenName = keyof typeof RADIUS_TOKENS;
 export type ShadowTokenName = keyof typeof SHADOW_TOKENS;
+export type TypographyRoleTokenName = keyof typeof TYPOGRAPHY_ROLE_TOKENS;
+export type CardTokenName = keyof typeof CARD_TOKENS;
 
 /** Ordered [cssGroupPrefix, table] pairs used to emit the `:root` block. */
 export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string>]> = [
@@ -353,6 +475,8 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["font-weight", FONT_WEIGHT_TOKENS],
   ["line-height", LINE_HEIGHT_TOKENS],
   ["letter-spacing", LETTER_SPACING_TOKENS],
+  ["typography-role", TYPOGRAPHY_ROLE_TOKENS],
+  ["card", CARD_TOKENS],
   ["z", Z_TOKENS],
   ["duration", DURATION_TOKENS],
   ["ease", EASING_TOKENS],

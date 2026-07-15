@@ -14,7 +14,8 @@ This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
 - Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
   Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, Switch, ToggleControl, ToggleGroup, Tabs,
-  Slider, Panel, PanelCard, ScrollArea, Toaster/toast, Alert banners, Spinner/
+  Slider, Card/CardMedia/CardContent/CardHeader/CardActions/CardActionArea,
+  Panel, PanelCard, ScrollArea, Toaster/toast, Alert banners, Spinner/
   Skeleton/Overlay, Badge, Kbd, CommandPalette). Reach for an existing primitive
   before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,

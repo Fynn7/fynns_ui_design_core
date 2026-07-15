@@ -26,7 +26,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "gallery": "vite --config examples/gallery/vite.config.ts",
-    "gallery:build": "vite build --config examples/gallery/vite.config.ts"
+    "gallery:build": "vite build --config examples/gallery/vite.config.ts",
+    "sandbox": "vite --config examples/aesthetic-sandbox/vite.config.ts",
+    "sandbox:build": "vite build --config examples/aesthetic-sandbox/vite.config.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0",
