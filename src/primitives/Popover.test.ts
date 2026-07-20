@@ -114,4 +114,17 @@ describe("resolveAnchoredPosition", () => {
     expect(box.bottom).toBeLessThanOrEqual(anchor.top - 6 + 1);
     expect(coversAnchor(box, anchor, pos.side, 6)).toBe(false);
   });
+
+  it("returns top-left box coords for bottom+end so a wide popover stays in the viewport", () => {
+    // Top-right toolbar anchor (activity indicator); popover align=end.
+    const anchor = new DOMRect(VW - 160, 12, 48, 32);
+    const size = { width: 420, height: 120 };
+    const box = resolveFloatingBox(anchor, size, { side: "bottom", align: "end", offset: 10 });
+    expect(box.top).toBeGreaterThanOrEqual(MARGIN);
+    expect(box.left).toBeGreaterThanOrEqual(MARGIN);
+    expect(box.left + size.width).toBeLessThanOrEqual(VW - MARGIN);
+    expect(box.top).toBeGreaterThanOrEqual(anchor.bottom + 10 - 1);
+    // Must be the floating box top-left, not the raw attachment point (anchor.right).
+    expect(box.left).toBeLessThan(anchor.right - size.width / 2);
+  });
 });

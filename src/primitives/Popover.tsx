@@ -459,7 +459,9 @@ export function Popover({
   role = "dialog",
 }: PopoverProps) {
   const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
-  const pos = useAnchoredPosition(anchorRef.current, panelEl, open, { side, align, offset });
+  // Use box top-left (not the raw anchor attachment point) so align=end/center
+  // stay inside the viewport without a CSS transform.
+  const pos = useFloatingBoxPosition(anchorRef.current, panelEl, open, { side, align, offset });
 
   useEffect(() => {
     if (!open) return;

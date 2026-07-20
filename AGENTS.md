@@ -169,15 +169,15 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
   align? }`.
-- **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
-  `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — tries all four sides
-  (preferred first, then opposite, then the rest), auto `align` start/end near
-  viewport edges, shifts the bubble inside the viewport margin, and **flips to
-  the opposite side** when the preferred side would overlap the anchor after
-  clamping (e.g. a `top` tooltip near the viewport top becomes `bottom` with an
-  upward caret). Tooltips use
-  `useFloatingBoxPosition` (top/left box coords, no CSS transform) plus a caret
-  aimed at the trigger's visual center.
+- **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
+  positions via `useFloatingBoxPosition` (top/left box coords, no CSS
+  transform). Placement tries all four sides (preferred first, then opposite,
+  then the rest), auto `align` start/end near viewport edges, shifts the bubble
+  inside the viewport margin, and **flips to the opposite side** when the
+  preferred side would overlap the anchor after clamping.
+  `useAnchoredPosition` returns the raw attachment point (for caret math);
+  prefer `useFloatingBoxPosition` / `resolveFloatingBox` when rendering a panel
+  with `top`/`left` only.
 - **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
   (compat passthrough). Renders a caret aimed at the trigger's center (preferring
   the child control over the inline wrapper), clamped inside the bubble: dead-center
