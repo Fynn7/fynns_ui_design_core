@@ -283,7 +283,7 @@ export function Dialog({
   variant = "centered",
   className,
   showCloseButton = true,
-  closeAriaLabel = "Close",
+  closeAriaLabel = "关闭",
 }: DialogProps) {
   const titleId = useId();
   const close = () => onOpenChange(false);
@@ -364,8 +364,8 @@ export function ConfirmDialog({
   title,
   description,
   children,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  confirmLabel = "确认",
+  cancelLabel = "取消",
   onConfirm,
   onCancel,
   danger = false,
@@ -374,7 +374,7 @@ export function ConfirmDialog({
   blockCloseWhileLoading = true,
   scrimDismiss = true,
   confirmIcon,
-  closeAriaLabel = "Close",
+  closeAriaLabel = "关闭",
 }: ConfirmDialogProps) {
   const titleId = useId();
   const closeBlocked = loading && blockCloseWhileLoading;
