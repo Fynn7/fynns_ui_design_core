@@ -33,8 +33,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
    `IconButton` paints as the glyph itself (ghost, no bordered tile). Pure
-   informational "i" affordances use **`InfoHint`** (standalone icon + tooltip),
-   not a chrome `IconButton`. Tooltips also describe *dynamic* state (e.g. why a
+   informational help uses **`InfoHint`**: standalone "i" when there is no
+   visible name; for form/inspector rows pass `label` (plain text trigger,
+   `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   Tooltips also describe *dynamic* state (e.g. why a
    control is disabled).
    **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
    cover its trigger or the adjacent related content; the caret links the bubble
@@ -196,8 +198,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Renders a caret aimed at the anchor's center, clamped inside the bubble:
   dead-center when the bubble is centered on the anchor (the default, since
   alignment prefers `center`), and tracking the anchor when the bubble shifts
-  to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }` —
-  standalone info glyph + tooltip for help affordances (not an `IconButton` tile).
+  to fit the viewport. **InfoHint** `{ content, label?, ariaLabel?, iconSize? }` —
+  icon-only help glyph, or `label` as a plain help trigger (prefer for
+  form/inspector rows; no underline fence, no trailing "i").
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in

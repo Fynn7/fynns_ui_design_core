@@ -256,7 +256,9 @@
 .sandbox-inspector-meta {
   display: inline-flex;
   align-items: center;
-  gap: var(--fynns-space-2xs);
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-caption);
 }
 
 .sandbox-inspector-actions {
@@ -758,7 +760,11 @@
 
 .sandbox-globals-readonly {
   margin: 0;
-  padding-left: var(--fynns-space-md);
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
 }

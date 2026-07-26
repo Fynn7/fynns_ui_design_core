@@ -13,17 +13,54 @@ function parseLengthToPx(value: string): number {
 }
 
 const EDITABLE_RADIUS = [
-  { key: "xs", label: "xs", max: 16 },
-  { key: "sm", label: "sm", max: 20 },
-  { key: "md", label: "md", max: 28 },
-  { key: "lg", label: "lg", max: 32 },
-  { key: "xl", label: "xl", max: 40 },
+  {
+    key: "xs",
+    label: "xs",
+    max: 16,
+    hint: "Smallest ladder step (M3 XS ≈ 4dp). Finest corners; keep below sm in the scale.",
+  },
+  {
+    key: "sm",
+    label: "sm",
+    max: 20,
+    hint: "Compact controls: Button, SplitButton, ToggleGroup, Badge, PickList, toast action chips.",
+  },
+  {
+    key: "md",
+    label: "md",
+    max: 28,
+    hint: "Default surface radius: Input, Select, Card, PanelCard, Popover, Tooltip, Tabs, Collapsible, list rows, Alert/Toast.",
+  },
+  {
+    key: "lg",
+    label: "lg",
+    max: 32,
+    hint: "Larger chrome: DropdownMenu / SplitButton menus, Dialog and Drawer panels.",
+  },
+  {
+    key: "xl",
+    label: "xl",
+    max: 40,
+    hint: "Largest ladder step (M3 XL band). Soft / emphasis shells; keep above lg in the scale.",
+  },
 ] as const;
 
 const READONLY_RADIUS = [
-  { key: "none", label: "none" },
-  { key: "pill", label: "pill" },
-  { key: "round", label: "round" },
+  {
+    key: "none",
+    label: "none",
+    hint: "Sharp corners (0). Flush edges when a control must meet a hard boundary.",
+  },
+  {
+    key: "pill",
+    label: "pill",
+    hint: "Capsule (999px): Switch track, SearchInput, fully rounded chips.",
+  },
+  {
+    key: "round",
+    label: "round",
+    hint: "Circle (50%): Switch thumb and other circular affordances.",
+  },
 ] as const;
 
 const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
@@ -61,10 +98,8 @@ export function GlobalsInspector() {
         <header className="sandbox-inspector-head">
           <h2>Global properties</h2>
           <span className="sandbox-inspector-meta">
-            <span className="sandbox-muted">
-              {overrideCount} override{overrideCount === 1 ? "" : "s"}
-            </span>
             <InfoHint
+              label={`${overrideCount} override${overrideCount === 1 ? "" : "s"}`}
               ariaLabel="What overrides means"
               content="Count of --fynns-* tokens changed in the live draft versus the tokens.ts baseline. Reset clears them; Apply changes writes them to source."
             />
@@ -106,13 +141,17 @@ export function GlobalsInspector() {
             Writes `--fynns-radius-*` used by every primitive (Button, Input, Card, flyouts,
             …) — not Card-only.
           </p>
-          {EDITABLE_RADIUS.map(({ key, label, max }) => {
+          {EDITABLE_RADIUS.map(({ key, label, max, hint }) => {
             const cssVar = `--fynns-radius-${key}`;
             const px = parseLengthToPx(resolved(cssVar));
             return (
               <div key={key} className="sandbox-field">
                 <div className="sandbox-field-row">
-                  <span>radius-{label}</span>
+                  <InfoHint
+                    label={<code>radius-{label}</code>}
+                    ariaLabel={`About radius-${label}`}
+                    content={hint}
+                  />
                   <code>{px}px</code>
                 </div>
                 <Slider
@@ -133,11 +172,18 @@ export function GlobalsInspector() {
               <span>Special (read-only)</span>
             </div>
             <ul className="sandbox-globals-readonly">
-              {READONLY_RADIUS.map(({ key, label }) => (
+              {READONLY_RADIUS.map(({ key, label, hint }) => (
                 <li key={key}>
-                  <code>
-                    {label}: {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
-                  </code>
+                  <InfoHint
+                    label={
+                      <code>
+                        {label}:{" "}
+                        {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
+                      </code>
+                    }
+                    ariaLabel={`About radius-${label}`}
+                    content={hint}
+                  />
                 </li>
               ))}
             </ul>

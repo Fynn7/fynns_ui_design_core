@@ -79,10 +79,8 @@ export function PropertyInspector() {
         <header className="sandbox-inspector-head">
           <h2>Property inspector</h2>
           <span className="sandbox-inspector-meta">
-            <span className="sandbox-muted">
-              {overrideCount} override{overrideCount === 1 ? "" : "s"}
-            </span>
             <InfoHint
+              label={`${overrideCount} override${overrideCount === 1 ? "" : "s"}`}
               ariaLabel="What overrides means"
               content="Count of --fynns-* tokens changed in the live draft versus the tokens.ts baseline. Reset clears them; Apply changes writes them to source."
             />
