@@ -1,4 +1,4 @@
-/** Tiny color helpers for sandbox surface brightness knobs (no free-form picker). */
+/** Tiny color helpers for sandbox surface / accent knobs (no free-form hex field). */
 
 export function hexToRgb(hex: string): [number, number, number] | null {
   const m = hex.trim().match(/^#([0-9a-f]{6})$/i);
@@ -35,4 +35,62 @@ export function estimateBrightnessDelta(baseline: string, current: string): numb
   const diff = lb - la;
   // Map ~0..255 channel delta into -40..+40 slider space (heuristic).
   return Math.max(-40, Math.min(40, Math.round((diff / 255) * 100)));
+}
+
+/** sRGB hex → HSL hue degrees (0–360), or null if not a hex color. */
+export function approxHueFromHex(value: string): number | null {
+  const rgb = hexToRgb(value);
+  if (!rgb) return null;
+  const [r, g, b] = rgb.map((c) => c / 255);
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const d = max - min;
+  if (d === 0) return 0;
+  let h = 0;
+  switch (max) {
+    case r:
+      h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      break;
+    case g:
+      h = ((b - r) / d + 2) / 6;
+      break;
+    default:
+      h = ((r - g) / d + 4) / 6;
+  }
+  return h * 360;
+}
+
+/** HSL (h 0–360, s/l 0–100) → `#rrggbb`. */
+export function hslToHex(h: number, s: number, l: number): string {
+  const hh = ((h % 360) + 360) % 360;
+  const ss = s / 100;
+  const ll = l / 100;
+  const c = (1 - Math.abs(2 * ll - 1)) * ss;
+  const x = c * (1 - Math.abs(((hh / 60) % 2) - 1));
+  const m = ll - c / 2;
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  if (hh < 60) [r, g, b] = [c, x, 0];
+  else if (hh < 120) [r, g, b] = [x, c, 0];
+  else if (hh < 180) [r, g, b] = [0, c, x];
+  else if (hh < 240) [r, g, b] = [0, x, c];
+  else if (hh < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  return toHex((r + m) * 255, (g + m) * 255, (b + m) * 255);
+}
+
+/**
+ * Pointer angle relative to element center → hue degrees.
+ * Matches CSS `conic-gradient` (0° at 12 o'clock, clockwise).
+ */
+export function hueFromPointer(
+  clientX: number,
+  clientY: number,
+  rect: DOMRect,
+): number {
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const angle = Math.atan2(clientY - cy, clientX - cx);
+  return (((angle * 180) / Math.PI + 90) % 360 + 360) % 360;
 }

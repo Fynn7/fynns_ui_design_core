@@ -314,20 +314,133 @@
 .sandbox-hue-wheel {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
-}
-
-.sandbox-hue-swatch {
-  height: 2rem;
-  border-radius: var(--fynns-radius-sm);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  gap: var(--fynns-space-sm);
 }
 
 .sandbox-hue-meta {
   display: flex;
   justify-content: space-between;
+  gap: var(--fynns-space-sm);
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text);
+}
+
+.sandbox-hue-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+}
+
+.sandbox-hue-preset {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 50%;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  cursor: pointer;
+  transition:
+    box-shadow var(--fynns-duration-fast),
+    transform var(--fynns-duration-fast);
+}
+
+.sandbox-hue-preset:hover {
+  transform: scale(1.08);
+}
+
+.sandbox-hue-preset--palette {
+  /* Rainbow trigger — spectrum is intentional for a hue-palette affordance. */
+  background: conic-gradient(
+    from 0deg,
+    hsl(0 90% 55%),
+    hsl(60 90% 50%),
+    hsl(120 70% 45%),
+    hsl(180 70% 45%),
+    hsl(240 70% 55%),
+    hsl(300 70% 50%),
+    hsl(360 90% 55%)
+  );
+}
+
+.sandbox-hue-preset--active,
+.sandbox-hue-preset:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fynns-color-app-bg), 0 0 0 4px var(--fynns-color-accent);
+}
+
+.sandbox-hue-popover {
+  padding: var(--fynns-space-sm);
+  min-width: 12.5rem;
+  box-sizing: border-box;
+}
+
+.sandbox-hue-disk {
+  position: relative;
+  width: 11.5rem;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: 50%;
+  touch-action: none;
+  cursor: crosshair;
+  outline: none;
+}
+
+.sandbox-hue-disk:focus-visible {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+.sandbox-hue-disk-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    hsl(0 90% 55%),
+    hsl(60 90% 50%),
+    hsl(120 70% 45%),
+    hsl(180 70% 45%),
+    hsl(240 70% 55%),
+    hsl(300 70% 50%),
+    hsl(360 90% 55%)
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 1.35rem),
+    #000 calc(100% - 1.3rem)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 1.35rem),
+    #000 calc(100% - 1.3rem)
+  );
+  pointer-events: none;
+}
+
+.sandbox-hue-disk-center {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  box-shadow: var(--fynns-shadow-sm);
+  pointer-events: none;
+}
+
+.sandbox-hue-disk-arm {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sandbox-hue-disk-marker {
+  position: absolute;
+  left: 50%;
+  top: 0.35rem;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-left: -0.425rem;
+  border-radius: 50%;
+  border: 2px solid var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-sm);
 }
 
 .sandbox-agent-bar {

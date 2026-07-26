@@ -168,7 +168,8 @@ export function PropertyInspector() {
         <Collapsible title="Color" defaultOpen>
           <HueWheel />
           <p className="sandbox-help">
-            Shifts the accent family as a hue. Card surfaces use separate brightness knobs below.
+            Preset chips stay inline; open the rainbow chip for the full hue ring.
+            Surfaces stay on the committed ladder — only the accent family shifts.
           </p>
           {SURFACE_KEYS.map(({ cssVar, key, label }) => {
             const baseline = BASELINE[cssVar] ?? "#000000";
