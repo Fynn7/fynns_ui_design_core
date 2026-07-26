@@ -30,6 +30,10 @@ export const COLOR_TOKENS = {
   "surface-2": "#082225",
   /** Elevation 3 — tooltips, toasts. oklch(17% 0.035 192) */
   "surface-3": "#0a2a2e",
+  /** Elevation 4 — dragged cards, reserved emphasis. oklch(20% 0.038 192) */
+  "surface-4": "#0c3237",
+  /** Elevation 5 — reserved hover emphasis. oklch(23% 0.04 192) */
+  "surface-5": "#0e3a40",
   "surface-muted": "rgba(255, 255, 255, 0.03)",
   "surface-hover": "rgba(255, 255, 255, 0.08)",
   border: "#0d2e2c",
@@ -133,11 +137,22 @@ export const SIZE_TOKENS = {
   "360": "360px",
 } as const;
 
-/** Corner radii. `--fynns-radius-<key>`. */
+/**
+ * Corner radii. `--fynns-radius-<key>`.
+ * T-shirt keys roughly track the M3 shape scale (see `tokens.m3-draft.ts`);
+ * numeric values remain fynns overrides, not a 1:1 M3 copy.
+ */
 export const RADIUS_TOKENS = {
+  none: "0",
+  /** M3 extra-small ≈ 4dp */
+  xs: "4px",
   sm: "6px",
+  /** Card default (M3 medium ≈ 12dp is a sandbox starting point, not forced here). */
   md: "8px",
   lg: "10px",
+  /** M3 extra-large band */
+  xl: "16px",
+  "2xl": "24px",
   "flyout-glyph": "5px",
   pill: "999px",
   round: "50%",
@@ -145,15 +160,58 @@ export const RADIUS_TOKENS = {
 
 /** Elevation shadows. `--fynns-shadow-<key>`. */
 export const SHADOW_TOKENS = {
+  none: "none",
+  /** Elevation 1 resting (elevated card). */
+  xs: "0 1px 2px rgba(0, 0, 0, 0.22)",
   sm: "0 1px 3px rgba(0, 0, 0, 0.25)",
   md: "0 4px 12px rgba(0, 0, 0, 0.35)",
   lg: "0 16px 48px rgba(0, 0, 0, 0.45)",
+  xl: "0 24px 64px rgba(0, 0, 0, 0.5)",
   flyout: "0 8px 24px rgba(0, 0, 0, 0.35)",
   tooltip: "0 6px 20px rgba(0, 0, 0, 0.45)",
   "toggle-thumb": "0 1px 2px rgba(0, 0, 0, 0.35)",
   "glow-accent": "0 0 12px rgba(45, 212, 191, 0.35)",
   "glow-danger": "0 0 12px rgba(248, 113, 113, 0.35)",
 } as const;
+
+/**
+ * State-layer opacities for interactive overlays.
+ * Consumed via `color-mix(in srgb, var(--fynns-color-*) var(--fynns-state-hover), transparent)`.
+ * `--fynns-state-<key>`.
+ */
+export const STATE_LAYER_TOKENS = {
+  hover: "8%",
+  focus: "10%",
+  pressed: "12%",
+  dragged: "16%",
+} as const;
+
+/**
+ * M3-informed elevation ladder (tonal surface + optional shadow).
+ * Lookup table for components — not emitted as CSS custom properties.
+ */
+export const ELEVATION_TOKENS = {
+  0: { surfaceVar: "--fynns-color-app-bg", shadowVar: "--fynns-shadow-none" },
+  1: { surfaceVar: "--fynns-color-surface-1", shadowVar: "--fynns-shadow-xs" },
+  2: { surfaceVar: "--fynns-color-surface-2", shadowVar: "--fynns-shadow-sm" },
+  3: { surfaceVar: "--fynns-color-surface-3", shadowVar: "--fynns-shadow-md" },
+  4: { surfaceVar: "--fynns-color-surface-4", shadowVar: "--fynns-shadow-lg" },
+  5: { surfaceVar: "--fynns-color-surface-5", shadowVar: "--fynns-shadow-xl" },
+} as const;
+
+/**
+ * Card variant → surface / elevation / border mapping.
+ * Lookup table for the Card primitive — not a CSS token group.
+ */
+export const CARD_VARIANT_MAP = {
+  elevated: { surfaceContainer: "surface-1", elevation: 1, border: false },
+  filled: { surfaceContainer: "surface-4", elevation: 0, border: false },
+  outlined: { surfaceContainer: "app-bg", elevation: 0, border: true },
+} as const;
+
+export type ElevationLevel = keyof typeof ELEVATION_TOKENS;
+export type StateLayerName = keyof typeof STATE_LAYER_TOKENS;
+export type CardVariant = keyof typeof CARD_VARIANT_MAP;
 
 /** Font stacks. `--fynns-font-<key>`. */
 export const FONT_FAMILY_TOKENS = {
@@ -278,6 +336,8 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "surface-1": "#ffffff",
       "surface-2": "#f5fafa",
       "surface-3": "#ffffff",
+      "surface-4": "#f0f7f5",
+      "surface-5": "#e8f2ef",
       "surface-muted": "rgba(0, 0, 0, 0.03)",
       "surface-hover": "rgba(0, 0, 0, 0.05)",
       border: "#c5ddd8",
@@ -315,9 +375,12 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
   [
     "shadow",
     {
+      none: "none",
+      xs: "0 1px 2px rgba(0, 0, 0, 0.06)",
       sm: "0 1px 3px rgba(0, 0, 0, 0.08)",
       md: "0 4px 12px rgba(0, 0, 0, 0.1)",
       lg: "0 16px 48px rgba(0, 0, 0, 0.12)",
+      xl: "0 24px 64px rgba(0, 0, 0, 0.14)",
       flyout: "0 8px 24px rgba(0, 0, 0, 0.1)",
       tooltip: "0 6px 20px rgba(0, 0, 0, 0.12)",
       "toggle-thumb": "0 1px 2px rgba(0, 0, 0, 0.15)",
@@ -340,6 +403,7 @@ export type SpaceTokenName = keyof typeof SPACE_TOKENS;
 export type SizeTokenName = keyof typeof SIZE_TOKENS;
 export type RadiusTokenName = keyof typeof RADIUS_TOKENS;
 export type ShadowTokenName = keyof typeof SHADOW_TOKENS;
+export type StateLayerTokenName = keyof typeof STATE_LAYER_TOKENS;
 
 /** Ordered [cssGroupPrefix, table] pairs used to emit the `:root` block. */
 export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string>]> = [
@@ -348,6 +412,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["size", SIZE_TOKENS],
   ["radius", RADIUS_TOKENS],
   ["shadow", SHADOW_TOKENS],
+  ["state", STATE_LAYER_TOKENS],
   ["font", FONT_FAMILY_TOKENS],
   ["font-size", FONT_SIZE_TOKENS],
   ["font-weight", FONT_WEIGHT_TOKENS],

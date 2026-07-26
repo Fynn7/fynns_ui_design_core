@@ -3,6 +3,10 @@ import {
   AlertCircleIcon,
   Badge,
   Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
   ConfirmDialog,
   Dialog,
   Drawer,
@@ -92,6 +96,31 @@ export function App() {
 
       <Foundations />
       <Motion />
+
+      <Section title="Cards (M3 variants)">
+        <Row>
+          {(["elevated", "filled", "outlined"] as const).map((variant) => (
+            <Card key={variant} variant={variant} style={{ width: "16rem" }}>
+              <CardHeader title={variant} subtitle="Subject card" avatar="C" />
+              <CardContent>
+                Shared anatomy: header, content, actions. PanelCard remains the layout shell.
+              </CardContent>
+              <CardActions align="end">
+                <Button size="sm" variant="ghost">
+                  Cancel
+                </Button>
+                <Button size="sm" variant="primary">
+                  Open
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+          <Card variant="elevated" interactive style={{ width: "16rem" }} onClick={() => toast.success("Card clicked")}>
+            <CardHeader title="Interactive" subtitle="Hover / press / focus" />
+            <CardContent>Uses state-layer tokens for feedback.</CardContent>
+          </Card>
+        </Row>
+      </Section>
 
       <Section title="Buttons (state matrix)">
         <Row>

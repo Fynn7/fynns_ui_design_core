@@ -77,6 +77,18 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run lint` — ESLint.
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
+- `npm run sandbox` — run the Card aesthetic sandbox in
+  [`examples/sandbox`](examples/sandbox) (live token overrides, WYSIWYG Card
+  preview, export diff). Drafts persist in `localStorage`; writeback is
+  copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
+
+## Aesthetic sandbox
+
+The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
+separate design language. Dragging radius / hue / state layers injects CSS
+variable overrides at runtime so both the Card preview and the sandbox chrome
+update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
+`tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ## Optional package distribution
 

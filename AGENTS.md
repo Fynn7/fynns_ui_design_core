@@ -68,7 +68,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `data-state` on the shared `DialogFrame` presence lifecycle.
 8. **Elevation = brightness in dark mode.** Surfaces climb a ladder:
    `app-bg` → `surface-1` (panels) → `surface-2` (flyouts) → `surface-3`
-   (tooltips/toasts). Higher surfaces are brighter, not darker.
+   (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
+   Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
    `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
    (side sheet) for overlays; **progressive disclosure** (reveal results only
@@ -111,7 +112,7 @@ override + reset + scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>`
 scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 `fynns-theme-mode`.
 
-Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
+Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
 `toggle`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
@@ -119,9 +120,10 @@ Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
 Color tokens (`--fynns-color-*`):
 
 - Surfaces (elevation ladder): `app-bg` `#031417`, `surface-1` (panels),
-  `surface-2` (flyouts), `surface-3` (tooltips/toasts). Legacy aliases kept:
-  `surface`, `surface-head`, `toast-surface`. Also `surface-muted`,
-  `surface-hover`, `control-surface`, `control-surface-hover`, `flyout-item`,
+  `surface-2` (flyouts), `surface-3` (tooltips/toasts), `surface-4` (dragged /
+  filled card), `surface-5` (reserved). Legacy aliases kept: `surface`,
+  `surface-head`, `toast-surface`. Also `surface-muted`, `surface-hover`,
+  `control-surface`, `control-surface-hover`, `flyout-item`,
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
 - Lines/text: `border` `#0d2e2c`, `border-strong`, `text` `#e2f0ed`,
   `text-muted` `#7a9e98`.
@@ -132,6 +134,10 @@ Color tokens (`--fynns-color-*`):
   `danger-border`, `info` `#60a5fa`.
 - Misc: `overlay`, `toggle-track`, `toggle-track-hover`,
   `scrollbar-thumb*` (also under the `scrollbar` group).
+- State layers (`--fynns-state-*`): `hover` `8%`, `focus` `10%`, `pressed`
+  `12%`, `dragged` `16%` — used via `color-mix(...)` for interactive overlays.
+- Card lookups (TS only, not CSS vars): `CARD_VARIANT_MAP`, `ELEVATION_TOKENS`.
+  M3 reference mirror: [`src/theme/tokens.m3-draft.ts`](src/theme/tokens.m3-draft.ts).
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
@@ -139,8 +145,8 @@ legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
 
-Shadows: `sm`, `md`, `lg`, `flyout`, `tooltip`, `toggle-thumb`, `glow-accent`,
-`glow-danger`.
+Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thumb`,
+`glow-accent`, `glow-danger`.
 
 Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
@@ -226,6 +232,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **TextLinkButton** — inline accent text link control.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
+- **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, disabled? }`
+  + anatomy: **CardMedia** `{ src, alt, height? }`, **CardHeader**
+  `{ title, subtitle?, avatar?, action? }`, **CardContent**, **CardActions**
+  `{ align?: "start"|"end" }`, **CardActionArea**. M3-informed subject card
+  (distinct from `PanelCard` layout shell). Uses elevation / state-layer tokens.
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
