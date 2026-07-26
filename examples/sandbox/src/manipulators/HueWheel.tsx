@@ -8,9 +8,11 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
  *
  * Surfaces stay on the committed ladder; only accent-family tokens are shifted
  * so the brand stays coordinated without free-form hex picking.
+ *
+ * Writes the whole accent family as one coalesced undo step (not 10 micro-ops).
  */
 export function HueWheel() {
-  const { apply, resolved } = useTokenDraft();
+  const { mergeOverrides, resolved } = useTokenDraft();
 
   const hue = useMemo(() => {
     // Encode current accent as a synthetic hue angle for the slider (0–360).
@@ -27,46 +29,21 @@ export function HueWheel() {
     const rgb = hexToRgb(accent);
     if (!rgb) return;
     const [r, g, b] = rgb;
-    apply({ group: "color", key: "accent", value: accent, source: "colorwheel" });
-    apply({ group: "color", key: "accent-dim", value: dim, source: "colorwheel" });
-    apply({ group: "color", key: "accent-hover", value: hover, source: "colorwheel" });
-    apply({ group: "color", key: "accent-active", value: active, source: "colorwheel" });
-    apply({
-      group: "color",
-      key: "accent-soft",
-      value: `rgba(${r}, ${g}, ${b}, 0.18)`,
-      source: "colorwheel",
-    });
-    apply({
-      group: "color",
-      key: "accent-mid",
-      value: `rgba(${r}, ${g}, ${b}, 0.5)`,
-      source: "colorwheel",
-    });
-    apply({
-      group: "color",
-      key: "accent-24",
-      value: `rgba(${r}, ${g}, ${b}, 0.24)`,
-      source: "colorwheel",
-    });
-    apply({
-      group: "color",
-      key: "accent-42",
-      value: `rgba(${r}, ${g}, ${b}, 0.42)`,
-      source: "colorwheel",
-    });
-    apply({
-      group: "color",
-      key: "accent-ring",
-      value: `rgba(${r}, ${g}, ${b}, 0.4)`,
-      source: "colorwheel",
-    });
-    apply({
-      group: "color",
-      key: "focus",
-      value: `rgba(${r}, ${g}, ${b}, 0.48)`,
-      source: "colorwheel",
-    });
+    mergeOverrides(
+      {
+        "--fynns-color-accent": accent,
+        "--fynns-color-accent-dim": dim,
+        "--fynns-color-accent-hover": hover,
+        "--fynns-color-accent-active": active,
+        "--fynns-color-accent-soft": `rgba(${r}, ${g}, ${b}, 0.18)`,
+        "--fynns-color-accent-mid": `rgba(${r}, ${g}, ${b}, 0.5)`,
+        "--fynns-color-accent-24": `rgba(${r}, ${g}, ${b}, 0.24)`,
+        "--fynns-color-accent-42": `rgba(${r}, ${g}, ${b}, 0.42)`,
+        "--fynns-color-accent-ring": `rgba(${r}, ${g}, ${b}, 0.4)`,
+        "--fynns-color-focus": `rgba(${r}, ${g}, ${b}, 0.48)`,
+      },
+      { source: "colorwheel", coalesce: true, group: "color" },
+    );
   };
 
   return (

@@ -107,6 +107,11 @@ update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
 - Spacing: `--fynns-space-lg` (content), `md` (header), `sm` (actions gap)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
+**Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft
+history: inspector knobs, corner-radius handle, Apply preset, and confirmed
+agent proposals. One hue gesture is a single undo step (accent family batched).
+Preview toggles, light/dark theme, and page nav are not in the draft history.
+
 Writeback remains copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
 ## Optional package distribution
 

@@ -35,7 +35,15 @@ type DraftAction =
   | { type: "redo" }
   | { type: "reset" }
   | { type: "load"; draft: TokenDraft }
-  | { type: "replaceOverrides"; overrides: Record<string, string>; source: TokenSource };
+  | { type: "replaceOverrides"; overrides: Record<string, string>; source: TokenSource }
+  | {
+      type: "mergeOverrides";
+      patch: Record<string, string>;
+      source: TokenSource;
+      /** When true, replace the tip history entry if it shares the same source + `*`. */
+      coalesce?: boolean;
+      group?: TokenGroup;
+    };
 
 function applyOpToOverrides(
   overrides: Record<string, string>,
@@ -72,6 +80,57 @@ function reducer(state: TokenDraft, action: DraftAction): TokenDraft {
       return {
         ...state,
         overrides: action.overrides,
+        history,
+        historyIndex: history.length - 1,
+      };
+    }
+    case "mergeOverrides": {
+      const nextOverrides = { ...state.overrides };
+      for (const [cssVar, value] of Object.entries(action.patch)) {
+        const baseline = BASELINE[cssVar] ?? "";
+        if (value === baseline) delete nextOverrides[cssVar];
+        else nextOverrides[cssVar] = value;
+      }
+      if (JSON.stringify(nextOverrides) === JSON.stringify(state.overrides)) return state;
+
+      const tip = state.history[state.historyIndex];
+      const COALESCE_MS = 500;
+      const canCoalesce =
+        Boolean(action.coalesce) &&
+        tip != null &&
+        tip.key === "*" &&
+        tip.source === action.source &&
+        state.historyIndex === state.history.length - 1 &&
+        Date.now() - tip.ts < COALESCE_MS;
+
+      if (canCoalesce) {
+        const coalesced: TokenOperation = {
+          ...tip,
+          to: JSON.stringify(nextOverrides),
+          ts: Date.now(),
+        };
+        const history = [...state.history.slice(0, state.historyIndex), coalesced];
+        return {
+          ...state,
+          overrides: nextOverrides,
+          history,
+          historyIndex: state.historyIndex,
+        };
+      }
+
+      const op: TokenOperation = {
+        ts: Date.now(),
+        group: action.group ?? "color",
+        key: "*",
+        from: JSON.stringify(state.overrides),
+        to: JSON.stringify(nextOverrides),
+        scope: "global",
+        source: action.source,
+      };
+      const history = [...state.history.slice(0, state.historyIndex + 1), op];
+      return {
+        ...state,
+        overrides: nextOverrides,
         history,
         historyIndex: history.length - 1,
       };
@@ -154,6 +213,15 @@ function loadStoredDraft(): TokenDraft {
 type DraftContextValue = {
   draft: TokenDraft;
   apply: (args: ApplyArgs) => void;
+  /**
+   * Merge a CSS-var patch into overrides as a single undo step (`key: "*"`).
+   * Pass `coalesce: true` for continuous gestures (hue drag) so one Undo
+   * reverts the whole gesture.
+   */
+  mergeOverrides: (
+    patch: Record<string, string>,
+    opts?: { source?: TokenSource; coalesce?: boolean; group?: TokenGroup },
+  ) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
@@ -211,6 +279,21 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
   const loadPreset = useCallback((overrides: Record<string, string>) => {
     dispatch({ type: "replaceOverrides", overrides, source: "preset" });
   }, []);
+  const mergeOverrides = useCallback(
+    (
+      patch: Record<string, string>,
+      opts?: { source?: TokenSource; coalesce?: boolean; group?: TokenGroup },
+    ) => {
+      dispatch({
+        type: "mergeOverrides",
+        patch,
+        source: opts?.source ?? "slider",
+        coalesce: opts?.coalesce,
+        group: opts?.group,
+      });
+    },
+    [],
+  );
 
   const resolved = useCallback(
     (cssVar: string) => draft.overrides[cssVar] ?? BASELINE[cssVar] ?? "",
@@ -221,6 +304,7 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
     () => ({
       draft,
       apply,
+      mergeOverrides,
       undo,
       redo,
       reset,
@@ -229,7 +313,7 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
       canUndo: draft.historyIndex >= 0,
       canRedo: draft.historyIndex < draft.history.length - 1,
     }),
-    [draft, apply, undo, redo, reset, loadPreset, resolved],
+    [draft, apply, mergeOverrides, undo, redo, reset, loadPreset, resolved],
   );
 
   return <DraftContext.Provider value={value}>{children}</DraftContext.Provider>;
