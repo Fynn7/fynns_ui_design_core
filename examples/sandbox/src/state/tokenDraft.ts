@@ -79,7 +79,18 @@ export function cssVarForOp(group: TokenGroup, key: string): string {
  * would appear dead in light mode.
  */
 export function buildOverrideStyleBlock(overrides: Record<string, string>): string {
-  const lines = Object.entries(overrides).map(([name, value]) => `  ${name}: ${value};`);
+  const lines: string[] = [];
+  for (const [name, value] of Object.entries(overrides)) {
+    if (!isSafeCssCustomProperty(name, value)) continue;
+    lines.push(`  ${name}: ${value};`);
+  }
   if (lines.length === 0) return "";
   return `:root,\n:root[data-fynns-theme="light"] {\n${lines.join("\n")}\n}`;
+}
+
+/** Reject keys/values that could break out of a CSS declaration. */
+export function isSafeCssCustomProperty(name: string, value: string): boolean {
+  if (!/^--(?:fynns|sandbox)-[a-z0-9-]+$/i.test(name)) return false;
+  if (!value || /[;{}]|\/\*|\*\/|[\n\r]/.test(value)) return false;
+  return true;
 }

@@ -61,44 +61,6 @@ function replaceInTable(
   return { ok: true, source: source.replace(tableRe, `$1${newBody}$3`) };
 }
 
-function replaceInLightThemeColor(
-  source: string,
-  key: string,
-  value: string,
-): { ok: true; source: string } | { ok: false } {
-  const blockRe =
-    /(export const LIGHT_THEME_OVERRIDES[\s\S]*?\[\s*"color"\s*,\s*\{)([\s\S]*?)(\n\s*\}\s*,)/;
-  const match = source.match(blockRe);
-  if (!match) return { ok: false };
-
-  const keyLit = keyLiteral(key);
-  const escapedKey = keyLit.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const entryRe = new RegExp(`(\\n\\s*${escapedKey}\\s*:\\s*)("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")`);
-  if (!entryRe.test(match[2])) return { ok: false };
-
-  const newBody = match[2].replace(entryRe, `$1${JSON.stringify(value)}`);
-  return { ok: true, source: source.replace(blockRe, `$1${newBody}$3`) };
-}
-
-function replaceInLightThemeShadow(
-  source: string,
-  key: string,
-  value: string,
-): { ok: true; source: string } | { ok: false } {
-  const blockRe =
-    /(export const LIGHT_THEME_OVERRIDES[\s\S]*?\[\s*"shadow"\s*,\s*\{)([\s\S]*?)(\n\s*\}\s*,)/;
-  const match = source.match(blockRe);
-  if (!match) return { ok: false };
-
-  const keyLit = keyLiteral(key);
-  const escapedKey = keyLit.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const entryRe = new RegExp(`(\\n\\s*${escapedKey}\\s*:\\s*)("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")`);
-  if (!entryRe.test(match[2])) return { ok: false };
-
-  const newBody = match[2].replace(entryRe, `$1${JSON.stringify(value)}`);
-  return { ok: true, source: source.replace(blockRe, `$1${newBody}$3`) };
-}
-
 function applyOverridesToSource(
   source: string,
   overrides: Record<string, string>,
@@ -120,14 +82,8 @@ function applyOverridesToSource(
       continue;
     }
     next = result.source;
-    if (mapped.table === "COLOR_TOKENS") {
-      const light = replaceInLightThemeColor(next, mapped.key, value);
-      if (light.ok) next = light.source;
-    }
-    if (mapped.table === "SHADOW_TOKENS") {
-      const lightShadow = replaceInLightThemeShadow(next, mapped.key, value);
-      if (lightShadow.ok) next = lightShadow.source;
-    }
+    // Do not mirror into LIGHT_THEME_OVERRIDES — light palette values differ
+    // from dark; live draft already targets light via CSS injection.
     applied.push(cssVar);
   }
 
@@ -225,6 +181,17 @@ export function applyTokensPlugin(repoRoot: string): Plugin {
   const tokensLabel = "src/theme/tokens.ts";
   const themeLabel = "src/theme/theme.css";
 
+  /** Serialize preview/apply so temp writes cannot race a real apply. */
+  let gate: Promise<void> = Promise.resolve();
+  function withGate<T>(fn: () => Promise<T>): Promise<T> {
+    const run = gate.then(fn, fn);
+    gate = run.then(
+      () => undefined,
+      () => undefined,
+    );
+    return run;
+  }
+
   return {
     name: "fynns-apply-tokens",
     apply: "serve",
@@ -243,71 +210,73 @@ export function applyTokensPlugin(repoRoot: string): Plugin {
         const isPreview = url === "/__fynns/apply-tokens/preview";
 
         try {
-          const body = await readJsonBody(req);
-          const parsed = parseOverrides(body);
-          if ("error" in parsed) {
-            sendJson(res, 400, { error: parsed.error });
-            return;
-          }
-
-          const originalTokens = readFileSync(tokensPath, "utf8");
-          const originalTheme = readFileSync(themePath, "utf8");
-          const { source: nextTokens, applied, skipped } = applyOverridesToSource(
-            originalTokens,
-            parsed,
-          );
-
-          if (applied.length === 0) {
-            sendJson(res, 400, {
-              error: "No overrides could be written to tokens.ts",
-              skipped,
-            });
-            return;
-          }
-
-          if (isPreview) {
-            let nextTheme = originalTheme;
-            // Temporarily materialize tokens + gen:theme to preview theme.css,
-            // then always restore both files.
-            try {
-              if (nextTokens !== originalTokens) {
-                writeFileSync(tokensPath, nextTokens, "utf8");
-                await runGenTheme(repoRoot);
-                nextTheme = readFileSync(themePath, "utf8");
-              }
-            } finally {
-              writeFileSync(tokensPath, originalTokens, "utf8");
-              writeFileSync(themePath, originalTheme, "utf8");
+          await withGate(async () => {
+            const body = await readJsonBody(req);
+            const parsed = parseOverrides(body);
+            if ("error" in parsed) {
+              sendJson(res, 400, { error: parsed.error });
+              return;
             }
 
-            const files: FileDiff[] = [
-              {
-                path: tokensLabel,
-                diff: await unifiedDiff(tokensLabel, originalTokens, nextTokens),
-                changed: nextTokens !== originalTokens,
-              },
-              {
-                path: themeLabel,
-                diff: await unifiedDiff(themeLabel, originalTheme, nextTheme),
-                changed: nextTheme !== originalTheme,
-              },
-            ];
+            const originalTokens = readFileSync(tokensPath, "utf8");
+            const originalTheme = readFileSync(themePath, "utf8");
+            const { source: nextTokens, applied, skipped } = applyOverridesToSource(
+              originalTokens,
+              parsed,
+            );
 
-            sendJson(res, 200, {
-              ok: true,
-              applied,
-              skipped,
-              files,
-            });
-            return;
-          }
+            if (applied.length === 0) {
+              sendJson(res, 400, {
+                error: "No overrides could be written to tokens.ts",
+                skipped,
+              });
+              return;
+            }
 
-          if (nextTokens !== originalTokens) {
-            writeFileSync(tokensPath, nextTokens, "utf8");
-          }
-          await runGenTheme(repoRoot);
+            if (isPreview) {
+              let nextTheme = originalTheme;
+              // Temporarily materialize tokens + gen:theme to preview theme.css,
+              // then always restore both files.
+              try {
+                if (nextTokens !== originalTokens) {
+                  writeFileSync(tokensPath, nextTokens, "utf8");
+                  await runGenTheme(repoRoot);
+                  nextTheme = readFileSync(themePath, "utf8");
+                }
+              } finally {
+                writeFileSync(tokensPath, originalTokens, "utf8");
+                writeFileSync(themePath, originalTheme, "utf8");
+              }
 
-          sendJson(res, 200, { ok: true, applied, skipped });
+              const files: FileDiff[] = [
+                {
+                  path: tokensLabel,
+                  diff: await unifiedDiff(tokensLabel, originalTokens, nextTokens),
+                  changed: nextTokens !== originalTokens,
+                },
+                {
+                  path: themeLabel,
+                  diff: await unifiedDiff(themeLabel, originalTheme, nextTheme),
+                  changed: nextTheme !== originalTheme,
+                },
+              ];
+
+              sendJson(res, 200, {
+                ok: true,
+                applied,
+                skipped,
+                files,
+              });
+              return;
+            }
+
+            if (nextTokens !== originalTokens) {
+              writeFileSync(tokensPath, nextTokens, "utf8");
+            }
+            await runGenTheme(repoRoot);
+
+            sendJson(res, 200, { ok: true, applied, skipped });
+          });
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err);
           sendJson(res, 500, { error: message });

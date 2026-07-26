@@ -1,5 +1,6 @@
 import type { FynnsThemeMode } from "@fynns/ui";
 import { BASE_TOKENS_HASH } from "../state/baseline";
+import { isSafeCssCustomProperty } from "../state/tokenDraft";
 
 /** Stable kind marker for import validation. */
 export const SANDBOX_CONFIG_KIND = "fynns-sandbox-config" as const;
@@ -70,6 +71,9 @@ export function parseConfigBundle(raw: unknown):
         ok: false,
         error: `Invalid override key (expected --fynns-* or --sandbox-*): ${key}`,
       };
+    }
+    if (!isSafeCssCustomProperty(key, value)) {
+      return { ok: false, error: `Unsafe override for ${key}` };
     }
     overrides[key] = value;
   }
