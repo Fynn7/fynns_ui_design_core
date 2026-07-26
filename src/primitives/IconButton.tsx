@@ -5,12 +5,12 @@ import { Button, type ButtonProps } from "./Button";
 export type IconButtonProps = Omit<ButtonProps, "iconOnly">;
 
 /**
- * Icon-only button. Enforces square `iconOnly` layout; pass an `aria-label`
- * at the call site for accessibility.
+ * Icon-only button. Enforces `iconOnly` layout and defaults to `ghost` so the
+ * control reads as the icon itself (no bordered tile). Pass `aria-label`.
  */
 export const IconButton = forwardRef(function IconButton(
-  props: IconButtonProps,
+  { variant = "ghost", ...props }: IconButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
-  return <Button {...props} ref={ref} iconOnly />;
+  return <Button {...props} ref={ref} variant={variant} iconOnly />;
 });

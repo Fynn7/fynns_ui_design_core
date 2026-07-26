@@ -5,6 +5,8 @@ const SURFACE_SWATCHES = [
   { label: "surface-1", token: "--fynns-color-surface-1" },
   { label: "surface-2", token: "--fynns-color-surface-2" },
   { label: "surface-3", token: "--fynns-color-surface-3" },
+  { label: "surface-4", token: "--fynns-color-surface-4" },
+  { label: "surface-5", token: "--fynns-color-surface-5" },
 ] as const;
 
 const ACCENT_SWATCHES = [
@@ -86,7 +88,7 @@ export function Foundations() {
 
       <Section title="Radius & shadow">
         <Row>
-          {(["sm", "md", "lg"] as const).map((r) => (
+          {(["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map((r) => (
             <div
               key={r}
               style={{
@@ -105,7 +107,7 @@ export function Foundations() {
               {r}
             </div>
           ))}
-          {(["sm", "md", "lg", "glow-accent"] as const).map((s) => (
+          {(["none", "xs", "sm", "md", "lg", "xl", "glow-accent"] as const).map((s) => (
             <div
               key={s}
               style={{

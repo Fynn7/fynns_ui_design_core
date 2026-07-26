@@ -77,7 +77,71 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run lint` — ESLint.
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
+- `npm run sandbox` — run the aesthetic sandbox in
+  [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
+  token overrides, Apply changes). Drafts persist in `localStorage` until you
+  click **Apply changes** (review per-file diffs, then confirm), which writes
+  `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
 
+## Aesthetic sandbox
+
+The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
+separate design language. Pages: **Playground** (Card), **Globals** (system
+shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
+footer — config JSON export/import and named templates). Editing
+`--fynns-radius-*` on Globals
+injects CSS variable overrides at runtime (including light theme, so hue knobs
+are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
+sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
+reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
+
+### Templates & config JSON
+
+- Open via the **gear** control at the bottom of the left nav (special page,
+  no inspector aside).
+- **Export JSON** / **Import JSON** move the full sandbox configuration:
+  `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
+- **Save as template** stores the same bundle under a name in `localStorage`
+  (`fynns-sandbox-templates`). Apply / export / rename / delete from the list.
+- Templates do not write `tokens.ts` by themselves — use **Apply changes** on
+  Playground / Globals after loading a template if you want source writeback.
+
+### Globals (system shape)
+
+- Shape ladder: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Align M3 /
+  Reset ladder)
+- Read-only: `none` / `pill` / `round`
+- Presets: M3-aligned radius, Restrained radius
+- Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
+
+### Preview toggles (Card Playground)
+
+- Anatomy: Media on/off
+- States: Interactive, Disabled
+- Actions: align start|end
+
+### Inspector knobs (Card Playground)
+
+- Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
+  hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
+  outlined `--fynns-color-border-strong`
+- Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
+- State layers: hover / focus / pressed / dragged
+- Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
+  (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
+  (sandbox-only, not Apply writeback)
+- Typography: `--fynns-font-size-{sm,md,lg}`
+
+**Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft
+history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+gesture is a single undo step (accent family batched). Preview toggles,
+light/dark theme, and page nav are not in the draft history.
+
+**Apply changes** opens a review dialog with unified diffs for
+`src/theme/tokens.ts` and regenerated `src/theme/theme.css`. Confirming writes
+the draft and runs `npm run gen:theme` (Vite dev middleware). That updates the
+design-system source consumed by every `@fynns/ui` client. Until then, overrides
+stay in the draft / `localStorage` and only affect the sandbox preview.
 ## Optional package distribution
 
 `package.json` is preconfigured (`exports`, `publishConfig`) so the library can

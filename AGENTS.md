@@ -32,7 +32,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 3. **Every action is an icon button + tooltip — never `title=`.** Use
    `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   Tooltips also describe *dynamic* state (e.g. why a control is disabled).
+   `IconButton` paints as the glyph itself (ghost, no bordered tile). Pure
+   informational help uses **`InfoHint`**: standalone "i" when there is no
+   visible name; for form/inspector rows pass `label` (plain text trigger,
+   `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   Tooltips also describe *dynamic* state (e.g. why a
+   control is disabled).
    **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
    cover its trigger or the adjacent related content; the caret links the bubble
    to the anchor so it need not touch the text):
@@ -68,7 +73,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `data-state` on the shared `DialogFrame` presence lifecycle.
 8. **Elevation = brightness in dark mode.** Surfaces climb a ladder:
    `app-bg` → `surface-1` (panels) → `surface-2` (flyouts) → `surface-3`
-   (tooltips/toasts). Higher surfaces are brighter, not darker.
+   (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
+   Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
    `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
    (side sheet) for overlays; **progressive disclosure** (reveal results only
@@ -111,7 +117,7 @@ override + reset + scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>`
 scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 `fynns-theme-mode`.
 
-Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
+Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
 `toggle`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
@@ -119,9 +125,10 @@ Groups: `color`, `space`, `size`, `radius`, `shadow`, `font`, `font-size`,
 Color tokens (`--fynns-color-*`):
 
 - Surfaces (elevation ladder): `app-bg` `#031417`, `surface-1` (panels),
-  `surface-2` (flyouts), `surface-3` (tooltips/toasts). Legacy aliases kept:
-  `surface`, `surface-head`, `toast-surface`. Also `surface-muted`,
-  `surface-hover`, `control-surface`, `control-surface-hover`, `flyout-item`,
+  `surface-2` (flyouts), `surface-3` (tooltips/toasts), `surface-4` (dragged /
+  filled card), `surface-5` (reserved). Legacy aliases kept: `surface`,
+  `surface-head`, `toast-surface`. Also `surface-muted`, `surface-hover`,
+  `control-surface`, `control-surface-hover`, `flyout-item`,
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
 - Lines/text: `border` `#0d2e2c`, `border-strong`, `text` `#e2f0ed`,
   `text-muted` `#7a9e98`.
@@ -132,6 +139,10 @@ Color tokens (`--fynns-color-*`):
   `danger-border`, `info` `#60a5fa`.
 - Misc: `overlay`, `toggle-track`, `toggle-track-hover`,
   `scrollbar-thumb*` (also under the `scrollbar` group).
+- State layers (`--fynns-state-*`): `hover` `8%`, `focus` `10%`, `pressed`
+  `12%`, `dragged` `16%` — used via `color-mix(...)` for interactive overlays.
+- Card lookups (TS only, not CSS vars): `CARD_VARIANT_MAP`, `ELEVATION_TOKENS`.
+  M3 reference mirror: [`src/theme/tokens.m3-draft.ts`](src/theme/tokens.m3-draft.ts).
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
@@ -139,8 +150,8 @@ legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
 
-Shadows: `sm`, `md`, `lg`, `flyout`, `tooltip`, `toggle-thumb`, `glow-accent`,
-`glow-danger`.
+Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thumb`,
+`glow-accent`, `glow-danger`.
 
 Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
@@ -155,7 +166,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 
 - **Button** `{ variant?: "default"|"primary"|"danger"|"ghost", size?: "md"|"sm",
   active?, danger?, iconOnly? }` + native button attrs. `forwardRef`.
-- **IconButton** — `Button` with `iconOnly`; pass `aria-label`.
+- **IconButton** — `Button` with `iconOnly`; defaults to `ghost` so the control
+  reads as the icon itself (no bordered square tile). Pass `aria-label`.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
   disabled?, mainAriaLabel?, menuAriaLabel? }`.
 - **Input** / **Textarea** — native attrs + `.fynns-input`/`.fynns-textarea`.
@@ -164,7 +176,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
 - **SearchInput** `{ leadingIcon?, wrapClassName?, ...inputAttrs }`.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox.
+  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
+  portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
+  (e.g. Collapsible / scroll panels) do not clip the flyout.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
@@ -184,7 +198,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   when the bubble is centered on the anchor (the default, since alignment prefers
   `center`), and tracking the anchor when the bubble shifts to fit the viewport. Pass **`interactive`** when the bubble
   contains buttons or other controls (pointer events on + delayed hide while the
-  cursor is over the bubble). **InfoHint** `{ content, ariaLabel?, iconSize? }`.
+  cursor is over the bubble). **InfoHint** `{ content, label?, ariaLabel?, iconSize? }` —
+  icon-only help glyph, or `label` as a plain help trigger (prefer for
+  form/inspector rows; no underline fence, no trailing "i").
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in
@@ -205,15 +221,29 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `modal={false}` for a non-modal drawer that leaves the page behind interactive
   (no scroll lock / focus trap / blocking scrim). Width via
   `--fynns-layout-drawer-width`.
-- **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?, disabled? }`
-  (`role="switch"`). **ToggleControl** — checkbox/radio styled as a switch.
-- **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, segmentLayout? }`
+- **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
+  labelSide?: "start"|"end", disabled? }` (`role="switch"`). Use
+  `labelSide="end"` (track then label) in dense toolbars so tracks share a left
+  edge with `ToggleGroup` / siblings instead of drifting with label length.
+  **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`
+  grid for multi-row toolbars; each nested `ControlRow` spans the stack via
+  CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
+  short rows do not pack the next label into an empty control column.
+  **ControlRow** `{ label, children }` — fixed label column
+  (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
+  inside `ControlStack` spans the shared tracks via subgrid. **Grid** `{ x?, y?, gap?,
+  children }` — X×Y layout; each axis is a fixed count or `"unbounded"` (default).
+  Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
+  are added (does not reflow into more columns). Tracks size to `max-content` and
+  do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
+  match `columns` to `Grid`’s `x`. **ToggleControl** —
+  checkbox/ radio styled as a switch.
+- **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
-  `ariaLabel`. `size="compact"` tightens padding for narrow panels;
-  `segmentLayout="content"` sizes segments to their labels instead of equal
-  widths. Chips are equal-width segments by default: they fill the group when it
-  is stretched (a flex/grid child or `fullWidth`) and stay content-width when
-  inline. **Tabs**
+  `ariaLabel`. `size="compact"` tightens padding for narrow panels.
+  Segments are always equal width (sized to the longest label) with centered
+  text; `fullWidth` stretches the group to its container. Chips fill the
+  group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — disclosure row; collapses content behind a clickable header (chevron rotates).
@@ -232,6 +262,14 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **TextLinkButton** — inline accent text link control.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
+- **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, disabled? }`
+  + anatomy: **CardMedia** `{ src?, alt?, height?, children? }` (custom media via
+  `children` when not using a plain image), **CardHeader**
+  `{ title, subtitle?, avatar?, action? }`, **CardContent**, **CardActions**
+  `{ align?: "start"|"end", disableSpacing? }`, **CardActionArea**. M3-informed
+  subject card (distinct from `PanelCard` layout shell). Uses elevation /
+  state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
+  toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
@@ -253,9 +291,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `InfoIcon`, `SearchIcon`, `AlertCircleIcon`, `AlertTriangleIcon`,
   `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
-  `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
+  `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
-  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`. Components also accept
+  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`, `SettingsIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system

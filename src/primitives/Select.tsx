@@ -1,6 +1,12 @@
-import type { KeyboardEvent, ReactNode } from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDownIcon } from "./icons";
+import {
+  floatingViewportRect,
+  useAnchoredPosition,
+  type AnchoredPosition,
+} from "./Popover";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
 
 export type SelectOption = {
@@ -25,10 +31,23 @@ function normalize(option: string | SelectOption): SelectOption {
   return typeof option === "string" ? { value: option } : option;
 }
 
+function listBoxOrigin(
+  pos: AnchoredPosition,
+  size: { width: number; height: number },
+): { top: number; left: number } {
+  const box = floatingViewportRect(
+    { top: pos.top, left: pos.left },
+    pos.side,
+    pos.align,
+    size,
+  );
+  return { top: box.top, left: box.left };
+}
+
 /**
- * Custom single-select (listbox) with keyboard support. Self-positioned
- * dropdown; replaces native `<select>` and the radix-popover-based variant
- * selects. `.fynns-select-*`.
+ * Custom single-select (listbox) with keyboard support. Portal-rendered
+ * dropdown (avoids overflow clipping from ancestors such as Collapsible);
+ * replaces native `<select>`. `.fynns-select-*`.
  */
 export function Select({
   value,
@@ -46,7 +65,14 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(() => Math.max(0, selectedIndex));
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const [listEl, setListEl] = useState<HTMLUListElement | null>(null);
+  const [triggerWidth, setTriggerWidth] = useState<number | null>(null);
   const listId = useId();
+  const pos = useAnchoredPosition(triggerRef.current, listEl, open, {
+    side: "bottom",
+    align: "start",
+    offset: 5,
+  });
 
   const pick = useCallback(
     (nextValue: string) => {
@@ -58,10 +84,25 @@ export function Select({
   );
 
   useEffect(() => {
+    if (!open) setListEl(null);
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current) {
+      setTriggerWidth(null);
+      return;
+    }
+    setTriggerWidth(triggerRef.current.getBoundingClientRect().width);
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
     setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
     const onPointerDown = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target as Node;
+      if (rootRef.current?.contains(target)) return;
+      if (listEl?.contains(target)) return;
+      setOpen(false);
     };
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -76,7 +117,7 @@ export function Select({
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, selectedIndex]);
+  }, [open, selectedIndex, listEl]);
 
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (disabled || normalized.length === 0) return;
@@ -105,6 +146,25 @@ export function Select({
     ? (selectedOption.label ?? selectedOption.value)
     : placeholder;
 
+  const listSize =
+    listEl != null
+      ? { width: listEl.offsetWidth, height: listEl.offsetHeight }
+      : triggerWidth != null
+        ? { width: triggerWidth, height: 40 }
+        : null;
+  const origin =
+    pos && listSize ? listBoxOrigin(pos, listSize) : null;
+
+  const listStyle: CSSProperties | undefined =
+    origin && triggerWidth != null
+      ? {
+          position: "fixed",
+          top: origin.top,
+          left: origin.left,
+          width: triggerWidth,
+        }
+      : undefined;
+
   return (
     <div ref={rootRef} className={["fynns-select", className ?? ""].filter(Boolean).join(" ")}>
       <button
@@ -128,41 +188,47 @@ export function Select({
         <span className="fynns-select-trigger-text">{displayValue}</span>
         <ChevronDownIcon size={14} className="fynns-select-trigger-chevron" />
       </button>
-      {open ? (
-        <ul
-          id={listId}
-          role="listbox"
-          aria-label={ariaLabel}
-          className={mergeScrollSurfaceClass("fynns-select-list")}
-        >
-          {normalized.map((option, index) => {
-            const selected = option.value === value;
-            const active = index === activeIndex;
-            return (
-              <li key={option.value} role="presentation">
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={selected}
-                  disabled={option.disabled}
-                  className={[
-                    "fynns-select-option",
-                    selected ? "fynns-select-option--selected" : "",
-                    active ? "fynns-select-option--active" : "",
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                  onMouseDown={(event) => event.preventDefault()}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  onClick={() => !option.disabled && pick(option.value)}
-                >
-                  {option.label ?? option.value}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
+      {open && pos && listStyle
+        ? createPortal(
+            <ul
+              ref={setListEl}
+              id={listId}
+              role="listbox"
+              aria-label={ariaLabel}
+              data-side={pos.side}
+              className={mergeScrollSurfaceClass("fynns-select-list")}
+              style={listStyle}
+            >
+              {normalized.map((option, index) => {
+                const selected = option.value === value;
+                const active = index === activeIndex;
+                return (
+                  <li key={option.value} role="presentation">
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      disabled={option.disabled}
+                      className={[
+                        "fynns-select-option",
+                        selected ? "fynns-select-option--selected" : "",
+                        active ? "fynns-select-option--active" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onClick={() => !option.disabled && pick(option.value)}
+                    >
+                      {option.label ?? option.value}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

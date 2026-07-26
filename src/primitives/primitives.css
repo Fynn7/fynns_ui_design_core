@@ -134,13 +134,41 @@
 }
 
 .fynns-btn--icon {
-  width: 2.25rem;
-  min-width: 2.25rem;
-  padding: 0;
+  /* Icon is the control — no bordered tile / fixed chrome square around the glyph. */
+  box-sizing: content-box;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: var(--fynns-space-xs);
+  border-color: transparent;
+  background: transparent;
+  line-height: 0;
 }
 
 .fynns-btn--sm.fynns-btn--icon {
-  width: 1.9rem;
+  width: auto;
+  min-height: 0;
+  padding: var(--fynns-space-2xs);
+}
+
+.fynns-btn--icon:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-btn--icon.fynns-btn--primary {
+  border-color: var(--fynns-color-accent-dim);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-btn--icon.fynns-btn--primary:hover:not(:disabled) {
+  background: var(--fynns-color-accent-hover);
+}
+
+.fynns-btn--icon.fynns-btn--danger:hover:not(:disabled) {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--fynns-color-danger) 14%, transparent);
 }
 
 .fynns-btn--icon svg {
@@ -435,12 +463,9 @@
 }
 
 .fynns-select-list {
-  position: absolute;
-  top: calc(100% + 0.3rem);
-  left: 0;
-  right: 0;
+  /* Positioned via inline `position:fixed` + top/left from useAnchoredPosition
+     (portaled to document.body so overflow:hidden ancestors cannot clip it). */
   z-index: var(--fynns-z-dropdown);
-  width: 100%;
   box-sizing: border-box;
   margin: 0;
   padding: 0.25rem 0;
@@ -453,6 +478,15 @@
   overflow: auto;
   transform-origin: top center;
   animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
+}
+
+.fynns-select-list[data-side="top"] {
+  transform-origin: bottom center;
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-select-list[data-side="bottom"] {
+  transform-origin: top center;
 }
 
 .fynns-select-option {
@@ -599,10 +633,14 @@
   line-height: var(--fynns-line-height-snug);
   box-shadow: var(--fynns-shadow-tooltip);
   pointer-events: none;
-  /* Long, space-less content (paths, URLs) must wrap inside max-width instead
-     of spilling past the bubble's border. */
+  /* Long content wraps inside max-width (token + viewport-aware inline cap from
+     useAnchoredPosition) instead of spilling past the bubble or the window. */
   white-space: normal;
   overflow-wrap: anywhere;
+  overflow: visible;
+  /* Opacity-only: animating `transform` would override the inline placement
+     translate (e.g. translate(-50%)) via fill-mode and clip tooltips at the
+     viewport edge — a recurring consumer-side bug when fixed locally. */
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
   /* Opacity-only enter animation; placement is absolute top/left (no transform). */
 }
@@ -672,18 +710,44 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.35rem;
-  height: 1.35rem;
+  padding: 0;
   border: 0;
   border-radius: var(--fynns-radius-round);
   background: transparent;
   color: var(--fynns-color-text-muted);
+  line-height: 0;
   cursor: help;
+}
+
+.fynns-info-hint-trigger--labeled {
+  max-width: 100%;
+  border-radius: var(--fynns-radius-sm);
+  line-height: var(--fynns-line-height-snug);
+  font: inherit;
+  color: inherit;
+  text-align: start;
+}
+
+.fynns-info-hint-label {
+  min-width: 0;
 }
 
 .fynns-info-hint-trigger:hover {
   color: var(--fynns-color-text);
-  background: var(--fynns-color-surface-hover);
+  background: transparent;
+}
+
+.fynns-info-hint-trigger--labeled:hover {
+  color: inherit;
+}
+
+.fynns-info-hint-trigger--labeled:hover .fynns-info-hint-label {
+  color: var(--fynns-color-text);
+}
+
+.fynns-info-hint-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 /* ---------- Dialog ---------- */
@@ -934,6 +998,11 @@
   line-height: var(--fynns-line-height-tight);
 }
 
+.fynns-switch--label-end {
+  /* Track-leading: dense toolbars align tracks with ToggleGroup / other glyphs. */
+  justify-content: flex-start;
+}
+
 .fynns-switch-label {
   font-size: var(--fynns-font-size-form-label);
   white-space: nowrap;
@@ -1011,6 +1080,108 @@
 
 .fynns-switch--sm .fynns-switch-thumb[data-state="checked"] {
   transform: translateX(1.05rem);
+}
+
+/* ---------- ControlStack ---------- */
+/* Shared label + X control tracks across nested ControlRow / Grid.
+   Each ControlRow is one stack row via subgrid — NOT display:contents on the
+   row itself. Flattening every cell into one auto-flow grid packs the next
+   row's label into empty columns when a row has fewer than `columns` controls
+   (e.g. Anatomy with only Media). */
+.fynns-control-stack {
+  display: grid;
+  grid-template-columns:
+    var(--fynns-layout-control-row-label)
+    repeat(var(--fynns-control-stack-cols, 2), max-content);
+  /* start — not stretch: a narrower ToggleGroup must not expand to the
+     shared column track width of a wider Switch in the same column. */
+  align-items: center;
+  justify-items: start;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.fynns-control-stack > .fynns-control-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  width: auto;
+  max-width: none;
+  column-gap: unset;
+  align-items: center;
+  /* Subgrid does not inherit the stack's justify-items; without this,
+     a short ToggleGroup stretches to the shared track of a wider Switch. */
+  justify-items: start;
+}
+
+/* Controls / Grid dissolve so switches sit on the shared tracks. */
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-grid {
+  display: contents;
+}
+
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__label,
+.fynns-control-stack .fynns-grid > *,
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls > :not(.fynns-grid) {
+  min-width: min-content;
+  max-width: none;
+  /* Do not force overflow here — ToggleGroup needs overflow:hidden to clip radius. */
+}
+
+/* ---------- ControlRow ---------- */
+.fynns-control-row {
+  display: grid;
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
+  grid-template-columns: var(--fynns-layout-control-row-label) max-content;
+  column-gap: var(--fynns-space-sm);
+  align-items: center;
+}
+
+.fynns-control-row__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-control-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  min-width: min-content;
+  overflow: visible;
+}
+
+/* ---------- Grid ---------- */
+.fynns-grid {
+  display: grid;
+  align-items: center;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  min-width: min-content;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.fynns-grid > * {
+  min-width: min-content;
+  max-width: none;
+  overflow: visible;
 }
 
 /* ---------- ToggleControl ---------- */
@@ -1092,9 +1263,11 @@
 }
 
 /* ---------- ToggleGroup ---------- */
+/* Equal-width segments (longest label wins); labels always centered. */
 .fynns-toggle-group {
-  display: inline-flex;
-  flex-wrap: nowrap;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   align-items: stretch;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-sm);
@@ -1103,19 +1276,13 @@
 }
 
 .fynns-toggle-group--full {
-  display: flex;
+  display: grid;
   width: 100%;
 }
 
-.fynns-toggle-group--content .fynns-toggle-chip,
-.fynns-toggle-group--content .fynns-toggle-group__segment {
-  flex: 0 1 auto;
-}
-
 .fynns-toggle-group__segment {
-  display: flex;
-  flex: 1 1 0;
-  min-width: 0;
+  display: grid;
+  min-width: max-content;
 }
 
 .fynns-toggle-group__segment > .fynns-toggle-chip {
@@ -1123,18 +1290,17 @@
 }
 
 .fynns-toggle-group--compact .fynns-toggle-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 0.35rem 0.4rem;
   font-size: 0.72rem;
 }
 
 .fynns-toggle-chip {
-  /* Segments share the group width equally: when the group is stretched (a flex/
-     grid child, or `--full`) the chips fill it as equal-width segments; when the
-     group sizes to its content (inline) they stay content-width. */
-  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: max-content;
   margin: 0;
   border: none;
   border-right: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -2272,6 +2438,253 @@
 .fynns-badge--accent {
   color: var(--fynns-color-accent);
   border-color: color-mix(in srgb, var(--fynns-color-accent) 50%, var(--fynns-color-border));
+}
+
+/* ---------- Card (M3-informed subject card) ---------- */
+.fynns-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  color: var(--fynns-color-text);
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-none);
+  border: var(--fynns-border-hairline) solid transparent;
+  transition:
+    background-color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-card--elevated {
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-card--filled {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-card--outlined {
+  background: var(--fynns-color-app-bg);
+  border-color: var(--fynns-color-border-strong);
+}
+
+.fynns-card--interactive {
+  cursor: pointer;
+}
+
+.fynns-card--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: transparent;
+  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+  z-index: 1;
+}
+
+.fynns-card--interactive:hover::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-card--interactive:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--fynns-shadow-xs),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+.fynns-card--interactive:focus-visible::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-card--interactive:active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-card--disabled {
+  opacity: var(--fynns-opacity-muted);
+  pointer-events: none;
+}
+
+.fynns-card-media {
+  position: relative;
+  width: 100%;
+  height: var(--fynns-size-152);
+  overflow: hidden;
+  background: var(--fynns-color-surface-2);
+  z-index: 0;
+}
+
+.fynns-card-media-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-md) var(--fynns-space-lg);
+  z-index: 0;
+}
+
+.fynns-card-header-avatar {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-34);
+  height: var(--fynns-size-34);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent-soft);
+  color: var(--fynns-color-accent);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-semibold);
+  overflow: hidden;
+}
+
+.fynns-card-header-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+}
+
+.fynns-card-header-title {
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+}
+
+.fynns-card-header-subtitle {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-card-header-action {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fynns-card-content {
+  padding: var(--fynns-space-lg);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text);
+  z-index: 0;
+}
+
+.fynns-card-header + .fynns-card-content {
+  padding-top: 0;
+}
+
+.fynns-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-sm) var(--fynns-space-lg) var(--fynns-space-md);
+  z-index: 0;
+}
+
+.fynns-card-actions--end {
+  justify-content: flex-end;
+}
+
+.fynns-card-actions--dense {
+  gap: 0;
+  padding: 0;
+}
+
+.fynns-card-media-custom {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-card-media-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--fynns-color-accent) 28%, var(--fynns-color-surface-2)),
+    var(--fynns-color-surface-3)
+  );
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-caption);
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.fynns-card-action-area {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  font: inherit;
+  position: relative;
+  z-index: 0;
+}
+
+.fynns-card-action-area:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+.fynns-card-action-area::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-card-action-area:hover::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-card-action-area:active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-pressed),
+    transparent
+  );
 }
 
 /* ---------- Kbd ---------- */
