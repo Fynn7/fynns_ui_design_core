@@ -205,21 +205,6 @@
   background: var(--fynns-color-surface-1);
 }
 
-.sandbox-preview-toolbar-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fynns-space-sm);
-}
-
-.sandbox-preview-toolbar-label {
-  flex: 0 0 6.5rem;
-  font-size: var(--fynns-font-size-caption);
-  text-transform: uppercase;
-  letter-spacing: var(--fynns-letter-spacing-wide);
-  color: var(--fynns-color-text-muted);
-}
-
 .sandbox-preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 18rem));

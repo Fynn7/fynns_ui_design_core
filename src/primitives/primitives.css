@@ -939,6 +939,20 @@
   line-height: var(--fynns-line-height-tight);
 }
 
+.fynns-switch--label-end {
+  /* Track-leading: dense toolbars align tracks with ToggleGroup / other glyphs. */
+  justify-content: flex-start;
+}
+
+.fynns-switch--label-end .fynns-switch-label {
+  flex: 0 0 var(--fynns-layout-switch-label-end);
+  box-sizing: border-box;
+  width: var(--fynns-layout-switch-label-end);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fynns-switch-label {
   font-size: var(--fynns-font-size-form-label);
   white-space: nowrap;
@@ -1016,6 +1030,33 @@
 
 .fynns-switch--sm .fynns-switch-thumb[data-state="checked"] {
   transform: translateX(1.05rem);
+}
+
+/* ---------- ControlRow ---------- */
+.fynns-control-row {
+  display: grid;
+  grid-template-columns: var(--fynns-layout-control-row-label) minmax(0, 1fr);
+  column-gap: var(--fynns-space-sm);
+  align-items: center;
+}
+
+.fynns-control-row__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-control-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
 }
 
 /* ---------- ToggleControl ---------- */

@@ -182,6 +182,8 @@
   --fynns-layout-command-palette-width: min(100%, 34rem);
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
   --fynns-layout-command-palette-top-padding: 12vh;
+  --fynns-layout-control-row-label: 7.5rem;
+  --fynns-layout-switch-label-end: 7rem;
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);

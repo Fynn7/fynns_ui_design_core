@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  ControlRow,
   IconButton,
   InfoIcon,
   Switch,
@@ -47,8 +48,7 @@ export function CardPreviewCanvas() {
   return (
     <div className="sandbox-preview">
       <div className="sandbox-preview-toolbar">
-        <div className="sandbox-preview-toolbar-row">
-          <span className="sandbox-preview-toolbar-label">Variant focus</span>
+        <ControlRow label="Variant focus">
           <ToggleGroup
             size="compact"
             segmentLayout="content"
@@ -61,39 +61,40 @@ export function CardPreviewCanvas() {
               { value: "outlined", label: "Outlined" },
             ]}
           />
-        </div>
-        <div className="sandbox-preview-toolbar-row">
-          <span className="sandbox-preview-toolbar-label">Anatomy</span>
+        </ControlRow>
+        <ControlRow label="Anatomy">
           <Switch
             size="sm"
+            labelSide="end"
             label="Media"
             checked={options.showMedia}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showMedia: checked }))}
           />
           <Switch
             size="sm"
+            labelSide="end"
             label="Action area"
             checked={options.showActionArea}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showActionArea: checked }))}
           />
-        </div>
-        <div className="sandbox-preview-toolbar-row">
-          <span className="sandbox-preview-toolbar-label">States</span>
+        </ControlRow>
+        <ControlRow label="States">
           <Switch
             size="sm"
+            labelSide="end"
             label="Interactive"
             checked={options.interactive}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, interactive: checked }))}
           />
           <Switch
             size="sm"
+            labelSide="end"
             label="Disabled"
             checked={options.disabled}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, disabled: checked }))}
           />
-        </div>
-        <div className="sandbox-preview-toolbar-row">
-          <span className="sandbox-preview-toolbar-label">Actions</span>
+        </ControlRow>
+        <ControlRow label="Actions">
           <ToggleGroup
             size="compact"
             segmentLayout="content"
@@ -106,11 +107,12 @@ export function CardPreviewCanvas() {
           />
           <Switch
             size="sm"
+            labelSide="end"
             label="Dense spacing"
             checked={options.disableSpacing}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, disableSpacing: checked }))}
           />
-        </div>
+        </ControlRow>
       </div>
 
       <div

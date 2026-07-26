@@ -298,6 +298,10 @@ export const LAYOUT_TOKENS = {
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
   "command-palette-top-padding": "12vh",
+  /** Fixed label column for `ControlRow` (toolbars / settings strips). */
+  "control-row-label": "7.5rem",
+  /** Fixed text width for `Switch` with `labelSide="end"` (dense toolbars). */
+  "switch-label-end": "7rem",
 } as const;
 
 /**

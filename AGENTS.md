@@ -213,8 +213,14 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `modal={false}` for a non-modal drawer that leaves the page behind interactive
   (no scroll lock / focus trap / blocking scrim). Width via
   `--fynns-layout-drawer-width`.
-- **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?, disabled? }`
-  (`role="switch"`). **ToggleControl** — checkbox/radio styled as a switch.
+- **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
+  labelSide?: "start"|"end", disabled? }` (`role="switch"`). Use
+  `labelSide="end"` (track then label) in dense toolbars so tracks share a left
+  edge with `ToggleGroup` / siblings instead of drifting with label length.
+  **ControlRow** `{ label, children }` — fixed label column
+  (`--fynns-layout-control-row-label`) + controls flex; use for toolbar /
+  settings strips so every row's controls align. **ToggleControl** — checkbox/
+  radio styled as a switch.
 - **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, segmentLayout? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
   `ariaLabel`. `size="compact"` tightens padding for narrow panels;

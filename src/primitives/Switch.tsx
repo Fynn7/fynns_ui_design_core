@@ -16,6 +16,13 @@ export type SwitchProps = {
   onCheckedChange: (next: boolean) => void;
   ariaLabel?: string;
   size?: SwitchSize;
+  /**
+   * Where the text sits relative to the track.
+   * - `start` (default): label then track — settings / form rows.
+   * - `end`: track then label — dense toolbars so tracks share a left edge with
+   *   sibling controls (ToggleGroup, etc.) instead of drifting with label length.
+   */
+  labelSide?: "start" | "end";
   className?: string;
   disabled?: boolean;
   labelId?: string;
@@ -28,6 +35,7 @@ export const Switch = forwardRef(function Switch(
     onCheckedChange,
     ariaLabel,
     size = "md",
+    labelSide = "start",
     className,
     disabled = false,
     labelId,
@@ -39,31 +47,48 @@ export const Switch = forwardRef(function Switch(
   const rootClass = [
     "fynns-switch",
     size === "sm" ? "fynns-switch--sm" : "fynns-switch--md",
+    labelSide === "end" ? "fynns-switch--label-end" : "",
     className ?? "",
   ]
     .filter(Boolean)
     .join(" ");
   const state = checked ? "checked" : "unchecked";
 
+  const labelEl = (
+    <span id={resolvedLabelId} className="fynns-switch-label">
+      {label}
+    </span>
+  );
+  const trackEl = (
+    <button
+      ref={ref}
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabel ? undefined : resolvedLabelId}
+      disabled={disabled}
+      data-state={state}
+      className="fynns-switch-track"
+      onClick={() => onCheckedChange(!checked)}
+    >
+      <span className="fynns-switch-thumb" data-state={state} />
+    </button>
+  );
+
   return (
     <label className={rootClass}>
-      <span id={resolvedLabelId} className="fynns-switch-label">
-        {label}
-      </span>
-      <button
-        ref={ref}
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabel ? undefined : resolvedLabelId}
-        disabled={disabled}
-        data-state={state}
-        className="fynns-switch-track"
-        onClick={() => onCheckedChange(!checked)}
-      >
-        <span className="fynns-switch-thumb" data-state={state} />
-      </button>
+      {labelSide === "end" ? (
+        <>
+          {trackEl}
+          {labelEl}
+        </>
+      ) : (
+        <>
+          {labelEl}
+          {trackEl}
+        </>
+      )}
     </label>
   );
 });
