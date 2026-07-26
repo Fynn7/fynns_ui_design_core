@@ -8,7 +8,6 @@ import {
   Select,
   Slider,
   toast,
-  Tooltip,
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { CARD_PRESETS } from "../../presets/presets";
@@ -118,7 +117,7 @@ function matchShadowPreset(value: string): string {
 }
 
 export function PropertyInspector() {
-  const { apply, mergeOverrides, resolved, reset, loadPreset, draft } = useTokenDraft();
+  const { apply, mergeOverrides, resolved, loadPreset, draft } = useTokenDraft();
   const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
 
   const hover = parsePercent(resolved("--fynns-state-hover"));
@@ -460,11 +459,6 @@ export function PropertyInspector() {
       </div>
 
       <div className="sandbox-inspector-actions">
-        <Tooltip content="Clear all token overrides in the draft (same as topbar Reset)">
-          <Button size="sm" variant="ghost" onClick={reset}>
-            Reset to default
-          </Button>
-        </Tooltip>
         <ApplyChangesControl />
       </div>
     </div>

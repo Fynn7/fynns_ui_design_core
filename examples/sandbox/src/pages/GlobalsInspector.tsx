@@ -69,7 +69,7 @@ const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
  * Global shape inspector: edits `--fynns-radius-*` for the whole UI core.
  */
 export function GlobalsInspector() {
-  const { apply, resolved, reset, loadPreset, draft, mergeOverrides } = useTokenDraft();
+  const { apply, resolved, loadPreset, draft, mergeOverrides } = useTokenDraft();
   const [presetId, setPresetId] = useState(GLOBAL_SHAPE_PRESETS[0]?.id ?? "");
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
@@ -210,11 +210,6 @@ export function GlobalsInspector() {
       </div>
 
       <footer className="sandbox-inspector-actions">
-        <Tooltip content="Clear all token overrides in the draft (same as topbar Reset)">
-          <Button size="sm" variant="ghost" onClick={reset}>
-            Reset to default
-          </Button>
-        </Tooltip>
         <ApplyChangesControl />
       </footer>
     </div>
