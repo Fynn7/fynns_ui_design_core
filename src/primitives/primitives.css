@@ -134,13 +134,41 @@
 }
 
 .fynns-btn--icon {
-  width: 2.25rem;
-  min-width: 2.25rem;
-  padding: 0;
+  /* Icon is the control — no bordered tile / fixed chrome square around the glyph. */
+  box-sizing: content-box;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: var(--fynns-space-xs);
+  border-color: transparent;
+  background: transparent;
+  line-height: 0;
 }
 
 .fynns-btn--sm.fynns-btn--icon {
-  width: 1.9rem;
+  width: auto;
+  min-height: 0;
+  padding: var(--fynns-space-2xs);
+}
+
+.fynns-btn--icon:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-btn--icon.fynns-btn--primary {
+  border-color: var(--fynns-color-accent-dim);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-btn--icon.fynns-btn--primary:hover:not(:disabled) {
+  background: var(--fynns-color-accent-hover);
+}
+
+.fynns-btn--icon.fynns-btn--danger:hover:not(:disabled) {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--fynns-color-danger) 14%, transparent);
 }
 
 .fynns-btn--icon svg {
@@ -677,18 +705,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.35rem;
-  height: 1.35rem;
+  padding: 0;
   border: 0;
   border-radius: var(--fynns-radius-round);
   background: transparent;
   color: var(--fynns-color-text-muted);
+  line-height: 0;
   cursor: help;
 }
 
 .fynns-info-hint-trigger:hover {
   color: var(--fynns-color-text);
-  background: var(--fynns-color-surface-hover);
+  background: transparent;
+}
+
+.fynns-info-hint-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 /* ---------- Dialog ---------- */

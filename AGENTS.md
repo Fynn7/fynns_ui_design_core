@@ -32,7 +32,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 3. **Every action is an icon button + tooltip — never `title=`.** Use
    `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   Tooltips also describe *dynamic* state (e.g. why a control is disabled).
+   `IconButton` paints as the glyph itself (ghost, no bordered tile). Pure
+   informational "i" affordances use **`InfoHint`** (standalone icon + tooltip),
+   not a chrome `IconButton`. Tooltips also describe *dynamic* state (e.g. why a
+   control is disabled).
    **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
    cover its trigger or the adjacent related content; the caret links the bubble
    to the anchor so it need not touch the text):
@@ -161,7 +164,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 
 - **Button** `{ variant?: "default"|"primary"|"danger"|"ghost", size?: "md"|"sm",
   active?, danger?, iconOnly? }` + native button attrs. `forwardRef`.
-- **IconButton** — `Button` with `iconOnly`; pass `aria-label`.
+- **IconButton** — `Button` with `iconOnly`; defaults to `ghost` so the control
+  reads as the icon itself (no bordered square tile). Pass `aria-label`.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
   disabled?, mainAriaLabel?, menuAriaLabel? }`.
 - **Input** / **Textarea** — native attrs + `.fynns-input`/`.fynns-textarea`.
@@ -192,7 +196,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Renders a caret aimed at the anchor's center, clamped inside the bubble:
   dead-center when the bubble is centered on the anchor (the default, since
   alignment prefers `center`), and tracking the anchor when the bubble shifts
-  to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }`.
+  to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }` —
+  standalone info glyph + tooltip for help affordances (not an `IconButton` tile).
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in

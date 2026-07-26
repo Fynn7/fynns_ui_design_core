@@ -7,11 +7,9 @@ import {
   CardHeader,
   CardMedia,
   ControlRow,
-  IconButton,
-  InfoIcon,
+  InfoHint,
   Switch,
   ToggleGroup,
-  Tooltip,
   toast,
 } from "@fynns/ui";
 import { useState } from "react";
@@ -139,11 +137,7 @@ export function CardPreviewCanvas() {
                 title="Aurora project"
                 subtitle="Updated just now"
                 action={
-                  <Tooltip content="More info">
-                    <IconButton aria-label="More info">
-                      <InfoIcon size={16} />
-                    </IconButton>
-                  </Tooltip>
+                  <InfoHint content="More info about this card subject." ariaLabel="More info" />
                 }
               />
               <CardContent>
