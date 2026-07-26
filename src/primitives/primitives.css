@@ -439,12 +439,9 @@
 }
 
 .fynns-select-list {
-  position: absolute;
-  top: calc(100% + 0.3rem);
-  left: 0;
-  right: 0;
+  /* Positioned via inline `position:fixed` + top/left from useAnchoredPosition
+     (portaled to document.body so overflow:hidden ancestors cannot clip it). */
   z-index: var(--fynns-z-dropdown);
-  width: 100%;
   box-sizing: border-box;
   margin: 0;
   padding: 0.25rem 0;
@@ -457,6 +454,15 @@
   overflow: auto;
   transform-origin: top center;
   animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
+}
+
+.fynns-select-list[data-side="top"] {
+  transform-origin: bottom center;
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-select-list[data-side="bottom"] {
+  transform-origin: top center;
 }
 
 .fynns-select-option {
@@ -2445,6 +2451,34 @@
 
 .fynns-card-actions--end {
   justify-content: flex-end;
+}
+
+.fynns-card-actions--dense {
+  gap: 0;
+  padding: 0;
+}
+
+.fynns-card-media-custom {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-card-media-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--fynns-color-accent) 28%, var(--fynns-color-surface-2)),
+    var(--fynns-color-surface-3)
+  );
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-caption);
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  text-transform: uppercase;
 }
 
 .fynns-card-action-area {

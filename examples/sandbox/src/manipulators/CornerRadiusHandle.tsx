@@ -60,7 +60,12 @@ export function CornerRadiusHandle({ radiusKey = "md", min = 0, max = 28 }: Corn
   }, [dragging, apply, radiusKey, min, max]);
 
   return (
-    <div className="sandbox-corner-handle-wrap" aria-hidden={false}>
+    <div
+      className="sandbox-corner-handle-wrap"
+      style={{
+        borderBottomRightRadius: `${Math.min(live, 10)}px`,
+      }}
+    >
       <button
         type="button"
         className={["sandbox-corner-handle", dragging ? "sandbox-corner-handle--active" : ""]
@@ -68,8 +73,7 @@ export function CornerRadiusHandle({ radiusKey = "md", min = 0, max = 28 }: Corn
           .join(" ")}
         aria-label={`Corner radius ${live} pixels. Drag to adjust.`}
         style={{
-          // Visual cue: handle sits on the corner arc.
-          borderBottomRightRadius: `${live}px`,
+          borderBottomRightRadius: `${Math.min(live, 10)}px`,
         }}
         onPointerDown={(event) => {
           event.preventDefault();

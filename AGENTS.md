@@ -170,7 +170,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
 - **SearchInput** `{ leadingIcon?, wrapClassName?, ...inputAttrs }`.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox.
+  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
+  portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
+  (e.g. Collapsible / scroll panels) do not clip the flyout.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
@@ -233,10 +235,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
 - **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, disabled? }`
-  + anatomy: **CardMedia** `{ src, alt, height? }`, **CardHeader**
+  + anatomy: **CardMedia** `{ src?, alt?, height?, children? }` (custom media via
+  `children` when not using a plain image), **CardHeader**
   `{ title, subtitle?, avatar?, action? }`, **CardContent**, **CardActions**
-  `{ align?: "start"|"end" }`, **CardActionArea**. M3-informed subject card
-  (distinct from `PanelCard` layout shell). Uses elevation / state-layer tokens.
+  `{ align?: "start"|"end", disableSpacing? }`, **CardActionArea**. M3-informed
+  subject card (distinct from `PanelCard` layout shell). Uses elevation /
+  state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
+  toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.

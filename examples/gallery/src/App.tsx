@@ -4,9 +4,11 @@ import {
   Badge,
   Button,
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
+  CardMedia,
   ConfirmDialog,
   Dialog,
   Drawer,
@@ -118,6 +120,37 @@ export function App() {
           <Card variant="elevated" interactive style={{ width: "16rem" }} onClick={() => toast.success("Card clicked")}>
             <CardHeader title="Interactive" subtitle="Hover / press / focus" />
             <CardContent>Uses state-layer tokens for feedback.</CardContent>
+          </Card>
+          <Card variant="filled" style={{ width: "16rem" }}>
+            <CardActionArea onClick={() => toast.message("Action area")}>
+              <CardMedia>
+                <div className="fynns-card-media-placeholder" aria-hidden>
+                  Media
+                </div>
+              </CardMedia>
+              <CardHeader title="Media + ActionArea" subtitle="Custom media children" />
+              <CardContent>Primary surface is clickable; actions stay outside.</CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button size="sm" variant="ghost">
+                Share
+              </Button>
+              <Button size="sm" variant="primary">
+                Learn more
+              </Button>
+            </CardActions>
+          </Card>
+          <Card variant="outlined" style={{ width: "16rem" }}>
+            <CardHeader title="Dense actions" subtitle="disableSpacing" />
+            <CardContent>Actions row without default padding/gap.</CardContent>
+            <CardActions disableSpacing align="end">
+              <Button size="sm" variant="ghost">
+                A
+              </Button>
+              <Button size="sm" variant="primary">
+                B
+              </Button>
+            </CardActions>
           </Card>
         </Row>
       </Section>

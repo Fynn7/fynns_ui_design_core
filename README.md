@@ -90,6 +90,24 @@ variable overrides at runtime so both the Card preview and the sandbox chrome
 update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
 `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
+### Preview toggles (component state)
+
+- Variant focus: All / Elevated / Filled / Outlined
+- Anatomy: Media on/off, ActionArea demo on/off
+- States: Interactive, Disabled
+- Actions: align start|end, dense spacing (`disableSpacing`)
+
+### Inspector knobs (token overrides)
+
+- Shape: `--fynns-radius-md` (+ Square card shortcut)
+- Color: accent hue family; card surfaces `surface-1` / `surface-4` / `app-bg`
+  brightness; outlined `--fynns-color-border-strong`
+- Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
+- State layers: hover / focus / pressed / dragged
+- Spacing: `--fynns-space-lg` (content), `md` (header), `sm` (actions gap)
+- Typography: `--fynns-font-size-{sm,md,lg}`
+
+Writeback remains copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
 ## Optional package distribution
 
 `package.json` is preconfigured (`exports`, `publishConfig`) so the library can

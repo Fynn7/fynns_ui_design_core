@@ -189,6 +189,37 @@
   margin-top: var(--fynns-space-sm);
 }
 
+.sandbox-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+}
+
+.sandbox-preview-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-md);
+  border-radius: var(--fynns-radius-md);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-preview-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.sandbox-preview-toolbar-label {
+  flex: 0 0 6.5rem;
+  font-size: var(--fynns-font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
 .sandbox-preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 18rem));
@@ -199,6 +230,16 @@
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: color-mix(in srgb, var(--fynns-color-surface-2) 55%, var(--fynns-color-app-bg));
+}
+
+.sandbox-preview-grid--focus {
+  grid-template-columns: minmax(16rem, 22rem);
+}
+
+.sandbox-surface-swatch {
+  height: 1.5rem;
+  border-radius: var(--fynns-radius-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
 .sandbox-preview-slot {
@@ -217,29 +258,32 @@
 
 .sandbox-preview-card-wrap {
   position: relative;
-  /* Room for the corner handle outside the card chrome. */
-  padding: 0 var(--fynns-space-lg) var(--fynns-space-lg) 0;
+  /* Keep a little room so the corner handle/readout aren't clipped by the stage. */
+  margin: 0 var(--fynns-space-xl) var(--fynns-space-lg) 0;
 }
 
 .sandbox-corner-handle-wrap {
   position: absolute;
+  /* Pin to the card's bottom-right corner; readout is positioned separately. */
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--fynns-space-xs);
+  width: 0.85rem;
+  height: 0.85rem;
   z-index: 3;
   pointer-events: none;
-  transform: translate(0.15rem, 0.15rem);
+  /* Sit just outside the corner so actions (Open) stay clear. */
+  transform: translate(45%, 45%);
 }
 
 .sandbox-corner-handle {
   pointer-events: auto;
-  width: 0.9rem;
-  height: 0.9rem;
-  border-radius: 0 0 var(--fynns-radius-sm) 0;
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-accent);
-  background: color-mix(in srgb, var(--fynns-color-accent) 35%, transparent);
+  /* Only the outer corner is rounded — matches the card radius being edited. */
+  border-bottom-right-radius: inherit;
+  background: color-mix(in srgb, var(--fynns-color-accent) 40%, var(--fynns-color-surface-3));
   cursor: nwse-resize;
   padding: 0;
   box-shadow: var(--fynns-shadow-xs);
@@ -247,11 +291,15 @@
 
 .sandbox-corner-handle--active,
 .sandbox-corner-handle:hover {
-  background: color-mix(in srgb, var(--fynns-color-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--fynns-color-accent) 60%, var(--fynns-color-surface-3));
 }
 
 .sandbox-corner-readout {
   pointer-events: none;
+  position: absolute;
+  left: calc(100% + var(--fynns-space-xs));
+  top: 50%;
+  transform: translateY(-50%);
   font-size: var(--fynns-font-size-caption);
   font-family: var(--fynns-font-mono);
   color: var(--fynns-color-text);

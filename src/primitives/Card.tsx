@@ -77,17 +77,32 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   );
 });
 
-export type CardMediaProps = ImgHTMLAttributes<HTMLImageElement> & {
-  src: string;
-  alt: string;
+export type CardMediaProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "children"> & {
+  /** Image URL. Omit when providing custom `children` (video, picture, etc.). */
+  src?: string;
+  alt?: string;
   /** CSS height for the media strip. Defaults to token-sized band. */
   height?: string;
+  /** Custom media node when not using a plain `<img>` (MUI `component` minimal subset). */
+  children?: ReactNode;
 };
 
-export function CardMedia({ src, alt, height, className, style, ...rest }: CardMediaProps) {
+export function CardMedia({
+  src,
+  alt = "",
+  height,
+  className,
+  style,
+  children,
+  ...rest
+}: CardMediaProps) {
   return (
     <div className={join("fynns-card-media", className)} style={height ? { height, ...style } : style}>
-      <img {...rest} src={src} alt={alt} className="fynns-card-media-img" />
+      {children != null ? (
+        children
+      ) : src ? (
+        <img {...rest} src={src} alt={alt} className="fynns-card-media-img" />
+      ) : null}
     </div>
   );
 }
@@ -126,15 +141,29 @@ export function CardContent({ className, children, ...rest }: CardContentProps) 
 
 export type CardActionsProps = HTMLAttributes<HTMLDivElement> & {
   align?: "start" | "end";
+  /** When true, removes the default gap / padding increment (MUI `disableSpacing`). */
+  disableSpacing?: boolean;
   children: ReactNode;
 };
 
-export function CardActions({ align = "start", className, children, ...rest }: CardActionsProps) {
+export function CardActions({
+  align = "start",
+  disableSpacing = false,
+  className,
+  children,
+  ...rest
+}: CardActionsProps) {
   return (
     <div
       {...rest}
       data-align={align}
-      className={join("fynns-card-actions", align === "end" && "fynns-card-actions--end", className)}
+      data-disable-spacing={disableSpacing ? "true" : undefined}
+      className={join(
+        "fynns-card-actions",
+        align === "end" && "fynns-card-actions--end",
+        disableSpacing && "fynns-card-actions--dense",
+        className,
+      )}
     >
       {children}
     </div>
