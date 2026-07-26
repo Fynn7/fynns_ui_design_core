@@ -12,7 +12,7 @@
  *
  * Pure builders live on the token module itself (`buildRootCssVarsBlock`,
  * `buildLightThemeCssBlock`, `fynnsVarName`) so the aesthetic sandbox can reuse
- * the same naming rules when emitting override diffs — no second codegen path.
+ * the same naming rules when applying overrides back into `tokens.ts`.
  */
 import { writeFileSync } from "node:fs";
 import path from "node:path";

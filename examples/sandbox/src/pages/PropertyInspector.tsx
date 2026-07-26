@@ -11,7 +11,7 @@ import {
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { CARD_PRESETS } from "../../presets/presets";
-import { formatCssPatch, formatOverrideDiff, formatTokensTsHints } from "../export/formatDiff";
+import { applyTokenOverrides } from "../export/applyTokens";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -58,6 +58,7 @@ function matchShadowPreset(value: string): string {
 export function PropertyInspector() {
   const { apply, resolved, reset, loadPreset, draft } = useTokenDraft();
   const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
+  const [applying, setApplying] = useState(false);
 
   const hover = parsePercent(resolved("--fynns-state-hover"));
   const focus = parsePercent(resolved("--fynns-state-focus"));
@@ -72,16 +73,28 @@ export function PropertyInspector() {
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
 
-  const copyDiff = async () => {
-    const text = [
-      formatOverrideDiff(draft.overrides),
-      formatCssPatch(draft.overrides),
-      formatTokensTsHints(draft.overrides),
-    ]
-      .filter(Boolean)
-      .join("\n");
-    await navigator.clipboard.writeText(text);
-    toast.success("Diff copied to clipboard");
+  const applyChanges = async () => {
+    if (overrideCount === 0 || applying) return;
+    setApplying(true);
+    try {
+      const result = await applyTokenOverrides(draft.overrides);
+      if (!result.ok) {
+        toast.error(result.error ?? "Apply failed");
+        return;
+      }
+      reset();
+      if (result.skipped.length > 0) {
+        toast.warning(
+          `Applied ${result.applied.length} token(s); skipped ${result.skipped.length}`,
+        );
+      } else {
+        toast.success(`Applied ${result.applied.length} token(s) to tokens.ts`);
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Apply failed");
+    } finally {
+      setApplying(false);
+    }
   };
 
   return (
@@ -351,9 +364,14 @@ export function PropertyInspector() {
             Reset to default
           </Button>
         </Tooltip>
-        <Tooltip content="Copy CSS / tokens.ts patch for the current overrides">
-          <Button size="sm" variant="primary" onClick={() => void copyDiff()}>
-            Copy diff
+        <Tooltip content="Write draft overrides into tokens.ts and regenerate theme.css">
+          <Button
+            size="sm"
+            variant="primary"
+            disabled={overrideCount === 0 || applying}
+            onClick={() => void applyChanges()}
+          >
+            {applying ? "Applying…" : "Apply changes"}
           </Button>
         </Tooltip>
       </div>

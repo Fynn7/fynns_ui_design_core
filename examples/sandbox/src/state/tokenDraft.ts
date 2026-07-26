@@ -71,9 +71,15 @@ export function cssVarForOp(group: TokenGroup, key: string): string {
   }
 }
 
-/** Build a `:root { ... }` override block for live injection. */
+/**
+ * Build a live `:root` override block.
+ * Must also target `:root[data-fynns-theme="light"]` — that selector is more
+ * specific than plain `:root`, so light-theme accent/surface tokens in
+ * `theme.css` would otherwise win over the sandbox draft and hue knobs
+ * would appear dead in light mode.
+ */
 export function buildOverrideStyleBlock(overrides: Record<string, string>): string {
   const lines = Object.entries(overrides).map(([name, value]) => `  ${name}: ${value};`);
   if (lines.length === 0) return "";
-  return `:root {\n${lines.join("\n")}\n}`;
+  return `:root,\n:root[data-fynns-theme="light"] {\n${lines.join("\n")}\n}`;
 }

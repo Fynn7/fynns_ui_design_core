@@ -79,16 +79,18 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
   [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
-  token overrides, export diff). Drafts persist in `localStorage`; writeback is
-  copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
+  token overrides, Apply changes). Drafts persist in `localStorage` until you
+  click **Apply changes**, which writes `src/theme/tokens.ts` and runs
+  `npm run gen:theme` via the Vite dev middleware.
 
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. Pages: **Playground** (Card), **Globals** (system
 shape / radius), Foundations, Motion. Editing `--fynns-radius-*` on Globals
-injects CSS variable overrides at runtime so Button, Input, Card, and sandbox
-chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
+injects CSS variable overrides at runtime (including light theme, so hue knobs
+are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
+sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Globals (system shape)
@@ -120,7 +122,10 @@ history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 
-Writeback remains copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
+**Apply changes** writes the current draft into `src/theme/tokens.ts` and runs
+`npm run gen:theme` (Vite dev middleware). That updates the design-system source
+consumed by every `@fynns/ui` client. Until then, overrides stay in the draft /
+`localStorage` and only affect the sandbox preview.
 ## Optional package distribution
 
 `package.json` is preconfigured (`exports`, `publishConfig`) so the library can
