@@ -8,6 +8,10 @@ import {
   fynnsVarName,
 } from "@fynns/ui";
 
+/** Sandbox chrome only — not part of `--fynns-*` / tokens.ts writeback. */
+export const SANDBOX_BLOCK_GAP_VAR = "--sandbox-block-gap";
+export const SANDBOX_BLOCK_GAP_BASELINE = "0.5rem";
+
 /** Snapshot of production baseline values the sandbox can override. */
 export const BASELINE: Record<string, string> = {
   ...Object.fromEntries(
@@ -32,6 +36,7 @@ export const BASELINE: Record<string, string> = {
       .filter(([k]) => ["xs", "sm", "md", "lg", "xl", "2xl"].includes(k))
       .map(([k, v]) => [fynnsVarName("font-size", k), v]),
   ),
+  [SANDBOX_BLOCK_GAP_VAR]: SANDBOX_BLOCK_GAP_BASELINE,
 };
 
 /** Cheap content hash so drafts can detect stale baselines. */

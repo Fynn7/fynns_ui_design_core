@@ -127,7 +127,9 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
   outlined `--fynns-color-border-strong`
 - Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
 - State layers: hover / focus / pressed / dragged
-- Spacing: `--fynns-space-lg` (content), `md` (header), `sm` (actions gap)
+- Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
+  (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
+  (sandbox-only, not Apply writeback)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
 **Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft

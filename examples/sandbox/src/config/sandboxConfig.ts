@@ -65,8 +65,11 @@ export function parseConfigBundle(raw: unknown):
     if (typeof key !== "string" || typeof value !== "string") {
       return { ok: false, error: "Each override must be a string CSS variable → value pair" };
     }
-    if (!key.startsWith("--fynns-")) {
-      return { ok: false, error: `Invalid override key (expected --fynns-*): ${key}` };
+    if (!key.startsWith("--fynns-") && !key.startsWith("--sandbox-")) {
+      return {
+        ok: false,
+        error: `Invalid override key (expected --fynns-* or --sandbox-*): ${key}`,
+      };
     }
     overrides[key] = value;
   }

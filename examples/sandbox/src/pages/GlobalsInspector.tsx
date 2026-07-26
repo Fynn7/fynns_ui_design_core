@@ -101,35 +101,39 @@ export function GlobalsInspector() {
             <InfoHint
               label={`${overrideCount} override${overrideCount === 1 ? "" : "s"}`}
               ariaLabel="What overrides means"
-              content="Count of --fynns-* tokens changed in the live draft versus the tokens.ts baseline. Reset clears them; Apply changes writes them to source."
+              content="Count of draft CSS variables versus baseline (--fynns-* and sandbox chrome). Reset clears them; Apply changes writes only --fynns-* into tokens.ts."
             />
           </span>
         </header>
 
         <Collapsible title="Shape presets" defaultOpen>
-          <div className="sandbox-field">
-            <Select
-              ariaLabel="Shape preset"
-              value={presetId}
-              options={GLOBAL_SHAPE_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
-              onChange={setPresetId}
-            />
+          <div className="sandbox-stack">
+            <div className="sandbox-field">
+              <Select
+                ariaLabel="Shape preset"
+                value={presetId}
+                options={GLOBAL_SHAPE_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+                onChange={setPresetId}
+              />
+            </div>
             <p className="sandbox-help">
               {GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId)?.description}
             </p>
-            <Tooltip content="Replace the entire draft with this preset's overrides (clears other knobs)">
-              <Button
-                size="sm"
-                onClick={() => {
-                  const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId);
-                  if (!preset) return;
-                  loadPreset(preset.overrides);
-                  toast.message(`Loaded preset: ${preset.label}`);
-                }}
-              >
-                Apply preset
-              </Button>
-            </Tooltip>
+            <div className="sandbox-field">
+              <Tooltip content="Replace the entire draft with this preset's overrides (clears other knobs)">
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId);
+                    if (!preset) return;
+                    loadPreset(preset.overrides);
+                    toast.message(`Loaded preset: ${preset.label}`);
+                  }}
+                >
+                  Apply preset
+                </Button>
+              </Tooltip>
+            </div>
             <p className="sandbox-help">
               Apply preset replaces the whole draft. Align M3 / Reset ladder only touch radius.
             </p>
@@ -137,68 +141,70 @@ export function GlobalsInspector() {
         </Collapsible>
 
         <Collapsible title="Shape ladder" defaultOpen>
-          <p className="sandbox-help">
-            Writes `--fynns-radius-*` used by every primitive (Button, Input, Card, flyouts,
-            …) — not Card-only.
-          </p>
-          {EDITABLE_RADIUS.map(({ key, label, max, hint }) => {
-            const cssVar = `--fynns-radius-${key}`;
-            const px = parseLengthToPx(resolved(cssVar));
-            return (
-              <div key={key} className="sandbox-field">
-                <div className="sandbox-field-row">
-                  <InfoHint
-                    label={<code>radius-{label}</code>}
-                    ariaLabel={`About radius-${label}`}
-                    content={hint}
-                  />
-                  <code>{px}px</code>
-                </div>
-                <Slider
-                  ariaLabel={`Radius ${label}`}
-                  min={0}
-                  max={max}
-                  step={1}
-                  value={px}
-                  onChange={(v) =>
-                    apply({ group: "radius", key, value: `${v}px`, source: "slider" })
-                  }
-                />
-              </div>
-            );
-          })}
-          <div className="sandbox-field">
-            <div className="sandbox-field-row">
-              <span>Special (read-only)</span>
-            </div>
-            <ul className="sandbox-globals-readonly">
-              {READONLY_RADIUS.map(({ key, label, hint }) => (
-                <li key={key}>
-                  <InfoHint
-                    label={
-                      <code>
-                        {label}:{" "}
-                        {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
-                      </code>
+          <div className="sandbox-stack">
+            <p className="sandbox-help">
+              Writes `--fynns-radius-*` used by every primitive (Button, Input, Card, flyouts,
+              …) — not Card-only.
+            </p>
+            {EDITABLE_RADIUS.map(({ key, label, max, hint }) => {
+              const cssVar = `--fynns-radius-${key}`;
+              const px = parseLengthToPx(resolved(cssVar));
+              return (
+                <div key={key} className="sandbox-field">
+                  <div className="sandbox-field-row">
+                    <InfoHint
+                      label={<code>radius-{label}</code>}
+                      ariaLabel={`About radius-${label}`}
+                      content={hint}
+                    />
+                    <code>{px}px</code>
+                  </div>
+                  <Slider
+                    ariaLabel={`Radius ${label}`}
+                    min={0}
+                    max={max}
+                    step={1}
+                    value={px}
+                    onChange={(v) =>
+                      apply({ group: "radius", key, value: `${v}px`, source: "slider" })
                     }
-                    ariaLabel={`About radius-${label}`}
-                    content={hint}
                   />
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="sandbox-field-row">
-            <Tooltip content="Apply the M3-aligned radius values (xs–xl only; other overrides stay)">
-              <Button size="sm" variant="ghost" onClick={alignM3Ladder}>
-                Align M3 ladder
-              </Button>
-            </Tooltip>
-            <Tooltip content="Restore radius xs–xl to baseline; leaves color and other overrides">
-              <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
-                Reset ladder
-              </Button>
-            </Tooltip>
+                </div>
+              );
+            })}
+            <div className="sandbox-field">
+              <div className="sandbox-field-row">
+                <span>Special (read-only)</span>
+              </div>
+              <ul className="sandbox-globals-readonly">
+                {READONLY_RADIUS.map(({ key, label, hint }) => (
+                  <li key={key}>
+                    <InfoHint
+                      label={
+                        <code>
+                          {label}:{" "}
+                          {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
+                        </code>
+                      }
+                      ariaLabel={`About radius-${label}`}
+                      content={hint}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="sandbox-field-row">
+              <Tooltip content="Apply the M3-aligned radius values (xs–xl only; other overrides stay)">
+                <Button size="sm" variant="ghost" onClick={alignM3Ladder}>
+                  Align M3 ladder
+                </Button>
+              </Tooltip>
+              <Tooltip content="Restore radius xs–xl to baseline; leaves color and other overrides">
+                <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
+                  Reset ladder
+                </Button>
+              </Tooltip>
+            </div>
           </div>
         </Collapsible>
       </div>

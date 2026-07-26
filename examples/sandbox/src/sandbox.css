@@ -1,3 +1,8 @@
+:root {
+  /* Sandbox chrome — live-overridable via draft; not a --fynns-* token. */
+  --sandbox-block-gap: 0.5rem;
+}
+
 .sandbox-root {
   display: grid;
   grid-template-columns: 12rem 1fr;
@@ -346,6 +351,17 @@
   flex-direction: column;
   gap: var(--fynns-space-xs);
   margin-bottom: var(--fynns-space-sm);
+}
+
+.sandbox-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sandbox-block-gap);
+  min-width: 0;
+}
+
+.sandbox-stack > .sandbox-field {
+  margin-bottom: 0;
 }
 
 .sandbox-field-row {
