@@ -1,4 +1,13 @@
-import { Button, Collapsible, InfoHint, Select, Slider, toast, Tooltip } from "@fynns/ui";
+import {
+  Button,
+  CardActions,
+  Collapsible,
+  InfoHint,
+  Select,
+  Slider,
+  toast,
+  Tooltip,
+} from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { GLOBAL_SHAPE_PRESETS } from "../../presets/presets";
 import { BASELINE } from "../state/baseline";
@@ -193,18 +202,18 @@ export function GlobalsInspector() {
                 ))}
               </ul>
             </div>
-            <div className="sandbox-field-row">
-              <Tooltip content="Apply the M3-aligned radius values (xs–xl only; other overrides stay)">
-                <Button size="sm" variant="ghost" onClick={alignM3Ladder}>
-                  Align M3 ladder
-                </Button>
-              </Tooltip>
+            <CardActions align="end" className="sandbox-field-actions">
               <Tooltip content="Restore radius xs–xl to baseline; leaves color and other overrides">
                 <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
                   Reset ladder
                 </Button>
               </Tooltip>
-            </div>
+              <Tooltip content="Apply the M3-aligned radius values (xs–xl only; other overrides stay)">
+                <Button size="sm" variant="primary" onClick={alignM3Ladder}>
+                  Align M3 ladder
+                </Button>
+              </Tooltip>
+            </CardActions>
           </div>
         </Collapsible>
       </div>

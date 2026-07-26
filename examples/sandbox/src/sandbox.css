@@ -372,6 +372,11 @@
   font-size: var(--fynns-font-size-sm);
 }
 
+.sandbox-field-actions.fynns-card-actions {
+  padding: 0;
+  margin: 0;
+}
+
 .sandbox-help,
 .sandbox-muted {
   margin: 0;
