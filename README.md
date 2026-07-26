@@ -100,8 +100,9 @@ update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
 ### Inspector knobs (token overrides)
 
 - Shape: `--fynns-radius-md` (+ Square card shortcut)
-- Color: accent hue presets + rainbow chip (opens hue ring); card surfaces
-  `surface-1` / `surface-4` / `app-bg` brightness; outlined `--fynns-color-border-strong`
+- Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
+  hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
+  outlined `--fynns-color-border-strong`
 - Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
 - State layers: hover / focus / pressed / dragged
 - Spacing: `--fynns-space-lg` (content), `md` (header), `sm` (actions gap)

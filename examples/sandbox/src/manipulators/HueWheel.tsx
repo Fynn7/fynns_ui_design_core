@@ -1,17 +1,19 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
-import { Popover, Slider, Tooltip } from "@fynns/ui";
+import { Input, Popover, Slider, Tooltip } from "@fynns/ui";
 import {
   approxHueFromHex,
   hexToRgb,
   hslToHex,
   hueFromPointer,
+  normalizeHex,
 } from "../theme/colorUtils";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
@@ -27,7 +29,8 @@ const HUE_PRESETS: Array<{ label: string; hue: number }> = [
 
 /**
  * Accent hue controls: preset chips stay on the inspector; the full hue ring
- * opens from a rainbow trigger chip (Popover). One coalesced undo step per gesture.
+ * opens from a rainbow trigger chip (Popover). Degree and hex fields edit
+ * independently. One coalesced undo step per gesture.
  */
 export function HueWheel() {
   const { mergeOverrides, resolved } = useTokenDraft();
@@ -35,30 +38,33 @@ export function HueWheel() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const draggingRef = useRef(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [hueDraft, setHueDraft] = useState<string | null>(null);
+  const [hexDraft, setHexDraft] = useState<string | null>(null);
 
-  const hue = useMemo(() => {
-    const accent = resolved("--fynns-color-accent");
-    return approxHueFromHex(accent) ?? 168;
+  const accentHex = useMemo(() => {
+    const raw = resolved("--fynns-color-accent");
+    return normalizeHex(raw) ?? "#2dd4bf";
   }, [resolved]);
 
-  const accentHex = useMemo(() => hslToHex(hue, 62, 50), [hue]);
+  const hue = useMemo(() => approxHueFromHex(accentHex) ?? 168, [accentHex]);
 
-  const setHue = useCallback(
-    (nextHue: number) => {
-      const h = ((nextHue % 360) + 360) % 360;
-      const accent = hslToHex(h, 62, 50);
-      const dim = hslToHex(h, 62, 40);
-      const hover = hslToHex(h, 64, 54);
-      const active = hslToHex(h, 60, 46);
+  useEffect(() => {
+    setHueDraft(null);
+    setHexDraft(null);
+  }, [accentHex]);
+
+  const applyAccentHex = useCallback(
+    (accent: string) => {
       const rgb = hexToRgb(accent);
       if (!rgb) return;
+      const h = approxHueFromHex(accent) ?? 168;
       const [r, g, b] = rgb;
       mergeOverrides(
         {
           "--fynns-color-accent": accent,
-          "--fynns-color-accent-dim": dim,
-          "--fynns-color-accent-hover": hover,
-          "--fynns-color-accent-active": active,
+          "--fynns-color-accent-dim": hslToHex(h, 62, 40),
+          "--fynns-color-accent-hover": hslToHex(h, 64, 54),
+          "--fynns-color-accent-active": hslToHex(h, 60, 46),
           "--fynns-color-accent-soft": `rgba(${r}, ${g}, ${b}, 0.18)`,
           "--fynns-color-accent-mid": `rgba(${r}, ${g}, ${b}, 0.5)`,
           "--fynns-color-accent-24": `rgba(${r}, ${g}, ${b}, 0.24)`,
@@ -71,6 +77,37 @@ export function HueWheel() {
     },
     [mergeOverrides],
   );
+
+  const setHue = useCallback(
+    (nextHue: number) => {
+      const h = ((nextHue % 360) + 360) % 360;
+      applyAccentHex(hslToHex(h, 62, 50));
+    },
+    [applyAccentHex],
+  );
+
+  const commitHueDraft = () => {
+    if (hueDraft == null) return;
+    const cleaned = hueDraft.replace(/°/g, "").trim();
+    const n = Number.parseFloat(cleaned);
+    if (!Number.isFinite(n)) {
+      setHueDraft(null);
+      return;
+    }
+    setHue(n);
+    setHueDraft(null);
+  };
+
+  const commitHexDraft = () => {
+    if (hexDraft == null) return;
+    const normalized = normalizeHex(hexDraft);
+    if (!normalized) {
+      setHexDraft(null);
+      return;
+    }
+    applyAccentHex(normalized);
+    setHexDraft(null);
+  };
 
   const pickFromPointer = (event: PointerEvent<HTMLDivElement>) => {
     const el = diskRef.current;
@@ -97,7 +134,7 @@ export function HueWheel() {
     }
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+  const onDiskKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const step = event.shiftKey ? 10 : 1;
     if (event.key === "ArrowRight" || event.key === "ArrowUp") {
       event.preventDefault();
@@ -118,9 +155,59 @@ export function HueWheel() {
     <div className="sandbox-hue-wheel">
       <div className="sandbox-hue-meta">
         <span>Accent hue</span>
-        <code>
-          {Math.round(hue)}° · {accentHex}
-        </code>
+        <div className="sandbox-hue-fields">
+          <label className="sandbox-hue-field">
+            <span className="fynns-sr-only">Hue degrees</span>
+            <Input
+              className="sandbox-hue-input sandbox-hue-input--deg"
+              inputMode="numeric"
+              spellCheck={false}
+              aria-label="Hue degrees"
+              value={hueDraft ?? `${Math.round(hue)}°`}
+              onChange={(event) => setHueDraft(event.target.value)}
+              onFocus={(event) => {
+                if (hueDraft == null) setHueDraft(String(Math.round(hue)));
+                event.target.select();
+              }}
+              onBlur={commitHueDraft}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  (event.target as HTMLInputElement).blur();
+                } else if (event.key === "Escape") {
+                  event.preventDefault();
+                  setHueDraft(null);
+                  (event.target as HTMLInputElement).blur();
+                }
+              }}
+            />
+          </label>
+          <label className="sandbox-hue-field">
+            <span className="fynns-sr-only">Accent hex</span>
+            <Input
+              className="sandbox-hue-input sandbox-hue-input--hex"
+              spellCheck={false}
+              aria-label="Accent hex"
+              value={hexDraft ?? accentHex}
+              onChange={(event) => setHexDraft(event.target.value)}
+              onFocus={(event) => {
+                if (hexDraft == null) setHexDraft(accentHex);
+                event.target.select();
+              }}
+              onBlur={commitHexDraft}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  (event.target as HTMLInputElement).blur();
+                } else if (event.key === "Escape") {
+                  event.preventDefault();
+                  setHexDraft(null);
+                  (event.target as HTMLInputElement).blur();
+                }
+              }}
+            />
+          </label>
+        </div>
       </div>
 
       <div className="sandbox-hue-presets" role="group" aria-label="Hue presets">
@@ -186,7 +273,7 @@ export function HueWheel() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          onKeyDown={onKeyDown}
+          onKeyDown={onDiskKeyDown}
         >
           <div className="sandbox-hue-disk-ring" aria-hidden />
           <div

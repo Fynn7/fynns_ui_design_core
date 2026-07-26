@@ -1,10 +1,23 @@
-/** Tiny color helpers for sandbox surface / accent knobs (no free-form hex field). */
+/** Tiny color helpers for sandbox surface / accent knobs. */
 
 export function hexToRgb(hex: string): [number, number, number] | null {
   const m = hex.trim().match(/^#([0-9a-f]{6})$/i);
   if (!m) return null;
   const n = Number.parseInt(m[1], 16);
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+/** Normalize `#rgb` / `#rrggbb` / `rrggbb` → `#rrggbb`, or null if invalid. */
+export function normalizeHex(value: string): string | null {
+  const raw = value.trim();
+  const short = raw.match(/^#?([0-9a-f]{3})$/i);
+  if (short) {
+    const [r, g, b] = short[1].split("");
+    return `#${r}${r}${g}${g}${b}${b}`.toLowerCase();
+  }
+  const full = raw.match(/^#?([0-9a-f]{6})$/i);
+  if (!full) return null;
+  return `#${full[1].toLowerCase()}`;
 }
 
 function toHex(r: number, g: number, b: number): string {
