@@ -185,7 +185,7 @@ export function CardPreviewCanvas() {
                     </Button>
                   </CardActions>
                 </Card>
-                {variant === "elevated" ? <CornerRadiusHandle /> : null}
+                <CornerRadiusHandle />
               </div>
             </div>
           );

@@ -159,7 +159,7 @@ export function PropertyInspector() {
               </Button>
             </div>
             <p className="sandbox-help">
-              Also drag the handle on the elevated preview card. M3 medium reference is 12px.
+              Also drag a corner handle on any preview card. M3 medium reference is 12px.
               Square matches MUI Paper `square`.
             </p>
           </div>
