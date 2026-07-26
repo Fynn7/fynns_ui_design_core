@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import type { ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -161,7 +162,7 @@ function readJsonBody(req: Connect.IncomingMessage): Promise<unknown> {
 }
 
 function sendJson(
-  res: Connect.ServerResponse,
+  res: ServerResponse,
   status: number,
   body: Record<string, unknown>,
 ) {
