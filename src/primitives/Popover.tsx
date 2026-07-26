@@ -5,20 +5,11 @@ import { createPortal } from "react-dom";
 export type Side = "top" | "bottom" | "left" | "right";
 export type Align = "start" | "center" | "end";
 
-export type AnchoredPosition = {
-  top: number;
-  left: number;
-  side: Side;
-  align: Align;
-  /**
-   * Pixel cap so the floating layer wraps inside the remaining viewport instead
-   * of painting past the window edge (tooltips near topbar corners, etc.).
-   */
-  maxWidth?: number;
-};
-
+export type AnchoredPosition = { top: number; left: number; side: Side; align: Align };
 
 const VIEWPORT_MARGIN = 8;
+/** Sub-pixel slack when comparing layout math to rendered bounds. */
+const VIEWPORT_EPSILON = 1;
 const OPPOSITE_SIDE: Record<Side, Side> = {
   top: "bottom",
   bottom: "top",
@@ -26,8 +17,33 @@ const OPPOSITE_SIDE: Record<Side, Side> = {
   right: "left",
 };
 
-/** Fallback size before the floating node is measured (tooltips / small popovers). */
-const ESTIMATED_FLOAT_SIZE = { width: 180, height: 40 };
+/** Matches `--fynns-layout-tooltip-max-width`: min(14rem, 85vw). */
+export function estimatedFloatSize(vw: number): FloatingSize {
+  return { width: Math.min(224, vw * 0.85), height: 48 };
+}
+
+/** Prefer the visible child control over the inline trigger wrapper when measuring. */
+export function anchorTargetRect(anchorEl: HTMLElement): DOMRect {
+  const child = anchorEl.firstElementChild;
+  if (child instanceof HTMLElement) {
+    const childRect = child.getBoundingClientRect();
+    if (childRect.width > 0 && childRect.height > 0) return childRect;
+  }
+  return anchorEl.getBoundingClientRect();
+}
+
+/** Top-left viewport coordinates for the floating box (no CSS transform). */
+export function resolveFloatingBox(
+  anchorRect: DOMRect,
+  floatingSize: FloatingSize | null,
+  opts: { side?: Side; align?: Align; offset?: number } = {},
+): { top: number; left: number; side: Side; align: Align } {
+  const pos = resolveAnchoredPosition(anchorRect, floatingSize, opts);
+  const vw = window.innerWidth;
+  const size = floatingSize ?? estimatedFloatSize(vw);
+  const box = floatingViewportRect({ top: pos.top, left: pos.left }, pos.side, pos.align, size);
+  return { top: box.top, left: box.left, side: pos.side, align: pos.align };
+}
 
 export type FloatingSize = { width: number; height: number };
 
@@ -172,89 +188,80 @@ function fitsViewport(
   margin: number,
 ): boolean {
   return (
-    box.top >= margin &&
-    box.left >= margin &&
-    box.bottom <= vh - margin &&
-    box.right <= vw - margin
+    box.top >= margin - VIEWPORT_EPSILON &&
+    box.left >= margin - VIEWPORT_EPSILON &&
+    box.bottom <= vh - margin + VIEWPORT_EPSILON &&
+    box.right <= vw - margin + VIEWPORT_EPSILON
   );
 }
 
-function rectsOverlap(
-  a: { top: number; left: number; right: number; bottom: number },
-  b: DOMRect,
+/** Whether the floating box intrudes into the anchor along the placement axis. */
+export function coversAnchor(
+  box: { top: number; left: number; right: number; bottom: number },
+  anchorRect: DOMRect,
+  side: Side,
+  offset: number,
 ): boolean {
-  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+  if (side === "top") return box.bottom > anchorRect.top - offset;
+  if (side === "bottom") return box.top < anchorRect.bottom + offset;
+  if (side === "left") return box.right > anchorRect.left - offset;
+  return box.left < anchorRect.right + offset;
 }
 
-function clampAnchorPoint(
+/** Minimal translation so a floating viewport box stays inside the margin inset. */
+export function computeViewportShift(
+  box: { top: number; left: number; right: number; bottom: number },
+  vw: number,
+  vh: number,
+  margin: number,
+): { dx: number; dy: number } {
+  let dx = 0;
+  let dy = 0;
+  const maxW = vw - margin * 2;
+  const maxH = vh - margin * 2;
+  const boxW = box.right - box.left;
+  const boxH = box.bottom - box.top;
+  if (boxW > maxW) {
+    dx = margin - box.left;
+  } else {
+    if (box.left < margin) dx = margin - box.left;
+    if (box.right > vw - margin) dx = vw - margin - box.right;
+  }
+  if (boxH > maxH) {
+    dy = margin - box.top;
+  } else {
+    if (box.top < margin) dy = margin - box.top;
+    if (box.bottom > vh - margin) dy = vh - margin - box.bottom;
+  }
+  return { dx, dy };
+}
+
+/** Shift an anchor point so the resolved floating box fits inside the viewport. */
+export function shiftIntoViewport(
   point: { top: number; left: number },
   side: Side,
   align: Align,
   size: FloatingSize,
-  anchorRect: DOMRect,
   vw: number,
   vh: number,
   margin: number,
-  offset: number,
 ): { top: number; left: number } {
   const box = floatingViewportRect(point, side, align, size);
-  let dx = 0;
-  let dy = 0;
-  if (box.left < margin) dx = margin - box.left;
-  if (box.right > vw - margin) dx = vw - margin - box.right;
-  if (box.top < margin) dy = margin - box.top;
-  if (box.bottom > vh - margin) dy = vh - margin - box.bottom;
-  let top = point.top + dy;
-  const left = point.left + dx;
-  // Never slide a top/bottom tooltip down/up through the anchor (clamp dy abuse).
-  if (side === "top") top = Math.min(top, anchorRect.top - offset);
-  if (side === "bottom") top = Math.max(top, anchorRect.bottom + offset);
-
-  const clamped = { top, left };
-  const clampedBox = floatingViewportRect(clamped, side, align, size);
-  if (!rectsOverlap(clampedBox, anchorRect)) return clamped;
-
-  // Prefer staying inside the viewport over the ideal "never cover the anchor".
-  // Abandoning the clamp here is what clipped long tooltips at the window edge.
-  const unclampedOverflows = !fitsViewport(box, vw, vh, margin);
-  if (unclampedOverflows) return clamped;
-  return point;
+  const { dx, dy } = computeViewportShift(box, vw, vh, margin);
+  return { top: point.top + dy, left: point.left + dx };
 }
 
-/**
- * How wide the floating layer may grow for this anchor point + placement before
- * it would leave the viewport (independent of content length).
- */
-export function availableFloatingMaxWidth(
-  point: { top: number; left: number },
-  side: Side,
-  align: Align,
-  vw: number,
-  margin: number = VIEWPORT_MARGIN,
-): number {
-  if (side === "top" || side === "bottom") {
-    if (align === "start") return Math.max(0, vw - margin - point.left);
-    if (align === "end") return Math.max(0, point.left - margin);
-    return Math.max(0, 2 * Math.min(point.left - margin, vw - margin - point.left));
-  }
-  if (side === "left") return Math.max(0, point.left - margin);
-  return Math.max(0, vw - margin - point.left);
-}
-
-function sizeForPlacement(measured: FloatingSize, maxWidth: number): FloatingSize {
-  if (!(maxWidth > 0) || measured.width <= maxWidth) return measured;
-  const scale = measured.width / maxWidth;
-  return {
-    width: maxWidth,
-    // Rough wrap estimate; ResizeObserver remeasures after maxWidth applies.
-    height: Math.ceil(measured.height * Math.min(scale, 4)),
-  };
+function sideCandidates(preferred: Side): Side[] {
+  const opposite = OPPOSITE_SIDE[preferred];
+  const rest = (["top", "bottom", "left", "right"] as Side[]).filter(
+    (s) => s !== preferred && s !== opposite,
+  );
+  return [preferred, opposite, ...rest];
 }
 
 /**
  * Pick placement side and anchor coordinates so the floating layer stays inside
  * the viewport. Uses measured size when available; otherwise a small estimate.
- * Returns `maxWidth` so callers (Tooltip) can wrap before painting past the edge.
  */
 function alignCandidates(
   anchorRect: DOMRect,
@@ -262,21 +269,22 @@ function alignCandidates(
   vh: number,
   side: Side,
   align: Align,
+  size: FloatingSize,
+  offset: number,
 ): Align[] {
   if (align !== "center") return [align];
   // Prefer true center so the bubble straddles the anchor and the caret lands
-  // on the bubble's midpoint. Near a viewport edge, center would squeeze
-  // maxWidth — try the edge-aware align first so long copy can wrap wider.
+  // on the bubble's midpoint. Only fall back to edge-snapped align when a
+  // centered bubble would overflow even after viewport shift.
+  const point = anchorPoint(anchorRect, side, "center", offset);
+  const shifted = shiftIntoViewport(point, side, "center", size, vw, vh, VIEWPORT_MARGIN);
+  const centered = floatingViewportRect(shifted, side, "center", size);
+  if (fitsViewport(centered, vw, vh, VIEWPORT_MARGIN)) return ["center"];
   const resolved = resolveAlignForAnchor(anchorRect, vw, vh, side, align);
-  const centerPoint = anchorPoint(anchorRect, side, "center", 0);
-  const centerAvail = availableFloatingMaxWidth(centerPoint, side, "center", vw);
-  const MIN_COMFORT_WIDTH = 160;
   const list: Align[] = [];
-  if (centerAvail >= MIN_COMFORT_WIDTH) list.push("center");
-  for (const extra of [resolved, "end", "start"] as const) {
+  for (const extra of [resolved, "end", "start", "center"] as const) {
     if (!list.includes(extra)) list.push(extra);
   }
-  if (!list.includes("center")) list.push("center");
   return list;
 }
 
@@ -286,82 +294,51 @@ export function resolveAnchoredPosition(
   opts: { side?: Side; align?: Align; offset?: number } = {},
 ): AnchoredPosition {
   const { side: preferred = "bottom", align = "center", offset = 6 } = opts;
-  const measured = floatingSize ?? ESTIMATED_FLOAT_SIZE;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const sides: Side[] = [preferred, OPPOSITE_SIDE[preferred]];
-  const aligns = alignCandidates(anchorRect, vw, vh, preferred, align);
+  const size = floatingSize ?? estimatedFloatSize(vw);
 
-  const tryPlacement = (trySide: Side, tryAlign: Align): AnchoredPosition | null => {
-    const point = anchorPoint(anchorRect, trySide, tryAlign, offset);
-    const maxWidth = availableFloatingMaxWidth(point, trySide, tryAlign, vw, VIEWPORT_MARGIN);
-    const size = sizeForPlacement(measured, maxWidth);
-    const box = floatingViewportRect(point, trySide, tryAlign, size);
-    if (!fitsViewport(box, vw, vh, VIEWPORT_MARGIN)) return null;
-    if (rectsOverlap(box, anchorRect)) return null;
-    const clamped = clampAnchorPoint(
-      point,
-      trySide,
-      tryAlign,
-      size,
-      anchorRect,
-      vw,
-      vh,
-      VIEWPORT_MARGIN,
-      offset,
-    );
-    const clampedBox = floatingViewportRect(clamped, trySide, tryAlign, size);
-    if (rectsOverlap(clampedBox, anchorRect)) return null;
-    const clampedMaxWidth = availableFloatingMaxWidth(
-      clamped,
-      trySide,
-      tryAlign,
-      vw,
-      VIEWPORT_MARGIN,
-    );
-    return {
-      ...clamped,
-      side: trySide,
-      align: tryAlign,
-      maxWidth: clampedMaxWidth,
-    };
-  };
+  type Candidate = AnchoredPosition & { score: number };
+  let best: Candidate | null = null;
 
-  for (const trySide of sides) {
+  for (const trySide of sideCandidates(preferred)) {
+    const aligns = alignCandidates(anchorRect, vw, vh, trySide, align, size, offset);
     for (const tryAlign of aligns) {
-      const hit = tryPlacement(trySide, tryAlign);
-      if (hit) return hit;
+      const point = anchorPoint(anchorRect, trySide, tryAlign, offset);
+      const shifted = shiftIntoViewport(point, trySide, tryAlign, size, vw, vh, VIEWPORT_MARGIN);
+      const box = floatingViewportRect(shifted, trySide, tryAlign, size);
+      if (!fitsViewport(box, vw, vh, VIEWPORT_MARGIN)) continue;
+      // Viewport shift can push a "top" bubble down over the trigger; skip those
+      // so we flip to the opposite side (e.g. bottom + upward caret near the top edge).
+      if (coversAnchor(box, anchorRect, trySide, offset)) continue;
+
+      let score = 0;
+      if (trySide === preferred) score += 100;
+      if (tryAlign === align || (align === "center" && tryAlign === "center")) score += 10;
+      score += 50;
+
+      const candidate: Candidate = { ...shifted, side: trySide, align: tryAlign, score };
+      if (!best || candidate.score > best.score) best = candidate;
     }
+  }
+
+  if (best) {
+    return { top: best.top, left: best.left, side: best.side, align: best.align };
   }
 
   const fallbackSide = preferred;
   const fallbackAlign = resolveAlignForAnchor(anchorRect, vw, vh, fallbackSide, align);
   const fallbackPoint = anchorPoint(anchorRect, fallbackSide, fallbackAlign, offset);
-  const maxWidth = availableFloatingMaxWidth(
-    fallbackPoint,
-    fallbackSide,
-    fallbackAlign,
-    vw,
-    VIEWPORT_MARGIN,
-  );
-  const size = sizeForPlacement(measured, maxWidth);
-  const clamped = clampAnchorPoint(
+  const shifted = shiftIntoViewport(
     fallbackPoint,
     fallbackSide,
     fallbackAlign,
     size,
-    anchorRect,
     vw,
     vh,
     VIEWPORT_MARGIN,
-    offset,
   );
-  return {
-    ...clamped,
-    side: fallbackSide,
-    align: fallbackAlign,
-    maxWidth: availableFloatingMaxWidth(clamped, fallbackSide, fallbackAlign, vw, VIEWPORT_MARGIN),
-  };
+  return { ...shifted, side: fallbackSide, align: fallbackAlign };
 }
 
 /**
@@ -386,9 +363,9 @@ export function useAnchoredPosition(
     }
     const compute = () => {
       const rect = anchorEl.getBoundingClientRect();
-      const floatingSize = floatingEl
-        ? { width: floatingEl.offsetWidth, height: floatingEl.offsetHeight }
-        : null;
+      const w = floatingEl?.offsetWidth ?? 0;
+      const h = floatingEl?.offsetHeight ?? 0;
+      const floatingSize = w > 0 && h > 0 ? { width: w, height: h } : null;
       setPos(resolveAnchoredPosition(rect, floatingSize, { side, align, offset }));
     };
     compute();
@@ -407,6 +384,51 @@ export function useAnchoredPosition(
   }, [anchorEl, floatingEl, open, side, align, offset]);
 
   return pos;
+}
+
+/**
+ * Like {@link useAnchoredPosition} but returns the floating box's top-left
+ * corner so consumers can position with `top`/`left` only (no CSS transform).
+ */
+export function useFloatingBoxPosition(
+  anchorEl: HTMLElement | null,
+  floatingEl: HTMLElement | null,
+  open: boolean,
+  opts: { side?: Side; align?: Align; offset?: number } = {},
+): { top: number; left: number; side: Side; align: Align } | null {
+  const { side = "bottom", align = "center", offset = 6 } = opts;
+  const [box, setBox] = useState<{ top: number; left: number; side: Side; align: Align } | null>(
+    null,
+  );
+
+  useLayoutEffect(() => {
+    if (!open || !anchorEl) {
+      setBox(null);
+      return;
+    }
+    const compute = () => {
+      const rect = anchorTargetRect(anchorEl);
+      const w = floatingEl?.offsetWidth ?? 0;
+      const h = floatingEl?.offsetHeight ?? 0;
+      const floatingSize = w > 0 && h > 0 ? { width: w, height: h } : null;
+      setBox(resolveFloatingBox(rect, floatingSize, { side, align, offset }));
+    };
+    compute();
+    const ro =
+      floatingEl && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(compute)
+        : null;
+    ro?.observe(floatingEl as Element);
+    window.addEventListener("scroll", compute, true);
+    window.addEventListener("resize", compute);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("scroll", compute, true);
+      window.removeEventListener("resize", compute);
+    };
+  }, [anchorEl, floatingEl, open, side, align, offset]);
+
+  return box;
 }
 
 export type PopoverProps = {
@@ -437,7 +459,9 @@ export function Popover({
   role = "dialog",
 }: PopoverProps) {
   const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
-  const pos = useAnchoredPosition(anchorRef.current, panelEl, open, { side, align, offset });
+  // Use box top-left (not the raw anchor attachment point) so align=end/center
+  // stay inside the viewport without a CSS transform.
+  const pos = useFloatingBoxPosition(anchorRef.current, panelEl, open, { side, align, offset });
 
   useEffect(() => {
     if (!open) return;

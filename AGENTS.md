@@ -183,22 +183,22 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
   align? }`.
-- **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
-  `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — flips top/bottom (or
-  left/right), auto `align` start/end near viewport edges, clamps to stay in the
-  viewport (prefer in-bounds over never covering the anchor), and returns a
-  viewport-aware `maxWidth` so floating layers can wrap before painting past the
-  window edge. Tooltips use `pos.side` + `pos.align` with
-  `floatingTransformForSide`.
-- **Tooltip** `{ content, side?, align?, children, className? }` + **TooltipProvider**
-  (compat passthrough). Applies `min(token, pos.maxWidth)` so long copy wraps
-  near viewport corners instead of being clipped. Enter animation is
-  **opacity-only** — never animate `transform` on the bubble (fill-mode would
-  override the placement `translate(-50%)` and clip at the window edge).
-  Renders a caret aimed at the anchor's center, clamped inside the bubble:
-  dead-center when the bubble is centered on the anchor (the default, since
-  alignment prefers `center`), and tracking the anchor when the bubble shifts
-  to fit the viewport. **InfoHint** `{ content, label?, ariaLabel?, iconSize? }` —
+- **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
+  positions via `useFloatingBoxPosition` (top/left box coords, no CSS
+  transform). Placement tries all four sides (preferred first, then opposite,
+  then the rest), auto `align` start/end near viewport edges, shifts the bubble
+  inside the viewport margin, and **flips to the opposite side** when the
+  preferred side would overlap the anchor after clamping.
+  `useAnchoredPosition` returns the raw attachment point (for caret math);
+  prefer `useFloatingBoxPosition` / `resolveFloatingBox` when rendering a panel
+  with `top`/`left` only.
+- **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
+  (compat passthrough). Renders a caret aimed at the trigger's center (preferring
+  the child control over the inline wrapper), clamped inside the bubble: dead-center
+  when the bubble is centered on the anchor (the default, since alignment prefers
+  `center`), and tracking the anchor when the bubble shifts to fit the viewport. Pass **`interactive`** when the bubble
+  contains buttons or other controls (pointer events on + delayed hide while the
+  cursor is over the bubble). **InfoHint** `{ content, label?, ariaLabel?, iconSize? }` —
   icon-only help glyph, or `label` as a plain help trigger (prefer for
   form/inspector rows; no underline fence, no trailing "i").
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
@@ -292,7 +292,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
-  `BotIcon`, `SparklesIcon`, `PlugIcon`, `CpuIcon`, `MessageSquareIcon`,
+  `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`, `SettingsIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 

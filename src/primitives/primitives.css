@@ -642,6 +642,11 @@
      translate (e.g. translate(-50%)) via fill-mode and clip tooltips at the
      viewport edge — a recurring consumer-side bug when fixed locally. */
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
+  /* Opacity-only enter animation; placement is absolute top/left (no transform). */
+}
+
+.fynns-tooltip--interactive {
+  pointer-events: auto;
 }
 
 .fynns-tooltip[data-side="bottom"] {

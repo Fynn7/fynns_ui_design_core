@@ -42,7 +42,7 @@ export function Drawer({
   description,
   headActions,
   showCloseButton = true,
-  closeAriaLabel = "Close",
+  closeAriaLabel = "关闭",
   ariaLabel,
   className,
   children,
