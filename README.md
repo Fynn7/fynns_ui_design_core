@@ -80,18 +80,31 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run sandbox` — run the aesthetic sandbox in
   [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
   token overrides, Apply changes). Drafts persist in `localStorage` until you
-  click **Apply changes**, which writes `src/theme/tokens.ts` and runs
-  `npm run gen:theme` via the Vite dev middleware.
+  click **Apply changes** (review per-file diffs, then confirm), which writes
+  `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
 
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. Pages: **Playground** (Card), **Globals** (system
-shape / radius), Foundations, Motion. Editing `--fynns-radius-*` on Globals
+shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
+footer — config JSON export/import and named templates). Editing
+`--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
+
+### Templates & config JSON
+
+- Open via the **gear** control at the bottom of the left nav (special page,
+  no inspector aside).
+- **Export JSON** / **Import JSON** move the full sandbox configuration:
+  `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
+- **Save as template** stores the same bundle under a name in `localStorage`
+  (`fynns-sandbox-templates`). Apply / export / rename / delete from the list.
+- Templates do not write `tokens.ts` by themselves — use **Apply changes** on
+  Playground / Globals after loading a template if you want source writeback.
 
 ### Globals (system shape)
 
@@ -122,10 +135,11 @@ history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 
-**Apply changes** writes the current draft into `src/theme/tokens.ts` and runs
-`npm run gen:theme` (Vite dev middleware). That updates the design-system source
-consumed by every `@fynns/ui` client. Until then, overrides stay in the draft /
-`localStorage` and only affect the sandbox preview.
+**Apply changes** opens a review dialog with unified diffs for
+`src/theme/tokens.ts` and regenerated `src/theme/theme.css`. Confirming writes
+the draft and runs `npm run gen:theme` (Vite dev middleware). That updates the
+design-system source consumed by every `@fynns/ui` client. Until then, overrides
+stay in the draft / `localStorage` and only affect the sandbox preview.
 ## Optional package distribution
 
 `package.json` is preconfigured (`exports`, `publishConfig`) so the library can

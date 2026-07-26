@@ -1,9 +1,9 @@
-import { Button, Collapsible, Select, Slider, toast, Tooltip } from "@fynns/ui";
+import { Button, Collapsible, InfoHint, Select, Slider, toast, Tooltip } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { GLOBAL_SHAPE_PRESETS } from "../../presets/presets";
-import { applyTokenOverrides } from "../export/applyTokens";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
+import { ApplyChangesControl } from "./ApplyChangesControl";
 
 function parseLengthToPx(value: string): number {
   const n = Number.parseFloat(value);
@@ -34,33 +34,8 @@ const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
 export function GlobalsInspector() {
   const { apply, resolved, reset, loadPreset, draft, mergeOverrides } = useTokenDraft();
   const [presetId, setPresetId] = useState(GLOBAL_SHAPE_PRESETS[0]?.id ?? "");
-  const [applying, setApplying] = useState(false);
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
-
-  const applyChanges = async () => {
-    if (overrideCount === 0 || applying) return;
-    setApplying(true);
-    try {
-      const result = await applyTokenOverrides(draft.overrides);
-      if (!result.ok) {
-        toast.error(result.error ?? "Apply failed");
-        return;
-      }
-      reset();
-      if (result.skipped.length > 0) {
-        toast.warning(
-          `Applied ${result.applied.length} token(s); skipped ${result.skipped.length}`,
-        );
-      } else {
-        toast.success(`Applied ${result.applied.length} token(s) to tokens.ts`);
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Apply failed");
-    } finally {
-      setApplying(false);
-    }
-  };
 
   const resetShapeLadder = () => {
     const patch: Record<string, string> = {};
@@ -85,7 +60,15 @@ export function GlobalsInspector() {
       <div className="sandbox-inspector-scroll fynns-scroll">
         <header className="sandbox-inspector-head">
           <h2>Global properties</h2>
-          <span className="sandbox-muted">{overrideCount} overrides</span>
+          <span className="sandbox-inspector-meta">
+            <span className="sandbox-muted">
+              {overrideCount} override{overrideCount === 1 ? "" : "s"}
+            </span>
+            <InfoHint
+              ariaLabel="What overrides means"
+              content="Count of --fynns-* tokens changed in the live draft versus the tokens.ts baseline. Reset clears them; Apply changes writes them to source."
+            />
+          </span>
         </header>
 
         <Collapsible title="Shape presets" defaultOpen>
@@ -180,16 +163,7 @@ export function GlobalsInspector() {
             Reset to default
           </Button>
         </Tooltip>
-        <Tooltip content="Write draft overrides into tokens.ts and regenerate theme.css">
-          <Button
-            size="sm"
-            variant="primary"
-            disabled={overrideCount === 0 || applying}
-            onClick={() => void applyChanges()}
-          >
-            {applying ? "Applying…" : "Apply changes"}
-          </Button>
-        </Tooltip>
+        <ApplyChangesControl />
       </footer>
     </div>
   );

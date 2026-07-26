@@ -8,6 +8,7 @@ import {
   Panel,
   RefreshIcon,
   restoreFynnsThemeMode,
+  SettingsIcon,
   toast,
   Toaster,
   Tooltip,
@@ -23,8 +24,14 @@ import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
 import { GlobalsPage } from "../pages/GlobalsPage";
 import { MotionPage } from "../pages/MotionPage";
+import { TemplatesPage } from "../pages/TemplatesPage";
 
-export type SandboxPage = "playground" | "globals" | "foundations" | "motion";
+export type SandboxPage =
+  | "playground"
+  | "globals"
+  | "foundations"
+  | "motion"
+  | "templates";
 
 export function SandboxShell() {
   const [page, setPage] = useState<SandboxPage>("playground");
@@ -57,6 +64,17 @@ export function SandboxShell() {
     setTheme(next);
   };
 
+  const pageTitle =
+    page === "playground"
+      ? "Playground"
+      : page === "globals"
+        ? "Globals"
+        : page === "foundations"
+          ? "Foundations"
+          : page === "motion"
+            ? "Motion"
+            : "Templates";
+
   return (
     <div className="sandbox-root">
       <Toaster position="bottom-right" />
@@ -76,19 +94,25 @@ export function SandboxShell() {
             <NavItemLabel>Motion</NavItemLabel>
           </NavItem>
         </nav>
+        <div className="sandbox-nav-foot">
+          <Tooltip content="Templates & config export/import" side="right">
+            <IconButton
+              aria-label="Templates and config"
+              aria-pressed={page === "templates"}
+              className={
+                page === "templates" ? "sandbox-nav-gear sandbox-nav-gear--active" : "sandbox-nav-gear"
+              }
+              onClick={() => setPage("templates")}
+            >
+              <SettingsIcon size={18} />
+            </IconButton>
+          </Tooltip>
+        </div>
       </Panel>
 
       <div className="sandbox-main">
         <header className="sandbox-topbar">
-          <div className="sandbox-topbar-title">
-            {page === "playground"
-              ? "Playground"
-              : page === "globals"
-                ? "Globals"
-                : page === "foundations"
-                  ? "Foundations"
-                  : "Motion"}
-          </div>
+          <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             <Tooltip content="Undo (Ctrl+Z)">
               <IconButton aria-label="Undo" disabled={!canUndo} onClick={undo}>
@@ -120,7 +144,11 @@ export function SandboxShell() {
           </div>
         </header>
 
-        <div className="sandbox-body">
+        <div
+          className={
+            page === "templates" ? "sandbox-body sandbox-body--single" : "sandbox-body"
+          }
+        >
           <main className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
               <>
@@ -131,6 +159,9 @@ export function SandboxShell() {
             {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}
+            {page === "templates" ? (
+              <TemplatesPage theme={theme} onThemeChange={setTheme} />
+            ) : null}
           </main>
           {page === "playground" ? (
             <aside className="sandbox-aside">
