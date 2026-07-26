@@ -977,15 +977,6 @@
   justify-content: flex-start;
 }
 
-.fynns-switch--label-end .fynns-switch-label {
-  flex: 0 0 var(--fynns-layout-switch-label-end);
-  box-sizing: border-box;
-  width: var(--fynns-layout-switch-label-end);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .fynns-switch-label {
   font-size: var(--fynns-font-size-form-label);
   white-space: nowrap;
@@ -1065,10 +1056,66 @@
   transform: translateX(1.05rem);
 }
 
+/* ---------- ControlStack ---------- */
+/* Shared label + X control tracks across nested ControlRow / Grid.
+   Each ControlRow is one stack row via subgrid — NOT display:contents on the
+   row itself. Flattening every cell into one auto-flow grid packs the next
+   row's label into empty columns when a row has fewer than `columns` controls
+   (e.g. Anatomy with only Media). */
+.fynns-control-stack {
+  display: grid;
+  grid-template-columns:
+    var(--fynns-layout-control-row-label)
+    repeat(var(--fynns-control-stack-cols, 2), max-content);
+  /* start — not stretch: a narrower ToggleGroup must not expand to the
+     shared column track width of a wider Switch in the same column. */
+  align-items: center;
+  justify-items: start;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.fynns-control-stack > .fynns-control-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  width: auto;
+  max-width: none;
+  column-gap: unset;
+  align-items: center;
+  /* Subgrid does not inherit the stack's justify-items; without this,
+     a short ToggleGroup stretches to the shared track of a wider Switch. */
+  justify-items: start;
+}
+
+/* Controls / Grid dissolve so switches sit on the shared tracks. */
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-grid {
+  display: contents;
+}
+
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__label,
+.fynns-control-stack .fynns-grid > *,
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls > :not(.fynns-grid) {
+  min-width: min-content;
+  max-width: none;
+  /* Do not force overflow here — ToggleGroup needs overflow:hidden to clip radius. */
+}
+
 /* ---------- ControlRow ---------- */
 .fynns-control-row {
   display: grid;
-  grid-template-columns: var(--fynns-layout-control-row-label) minmax(0, 1fr);
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
+  grid-template-columns: var(--fynns-layout-control-row-label) max-content;
   column-gap: var(--fynns-space-sm);
   align-items: center;
 }
@@ -1089,7 +1136,26 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-space-sm);
-  min-width: 0;
+  min-width: min-content;
+  overflow: visible;
+}
+
+/* ---------- Grid ---------- */
+.fynns-grid {
+  display: grid;
+  align-items: center;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  min-width: min-content;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.fynns-grid > * {
+  min-width: min-content;
+  max-width: none;
+  overflow: visible;
 }
 
 /* ---------- ToggleControl ---------- */
@@ -1171,9 +1237,11 @@
 }
 
 /* ---------- ToggleGroup ---------- */
+/* Equal-width segments (longest label wins); labels always centered. */
 .fynns-toggle-group {
-  display: inline-flex;
-  flex-wrap: nowrap;
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   align-items: stretch;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-sm);
@@ -1182,19 +1250,13 @@
 }
 
 .fynns-toggle-group--full {
-  display: flex;
+  display: grid;
   width: 100%;
 }
 
-.fynns-toggle-group--content .fynns-toggle-chip,
-.fynns-toggle-group--content .fynns-toggle-group__segment {
-  flex: 0 1 auto;
-}
-
 .fynns-toggle-group__segment {
-  display: flex;
-  flex: 1 1 0;
-  min-width: 0;
+  display: grid;
+  min-width: max-content;
 }
 
 .fynns-toggle-group__segment > .fynns-toggle-chip {
@@ -1202,18 +1264,17 @@
 }
 
 .fynns-toggle-group--compact .fynns-toggle-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 0.35rem 0.4rem;
   font-size: 0.72rem;
 }
 
 .fynns-toggle-chip {
-  /* Segments share the group width equally: when the group is stretched (a flex/
-     grid child, or `--full`) the chips fill it as equal-width segments; when the
-     group sizes to its content (inline) they stay content-width. */
-  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: max-content;
   margin: 0;
   border: none;
   border-right: var(--fynns-border-hairline) solid var(--fynns-color-border);

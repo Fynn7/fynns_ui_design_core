@@ -82,9 +82,9 @@ export function SandboxShell() {
         <header className="sandbox-topbar">
           <div className="sandbox-topbar-title">
             {page === "playground"
-              ? "Card aesthetic workshop"
+              ? "Playground"
               : page === "globals"
-                ? "Global shape"
+                ? "Globals"
                 : page === "foundations"
                   ? "Foundations"
                   : "Motion"}

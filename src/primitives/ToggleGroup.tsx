@@ -18,24 +18,18 @@ export type ToggleGroupProps<V extends string> = {
   ariaLabel?: string;
   className?: string;
   /**
-   * Force the group to span its container's full width. Segments are always
-   * equal-width when the group is stretched; this just opts in to stretching
-   * even when the parent would otherwise leave the group at content width.
+   * Force the group to span its container's full width. Segments stay
+   * equal-width either way; this just stretches the group itself.
    */
   fullWidth?: boolean;
   /** Tighter padding and font size for narrow containers. */
   size?: "default" | "compact";
-  /**
-   * `equal` (default): segments share width evenly when stretched.
-   * `content`: each segment sizes to its label.
-   */
-  segmentLayout?: "equal" | "content";
 };
 
 /**
- * Segmented control: a row of mutually-exclusive chips. `.fynns-toggle-group`.
- * Chips are equal-width segments that fill the group when it is stretched (a
- * flex/grid child or `fullWidth`), and stay content-width when it is inline.
+ * Segmented control: mutually-exclusive chips. `.fynns-toggle-group`.
+ * Segments are always equal width (sized to the longest label) with centered
+ * labels — not content-width per chip. Pass `fullWidth` to stretch the group.
  */
 export function ToggleGroup<V extends string>({
   options,
@@ -45,7 +39,6 @@ export function ToggleGroup<V extends string>({
   className,
   fullWidth = false,
   size = "default",
-  segmentLayout = "equal",
 }: ToggleGroupProps<V>) {
   return (
     <div
@@ -53,7 +46,6 @@ export function ToggleGroup<V extends string>({
         "fynns-toggle-group",
         fullWidth ? "fynns-toggle-group--full" : "",
         size === "compact" ? "fynns-toggle-group--compact" : "",
-        segmentLayout === "content" ? "fynns-toggle-group--content" : "",
         className ?? "",
       ]
         .filter(Boolean)

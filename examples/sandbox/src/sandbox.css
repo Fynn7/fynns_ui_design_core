@@ -196,9 +196,7 @@
 }
 
 .sandbox-preview-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-sm);
+  /* Layout comes from `.fynns-control-stack` (shared label + control tracks). */
   padding: var(--fynns-space-md);
   border-radius: var(--fynns-radius-md);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -215,10 +213,6 @@
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: color-mix(in srgb, var(--fynns-color-surface-2) 55%, var(--fynns-color-app-bg));
-}
-
-.sandbox-preview-grid--focus {
-  grid-template-columns: minmax(16rem, 22rem);
 }
 
 .sandbox-surface-swatch {

@@ -34,6 +34,8 @@ export * from "./primitives/Dialog";
 export * from "./primitives/Drawer";
 export * from "./primitives/Switch";
 export * from "./primitives/ControlRow";
+export * from "./primitives/ControlStack";
+export * from "./primitives/Grid";
 export * from "./primitives/ToggleControl";
 export * from "./primitives/ToggleGroup";
 export * from "./primitives/Tabs";

@@ -222,17 +222,25 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   labelSide?: "start"|"end", disabled? }` (`role="switch"`). Use
   `labelSide="end"` (track then label) in dense toolbars so tracks share a left
   edge with `ToggleGroup` / siblings instead of drifting with label length.
+  **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`
+  grid for multi-row toolbars; each nested `ControlRow` spans the stack via
+  CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
+  short rows do not pack the next label into an empty control column.
   **ControlRow** `{ label, children }` — fixed label column
-  (`--fynns-layout-control-row-label`) + controls flex; use for toolbar /
-  settings strips so every row's controls align. **ToggleControl** — checkbox/
-  radio styled as a switch.
-- **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, segmentLayout? }`
+  (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
+  inside `ControlStack` spans the shared tracks via subgrid. **Grid** `{ x?, y?, gap?,
+  children }` — X×Y layout; each axis is a fixed count or `"unbounded"` (default).
+  Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
+  are added (does not reflow into more columns). Tracks size to `max-content` and
+  do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
+  match `columns` to `Grid`’s `x`. **ToggleControl** —
+  checkbox/ radio styled as a switch.
+- **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
-  `ariaLabel`. `size="compact"` tightens padding for narrow panels;
-  `segmentLayout="content"` sizes segments to their labels instead of equal
-  widths. Chips are equal-width segments by default: they fill the group when it
-  is stretched (a flex/grid child or `fullWidth`) and stay content-width when
-  inline. **Tabs**
+  `ariaLabel`. `size="compact"` tightens padding for narrow panels.
+  Segments are always equal width (sized to the longest label) with centered
+  text; `fullWidth` stretches the group to its container. Chips fill the
+  group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — disclosure row; collapses content behind a clickable header (chevron rotates).

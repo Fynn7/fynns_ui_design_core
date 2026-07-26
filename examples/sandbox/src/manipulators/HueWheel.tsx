@@ -28,6 +28,13 @@ const HUE_PRESETS: Array<{ label: string; hue: number }> = [
 ];
 
 /**
+ * Linear hue slider / aria max. 360° ≡ 0° on the circle; a range input with
+ * `max={360}` snaps the thumb from the far right back to 0 when the value
+ * wraps — use 359 so the rightmost stop stays put (matches disk End key).
+ */
+const HUE_DEGREE_MAX = 359;
+
+/**
  * Accent hue controls: preset chips stay on the inspector; the full hue ring
  * opens from a rainbow trigger chip (Popover). Degree and hex fields edit
  * independently. One coalesced undo step per gesture.
@@ -80,6 +87,7 @@ export function HueWheel() {
 
   const setHue = useCallback(
     (nextHue: number) => {
+      // Hue is a circle: 360° ≡ 0°. Keep the stored angle in [0, 360).
       const h = ((nextHue % 360) + 360) % 360;
       applyAccentHex(hslToHex(h, 62, 50));
     },
@@ -147,7 +155,7 @@ export function HueWheel() {
       setHue(0);
     } else if (event.key === "End") {
       event.preventDefault();
-      setHue(359);
+      setHue(HUE_DEGREE_MAX);
     }
   };
 
@@ -266,8 +274,8 @@ export function HueWheel() {
           tabIndex={0}
           aria-label="Accent hue palette"
           aria-valuemin={0}
-          aria-valuemax={360}
-          aria-valuenow={Math.round(hue)}
+          aria-valuemax={HUE_DEGREE_MAX}
+          aria-valuenow={Math.min(HUE_DEGREE_MAX, Math.round(hue) % 360)}
           aria-valuetext={`${Math.round(hue)} degrees`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -292,9 +300,9 @@ export function HueWheel() {
       </Popover>
 
       <Slider
-        value={Math.round(hue)}
+        value={Math.min(HUE_DEGREE_MAX, ((Math.round(hue) % 360) + 360) % 360)}
         min={0}
-        max={360}
+        max={HUE_DEGREE_MAX}
         step={1}
         ariaLabel="Accent hue"
         onChange={setHue}

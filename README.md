@@ -101,10 +101,9 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Preview toggles (Card Playground)
 
-- Variant focus: All / Elevated / Filled / Outlined
-- Anatomy: Media on/off, ActionArea demo on/off
+- Anatomy: Media on/off
 - States: Interactive, Disabled
-- Actions: align start|end, dense spacing (`disableSpacing`)
+- Actions: align start|end
 
 ### Inspector knobs (Card Playground)
 
