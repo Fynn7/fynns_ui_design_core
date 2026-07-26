@@ -190,17 +190,31 @@
 }
 
 .sandbox-preview {
+  /* One shared column: width tracks the canvas; toolbar + card grid stay equal. */
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: var(--fynns-space-md);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sandbox-preview-toolbar {
-  /* Layout comes from `.fynns-control-stack` (shared label + control tracks). */
+  /* Layout tracks come from `.fynns-control-stack`; width matches the card grid. */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: var(--fynns-space-md);
   border-radius: var(--fynns-radius-md);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-1);
+}
+
+/* Core ControlStack is max-content; fill the shared preview column instead. */
+.sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
+  width: 100%;
+  max-width: 100%;
 }
 
 .sandbox-preview-grid {
@@ -209,6 +223,9 @@
   gap: var(--fynns-space-lg);
   align-items: start;
   justify-content: start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: var(--fynns-space-lg);
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
