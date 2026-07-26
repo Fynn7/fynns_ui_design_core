@@ -14,7 +14,6 @@ import {
   toast,
 } from "@fynns/ui";
 import { useState } from "react";
-import { CornerRadiusHandle } from "../manipulators/CornerRadiusHandle";
 
 const ALL_VARIANTS = ["elevated", "filled", "outlined"] as const;
 type VariantFocus = "all" | (typeof ALL_VARIANTS)[number];
@@ -146,8 +145,9 @@ export function CardPreviewCanvas() {
                 }
               />
               <CardContent>
-                A subject card with shared anatomy. Drag the corner handle or use the inspector
-                to tune tokens — sandbox chrome updates from the same variables.
+                A subject card with shared anatomy. Use the inspector to tune Card-related
+                tokens — sandbox chrome updates from the same variables. Shape / radius lives
+                under Globals.
               </CardContent>
             </>
           );
@@ -185,7 +185,6 @@ export function CardPreviewCanvas() {
                     </Button>
                   </CardActions>
                 </Card>
-                <CornerRadiusHandle />
               </div>
             </div>
           );

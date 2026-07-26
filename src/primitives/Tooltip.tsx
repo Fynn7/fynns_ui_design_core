@@ -100,6 +100,14 @@ export function Tooltip({ content, side = "top", align = "center", children, cla
                 top: pos.top,
                 left: pos.left,
                 transform: floatingTransformForSide(pos.side, pos.align),
+                // Cap by remaining viewport space so long copy wraps instead of
+                // painting past the window edge (token max-width alone is not enough
+                // near corners / topbar actions).
+                ...(pos.maxWidth != null
+                  ? {
+                      maxWidth: `min(var(--fynns-layout-tooltip-max-width), ${Math.max(0, Math.floor(pos.maxWidth))}px)`,
+                    }
+                  : null),
               }}
             >
               {content}

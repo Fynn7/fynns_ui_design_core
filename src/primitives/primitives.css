@@ -30,22 +30,18 @@
 @keyframes fynns-tooltip-enter {
   from {
     opacity: 0;
-    transform: translateY(2px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 @keyframes fynns-tooltip-enter-bottom {
   from {
     opacity: 0;
-    transform: translateY(-2px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -609,10 +605,14 @@
   line-height: var(--fynns-line-height-snug);
   box-shadow: var(--fynns-shadow-tooltip);
   pointer-events: none;
-  /* Long, space-less content (paths, URLs) must wrap inside max-width instead
-     of spilling past the bubble's border. */
+  /* Long content wraps inside max-width (token + viewport-aware inline cap from
+     useAnchoredPosition) instead of spilling past the bubble or the window. */
   white-space: normal;
   overflow-wrap: anywhere;
+  overflow: visible;
+  /* Opacity-only: animating `transform` would override the inline placement
+     translate (e.g. translate(-50%)) via fill-mode and clip tooltips at the
+     viewport edge — a recurring consumer-side bug when fixed locally. */
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
 }
 

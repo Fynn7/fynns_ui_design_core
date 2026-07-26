@@ -258,57 +258,6 @@
 
 .sandbox-preview-card-wrap {
   position: relative;
-  /* Keep a little room so the corner handle/readout aren't clipped by the stage. */
-  margin: 0 var(--fynns-space-xl) var(--fynns-space-lg) 0;
-}
-
-.sandbox-corner-handle-wrap {
-  position: absolute;
-  /* Pin to the card's bottom-right corner; readout is positioned separately. */
-  right: 0;
-  bottom: 0;
-  width: 0.85rem;
-  height: 0.85rem;
-  z-index: 3;
-  pointer-events: none;
-  /* Sit just outside the corner so actions (Open) stay clear. */
-  transform: translate(45%, 45%);
-}
-
-.sandbox-corner-handle {
-  pointer-events: auto;
-  position: absolute;
-  inset: 0;
-  border-radius: 0;
-  border: var(--fynns-border-hairline) solid var(--fynns-color-accent);
-  /* Only the outer corner is rounded — matches the card radius being edited. */
-  border-bottom-right-radius: inherit;
-  background: color-mix(in srgb, var(--fynns-color-accent) 40%, var(--fynns-color-surface-3));
-  cursor: nwse-resize;
-  padding: 0;
-  box-shadow: var(--fynns-shadow-xs);
-}
-
-.sandbox-corner-handle--active,
-.sandbox-corner-handle:hover {
-  background: color-mix(in srgb, var(--fynns-color-accent) 60%, var(--fynns-color-surface-3));
-}
-
-.sandbox-corner-readout {
-  pointer-events: none;
-  position: absolute;
-  left: calc(100% + var(--fynns-space-xs));
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: var(--fynns-font-size-caption);
-  font-family: var(--fynns-font-mono);
-  color: var(--fynns-color-text);
-  background: var(--fynns-color-surface-3);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-sm);
-  padding: 0.1rem 0.35rem;
-  box-shadow: var(--fynns-shadow-tooltip);
-  white-space: nowrap;
 }
 
 .sandbox-hue-wheel {
@@ -536,6 +485,86 @@
   font-size: var(--fynns-font-size-settings-section);
   text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-globals {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xl);
+  max-width: 56rem;
+}
+
+.sandbox-globals-lead {
+  margin: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.sandbox-globals-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+}
+
+.sandbox-globals-heading {
+  margin: 0;
+  font-size: var(--fynns-font-size-settings-section);
+  text-transform: uppercase;
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-globals-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.sandbox-globals-row--stack {
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 20rem;
+}
+
+.sandbox-globals-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--fynns-space-md);
+}
+
+.sandbox-globals-card {
+  min-height: 8rem;
+}
+
+.sandbox-globals-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fynns-space-md);
+}
+
+.sandbox-globals-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-globals-swatch-box {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: var(--fynns-color-surface-2);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+}
+
+.sandbox-globals-readonly {
+  margin: 0;
+  padding-left: var(--fynns-space-md);
+  font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
 }
 

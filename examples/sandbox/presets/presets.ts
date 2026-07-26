@@ -5,7 +5,8 @@ export type SandboxPreset = {
   overrides: Record<string, string>;
 };
 
-export const SANDBOX_PRESETS: SandboxPreset[] = [
+/** Global shape / radius ladder presets (Globals page). */
+export const GLOBAL_SHAPE_PRESETS: SandboxPreset[] = [
   {
     id: "m3-aligned-radius",
     label: "M3-aligned radius",
@@ -27,6 +28,10 @@ export const SANDBOX_PRESETS: SandboxPreset[] = [
       "--fynns-radius-lg": "8px",
     },
   },
+];
+
+/** Card Playground presets (non-shape). */
+export const CARD_PRESETS: SandboxPreset[] = [
   {
     id: "stronger-elevation",
     label: "Stronger elevation",
@@ -47,3 +52,6 @@ export const SANDBOX_PRESETS: SandboxPreset[] = [
     },
   },
 ];
+
+/** @deprecated Prefer CARD_PRESETS or GLOBAL_SHAPE_PRESETS. */
+export const SANDBOX_PRESETS: SandboxPreset[] = [...GLOBAL_SHAPE_PRESETS, ...CARD_PRESETS];

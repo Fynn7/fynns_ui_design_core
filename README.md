@@ -77,29 +77,37 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run lint` — ESLint.
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
-- `npm run sandbox` — run the Card aesthetic sandbox in
-  [`examples/sandbox`](examples/sandbox) (live token overrides, WYSIWYG Card
-  preview, export diff). Drafts persist in `localStorage`; writeback is
+- `npm run sandbox` — run the aesthetic sandbox in
+  [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
+  token overrides, export diff). Drafts persist in `localStorage`; writeback is
   copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
 
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Dragging radius / hue / state layers injects CSS
-variable overrides at runtime so both the Card preview and the sandbox chrome
-update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
-`tokens.ts` (fynns base) → sandbox overrides (fynns-override).
+separate design language. Pages: **Playground** (Card), **Globals** (system
+shape / radius), Foundations, Motion. Editing `--fynns-radius-*` on Globals
+injects CSS variable overrides at runtime so Button, Input, Card, and sandbox
+chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
+reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
-### Preview toggles (component state)
+### Globals (system shape)
+
+- Shape ladder: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Align M3 /
+  Reset ladder)
+- Read-only: `none` / `pill` / `round`
+- Presets: M3-aligned radius, Restrained radius
+- Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
+
+### Preview toggles (Card Playground)
 
 - Variant focus: All / Elevated / Filled / Outlined
 - Anatomy: Media on/off, ActionArea demo on/off
 - States: Interactive, Disabled
 - Actions: align start|end, dense spacing (`disableSpacing`)
 
-### Inspector knobs (token overrides)
+### Inspector knobs (Card Playground)
 
-- Shape: `--fynns-radius-md` (+ Square card shortcut)
 - Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
   hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
   outlined `--fynns-color-border-strong`
@@ -109,9 +117,9 @@ update together. See the plan layers: `tokens.m3-draft.ts` (M3 reference) →
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
 **Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft
-history: inspector knobs, corner-radius handle, Apply preset, and confirmed
-agent proposals. One hue gesture is a single undo step (accent family batched).
-Preview toggles, light/dark theme, and page nav are not in the draft history.
+history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+gesture is a single undo step (accent family batched). Preview toggles,
+light/dark theme, and page nav are not in the draft history.
 
 Writeback remains copy-diff → manual paste into `tokens.ts` → `npm run gen:theme`.
 ## Optional package distribution

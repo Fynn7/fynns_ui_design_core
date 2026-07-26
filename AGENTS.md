@@ -179,14 +179,20 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   align? }`.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` +
   `useAnchoredPosition(anchorEl, floatingEl, open, opts)` — flips top/bottom (or
-  left/right), auto `align` start/end near viewport edges, and clamps without
-  covering the anchor. Tooltips use `pos.side` + `pos.align` with
+  left/right), auto `align` start/end near viewport edges, clamps to stay in the
+  viewport (prefer in-bounds over never covering the anchor), and returns a
+  viewport-aware `maxWidth` so floating layers can wrap before painting past the
+  window edge. Tooltips use `pos.side` + `pos.align` with
   `floatingTransformForSide`.
 - **Tooltip** `{ content, side?, align?, children, className? }` + **TooltipProvider**
-  (compat passthrough). Renders a caret aimed at the anchor's center, clamped
-  inside the bubble: dead-center when the bubble is centered on the anchor (the
-  default, since alignment prefers `center`), and tracking the anchor when the
-  bubble shifts to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }`.
+  (compat passthrough). Applies `min(token, pos.maxWidth)` so long copy wraps
+  near viewport corners instead of being clipped. Enter animation is
+  **opacity-only** — never animate `transform` on the bubble (fill-mode would
+  override the placement `translate(-50%)` and clip at the window edge).
+  Renders a caret aimed at the anchor's center, clamped inside the bubble:
+  dead-center when the bubble is centered on the anchor (the default, since
+  alignment prefers `center`), and tracking the anchor when the bubble shifts
+  to fit the viewport. **InfoHint** `{ content, ariaLabel?, iconSize? }`.
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
   headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in

@@ -94,7 +94,7 @@ export function proposeFromPrompt(prompt: string): PendingAgentProposal[] {
       key: "md",
       value: "12px",
       scope: "global",
-      reasoning: "Increase card corner radius toward the M3 medium (12dp) default.",
+      reasoning: "Increase global shape radius-md toward the M3 medium (12dp) default.",
     });
   }
   if (/sharper|less round|smaller radius|tighter corner/.test(lower)) {
@@ -105,7 +105,7 @@ export function proposeFromPrompt(prompt: string): PendingAgentProposal[] {
       key: "md",
       value: "6px",
       scope: "global",
-      reasoning: "Reduce card corner radius for a more restrained silhouette.",
+      reasoning: "Reduce global shape radius-md for a more restrained silhouette.",
     });
   }
   if (/softer|gentler hover|less hover/.test(lower)) {

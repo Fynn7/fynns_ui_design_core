@@ -20,9 +20,11 @@ import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
+import { GlobalsInspector } from "../pages/GlobalsInspector";
+import { GlobalsPage } from "../pages/GlobalsPage";
 import { MotionPage } from "../pages/MotionPage";
 
-export type SandboxPage = "playground" | "foundations" | "motion";
+export type SandboxPage = "playground" | "globals" | "foundations" | "motion";
 
 export function SandboxShell() {
   const [page, setPage] = useState<SandboxPage>("playground");
@@ -64,6 +66,9 @@ export function SandboxShell() {
           <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
             <NavItemLabel>Playground</NavItemLabel>
           </NavItem>
+          <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
+            <NavItemLabel>Globals</NavItemLabel>
+          </NavItem>
           <NavItem active={page === "foundations"} onClick={() => setPage("foundations")}>
             <NavItemLabel>Foundations</NavItemLabel>
           </NavItem>
@@ -78,9 +83,11 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">
             {page === "playground"
               ? "Card aesthetic workshop"
-              : page === "foundations"
-                ? "Foundations"
-                : "Motion"}
+              : page === "globals"
+                ? "Global shape"
+                : page === "foundations"
+                  ? "Foundations"
+                  : "Motion"}
           </div>
           <div className="sandbox-topbar-actions">
             <Tooltip content="Undo (Ctrl+Z)">
@@ -93,7 +100,7 @@ export function SandboxShell() {
                 <RefreshIcon size={16} />
               </IconButton>
             </Tooltip>
-            <Tooltip content="Reset draft">
+            <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
               <Button
                 size="sm"
                 variant="ghost"
@@ -105,9 +112,11 @@ export function SandboxShell() {
                 Reset
               </Button>
             </Tooltip>
-            <Button size="sm" variant="ghost" onClick={toggleTheme}>
-              {theme === "light" ? "Dark" : "Light"} theme
-            </Button>
+            <Tooltip content={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}>
+              <Button size="sm" variant="ghost" onClick={toggleTheme}>
+                {theme === "light" ? "Dark" : "Light"} theme
+              </Button>
+            </Tooltip>
           </div>
         </header>
 
@@ -119,12 +128,18 @@ export function SandboxShell() {
                 <AgentInputBar />
               </>
             ) : null}
+            {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}
           </main>
           {page === "playground" ? (
             <aside className="sandbox-aside">
               <PropertyInspector />
+            </aside>
+          ) : null}
+          {page === "globals" ? (
+            <aside className="sandbox-aside">
+              <GlobalsInspector />
             </aside>
           ) : null}
         </div>

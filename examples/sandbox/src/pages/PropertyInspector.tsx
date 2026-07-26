@@ -7,9 +7,10 @@ import {
   Select,
   Slider,
   toast,
+  Tooltip,
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
-import { SANDBOX_PRESETS } from "../../presets/presets";
+import { CARD_PRESETS } from "../../presets/presets";
 import { formatCssPatch, formatOverrideDiff, formatTokensTsHints } from "../export/formatDiff";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE } from "../state/baseline";
@@ -56,9 +57,8 @@ function matchShadowPreset(value: string): string {
 
 export function PropertyInspector() {
   const { apply, resolved, reset, loadPreset, draft } = useTokenDraft();
-  const [presetId, setPresetId] = useState(SANDBOX_PRESETS[0]?.id ?? "");
+  const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
 
-  const radiusMd = parseLengthToPx(resolved("--fynns-radius-md"));
   const hover = parsePercent(resolved("--fynns-state-hover"));
   const focus = parsePercent(resolved("--fynns-state-focus"));
   const pressed = parsePercent(resolved("--fynns-state-pressed"));
@@ -97,16 +97,16 @@ export function PropertyInspector() {
             <Select
               ariaLabel="Preset"
               value={presetId}
-              options={SANDBOX_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+              options={CARD_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
               onChange={setPresetId}
             />
             <p className="sandbox-help">
-              {SANDBOX_PRESETS.find((p) => p.id === presetId)?.description}
+              {CARD_PRESETS.find((p) => p.id === presetId)?.description}
             </p>
             <Button
               size="sm"
               onClick={() => {
-                const preset = SANDBOX_PRESETS.find((p) => p.id === presetId);
+                const preset = CARD_PRESETS.find((p) => p.id === presetId);
                 if (!preset) return;
                 loadPreset(preset.overrides);
                 toast.message(`Loaded preset: ${preset.label}`);
@@ -114,53 +114,8 @@ export function PropertyInspector() {
             >
               Apply preset
             </Button>
-          </div>
-        </Collapsible>
-
-        <Collapsible title="Shape" defaultOpen>
-          <div className="sandbox-field">
-            <div className="sandbox-field-row">
-              <span>Corner radius (md)</span>
-              <code>{radiusMd}px</code>
-            </div>
-            <Slider
-              ariaLabel="Corner radius"
-              min={0}
-              max={28}
-              step={1}
-              value={radiusMd}
-              onChange={(v) =>
-                apply({ group: "radius", key: "md", value: `${v}px`, source: "slider" })
-              }
-            />
-            <div className="sandbox-field-row">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  apply({ group: "radius", key: "md", value: "0", source: "preset" })
-                }
-              >
-                Square card
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() =>
-                  apply({
-                    group: "radius",
-                    key: "md",
-                    value: BASELINE["--fynns-radius-md"] ?? "8px",
-                    source: "reset",
-                  })
-                }
-              >
-                Reset radius
-              </Button>
-            </div>
             <p className="sandbox-help">
-              Also drag a corner handle on any preview card. M3 medium reference is 12px.
-              Square matches MUI Paper `square`.
+              Shape / radius lives under Globals — these presets cover elevation and state layers.
             </p>
           </div>
         </Collapsible>
@@ -391,12 +346,16 @@ export function PropertyInspector() {
       </div>
 
       <div className="sandbox-inspector-actions">
-        <Button size="sm" variant="ghost" onClick={reset}>
-          Reset to default
-        </Button>
-        <Button size="sm" variant="primary" onClick={() => void copyDiff()}>
-          Copy diff
-        </Button>
+        <Tooltip content="Clear all token overrides in the draft (same as topbar Reset)">
+          <Button size="sm" variant="ghost" onClick={reset}>
+            Reset to default
+          </Button>
+        </Tooltip>
+        <Tooltip content="Copy CSS / tokens.ts patch for the current overrides">
+          <Button size="sm" variant="primary" onClick={() => void copyDiff()}>
+            Copy diff
+          </Button>
+        </Tooltip>
       </div>
     </div>
   );
