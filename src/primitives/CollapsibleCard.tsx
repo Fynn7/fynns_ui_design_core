@@ -146,7 +146,7 @@ export type CollapsibleCardHeaderProps = HTMLAttributes<HTMLDivElement> & {
   title: ReactNode;
   subtitle?: ReactNode;
   avatar?: ReactNode;
-  /** Shown outside the toggle button (e.g. icon buttons). */
+  /** Overlaid on the header; only the control itself receives clicks (not the surrounding padding). */
   action?: ReactNode;
 };
 

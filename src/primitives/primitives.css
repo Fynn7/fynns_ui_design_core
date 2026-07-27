@@ -2699,14 +2699,15 @@
 /* @fynns-recipe collapsible-card end */
 
 .fynns-collapsible-card-header {
-  display: flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: stretch;
-  gap: var(--fynns-collapsible-card-header-gap);
   z-index: 0;
   transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-/* Full-row hover (trigger + header action / info icon), not trigger-only. */
+/* Full-row hover — trigger spans the whole bar under the action slot. */
 .fynns-collapsible-card-header:hover:has(.fynns-collapsible-card-trigger:not(:disabled)) {
   background: color-mix(
     in srgb,
@@ -2716,11 +2717,13 @@
 }
 
 .fynns-collapsible-card-trigger {
-  flex: 1 1 auto;
+  grid-column: 1 / -1;
+  grid-row: 1;
   display: flex;
   align-items: center;
   gap: var(--fynns-space-sm);
   min-width: 0;
+  width: 100%;
   margin: 0;
   padding: var(--fynns-space-md) var(--fynns-space-lg);
   background: transparent;
@@ -2730,6 +2733,14 @@
   text-align: left;
   cursor: pointer;
   border-radius: 0;
+}
+
+/* Leave room for the overlaid action control so title does not sit under it. */
+.fynns-collapsible-card-header:has(.fynns-collapsible-card-header-action)
+  .fynns-collapsible-card-trigger {
+  padding-right: calc(
+    var(--fynns-space-lg) + var(--fynns-size-34) + var(--fynns-collapsible-card-header-gap)
+  );
 }
 
 .fynns-collapsible-card-trigger:focus-visible {
@@ -2789,21 +2800,24 @@
 }
 
 .fynns-collapsible-card-header-action {
-  flex: 0 0 auto;
+  grid-column: 2;
+  grid-row: 1;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
-  align-self: stretch;
+  justify-content: center;
   padding-right: var(--fynns-space-md);
+  /* Background / padding clicks fall through to the full-width trigger. */
+  pointer-events: none;
+}
+
+.fynns-collapsible-card-header-action > * {
+  pointer-events: auto;
 }
 
 .fynns-collapsible-card-body {
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
   z-index: 0;
-}
-
-.fynns-collapsible-card .fynns-card-header + .fynns-card-content,
-.fynns-collapsible-card-body .fynns-card-content:first-child {
-  padding-top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
