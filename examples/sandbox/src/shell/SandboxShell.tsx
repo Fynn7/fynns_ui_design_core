@@ -17,6 +17,7 @@ import {
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
@@ -37,6 +38,7 @@ export type SandboxPage =
   | "templates";
 
 export function SandboxShell() {
+  const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const { undo, redo, reset } = useTokenDraft();
@@ -70,38 +72,38 @@ export function SandboxShell() {
 
   const pageTitle =
     page === "playground"
-      ? "Playground"
+      ? t("nav.playground")
       : page === "globals"
-        ? "Globals"
+        ? t("nav.globals")
         : page === "foundations"
-          ? "Foundations"
+          ? t("nav.foundations")
           : page === "motion"
-            ? "Motion"
-            : "Templates";
+            ? t("nav.motion")
+            : t("nav.templates");
 
   return (
     <div className="sandbox-root">
       <Toaster position="bottom-right" />
       <Panel className="sandbox-nav" side="left">
-        <div className="sandbox-brand">fynns sandbox</div>
-        <nav className="sandbox-nav-list" aria-label="Sandbox pages">
+        <div className="sandbox-brand">{t("brand.name")}</div>
+        <nav className="sandbox-nav-list" aria-label={t("nav.aria")}>
           <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
-            <NavItemLabel>Playground</NavItemLabel>
+            <NavItemLabel>{t("nav.playground")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
-            <NavItemLabel>Globals</NavItemLabel>
+            <NavItemLabel>{t("nav.globals")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "foundations"} onClick={() => setPage("foundations")}>
-            <NavItemLabel>Foundations</NavItemLabel>
+            <NavItemLabel>{t("nav.foundations")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "motion"} onClick={() => setPage("motion")}>
-            <NavItemLabel>Motion</NavItemLabel>
+            <NavItemLabel>{t("nav.motion")}</NavItemLabel>
           </NavItem>
         </nav>
         <div className="sandbox-nav-foot">
-          <Tooltip content="Templates & config export/import" side="right">
+          <Tooltip content={t("nav.templatesTip")} side="right">
             <IconButton
-              aria-label="Templates and config"
+              aria-label={t("nav.templatesAria")}
               aria-pressed={page === "templates"}
               className={
                 page === "templates" ? "sandbox-nav-gear sandbox-nav-gear--active" : "sandbox-nav-gear"
@@ -119,20 +121,20 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             {page === "playground" ? <AgentInputBar /> : null}
-            <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
+            <Tooltip content={t("topbar.resetTip")}>
               <IconButton
-                aria-label="Reset draft overrides"
+                aria-label={t("topbar.resetAria")}
                 onClick={() => {
                   reset();
-                  toast.message("Draft reset");
+                  toast.message(t("topbar.resetToast"));
                 }}
               >
                 <RefreshIcon size={16} aria-hidden />
               </IconButton>
             </Tooltip>
-            <Tooltip content={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}>
+            <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <IconButton
-                aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+                aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
                 aria-pressed={theme === "light"}
                 onClick={toggleTheme}
               >
@@ -155,8 +157,8 @@ export function SandboxShell() {
                     value={target}
                     onChange={(id) => setTarget(id as typeof target)}
                     options={[
-                      { value: "card", label: "Card" },
-                      { value: "collapsible-card", label: "CollapsibleCard" },
+                      { value: "card", label: t("playground.targetCard") },
+                      { value: "collapsible-card", label: t("playground.targetCollapsible") },
                     ]}
                   />
                 </div>

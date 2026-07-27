@@ -26,10 +26,19 @@ const SEMANTIC_SWATCHES = [
 const SPACING_KEYS = ["2xs", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"] as const;
 const FONT_SIZE_KEYS = ["xs", "sm", "md", "lg", "xl", "2xl"] as const;
 
-export function Foundations() {
+export type FoundationsTitles = {
+  elevation?: string;
+  accent?: string;
+  semantic?: string;
+  spacing?: string;
+  type?: string;
+  radiusShadow?: string;
+};
+
+export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
   return (
     <>
-      <Section title="Elevation (surface ladder)">
+      <Section title={titles?.elevation ?? "Elevation (surface ladder)"}>
         <Row>
           {SURFACE_SWATCHES.map((s) => (
             <Swatch key={s.label} label={s.label} token={s.token} />
@@ -37,7 +46,7 @@ export function Foundations() {
         </Row>
       </Section>
 
-      <Section title="Accent palette">
+      <Section title={titles?.accent ?? "Accent palette"}>
         <Row>
           {ACCENT_SWATCHES.map((s) => (
             <Swatch key={s.label} label={s.label} token={s.token} />
@@ -45,7 +54,7 @@ export function Foundations() {
         </Row>
       </Section>
 
-      <Section title="Semantic colors">
+      <Section title={titles?.semantic ?? "Semantic colors"}>
         <Row>
           {SEMANTIC_SWATCHES.map((s) => (
             <Swatch key={s.label} label={s.label} token={s.token} />
@@ -53,7 +62,7 @@ export function Foundations() {
         </Row>
       </Section>
 
-      <Section title="Spacing scale (t-shirt)">
+      <Section title={titles?.spacing ?? "Spacing scale (t-shirt)"}>
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-xs)" }}>
           {SPACING_KEYS.map((key) => (
             <div key={key} style={{ display: "flex", alignItems: "center", gap: "var(--fynns-space-sm)" }}>
@@ -71,7 +80,7 @@ export function Foundations() {
         </div>
       </Section>
 
-      <Section title="Type scale">
+      <Section title={titles?.type ?? "Type scale"}>
         {FONT_SIZE_KEYS.map((key) => (
           <p
             key={key}
@@ -86,7 +95,7 @@ export function Foundations() {
         ))}
       </Section>
 
-      <Section title="Radius & shadow">
+      <Section title={titles?.radiusShadow ?? "Radius & shadow"}>
         <Row>
           {(["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map((r) => (
             <div

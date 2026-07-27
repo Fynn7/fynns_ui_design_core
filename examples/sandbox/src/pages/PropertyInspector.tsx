@@ -11,6 +11,7 @@ import {
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { CARD_PRESETS } from "../../presets/presets";
+import { useLocale, type MessageKey } from "../i18n";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE, SANDBOX_BLOCK_GAP_VAR } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -36,90 +37,95 @@ function pxToRem(px: number): string {
   return `${Number(rem.toFixed(4))}rem`;
 }
 
-const SHADOW_XS_PRESETS = [
-  { id: "none", label: "None", value: "none" },
-  { id: "soft", label: "Soft", value: "0 1px 2px rgba(0, 0, 0, 0.12)" },
+const SHADOW_XS_PRESET_DEFS = [
+  { id: "none", labelKey: "inspector.shadowNone" as const, value: "none" },
+  {
+    id: "soft",
+    labelKey: "inspector.shadowSoft" as const,
+    value: "0 1px 2px rgba(0, 0, 0, 0.12)",
+  },
   {
     id: "default",
-    label: "Default",
+    labelKey: "inspector.shadowDefault" as const,
     value: BASELINE["--fynns-shadow-xs"] ?? "0 1px 2px rgba(0, 0, 0, 0.22)",
   },
-  { id: "strong", label: "Strong", value: "0 2px 8px rgba(0, 0, 0, 0.4)" },
+  {
+    id: "strong",
+    labelKey: "inspector.shadowStrong" as const,
+    value: "0 2px 8px rgba(0, 0, 0, 0.4)",
+  },
 ] as const;
 
 const SURFACE_KEYS = [
   {
     cssVar: "--fynns-color-surface-1",
     key: "surface-1",
-    label: "Elevated (surface-1)",
-    hint: "Elevation 1 panel surface — resting fill for elevated Card and sidebar chrome.",
+    labelKey: "inspector.surface1" as const,
+    hintKey: "inspector.surface1Hint" as const,
   },
   {
     cssVar: "--fynns-color-surface-4",
     key: "surface-4",
-    label: "Filled (surface-4)",
-    hint: "Elevation 4 filled surface — filled Card and dragged / emphasis fills.",
+    labelKey: "inspector.surface4" as const,
+    hintKey: "inspector.surface4Hint" as const,
   },
   {
     cssVar: "--fynns-color-app-bg",
     key: "app-bg",
-    label: "Outlined (app-bg)",
-    hint: "App background — outlined Card sits on this; lowest rung of the elevation ladder.",
+    labelKey: "inspector.appBg" as const,
+    hintKey: "inspector.appBgHint" as const,
   },
 ] as const;
 
 const STATE_LAYER_KEYS = [
-  {
-    key: "hover",
-    hint: "--fynns-state-hover opacity for pointer-hover overlays (color-mix on interactive surfaces).",
-  },
-  {
-    key: "focus",
-    hint: "--fynns-state-focus opacity for keyboard / focus-visible overlays.",
-  },
-  {
-    key: "pressed",
-    hint: "--fynns-state-pressed opacity while the control is actively pressed.",
-  },
-  {
-    key: "dragged",
-    hint: "--fynns-state-dragged opacity for drag / high-emphasis interactive overlays.",
-  },
+  { key: "hover", hintKey: "inspector.stateHoverHint" as const },
+  { key: "focus", hintKey: "inspector.stateFocusHint" as const },
+  { key: "pressed", hintKey: "inspector.statePressedHint" as const },
+  { key: "dragged", hintKey: "inspector.stateDraggedHint" as const },
 ] as const;
 
 const SPACE_KEYS = [
   {
     key: "lg",
-    label: "Content (space-lg)",
-    hint: "--fynns-space-lg — Card content padding and related roomy content gaps.",
+    labelKey: "inspector.spaceLg" as const,
+    hintKey: "inspector.spaceLgHint" as const,
   },
   {
     key: "md",
-    label: "Header (space-md)",
-    hint: "--fynns-space-md — Card header spacing and mid-density gaps.",
+    labelKey: "inspector.spaceMd" as const,
+    hintKey: "inspector.spaceMdHint" as const,
   },
   {
     key: "sm",
-    label: "Actions gap (space-sm)",
-    hint: "--fynns-space-sm — Card actions row gap and compact control spacing.",
+    labelKey: "inspector.spaceSm" as const,
+    hintKey: "inspector.spaceSmHint" as const,
   },
 ] as const;
 
-const FONT_SIZE_HINTS = {
-  sm: "--fynns-font-size-sm — compact UI copy (captions, dense labels).",
-  md: "--fynns-font-size-md — default body / control text size.",
-  lg: "--fynns-font-size-lg — emphasized titles and larger chrome text.",
-} as const;
+const FONT_SIZE_HINT_KEYS = {
+  sm: "inspector.fontSmHint",
+  md: "inspector.fontMdHint",
+  lg: "inspector.fontLgHint",
+} as const satisfies Record<"sm" | "md" | "lg", MessageKey>;
 
-const BRIGHTNESS_HINT =
-  "Shift this surface’s hex brightness relative to the tokens.ts baseline (does not change hue).";
+const CARD_PRESET_LABEL_KEYS: Record<string, { label: MessageKey; desc: MessageKey }> = {
+  "stronger-elevation": {
+    label: "preset.strongerElev",
+    desc: "preset.strongerElevDesc",
+  },
+  "softer-state-layers": {
+    label: "preset.softerState",
+    desc: "preset.softerStateDesc",
+  },
+};
 
 function matchShadowPreset(value: string): string {
-  const hit = SHADOW_XS_PRESETS.find((p) => p.value === value);
+  const hit = SHADOW_XS_PRESET_DEFS.find((p) => p.value === value);
   return hit?.id ?? "custom";
 }
 
 export function PropertyInspector() {
+  const { t, plural } = useLocale();
   const { apply, mergeOverrides, resolved, loadPreset, draft } = useTokenDraft();
   const { target } = usePlaygroundTarget();
   const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
@@ -138,33 +144,48 @@ export function PropertyInspector() {
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
 
+  const presetOptions = CARD_PRESETS.map((p) => {
+    const keys = CARD_PRESET_LABEL_KEYS[p.id];
+    return {
+      value: p.id,
+      label: keys ? t(keys.label) : p.label,
+    };
+  });
+
+  const activePresetDesc = (() => {
+    const keys = CARD_PRESET_LABEL_KEYS[presetId];
+    if (keys) return t(keys.desc);
+    return CARD_PRESETS.find((p) => p.id === presetId)?.description;
+  })();
+
   return (
     <div className="sandbox-inspector">
       <div className="sandbox-inspector-scroll fynns-scroll">
         <header className="sandbox-inspector-head">
-          <h2>Property inspector</h2>
+          <h2>{t("inspector.propertyTitle")}</h2>
           <span className="sandbox-inspector-meta">
             <InfoHint
-              label={`${overrideCount} override${overrideCount === 1 ? "" : "s"}`}
-              ariaLabel="What overrides means"
-              content="Count of draft CSS variables versus baseline (--fynns-* and sandbox chrome). Reset clears them; Apply changes writes only --fynns-* into tokens.ts."
+              label={t("inspector.overrides", {
+                count: overrideCount,
+                plural: plural(overrideCount),
+              })}
+              ariaLabel={t("inspector.overridesAria")}
+              content={t("inspector.overridesHint")}
             />
           </span>
         </header>
 
-        <Collapsible title="Presets" defaultOpen>
+        <Collapsible title={t("inspector.presets")} defaultOpen>
           <div className="sandbox-stack">
             <div className="sandbox-field">
               <Select
-                ariaLabel="Preset"
+                ariaLabel={t("inspector.presetAria")}
                 value={presetId}
-                options={CARD_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+                options={presetOptions}
                 onChange={setPresetId}
               />
             </div>
-            <p className="sandbox-help">
-              {CARD_PRESETS.find((p) => p.id === presetId)?.description}
-            </p>
+            <p className="sandbox-help">{activePresetDesc}</p>
             <div className="sandbox-field">
               <Button
                 size="sm"
@@ -172,33 +193,38 @@ export function PropertyInspector() {
                   const preset = CARD_PRESETS.find((p) => p.id === presetId);
                   if (!preset) return;
                   loadPreset(preset.overrides);
-                  toast.message(`Loaded preset: ${preset.label}`);
+                  const keys = CARD_PRESET_LABEL_KEYS[preset.id];
+                  toast.message(
+                    t("inspector.loadedPreset", {
+                      label: keys ? t(keys.label) : preset.label,
+                    }),
+                  );
                 }}
               >
-                Apply preset
+                {t("inspector.applyPreset")}
               </Button>
             </div>
-            <p className="sandbox-help">
-              Shape / radius lives under Globals — these presets cover elevation and state layers.
-            </p>
+            <p className="sandbox-help">{t("inspector.presetShapeNote")}</p>
           </div>
         </Collapsible>
 
-        <Collapsible title="Color" defaultOpen>
+        <Collapsible title={t("inspector.color")} defaultOpen>
           <div className="sandbox-stack">
             <HueWheel />
-            <p className="sandbox-help">
-              Preset chips stay inline; open the rainbow chip for the full hue ring.
-              Surfaces stay on the committed ladder — only the accent family shifts.
-            </p>
-            {SURFACE_KEYS.map(({ cssVar, key, label, hint }) => {
+            <p className="sandbox-help">{t("inspector.colorHelp")}</p>
+            {SURFACE_KEYS.map(({ cssVar, key, labelKey, hintKey }) => {
               const baseline = BASELINE[cssVar] ?? "#000000";
               const current = resolved(cssVar);
               const delta = estimateBrightnessDelta(baseline, current);
+              const label = t(labelKey);
               return (
                 <div key={key} className="sandbox-field">
                   <div className="sandbox-field-row">
-                    <InfoHint label={label} ariaLabel={`About ${label}`} content={hint} />
+                    <InfoHint
+                      label={label}
+                      ariaLabel={`${t("inspector.brightness")} · ${label}`}
+                      content={t(hintKey)}
+                    />
                     <code>{current}</code>
                   </div>
                   <div
@@ -208,14 +234,14 @@ export function PropertyInspector() {
                   />
                   <div className="sandbox-field-row">
                     <InfoHint
-                      label="Brightness"
-                      ariaLabel={`About brightness for ${label}`}
-                      content={BRIGHTNESS_HINT}
+                      label={t("inspector.brightness")}
+                      ariaLabel={`${t("inspector.brightness")} · ${label}`}
+                      content={t("inspector.brightnessHint")}
                     />
                     <code>{delta > 0 ? `+${delta}` : delta}</code>
                   </div>
                   <Slider
-                    ariaLabel={`${label} brightness`}
+                    ariaLabel={`${label} · ${t("inspector.brightness")}`}
                     min={-40}
                     max={40}
                     step={1}
@@ -235,9 +261,9 @@ export function PropertyInspector() {
             <div className="sandbox-field">
               <div className="sandbox-field-row">
                 <InfoHint
-                  label="Outline border (border-strong)"
-                  ariaLabel="About outline border"
-                  content="--fynns-color-border-strong — stroke for outlined Card and strong borders."
+                  label={t("inspector.outlineBorder")}
+                  ariaLabel={t("inspector.outlineBorderAria")}
+                  content={t("inspector.outlineBorderHint")}
                 />
                 <code>{borderStrong}</code>
               </div>
@@ -247,7 +273,7 @@ export function PropertyInspector() {
                 aria-hidden
               />
               <Slider
-                ariaLabel="Outline border brightness"
+                ariaLabel={t("inspector.outlineBorderBrightness")}
                 min={-40}
                 max={40}
                 step={1}
@@ -267,12 +293,12 @@ export function PropertyInspector() {
                   })
                 }
               />
-              <p className="sandbox-help">Used by outlined cards as the stroke color.</p>
+              <p className="sandbox-help">{t("inspector.outlineHelp")}</p>
             </div>
           </div>
         </Collapsible>
 
-        <Collapsible title="Elevation" defaultOpen>
+        <Collapsible title={t("inspector.elevation")} defaultOpen>
           <div className="sandbox-stack">
             <div className="sandbox-elev-ladder">
               {[0, 1, 2, 3, 4, 5].map((level) => (
@@ -293,18 +319,21 @@ export function PropertyInspector() {
             <div className="sandbox-field">
               <div className="sandbox-field-row">
                 <InfoHint
-                  label="Elevated resting shadow (xs)"
-                  ariaLabel="About elevated resting shadow"
-                  content="--fynns-shadow-xs — resting elevation shadow for elevated Card (ladder swatches above are read-only)."
+                  label={t("inspector.elevatedShadow")}
+                  ariaLabel={t("inspector.elevatedShadowAria")}
+                  content={t("inspector.elevatedShadowHint")}
                 />
                 <code>{shadowPreset}</code>
               </div>
               <Select
-                ariaLabel="Elevated shadow preset"
+                ariaLabel={t("inspector.elevatedShadowSelect")}
                 value={shadowPreset === "custom" ? "default" : shadowPreset}
-                options={SHADOW_XS_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+                options={SHADOW_XS_PRESET_DEFS.map((p) => ({
+                  value: p.id,
+                  label: t(p.labelKey),
+                }))}
                 onChange={(id) => {
-                  const preset = SHADOW_XS_PRESETS.find((p) => p.id === id);
+                  const preset = SHADOW_XS_PRESET_DEFS.find((p) => p.id === id);
                   if (!preset) return;
                   apply({
                     group: "shadow",
@@ -314,31 +343,24 @@ export function PropertyInspector() {
                   });
                 }}
               />
-              <p className="sandbox-help">
-                Tonal ladder is read-only above; elevated cards use shadow-xs at rest. Dragged /
-                reserved levels use surface-4/5.
-              </p>
+              <p className="sandbox-help">{t("inspector.elevationHelp")}</p>
             </div>
           </div>
         </Collapsible>
 
-        <Collapsible title="State layers" defaultOpen>
+        <Collapsible title={t("inspector.stateLayers")} defaultOpen>
           <div className="sandbox-stack">
-            {STATE_LAYER_KEYS.map(({ key, hint }) => {
+            {STATE_LAYER_KEYS.map(({ key, hintKey }) => {
               const valueByKey = { hover, focus, pressed, dragged } as const;
               const value = valueByKey[key];
               return (
                 <div key={key} className="sandbox-field">
                   <div className="sandbox-field-row">
-                    <InfoHint
-                      label={key}
-                      ariaLabel={`About state layer ${key}`}
-                      content={hint}
-                    />
+                    <InfoHint label={key} ariaLabel={key} content={t(hintKey)} />
                     <code>{value}%</code>
                   </div>
                   <Slider
-                    ariaLabel={`${key} state layer`}
+                    ariaLabel={key}
                     min={0}
                     max={24}
                     step={1}
@@ -356,25 +378,26 @@ export function PropertyInspector() {
               );
             })}
             <Card variant="filled" interactive className="sandbox-state-demo">
-              <CardHeader title="State demo" subtitle="Hover / press me" />
-              <CardContent>Live overlay uses the opacities above.</CardContent>
+              <CardHeader
+                title={t("inspector.stateDemoTitle")}
+                subtitle={t("inspector.stateDemoSubtitle")}
+              />
+              <CardContent>{t("inspector.stateDemoBody")}</CardContent>
             </Card>
           </div>
         </Collapsible>
 
-        <Collapsible title="Spacing" defaultOpen>
+        <Collapsible title={t("inspector.spacing")} defaultOpen>
           <div className="sandbox-stack">
-            <p className="sandbox-help">
-              Card anatomy — `--fynns-space-*` used by Card content / header / actions (Apply
-              writeback).
-            </p>
-            {SPACE_KEYS.map(({ key, label, hint }) => {
+            <p className="sandbox-help">{t("inspector.spacingHelp")}</p>
+            {SPACE_KEYS.map(({ key, labelKey, hintKey }) => {
               const pxByKey = { lg: spaceLgPx, md: spaceMdPx, sm: spaceSmPx } as const;
               const px = pxByKey[key];
+              const label = t(labelKey);
               return (
                 <div key={key} className="sandbox-field">
                   <div className="sandbox-field-row">
-                    <InfoHint label={label} ariaLabel={`About ${label}`} content={hint} />
+                    <InfoHint label={label} ariaLabel={label} content={t(hintKey)} />
                     <code>{px}px</code>
                   </div>
                   <Slider
@@ -395,21 +418,18 @@ export function PropertyInspector() {
                 </div>
               );
             })}
-            <p className="sandbox-help">
-              Inspector blocks — gap between adjacent chrome blocks in every inspector stack
-              (`--sandbox-block-gap`, sandbox-only; not written by Apply changes).
-            </p>
+            <p className="sandbox-help">{t("inspector.blockGapHelp")}</p>
             <div className="sandbox-field">
               <div className="sandbox-field-row">
                 <InfoHint
-                  label="Block gap"
-                  ariaLabel="About block gap"
-                  content="--sandbox-block-gap — uniform gap between adjacent blocks in inspector stacks (sandbox chrome; not Apply writeback)."
+                  label={t("inspector.blockGap")}
+                  ariaLabel={t("inspector.blockGapAria")}
+                  content={t("inspector.blockGapHint")}
                 />
                 <code>{blockGapPx}px</code>
               </div>
               <Slider
-                ariaLabel="Inspector block gap"
+                ariaLabel={t("inspector.blockGapSlider")}
                 min={0}
                 max={32}
                 step={1}
@@ -425,7 +445,7 @@ export function PropertyInspector() {
           </div>
         </Collapsible>
 
-        <Collapsible title="Typography">
+        <Collapsible title={t("inspector.typography")}>
           <div className="sandbox-stack">
             {(["sm", "md", "lg"] as const).map((key) => {
               const raw = resolved(`--fynns-font-size-${key}`);
@@ -435,13 +455,13 @@ export function PropertyInspector() {
                   <div className="sandbox-field-row">
                     <InfoHint
                       label={`font-size-${key}`}
-                      ariaLabel={`About font-size-${key}`}
-                      content={FONT_SIZE_HINTS[key]}
+                      ariaLabel={`font-size-${key}`}
+                      content={t(FONT_SIZE_HINT_KEYS[key])}
                     />
                     <code>{raw}</code>
                   </div>
                   <Slider
-                    ariaLabel={`Font size ${key}`}
+                    ariaLabel={`font-size-${key}`}
                     min={10}
                     max={28}
                     step={1}

@@ -8,60 +8,60 @@ import {
   Input,
   Select,
 } from "@fynns/ui";
+import { useLocale } from "../i18n";
 
 /**
  * Live stage proving `--fynns-radius-*` is system-wide: multiple primitives
  * share the same token ladder (not Card-only).
  */
 export function GlobalsPage() {
+  const { t } = useLocale();
+
   return (
     <div className="sandbox-globals">
-      <p className="sandbox-globals-lead">
-        Shape tokens (`--fynns-radius-*`) apply across the UI core. Tune the ladder in the
-        inspector — every sample below updates from the same draft.
-      </p>
+      <p className="sandbox-globals-lead">{t("globals.lead")}</p>
 
-      <section className="sandbox-globals-section" aria-label="Controls">
-        <h3 className="sandbox-globals-heading">Controls</h3>
+      <section className="sandbox-globals-section" aria-label={t("globals.controlsAria")}>
+        <h3 className="sandbox-globals-heading">{t("globals.controls")}</h3>
         <div className="sandbox-globals-row">
-          <Button size="sm">Small</Button>
-          <Button>Default</Button>
-          <Button variant="primary">Primary</Button>
-          <Button variant="ghost">Ghost</Button>
+          <Button size="sm">{t("globals.btnSmall")}</Button>
+          <Button>{t("globals.btnDefault")}</Button>
+          <Button variant="primary">{t("globals.btnPrimary")}</Button>
+          <Button variant="ghost">{t("globals.btnGhost")}</Button>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <Input placeholder="Input" aria-label="Sample input" />
+          <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
           <Select
-            ariaLabel="Sample select"
+            ariaLabel={t("globals.selectAria")}
             value="one"
             options={["one", "two", "three"]}
             onChange={() => {}}
           />
         </div>
         <div className="sandbox-globals-row">
-          <Badge>Neutral</Badge>
-          <Badge variant="accent">Accent</Badge>
-          <Badge variant="success">Success</Badge>
+          <Badge>{t("globals.badgeNeutral")}</Badge>
+          <Badge variant="accent">{t("globals.badgeAccent")}</Badge>
+          <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
         </div>
       </section>
 
-      <section className="sandbox-globals-section" aria-label="Surfaces">
-        <h3 className="sandbox-globals-heading">Surfaces</h3>
+      <section className="sandbox-globals-section" aria-label={t("globals.surfacesAria")}>
+        <h3 className="sandbox-globals-heading">{t("globals.surfaces")}</h3>
         <div className="sandbox-globals-cards">
           {(["elevated", "filled", "outlined"] as const).map((variant) => (
             <Card key={variant} variant={variant} className="sandbox-globals-card">
-              <CardHeader title={variant} subtitle="Shared radius-md" />
-              <CardContent>Container shape follows the global ladder.</CardContent>
+              <CardHeader title={variant} subtitle={t("globals.cardSubtitle")} />
+              <CardContent>{t("globals.cardBody")}</CardContent>
             </Card>
           ))}
         </div>
-        <Collapsible title="Collapsible sample" defaultOpen>
-          <p className="sandbox-help">Headers and panels also consume radius tokens.</p>
+        <Collapsible title={t("globals.collapsible")} defaultOpen>
+          <p className="sandbox-help">{t("globals.collapsibleHelp")}</p>
         </Collapsible>
       </section>
 
-      <section className="sandbox-globals-section" aria-label="Radius swatches">
-        <h3 className="sandbox-globals-heading">Ladder swatches</h3>
+      <section className="sandbox-globals-section" aria-label={t("globals.swatchesAria")}>
+        <h3 className="sandbox-globals-heading">{t("globals.swatches")}</h3>
         <div className="sandbox-globals-swatches">
           {(["xs", "sm", "md", "lg", "xl"] as const).map((key) => (
             <div key={key} className="sandbox-globals-swatch">

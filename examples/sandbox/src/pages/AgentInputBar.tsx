@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   BotIcon,
   Button,
@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
@@ -17,26 +18,22 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
  * yet — local heuristics only.
  */
 export function AgentInputBar() {
+  const { t } = useLocale();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const { apply } = useTokenDraft();
   const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
 
-  const hint = useMemo(
-    () => 'Try: "make corners rounder" or "softer hover"',
-    [],
-  );
-
   const run = () => {
     const proposals = proposeFromPrompt(prompt);
     if (proposals.length === 0) {
-      toast.warning("No structured proposals yet — refine the request or wait for a model backend.");
+      toast.warning(t("agent.toastNone"));
       return;
     }
     setPending(proposals);
     setOpen(true);
-    toast.info(`${proposals.length} proposal(s) ready — confirm to apply.`);
+    toast.info(t("agent.toastReady", { count: proposals.length }));
   };
 
   const confirmAll = () => {
@@ -50,7 +47,7 @@ export function AgentInputBar() {
         reasoning: p.reasoning,
       });
     }
-    toast.success("Agent proposals applied");
+    toast.success(t("agent.toastApplied"));
     setPending([]);
     setPrompt("");
     setOpen(false);
@@ -58,15 +55,15 @@ export function AgentInputBar() {
 
   const tooltip =
     pending.length > 0
-      ? `${pending.length} proposal(s) awaiting confirmation`
-      : "Natural-language token proposals (local heuristics)";
+      ? t("agent.tipPending", { count: pending.length })
+      : t("agent.tipIdle");
 
   return (
     <>
       <Tooltip content={tooltip}>
         <IconButton
           ref={triggerRef}
-          aria-label="Agent proposals"
+          aria-label={t("agent.triggerAria")}
           aria-haspopup="dialog"
           aria-expanded={open}
           className={
@@ -90,14 +87,14 @@ export function AgentInputBar() {
             <Input
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder={hint}
-              aria-label="Agent prompt"
+              placeholder={t("agent.hint")}
+              aria-label={t("agent.promptAria")}
               onKeyDown={(e) => {
                 if (e.key === "Enter") run();
               }}
             />
             <Button size="sm" onClick={run}>
-              Propose
+              {t("agent.propose")}
             </Button>
           </div>
           {pending.length > 0 ? (
@@ -112,18 +109,15 @@ export function AgentInputBar() {
               ))}
               <div className="sandbox-agent-pending-actions">
                 <Button size="sm" variant="ghost" onClick={() => setPending([])}>
-                  Dismiss
+                  {t("agent.dismiss")}
                 </Button>
                 <Button size="sm" variant="primary" onClick={confirmAll}>
-                  Confirm apply
+                  {t("agent.confirm")}
                 </Button>
               </div>
             </div>
           ) : (
-            <p className="sandbox-help">
-              Agent proposals require confirmation before they change tokens. Model backend
-              is not wired yet — local heuristics only.
-            </p>
+            <p className="sandbox-help">{t("agent.help")}</p>
           )}
         </div>
       </Popover>

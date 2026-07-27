@@ -10,6 +10,7 @@ import {
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { GLOBAL_SHAPE_PRESETS } from "../../presets/presets";
+import { useLocale, type MessageKey } from "../i18n";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { ApplyChangesControl } from "./ApplyChangesControl";
@@ -26,31 +27,31 @@ const EDITABLE_RADIUS = [
     key: "xs",
     label: "xs",
     max: 16,
-    hint: "Smallest ladder step (M3 XS ≈ 4dp). Finest corners; keep below sm in the scale.",
+    hintKey: "globalsInspector.radiusXsHint" as const,
   },
   {
     key: "sm",
     label: "sm",
     max: 20,
-    hint: "Compact controls: Button, SplitButton, ToggleGroup, Badge, PickList, toast action chips.",
+    hintKey: "globalsInspector.radiusSmHint" as const,
   },
   {
     key: "md",
     label: "md",
     max: 28,
-    hint: "Default surface radius: Input, Select, Card, PanelCard, Popover, Tooltip, Tabs, Collapsible, list rows, Alert/Toast.",
+    hintKey: "globalsInspector.radiusMdHint" as const,
   },
   {
     key: "lg",
     label: "lg",
     max: 32,
-    hint: "Larger chrome: DropdownMenu / SplitButton menus, Dialog and Drawer panels.",
+    hintKey: "globalsInspector.radiusLgHint" as const,
   },
   {
     key: "xl",
     label: "xl",
     max: 40,
-    hint: "Largest ladder step (M3 XL band). Soft / emphasis shells; keep above lg in the scale.",
+    hintKey: "globalsInspector.radiusXlHint" as const,
   },
 ] as const;
 
@@ -58,26 +59,32 @@ const READONLY_RADIUS = [
   {
     key: "none",
     label: "none",
-    hint: "Sharp corners (0). Flush edges when a control must meet a hard boundary.",
+    hintKey: "globalsInspector.radiusNoneHint" as const,
   },
   {
     key: "pill",
     label: "pill",
-    hint: "Capsule (999px): Switch track, SearchInput, fully rounded chips.",
+    hintKey: "globalsInspector.radiusPillHint" as const,
   },
   {
     key: "round",
     label: "round",
-    hint: "Circle (50%): Switch thumb and other circular affordances.",
+    hintKey: "globalsInspector.radiusRoundHint" as const,
   },
 ] as const;
 
 const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
 
+const SHAPE_PRESET_KEYS: Record<string, { label: MessageKey; desc: MessageKey }> = {
+  "m3-aligned-radius": { label: "preset.m3Aligned", desc: "preset.m3AlignedDesc" },
+  "restrained-radius": { label: "preset.restrained", desc: "preset.restrainedDesc" },
+};
+
 /**
  * Global shape inspector: edits `--fynns-radius-*` for the whole UI core.
  */
 export function GlobalsInspector() {
+  const { t, plural } = useLocale();
   const { apply, resolved, loadPreset, draft, mergeOverrides } = useTokenDraft();
   const [presetId, setPresetId] = useState(GLOBAL_SHAPE_PRESETS[0]?.id ?? "");
 
@@ -90,7 +97,7 @@ export function GlobalsInspector() {
       patch[cssVar] = BASELINE[cssVar] ?? "0";
     }
     mergeOverrides(patch, { source: "reset", group: "radius" });
-    toast.message("Shape ladder reset to baseline");
+    toast.message(t("globalsInspector.toastReset"));
   };
 
   const alignM3Ladder = () => {
@@ -98,64 +105,76 @@ export function GlobalsInspector() {
     if (!preset) return;
     mergeOverrides(preset.overrides, { source: "preset", group: "radius" });
     setPresetId(preset.id);
-    toast.message("Aligned to M3 radius ladder");
+    toast.message(t("globalsInspector.toastAlign"));
   };
+
+  const presetOptions = GLOBAL_SHAPE_PRESETS.map((p) => {
+    const keys = SHAPE_PRESET_KEYS[p.id];
+    return { value: p.id, label: keys ? t(keys.label) : p.label };
+  });
+
+  const activePresetDesc = (() => {
+    const keys = SHAPE_PRESET_KEYS[presetId];
+    if (keys) return t(keys.desc);
+    return GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId)?.description;
+  })();
 
   return (
     <div className="sandbox-inspector">
       <div className="sandbox-inspector-scroll fynns-scroll">
         <header className="sandbox-inspector-head">
-          <h2>Global properties</h2>
+          <h2>{t("inspector.globalTitle")}</h2>
           <span className="sandbox-inspector-meta">
             <InfoHint
-              label={`${overrideCount} override${overrideCount === 1 ? "" : "s"}`}
-              ariaLabel="What overrides means"
-              content="Count of draft CSS variables versus baseline (--fynns-* and sandbox chrome). Reset clears them; Apply changes writes only --fynns-* into tokens.ts."
+              label={t("inspector.overrides", {
+                count: overrideCount,
+                plural: plural(overrideCount),
+              })}
+              ariaLabel={t("inspector.overridesAria")}
+              content={t("inspector.overridesHint")}
             />
           </span>
         </header>
 
-        <Collapsible title="Shape presets" defaultOpen>
+        <Collapsible title={t("globalsInspector.shapePresets")} defaultOpen>
           <div className="sandbox-stack">
             <div className="sandbox-field">
               <Select
-                ariaLabel="Shape preset"
+                ariaLabel={t("globalsInspector.shapePresetAria")}
                 value={presetId}
-                options={GLOBAL_SHAPE_PRESETS.map((p) => ({ value: p.id, label: p.label }))}
+                options={presetOptions}
                 onChange={setPresetId}
               />
             </div>
-            <p className="sandbox-help">
-              {GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId)?.description}
-            </p>
+            <p className="sandbox-help">{activePresetDesc}</p>
             <div className="sandbox-field">
-              <Tooltip content="Replace the entire draft with this preset's overrides (clears other knobs)">
+              <Tooltip content={t("globalsInspector.applyPresetTip")}>
                 <Button
                   size="sm"
                   onClick={() => {
                     const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId);
                     if (!preset) return;
                     loadPreset(preset.overrides);
-                    toast.message(`Loaded preset: ${preset.label}`);
+                    const keys = SHAPE_PRESET_KEYS[preset.id];
+                    toast.message(
+                      t("inspector.loadedPreset", {
+                        label: keys ? t(keys.label) : preset.label,
+                      }),
+                    );
                   }}
                 >
-                  Apply preset
+                  {t("inspector.applyPreset")}
                 </Button>
               </Tooltip>
             </div>
-            <p className="sandbox-help">
-              Apply preset replaces the whole draft. Align M3 / Reset ladder only touch radius.
-            </p>
+            <p className="sandbox-help">{t("globalsInspector.applyPresetNote")}</p>
           </div>
         </Collapsible>
 
-        <Collapsible title="Shape ladder" defaultOpen>
+        <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
           <div className="sandbox-stack">
-            <p className="sandbox-help">
-              Writes `--fynns-radius-*` used by every primitive (Button, Input, Card, flyouts,
-              …) — not Card-only.
-            </p>
-            {EDITABLE_RADIUS.map(({ key, label, max, hint }) => {
+            <p className="sandbox-help">{t("globalsInspector.shapeLadderHelp")}</p>
+            {EDITABLE_RADIUS.map(({ key, label, max, hintKey }) => {
               const cssVar = `--fynns-radius-${key}`;
               const px = parseLengthToPx(resolved(cssVar));
               return (
@@ -163,13 +182,13 @@ export function GlobalsInspector() {
                   <div className="sandbox-field-row">
                     <InfoHint
                       label={<code>radius-{label}</code>}
-                      ariaLabel={`About radius-${label}`}
-                      content={hint}
+                      ariaLabel={`radius-${label}`}
+                      content={t(hintKey)}
                     />
                     <code>{px}px</code>
                   </div>
                   <Slider
-                    ariaLabel={`Radius ${label}`}
+                    ariaLabel={`radius-${label}`}
                     min={0}
                     max={max}
                     step={1}
@@ -183,10 +202,10 @@ export function GlobalsInspector() {
             })}
             <div className="sandbox-field">
               <div className="sandbox-field-row">
-                <span>Special (read-only)</span>
+                <span>{t("globalsInspector.specialReadonly")}</span>
               </div>
               <ul className="sandbox-globals-readonly">
-                {READONLY_RADIUS.map(({ key, label, hint }) => (
+                {READONLY_RADIUS.map(({ key, label, hintKey }) => (
                   <li key={key}>
                     <InfoHint
                       label={
@@ -195,22 +214,22 @@ export function GlobalsInspector() {
                           {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
                         </code>
                       }
-                      ariaLabel={`About radius-${label}`}
-                      content={hint}
+                      ariaLabel={`radius-${label}`}
+                      content={t(hintKey)}
                     />
                   </li>
                 ))}
               </ul>
             </div>
             <CardActions align="end" className="sandbox-field-actions">
-              <Tooltip content="Restore radius xs–xl to baseline; leaves color and other overrides">
+              <Tooltip content={t("globalsInspector.resetLadderTip")}>
                 <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
-                  Reset ladder
+                  {t("globalsInspector.resetLadder")}
                 </Button>
               </Tooltip>
-              <Tooltip content="Apply the M3-aligned radius values (xs–xl only; other overrides stay)">
+              <Tooltip content={t("globalsInspector.alignM3Tip")}>
                 <Button size="sm" variant="primary" onClick={alignM3Ladder}>
-                  Align M3 ladder
+                  {t("globalsInspector.alignM3")}
                 </Button>
               </Tooltip>
             </CardActions>

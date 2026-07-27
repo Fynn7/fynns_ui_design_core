@@ -14,6 +14,7 @@ import {
   toast,
 } from "@fynns/ui";
 import { useState } from "react";
+import { useLocale } from "../i18n";
 
 const ALL_VARIANTS = ["elevated", "filled", "outlined"] as const;
 type ActionsAlign = "start" | "end";
@@ -33,46 +34,47 @@ const DEFAULT_OPTIONS: CardPreviewOptions = {
 };
 
 export function CardPreviewCanvas() {
+  const { t } = useLocale();
   const [options, setOptions] = useState<CardPreviewOptions>(DEFAULT_OPTIONS);
 
   return (
     <div className="sandbox-preview">
       <ControlStack className="sandbox-preview-toolbar" columns={2}>
-        <ControlRow label="Anatomy">
+        <ControlRow label={t("preview.anatomy")}>
           <Switch
             size="sm"
             labelSide="end"
-            label="Media"
+            label={t("preview.media")}
             checked={options.showMedia}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showMedia: checked }))}
           />
         </ControlRow>
-        <ControlRow label="States">
+        <ControlRow label={t("preview.states")}>
           <Grid x={2} y="unbounded">
             <Switch
               size="sm"
               labelSide="end"
-              label="Interactive"
+              label={t("preview.interactive")}
               checked={options.interactive}
               onCheckedChange={(checked) => setOptions((o) => ({ ...o, interactive: checked }))}
             />
             <Switch
               size="sm"
               labelSide="end"
-              label="Disabled"
+              label={t("preview.disabled")}
               checked={options.disabled}
               onCheckedChange={(checked) => setOptions((o) => ({ ...o, disabled: checked }))}
             />
           </Grid>
         </ControlRow>
-        <ControlRow label="Actions">
+        <ControlRow label={t("preview.actions")}>
           <ToggleGroup
             size="compact"
             value={options.actionsAlign}
             onChange={(id) => setOptions((o) => ({ ...o, actionsAlign: id as ActionsAlign }))}
             options={[
-              { value: "start", label: "Start" },
-              { value: "end", label: "End" },
+              { value: "start", label: t("preview.start") },
+              { value: "end", label: t("preview.end") },
             ]}
           />
         </ControlRow>
@@ -91,36 +93,32 @@ export function CardPreviewCanvas() {
                   disabled={options.disabled}
                   onClick={
                     interactive
-                      ? () => toast.message(`${variant} card activated`)
+                      ? () => toast.message(t("preview.cardActivated", { variant }))
                       : undefined
                   }
                 >
                   {options.showMedia ? (
                     <CardMedia>
                       <div className="fynns-card-media-placeholder" aria-hidden>
-                        Media
+                        {t("preview.media")}
                       </div>
                     </CardMedia>
                   ) : null}
                   <CardHeader
                     avatar="F"
-                    title="Aurora project"
-                    subtitle="Updated just now"
+                    title={t("preview.cardTitle")}
+                    subtitle={t("preview.cardSubtitle")}
                     action={
-                      <InfoHint content="More info about this card subject." ariaLabel="More info" />
+                      <InfoHint content={t("preview.cardInfo")} ariaLabel={t("preview.cardInfoAria")} />
                     }
                   />
-                  <CardContent>
-                    A subject card with shared anatomy. Use the inspector to tune Card-related
-                    tokens — sandbox chrome updates from the same variables. Shape / radius lives
-                    under Globals.
-                  </CardContent>
+                  <CardContent>{t("preview.cardBody")}</CardContent>
                   <CardActions align={options.actionsAlign}>
                     <Button size="sm" variant="ghost" disabled={options.disabled}>
-                      Dismiss
+                      {t("preview.dismiss")}
                     </Button>
                     <Button size="sm" variant="primary" disabled={options.disabled}>
-                      Open
+                      {t("preview.open")}
                     </Button>
                   </CardActions>
                 </Card>

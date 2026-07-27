@@ -5,6 +5,7 @@ import {
   previewTokenOverrides,
   type ApplyFileDiff,
 } from "../export/applyTokens";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 type Phase = "idle" | "previewing" | "review" | "applying";
@@ -13,6 +14,7 @@ type Phase = "idle" | "previewing" | "review" | "applying";
  * Inspector footer control: preview per-file diffs, then confirm writeback.
  */
 export function ApplyChangesControl() {
+  const { t } = useLocale();
   const { draft, reset } = useTokenDraft();
   const overrideCount = Object.keys(draft.overrides).length;
   const [phase, setPhase] = useState<Phase>("idle");
@@ -30,7 +32,7 @@ export function ApplyChangesControl() {
     try {
       const preview = await previewTokenOverrides(draft.overrides);
       if (!preview.ok) {
-        toast.error(preview.error ?? "Preview failed");
+        toast.error(preview.error ?? t("apply.toastPreviewFailed"));
         setPhase("idle");
         return;
       }
@@ -39,7 +41,7 @@ export function ApplyChangesControl() {
       setSkippedCount(preview.skipped.length);
       setPhase("review");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Preview failed");
+      toast.error(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
       setPhase("idle");
     }
   };
@@ -56,7 +58,7 @@ export function ApplyChangesControl() {
     try {
       const result = await applyTokenOverrides(draft.overrides);
       if (!result.ok) {
-        toast.error(result.error ?? "Apply failed");
+        toast.error(result.error ?? t("apply.toastApplyFailed"));
         setPhase("review");
         return;
       }
@@ -65,27 +67,30 @@ export function ApplyChangesControl() {
       setFiles([]);
       if (result.skipped.length > 0) {
         toast.warning(
-          `Applied ${result.applied.length} token(s); skipped ${result.skipped.length}`,
+          t("apply.toastPartial", {
+            applied: result.applied.length,
+            skipped: result.skipped.length,
+          }),
         );
       } else {
-        toast.success(`Applied ${result.applied.length} token(s) to tokens.ts`);
+        toast.success(t("apply.toastOk", { applied: result.applied.length }));
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Apply failed");
+      toast.error(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
       setPhase("review");
     }
   };
 
   return (
     <>
-      <Tooltip content="Review per-file diffs, then write tokens.ts and regenerate theme.css">
+      <Tooltip content={t("apply.tip")}>
         <Button
           size="sm"
           variant="primary"
           disabled={overrideCount === 0 || busy}
           onClick={() => void openReview()}
         >
-          {phase === "previewing" ? "Preparing diff…" : "Apply changes"}
+          {phase === "previewing" ? t("apply.preparing") : t("apply.button")}
         </Button>
       </Tooltip>
 
@@ -94,31 +99,37 @@ export function ApplyChangesControl() {
         onOpenChange={(open) => {
           if (!open) closeReview();
         }}
-        title="Review apply changes"
+        title={t("apply.dialogTitle")}
         description={
           skippedCount > 0
-            ? `${appliedCount} token(s) will write; ${skippedCount} skipped. Confirm to update the files below.`
-            : `${appliedCount} token(s) will write across ${changedFiles.length} file(s). Confirm to apply.`
+            ? t("apply.dialogDescSkipped", {
+                applied: appliedCount,
+                skipped: skippedCount,
+              })
+            : t("apply.dialogDesc", {
+                applied: appliedCount,
+                files: changedFiles.length,
+              })
         }
         className="sandbox-apply-diff-dialog"
         showCloseButton={phase !== "applying"}
       >
         <div className="sandbox-apply-diff-list fynns-scroll">
           {files.length === 0 ? (
-            <p className="sandbox-muted">No file diffs.</p>
+            <p className="sandbox-muted">{t("apply.noDiffs")}</p>
           ) : (
             files.map((file) => (
               <section key={file.path} className="sandbox-apply-diff-file">
                 <header className="sandbox-apply-diff-file-head">
                   <code>{file.path}</code>
                   <span className="sandbox-muted">
-                    {file.changed ? "changed" : "unchanged"}
+                    {file.changed ? t("apply.changed") : t("apply.unchanged")}
                   </span>
                 </header>
                 {file.changed && file.diff ? (
                   <pre className="sandbox-apply-diff-pre fynns-scroll">{file.diff}</pre>
                 ) : (
-                  <p className="sandbox-muted">No textual changes.</p>
+                  <p className="sandbox-muted">{t("apply.noTextual")}</p>
                 )}
               </section>
             ))
@@ -126,14 +137,14 @@ export function ApplyChangesControl() {
         </div>
         <div className="sandbox-apply-diff-foot">
           <Button variant="ghost" onClick={closeReview} disabled={phase === "applying"}>
-            Cancel
+            {t("apply.cancel")}
           </Button>
           <Button
             variant="primary"
             disabled={phase === "applying" || changedFiles.length === 0}
             onClick={() => void confirmApply()}
           >
-            {phase === "applying" ? "Applying…" : "Apply"}
+            {phase === "applying" ? t("apply.applying") : t("apply.confirm")}
           </Button>
         </div>
       </Dialog>

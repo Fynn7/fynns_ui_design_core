@@ -9,7 +9,15 @@ const EASING_DEMOS = [
   { label: "in-out", token: "var(--fynns-ease-in-out)" },
 ] as const;
 
-function EasingBar({ label, easing }: { label: string; easing: string }) {
+function EasingBar({
+  label,
+  easing,
+  replayLabel,
+}: {
+  label: string;
+  easing: string;
+  replayLabel: string;
+}) {
   const [run, setRun] = useState(0);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-2xs)", flex: "1 1 10rem" }}>
@@ -41,13 +49,21 @@ function EasingBar({ label, easing }: { label: string; easing: string }) {
         />
       </div>
       <Button size="sm" onClick={() => setRun((n) => n + 1)}>
-        Replay
+        {replayLabel}
       </Button>
     </div>
   );
 }
 
-export function Motion() {
+export type MotionTitles = {
+  easing?: string;
+  flyout?: string;
+  flyoutHelp?: string;
+  replay?: string;
+};
+
+export function Motion({ titles }: { titles?: MotionTitles } = {}) {
+  const replay = titles?.replay ?? "Replay";
   return (
     <>
       <style>{`
@@ -56,16 +72,22 @@ export function Motion() {
           to { transform: translateX(calc(100% + 6rem)); }
         }
       `}</style>
-      <Section title="Easing curves">
+      <Section title={titles?.easing ?? "Easing curves"}>
         <Row>
           {EASING_DEMOS.map((demo) => (
-            <EasingBar key={demo.label} label={demo.label} easing={demo.token} />
+            <EasingBar
+              key={demo.label}
+              label={demo.label}
+              easing={demo.token}
+              replayLabel={replay}
+            />
           ))}
         </Row>
       </Section>
-      <Section title="Flyout & overlay motion">
+      <Section title={titles?.flyout ?? "Flyout & overlay motion"}>
         <p style={{ margin: 0, fontSize: "var(--fynns-font-size-form-label)", color: "var(--fynns-color-text-muted)" }}>
-          Open a dialog, select, split-button menu, or tooltip in the Components section to preview enter animations.
+          {titles?.flyoutHelp ??
+            "Open a dialog, select, split-button menu, or tooltip in the Components section to preview enter animations."}
         </p>
       </Section>
     </>
