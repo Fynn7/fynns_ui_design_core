@@ -2687,6 +2687,131 @@
   );
 }
 
+/* ---------- CollapsibleCard (Card + disclosure) ---------- */
+.fynns-collapsible-card {
+  --fynns-collapsible-card-header-gap: var(--fynns-space-sm);
+}
+
+/* @fynns-recipe collapsible-card start */
+.fynns-collapsible-card {
+  /* Recipe-local custom properties (--fynns-*) are merged here on apply. */
+}
+/* @fynns-recipe collapsible-card end */
+
+.fynns-collapsible-card-header {
+  display: flex;
+  align-items: stretch;
+  gap: var(--fynns-collapsible-card-header-gap);
+  z-index: 0;
+  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+/* Full-row hover (trigger + header action / info icon), not trigger-only. */
+.fynns-collapsible-card-header:hover:has(.fynns-collapsible-card-trigger:not(:disabled)) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-collapsible-card-trigger {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+  margin: 0;
+  padding: var(--fynns-space-md) var(--fynns-space-lg);
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.fynns-collapsible-card-trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+.fynns-collapsible-card-trigger:disabled {
+  cursor: not-allowed;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-collapsible-card-chevron {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-card--open .fynns-collapsible-card-chevron {
+  transform: rotate(180deg);
+}
+
+.fynns-collapsible-card-header-avatar {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-34);
+  height: var(--fynns-size-34);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent-soft);
+  color: var(--fynns-color-accent);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-semibold);
+  overflow: hidden;
+}
+
+.fynns-collapsible-card-header-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+}
+
+.fynns-collapsible-card-header-title {
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+}
+
+.fynns-collapsible-card-header-subtitle {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-collapsible-card-header-action {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  padding-right: var(--fynns-space-md);
+}
+
+.fynns-collapsible-card-body {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  z-index: 0;
+}
+
+.fynns-collapsible-card .fynns-card-header + .fynns-card-content,
+.fynns-collapsible-card-body .fynns-card-content:first-child {
+  padding-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-collapsible-card-chevron {
+    transition: none;
+  }
+}
+
 /* ---------- Kbd ---------- */
 .fynns-kbd {
   display: inline-block;

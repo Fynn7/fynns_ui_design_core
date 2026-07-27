@@ -3,13 +3,14 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { applyTokensPlugin } from "./plugins/applyTokensPlugin";
+import { applyRecipePlugin } from "./plugins/applyRecipePlugin";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(dir, "../..");
 
 export default defineConfig({
   root: dir,
-  plugins: [react(), applyTokensPlugin(repoRoot)],
+  plugins: [react(), applyTokensPlugin(repoRoot), applyRecipePlugin(repoRoot)],
   resolve: {
     alias: {
       "@fynns/ui": path.resolve(dir, "../../src/index.ts"),

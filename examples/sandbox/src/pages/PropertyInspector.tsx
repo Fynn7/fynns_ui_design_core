@@ -16,6 +16,9 @@ import { BASELINE, SANDBOX_BLOCK_GAP_VAR } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { estimateBrightnessDelta, shiftHexBrightness } from "../theme/colorUtils";
 import { ApplyChangesControl } from "./ApplyChangesControl";
+import { ApplyRecipeControl } from "./ApplyRecipeControl";
+import { CollapsibleCardRecipeInspector } from "./CollapsibleCardRecipeInspector";
+import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 
 function parsePercent(value: string): number {
   return Number.parseFloat(value) || 0;
@@ -118,6 +121,7 @@ function matchShadowPreset(value: string): string {
 
 export function PropertyInspector() {
   const { apply, mergeOverrides, resolved, loadPreset, draft } = useTokenDraft();
+  const { target } = usePlaygroundTarget();
   const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
 
   const hover = parsePercent(resolved("--fynns-state-hover"));
@@ -456,10 +460,13 @@ export function PropertyInspector() {
             })}
           </div>
         </Collapsible>
+
+        {target === "collapsible-card" ? <CollapsibleCardRecipeInspector /> : null}
       </div>
 
       <div className="sandbox-inspector-actions">
         <ApplyChangesControl />
+        {target === "collapsible-card" ? <ApplyRecipeControl /> : null}
       </div>
     </div>
   );
