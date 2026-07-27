@@ -105,6 +105,11 @@
   color: var(--fynns-color-text-muted);
 }
 
+:root[data-fynns-locale="zh"] .sandbox-templates-section-title {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 .sandbox-templates-cards {
   list-style: none;
   margin: 0;

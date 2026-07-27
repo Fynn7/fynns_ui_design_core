@@ -88,17 +88,27 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. Pages: **Playground** (Card), **Globals** (system
 shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
-footer — config JSON export/import and named templates). Editing
-`--fynns-radius-*` on Globals
+footer — settings: language, config JSON export/import, and named templates).
+Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
+### Language (English / 中文)
+
+- Open **Templates** via the gear control and use the **Language** toggle
+  (`English` / `中文`) at the top of the settings page.
+- Choice persists in `localStorage` (`fynns-sandbox-locale`) and sets
+  `document.documentElement.lang` plus `data-fynns-locale`.
+- Catalog: [`examples/sandbox/src/i18n/`](examples/sandbox/src/i18n/).
+  `@fynns/ui` default labels stay English; the sandbox passes localized chrome.
+
 ### Templates & config JSON
 
 - Open via the **gear** control at the bottom of the left nav (special page,
   no inspector aside).
+- **Language** switch (English / 中文) sits at the top of this settings page.
 - **Export JSON** / **Import JSON** move the full sandbox configuration:
   `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
 - **Save as template** stores the same bundle under a name in `localStorage`

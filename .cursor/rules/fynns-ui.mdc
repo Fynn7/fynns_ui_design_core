@@ -30,4 +30,6 @@ This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
   `restoreFynnsThemeMode()` from `@fynns/ui`.
 
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
-catalog. Text must be English or German only (no CJK).
+catalog. Text in this package (docs / default labels) is English or German;
+consumer sandboxes may offer English ↔ Chinese UI locale switching for their
+own chrome.

@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { BotIcon, Button, Input, toast } from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
@@ -9,23 +10,19 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
  * heuristic parser demos the confirmation UX.
  */
 export function AgentInputBar() {
+  const { t } = useLocale();
   const { apply } = useTokenDraft();
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
 
-  const hint = useMemo(
-    () => 'Try: "make corners rounder" or "softer hover"',
-    [],
-  );
-
   const run = () => {
     const proposals = proposeFromPrompt(prompt);
     if (proposals.length === 0) {
-      toast.warning("No structured proposals yet — refine the request or wait for a model backend.");
+      toast.warning(t("agent.toastNone"));
       return;
     }
     setPending(proposals);
-    toast.info(`${proposals.length} proposal(s) ready — confirm to apply.`);
+    toast.info(t("agent.toastReady", { count: proposals.length }));
   };
 
   const confirmAll = () => {
@@ -39,7 +36,7 @@ export function AgentInputBar() {
         reasoning: p.reasoning,
       });
     }
-    toast.success("Agent proposals applied");
+    toast.success(t("agent.toastApplied"));
     setPending([]);
     setPrompt("");
   };
@@ -51,14 +48,14 @@ export function AgentInputBar() {
         <Input
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder={hint}
-          aria-label="Agent prompt"
+          placeholder={t("agent.hint")}
+          aria-label={t("agent.promptAria")}
           onKeyDown={(e) => {
             if (e.key === "Enter") run();
           }}
         />
         <Button size="sm" onClick={run}>
-          Propose
+          {t("agent.propose")}
         </Button>
       </div>
       {pending.length > 0 ? (
@@ -73,18 +70,15 @@ export function AgentInputBar() {
           ))}
           <div className="sandbox-agent-pending-actions">
             <Button size="sm" variant="ghost" onClick={() => setPending([])}>
-              Dismiss
+              {t("agent.dismiss")}
             </Button>
             <Button size="sm" variant="primary" onClick={confirmAll}>
-              Confirm apply
+              {t("agent.confirm")}
             </Button>
           </div>
         </div>
       ) : (
-        <p className="sandbox-help">
-          Agent proposals require confirmation before they change tokens. Model backend
-          is not wired yet — local heuristics only.
-        </p>
+        <p className="sandbox-help">{t("agent.help")}</p>
       )}
     </div>
   );

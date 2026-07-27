@@ -8,6 +8,7 @@ import {
   type PointerEvent,
 } from "react";
 import { Input, Popover, Slider, Tooltip } from "@fynns/ui";
+import { useLocale, type MessageKey } from "../i18n";
 import {
   approxHueFromHex,
   hexToRgb,
@@ -18,13 +19,13 @@ import {
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /** Quick-pick hues kept on-brand (teal family + a few complementary accents). */
-const HUE_PRESETS: Array<{ label: string; hue: number }> = [
-  { label: "Teal", hue: 168 },
-  { label: "Cyan", hue: 190 },
-  { label: "Blue", hue: 210 },
-  { label: "Violet", hue: 270 },
-  { label: "Rose", hue: 340 },
-  { label: "Amber", hue: 38 },
+const HUE_PRESETS: Array<{ labelKey: MessageKey; hue: number }> = [
+  { labelKey: "hue.teal", hue: 168 },
+  { labelKey: "hue.cyan", hue: 190 },
+  { labelKey: "hue.blue", hue: 210 },
+  { labelKey: "hue.violet", hue: 270 },
+  { labelKey: "hue.rose", hue: 340 },
+  { labelKey: "hue.amber", hue: 38 },
 ];
 
 /**
@@ -40,6 +41,7 @@ const HUE_DEGREE_MAX = 359;
  * independently. One coalesced undo step per gesture.
  */
 export function HueWheel() {
+  const { t } = useLocale();
   const { mergeOverrides, resolved } = useTokenDraft();
   const diskRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -162,15 +164,15 @@ export function HueWheel() {
   return (
     <div className="sandbox-hue-wheel">
       <div className="sandbox-hue-meta">
-        <span>Accent hue</span>
+        <span>{t("hue.slider")}</span>
         <div className="sandbox-hue-fields">
           <label className="sandbox-hue-field">
-            <span className="fynns-sr-only">Hue degrees</span>
+            <span className="fynns-sr-only">{t("hue.degreeField")}</span>
             <Input
               className="sandbox-hue-input sandbox-hue-input--deg"
               inputMode="numeric"
               spellCheck={false}
-              aria-label="Hue degrees"
+              aria-label={t("hue.degreeField")}
               value={hueDraft ?? `${Math.round(hue)}°`}
               onChange={(event) => setHueDraft(event.target.value)}
               onFocus={(event) => {
@@ -191,11 +193,11 @@ export function HueWheel() {
             />
           </label>
           <label className="sandbox-hue-field">
-            <span className="fynns-sr-only">Accent hex</span>
+            <span className="fynns-sr-only">{t("hue.hexField")}</span>
             <Input
               className="sandbox-hue-input sandbox-hue-input--hex"
               spellCheck={false}
-              aria-label="Accent hex"
+              aria-label={t("hue.hexField")}
               value={hexDraft ?? accentHex}
               onChange={(event) => setHexDraft(event.target.value)}
               onFocus={(event) => {
@@ -218,12 +220,13 @@ export function HueWheel() {
         </div>
       </div>
 
-      <div className="sandbox-hue-presets" role="group" aria-label="Hue presets">
+      <div className="sandbox-hue-presets" role="group" aria-label={t("hue.presetsAria")}>
         {HUE_PRESETS.map((preset) => {
+          const label = t(preset.labelKey);
           const active = Math.abs(((hue - preset.hue + 540) % 360) - 180) < 8;
           const swatch = hslToHex(preset.hue, 62, 50);
           return (
-            <Tooltip key={preset.label} content={preset.label} side="top">
+            <Tooltip key={preset.labelKey} content={label} side="top">
               <button
                 type="button"
                 className={[
@@ -232,7 +235,7 @@ export function HueWheel() {
                 ]
                   .filter(Boolean)
                   .join(" ")}
-                aria-label={`${preset.label} (${preset.hue}°)`}
+                aria-label={`${label} (${preset.hue}°)`}
                 aria-pressed={active}
                 style={{ background: swatch }}
                 onClick={() => setHue(preset.hue)}
@@ -240,7 +243,7 @@ export function HueWheel() {
             </Tooltip>
           );
         })}
-        <Tooltip content="Open hue palette" side="top">
+        <Tooltip content={t("hue.openPalette")} side="top">
           <button
             ref={triggerRef}
             type="button"
@@ -251,7 +254,7 @@ export function HueWheel() {
             ]
               .filter(Boolean)
               .join(" ")}
-            aria-label="Open hue palette"
+            aria-label={t("hue.openPalette")}
             aria-haspopup="dialog"
             aria-expanded={paletteOpen}
             onClick={() => setPaletteOpen((wasOpen) => !wasOpen)}
@@ -272,11 +275,11 @@ export function HueWheel() {
           className="sandbox-hue-disk"
           role="slider"
           tabIndex={0}
-          aria-label="Accent hue palette"
+          aria-label={t("hue.paletteAria")}
           aria-valuemin={0}
           aria-valuemax={HUE_DEGREE_MAX}
           aria-valuenow={Math.min(HUE_DEGREE_MAX, Math.round(hue) % 360)}
-          aria-valuetext={`${Math.round(hue)} degrees`}
+          aria-valuetext={t("hue.degrees", { n: Math.round(hue) })}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -304,7 +307,7 @@ export function HueWheel() {
         min={0}
         max={HUE_DEGREE_MAX}
         step={1}
-        ariaLabel="Accent hue"
+        ariaLabel={t("hue.slider")}
         onChange={setHue}
       />
     </div>

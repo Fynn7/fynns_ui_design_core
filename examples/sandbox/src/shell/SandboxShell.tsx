@@ -16,6 +16,7 @@ import {
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
@@ -34,6 +35,7 @@ export type SandboxPage =
   | "templates";
 
 export function SandboxShell() {
+  const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const { undo, redo, canUndo, canRedo, reset } = useTokenDraft();
@@ -66,38 +68,38 @@ export function SandboxShell() {
 
   const pageTitle =
     page === "playground"
-      ? "Playground"
+      ? t("nav.playground")
       : page === "globals"
-        ? "Globals"
+        ? t("nav.globals")
         : page === "foundations"
-          ? "Foundations"
+          ? t("nav.foundations")
           : page === "motion"
-            ? "Motion"
-            : "Templates";
+            ? t("nav.motion")
+            : t("nav.templates");
 
   return (
     <div className="sandbox-root">
       <Toaster position="bottom-right" />
       <Panel className="sandbox-nav" side="left">
-        <div className="sandbox-brand">fynns sandbox</div>
-        <nav className="sandbox-nav-list" aria-label="Sandbox pages">
+        <div className="sandbox-brand">{t("brand.name")}</div>
+        <nav className="sandbox-nav-list" aria-label={t("nav.aria")}>
           <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
-            <NavItemLabel>Playground</NavItemLabel>
+            <NavItemLabel>{t("nav.playground")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
-            <NavItemLabel>Globals</NavItemLabel>
+            <NavItemLabel>{t("nav.globals")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "foundations"} onClick={() => setPage("foundations")}>
-            <NavItemLabel>Foundations</NavItemLabel>
+            <NavItemLabel>{t("nav.foundations")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "motion"} onClick={() => setPage("motion")}>
-            <NavItemLabel>Motion</NavItemLabel>
+            <NavItemLabel>{t("nav.motion")}</NavItemLabel>
           </NavItem>
         </nav>
         <div className="sandbox-nav-foot">
-          <Tooltip content="Templates & config export/import" side="right">
+          <Tooltip content={t("nav.templatesTip")} side="right">
             <IconButton
-              aria-label="Templates and config"
+              aria-label={t("nav.templatesAria")}
               aria-pressed={page === "templates"}
               className={
                 page === "templates" ? "sandbox-nav-gear sandbox-nav-gear--active" : "sandbox-nav-gear"
@@ -114,31 +116,31 @@ export function SandboxShell() {
         <header className="sandbox-topbar">
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
-            <Tooltip content="Undo (Ctrl+Z)">
-              <IconButton aria-label="Undo" disabled={!canUndo} onClick={undo}>
+            <Tooltip content={t("topbar.undoTip")}>
+              <IconButton aria-label={t("topbar.undo")} disabled={!canUndo} onClick={undo}>
                 <UndoIcon size={16} />
               </IconButton>
             </Tooltip>
-            <Tooltip content="Redo (Ctrl+Y)">
-              <IconButton aria-label="Redo" disabled={!canRedo} onClick={redo}>
+            <Tooltip content={t("topbar.redoTip")}>
+              <IconButton aria-label={t("topbar.redo")} disabled={!canRedo} onClick={redo}>
                 <RefreshIcon size={16} />
               </IconButton>
             </Tooltip>
-            <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
+            <Tooltip content={t("topbar.resetTip")}>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => {
                   reset();
-                  toast.message("Draft reset");
+                  toast.message(t("topbar.resetToast"));
                 }}
               >
-                Reset
+                {t("topbar.reset")}
               </Button>
             </Tooltip>
-            <Tooltip content={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}>
+            <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <Button size="sm" variant="ghost" onClick={toggleTheme}>
-                {theme === "light" ? "Dark" : "Light"} theme
+                {theme === "light" ? t("topbar.themeDark") : t("topbar.themeLight")}
               </Button>
             </Tooltip>
           </div>
