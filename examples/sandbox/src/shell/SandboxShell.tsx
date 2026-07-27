@@ -1,18 +1,18 @@
 import {
   applyFynnsThemeMode,
-  Button,
   getFynnsThemeMode,
   IconButton,
+  MoonIcon,
   NavItem,
   NavItemLabel,
   Panel,
   RefreshIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
+  SunIcon,
   toast,
   Toaster,
   Tooltip,
-  UndoIcon,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export type SandboxPage =
 export function SandboxShell() {
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const { undo, redo, canUndo, canRedo, reset } = useTokenDraft();
+  const { undo, redo, reset } = useTokenDraft();
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -114,33 +114,26 @@ export function SandboxShell() {
         <header className="sandbox-topbar">
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
-            <Tooltip content="Undo (Ctrl+Z)">
-              <IconButton aria-label="Undo" disabled={!canUndo} onClick={undo}>
-                <UndoIcon size={16} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content="Redo (Ctrl+Y)">
-              <IconButton aria-label="Redo" disabled={!canRedo} onClick={redo}>
-                <RefreshIcon size={16} />
-              </IconButton>
-            </Tooltip>
             {page === "playground" ? <AgentInputBar /> : null}
             <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
-              <Button
-                size="sm"
-                variant="ghost"
+              <IconButton
+                aria-label="Reset draft overrides"
                 onClick={() => {
                   reset();
                   toast.message("Draft reset");
                 }}
               >
-                Reset
-              </Button>
+                <RefreshIcon size={16} aria-hidden />
+              </IconButton>
             </Tooltip>
             <Tooltip content={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}>
-              <Button size="sm" variant="ghost" onClick={toggleTheme}>
-                {theme === "light" ? "Dark" : "Light"} theme
-              </Button>
+              <IconButton
+                aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+                aria-pressed={theme === "light"}
+                onClick={toggleTheme}
+              >
+                {theme === "light" ? <MoonIcon size={16} /> : <SunIcon size={16} />}
+              </IconButton>
             </Tooltip>
           </div>
         </header>
