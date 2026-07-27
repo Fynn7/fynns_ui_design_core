@@ -13,7 +13,6 @@ import {
   toast,
   Toaster,
   Tooltip,
-  ToggleGroup,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
@@ -21,9 +20,7 @@ import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
-import { CollapsibleCardPreviewCanvas } from "../pages/CollapsibleCardPreviewCanvas";
 import { PropertyInspector } from "../pages/PropertyInspector";
-import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
 import { GlobalsPage } from "../pages/GlobalsPage";
@@ -42,7 +39,6 @@ export function SandboxShell() {
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const { undo, redo, reset } = useTokenDraft();
-  const { target, setTarget } = usePlaygroundTarget();
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -150,21 +146,7 @@ export function SandboxShell() {
           }
         >
           <main className="sandbox-canvas fynns-scroll">
-            {page === "playground" ? (
-              <div className="sandbox-playground">
-                <div className="sandbox-playground-target">
-                  <ToggleGroup
-                    value={target}
-                    onChange={(id) => setTarget(id as typeof target)}
-                    options={[
-                      { value: "card", label: t("playground.targetCard") },
-                      { value: "collapsible-card", label: t("playground.targetCollapsible") },
-                    ]}
-                  />
-                </div>
-                {target === "card" ? <CardPreviewCanvas /> : <CollapsibleCardPreviewCanvas />}
-              </div>
-            ) : null}
+            {page === "playground" ? <CardPreviewCanvas /> : null}
             {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}

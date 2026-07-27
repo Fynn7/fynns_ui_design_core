@@ -271,16 +271,6 @@
   font-size: var(--fynns-font-size-caption);
 }
 
-.sandbox-playground-target {
-  display: flex;
-  justify-content: flex-start;
-  padding: var(--fynns-space-sm) var(--fynns-space-md) 0;
-}
-
-.sandbox-playground .sandbox-preview {
-  padding-top: var(--fynns-space-sm);
-}
-
 .sandbox-inspector-actions {
   display: flex;
   gap: var(--fynns-space-sm);

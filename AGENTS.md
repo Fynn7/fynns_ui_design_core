@@ -274,13 +274,6 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   subject card (distinct from `PanelCard` layout shell). Uses elevation /
   state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
   toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
-- **CollapsibleCard** — Card shell with **CollapsibleCardHeader** (chevron
-  trigger) + optional **CardMedia** / **CardContent** / **CardActions**.
-  `{ variant?, open?, defaultOpen?, onOpenChange?, disabled?, mediaCollapse?:
-  "always"|"withBody", cssOverrides? }`. Factory defaults from
-  `COLLAPSIBLE_CARD_RECIPE` in `collapsible-card.recipe.ts` (sandbox **Apply
-  component template** writes that file + the `@fynns-recipe collapsible-card`
-  CSS block). Not `interactive` on the root card.
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.

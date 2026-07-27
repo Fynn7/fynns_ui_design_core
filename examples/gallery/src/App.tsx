@@ -9,8 +9,6 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  CollapsibleCard,
-  CollapsibleCardHeader,
   ConfirmDialog,
   Dialog,
   Drawer,
@@ -154,40 +152,6 @@ export function App() {
               </Button>
             </CardActions>
           </Card>
-        </Row>
-      </Section>
-
-      <Section title="CollapsibleCard">
-        <Row>
-          <CollapsibleCard variant="elevated" defaultOpen style={{ width: "18rem" }}>
-            <CardMedia>
-              <div className="fynns-card-media-placeholder" aria-hidden>
-                Media
-              </div>
-            </CardMedia>
-            <CollapsibleCardHeader title="Release notes" subtitle="v0.2" avatar="R" />
-            <CardContent>
-              Card anatomy with a disclosure header. Content and actions collapse together; media
-              stays visible by default.
-            </CardContent>
-            <CardActions align="end">
-              <Button size="sm" variant="ghost">
-                Later
-              </Button>
-              <Button size="sm" variant="primary">
-                Read
-              </Button>
-            </CardActions>
-          </CollapsibleCard>
-          <CollapsibleCard variant="filled" mediaCollapse="withBody" style={{ width: "18rem" }}>
-            <CardMedia>
-              <div className="fynns-card-media-placeholder" aria-hidden>
-                Media
-              </div>
-            </CardMedia>
-            <CollapsibleCardHeader title="With body" subtitle="Media hides when closed" />
-            <CardContent>Uses mediaCollapse=&quot;withBody&quot;.</CardContent>
-          </CollapsibleCard>
         </Row>
       </Section>
 
