@@ -6,8 +6,6 @@ export function serializeCollapsibleCardRecipeFile(recipe: CollapsibleCardRecipe
     .map((key) => `    ${JSON.stringify(key)}: ${JSON.stringify(recipe.cssOverrides[key])},`)
     .join("\n");
 
-  const cssBlock = cssEntries ? `${cssEntries}\n` : "";
-
   return `import type { CardVariant } from "../theme/tokens";
 
 export type CollapsibleCardMediaCollapse = "always" | "withBody";
