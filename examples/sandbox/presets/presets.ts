@@ -30,7 +30,7 @@ export const GLOBAL_SHAPE_PRESETS: SandboxPreset[] = [
   },
 ];
 
-/** Card Playground presets (non-shape). */
+/** Surfaces page presets (non-shape). */
 export const CARD_PRESETS: SandboxPreset[] = [
   {
     id: "stronger-elevation",

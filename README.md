@@ -86,7 +86,7 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Playground** (Card or Collapsible target),
+separate design language. Pages: **Surfaces** (Card or Collapsible target),
 **Globals** (system shape / radius), Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates).
@@ -115,7 +115,7 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - **Save as template** stores the same bundle under a name in `localStorage`
   (`fynns-sandbox-templates`). Apply / export / rename / delete from the list.
 - Templates do not write `tokens.ts` by themselves — use **Apply changes** on
-  Playground / Globals after loading a template if you want source writeback.
+  Surfaces / Globals after loading a template if you want source writeback.
 
 ### Globals (system shape)
 
@@ -125,7 +125,7 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Presets: M3-aligned radius, Restrained radius
 - Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
 
-### Preview toggles (Playground)
+### Preview toggles (Surfaces)
 
 Switch the canvas target with **Card | Collapsible** (preview-only; does not
 change Apply writeback).
@@ -141,7 +141,7 @@ change Apply writeback).
 - States: Open (controlled preview)
 - Anatomy: Header actions on/off
 
-### Inspector knobs (Playground)
+### Inspector knobs (Surfaces)
 
 Shared token draft for both Card and Collapsible targets (Apply still writes
 `tokens.ts` only — no component recipe writeback):
