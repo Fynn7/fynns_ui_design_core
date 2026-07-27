@@ -1,44 +1,39 @@
 import { Button, Dialog, toast, Tooltip } from "@fynns/ui";
 import { useState } from "react";
 import {
-  applyTokenOverrides,
-  previewTokenOverrides,
-  type ApplyFileDiff,
-} from "../export/applyTokens";
+  applyRecipeDraft,
+  previewRecipeDraft,
+  type ApplyRecipeFileDiff,
+} from "../export/applyRecipe";
 import { useLocale } from "../i18n";
-import { useTokenDraft } from "../state/TokenDraftProvider";
+import { useRecipeDraft } from "../state/RecipeDraftProvider";
 
 type Phase = "idle" | "previewing" | "review" | "applying";
 
 /**
- * Inspector footer control: preview per-file diffs, then confirm writeback.
+ * Inspector footer: preview + apply CollapsibleCard template to source files.
  */
-export function ApplyChangesControl() {
+export function ApplyRecipeControl() {
   const { t } = useLocale();
-  const { draft, reset } = useTokenDraft();
-  const overrideCount = Object.keys(draft.overrides).length;
+  const { draft, isDirty, commit } = useRecipeDraft();
   const [phase, setPhase] = useState<Phase>("idle");
-  const [files, setFiles] = useState<ApplyFileDiff[]>([]);
-  const [appliedCount, setAppliedCount] = useState(0);
-  const [skippedCount, setSkippedCount] = useState(0);
+  const [files, setFiles] = useState<ApplyRecipeFileDiff[]>([]);
 
   const busy = phase === "previewing" || phase === "applying";
   const reviewOpen = phase === "review" || phase === "applying";
   const changedFiles = files.filter((f) => f.changed);
 
   const openReview = async () => {
-    if (overrideCount === 0 || busy) return;
+    if (!isDirty || busy) return;
     setPhase("previewing");
     try {
-      const preview = await previewTokenOverrides(draft.overrides);
+      const preview = await previewRecipeDraft(draft);
       if (!preview.ok) {
         toast.error(preview.error ?? t("apply.toastPreviewFailed"));
         setPhase("idle");
         return;
       }
       setFiles(preview.files);
-      setAppliedCount(preview.applied.length);
-      setSkippedCount(preview.skipped.length);
       setPhase("review");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
@@ -56,25 +51,16 @@ export function ApplyChangesControl() {
     if (phase !== "review") return;
     setPhase("applying");
     try {
-      const result = await applyTokenOverrides(draft.overrides);
+      const result = await applyRecipeDraft(draft);
       if (!result.ok) {
         toast.error(result.error ?? t("apply.toastApplyFailed"));
         setPhase("review");
         return;
       }
-      reset();
+      toast.success(t("applyRecipe.toastOk"));
+      commit();
       setPhase("idle");
       setFiles([]);
-      if (result.skipped.length > 0) {
-        toast.warning(
-          t("apply.toastPartial", {
-            applied: result.applied.length,
-            skipped: result.skipped.length,
-          }),
-        );
-      } else {
-        toast.success(t("apply.toastOk", { applied: result.applied.length }));
-      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
       setPhase("review");
@@ -83,14 +69,9 @@ export function ApplyChangesControl() {
 
   return (
     <>
-      <Tooltip content={t("apply.tip")}>
-        <Button
-          size="sm"
-          variant="primary"
-          disabled={overrideCount === 0 || busy}
-          onClick={() => void openReview()}
-        >
-          {phase === "previewing" ? t("apply.preparing") : t("apply.button")}
+      <Tooltip content={isDirty ? t("applyRecipe.tipDirty") : t("applyRecipe.tipClean")}>
+        <Button size="sm" disabled={!isDirty || busy} onClick={() => void openReview()}>
+          {phase === "previewing" ? t("applyRecipe.preparing") : t("applyRecipe.button")}
         </Button>
       </Tooltip>
 
@@ -99,20 +80,11 @@ export function ApplyChangesControl() {
         onOpenChange={(open) => {
           if (!open) closeReview();
         }}
-        title={t("apply.dialogTitle")}
-        description={
-          skippedCount > 0
-            ? t("apply.dialogDescSkipped", {
-                applied: appliedCount,
-                skipped: skippedCount,
-              })
-            : t("apply.dialogDesc", {
-                applied: appliedCount,
-                files: changedFiles.length,
-              })
-        }
+        title={t("applyRecipe.dialogTitle")}
+        description={t("applyRecipe.dialogDesc", { files: changedFiles.length })}
         className="sandbox-apply-diff-dialog"
         showCloseButton={phase !== "applying"}
+        closeAriaLabel={t("applyRecipe.closeAria")}
       >
         <div className="sandbox-apply-diff-list fynns-scroll">
           {files.length === 0 ? (

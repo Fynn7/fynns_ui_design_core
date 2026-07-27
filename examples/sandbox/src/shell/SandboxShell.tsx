@@ -1,25 +1,29 @@
 import {
   applyFynnsThemeMode,
-  Button,
   getFynnsThemeMode,
   IconButton,
+  MoonIcon,
   NavItem,
   NavItemLabel,
   Panel,
   RefreshIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
+  SunIcon,
   toast,
   Toaster,
   Tooltip,
-  UndoIcon,
+  ToggleGroup,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
+import { CollapsibleCardPreviewCanvas } from "../pages/CollapsibleCardPreviewCanvas";
 import { PropertyInspector } from "../pages/PropertyInspector";
+import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
 import { GlobalsPage } from "../pages/GlobalsPage";
@@ -34,9 +38,11 @@ export type SandboxPage =
   | "templates";
 
 export function SandboxShell() {
+  const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const { undo, redo, canUndo, canRedo, reset } = useTokenDraft();
+  const { undo, redo, reset } = useTokenDraft();
+  const { target, setTarget } = usePlaygroundTarget();
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -66,45 +72,45 @@ export function SandboxShell() {
 
   const pageTitle =
     page === "playground"
-      ? "Playground"
+      ? t("nav.playground")
       : page === "globals"
-        ? "Globals"
+        ? t("nav.globals")
         : page === "foundations"
-          ? "Foundations"
+          ? t("nav.foundations")
           : page === "motion"
-            ? "Motion"
-            : "Templates";
+            ? t("nav.motion")
+            : t("nav.templates");
 
   return (
     <div className="sandbox-root">
       <Toaster position="bottom-right" />
       <Panel className="sandbox-nav" side="left">
-        <div className="sandbox-brand">fynns sandbox</div>
-        <nav className="sandbox-nav-list" aria-label="Sandbox pages">
+        <div className="sandbox-brand">{t("brand.name")}</div>
+        <nav className="sandbox-nav-list" aria-label={t("nav.aria")}>
           <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
-            <NavItemLabel>Playground</NavItemLabel>
+            <NavItemLabel>{t("nav.playground")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
-            <NavItemLabel>Globals</NavItemLabel>
+            <NavItemLabel>{t("nav.globals")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "foundations"} onClick={() => setPage("foundations")}>
-            <NavItemLabel>Foundations</NavItemLabel>
+            <NavItemLabel>{t("nav.foundations")}</NavItemLabel>
           </NavItem>
           <NavItem active={page === "motion"} onClick={() => setPage("motion")}>
-            <NavItemLabel>Motion</NavItemLabel>
+            <NavItemLabel>{t("nav.motion")}</NavItemLabel>
           </NavItem>
         </nav>
         <div className="sandbox-nav-foot">
-          <Tooltip content="Templates & config export/import" side="right">
+          <Tooltip content={t("nav.templatesTip")} side="right">
             <IconButton
-              aria-label="Templates and config"
+              aria-label={t("nav.templatesAria")}
               aria-pressed={page === "templates"}
               className={
                 page === "templates" ? "sandbox-nav-gear sandbox-nav-gear--active" : "sandbox-nav-gear"
               }
               onClick={() => setPage("templates")}
             >
-              <SettingsIcon size={18} />
+              <SettingsIcon size={18} aria-hidden />
             </IconButton>
           </Tooltip>
         </div>
@@ -114,32 +120,26 @@ export function SandboxShell() {
         <header className="sandbox-topbar">
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
-            <Tooltip content="Undo (Ctrl+Z)">
-              <IconButton aria-label="Undo" disabled={!canUndo} onClick={undo}>
-                <UndoIcon size={16} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content="Redo (Ctrl+Y)">
-              <IconButton aria-label="Redo" disabled={!canRedo} onClick={redo}>
-                <RefreshIcon size={16} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
-              <Button
-                size="sm"
-                variant="ghost"
+            {page === "playground" ? <AgentInputBar /> : null}
+            <Tooltip content={t("topbar.resetTip")}>
+              <IconButton
+                aria-label={t("topbar.resetAria")}
                 onClick={() => {
                   reset();
-                  toast.message("Draft reset");
+                  toast.message(t("topbar.resetToast"));
                 }}
               >
-                Reset
-              </Button>
+                <RefreshIcon size={16} aria-hidden />
+              </IconButton>
             </Tooltip>
-            <Tooltip content={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}>
-              <Button size="sm" variant="ghost" onClick={toggleTheme}>
-                {theme === "light" ? "Dark" : "Light"} theme
-              </Button>
+            <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
+              <IconButton
+                aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
+                aria-pressed={theme === "light"}
+                onClick={toggleTheme}
+              >
+                {theme === "light" ? <MoonIcon size={16} aria-hidden /> : <SunIcon size={16} aria-hidden />}
+              </IconButton>
             </Tooltip>
           </div>
         </header>
@@ -151,10 +151,19 @@ export function SandboxShell() {
         >
           <main className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
-              <>
-                <CardPreviewCanvas />
-                <AgentInputBar />
-              </>
+              <div className="sandbox-playground">
+                <div className="sandbox-playground-target">
+                  <ToggleGroup
+                    value={target}
+                    onChange={(id) => setTarget(id as typeof target)}
+                    options={[
+                      { value: "card", label: t("playground.targetCard") },
+                      { value: "collapsible-card", label: t("playground.targetCollapsible") },
+                    ]}
+                  />
+                </div>
+                {target === "card" ? <CardPreviewCanvas /> : <CollapsibleCardPreviewCanvas />}
+              </div>
             ) : null}
             {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}

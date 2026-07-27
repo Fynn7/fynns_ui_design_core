@@ -1,31 +1,39 @@
-import { useMemo, useState } from "react";
-import { BotIcon, Button, Input, toast } from "@fynns/ui";
+import { useRef, useState } from "react";
+import {
+  BotIcon,
+  Button,
+  IconButton,
+  Input,
+  Popover,
+  toast,
+  Tooltip,
+} from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
+import { useLocale } from "../i18n";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
  * Phase 4 stub: natural-language proposals become TokenOperations after
- * explicit user confirmation. No model backend is wired yet — a local
- * heuristic parser demos the confirmation UX.
+ * explicit user confirmation. Top-bar icon opens a popover; no model backend
+ * yet — local heuristics only.
  */
 export function AgentInputBar() {
+  const { t } = useLocale();
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const { apply } = useTokenDraft();
+  const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
-
-  const hint = useMemo(
-    () => 'Try: "make corners rounder" or "softer hover"',
-    [],
-  );
 
   const run = () => {
     const proposals = proposeFromPrompt(prompt);
     if (proposals.length === 0) {
-      toast.warning("No structured proposals yet — refine the request or wait for a model backend.");
+      toast.warning(t("agent.toastNone"));
       return;
     }
     setPending(proposals);
-    toast.info(`${proposals.length} proposal(s) ready — confirm to apply.`);
+    setOpen(true);
+    toast.info(t("agent.toastReady", { count: proposals.length }));
   };
 
   const confirmAll = () => {
@@ -39,53 +47,80 @@ export function AgentInputBar() {
         reasoning: p.reasoning,
       });
     }
-    toast.success("Agent proposals applied");
+    toast.success(t("agent.toastApplied"));
     setPending([]);
     setPrompt("");
+    setOpen(false);
   };
 
+  const tooltip =
+    pending.length > 0
+      ? t("agent.tipPending", { count: pending.length })
+      : t("agent.tipIdle");
+
   return (
-    <div className="sandbox-agent-bar">
-      <div className="sandbox-agent-row">
-        <BotIcon size={18} aria-hidden />
-        <Input
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder={hint}
-          aria-label="Agent prompt"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") run();
-          }}
-        />
-        <Button size="sm" onClick={run}>
-          Propose
-        </Button>
-      </div>
-      {pending.length > 0 ? (
-        <div className="sandbox-agent-pending">
-          {pending.map((p) => (
-            <div key={p.id} className="sandbox-agent-proposal">
-              <code>
-                {p.group}.{p.key} → {p.value}
-              </code>
-              <span>{p.reasoning}</span>
-            </div>
-          ))}
-          <div className="sandbox-agent-pending-actions">
-            <Button size="sm" variant="ghost" onClick={() => setPending([])}>
-              Dismiss
-            </Button>
-            <Button size="sm" variant="primary" onClick={confirmAll}>
-              Confirm apply
+    <>
+      <Tooltip content={tooltip}>
+        <IconButton
+          ref={triggerRef}
+          aria-label={t("agent.triggerAria")}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          className={
+            pending.length > 0 ? "sandbox-agent-trigger sandbox-agent-trigger--pending" : "sandbox-agent-trigger"
+          }
+          onClick={() => setOpen((wasOpen) => !wasOpen)}
+        >
+          <BotIcon size={16} aria-hidden />
+        </IconButton>
+      </Tooltip>
+      <Popover
+        open={open}
+        onOpenChange={setOpen}
+        anchorRef={triggerRef}
+        side="bottom"
+        align="end"
+        className="sandbox-agent-popover"
+      >
+        <div className="sandbox-agent-panel">
+          <div className="sandbox-agent-row">
+            <Input
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder={t("agent.hint")}
+              aria-label={t("agent.promptAria")}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") run();
+              }}
+            />
+            <Button size="sm" onClick={run}>
+              {t("agent.propose")}
             </Button>
           </div>
+          {pending.length > 0 ? (
+            <div className="sandbox-agent-pending">
+              {pending.map((p) => (
+                <div key={p.id} className="sandbox-agent-proposal">
+                  <code>
+                    {p.group}.{p.key} → {p.value}
+                  </code>
+                  <span>{p.reasoning}</span>
+                </div>
+              ))}
+              <div className="sandbox-agent-pending-actions">
+                <Button size="sm" variant="ghost" onClick={() => setPending([])}>
+                  {t("agent.dismiss")}
+                </Button>
+                <Button size="sm" variant="primary" onClick={confirmAll}>
+                  {t("agent.confirm")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <p className="sandbox-help">{t("agent.help")}</p>
+          )}
         </div>
-      ) : (
-        <p className="sandbox-help">
-          Agent proposals require confirmation before they change tokens. Model backend
-          is not wired yet — local heuristics only.
-        </p>
-      )}
-    </div>
+      </Popover>
+    </>
   );
 }

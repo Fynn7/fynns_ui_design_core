@@ -86,19 +86,29 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Playground** (Card), **Globals** (system
-shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
-footer — config JSON export/import and named templates). Editing
-`--fynns-radius-*` on Globals
+separate design language. Pages: **Playground** (Card or **CollapsibleCard**),
+**Globals** (system shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
+footer — settings: language, config JSON export/import, and named templates).
+Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
+### Language (English / 中文)
+
+- Open **Templates** via the gear control and use the **Language** toggle
+  (`English` / `中文`) at the top of the settings page.
+- Choice persists in `localStorage` (`fynns-sandbox-locale`) and sets
+  `document.documentElement.lang` plus `data-fynns-locale`.
+- Catalog: [`examples/sandbox/src/i18n/`](examples/sandbox/src/i18n/).
+  `@fynns/ui` default labels stay English; the sandbox passes localized chrome.
+
 ### Templates & config JSON
 
 - Open via the **gear** control at the bottom of the left nav (special page,
   no inspector aside).
+- **Language** switch (English / 中文) sits at the top of this settings page.
 - **Export JSON** / **Import JSON** move the full sandbox configuration:
   `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
 - **Save as template** stores the same bundle under a name in `localStorage`
@@ -114,13 +124,15 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Presets: M3-aligned radius, Restrained radius
 - Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
 
-### Preview toggles (Card Playground)
+### Preview toggles (Playground)
 
-- Anatomy: Media on/off
-- States: Interactive, Disabled
-- Actions: align start|end
+- **Component**: Card | CollapsibleCard (toolbar above canvas)
+- **Card**: Anatomy Media; States Interactive / Disabled; Actions align
+- **CollapsibleCard**: Anatomy Media; States Default open / Disabled; Actions align
 
-### Inspector knobs (Card Playground)
+### Inspector knobs (Playground)
+
+Global token knobs (both components):
 
 - Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
   hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
@@ -132,8 +144,8 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
   (sandbox-only, not Apply writeback)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
-**Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft
-history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+**Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
+draft history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 
@@ -142,6 +154,13 @@ light/dark theme, and page nav are not in the draft history.
 the draft and runs `npm run gen:theme` (Vite dev middleware). That updates the
 design-system source consumed by every `@fynns/ui` client. Until then, overrides
 stay in the draft / `localStorage` and only affect the sandbox preview.
+
+**Apply component template** (CollapsibleCard only) reviews diffs for
+`src/primitives/collapsible-card.recipe.ts` and the `@fynns-recipe collapsible-card`
+block in `src/primitives/primitives.css`, then writes both (dev middleware only).
+Template fields: default variant, default open, media collapse, and component-local
+`--fynns-*` overrides (e.g. header gap). Global color/spacing still use **Apply changes**.
+
 ## Optional package distribution
 
 `package.json` is preconfigured (`exports`, `publishConfig`) so the library can

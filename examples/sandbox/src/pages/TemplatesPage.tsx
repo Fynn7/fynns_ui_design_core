@@ -6,6 +6,7 @@ import {
   Input,
   Textarea,
   toast,
+  ToggleGroup,
   Tooltip,
   TrashIcon,
   UploadIcon,
@@ -19,6 +20,7 @@ import {
   type SandboxConfigBundle,
   type SandboxTemplate,
 } from "../config/sandboxConfig";
+import { useLocale, type Locale } from "../i18n";
 import {
   deleteTemplate,
   listTemplates,
@@ -33,10 +35,11 @@ export type TemplatesPageProps = {
 };
 
 /**
- * Special settings page: export/import full config JSON and manage user templates
+ * Special settings page: language, export/import full config JSON, and user templates
  * (same JSON shape). Opened from the nav gear icon.
  */
 export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
+  const { t, plural, locale, setLocale } = useLocale();
   const { draft, loadPreset } = useTokenDraft();
   const fileRef = useRef<HTMLInputElement>(null);
   const [templates, setTemplates] = useState(() => listTemplates());
@@ -62,14 +65,21 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
       applyFynnsThemeMode(bundle.theme);
       onThemeChange(bundle.theme);
       const n = Object.keys(bundle.overrides).length;
-      toast.success(`Loaded ${label} (${n} override${n === 1 ? "" : "s"}, ${bundle.theme})`);
+      toast.success(
+        t("templates.toastLoaded", {
+          label,
+          count: n,
+          plural: plural(n),
+          theme: bundle.theme,
+        }),
+      );
     },
-    [loadPreset, onThemeChange],
+    [loadPreset, onThemeChange, t, plural],
   );
 
   const exportCurrent = () => {
     downloadConfigJson(currentBundle());
-    toast.message("Config JSON downloaded");
+    toast.message(t("templates.toastDownloaded"));
   };
 
   const onImportFile = async (file: File | undefined) => {
@@ -85,7 +95,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
   const confirmSaveTemplate = () => {
     const name = saveName.trim();
     if (!name) {
-      toast.error("Template name is required");
+      toast.error(t("templates.toastNameRequired"));
       return;
     }
     saveTemplateFromBundle(currentBundle(), {
@@ -96,38 +106,59 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
     setSaveName("");
     setSaveDescription("");
     refresh();
-    toast.success(`Template "${name}" saved`);
+    toast.success(t("templates.toastSaved", { name }));
   };
 
   const exportTemplate = (tpl: SandboxTemplate) => {
-    const { id: _id, name, description: _desc, savedAt: _saved, ...bundle } = tpl;
-    downloadConfigJson(bundle, `fynns-template-${slugify(name)}.json`);
-    toast.message(`Exported "${name}"`);
+    const bundle: SandboxConfigBundle = {
+      kind: tpl.kind,
+      version: tpl.version,
+      exportedAt: tpl.exportedAt,
+      theme: tpl.theme,
+      overrides: tpl.overrides,
+      baseTokensHash: tpl.baseTokensHash,
+    };
+    downloadConfigJson(bundle, `fynns-template-${slugify(tpl.name)}.json`);
+    toast.message(t("templates.toastExported", { name: tpl.name }));
   };
 
   const overrideCount = Object.keys(draft.overrides).length;
 
   return (
     <div className="sandbox-templates">
+      <section className="sandbox-templates-hero" aria-labelledby="sandbox-settings-language">
+        <h2 id="sandbox-settings-language" className="sandbox-templates-section-title">
+          {t("settings.languageTitle")}
+        </h2>
+        <p className="sandbox-templates-lead">{t("settings.languageLead")}</p>
+        <ToggleGroup
+          size="compact"
+          value={locale}
+          onChange={(id) => setLocale(id as Locale)}
+          ariaLabel={t("settings.languageAria")}
+          options={[
+            { value: "en", label: t("settings.languageEn") },
+            { value: "zh", label: t("settings.languageZh") },
+          ]}
+        />
+      </section>
+
       <header className="sandbox-templates-hero">
-        <p className="sandbox-templates-lead">
-          Export or import the full sandbox configuration as JSON (token overrides + theme).
-          Save the same bundle as a named template for reuse.
-        </p>
+        <p className="sandbox-templates-lead">{t("templates.lead")}</p>
         <div className="sandbox-templates-actions">
-          <Tooltip content="Download current overrides and theme as JSON">
+          <Tooltip content={t("templates.exportTip")}>
             <Button size="sm" variant="primary" onClick={exportCurrent}>
               <DownloadIcon size={14} />
-              Export JSON
+              {t("templates.export")}
             </Button>
           </Tooltip>
-          <Tooltip content="Import a previously exported config JSON">
+          <Tooltip content={t("templates.importTip")}>
             <Button size="sm" variant="ghost" onClick={() => fileRef.current?.click()}>
               <UploadIcon size={14} />
-              Import JSON
+              {t("templates.import")}
             </Button>
           </Tooltip>
-          <Tooltip content="Save the current full configuration as a template">
+          <Tooltip content={t("templates.saveAsTip")}>
             <Button
               size="sm"
               variant="ghost"
@@ -137,7 +168,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                 setSaveOpen(true);
               }}
             >
-              Save as template
+              {t("templates.saveAs")}
             </Button>
           </Tooltip>
           <input
@@ -145,7 +176,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
             type="file"
             accept="application/json,.json"
             className="sandbox-file-input"
-            aria-label="Import config JSON"
+            aria-label={t("templates.importAria")}
             onChange={(event) => {
               const file = event.target.files?.[0];
               void onImportFile(file);
@@ -154,16 +185,18 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
           />
         </div>
         <p className="sandbox-muted">
-          Current draft: {overrideCount} override{overrideCount === 1 ? "" : "s"} · theme {theme}
+          {t("templates.currentDraft", {
+            count: overrideCount,
+            plural: plural(overrideCount),
+            theme,
+          })}
         </p>
       </header>
 
-      <section className="sandbox-templates-list" aria-label="Saved templates">
-        <h2 className="sandbox-templates-section-title">Saved templates</h2>
+      <section className="sandbox-templates-list" aria-label={t("templates.savedAria")}>
+        <h2 className="sandbox-templates-section-title">{t("templates.savedTitle")}</h2>
         {templates.length === 0 ? (
-          <p className="sandbox-muted">
-            No templates yet. Tune tokens on Playground / Globals, then Save as template.
-          </p>
+          <p className="sandbox-muted">{t("templates.empty")}</p>
         ) : (
           <ul className="sandbox-templates-cards">
             {templates.map((tpl) => (
@@ -174,20 +207,23 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                     <p className="sandbox-templates-card-desc">{tpl.description}</p>
                   ) : null}
                   <p className="sandbox-muted">
-                    {Object.keys(tpl.overrides).length} override
-                    {Object.keys(tpl.overrides).length === 1 ? "" : "s"} · {tpl.theme} ·{" "}
-                    {new Date(tpl.savedAt).toLocaleString()}
+                    {t("templates.cardMeta", {
+                      count: Object.keys(tpl.overrides).length,
+                      plural: plural(Object.keys(tpl.overrides).length),
+                      theme: tpl.theme,
+                      when: new Date(tpl.savedAt).toLocaleString(locale === "zh" ? "zh-CN" : "en"),
+                    })}
                   </p>
                 </div>
                 <div className="sandbox-templates-card-actions">
                   <Button size="sm" variant="primary" onClick={() => applyBundle(tpl, tpl.name)}>
-                    Apply
+                    {t("templates.apply")}
                   </Button>
-                  <Tooltip content="Download this template as JSON">
+                  <Tooltip content={t("templates.exportOneTip")}>
                     <Button
                       size="sm"
                       variant="ghost"
-                      aria-label={`Export ${tpl.name}`}
+                      aria-label={t("templates.exportOneAria", { name: tpl.name })}
                       onClick={() => exportTemplate(tpl)}
                     >
                       <DownloadIcon size={14} />
@@ -201,17 +237,17 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                       setRenameName(tpl.name);
                     }}
                   >
-                    Rename
+                    {t("templates.rename")}
                   </Button>
-                  <Tooltip content="Delete template">
+                  <Tooltip content={t("templates.deleteTip")}>
                     <Button
                       size="sm"
                       variant="ghost"
-                      aria-label={`Delete ${tpl.name}`}
+                      aria-label={t("templates.deleteAria", { name: tpl.name })}
                       onClick={() => {
                         deleteTemplate(tpl.id);
                         refresh();
-                        toast.message(`Deleted "${tpl.name}"`);
+                        toast.message(t("templates.toastDeleted", { name: tpl.name }));
                       }}
                     >
                       <TrashIcon size={14} />
@@ -227,34 +263,34 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
       <Dialog
         open={saveOpen}
         onOpenChange={setSaveOpen}
-        title="Save as template"
-        description="Stores the current overrides and theme in this browser (same JSON shape as Export)."
+        title={t("templates.saveDialogTitle")}
+        description={t("templates.saveDialogDesc")}
       >
         <div className="sandbox-templates-form">
           <label className="sandbox-templates-field">
-            <span>Name</span>
+            <span>{t("templates.name")}</span>
             <Input
               value={saveName}
               onChange={(event) => setSaveName(event.target.value)}
-              placeholder="e.g. Amber accent workshop"
-              aria-label="Template name"
+              placeholder={t("templates.namePlaceholder")}
+              aria-label={t("templates.nameAria")}
             />
           </label>
           <label className="sandbox-templates-field">
-            <span>Description (optional)</span>
+            <span>{t("templates.description")}</span>
             <Textarea
               value={saveDescription}
               onChange={(event) => setSaveDescription(event.target.value)}
               rows={3}
-              aria-label="Template description"
+              aria-label={t("templates.descriptionAria")}
             />
           </label>
           <div className="sandbox-apply-diff-foot">
             <Button size="sm" variant="ghost" onClick={() => setSaveOpen(false)}>
-              Cancel
+              {t("templates.cancel")}
             </Button>
             <Button size="sm" variant="primary" onClick={confirmSaveTemplate}>
-              Save template
+              {t("templates.saveTemplate")}
             </Button>
           </div>
         </div>
@@ -265,20 +301,20 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
         onOpenChange={(open) => {
           if (!open) setRenameId(null);
         }}
-        title="Rename template"
+        title={t("templates.renameTitle")}
       >
         <div className="sandbox-templates-form">
           <label className="sandbox-templates-field">
-            <span>Name</span>
+            <span>{t("templates.name")}</span>
             <Input
               value={renameName}
               onChange={(event) => setRenameName(event.target.value)}
-              aria-label="Template name"
+              aria-label={t("templates.nameAria")}
             />
           </label>
           <div className="sandbox-apply-diff-foot">
             <Button size="sm" variant="ghost" onClick={() => setRenameId(null)}>
-              Cancel
+              {t("templates.cancel")}
             </Button>
             <Button
               size="sm"
@@ -287,15 +323,15 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                 if (!renameId) return;
                 const updated = updateTemplateMeta(renameId, { name: renameName });
                 if (!updated) {
-                  toast.error("Template not found");
+                  toast.error(t("templates.toastNotFound"));
                   return;
                 }
                 setRenameId(null);
                 refresh();
-                toast.message("Template renamed");
+                toast.message(t("templates.toastRenamed"));
               }}
             >
-              Save
+              {t("templates.save")}
             </Button>
           </div>
         </div>

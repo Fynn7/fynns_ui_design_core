@@ -82,9 +82,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    destructive action while it is unsafe and say why in a tooltip (e.g. disabling
    a rescan while a conflicting process holds the file), rather than letting it
    fail.
-10. **Language.** UI chrome / code text is **English or German only (no CJK)**.
-   The only CJK allowed is genuine user-facing deliverable *content* (e.g. a
-   report's optional `中文` section), never UI chrome.
+10. **Language.** Design-system docs, default primitive labels, and source comments
+ stay **English or German**. Consumer apps (and the aesthetic sandbox) may offer
+ an **English ↔ Chinese** UI locale switch for their own chrome strings; Chinese
+ is allowed when the active locale is `zh`. Do not bake CJK into `@fynns/ui`
+ default labels — pass localized strings from the app.
 
 ## Hard rules (Do / Don't)
 
@@ -101,7 +103,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
-- Text is **English or German only** (no CJK), per the workspace language policy.
+- Text in this package (docs, default primitive labels, comments) is **English or
+ German**. Consumer apps / the sandbox may localize their chrome to Chinese via
+ a locale switch — see [README.md](README.md#aesthetic-sandbox).
 
 ## Tokens
 
@@ -270,6 +274,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   subject card (distinct from `PanelCard` layout shell). Uses elevation /
   state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
   toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
+- **CollapsibleCard** — Card shell with **CollapsibleCardHeader** (chevron
+  trigger) + optional **CardMedia** / **CardContent** / **CardActions**.
+  `{ variant?, open?, defaultOpen?, onOpenChange?, disabled?, mediaCollapse?:
+  "always"|"withBody", cssOverrides? }`. Factory defaults from
+  `COLLAPSIBLE_CARD_RECIPE` in `collapsible-card.recipe.ts` (sandbox **Apply
+  component template** writes that file + the `@fynns-recipe collapsible-card`
+  CSS block). Not `interactive` on the root card.
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.
@@ -293,7 +304,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
-  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`, `SettingsIcon`. Components also accept
+  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system
