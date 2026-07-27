@@ -124,6 +124,7 @@ export function SandboxShell() {
                 <RefreshIcon size={16} />
               </IconButton>
             </Tooltip>
+            {page === "playground" ? <AgentInputBar /> : null}
             <Tooltip content="Clear all token overrides in the draft (hue, radius, elevation, …)">
               <Button
                 size="sm"
@@ -150,12 +151,7 @@ export function SandboxShell() {
           }
         >
           <main className="sandbox-canvas fynns-scroll">
-            {page === "playground" ? (
-              <>
-                <CardPreviewCanvas />
-                <AgentInputBar />
-              </>
-            ) : null}
+            {page === "playground" ? <CardPreviewCanvas /> : null}
             {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}
