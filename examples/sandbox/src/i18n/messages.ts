@@ -32,6 +32,7 @@ const en = {
   "topbar.themeToDark": "Switch to dark theme",
 
   "playground.targetCard": "Card",
+  "playground.targetCollapsible": "Collapsible",
 
   "settings.languageTitle": "Language",
   "settings.languageLead": "Switch the sandbox UI between English and Chinese. Choice is saved in this browser.",
@@ -97,6 +98,15 @@ const en = {
   "preview.dismiss": "Dismiss",
   "preview.open": "Open",
   "preview.cardActivated": "{variant} card activated",
+  "preview.collapsibleOpen": "Open",
+  "preview.collapsibleActions": "Header actions",
+  "preview.collapsibleLabel": "disclosure",
+  "preview.collapsibleTitle": "Presets",
+  "preview.collapsibleBody":
+    "One-shot disclosure: pass title and children. Chevron, head, and body chrome are built in — do not assemble them by hand.",
+  "preview.collapsibleActionTip": "Example header action (outside the toggle)",
+  "preview.collapsibleActionAria": "Example header action",
+  "preview.collapsibleActionToast": "Header action clicked",
 
   "agent.hint": 'Try: "make corners rounder" or "softer hover"',
   "agent.promptAria": "Agent prompt",
@@ -337,6 +347,7 @@ const zh: Record<MessageKey, string> = {
   "topbar.themeToDark": "切换到深色主题",
 
   "playground.targetCard": "Card",
+  "playground.targetCollapsible": "Collapsible",
 
   "settings.languageTitle": "语言",
   "settings.languageLead": "在英语与中文之间切换沙盒界面。选择会保存在本浏览器中。",
@@ -401,6 +412,15 @@ const zh: Record<MessageKey, string> = {
   "preview.dismiss": "关闭",
   "preview.open": "打开",
   "preview.cardActivated": "已激活 {variant} 卡片",
+  "preview.collapsibleOpen": "展开",
+  "preview.collapsibleActions": "标题操作",
+  "preview.collapsibleLabel": "disclosure",
+  "preview.collapsibleTitle": "预设",
+  "preview.collapsibleBody":
+    "一站式折叠区：传入 title 与 children 即可。Chevron、标题行与内容壳已内置，无需手拼。",
+  "preview.collapsibleActionTip": "示例标题操作（在折叠触发器外）",
+  "preview.collapsibleActionAria": "示例标题操作",
+  "preview.collapsibleActionToast": "已点击标题操作",
 
   "agent.hint": "试试：「圆角更大」或「更柔和的悬停」",
   "agent.promptAria": "智能体提示",

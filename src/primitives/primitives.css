@@ -1397,6 +1397,10 @@
   gap: var(--fynns-space-2);
 }
 
+.fynns-collapsible-head:hover {
+  background: var(--fynns-color-surface-hover);
+}
+
 .fynns-collapsible-trigger {
   flex: 1 1 auto;
   display: flex;
@@ -1410,10 +1414,6 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-}
-
-.fynns-collapsible-trigger:hover {
-  background: var(--fynns-color-surface-hover);
 }
 
 .fynns-collapsible-title {

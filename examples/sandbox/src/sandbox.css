@@ -416,6 +416,16 @@
   margin-top: var(--fynns-space-sm);
 }
 
+.sandbox-playground-target {
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--fynns-space-sm) var(--fynns-space-md) 0;
+}
+
+.sandbox-playground .sandbox-preview {
+  padding-top: var(--fynns-space-sm);
+}
+
 .sandbox-preview {
   /* One shared column: width tracks the canvas; toolbar + card grid stay equal. */
   display: flex;

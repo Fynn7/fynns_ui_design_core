@@ -86,9 +86,10 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Playground** (Card), **Globals** (system
-shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
-footer — settings: language, config JSON export/import, and named templates).
+separate design language. Pages: **Playground** (Card or Collapsible target),
+**Globals** (system shape / radius), Foundations, Motion, and **Templates**
+(gear icon in the nav footer — settings: language, config JSON export/import,
+and named templates).
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
@@ -124,13 +125,26 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Presets: M3-aligned radius, Restrained radius
 - Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
 
-### Preview toggles (Card Playground)
+### Preview toggles (Playground)
+
+Switch the canvas target with **Card | Collapsible** (preview-only; does not
+change Apply writeback).
+
+**Card**
 
 - Anatomy: Media on/off
 - States: Interactive, Disabled
 - Actions: align start|end
 
-### Inspector knobs (Card Playground)
+**Collapsible**
+
+- States: Open (controlled preview)
+- Anatomy: Header actions on/off
+
+### Inspector knobs (Playground)
+
+Shared token draft for both Card and Collapsible targets (Apply still writes
+`tokens.ts` only — no component recipe writeback):
 
 - Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
   hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;

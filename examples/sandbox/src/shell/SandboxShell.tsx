@@ -12,14 +12,17 @@ import {
   SunIcon,
   toast,
   Toaster,
+  ToggleGroup,
   Tooltip,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
 import { useLocale } from "../i18n";
+import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
+import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
 import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
@@ -39,6 +42,7 @@ export function SandboxShell() {
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const { undo, redo, reset } = useTokenDraft();
+  const { target, setTarget } = usePlaygroundTarget();
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -146,7 +150,22 @@ export function SandboxShell() {
           }
         >
           <main className="sandbox-canvas fynns-scroll">
-            {page === "playground" ? <CardPreviewCanvas /> : null}
+            {page === "playground" ? (
+              <div className="sandbox-playground">
+                <div className="sandbox-playground-target">
+                  <ToggleGroup
+                    size="compact"
+                    value={target}
+                    onChange={(id) => setTarget(id as typeof target)}
+                    options={[
+                      { value: "card", label: t("playground.targetCard") },
+                      { value: "collapsible", label: t("playground.targetCollapsible") },
+                    ]}
+                  />
+                </div>
+                {target === "card" ? <CardPreviewCanvas /> : <CollapsiblePreviewCanvas />}
+              </div>
+            ) : null}
             {page === "globals" ? <GlobalsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}

@@ -250,9 +250,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
-  — disclosure row; collapses content behind a clickable header (chevron rotates).
-  Controlled via `open` or uncontrolled via `defaultOpen`. `actions` sits outside
-  the toggle button. Use to keep long repeated form sections scannable.
+  — **one-shot disclosure section** for agents and apps: pass `title` + `children`
+  (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
+  are built in — do **not** hand-assemble `.fynns-collapsible-*` pieces. Controlled
+  via `open` or uncontrolled via `defaultOpen`. `actions` sits outside the toggle
+  button. Use to keep long repeated form sections scannable.
 - **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**
   / **ListDisclosureToggleSpacer** / **ListTree** / **ListTreeRow** / **ListTreeSlot**
   / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
