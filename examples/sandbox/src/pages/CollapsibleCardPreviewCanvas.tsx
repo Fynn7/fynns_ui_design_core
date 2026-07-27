@@ -14,6 +14,7 @@ import {
   toast,
 } from "@fynns/ui";
 import { useState } from "react";
+import { useLocale } from "../i18n";
 import { useRecipeDraft } from "../state/RecipeDraftProvider";
 
 const ALL_VARIANTS = ["elevated", "filled", "outlined"] as const;
@@ -34,47 +35,48 @@ const DEFAULT_OPTIONS: CollapsibleCardPreviewOptions = {
 };
 
 export function CollapsibleCardPreviewCanvas() {
+  const { t } = useLocale();
   const { draft } = useRecipeDraft();
   const [options, setOptions] = useState<CollapsibleCardPreviewOptions>(DEFAULT_OPTIONS);
 
   return (
     <div className="sandbox-preview">
       <ControlStack className="sandbox-preview-toolbar" columns={2}>
-        <ControlRow label="Anatomy">
+        <ControlRow label={t("preview.anatomy")}>
           <Switch
             size="sm"
             labelSide="end"
-            label="Media"
+            label={t("preview.media")}
             checked={options.showMedia}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showMedia: checked }))}
           />
         </ControlRow>
-        <ControlRow label="States">
+        <ControlRow label={t("preview.states")}>
           <Grid x={2} y="unbounded">
             <Switch
               size="sm"
               labelSide="end"
-              label="Default open"
+              label={t("preview.defaultOpen")}
               checked={options.defaultOpen}
               onCheckedChange={(checked) => setOptions((o) => ({ ...o, defaultOpen: checked }))}
             />
             <Switch
               size="sm"
               labelSide="end"
-              label="Disabled"
+              label={t("preview.disabled")}
               checked={options.disabled}
               onCheckedChange={(checked) => setOptions((o) => ({ ...o, disabled: checked }))}
             />
           </Grid>
         </ControlRow>
-        <ControlRow label="Actions">
+        <ControlRow label={t("preview.actions")}>
           <ToggleGroup
             size="compact"
             value={options.actionsAlign}
             onChange={(id) => setOptions((o) => ({ ...o, actionsAlign: id as ActionsAlign }))}
             options={[
-              { value: "start", label: "Start" },
-              { value: "end", label: "End" },
+              { value: "start", label: t("preview.start") },
+              { value: "end", label: t("preview.end") },
             ]}
           />
         </ControlRow>
@@ -86,6 +88,7 @@ export function CollapsibleCardPreviewCanvas() {
             <div className="sandbox-preview-label">{variant}</div>
             <div className="sandbox-preview-card-wrap">
               <CollapsibleCard
+                key={`${variant}-${options.defaultOpen ? "open" : "closed"}`}
                 variant={variant}
                 defaultOpen={options.defaultOpen}
                 disabled={options.disabled}
@@ -95,33 +98,33 @@ export function CollapsibleCardPreviewCanvas() {
                 {options.showMedia ? (
                   <CardMedia>
                     <div className="fynns-card-media-placeholder" aria-hidden>
-                      Media
+                      {t("preview.media")}
                     </div>
                   </CardMedia>
                 ) : null}
                 <CollapsibleCardHeader
                   avatar="F"
-                  title="Aurora project"
-                  subtitle="Tap header to expand"
+                  title={t("preview.cardTitle")}
+                  subtitle={t("preview.collapsibleSubtitle")}
                   action={
-                    <InfoHint content="Header action stays outside the trigger." ariaLabel="More info" />
+                    <InfoHint
+                      content={t("preview.collapsibleInfo")}
+                      ariaLabel={t("preview.cardInfoAria")}
+                    />
                   }
                 />
-                <CardContent>
-                  CollapsibleCard combines Card anatomy with a disclosure header. Template defaults
-                  come from the recipe draft; global Card tokens still use Apply changes.
-                </CardContent>
+                <CardContent>{t("preview.collapsibleBody")}</CardContent>
                 <CardActions align={options.actionsAlign}>
                   <Button size="sm" variant="ghost" disabled={options.disabled}>
-                    Dismiss
+                    {t("preview.dismiss")}
                   </Button>
                   <Button
                     size="sm"
                     variant="primary"
                     disabled={options.disabled}
-                    onClick={() => toast.message(`${variant} action`)}
+                    onClick={() => toast.message(t("preview.collapsibleActivated", { variant }))}
                   >
-                    Open
+                    {t("preview.open")}
                   </Button>
                 </CardActions>
               </CollapsibleCard>

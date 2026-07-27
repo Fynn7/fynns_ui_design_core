@@ -144,8 +144,8 @@ Global token knobs (both components):
   (sandbox-only, not Apply writeback)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
-**Undo / Redo** (toolbar + Ctrl/Cmd+Z / Ctrl+Y) only cover the token draft
-history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+**Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
+draft history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 

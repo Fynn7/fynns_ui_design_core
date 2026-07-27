@@ -114,6 +114,43 @@ const en = {
   "agent.toastReady": "{count} proposal(s) ready — confirm to apply.",
   "agent.toastApplied": "Agent proposals applied",
 
+  "preview.defaultOpen": "Default open",
+  "preview.collapsibleSubtitle": "Tap header to expand",
+  "preview.collapsibleInfo": "Header action stays outside the trigger.",
+  "preview.collapsibleBody":
+    "CollapsibleCard combines Card anatomy with a disclosure header. Template defaults come from the recipe draft; global Card tokens still use Apply changes.",
+  "preview.collapsibleActivated": "{variant} action",
+
+  "recipe.title": "CollapsibleCard template",
+  "recipe.help":
+    "Component defaults and local CSS variables — use Apply component template below (not Apply changes). {dirty}.",
+  "recipe.dirty": "Template draft modified",
+  "recipe.clean": "Matches committed template",
+  "recipe.defaultVariant": "Default variant",
+  "recipe.defaultVariantHint": "Factory default Card variant when callers omit variant.",
+  "recipe.variantElevated": "Elevated",
+  "recipe.variantFilled": "Filled",
+  "recipe.variantOutlined": "Outlined",
+  "recipe.defaultOpen": "Default open",
+  "recipe.mediaCollapse": "Media collapse",
+  "recipe.mediaCollapseHint": 'When "withBody", CardMedia hides with the collapsible region.',
+  "recipe.mediaAlways": "Always visible",
+  "recipe.mediaWithBody": "With body",
+  "recipe.headerGap": "Header gap",
+  "recipe.headerGapAria": "About header gap",
+  "recipe.headerGapHint": "{cssVar} — gap between trigger and header action.",
+
+  "applyRecipe.button": "Apply component template",
+  "applyRecipe.preparing": "Preparing diff…",
+  "applyRecipe.tipDirty":
+    "Write CollapsibleCard recipe + CSS block to src/primitives (dev server only)",
+  "applyRecipe.tipClean": "No template changes in the recipe draft",
+  "applyRecipe.dialogTitle": "Apply CollapsibleCard template",
+  "applyRecipe.dialogDesc":
+    "{files} file(s) will update. Confirm to write the recipe and CSS block.",
+  "applyRecipe.closeAria": "Close",
+  "applyRecipe.toastOk": "CollapsibleCard template applied",
+
   "apply.button": "Apply changes",
   "apply.preparing": "Preparing diff…",
   "apply.tip": "Review per-file diffs, then write tokens.ts and regenerate theme.css",
@@ -417,6 +454,42 @@ const zh: Record<MessageKey, string> = {
   "agent.toastNone": "尚无结构化提案 —— 请细化请求，或等待模型后端。",
   "agent.toastReady": "{count} 条提案就绪 —— 确认后应用。",
   "agent.toastApplied": "智能体提案已应用",
+
+  "preview.defaultOpen": "默认展开",
+  "preview.collapsibleSubtitle": "点按页眉展开",
+  "preview.collapsibleInfo": "页眉操作留在触发器之外。",
+  "preview.collapsibleBody":
+    "CollapsibleCard 将 Card 结构与可折叠页眉结合。模板默认来自 recipe 草稿；全局 Card token 仍用「应用更改」。",
+  "preview.collapsibleActivated": "{variant} 操作",
+
+  "recipe.title": "CollapsibleCard 模板",
+  "recipe.help":
+    "组件默认值与本地 CSS 变量 —— 使用下方「应用组件模板」（不是「应用更改」）。{dirty}。",
+  "recipe.dirty": "模板草稿已修改",
+  "recipe.clean": "与已提交模板一致",
+  "recipe.defaultVariant": "默认变体",
+  "recipe.defaultVariantHint": "调用方省略 variant 时的工厂默认 Card 变体。",
+  "recipe.variantElevated": "抬升",
+  "recipe.variantFilled": "填充",
+  "recipe.variantOutlined": "描边",
+  "recipe.defaultOpen": "默认展开",
+  "recipe.mediaCollapse": "媒体折叠",
+  "recipe.mediaCollapseHint": "选择「随正文」时，CardMedia 随可折叠区域隐藏。",
+  "recipe.mediaAlways": "始终可见",
+  "recipe.mediaWithBody": "随正文",
+  "recipe.headerGap": "页眉间隙",
+  "recipe.headerGapAria": "关于页眉间隙",
+  "recipe.headerGapHint": "{cssVar} — 触发器与页眉操作之间的间隙。",
+
+  "applyRecipe.button": "应用组件模板",
+  "applyRecipe.preparing": "正在准备差异…",
+  "applyRecipe.tipDirty":
+    "将 CollapsibleCard recipe + CSS 块写入 src/primitives（仅开发服务器）",
+  "applyRecipe.tipClean": "recipe 草稿中无模板变更",
+  "applyRecipe.dialogTitle": "应用 CollapsibleCard 模板",
+  "applyRecipe.dialogDesc": "将更新 {files} 个文件。确认后写入 recipe 与 CSS 块。",
+  "applyRecipe.closeAria": "关闭",
+  "applyRecipe.toastOk": "CollapsibleCard 模板已应用",
 
   "apply.button": "应用更改",
   "apply.preparing": "正在准备差异…",

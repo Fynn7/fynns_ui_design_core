@@ -110,7 +110,7 @@ export function SandboxShell() {
               }
               onClick={() => setPage("templates")}
             >
-              <SettingsIcon size={18} />
+              <SettingsIcon size={18} aria-hidden />
             </IconButton>
           </Tooltip>
         </div>
@@ -138,7 +138,7 @@ export function SandboxShell() {
                 aria-pressed={theme === "light"}
                 onClick={toggleTheme}
               >
-                {theme === "light" ? <MoonIcon size={16} /> : <SunIcon size={16} />}
+                {theme === "light" ? <MoonIcon size={16} aria-hidden /> : <SunIcon size={16} aria-hidden />}
               </IconButton>
             </Tooltip>
           </div>

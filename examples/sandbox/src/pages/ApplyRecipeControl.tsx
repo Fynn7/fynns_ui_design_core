@@ -5,6 +5,7 @@ import {
   previewRecipeDraft,
   type ApplyRecipeFileDiff,
 } from "../export/applyRecipe";
+import { useLocale } from "../i18n";
 import { useRecipeDraft } from "../state/RecipeDraftProvider";
 
 type Phase = "idle" | "previewing" | "review" | "applying";
@@ -13,6 +14,7 @@ type Phase = "idle" | "previewing" | "review" | "applying";
  * Inspector footer: preview + apply CollapsibleCard template to source files.
  */
 export function ApplyRecipeControl() {
+  const { t } = useLocale();
   const { draft, isDirty, commit } = useRecipeDraft();
   const [phase, setPhase] = useState<Phase>("idle");
   const [files, setFiles] = useState<ApplyRecipeFileDiff[]>([]);
@@ -27,14 +29,14 @@ export function ApplyRecipeControl() {
     try {
       const preview = await previewRecipeDraft(draft);
       if (!preview.ok) {
-        toast.error(preview.error ?? "Preview failed");
+        toast.error(preview.error ?? t("apply.toastPreviewFailed"));
         setPhase("idle");
         return;
       }
       setFiles(preview.files);
       setPhase("review");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Preview failed");
+      toast.error(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
       setPhase("idle");
     }
   };
@@ -51,31 +53,25 @@ export function ApplyRecipeControl() {
     try {
       const result = await applyRecipeDraft(draft);
       if (!result.ok) {
-        toast.error(result.error ?? "Apply failed");
+        toast.error(result.error ?? t("apply.toastApplyFailed"));
         setPhase("review");
         return;
       }
-      toast.success("CollapsibleCard template applied");
+      toast.success(t("applyRecipe.toastOk"));
       commit();
       setPhase("idle");
       setFiles([]);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Apply failed");
+      toast.error(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
       setPhase("review");
     }
   };
 
   return (
     <>
-      <Tooltip
-        content={
-          isDirty
-            ? "Write CollapsibleCard recipe + CSS block to src/primitives (dev server only)"
-            : "No template changes in the recipe draft"
-        }
-      >
+      <Tooltip content={isDirty ? t("applyRecipe.tipDirty") : t("applyRecipe.tipClean")}>
         <Button size="sm" disabled={!isDirty || busy} onClick={() => void openReview()}>
-          {phase === "previewing" ? "Preparing diff…" : "Apply component template"}
+          {phase === "previewing" ? t("applyRecipe.preparing") : t("applyRecipe.button")}
         </Button>
       </Tooltip>
 
@@ -84,26 +80,28 @@ export function ApplyRecipeControl() {
         onOpenChange={(open) => {
           if (!open) closeReview();
         }}
-        title="Apply CollapsibleCard template"
-        description={`${changedFiles.length} file(s) will update. Confirm to write the recipe and CSS block.`}
+        title={t("applyRecipe.dialogTitle")}
+        description={t("applyRecipe.dialogDesc", { files: changedFiles.length })}
         className="sandbox-apply-diff-dialog"
         showCloseButton={phase !== "applying"}
-        closeAriaLabel="Close"
+        closeAriaLabel={t("applyRecipe.closeAria")}
       >
         <div className="sandbox-apply-diff-list fynns-scroll">
           {files.length === 0 ? (
-            <p className="sandbox-muted">No file diffs.</p>
+            <p className="sandbox-muted">{t("apply.noDiffs")}</p>
           ) : (
             files.map((file) => (
               <section key={file.path} className="sandbox-apply-diff-file">
                 <header className="sandbox-apply-diff-file-head">
                   <code>{file.path}</code>
-                  <span className="sandbox-muted">{file.changed ? "changed" : "unchanged"}</span>
+                  <span className="sandbox-muted">
+                    {file.changed ? t("apply.changed") : t("apply.unchanged")}
+                  </span>
                 </header>
                 {file.changed && file.diff ? (
                   <pre className="sandbox-apply-diff-pre fynns-scroll">{file.diff}</pre>
                 ) : (
-                  <p className="sandbox-muted">No textual changes.</p>
+                  <p className="sandbox-muted">{t("apply.noTextual")}</p>
                 )}
               </section>
             ))
@@ -111,14 +109,14 @@ export function ApplyRecipeControl() {
         </div>
         <div className="sandbox-apply-diff-foot">
           <Button variant="ghost" onClick={closeReview} disabled={phase === "applying"}>
-            Cancel
+            {t("apply.cancel")}
           </Button>
           <Button
             variant="primary"
             disabled={phase === "applying" || changedFiles.length === 0}
             onClick={() => void confirmApply()}
           >
-            {phase === "applying" ? "Applying…" : "Apply"}
+            {phase === "applying" ? t("apply.applying") : t("apply.confirm")}
           </Button>
         </div>
       </Dialog>

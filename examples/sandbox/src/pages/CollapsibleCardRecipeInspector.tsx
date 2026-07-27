@@ -1,5 +1,5 @@
 import { Collapsible, InfoHint, Select, Slider, Switch, ToggleGroup } from "@fynns/ui";
-import { useMemo } from "react";
+import { useLocale } from "../i18n";
 import { useRecipeDraft } from "../state/RecipeDraftProvider";
 
 function parseLengthToPx(value: string): number {
@@ -14,39 +14,35 @@ function pxToRem(px: number): string {
 }
 
 const HEADER_GAP_VAR = "--fynns-collapsible-card-header-gap";
+/** Fallback px when header gap resolves to `var(--fynns-space-sm)`. */
+const SPACE_SM_FALLBACK_PX = 8;
 
 export function CollapsibleCardRecipeInspector() {
+  const { t } = useLocale();
   const { draft, patch, setCssOverride, isDirty } = useRecipeDraft();
 
   const cssOverrides = draft.cssOverrides ?? {};
   const headerGap = cssOverrides[HEADER_GAP_VAR] ?? "var(--fynns-space-sm)";
-  const headerGapPx = headerGap.startsWith("var(") ? 8 : parseLengthToPx(headerGap);
+  const headerGapPx = headerGap.startsWith("var(")
+    ? SPACE_SM_FALLBACK_PX
+    : parseLengthToPx(headerGap);
 
-  const dirtyLabel = useMemo(
-    () => (isDirty ? "Template draft modified" : "Matches committed template"),
-    [isDirty],
-  );
+  const dirtyLabel = isDirty ? t("recipe.dirty") : t("recipe.clean");
 
   return (
-    <Collapsible title="CollapsibleCard template" defaultOpen>
+    <Collapsible title={t("recipe.title")} defaultOpen>
       <div className="sandbox-stack">
-        <p className="sandbox-help">
-          Component defaults and local CSS variables — use Apply component template below (not Apply
-          changes). {dirtyLabel}.
-        </p>
+        <p className="sandbox-help">{t("recipe.help", { dirty: dirtyLabel })}</p>
 
         <div className="sandbox-field">
-          <InfoHint
-            label="Default variant"
-            content="Factory default Card variant when callers omit variant."
-          />
+          <InfoHint label={t("recipe.defaultVariant")} content={t("recipe.defaultVariantHint")} />
           <Select
-            ariaLabel="Default variant"
+            ariaLabel={t("recipe.defaultVariant")}
             value={draft.defaultVariant}
             options={[
-              { value: "elevated", label: "Elevated" },
-              { value: "filled", label: "Filled" },
-              { value: "outlined", label: "Outlined" },
+              { value: "elevated", label: t("recipe.variantElevated") },
+              { value: "filled", label: t("recipe.variantFilled") },
+              { value: "outlined", label: t("recipe.variantOutlined") },
             ]}
             onChange={(value) =>
               patch({ defaultVariant: value as typeof draft.defaultVariant })
@@ -58,17 +54,14 @@ export function CollapsibleCardRecipeInspector() {
           <Switch
             size="sm"
             labelSide="end"
-            label="Default open"
+            label={t("recipe.defaultOpen")}
             checked={draft.defaultOpen}
             onCheckedChange={(checked) => patch({ defaultOpen: checked })}
           />
         </div>
 
         <div className="sandbox-field">
-          <InfoHint
-            label="Media collapse"
-            content='When "withBody", CardMedia hides with the collapsible region.'
-          />
+          <InfoHint label={t("recipe.mediaCollapse")} content={t("recipe.mediaCollapseHint")} />
           <ToggleGroup
             size="compact"
             value={draft.mediaCollapse}
@@ -76,8 +69,8 @@ export function CollapsibleCardRecipeInspector() {
               patch({ mediaCollapse: id as typeof draft.mediaCollapse })
             }
             options={[
-              { value: "always", label: "Always visible" },
-              { value: "withBody", label: "With body" },
+              { value: "always", label: t("recipe.mediaAlways") },
+              { value: "withBody", label: t("recipe.mediaWithBody") },
             ]}
           />
         </div>
@@ -85,14 +78,14 @@ export function CollapsibleCardRecipeInspector() {
         <div className="sandbox-field">
           <div className="sandbox-field-row">
             <InfoHint
-              label="Header gap"
-              ariaLabel="About header gap"
-              content={`${HEADER_GAP_VAR} — gap between trigger and header action.`}
+              label={t("recipe.headerGap")}
+              ariaLabel={t("recipe.headerGapAria")}
+              content={t("recipe.headerGapHint", { cssVar: HEADER_GAP_VAR })}
             />
             <code>{headerGapPx}px</code>
           </div>
           <Slider
-            ariaLabel="Header gap"
+            ariaLabel={t("recipe.headerGap")}
             min={0}
             max={24}
             step={1}

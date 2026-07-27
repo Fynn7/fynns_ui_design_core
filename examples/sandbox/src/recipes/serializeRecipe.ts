@@ -1,8 +1,13 @@
 import type { CollapsibleCardRecipe } from "@fynns/ui";
+import { isSafeCssCustomProperty } from "../state/tokenDraft";
 
 export function serializeCollapsibleCardRecipeFile(recipe: CollapsibleCardRecipe): string {
   const cssEntries = Object.keys(recipe.cssOverrides)
     .sort()
+    .filter((key) => {
+      const value = recipe.cssOverrides[key];
+      return typeof value === "string" && isSafeCssCustomProperty(key, value);
+    })
     .map((key) => `    ${JSON.stringify(key)}: ${JSON.stringify(recipe.cssOverrides[key])},`)
     .join("\n");
 
@@ -42,6 +47,10 @@ export function patchCollapsibleCardRecipeCss(
 
   const props = Object.keys(cssOverrides)
     .sort()
+    .filter((key) => {
+      const value = cssOverrides[key];
+      return typeof value === "string" && isSafeCssCustomProperty(key, value);
+    })
     .map((key) => `  ${key}: ${cssOverrides[key]};`)
     .join("\n");
 
