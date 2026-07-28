@@ -220,6 +220,26 @@ function hasDedupe(text) {
   return /dedupe\s*:\s*\[[^\]]*react/.test(text);
 }
 
+function ensureViteHelpers(src) {
+  let final = src;
+  if (!/from ["']node:path["']|from ["']path["']|require\(["']path["']\)/.test(final)) {
+    if (/^import\s/m.test(final)) {
+      final = `import path from "node:path";\n${final}`;
+    }
+  }
+  if (!/\b__dirname\b/.test(final)) {
+    if (!/fileURLToPath/.test(final)) {
+      final = `import { fileURLToPath } from "node:url";\n${final}`;
+    }
+    final = final.replace(
+      /^(import .+\n)+/,
+      (imports) =>
+        `${imports}const __dirname = path.dirname(fileURLToPath(import.meta.url));\n`,
+    );
+  }
+  return final;
+}
+
 function wireVite(viteFile, entryRel, dryRun, log) {
   const before = readText(viteFile);
   if (hasFynnsAlias(before)) {
@@ -239,7 +259,7 @@ function wireVite(viteFile, entryRel, dryRun, log) {
     } else {
       log.push({ step: "vite_alias", status: "ok", detail: "alias already present", file: viteFile });
     }
-    return { patched: changed, snippet: null };
+    return { patched: changed || true, wired: true, snippet: null };
   }
 
   const aliasLine = `"@fynns/ui": path.resolve(__dirname, "${entryRel}")`;
@@ -247,36 +267,28 @@ function wireVite(viteFile, entryRel, dryRun, log) {
 
   // Prefer injecting into existing resolve.alias
   if (/alias\s*:\s*\{/.test(before)) {
-    const next = before.replace(/alias\s*:\s*\{(\s*)/, (_m, ws) => {
-      const indent = ws.includes("\n") ? "\n      " : "\n      ";
-      return `alias: {${indent}${aliasLine},${indent}`;
+    let final = before.replace(/alias\s*:\s*\{(\s*)/, () => {
+      return `alias: {\n      ${aliasLine},\n      `;
     });
-    let final = next;
     if (!hasDedupe(final) && /resolve\s*:\s*\{/.test(final)) {
       final = final.replace(/resolve\s*:\s*\{/, (m) => `${m}\n    dedupe: ["react", "react-dom"],`);
     }
-    if (!/from ["']node:path["']|from ["']path["']|require\(["']path["']\)/.test(final)) {
-      // Prepend path import for ESM vite configs
-      if (/^import\s/m.test(final)) {
-        final = `import path from "node:path";\n${final}`;
-      }
-    }
-    if (!/__dirname/.test(final) && /fileURLToPath/.test(final) === false) {
-      // Many ESM configs define __dirname already; if alias uses __dirname ensure helper exists
-      if (!/\b__dirname\b/.test(final)) {
-        if (!/fileURLToPath/.test(final)) {
-          final = `import { fileURLToPath } from "node:url";\n${final}`;
-        }
-        final = final.replace(
-          /^(import .+\n)+/,
-          (imports) =>
-            `${imports}const __dirname = path.dirname(fileURLToPath(import.meta.url));\n`,
-        );
-      }
-    }
+    final = ensureViteHelpers(final);
     writeText(viteFile, final, dryRun);
     log.push({ step: "vite_alias", status: dryRun ? "dry-run" : "patched", file: viteFile });
-    return { patched: true, snippet: null };
+    return { patched: true, wired: true, snippet: null };
+  }
+
+  // Inject alias into existing resolve: { } when alias key is missing
+  if (/resolve\s*:\s*\{/.test(before)) {
+    let final = before.replace(/resolve\s*:\s*\{/, (m) => {
+      const dedupe = hasDedupe(before) ? "" : `\n    dedupe: ["react", "react-dom"],`;
+      return `${m}${dedupe}\n    alias: {\n      ${aliasLine},\n    },`;
+    });
+    final = ensureViteHelpers(final);
+    writeText(viteFile, final, dryRun);
+    log.push({ step: "vite_alias", status: dryRun ? "dry-run" : "patched", file: viteFile });
+    return { patched: true, wired: true, snippet: null };
   }
 
   log.push({
@@ -286,7 +298,7 @@ function wireVite(viteFile, entryRel, dryRun, log) {
     detail: "Could not auto-inject; add this resolve block",
     snippet,
   });
-  return { patched: false, snippet };
+  return { patched: false, wired: false, snippet };
 }
 
 function wireTsconfig(tsconfigFile, entryRelFromTsconfig, dryRun, log) {
@@ -430,16 +442,22 @@ function main() {
     throw new Error(`Submodule entry missing after install: ${entryAbs}`);
   }
 
+  let wireOk = opts.skipWire;
   if (!opts.skipWire) {
     if (viteFile) {
       const entryRel = relImport(viteFile, entryAbs);
       const w = wireVite(viteFile, entryRel, opts.dryRun, log);
       if (w.snippet) result.manualSnippets.push({ file: viteFile, snippet: w.snippet });
+      wireOk = !!w.wired;
+      if (!w.wired) {
+        result.nextSteps.push("Apply the Vite resolve alias manually (see manualSnippets), then re-run --check.");
+      }
     } else {
       log.push({ step: "vite_alias", status: "skip", detail: "no vite.config.* found" });
       result.nextSteps.push(
         `Create vite.config and alias @fynns/ui → ${toPosix(path.join(subPath, "src/index.ts"))}`,
       );
+      wireOk = false;
     }
     if (tsconfigFile) {
       const entryRel = toPosix(path.relative(path.dirname(tsconfigFile), entryAbs));
@@ -461,9 +479,21 @@ function main() {
     `Import: import { Button, Collapsible } from "@fynns/ui";`,
     `Do not npm-install the design system. See llm/CONSUME.md in the core repo.`,
   );
-  result.ok = true;
+
+  // Install succeeds only when wiring landed (or --skip-wire) and no forbidden npm deps.
+  const issues = [];
+  if (!opts.skipWire && !wireOk) issues.push("vite @fynns/ui alias was not applied");
+  if (result.forbiddenDeps.length) {
+    issues.push(
+      `forbidden npm dependency on design system: ${result.forbiddenDeps
+        .map((h) => `${h.file}:${h.name}`)
+        .join(", ")}`,
+    );
+  }
+  result.issues = issues;
+  result.ok = issues.length === 0;
   emit(result, opts.json);
-  process.exit(0);
+  process.exit(result.ok ? 0 : 1);
 }
 
 function emit(result, asJson) {

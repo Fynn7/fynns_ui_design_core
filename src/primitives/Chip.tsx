@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import { CloseIcon } from "./icons";
+import { CheckIcon, CloseIcon } from "./icons";
+import { IconButton } from "./IconButton";
+import { Tooltip } from "./Tooltip";
 
 export type ChipVariant = "assist" | "filter" | "input";
 
@@ -24,25 +26,6 @@ export type ChipProps = Omit<
   onRemove?: () => void;
   removeAriaLabel?: string;
 };
-
-function ChipCheckIcon() {
-  return (
-    <svg
-      className="fynns-chip-check"
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
 
 /**
  * M3 Chip — compact assist / filter / input pill. Distinct from segmented
@@ -79,7 +62,7 @@ export function Chip({
   const leading =
     leadingIcon || showCheck ? (
       <span className="fynns-chip-leading" aria-hidden>
-        {showCheck ? <ChipCheckIcon /> : leadingIcon}
+        {showCheck ? <CheckIcon className="fynns-chip-check" size={18} /> : leadingIcon}
       </span>
     ) : null;
 
@@ -106,15 +89,18 @@ export function Chip({
           {leading}
           {label}
         </button>
-        <button
-          type="button"
-          className="fynns-chip-remove-btn"
-          aria-label={removeAriaLabel}
-          disabled={disabled}
-          onClick={onRemove}
-        >
-          <CloseIcon size={14} />
-        </button>
+        <Tooltip content={removeAriaLabel}>
+          <IconButton
+            type="button"
+            className="fynns-chip-remove-btn"
+            aria-label={removeAriaLabel}
+            disabled={disabled}
+            size="sm"
+            onClick={onRemove}
+          >
+            <CloseIcon size={14} />
+          </IconButton>
+        </Tooltip>
       </div>
     );
   }

@@ -3547,6 +3547,7 @@
   /* M3 trailing action state layer: 24dp (4/3 × 18dp icon). */
   width: var(--fynns-chip-trailing-action-size);
   height: var(--fynns-chip-trailing-action-size);
+  min-width: var(--fynns-chip-trailing-action-size);
   margin: 0 var(--fynns-space-2xs) 0 0;
   padding: 0;
   border: none;
@@ -3554,6 +3555,7 @@
   background: transparent;
   color: inherit;
   cursor: pointer;
+  box-shadow: none;
   transition: background var(--fynns-duration-fast);
 }
 
