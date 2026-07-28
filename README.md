@@ -89,7 +89,9 @@ The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. Pages: **Surfaces** (Card or Collapsible target),
 **Globals** (system shape / radius), Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
-and named templates).
+and named templates). On Surfaces / Globals, the topbar **inspector** toggle
+(`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
+without an inspector), the canvas uses a single full-width column.
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and

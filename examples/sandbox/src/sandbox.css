@@ -53,10 +53,6 @@
   color: var(--fynns-color-accent);
 }
 
-.sandbox-body--single {
-  grid-template-columns: 1fr;
-}
-
 .sandbox-file-input {
   position: absolute;
   width: 1px;
@@ -214,12 +210,25 @@
   min-height: 0;
 }
 
+.sandbox-body.sandbox-body--single {
+  grid-template-columns: 1fr;
+}
+
 .sandbox-canvas {
   padding: var(--fynns-space-lg);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
+  min-width: 0;
+}
+
+.sandbox-playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-width: 0;
 }
 
 .sandbox-aside {

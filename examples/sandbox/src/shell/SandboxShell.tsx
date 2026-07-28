@@ -6,6 +6,7 @@ import {
   NavItem,
   NavItemLabel,
   Panel,
+  PanelRightIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
   SunIcon,
@@ -39,6 +40,7 @@ export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
+  const [asideOpen, setAsideOpen] = useState(true);
   const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 
@@ -78,6 +80,9 @@ export function SandboxShell() {
           : page === "motion"
             ? t("nav.motion")
             : t("nav.templates");
+
+  const hasInspector = page === "playground" || page === "globals";
+  const showAside = hasInspector && asideOpen;
 
   return (
     <div className="sandbox-root">
@@ -119,6 +124,17 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             {page === "playground" ? <AgentInputBar /> : null}
+            {hasInspector ? (
+              <Tooltip content={asideOpen ? t("topbar.hideAside") : t("topbar.showAside")}>
+                <IconButton
+                  aria-label={asideOpen ? t("topbar.hideAside") : t("topbar.showAside")}
+                  aria-pressed={asideOpen}
+                  onClick={() => setAsideOpen((open) => !open)}
+                >
+                  <PanelRightIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <IconButton
                 aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
@@ -131,11 +147,7 @@ export function SandboxShell() {
           </div>
         </header>
 
-        <div
-          className={
-            page === "templates" ? "sandbox-body sandbox-body--single" : "sandbox-body"
-          }
-        >
+        <div className={showAside ? "sandbox-body" : "sandbox-body sandbox-body--single"}>
           <main className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
               <div className="sandbox-playground">
@@ -160,12 +172,12 @@ export function SandboxShell() {
               <TemplatesPage theme={theme} onThemeChange={setTheme} />
             ) : null}
           </main>
-          {page === "playground" ? (
+          {page === "playground" && showAside ? (
             <aside className="sandbox-aside">
               <PropertyInspector />
             </aside>
           ) : null}
-          {page === "globals" ? (
+          {page === "globals" && showAside ? (
             <aside className="sandbox-aside">
               <GlobalsInspector />
             </aside>

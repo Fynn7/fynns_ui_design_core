@@ -30,6 +30,8 @@ const en = {
   "topbar.themeDark": "Dark theme",
   "topbar.themeToLight": "Switch to light theme",
   "topbar.themeToDark": "Switch to dark theme",
+  "topbar.hideAside": "Hide inspector",
+  "topbar.showAside": "Show inspector",
 
   "playground.targetCard": "Card",
   "playground.targetCollapsible": "Collapsible",
@@ -329,6 +331,8 @@ const zh: Record<MessageKey, string> = {
   "topbar.themeDark": "深色主题",
   "topbar.themeToLight": "切换到浅色主题",
   "topbar.themeToDark": "切换到深色主题",
+  "topbar.hideAside": "隐藏检查器",
+  "topbar.showAside": "显示检查器",
 
   "playground.targetCard": "Card",
   "playground.targetCollapsible": "Collapsible",
