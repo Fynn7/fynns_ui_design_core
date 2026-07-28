@@ -11,7 +11,7 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
 type Phase = "idle" | "previewing" | "review" | "applying";
 
 /**
- * Inspector footer control: preview per-file diffs, then confirm writeback.
+ * Inspector footer controls: reset draft, then preview/confirm writeback.
  */
 export function ApplyChangesControl() {
   const { t } = useLocale();
@@ -83,6 +83,19 @@ export function ApplyChangesControl() {
 
   return (
     <>
+      <Tooltip content={t("topbar.resetTip")}>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={overrideCount === 0 || busy}
+          onClick={() => {
+            reset();
+            toast.message(t("topbar.resetToast"));
+          }}
+        >
+          {t("topbar.reset")}
+        </Button>
+      </Tooltip>
       <Tooltip content={t("apply.tip")}>
         <Button
           size="sm"

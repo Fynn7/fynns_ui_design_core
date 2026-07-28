@@ -6,11 +6,9 @@ import {
   NavItem,
   NavItemLabel,
   Panel,
-  RefreshIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
   SunIcon,
-  toast,
   Toaster,
   ToggleGroup,
   Tooltip,
@@ -41,7 +39,7 @@ export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const { undo, redo, reset } = useTokenDraft();
+  const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 
   useEffect(() => {
@@ -121,17 +119,6 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             {page === "playground" ? <AgentInputBar /> : null}
-            <Tooltip content={t("topbar.resetTip")}>
-              <IconButton
-                aria-label={t("topbar.resetAria")}
-                onClick={() => {
-                  reset();
-                  toast.message(t("topbar.resetToast"));
-                }}
-              >
-                <RefreshIcon size={16} aria-hidden />
-              </IconButton>
-            </Tooltip>
             <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <IconButton
                 aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
