@@ -89,8 +89,11 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Surfaces** (Card or Collapsible target),
-**Globals** (system shape / radius), Foundations, Motion, and **Templates**
+separate design language. **Every new primitive must ship with a sandbox
+preview** (usually on Globals or Surfaces) in the same change set — gallery
+alone is not enough. Pages: **Surfaces** (Card or Collapsible target),
+**Globals** (system shape / radius + control samples), Foundations, Motion, and
+**Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
 (`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages

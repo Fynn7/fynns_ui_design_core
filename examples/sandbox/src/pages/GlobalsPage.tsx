@@ -5,6 +5,7 @@ import {
   CardContent,
   CardHeader,
   Collapsible,
+  Divider,
   Input,
   Select,
   Switch,
@@ -60,6 +61,20 @@ export function GlobalsPage() {
             checked={switchOn}
             onCheckedChange={setSwitchOn}
           />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <span className="sandbox-help">{t("globals.dividerFull")}</span>
+          <Divider />
+          <span className="sandbox-help">{t("globals.dividerInset")}</span>
+          <Divider inset />
+          <div
+            className="sandbox-globals-row"
+            style={{ alignItems: "stretch", height: "var(--fynns-space-2xl)" }}
+          >
+            <span className="sandbox-help">{t("globals.dividerVerticalA")}</span>
+            <Divider orientation="vertical" />
+            <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
+          </div>
         </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>

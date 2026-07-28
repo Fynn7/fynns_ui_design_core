@@ -304,6 +304,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
+  **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
+  M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
+  (16dp). Vertical stretches in a flex row (`align-self: stretch`).
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
@@ -321,5 +324,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
    reference it as `var(--fynns-...)`.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
-   `src/index.ts`, and document it here.
+   `src/index.ts`, document it here, **and add a live sample to the aesthetic
+   sandbox** (`examples/sandbox`, typically Globals controls or a Surfaces
+   preview). Gallery (`examples/gallery`) is optional extra coverage, not a
+   substitute for sandbox.
 3. Keep `npm run typecheck` and `npm run lint` green.

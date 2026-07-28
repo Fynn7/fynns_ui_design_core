@@ -3090,6 +3090,65 @@
   );
 }
 
+/* ---------- Divider (M3) ---------- */
+.fynns-divider {
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  width: 100%;
+  height: var(--fynns-border-hairline);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-outline-subtle);
+}
+
+.fynns-divider::before {
+  content: "";
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  background: currentColor;
+}
+
+.fynns-divider--inset,
+.fynns-divider--inset-start {
+  padding-inline-start: var(--fynns-space-lg);
+}
+
+.fynns-divider--inset,
+.fynns-divider--inset-end {
+  padding-inline-end: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical {
+  flex-direction: column;
+  width: var(--fynns-border-hairline);
+  height: auto;
+  align-self: stretch;
+  min-height: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical.fynns-divider--inset,
+.fynns-divider--vertical.fynns-divider--inset-start {
+  padding-inline-start: 0;
+  padding-block-start: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical.fynns-divider--inset,
+.fynns-divider--vertical.fynns-divider--inset-end {
+  padding-inline-end: 0;
+  padding-block-end: var(--fynns-space-lg);
+}
+
+@media (forced-colors: active) {
+  .fynns-divider {
+    color: CanvasText;
+  }
+}
+
 /* ---------- Kbd ---------- */
 .fynns-kbd {
   display: inline-block;

@@ -12,6 +12,7 @@ import {
   Collapsible,
   ConfirmDialog,
   Dialog,
+  Divider,
   Drawer,
   DropdownMenu,
   DropdownMenuItem,
@@ -283,6 +284,29 @@ export function App() {
           <Kbd>K</Kbd>
           <Spinner label="Loading" />
         </Row>
+        <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Divider
+          </span>
+          <Divider />
+          <Divider inset />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "stretch",
+              gap: "var(--fynns-space-md)",
+              height: "2.5rem",
+            }}
+          >
+            <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+              A
+            </span>
+            <Divider orientation="vertical" />
+            <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+              B
+            </span>
+          </div>
+        </div>
       </Section>
 
       <Section title="Alerts">
