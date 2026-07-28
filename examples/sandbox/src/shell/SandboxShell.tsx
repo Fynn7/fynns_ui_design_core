@@ -71,6 +71,7 @@ function SandboxAside({ open, children }: { open: boolean; children: ReactNode }
       className="sandbox-aside"
       data-state={entered ? "open" : "closing"}
       aria-hidden={!open || undefined}
+      inert={!open ? true : undefined}
     >
       {children}
     </aside>

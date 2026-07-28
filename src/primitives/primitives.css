@@ -1677,7 +1677,8 @@
 @media (prefers-reduced-motion: reduce) {
   .fynns-expand,
   .fynns-collapsible-body,
-  .fynns-collapsible-chevron {
+  .fynns-collapsible-chevron,
+  .fynns-collapsible-head::before {
     transition: none;
   }
 }

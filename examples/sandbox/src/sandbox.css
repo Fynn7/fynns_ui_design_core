@@ -262,7 +262,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sandbox-aside {
+  .sandbox-aside,
+  .sandbox-aside[data-state="closing"] {
     transition: none;
   }
 }
@@ -902,6 +903,5 @@
     transition:
       max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
       border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-  }
   }
 }
