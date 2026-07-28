@@ -260,10 +260,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
   are built in — do **not** hand-assemble `.fynns-collapsible-*` pieces. Controlled
   via `open` or uncontrolled via `defaultOpen`. `actions` sits outside the toggle
-  button. Body uses an M3-inspired container transform: outer card morphs height
-  (`grid-template-rows` + presence `data-state`); body fades out on close.
-  No head/body hairline (spacing only) — a mid border stacks with the rising
-  outer bottom edge during collapse. Respects `prefers-reduced-motion`.
+  button. Body stays mounted so open and close both animate height + fade
+  (`data-state` open/closed). No head/body hairline (spacing only). Respects
+  `prefers-reduced-motion`.
   Reusable utility: `.fynns-expand` / `.fynns-expand-inner`. Use to keep long
   repeated form sections scannable.
 - **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**

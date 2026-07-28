@@ -1648,16 +1648,13 @@
 }
 
 .fynns-collapsible-body {
-  /* Spacing only — no head/body hairline. A mid border stacks with the outer
-     bottom edge while height collapses (reads as overlapping lines). */
+  /* Spacing only — no head/body hairline (avoids mid/bottom border stack). */
   padding: var(--fynns-space-2) 0.8rem 0.8rem;
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
-/* M3-style container transform (disclosure):
-   Outer card morphs height as one bordered surface; body content fades so the
-   clip edge does not read as a second horizontal rule. */
+/* Bidirectional height morph: body stays mounted; `open` ↔ `closed` both animate. */
 .fynns-expand {
   display: grid;
   grid-template-rows: 0fr;
@@ -1670,14 +1667,6 @@
 
 .fynns-expand[data-state="open"] .fynns-collapsible-body {
   opacity: 1;
-  transition-delay: var(--fynns-duration-fast);
-}
-
-.fynns-expand[data-state="closing"] .fynns-collapsible-body {
-  opacity: 0;
-  /* Drop content immediately so height collapse clips empty space only. */
-  transition-duration: var(--fynns-duration-instant);
-  transition-delay: 0ms;
 }
 
 .fynns-expand-inner {
@@ -1690,10 +1679,6 @@
   .fynns-collapsible-body,
   .fynns-collapsible-chevron {
     transition: none;
-  }
-
-  .fynns-expand[data-state="open"] .fynns-collapsible-body {
-    transition-delay: 0ms;
   }
 }
 
