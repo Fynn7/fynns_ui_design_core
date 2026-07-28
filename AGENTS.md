@@ -58,11 +58,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    carries the `fynns-scroll` class or uses `ScrollArea`. Browser-default
    scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** The kit is `Spinner`,
-   `PanelSkeleton`, `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
+   `LinearProgress` / `CircularProgress`, `PanelSkeleton`,
+   `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
    primitives). Prefer *layered* loading for heavy boots: an inline pre-mount
    spinner → a full-screen `BlockingLoadingOverlay` while the engine isn't ready
    → a scoped per-action spinner; freeze the whole UI with an overlay during a
-   blocking batch run. Color status semantically — `danger` (fatal), `warning`
+   blocking batch run. Use Progress when the fraction is known (upload, batch).
+   Color status semantically — `danger` (fatal), `warning`
    (recoverable/render), `info` (static/notice), `success` (ok) — typically as a
    `border-left: 3px solid var(--fynns-color-*)` or a `Badge` variant. Use
    `Badge` variants to build the information architecture (source / mode /
@@ -82,8 +84,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   `Panel`/`PanelCard` for sections; `Dialog` (centered/command) and `Drawer`
-   (side sheet) for overlays; **progressive disclosure** (reveal results only
+   `Panel`/`PanelCard` for sections; `Dialog` (centered/command), `Drawer`
+   (side sheet), and `BottomSheet` (bottom edge) for overlays; **progressive disclosure** (reveal results only
    once they exist); and **safety-first interactivity** — disable/refuse a
    destructive action while it is unsafe and say why in a tooltip (e.g. disabling
    a rescan while a conflicting process holds the file), rather than letting it
@@ -129,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -176,7 +178,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 
 - **Button** `{ variant?: "default"|"primary"|"tonal"|"danger"|"ghost", size?: "md"|"sm"|"lg",
   active?, danger?, iconOnly?, loading? }` + native button attrs. `forwardRef`.
-  `tonal` is secondary emphasis (`accent-container`). `loading` shows a spinner and disables.
+  Default `tonal` (`accent-container`, `radius-xl`, 40dp). `default` is the outlined
+  border style; `primary` is filled accent. `loading` shows a spinner and disables.
 - **IconButton** — `Button` with `iconOnly`; defaults to `ghost` so the control
   reads as the icon itself (no bordered square tile). Pass `aria-label`.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
@@ -222,7 +225,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   via the shared frame presence lifecycle. `size` maps to
   `--fynns-layout-dialog-max-width-*` (centered only). **DialogShell** is the low-level shell
   `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
-  is the shared low-level frame reused by Dialog/Drawer (`modal?`, `side?`,
+  is the shared low-level frame reused by Dialog/Drawer/BottomSheet (`modal?`, `side?`,
   `dataState?`); manages enter/exit when `dataState` is omitted. **ConfirmDialog** `{ open, onOpenChange, title, description?,
   children?, confirmLabel?, cancelLabel?, onConfirm, onCancel?, danger?,
   confirmDisabled?, loading?, confirmIcon?, closeAriaLabel? }` — yes/no
@@ -237,10 +240,19 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `modal={false}` for a non-modal drawer that leaves the page behind interactive
   (no scroll lock / focus trap / blocking scrim). Width via
   `--fynns-layout-drawer-width`.
+  **BottomSheet** `{ open, onClose, modal?, title?, description?,
+  showCloseButton?, showHandle?, size?: "content"|"half"|"full", actions?,
+  closeAriaLabel?, ariaLabel?, className?, children }` — M3 bottom sheet
+  ([specs](https://m3.material.io/components/bottom-sheets/specs)):
+  `surface-1` container, 28dp top corners, level-1 shadow, visual drag-handle
+  chrome (not interactive drag),
+  `title-large` headline. Close icon **off** by default (dismiss via Esc/scrim).
+  Prefer `Drawer` for desktop side panels.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
   labelSide?: "start"|"end", disabled? }` (`role="switch"`). M3-aligned track /
-  thumb (52×32dp proportions, outlined unchecked / filled checked, fixed-size
-  handle); no handle icon. Use `labelSide="end"` (track then label) in dense
+  thumb (52×32dp proportions, outlined unchecked / soft `accent-24` track +
+  accent outline & thumb when checked, fixed-size handle); no handle icon. Use
+  `labelSide="end"` (track then label) in dense
   toolbars so tracks share a left edge with `ToggleGroup` / siblings instead of
   drifting with label length.
   **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`
@@ -319,6 +331,15 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
+  **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
+  `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
+  determinate track gap + linear stop). Omit `value` for indeterminate. Prefer
+  `Spinner` for compact button/inline busy; use Progress for known % or section waits.
+  **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
+  identity (40dp default); image → children → initials from `name` → person glyph.
+  Pass into `CardHeader`’s `avatar` slot.
+  **Fab** `{ children, label?, size?: "sm"|"md"|"lg" }` — M3 floating action (56dp);
+  pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
@@ -326,6 +347,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
+  `PersonIcon`,
   `InfoIcon`, `SearchIcon`, `AlertCircleIcon`, `AlertTriangleIcon`,
   `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,

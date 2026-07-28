@@ -1,5 +1,7 @@
 import {
+  Avatar,
   Badge,
+  BottomSheet,
   Button,
   Card,
   CardContent,
@@ -7,12 +9,17 @@ import {
   Checkbox,
   Chip,
   ChipSet,
+  CircularProgress,
   Collapsible,
   Divider,
+  Fab,
   Input,
+  LinearProgress,
+  PlusIcon,
   Radio,
   Select,
   Switch,
+  Tooltip,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -37,6 +44,7 @@ export function GlobalsPage() {
   const [radioValue, setRadioValue] = useState<"a" | "b">("a");
   const [filterOn, setFilterOn] = useState(true);
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -47,6 +55,7 @@ export function GlobalsPage() {
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
+          <Button variant="default">{t("globals.btnOutlined")}</Button>
           <Button variant="primary">{t("globals.btnPrimary")}</Button>
           <Button variant="ghost">{t("globals.btnGhost")}</Button>
         </div>
@@ -144,6 +153,64 @@ export function GlobalsPage() {
             <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
           </div>
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <span className="sandbox-help">{t("globals.progressLinear")}</span>
+          <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
+          <span className="sandbox-help">{t("globals.progressLinearIndeterminate")}</span>
+          <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <CircularProgress value={0.65} label={t("globals.progressCircularAria")} size="sm" />
+            <CircularProgress label={t("globals.progressCircularIndeterminateAria")} />
+            <CircularProgress value={0.2} label={t("globals.progressCircularAria")} size="lg" />
+          </div>
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
+          <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
+          <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
+          <Avatar alt={t("globals.avatarFallback")} />
+          <Avatar
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' fill='%23031417' font-size='16' font-family='sans-serif'%3EAL%3C/text%3E%3C/svg%3E"
+            name="Ada Lovelace"
+            alt={t("globals.avatarImage")}
+          />
+          <Avatar
+            src="/__missing-avatar__.png"
+            name="Broken Src"
+            alt={t("globals.avatarBroken")}
+          />
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab size="sm" aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
+            <PlusIcon />
+          </Fab>
+          <Button size="sm" onClick={() => setSheetOpen(true)}>
+            {t("globals.sheetOpen")}
+          </Button>
+        </div>
+        <BottomSheet
+          open={sheetOpen}
+          onClose={() => setSheetOpen(false)}
+          title={t("globals.sheetTitle")}
+          description={t("globals.sheetDescription")}
+          actions={
+            <Button onClick={() => setSheetOpen(false)}>
+              {t("globals.sheetDone")}
+            </Button>
+          }
+        >
+          <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
+        </BottomSheet>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>
 
@@ -152,7 +219,11 @@ export function GlobalsPage() {
         <div className="sandbox-globals-cards">
           {(["elevated", "filled", "outlined"] as const).map((variant) => (
             <Card key={variant} variant={variant} className="sandbox-globals-card">
-              <CardHeader title={variant} subtitle={t("globals.cardSubtitle")} />
+              <CardHeader
+                title={variant}
+                subtitle={t("globals.cardSubtitle")}
+                avatar={<Avatar name="FY" alt={t("globals.avatarCard")} size="sm" />}
+              />
               <CardContent>{t("globals.cardBody")}</CardContent>
             </Card>
           ))}

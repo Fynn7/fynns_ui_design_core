@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import {
   AlertCircleIcon,
+  Avatar,
   Badge,
+  BottomSheet,
   Button,
   Card,
   CardActionArea,
@@ -14,19 +16,23 @@ import {
   Checkbox,
   Chip,
   ChipSet,
+  CircularProgress,
   Dialog,
   Divider,
   Drawer,
   DropdownMenu,
   DropdownMenuItem,
   ErrorBanner,
+  Fab,
   IconButton,
   InfoBanner,
   InfoHint,
   Input,
   Kbd,
   Counter,
+  LinearProgress,
   PanelCard,
+  PlusIcon,
   Radio,
   SearchInput,
   Select,
@@ -57,6 +63,7 @@ export function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
@@ -290,6 +297,7 @@ export function App() {
           <Button onClick={() => setDialogOpen(true)}>Open dialog</Button>
           <Button onClick={() => setConfirmOpen(true)}>Confirm dialog</Button>
           <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
+          <Button onClick={() => setSheetOpen(true)}>Open bottom sheet</Button>
           <Tooltip content="A self-positioned tooltip">
             <Button>Hover me</Button>
           </Tooltip>
@@ -319,8 +327,32 @@ export function App() {
           <Kbd>Ctrl</Kbd>
           <Kbd>K</Kbd>
           <Spinner label="Loading" />
+          <CircularProgress value={0.7} label="70 percent" size="sm" />
+          <CircularProgress label="Working" />
+          <Avatar size="sm" name="Ada" alt="Ada" />
+          <Avatar name="Ada Lovelace" alt="Ada Lovelace" />
+          <Avatar alt="User" />
+          <Avatar
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3C/svg%3E"
+            name="Ada Lovelace"
+            alt="Ada image"
+          />
+          <Avatar src="/__missing-avatar__.png" name="Broken Src" alt="Broken image fallback" />
+          <Tooltip content="Create">
+            <Fab aria-label="Create">
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Fab label="Create item">
+            <PlusIcon />
+          </Fab>
         </Row>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Linear progress
+          </span>
+          <LinearProgress value={0.42} label="42 percent" />
+          <LinearProgress label="Loading" />
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
             Divider
           </span>
@@ -385,6 +417,22 @@ export function App() {
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} title="Side drawer">
         <p style={{ marginTop: 0 }}>Drawer slides in from the right with the shared frame presence lifecycle.</p>
       </Drawer>
+
+      <BottomSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title="Bottom sheet"
+        description="Slides up from the bottom edge."
+        actions={
+          <Button onClick={() => setSheetOpen(false)}>
+            Done
+          </Button>
+        }
+      >
+        <p style={{ marginTop: 0 }}>
+          Prefer BottomSheet for mobile-leaning actions; use Drawer for desktop side panels.
+        </p>
+      </BottomSheet>
 
       <Toaster />
     </div>

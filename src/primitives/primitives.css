@@ -51,21 +51,25 @@
   align-items: center;
   justify-content: center;
   gap: var(--fynns-space-2);
-  min-height: 2.25rem;
+  box-sizing: border-box;
+  min-height: 2.5rem;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-sm);
-  padding: 0.4rem 0.75rem;
+  border-radius: var(--fynns-radius-xl);
+  padding: 0 var(--fynns-space-lg);
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
   font-size: var(--fynns-font-size-body-small);
+  font-weight: var(--fynns-font-weight-medium);
   white-space: nowrap;
   cursor: pointer;
   transition:
     border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
     color var(--fynns-duration-fast) var(--fynns-ease-standard),
-    opacity var(--fynns-duration-base) var(--fynns-ease-standard);
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
+    opacity var(--fynns-duration-base) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-btn:hover:not(:disabled) {
@@ -143,15 +147,15 @@
 }
 
 .fynns-btn--sm {
-  min-height: 1.9rem;
-  font-size: 0.78rem;
-  padding: 0.2rem 0.55rem;
+  min-height: 2rem;
+  font-size: var(--fynns-font-size-xs);
+  padding: 0 var(--fynns-space-md);
 }
 
 .fynns-btn--lg {
-  min-height: 2.5rem;
+  min-height: 3rem;
   font-size: var(--fynns-font-size-md);
-  padding: 0.55rem 1.1rem;
+  padding: 0 var(--fynns-space-xl);
 }
 
 .fynns-btn--loading {
@@ -1138,8 +1142,150 @@
   transform: translateX(0);
 }
 
+/* ---------- Bottom sheet (M3) ---------- */
+/* Specs: https://m3.material.io/components/bottom-sheets/specs */
+.fynns-dialog-overlay--sheet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--fynns-layout-sheet-top-margin) 0 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 40rem) {
+  .fynns-dialog-overlay--sheet {
+    padding: var(--fynns-layout-sheet-top-margin-wide)
+      var(--fynns-layout-sheet-side-margin-wide) 0;
+  }
+}
+
+.fynns-dialog-panel--sheet {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--fynns-layout-sheet-max-width);
+  max-height: 100%;
+  margin: 0 auto;
+  /* Reset dialog chrome — M3 sheet is borderless surface-container-low + level1. */
+  border: none;
+  border-radius: var(--fynns-radius-3xl) var(--fynns-radius-3xl) 0 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-xs);
+  overflow: hidden;
+  will-change: transform;
+  transform: translateY(100%);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-dialog-panel--sheet[data-state="open"] {
+  transform: translateY(0);
+}
+
+.fynns-dialog-panel--sheet-half {
+  height: var(--fynns-layout-sheet-half-height);
+  max-height: 100%;
+}
+
+.fynns-dialog-panel--sheet-full {
+  height: var(--fynns-layout-sheet-max-height);
+  max-height: 100%;
+}
+
+.fynns-sheet-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding-block: var(--fynns-layout-sheet-handle-pad-block);
+}
+
+.fynns-sheet-handle-pill {
+  width: var(--fynns-layout-sheet-handle-width);
+  height: var(--fynns-layout-sheet-handle-height);
+  border-radius: var(--fynns-radius-pill);
+  /* on-surface-variant */
+  background: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--fynns-layout-sheet-header-gap);
+  flex: 0 0 auto;
+  padding: 0 var(--fynns-layout-sheet-pad-inline);
+  /* No divider / no surface-head — not a dialog title bar. */
+  border: none;
+  background: transparent;
+}
+
+.fynns-sheet-header-spacer {
+  flex: 1 1 auto;
+}
+
+.fynns-sheet-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-font-size-title-large);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-title-large);
+  letter-spacing: 0;
+}
+
+.fynns-sheet-close {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-close:hover:not(:disabled) {
+  color: var(--fynns-color-text);
+}
+
+.fynns-sheet-description {
+  margin: var(--fynns-layout-sheet-header-gap) 0 0;
+  padding: 0 var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--fynns-layout-sheet-pad-block) var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-header + .fynns-sheet-body,
+.fynns-sheet-description + .fynns-sheet-body {
+  padding-top: var(--fynns-layout-sheet-header-gap);
+}
+
+.fynns-sheet-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-layout-sheet-actions-pad-top)
+    var(--fynns-layout-sheet-pad-inline)
+    var(--fynns-layout-sheet-actions-pad-bottom);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fynns-dialog-panel--drawer {
+  .fynns-dialog-panel--drawer,
+  .fynns-dialog-panel--sheet {
     transition: none;
   }
 
@@ -1183,7 +1329,6 @@
   --fynns-toggle-thumb: var(--fynns-toggle-thumb-sm);
   --fynns-toggle-track-pad-inline: var(--fynns-toggle-track-pad-inline-sm);
   --fynns-toggle-track-pad-checked: var(--fynns-toggle-track-pad-checked-sm);
-  --fynns-toggle-state-layer: var(--fynns-toggle-state-layer-sm);
   --fynns-toggle-track-outline: var(--fynns-toggle-track-outline-sm);
 }
 
@@ -1215,67 +1360,11 @@
 /*
  * Thumb uses `--fynns-toggle-track-pad-*` (padding-box). Pads are sized so
  * outer gap ≈ pad + outline ≈ (track-h − thumb) / 2 on both ends.
+ * No hover/pressed state-layer halo on the thumb.
  */
-.fynns-switch-track::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  width: var(--fynns-toggle-state-layer);
-  height: var(--fynns-toggle-state-layer);
-  top: 50%;
-  left: calc(
-    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
-  );
-  border-radius: var(--fynns-radius-round);
-  transform: translate(-50%, -50%);
-  background: transparent;
-  pointer-events: none;
-  transition:
-    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
-    background var(--fynns-duration-toggle);
-}
-
-.fynns-switch-track[data-state="checked"]::before {
-  left: calc(
-    100% - var(--fynns-toggle-track-pad-checked) -
-      var(--fynns-toggle-thumb) / 2
-  );
-}
-
-.fynns-switch-track:hover:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-switch-track:active:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-switch-track[data-state="checked"]:hover:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-switch-track[data-state="checked"]:active:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
 .fynns-switch-track[data-state="checked"] {
-  background: var(--fynns-color-accent);
+  /* Soft filled track + accent outline; thumb stays accent (not on-accent). */
+  background: var(--fynns-color-accent-24);
   border-color: var(--fynns-color-accent);
 }
 
@@ -1310,12 +1399,11 @@
   left: calc(
     100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
-  background: var(--fynns-color-on-accent);
+  background: var(--fynns-color-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fynns-switch-track,
-  .fynns-switch-track::before,
   .fynns-switch-thumb {
     transition: none;
   }
@@ -1464,25 +1552,6 @@
     box-shadow var(--fynns-duration-toggle);
 }
 
-.fynns-toggle-track::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  width: var(--fynns-toggle-state-layer);
-  height: var(--fynns-toggle-state-layer);
-  top: 50%;
-  left: calc(
-    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
-  );
-  border-radius: var(--fynns-radius-round);
-  transform: translate(-50%, -50%);
-  background: transparent;
-  pointer-events: none;
-  transition:
-    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
-    background var(--fynns-duration-toggle);
-}
-
 .fynns-toggle-label {
   flex: 1 1 0;
   min-width: 0;
@@ -1505,59 +1574,16 @@
     background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
-.fynns-toggle--switch:hover:not(:has(> input:disabled)) .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:active:not(:has(> input:disabled)) .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:hover:not(:has(> input:disabled))
-  > input:checked
-  + .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:active:not(:has(> input:disabled))
-  > input:checked
-  + .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
 .fynns-toggle--switch > input:checked + .fynns-toggle-track {
-  background: var(--fynns-color-accent);
+  background: var(--fynns-color-accent-24);
   border-color: var(--fynns-color-accent);
-}
-
-.fynns-toggle--switch > input:checked + .fynns-toggle-track::before {
-  left: calc(
-    100% - var(--fynns-toggle-track-pad-checked) -
-      var(--fynns-toggle-thumb) / 2
-  );
 }
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track .fynns-toggle-track__thumb {
   left: calc(
     100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
-  background: var(--fynns-color-on-accent);
+  background: var(--fynns-color-accent);
 }
 
 .fynns-toggle--switch > input:focus-visible + .fynns-toggle-track {
@@ -1574,7 +1600,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fynns-toggle-track,
-  .fynns-toggle-track::before,
   .fynns-toggle-track__thumb {
     transition: none;
   }
@@ -2965,6 +2990,17 @@
   overflow: hidden;
 }
 
+/* Prefer the Avatar primitive inside the slot — drop the legacy chrome. */
+.fynns-card-header-avatar:has(.fynns-avatar) {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  overflow: visible;
+}
+
 .fynns-card-header-text {
   flex: 1 1 auto;
   min-width: 0;
@@ -3663,4 +3699,390 @@
   padding: 0.85rem 1rem;
   font-size: var(--fynns-font-size-form-label);
   color: var(--fynns-color-text-muted);
+}
+
+/* ---------- Progress (M3 linear / circular) ---------- */
+.fynns-linear-progress {
+  --fynns-progress-value: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  height: var(--fynns-progress-track-thickness);
+  min-width: 4rem;
+  overflow: hidden;
+}
+
+.fynns-linear-progress--active {
+  gap: var(--fynns-progress-gap);
+}
+
+.fynns-linear-progress-active,
+.fynns-linear-progress-track,
+.fynns-linear-progress-stop,
+.fynns-linear-progress-indeterminate-bar {
+  box-sizing: border-box;
+  height: 100%;
+  border-radius: var(--fynns-radius-pill);
+}
+
+.fynns-linear-progress-active {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: calc(var(--fynns-progress-value) * 100%);
+  background: var(--fynns-color-accent);
+  transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
+  width: calc(
+    var(--fynns-progress-value) *
+      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
+  );
+}
+
+.fynns-linear-progress-track {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--fynns-color-accent-24);
+}
+
+.fynns-linear-progress-stop {
+  flex: 0 0 var(--fynns-progress-stop-size);
+  width: var(--fynns-progress-stop-size);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-linear-progress--indeterminate {
+  position: relative;
+  background: var(--fynns-color-accent-24);
+  border-radius: var(--fynns-radius-pill);
+  gap: 0;
+}
+
+.fynns-linear-progress-indeterminate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Short traveling segments (not full-width + scaleX — that reads as a solid bar). */
+.fynns-linear-progress-indeterminate-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-linear-progress-indeterminate-bar--1 {
+  animation: fynns-linear-progress-1 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+}
+
+.fynns-linear-progress-indeterminate-bar--2 {
+  animation: fynns-linear-progress-2 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+  animation-delay: calc(var(--fynns-duration-presentation-hint) * 0.7);
+}
+
+@keyframes fynns-linear-progress-1 {
+  0% {
+    left: -40%;
+    width: 32%;
+  }
+  40% {
+    left: 25%;
+    width: 48%;
+  }
+  100% {
+    left: 100%;
+    width: 24%;
+  }
+}
+
+@keyframes fynns-linear-progress-2 {
+  0% {
+    left: -30%;
+    width: 18%;
+  }
+  50% {
+    left: 40%;
+    width: 36%;
+  }
+  100% {
+    left: 100%;
+    width: 14%;
+  }
+}
+
+.fynns-circular-progress {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-progress-circular-size);
+  height: var(--fynns-progress-circular-size);
+  flex: 0 0 auto;
+  color: var(--fynns-color-accent);
+}
+
+.fynns-circular-progress--sm {
+  width: var(--fynns-progress-circular-size-sm);
+  height: var(--fynns-progress-circular-size-sm);
+}
+
+.fynns-circular-progress--lg {
+  width: var(--fynns-progress-circular-size-lg);
+  height: var(--fynns-progress-circular-size-lg);
+}
+
+.fynns-circular-progress-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-circular-progress-track,
+.fynns-circular-progress-active {
+  stroke-width: var(--fynns-progress-track-thickness);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.fynns-circular-progress-track {
+  stroke: var(--fynns-color-accent-24);
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard),
+    stroke-dashoffset var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress-active {
+  stroke: currentColor;
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+  animation: fynns-circular-progress-rotate var(--fynns-duration-loading-spin) linear infinite;
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+  animation: fynns-circular-progress-dash calc(var(--fynns-duration-presentation-hint) * 1.5)
+    var(--fynns-ease-in-out) infinite;
+  transition: none;
+}
+
+@keyframes fynns-circular-progress-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fynns-circular-progress-dash {
+  0% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 80 45.6;
+    stroke-dashoffset: -24;
+  }
+  100% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: -125.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-linear-progress-active,
+  .fynns-circular-progress-track,
+  .fynns-circular-progress-active {
+    transition: none;
+  }
+
+  .fynns-linear-progress-indeterminate-bar--1,
+  .fynns-linear-progress-indeterminate-bar--2 {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+    animation-duration: calc(var(--fynns-duration-reduced-motion-spin) * 1.5);
+  }
+}
+
+/* ---------- Avatar (M3) ---------- */
+.fynns-avatar {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--fynns-avatar-size);
+  height: var(--fynns-avatar-size);
+  border-radius: var(--fynns-radius-round);
+  overflow: hidden;
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-avatar-font-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: 1;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.fynns-avatar--sm {
+  width: var(--fynns-avatar-size-sm);
+  height: var(--fynns-avatar-size-sm);
+  font-size: var(--fynns-avatar-font-size-sm);
+}
+
+.fynns-avatar--lg {
+  width: var(--fynns-avatar-size-lg);
+  height: var(--fynns-avatar-size-lg);
+  font-size: var(--fynns-avatar-font-size-lg);
+}
+
+.fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-avatar-initials,
+.fynns-avatar-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+/* ---------- FAB (M3 floating action) ---------- */
+.fynns-fab {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 0;
+  width: var(--fynns-fab-size);
+  height: var(--fynns-fab-size);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+  box-shadow: var(--fynns-shadow-lg);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-fab--sm {
+  width: var(--fynns-fab-size-sm);
+  height: var(--fynns-fab-size-sm);
+  border-radius: var(--fynns-radius-md);
+}
+
+.fynns-fab--lg {
+  width: var(--fynns-fab-size-lg);
+  height: var(--fynns-fab-size-lg);
+  border-radius: var(--fynns-radius-xl);
+}
+
+.fynns-fab--extended {
+  width: auto;
+  min-width: var(--fynns-fab-size);
+  padding-inline: var(--fynns-fab-pad-inline-extended);
+  gap: var(--fynns-fab-gap);
+}
+
+.fynns-fab--extended.fynns-fab--sm {
+  min-width: var(--fynns-fab-size-sm);
+  padding-inline: var(--fynns-space-md);
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-fab--extended.fynns-fab--lg {
+  min-width: var(--fynns-fab-size-lg);
+  padding-inline: var(--fynns-space-xl);
+  gap: var(--fynns-space-md);
+  font-size: var(--fynns-font-size-lg);
+}
+
+.fynns-fab:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent-container) 88%,
+    var(--fynns-color-accent)
+  );
+  box-shadow: var(--fynns-shadow-xl);
+}
+
+.fynns-fab:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent-container) 72%,
+    var(--fynns-color-accent)
+  );
+  transform: scale(0.98);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+.fynns-fab:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-fab:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+  box-shadow: var(--fynns-shadow-none);
+}
+
+.fynns-fab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-fab-icon-size);
+  height: var(--fynns-fab-icon-size);
+  flex: 0 0 auto;
+}
+
+.fynns-fab--sm .fynns-fab-icon {
+  width: var(--fynns-fab-icon-size-sm);
+  height: var(--fynns-fab-icon-size-sm);
+}
+
+.fynns-fab--lg .fynns-fab-icon {
+  width: var(--fynns-fab-icon-size-lg);
+  height: var(--fynns-fab-icon-size-lg);
+}
+
+.fynns-fab-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-fab-label {
+  white-space: nowrap;
 }

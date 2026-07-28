@@ -52,7 +52,7 @@ export const COLOR_TOKENS = {
   "accent-24": "rgba(45, 212, 191, 0.24)",
   "accent-42": "rgba(45, 212, 191, 0.42)",
   "accent-ring": "rgba(45, 212, 191, 0.4)",
-  /** Content on solid accent (M3 onPrimary; Switch checked thumb). */
+  /** Content on solid accent (M3 onPrimary; e.g. primary Button label). */
   "on-accent": "#031417",
   /** Selected / tonal container fill (M3 primaryContainer analogue). */
   "accent-container": "rgba(45, 212, 191, 0.2)",
@@ -161,6 +161,8 @@ export const RADIUS_TOKENS = {
   /** M3 extra-large band */
   xl: "16px",
   "2xl": "24px",
+  /** M3 extra-large / sheet top corners ≈ 28dp. */
+  "3xl": "28px",
   "flyout-glyph": "5px",
   pill: "999px",
   round: "50%",
@@ -238,6 +240,8 @@ export const FONT_SIZE_TOKENS = {
   sm: "0.875rem",
   md: "1rem",
   lg: "1.25rem",
+  /** M3 title-large ≈ 22sp. */
+  "title-large": "1.375rem",
   xl: "1.5rem",
   "2xl": "2rem",
   /** Legacy semantic keys — do not remove. */
@@ -252,6 +256,9 @@ export const FONT_SIZE_TOKENS = {
 
 /** Font weights. `--fynns-font-weight-<key>`. */
 export const FONT_WEIGHT_TOKENS = {
+  /** M3 regular (title-large, body). */
+  regular: "400",
+  medium: "500",
   semibold: "600",
   title: "650",
   bold: "700",
@@ -262,6 +269,8 @@ export const LINE_HEIGHT_TOKENS = {
   root: "1.4",
   tight: "1",
   snug: "1.25",
+  /** M3 title-large line height ≈ 28sp / 22sp. */
+  "title-large": "1.2727",
   body: "1.45",
   compact: "1.35",
 } as const;
@@ -305,14 +314,12 @@ export const TOGGLE_TOKENS = {
   "track-outline": "2px",
   /** Proportional outline for `size="sm"` (~75% track). */
   "track-outline-sm": "1.5px",
-  "state-layer": "2.5rem",
   "track-w-sm": "2.4375rem",
   "track-h-sm": "1.5rem",
   "thumb-sm": "0.9375rem",
   "thumb-checked-sm": "0.9375rem",
   "track-pad-inline-sm": "0.1875rem",
   "track-pad-checked-sm": "0.1875rem",
-  "state-layer-sm": "1.875rem",
   "margin-top": "0.08em",
 } as const;
 
@@ -347,6 +354,50 @@ export const CHIP_TOKENS = {
   outline: "1px",
 } as const;
 
+/**
+ * Progress indicator geometry (M3 linear / circular at 16px rem).
+ * Track + active indicator 4dp; circular default 48dp; gap + stop 4dp.
+ * `--fynns-progress-<key>`.
+ */
+export const PROGRESS_TOKENS = {
+  "track-thickness": "0.25rem",
+  gap: "0.25rem",
+  "stop-size": "0.25rem",
+  "circular-size": "3rem",
+  "circular-size-sm": "2.25rem",
+  "circular-size-lg": "4rem",
+} as const;
+
+/**
+ * Avatar geometry (M3 list leading avatar at 16px rem).
+ * Default 40dp; sm 32dp; lg 56dp.
+ * `--fynns-avatar-<key>`.
+ */
+export const AVATAR_TOKENS = {
+  size: "2.5rem",
+  "size-sm": "2rem",
+  "size-lg": "3.5rem",
+  "font-size": "1rem",
+  "font-size-sm": "0.75rem",
+  "font-size-lg": "1.25rem",
+} as const;
+
+/**
+ * FAB geometry (M3 Floating Action Button at 16px rem).
+ * Default 56dp; small 40dp; large 96dp; extended height matches default.
+ * `--fynns-fab-<key>`.
+ */
+export const FAB_TOKENS = {
+  size: "3.5rem",
+  "size-sm": "2.5rem",
+  "size-lg": "6rem",
+  "icon-size": "1.5rem",
+  "icon-size-sm": "1.25rem",
+  "icon-size-lg": "2.25rem",
+  "pad-inline-extended": "1.25rem",
+  gap: "0.75rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -361,6 +412,29 @@ export const LAYOUT_TOKENS = {
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "42rem",
   "drawer-width": "72vw",
+  /** Bottom sheet — M3 max width 640dp. */
+  "sheet-max-width": "40rem",
+  /** Near-fullscreen height (leaves a peek of the page above). */
+  "sheet-max-height": "90vh",
+  "sheet-half-height": "50vh",
+  /** Top inset so the sheet never covers the full viewport (M3 72dp). */
+  "sheet-top-margin": "4.5rem",
+  /** When viewport > 640dp (M3 56dp). */
+  "sheet-top-margin-wide": "3.5rem",
+  "sheet-side-margin-wide": "3.5rem",
+  /** M3 docked drag handle 32×4dp. */
+  "sheet-handle-width": "2rem",
+  "sheet-handle-height": "0.25rem",
+  /** Handle vertical padding (M3 22dp). */
+  "sheet-handle-pad-block": "1.375rem",
+  /** Content inset (M3 24dp inline / 16dp block). */
+  "sheet-pad-inline": "1.5rem",
+  "sheet-pad-block": "1rem",
+  /** Gap between header stack elements (M3 12dp). */
+  "sheet-header-gap": "0.75rem",
+  /** Actions: top 16dp / bottom 24dp. */
+  "sheet-actions-pad-top": "1rem",
+  "sheet-actions-pad-bottom": "1.5rem",
   "tooltip-max-width": "min(14rem, 85vw)",
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
@@ -499,6 +573,9 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["toggle", TOGGLE_TOKENS],
   ["selection", SELECTION_TOKENS],
   ["chip", CHIP_TOKENS],
+  ["progress", PROGRESS_TOKENS],
+  ["avatar", AVATAR_TOKENS],
+  ["fab", FAB_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
