@@ -78,7 +78,7 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
-  [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
+  [`examples/sandbox`](examples/sandbox) (Globals shape levels, live Card
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
@@ -119,12 +119,11 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Globals (system shape)
 
-- Shape ladder: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Align M3 /
-  Reset ladder)
+- Shape levels: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Reset levels)
 - Read-only: `none` / `pill` / `round`
-- Presets: M3 rounder (md 12px), Sharper (md 4px) — selecting applies immediately
+- Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
 - Preview stage shows Button, Input, Select, Badge, Switch (pill), Card variants,
-  Collapsible, plus an xs–xl ladder legend labeled with which components use each
+  Collapsible, plus an xs–xl levels legend labeled with which components use each
   step (cards use **md**; switch track uses **pill**)
 
 ### Preview toggles (Surfaces)
@@ -159,8 +158,7 @@ Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspecto
 knobs).
 
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
-draft history: inspector knobs, Globals radius presets (select applies), and confirmed agent
-proposals. One hue
+draft history: inspector knobs and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 

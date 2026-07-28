@@ -65,7 +65,7 @@ const en = {
     "Stores the current overrides and theme in this browser (same JSON shape as Export).",
   "templates.name": "Name",
   "templates.nameAria": "Template name",
-  "templates.namePlaceholder": "e.g. design_template_2026_07_28_13_15_22",
+  "templates.namePlaceholder": "e.g. Amber accent workshop",
   "templates.description": "Description (optional)",
   "templates.descriptionAria": "Template description",
   "templates.cancel": "Cancel",
@@ -149,11 +149,9 @@ const en = {
   "inspector.overridesAria": "What overrides means",
   "inspector.overridesHint":
     "How many draft values differ from the baseline. Reset clears them; Apply changes writes only --fynns-* into tokens.ts.",
-  "inspector.applyPreset": "Apply preset",
-  "inspector.loadedPreset": "Loaded preset: {label}",
   "inspector.color": "Color",
   "inspector.colorHelp":
-    "Tap a color chip for a quick accent; open the rainbow chip for the full hue wheel. Card surface fills stay on the ladder — only the accent family shifts.",
+    "Tap a color chip for a quick accent; open the rainbow chip for the full hue wheel. Card surface fills stay on the surface levels — only the accent family shifts.",
   "inspector.brightness": "Brightness",
   "inspector.brightnessOf": "{name} brightness",
   "inspector.brightnessHint":
@@ -211,11 +209,11 @@ const en = {
     "Larger titles and chrome text (font-size-lg).",
 
   "globals.lead":
-    "Corner radius is a named ladder (xs→xl), plus special shapes (pill / round). Cards and inputs on this page use md; buttons use sm; the switch track uses pill.",
+    "Corner radius is a named set of levels (xs→xl), plus special shapes (pill / round). Cards and inputs on this page use md; buttons use sm; the switch track uses pill.",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
-    "Buttons / badges → radius-sm. Input / Select → radius-md. Switch track → radius-pill (not on the xs–xl ladder).",
+    "Buttons / badges → radius-sm. Input / Select → radius-md. Switch track → radius-pill (not on the xs–xl levels).",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Default",
   "globals.btnPrimary": "Primary",
@@ -230,11 +228,11 @@ const en = {
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
-  "globals.cardBody": "Card corners follow radius-md on the global ladder.",
+  "globals.cardBody": "Card corners follow radius-md on the global levels.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp": "Collapsible headers also use radius-md.",
-  "globals.swatches": "Radius ladder (who uses what)",
-  "globals.swatchesAria": "Radius ladder",
+  "globals.swatches": "Radius levels (who uses what)",
+  "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
     "Each box is one token step. This page’s cards use md — not xs or xl.",
   "globals.swatchXsUses": "finest chips",
@@ -245,22 +243,16 @@ const en = {
   "globals.swatchesSpecialHelp":
     "Special (not in this row): pill = switch track / search field; round = switch thumb; none = sharp.",
 
-  "globalsInspector.shapePresets": "Radius presets",
-  "globalsInspector.shapePresetAria": "Radius preset",
-  "globalsInspector.applyPresetTip":
-    "Choosing a preset replaces the whole draft with that radius ladder (clears other knobs)",
-  "globalsInspector.applyPresetNote":
-    "Selecting a preset applies it right away and replaces the whole draft. Align M3 / Reset ladder only change radius.",
-  "globalsInspector.shapeLadder": "Radius ladder",
+  "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Cards / inputs = md; buttons = sm; switch capsule = pill (read-only below).",
+    "Each step maps to different components. Cards / inputs = md; buttons = sm; switch capsule = pill (read-only below). Save named bundles via Templates JSON export — no built-in radius presets.",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Buttons, badges, toggle chips",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
   "globalsInspector.radiusLgUses": "Menus, dialogs, drawers",
   "globalsInspector.radiusXlUses": "Soft / emphasis shells",
   "globalsInspector.radiusXsHint":
-    "Smallest ladder step (M3 XS ≈ 4dp). Keep below sm on the scale.",
+    "Smallest level (M3 XS ≈ 4dp). Keep below sm on the scale.",
   "globalsInspector.radiusSmHint":
     "Compact controls: buttons, toggle groups, badges, toast action chips.",
   "globalsInspector.radiusMdHint":
@@ -279,21 +271,10 @@ const en = {
     "Pill shape (999px): switch track, search field, fully rounded chips — higher than xl on purpose.",
   "globalsInspector.radiusRoundHint":
     "Circle (50%): switch thumb and other round controls.",
-  "globalsInspector.resetLadder": "Reset ladder",
+  "globalsInspector.resetLadder": "Reset levels",
   "globalsInspector.resetLadderTip":
     "Restore radius xs–xl to baseline; keep color and other overrides",
-  "globalsInspector.alignM3": "Align M3 ladder",
-  "globalsInspector.alignM3Tip":
-    "Apply M3-aligned radius values (xs–xl only; other overrides stay)",
-  "globalsInspector.toastReset": "Radius ladder reset to baseline",
-  "globalsInspector.toastAlign": "Aligned to M3 radius ladder",
-
-  "preset.m3Aligned": "M3 rounder (md 12px)",
-  "preset.m3AlignedDesc":
-    "Rounder M3-style ladder — look at Card / Button corners: xs 4 · sm 8 · md 12 · lg 16 · xl 28.",
-  "preset.restrained": "Sharper (md 4px)",
-  "preset.restrainedDesc":
-    "Clearly tighter corners — compare to M3: xs 2 · sm 3 · md 4 · lg 6 · xl 8.",
+  "globalsInspector.toastReset": "Radius levels reset to baseline",
 
   "hue.presetsAria": "Accent color presets",
   "hue.openPalette": "Open hue wheel",
@@ -308,7 +289,7 @@ const en = {
   "hue.rose": "Rose",
   "hue.blue": "Blue",
 
-  "foundations.elevation": "Surfaces (elevation ladder)",
+  "foundations.elevation": "Surfaces (elevation levels)",
   "foundations.accent": "Accent palette",
   "foundations.semantic": "Status colors",
   "foundations.spacing": "Spacing scale",
@@ -382,7 +363,7 @@ const zh: Record<MessageKey, string> = {
   "templates.saveDialogDesc": "将当前改动与主题存入本浏览器（格式与导出相同）。",
   "templates.name": "名称",
   "templates.nameAria": "模板名称",
-  "templates.namePlaceholder": "例如：design_template_2026_07_28_13_15_22",
+  "templates.namePlaceholder": "例如：琥珀色强调实验",
   "templates.description": "描述（可选）",
   "templates.descriptionAria": "模板描述",
   "templates.cancel": "取消",
@@ -464,11 +445,9 @@ const zh: Record<MessageKey, string> = {
   "inspector.overridesAria": "改动项说明",
   "inspector.overridesHint":
     "草稿相对基线改了多少项。重置会清空；「应用更改」只把 --fynns-* 写入 tokens.ts。",
-  "inspector.applyPreset": "应用预设",
-  "inspector.loadedPreset": "已加载预设：{label}",
   "inspector.color": "颜色",
   "inspector.colorHelp":
-    "点色块可快速换强调色；点彩虹色块打开完整色相环。卡片底色仍走表面阶梯 —— 只会动强调色族。",
+    "点色块可快速换强调色；点彩虹色块打开完整色相环。卡片底色仍走表面等级 —— 只会动强调色族。",
   "inspector.brightness": "亮度",
   "inspector.brightnessOf": "{name} 亮度",
   "inspector.brightnessHint":
@@ -515,11 +494,11 @@ const zh: Record<MessageKey, string> = {
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
 
   "globals.lead":
-    "圆角是命名阶梯（xs→xl），另有特殊形（pill / round）。本页卡片与输入框用 md；按钮用 sm；开关轨道用 pill。",
+    "圆角是命名等级（xs→xl），另有特殊形（pill / round）。本页卡片与输入框用 md；按钮用 sm；开关轨道用 pill。",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
-    "按钮 / 徽章 → radius-sm。输入框 / 选择器 → radius-md。开关轨道 → radius-pill（不在 xs–xl 阶梯上）。",
+    "按钮 / 徽章 → radius-sm。输入框 / 选择器 → radius-md。开关轨道 → radius-pill（不在 xs–xl 等级上）。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "默认",
   "globals.btnPrimary": "主要",
@@ -534,11 +513,11 @@ const zh: Record<MessageKey, string> = {
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
-  "globals.cardBody": "卡片圆角跟随全局阶梯的 md。",
+  "globals.cardBody": "卡片圆角跟随全局等级的 md。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp": "折叠分区标题栏也使用 radius-md。",
-  "globals.swatches": "圆角阶梯（谁用哪档）",
-  "globals.swatchesAria": "圆角阶梯",
+  "globals.swatches": "圆角等级（谁用哪档）",
+  "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":
     "每个色块是一档 token。本页卡片用的是 md —— 不是 xs 或 xl。",
   "globals.swatchXsUses": "最细芯片",
@@ -549,15 +528,9 @@ const zh: Record<MessageKey, string> = {
   "globals.swatchesSpecialHelp":
     "特殊形（不在上排）：pill = 开关轨道 / 搜索框；round = 开关圆钮；none = 直角。",
 
-  "globalsInspector.shapePresets": "圆角预设",
-  "globalsInspector.shapePresetAria": "圆角预设",
-  "globalsInspector.applyPresetTip":
-    "选择预设会立刻用该圆角阶梯替换整个草稿（其他旋钮会清掉）",
-  "globalsInspector.applyPresetNote":
-    "选中即应用，并替换整个草稿。对齐 M3 / 重置阶梯只改圆角。",
-  "globalsInspector.shapeLadder": "圆角阶梯",
+  "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。卡片 / 输入 = md；按钮 = sm；开关胶囊 = pill（下方只读）。",
+    "每一档对应不同组件。卡片 / 输入 = md；按钮 = sm；开关胶囊 = pill（下方只读）。命名配置请用模板 JSON 导出 —— 无内置圆角预设。",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "按钮、徽章、切换芯片",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
@@ -583,21 +556,10 @@ const zh: Record<MessageKey, string> = {
     "胶囊形 (999px)：开关轨道、搜索框、全圆角芯片 —— 刻意高于 xl。",
   "globalsInspector.radiusRoundHint":
     "圆形 (50%)：开关圆钮与其他圆形控件。",
-  "globalsInspector.resetLadder": "重置阶梯",
+  "globalsInspector.resetLadder": "重置等级",
   "globalsInspector.resetLadderTip":
     "将 radius xs–xl 恢复为基线；保留颜色与其他改动",
-  "globalsInspector.alignM3": "对齐 M3 阶梯",
-  "globalsInspector.alignM3Tip":
-    "应用 M3 对齐的圆角（仅 xs–xl；其他改动保留）",
-  "globalsInspector.toastReset": "圆角阶梯已重置为基线",
-  "globalsInspector.toastAlign": "已对齐到 M3 圆角阶梯",
-
-  "preset.m3Aligned": "M3 更圆 (md 12px)",
-  "preset.m3AlignedDesc":
-    "更接近 M3 的圆角 —— 看卡片/按钮：xs 4 · sm 8 · md 12 · lg 16 · xl 28。",
-  "preset.restrained": "更方 (md 4px)",
-  "preset.restrainedDesc":
-    "明显更方的圆角 —— 对比 M3：xs 2 · sm 3 · md 4 · lg 6 · xl 8。",
+  "globalsInspector.toastReset": "圆角等级已重置为基线",
 
   "hue.presetsAria": "强调色预设",
   "hue.openPalette": "打开色相环",
@@ -612,7 +574,7 @@ const zh: Record<MessageKey, string> = {
   "hue.rose": "玫红",
   "hue.blue": "蓝色",
 
-  "foundations.elevation": "表面（海拔阶梯）",
+  "foundations.elevation": "表面（海拔等级）",
   "foundations.accent": "强调色板",
   "foundations.semantic": "状态色",
   "foundations.spacing": "间距尺度",

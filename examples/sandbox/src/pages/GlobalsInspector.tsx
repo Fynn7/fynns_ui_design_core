@@ -3,14 +3,12 @@ import {
   CardActions,
   Collapsible,
   InfoHint,
-  Select,
   Slider,
   toast,
   Tooltip,
 } from "@fynns/ui";
-import { useMemo, useState } from "react";
-import { GLOBAL_SHAPE_PRESETS } from "../../presets/presets";
-import { useLocale, type MessageKey } from "../i18n";
+import { useMemo } from "react";
+import { useLocale } from "../i18n";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { ApplyChangesControl } from "./ApplyChangesControl";
@@ -83,18 +81,12 @@ const READONLY_RADIUS = [
 
 const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
 
-const SHAPE_PRESET_KEYS: Record<string, { label: MessageKey; desc: MessageKey }> = {
-  "m3-aligned-radius": { label: "preset.m3Aligned", desc: "preset.m3AlignedDesc" },
-  "restrained-radius": { label: "preset.restrained", desc: "preset.restrainedDesc" },
-};
-
 /**
  * Global shape inspector: edits `--fynns-radius-*` for the whole UI core.
  */
 export function GlobalsInspector() {
   const { t, plural } = useLocale();
-  const { apply, resolved, loadPreset, draft, mergeOverrides } = useTokenDraft();
-  const [presetId, setPresetId] = useState(GLOBAL_SHAPE_PRESETS[0]?.id ?? "");
+  const { apply, resolved, draft, mergeOverrides } = useTokenDraft();
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
 
@@ -107,25 +99,6 @@ export function GlobalsInspector() {
     mergeOverrides(patch, { source: "reset", group: "radius" });
     toast.message(t("globalsInspector.toastReset"));
   };
-
-  const alignM3Ladder = () => {
-    const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === "m3-aligned-radius");
-    if (!preset) return;
-    mergeOverrides(preset.overrides, { source: "preset", group: "radius" });
-    setPresetId(preset.id);
-    toast.message(t("globalsInspector.toastAlign"));
-  };
-
-  const presetOptions = GLOBAL_SHAPE_PRESETS.map((p) => {
-    const keys = SHAPE_PRESET_KEYS[p.id];
-    return { value: p.id, label: keys ? t(keys.label) : p.label };
-  });
-
-  const activePresetDesc = (() => {
-    const keys = SHAPE_PRESET_KEYS[presetId];
-    if (keys) return t(keys.desc);
-    return GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId)?.description;
-  })();
 
   return (
     <div className="sandbox-inspector">
@@ -143,32 +116,6 @@ export function GlobalsInspector() {
             />
           </span>
         </header>
-
-        <Collapsible title={t("globalsInspector.shapePresets")} defaultOpen>
-          <div className="sandbox-stack">
-            <div className="sandbox-field">
-              <Select
-                ariaLabel={t("globalsInspector.shapePresetAria")}
-                value={presetId}
-                options={presetOptions}
-                onChange={(id) => {
-                  setPresetId(id);
-                  const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === id);
-                  if (!preset) return;
-                  loadPreset(preset.overrides);
-                  const keys = SHAPE_PRESET_KEYS[preset.id];
-                  toast.message(
-                    t("inspector.loadedPreset", {
-                      label: keys ? t(keys.label) : preset.label,
-                    }),
-                  );
-                }}
-              />
-            </div>
-            <p className="sandbox-help">{activePresetDesc}</p>
-            <p className="sandbox-help">{t("globalsInspector.applyPresetNote")}</p>
-          </div>
-        </Collapsible>
 
         <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
           <div className="sandbox-stack">
@@ -232,11 +179,6 @@ export function GlobalsInspector() {
               <Tooltip content={t("globalsInspector.resetLadderTip")}>
                 <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
                   {t("globalsInspector.resetLadder")}
-                </Button>
-              </Tooltip>
-              <Tooltip content={t("globalsInspector.alignM3Tip")}>
-                <Button size="sm" variant="primary" onClick={alignM3Ladder}>
-                  {t("globalsInspector.alignM3")}
                 </Button>
               </Tooltip>
             </CardActions>

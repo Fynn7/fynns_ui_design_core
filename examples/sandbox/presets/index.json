@@ -2,7 +2,7 @@
   {
     "id": "m3-aligned-radius",
     "label": "M3-aligned radius",
-    "description": "Push radius-md toward M3 medium (12px) and expand the shape ladder.",
+    "description": "Push radius-md toward M3 medium (12px) and expand the shape levels.",
     "overrides": {
       "--fynns-radius-xs": "4px",
       "--fynns-radius-sm": "8px",
