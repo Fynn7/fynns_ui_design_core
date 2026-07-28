@@ -5,6 +5,9 @@ import { forwardRef, useId } from "react";
  * Switch (toggle) primitive. Self-implemented `<button role="switch">` with
  * `data-state` so CSS drives the visual. Replaces the radix switch.
  *
+ * Visuals follow M3 Switch proportions (outlined unchecked / filled checked,
+ * fixed-size handle). No handle icon.
+ *
  * Sizes: `md` (default, forms/settings) and `sm` (dense panel headers).
  */
 export type SwitchSize = "md" | "sm";

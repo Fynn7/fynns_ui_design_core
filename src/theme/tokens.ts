@@ -52,6 +52,8 @@ export const COLOR_TOKENS = {
   "accent-24": "rgba(45, 212, 191, 0.24)",
   "accent-42": "rgba(45, 212, 191, 0.42)",
   "accent-ring": "rgba(45, 212, 191, 0.4)",
+  /** Content on solid accent (M3 onPrimary; Switch checked thumb). */
+  "on-accent": "#031417",
   /** Selected / tonal container fill (M3 primaryContainer analogue). */
   "accent-container": "rgba(45, 212, 191, 0.2)",
   /** Text/icons on accent-container. */
@@ -279,13 +281,38 @@ export const Z_TOKENS = {
   tooltip: "8000",
 } as const;
 
-/** Toggle/switch geometry. `--fynns-toggle-<key>`. */
+/**
+ * Toggle/switch geometry (M3 Switch proportions at 16px rem).
+ * Track 52×32dp; fixed handle 20dp (between M3 unselected 16 / selected 24).
+ * Outline 2dp at md; sm uses 1.5px so the stroke does not look heavier.
+ * `track-pad-*` = padding-box inset (outer gap ≈ pad + outline = (track-h − thumb)/2).
+ * No selected-size morph.
+ * `--fynns-toggle-<key>`.
+ */
 export const TOGGLE_TOKENS = {
-  "track-w": "2.2rem",
-  "track-h": "1.25rem",
-  thumb: "0.86rem",
-  "thumb-shift": "0.92rem",
-  "track-pad-inline": "0.14rem",
+  "track-w": "3.25rem",
+  "track-h": "2rem",
+  /** Fixed handle diameter (20dp both states). */
+  thumb: "1.25rem",
+  /** @deprecated Alias of `thumb` — kept so older CSS/refs stay valid. */
+  "thumb-checked": "1.25rem",
+  /** Legacy transform shift; prefer absolute left for Switch. */
+  "thumb-shift": "1.25rem",
+  /** Padding-box inset; pairs with `track-outline` for outer-edge symmetry. */
+  "track-pad-inline": "0.25rem",
+  "track-pad-checked": "0.25rem",
+  /** M3 `track-outline-width` = 2dp. */
+  "track-outline": "2px",
+  /** Proportional outline for `size="sm"` (~75% track). */
+  "track-outline-sm": "1.5px",
+  "state-layer": "2.5rem",
+  "track-w-sm": "2.4375rem",
+  "track-h-sm": "1.5rem",
+  "thumb-sm": "0.9375rem",
+  "thumb-checked-sm": "0.9375rem",
+  "track-pad-inline-sm": "0.1875rem",
+  "track-pad-checked-sm": "0.1875rem",
+  "state-layer-sm": "1.875rem",
   "margin-top": "0.08em",
 } as const;
 
@@ -366,6 +393,7 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "accent-24": "rgba(13, 148, 136, 0.18)",
       "accent-42": "rgba(13, 148, 136, 0.32)",
       "accent-ring": "rgba(13, 148, 136, 0.38)",
+      "on-accent": "#ffffff",
       "accent-container": "rgba(13, 148, 136, 0.14)",
       "on-accent-container": "#0f766e",
       "outline-subtle": "#d5e8e4",

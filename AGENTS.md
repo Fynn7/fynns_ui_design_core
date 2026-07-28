@@ -136,7 +136,7 @@ Color tokens (`--fynns-color-*`):
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
-    `accent-ring`, `accent-container`, `on-accent-container`, `focus`.
+    `accent-ring`, `on-accent`, `accent-container`, `on-accent-container`, `focus`.
   - Lines/text: `border` `#0d2e2c`, `border-strong`, `outline-subtle`, `text` `#e2f0ed`,
     `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
@@ -232,9 +232,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   (no scroll lock / focus trap / blocking scrim). Width via
   `--fynns-layout-drawer-width`.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
-  labelSide?: "start"|"end", disabled? }` (`role="switch"`). Use
-  `labelSide="end"` (track then label) in dense toolbars so tracks share a left
-  edge with `ToggleGroup` / siblings instead of drifting with label length.
+  labelSide?: "start"|"end", disabled? }` (`role="switch"`). M3-aligned track /
+  thumb (52×32dp proportions, outlined unchecked / filled checked, fixed-size
+  handle); no handle icon. Use `labelSide="end"` (track then label) in dense
+  toolbars so tracks share a left edge with `ToggleGroup` / siblings instead of
+  drifting with label length.
   **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`
   grid for multi-row toolbars; each nested `ControlRow` spans the stack via
   CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
@@ -247,7 +249,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   are added (does not reflow into more columns). Tracks size to `max-content` and
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
   match `columns` to `Grid`’s `x`. **ToggleControl** —
-  checkbox/ radio styled as a switch.
+  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`).
 - **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
   `ariaLabel`. `size="compact"` tightens padding for narrow panels.

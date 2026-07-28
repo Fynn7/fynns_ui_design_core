@@ -1156,12 +1156,12 @@
   }
 }
 
-/* ---------- Switch ---------- */
+/* ---------- Switch (M3-aligned track / thumb; no handle icon) ---------- */
 .fynns-switch {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--fynns-space-md);
   color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-tight);
 }
@@ -1177,7 +1177,14 @@
 }
 
 .fynns-switch--sm {
-  gap: 0.4rem;
+  gap: var(--fynns-space-sm);
+  --fynns-toggle-track-w: var(--fynns-toggle-track-w-sm);
+  --fynns-toggle-track-h: var(--fynns-toggle-track-h-sm);
+  --fynns-toggle-thumb: var(--fynns-toggle-thumb-sm);
+  --fynns-toggle-track-pad-inline: var(--fynns-toggle-track-pad-inline-sm);
+  --fynns-toggle-track-pad-checked: var(--fynns-toggle-track-pad-checked-sm);
+  --fynns-toggle-state-layer: var(--fynns-toggle-state-layer-sm);
+  --fynns-toggle-track-outline: var(--fynns-toggle-track-outline-sm);
 }
 
 .fynns-switch--sm .fynns-switch-label {
@@ -1188,29 +1195,88 @@
 .fynns-switch-track {
   position: relative;
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
+  box-sizing: border-box;
   width: var(--fynns-toggle-track-w);
   height: var(--fynns-toggle-track-h);
-  padding: 0 var(--fynns-toggle-track-pad-inline);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  margin: 0;
+  padding: 0;
+  border: var(--fynns-toggle-track-outline) solid var(--fynns-color-border-strong);
   border-radius: var(--fynns-radius-pill);
-  background: var(--fynns-color-toggle-track);
+  background: transparent;
+  appearance: none;
   cursor: pointer;
+  overflow: visible;
   transition:
     background var(--fynns-duration-toggle),
     border-color var(--fynns-duration-toggle),
     box-shadow var(--fynns-duration-toggle);
 }
 
-.fynns-switch--sm .fynns-switch-track {
-  width: 2.05rem;
-  height: 1.08rem;
+/*
+ * Thumb uses `--fynns-toggle-track-pad-*` (padding-box). Pads are sized so
+ * outer gap ≈ pad + outline ≈ (track-h − thumb) / 2 on both ends.
+ */
+.fynns-switch-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: var(--fynns-toggle-state-layer);
+  height: var(--fynns-toggle-state-layer);
+  top: 50%;
+  left: calc(
+    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
+  );
+  border-radius: var(--fynns-radius-round);
+  transform: translate(-50%, -50%);
+  background: transparent;
+  pointer-events: none;
+  transition:
+    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    background var(--fynns-duration-toggle);
+}
+
+.fynns-switch-track[data-state="checked"]::before {
+  left: calc(
+    100% - var(--fynns-toggle-track-pad-checked) -
+      var(--fynns-toggle-thumb) / 2
+  );
+}
+
+.fynns-switch-track:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-switch-track:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-switch-track[data-state="checked"]:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-switch-track[data-state="checked"]:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-pressed),
+    transparent
+  );
 }
 
 .fynns-switch-track[data-state="checked"] {
-  background: var(--fynns-color-accent-24);
-  border-color: var(--fynns-color-accent-dim);
+  background: var(--fynns-color-accent);
+  border-color: var(--fynns-color-accent);
 }
 
 .fynns-switch-track:focus-visible {
@@ -1224,30 +1290,35 @@
 }
 
 .fynns-switch-thumb {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: var(--fynns-toggle-track-pad-inline);
   display: block;
   width: var(--fynns-toggle-thumb);
   height: var(--fynns-toggle-thumb);
   border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-text-muted);
-  box-shadow: var(--fynns-shadow-toggle-thumb);
-  transform: translateX(0);
+  background: var(--fynns-color-border-strong);
+  box-shadow: var(--fynns-shadow-none);
+  transform: translateY(-50%);
   transition:
-    transform var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
     background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
-.fynns-switch--sm .fynns-switch-thumb {
-  width: 0.72rem;
-  height: 0.72rem;
-}
-
 .fynns-switch-thumb[data-state="checked"] {
-  transform: translateX(var(--fynns-toggle-thumb-shift));
-  background: var(--fynns-color-accent);
+  left: calc(
+    100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
+  );
+  background: var(--fynns-color-on-accent);
 }
 
-.fynns-switch--sm .fynns-switch-thumb[data-state="checked"] {
-  transform: translateX(1.05rem);
+@media (prefers-reduced-motion: reduce) {
+  .fynns-switch-track,
+  .fynns-switch-track::before,
+  .fynns-switch-thumb {
+    transition: none;
+  }
 }
 
 /* ---------- ControlStack ---------- */
@@ -1352,7 +1423,7 @@
   overflow: visible;
 }
 
-/* ---------- ToggleControl ---------- */
+/* ---------- ToggleControl (same M3 track/thumb as Switch) ---------- */
 .fynns-toggle {
   display: flex;
   align-items: flex-start;
@@ -1377,20 +1448,39 @@
 }
 
 .fynns-toggle-track {
+  position: relative;
   box-sizing: border-box;
   flex: 0 0 auto;
   width: var(--fynns-toggle-track-w);
   height: var(--fynns-toggle-track-h);
   margin-top: var(--fynns-toggle-margin-top);
   border-radius: var(--fynns-radius-pill);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  background: var(--fynns-color-toggle-track);
-  display: inline-flex;
-  align-items: center;
-  padding: 0 var(--fynns-toggle-track-pad-inline);
+  border: var(--fynns-toggle-track-outline) solid var(--fynns-color-border-strong);
+  background: transparent;
+  overflow: visible;
   transition:
     background var(--fynns-duration-toggle),
-    border-color var(--fynns-duration-toggle);
+    border-color var(--fynns-duration-toggle),
+    box-shadow var(--fynns-duration-toggle);
+}
+
+.fynns-toggle-track::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: var(--fynns-toggle-state-layer);
+  height: var(--fynns-toggle-state-layer);
+  top: 50%;
+  left: calc(
+    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
+  );
+  border-radius: var(--fynns-radius-round);
+  transform: translate(-50%, -50%);
+  background: transparent;
+  pointer-events: none;
+  transition:
+    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    background var(--fynns-duration-toggle);
 }
 
 .fynns-toggle-label {
@@ -1399,35 +1489,95 @@
 }
 
 .fynns-toggle-track__thumb {
-  flex-shrink: 0;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: var(--fynns-toggle-track-pad-inline);
+  display: block;
   width: var(--fynns-toggle-thumb);
   height: var(--fynns-toggle-thumb);
   border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-text-muted);
-  box-shadow: var(--fynns-shadow-toggle-thumb);
-  transform: translateX(0);
+  background: var(--fynns-color-border-strong);
+  box-shadow: var(--fynns-shadow-none);
+  transform: translateY(-50%);
   transition:
-    transform var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
     background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
-.fynns-toggle--switch:hover .fynns-toggle-track {
-  border-color: var(--fynns-color-accent-mid);
-  background: var(--fynns-color-toggle-track-hover);
+.fynns-toggle--switch:hover:not(:has(> input:disabled)) .fynns-toggle-track::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-toggle--switch:active:not(:has(> input:disabled)) .fynns-toggle-track::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-toggle--switch:hover:not(:has(> input:disabled))
+  > input:checked
+  + .fynns-toggle-track::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-toggle--switch:active:not(:has(> input:disabled))
+  > input:checked
+  + .fynns-toggle-track::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-pressed),
+    transparent
+  );
 }
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track {
-  background: var(--fynns-color-accent-24);
-  border-color: var(--fynns-color-accent-dim);
+  background: var(--fynns-color-accent);
+  border-color: var(--fynns-color-accent);
+}
+
+.fynns-toggle--switch > input:checked + .fynns-toggle-track::before {
+  left: calc(
+    100% - var(--fynns-toggle-track-pad-checked) -
+      var(--fynns-toggle-thumb) / 2
+  );
 }
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track .fynns-toggle-track__thumb {
-  transform: translateX(var(--fynns-toggle-thumb-shift));
-  background: var(--fynns-color-accent);
+  left: calc(
+    100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
+  );
+  background: var(--fynns-color-on-accent);
 }
 
 .fynns-toggle--switch > input:focus-visible + .fynns-toggle-track {
   box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-toggle--switch > input:disabled + .fynns-toggle-track {
+  opacity: 0.5;
+}
+
+.fynns-toggle--switch:has(> input:disabled) {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-toggle-track,
+  .fynns-toggle-track::before,
+  .fynns-toggle-track__thumb {
+    transition: none;
+  }
 }
 
 /* ---------- ToggleGroup ---------- */
