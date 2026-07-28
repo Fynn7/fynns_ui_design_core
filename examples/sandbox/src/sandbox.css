@@ -136,17 +136,21 @@
   flex-direction: column;
   gap: var(--fynns-space-2xs);
   min-width: 0;
-  flex: 1;
+  flex: 1 1 12rem;
 }
 
 .sandbox-templates-card-title {
   font-weight: var(--fynns-font-weight-semibold);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .sandbox-templates-card-desc {
   margin: 0;
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text-muted);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .sandbox-templates-card-actions {
@@ -154,6 +158,8 @@
   flex-wrap: wrap;
   gap: var(--fynns-space-2xs);
   align-items: center;
+  flex: 0 0 auto;
+  max-width: 100%;
 }
 
 .sandbox-templates-form {
