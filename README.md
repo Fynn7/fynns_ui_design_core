@@ -149,15 +149,18 @@ Shared token draft for both Card and Collapsible targets (Apply still writes
 - Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
   hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
   outlined `--fynns-color-border-strong`
-- Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
 - State layers: hover / focus / pressed / dragged
 - Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
   (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
   (sandbox-only, not Apply writeback)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
+Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspector
+knobs).
+
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
-draft history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+draft history: inspector knobs, Apply preset (Globals shape), and confirmed agent
+proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 

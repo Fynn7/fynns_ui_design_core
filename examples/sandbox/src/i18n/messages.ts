@@ -149,11 +149,7 @@ const en = {
   "inspector.overridesAria": "What overrides means",
   "inspector.overridesHint":
     "Count of draft CSS variables versus baseline (--fynns-* and sandbox chrome). Reset clears them; Apply changes writes only --fynns-* into tokens.ts.",
-  "inspector.presets": "Presets",
-  "inspector.presetAria": "Preset",
   "inspector.applyPreset": "Apply preset",
-  "inspector.presetShapeNote":
-    "Shape / radius lives under Globals — these presets cover elevation and state layers.",
   "inspector.loadedPreset": "Loaded preset: {label}",
   "inspector.color": "Color",
   "inspector.colorHelp":
@@ -176,18 +172,6 @@ const en = {
     "--fynns-color-border-strong — stroke for outlined Card and strong borders.",
   "inspector.outlineBorderBrightness": "Outline border brightness",
   "inspector.outlineHelp": "Used by outlined cards as the stroke color.",
-  "inspector.elevation": "Elevation",
-  "inspector.elevatedShadow": "Elevated resting shadow (xs)",
-  "inspector.elevatedShadowAria": "About elevated resting shadow",
-  "inspector.elevatedShadowHint":
-    "--fynns-shadow-xs — resting elevation shadow for elevated Card (ladder swatches above are read-only).",
-  "inspector.elevatedShadowSelect": "Elevated shadow preset",
-  "inspector.elevationHelp":
-    "Tonal ladder is read-only above; elevated cards use shadow-xs at rest. Dragged / reserved levels use surface-4/5.",
-  "inspector.shadowNone": "None",
-  "inspector.shadowSoft": "Soft",
-  "inspector.shadowDefault": "Default",
-  "inspector.shadowStrong": "Strong",
   "inspector.stateLayers": "State layers",
   "inspector.stateHoverHint":
     "--fynns-state-hover opacity for pointer-hover overlays (color-mix on interactive surfaces).",
@@ -287,10 +271,6 @@ const en = {
   "preset.m3AlignedDesc": "Push radius-md toward M3 medium (12px) and expand the shape ladder.",
   "preset.restrained": "Restrained radius",
   "preset.restrainedDesc": "Slightly tighter corners than current baseline.",
-  "preset.strongerElev": "Stronger elevation",
-  "preset.strongerElevDesc": "Emphasize elevated cards with a deeper resting shadow.",
-  "preset.softerState": "Softer state layers",
-  "preset.softerStateDesc": "Dial back interactive overlay opacities.",
 
   "hue.presetsAria": "Hue presets",
   "hue.openPalette": "Open hue palette",
@@ -461,11 +441,7 @@ const zh: Record<MessageKey, string> = {
   "inspector.overridesAria": "覆盖项含义",
   "inspector.overridesHint":
     "草稿 CSS 变量相对基线的数量（--fynns-* 与沙盒界面）。重置会清空；「应用更改」仅将 --fynns-* 写入 tokens.ts。",
-  "inspector.presets": "预设",
-  "inspector.presetAria": "预设",
   "inspector.applyPreset": "应用预设",
-  "inspector.presetShapeNote":
-    "形状 / 圆角在「全局」页 —— 这些预设覆盖海拔与状态层。",
   "inspector.loadedPreset": "已加载预设：{label}",
   "inspector.color": "颜色",
   "inspector.colorHelp":
@@ -485,18 +461,6 @@ const zh: Record<MessageKey, string> = {
     "--fynns-color-border-strong — outlined Card 与强边框的描边色。",
   "inspector.outlineBorderBrightness": "描边边框亮度",
   "inspector.outlineHelp": "outlined 卡片用作描边颜色。",
-  "inspector.elevation": "海拔",
-  "inspector.elevatedShadow": "抬升静止阴影 (xs)",
-  "inspector.elevatedShadowAria": "关于抬升静止阴影",
-  "inspector.elevatedShadowHint":
-    "--fynns-shadow-xs — elevated Card 的静止海拔阴影（上方阶梯色块为只读）。",
-  "inspector.elevatedShadowSelect": "抬升阴影预设",
-  "inspector.elevationHelp":
-    "上方色调阶梯为只读；抬升卡片静止时使用 shadow-xs。拖拽 / 保留级使用 surface-4/5。",
-  "inspector.shadowNone": "无",
-  "inspector.shadowSoft": "柔和",
-  "inspector.shadowDefault": "默认",
-  "inspector.shadowStrong": "强烈",
   "inspector.stateLayers": "状态层",
   "inspector.stateHoverHint":
     "--fynns-state-hover 不透明度，用于指针悬停叠加（在可交互表面上 color-mix）。",
@@ -596,10 +560,6 @@ const zh: Record<MessageKey, string> = {
   "preset.m3AlignedDesc": "将 radius-md 推向 M3 medium (12px) 并扩展形状阶梯。",
   "preset.restrained": "克制圆角",
   "preset.restrainedDesc": "比当前基线略紧的圆角。",
-  "preset.strongerElev": "更强海拔",
-  "preset.strongerElevDesc": "用更深的静止阴影强调 elevated 卡片。",
-  "preset.softerState": "更柔状态层",
-  "preset.softerStateDesc": "降低交互叠加不透明度。",
 
   "hue.presetsAria": "色相预设",
   "hue.openPalette": "打开色相盘",
