@@ -35,6 +35,7 @@ export * from "./primitives/Drawer";
 export * from "./primitives/Switch";
 export * from "./primitives/Checkbox";
 export * from "./primitives/Radio";
+export * from "./primitives/Chip";
 export * from "./primitives/ControlRow";
 export * from "./primitives/ControlStack";
 export * from "./primitives/Grid";

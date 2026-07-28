@@ -196,6 +196,13 @@
   --fynns-selection-radio-dot: 0.625rem;
   --fynns-selection-icon-size: 0.875rem;
   --fynns-selection-state-layer: 2.5rem;
+  --fynns-chip-height: 2rem;
+  --fynns-chip-icon-size: 1.125rem;
+  --fynns-chip-trailing-action-size: 1.5rem;
+  --fynns-chip-pad-inline: 0.75rem;
+  --fynns-chip-pad-inline-icon: 0.5rem;
+  --fynns-chip-gap: 0.5rem;
+  --fynns-chip-outline: 1px;
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;

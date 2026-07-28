@@ -15,8 +15,8 @@ This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
   Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, Switch, ToggleControl, ToggleGroup, Tabs,
   Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast, Alert banners, Spinner/
-  Skeleton/Overlay, Badge, Divider, Checkbox, Radio, Kbd, CommandPalette). Reach
-  for an existing primitive before writing a new control.
+  Skeleton/Overlay, Badge, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
+  Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed

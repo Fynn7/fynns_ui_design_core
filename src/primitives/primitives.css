@@ -3348,6 +3348,260 @@
   }
 }
 
+/* ---------- Chip (M3 assist / filter / input) ---------- */
+.fynns-chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-chip,
+.fynns-chip-face {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-chip-gap);
+  min-height: var(--fynns-chip-height);
+  padding: 0 var(--fynns-chip-pad-inline);
+  border: var(--fynns-chip-outline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-sm);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font-family: inherit;
+  font-size: var(--fynns-font-size-form-label);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-compact);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--fynns-duration-fast),
+    border-color var(--fynns-duration-fast),
+    box-shadow var(--fynns-duration-fast),
+    color var(--fynns-duration-fast);
+}
+
+.fynns-chip--removable {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.fynns-chip--removable .fynns-chip-face {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  min-height: calc(var(--fynns-chip-height) - 2 * var(--fynns-chip-outline));
+  padding-inline-start: var(--fynns-chip-pad-inline);
+  padding-inline-end: var(--fynns-space-2xs);
+  flex: 1 1 auto;
+}
+
+/* Removable: no local wash on the face — only the shell lights up. */
+.fynns-chip--removable .fynns-chip-face::before {
+  content: none;
+}
+
+.fynns-chip:has(.fynns-chip-leading),
+.fynns-chip-face:has(.fynns-chip-leading) {
+  padding-inline-start: var(--fynns-chip-pad-inline-icon);
+}
+
+.fynns-chip::before,
+.fynns-chip-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+  transition: background var(--fynns-duration-fast);
+}
+
+.fynns-chip:hover:not(:disabled)::before,
+.fynns-chip-face:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip:active:not(:disabled)::before,
+.fynns-chip-face:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+/* Hovering the remove control must not wash the whole chip. */
+.fynns-chip--removable:hover::before,
+.fynns-chip--removable:active::before {
+  background: transparent;
+}
+
+.fynns-chip--removable:has(.fynns-chip-face:hover)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--removable:has(.fynns-chip-face:active)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip--elevated {
+  border-color: transparent;
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-chip--selected {
+  border-color: transparent;
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-chip--selected:hover:not(:disabled)::before,
+.fynns-chip--selected .fynns-chip-face:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--removable.fynns-chip--selected:hover::before {
+  background: transparent;
+}
+
+.fynns-chip--removable.fynns-chip--selected:has(.fynns-chip-face:hover)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip:focus-visible,
+.fynns-chip-face:focus-visible,
+.fynns-chip-remove-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-chip:disabled,
+.fynns-chip:has(.fynns-chip-face:disabled) {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fynns-chip-leading,
+.fynns-chip-trailing {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-chip-icon-size);
+  height: var(--fynns-chip-icon-size);
+  color: var(--fynns-color-accent);
+}
+
+.fynns-chip--selected .fynns-chip-leading,
+.fynns-chip--selected .fynns-chip-trailing {
+  color: inherit;
+}
+
+.fynns-chip-label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.fynns-chip-check {
+  display: block;
+}
+
+.fynns-chip-remove-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  /* M3 trailing action state layer: 24dp (4/3 × 18dp icon). */
+  width: var(--fynns-chip-trailing-action-size);
+  height: var(--fynns-chip-trailing-action-size);
+  margin: 0 var(--fynns-space-2xs) 0 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--fynns-duration-fast);
+}
+
+.fynns-chip-remove-btn:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--selected .fynns-chip-remove-btn:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip-remove-btn:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip--selected .fynns-chip-remove-btn:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip-remove-btn:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chip,
+  .fynns-chip-face,
+  .fynns-chip::before,
+  .fynns-chip-face::before {
+    transition: none;
+  }
+}
+
 /* ---------- Kbd ---------- */
 .fynns-kbd {
   display: inline-block;

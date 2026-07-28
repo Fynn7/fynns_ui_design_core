@@ -5,6 +5,8 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
+  Chip,
+  ChipSet,
   Collapsible,
   Divider,
   Input,
@@ -33,6 +35,8 @@ export function GlobalsPage() {
   const [checkOn, setCheckOn] = useState(true);
   const [checkMixed, setCheckMixed] = useState(true);
   const [radioValue, setRadioValue] = useState<"a" | "b">("a");
+  const [filterOn, setFilterOn] = useState(true);
+  const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
 
   return (
     <div className="sandbox-globals">
@@ -101,6 +105,30 @@ export function GlobalsPage() {
               onCheckedChange={() => setRadioValue("b")}
             />
           </div>
+          <ChipSet ariaLabel={t("globals.chipsAria")}>
+            <Chip onClick={() => {}}>{t("globals.chipAssist")}</Chip>
+            <Chip
+              variant="filter"
+              selected={filterOn}
+              onClick={() => setFilterOn((v) => !v)}
+            >
+              {t("globals.chipFilter")}
+            </Chip>
+            <Chip elevated onClick={() => {}}>
+              {t("globals.chipElevated")}
+            </Chip>
+            {inputChips.map((name) => (
+              <Chip
+                key={name}
+                variant="input"
+                selected
+                removeAriaLabel={t("globals.chipRemove")}
+                onRemove={() => setInputChips((list) => list.filter((x) => x !== name))}
+              >
+                {name}
+              </Chip>
+            ))}
+          </ChipSet>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <span className="sandbox-help">{t("globals.dividerFull")}</span>

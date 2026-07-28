@@ -123,7 +123,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -260,7 +260,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `ariaLabel`. `size="compact"` tightens padding for narrow panels.
   Segments are always equal width (sized to the longest label) with centered
   text; `fullWidth` stretches the group to its container. Chips fill the
-  group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
+  group when it is stretched (a flex/grid child or `fullWidth`). **Chip** /
+  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
+  leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 chips (32dp);
+  filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
+  button. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
+  segmented exclusivity. **Tabs**
   `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — **one-shot disclosure section** for agents and apps: pass `title` + `children`

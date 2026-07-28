@@ -12,6 +12,8 @@ import {
   Collapsible,
   ConfirmDialog,
   Checkbox,
+  Chip,
+  ChipSet,
   Dialog,
   Divider,
   Drawer,
@@ -59,6 +61,7 @@ export function App() {
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
   const [radioValue, setRadioValue] = useState<"a" | "b">("a");
+  const [filterChip, setFilterChip] = useState(true);
   const [seg, setSeg] = useState<"a" | "b" | "c">("a");
   const [tab, setTab] = useState<"one" | "two">("one");
   const [fruit, setFruit] = useState("Apple");
@@ -246,6 +249,19 @@ export function App() {
             checked={radioValue === "b"}
             onCheckedChange={() => setRadioValue("b")}
           />
+          <ChipSet ariaLabel="Chips">
+            <Chip onClick={() => {}}>Assist</Chip>
+            <Chip
+              variant="filter"
+              selected={filterChip}
+              onClick={() => setFilterChip((v) => !v)}
+            >
+              Filter
+            </Chip>
+            <Chip variant="input" selected onRemove={() => {}}>
+              Input
+            </Chip>
+          </ChipSet>
           <ToggleGroup
             value={seg}
             onChange={setSeg}
