@@ -8,6 +8,8 @@ alwaysApply: true
 
 This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
 `packages/fynns_ui_design_core`). It is the single source of truth for UI.
+To install into a **new** consumer: follow `llm/CONSUME.md` and run
+`scripts/install-as-submodule.mjs` (never npm-install `@fynns/ui-design-core`).
 
 ## Rules
 

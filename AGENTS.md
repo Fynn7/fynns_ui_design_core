@@ -9,6 +9,12 @@ repos should link here, not duplicate it.
 A dark-teal design system: canonical `--fynns-*` CSS tokens + self-developed,
 dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 
+**Installing into a consumer repo (submodule + Vite alias):** follow
+[`llm/CONSUME.md`](llm/CONSUME.md) and run
+`npm run consume:install -- --target <consumer-root>`
+(`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
+Never add this package to a consumer's `package.json` dependencies.
+
 ## Design philosophy & UX principles
 
 This is the **single source of truth** for *how* UI is built across every repo

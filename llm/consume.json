@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "name": "fynns-ui-consume",
+  "title": "Install @fynns/ui via git submodule (LLM contract)",
+  "description": "Machine-readable API for agents: add fynns_ui_design_core as a submodule and wire Vite/tsconfig aliases. Never npm-install this package.",
+  "docs": {
+    "human": "llm/CONSUME.md",
+    "designSystem": "AGENTS.md",
+    "propagation": "docs/submodule-propagation.md"
+  },
+  "rules": [
+    "Consume as git submodule + Vite source alias @fynns/ui.",
+    "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
+    "NEVER publish-install from npm registry for day-to-day app work.",
+    "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
+    "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately)."
+  ],
+  "defaults": {
+    "submodulePath": "packages/fynns_ui_design_core",
+    "url": "https://github.com/Fynn7/fynns_ui_design_core.git",
+    "alias": "@fynns/ui",
+    "entry": "packages/fynns_ui_design_core/src/index.ts"
+  },
+  "commands": {
+    "bootstrapThenInstall": {
+      "description": "When the consumer does not yet have this repo: clone core to a temp dir, then run install against the consumer root.",
+      "windows": [
+        "git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git \"%TEMP%\\fynns_ui_design_core\"",
+        "node \"%TEMP%\\fynns_ui_design_core\\scripts\\install-as-submodule.mjs\" --target \"<CONSUMER_ROOT>\" --json"
+      ],
+      "posix": [
+        "git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git /tmp/fynns_ui_design_core",
+        "node /tmp/fynns_ui_design_core/scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --json"
+      ]
+    },
+    "install": {
+      "description": "Add submodule (if missing) and wire Vite + tsconfig. Run from a checkout of fynns_ui_design_core.",
+      "argv": [
+        "node",
+        "scripts/install-as-submodule.mjs",
+        "--target",
+        "<CONSUMER_ROOT>",
+        "--json"
+      ],
+      "npm": "npm run consume:install -- --target <CONSUMER_ROOT> --json"
+    },
+    "check": {
+      "description": "Validate submodule + alias + no forbidden npm deps.",
+      "argv": [
+        "node",
+        "scripts/install-as-submodule.mjs",
+        "--target",
+        "<CONSUMER_ROOT>",
+        "--check",
+        "--json"
+      ]
+    },
+    "wireOnly": {
+      "description": "Submodule already present; only patch Vite/tsconfig.",
+      "argv": [
+        "node",
+        "scripts/install-as-submodule.mjs",
+        "--target",
+        "<CONSUMER_ROOT>",
+        "--wire-only",
+        "--json"
+      ]
+    }
+  },
+  "successCriteria": [
+    "packages/fynns_ui_design_core/src/index.ts exists in the consumer",
+    ".gitmodules lists the submodule",
+    "vite.config.* has resolve.alias[\"@fynns/ui\"] pointing at that entry",
+    "vite resolve.dedupe includes react and react-dom",
+    "tsconfig paths map @fynns/ui to the same entry (when a tsconfig exists)",
+    "package.json does not depend on @fynns/ui or @fynns/ui-design-core",
+    "import { Collapsible } from \"@fynns/ui\" typechecks / builds in the consumer"
+  ],
+  "importExample": "import { Button, Collapsible, PanelCard, Toaster, toast } from \"@fynns/ui\";"
+}
