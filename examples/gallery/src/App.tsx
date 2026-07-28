@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   AlertCircleIcon,
+  Avatar,
   Badge,
   Button,
   Card,
@@ -323,6 +324,9 @@ export function App() {
           <Spinner label="Loading" />
           <CircularProgress value={0.7} label="70 percent" size="sm" />
           <CircularProgress label="Working" />
+          <Avatar size="sm" name="Ada" alt="Ada" />
+          <Avatar name="Ada Lovelace" alt="Ada Lovelace" />
+          <Avatar alt="User" />
         </Row>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>

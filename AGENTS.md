@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -325,6 +325,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
   determinate track gap + linear stop). Omit `value` for indeterminate. Prefer
   `Spinner` for compact button/inline busy; use Progress for known % or section waits.
+  **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
+  identity (40dp default); image → children → initials from `name` → person glyph.
+  Pass into `CardHeader`’s `avatar` slot.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
@@ -332,6 +335,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
+  `PersonIcon`,
   `InfoIcon`, `SearchIcon`, `AlertCircleIcon`, `AlertTriangleIcon`,
   `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,

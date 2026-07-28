@@ -2965,6 +2965,17 @@
   overflow: hidden;
 }
 
+/* Prefer the Avatar primitive inside the slot — drop the legacy chrome. */
+.fynns-card-header-avatar:has(.fynns-avatar) {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  overflow: visible;
+}
+
 .fynns-card-header-text {
   flex: 1 1 auto;
   min-width: 0;
@@ -3878,4 +3889,56 @@
   .fynns-circular-progress--indeterminate .fynns-circular-progress-active {
     animation-duration: calc(var(--fynns-duration-reduced-motion-spin) * 1.5);
   }
+}
+
+/* ---------- Avatar (M3) ---------- */
+.fynns-avatar {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--fynns-avatar-size);
+  height: var(--fynns-avatar-size);
+  border-radius: var(--fynns-radius-round);
+  overflow: hidden;
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-avatar-font-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: 1;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.fynns-avatar--sm {
+  width: var(--fynns-avatar-size-sm);
+  height: var(--fynns-avatar-size-sm);
+  font-size: var(--fynns-avatar-font-size-sm);
+}
+
+.fynns-avatar--lg {
+  width: var(--fynns-avatar-size-lg);
+  height: var(--fynns-avatar-size-lg);
+  font-size: var(--fynns-avatar-font-size-lg);
+}
+
+.fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-avatar-initials,
+.fynns-avatar-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
 }

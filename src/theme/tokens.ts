@@ -361,6 +361,20 @@ export const PROGRESS_TOKENS = {
   "circular-size-lg": "4rem",
 } as const;
 
+/**
+ * Avatar geometry (M3 list leading avatar at 16px rem).
+ * Default 40dp; sm 32dp; lg 56dp.
+ * `--fynns-avatar-<key>`.
+ */
+export const AVATAR_TOKENS = {
+  size: "2.5rem",
+  "size-sm": "2rem",
+  "size-lg": "3.5rem",
+  "font-size": "1rem",
+  "font-size-sm": "0.75rem",
+  "font-size-lg": "1.25rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -514,6 +528,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["selection", SELECTION_TOKENS],
   ["chip", CHIP_TOKENS],
   ["progress", PROGRESS_TOKENS],
+  ["avatar", AVATAR_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

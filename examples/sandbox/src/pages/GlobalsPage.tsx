@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Badge,
   Button,
   Card,
@@ -157,6 +158,12 @@ export function GlobalsPage() {
             <CircularProgress value={0.2} label={t("globals.progressCircularAria")} size="lg" />
           </div>
         </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
+          <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
+          <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
+          <Avatar alt={t("globals.avatarFallback")} />
+        </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>
 
@@ -165,7 +172,11 @@ export function GlobalsPage() {
         <div className="sandbox-globals-cards">
           {(["elevated", "filled", "outlined"] as const).map((variant) => (
             <Card key={variant} variant={variant} className="sandbox-globals-card">
-              <CardHeader title={variant} subtitle={t("globals.cardSubtitle")} />
+              <CardHeader
+                title={variant}
+                subtitle={t("globals.cardSubtitle")}
+                avatar={<Avatar name="FY" alt={t("globals.avatarCard")} size="sm" />}
+              />
               <CardContent>{t("globals.cardBody")}</CardContent>
             </Card>
           ))}
