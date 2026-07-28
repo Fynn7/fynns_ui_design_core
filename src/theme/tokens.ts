@@ -52,7 +52,7 @@ export const COLOR_TOKENS = {
   "accent-24": "rgba(45, 212, 191, 0.24)",
   "accent-42": "rgba(45, 212, 191, 0.42)",
   "accent-ring": "rgba(45, 212, 191, 0.4)",
-  /** Content on solid accent (M3 onPrimary; Switch checked thumb). */
+  /** Content on solid accent (M3 onPrimary; e.g. primary Button label). */
   "on-accent": "#031417",
   /** Selected / tonal container fill (M3 primaryContainer analogue). */
   "accent-container": "rgba(45, 212, 191, 0.2)",
@@ -314,14 +314,12 @@ export const TOGGLE_TOKENS = {
   "track-outline": "2px",
   /** Proportional outline for `size="sm"` (~75% track). */
   "track-outline-sm": "1.5px",
-  "state-layer": "2.5rem",
   "track-w-sm": "2.4375rem",
   "track-h-sm": "1.5rem",
   "thumb-sm": "0.9375rem",
   "thumb-checked-sm": "0.9375rem",
   "track-pad-inline-sm": "0.1875rem",
   "track-pad-checked-sm": "0.1875rem",
-  "state-layer-sm": "1.875rem",
   "margin-top": "0.08em",
 } as const;
 

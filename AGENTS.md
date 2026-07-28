@@ -249,8 +249,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Prefer `Drawer` for desktop side panels.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
   labelSide?: "start"|"end", disabled? }` (`role="switch"`). M3-aligned track /
-  thumb (52×32dp proportions, outlined unchecked / filled checked, fixed-size
-  handle); no handle icon. Use `labelSide="end"` (track then label) in dense
+  thumb (52×32dp proportions, outlined unchecked / soft `accent-24` track +
+  accent outline & thumb when checked, fixed-size handle); no handle icon. Use
+  `labelSide="end"` (track then label) in dense
   toolbars so tracks share a left edge with `ToggleGroup` / siblings instead of
   drifting with label length.
   **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`

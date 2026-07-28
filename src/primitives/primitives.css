@@ -1328,7 +1328,6 @@
   --fynns-toggle-thumb: var(--fynns-toggle-thumb-sm);
   --fynns-toggle-track-pad-inline: var(--fynns-toggle-track-pad-inline-sm);
   --fynns-toggle-track-pad-checked: var(--fynns-toggle-track-pad-checked-sm);
-  --fynns-toggle-state-layer: var(--fynns-toggle-state-layer-sm);
   --fynns-toggle-track-outline: var(--fynns-toggle-track-outline-sm);
 }
 
@@ -1360,67 +1359,11 @@
 /*
  * Thumb uses `--fynns-toggle-track-pad-*` (padding-box). Pads are sized so
  * outer gap ≈ pad + outline ≈ (track-h − thumb) / 2 on both ends.
+ * No hover/pressed state-layer halo on the thumb.
  */
-.fynns-switch-track::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  width: var(--fynns-toggle-state-layer);
-  height: var(--fynns-toggle-state-layer);
-  top: 50%;
-  left: calc(
-    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
-  );
-  border-radius: var(--fynns-radius-round);
-  transform: translate(-50%, -50%);
-  background: transparent;
-  pointer-events: none;
-  transition:
-    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
-    background var(--fynns-duration-toggle);
-}
-
-.fynns-switch-track[data-state="checked"]::before {
-  left: calc(
-    100% - var(--fynns-toggle-track-pad-checked) -
-      var(--fynns-toggle-thumb) / 2
-  );
-}
-
-.fynns-switch-track:hover:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-switch-track:active:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-switch-track[data-state="checked"]:hover:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-switch-track[data-state="checked"]:active:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
 .fynns-switch-track[data-state="checked"] {
-  background: var(--fynns-color-accent);
+  /* Soft filled track + accent outline; thumb stays accent (not on-accent). */
+  background: var(--fynns-color-accent-24);
   border-color: var(--fynns-color-accent);
 }
 
@@ -1455,12 +1398,11 @@
   left: calc(
     100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
-  background: var(--fynns-color-on-accent);
+  background: var(--fynns-color-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fynns-switch-track,
-  .fynns-switch-track::before,
   .fynns-switch-thumb {
     transition: none;
   }
@@ -1609,25 +1551,6 @@
     box-shadow var(--fynns-duration-toggle);
 }
 
-.fynns-toggle-track::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  width: var(--fynns-toggle-state-layer);
-  height: var(--fynns-toggle-state-layer);
-  top: 50%;
-  left: calc(
-    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
-  );
-  border-radius: var(--fynns-radius-round);
-  transform: translate(-50%, -50%);
-  background: transparent;
-  pointer-events: none;
-  transition:
-    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
-    background var(--fynns-duration-toggle);
-}
-
 .fynns-toggle-label {
   flex: 1 1 0;
   min-width: 0;
@@ -1650,59 +1573,16 @@
     background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
 }
 
-.fynns-toggle--switch:hover:not(:has(> input:disabled)) .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:active:not(:has(> input:disabled)) .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:hover:not(:has(> input:disabled))
-  > input:checked
-  + .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-toggle--switch:active:not(:has(> input:disabled))
-  > input:checked
-  + .fynns-toggle-track::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
 .fynns-toggle--switch > input:checked + .fynns-toggle-track {
-  background: var(--fynns-color-accent);
+  background: var(--fynns-color-accent-24);
   border-color: var(--fynns-color-accent);
-}
-
-.fynns-toggle--switch > input:checked + .fynns-toggle-track::before {
-  left: calc(
-    100% - var(--fynns-toggle-track-pad-checked) -
-      var(--fynns-toggle-thumb) / 2
-  );
 }
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track .fynns-toggle-track__thumb {
   left: calc(
     100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
-  background: var(--fynns-color-on-accent);
+  background: var(--fynns-color-accent);
 }
 
 .fynns-toggle--switch > input:focus-visible + .fynns-toggle-track {
@@ -1719,7 +1599,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fynns-toggle-track,
-  .fynns-toggle-track::before,
   .fynns-toggle-track__thumb {
     transition: none;
   }
