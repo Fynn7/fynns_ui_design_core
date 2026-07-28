@@ -18,6 +18,8 @@ export type CardProps = HTMLAttributes<HTMLDivElement> & {
   variant?: CardVariant;
   /** Renders as a single clickable region with state-layer feedback + focus ring. */
   interactive?: boolean;
+  /** Selected / emphasized container (accent-container). */
+  selected?: boolean;
   disabled?: boolean;
   children: ReactNode;
 };
@@ -31,6 +33,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   {
     variant = "elevated",
     interactive = false,
+    selected = false,
     disabled = false,
     className,
     children,
@@ -59,13 +62,16 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
       role={role ?? (isInteractive ? "button" : undefined)}
       tabIndex={tabIndex ?? (isInteractive ? 0 : undefined)}
       aria-disabled={disabled || undefined}
+      aria-pressed={isInteractive && selected ? true : undefined}
       data-variant={variant}
       data-interactive={isInteractive ? "true" : undefined}
+      data-selected={selected ? "true" : undefined}
       data-disabled={disabled ? "true" : undefined}
       className={join(
         "fynns-card",
         `fynns-card--${variant}`,
         isInteractive && "fynns-card--interactive",
+        selected && "fynns-card--selected",
         disabled && "fynns-card--disabled",
         className,
       )}

@@ -53,10 +53,6 @@
   color: var(--fynns-color-accent);
 }
 
-.sandbox-body--single {
-  grid-template-columns: 1fr;
-}
-
 .sandbox-file-input {
   position: absolute;
   width: 1px;
@@ -136,17 +132,21 @@
   flex-direction: column;
   gap: var(--fynns-space-2xs);
   min-width: 0;
-  flex: 1;
+  flex: 1 1 12rem;
 }
 
 .sandbox-templates-card-title {
   font-weight: var(--fynns-font-weight-semibold);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .sandbox-templates-card-desc {
   margin: 0;
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text-muted);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .sandbox-templates-card-actions {
@@ -154,6 +154,8 @@
   flex-wrap: wrap;
   gap: var(--fynns-space-2xs);
   align-items: center;
+  flex: 0 0 auto;
+  max-width: 100%;
 }
 
 .sandbox-templates-form {
@@ -202,26 +204,68 @@
 }
 
 .sandbox-body {
-  display: grid;
-  grid-template-columns: 1fr min(22rem, 36vw);
+  display: flex;
   flex: 1;
   min-height: 0;
+  min-width: 0;
 }
 
 .sandbox-canvas {
+  flex: 1 1 auto;
   padding: var(--fynns-space-lg);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
+  min-width: 0;
+}
+
+.sandbox-playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-width: 0;
 }
 
 .sandbox-aside {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 22rem;
+  max-width: 36vw;
   border-left: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-1);
   min-height: 0;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  transition:
+    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    border-left-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.sandbox-aside[data-state="closing"] {
+  width: 0;
+  max-width: 0;
+  border-left-color: transparent;
+}
+
+/* Keep inspector layout stable while the pane width clips — avoids reflow
+   that reads as a morphing corner at the canvas / aside seam. */
+.sandbox-aside > * {
+  width: 22rem;
+  max-width: 36vw;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-aside,
+  .sandbox-aside[data-state="closing"] {
+    transition: none;
+  }
 }
 
 .sandbox-inspector {
@@ -766,8 +810,14 @@
   flex-direction: column;
   align-items: center;
   gap: var(--fynns-space-xs);
+  max-width: 5.5rem;
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.sandbox-globals-swatch-uses {
+  line-height: var(--fynns-line-height-tight, 1.25);
 }
 
 .sandbox-globals-swatch-box {
@@ -775,6 +825,20 @@
   height: 3.5rem;
   background: var(--fynns-color-surface-2);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+}
+
+.sandbox-radius-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.sandbox-radius-uses {
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+  font-weight: var(--fynns-font-weight-regular, 400);
 }
 
 .sandbox-globals-readonly {
@@ -814,12 +878,30 @@
   }
 
   .sandbox-body {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .sandbox-aside {
+    width: 100%;
+    max-width: none;
     border-left: none;
     border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
     max-height: 50vh;
+  }
+
+  .sandbox-aside > * {
+    width: 100%;
+    max-width: none;
+  }
+
+  .sandbox-aside[data-state="closing"] {
+    width: 100%;
+    max-width: none;
+    max-height: 0;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 }

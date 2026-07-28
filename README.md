@@ -78,10 +78,13 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
-  [`examples/sandbox`](examples/sandbox) (Globals shape ladder, live Card
+  [`examples/sandbox`](examples/sandbox) (Globals shape levels, live Card
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
+  Collapsible sections animate open/close with a height slide; the inspector
+  aside opens/closes by clipping its width (hard seam with the canvas — no
+  translate slide that morphs the corner).
 
 ## Aesthetic sandbox
 
@@ -89,7 +92,9 @@ The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. Pages: **Surfaces** (Card or Collapsible target),
 **Globals** (system shape / radius), Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
-and named templates).
+and named templates). On Surfaces / Globals, the topbar **inspector** toggle
+(`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
+without an inspector), the canvas uses a single full-width column.
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
@@ -119,11 +124,12 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Globals (system shape)
 
-- Shape ladder: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Align M3 /
-  Reset ladder)
+- Shape levels: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Reset levels)
 - Read-only: `none` / `pill` / `round`
-- Presets: M3-aligned radius, Restrained radius
-- Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
+- Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
+- Preview stage shows Button, Input, Select, Badge, Switch (pill), Card variants,
+  Collapsible, plus an xs–xl levels legend labeled with which components use each
+  step (cards use **md**; switch track uses **pill**)
 
 ### Preview toggles (Surfaces)
 
@@ -132,35 +138,32 @@ change Apply writeback).
 
 **Card**
 
-- Anatomy: Media on/off
-- States: Interactive, Disabled
-- Actions: align start|end
+- Contents: Image on/off
+- Behavior: Clickable, Disabled
+- Footer buttons: align left|right
 
 **Collapsible**
 
-- States: Open (controlled preview)
-- Anatomy: Header actions on/off
+- Behavior: Expanded (controlled preview)
+- Contents: Extra header button on/off
 
 ### Inspector knobs (Surfaces)
 
 Shared token draft for both Card and Collapsible targets (Apply still writes
 `tokens.ts` only — no component recipe writeback):
 
-- Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
-  hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
-  outlined `--fynns-color-border-strong`
-- State layers: hover / focus / pressed / dragged
-- Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
-  (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
+- Color: accent chips + rainbow hue wheel; elevated / filled / page background
+  brightness; outlined card border
+- Hover overlays: hover / focus / pressed / dragged
+- Spacing: card body / title row / footer button gaps; inspector **Section gap**
   (sandbox-only, not Apply writeback)
-- Typography: `--fynns-font-size-{sm,md,lg}`
+- Type size: `--fynns-font-size-{sm,md,lg}`
 
 Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspector
 knobs).
 
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
-draft history: inspector knobs, Apply preset (Globals shape), and confirmed agent
-proposals. One hue
+draft history: inspector knobs and confirmed agent proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 

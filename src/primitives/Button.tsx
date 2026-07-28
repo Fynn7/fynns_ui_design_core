@@ -1,13 +1,15 @@
-import type { ButtonHTMLAttributes, ForwardedRef } from "react";
+import type { ButtonHTMLAttributes, ForwardedRef, ReactNode } from "react";
 import { forwardRef } from "react";
+import { Spinner } from "./Loading";
 
 /**
  * Button primitive. The single source of truth for `<button>` styling across
- * fynns apps. Style axes are `variant`, `size`, `active`, `iconOnly` only; any
- * other visual tweak must go through `--fynns-*` overrides, never inline color.
+ * fynns apps. Style axes are `variant`, `size`, `active`, `iconOnly`, `loading`
+ * only; any other visual tweak must go through `--fynns-*` overrides, never
+ * inline color.
  */
-export type ButtonVariant = "default" | "primary" | "danger" | "ghost";
-export type ButtonSize = "md" | "sm";
+export type ButtonVariant = "default" | "primary" | "tonal" | "danger" | "ghost";
+export type ButtonSize = "md" | "sm" | "lg";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -18,11 +20,15 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   danger?: boolean;
   /** Layout-only: renders a square icon button. */
   iconOnly?: boolean;
+  /** Shows a spinner and disables the control. */
+  loading?: boolean;
+  children?: ReactNode;
 };
 
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   default: "",
   primary: "fynns-btn--primary",
+  tonal: "fynns-btn--tonal",
   danger: "fynns-btn--danger",
   ghost: "fynns-btn--ghost",
 };
@@ -34,8 +40,11 @@ export const Button = forwardRef(function Button(
     active = false,
     danger = false,
     iconOnly = false,
+    loading = false,
     className,
     type = "button",
+    disabled,
+    children,
     ...rest
   }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
@@ -45,11 +54,31 @@ export const Button = forwardRef(function Button(
     "fynns-btn",
     VARIANT_CLASS[resolvedVariant],
     size === "sm" ? "fynns-btn--sm" : "",
+    size === "lg" ? "fynns-btn--lg" : "",
     active ? "fynns-btn--active" : "",
     iconOnly ? "fynns-btn--icon" : "",
+    loading ? "fynns-btn--loading" : "",
     className ?? "",
   ]
     .filter(Boolean)
     .join(" ");
-  return <button {...rest} ref={ref} type={type} className={classes} />;
+  return (
+    <button
+      {...rest}
+      ref={ref}
+      type={type}
+      className={classes}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+    >
+      {loading ? (
+        <span className="fynns-btn-loading">
+          <Spinner size="sm" label="Loading" />
+          <span className="fynns-btn-loading-label">{children}</span>
+        </span>
+      ) : (
+        children
+      )}
+    </button>
+  );
 });

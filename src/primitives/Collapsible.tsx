@@ -22,6 +22,10 @@ export type CollapsibleProps = {
  * compact summary and expands on demand. Works controlled (`open`) or
  * uncontrolled (`defaultOpen`). `.fynns-collapsible*`.
  *
+ * Body stays mounted so open and close both run the same CSS height + fade
+ * transitions (M3-inspired container morph). No head/body hairline — spacing
+ * only. Uses motion tokens; honors `prefers-reduced-motion` in CSS.
+ *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
  * head, trigger, or body chrome.
  *
@@ -71,11 +75,13 @@ export function Collapsible({
         </button>
         {actions ? <div className="fynns-collapsible-actions">{actions}</div> : null}
       </div>
-      {isOpen ? (
-        <div id={bodyId} className="fynns-collapsible-body">
-          {children}
+      <div className="fynns-expand" data-state={isOpen ? "open" : "closed"} aria-hidden={!isOpen}>
+        <div className="fynns-expand-inner">
+          <div id={bodyId} className="fynns-collapsible-body" inert={isOpen ? undefined : true}>
+            {children}
+          </div>
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }

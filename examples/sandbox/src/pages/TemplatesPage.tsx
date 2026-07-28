@@ -29,6 +29,17 @@ import {
 } from "../state/templateStore";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
+function defaultTemplateName(date = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const h = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  const s = pad(date.getSeconds());
+  return `design_template_${y}_${m}_${d}_${h}_${min}_${s}`;
+}
+
 export type TemplatesPageProps = {
   theme: FynnsThemeMode;
   onThemeChange: (theme: FynnsThemeMode) => void;
@@ -163,7 +174,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
               size="sm"
               variant="ghost"
               onClick={() => {
-                setSaveName("");
+                setSaveName(defaultTemplateName());
                 setSaveDescription("");
                 setSaveOpen(true);
               }}

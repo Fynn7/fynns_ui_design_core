@@ -1,11 +1,13 @@
 import {
   applyFynnsThemeMode,
+  DIALOG_TRANSITION_MS,
   getFynnsThemeMode,
   IconButton,
   MoonIcon,
   NavItem,
   NavItemLabel,
   Panel,
+  PanelRightIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
   SunIcon,
@@ -14,7 +16,7 @@ import {
   Tooltip,
   type FynnsThemeMode,
 } from "@fynns/ui";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -35,10 +37,52 @@ export type SandboxPage =
   | "motion"
   | "templates";
 
+function asideTransitionMs(): number {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return 0;
+  }
+  return DIALOG_TRANSITION_MS;
+}
+
+/** Right inspector pane: width expand/collapse (no translate — keeps the
+ * topbar / canvas / aside seam a hard edge throughout the motion). */
+function SandboxAside({ open, children }: { open: boolean; children: ReactNode }) {
+  const [rendered, setRendered] = useState(open);
+  const [entered, setEntered] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setRendered(true);
+      const raf = requestAnimationFrame(() => setEntered(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setEntered(false);
+    const timer = setTimeout(() => setRendered(false), asideTransitionMs());
+    return () => clearTimeout(timer);
+  }, [open]);
+
+  if (!rendered) return null;
+
+  return (
+    <aside
+      className="sandbox-aside"
+      data-state={entered ? "open" : "closing"}
+      aria-hidden={!open || undefined}
+      inert={!open ? true : undefined}
+    >
+      {children}
+    </aside>
+  );
+}
+
 export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
+  const [asideOpen, setAsideOpen] = useState(true);
   const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 
@@ -78,6 +122,9 @@ export function SandboxShell() {
           : page === "motion"
             ? t("nav.motion")
             : t("nav.templates");
+
+  const hasInspector = page === "playground" || page === "globals";
+  const showAside = hasInspector && asideOpen;
 
   return (
     <div className="sandbox-root">
@@ -119,6 +166,17 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             {page === "playground" ? <AgentInputBar /> : null}
+            {hasInspector ? (
+              <Tooltip content={asideOpen ? t("topbar.hideAside") : t("topbar.showAside")}>
+                <IconButton
+                  aria-label={asideOpen ? t("topbar.hideAside") : t("topbar.showAside")}
+                  aria-pressed={asideOpen}
+                  onClick={() => setAsideOpen((open) => !open)}
+                >
+                  <PanelRightIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <IconButton
                 aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
@@ -131,11 +189,7 @@ export function SandboxShell() {
           </div>
         </header>
 
-        <div
-          className={
-            page === "templates" ? "sandbox-body sandbox-body--single" : "sandbox-body"
-          }
-        >
+        <div className="sandbox-body">
           <main className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
               <div className="sandbox-playground">
@@ -161,14 +215,14 @@ export function SandboxShell() {
             ) : null}
           </main>
           {page === "playground" ? (
-            <aside className="sandbox-aside">
+            <SandboxAside open={showAside}>
               <PropertyInspector />
-            </aside>
+            </SandboxAside>
           ) : null}
           {page === "globals" ? (
-            <aside className="sandbox-aside">
+            <SandboxAside open={showAside}>
               <GlobalsInspector />
-            </aside>
+            </SandboxAside>
           ) : null}
         </div>
       </div>

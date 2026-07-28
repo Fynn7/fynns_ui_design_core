@@ -95,6 +95,8 @@ export function PropertyInspector() {
   const spaceSmPx = parseLengthToPx(resolved("--fynns-space-sm"));
   const blockGapPx = parseLengthToPx(resolved(SANDBOX_BLOCK_GAP_VAR));
   const borderStrong = resolved("--fynns-color-border-strong");
+  const borderStrongBaseline = BASELINE["--fynns-color-border-strong"] ?? "#164038";
+  const borderStrongDelta = estimateBrightnessDelta(borderStrongBaseline, borderStrong);
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
 
@@ -141,8 +143,8 @@ export function PropertyInspector() {
                   />
                   <div className="sandbox-field-row">
                     <InfoHint
-                      label={t("inspector.brightness")}
-                      ariaLabel={`${t("inspector.brightness")} · ${label}`}
+                      label={t("inspector.brightnessOf", { name: label })}
+                      ariaLabel={t("inspector.brightnessOf", { name: label })}
                       content={t("inspector.brightnessHint")}
                     />
                     <code>{delta > 0 ? `+${delta}` : delta}</code>
@@ -179,23 +181,25 @@ export function PropertyInspector() {
                 style={{ background: borderStrong }}
                 aria-hidden
               />
+              <div className="sandbox-field-row">
+                <InfoHint
+                  label={t("inspector.outlineBorderBrightness")}
+                  ariaLabel={t("inspector.outlineBorderBrightness")}
+                  content={t("inspector.outlineBorderHint")}
+                />
+                <code>{borderStrongDelta > 0 ? `+${borderStrongDelta}` : borderStrongDelta}</code>
+              </div>
               <Slider
                 ariaLabel={t("inspector.outlineBorderBrightness")}
                 min={-40}
                 max={40}
                 step={1}
-                value={estimateBrightnessDelta(
-                  BASELINE["--fynns-color-border-strong"] ?? "#164038",
-                  borderStrong,
-                )}
+                value={borderStrongDelta}
                 onChange={(v) =>
                   apply({
                     group: "color",
                     key: "border-strong",
-                    value: shiftHexBrightness(
-                      BASELINE["--fynns-color-border-strong"] ?? "#164038",
-                      v,
-                    ),
+                    value: shiftHexBrightness(borderStrongBaseline, v),
                     source: "slider",
                   })
                 }

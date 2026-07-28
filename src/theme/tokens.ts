@@ -52,6 +52,12 @@ export const COLOR_TOKENS = {
   "accent-24": "rgba(45, 212, 191, 0.24)",
   "accent-42": "rgba(45, 212, 191, 0.42)",
   "accent-ring": "rgba(45, 212, 191, 0.4)",
+  /** Selected / tonal container fill (M3 primaryContainer analogue). */
+  "accent-container": "rgba(45, 212, 191, 0.2)",
+  /** Text/icons on accent-container. */
+  "on-accent-container": "#7ee8d8",
+  /** Quieter divider than border / border-strong. */
+  "outline-subtle": "#0a2524",
   success: "#4ade80",
   warning: "#fbbf24",
   danger: "#f87171",
@@ -293,6 +299,9 @@ export const FOCUS_TOKENS = {
 /** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
   "dialog-max-width": "32rem",
+  "dialog-max-width-sm": "24rem",
+  "dialog-max-width-md": "32rem",
+  "dialog-max-width-lg": "42rem",
   "drawer-width": "72vw",
   "tooltip-max-width": "min(14rem, 85vw)",
   "command-palette-width": "min(100%, 34rem)",
@@ -357,6 +366,9 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "accent-24": "rgba(13, 148, 136, 0.18)",
       "accent-42": "rgba(13, 148, 136, 0.32)",
       "accent-ring": "rgba(13, 148, 136, 0.38)",
+      "accent-container": "rgba(13, 148, 136, 0.14)",
+      "on-accent-container": "#0f766e",
+      "outline-subtle": "#d5e8e4",
       success: "#16a34a",
       warning: "#d97706",
       danger: "#dc2626",

@@ -6,12 +6,16 @@ export type TabItem<Id extends string> = {
   disabled?: boolean;
 };
 
+export type TabsSize = "sm" | "md";
+
 export type TabsProps<Id extends string> = {
   tabs: TabItem<Id>[];
   activeId: Id;
   onChange: (id: Id) => void;
   ariaLabel?: string;
   className?: string;
+  size?: TabsSize;
+  fullWidth?: boolean;
 };
 
 /** Horizontal tab strip. `.fynns-tabs` / `.fynns-tab`. */
@@ -21,10 +25,19 @@ export function Tabs<Id extends string>({
   onChange,
   ariaLabel,
   className,
+  size = "md",
+  fullWidth = false,
 }: TabsProps<Id>) {
   return (
     <div
-      className={["fynns-tabs", className ?? ""].filter(Boolean).join(" ")}
+      className={[
+        "fynns-tabs",
+        size === "sm" ? "fynns-tabs--sm" : "",
+        fullWidth ? "fynns-tabs--full" : "",
+        className ?? "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       role="tablist"
       aria-label={ariaLabel}
     >

@@ -28,6 +28,9 @@
   --fynns-color-accent-24: rgba(45, 212, 191, 0.24);
   --fynns-color-accent-42: rgba(45, 212, 191, 0.42);
   --fynns-color-accent-ring: rgba(45, 212, 191, 0.4);
+  --fynns-color-accent-container: rgba(45, 212, 191, 0.2);
+  --fynns-color-on-accent-container: #7ee8d8;
+  --fynns-color-outline-subtle: #0a2524;
   --fynns-color-success: #4ade80;
   --fynns-color-warning: #fbbf24;
   --fynns-color-danger: #f87171;
@@ -177,6 +180,9 @@
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
   --fynns-layout-dialog-max-width: 32rem;
+  --fynns-layout-dialog-max-width-sm: 24rem;
+  --fynns-layout-dialog-max-width-md: 32rem;
+  --fynns-layout-dialog-max-width-lg: 42rem;
   --fynns-layout-drawer-width: 72vw;
   --fynns-layout-tooltip-max-width: min(14rem, 85vw);
   --fynns-layout-command-palette-width: min(100%, 34rem);
@@ -219,6 +225,9 @@
   --fynns-color-accent-24: rgba(13, 148, 136, 0.18);
   --fynns-color-accent-42: rgba(13, 148, 136, 0.32);
   --fynns-color-accent-ring: rgba(13, 148, 136, 0.38);
+  --fynns-color-accent-container: rgba(13, 148, 136, 0.14);
+  --fynns-color-on-accent-container: #0f766e;
+  --fynns-color-outline-subtle: #d5e8e4;
   --fynns-color-success: #16a34a;
   --fynns-color-warning: #d97706;
   --fynns-color-danger: #dc2626;
