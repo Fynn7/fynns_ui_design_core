@@ -7,9 +7,11 @@ import {
   Checkbox,
   Chip,
   ChipSet,
+  CircularProgress,
   Collapsible,
   Divider,
   Input,
+  LinearProgress,
   Radio,
   Select,
   Switch,
@@ -142,6 +144,17 @@ export function GlobalsPage() {
             <span className="sandbox-help">{t("globals.dividerVerticalA")}</span>
             <Divider orientation="vertical" />
             <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
+          </div>
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <span className="sandbox-help">{t("globals.progressLinear")}</span>
+          <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
+          <span className="sandbox-help">{t("globals.progressLinearIndeterminate")}</span>
+          <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <CircularProgress value={0.65} label={t("globals.progressCircularAria")} size="sm" />
+            <CircularProgress label={t("globals.progressCircularIndeterminateAria")} />
+            <CircularProgress value={0.2} label={t("globals.progressCircularAria")} size="lg" />
           </div>
         </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>

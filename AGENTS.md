@@ -58,11 +58,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    carries the `fynns-scroll` class or uses `ScrollArea`. Browser-default
    scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** The kit is `Spinner`,
-   `PanelSkeleton`, `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
+   `LinearProgress` / `CircularProgress`, `PanelSkeleton`,
+   `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
    primitives). Prefer *layered* loading for heavy boots: an inline pre-mount
    spinner → a full-screen `BlockingLoadingOverlay` while the engine isn't ready
    → a scoped per-action spinner; freeze the whole UI with an overlay during a
-   blocking batch run. Color status semantically — `danger` (fatal), `warning`
+   blocking batch run. Use Progress when the fraction is known (upload, batch).
+   Color status semantically — `danger` (fatal), `warning`
    (recoverable/render), `info` (static/notice), `success` (ok) — typically as a
    `border-left: 3px solid var(--fynns-color-*)` or a `Badge` variant. Use
    `Badge` variants to build the information architecture (source / mode /
@@ -129,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -319,6 +321,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
+  **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
+  `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
+  determinate track gap + linear stop). Omit `value` for indeterminate. Prefer
+  `Spinner` for compact button/inline busy; use Progress for known % or section waits.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`

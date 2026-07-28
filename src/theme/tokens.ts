@@ -347,6 +347,20 @@ export const CHIP_TOKENS = {
   outline: "1px",
 } as const;
 
+/**
+ * Progress indicator geometry (M3 linear / circular at 16px rem).
+ * Track + active indicator 4dp; circular default 48dp; gap + stop 4dp.
+ * `--fynns-progress-<key>`.
+ */
+export const PROGRESS_TOKENS = {
+  "track-thickness": "0.25rem",
+  gap: "0.25rem",
+  "stop-size": "0.25rem",
+  "circular-size": "3rem",
+  "circular-size-sm": "2.25rem",
+  "circular-size-lg": "4rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -499,6 +513,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["toggle", TOGGLE_TOKENS],
   ["selection", SELECTION_TOKENS],
   ["chip", CHIP_TOKENS],
+  ["progress", PROGRESS_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

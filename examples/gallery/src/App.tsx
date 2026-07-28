@@ -14,6 +14,7 @@ import {
   Checkbox,
   Chip,
   ChipSet,
+  CircularProgress,
   Dialog,
   Divider,
   Drawer,
@@ -26,6 +27,7 @@ import {
   Input,
   Kbd,
   Counter,
+  LinearProgress,
   PanelCard,
   Radio,
   SearchInput,
@@ -319,8 +321,15 @@ export function App() {
           <Kbd>Ctrl</Kbd>
           <Kbd>K</Kbd>
           <Spinner label="Loading" />
+          <CircularProgress value={0.7} label="70 percent" size="sm" />
+          <CircularProgress label="Working" />
         </Row>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Linear progress
+          </span>
+          <LinearProgress value={0.42} label="42 percent" />
+          <LinearProgress label="Loading" />
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
             Divider
           </span>

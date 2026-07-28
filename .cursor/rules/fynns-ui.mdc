@@ -17,8 +17,9 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, Switch, ToggleControl, ToggleGroup, Tabs,
   Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast, Alert banners, Spinner/
-  Skeleton/Overlay, Badge, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
-  Reach for an existing primitive before writing a new control.
+  Skeleton/Overlay, LinearProgress/CircularProgress, Badge, Divider, Checkbox,
+  Radio, Chip, Kbd, CommandPalette). Reach for an existing primitive
+  before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed

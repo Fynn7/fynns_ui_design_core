@@ -53,6 +53,7 @@ export * from "./primitives/ScrollArea";
 export * from "./primitives/Toast";
 export * from "./primitives/Alert";
 export * from "./primitives/Loading";
+export * from "./primitives/Progress";
 export * from "./primitives/Badge";
 export * from "./primitives/Divider";
 export * from "./primitives/Kbd";

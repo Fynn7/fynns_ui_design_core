@@ -3664,3 +3664,218 @@
   font-size: var(--fynns-font-size-form-label);
   color: var(--fynns-color-text-muted);
 }
+
+/* ---------- Progress (M3 linear / circular) ---------- */
+.fynns-linear-progress {
+  --fynns-progress-value: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  height: var(--fynns-progress-track-thickness);
+  min-width: 4rem;
+  overflow: hidden;
+}
+
+.fynns-linear-progress--active {
+  gap: var(--fynns-progress-gap);
+}
+
+.fynns-linear-progress-active,
+.fynns-linear-progress-track,
+.fynns-linear-progress-stop,
+.fynns-linear-progress-indeterminate-bar {
+  box-sizing: border-box;
+  height: 100%;
+  border-radius: var(--fynns-radius-pill);
+}
+
+.fynns-linear-progress-active {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: calc(var(--fynns-progress-value) * 100%);
+  background: var(--fynns-color-accent);
+  transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
+  width: calc(
+    var(--fynns-progress-value) *
+      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
+  );
+}
+
+.fynns-linear-progress-track {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--fynns-color-accent-24);
+}
+
+.fynns-linear-progress-stop {
+  flex: 0 0 var(--fynns-progress-stop-size);
+  width: var(--fynns-progress-stop-size);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-linear-progress--indeterminate {
+  position: relative;
+  background: var(--fynns-color-accent-24);
+  border-radius: var(--fynns-radius-pill);
+  gap: 0;
+}
+
+.fynns-linear-progress-indeterminate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Short traveling segments (not full-width + scaleX — that reads as a solid bar). */
+.fynns-linear-progress-indeterminate-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-linear-progress-indeterminate-bar--1 {
+  animation: fynns-linear-progress-1 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+}
+
+.fynns-linear-progress-indeterminate-bar--2 {
+  animation: fynns-linear-progress-2 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+  animation-delay: calc(var(--fynns-duration-presentation-hint) * 0.7);
+}
+
+@keyframes fynns-linear-progress-1 {
+  0% {
+    left: -40%;
+    width: 32%;
+  }
+  40% {
+    left: 25%;
+    width: 48%;
+  }
+  100% {
+    left: 100%;
+    width: 24%;
+  }
+}
+
+@keyframes fynns-linear-progress-2 {
+  0% {
+    left: -30%;
+    width: 18%;
+  }
+  50% {
+    left: 40%;
+    width: 36%;
+  }
+  100% {
+    left: 100%;
+    width: 14%;
+  }
+}
+
+.fynns-circular-progress {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-progress-circular-size);
+  height: var(--fynns-progress-circular-size);
+  flex: 0 0 auto;
+  color: var(--fynns-color-accent);
+}
+
+.fynns-circular-progress--sm {
+  width: var(--fynns-progress-circular-size-sm);
+  height: var(--fynns-progress-circular-size-sm);
+}
+
+.fynns-circular-progress--lg {
+  width: var(--fynns-progress-circular-size-lg);
+  height: var(--fynns-progress-circular-size-lg);
+}
+
+.fynns-circular-progress-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-circular-progress-track,
+.fynns-circular-progress-active {
+  stroke-width: var(--fynns-progress-track-thickness);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.fynns-circular-progress-track {
+  stroke: var(--fynns-color-accent-24);
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard),
+    stroke-dashoffset var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress-active {
+  stroke: currentColor;
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+  animation: fynns-circular-progress-rotate var(--fynns-duration-loading-spin) linear infinite;
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+  animation: fynns-circular-progress-dash calc(var(--fynns-duration-presentation-hint) * 1.5)
+    var(--fynns-ease-in-out) infinite;
+  transition: none;
+}
+
+@keyframes fynns-circular-progress-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fynns-circular-progress-dash {
+  0% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 80 45.6;
+    stroke-dashoffset: -24;
+  }
+  100% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: -125.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-linear-progress-active,
+  .fynns-circular-progress-track,
+  .fynns-circular-progress-active {
+    transition: none;
+  }
+
+  .fynns-linear-progress-indeterminate-bar--1,
+  .fynns-linear-progress-indeterminate-bar--2 {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+    animation-duration: calc(var(--fynns-duration-reduced-motion-spin) * 1.5);
+  }
+}
