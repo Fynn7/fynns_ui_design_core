@@ -11,11 +11,14 @@ import {
   CircularProgress,
   Collapsible,
   Divider,
+  Fab,
   Input,
   LinearProgress,
+  PlusIcon,
   Radio,
   Select,
   Switch,
+  Tooltip,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -163,6 +166,21 @@ export function GlobalsPage() {
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
           <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
           <Avatar alt={t("globals.avatarFallback")} />
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab size="sm" aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
+            <PlusIcon />
+          </Fab>
         </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>

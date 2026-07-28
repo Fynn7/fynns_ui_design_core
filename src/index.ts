@@ -56,6 +56,7 @@ export * from "./primitives/Loading";
 export * from "./primitives/Progress";
 export * from "./primitives/Badge";
 export * from "./primitives/Avatar";
+export * from "./primitives/Fab";
 export * from "./primitives/Divider";
 export * from "./primitives/Kbd";
 export * from "./primitives/CommandPalette";

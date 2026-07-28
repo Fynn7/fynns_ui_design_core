@@ -22,6 +22,7 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   ErrorBanner,
+  Fab,
   IconButton,
   InfoBanner,
   InfoHint,
@@ -30,6 +31,7 @@ import {
   Counter,
   LinearProgress,
   PanelCard,
+  PlusIcon,
   Radio,
   SearchInput,
   Select,
@@ -327,6 +329,14 @@ export function App() {
           <Avatar size="sm" name="Ada" alt="Ada" />
           <Avatar name="Ada Lovelace" alt="Ada Lovelace" />
           <Avatar alt="User" />
+          <Tooltip content="Create">
+            <Fab aria-label="Create">
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Fab label="Create item">
+            <PlusIcon />
+          </Fab>
         </Row>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>

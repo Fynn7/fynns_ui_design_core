@@ -375,6 +375,22 @@ export const AVATAR_TOKENS = {
   "font-size-lg": "1.25rem",
 } as const;
 
+/**
+ * FAB geometry (M3 Floating Action Button at 16px rem).
+ * Default 56dp; small 40dp; large 96dp; extended height matches default.
+ * `--fynns-fab-<key>`.
+ */
+export const FAB_TOKENS = {
+  size: "3.5rem",
+  "size-sm": "2.5rem",
+  "size-lg": "6rem",
+  "icon-size": "1.5rem",
+  "icon-size-sm": "1.25rem",
+  "icon-size-lg": "2.25rem",
+  "pad-inline-extended": "1.25rem",
+  gap: "0.75rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -529,6 +545,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["chip", CHIP_TOKENS],
   ["progress", PROGRESS_TOKENS],
   ["avatar", AVATAR_TOKENS],
+  ["fab", FAB_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
