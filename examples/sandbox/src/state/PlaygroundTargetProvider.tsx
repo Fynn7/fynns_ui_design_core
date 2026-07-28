@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 
-export type PlaygroundTarget = "card" | "collapsible-card";
+export type PlaygroundTarget = "card" | "collapsible";
 
 type PlaygroundTargetContextValue = {
   target: PlaygroundTarget;

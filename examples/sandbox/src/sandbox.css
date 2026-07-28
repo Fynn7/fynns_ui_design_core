@@ -271,16 +271,6 @@
   font-size: var(--fynns-font-size-caption);
 }
 
-.sandbox-playground-target {
-  display: flex;
-  justify-content: flex-start;
-  padding: var(--fynns-space-sm) var(--fynns-space-md) 0;
-}
-
-.sandbox-playground .sandbox-preview {
-  padding-top: var(--fynns-space-sm);
-}
-
 .sandbox-inspector-actions {
   display: flex;
   gap: var(--fynns-space-sm);
@@ -399,31 +389,18 @@
   color: var(--fynns-color-text-muted);
 }
 
-.sandbox-elev-ladder {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: var(--fynns-space-xs);
-  padding: var(--fynns-space-sm);
-  margin: 0 calc(-1 * var(--fynns-space-sm));
-  overflow: hidden;
-  border-radius: var(--fynns-radius-sm);
-  background: var(--fynns-color-app-bg);
-}
-
-.sandbox-elev-step {
-  height: 2.75rem;
-  border-radius: var(--fynns-radius-sm);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  display: grid;
-  place-items: center;
-  font-size: var(--fynns-font-size-caption);
-  color: var(--fynns-color-text-muted);
-  /* Keep demo shadows compact so L4/L5 don't look clipped. */
-  box-shadow: none !important;
-}
-
 .sandbox-state-demo {
   margin-top: var(--fynns-space-sm);
+}
+
+.sandbox-playground-target {
+  display: flex;
+  justify-content: flex-start;
+  padding: var(--fynns-space-sm) var(--fynns-space-md) 0;
+}
+
+.sandbox-playground .sandbox-preview {
+  padding-top: var(--fynns-space-sm);
 }
 
 .sandbox-preview {

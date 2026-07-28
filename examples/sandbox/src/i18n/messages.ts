@@ -10,7 +10,7 @@ const en = {
   "brand.name": "fynns sandbox",
 
   "nav.aria": "Sandbox pages",
-  "nav.playground": "Playground",
+  "nav.playground": "Surfaces",
   "nav.globals": "Globals",
   "nav.foundations": "Foundations",
   "nav.motion": "Motion",
@@ -32,7 +32,7 @@ const en = {
   "topbar.themeToDark": "Switch to dark theme",
 
   "playground.targetCard": "Card",
-  "playground.targetCollapsible": "CollapsibleCard",
+  "playground.targetCollapsible": "Collapsible",
 
   "settings.languageTitle": "Language",
   "settings.languageLead": "Switch the sandbox UI between English and Chinese. Choice is saved in this browser.",
@@ -52,7 +52,7 @@ const en = {
   "templates.currentDraft": "Current draft: {count} override{plural} · theme {theme}",
   "templates.savedTitle": "Saved templates",
   "templates.savedAria": "Saved templates",
-  "templates.empty": "No templates yet. Tune tokens on Playground / Globals, then Save as template.",
+  "templates.empty": "No templates yet. Tune tokens on Surfaces / Globals, then Save as template.",
   "templates.cardMeta": "{count} override{plural} · {theme} · {when}",
   "templates.apply": "Apply",
   "templates.exportOneTip": "Download this template as JSON",
@@ -98,6 +98,15 @@ const en = {
   "preview.dismiss": "Dismiss",
   "preview.open": "Open",
   "preview.cardActivated": "{variant} card activated",
+  "preview.collapsibleOpen": "Open",
+  "preview.collapsibleActions": "Header actions",
+  "preview.collapsibleLabel": "disclosure",
+  "preview.collapsibleTitle": "Presets",
+  "preview.collapsibleBody":
+    "One-shot disclosure: pass title and children. Chevron, head, and body chrome are built in — do not assemble them by hand.",
+  "preview.collapsibleActionTip": "Example header action (outside the toggle)",
+  "preview.collapsibleActionAria": "Example header action",
+  "preview.collapsibleActionToast": "Header action clicked",
 
   "agent.hint": 'Try: "make corners rounder" or "softer hover"',
   "agent.promptAria": "Agent prompt",
@@ -113,43 +122,6 @@ const en = {
     "No structured proposals yet — refine the request or wait for a model backend.",
   "agent.toastReady": "{count} proposal(s) ready — confirm to apply.",
   "agent.toastApplied": "Agent proposals applied",
-
-  "preview.defaultOpen": "Default open",
-  "preview.collapsibleSubtitle": "Tap header to expand",
-  "preview.collapsibleInfo": "Header action stays outside the trigger.",
-  "preview.collapsibleBody":
-    "CollapsibleCard combines Card anatomy with a disclosure header. Template defaults come from the recipe draft; global Card tokens still use Apply changes.",
-  "preview.collapsibleActivated": "{variant} action",
-
-  "recipe.title": "CollapsibleCard template",
-  "recipe.help":
-    "Component defaults and local CSS variables — use Apply component template below (not Apply changes). {dirty}.",
-  "recipe.dirty": "Template draft modified",
-  "recipe.clean": "Matches committed template",
-  "recipe.defaultVariant": "Default variant",
-  "recipe.defaultVariantHint": "Factory default Card variant when callers omit variant.",
-  "recipe.variantElevated": "Elevated",
-  "recipe.variantFilled": "Filled",
-  "recipe.variantOutlined": "Outlined",
-  "recipe.defaultOpen": "Default open",
-  "recipe.mediaCollapse": "Media collapse",
-  "recipe.mediaCollapseHint": 'When "withBody", CardMedia hides with the collapsible region.',
-  "recipe.mediaAlways": "Always visible",
-  "recipe.mediaWithBody": "With body",
-  "recipe.headerGap": "Header gap",
-  "recipe.headerGapAria": "About header gap",
-  "recipe.headerGapHint": "{cssVar} — gap between trigger and header action.",
-
-  "applyRecipe.button": "Apply component template",
-  "applyRecipe.preparing": "Preparing diff…",
-  "applyRecipe.tipDirty":
-    "Write CollapsibleCard recipe + CSS block to src/primitives (dev server only)",
-  "applyRecipe.tipClean": "No template changes in the recipe draft",
-  "applyRecipe.dialogTitle": "Apply CollapsibleCard template",
-  "applyRecipe.dialogDesc":
-    "{files} file(s) will update. Confirm to write the recipe and CSS block.",
-  "applyRecipe.closeAria": "Close",
-  "applyRecipe.toastOk": "CollapsibleCard template applied",
 
   "apply.button": "Apply changes",
   "apply.preparing": "Preparing diff…",
@@ -177,11 +149,7 @@ const en = {
   "inspector.overridesAria": "What overrides means",
   "inspector.overridesHint":
     "Count of draft CSS variables versus baseline (--fynns-* and sandbox chrome). Reset clears them; Apply changes writes only --fynns-* into tokens.ts.",
-  "inspector.presets": "Presets",
-  "inspector.presetAria": "Preset",
   "inspector.applyPreset": "Apply preset",
-  "inspector.presetShapeNote":
-    "Shape / radius lives under Globals — these presets cover elevation and state layers.",
   "inspector.loadedPreset": "Loaded preset: {label}",
   "inspector.color": "Color",
   "inspector.colorHelp":
@@ -204,18 +172,6 @@ const en = {
     "--fynns-color-border-strong — stroke for outlined Card and strong borders.",
   "inspector.outlineBorderBrightness": "Outline border brightness",
   "inspector.outlineHelp": "Used by outlined cards as the stroke color.",
-  "inspector.elevation": "Elevation",
-  "inspector.elevatedShadow": "Elevated resting shadow (xs)",
-  "inspector.elevatedShadowAria": "About elevated resting shadow",
-  "inspector.elevatedShadowHint":
-    "--fynns-shadow-xs — resting elevation shadow for elevated Card (ladder swatches above are read-only).",
-  "inspector.elevatedShadowSelect": "Elevated shadow preset",
-  "inspector.elevationHelp":
-    "Tonal ladder is read-only above; elevated cards use shadow-xs at rest. Dragged / reserved levels use surface-4/5.",
-  "inspector.shadowNone": "None",
-  "inspector.shadowSoft": "Soft",
-  "inspector.shadowDefault": "Default",
-  "inspector.shadowStrong": "Strong",
   "inspector.stateLayers": "State layers",
   "inspector.stateHoverHint":
     "--fynns-state-hover opacity for pointer-hover overlays (color-mix on interactive surfaces).",
@@ -315,10 +271,6 @@ const en = {
   "preset.m3AlignedDesc": "Push radius-md toward M3 medium (12px) and expand the shape ladder.",
   "preset.restrained": "Restrained radius",
   "preset.restrainedDesc": "Slightly tighter corners than current baseline.",
-  "preset.strongerElev": "Stronger elevation",
-  "preset.strongerElevDesc": "Emphasize elevated cards with a deeper resting shadow.",
-  "preset.softerState": "Softer state layers",
-  "preset.softerStateDesc": "Dial back interactive overlay opacities.",
 
   "hue.presetsAria": "Hue presets",
   "hue.openPalette": "Open hue palette",
@@ -353,7 +305,7 @@ const zh: Record<MessageKey, string> = {
   "brand.name": "fynns 沙盒",
 
   "nav.aria": "沙盒页面",
-  "nav.playground": "预览台",
+  "nav.playground": "表面",
   "nav.globals": "全局",
   "nav.foundations": "基础",
   "nav.motion": "动效",
@@ -375,7 +327,7 @@ const zh: Record<MessageKey, string> = {
   "topbar.themeToDark": "切换到深色主题",
 
   "playground.targetCard": "Card",
-  "playground.targetCollapsible": "CollapsibleCard",
+  "playground.targetCollapsible": "Collapsible",
 
   "settings.languageTitle": "语言",
   "settings.languageLead": "在英语与中文之间切换沙盒界面。选择会保存在本浏览器中。",
@@ -395,7 +347,7 @@ const zh: Record<MessageKey, string> = {
   "templates.currentDraft": "当前草稿：{count} 项覆盖{plural} · 主题 {theme}",
   "templates.savedTitle": "已存模板",
   "templates.savedAria": "已存模板",
-  "templates.empty": "尚无模板。先在预览台 / 全局调整 token，再另存为模板。",
+  "templates.empty": "尚无模板。先在表面 / 全局调整 token，再另存为模板。",
   "templates.cardMeta": "{count} 项覆盖{plural} · {theme} · {when}",
   "templates.apply": "应用",
   "templates.exportOneTip": "下载此模板为 JSON",
@@ -440,6 +392,15 @@ const zh: Record<MessageKey, string> = {
   "preview.dismiss": "关闭",
   "preview.open": "打开",
   "preview.cardActivated": "已激活 {variant} 卡片",
+  "preview.collapsibleOpen": "展开",
+  "preview.collapsibleActions": "标题操作",
+  "preview.collapsibleLabel": "折叠区",
+  "preview.collapsibleTitle": "预设",
+  "preview.collapsibleBody":
+    "一站式折叠区：传入 title 与 children 即可。Chevron、标题行与内容壳已内置，无需手拼。",
+  "preview.collapsibleActionTip": "示例标题操作（在折叠触发器外）",
+  "preview.collapsibleActionAria": "示例标题操作",
+  "preview.collapsibleActionToast": "已点击标题操作",
 
   "agent.hint": "试试：「圆角更大」或「更柔和的悬停」",
   "agent.promptAria": "智能体提示",
@@ -454,42 +415,6 @@ const zh: Record<MessageKey, string> = {
   "agent.toastNone": "尚无结构化提案 —— 请细化请求，或等待模型后端。",
   "agent.toastReady": "{count} 条提案就绪 —— 确认后应用。",
   "agent.toastApplied": "智能体提案已应用",
-
-  "preview.defaultOpen": "默认展开",
-  "preview.collapsibleSubtitle": "点按页眉展开",
-  "preview.collapsibleInfo": "页眉操作留在触发器之外。",
-  "preview.collapsibleBody":
-    "CollapsibleCard 将 Card 结构与可折叠页眉结合。模板默认来自 recipe 草稿；全局 Card token 仍用「应用更改」。",
-  "preview.collapsibleActivated": "{variant} 操作",
-
-  "recipe.title": "CollapsibleCard 模板",
-  "recipe.help":
-    "组件默认值与本地 CSS 变量 —— 使用下方「应用组件模板」（不是「应用更改」）。{dirty}。",
-  "recipe.dirty": "模板草稿已修改",
-  "recipe.clean": "与已提交模板一致",
-  "recipe.defaultVariant": "默认变体",
-  "recipe.defaultVariantHint": "调用方省略 variant 时的工厂默认 Card 变体。",
-  "recipe.variantElevated": "抬升",
-  "recipe.variantFilled": "填充",
-  "recipe.variantOutlined": "描边",
-  "recipe.defaultOpen": "默认展开",
-  "recipe.mediaCollapse": "媒体折叠",
-  "recipe.mediaCollapseHint": "选择「随正文」时，CardMedia 随可折叠区域隐藏。",
-  "recipe.mediaAlways": "始终可见",
-  "recipe.mediaWithBody": "随正文",
-  "recipe.headerGap": "页眉间隙",
-  "recipe.headerGapAria": "关于页眉间隙",
-  "recipe.headerGapHint": "{cssVar} — 触发器与页眉操作之间的间隙。",
-
-  "applyRecipe.button": "应用组件模板",
-  "applyRecipe.preparing": "正在准备差异…",
-  "applyRecipe.tipDirty":
-    "将 CollapsibleCard recipe + CSS 块写入 src/primitives（仅开发服务器）",
-  "applyRecipe.tipClean": "recipe 草稿中无模板变更",
-  "applyRecipe.dialogTitle": "应用 CollapsibleCard 模板",
-  "applyRecipe.dialogDesc": "将更新 {files} 个文件。确认后写入 recipe 与 CSS 块。",
-  "applyRecipe.closeAria": "关闭",
-  "applyRecipe.toastOk": "CollapsibleCard 模板已应用",
 
   "apply.button": "应用更改",
   "apply.preparing": "正在准备差异…",
@@ -516,11 +441,7 @@ const zh: Record<MessageKey, string> = {
   "inspector.overridesAria": "覆盖项含义",
   "inspector.overridesHint":
     "草稿 CSS 变量相对基线的数量（--fynns-* 与沙盒界面）。重置会清空；「应用更改」仅将 --fynns-* 写入 tokens.ts。",
-  "inspector.presets": "预设",
-  "inspector.presetAria": "预设",
   "inspector.applyPreset": "应用预设",
-  "inspector.presetShapeNote":
-    "形状 / 圆角在「全局」页 —— 这些预设覆盖海拔与状态层。",
   "inspector.loadedPreset": "已加载预设：{label}",
   "inspector.color": "颜色",
   "inspector.colorHelp":
@@ -540,18 +461,6 @@ const zh: Record<MessageKey, string> = {
     "--fynns-color-border-strong — outlined Card 与强边框的描边色。",
   "inspector.outlineBorderBrightness": "描边边框亮度",
   "inspector.outlineHelp": "outlined 卡片用作描边颜色。",
-  "inspector.elevation": "海拔",
-  "inspector.elevatedShadow": "抬升静止阴影 (xs)",
-  "inspector.elevatedShadowAria": "关于抬升静止阴影",
-  "inspector.elevatedShadowHint":
-    "--fynns-shadow-xs — elevated Card 的静止海拔阴影（上方阶梯色块为只读）。",
-  "inspector.elevatedShadowSelect": "抬升阴影预设",
-  "inspector.elevationHelp":
-    "上方色调阶梯为只读；抬升卡片静止时使用 shadow-xs。拖拽 / 保留级使用 surface-4/5。",
-  "inspector.shadowNone": "无",
-  "inspector.shadowSoft": "柔和",
-  "inspector.shadowDefault": "默认",
-  "inspector.shadowStrong": "强烈",
   "inspector.stateLayers": "状态层",
   "inspector.stateHoverHint":
     "--fynns-state-hover 不透明度，用于指针悬停叠加（在可交互表面上 color-mix）。",
@@ -651,10 +560,6 @@ const zh: Record<MessageKey, string> = {
   "preset.m3AlignedDesc": "将 radius-md 推向 M3 medium (12px) 并扩展形状阶梯。",
   "preset.restrained": "克制圆角",
   "preset.restrainedDesc": "比当前基线略紧的圆角。",
-  "preset.strongerElev": "更强海拔",
-  "preset.strongerElevDesc": "用更深的静止阴影强调 elevated 卡片。",
-  "preset.softerState": "更柔状态层",
-  "preset.softerStateDesc": "降低交互叠加不透明度。",
 
   "hue.presetsAria": "色相预设",
   "hue.openPalette": "打开色相盘",

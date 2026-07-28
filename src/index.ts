@@ -46,8 +46,6 @@ export * from "./primitives/Slider";
 export * from "./primitives/Panel";
 export * from "./primitives/PanelCard";
 export * from "./primitives/Card";
-export * from "./primitives/CollapsibleCard";
-export * from "./primitives/collapsible-card.recipe";
 export * from "./primitives/ScrollArea";
 export * from "./primitives/Toast";
 export * from "./primitives/Alert";

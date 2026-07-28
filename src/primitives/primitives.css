@@ -1397,6 +1397,10 @@
   gap: var(--fynns-space-2);
 }
 
+.fynns-collapsible-head:hover {
+  background: var(--fynns-color-surface-hover);
+}
+
 .fynns-collapsible-trigger {
   flex: 1 1 auto;
   display: flex;
@@ -1410,10 +1414,6 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-}
-
-.fynns-collapsible-trigger:hover {
-  background: var(--fynns-color-surface-hover);
 }
 
 .fynns-collapsible-title {
@@ -2685,145 +2685,6 @@
     var(--fynns-color-accent) var(--fynns-state-pressed),
     transparent
   );
-}
-
-/* ---------- CollapsibleCard (Card + disclosure) ---------- */
-.fynns-collapsible-card {
-  --fynns-collapsible-card-header-gap: var(--fynns-space-sm);
-}
-
-/* @fynns-recipe collapsible-card start */
-.fynns-collapsible-card {
-  /* Recipe-local custom properties (--fynns-*) are merged here on apply. */
-}
-/* @fynns-recipe collapsible-card end */
-
-.fynns-collapsible-card-header {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: stretch;
-  z-index: 0;
-  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-/* Full-row hover — trigger spans the whole bar under the action slot. */
-.fynns-collapsible-card-header:hover:has(.fynns-collapsible-card-trigger:not(:disabled)) {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-collapsible-card-trigger {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--fynns-space-sm);
-  min-width: 0;
-  width: 100%;
-  margin: 0;
-  padding: var(--fynns-space-md) var(--fynns-space-lg);
-  background: transparent;
-  border: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 0;
-}
-
-/* Leave room for the overlaid action control so title does not sit under it. */
-.fynns-collapsible-card-header:has(.fynns-collapsible-card-header-action)
-  .fynns-collapsible-card-trigger {
-  padding-right: calc(
-    var(--fynns-space-lg) + var(--fynns-size-34) + var(--fynns-collapsible-card-header-gap)
-  );
-}
-
-.fynns-collapsible-card-trigger:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
-}
-
-.fynns-collapsible-card-trigger:disabled {
-  cursor: not-allowed;
-  opacity: var(--fynns-opacity-muted);
-}
-
-.fynns-collapsible-card-chevron {
-  flex: 0 0 auto;
-  color: var(--fynns-color-text-muted);
-  transition: transform var(--fynns-duration-base) var(--fynns-ease-standard);
-}
-
-.fynns-collapsible-card--open .fynns-collapsible-card-chevron {
-  transform: rotate(180deg);
-}
-
-.fynns-collapsible-card-header-avatar {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--fynns-size-34);
-  height: var(--fynns-size-34);
-  border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-accent-soft);
-  color: var(--fynns-color-accent);
-  font-size: var(--fynns-font-size-sm);
-  font-weight: var(--fynns-font-weight-semibold);
-  overflow: hidden;
-}
-
-.fynns-collapsible-card-header-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-2xs);
-}
-
-.fynns-collapsible-card-header-title {
-  font-size: var(--fynns-font-size-md);
-  font-weight: var(--fynns-font-weight-semibold);
-  line-height: var(--fynns-line-height-snug);
-  color: var(--fynns-color-text);
-}
-
-.fynns-collapsible-card-header-subtitle {
-  font-size: var(--fynns-font-size-sm);
-  line-height: var(--fynns-line-height-body);
-  color: var(--fynns-color-text-muted);
-}
-
-.fynns-collapsible-card-header-action {
-  grid-column: 2;
-  grid-row: 1;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding-right: var(--fynns-space-md);
-  /* Background / padding clicks fall through to the full-width trigger. */
-  pointer-events: none;
-}
-
-.fynns-collapsible-card-header-action > * {
-  pointer-events: auto;
-}
-
-.fynns-collapsible-card-body {
-  border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  z-index: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fynns-collapsible-card-chevron {
-    transition: none;
-  }
 }
 
 /* ---------- Kbd ---------- */

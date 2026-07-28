@@ -1,25 +1,18 @@
 import {
-  Button,
   Card,
   CardContent,
   CardHeader,
   Collapsible,
   InfoHint,
-  Select,
   Slider,
-  toast,
 } from "@fynns/ui";
-import { useMemo, useState } from "react";
-import { CARD_PRESETS } from "../../presets/presets";
+import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE, SANDBOX_BLOCK_GAP_VAR } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { estimateBrightnessDelta, shiftHexBrightness } from "../theme/colorUtils";
 import { ApplyChangesControl } from "./ApplyChangesControl";
-import { ApplyRecipeControl } from "./ApplyRecipeControl";
-import { CollapsibleCardRecipeInspector } from "./CollapsibleCardRecipeInspector";
-import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 
 function parsePercent(value: string): number {
   return Number.parseFloat(value) || 0;
@@ -36,25 +29,6 @@ function pxToRem(px: number): string {
   const rem = px / 16;
   return `${Number(rem.toFixed(4))}rem`;
 }
-
-const SHADOW_XS_PRESET_DEFS = [
-  { id: "none", labelKey: "inspector.shadowNone" as const, value: "none" },
-  {
-    id: "soft",
-    labelKey: "inspector.shadowSoft" as const,
-    value: "0 1px 2px rgba(0, 0, 0, 0.12)",
-  },
-  {
-    id: "default",
-    labelKey: "inspector.shadowDefault" as const,
-    value: BASELINE["--fynns-shadow-xs"] ?? "0 1px 2px rgba(0, 0, 0, 0.22)",
-  },
-  {
-    id: "strong",
-    labelKey: "inspector.shadowStrong" as const,
-    value: "0 2px 8px rgba(0, 0, 0, 0.4)",
-  },
-] as const;
 
 const SURFACE_KEYS = [
   {
@@ -108,27 +82,9 @@ const FONT_SIZE_HINT_KEYS = {
   lg: "inspector.fontLgHint",
 } as const satisfies Record<"sm" | "md" | "lg", MessageKey>;
 
-const CARD_PRESET_LABEL_KEYS: Record<string, { label: MessageKey; desc: MessageKey }> = {
-  "stronger-elevation": {
-    label: "preset.strongerElev",
-    desc: "preset.strongerElevDesc",
-  },
-  "softer-state-layers": {
-    label: "preset.softerState",
-    desc: "preset.softerStateDesc",
-  },
-};
-
-function matchShadowPreset(value: string): string {
-  const hit = SHADOW_XS_PRESET_DEFS.find((p) => p.value === value);
-  return hit?.id ?? "custom";
-}
-
 export function PropertyInspector() {
   const { t, plural } = useLocale();
-  const { apply, mergeOverrides, resolved, loadPreset, draft } = useTokenDraft();
-  const { target } = usePlaygroundTarget();
-  const [presetId, setPresetId] = useState(CARD_PRESETS[0]?.id ?? "");
+  const { apply, mergeOverrides, resolved, draft } = useTokenDraft();
 
   const hover = parsePercent(resolved("--fynns-state-hover"));
   const focus = parsePercent(resolved("--fynns-state-focus"));
@@ -138,25 +94,9 @@ export function PropertyInspector() {
   const spaceMdPx = parseLengthToPx(resolved("--fynns-space-md"));
   const spaceSmPx = parseLengthToPx(resolved("--fynns-space-sm"));
   const blockGapPx = parseLengthToPx(resolved(SANDBOX_BLOCK_GAP_VAR));
-  const shadowXs = resolved("--fynns-shadow-xs");
-  const shadowPreset = matchShadowPreset(shadowXs);
   const borderStrong = resolved("--fynns-color-border-strong");
 
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
-
-  const presetOptions = CARD_PRESETS.map((p) => {
-    const keys = CARD_PRESET_LABEL_KEYS[p.id];
-    return {
-      value: p.id,
-      label: keys ? t(keys.label) : p.label,
-    };
-  });
-
-  const activePresetDesc = (() => {
-    const keys = CARD_PRESET_LABEL_KEYS[presetId];
-    if (keys) return t(keys.desc);
-    return CARD_PRESETS.find((p) => p.id === presetId)?.description;
-  })();
 
   return (
     <div className="sandbox-inspector">
@@ -174,39 +114,6 @@ export function PropertyInspector() {
             />
           </span>
         </header>
-
-        <Collapsible title={t("inspector.presets")} defaultOpen>
-          <div className="sandbox-stack">
-            <div className="sandbox-field">
-              <Select
-                ariaLabel={t("inspector.presetAria")}
-                value={presetId}
-                options={presetOptions}
-                onChange={setPresetId}
-              />
-            </div>
-            <p className="sandbox-help">{activePresetDesc}</p>
-            <div className="sandbox-field">
-              <Button
-                size="sm"
-                onClick={() => {
-                  const preset = CARD_PRESETS.find((p) => p.id === presetId);
-                  if (!preset) return;
-                  loadPreset(preset.overrides);
-                  const keys = CARD_PRESET_LABEL_KEYS[preset.id];
-                  toast.message(
-                    t("inspector.loadedPreset", {
-                      label: keys ? t(keys.label) : preset.label,
-                    }),
-                  );
-                }}
-              >
-                {t("inspector.applyPreset")}
-              </Button>
-            </div>
-            <p className="sandbox-help">{t("inspector.presetShapeNote")}</p>
-          </div>
-        </Collapsible>
 
         <Collapsible title={t("inspector.color")} defaultOpen>
           <div className="sandbox-stack">
@@ -294,56 +201,6 @@ export function PropertyInspector() {
                 }
               />
               <p className="sandbox-help">{t("inspector.outlineHelp")}</p>
-            </div>
-          </div>
-        </Collapsible>
-
-        <Collapsible title={t("inspector.elevation")} defaultOpen>
-          <div className="sandbox-stack">
-            <div className="sandbox-elev-ladder">
-              {[0, 1, 2, 3, 4, 5].map((level) => (
-                <div
-                  key={level}
-                  className="sandbox-elev-step"
-                  style={{
-                    background:
-                      level === 0
-                        ? "var(--fynns-color-app-bg)"
-                        : `var(--fynns-color-surface-${level})`,
-                  }}
-                >
-                  L{level}
-                </div>
-              ))}
-            </div>
-            <div className="sandbox-field">
-              <div className="sandbox-field-row">
-                <InfoHint
-                  label={t("inspector.elevatedShadow")}
-                  ariaLabel={t("inspector.elevatedShadowAria")}
-                  content={t("inspector.elevatedShadowHint")}
-                />
-                <code>{shadowPreset}</code>
-              </div>
-              <Select
-                ariaLabel={t("inspector.elevatedShadowSelect")}
-                value={shadowPreset === "custom" ? "default" : shadowPreset}
-                options={SHADOW_XS_PRESET_DEFS.map((p) => ({
-                  value: p.id,
-                  label: t(p.labelKey),
-                }))}
-                onChange={(id) => {
-                  const preset = SHADOW_XS_PRESET_DEFS.find((p) => p.id === id);
-                  if (!preset) return;
-                  apply({
-                    group: "shadow",
-                    key: "xs",
-                    value: preset.value,
-                    source: "preset",
-                  });
-                }}
-              />
-              <p className="sandbox-help">{t("inspector.elevationHelp")}</p>
             </div>
           </div>
         </Collapsible>
@@ -480,13 +337,10 @@ export function PropertyInspector() {
             })}
           </div>
         </Collapsible>
-
-        {target === "collapsible-card" ? <CollapsibleCardRecipeInspector /> : null}
       </div>
 
       <div className="sandbox-inspector-actions">
         <ApplyChangesControl />
-        {target === "collapsible-card" ? <ApplyRecipeControl /> : null}
       </div>
     </div>
   );

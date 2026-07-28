@@ -86,9 +86,10 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Playground** (Card or **CollapsibleCard**),
-**Globals** (system shape / radius), Foundations, Motion, and **Templates** (gear icon in the nav
-footer — settings: language, config JSON export/import, and named templates).
+separate design language. Pages: **Surfaces** (Card or Collapsible target),
+**Globals** (system shape / radius), Foundations, Motion, and **Templates**
+(gear icon in the nav footer — settings: language, config JSON export/import,
+and named templates).
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
@@ -114,7 +115,7 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - **Save as template** stores the same bundle under a name in `localStorage`
   (`fynns-sandbox-templates`). Apply / export / rename / delete from the list.
 - Templates do not write `tokens.ts` by themselves — use **Apply changes** on
-  Playground / Globals after loading a template if you want source writeback.
+  Surfaces / Globals after loading a template if you want source writeback.
 
 ### Globals (system shape)
 
@@ -124,28 +125,42 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Presets: M3-aligned radius, Restrained radius
 - Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
 
-### Preview toggles (Playground)
+### Preview toggles (Surfaces)
 
-- **Component**: Card | CollapsibleCard (toolbar above canvas)
-- **Card**: Anatomy Media; States Interactive / Disabled; Actions align
-- **CollapsibleCard**: Anatomy Media; States Default open / Disabled; Actions align
+Switch the canvas target with **Card | Collapsible** (preview-only; does not
+change Apply writeback).
 
-### Inspector knobs (Playground)
+**Card**
 
-Global token knobs (both components):
+- Anatomy: Media on/off
+- States: Interactive, Disabled
+- Actions: align start|end
+
+**Collapsible**
+
+- States: Open (controlled preview)
+- Anatomy: Header actions on/off
+
+### Inspector knobs (Surfaces)
+
+Shared token draft for both Card and Collapsible targets (Apply still writes
+`tokens.ts` only — no component recipe writeback):
 
 - Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
   hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
   outlined `--fynns-color-border-strong`
-- Elevation: tonal ladder swatches; writable `--fynns-shadow-xs` presets
 - State layers: hover / focus / pressed / dragged
 - Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
   (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
   (sandbox-only, not Apply writeback)
 - Typography: `--fynns-font-size-{sm,md,lg}`
 
+Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspector
+knobs).
+
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
-draft history: inspector knobs, Apply preset, and confirmed agent proposals. One hue
+draft history: inspector knobs, Apply preset (Globals shape), and confirmed agent
+proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.
 
@@ -154,12 +169,6 @@ light/dark theme, and page nav are not in the draft history.
 the draft and runs `npm run gen:theme` (Vite dev middleware). That updates the
 design-system source consumed by every `@fynns/ui` client. Until then, overrides
 stay in the draft / `localStorage` and only affect the sandbox preview.
-
-**Apply component template** (CollapsibleCard only) reviews diffs for
-`src/primitives/collapsible-card.recipe.ts` and the `@fynns-recipe collapsible-card`
-block in `src/primitives/primitives.css`, then writes both (dev middleware only).
-Template fields: default variant, default open, media collapse, and component-local
-`--fynns-*` overrides (e.g. header gap). Global color/spacing still use **Apply changes**.
 
 ## Optional package distribution
 

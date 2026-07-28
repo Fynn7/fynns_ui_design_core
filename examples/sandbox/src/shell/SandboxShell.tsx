@@ -6,24 +6,22 @@ import {
   NavItem,
   NavItemLabel,
   Panel,
-  RefreshIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
   SunIcon,
-  toast,
   Toaster,
-  Tooltip,
   ToggleGroup,
+  Tooltip,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useState } from "react";
 import { useLocale } from "../i18n";
+import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
-import { CollapsibleCardPreviewCanvas } from "../pages/CollapsibleCardPreviewCanvas";
+import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
 import { PropertyInspector } from "../pages/PropertyInspector";
-import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
 import { GlobalsPage } from "../pages/GlobalsPage";
@@ -41,7 +39,7 @@ export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const { undo, redo, reset } = useTokenDraft();
+  const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 
   useEffect(() => {
@@ -121,17 +119,6 @@ export function SandboxShell() {
           <div className="sandbox-topbar-title">{pageTitle}</div>
           <div className="sandbox-topbar-actions">
             {page === "playground" ? <AgentInputBar /> : null}
-            <Tooltip content={t("topbar.resetTip")}>
-              <IconButton
-                aria-label={t("topbar.resetAria")}
-                onClick={() => {
-                  reset();
-                  toast.message(t("topbar.resetToast"));
-                }}
-              >
-                <RefreshIcon size={16} aria-hidden />
-              </IconButton>
-            </Tooltip>
             <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
               <IconButton
                 aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}
@@ -154,15 +141,16 @@ export function SandboxShell() {
               <div className="sandbox-playground">
                 <div className="sandbox-playground-target">
                   <ToggleGroup
+                    size="compact"
                     value={target}
                     onChange={(id) => setTarget(id as typeof target)}
                     options={[
                       { value: "card", label: t("playground.targetCard") },
-                      { value: "collapsible-card", label: t("playground.targetCollapsible") },
+                      { value: "collapsible", label: t("playground.targetCollapsible") },
                     ]}
                   />
                 </div>
-                {target === "card" ? <CardPreviewCanvas /> : <CollapsibleCardPreviewCanvas />}
+                {target === "card" ? <CardPreviewCanvas /> : <CollapsiblePreviewCanvas />}
               </div>
             ) : null}
             {page === "globals" ? <GlobalsPage /> : null}

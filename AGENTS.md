@@ -250,9 +250,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
   `{ tabs, activeId, onChange }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
-  — disclosure row; collapses content behind a clickable header (chevron rotates).
-  Controlled via `open` or uncontrolled via `defaultOpen`. `actions` sits outside
-  the toggle button. Use to keep long repeated form sections scannable.
+  — **one-shot disclosure section** for agents and apps: pass `title` + `children`
+  (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
+  are built in — do **not** hand-assemble `.fynns-collapsible-*` pieces. Controlled
+  via `open` or uncontrolled via `defaultOpen`. `actions` sits outside the toggle
+  button. Use to keep long repeated form sections scannable.
 - **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**
   / **ListDisclosureToggleSpacer** / **ListTree** / **ListTreeRow** / **ListTreeSlot**
   / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
@@ -274,13 +276,6 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   subject card (distinct from `PanelCard` layout shell). Uses elevation /
   state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
   toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
-- **CollapsibleCard** — Card shell with **CollapsibleCardHeader** (chevron
-  trigger) + optional **CardMedia** / **CardContent** / **CardActions**.
-  `{ variant?, open?, defaultOpen?, onOpenChange?, disabled?, mediaCollapse?:
-  "always"|"withBody", cssOverrides? }`. Factory defaults from
-  `COLLAPSIBLE_CARD_RECIPE` in `collapsible-card.recipe.ts` (sandbox **Apply
-  component template** writes that file + the `@fynns-recipe collapsible-card`
-  CSS block). Not `interactive` on the root card.
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
   styled native range.

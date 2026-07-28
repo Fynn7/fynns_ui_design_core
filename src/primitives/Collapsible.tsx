@@ -21,6 +21,16 @@ export type CollapsibleProps = {
  * to keep long lists (e.g. repeated form sections) scannable: each item shows a
  * compact summary and expands on demand. Works controlled (`open`) or
  * uncontrolled (`defaultOpen`). `.fynns-collapsible*`.
+ *
+ * Agents: call this once as the whole section — do not hand-assemble chevron,
+ * head, trigger, or body chrome.
+ *
+ * @example
+ * ```tsx
+ * <Collapsible title="Presets" defaultOpen>
+ *   {children}
+ * </Collapsible>
+ * ```
  */
 export function Collapsible({
   title,
