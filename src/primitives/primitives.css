@@ -1189,7 +1189,8 @@
 }
 
 .fynns-dialog-panel--sheet-full {
-  height: 100%;
+  height: var(--fynns-layout-sheet-max-height);
+  max-height: 100%;
 }
 
 .fynns-sheet-handle {

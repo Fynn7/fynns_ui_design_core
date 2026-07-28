@@ -169,6 +169,16 @@ export function GlobalsPage() {
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
           <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
           <Avatar alt={t("globals.avatarFallback")} />
+          <Avatar
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' fill='%23031417' font-size='16' font-family='sans-serif'%3EAL%3C/text%3E%3C/svg%3E"
+            name="Ada Lovelace"
+            alt={t("globals.avatarImage")}
+          />
+          <Avatar
+            src="/__missing-avatar__.png"
+            name="Broken Src"
+            alt={t("globals.avatarBroken")}
+          />
         </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.fabTip")}>

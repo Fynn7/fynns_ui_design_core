@@ -332,6 +332,12 @@ export function App() {
           <Avatar size="sm" name="Ada" alt="Ada" />
           <Avatar name="Ada Lovelace" alt="Ada Lovelace" />
           <Avatar alt="User" />
+          <Avatar
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3C/svg%3E"
+            name="Ada Lovelace"
+            alt="Ada image"
+          />
+          <Avatar src="/__missing-avatar__.png" name="Broken Src" alt="Broken image fallback" />
           <Tooltip content="Create">
             <Fab aria-label="Create">
               <PlusIcon />

@@ -244,7 +244,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   showCloseButton?, showHandle?, size?: "content"|"half"|"full", actions?,
   closeAriaLabel?, ariaLabel?, className?, children }` — M3 bottom sheet
   ([specs](https://m3.material.io/components/bottom-sheets/specs)):
-  `surface-1` container, 28dp top corners, level-1 shadow, 32×4 drag handle,
+  `surface-1` container, 28dp top corners, level-1 shadow, visual drag-handle
+  chrome (not interactive drag),
   `title-large` headline. Close icon **off** by default (dismiss via Esc/scrim).
   Prefer `Drawer` for desktop side panels.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
