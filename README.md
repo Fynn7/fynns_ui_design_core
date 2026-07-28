@@ -132,28 +132,26 @@ change Apply writeback).
 
 **Card**
 
-- Anatomy: Media on/off
-- States: Interactive, Disabled
-- Actions: align start|end
+- Contents: Image on/off
+- Behavior: Clickable, Disabled
+- Footer buttons: align left|right
 
 **Collapsible**
 
-- States: Open (controlled preview)
-- Anatomy: Header actions on/off
+- Behavior: Expanded (controlled preview)
+- Contents: Extra header button on/off
 
 ### Inspector knobs (Surfaces)
 
 Shared token draft for both Card and Collapsible targets (Apply still writes
 `tokens.ts` only — no component recipe writeback):
 
-- Color: accent hue presets + rainbow chip (opens hue ring); editable degree /
-  hex fields; card surfaces `surface-1` / `surface-4` / `app-bg` brightness;
-  outlined `--fynns-color-border-strong`
-- State layers: hover / focus / pressed / dragged
-- Spacing: Card anatomy `--fynns-space-lg` / `md` / `sm`; inspector **Block gap**
-  (`--sandbox-block-gap`) between adjacent chrome blocks in every inspector stack
+- Color: accent chips + rainbow hue wheel; elevated / filled / page background
+  brightness; outlined card border
+- Hover overlays: hover / focus / pressed / dragged
+- Spacing: card body / title row / footer button gaps; inspector **Section gap**
   (sandbox-only, not Apply writeback)
-- Typography: `--fynns-font-size-{sm,md,lg}`
+- Type size: `--fynns-font-size-{sm,md,lg}`
 
 Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspector
 knobs).
