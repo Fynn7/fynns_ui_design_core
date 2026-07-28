@@ -283,8 +283,9 @@ export const Z_TOKENS = {
 
 /**
  * Toggle/switch geometry (M3 Switch proportions at 16px rem).
- * Track 52×32dp; fixed handle 20dp (between M3 unselected 16 / selected 24);
- * inset 6dp. Outline 2dp at md; sm uses a thinner outline so it does not look heavier.
+ * Track 52×32dp; fixed handle 20dp (between M3 unselected 16 / selected 24).
+ * Outline 2dp at md; sm uses 1.5px so the stroke does not look heavier.
+ * `track-pad-*` = padding-box inset (outer gap ≈ pad + outline = (track-h − thumb)/2).
  * No selected-size morph.
  * `--fynns-toggle-<key>`.
  */
@@ -297,8 +298,9 @@ export const TOGGLE_TOKENS = {
   "thumb-checked": "1.25rem",
   /** Legacy transform shift; prefer absolute left for Switch. */
   "thumb-shift": "1.25rem",
-  "track-pad-inline": "0.375rem",
-  "track-pad-checked": "0.375rem",
+  /** Padding-box inset; pairs with `track-outline` for outer-edge symmetry. */
+  "track-pad-inline": "0.25rem",
+  "track-pad-checked": "0.25rem",
   /** M3 `track-outline-width` = 2dp. */
   "track-outline": "2px",
   /** Proportional outline for `size="sm"` (~75% track). */
@@ -308,8 +310,8 @@ export const TOGGLE_TOKENS = {
   "track-h-sm": "1.5rem",
   "thumb-sm": "0.9375rem",
   "thumb-checked-sm": "0.9375rem",
-  "track-pad-inline-sm": "0.28125rem",
-  "track-pad-checked-sm": "0.28125rem",
+  "track-pad-inline-sm": "0.1875rem",
+  "track-pad-checked-sm": "0.1875rem",
   "state-layer-sm": "1.875rem",
   "margin-top": "0.08em",
 } as const;

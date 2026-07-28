@@ -176,8 +176,8 @@
   --fynns-toggle-thumb: 1.25rem;
   --fynns-toggle-thumb-checked: 1.25rem;
   --fynns-toggle-thumb-shift: 1.25rem;
-  --fynns-toggle-track-pad-inline: 0.375rem;
-  --fynns-toggle-track-pad-checked: 0.375rem;
+  --fynns-toggle-track-pad-inline: 0.25rem;
+  --fynns-toggle-track-pad-checked: 0.25rem;
   --fynns-toggle-track-outline: 2px;
   --fynns-toggle-track-outline-sm: 1.5px;
   --fynns-toggle-state-layer: 2.5rem;
@@ -185,8 +185,8 @@
   --fynns-toggle-track-h-sm: 1.5rem;
   --fynns-toggle-thumb-sm: 0.9375rem;
   --fynns-toggle-thumb-checked-sm: 0.9375rem;
-  --fynns-toggle-track-pad-inline-sm: 0.28125rem;
-  --fynns-toggle-track-pad-checked-sm: 0.28125rem;
+  --fynns-toggle-track-pad-inline-sm: 0.1875rem;
+  --fynns-toggle-track-pad-checked-sm: 0.1875rem;
   --fynns-toggle-state-layer-sm: 1.875rem;
   --fynns-toggle-margin-top: 0.08em;
   --fynns-focus-ring-width: 2px;

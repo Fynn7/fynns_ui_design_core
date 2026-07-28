@@ -1213,10 +1213,8 @@
 }
 
 /*
- * Thumb inset from the *outer* track edge: (track-h - thumb) / 2.
- * Absolute `left`/`right` are relative to the padding box (inside the border),
- * so subtract outline — otherwise checked (border blends into fill) looks
- * shifted inward vs unchecked.
+ * Thumb uses `--fynns-toggle-track-pad-*` (padding-box). Pads are sized so
+ * outer gap ≈ pad + outline ≈ (track-h − thumb) / 2 on both ends.
  */
 .fynns-switch-track::before {
   content: "";
@@ -1226,8 +1224,7 @@
   height: var(--fynns-toggle-state-layer);
   top: 50%;
   left: calc(
-    (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-      var(--fynns-toggle-track-outline) + var(--fynns-toggle-thumb) / 2
+    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
   );
   border-radius: var(--fynns-radius-round);
   transform: translate(-50%, -50%);
@@ -1240,11 +1237,8 @@
 
 .fynns-switch-track[data-state="checked"]::before {
   left: calc(
-    100% -
-      (
-        (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-          var(--fynns-toggle-track-outline) + var(--fynns-toggle-thumb) / 2
-      )
+    100% - var(--fynns-toggle-track-pad-checked) -
+      var(--fynns-toggle-thumb) / 2
   );
 }
 
@@ -1299,16 +1293,13 @@
   position: absolute;
   z-index: 1;
   top: 50%;
-  left: calc(
-    (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-      var(--fynns-toggle-track-outline)
-  );
+  left: var(--fynns-toggle-track-pad-inline);
   display: block;
   width: var(--fynns-toggle-thumb);
   height: var(--fynns-toggle-thumb);
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-border-strong);
-  box-shadow: none;
+  box-shadow: var(--fynns-shadow-none);
   transform: translateY(-50%);
   transition:
     left var(--fynns-duration-toggle) var(--fynns-ease-spring),
@@ -1317,11 +1308,7 @@
 
 .fynns-switch-thumb[data-state="checked"] {
   left: calc(
-    100% -
-      (
-        (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-          var(--fynns-toggle-track-outline)
-      ) - var(--fynns-toggle-thumb)
+    100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
   background: var(--fynns-color-on-accent);
 }
@@ -1485,8 +1472,7 @@
   height: var(--fynns-toggle-state-layer);
   top: 50%;
   left: calc(
-    (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-      var(--fynns-toggle-track-outline) + var(--fynns-toggle-thumb) / 2
+    var(--fynns-toggle-track-pad-inline) + var(--fynns-toggle-thumb) / 2
   );
   border-radius: var(--fynns-radius-round);
   transform: translate(-50%, -50%);
@@ -1506,16 +1492,13 @@
   position: absolute;
   z-index: 1;
   top: 50%;
-  left: calc(
-    (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-      var(--fynns-toggle-track-outline)
-  );
+  left: var(--fynns-toggle-track-pad-inline);
   display: block;
   width: var(--fynns-toggle-thumb);
   height: var(--fynns-toggle-thumb);
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-border-strong);
-  box-shadow: none;
+  box-shadow: var(--fynns-shadow-none);
   transform: translateY(-50%);
   transition:
     left var(--fynns-duration-toggle) var(--fynns-ease-spring),
@@ -1565,21 +1548,14 @@
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track::before {
   left: calc(
-    100% -
-      (
-        (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-          var(--fynns-toggle-track-outline) + var(--fynns-toggle-thumb) / 2
-      )
+    100% - var(--fynns-toggle-track-pad-checked) -
+      var(--fynns-toggle-thumb) / 2
   );
 }
 
 .fynns-toggle--switch > input:checked + .fynns-toggle-track .fynns-toggle-track__thumb {
   left: calc(
-    100% -
-      (
-        (var(--fynns-toggle-track-h) - var(--fynns-toggle-thumb)) / 2 -
-          var(--fynns-toggle-track-outline)
-      ) - var(--fynns-toggle-thumb)
+    100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb)
   );
   background: var(--fynns-color-on-accent);
 }
