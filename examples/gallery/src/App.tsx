@@ -3,6 +3,7 @@ import {
   AlertCircleIcon,
   Avatar,
   Badge,
+  BottomSheet,
   Button,
   Card,
   CardActionArea,
@@ -62,6 +63,7 @@ export function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
@@ -295,6 +297,7 @@ export function App() {
           <Button onClick={() => setDialogOpen(true)}>Open dialog</Button>
           <Button onClick={() => setConfirmOpen(true)}>Confirm dialog</Button>
           <Button onClick={() => setDrawerOpen(true)}>Open drawer</Button>
+          <Button onClick={() => setSheetOpen(true)}>Open bottom sheet</Button>
           <Tooltip content="A self-positioned tooltip">
             <Button>Hover me</Button>
           </Tooltip>
@@ -408,6 +411,22 @@ export function App() {
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} title="Side drawer">
         <p style={{ marginTop: 0 }}>Drawer slides in from the right with the shared frame presence lifecycle.</p>
       </Drawer>
+
+      <BottomSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title="Bottom sheet"
+        description="Slides up from the bottom edge."
+        actions={
+          <Button onClick={() => setSheetOpen(false)}>
+            Done
+          </Button>
+        }
+      >
+        <p style={{ marginTop: 0 }}>
+          Prefer BottomSheet for mobile-leaning actions; use Drawer for desktop side panels.
+        </p>
+      </BottomSheet>
 
       <Toaster />
     </div>

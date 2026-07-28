@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  BottomSheet,
   Button,
   Card,
   CardContent,
@@ -43,6 +44,7 @@ export function GlobalsPage() {
   const [radioValue, setRadioValue] = useState<"a" | "b">("a");
   const [filterOn, setFilterOn] = useState(true);
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -53,6 +55,7 @@ export function GlobalsPage() {
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
+          <Button variant="default">{t("globals.btnOutlined")}</Button>
           <Button variant="primary">{t("globals.btnPrimary")}</Button>
           <Button variant="ghost">{t("globals.btnGhost")}</Button>
         </div>
@@ -181,7 +184,23 @@ export function GlobalsPage() {
           <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
             <PlusIcon />
           </Fab>
+          <Button size="sm" onClick={() => setSheetOpen(true)}>
+            {t("globals.sheetOpen")}
+          </Button>
         </div>
+        <BottomSheet
+          open={sheetOpen}
+          onClose={() => setSheetOpen(false)}
+          title={t("globals.sheetTitle")}
+          description={t("globals.sheetDescription")}
+          actions={
+            <Button onClick={() => setSheetOpen(false)}>
+              {t("globals.sheetDone")}
+            </Button>
+          }
+        >
+          <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
+        </BottomSheet>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>
 

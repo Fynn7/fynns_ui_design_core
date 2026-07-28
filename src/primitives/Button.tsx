@@ -4,9 +4,9 @@ import { Spinner } from "./Loading";
 
 /**
  * Button primitive. The single source of truth for `<button>` styling across
- * fynns apps. Style axes are `variant`, `size`, `active`, `iconOnly`, `loading`
- * only; any other visual tweak must go through `--fynns-*` overrides, never
- * inline color.
+ * fynns apps. Default variant is `tonal` (accent-container). Style axes are
+ * `variant`, `size`, `active`, `iconOnly`, `loading` only; any other visual
+ * tweak must go through `--fynns-*` overrides, never inline color.
  */
 export type ButtonVariant = "default" | "primary" | "tonal" | "danger" | "ghost";
 export type ButtonSize = "md" | "sm" | "lg";
@@ -35,7 +35,7 @@ const VARIANT_CLASS: Record<ButtonVariant, string> = {
 
 export const Button = forwardRef(function Button(
   {
-    variant = "default",
+    variant = "tonal",
     size = "md",
     active = false,
     danger = false,

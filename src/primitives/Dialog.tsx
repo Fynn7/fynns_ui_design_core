@@ -5,7 +5,7 @@ import { Button } from "./Button";
 import { CloseIcon } from "./icons";
 import { Spinner } from "./Loading";
 
-export type DialogVariant = "centered" | "command" | "drawer";
+export type DialogVariant = "centered" | "command" | "drawer" | "sheet";
 
 export type DrawerSide = "left" | "right";
 
@@ -49,7 +49,8 @@ export type DialogFrameProps = {
 
 /**
  * Shared frame: portal + scrim + focus-trap + Esc + body scroll lock.
- * Low-level building block reused by `Dialog`, `DialogShell`, and `Drawer`.
+ * Low-level building block reused by `Dialog`, `DialogShell`, `Drawer`, and
+ * `BottomSheet`.
  */
 export function DialogFrame({
   open,
@@ -162,13 +163,17 @@ export function DialogFrame({
       ? "fynns-dialog-overlay--command"
       : variant === "drawer"
         ? "fynns-dialog-overlay--drawer"
-        : "fynns-dialog-overlay--centered";
+        : variant === "sheet"
+          ? "fynns-dialog-overlay--sheet"
+          : "fynns-dialog-overlay--centered";
   const panelVariantClass =
     variant === "command"
       ? "fynns-dialog-panel--command"
       : variant === "drawer"
         ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
-        : "fynns-dialog-panel--centered";
+        : variant === "sheet"
+          ? "fynns-dialog-panel--sheet"
+          : "fynns-dialog-panel--centered";
 
   return createPortal(
     <div

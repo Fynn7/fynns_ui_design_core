@@ -51,21 +51,25 @@
   align-items: center;
   justify-content: center;
   gap: var(--fynns-space-2);
-  min-height: 2.25rem;
+  box-sizing: border-box;
+  min-height: 2.5rem;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-sm);
-  padding: 0.4rem 0.75rem;
+  border-radius: var(--fynns-radius-xl);
+  padding: 0 var(--fynns-space-lg);
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
   font-size: var(--fynns-font-size-body-small);
+  font-weight: var(--fynns-font-weight-medium);
   white-space: nowrap;
   cursor: pointer;
   transition:
     border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
     color var(--fynns-duration-fast) var(--fynns-ease-standard),
-    opacity var(--fynns-duration-base) var(--fynns-ease-standard);
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
+    opacity var(--fynns-duration-base) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-btn:hover:not(:disabled) {
@@ -143,15 +147,15 @@
 }
 
 .fynns-btn--sm {
-  min-height: 1.9rem;
-  font-size: 0.78rem;
-  padding: 0.2rem 0.55rem;
+  min-height: 2rem;
+  font-size: var(--fynns-font-size-xs);
+  padding: 0 var(--fynns-space-md);
 }
 
 .fynns-btn--lg {
-  min-height: 2.5rem;
+  min-height: 3rem;
   font-size: var(--fynns-font-size-md);
-  padding: 0.55rem 1.1rem;
+  padding: 0 var(--fynns-space-xl);
 }
 
 .fynns-btn--loading {
@@ -1138,8 +1142,149 @@
   transform: translateX(0);
 }
 
+/* ---------- Bottom sheet (M3) ---------- */
+/* Specs: https://m3.material.io/components/bottom-sheets/specs */
+.fynns-dialog-overlay--sheet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--fynns-layout-sheet-top-margin) 0 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 40rem) {
+  .fynns-dialog-overlay--sheet {
+    padding: var(--fynns-layout-sheet-top-margin-wide)
+      var(--fynns-layout-sheet-side-margin-wide) 0;
+  }
+}
+
+.fynns-dialog-panel--sheet {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--fynns-layout-sheet-max-width);
+  max-height: 100%;
+  margin: 0 auto;
+  /* Reset dialog chrome — M3 sheet is borderless surface-container-low + level1. */
+  border: none;
+  border-radius: var(--fynns-radius-3xl) var(--fynns-radius-3xl) 0 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-xs);
+  overflow: hidden;
+  will-change: transform;
+  transform: translateY(100%);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-dialog-panel--sheet[data-state="open"] {
+  transform: translateY(0);
+}
+
+.fynns-dialog-panel--sheet-half {
+  height: var(--fynns-layout-sheet-half-height);
+  max-height: 100%;
+}
+
+.fynns-dialog-panel--sheet-full {
+  height: 100%;
+}
+
+.fynns-sheet-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding-block: var(--fynns-layout-sheet-handle-pad-block);
+}
+
+.fynns-sheet-handle-pill {
+  width: var(--fynns-layout-sheet-handle-width);
+  height: var(--fynns-layout-sheet-handle-height);
+  border-radius: var(--fynns-radius-pill);
+  /* on-surface-variant */
+  background: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--fynns-layout-sheet-header-gap);
+  flex: 0 0 auto;
+  padding: 0 var(--fynns-layout-sheet-pad-inline);
+  /* No divider / no surface-head — not a dialog title bar. */
+  border: none;
+  background: transparent;
+}
+
+.fynns-sheet-header-spacer {
+  flex: 1 1 auto;
+}
+
+.fynns-sheet-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-font-size-title-large);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-title-large);
+  letter-spacing: 0;
+}
+
+.fynns-sheet-close {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-close:hover:not(:disabled) {
+  color: var(--fynns-color-text);
+}
+
+.fynns-sheet-description {
+  margin: var(--fynns-layout-sheet-header-gap) 0 0;
+  padding: 0 var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--fynns-layout-sheet-pad-block) var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-header + .fynns-sheet-body,
+.fynns-sheet-description + .fynns-sheet-body {
+  padding-top: var(--fynns-layout-sheet-header-gap);
+}
+
+.fynns-sheet-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-layout-sheet-actions-pad-top)
+    var(--fynns-layout-sheet-pad-inline)
+    var(--fynns-layout-sheet-actions-pad-bottom);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fynns-dialog-panel--drawer {
+  .fynns-dialog-panel--drawer,
+  .fynns-dialog-panel--sheet {
     transition: none;
   }
 

@@ -158,7 +158,8 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
 - Preview stage shows Button, Input, Select, Badge, Switch, Card variants,
   Collapsible, plus an xs–xl levels legend labeled with which components use each
-  step (cards use **md**; switch track uses **radius-pill**)
+  step (buttons use **xl**; cards / inputs use **md**; badges / chips use **sm**;
+  switch track uses **radius-pill**)
 
 ### Preview toggles (Surfaces)
 

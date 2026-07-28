@@ -161,6 +161,8 @@ export const RADIUS_TOKENS = {
   /** M3 extra-large band */
   xl: "16px",
   "2xl": "24px",
+  /** M3 extra-large / sheet top corners ≈ 28dp. */
+  "3xl": "28px",
   "flyout-glyph": "5px",
   pill: "999px",
   round: "50%",
@@ -238,6 +240,8 @@ export const FONT_SIZE_TOKENS = {
   sm: "0.875rem",
   md: "1rem",
   lg: "1.25rem",
+  /** M3 title-large ≈ 22sp. */
+  "title-large": "1.375rem",
   xl: "1.5rem",
   "2xl": "2rem",
   /** Legacy semantic keys — do not remove. */
@@ -252,6 +256,9 @@ export const FONT_SIZE_TOKENS = {
 
 /** Font weights. `--fynns-font-weight-<key>`. */
 export const FONT_WEIGHT_TOKENS = {
+  /** M3 regular (title-large, body). */
+  regular: "400",
+  medium: "500",
   semibold: "600",
   title: "650",
   bold: "700",
@@ -262,6 +269,8 @@ export const LINE_HEIGHT_TOKENS = {
   root: "1.4",
   tight: "1",
   snug: "1.25",
+  /** M3 title-large line height ≈ 28sp / 22sp. */
+  "title-large": "1.2727",
   body: "1.45",
   compact: "1.35",
 } as const;
@@ -405,6 +414,29 @@ export const LAYOUT_TOKENS = {
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "42rem",
   "drawer-width": "72vw",
+  /** Bottom sheet — M3 max width 640dp. */
+  "sheet-max-width": "40rem",
+  /** Near-fullscreen height (leaves a peek of the page above). */
+  "sheet-max-height": "90vh",
+  "sheet-half-height": "50vh",
+  /** Top inset so the sheet never covers the full viewport (M3 72dp). */
+  "sheet-top-margin": "4.5rem",
+  /** When viewport > 640dp (M3 56dp). */
+  "sheet-top-margin-wide": "3.5rem",
+  "sheet-side-margin-wide": "3.5rem",
+  /** M3 docked drag handle 32×4dp. */
+  "sheet-handle-width": "2rem",
+  "sheet-handle-height": "0.25rem",
+  /** Handle vertical padding (M3 22dp). */
+  "sheet-handle-pad-block": "1.375rem",
+  /** Content inset (M3 24dp inline / 16dp block). */
+  "sheet-pad-inline": "1.5rem",
+  "sheet-pad-block": "1rem",
+  /** Gap between header stack elements (M3 12dp). */
+  "sheet-header-gap": "0.75rem",
+  /** Actions: top 16dp / bottom 24dp. */
+  "sheet-actions-pad-top": "1rem",
+  "sheet-actions-pad-bottom": "1.5rem",
   "tooltip-max-width": "min(14rem, 85vw)",
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
