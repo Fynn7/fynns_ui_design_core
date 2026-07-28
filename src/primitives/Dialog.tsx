@@ -267,6 +267,8 @@ export type DialogProps = {
   children: ReactNode;
   headActions?: ReactNode;
   variant?: DialogVariant;
+  /** Maps to `--fynns-layout-dialog-max-width-*` for centered dialogs. */
+  size?: "sm" | "md" | "lg";
   className?: string;
   showCloseButton?: boolean;
   closeAriaLabel?: string;
@@ -281,6 +283,7 @@ export function Dialog({
   children,
   headActions,
   variant = "centered",
+  size = "md",
   className,
   showCloseButton = true,
   closeAriaLabel = "关闭",
@@ -288,12 +291,20 @@ export function Dialog({
   const titleId = useId();
   const close = () => onOpenChange(false);
   const showHead = visibleTitle || !!headActions || showCloseButton;
+  const sizeClass =
+    variant === "centered"
+      ? size === "sm"
+        ? "fynns-dialog-panel--size-sm"
+        : size === "lg"
+          ? "fynns-dialog-panel--size-lg"
+          : "fynns-dialog-panel--size-md"
+      : "";
   return (
     <DialogFrame
       open={open}
       onClose={close}
       variant={variant}
-      panelClassName={className}
+      panelClassName={[sizeClass, className ?? ""].filter(Boolean).join(" ") || undefined}
       labelledBy={titleId}
     >
       {showHead ? (

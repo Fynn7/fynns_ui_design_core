@@ -134,11 +134,11 @@ Color tokens (`--fynns-color-*`):
   `surface-head`, `toast-surface`. Also `surface-muted`, `surface-hover`,
   `control-surface`, `control-surface-hover`, `flyout-item`,
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
-- Lines/text: `border` `#0d2e2c`, `border-strong`, `text` `#e2f0ed`,
-  `text-muted` `#7a9e98`.
-- Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
-  `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
-  `accent-ring`, `focus`.
+  - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
+    `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
+    `accent-ring`, `accent-container`, `on-accent-container`, `focus`.
+  - Lines/text: `border` `#0d2e2c`, `border-strong`, `outline-subtle`, `text` `#e2f0ed`,
+    `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
   `danger-border`, `info` `#60a5fa`.
 - Misc: `overlay`, `toggle-track`, `toggle-track-hover`,
@@ -168,17 +168,21 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 
-- **Button** `{ variant?: "default"|"primary"|"danger"|"ghost", size?: "md"|"sm",
-  active?, danger?, iconOnly? }` + native button attrs. `forwardRef`.
+- **Button** `{ variant?: "default"|"primary"|"tonal"|"danger"|"ghost", size?: "md"|"sm"|"lg",
+  active?, danger?, iconOnly?, loading? }` + native button attrs. `forwardRef`.
+  `tonal` is secondary emphasis (`accent-container`). `loading` shows a spinner and disables.
 - **IconButton** — `Button` with `iconOnly`; defaults to `ghost` so the control
   reads as the icon itself (no bordered square tile). Pass `aria-label`.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
   disabled?, mainAriaLabel?, menuAriaLabel? }`.
-- **Input** / **Textarea** — native attrs + `.fynns-input`/`.fynns-textarea`.
+- **Input** / **Textarea** — `{ invalid?, size?: "sm"|"md", variant?: "filled"|"outlined",
+  supportingText?, errorText? }` (+ Input `leading?`/`trailing?`) and native attrs.
+  `.fynns-input` / `.fynns-textarea`; hint rows use `.fynns-field-hint`.
 - **Counter** `{ value, onChange, min?, max?, step?, ariaLabel?, disabled? }` — numeric
   field + press-and-hold steppers (`CounterRoot`, `CounterField`, `CounterSteppers`,
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
-- **SearchInput** `{ leadingIcon?, wrapClassName?, ...inputAttrs }`.
+- **SearchInput** `{ leadingIcon?, trailing?, wrapClassName?, invalid?, size?,
+  supportingText?, errorText?, ...inputAttrs }`.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -206,9 +210,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   icon-only help glyph, or `label` as a plain help trigger (prefer for
   form/inspector rows; no underline fence, no trailing "i").
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
-  headActions?, variant?: "centered"|"command", showCloseButton?, closeAriaLabel?
+  headActions?, variant?: "centered"|"command", size?: "sm"|"md"|"lg",
+  showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in
-  via the shared frame presence lifecycle. **DialogShell** is the low-level shell
+  via the shared frame presence lifecycle. `size` maps to
+  `--fynns-layout-dialog-max-width-*` (centered only). **DialogShell** is the low-level shell
   `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
   is the shared low-level frame reused by Dialog/Drawer (`modal?`, `side?`,
   `dataState?`); manages enter/exit when `dataState` is omitted. **ConfirmDialog** `{ open, onOpenChange, title, description?,
@@ -248,13 +254,18 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Segments are always equal width (sized to the longest label) with centered
   text; `fullWidth` stretches the group to its container. Chips fill the
   group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
-  `{ tabs, activeId, onChange }`.
+  `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — **one-shot disclosure section** for agents and apps: pass `title` + `children`
   (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
   are built in — do **not** hand-assemble `.fynns-collapsible-*` pieces. Controlled
   via `open` or uncontrolled via `defaultOpen`. `actions` sits outside the toggle
-  button. Use to keep long repeated form sections scannable.
+  button. Body uses an M3-inspired container transform: outer card morphs height
+  (`grid-template-rows` + presence `data-state`); body fades out on close.
+  No head/body hairline (spacing only) — a mid border stacks with the rising
+  outer bottom edge during collapse. Respects `prefers-reduced-motion`.
+  Reusable utility: `.fynns-expand` / `.fynns-expand-inner`. Use to keep long
+  repeated form sections scannable.
 - **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**
   / **ListDisclosureToggleSpacer** / **ListTree** / **ListTreeRow** / **ListTreeSlot**
   / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
@@ -268,13 +279,14 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **TextLinkButton** — inline accent text link control.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
-- **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, disabled? }`
+- **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, selected?, disabled? }`
   + anatomy: **CardMedia** `{ src?, alt?, height?, children? }` (custom media via
   `children` when not using a plain image), **CardHeader**
   `{ title, subtitle?, avatar?, action? }`, **CardContent**, **CardActions**
   `{ align?: "start"|"end", disableSpacing? }`, **CardActionArea**. M3-informed
   subject card (distinct from `PanelCard` layout shell). Uses elevation /
-  state-layer tokens. Aesthetic sandbox (`npm run sandbox`) exposes preview
+  state-layer tokens; elevated+interactive hovers to a stronger shadow;
+  `selected` uses `accent-container`. Aesthetic sandbox (`npm run sandbox`) exposes preview
   toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
 - **CardOpenButton** — full-width card primary action area (quicklinks).
 - **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
@@ -290,7 +302,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
-- **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", icon? }`.
+- **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,

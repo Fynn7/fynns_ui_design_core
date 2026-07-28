@@ -1,5 +1,6 @@
 import {
   applyFynnsThemeMode,
+  DIALOG_TRANSITION_MS,
   getFynnsThemeMode,
   IconButton,
   MoonIcon,
@@ -15,7 +16,7 @@ import {
   Tooltip,
   type FynnsThemeMode,
 } from "@fynns/ui";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -35,6 +36,46 @@ export type SandboxPage =
   | "foundations"
   | "motion"
   | "templates";
+
+function asideTransitionMs(): number {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return 0;
+  }
+  return DIALOG_TRANSITION_MS;
+}
+
+/** Right inspector pane: width expand/collapse (no translate — keeps the
+ * topbar / canvas / aside seam a hard edge throughout the motion). */
+function SandboxAside({ open, children }: { open: boolean; children: ReactNode }) {
+  const [rendered, setRendered] = useState(open);
+  const [entered, setEntered] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setRendered(true);
+      const raf = requestAnimationFrame(() => setEntered(true));
+      return () => cancelAnimationFrame(raf);
+    }
+    setEntered(false);
+    const timer = setTimeout(() => setRendered(false), asideTransitionMs());
+    return () => clearTimeout(timer);
+  }, [open]);
+
+  if (!rendered) return null;
+
+  return (
+    <aside
+      className="sandbox-aside"
+      data-state={entered ? "open" : "closing"}
+      aria-hidden={!open || undefined}
+    >
+      {children}
+    </aside>
+  );
+}
 
 export function SandboxShell() {
   const { t } = useLocale();
@@ -147,7 +188,7 @@ export function SandboxShell() {
           </div>
         </header>
 
-        <div className={showAside ? "sandbox-body" : "sandbox-body sandbox-body--single"}>
+        <div className="sandbox-body">
           <main className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
               <div className="sandbox-playground">
@@ -172,15 +213,15 @@ export function SandboxShell() {
               <TemplatesPage theme={theme} onThemeChange={setTheme} />
             ) : null}
           </main>
-          {page === "playground" && showAside ? (
-            <aside className="sandbox-aside">
+          {page === "playground" ? (
+            <SandboxAside open={showAside}>
               <PropertyInspector />
-            </aside>
+            </SandboxAside>
           ) : null}
-          {page === "globals" && showAside ? (
-            <aside className="sandbox-aside">
+          {page === "globals" ? (
+            <SandboxAside open={showAside}>
               <GlobalsInspector />
-            </aside>
+            </SandboxAside>
           ) : null}
         </div>
       </div>

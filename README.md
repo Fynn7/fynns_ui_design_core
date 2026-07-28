@@ -82,6 +82,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
+  Collapsible sections animate open/close with a height slide; the inspector
+  aside opens/closes by clipping its width (hard seam with the canvas — no
+  translate slide that morphs the corner).
 
 ## Aesthetic sandbox
 
