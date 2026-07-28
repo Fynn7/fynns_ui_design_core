@@ -1,7 +1,8 @@
 /**
- * Checkbox/radio styled as a switch with a leading control and trailing label.
- * Use `Switch` for the button-style toggle; use this when you need a real
- * `<input type="checkbox|radio">` (e.g. inside a `<form>` or radio group).
+ * Checkbox/radio **styled as a switch** with a leading control and trailing label.
+ * Prefer `Checkbox` / `Radio` for true M3 selection marks; use this when you need
+ * a real `<input type="checkbox|radio">` that should look like a Switch (e.g.
+ * inside a `<form>` or radio group with switch chrome).
  */
 export type ToggleControlProps = {
   label: string;

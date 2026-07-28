@@ -18,7 +18,30 @@ projects and are easy for humans and agents to reuse.
 ## Consume it (git submodule + source alias)
 
 This package is consumed **as source** through a Vite path alias `@fynns/ui`. No
-build step or npm publish is required.
+build step or npm publish is required. **Do not** add `@fynns/ui-design-core` to
+`package.json` dependencies.
+
+### One-shot (humans & LLM agents)
+
+Authoritative install contract + script:
+
+- Agent guide: [`llm/CONSUME.md`](llm/CONSUME.md)
+- Machine JSON: [`llm/consume.json`](llm/consume.json)
+- Installer: `npm run consume:install -- --target <consumer-root>`
+  (`scripts/install-as-submodule.mjs` / `.ps1`)
+
+```bash
+# from a checkout of this repo
+npm run consume:install -- --target ../my-app --json
+
+# or bootstrap: clone this repo to a temp dir, then point --target at the app
+```
+
+The script adds the submodule (default `packages/fynns_ui_design_core`) and wires
+Vite/tsconfig aliases when it can. Verify with
+`npm run consume:check -- --target ../my-app --json`.
+
+### Manual steps (same outcome)
 
 1. Add the submodule (path `packages/fynns_ui_design_core` by convention):
 
@@ -75,6 +98,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run gen:theme` — regenerate `src/theme/theme.css` from the token tables.
 - `npm run typecheck` — `tsc --noEmit`.
 - `npm run lint` — ESLint.
+- `npm run consume:install -- --target <dir>` — add this repo as a consumer
+  submodule and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).
+- `npm run consume:check -- --target <dir>` — validate submodule + alias.
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
@@ -89,8 +115,11 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. Pages: **Surfaces** (Card or Collapsible target),
-**Globals** (system shape / radius), Foundations, Motion, and **Templates**
+separate design language. **Every new primitive must ship with a sandbox
+preview** (usually on Globals or Surfaces) in the same change set — gallery
+alone is not enough. Pages: **Surfaces** (Card or Collapsible target),
+**Globals** (system shape / radius + control samples), Foundations, Motion, and
+**Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
 (`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages

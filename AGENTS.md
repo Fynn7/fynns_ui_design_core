@@ -9,6 +9,12 @@ repos should link here, not duplicate it.
 A dark-teal design system: canonical `--fynns-*` CSS tokens + self-developed,
 dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 
+**Installing into a consumer repo (submodule + Vite alias):** follow
+[`llm/CONSUME.md`](llm/CONSUME.md) and run
+`npm run consume:install -- --target <consumer-root>`
+(`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
+Never add this package to a consumer's `package.json` dependencies.
+
 ## Design philosophy & UX principles
 
 This is the **single source of truth** for *how* UI is built across every repo
@@ -123,7 +129,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -248,14 +254,24 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
   are added (does not reflow into more columns). Tracks size to `max-content` and
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
-  match `columns` to `Grid`’s `x`. **ToggleControl** —
-  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`).
+  match `columns` to `Grid`’s `x`. **Checkbox** `{ label, checked, onCheckedChange,
+  indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
+  (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
+  checked, onCheckedChange, name, value, invalid?, disabled? }` — M3 circular
+  mark (20dp); group via shared `name`. **ToggleControl** —
+  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`); prefer
+  `Checkbox` / `Radio` for true selection chrome.
 - **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
   `ariaLabel`. `size="compact"` tightens padding for narrow panels.
   Segments are always equal width (sized to the longest label) with centered
   text; `fullWidth` stretches the group to its container. Chips fill the
-  group when it is stretched (a flex/grid child or `fullWidth`). **Tabs**
+  group when it is stretched (a flex/grid child or `fullWidth`). **Chip** /
+  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
+  leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 chips (32dp);
+  filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
+  button. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
+  segmented exclusivity. **Tabs**
   `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }`.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — **one-shot disclosure section** for agents and apps: pass `title` + `children`
@@ -304,6 +320,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
+  **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
+  M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
+  (16dp). Vertical stretches in a flex row (`align-self: stretch`).
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
@@ -321,5 +340,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
    reference it as `var(--fynns-...)`.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
-   `src/index.ts`, and document it here.
+   `src/index.ts`, document it here, **and add a live sample to the aesthetic
+   sandbox** (`examples/sandbox`, typically Globals controls or a Surfaces
+   preview). Gallery (`examples/gallery`) is optional extra coverage, not a
+   substitute for sandbox.
 3. Keep `npm run typecheck` and `npm run lint` green.

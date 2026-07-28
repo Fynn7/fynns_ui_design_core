@@ -11,7 +11,11 @@ import {
   CardMedia,
   Collapsible,
   ConfirmDialog,
+  Checkbox,
+  Chip,
+  ChipSet,
   Dialog,
+  Divider,
   Drawer,
   DropdownMenu,
   DropdownMenuItem,
@@ -23,6 +27,7 @@ import {
   Kbd,
   Counter,
   PanelCard,
+  Radio,
   SearchInput,
   Select,
   Slider,
@@ -54,6 +59,9 @@ export function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
+  const [checkboxOn, setCheckboxOn] = useState(true);
+  const [radioValue, setRadioValue] = useState<"a" | "b">("a");
+  const [filterChip, setFilterChip] = useState(true);
   const [seg, setSeg] = useState<"a" | "b" | "c">("a");
   const [tab, setTab] = useState<"one" | "two">("one");
   const [fruit, setFruit] = useState("Apple");
@@ -225,6 +233,35 @@ export function App() {
           <Switch label="Switch (md)" checked={checked} onCheckedChange={setChecked} />
           <Switch label="Switch (sm)" size="sm" checked={checked} onCheckedChange={setChecked} />
           <ToggleControl label="Toggle control" checked={toggleChecked} onChange={setToggleChecked} />
+          <Checkbox label="Checkbox" checked={checkboxOn} onCheckedChange={setCheckboxOn} />
+          <Checkbox label="Indeterminate" checked={false} indeterminate onCheckedChange={setCheckboxOn} />
+          <Radio
+            name="gallery-radio"
+            value="a"
+            label="Radio A"
+            checked={radioValue === "a"}
+            onCheckedChange={() => setRadioValue("a")}
+          />
+          <Radio
+            name="gallery-radio"
+            value="b"
+            label="Radio B"
+            checked={radioValue === "b"}
+            onCheckedChange={() => setRadioValue("b")}
+          />
+          <ChipSet ariaLabel="Chips">
+            <Chip onClick={() => {}}>Assist</Chip>
+            <Chip
+              variant="filter"
+              selected={filterChip}
+              onClick={() => setFilterChip((v) => !v)}
+            >
+              Filter
+            </Chip>
+            <Chip variant="input" selected onRemove={() => {}}>
+              Input
+            </Chip>
+          </ChipSet>
           <ToggleGroup
             value={seg}
             onChange={setSeg}
@@ -283,6 +320,29 @@ export function App() {
           <Kbd>K</Kbd>
           <Spinner label="Loading" />
         </Row>
+        <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Divider
+          </span>
+          <Divider />
+          <Divider inset />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "stretch",
+              gap: "var(--fynns-space-md)",
+              height: "2.5rem",
+            }}
+          >
+            <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+              A
+            </span>
+            <Divider orientation="vertical" />
+            <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+              B
+            </span>
+          </div>
+        </div>
       </Section>
 
       <Section title="Alerts">
