@@ -316,6 +316,21 @@ export const TOGGLE_TOKENS = {
   "margin-top": "0.08em",
 } as const;
 
+/**
+ * Checkbox / radio geometry (M3 Selection controls at 16px rem).
+ * Checkbox box 18dp; radio 20dp; state layer 40dp; outline 2dp.
+ * `--fynns-selection-<key>`.
+ */
+export const SELECTION_TOKENS = {
+  "box-size": "1.125rem",
+  "box-radius": "2px",
+  "box-outline": "2px",
+  "radio-size": "1.25rem",
+  "radio-dot": "0.625rem",
+  "icon-size": "0.875rem",
+  "state-layer": "2.5rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -466,6 +481,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["duration", DURATION_TOKENS],
   ["ease", EASING_TOKENS],
   ["toggle", TOGGLE_TOKENS],
+  ["selection", SELECTION_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

@@ -4,9 +4,11 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Checkbox,
   Collapsible,
   Divider,
   Input,
+  Radio,
   Select,
   Switch,
 } from "@fynns/ui";
@@ -28,6 +30,9 @@ const SWATCH_KEYS = [
 export function GlobalsPage() {
   const { t } = useLocale();
   const [switchOn, setSwitchOn] = useState(true);
+  const [checkOn, setCheckOn] = useState(true);
+  const [checkMixed, setCheckMixed] = useState(true);
+  const [radioValue, setRadioValue] = useState<"a" | "b">("a");
 
   return (
     <div className="sandbox-globals">
@@ -61,6 +66,41 @@ export function GlobalsPage() {
             checked={switchOn}
             onCheckedChange={setSwitchOn}
           />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Checkbox
+            label={t("globals.checkbox")}
+            checked={checkOn}
+            onCheckedChange={(next) => {
+              setCheckOn(next);
+              setCheckMixed(false);
+            }}
+          />
+          <Checkbox
+            label={t("globals.checkboxMixed")}
+            checked={checkOn}
+            indeterminate={checkMixed}
+            onCheckedChange={(next) => {
+              setCheckOn(next);
+              setCheckMixed(false);
+            }}
+          />
+          <div className="sandbox-globals-row">
+            <Radio
+              name="sandbox-globals-radio"
+              value="a"
+              label={t("globals.radioA")}
+              checked={radioValue === "a"}
+              onCheckedChange={() => setRadioValue("a")}
+            />
+            <Radio
+              name="sandbox-globals-radio"
+              value="b"
+              label={t("globals.radioB")}
+              checked={radioValue === "b"}
+              onCheckedChange={() => setRadioValue("b")}
+            />
+          </div>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <span className="sandbox-help">{t("globals.dividerFull")}</span>

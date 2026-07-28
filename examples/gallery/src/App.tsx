@@ -11,6 +11,7 @@ import {
   CardMedia,
   Collapsible,
   ConfirmDialog,
+  Checkbox,
   Dialog,
   Divider,
   Drawer,
@@ -24,6 +25,7 @@ import {
   Kbd,
   Counter,
   PanelCard,
+  Radio,
   SearchInput,
   Select,
   Slider,
@@ -55,6 +57,8 @@ export function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
+  const [checkboxOn, setCheckboxOn] = useState(true);
+  const [radioValue, setRadioValue] = useState<"a" | "b">("a");
   const [seg, setSeg] = useState<"a" | "b" | "c">("a");
   const [tab, setTab] = useState<"one" | "two">("one");
   const [fruit, setFruit] = useState("Apple");
@@ -226,6 +230,22 @@ export function App() {
           <Switch label="Switch (md)" checked={checked} onCheckedChange={setChecked} />
           <Switch label="Switch (sm)" size="sm" checked={checked} onCheckedChange={setChecked} />
           <ToggleControl label="Toggle control" checked={toggleChecked} onChange={setToggleChecked} />
+          <Checkbox label="Checkbox" checked={checkboxOn} onCheckedChange={setCheckboxOn} />
+          <Checkbox label="Indeterminate" checked={false} indeterminate onCheckedChange={setCheckboxOn} />
+          <Radio
+            name="gallery-radio"
+            value="a"
+            label="Radio A"
+            checked={radioValue === "a"}
+            onCheckedChange={() => setRadioValue("a")}
+          />
+          <Radio
+            name="gallery-radio"
+            value="b"
+            label="Radio B"
+            checked={radioValue === "b"}
+            onCheckedChange={() => setRadioValue("b")}
+          />
           <ToggleGroup
             value={seg}
             onChange={setSeg}

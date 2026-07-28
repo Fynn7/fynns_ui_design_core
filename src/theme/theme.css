@@ -189,6 +189,13 @@
   --fynns-toggle-track-pad-checked-sm: 0.1875rem;
   --fynns-toggle-state-layer-sm: 1.875rem;
   --fynns-toggle-margin-top: 0.08em;
+  --fynns-selection-box-size: 1.125rem;
+  --fynns-selection-box-radius: 2px;
+  --fynns-selection-box-outline: 2px;
+  --fynns-selection-radio-size: 1.25rem;
+  --fynns-selection-radio-dot: 0.625rem;
+  --fynns-selection-icon-size: 0.875rem;
+  --fynns-selection-state-layer: 2.5rem;
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;

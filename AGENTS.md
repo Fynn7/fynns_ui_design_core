@@ -123,7 +123,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -248,8 +248,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
   are added (does not reflow into more columns). Tracks size to `max-content` and
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
-  match `columns` to `Grid`’s `x`. **ToggleControl** —
-  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`).
+  match `columns` to `Grid`’s `x`. **Checkbox** `{ label, checked, onCheckedChange,
+  indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
+  (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
+  checked, onCheckedChange, name, value, invalid?, disabled? }` — M3 circular
+  mark (20dp); group via shared `name`. **ToggleControl** —
+  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`); prefer
+  `Checkbox` / `Radio` for true selection chrome.
 - **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
   — segmented chips. Options may include `tip` (per-segment tooltip) and
   `ariaLabel`. `size="compact"` tightens padding for narrow panels.
