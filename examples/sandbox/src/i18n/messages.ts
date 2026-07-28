@@ -211,9 +211,11 @@ const en = {
     "Larger titles and chrome text (font-size-lg).",
 
   "globals.lead":
-    "Corner radius tokens (--fynns-radius-*) apply across the whole UI. Change the ladder in the inspector — every sample below updates together.",
+    "Corner radius is a named ladder (xs→xl), plus special shapes (pill / round). Cards and inputs on this page use md; buttons use sm; the switch track uses pill.",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
+  "globals.controlsRadiusHelp":
+    "Buttons / badges → radius-sm. Input / Select → radius-md. Switch track → radius-pill (not on the xs–xl ladder).",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Default",
   "globals.btnPrimary": "Primary",
@@ -224,26 +226,41 @@ const en = {
   "globals.badgeNeutral": "Neutral",
   "globals.badgeAccent": "Accent",
   "globals.badgeSuccess": "Success",
+  "globals.switchPill": "Switch (pill)",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
-  "globals.cardSubtitle": "Shared corner radius",
-  "globals.cardBody": "Container corners follow the global radius ladder.",
+  "globals.cardSubtitle": "Uses radius-md",
+  "globals.cardBody": "Card corners follow radius-md on the global ladder.",
   "globals.collapsible": "Fold section sample",
-  "globals.collapsibleHelp": "Headers and panels use the same radius tokens.",
-  "globals.swatches": "Radius steps",
-  "globals.swatchesAria": "Radius steps",
+  "globals.collapsibleHelp": "Collapsible headers also use radius-md.",
+  "globals.swatches": "Radius ladder (who uses what)",
+  "globals.swatchesAria": "Radius ladder",
+  "globals.swatchesHelp":
+    "Each box is one token step. This page’s cards use md — not xs or xl.",
+  "globals.swatchXsUses": "finest chips",
+  "globals.swatchSmUses": "buttons, badges",
+  "globals.swatchMdUses": "cards, inputs",
+  "globals.swatchLgUses": "menus, dialogs",
+  "globals.swatchXlUses": "soft shells",
+  "globals.swatchesSpecialHelp":
+    "Special (not in this row): pill = switch track / search field; round = switch thumb; none = sharp.",
 
   "globalsInspector.shapePresets": "Radius presets",
   "globalsInspector.shapePresetAria": "Radius preset",
   "globalsInspector.applyPresetTip":
-    "Replace the whole draft with this preset (clears other knobs)",
+    "Choosing a preset replaces the whole draft with that radius ladder (clears other knobs)",
   "globalsInspector.applyPresetNote":
-    "Apply preset replaces the whole draft. Align M3 / Reset ladder only change radius.",
+    "Selecting a preset applies it right away and replaces the whole draft. Align M3 / Reset ladder only change radius.",
   "globalsInspector.shapeLadder": "Radius ladder",
   "globalsInspector.shapeLadderHelp":
-    "Sets --fynns-radius-* used by buttons, inputs, cards, menus, and more — not cards only.",
+    "Each step maps to different components. Cards / inputs = md; buttons = sm; switch capsule = pill (read-only below).",
+  "globalsInspector.radiusXsUses": "Finest chips",
+  "globalsInspector.radiusSmUses": "Buttons, badges, toggle chips",
+  "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
+  "globalsInspector.radiusLgUses": "Menus, dialogs, drawers",
+  "globalsInspector.radiusXlUses": "Soft / emphasis shells",
   "globalsInspector.radiusXsHint":
-    "Smallest corners (M3 XS ≈ 4dp). Keep below sm on the scale.",
+    "Smallest ladder step (M3 XS ≈ 4dp). Keep below sm on the scale.",
   "globalsInspector.radiusSmHint":
     "Compact controls: buttons, toggle groups, badges, toast action chips.",
   "globalsInspector.radiusMdHint":
@@ -252,11 +269,14 @@ const en = {
     "Larger chrome: dropdown menus, dialogs, and drawers.",
   "globalsInspector.radiusXlHint":
     "Largest corners (M3 XL band). Soft / emphasis shells; keep above lg on the scale.",
-  "globalsInspector.specialReadonly": "Special (read-only)",
+  "globalsInspector.specialReadonly": "Special shapes (read-only)",
+  "globalsInspector.radiusNoneUses": "Sharp corners when needed",
+  "globalsInspector.radiusPillUses": "Switch track, search field",
+  "globalsInspector.radiusRoundUses": "Switch thumb (circle)",
   "globalsInspector.radiusNoneHint":
     "Sharp corners (0). Use when a control must meet a hard edge.",
   "globalsInspector.radiusPillHint":
-    "Pill shape (999px): switch track, search field, fully rounded chips.",
+    "Pill shape (999px): switch track, search field, fully rounded chips — higher than xl on purpose.",
   "globalsInspector.radiusRoundHint":
     "Circle (50%): switch thumb and other round controls.",
   "globalsInspector.resetLadder": "Reset ladder",
@@ -268,10 +288,12 @@ const en = {
   "globalsInspector.toastReset": "Radius ladder reset to baseline",
   "globalsInspector.toastAlign": "Aligned to M3 radius ladder",
 
-  "preset.m3Aligned": "M3-aligned radius",
-  "preset.m3AlignedDesc": "Push mid radius toward M3 medium (12px) and widen the ladder.",
-  "preset.restrained": "Tighter radius",
-  "preset.restrainedDesc": "Slightly tighter corners than the current baseline.",
+  "preset.m3Aligned": "M3 rounder (md 12px)",
+  "preset.m3AlignedDesc":
+    "Rounder M3-style ladder — look at Card / Button corners: xs 4 · sm 8 · md 12 · lg 16 · xl 28.",
+  "preset.restrained": "Sharper (md 4px)",
+  "preset.restrainedDesc":
+    "Clearly tighter corners — compare to M3: xs 2 · sm 3 · md 4 · lg 6 · xl 8.",
 
   "hue.presetsAria": "Accent color presets",
   "hue.openPalette": "Open hue wheel",
@@ -493,9 +515,11 @@ const zh: Record<MessageKey, string> = {
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
 
   "globals.lead":
-    "圆角 token（--fynns-radius-*）作用于整个界面。在右侧检查器调阶梯 —— 下方样例会一起更新。",
+    "圆角是命名阶梯（xs→xl），另有特殊形（pill / round）。本页卡片与输入框用 md；按钮用 sm；开关轨道用 pill。",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
+  "globals.controlsRadiusHelp":
+    "按钮 / 徽章 → radius-sm。输入框 / 选择器 → radius-md。开关轨道 → radius-pill（不在 xs–xl 阶梯上）。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "默认",
   "globals.btnPrimary": "主要",
@@ -506,24 +530,39 @@ const zh: Record<MessageKey, string> = {
   "globals.badgeNeutral": "中性",
   "globals.badgeAccent": "强调",
   "globals.badgeSuccess": "成功",
+  "globals.switchPill": "开关 (pill)",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
-  "globals.cardSubtitle": "共用圆角",
-  "globals.cardBody": "容器圆角跟随全局阶梯。",
+  "globals.cardSubtitle": "使用 radius-md",
+  "globals.cardBody": "卡片圆角跟随全局阶梯的 md。",
   "globals.collapsible": "折叠分区示例",
-  "globals.collapsibleHelp": "标题栏与面板也使用同一套圆角。",
-  "globals.swatches": "圆角档位",
-  "globals.swatchesAria": "圆角档位",
+  "globals.collapsibleHelp": "折叠分区标题栏也使用 radius-md。",
+  "globals.swatches": "圆角阶梯（谁用哪档）",
+  "globals.swatchesAria": "圆角阶梯",
+  "globals.swatchesHelp":
+    "每个色块是一档 token。本页卡片用的是 md —— 不是 xs 或 xl。",
+  "globals.swatchXsUses": "最细芯片",
+  "globals.swatchSmUses": "按钮、徽章",
+  "globals.swatchMdUses": "卡片、输入框",
+  "globals.swatchLgUses": "菜单、对话框",
+  "globals.swatchXlUses": "柔和外壳",
+  "globals.swatchesSpecialHelp":
+    "特殊形（不在上排）：pill = 开关轨道 / 搜索框；round = 开关圆钮；none = 直角。",
 
   "globalsInspector.shapePresets": "圆角预设",
   "globalsInspector.shapePresetAria": "圆角预设",
   "globalsInspector.applyPresetTip":
-    "用此预设替换整个草稿（会清掉其他旋钮）",
+    "选择预设会立刻用该圆角阶梯替换整个草稿（其他旋钮会清掉）",
   "globalsInspector.applyPresetNote":
-    "「应用预设」会替换整个草稿。对齐 M3 / 重置阶梯只改圆角。",
+    "选中即应用，并替换整个草稿。对齐 M3 / 重置阶梯只改圆角。",
   "globalsInspector.shapeLadder": "圆角阶梯",
   "globalsInspector.shapeLadderHelp":
-    "设置按钮、输入框、卡片、菜单等共用的 --fynns-radius-* —— 不只影响卡片。",
+    "每一档对应不同组件。卡片 / 输入 = md；按钮 = sm；开关胶囊 = pill（下方只读）。",
+  "globalsInspector.radiusXsUses": "最细芯片",
+  "globalsInspector.radiusSmUses": "按钮、徽章、切换芯片",
+  "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
+  "globalsInspector.radiusLgUses": "菜单、对话框、抽屉",
+  "globalsInspector.radiusXlUses": "柔和 / 强调外壳",
   "globalsInspector.radiusXsHint":
     "最小圆角（M3 XS ≈ 4dp）。在尺度上应小于 sm。",
   "globalsInspector.radiusSmHint":
@@ -534,11 +573,14 @@ const zh: Record<MessageKey, string> = {
     "较大界面：下拉菜单、对话框与抽屉。",
   "globalsInspector.radiusXlHint":
     "最大圆角（M3 XL）。柔和 / 强调外壳；在尺度上应大于 lg。",
-  "globalsInspector.specialReadonly": "特殊（只读）",
+  "globalsInspector.specialReadonly": "特殊形（只读）",
+  "globalsInspector.radiusNoneUses": "需要直角时",
+  "globalsInspector.radiusPillUses": "开关轨道、搜索框",
+  "globalsInspector.radiusRoundUses": "开关圆钮（圆形）",
   "globalsInspector.radiusNoneHint":
     "直角 (0)。需要贴齐硬边时使用。",
   "globalsInspector.radiusPillHint":
-    "胶囊形 (999px)：开关轨道、搜索框、全圆角芯片。",
+    "胶囊形 (999px)：开关轨道、搜索框、全圆角芯片 —— 刻意高于 xl。",
   "globalsInspector.radiusRoundHint":
     "圆形 (50%)：开关圆钮与其他圆形控件。",
   "globalsInspector.resetLadder": "重置阶梯",
@@ -550,10 +592,12 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.toastReset": "圆角阶梯已重置为基线",
   "globalsInspector.toastAlign": "已对齐到 M3 圆角阶梯",
 
-  "preset.m3Aligned": "M3 对齐圆角",
-  "preset.m3AlignedDesc": "把中档圆角推向 M3 medium（12px），并拉开阶梯。",
-  "preset.restrained": "更紧圆角",
-  "preset.restrainedDesc": "比当前基线略紧一点的圆角。",
+  "preset.m3Aligned": "M3 更圆 (md 12px)",
+  "preset.m3AlignedDesc":
+    "更接近 M3 的圆角 —— 看卡片/按钮：xs 4 · sm 8 · md 12 · lg 16 · xl 28。",
+  "preset.restrained": "更方 (md 4px)",
+  "preset.restrainedDesc":
+    "明显更方的圆角 —— 对比 M3：xs 2 · sm 3 · md 4 · lg 6 · xl 8。",
 
   "hue.presetsAria": "强调色预设",
   "hue.openPalette": "打开色相环",

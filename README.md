@@ -122,8 +122,10 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Shape ladder: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Align M3 /
   Reset ladder)
 - Read-only: `none` / `pill` / `round`
-- Presets: M3-aligned radius, Restrained radius
-- Preview stage shows Button, Input, Select, Badge, Card variants, Collapsible
+- Presets: M3 rounder (md 12px), Sharper (md 4px) — selecting applies immediately
+- Preview stage shows Button, Input, Select, Badge, Switch (pill), Card variants,
+  Collapsible, plus an xs–xl ladder legend labeled with which components use each
+  step (cards use **md**; switch track uses **pill**)
 
 ### Preview toggles (Surfaces)
 
@@ -157,7 +159,7 @@ Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspecto
 knobs).
 
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
-draft history: inspector knobs, Apply preset (Globals shape), and confirmed agent
+draft history: inspector knobs, Globals radius presets (select applies), and confirmed agent
 proposals. One hue
 gesture is a single undo step (accent family batched). Preview toggles,
 light/dark theme, and page nav are not in the draft history.

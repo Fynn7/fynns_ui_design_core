@@ -9,8 +9,8 @@ export type SandboxPreset = {
 export const GLOBAL_SHAPE_PRESETS: SandboxPreset[] = [
   {
     id: "m3-aligned-radius",
-    label: "M3-aligned radius",
-    description: "Push radius-md toward M3 medium (12px) and expand the shape ladder.",
+    label: "M3 rounder",
+    description: "Rounder M3-style ladder: md 12px (xs 4 · sm 8 · md 12 · lg 16 · xl 28).",
     overrides: {
       "--fynns-radius-xs": "4px",
       "--fynns-radius-sm": "8px",
@@ -21,11 +21,14 @@ export const GLOBAL_SHAPE_PRESETS: SandboxPreset[] = [
   },
   {
     id: "restrained-radius",
-    label: "Restrained radius",
-    description: "Slightly tighter corners than current baseline.",
+    label: "Sharper",
+    description: "Clearly tighter corners: md 4px (xs 2 · sm 3 · md 4 · lg 6 · xl 8).",
     overrides: {
-      "--fynns-radius-md": "6px",
-      "--fynns-radius-lg": "8px",
+      "--fynns-radius-xs": "2px",
+      "--fynns-radius-sm": "3px",
+      "--fynns-radius-md": "4px",
+      "--fynns-radius-lg": "6px",
+      "--fynns-radius-xl": "8px",
     },
   },
 ];

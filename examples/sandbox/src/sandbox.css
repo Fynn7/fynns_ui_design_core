@@ -766,8 +766,14 @@
   flex-direction: column;
   align-items: center;
   gap: var(--fynns-space-xs);
+  max-width: 5.5rem;
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.sandbox-globals-swatch-uses {
+  line-height: var(--fynns-line-height-tight, 1.25);
 }
 
 .sandbox-globals-swatch-box {
@@ -775,6 +781,20 @@
   height: 3.5rem;
   background: var(--fynns-color-surface-2);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+}
+
+.sandbox-radius-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.sandbox-radius-uses {
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+  font-weight: var(--fynns-font-weight-regular, 400);
 }
 
 .sandbox-globals-readonly {

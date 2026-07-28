@@ -27,30 +27,35 @@ const EDITABLE_RADIUS = [
     key: "xs",
     label: "xs",
     max: 16,
+    usesKey: "globalsInspector.radiusXsUses" as const,
     hintKey: "globalsInspector.radiusXsHint" as const,
   },
   {
     key: "sm",
     label: "sm",
     max: 20,
+    usesKey: "globalsInspector.radiusSmUses" as const,
     hintKey: "globalsInspector.radiusSmHint" as const,
   },
   {
     key: "md",
     label: "md",
     max: 28,
+    usesKey: "globalsInspector.radiusMdUses" as const,
     hintKey: "globalsInspector.radiusMdHint" as const,
   },
   {
     key: "lg",
     label: "lg",
     max: 32,
+    usesKey: "globalsInspector.radiusLgUses" as const,
     hintKey: "globalsInspector.radiusLgHint" as const,
   },
   {
     key: "xl",
     label: "xl",
     max: 40,
+    usesKey: "globalsInspector.radiusXlUses" as const,
     hintKey: "globalsInspector.radiusXlHint" as const,
   },
 ] as const;
@@ -59,16 +64,19 @@ const READONLY_RADIUS = [
   {
     key: "none",
     label: "none",
+    usesKey: "globalsInspector.radiusNoneUses" as const,
     hintKey: "globalsInspector.radiusNoneHint" as const,
   },
   {
     key: "pill",
     label: "pill",
+    usesKey: "globalsInspector.radiusPillUses" as const,
     hintKey: "globalsInspector.radiusPillHint" as const,
   },
   {
     key: "round",
     label: "round",
+    usesKey: "globalsInspector.radiusRoundUses" as const,
     hintKey: "globalsInspector.radiusRoundHint" as const,
   },
 ] as const;
@@ -143,30 +151,21 @@ export function GlobalsInspector() {
                 ariaLabel={t("globalsInspector.shapePresetAria")}
                 value={presetId}
                 options={presetOptions}
-                onChange={setPresetId}
+                onChange={(id) => {
+                  setPresetId(id);
+                  const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === id);
+                  if (!preset) return;
+                  loadPreset(preset.overrides);
+                  const keys = SHAPE_PRESET_KEYS[preset.id];
+                  toast.message(
+                    t("inspector.loadedPreset", {
+                      label: keys ? t(keys.label) : preset.label,
+                    }),
+                  );
+                }}
               />
             </div>
             <p className="sandbox-help">{activePresetDesc}</p>
-            <div className="sandbox-field">
-              <Tooltip content={t("globalsInspector.applyPresetTip")}>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    const preset = GLOBAL_SHAPE_PRESETS.find((p) => p.id === presetId);
-                    if (!preset) return;
-                    loadPreset(preset.overrides);
-                    const keys = SHAPE_PRESET_KEYS[preset.id];
-                    toast.message(
-                      t("inspector.loadedPreset", {
-                        label: keys ? t(keys.label) : preset.label,
-                      }),
-                    );
-                  }}
-                >
-                  {t("inspector.applyPreset")}
-                </Button>
-              </Tooltip>
-            </div>
             <p className="sandbox-help">{t("globalsInspector.applyPresetNote")}</p>
           </div>
         </Collapsible>
@@ -174,15 +173,20 @@ export function GlobalsInspector() {
         <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
           <div className="sandbox-stack">
             <p className="sandbox-help">{t("globalsInspector.shapeLadderHelp")}</p>
-            {EDITABLE_RADIUS.map(({ key, label, max, hintKey }) => {
+            {EDITABLE_RADIUS.map(({ key, label, max, usesKey, hintKey }) => {
               const cssVar = `--fynns-radius-${key}`;
               const px = parseLengthToPx(resolved(cssVar));
               return (
                 <div key={key} className="sandbox-field">
                   <div className="sandbox-field-row">
                     <InfoHint
-                      label={<code>radius-{label}</code>}
-                      ariaLabel={`radius-${label}`}
+                      label={
+                        <span className="sandbox-radius-label">
+                          <code>radius-{label}</code>
+                          <span className="sandbox-radius-uses">{t(usesKey)}</span>
+                        </span>
+                      }
+                      ariaLabel={`radius-${label}: ${t(usesKey)}`}
                       content={t(hintKey)}
                     />
                     <code>{px}px</code>
@@ -205,16 +209,19 @@ export function GlobalsInspector() {
                 <span>{t("globalsInspector.specialReadonly")}</span>
               </div>
               <ul className="sandbox-globals-readonly">
-                {READONLY_RADIUS.map(({ key, label, hintKey }) => (
+                {READONLY_RADIUS.map(({ key, label, usesKey, hintKey }) => (
                   <li key={key}>
                     <InfoHint
                       label={
-                        <code>
-                          {label}:{" "}
-                          {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
-                        </code>
+                        <span className="sandbox-radius-label">
+                          <code>
+                            {label}:{" "}
+                            {resolved(`--fynns-radius-${key}`) || BASELINE[`--fynns-radius-${key}`]}
+                          </code>
+                          <span className="sandbox-radius-uses">{t(usesKey)}</span>
+                        </span>
                       }
-                      ariaLabel={`radius-${label}`}
+                      ariaLabel={`radius-${label}: ${t(usesKey)}`}
                       content={t(hintKey)}
                     />
                   </li>
