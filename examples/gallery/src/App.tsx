@@ -9,6 +9,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Collapsible,
   ConfirmDialog,
   Dialog,
   Drawer,
@@ -152,6 +153,17 @@ export function App() {
               </Button>
             </CardActions>
           </Card>
+        </Row>
+      </Section>
+
+      <Section title="Collapsible">
+        <Row>
+          <div style={{ width: "20rem" }}>
+            <Collapsible title="Presets" defaultOpen>
+              One-shot disclosure: pass title and children. Chevron, head, and body
+              chrome are built in.
+            </Collapsible>
+          </div>
         </Row>
       </Section>
 

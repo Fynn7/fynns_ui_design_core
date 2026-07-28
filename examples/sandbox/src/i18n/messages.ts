@@ -394,7 +394,7 @@ const zh: Record<MessageKey, string> = {
   "preview.cardActivated": "已激活 {variant} 卡片",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleActions": "标题操作",
-  "preview.collapsibleLabel": "disclosure",
+  "preview.collapsibleLabel": "折叠区",
   "preview.collapsibleTitle": "预设",
   "preview.collapsibleBody":
     "一站式折叠区：传入 title 与 children 即可。Chevron、标题行与内容壳已内置，无需手拼。",
