@@ -109,8 +109,11 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
   Collapsible sections animate open/close with a height slide; the inspector
-  aside opens/closes by clipping its width (hard seam with the canvas — no
-  translate slide that morphs the corner).
+  aside opens/closes by clipping its width on wide layouts (hard seam with the
+  canvas — no translate slide that morphs the corner). Below 900px the shell
+  stacks: nav becomes a compact chip strip, the inspector overlays as a bottom
+  sheet (canvas keeps full height), and it starts closed so the preview is not
+  crushed.
 
 ## Aesthetic sandbox
 
@@ -123,7 +126,8 @@ alone is not enough. Pages: **Surfaces** (Card or Collapsible target),
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
 (`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
-without an inspector), the canvas uses a single full-width column.
+without an inspector), the canvas uses a single full-width column. On narrow
+viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and

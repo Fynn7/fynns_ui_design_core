@@ -8,6 +8,8 @@
   grid-template-columns: 12rem 1fr;
   height: 100%;
   min-height: 100%;
+  max-height: 100%;
+  overflow: hidden;
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
 }
@@ -477,7 +479,7 @@
 
 .sandbox-preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 18rem));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   gap: var(--fynns-space-lg);
   align-items: start;
   justify-content: start;
@@ -490,17 +492,19 @@
   background: color-mix(in srgb, var(--fynns-color-surface-2) 55%, var(--fynns-color-app-bg));
 }
 
-.sandbox-surface-swatch {
-  height: 1.5rem;
-  border-radius: var(--fynns-radius-sm);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-}
-
 .sandbox-preview-slot {
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-sm);
   max-width: 18rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.sandbox-surface-swatch {
+  height: 1.5rem;
+  border-radius: var(--fynns-radius-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
 .sandbox-preview-label {
@@ -855,38 +859,106 @@
 @media (max-width: 900px) {
   .sandbox-root {
     grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    /* Prefer dynamic viewport so mobile browser chrome does not clip the shell. */
+    height: 100dvh;
+    max-height: 100dvh;
   }
 
   .sandbox-nav.fynns-panel-aside {
     width: auto;
     min-width: 0;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
+    gap: var(--fynns-space-xs) var(--fynns-space-sm);
     border-right: none;
     border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
   }
 
+  .sandbox-brand {
+    flex: 0 0 auto;
+  }
+
   .sandbox-nav-list {
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: var(--fynns-space-2xs);
+  }
+
+  /* NavItem defaults to width:100% for sidebar rows — override for the chip strip. */
+  .sandbox-nav-list .fynns-nav-item {
+    width: auto;
+    flex: 0 0 auto;
+    justify-content: center;
+    padding-inline: var(--fynns-space-sm);
   }
 
   .sandbox-nav-foot {
+    margin-top: 0;
     margin-left: auto;
     padding: 0;
     border-top: none;
+    flex: 0 0 auto;
+  }
+
+  .sandbox-main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .sandbox-topbar {
+    flex-wrap: wrap;
+    padding-inline: var(--fynns-space-md);
+  }
+
+  .sandbox-topbar-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sandbox-topbar-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .sandbox-body {
+    position: relative;
     flex-direction: column;
+    min-height: 0;
   }
 
+  .sandbox-canvas {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: var(--fynns-space-md);
+  }
+
+  /*
+   * Overlay the inspector as a bottom sheet so the canvas keeps full height
+   * (in-flow 50vh aside previously crushed the preview).
+   */
   .sandbox-aside {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
     width: 100%;
     max-width: none;
     border-left: none;
     border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
-    max-height: 50vh;
+    max-height: min(45dvh, 22rem);
+    box-shadow: var(--fynns-shadow-md);
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
   .sandbox-aside > * {
@@ -900,8 +972,50 @@
     max-height: 0;
     border-left-color: transparent;
     border-top-color: transparent;
+    box-shadow: var(--fynns-shadow-none);
     transition:
       max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
-      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  }
+
+  /* Toolbar: stack label above controls when the label column would overflow. */
+  .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--fynns-space-2xs);
+  }
+
+  .sandbox-preview-grid {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--fynns-space-md);
+  }
+
+  .sandbox-preview-slot {
+    max-width: none;
+  }
+
+  .sandbox-globals-row {
+    flex-wrap: wrap;
+  }
+
+  .sandbox-field-row,
+  .sandbox-hue-meta {
+    flex-wrap: wrap;
+  }
+
+  .sandbox-hue-meta > span {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 900px) and (max-height: 640px) {
+  .sandbox-aside {
+    max-height: min(38dvh, 16rem);
   }
 }

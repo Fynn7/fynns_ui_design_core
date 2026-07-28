@@ -82,7 +82,10 @@ export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const [asideOpen, setAsideOpen] = useState(true);
+  const [asideOpen, setAsideOpen] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return !window.matchMedia("(max-width: 900px)").matches;
+  });
   const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 

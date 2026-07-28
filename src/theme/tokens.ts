@@ -398,6 +398,30 @@ export const FAB_TOKENS = {
   gap: "0.75rem",
 } as const;
 
+/**
+ * Top app bar geometry (M3-informed, denser for desktop/tool chrome).
+ * Small 40dp; medium 80dp; large 104dp. Action row matches small height.
+ * `--fynns-appbar-<key>`.
+ */
+export const APPBAR_TOKENS = {
+  height: "2.5rem",
+  "height-md": "5rem",
+  "height-lg": "6.5rem",
+  "row-height": "2.5rem",
+  "pad-inline": "0.25rem",
+  /** Title inset under the action row (medium / large). */
+  "title-pad-inline": "0.75rem",
+  "title-pad-bottom-md": "0.75rem",
+  "title-pad-bottom-lg": "1rem",
+  /** sm inline title; md/lg stacked headlines (below M3 title-large / headline). */
+  "title-size": "0.9375rem",
+  "title-size-md": "1.125rem",
+  "title-size-lg": "1.375rem",
+  "title-line": "1.333",
+  "title-line-md": "1.3",
+  "title-line-lg": "1.25",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -576,6 +600,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["progress", PROGRESS_TOKENS],
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
+  ["appbar", APPBAR_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

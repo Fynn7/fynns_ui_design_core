@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   AlertCircleIcon,
+  ArrowLeftIcon,
   Avatar,
   Badge,
   BottomSheet,
@@ -34,6 +35,7 @@ import {
   PanelCard,
   PlusIcon,
   Radio,
+  SearchIcon,
   SearchInput,
   Select,
   Slider,
@@ -47,6 +49,7 @@ import {
   ToggleControl,
   ToggleGroup,
   Tooltip,
+  TopAppBar,
   WarningBanner,
   applyFynnsThemeMode,
   getFynnsThemeMode,
@@ -333,7 +336,7 @@ export function App() {
           <Avatar name="Ada Lovelace" alt="Ada Lovelace" />
           <Avatar alt="User" />
           <Avatar
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3C/svg%3E"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%230a3d3a' width='40' height='40'/%3E%3Ccircle cx='20' cy='15' r='7' fill='%232dd4bf'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='13' fill='%232dd4bf'/%3E%3C/svg%3E"
             name="Ada Lovelace"
             alt="Ada image"
           />
@@ -347,6 +350,25 @@ export function App() {
             <PlusIcon />
           </Fab>
         </Row>
+        <div style={{ width: "100%", maxWidth: "24rem" }}>
+          <TopAppBar
+            title="Library"
+            leading={
+              <Tooltip content="Back">
+                <IconButton aria-label="Back">
+                  <ArrowLeftIcon />
+                </IconButton>
+              </Tooltip>
+            }
+            trailing={
+              <Tooltip content="Search">
+                <IconButton aria-label="Search">
+                  <SearchIcon />
+                </IconButton>
+              </Tooltip>
+            }
+          />
+        </div>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
             Linear progress

@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -340,6 +340,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Pass into `CardHeader`’s `avatar` slot.
   **Fab** `{ children, label?, size?: "sm"|"md"|"lg" }` — M3 floating action (56dp);
   pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
+  **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
+  top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
+  at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
+  Prefer `Panel` for sidebar chrome.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`

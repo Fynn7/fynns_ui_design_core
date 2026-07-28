@@ -1,4 +1,5 @@
 import {
+  ArrowLeftIcon,
   Avatar,
   Badge,
   BottomSheet,
@@ -13,12 +14,16 @@ import {
   Collapsible,
   Divider,
   Fab,
+  IconButton,
   Input,
   LinearProgress,
   PlusIcon,
   Radio,
+  SearchIcon,
   Select,
+  SettingsIcon,
   Switch,
+  TopAppBar,
   Tooltip,
 } from "@fynns/ui";
 import { useState } from "react";
@@ -45,6 +50,7 @@ export function GlobalsPage() {
   const [filterOn, setFilterOn] = useState(true);
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [appBarScrolled, setAppBarScrolled] = useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -170,7 +176,7 @@ export function GlobalsPage() {
           <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
           <Avatar alt={t("globals.avatarFallback")} />
           <Avatar
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' fill='%23031417' font-size='16' font-family='sans-serif'%3EAL%3C/text%3E%3C/svg%3E"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%230a3d3a' width='40' height='40'/%3E%3Ccircle cx='20' cy='15' r='7' fill='%232dd4bf'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='13' fill='%232dd4bf'/%3E%3C/svg%3E"
             name="Ada Lovelace"
             alt={t("globals.avatarImage")}
           />
@@ -211,6 +217,49 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+        <div
+          className="sandbox-globals-appbar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+          }}
+        >
+          <TopAppBar
+            title={t("globals.appBarTitle")}
+            scrolled={appBarScrolled}
+            leading={
+              <Tooltip content={t("globals.appBarBack")}>
+                <IconButton aria-label={t("globals.appBarBack")}>
+                  <ArrowLeftIcon />
+                </IconButton>
+              </Tooltip>
+            }
+            trailing={
+              <>
+                <Tooltip content={t("globals.appBarSearch")}>
+                  <IconButton aria-label={t("globals.appBarSearch")}>
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.appBarSettings")}>
+                  <IconButton aria-label={t("globals.appBarSettings")}>
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+          />
+        </div>
+        <Switch
+          size="sm"
+          labelSide="end"
+          label={t("globals.appBarScrolled")}
+          checked={appBarScrolled}
+          onCheckedChange={setAppBarScrolled}
+        />
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>
 
