@@ -15,6 +15,7 @@ import {
   Collapsible,
   Divider,
   Fab,
+  FileIcon,
   FolderOpenIcon,
   IconButton,
   Input,
@@ -27,6 +28,9 @@ import {
   NavigationRailMenu,
   NavigationBar,
   NavigationBarItem,
+  NavigationDrawer,
+  NavigationDrawerHeadline,
+  NavigationDrawerItem,
   PlusIcon,
   Radio,
   SearchIcon,
@@ -36,6 +40,7 @@ import {
   ToggleGroup,
   TopAppBar,
   Tooltip,
+  UploadIcon,
   ControlRow,
   ControlStack,
   Grid,
@@ -76,6 +81,10 @@ export function GlobalsPage() {
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
   const [barId, setBarId] = useState<"home" | "search" | "charts" | "all">("home");
+  const [drawerId, setDrawerId] = useState<"inbox" | "sent" | "drafts" | "settings">(
+    "inbox",
+  );
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -392,6 +401,96 @@ export function GlobalsPage() {
           </NavigationBar>
         </div>
         <p className="sandbox-help">{t("globals.navBarHelp")}</p>
+        <div
+          className="sandbox-globals-navdrawer"
+          style={{
+            display: "flex",
+            width: "100%",
+            maxWidth: "28rem",
+            height: "18rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationDrawer
+            variant="standard"
+            aria-label={t("globals.navDrawerAria")}
+            headline={t("globals.navDrawerHeadline")}
+          >
+            <NavigationDrawerItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navDrawerInbox")}
+              active={drawerId === "inbox"}
+              badge={24}
+              onClick={() => setDrawerId("inbox")}
+            />
+            <NavigationDrawerItem
+              icon={<UploadIcon />}
+              label={t("globals.navDrawerSent")}
+              active={drawerId === "sent"}
+              onClick={() => setDrawerId("sent")}
+            />
+            <NavigationDrawerHeadline>
+              {t("globals.navDrawerSection")}
+            </NavigationDrawerHeadline>
+            <NavigationDrawerItem
+              icon={<FileIcon />}
+              label={t("globals.navDrawerDrafts")}
+              active={drawerId === "drafts"}
+              badge
+              onClick={() => setDrawerId("drafts")}
+            />
+            <NavigationDrawerItem
+              icon={<SettingsIcon />}
+              label={t("globals.navDrawerSettings")}
+              active={drawerId === "settings"}
+              onClick={() => setDrawerId("settings")}
+            />
+          </NavigationDrawer>
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDrawerOpen(true)}>
+            {t("globals.navDrawerOpen")}
+          </Button>
+        </div>
+        <NavigationDrawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          aria-label={t("globals.navDrawerModalAria")}
+          headline={t("globals.navDrawerHeadline")}
+        >
+          <NavigationDrawerItem
+            icon={<FolderOpenIcon />}
+            label={t("globals.navDrawerInbox")}
+            active={drawerId === "inbox"}
+            badge={24}
+            onClick={() => {
+              setDrawerId("inbox");
+              setDrawerOpen(false);
+            }}
+          />
+          <NavigationDrawerItem
+            icon={<UploadIcon />}
+            label={t("globals.navDrawerSent")}
+            active={drawerId === "sent"}
+            onClick={() => {
+              setDrawerId("sent");
+              setDrawerOpen(false);
+            }}
+          />
+          <NavigationDrawerItem
+            icon={<SettingsIcon />}
+            label={t("globals.navDrawerSettings")}
+            active={drawerId === "settings"}
+            onClick={() => {
+              setDrawerId("settings");
+              setDrawerOpen(false);
+            }}
+          />
+        </NavigationDrawer>
+        <p className="sandbox-help">{t("globals.navDrawerHelp")}</p>
       </section>
 
       <section

@@ -297,6 +297,17 @@ const en = {
   "globals.navBarAria": "Sample navigation bar",
   "globals.navBarHelp":
     "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
+  "globals.navDrawerAria": "Sample navigation drawer",
+  "globals.navDrawerModalAria": "Modal navigation drawer",
+  "globals.navDrawerHeadline": "Mail",
+  "globals.navDrawerInbox": "Inbox",
+  "globals.navDrawerSent": "Sent",
+  "globals.navDrawerDrafts": "Drafts",
+  "globals.navDrawerSettings": "Settings",
+  "globals.navDrawerSection": "Labels",
+  "globals.navDrawerOpen": "Open modal drawer",
+  "globals.navDrawerHelp":
+    "Destination side sheet (360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -321,7 +332,7 @@ const en = {
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
-  "globalsInspector.radiusLgUses": "Menus, dialogs, drawers",
+  "globalsInspector.radiusLgUses": "Menus, dialogs, nav drawer items",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
   "globalsInspector.radiusXsHint":
     "Smallest level (M3 XS ≈ 4dp). Keep below sm on the scale.",
@@ -330,7 +341,7 @@ const en = {
   "globalsInspector.radiusMdHint":
     "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
   "globalsInspector.radiusLgHint":
-    "Larger chrome: dropdown menus, dialogs, and drawers.",
+    "Larger chrome: dropdown menus, dialogs, and NavigationDrawer destinations.",
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
@@ -654,6 +665,17 @@ const zh: Record<MessageKey, string> = {
   "globals.navBarAria": "示例底部导航栏",
   "globals.navBarHelp":
     "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",
+  "globals.navDrawerAria": "示例导航抽屉",
+  "globals.navDrawerModalAria": "模态导航抽屉",
+  "globals.navDrawerHeadline": "邮件",
+  "globals.navDrawerInbox": "收件箱",
+  "globals.navDrawerSent": "已发送",
+  "globals.navDrawerDrafts": "草稿",
+  "globals.navDrawerSettings": "设置",
+  "globals.navDrawerSection": "标签",
+  "globals.navDrawerOpen": "打开模态抽屉",
+  "globals.navDrawerHelp":
+    "目的地侧栏（360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
@@ -678,7 +700,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
-  "globalsInspector.radiusLgUses": "菜单、对话框、抽屉",
+  "globalsInspector.radiusLgUses": "菜单、对话框、导航抽屉项",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
   "globalsInspector.radiusXsHint":
     "最小圆角（M3 XS ≈ 4dp）。在尺度上应小于 sm。",
@@ -687,7 +709,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusMdHint":
     "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
   "globalsInspector.radiusLgHint":
-    "较大界面：下拉菜单、对话框与抽屉。",
+    "较大界面：下拉菜单、对话框与 NavigationDrawer 目的地行。",
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
   "globalsInspector.specialReadonly": "特殊形（只读）",

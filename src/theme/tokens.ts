@@ -494,6 +494,31 @@ export const NAVBAR_TOKENS = {
   "badge-nudge": "0.125rem",
 } as const;
 
+/**
+ * Navigation drawer geometry (at 16px rem).
+ * Modal / standard destination sheet — 360dp wide; 56dp pill destinations.
+ * `--fynns-navdrawer-<key>`.
+ */
+export const NAVDRAWER_TOKENS = {
+  width: "22.5rem",
+  "pad-block": "0.75rem",
+  "pad-inline": "0.75rem",
+  "item-height": "3.5rem",
+  "item-pad-inline-start": "1rem",
+  "item-pad-inline-end": "1.5rem",
+  "item-gap": "0.75rem",
+  "item-radius": "var(--fynns-radius-lg)",
+  "icon-size": "1.5rem",
+  "label-size": "0.875rem",
+  "label-line": "1.25",
+  "headline-size": "0.875rem",
+  "headline-line": "1.25",
+  "headline-pad-block": "1.125rem",
+  "headline-pad-inline": "1rem",
+  "section-gap": "0.5rem",
+  "badge-dot": "0.375rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -689,6 +714,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["appbar", APPBAR_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
+  ["navdrawer", NAVDRAWER_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

@@ -18,7 +18,7 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
   ToggleGroup, Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
-  Badge, Avatar, Fab, TopAppBar, NavigationRail, NavigationBar, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
+  Badge, Avatar, Fab, TopAppBar, NavigationRail, NavigationBar, NavigationDrawer, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.

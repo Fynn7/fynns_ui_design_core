@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `navbar`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -383,6 +383,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `secondary-container` highlight as the rail; badge via `NavigationRailBadge`
   (count folds into the item accessible name). Prefer `NavigationRail` on
   medium+ layouts.
+  **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
+  side?, modal?, headline?, children }` + **NavigationDrawerItem**
+  `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
+  destination side sheet (360dp). Modal overlays with scrim (default
+  `side="left"`); `standard` is permanent in-layout. Item highlight is a
+  full-width row highlight (`secondary-container`, `--fynns-radius-lg`); trailing badge for counts.
+  Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`

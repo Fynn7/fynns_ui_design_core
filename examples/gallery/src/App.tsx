@@ -37,6 +37,9 @@ import {
   MenuIcon,
   NavigationBar,
   NavigationBarItem,
+  NavigationDrawer,
+  NavigationDrawerHeadline,
+  NavigationDrawerItem,
   NavigationRail,
   NavigationRailHeader,
   NavigationRailItem,
@@ -424,6 +427,26 @@ export function App() {
             <NavigationBarItem icon={<SettingsIcon />} label="Settings" badge />
             <NavigationBarItem icon={<LayoutGridIcon />} label="All" />
           </NavigationBar>
+        </div>
+        <div
+          style={{
+            height: "16rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationDrawer
+            variant="standard"
+            aria-label="Navigation drawer"
+            headline="Mail"
+          >
+            <NavigationDrawerItem icon={<FolderOpenIcon />} label="Inbox" active badge={24} />
+            <NavigationDrawerItem icon={<SearchIcon />} label="Sent" />
+            <NavigationDrawerHeadline>Labels</NavigationDrawerHeadline>
+            <NavigationDrawerItem icon={<SettingsIcon />} label="Settings" badge />
+          </NavigationDrawer>
         </div>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
