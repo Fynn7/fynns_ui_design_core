@@ -10,13 +10,17 @@ const en = {
   "brand.name": "fynns sandbox",
 
   "nav.aria": "Sandbox pages",
-  "nav.playground": "Surfaces",
-  "nav.globals": "Globals",
+  "nav.playground": "Preview",
+  "nav.globals": "Components",
   "nav.foundations": "Foundations",
   "nav.motion": "Motion",
   "nav.templates": "Templates",
   "nav.templatesTip": "Templates & config export/import",
   "nav.templatesAria": "Templates and config",
+  "nav.playgroundHint":
+    "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
+  "nav.globalsHint":
+    "M3 component catalog (collapsed sections) plus the shape / radius inspector.",
 
   "topbar.undo": "Undo",
   "topbar.undoTip": "Undo (Ctrl+Z)",
@@ -54,7 +58,7 @@ const en = {
   "templates.currentDraft": "Current draft: {count} override{plural} · theme {theme}",
   "templates.savedTitle": "Saved templates",
   "templates.savedAria": "Saved templates",
-  "templates.empty": "No templates yet. Tune tokens on Surfaces / Globals, then Save as template.",
+  "templates.empty": "No templates yet. Tune tokens on Preview / Components, then Save as template.",
   "templates.cardMeta": "{count} override{plural} · {theme} · {when}",
   "templates.apply": "Apply",
   "templates.exportOneTip": "Download this template as JSON",
@@ -96,7 +100,7 @@ const en = {
   "preview.cardInfo": "More about this card.",
   "preview.cardInfoAria": "More info",
   "preview.cardBody":
-    "Sample card. Use the inspector on the right to tweak colors and spacing — this preview updates live. Corner rounding is on the Globals page.",
+    "Sample card. Use the inspector on the right to tweak colors and spacing — this preview updates live. Corner rounding is on the Components page.",
   "preview.dismiss": "Dismiss",
   "preview.open": "Open",
   "preview.cardActivated": "{variant} card activated",
@@ -211,7 +215,13 @@ const en = {
     "Larger titles and chrome text (font-size-lg).",
 
   "globals.lead":
-    "Corner radius is a named set of levels (xs→xl), plus special shapes (pill / round). Cards and inputs on this page use md; buttons use xl; the switch track uses pill.",
+    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+  "globals.catActions": "Actions",
+  "globals.catTextInputs": "Text inputs",
+  "globals.catSelection": "Selection",
+  "globals.catCommunication": "Communication",
+  "globals.catContainment": "Containment",
+  "globals.catNavigation": "Navigation",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
@@ -293,7 +303,7 @@ const en = {
   "globals.navRailPaneHome": "Home destination — sample content beside the rail.",
   "globals.navRailPaneSearch": "Search destination — badge count demo (3).",
   "globals.navRailPaneCharts": "Charts destination — notification dot on the icon.",
-  "globals.navRailPaneAll": "Browse every control sample on this Globals page.",
+  "globals.navRailPaneAll": "Browse every control sample on this Components page.",
   "globals.navBarAria": "Sample navigation bar",
   "globals.navBarHelp":
     "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
@@ -420,13 +430,17 @@ const zh: Record<MessageKey, string> = {
   "brand.name": "fynns 沙盒",
 
   "nav.aria": "沙盒页面",
-  "nav.playground": "表面",
-  "nav.globals": "全局",
+  "nav.playground": "预览",
+  "nav.globals": "组件",
   "nav.foundations": "基础",
   "nav.motion": "动效",
   "nav.templates": "模板",
   "nav.templatesTip": "模板与配置导入导出",
   "nav.templatesAria": "模板与配置",
+  "nav.playgroundHint":
+    "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
+  "nav.globalsHint":
+    "按 M3 分类的组件样例（分区默认收起），右侧是圆角 / 形状检查器。",
 
   "topbar.undo": "撤销",
   "topbar.undoTip": "撤销 (Ctrl+Z)",
@@ -464,7 +478,7 @@ const zh: Record<MessageKey, string> = {
   "templates.currentDraft": "当前草稿：{count} 项改动{plural} · 主题 {theme}",
   "templates.savedTitle": "已存模板",
   "templates.savedAria": "已存模板",
-  "templates.empty": "尚无模板。先在「表面 / 全局」调好，再另存为模板。",
+  "templates.empty": "尚无模板。先在「预览 / 组件」调好，再另存为模板。",
   "templates.cardMeta": "{count} 项改动{plural} · {theme} · {when}",
   "templates.apply": "应用",
   "templates.exportOneTip": "下载此模板为 JSON",
@@ -505,7 +519,7 @@ const zh: Record<MessageKey, string> = {
   "preview.cardInfo": "关于这张卡片的更多说明。",
   "preview.cardInfoAria": "更多信息",
   "preview.cardBody":
-    "示例卡片。右侧检查器可调颜色与间距，预览会即时更新。圆角请到「全局」页。",
+    "示例卡片。右侧检查器可调颜色与间距，预览会即时更新。圆角请到「组件」页。",
   "preview.dismiss": "关闭",
   "preview.open": "打开",
   "preview.cardActivated": "已激活 {variant} 卡片",
@@ -607,7 +621,13 @@ const zh: Record<MessageKey, string> = {
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
 
   "globals.lead":
-    "圆角是命名等级（xs→xl），另有特殊形（pill / round）。本页卡片与输入框用 md；按钮用 xl；开关轨道用 pill。",
+    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+  "globals.catActions": "操作",
+  "globals.catTextInputs": "文本输入",
+  "globals.catSelection": "选择",
+  "globals.catCommunication": "沟通与反馈",
+  "globals.catContainment": "容器",
+  "globals.catNavigation": "导航",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
@@ -689,7 +709,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneHome": "首页目的地 — 导航轨旁侧示例内容。",
   "globals.navRailPaneSearch": "搜索目的地 — 数字徽章示例（3）。",
   "globals.navRailPaneCharts": "图表目的地 — 图标上的通知圆点。",
-  "globals.navRailPaneAll": "浏览本页 Globals 中的全部控件样例。",
+  "globals.navRailPaneAll": "浏览本页「组件」中的全部控件样例。",
   "globals.navBarAria": "示例底部导航栏",
   "globals.navBarHelp":
     "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",

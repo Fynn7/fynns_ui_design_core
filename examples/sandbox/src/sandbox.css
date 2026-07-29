@@ -756,7 +756,7 @@
 .sandbox-globals {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xl);
+  gap: var(--fynns-space-md);
   max-width: 56rem;
 }
 
@@ -765,6 +765,13 @@
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
+}
+
+.sandbox-globals-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+  padding-block-end: var(--fynns-space-sm);
 }
 
 .sandbox-globals-section {

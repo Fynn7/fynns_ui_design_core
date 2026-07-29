@@ -52,7 +52,7 @@ import {
   ControlStack,
   Grid,
 } from "@fynns/ui";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 
 const SWATCH_KEYS = [
@@ -72,9 +72,25 @@ const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
   all: "globals.navRailPaneAll",
 };
 
+/** One M3 / sandbox category — Collapsible defaults to collapsed. */
+function GlobalsCategory({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <Collapsible title={title} className="sandbox-globals-category">
+      <div className="sandbox-globals-section-body">{children}</div>
+    </Collapsible>
+  );
+}
+
 /**
  * Live stage proving `--fynns-radius-*` is system-wide: multiple primitives
- * share the same token ladder (not Card-only).
+ * share the same token ladder (not Card-only). Samples are grouped by M3
+ * component families; each family is a collapsed Collapsible.
  */
 export function GlobalsPage() {
   const { t } = useLocale();
@@ -104,8 +120,7 @@ export function GlobalsPage() {
     <div className="sandbox-globals">
       <p className="sandbox-globals-lead">{t("globals.lead")}</p>
 
-      <section className="sandbox-globals-section" aria-label={t("globals.controlsAria")}>
-        <h3 className="sandbox-globals-heading">{t("globals.controls")}</h3>
+      <GlobalsCategory title={t("globals.catActions")}>
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
@@ -113,6 +128,24 @@ export function GlobalsPage() {
           <Button variant="primary">{t("globals.btnPrimary")}</Button>
           <Button variant="ghost">{t("globals.btnGhost")}</Button>
         </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab size="sm" aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Tooltip content={t("globals.fabTip")}>
+            <Fab aria-label={t("globals.fabTip")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
+          <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
+            <PlusIcon />
+          </Fab>
+        </div>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catTextInputs")}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
           <Select
@@ -122,10 +155,10 @@ export function GlobalsPage() {
             onChange={() => {}}
           />
         </div>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catSelection")}>
         <div className="sandbox-globals-row">
-          <Badge>{t("globals.badgeNeutral")}</Badge>
-          <Badge variant="accent">{t("globals.badgeAccent")}</Badge>
-          <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
           <Switch
             size="sm"
             labelSide="end"
@@ -193,19 +226,13 @@ export function GlobalsPage() {
             ))}
           </ChipSet>
         </div>
-        <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <span className="sandbox-help">{t("globals.dividerFull")}</span>
-          <Divider />
-          <span className="sandbox-help">{t("globals.dividerInset")}</span>
-          <Divider inset />
-          <div
-            className="sandbox-globals-row"
-            style={{ alignItems: "stretch", height: "var(--fynns-space-2xl)" }}
-          >
-            <span className="sandbox-help">{t("globals.dividerVerticalA")}</span>
-            <Divider orientation="vertical" />
-            <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
-          </div>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catCommunication")}>
+        <div className="sandbox-globals-row">
+          <Badge>{t("globals.badgeNeutral")}</Badge>
+          <Badge variant="accent">{t("globals.badgeAccent")}</Badge>
+          <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <span className="sandbox-help">{t("globals.progressLinear")}</span>
@@ -218,6 +245,37 @@ export function GlobalsPage() {
             <CircularProgress value={0.2} label={t("globals.progressCircularAria")} size="lg" />
           </div>
         </div>
+        {bannerVisible ? (
+          <div
+            className="sandbox-globals-banner"
+            style={{
+              width: "100%",
+              maxWidth: "28rem",
+            }}
+          >
+            <Banner
+              variant="tonal"
+              icon={<InfoIcon />}
+              text={t("globals.bannerText")}
+              supportingText={t("globals.bannerSupporting")}
+              actions={
+                <Button size="sm" variant="ghost" onClick={() => setBannerVisible(false)}>
+                  {t("globals.bannerAction")}
+                </Button>
+              }
+              onDismiss={() => setBannerVisible(false)}
+              dismissAriaLabel={t("globals.bannerDismiss")}
+            />
+          </div>
+        ) : (
+          <Button size="sm" variant="ghost" onClick={() => setBannerVisible(true)}>
+            {t("globals.bannerShow")}
+          </Button>
+        )}
+        <p className="sandbox-help">{t("globals.bannerHelp")}</p>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catContainment")}>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
@@ -234,20 +292,36 @@ export function GlobalsPage() {
             alt={t("globals.avatarBroken")}
           />
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <span className="sandbox-help">{t("globals.dividerFull")}</span>
+          <Divider />
+          <span className="sandbox-help">{t("globals.dividerInset")}</span>
+          <Divider inset />
+          <div
+            className="sandbox-globals-row"
+            style={{ alignItems: "stretch", height: "var(--fynns-space-2xl)" }}
+          >
+            <span className="sandbox-help">{t("globals.dividerVerticalA")}</span>
+            <Divider orientation="vertical" />
+            <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
+          </div>
+        </div>
+        <div className="sandbox-globals-cards">
+          {(["elevated", "filled", "outlined"] as const).map((variant) => (
+            <Card key={variant} variant={variant} className="sandbox-globals-card">
+              <CardHeader
+                title={variant}
+                subtitle={t("globals.cardSubtitle")}
+                avatar={<Avatar name="FY" alt={t("globals.avatarCard")} size="sm" />}
+              />
+              <CardContent>{t("globals.cardBody")}</CardContent>
+            </Card>
+          ))}
+        </div>
+        <Collapsible title={t("globals.collapsible")} defaultOpen>
+          <p className="sandbox-help">{t("globals.collapsibleHelp")}</p>
+        </Collapsible>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
-          <Tooltip content={t("globals.fabTip")}>
-            <Fab size="sm" aria-label={t("globals.fabTip")}>
-              <PlusIcon />
-            </Fab>
-          </Tooltip>
-          <Tooltip content={t("globals.fabTip")}>
-            <Fab aria-label={t("globals.fabTip")}>
-              <PlusIcon />
-            </Fab>
-          </Tooltip>
-          <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
-            <PlusIcon />
-          </Fab>
           <Button size="sm" onClick={() => setSheetOpen(true)}>
             {t("globals.sheetOpen")}
           </Button>
@@ -265,6 +339,9 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catNavigation")}>
         <div
           className="sandbox-globals-appbar"
           style={{
@@ -355,19 +432,6 @@ export function GlobalsPage() {
             <p className="sandbox-globals-navrail-pane-body">
               {t(RAIL_PANE_BODY[railId])}
             </p>
-            {railId === "all" ? (
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => {
-                  document
-                    .querySelector(".sandbox-globals-section")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-              >
-                {t("globals.navRailShowAll")}
-              </Button>
-            ) : null}
           </div>
         </div>
         <div
@@ -588,41 +652,9 @@ export function GlobalsPage() {
           </SearchBar>
         </div>
         <p className="sandbox-help">{t("globals.searchBarHelp")}</p>
-        {bannerVisible ? (
-          <div
-            className="sandbox-globals-banner"
-            style={{
-              width: "100%",
-              maxWidth: "28rem",
-            }}
-          >
-            <Banner
-              variant="tonal"
-              icon={<InfoIcon />}
-              text={t("globals.bannerText")}
-              supportingText={t("globals.bannerSupporting")}
-              actions={
-                <Button size="sm" variant="ghost" onClick={() => setBannerVisible(false)}>
-                  {t("globals.bannerAction")}
-                </Button>
-              }
-              onDismiss={() => setBannerVisible(false)}
-              dismissAriaLabel={t("globals.bannerDismiss")}
-            />
-          </div>
-        ) : (
-          <Button size="sm" variant="ghost" onClick={() => setBannerVisible(true)}>
-            {t("globals.bannerShow")}
-          </Button>
-        )}
-        <p className="sandbox-help">{t("globals.bannerHelp")}</p>
-      </section>
+      </GlobalsCategory>
 
-      <section
-        className="sandbox-globals-section"
-        aria-label={t("globals.rhythmAria")}
-      >
-        <h3 className="sandbox-globals-heading">{t("globals.rhythm")}</h3>
+      <GlobalsCategory title={t("globals.rhythm")}>
         <p className="sandbox-help">{t("globals.rhythmLead")}</p>
         <div className="sandbox-globals-rhythm">
           <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
@@ -693,29 +725,9 @@ export function GlobalsPage() {
           </dl>
         </div>
         <p className="sandbox-help">{t("globals.rhythmAgentHint")}</p>
-      </section>
+      </GlobalsCategory>
 
-      <section className="sandbox-globals-section" aria-label={t("globals.surfacesAria")}>
-        <h3 className="sandbox-globals-heading">{t("globals.surfaces")}</h3>
-        <div className="sandbox-globals-cards">
-          {(["elevated", "filled", "outlined"] as const).map((variant) => (
-            <Card key={variant} variant={variant} className="sandbox-globals-card">
-              <CardHeader
-                title={variant}
-                subtitle={t("globals.cardSubtitle")}
-                avatar={<Avatar name="FY" alt={t("globals.avatarCard")} size="sm" />}
-              />
-              <CardContent>{t("globals.cardBody")}</CardContent>
-            </Card>
-          ))}
-        </div>
-        <Collapsible title={t("globals.collapsible")} defaultOpen>
-          <p className="sandbox-help">{t("globals.collapsibleHelp")}</p>
-        </Collapsible>
-      </section>
-
-      <section className="sandbox-globals-section" aria-label={t("globals.swatchesAria")}>
-        <h3 className="sandbox-globals-heading">{t("globals.swatches")}</h3>
+      <GlobalsCategory title={t("globals.swatches")}>
         <p className="sandbox-help">{t("globals.swatchesHelp")}</p>
         <div className="sandbox-globals-swatches">
           {SWATCH_KEYS.map(({ key, usesKey }) => (
@@ -731,7 +743,7 @@ export function GlobalsPage() {
           ))}
         </div>
         <p className="sandbox-help">{t("globals.swatchesSpecialHelp")}</p>
-      </section>
+      </GlobalsCategory>
     </div>
   );
 }

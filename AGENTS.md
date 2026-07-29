@@ -110,7 +110,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
   `--fynns-<component>-*-radius`). Corner radius **must** use
   `var(--fynns-radius-<key>)` from [`RADIUS_TOKENS`](src/theme/tokens.ts).
-  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Globals shape
+  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Components shape
   inspector (editable slider or explicit read-only row). If a new radius step is
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
@@ -309,7 +309,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
-  sample + legend: sandbox **Globals → Toolbar rhythm**. Values live in
+  sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
   [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
   `npm run gen:theme`.
   **Checkbox** `{ label, checked, onCheckedChange,
@@ -444,7 +444,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
    `src/index.ts`, document it here, **and add a live sample to the aesthetic
-   sandbox** (`examples/sandbox`, typically Globals controls or a Surfaces
-   preview). Gallery (`examples/gallery`) is optional extra coverage, not a
+   sandbox** (`examples/sandbox`, typically Components catalog or the Preview
+   Card/Collapsible stage). Gallery (`examples/gallery`) is optional extra coverage, not a
    substitute for sandbox.
 3. Keep `npm run typecheck` and `npm run lint` green.

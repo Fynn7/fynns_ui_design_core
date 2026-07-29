@@ -104,9 +104,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
-  [`examples/sandbox`](examples/sandbox) (Globals shape levels, **Toolbar rhythm**
+  [`examples/sandbox`](examples/sandbox) (Components shape levels, **Toolbar rhythm**
   sample for ControlStack spacing tokens, live Card
-  token overrides, Apply changes). Drafts persist in `localStorage` until you
+  token overrides on Preview, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
   Collapsible sections animate open/close with a height slide; the inspector
@@ -120,16 +120,16 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. **Every new primitive must ship with a sandbox
-preview** (usually on Globals or Surfaces) in the same change set — gallery
-alone is not enough. Pages: **Surfaces** (Card or Collapsible target),
-**Globals** (system shape / radius + control samples), Foundations, Motion, and
-**Templates**
+preview** (usually on Components or Preview) in the same change set — gallery
+alone is not enough. Pages: **Preview** (Card or Collapsible live stage +
+color/spacing inspector), **Components** (M3 catalog in collapsed sections +
+radius inspector), Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
-and named templates). On Surfaces / Globals, the topbar **inspector** toggle
+and named templates). On Preview / Components, the topbar **inspector** toggle
 (`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
-Editing `--fynns-radius-*` on Globals
+Editing `--fynns-radius-*` on Components
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
@@ -153,20 +153,21 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
   `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
 - **Save as template** stores the same bundle under a name in `localStorage`
   (`fynns-sandbox-templates`). Apply / export / rename / delete from the list.
-- Templates do not write `tokens.ts` by themselves — use **Apply changes** on
-  Surfaces / Globals after loading a template if you want source writeback.
+-   Templates do not write `tokens.ts` by themselves — use **Apply changes** on
+  Preview / Components after loading a template if you want source writeback.
 
-### Globals (system shape)
+### Components (catalog + shape)
 
 - Shape levels: editable `--fynns-radius-{2xs,xs,sm,md,lg,xl,3xl}` (+ Reset levels)
 - Read-only: `none` / `pill` / `round`
 - Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
-- Preview stage shows Button, Input, Select, Badge, Switch, Card variants,
-  Collapsible, plus an xs–xl levels legend labeled with which components use each
-  step (buttons use **xl**; cards / inputs use **md**; badges / chips use **sm**;
-  long chrome strips use **3xl**; switch track uses **radius-pill**)
+- Preview stage shows samples grouped by **Material 3** families (Actions,
+  Text inputs, Selection, Communication, Containment, Navigation), plus
+  Toolbar rhythm and Shape — each family is a **Collapsible** (collapsed by
+  default). Buttons use **xl**; cards / inputs use **md**; badges / chips use
+  **sm**; long chrome strips use **3xl**; switch track uses **radius-pill**.
 
-### Preview toggles (Surfaces)
+### Preview toggles (Preview page)
 
 Switch the canvas target with **Card | Collapsible** (preview-only; does not
 change Apply writeback).
@@ -182,7 +183,7 @@ change Apply writeback).
 - Behavior: Expanded (controlled preview)
 - Contents: Extra header button on/off
 
-### Inspector knobs (Surfaces)
+### Inspector knobs (Preview page)
 
 Shared token draft for both Card and Collapsible targets (Apply still writes
 `tokens.ts` only — no component recipe writeback):
@@ -194,7 +195,7 @@ Shared token draft for both Card and Collapsible targets (Apply still writes
   (sandbox-only, not Apply writeback)
 - Type size: `--fynns-font-size-{sm,md,lg}`
 
-Elevation / `--fynns-shadow-xs` stay on the token baseline (no Surfaces inspector
+Elevation / `--fynns-shadow-xs` stay on the token baseline (no Preview inspector
 knobs).
 
 **Undo / Redo** (Ctrl/Cmd+Z / Ctrl+Y; no toolbar buttons) only cover the token
