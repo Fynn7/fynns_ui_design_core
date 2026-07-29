@@ -290,6 +290,10 @@
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
   --fynns-layout-command-palette-top-padding: 12vh;
   --fynns-layout-control-row-label: 7.5rem;
+  --fynns-layout-control-stack-gap: 0.75rem;
+  --fynns-layout-control-row-gap: 0.25rem;
+  --fynns-layout-control-row-column-gap: 0.5rem;
+  --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);

@@ -1420,6 +1420,7 @@
   grid-template-columns:
     var(--fynns-layout-control-row-label)
     repeat(var(--fynns-control-stack-cols, 2), max-content);
+  gap: var(--fynns-layout-control-stack-gap);
   /* start — not stretch: a narrower ToggleGroup must not expand to the
      shared column track width of a wider Switch in the same column. */
   align-items: center;
@@ -1437,7 +1438,9 @@
   grid-template-columns: subgrid;
   width: auto;
   max-width: none;
-  column-gap: unset;
+  /* Cluster siblings on shared tracks; stack `gap` spaces whole rows. */
+  column-gap: var(--fynns-layout-control-cluster-gap);
+  row-gap: var(--fynns-layout-control-row-gap);
   align-items: center;
   /* Subgrid does not inherit the stack's justify-items; without this,
      a short ToggleGroup stretches to the shared track of a wider Switch. */
@@ -1469,9 +1472,9 @@
   box-sizing: border-box;
   /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
   grid-template-columns: var(--fynns-layout-control-row-label) max-content;
-  column-gap: var(--fynns-space-sm);
+  column-gap: var(--fynns-layout-control-row-column-gap);
   /* Used when a consumer stacks label above controls (narrow toolbars). */
-  row-gap: var(--fynns-space-xs);
+  row-gap: var(--fynns-layout-control-row-gap);
   align-items: center;
 }
 
@@ -1490,7 +1493,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--fynns-space-sm);
+  gap: var(--fynns-layout-control-cluster-gap);
   min-width: min-content;
   overflow: visible;
 }

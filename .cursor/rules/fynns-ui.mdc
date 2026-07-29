@@ -22,6 +22,9 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
+  Toolbar / inspector strips: prefer `ControlStack` + `ControlRow` and the
+  `--fynns-layout-control-*` rhythm tokens (see AGENTS.md **Toolbar rhythm**);
+  do not invent ad-hoc gaps.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)

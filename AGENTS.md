@@ -260,14 +260,35 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   grid for multi-row toolbars; each nested `ControlRow` spans the stack via
   CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
   short rows do not pack the next label into an empty control column.
+  Default row gap is `--fynns-layout-control-stack-gap` (omit `gap` unless you
+  need a deliberate density override via a `--fynns-space-*` t-shirt key).
   **ControlRow** `{ label, children }` — fixed label column
   (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
-  inside `ControlStack` spans the shared tracks via subgrid. **Grid** `{ x?, y?, gap?,
+  inside `ControlStack` spans the shared tracks via subgrid. Gaps:
+  `--fynns-layout-control-row-column-gap` (horizontal),
+  `--fynns-layout-control-row-gap` (stacked label above controls),
+  `--fynns-layout-control-cluster-gap` (siblings in the controls cluster).
+  **Grid** `{ x?, y?, gap?,
   children }` — X×Y layout; each axis is a fixed count or `"unbounded"` (default).
   Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
   are added (does not reflow into more columns). Tracks size to `max-content` and
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
-  match `columns` to `Grid`’s `x`. **Checkbox** `{ label, checked, onCheckedChange,
+  match `columns` to `Grid`’s `x`.
+
+  **Toolbar rhythm** (single source — do not invent ad-hoc gaps):
+
+  | Role | Token |
+  | --- | --- |
+  | Between `ControlRow`s | `--fynns-layout-control-stack-gap` |
+  | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
+  | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
+  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+
+  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
+  sample + legend: sandbox **Globals → Toolbar rhythm**. Values live in
+  [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
+  `npm run gen:theme`.
+  **Checkbox** `{ label, checked, onCheckedChange,
   indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
   (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
   checked, onCheckedChange, name, value, invalid?, disabled? }` — M3 circular

@@ -857,6 +857,55 @@
   color: var(--fynns-color-text-muted);
 }
 
+.sandbox-globals-rhythm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-md);
+  border: 1px solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  max-width: 40rem;
+  box-sizing: border-box;
+}
+
+.sandbox-globals-rhythm-stack {
+  width: 100%;
+  max-width: 100%;
+}
+
+.sandbox-globals-rhythm-legend {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  padding-block-start: var(--fynns-space-sm);
+  border-block-start: 1px solid var(--fynns-color-border);
+}
+
+.sandbox-globals-rhythm-legend > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--fynns-space-2xs);
+}
+
+.sandbox-globals-rhythm-legend dt {
+  margin: 0;
+  font-size: var(--fynns-font-size-caption);
+}
+
+.sandbox-globals-rhythm-legend dt code {
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-accent);
+}
+
+.sandbox-globals-rhythm-legend dd {
+  margin: 0;
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+}
+
 .sandbox-globals-navrail {
   display: flex;
   align-items: stretch;
@@ -1017,7 +1066,7 @@
      row when they fit; increase wrap gap when they cannot. */
   .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
     grid-template-columns: minmax(0, 1fr);
-    /* Keep row-to-row gap from the base toolbar rule (lg). */
+    /* Row-to-row gap stays --fynns-layout-control-stack-gap from core. */
   }
 
   .sandbox-preview
@@ -1026,8 +1075,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* Label → controls: keep a clear vertical rhythm when stacked. */
-    gap: var(--fynns-space-xs);
+    /* Label → controls: semantic rhythm token. */
+    gap: var(--fynns-layout-control-row-gap);
     width: 100%;
     max-width: 100%;
     grid-template-columns: unset;
@@ -1040,7 +1089,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fynns-space-sm);
+    gap: var(--fynns-layout-control-cluster-gap);
     width: 100%;
     max-width: 100%;
   }
@@ -1055,7 +1104,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--fynns-space-sm);
+    gap: var(--fynns-layout-control-cluster-gap);
     width: 100%;
     max-width: 100%;
     grid-template-columns: unset;

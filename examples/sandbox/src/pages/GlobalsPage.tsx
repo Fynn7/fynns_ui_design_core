@@ -31,8 +31,12 @@ import {
   Select,
   SettingsIcon,
   Switch,
+  ToggleGroup,
   TopAppBar,
   Tooltip,
+  ControlRow,
+  ControlStack,
+  Grid,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -69,6 +73,10 @@ export function GlobalsPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
+  const [rhythmClickable, setRhythmClickable] = useState(true);
+  const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
+  const [rhythmMedia, setRhythmMedia] = useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -341,6 +349,83 @@ export function GlobalsPage() {
           </div>
         </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
+      </section>
+
+      <section
+        className="sandbox-globals-section"
+        aria-label={t("globals.rhythmAria")}
+      >
+        <h3 className="sandbox-globals-heading">{t("globals.rhythm")}</h3>
+        <p className="sandbox-help">{t("globals.rhythmLead")}</p>
+        <div className="sandbox-globals-rhythm">
+          <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
+            <ControlRow label={t("globals.rhythmRowContent")}>
+              <Switch
+                size="sm"
+                labelSide="end"
+                label={t("globals.rhythmMedia")}
+                checked={rhythmMedia}
+                onCheckedChange={setRhythmMedia}
+              />
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmRowBehavior")}>
+              <Grid x={2} y="unbounded">
+                <Switch
+                  size="sm"
+                  labelSide="end"
+                  label={t("globals.rhythmClickable")}
+                  checked={rhythmClickable}
+                  onCheckedChange={setRhythmClickable}
+                />
+                <Switch
+                  size="sm"
+                  labelSide="end"
+                  label={t("globals.rhythmDisabled")}
+                  checked={rhythmDisabled}
+                  onCheckedChange={setRhythmDisabled}
+                />
+              </Grid>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmRowActions")}>
+              <ToggleGroup
+                size="compact"
+                value={rhythmAlign}
+                onChange={(id) => setRhythmAlign(id as "start" | "end")}
+                options={[
+                  { value: "start", label: t("globals.rhythmStart") },
+                  { value: "end", label: t("globals.rhythmEnd") },
+                ]}
+              />
+            </ControlRow>
+          </ControlStack>
+          <dl className="sandbox-globals-rhythm-legend">
+            <div>
+              <dt>
+                <code>--fynns-layout-control-stack-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenStack")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-row-column-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenRowCol")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-row-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenRow")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-cluster-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenCluster")}</dd>
+            </div>
+          </dl>
+        </div>
+        <p className="sandbox-help">{t("globals.rhythmAgentHint")}</p>
       </section>
 
       <section className="sandbox-globals-section" aria-label={t("globals.surfacesAria")}>

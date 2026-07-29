@@ -39,7 +39,7 @@ export function CardPreviewCanvas() {
 
   return (
     <div className="sandbox-preview">
-      <ControlStack className="sandbox-preview-toolbar" columns={2} gap="md">
+      <ControlStack className="sandbox-preview-toolbar" columns={2}>
         <ControlRow label={t("preview.anatomy")}>
           <Switch
             size="sm"

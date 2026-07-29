@@ -514,6 +514,18 @@ export const LAYOUT_TOKENS = {
   "command-palette-top-padding": "12vh",
   /** Fixed label column for `ControlRow` (toolbars / settings strips). */
   "control-row-label": "7.5rem",
+  /**
+   * Toolbar rhythm — prefer these over raw `--fynns-space-*` in ControlStack/
+   * ControlRow layouts (see AGENTS.md “Toolbar rhythm”).
+   */
+  /** Gap between ControlRows in a ControlStack. */
+  "control-stack-gap": "0.75rem",
+  /** Label → controls when the row stacks vertically (narrow). */
+  "control-row-gap": "0.25rem",
+  /** Label | controls when the row is horizontal. */
+  "control-row-column-gap": "0.5rem",
+  /** Sibling switches / chips / Grid cells inside one controls cluster. */
+  "control-cluster-gap": "0.5rem",
   /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
   "switch-label-end": "7rem",
 } as const;
