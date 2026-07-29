@@ -1438,8 +1438,8 @@
   grid-template-columns: subgrid;
   width: auto;
   max-width: none;
-  /* Cluster siblings on shared tracks; stack `gap` spaces whole rows. */
-  column-gap: var(--fynns-layout-control-cluster-gap);
+  /* Label | controls on shared tracks; cluster gap is for __controls / Grid siblings. */
+  column-gap: var(--fynns-layout-control-row-column-gap);
   row-gap: var(--fynns-layout-control-row-gap);
   align-items: center;
   /* Subgrid does not inherit the stack's justify-items; without this,

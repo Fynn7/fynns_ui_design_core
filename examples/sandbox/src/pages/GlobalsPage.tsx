@@ -329,7 +329,7 @@ export function GlobalsPage() {
               onClick={() => setRailId("all")}
             />
           </NavigationRail>
-          <div className="sandbox-globals-navrail-pane fynns-scroll">
+          <div className="sandbox-globals-navrail-pane">
             <p className="sandbox-globals-navrail-pane-body">
               {t(RAIL_PANE_BODY[railId])}
             </p>

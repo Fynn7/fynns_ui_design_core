@@ -245,6 +245,14 @@ export const NavigationRailItem = forwardRef(function NavigationRailItem(
     badgeNode = badge;
   }
 
+  const badgeCountText =
+    typeof badge === "number" || typeof badge === "string" ? String(badge) : null;
+  const baseName = ariaLabel ?? label;
+  const resolvedAriaLabel =
+    baseName && badgeCountText
+      ? `${baseName}, ${badgeCountText}`
+      : ariaLabel ?? (showLabel ? undefined : label);
+
   const rootClass = [
     "fynns-nav-rail-item",
     iconOnly ? "fynns-nav-rail-item--icon" : "fynns-nav-rail-item--labeled",
@@ -261,8 +269,10 @@ export const NavigationRailItem = forwardRef(function NavigationRailItem(
       type={type}
       className={rootClass}
       aria-current={active ? "page" : undefined}
-      aria-label={ariaLabel ?? (showLabel ? undefined : label)}
-      aria-labelledby={showLabel && !ariaLabel ? labelId : undefined}
+      aria-label={resolvedAriaLabel}
+      aria-labelledby={
+        showLabel && resolvedAriaLabel == null ? labelId : undefined
+      }
     >
       <span className="fynns-nav-rail-indicator">
         <span className="fynns-nav-rail-icon-wrap">
