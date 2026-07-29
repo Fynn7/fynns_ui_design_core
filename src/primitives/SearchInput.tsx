@@ -53,7 +53,7 @@ export const SearchInput = forwardRef(function SearchInput(
       )}
     >
       <span className="fynns-search-leading" aria-hidden="true">
-        {leadingIcon ?? <SearchIcon />}
+        {leadingIcon ?? <SearchIcon size={16} />}
       </span>
       <input
         {...rest}

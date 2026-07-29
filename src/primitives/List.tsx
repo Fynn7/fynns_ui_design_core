@@ -3,6 +3,7 @@ import {
   type ButtonHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
+  type Ref,
 } from "react";
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -71,89 +72,95 @@ function resolveLines(
  * M3 ListItem — one-, two-, or three-line content row with optional
  * leading / trailing slots. Use inside `List`. Not a sidebar `ListRow`.
  */
-export const ListItem = forwardRef<HTMLButtonElement, ListItemProps>(
-  function ListItem(
-    {
-      headline,
-      supportingText,
-      overline,
-      leading,
-      trailing,
-      trailingSupportingText,
-      lines: linesProp,
-      selected = false,
-      interactive: interactiveProp,
-      disabled = false,
-      className,
-      onClick,
-      ...rest
-    },
-    ref,
-  ) {
-    const lines = resolveLines(linesProp, overline, supportingText);
-    const interactive = interactiveProp ?? onClick != null;
-    const itemClass = join(
-      "fynns-list-item",
-      `fynns-list-item--${lines}`,
-      selected && "fynns-list-item--selected",
-      interactive && "fynns-list-item--interactive",
-      disabled && "fynns-list-item--disabled",
-      className,
-    );
+export const ListItem = forwardRef<
+  HTMLButtonElement | HTMLDivElement,
+  ListItemProps
+>(function ListItem(
+  {
+    headline,
+    supportingText,
+    overline,
+    leading,
+    trailing,
+    trailingSupportingText,
+    lines: linesProp,
+    selected = false,
+    interactive: interactiveProp,
+    disabled = false,
+    className,
+    onClick,
+    ...rest
+  },
+  ref,
+) {
+  const lines = resolveLines(linesProp, overline, supportingText);
+  const interactive = interactiveProp ?? onClick != null;
+  const itemClass = join(
+    "fynns-list-item",
+    `fynns-list-item--${lines}`,
+    selected && "fynns-list-item--selected",
+    interactive && "fynns-list-item--interactive",
+    disabled && "fynns-list-item--disabled",
+    className,
+  );
 
-    const body = (
-      <>
-        {leading != null ? (
-          <span className="fynns-list-item-leading" aria-hidden>
-            {leading}
-          </span>
+  const body = (
+    <>
+      {leading != null ? (
+        <span className="fynns-list-item-leading" aria-hidden>
+          {leading}
+        </span>
+      ) : null}
+      <span className="fynns-list-item-content">
+        {overline != null ? (
+          <span className="fynns-list-item-overline">{overline}</span>
         ) : null}
-        <span className="fynns-list-item-content">
-          {overline != null ? (
-            <span className="fynns-list-item-overline">{overline}</span>
+        <span className="fynns-list-item-headline">{headline}</span>
+        {supportingText != null ? (
+          <span className="fynns-list-item-supporting">{supportingText}</span>
+        ) : null}
+      </span>
+      {trailingSupportingText != null || trailing != null ? (
+        <span className="fynns-list-item-trailing">
+          {trailingSupportingText != null ? (
+            <span className="fynns-list-item-trailing-text">
+              {trailingSupportingText}
+            </span>
           ) : null}
-          <span className="fynns-list-item-headline">{headline}</span>
-          {supportingText != null ? (
-            <span className="fynns-list-item-supporting">{supportingText}</span>
+          {trailing != null ? (
+            <span className="fynns-list-item-trailing-icon" aria-hidden>
+              {trailing}
+            </span>
           ) : null}
         </span>
-        {trailingSupportingText != null || trailing != null ? (
-          <span className="fynns-list-item-trailing">
-            {trailingSupportingText != null ? (
-              <span className="fynns-list-item-trailing-text">
-                {trailingSupportingText}
-              </span>
-            ) : null}
-            {trailing != null ? (
-              <span className="fynns-list-item-trailing-icon" aria-hidden>
-                {trailing}
-              </span>
-            ) : null}
-          </span>
-        ) : null}
-      </>
-    );
+      ) : null}
+    </>
+  );
 
-    return (
-      <li className="fynns-list-item-host">
-        {interactive ? (
-          <button
-            {...rest}
-            ref={ref}
-            type="button"
-            className={itemClass}
-            disabled={disabled}
-            aria-current={selected ? "true" : undefined}
-            onClick={onClick}
-          >
-            {body}
-          </button>
-        ) : (
-          <div className={itemClass} aria-disabled={disabled || undefined}>
-            {body}
-          </div>
-        )}
-      </li>
-    );
-  },
-);
+  return (
+    <li className="fynns-list-item-host">
+      {interactive ? (
+        <button
+          {...rest}
+          ref={ref as Ref<HTMLButtonElement>}
+          type="button"
+          className={itemClass}
+          disabled={disabled}
+          aria-current={selected ? "true" : undefined}
+          onClick={onClick}
+        >
+          {body}
+        </button>
+      ) : (
+        <div
+          {...(rest as HTMLAttributes<HTMLDivElement>)}
+          ref={ref as Ref<HTMLDivElement>}
+          className={itemClass}
+          aria-disabled={disabled || undefined}
+        >
+          {body}
+        </div>
+      )}
+    </li>
+  );
+});

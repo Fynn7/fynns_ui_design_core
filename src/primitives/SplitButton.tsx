@@ -73,7 +73,7 @@ export function SplitButton({
         aria-expanded={menuOpen}
         aria-label={menuAriaLabel}
       >
-        <ChevronDownIcon />
+        <ChevronDownIcon size={16} />
       </button>
       {menuOpen ? (
         <div className="fynns-splitbtn-menu" role="menu">
