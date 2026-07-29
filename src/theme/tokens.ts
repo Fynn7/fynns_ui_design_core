@@ -462,8 +462,8 @@ export const NAVRAIL_TOKENS = {
   /** Small badge (dot) on destination icon. */
   "badge-dot": "0.375rem",
   /** Large badge min size (count / short text). */
-  "badge-size": "1rem",
-  "badge-font-size": "0.6875rem",
+  "badge-size": "0.875rem",
+  "badge-font-size": "0.625rem",
   /**
    * Extra outward shift past the icon corner so badge centers (dot and
    * large) share one point and clear the glyph.
@@ -489,8 +489,8 @@ export const NAVBAR_TOKENS = {
   "label-line": "1.25",
   "label-gap": "0.125rem",
   "badge-dot": "0.375rem",
-  "badge-size": "1rem",
-  "badge-font-size": "0.6875rem",
+  "badge-size": "0.875rem",
+  "badge-font-size": "0.625rem",
   "badge-nudge": "0.125rem",
 } as const;
 
