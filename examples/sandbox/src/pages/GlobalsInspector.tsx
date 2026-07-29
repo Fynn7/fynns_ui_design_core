@@ -9,9 +9,10 @@ import {
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
-import { BASELINE } from "../state/baseline";
+import { BASELINE, SANDBOX_RESTING } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { ApplyChangesControl } from "./ApplyChangesControl";
+import { LayoutChromeSliders } from "./LayoutChromeSliders";
 
 function parseLengthToPx(value: string): number {
   const n = Number.parseFloat(value);
@@ -118,7 +119,7 @@ export function GlobalsInspector() {
     const patch: Record<string, string> = {};
     for (const key of LADDER_KEYS) {
       const cssVar = `--fynns-radius-${key}`;
-      patch[cssVar] = BASELINE[cssVar] ?? "0";
+      patch[cssVar] = SANDBOX_RESTING[cssVar] ?? BASELINE[cssVar] ?? "0";
     }
     mergeOverrides(patch, { source: "reset", group: "radius" });
     toast.message(t("globalsInspector.toastReset"));
@@ -207,6 +208,10 @@ export function GlobalsInspector() {
               </Tooltip>
             </CardActions>
           </div>
+        </Collapsible>
+
+        <Collapsible title={t("layoutChrome.collapsible")} defaultOpen>
+          <LayoutChromeSliders />
         </Collapsible>
       </div>
 

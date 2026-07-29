@@ -1,8 +1,19 @@
 import type { ReactNode } from "react";
 
+/**
+ * Gallery / sandbox demo chrome.
+ * Gaps use `--sandbox-*` (draft + GUI). Fallbacks keep standalone gallery usable.
+ * Agents: see `SANDBOX_LAYOUT_AGENT_CATALOG` in sandbox `state/baseline.ts`.
+ */
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-sm)" }}>
+    <section
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--sandbox-section-gap, var(--fynns-space-sm))",
+      }}
+    >
       <h2
         style={{
           margin: 0,
@@ -21,11 +32,18 @@ export function Section({ title, children }: { title: string; children: ReactNod
 
 export function Swatch({ label, token }: { label: string; token: string }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-2xs)", minWidth: "5.5rem" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--sandbox-section-gap, var(--fynns-space-2xs))",
+        minWidth: "5.5rem",
+      }}
+    >
       <div
         style={{
           height: "2.5rem",
-          borderRadius: "var(--fynns-radius-sm)",
+          borderRadius: "var(--fynns-radius-md)",
           border: "var(--fynns-border-hairline) solid var(--fynns-color-border)",
           background: `var(${token})`,
         }}
@@ -39,7 +57,14 @@ export function Swatch({ label, token }: { label: string; token: string }) {
 
 export function Row({ children }: { children: ReactNode }) {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--fynns-space-sm)", alignItems: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "var(--sandbox-row-gap, var(--fynns-space-md))",
+        alignItems: "center",
+      }}
+    >
       {children}
     </div>
   );

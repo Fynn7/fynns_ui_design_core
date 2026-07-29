@@ -200,9 +200,12 @@ function loadStoredDraft(): TokenDraft {
     if (parsed.baseTokensHash !== BASE_TOKENS_HASH) {
       return emptyDraft(BASE_TOKENS_HASH);
     }
+    const seeded = emptyDraft(BASE_TOKENS_HASH);
     return {
-      ...emptyDraft(BASE_TOKENS_HASH),
+      ...seeded,
       ...parsed,
+      // Keep sandbox aesthetic defaults when a stored draft never set the key.
+      overrides: { ...seeded.overrides, ...(parsed.overrides ?? {}) },
       historyIndex: parsed.historyIndex ?? parsed.history.length - 1,
     };
   } catch {

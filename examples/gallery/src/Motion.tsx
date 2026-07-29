@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@fynns/ui";
+import { Button, Card } from "@fynns/ui";
 import { Row, Section } from "./galleryShared";
 
 const EASING_DEMOS = [
@@ -20,18 +20,27 @@ function EasingBar({
 }) {
   const [run, setRun] = useState(0);
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-2xs)", flex: "1 1 10rem" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        /* M3 4dp grid: related control cluster = 8dp (same as --fynns-layout-control-cluster-gap). */
+        gap: "var(--fynns-layout-control-cluster-gap)",
+        flex: "1 1 10rem",
+      }}
+    >
       <span style={{ fontSize: "var(--fynns-font-size-caption)", color: "var(--fynns-color-text-muted)" }}>
         {label}
       </span>
-      <div
+      {/* Outlined Card = shared container radius (`--fynns-radius-md`), not a one-off sm. */}
+      <Card
+        variant="outlined"
         style={{
           position: "relative",
           height: "2rem",
-          borderRadius: "var(--fynns-radius-sm)",
-          border: "var(--fynns-border-hairline) solid var(--fynns-color-border)",
+          flexShrink: 0,
+          boxShadow: "none",
           background: "var(--fynns-color-surface-muted)",
-          overflow: "hidden",
         }}
       >
         <div
@@ -47,7 +56,7 @@ function EasingBar({
             animation: `fynns-gallery-ease var(--fynns-duration-slow) ${easing} both`,
           }}
         />
-      </div>
+      </Card>
       <Button size="sm" onClick={() => setRun((n) => n + 1)}>
         {replayLabel}
       </Button>
