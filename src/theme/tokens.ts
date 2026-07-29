@@ -173,8 +173,10 @@ export const RADIUS_TOKENS = {
   lg: "10px",
   /** M3 extra-large band */
   xl: "16px",
-  "2xl": "24px",
-  /** M3 extra-large / sheet top corners / SearchBar ≈ 28dp. */
+  /**
+   * Long chrome strips ≈ 28dp: SearchBar, Banner, BottomAppBar,
+   * NavigationDrawer items, BottomSheet top corners. (No `2xl` step — unused.)
+   */
   "3xl": "28px",
   pill: "999px",
   round: "50%",

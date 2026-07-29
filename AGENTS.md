@@ -209,9 +209,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   form rows.
 - **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
   dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
-  TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` with SearchBar /
-  BottomAppBar). Prefer `InfoBanner` / `WarningBanner` for inline alerts inside
-  panels.
+  TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` long-strip group
+  with SearchBar / BottomAppBar / NavigationDrawer items / sheet tops). Prefer
+  `InfoBanner` / `WarningBanner` for inline alerts inside panels.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -387,9 +387,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
   Prefer `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` with SearchBar /
-  Banner). Actions start-aligned with 40dp targets; optional FAB sits inside the
-  bar (no cradle cutout). Prefer `NavigationBar` for bottom destinations.
+  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` long-strip group
+  with SearchBar / Banner / NavigationDrawer items / sheet tops). Actions
+  start-aligned with 40dp targets; optional FAB sits inside the bar (no cradle
+  cutout). Prefer `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
@@ -412,7 +413,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
   destination side sheet (360dp). Modal overlays with scrim (default
   `side="left"`); `standard` is permanent in-layout. Item highlight is a
-  full-width row highlight (`secondary-container`, `--fynns-radius-lg`); trailing badge for counts.
+  full-width row highlight (`secondary-container`, `--fynns-radius-3xl`); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —

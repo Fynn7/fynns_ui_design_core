@@ -97,7 +97,7 @@ export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
 
       <Section title={titles?.radiusShadow ?? "Radius & shadow"}>
         <Row>
-          {(["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const).map((r) => (
+          {(["none", "xs", "sm", "md", "lg", "xl", "3xl"] as const).map((r) => (
             <div
               key={r}
               style={{

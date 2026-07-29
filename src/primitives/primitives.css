@@ -4824,7 +4824,7 @@
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
   border: 0;
-  border-radius: var(--fynns-radius-lg);
+  border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text-muted);
   font: inherit;

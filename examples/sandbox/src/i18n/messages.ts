@@ -349,15 +349,15 @@ const en = {
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; long chrome strips (SearchBar / Banner / BottomAppBar / sheet tops) = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; long chrome strips (SearchBar / Banner / BottomAppBar / NavigationDrawer items / sheet tops) = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
-  "globalsInspector.radiusLgUses": "Menus, dialogs, nav drawer items, scrollbar thumb",
+  "globalsInspector.radiusLgUses": "Menus, dialogs, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
-  "globalsInspector.radius2xlUses": "Large soft shells",
-  "globalsInspector.radius3xlUses": "SearchBar, Banner, BottomAppBar, bottom sheet tops",
+  "globalsInspector.radius3xlUses":
+    "SearchBar, Banner, BottomAppBar, NavigationDrawer items, sheet tops",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
@@ -367,13 +367,11 @@ const en = {
   "globalsInspector.radiusMdHint":
     "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
   "globalsInspector.radiusLgHint":
-    "Larger chrome: dropdown menus, dialogs, NavigationDrawer destinations, scrollbar thumbs.",
+    "Larger chrome: dropdown menus, dialogs, scrollbar thumbs.",
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
-  "globalsInspector.radius2xlHint":
-    "Between xl and long chrome strips (3xl). Soft large shells.",
   "globalsInspector.radius3xlHint":
-    "≈28dp long chrome strips: SearchBar, Banner, BottomAppBar, and BottomSheet top edge. Slide this to reshape that group.",
+    "≈28dp long chrome strips: SearchBar, Banner, BottomAppBar, NavigationDrawer destination rows, and BottomSheet top edge. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track, SearchInput",
@@ -747,15 +745,15 @@ const zh: Record<MessageKey, string> = {
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；长条 chrome（SearchBar / Banner / BottomAppBar / 表单顶角）= 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；长条 chrome（SearchBar / Banner / BottomAppBar / 导航抽屉项 / 表单顶角）= 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
-  "globalsInspector.radiusLgUses": "菜单、对话框、导航抽屉项、滚动条滑块",
+  "globalsInspector.radiusLgUses": "菜单、对话框、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
-  "globalsInspector.radius2xlUses": "更大的柔和外壳",
-  "globalsInspector.radius3xlUses": "SearchBar、Banner、BottomAppBar、底部表单顶角",
+  "globalsInspector.radius3xlUses":
+    "SearchBar、Banner、BottomAppBar、导航抽屉项、底部表单顶角",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
@@ -765,13 +763,11 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusMdHint":
     "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
   "globalsInspector.radiusLgHint":
-    "较大界面：下拉菜单、对话框、NavigationDrawer 目的地行、滚动条滑块。",
+    "较大界面：下拉菜单、对话框、滚动条滑块。",
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
-  "globalsInspector.radius2xlHint":
-    "介于 xl 与长条 chrome (3xl) 之间的柔和大外壳。",
   "globalsInspector.radius3xlHint":
-    "≈28dp 长条 chrome：SearchBar、Banner、BottomAppBar 与 BottomSheet 顶边。调这一档即可改整组圆角。",
+    "≈28dp 长条 chrome：SearchBar、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道、SearchInput",

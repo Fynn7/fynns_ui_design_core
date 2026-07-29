@@ -158,13 +158,13 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Globals (system shape)
 
-- Shape levels: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Reset levels)
+- Shape levels: editable `--fynns-radius-{2xs,xs,sm,md,lg,xl,3xl}` (+ Reset levels)
 - Read-only: `none` / `pill` / `round`
 - Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
 - Preview stage shows Button, Input, Select, Badge, Switch, Card variants,
   Collapsible, plus an xs–xl levels legend labeled with which components use each
   step (buttons use **xl**; cards / inputs use **md**; badges / chips use **sm**;
-  switch track uses **radius-pill**)
+  long chrome strips use **3xl**; switch track uses **radius-pill**)
 
 ### Preview toggles (Surfaces)
 
