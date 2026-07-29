@@ -421,8 +421,14 @@ export const APPBAR_TOKENS = {
   "height-md": "5rem",
   "height-lg": "6.5rem",
   "row-height": "2.5rem",
-  "pad-inline": "0.25rem",
-  /** Title inset under the action row (medium / large). */
+  /** Inline inset for the action row (leading / trailing icons). */
+  "pad-inline": "0.5rem",
+  /**
+   * Hover / state-layer circle for IconButtons (glyph stays default size;
+   * disc is slightly under the 40dp row so it does not dominate).
+   */
+  "action-hover-size": "2.25rem",
+  /** Title inset under the action row (medium / large only). */
   "title-pad-inline": "0.75rem",
   "title-pad-bottom-md": "0.75rem",
   "title-pad-bottom-lg": "1rem",

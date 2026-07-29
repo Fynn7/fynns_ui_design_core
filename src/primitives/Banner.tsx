@@ -75,10 +75,11 @@ export function Banner({
             <Tooltip content={dismissAriaLabel}>
               <IconButton
                 type="button"
+                size="sm"
                 aria-label={dismissAriaLabel}
                 onClick={onDismiss}
               >
-                <CloseIcon size={20} />
+                <CloseIcon />
               </IconButton>
             </Tooltip>
           ) : null}

@@ -4126,7 +4126,7 @@
 .fynns-top-app-bar-row {
   display: flex;
   align-items: center;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-space-sm);
   box-sizing: border-box;
   flex: 0 0 auto;
   min-height: var(--fynns-appbar-row-height);
@@ -4144,6 +4144,60 @@
 
 .fynns-top-app-bar-trailing {
   color: var(--fynns-color-text-muted);
+}
+
+/*
+ * Keep IconButton compact (default glyph + padding). Enlarge only the circular
+ * hover / pressed disc via ::before (slightly under the 40dp row).
+ */
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon,
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon {
+  position: relative;
+  z-index: 0;
+  box-sizing: content-box;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon::before,
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--fynns-appbar-action-hover-size);
+  height: var(--fynns-appbar-action-hover-size);
+  transform: translate(-50%, -50%);
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:hover:not(:disabled),
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:hover:not(:disabled),
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:active:not(:disabled),
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:active:not(:disabled) {
+  background: transparent;
+}
+
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before,
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before {
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:active:not(:disabled)::before,
+.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
 }
 
 .fynns-top-app-bar-spacer {
@@ -5200,9 +5254,9 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
+  align-self: center;
   width: var(--fynns-banner-icon-size);
   height: var(--fynns-banner-icon-size);
-  margin-block-start: 0.125rem;
   color: inherit;
 }
 
@@ -5242,8 +5296,14 @@
   flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
+  align-self: center;
   gap: var(--fynns-banner-actions-gap);
   margin-inline-start: auto;
+}
+
+.fynns-banner-trailing .fynns-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
 }
 
 .fynns-banner-actions {

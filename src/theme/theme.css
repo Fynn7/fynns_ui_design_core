@@ -230,7 +230,8 @@
   --fynns-appbar-height-md: 5rem;
   --fynns-appbar-height-lg: 6.5rem;
   --fynns-appbar-row-height: 2.5rem;
-  --fynns-appbar-pad-inline: 0.25rem;
+  --fynns-appbar-pad-inline: 0.5rem;
+  --fynns-appbar-action-hover-size: 2.25rem;
   --fynns-appbar-title-pad-inline: 0.75rem;
   --fynns-appbar-title-pad-bottom-md: 0.75rem;
   --fynns-appbar-title-pad-bottom-lg: 1rem;
