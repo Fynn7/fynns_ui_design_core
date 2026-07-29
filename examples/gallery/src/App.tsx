@@ -5,6 +5,7 @@ import {
   ArrowLeftIcon,
   Avatar,
   Badge,
+  Banner,
   BottomAppBar,
   BottomSheet,
   Button,
@@ -538,6 +539,16 @@ export function App() {
           <WarningBanner message="Careful with this." />
           <ErrorBanner message="An error occurred." />
         </Row>
+        <div style={{ width: "100%", maxWidth: "28rem" }}>
+          <Banner
+            variant="tonal"
+            text="A new version is available"
+            supportingText="Restart to apply updates when you are ready."
+            actions={<Button size="sm" variant="ghost">Learn more</Button>}
+            onDismiss={() => undefined}
+            dismissAriaLabel="Dismiss banner"
+          />
+        </div>
       </Section>
 
       <PanelCard title="Panel card" fill={false}>

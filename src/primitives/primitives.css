@@ -4953,6 +4953,7 @@
   padding-inline: var(--fynns-bottomappbar-pad-inline);
   background: var(--fynns-color-surface-1);
   color: var(--fynns-color-text);
+  border-radius: var(--fynns-radius-3xl);
   box-shadow: var(--fynns-shadow-sm);
   border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
@@ -5168,3 +5169,89 @@
     transition: none;
   }
 }
+
+/* ---------- Banner (M3 full-width strip) ---------- */
+.fynns-banner {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--fynns-banner-gap);
+  width: 100%;
+  min-height: var(--fynns-banner-min-height);
+  padding-block: var(--fynns-banner-pad-block);
+  padding-inline: var(--fynns-banner-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  color: var(--fynns-color-text);
+}
+
+.fynns-banner--default {
+  background: var(--fynns-color-surface-2);
+}
+
+.fynns-banner--tonal {
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-banner-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  margin-block-start: 0.125rem;
+  color: inherit;
+}
+
+.fynns-banner-icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+}
+
+.fynns-banner-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+  padding-block: 0.125rem;
+}
+
+.fynns-banner-text {
+  font-size: var(--fynns-banner-text-size);
+  line-height: var(--fynns-banner-text-line);
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-banner-supporting {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-banner--tonal .fynns-banner-supporting {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.fynns-banner-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-banner-actions-gap);
+  margin-inline-start: auto;
+}
+
+.fynns-banner-actions {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--fynns-banner-actions-gap);
+}
+

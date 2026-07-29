@@ -3,6 +3,7 @@ import {
   ArrowLeftIcon,
   Avatar,
   Badge,
+  Banner,
   BarChartIcon,
   BottomAppBar,
   BottomSheet,
@@ -20,6 +21,7 @@ import {
   FileIcon,
   FolderOpenIcon,
   IconButton,
+  InfoIcon,
   Input,
   LayoutGridIcon,
   LinearProgress,
@@ -92,6 +94,7 @@ export function GlobalsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(true);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -504,7 +507,7 @@ export function GlobalsPage() {
             width: "100%",
             maxWidth: "28rem",
             border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-md)",
+            borderRadius: "var(--fynns-radius-3xl)",
             overflow: "hidden",
             background: "var(--fynns-color-app-bg)",
           }}
@@ -585,6 +588,34 @@ export function GlobalsPage() {
           </SearchBar>
         </div>
         <p className="sandbox-help">{t("globals.searchBarHelp")}</p>
+        {bannerVisible ? (
+          <div
+            className="sandbox-globals-banner"
+            style={{
+              width: "100%",
+              maxWidth: "28rem",
+            }}
+          >
+            <Banner
+              variant="tonal"
+              icon={<InfoIcon />}
+              text={t("globals.bannerText")}
+              supportingText={t("globals.bannerSupporting")}
+              actions={
+                <Button size="sm" variant="ghost" onClick={() => setBannerVisible(false)}>
+                  {t("globals.bannerAction")}
+                </Button>
+              }
+              onDismiss={() => setBannerVisible(false)}
+              dismissAriaLabel={t("globals.bannerDismiss")}
+            />
+          </div>
+        ) : (
+          <Button size="sm" variant="ghost" onClick={() => setBannerVisible(true)}>
+            {t("globals.bannerShow")}
+          </Button>
+        )}
+        <p className="sandbox-help">{t("globals.bannerHelp")}</p>
       </section>
 
       <section

@@ -260,6 +260,14 @@
   --fynns-searchbar-results-pad-block-end: 0.75rem;
   --fynns-searchbar-results-pad-inline: 0.5rem;
   --fynns-searchbar-results-gap: 0.125rem;
+  --fynns-banner-min-height: 3.25rem;
+  --fynns-banner-pad-inline: 1rem;
+  --fynns-banner-pad-block: 0.75rem;
+  --fynns-banner-gap: 0.75rem;
+  --fynns-banner-icon-size: 1.5rem;
+  --fynns-banner-text-size: 0.875rem;
+  --fynns-banner-text-line: 1.25;
+  --fynns-banner-actions-gap: 0.5rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

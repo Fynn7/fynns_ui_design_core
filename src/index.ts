@@ -25,6 +25,7 @@ export * from "./primitives/Textarea";
 export * from "./primitives/Counter";
 export * from "./primitives/SearchInput";
 export * from "./primitives/SearchBar";
+export * from "./primitives/Banner";
 export * from "./primitives/Select";
 export * from "./primitives/Combobox";
 export * from "./primitives/DropdownMenu";

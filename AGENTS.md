@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -207,6 +207,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
   field + results merge into one docked shell. Prefer `SearchInput` for dense
   form rows.
+- **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
+  dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
+  TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` with SearchBar /
+  BottomAppBar). Prefer `InfoBanner` / `WarningBanner` for inline alerts inside
+  panels.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -365,7 +370,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top from above) with a fade; dismiss plays the reverse before unmount. **ToastProvider** +
   **useToast** compat; declarative `<Toast>` uses the same animation (bottom-center).
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
-  + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
+  + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner** — inline panel
+  alerts (not the M3 chrome `Banner`).
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
   **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
   `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
@@ -381,9 +387,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
   Prefer `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (56dp dense; stock M3 is 80dp). Actions start-aligned with 40dp
-  targets; optional FAB sits inside the bar (no cradle cutout). Prefer
-  `NavigationBar` for bottom destinations.
+  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` with SearchBar /
+  Banner). Actions start-aligned with 40dp targets; optional FAB sits inside the
+  bar (no cradle cutout). Prefer `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /

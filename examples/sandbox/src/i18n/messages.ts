@@ -322,6 +322,13 @@ const en = {
   "globals.searchBarResultSettings": "Settings",
   "globals.searchBarHelp":
     "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer SearchInput in dense forms.",
+  "globals.bannerText": "A new version is available",
+  "globals.bannerSupporting": "Restart to apply updates when you are ready.",
+  "globals.bannerAction": "Learn more",
+  "globals.bannerDismiss": "Dismiss banner",
+  "globals.bannerShow": "Show banner",
+  "globals.bannerHelp":
+    "Full-width strip under TopAppBar (message + actions + dismiss). Prefer InfoBanner / WarningBanner for inline alerts inside panels.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -342,7 +349,7 @@ const en = {
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; SearchBar / sheet tops = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; long chrome strips (SearchBar / Banner / BottomAppBar / sheet tops) = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
@@ -350,7 +357,7 @@ const en = {
   "globalsInspector.radiusLgUses": "Menus, dialogs, nav drawer items, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
   "globalsInspector.radius2xlUses": "Large soft shells",
-  "globalsInspector.radius3xlUses": "SearchBar shell, bottom sheet top corners",
+  "globalsInspector.radius3xlUses": "SearchBar, Banner, BottomAppBar, bottom sheet tops",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
@@ -364,9 +371,9 @@ const en = {
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
   "globalsInspector.radius2xlHint":
-    "Between xl and SearchBar / sheet (3xl). Soft large shells.",
+    "Between xl and long chrome strips (3xl). Soft large shells.",
   "globalsInspector.radius3xlHint":
-    "≈28dp SearchBar capsule / docked shell and BottomSheet top edge. Slide this to reshape SearchBar.",
+    "≈28dp long chrome strips: SearchBar, Banner, BottomAppBar, and BottomSheet top edge. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track, SearchInput",
@@ -713,6 +720,13 @@ const zh: Record<MessageKey, string> = {
   "globals.searchBarResultSettings": "设置",
   "globals.searchBarHelp":
     "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 SearchInput。",
+  "globals.bannerText": "有新版本可用",
+  "globals.bannerSupporting": "准备好后重启即可应用更新。",
+  "globals.bannerAction": "了解更多",
+  "globals.bannerDismiss": "关闭横幅",
+  "globals.bannerShow": "显示横幅",
+  "globals.bannerHelp":
+    "顶栏下全宽条（文案 + 操作 + 关闭）。面板内联提示请优先用 InfoBanner / WarningBanner。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
@@ -733,7 +747,7 @@ const zh: Record<MessageKey, string> = {
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；SearchBar / 表单顶角 = 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；长条 chrome（SearchBar / Banner / BottomAppBar / 表单顶角）= 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
@@ -741,7 +755,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusLgUses": "菜单、对话框、导航抽屉项、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
   "globalsInspector.radius2xlUses": "更大的柔和外壳",
-  "globalsInspector.radius3xlUses": "SearchBar 外壳、底部表单顶角",
+  "globalsInspector.radius3xlUses": "SearchBar、Banner、BottomAppBar、底部表单顶角",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
@@ -755,9 +769,9 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
   "globalsInspector.radius2xlHint":
-    "介于 xl 与 SearchBar / 表单顶角 (3xl) 之间的柔和大外壳。",
+    "介于 xl 与长条 chrome (3xl) 之间的柔和大外壳。",
   "globalsInspector.radius3xlHint":
-    "≈28dp：SearchBar 胶囊 / 挂靠外壳与 BottomSheet 顶边。调这一档即可改 SearchBar 圆角。",
+    "≈28dp 长条 chrome：SearchBar、Banner、BottomAppBar 与 BottomSheet 顶边。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道、SearchInput",

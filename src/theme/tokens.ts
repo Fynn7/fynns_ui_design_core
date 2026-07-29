@@ -477,6 +477,23 @@ export const SEARCHBAR_TOKENS = {
 } as const;
 
 /**
+ * Banner geometry (M3 Banner at 16px rem).
+ * Full-width strip under TopAppBar: message + actions + optional dismiss.
+ * Distinct from inline `*Banner` / `AlertMessageBase` helpers.
+ * `--fynns-banner-<key>`.
+ */
+export const BANNER_TOKENS = {
+  "min-height": "3.25rem",
+  "pad-inline": "1rem",
+  "pad-block": "0.75rem",
+  gap: "0.75rem",
+  "icon-size": "1.5rem",
+  "text-size": "0.875rem",
+  "text-line": "1.25",
+  "actions-gap": "0.5rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -759,6 +776,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
+  ["banner", BANNER_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
