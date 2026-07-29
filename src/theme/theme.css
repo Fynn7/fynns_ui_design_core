@@ -277,6 +277,13 @@
   --fynns-list-gap: 1rem;
   --fynns-list-icon-size: 1.25rem;
   --fynns-list-leading-width: 2.5rem;
+  --fynns-datepicker-day-size: 2.5rem;
+  --fynns-datepicker-pad-inline: 0.75rem;
+  --fynns-datepicker-pad-block: 0.75rem;
+  --fynns-datepicker-header-min-height: 3rem;
+  --fynns-datepicker-weekday-size: 2.5rem;
+  --fynns-datepicker-weekday-font: 0.75rem;
+  --fynns-datepicker-gap: 0.25rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

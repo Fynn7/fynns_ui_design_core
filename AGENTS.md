@@ -224,6 +224,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   start edge. Type roles map to the shared font-size ladder (`overline` → `xs`,
   `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
   `ListRow` for sidebar master/detail chrome.
+- **DatePicker** `{ value?, defaultValue?, onChange?, displayMonth?,
+  defaultDisplayMonth?, onDisplayMonthChange?, minDate?, maxDate?,
+  isDateDisabled?, weekStartsOn?: 0|1, labels?, disabled? }` — M3 month
+  calendar (`YYYY-MM-DD` local date-only). Docked surface; helpers
+  `formatDateValue` / `parseDateValue`. **DatePickerDialog** `{ open,
+  onOpenChange, value?, onConfirm, title?, confirmLabel?, cancelLabel?, … }`
+  wraps the picker in a centered dialog (draft until OK).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -442,7 +449,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,
-  `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`. Components also accept
+  `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`,
+  `CalendarIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system

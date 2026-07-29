@@ -17,6 +17,8 @@ import {
   ChipSet,
   CircularProgress,
   Collapsible,
+  DatePicker,
+  DatePickerDialog,
   Divider,
   Fab,
   FileIcon,
@@ -115,6 +117,8 @@ export function GlobalsPage() {
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
+  const [pickedDate, setPickedDate] = useState<string | null>(null);
+  const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -230,6 +234,89 @@ export function GlobalsPage() {
             ))}
           </ChipSet>
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DatePicker
+            value={pickedDate}
+            onChange={setPickedDate}
+            weekStartsOn={1}
+            labels={{
+              previousMonth: t("globals.datePrev"),
+              nextMonth: t("globals.dateNext"),
+              weekdays: [
+                t("globals.dateWd0"),
+                t("globals.dateWd1"),
+                t("globals.dateWd2"),
+                t("globals.dateWd3"),
+                t("globals.dateWd4"),
+                t("globals.dateWd5"),
+                t("globals.dateWd6"),
+              ],
+              months: [
+                t("globals.dateM0"),
+                t("globals.dateM1"),
+                t("globals.dateM2"),
+                t("globals.dateM3"),
+                t("globals.dateM4"),
+                t("globals.dateM5"),
+                t("globals.dateM6"),
+                t("globals.dateM7"),
+                t("globals.dateM8"),
+                t("globals.dateM9"),
+                t("globals.dateM10"),
+                t("globals.dateM11"),
+              ],
+            }}
+          />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setDateDialogOpen(true)}>
+              {t("globals.dateOpenDialog")}
+            </Button>
+            <span className="sandbox-help">
+              {pickedDate
+                ? t("globals.dateSelected", { date: pickedDate })
+                : t("globals.dateNone")}
+            </span>
+          </div>
+          <p className="sandbox-help">{t("globals.dateHelp")}</p>
+        </div>
+        <DatePickerDialog
+          open={dateDialogOpen}
+          onOpenChange={setDateDialogOpen}
+          value={pickedDate}
+          onConfirm={setPickedDate}
+          title={t("globals.dateDialogTitle")}
+          confirmLabel={t("globals.dateConfirm")}
+          cancelLabel={t("globals.dateCancel")}
+          closeAriaLabel={t("globals.dateClose")}
+          weekStartsOn={1}
+          labels={{
+            previousMonth: t("globals.datePrev"),
+            nextMonth: t("globals.dateNext"),
+            weekdays: [
+              t("globals.dateWd0"),
+              t("globals.dateWd1"),
+              t("globals.dateWd2"),
+              t("globals.dateWd3"),
+              t("globals.dateWd4"),
+              t("globals.dateWd5"),
+              t("globals.dateWd6"),
+            ],
+            months: [
+              t("globals.dateM0"),
+              t("globals.dateM1"),
+              t("globals.dateM2"),
+              t("globals.dateM3"),
+              t("globals.dateM4"),
+              t("globals.dateM5"),
+              t("globals.dateM6"),
+              t("globals.dateM7"),
+              t("globals.dateM8"),
+              t("globals.dateM9"),
+              t("globals.dateM10"),
+              t("globals.dateM11"),
+            ],
+          }}
+        />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catCommunication")}>

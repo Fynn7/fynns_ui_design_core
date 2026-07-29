@@ -533,6 +533,21 @@ export const LIST_TOKENS = {
 } as const;
 
 /**
+ * M3 DatePicker calendar geometry (at 16px rem).
+ * Day cells 40dp; 7-column week grid. `--fynns-datepicker-<key>`.
+ */
+export const DATEPICKER_TOKENS = {
+  "day-size": "2.5rem",
+  "pad-inline": "0.75rem",
+  "pad-block": "0.75rem",
+  "header-min-height": "3rem",
+  "weekday-size": "2.5rem",
+  "weekday-font": "0.75rem",
+  /** Keeps adjacent today/selected discs from touching (4dp). */
+  gap: "0.25rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -821,6 +836,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
   ["list", LIST_TOKENS],
+  ["datepicker", DATEPICKER_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
