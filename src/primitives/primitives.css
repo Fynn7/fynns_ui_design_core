@@ -1185,6 +1185,10 @@
   transform: translateY(0);
 }
 
+.fynns-dialog-panel--sheet[data-state="closing"] {
+  transform: translateY(100%);
+}
+
 .fynns-dialog-panel--sheet-half {
   height: var(--fynns-layout-sheet-half-height);
   max-height: 100%;

@@ -74,8 +74,16 @@ export function DialogFrame({
     if (!managesPresence) return;
     if (open) {
       setRendered(true);
-      const raf = requestAnimationFrame(() => setEntered(true));
-      return () => cancelAnimationFrame(raf);
+      // Two frames so the browser paints the off-screen / closed styles before
+      // flipping to `data-state="open"` — otherwise enter transitions are skipped.
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setEntered(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
     }
     setEntered(false);
     const timer = setTimeout(() => setRendered(false), DIALOG_TRANSITION_MS);
