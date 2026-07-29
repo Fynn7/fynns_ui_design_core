@@ -125,14 +125,24 @@ alone is not enough. Pages: **Preview** (Card or Collapsible live stage +
 color/spacing inspector), **Components** (M3 catalog in collapsed sections +
 radius inspector), Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
-and named templates). On Preview / Components, the topbar **inspector** toggle
+and named templates). Left chrome follows M3 **clipped** adaptive navigation:
+full-bleed top app bar; expanded **NavigationDrawer** / collapsed **NavigationRail**
+sit under the bar (vertical seam only — no brand×topbar crosshair). Preference
+persists in `localStorage` (`fynns-sandbox-nav-expanded`); viewports ≤900px stay
+on the drawer. Shell seams use `surface-1` plus `--fynns-color-outline-subtle`
+under the topbar and beside nav / inspector. On Preview / Components, the topbar
+**inspector** toggle
 (`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
 Editing `--fynns-radius-*` on Components
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
-sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
+sandbox chrome update together. Sandbox draft defaults include
+`--fynns-radius-md: 20px` (`SANDBOX_DEFAULT_OVERRIDES` in
+[`examples/sandbox/src/state/baseline.ts`](examples/sandbox/src/state/baseline.ts));
+production `tokens.ts` stays at its own baseline until **Apply changes**.
+See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 
 ### Language (English / 中文)
@@ -191,9 +201,14 @@ Shared token draft for both Card and Collapsible targets (Apply still writes
 - Color: accent chips + rainbow hue wheel; elevated / filled / page background
   brightness; outlined card border
 - Hover overlays: hover / focus / pressed / dragged
-- Spacing: card body / title row / footer button gaps; inspector **Section gap**
-  (sandbox-only, not Apply writeback)
+- Spacing: card body / title row / footer button gaps; **Layout chrome & rhythm**
+  (`--sandbox-row-gap` / `section-gap` / `block-gap` / `chrome-bar-height` plus
+  `--fynns-layout-control-*` — GUI + `SANDBOX_LAYOUT_AGENT_CATALOG`; sandbox-*
+  not Apply writeback)
 - Type size: `--fynns-font-size-{sm,md,lg}`
+
+Motion / Foundations use the same **Layout chrome** aside. Demo `Row` wrap
+(e.g. Motion easing bars) reads `--sandbox-row-gap` (default `1rem`).
 
 Elevation / `--fynns-shadow-xs` stay on the token baseline (no Preview inspector
 knobs).
