@@ -110,7 +110,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
   `--fynns-<component>-*-radius`). Corner radius **must** use
   `var(--fynns-radius-<key>)` from [`RADIUS_TOKENS`](src/theme/tokens.ts).
-  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Globals shape
+  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Components shape
   inspector (editable slider or explicit read-only row). If a new radius step is
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -168,6 +168,11 @@ Color tokens (`--fynns-color-*`):
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
+
+Standard chrome glyph: `--fynns-size-icon` (`1.25rem` / 20dp) + TS `ICON_SIZE`
+(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar
+action icons share this; Fab `sm` matches. Dense micro glyphs (chip trailing,
+select chevron, steppers) may stay smaller.
 
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
@@ -207,6 +212,18 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
   field + results merge into one docked shell. Prefer `SearchInput` for dense
   form rows.
+- **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
+  dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
+  TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` long-strip group
+  with SearchBar / BottomAppBar / NavigationDrawer items / sheet tops). Prefer
+  `InfoBanner` / `WarningBanner` for inline alerts inside panels.
+- **List** + **ListItem** `{ headline, supportingText?, overline?, leading?,
+  trailing?, trailingSupportingText?, lines?: 1|2|3, selected?, interactive?,
+  disabled? }` — M3 content list (56 / 72 / 88dp). Fixed `--fynns-list-leading-width`
+  (40dp, matches Avatar `md`) grids icon/avatar columns so headlines share one
+  start edge. Type roles map to the shared font-size ladder (`overline` → `xs`,
+  `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
+  `ListRow` for sidebar master/detail chrome.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -299,7 +316,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
-  sample + legend: sandbox **Globals → Toolbar rhythm**. Values live in
+  sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
   [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
   `npm run gen:theme`.
   **Checkbox** `{ label, checked, onCheckedChange,
@@ -336,6 +353,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
   compact tree chevrons, and nested branches. `ListGroupTrigger` integrates chevron
   + title; `ListDisclosureToggle` is chevron-only for split headers or tree rows.
+  Prefer **List** / **ListItem** for main-content M3 lists.
 - **ListRow** / **ListRowSelectable** / **ListRowBody** / **ListRowTitle** /
   **ListRowName** / **ListRowSub** / **ListRowBadges** / **ListRowMain** —
   selectable sidebar rows (normal and bulk-select shells).
@@ -365,7 +383,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top from above) with a fade; dismiss plays the reverse before unmount. **ToastProvider** +
   **useToast** compat; declarative `<Toast>` uses the same animation (bottom-center).
 - **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
-  + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner**.
+  + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner** — inline panel
+  alerts (not the M3 chrome `Banner`).
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
   **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
   `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
@@ -381,9 +400,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
   Prefer `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (56dp dense; stock M3 is 80dp). Actions start-aligned with 40dp
-  targets; optional FAB sits inside the bar (no cradle cutout). Prefer
-  `NavigationBar` for bottom destinations.
+  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` long-strip group
+  with SearchBar / Banner / NavigationDrawer items / sheet tops). Actions
+  start-aligned with 40dp targets; optional FAB sits inside the bar (no cradle
+  cutout). Prefer `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
@@ -404,9 +424,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
   side?, modal?, headline?, children }` + **NavigationDrawerItem**
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
-  destination side sheet (360dp). Modal overlays with scrim (default
+  destination side sheet (280dp dense; stock M3 is 360dp). Modal overlays with scrim (default
   `side="left"`); `standard` is permanent in-layout. Item highlight is a
-  full-width row highlight (`secondary-container`, `--fynns-radius-lg`); trailing badge for counts.
+  full-width row highlight (`secondary-container`, `--fynns-radius-3xl`); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
@@ -432,7 +452,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
    `src/index.ts`, document it here, **and add a live sample to the aesthetic
-   sandbox** (`examples/sandbox`, typically Globals controls or a Surfaces
-   preview). Gallery (`examples/gallery`) is optional extra coverage, not a
+   sandbox** (`examples/sandbox`, typically Components catalog or the Preview
+   Card/Collapsible stage). Gallery (`examples/gallery`) is optional extra coverage, not a
    substitute for sandbox.
 3. Keep `npm run typecheck` and `npm run lint` green.

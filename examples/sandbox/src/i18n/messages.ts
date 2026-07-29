@@ -10,13 +10,17 @@ const en = {
   "brand.name": "fynns sandbox",
 
   "nav.aria": "Sandbox pages",
-  "nav.playground": "Surfaces",
-  "nav.globals": "Globals",
+  "nav.playground": "Preview",
+  "nav.globals": "Components",
   "nav.foundations": "Foundations",
   "nav.motion": "Motion",
   "nav.templates": "Templates",
   "nav.templatesTip": "Templates & config export/import",
   "nav.templatesAria": "Templates and config",
+  "nav.playgroundHint":
+    "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
+  "nav.globalsHint":
+    "M3 component catalog (collapsed sections) plus the shape / radius inspector.",
 
   "topbar.undo": "Undo",
   "topbar.undoTip": "Undo (Ctrl+Z)",
@@ -54,7 +58,7 @@ const en = {
   "templates.currentDraft": "Current draft: {count} override{plural} · theme {theme}",
   "templates.savedTitle": "Saved templates",
   "templates.savedAria": "Saved templates",
-  "templates.empty": "No templates yet. Tune tokens on Surfaces / Globals, then Save as template.",
+  "templates.empty": "No templates yet. Tune tokens on Preview / Components, then Save as template.",
   "templates.cardMeta": "{count} override{plural} · {theme} · {when}",
   "templates.apply": "Apply",
   "templates.exportOneTip": "Download this template as JSON",
@@ -96,7 +100,7 @@ const en = {
   "preview.cardInfo": "More about this card.",
   "preview.cardInfoAria": "More info",
   "preview.cardBody":
-    "Sample card. Use the inspector on the right to tweak colors and spacing — this preview updates live. Corner rounding is on the Globals page.",
+    "Sample card. Use the inspector on the right to tweak colors and spacing — this preview updates live. Corner rounding is on the Components page.",
   "preview.dismiss": "Dismiss",
   "preview.open": "Open",
   "preview.cardActivated": "{variant} card activated",
@@ -211,7 +215,13 @@ const en = {
     "Larger titles and chrome text (font-size-lg).",
 
   "globals.lead":
-    "Corner radius is a named set of levels (xs→xl), plus special shapes (pill / round). Cards and inputs on this page use md; buttons use xl; the switch track uses pill.",
+    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+  "globals.catActions": "Actions",
+  "globals.catTextInputs": "Text inputs",
+  "globals.catSelection": "Selection",
+  "globals.catCommunication": "Communication",
+  "globals.catContainment": "Containment",
+  "globals.catNavigation": "Navigation",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
@@ -293,7 +303,7 @@ const en = {
   "globals.navRailPaneHome": "Home destination — sample content beside the rail.",
   "globals.navRailPaneSearch": "Search destination — badge count demo (3).",
   "globals.navRailPaneCharts": "Charts destination — notification dot on the icon.",
-  "globals.navRailPaneAll": "Browse every control sample on this Globals page.",
+  "globals.navRailPaneAll": "Browse every control sample on this Components page.",
   "globals.navBarAria": "Sample navigation bar",
   "globals.navBarHelp":
     "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
@@ -307,7 +317,7 @@ const en = {
   "globals.navDrawerSection": "Labels",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "Destination side sheet (360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
+    "Destination side sheet (280dp dense; stock M3 is 360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -322,6 +332,25 @@ const en = {
   "globals.searchBarResultSettings": "Settings",
   "globals.searchBarHelp":
     "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer SearchInput in dense forms.",
+  "globals.bannerText": "A new version is available",
+  "globals.bannerSupporting": "Restart to apply updates when you are ready.",
+  "globals.bannerAction": "Learn more",
+  "globals.bannerDismiss": "Dismiss banner",
+  "globals.bannerShow": "Show banner",
+  "globals.bannerHelp":
+    "Full-width strip under TopAppBar (message + actions + dismiss). Prefer InfoBanner / WarningBanner for inline alerts inside panels.",
+  "globals.listAria": "Sample content list",
+  "globals.listOneLine": "Inbox",
+  "globals.listTwoLine": "Ada Lovelace",
+  "globals.listTwoLineSupporting": "Notes from yesterday’s review",
+  "globals.listOverline": "Label",
+  "globals.listThreeLine": "Design system sync",
+  "globals.listThreeLineSupporting":
+    "Token ladder, Banner strip, and navigation chrome landed on the shared radius band.",
+  "globals.listStatic": "Preferences",
+  "globals.listStaticSupporting": "Non-interactive row (no onClick)",
+  "globals.listHelp":
+    "M3 content List / ListItem (1–3 lines). Prefer ListGroup / ListRow for sidebar master/detail.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -342,15 +371,15 @@ const en = {
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; SearchBar / sheet tops = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; long chrome strips (SearchBar / Banner / BottomAppBar / NavigationDrawer items / sheet tops) = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
-  "globalsInspector.radiusLgUses": "Menus, dialogs, nav drawer items, scrollbar thumb",
+  "globalsInspector.radiusLgUses": "Menus, dialogs, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
-  "globalsInspector.radius2xlUses": "Large soft shells",
-  "globalsInspector.radius3xlUses": "SearchBar shell, bottom sheet top corners",
+  "globalsInspector.radius3xlUses":
+    "SearchBar, Banner, BottomAppBar, NavigationDrawer items, sheet tops",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
@@ -360,13 +389,11 @@ const en = {
   "globalsInspector.radiusMdHint":
     "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
   "globalsInspector.radiusLgHint":
-    "Larger chrome: dropdown menus, dialogs, NavigationDrawer destinations, scrollbar thumbs.",
+    "Larger chrome: dropdown menus, dialogs, scrollbar thumbs.",
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
-  "globalsInspector.radius2xlHint":
-    "Between xl and SearchBar / sheet (3xl). Soft large shells.",
   "globalsInspector.radius3xlHint":
-    "≈28dp SearchBar capsule / docked shell and BottomSheet top edge. Slide this to reshape SearchBar.",
+    "≈28dp long chrome strips: SearchBar, Banner, BottomAppBar, NavigationDrawer destination rows, and BottomSheet top edge. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track, SearchInput",
@@ -415,13 +442,17 @@ const zh: Record<MessageKey, string> = {
   "brand.name": "fynns 沙盒",
 
   "nav.aria": "沙盒页面",
-  "nav.playground": "表面",
-  "nav.globals": "全局",
+  "nav.playground": "预览",
+  "nav.globals": "组件",
   "nav.foundations": "基础",
   "nav.motion": "动效",
   "nav.templates": "模板",
   "nav.templatesTip": "模板与配置导入导出",
   "nav.templatesAria": "模板与配置",
+  "nav.playgroundHint":
+    "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
+  "nav.globalsHint":
+    "按 M3 分类的组件样例（分区默认收起），右侧是圆角 / 形状检查器。",
 
   "topbar.undo": "撤销",
   "topbar.undoTip": "撤销 (Ctrl+Z)",
@@ -459,7 +490,7 @@ const zh: Record<MessageKey, string> = {
   "templates.currentDraft": "当前草稿：{count} 项改动{plural} · 主题 {theme}",
   "templates.savedTitle": "已存模板",
   "templates.savedAria": "已存模板",
-  "templates.empty": "尚无模板。先在「表面 / 全局」调好，再另存为模板。",
+  "templates.empty": "尚无模板。先在「预览 / 组件」调好，再另存为模板。",
   "templates.cardMeta": "{count} 项改动{plural} · {theme} · {when}",
   "templates.apply": "应用",
   "templates.exportOneTip": "下载此模板为 JSON",
@@ -500,7 +531,7 @@ const zh: Record<MessageKey, string> = {
   "preview.cardInfo": "关于这张卡片的更多说明。",
   "preview.cardInfoAria": "更多信息",
   "preview.cardBody":
-    "示例卡片。右侧检查器可调颜色与间距，预览会即时更新。圆角请到「全局」页。",
+    "示例卡片。右侧检查器可调颜色与间距，预览会即时更新。圆角请到「组件」页。",
   "preview.dismiss": "关闭",
   "preview.open": "打开",
   "preview.cardActivated": "已激活 {variant} 卡片",
@@ -602,7 +633,13 @@ const zh: Record<MessageKey, string> = {
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
 
   "globals.lead":
-    "圆角是命名等级（xs→xl），另有特殊形（pill / round）。本页卡片与输入框用 md；按钮用 xl；开关轨道用 pill。",
+    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+  "globals.catActions": "操作",
+  "globals.catTextInputs": "文本输入",
+  "globals.catSelection": "选择",
+  "globals.catCommunication": "沟通与反馈",
+  "globals.catContainment": "容器",
+  "globals.catNavigation": "导航",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
@@ -684,7 +721,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneHome": "首页目的地 — 导航轨旁侧示例内容。",
   "globals.navRailPaneSearch": "搜索目的地 — 数字徽章示例（3）。",
   "globals.navRailPaneCharts": "图表目的地 — 图标上的通知圆点。",
-  "globals.navRailPaneAll": "浏览本页 Globals 中的全部控件样例。",
+  "globals.navRailPaneAll": "浏览本页「组件」中的全部控件样例。",
   "globals.navBarAria": "示例底部导航栏",
   "globals.navBarHelp":
     "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",
@@ -698,7 +735,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSection": "标签",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "目的地侧栏（360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
+    "目的地侧栏（280dp 紧凑；原版 M3 为 360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -713,6 +750,25 @@ const zh: Record<MessageKey, string> = {
   "globals.searchBarResultSettings": "设置",
   "globals.searchBarHelp":
     "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 SearchInput。",
+  "globals.bannerText": "有新版本可用",
+  "globals.bannerSupporting": "准备好后重启即可应用更新。",
+  "globals.bannerAction": "了解更多",
+  "globals.bannerDismiss": "关闭横幅",
+  "globals.bannerShow": "显示横幅",
+  "globals.bannerHelp":
+    "顶栏下全宽条（文案 + 操作 + 关闭）。面板内联提示请优先用 InfoBanner / WarningBanner。",
+  "globals.listAria": "内容列表示例",
+  "globals.listOneLine": "收件箱",
+  "globals.listTwoLine": "Ada Lovelace",
+  "globals.listTwoLineSupporting": "昨天评审留下的备注",
+  "globals.listOverline": "标签",
+  "globals.listThreeLine": "设计系统同步",
+  "globals.listThreeLineSupporting":
+    "Token 阶梯、Banner 条与导航 chrome 已落到同一圆角档。",
+  "globals.listStatic": "偏好设置",
+  "globals.listStaticSupporting": "静态行（无 onClick）",
+  "globals.listHelp":
+    "M3 内容列表 List / ListItem（1–3 行）。侧栏主从列表请优先用 ListGroup / ListRow。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
@@ -733,15 +789,15 @@ const zh: Record<MessageKey, string> = {
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；SearchBar / 表单顶角 = 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；长条 chrome（SearchBar / Banner / BottomAppBar / 导航抽屉项 / 表单顶角）= 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
-  "globalsInspector.radiusLgUses": "菜单、对话框、导航抽屉项、滚动条滑块",
+  "globalsInspector.radiusLgUses": "菜单、对话框、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
-  "globalsInspector.radius2xlUses": "更大的柔和外壳",
-  "globalsInspector.radius3xlUses": "SearchBar 外壳、底部表单顶角",
+  "globalsInspector.radius3xlUses":
+    "SearchBar、Banner、BottomAppBar、导航抽屉项、底部表单顶角",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
@@ -751,13 +807,11 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusMdHint":
     "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
   "globalsInspector.radiusLgHint":
-    "较大界面：下拉菜单、对话框、NavigationDrawer 目的地行、滚动条滑块。",
+    "较大界面：下拉菜单、对话框、滚动条滑块。",
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
-  "globalsInspector.radius2xlHint":
-    "介于 xl 与 SearchBar / 表单顶角 (3xl) 之间的柔和大外壳。",
   "globalsInspector.radius3xlHint":
-    "≈28dp：SearchBar 胶囊 / 挂靠外壳与 BottomSheet 顶边。调这一档即可改 SearchBar 圆角。",
+    "≈28dp 长条 chrome：SearchBar、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道、SearchInput",

@@ -102,7 +102,7 @@ export function BottomSheet({
               aria-label={closeAriaLabel}
               onClick={onClose}
             >
-              <CloseIcon size={24} />
+              <CloseIcon />
             </Button>
           ) : null}
         </div>

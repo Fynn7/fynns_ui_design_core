@@ -5,6 +5,7 @@ import {
   ArrowLeftIcon,
   Avatar,
   Badge,
+  Banner,
   BottomAppBar,
   BottomSheet,
   Button,
@@ -19,6 +20,7 @@ import {
   Checkbox,
   Chip,
   ChipSet,
+  ChevronRightIcon,
   CircularProgress,
   Dialog,
   Divider,
@@ -35,6 +37,8 @@ import {
   Kbd,
   Counter,
   LinearProgress,
+  List,
+  ListItem,
   LayoutGridIcon,
   MenuIcon,
   NavigationBar,
@@ -528,6 +532,47 @@ export function App() {
               B
             </span>
           </div>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            List / ListItem
+          </span>
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "22rem",
+              border: "1px solid var(--fynns-color-border)",
+              borderRadius: "var(--fynns-radius-md)",
+              overflow: "hidden",
+              background: "var(--fynns-color-surface-1)",
+            }}
+          >
+            <List aria-label="Gallery content list">
+              <ListItem
+                headline="Inbox"
+                leading={<FolderOpenIcon />}
+                trailing={<ChevronRightIcon />}
+                trailingSupportingText="24"
+                selected
+                onClick={() => {}}
+              />
+              <Divider inset />
+              <ListItem
+                headline="Ada Lovelace"
+                supportingText="Notes from yesterday’s review"
+                leading={<Avatar name="Ada Lovelace" alt="Ada Lovelace" />}
+                trailingSupportingText="10:24"
+                onClick={() => {}}
+              />
+              <Divider inset />
+              <ListItem
+                overline="Label"
+                headline="Design system sync"
+                supportingText="Token ladder and chrome strips share the radius band."
+                leading={<SearchIcon />}
+                trailing={<ChevronRightIcon />}
+                onClick={() => {}}
+              />
+            </List>
+          </div>
         </div>
       </Section>
 
@@ -538,6 +583,16 @@ export function App() {
           <WarningBanner message="Careful with this." />
           <ErrorBanner message="An error occurred." />
         </Row>
+        <div style={{ width: "100%", maxWidth: "28rem" }}>
+          <Banner
+            variant="tonal"
+            text="A new version is available"
+            supportingText="Restart to apply updates when you are ready."
+            actions={<Button size="sm" variant="ghost">Learn more</Button>}
+            onDismiss={() => undefined}
+            dismissAriaLabel="Dismiss banner"
+          />
+        </div>
       </Section>
 
       <PanelCard title="Panel card" fill={false}>

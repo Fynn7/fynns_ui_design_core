@@ -83,7 +83,7 @@ export function Drawer({
                 aria-label={closeAriaLabel}
                 onClick={onClose}
               >
-                <CloseIcon size={22} />
+                <CloseIcon />
               </Button>
             ) : null}
           </div>

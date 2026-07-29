@@ -6,7 +6,10 @@ import type { SVGProps } from "react";
  */
 export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number };
 
-function svgProps({ size = 16, ...rest }: IconProps) {
+/** Default glyph size in CSS pixels — matches `--fynns-size-icon` (20dp). */
+export const ICON_SIZE = 20;
+
+function svgProps({ size = ICON_SIZE, ...rest }: IconProps) {
   return {
     width: size,
     height: size,
@@ -252,7 +255,10 @@ export function FileIcon(props: IconProps) {
 export function FolderOpenIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>
-      <path d="M6 14l1.5-3.5A2 2 0 0 1 9.3 9.3H20a1 1 0 0 1 .95 1.3l-1.6 5.4A2 2 0 0 1 17.4 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.7.9l.8 1.2a2 2 0 0 0 1.7.9H18a2 2 0 0 1 2 2v1" />
+      {/* Shift down ~2 user units so stroke ink is centered in the 24 viewBox. */}
+      <g transform="translate(0 2)">
+        <path d="M6 14l1.5-3.5A2 2 0 0 1 9.3 9.3H20a1 1 0 0 1 .95 1.3l-1.6 5.4A2 2 0 0 1 17.4 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.7.9l.8 1.2a2 2 0 0 0 1.7.9H18a2 2 0 0 1 2 2v1" />
+      </g>
     </svg>
   );
 }

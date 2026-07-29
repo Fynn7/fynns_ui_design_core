@@ -135,12 +135,16 @@ export function SandboxShell() {
       <Panel className="sandbox-nav" side="left">
         <div className="sandbox-brand">{t("brand.name")}</div>
         <nav className="sandbox-nav-list" aria-label={t("nav.aria")}>
-          <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
-            <NavItemLabel>{t("nav.playground")}</NavItemLabel>
-          </NavItem>
-          <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
-            <NavItemLabel>{t("nav.globals")}</NavItemLabel>
-          </NavItem>
+          <Tooltip content={t("nav.playgroundHint")} side="right">
+            <NavItem active={page === "playground"} onClick={() => setPage("playground")}>
+              <NavItemLabel>{t("nav.playground")}</NavItemLabel>
+            </NavItem>
+          </Tooltip>
+          <Tooltip content={t("nav.globalsHint")} side="right">
+            <NavItem active={page === "globals"} onClick={() => setPage("globals")}>
+              <NavItemLabel>{t("nav.globals")}</NavItemLabel>
+            </NavItem>
+          </Tooltip>
           <NavItem active={page === "foundations"} onClick={() => setPage("foundations")}>
             <NavItemLabel>{t("nav.foundations")}</NavItemLabel>
           </NavItem>

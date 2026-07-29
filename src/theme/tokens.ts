@@ -143,6 +143,11 @@ export const SIZE_TOKENS = {
   "13": "13px",
   "14": "14px",
   "16": "16px",
+  /**
+   * Standard UI / chrome glyph (IconButton, nav destinations, Banner, …).
+   * 20dp — matches Fab `sm` icon; prefer over ad-hoc 16/24.
+   */
+  icon: "1.25rem",
   "20": "20px",
   "22": "22px",
   "24": "24px",
@@ -173,8 +178,10 @@ export const RADIUS_TOKENS = {
   lg: "10px",
   /** M3 extra-large band */
   xl: "16px",
-  "2xl": "24px",
-  /** M3 extra-large / sheet top corners / SearchBar ≈ 28dp. */
+  /**
+   * Long chrome strips ≈ 28dp: SearchBar, Banner, BottomAppBar,
+   * NavigationDrawer items, BottomSheet top corners. (No `2xl` step — unused.)
+   */
   "3xl": "28px",
   pill: "999px",
   round: "50%",
@@ -403,6 +410,7 @@ export const FAB_TOKENS = {
   "size-sm": "2.5rem",
   "size-lg": "6rem",
   "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
   "icon-size-sm": "1.25rem",
   "icon-size-lg": "2.25rem",
   "pad-inline-extended": "1.25rem",
@@ -419,8 +427,14 @@ export const APPBAR_TOKENS = {
   "height-md": "5rem",
   "height-lg": "6.5rem",
   "row-height": "2.5rem",
-  "pad-inline": "0.25rem",
-  /** Title inset under the action row (medium / large). */
+  /** Inline inset for the action row (leading / trailing icons). */
+  "pad-inline": "0.5rem",
+  /**
+   * Hover / state-layer circle for IconButtons (glyph stays default size;
+   * disc is slightly under the 40dp row so it does not dominate).
+   */
+  "action-hover-size": "2.25rem",
+  /** Title inset under the action row (medium / large only). */
   "title-pad-inline": "0.75rem",
   "title-pad-bottom-md": "0.75rem",
   "title-pad-bottom-lg": "1rem",
@@ -446,7 +460,8 @@ export const BOTTOM_APPBAR_TOKENS = {
   "actions-gap": "0.125rem",
   /** IconButton / Fab sm hit target inside the bar. */
   "action-size": "2.5rem",
-  "action-icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "action-icon-size": "1.25rem",
   "fab-pad-inline-end": "0.25rem",
 } as const;
 
@@ -461,7 +476,8 @@ export const SEARCHBAR_TOKENS = {
   height: "3.5rem",
   "pad-inline": "0.25rem",
   "icon-slot": "3rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "input-pad-inline": "0.25rem",
   "font-size": "1rem",
   "line-height": "1.5",
@@ -474,6 +490,46 @@ export const SEARCHBAR_TOKENS = {
   "results-pad-block-end": "0.75rem",
   "results-pad-inline": "0.5rem",
   "results-gap": "0.125rem",
+} as const;
+
+/**
+ * Banner geometry (M3 Banner at 16px rem).
+ * Full-width strip under TopAppBar: message + actions + optional dismiss.
+ * Distinct from inline `*Banner` / `AlertMessageBase` helpers.
+ * `--fynns-banner-<key>`.
+ */
+export const BANNER_TOKENS = {
+  "min-height": "3.25rem",
+  "pad-inline": "1rem",
+  "pad-block": "0.75rem",
+  gap: "0.75rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
+  "text-size": "0.875rem",
+  "text-line": "1.25",
+  "actions-gap": "0.5rem",
+} as const;
+
+/**
+ * M3 content List / ListItem geometry (at 16px rem).
+ * One-line 56dp; two-line 72dp; three-line 88dp. Distinct from sidebar
+ * `ListRow` / `ListGroup` chrome.
+ * `--fynns-list-<key>`.
+ */
+export const LIST_TOKENS = {
+  "height-1": "3.5rem",
+  "height-2": "4.5rem",
+  "height-3": "5.5rem",
+  "pad-inline": "1rem",
+  "pad-block": "0.5rem",
+  gap: "1rem",
+  /** Leading / trailing glyph; matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
+  /**
+   * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
+   * avatar rows share one vertical grid; glyphs center inside the slot.
+   */
+  "leading-width": "2.5rem",
 } as const;
 
 /**
@@ -492,7 +548,8 @@ export const NAVRAIL_TOKENS = {
   /** Padding inside the labeled square (symmetric; keep content off the edge). */
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   /** Outer space around each destination button (keep tight — gap owns rhythm). */
   "item-pad-block": "0",
   /** Space between destination buttons. */
@@ -531,7 +588,8 @@ export const NAVBAR_TOKENS = {
   "indicator-height-icon": "3.5rem",
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "label-size": "0.75rem",
   "label-line": "1.25",
   "label-gap": "0.125rem",
@@ -543,25 +601,27 @@ export const NAVBAR_TOKENS = {
 
 /**
  * Navigation drawer geometry (at 16px rem).
- * Modal / standard destination sheet — 360dp wide; 56dp pill destinations.
+ * Dense destination sheet — 280dp wide; 40dp rows (stock M3 is 360 / 56).
+ * Label / icon sizes stay on the shared chrome glyph scale.
  * `--fynns-navdrawer-<key>`.
  */
 export const NAVDRAWER_TOKENS = {
-  width: "22.5rem",
-  "pad-block": "0.75rem",
-  "pad-inline": "0.75rem",
-  "item-height": "3.5rem",
-  "item-pad-inline-start": "1rem",
-  "item-pad-inline-end": "1.5rem",
-  "item-gap": "0.75rem",
-  "icon-size": "1.5rem",
+  width: "17.5rem",
+  "pad-block": "0.5rem",
+  "pad-inline": "0.5rem",
+  "item-height": "2.5rem",
+  "item-pad-inline-start": "0.75rem",
+  "item-pad-inline-end": "1rem",
+  "item-gap": "0.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "label-size": "0.875rem",
   "label-line": "1.25",
   "headline-size": "0.875rem",
   "headline-line": "1.25",
-  "headline-pad-block": "1.125rem",
-  "headline-pad-inline": "1rem",
-  "section-gap": "0.5rem",
+  "headline-pad-block": "0.5rem",
+  "headline-pad-inline": "0.75rem",
+  "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
 } as const;
 
@@ -759,6 +819,8 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
+  ["banner", BANNER_TOKENS],
+  ["list", LIST_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

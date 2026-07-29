@@ -330,7 +330,7 @@ export function Dialog({
                 aria-label={closeAriaLabel}
                 onClick={close}
               >
-                <CloseIcon size={22} />
+                <CloseIcon />
               </Button>
             ) : null}
           </div>
@@ -414,7 +414,7 @@ export function ConfirmDialog({
           disabled={closeBlocked}
           onClick={cancel}
         >
-          <CloseIcon size={22} />
+          <CloseIcon />
         </Button>
       </div>
       {description ? <p className="fynns-dialog-description">{description}</p> : null}
