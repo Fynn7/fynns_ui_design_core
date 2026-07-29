@@ -25,6 +25,8 @@ import {
   NavigationRailHeader,
   NavigationRailItem,
   NavigationRailMenu,
+  NavigationBar,
+  NavigationBarItem,
   PlusIcon,
   Radio,
   SearchIcon,
@@ -73,6 +75,7 @@ export function GlobalsPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
+  const [barId, setBarId] = useState<"home" | "search" | "charts" | "all">("home");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -348,7 +351,47 @@ export function GlobalsPage() {
             ) : null}
           </div>
         </div>
-        <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
+        <div
+          className="sandbox-globals-navbar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationBar aria-label={t("globals.navBarAria")}>
+            <NavigationBarItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navRailHome")}
+              active={barId === "home"}
+              onClick={() => setBarId("home")}
+            />
+            <NavigationBarItem
+              icon={<SearchIcon />}
+              label={t("globals.navRailSearch")}
+              active={barId === "search"}
+              badge={3}
+              onClick={() => setBarId("search")}
+            />
+            <NavigationBarItem
+              icon={<BarChartIcon />}
+              label={t("globals.navRailCharts")}
+              active={barId === "charts"}
+              badge
+              onClick={() => setBarId("charts")}
+            />
+            <NavigationBarItem
+              icon={<LayoutGridIcon />}
+              label={t("globals.navRailAll")}
+              active={barId === "all"}
+              onClick={() => setBarId("all")}
+            />
+          </NavigationBar>
+        </div>
+        <p className="sandbox-help">{t("globals.navBarHelp")}</p>
       </section>
 
       <section

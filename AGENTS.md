@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `navbar`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -377,6 +377,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top-end corner.
   `labelVisibility`: `labeled` | `selected` | `unlabeled`. Prefer `NavItem` +
   `Panel` for full sidebar rows; icon-only items need `aria-label`.
+  **NavigationBar** `{ labelVisibility?, children }` + **NavigationBarItem**
+  `{ icon, label?, active?, alwaysShowLabel?, badge? }` — horizontal bottom
+  destinations (80dp, 3–5 items). Same labelVisibility + square
+  `secondary-container` highlight as the rail; badge via `NavigationRailBadge`
+  (count folds into the item accessible name). Prefer `NavigationRail` on
+  medium+ layouts.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`

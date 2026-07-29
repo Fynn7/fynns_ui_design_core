@@ -471,6 +471,29 @@ export const NAVRAIL_TOKENS = {
   "badge-nudge": "0.125rem",
 } as const;
 
+/**
+ * Navigation bar geometry (at 16px rem).
+ * Horizontal bottom destinations (3–5); container 80dp.
+ * Destination highlight matches NavigationRail (square labeled / 56 icon-only).
+ * `--fynns-navbar-<key>`.
+ */
+export const NAVBAR_TOKENS = {
+  height: "5rem",
+  "pad-inline": "0.5rem",
+  "indicator-size-labeled": "4rem",
+  "indicator-height-icon": "3.5rem",
+  "indicator-pad-block": "0.5rem",
+  "indicator-pad-inline": "0.5rem",
+  "icon-size": "1.5rem",
+  "label-size": "0.75rem",
+  "label-line": "1.25",
+  "label-gap": "0.125rem",
+  "badge-dot": "0.375rem",
+  "badge-size": "1rem",
+  "badge-font-size": "0.6875rem",
+  "badge-nudge": "0.125rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -665,6 +688,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
+  ["navbar", NAVBAR_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

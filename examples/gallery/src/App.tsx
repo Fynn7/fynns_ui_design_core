@@ -35,6 +35,8 @@ import {
   LinearProgress,
   LayoutGridIcon,
   MenuIcon,
+  NavigationBar,
+  NavigationBarItem,
   NavigationRail,
   NavigationRailHeader,
   NavigationRailItem,
@@ -405,6 +407,23 @@ export function App() {
             <NavigationRailItem icon={<SettingsIcon />} label="Settings" badge />
             <NavigationRailItem icon={<LayoutGridIcon />} label="All" />
           </NavigationRail>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationBar aria-label="Navigation bar">
+            <NavigationBarItem icon={<FolderOpenIcon />} label="Home" active />
+            <NavigationBarItem icon={<SearchIcon />} label="Search" badge={2} />
+            <NavigationBarItem icon={<SettingsIcon />} label="Settings" badge />
+            <NavigationBarItem icon={<LayoutGridIcon />} label="All" />
+          </NavigationBar>
         </div>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>

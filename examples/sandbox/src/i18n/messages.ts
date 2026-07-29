@@ -294,6 +294,9 @@ const en = {
   "globals.navRailPaneSearch": "Search destination — badge count demo (3).",
   "globals.navRailPaneCharts": "Charts destination — notification dot on the icon.",
   "globals.navRailPaneAll": "Browse every control sample on this Globals page.",
+  "globals.navBarAria": "Sample navigation bar",
+  "globals.navBarHelp":
+    "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -648,6 +651,9 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneSearch": "搜索目的地 — 数字徽章示例（3）。",
   "globals.navRailPaneCharts": "图表目的地 — 图标上的通知圆点。",
   "globals.navRailPaneAll": "浏览本页 Globals 中的全部控件样例。",
+  "globals.navBarAria": "示例底部导航栏",
+  "globals.navBarHelp":
+    "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
