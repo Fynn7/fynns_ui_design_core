@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -366,6 +366,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
   Prefer `Panel` for sidebar chrome.
+  **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
+  action bar (56dp dense; stock M3 is 80dp). Actions start-aligned with 40dp
+  targets; optional FAB sits inside the bar (no cradle cutout). Prefer
+  `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /

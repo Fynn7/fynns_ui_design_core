@@ -308,6 +308,12 @@ const en = {
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
     "Destination side sheet (360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
+  "globals.bottomAppBarAria": "Sample bottom app bar",
+  "globals.bottomAppBarSearch": "Search",
+  "globals.bottomAppBarArchive": "Archive",
+  "globals.bottomAppBarDelete": "Delete",
+  "globals.bottomAppBarHelp":
+    "Bottom action chrome (56dp dense) with optional FAB inside the bar. Prefer NavigationBar for destinations.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -676,6 +682,12 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
     "目的地侧栏（360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
+  "globals.bottomAppBarAria": "示例底部应用栏",
+  "globals.bottomAppBarSearch": "搜索",
+  "globals.bottomAppBarArchive": "归档",
+  "globals.bottomAppBarDelete": "删除",
+  "globals.bottomAppBarHelp":
+    "底部操作栏（56dp 紧凑），可选 FAB 放在栏内。目的地导航请优先用 NavigationBar。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",

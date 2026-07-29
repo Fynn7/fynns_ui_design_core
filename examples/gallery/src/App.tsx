@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   AlertCircleIcon,
+  ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
   Badge,
+  BottomAppBar,
   BottomSheet,
   Button,
   Card,
@@ -63,6 +65,7 @@ import {
   ToggleGroup,
   Tooltip,
   TopAppBar,
+  TrashIcon,
   WarningBanner,
   applyFynnsThemeMode,
   getFynnsThemeMode,
@@ -379,6 +382,35 @@ export function App() {
                   <SearchIcon />
                 </IconButton>
               </Tooltip>
+            }
+          />
+        </div>
+        <div style={{ width: "100%", maxWidth: "24rem" }}>
+          <BottomAppBar
+            aria-label="Bottom app bar"
+            actions={
+              <>
+                <Tooltip content="Search">
+                  <IconButton aria-label="Search">
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Archive">
+                  <IconButton aria-label="Archive">
+                    <ArchiveIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Delete">
+                  <IconButton aria-label="Delete">
+                    <TrashIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+            floatingActionButton={
+              <Fab size="sm" aria-label="Create">
+                <PlusIcon />
+              </Fab>
             }
           />
         </div>

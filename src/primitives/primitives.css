@@ -4936,3 +4936,64 @@
     transition: none;
   }
 }
+
+/* ---------- BottomAppBar (M3 bottom app bar, densified) ---------- */
+.fynns-bottom-app-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-bottomappbar-height);
+  height: var(--fynns-bottomappbar-height);
+  margin: 0;
+  padding-block: var(--fynns-bottomappbar-pad-block);
+  padding-inline: var(--fynns-bottomappbar-pad-inline);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-sm);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-bottom-app-bar-actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-bottomappbar-actions-gap);
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+/* Match Fab sm: 40dp targets so ghost IconButtons fill the dense bar. */
+.fynns-bottom-app-bar-actions .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+  padding: 0;
+}
+
+.fynns-bottom-app-bar-actions .fynns-btn--icon svg {
+  width: var(--fynns-bottomappbar-action-icon-size);
+  height: var(--fynns-bottomappbar-action-icon-size);
+}
+
+.fynns-bottom-app-bar-fab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-inline-end: var(--fynns-bottomappbar-fab-pad-inline-end);
+}
+
+.fynns-bottom-app-bar-fab .fynns-fab--sm {
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+}

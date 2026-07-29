@@ -430,6 +430,23 @@ export const APPBAR_TOKENS = {
 } as const;
 
 /**
+ * Bottom app bar geometry (at 16px rem).
+ * Dense 56dp (below stock M3 80dp) for tool chrome — matches TopAppBar densification.
+ * Actions / FAB share a 40dp control size inside the bar (M3: FAB inside, no cradle).
+ * `--fynns-bottomappbar-<key>`.
+ */
+export const BOTTOM_APPBAR_TOKENS = {
+  height: "3.5rem",
+  "pad-inline": "0.5rem",
+  "pad-block": "0.25rem",
+  "actions-gap": "0.125rem",
+  /** IconButton / Fab sm hit target inside the bar. */
+  "action-size": "2.5rem",
+  "action-icon-size": "1.5rem",
+  "fab-pad-inline-end": "0.25rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -712,6 +729,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
+  ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

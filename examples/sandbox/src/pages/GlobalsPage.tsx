@@ -1,8 +1,10 @@
 import {
+  ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
   Badge,
   BarChartIcon,
+  BottomAppBar,
   BottomSheet,
   Button,
   Card,
@@ -40,6 +42,7 @@ import {
   ToggleGroup,
   TopAppBar,
   Tooltip,
+  TrashIcon,
   UploadIcon,
   ControlRow,
   ControlStack,
@@ -491,6 +494,48 @@ export function GlobalsPage() {
           />
         </NavigationDrawer>
         <p className="sandbox-help">{t("globals.navDrawerHelp")}</p>
+        <div
+          className="sandbox-globals-bottom-app-bar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <BottomAppBar
+            aria-label={t("globals.bottomAppBarAria")}
+            actions={
+              <>
+                <Tooltip content={t("globals.bottomAppBarSearch")}>
+                  <IconButton aria-label={t("globals.bottomAppBarSearch")}>
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.bottomAppBarArchive")}>
+                  <IconButton aria-label={t("globals.bottomAppBarArchive")}>
+                    <ArchiveIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.bottomAppBarDelete")}>
+                  <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                    <TrashIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+            floatingActionButton={
+              <Tooltip content={t("globals.fabTip")}>
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            }
+          />
+        </div>
+        <p className="sandbox-help">{t("globals.bottomAppBarHelp")}</p>
       </section>
 
       <section
