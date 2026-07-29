@@ -805,9 +805,11 @@
 }
 
 .sandbox-globals-swatches {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
   gap: var(--fynns-space-md);
+  align-items: start;
+  width: 100%;
 }
 
 .sandbox-globals-swatch {
@@ -815,19 +817,23 @@
   flex-direction: column;
   align-items: center;
   gap: var(--fynns-space-xs);
-  max-width: 5.5rem;
+  min-width: 0;
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
   text-align: center;
 }
 
 .sandbox-globals-swatch-uses {
-  line-height: var(--fynns-line-height-tight, 1.25);
+  display: block;
+  width: 100%;
+  line-height: var(--fynns-line-height-snug);
+  overflow-wrap: anywhere;
 }
 
 .sandbox-globals-swatch-box {
   width: 3.5rem;
   height: 3.5rem;
+  flex: 0 0 auto;
   background: var(--fynns-color-surface-2);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
 }
