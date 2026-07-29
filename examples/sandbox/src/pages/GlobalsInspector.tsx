@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "@fynns/ui";
 import { useMemo } from "react";
-import { useLocale } from "../i18n";
+import { useLocale, type MessageKey } from "../i18n";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { ApplyChangesControl } from "./ApplyChangesControl";
@@ -20,43 +20,73 @@ function parseLengthToPx(value: string): number {
   return Math.round(n);
 }
 
-const EDITABLE_RADIUS = [
+type RadiusRow = {
+  key: string;
+  label: string;
+  max: number;
+  usesKey: MessageKey;
+  hintKey: MessageKey;
+};
+
+/** Every editable `--fynns-radius-*` length step (must match RADIUS_TOKENS). */
+const EDITABLE_RADIUS: ReadonlyArray<RadiusRow> = [
+  {
+    key: "2xs",
+    label: "2xs",
+    max: 8,
+    usesKey: "globalsInspector.radius2xsUses",
+    hintKey: "globalsInspector.radius2xsHint",
+  },
   {
     key: "xs",
     label: "xs",
     max: 16,
-    usesKey: "globalsInspector.radiusXsUses" as const,
-    hintKey: "globalsInspector.radiusXsHint" as const,
+    usesKey: "globalsInspector.radiusXsUses",
+    hintKey: "globalsInspector.radiusXsHint",
   },
   {
     key: "sm",
     label: "sm",
     max: 20,
-    usesKey: "globalsInspector.radiusSmUses" as const,
-    hintKey: "globalsInspector.radiusSmHint" as const,
+    usesKey: "globalsInspector.radiusSmUses",
+    hintKey: "globalsInspector.radiusSmHint",
   },
   {
     key: "md",
     label: "md",
     max: 28,
-    usesKey: "globalsInspector.radiusMdUses" as const,
-    hintKey: "globalsInspector.radiusMdHint" as const,
+    usesKey: "globalsInspector.radiusMdUses",
+    hintKey: "globalsInspector.radiusMdHint",
   },
   {
     key: "lg",
     label: "lg",
     max: 32,
-    usesKey: "globalsInspector.radiusLgUses" as const,
-    hintKey: "globalsInspector.radiusLgHint" as const,
+    usesKey: "globalsInspector.radiusLgUses",
+    hintKey: "globalsInspector.radiusLgHint",
   },
   {
     key: "xl",
     label: "xl",
     max: 40,
-    usesKey: "globalsInspector.radiusXlUses" as const,
-    hintKey: "globalsInspector.radiusXlHint" as const,
+    usesKey: "globalsInspector.radiusXlUses",
+    hintKey: "globalsInspector.radiusXlHint",
   },
-] as const;
+  {
+    key: "2xl",
+    label: "2xl",
+    max: 48,
+    usesKey: "globalsInspector.radius2xlUses",
+    hintKey: "globalsInspector.radius2xlHint",
+  },
+  {
+    key: "3xl",
+    label: "3xl",
+    max: 56,
+    usesKey: "globalsInspector.radius3xlUses",
+    hintKey: "globalsInspector.radius3xlHint",
+  },
+];
 
 const READONLY_RADIUS = [
   {
@@ -79,10 +109,11 @@ const READONLY_RADIUS = [
   },
 ] as const;
 
-const LADDER_KEYS = ["xs", "sm", "md", "lg", "xl"] as const;
+const LADDER_KEYS = EDITABLE_RADIUS.map((r) => r.key);
 
 /**
  * Global shape inspector: edits `--fynns-radius-*` for the whole UI core.
+ * Must list every key from RADIUS_TOKENS (editable or read-only).
  */
 export function GlobalsInspector() {
   const { t, plural } = useLocale();

@@ -1,8 +1,10 @@
 import {
+  ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
   Badge,
   BarChartIcon,
+  BottomAppBar,
   BottomSheet,
   Button,
   Card,
@@ -15,6 +17,7 @@ import {
   Collapsible,
   Divider,
   Fab,
+  FileIcon,
   FolderOpenIcon,
   IconButton,
   Input,
@@ -25,15 +28,24 @@ import {
   NavigationRailHeader,
   NavigationRailItem,
   NavigationRailMenu,
+  NavigationBar,
+  NavigationBarItem,
+  NavigationDrawer,
+  NavigationDrawerHeadline,
+  NavigationDrawerItem,
   PlusIcon,
   Radio,
   SearchIcon,
+  SearchBar,
+  SearchBarResult,
   Select,
   SettingsIcon,
   Switch,
   ToggleGroup,
   TopAppBar,
   Tooltip,
+  TrashIcon,
+  UploadIcon,
   ControlRow,
   ControlStack,
   Grid,
@@ -73,6 +85,13 @@ export function GlobalsPage() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
+  const [barId, setBarId] = useState<"home" | "search" | "charts" | "all">("home");
+  const [drawerId, setDrawerId] = useState<"inbox" | "sent" | "drafts" | "settings">(
+    "inbox",
+  );
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -348,7 +367,224 @@ export function GlobalsPage() {
             ) : null}
           </div>
         </div>
-        <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
+        <div
+          className="sandbox-globals-navbar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationBar aria-label={t("globals.navBarAria")}>
+            <NavigationBarItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navRailHome")}
+              active={barId === "home"}
+              onClick={() => setBarId("home")}
+            />
+            <NavigationBarItem
+              icon={<SearchIcon />}
+              label={t("globals.navRailSearch")}
+              active={barId === "search"}
+              badge={3}
+              onClick={() => setBarId("search")}
+            />
+            <NavigationBarItem
+              icon={<BarChartIcon />}
+              label={t("globals.navRailCharts")}
+              active={barId === "charts"}
+              badge
+              onClick={() => setBarId("charts")}
+            />
+            <NavigationBarItem
+              icon={<LayoutGridIcon />}
+              label={t("globals.navRailAll")}
+              active={barId === "all"}
+              onClick={() => setBarId("all")}
+            />
+          </NavigationBar>
+        </div>
+        <p className="sandbox-help">{t("globals.navBarHelp")}</p>
+        <div
+          className="sandbox-globals-navdrawer"
+          style={{
+            display: "flex",
+            width: "100%",
+            maxWidth: "28rem",
+            height: "18rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationDrawer
+            variant="standard"
+            aria-label={t("globals.navDrawerAria")}
+            headline={t("globals.navDrawerHeadline")}
+          >
+            <NavigationDrawerItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navDrawerInbox")}
+              active={drawerId === "inbox"}
+              badge={24}
+              onClick={() => setDrawerId("inbox")}
+            />
+            <NavigationDrawerItem
+              icon={<UploadIcon />}
+              label={t("globals.navDrawerSent")}
+              active={drawerId === "sent"}
+              onClick={() => setDrawerId("sent")}
+            />
+            <NavigationDrawerHeadline>
+              {t("globals.navDrawerSection")}
+            </NavigationDrawerHeadline>
+            <NavigationDrawerItem
+              icon={<FileIcon />}
+              label={t("globals.navDrawerDrafts")}
+              active={drawerId === "drafts"}
+              badge
+              onClick={() => setDrawerId("drafts")}
+            />
+            <NavigationDrawerItem
+              icon={<SettingsIcon />}
+              label={t("globals.navDrawerSettings")}
+              active={drawerId === "settings"}
+              onClick={() => setDrawerId("settings")}
+            />
+          </NavigationDrawer>
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDrawerOpen(true)}>
+            {t("globals.navDrawerOpen")}
+          </Button>
+        </div>
+        <NavigationDrawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          aria-label={t("globals.navDrawerModalAria")}
+          headline={t("globals.navDrawerHeadline")}
+        >
+          <NavigationDrawerItem
+            icon={<FolderOpenIcon />}
+            label={t("globals.navDrawerInbox")}
+            active={drawerId === "inbox"}
+            badge={24}
+            onClick={() => {
+              setDrawerId("inbox");
+              setDrawerOpen(false);
+            }}
+          />
+          <NavigationDrawerItem
+            icon={<UploadIcon />}
+            label={t("globals.navDrawerSent")}
+            active={drawerId === "sent"}
+            onClick={() => {
+              setDrawerId("sent");
+              setDrawerOpen(false);
+            }}
+          />
+          <NavigationDrawerItem
+            icon={<SettingsIcon />}
+            label={t("globals.navDrawerSettings")}
+            active={drawerId === "settings"}
+            onClick={() => {
+              setDrawerId("settings");
+              setDrawerOpen(false);
+            }}
+          />
+        </NavigationDrawer>
+        <p className="sandbox-help">{t("globals.navDrawerHelp")}</p>
+        <div
+          className="sandbox-globals-bottom-app-bar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <BottomAppBar
+            aria-label={t("globals.bottomAppBarAria")}
+            actions={
+              <>
+                <Tooltip content={t("globals.bottomAppBarSearch")}>
+                  <IconButton aria-label={t("globals.bottomAppBarSearch")}>
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.bottomAppBarArchive")}>
+                  <IconButton aria-label={t("globals.bottomAppBarArchive")}>
+                    <ArchiveIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.bottomAppBarDelete")}>
+                  <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                    <TrashIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+            floatingActionButton={
+              <Tooltip content={t("globals.fabTip")}>
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            }
+          />
+        </div>
+        <p className="sandbox-help">{t("globals.bottomAppBarHelp")}</p>
+        <div
+          className="sandbox-globals-search-bar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            ariaLabel={t("globals.searchBarAria")}
+            placeholder={t("globals.searchBarPlaceholder")}
+            clearAriaLabel={t("globals.searchBarClear")}
+            expanded={searchExpanded}
+            onExpandedChange={setSearchExpanded}
+            onSearch={() => setSearchExpanded(false)}
+          >
+            {(
+              [
+                t("globals.searchBarResultLibs"),
+                t("globals.searchBarResultDocs"),
+                t("globals.searchBarResultSettings"),
+              ] as const
+            )
+              .filter((label) =>
+                searchQuery.trim()
+                  ? label.toLowerCase().includes(searchQuery.trim().toLowerCase())
+                  : true,
+              )
+              .map((label) => (
+                <SearchBarResult
+                  key={label}
+                  onClick={() => {
+                    setSearchQuery(label);
+                    setSearchExpanded(false);
+                  }}
+                >
+                  {label}
+                </SearchBarResult>
+              ))}
+          </SearchBar>
+        </div>
+        <p className="sandbox-help">{t("globals.searchBarHelp")}</p>
       </section>
 
       <section

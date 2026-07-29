@@ -294,6 +294,34 @@ const en = {
   "globals.navRailPaneSearch": "Search destination — badge count demo (3).",
   "globals.navRailPaneCharts": "Charts destination — notification dot on the icon.",
   "globals.navRailPaneAll": "Browse every control sample on this Globals page.",
+  "globals.navBarAria": "Sample navigation bar",
+  "globals.navBarHelp":
+    "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
+  "globals.navDrawerAria": "Sample navigation drawer",
+  "globals.navDrawerModalAria": "Modal navigation drawer",
+  "globals.navDrawerHeadline": "Mail",
+  "globals.navDrawerInbox": "Inbox",
+  "globals.navDrawerSent": "Sent",
+  "globals.navDrawerDrafts": "Drafts",
+  "globals.navDrawerSettings": "Settings",
+  "globals.navDrawerSection": "Labels",
+  "globals.navDrawerOpen": "Open modal drawer",
+  "globals.navDrawerHelp":
+    "Destination side sheet (360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
+  "globals.bottomAppBarAria": "Sample bottom app bar",
+  "globals.bottomAppBarSearch": "Search",
+  "globals.bottomAppBarArchive": "Archive",
+  "globals.bottomAppBarDelete": "Delete",
+  "globals.bottomAppBarHelp":
+    "Bottom action chrome (56dp dense) with optional FAB inside the bar. Prefer NavigationBar for destinations.",
+  "globals.searchBarAria": "Search the library",
+  "globals.searchBarPlaceholder": "Search…",
+  "globals.searchBarClear": "Clear search",
+  "globals.searchBarResultLibs": "Libraries",
+  "globals.searchBarResultDocs": "Documentation",
+  "globals.searchBarResultSettings": "Settings",
+  "globals.searchBarHelp":
+    "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer SearchInput in dense forms.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -310,39 +338,48 @@ const en = {
   "globals.swatchLgUses": "menus, dialogs",
   "globals.swatchXlUses": "buttons, soft shells",
   "globals.swatchesSpecialHelp":
-    "Special (not in this row): pill = switch track / search field; round = switch thumb; none = sharp.",
+    "Special (not in this row): pill = switch track / SearchInput; round = switch thumb; none = sharp.",
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Cards / inputs = md; buttons = xl; badges / chips = sm; switch capsule = pill (read-only below). Save named bundles via Templates JSON export — no built-in radius presets.",
+    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; SearchBar / sheet tops = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+  "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
-  "globalsInspector.radiusLgUses": "Menus, dialogs, drawers",
+  "globalsInspector.radiusLgUses": "Menus, dialogs, nav drawer items, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
+  "globalsInspector.radius2xlUses": "Large soft shells",
+  "globalsInspector.radius3xlUses": "SearchBar shell, bottom sheet top corners",
+  "globalsInspector.radius2xsHint":
+    "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
-    "Smallest level (M3 XS ≈ 4dp). Keep below sm on the scale.",
+    "Smallest general level (M3 XS ≈ 4dp). Keep below sm on the scale.",
   "globalsInspector.radiusSmHint":
     "Compact chrome: badges, toggle groups, toast action chips — not the default Button.",
   "globalsInspector.radiusMdHint":
     "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
   "globalsInspector.radiusLgHint":
-    "Larger chrome: dropdown menus, dialogs, and drawers.",
+    "Larger chrome: dropdown menus, dialogs, NavigationDrawer destinations, scrollbar thumbs.",
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
+  "globalsInspector.radius2xlHint":
+    "Between xl and SearchBar / sheet (3xl). Soft large shells.",
+  "globalsInspector.radius3xlHint":
+    "≈28dp SearchBar capsule / docked shell and BottomSheet top edge. Slide this to reshape SearchBar.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
-  "globalsInspector.radiusPillUses": "Switch track, search field",
+  "globalsInspector.radiusPillUses": "Switch track, SearchInput",
   "globalsInspector.radiusRoundUses": "Switch thumb (circle)",
   "globalsInspector.radiusNoneHint":
     "Sharp corners (0). Use when a control must meet a hard edge.",
   "globalsInspector.radiusPillHint":
-    "Pill shape (999px): switch track, search field, fully rounded chips — higher than xl on purpose.",
+    "Pill shape (999px): switch track, SearchInput — higher than xl on purpose. Readonly; SearchBar uses radius-3xl.",
   "globalsInspector.radiusRoundHint":
     "Circle (50%): switch thumb and other round controls.",
   "globalsInspector.resetLadder": "Reset levels",
   "globalsInspector.resetLadderTip":
-    "Restore radius xs–xl to baseline; keep color and other overrides",
+    "Restore radius 2xs–3xl to baseline; keep color and other overrides",
   "globalsInspector.toastReset": "Radius levels reset to baseline",
 
   "hue.presetsAria": "Accent color presets",
@@ -648,6 +685,34 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneSearch": "搜索目的地 — 数字徽章示例（3）。",
   "globals.navRailPaneCharts": "图表目的地 — 图标上的通知圆点。",
   "globals.navRailPaneAll": "浏览本页 Globals 中的全部控件样例。",
+  "globals.navBarAria": "示例底部导航栏",
+  "globals.navBarHelp":
+    "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",
+  "globals.navDrawerAria": "示例导航抽屉",
+  "globals.navDrawerModalAria": "模态导航抽屉",
+  "globals.navDrawerHeadline": "邮件",
+  "globals.navDrawerInbox": "收件箱",
+  "globals.navDrawerSent": "已发送",
+  "globals.navDrawerDrafts": "草稿",
+  "globals.navDrawerSettings": "设置",
+  "globals.navDrawerSection": "标签",
+  "globals.navDrawerOpen": "打开模态抽屉",
+  "globals.navDrawerHelp":
+    "目的地侧栏（360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
+  "globals.bottomAppBarAria": "示例底部应用栏",
+  "globals.bottomAppBarSearch": "搜索",
+  "globals.bottomAppBarArchive": "归档",
+  "globals.bottomAppBarDelete": "删除",
+  "globals.bottomAppBarHelp":
+    "底部操作栏（56dp 紧凑），可选 FAB 放在栏内。目的地导航请优先用 NavigationBar。",
+  "globals.searchBarAria": "搜索资料库",
+  "globals.searchBarPlaceholder": "搜索…",
+  "globals.searchBarClear": "清除搜索",
+  "globals.searchBarResultLibs": "资料库",
+  "globals.searchBarResultDocs": "文档",
+  "globals.searchBarResultSettings": "设置",
+  "globals.searchBarHelp":
+    "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 SearchInput。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",
@@ -664,39 +729,48 @@ const zh: Record<MessageKey, string> = {
   "globals.swatchLgUses": "菜单、对话框",
   "globals.swatchXlUses": "按钮、柔和外壳",
   "globals.swatchesSpecialHelp":
-    "特殊形（不在上排）：pill = 开关轨道 / 搜索框；round = 开关圆钮；none = 直角。",
+    "特殊形（不在上排）：pill = 开关轨道 / SearchInput；round = 开关圆钮；none = 直角。",
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。卡片 / 输入 = md；按钮 = xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。命名配置请用模板 JSON 导出 —— 无内置圆角预设。",
+    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；SearchBar / 表单顶角 = 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+  "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
-  "globalsInspector.radiusLgUses": "菜单、对话框、抽屉",
+  "globalsInspector.radiusLgUses": "菜单、对话框、导航抽屉项、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
+  "globalsInspector.radius2xlUses": "更大的柔和外壳",
+  "globalsInspector.radius3xlUses": "SearchBar 外壳、底部表单顶角",
+  "globalsInspector.radius2xsHint":
+    "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
-    "最小圆角（M3 XS ≈ 4dp）。在尺度上应小于 sm。",
+    "通用最小圆角（M3 XS ≈ 4dp）。在尺度上应小于 sm。",
   "globalsInspector.radiusSmHint":
     "紧凑控件：徽章、切换组、toast 操作芯片 —— 不是默认 Button。",
   "globalsInspector.radiusMdHint":
     "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
   "globalsInspector.radiusLgHint":
-    "较大界面：下拉菜单、对话框与抽屉。",
+    "较大界面：下拉菜单、对话框、NavigationDrawer 目的地行、滚动条滑块。",
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
+  "globalsInspector.radius2xlHint":
+    "介于 xl 与 SearchBar / 表单顶角 (3xl) 之间的柔和大外壳。",
+  "globalsInspector.radius3xlHint":
+    "≈28dp：SearchBar 胶囊 / 挂靠外壳与 BottomSheet 顶边。调这一档即可改 SearchBar 圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
-  "globalsInspector.radiusPillUses": "开关轨道、搜索框",
+  "globalsInspector.radiusPillUses": "开关轨道、SearchInput",
   "globalsInspector.radiusRoundUses": "开关圆钮（圆形）",
   "globalsInspector.radiusNoneHint":
     "直角 (0)。需要贴齐硬边时使用。",
   "globalsInspector.radiusPillHint":
-    "胶囊形 (999px)：开关轨道、搜索框、全圆角芯片 —— 刻意高于 xl。",
+    "胶囊形 (999px)：开关轨道、SearchInput —— 刻意高于 xl。只读；SearchBar 用 radius-3xl。",
   "globalsInspector.radiusRoundHint":
     "圆形 (50%)：开关圆钮与其他圆形控件。",
   "globalsInspector.resetLadder": "重置等级",
   "globalsInspector.resetLadderTip":
-    "将 radius xs–xl 恢复为基线；保留颜色与其他改动",
+    "将 radius 2xs–3xl 恢复为基线；保留颜色与其他改动",
   "globalsInspector.toastReset": "圆角等级已重置为基线",
 
   "hue.presetsAria": "强调色预设",

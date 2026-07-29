@@ -3270,7 +3270,7 @@
 .fynns-checkbox-box {
   width: var(--fynns-selection-box-size);
   height: var(--fynns-selection-box-size);
-  border-radius: var(--fynns-selection-box-radius);
+  border-radius: var(--fynns-radius-2xs);
   border: var(--fynns-selection-box-outline) solid var(--fynns-color-text-muted);
   background: transparent;
   color: var(--fynns-color-on-accent);
@@ -4525,4 +4525,646 @@
   }
 }
 
+/* ---------- NavigationBar (M3 bottom destinations) ---------- */
+.fynns-nav-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-height: var(--fynns-navbar-height);
+  height: var(--fynns-navbar-height);
+  padding-inline: var(--fynns-navbar-pad-inline);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
 
+.fynns-nav-bar-destinations {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  justify-content: space-around;
+  width: 100%;
+  min-height: 0;
+  gap: 0;
+}
+
+.fynns-nav-bar-item {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-nav-bar-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-nav-bar-indicator {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-navbar-label-gap);
+  box-sizing: border-box;
+  width: var(--fynns-navbar-indicator-size-labeled);
+  max-width: 100%;
+  height: var(--fynns-navbar-indicator-size-labeled);
+  min-width: 0;
+  min-height: var(--fynns-navbar-indicator-size-labeled);
+  max-height: var(--fynns-navbar-indicator-size-labeled);
+  padding-block: var(--fynns-navbar-indicator-pad-block);
+  padding-inline: var(--fynns-navbar-indicator-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  overflow: visible;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-bar-item--icon .fynns-nav-bar-indicator,
+.fynns-nav-bar[data-label-visibility="unlabeled"] .fynns-nav-bar-indicator {
+  width: var(--fynns-navbar-indicator-height-icon);
+  height: var(--fynns-navbar-indicator-height-icon);
+  min-height: var(--fynns-navbar-indicator-height-icon);
+  max-height: var(--fynns-navbar-indicator-height-icon);
+  padding: 0;
+  border-radius: var(--fynns-radius-pill);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-indicator {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-bar-item:active:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-bar-item:focus-visible {
+  outline: none;
+}
+
+.fynns-nav-bar-item:focus-visible .fynns-nav-bar-indicator {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-bar-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navbar-icon-size);
+  height: var(--fynns-navbar-icon-size);
+  overflow: visible;
+}
+
+.fynns-nav-bar-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navbar-icon-size);
+  height: var(--fynns-navbar-icon-size);
+  color: inherit;
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-icon {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item:not(.fynns-nav-bar-item--active) .fynns-nav-bar-icon {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-icon {
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-bar-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Reuse rail badge chrome when NavigationRailBadge is nested in a bar item. */
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge {
+  top: calc(
+    -0.5 * var(--fynns-navbar-badge-size) - var(--fynns-navbar-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navbar-badge-size) - var(--fynns-navbar-badge-nudge)
+  );
+}
+
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge--dot {
+  top: calc(
+    -0.5 * var(--fynns-navbar-badge-dot) - var(--fynns-navbar-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navbar-badge-dot) - var(--fynns-navbar-badge-nudge)
+  );
+  width: var(--fynns-navbar-badge-dot);
+  height: var(--fynns-navbar-badge-dot);
+  min-width: var(--fynns-navbar-badge-dot);
+}
+
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge--large {
+  min-width: var(--fynns-navbar-badge-size);
+  height: var(--fynns-navbar-badge-size);
+  font-size: var(--fynns-navbar-badge-font-size);
+}
+
+.fynns-nav-bar-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navbar-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navbar-label-line);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-label {
+  color: var(--fynns-color-on-secondary-container);
+  font-weight: var(--fynns-font-weight-semibold);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-label {
+  color: var(--fynns-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-bar-indicator {
+    transition: none;
+  }
+}
+
+/* ---------- NavigationDrawer (M3 destination side sheet) ---------- */
+.fynns-dialog-panel--nav-drawer {
+  width: var(--fynns-navdrawer-width);
+  max-width: 100%;
+}
+
+.fynns-dialog-panel--nav-drawer .fynns-nav-drawer {
+  height: 100%;
+}
+
+.fynns-nav-drawer {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: var(--fynns-navdrawer-width);
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding-block: var(--fynns-navdrawer-pad-block);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer--standard {
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-nav-drawer-headline {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding-block: var(--fynns-navdrawer-headline-pad-block);
+  padding-inline: var(--fynns-navdrawer-headline-pad-inline);
+  font-size: var(--fynns-navdrawer-headline-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-navdrawer-headline-line);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-drawer-body {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-section-gap);
+  align-items: stretch;
+  min-height: 0;
+  padding-inline: var(--fynns-navdrawer-pad-inline);
+  overflow: auto;
+}
+
+.fynns-nav-drawer-section-headline {
+  box-sizing: border-box;
+  padding-block: var(--fynns-navdrawer-headline-pad-block);
+  padding-inline: var(--fynns-navdrawer-headline-pad-inline);
+  font-size: var(--fynns-navdrawer-headline-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-navdrawer-headline-line);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-drawer-item {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  width: 100%;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 0;
+  border-radius: var(--fynns-radius-lg);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-nav-drawer-item--active {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-drawer-item:hover:not(:disabled):not(.fynns-nav-drawer-item--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-item--active:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-item:active:not(:disabled):not(.fynns-nav-drawer-item--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-item--active:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-drawer-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+  color: inherit;
+}
+
+.fynns-nav-drawer-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-nav-drawer-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navdrawer-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: inherit;
+}
+
+.fynns-nav-drawer-item--active .fynns-nav-drawer-label {
+  font-weight: var(--fynns-font-weight-semibold);
+}
+
+.fynns-nav-drawer-badge {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  font-size: var(--fynns-navdrawer-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: inherit;
+}
+
+.fynns-nav-drawer-badge--mark {
+  width: var(--fynns-navdrawer-badge-dot);
+  height: var(--fynns-navdrawer-badge-dot);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-drawer-item {
+    transition: none;
+  }
+}
+
+/* ---------- BottomAppBar (M3 bottom app bar, densified) ---------- */
+.fynns-bottom-app-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-bottomappbar-height);
+  height: var(--fynns-bottomappbar-height);
+  margin: 0;
+  padding-block: var(--fynns-bottomappbar-pad-block);
+  padding-inline: var(--fynns-bottomappbar-pad-inline);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-sm);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-bottom-app-bar-actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-bottomappbar-actions-gap);
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+/* Match Fab sm: 40dp targets so ghost IconButtons fill the dense bar. */
+.fynns-bottom-app-bar-actions .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+  padding: 0;
+}
+
+.fynns-bottom-app-bar-actions .fynns-btn--icon svg {
+  width: var(--fynns-bottomappbar-action-icon-size);
+  height: var(--fynns-bottomappbar-action-icon-size);
+}
+
+.fynns-bottom-app-bar-fab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-inline-end: var(--fynns-bottomappbar-fab-pad-inline-end);
+}
+
+.fynns-bottom-app-bar-fab .fynns-fab--sm {
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+}
+
+/* ---------- SearchBar (M3 elevated search) ---------- */
+.fynns-search-bar {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  z-index: var(--fynns-z-dropdown);
+}
+
+/* Collapsed: capsule field. Expanded: one continuous shell (Google-style). */
+.fynns-search-bar-field {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  min-height: var(--fynns-searchbar-height);
+  height: var(--fynns-searchbar-height);
+  padding-inline: var(--fynns-searchbar-pad-inline);
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-md);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-radius var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-search-bar--expanded {
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-lg);
+  overflow: hidden;
+}
+
+.fynns-search-bar--expanded:focus-within {
+  box-shadow:
+    var(--fynns-shadow-lg),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar--expanded .fynns-search-bar-field {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fynns-search-bar--disabled .fynns-search-bar-field {
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-search-bar-leading,
+.fynns-search-bar-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-space-2xs);
+  min-width: var(--fynns-searchbar-icon-slot);
+  height: var(--fynns-searchbar-height);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-search-bar-leading svg {
+  width: var(--fynns-searchbar-icon-size);
+  height: var(--fynns-searchbar-icon-size);
+}
+
+.fynns-search-bar-input {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding-inline: var(--fynns-searchbar-input-pad-inline);
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-searchbar-font-size);
+  line-height: var(--fynns-searchbar-line-height);
+  outline: none;
+  appearance: none;
+}
+
+.fynns-search-bar-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-search-bar-input::-webkit-search-decoration,
+.fynns-search-bar-input::-webkit-search-cancel-button,
+.fynns-search-bar-input::-webkit-search-results-button,
+.fynns-search-bar-input::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+.fynns-search-bar:not(.fynns-search-bar--expanded) .fynns-search-bar-field:focus-within {
+  box-shadow:
+    var(--fynns-shadow-md),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+/* Results share the expanded shell. Suggestion hover stays slightly squarer
+   (`radius-sm`) and is inset from the shell edge so it does not fight the
+   large outer `--fynns-radius-3xl` curve (Google Search pattern). */
+.fynns-search-bar-results {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-searchbar-results-gap);
+  max-height: var(--fynns-searchbar-results-max-height);
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
+  overflow: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-search-bar-result {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: 2.5rem;
+  margin: 0;
+  padding-block: var(--fynns-space-xs);
+  padding-inline: var(--fynns-space-md);
+  border: 0;
+  border-radius: var(--fynns-radius-sm);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-search-bar-result:hover:not(:disabled),
+.fynns-search-bar-result--active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar-result:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-search-bar-field {
+    transition: none;
+  }
+}

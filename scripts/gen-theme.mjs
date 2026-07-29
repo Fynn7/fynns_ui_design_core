@@ -86,7 +86,7 @@ button {
 
 *::-webkit-scrollbar-thumb {
   background-color: var(--fynns-scrollbar-thumb);
-  border-radius: var(--fynns-scrollbar-thumb-radius);
+  border-radius: var(--fynns-radius-lg);
   border: var(--fynns-scrollbar-thumb-border) solid transparent;
   background-clip: padding-box;
 }

@@ -11,6 +11,7 @@ Machine contract: [`consume.json`](consume.json).
 3. Alias name is **`@fynns/ui`** → `packages/fynns_ui_design_core/src/index.ts`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit submodule sources for consumer features; bump the pin instead.
+6. **TypeScript:** set consumer `compilerOptions.target` and `lib` to **ES2022** (or later). `tsc` follows `@fynns/ui` into this repo’s `.ts` sources (e.g. `String.replaceAll`); `ES2020` alone will fail typecheck even when Vite builds fine.
 
 ## One-shot install (any consumer repo)
 
@@ -57,6 +58,18 @@ npm run consume:install -- --target ../my-app --json
 Useful flags: `--check`, `--wire-only`, `--skip-wire`, `--dry-run`, `--vite <file>`, `--tsconfig <file>`, `--submodule-path <path>`, `--branch <name>`.
 
 ## After install
+
+Ensure the consumer `tsconfig` (example):
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "paths": { "@fynns/ui": ["./packages/fynns_ui_design_core/src/index.ts"] }
+  }
+}
+```
 
 ```tsx
 import { Button, Collapsible, Toaster } from "@fynns/ui";

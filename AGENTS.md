@@ -106,6 +106,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
   `npm run gen:theme`.
+- **DON'T** invent private radius CSS variables outside `--fynns-radius-*`
+  (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
+  `--fynns-<component>-*-radius`). Corner radius **must** use
+  `var(--fynns-radius-<key>)` from [`RADIUS_TOKENS`](src/theme/tokens.ts).
+  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Globals shape
+  inspector (editable slider or explicit read-only row). If a new radius step is
+  required, add it to `RADIUS_TOKENS` **and** to
+  [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
+  same change — never ship a radius token that the GUI cannot show.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Every overlay, toggle, and
   toast here is self-developed. Extend these primitives instead.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
@@ -131,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -193,6 +202,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
 - **SearchInput** `{ leadingIcon?, trailing?, wrapClassName?, invalid?, size?,
   supportingText?, errorText?, ...inputAttrs }`.
+- **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
+  expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
+  elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
+  field + results merge into one docked shell. Prefer `SearchInput` for dense
+  form rows.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -366,6 +380,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
   Prefer `Panel` for sidebar chrome.
+  **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
+  action bar (56dp dense; stock M3 is 80dp). Actions start-aligned with 40dp
+  targets; optional FAB sits inside the bar (no cradle cutout). Prefer
+  `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
@@ -377,6 +395,19 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   top-end corner.
   `labelVisibility`: `labeled` | `selected` | `unlabeled`. Prefer `NavItem` +
   `Panel` for full sidebar rows; icon-only items need `aria-label`.
+  **NavigationBar** `{ labelVisibility?, children }` + **NavigationBarItem**
+  `{ icon, label?, active?, alwaysShowLabel?, badge? }` — horizontal bottom
+  destinations (80dp, 3–5 items). Same labelVisibility + square
+  `secondary-container` highlight as the rail; badge via `NavigationRailBadge`
+  (count folds into the item accessible name). Prefer `NavigationRail` on
+  medium+ layouts.
+  **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
+  side?, modal?, headline?, children }` + **NavigationDrawerItem**
+  `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
+  destination side sheet (360dp). Modal overlays with scrim (default
+  `side="left"`); `standard` is permanent in-layout. Item highlight is a
+  full-width row highlight (`secondary-container`, `--fynns-radius-lg`); trailing badge for counts.
+  Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`

@@ -156,9 +156,15 @@ export const SIZE_TOKENS = {
  * Corner radii. `--fynns-radius-<key>`.
  * T-shirt keys roughly track the M3 shape scale (see `tokens.m3-draft.ts`);
  * numeric values remain fynns overrides, not a 1:1 M3 copy.
+ *
+ * Hard rule: every key here MUST appear in the sandbox Globals shape inspector
+ * (`GlobalsInspector` EDITABLE_RADIUS or READONLY_RADIUS). Do not add radius
+ * tokens under other groups (`--fynns-<component>-*-radius`).
  */
 export const RADIUS_TOKENS = {
   none: "0",
+  /** Finer than xs — checkbox box (M3 ≈ 2dp). */
+  "2xs": "2px",
   /** M3 extra-small ≈ 4dp */
   xs: "4px",
   sm: "6px",
@@ -168,9 +174,8 @@ export const RADIUS_TOKENS = {
   /** M3 extra-large band */
   xl: "16px",
   "2xl": "24px",
-  /** M3 extra-large / sheet top corners ≈ 28dp. */
+  /** M3 extra-large / sheet top corners / SearchBar ≈ 28dp. */
   "3xl": "28px",
-  "flyout-glyph": "5px",
   pill: "999px",
   round: "50%",
 } as const;
@@ -337,7 +342,6 @@ export const TOGGLE_TOKENS = {
  */
 export const SELECTION_TOKENS = {
   "box-size": "1.125rem",
-  "box-radius": "2px",
   "box-outline": "2px",
   "radio-size": "1.25rem",
   "radio-dot": "0.625rem",
@@ -430,6 +434,49 @@ export const APPBAR_TOKENS = {
 } as const;
 
 /**
+ * Bottom app bar geometry (at 16px rem).
+ * Dense 56dp (below stock M3 80dp) for tool chrome — matches TopAppBar densification.
+ * Actions / FAB share a 40dp control size inside the bar (M3: FAB inside, no cradle).
+ * `--fynns-bottomappbar-<key>`.
+ */
+export const BOTTOM_APPBAR_TOKENS = {
+  height: "3.5rem",
+  "pad-inline": "0.5rem",
+  "pad-block": "0.25rem",
+  "actions-gap": "0.125rem",
+  /** IconButton / Fab sm hit target inside the bar. */
+  "action-size": "2.5rem",
+  "action-icon-size": "1.5rem",
+  "fab-pad-inline-end": "0.25rem",
+} as const;
+
+/**
+ * Search bar geometry (M3 SearchBar at 16px rem).
+ * Collapsed 56dp capsule; expanded merges field + results into one shell.
+ * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
+ * Prefer `SearchInput` for dense form rows.
+ * `--fynns-searchbar-<key>`.
+ */
+export const SEARCHBAR_TOKENS = {
+  height: "3.5rem",
+  "pad-inline": "0.25rem",
+  "icon-slot": "3rem",
+  "icon-size": "1.5rem",
+  "input-pad-inline": "0.25rem",
+  "font-size": "1rem",
+  "line-height": "1.5",
+  "results-max-height": "20rem",
+  /**
+   * Inset around suggestion rows (Google-style): hover chips stay off the
+   * shell’s large `--fynns-radius-3xl` corners — do not match radii; inset instead.
+   */
+  "results-pad-block-start": "0.5rem",
+  "results-pad-block-end": "0.75rem",
+  "results-pad-inline": "0.5rem",
+  "results-gap": "0.125rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -462,13 +509,60 @@ export const NAVRAIL_TOKENS = {
   /** Small badge (dot) on destination icon. */
   "badge-dot": "0.375rem",
   /** Large badge min size (count / short text). */
-  "badge-size": "1rem",
-  "badge-font-size": "0.6875rem",
+  "badge-size": "0.875rem",
+  "badge-font-size": "0.625rem",
   /**
    * Extra outward shift past the icon corner so badge centers (dot and
    * large) share one point and clear the glyph.
    */
   "badge-nudge": "0.125rem",
+} as const;
+
+/**
+ * Navigation bar geometry (at 16px rem).
+ * Horizontal bottom destinations (3–5); container 80dp.
+ * Destination highlight matches NavigationRail (square labeled / 56 icon-only).
+ * `--fynns-navbar-<key>`.
+ */
+export const NAVBAR_TOKENS = {
+  height: "5rem",
+  "pad-inline": "0.5rem",
+  "indicator-size-labeled": "4rem",
+  "indicator-height-icon": "3.5rem",
+  "indicator-pad-block": "0.5rem",
+  "indicator-pad-inline": "0.5rem",
+  "icon-size": "1.5rem",
+  "label-size": "0.75rem",
+  "label-line": "1.25",
+  "label-gap": "0.125rem",
+  "badge-dot": "0.375rem",
+  "badge-size": "0.875rem",
+  "badge-font-size": "0.625rem",
+  "badge-nudge": "0.125rem",
+} as const;
+
+/**
+ * Navigation drawer geometry (at 16px rem).
+ * Modal / standard destination sheet — 360dp wide; 56dp pill destinations.
+ * `--fynns-navdrawer-<key>`.
+ */
+export const NAVDRAWER_TOKENS = {
+  width: "22.5rem",
+  "pad-block": "0.75rem",
+  "pad-inline": "0.75rem",
+  "item-height": "3.5rem",
+  "item-pad-inline-start": "1rem",
+  "item-pad-inline-end": "1.5rem",
+  "item-gap": "0.75rem",
+  "icon-size": "1.5rem",
+  "label-size": "0.875rem",
+  "label-line": "1.25",
+  "headline-size": "0.875rem",
+  "headline-line": "1.25",
+  "headline-pad-block": "1.125rem",
+  "headline-pad-inline": "1rem",
+  "section-gap": "0.5rem",
+  "badge-dot": "0.375rem",
 } as const;
 
 /** Focus ring geometry. `--fynns-focus-<key>`. */
@@ -540,7 +634,6 @@ export const SCROLLBAR_TOKENS = {
   "thumb-hover": "rgba(22, 159, 177, 0.384)",
   "thumb-active": "rgba(22, 159, 177, 0.678)",
   track: "transparent",
-  "thumb-radius": "10px",
   "thumb-border": "2px",
 } as const;
 
@@ -664,7 +757,11 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
+  ["bottomappbar", BOTTOM_APPBAR_TOKENS],
+  ["searchbar", SEARCHBAR_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
+  ["navbar", NAVBAR_TOKENS],
+  ["navdrawer", NAVDRAWER_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

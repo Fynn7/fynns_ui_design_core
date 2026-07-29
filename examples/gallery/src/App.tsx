@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import {
   AlertCircleIcon,
+  ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
   Badge,
+  BottomAppBar,
   BottomSheet,
   Button,
   Card,
@@ -35,6 +37,11 @@ import {
   LinearProgress,
   LayoutGridIcon,
   MenuIcon,
+  NavigationBar,
+  NavigationBarItem,
+  NavigationDrawer,
+  NavigationDrawerHeadline,
+  NavigationDrawerItem,
   NavigationRail,
   NavigationRailHeader,
   NavigationRailItem,
@@ -43,6 +50,8 @@ import {
   PlusIcon,
   Radio,
   SearchIcon,
+  SearchBar,
+  SearchBarResult,
   SearchInput,
   Select,
   SettingsIcon,
@@ -58,6 +67,7 @@ import {
   ToggleGroup,
   Tooltip,
   TopAppBar,
+  TrashIcon,
   WarningBanner,
   applyFynnsThemeMode,
   getFynnsThemeMode,
@@ -86,6 +96,8 @@ export function App() {
   const [count, setCount] = useState(5);
   const [speed, setSpeed] = useState(40);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchExpanded, setSearchExpanded] = useState(false);
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -234,6 +246,23 @@ export function App() {
           <Textarea placeholder="Textarea" style={{ minHeight: "3rem", width: "16rem" }} />
           <Counter value={count} onChange={setCount} min={1} max={20} ariaLabel="Count" />
           <SearchInput placeholder="Search..." wrapClassName="" style={{ width: "16rem" }} />
+          <div style={{ width: "20rem", position: "relative", zIndex: 1 }}>
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              ariaLabel="Search gallery"
+              placeholder="Search…"
+              expanded={searchExpanded}
+              onExpandedChange={setSearchExpanded}
+            >
+              <SearchBarResult onClick={() => { setSearchQuery("Buttons"); setSearchExpanded(false); }}>
+                Buttons
+              </SearchBarResult>
+              <SearchBarResult onClick={() => { setSearchQuery("Cards"); setSearchExpanded(false); }}>
+                Cards
+              </SearchBarResult>
+            </SearchBar>
+          </div>
           <Select
             value={fruit}
             onChange={setFruit}
@@ -377,6 +406,35 @@ export function App() {
             }
           />
         </div>
+        <div style={{ width: "100%", maxWidth: "24rem" }}>
+          <BottomAppBar
+            aria-label="Bottom app bar"
+            actions={
+              <>
+                <Tooltip content="Search">
+                  <IconButton aria-label="Search">
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Archive">
+                  <IconButton aria-label="Archive">
+                    <ArchiveIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Delete">
+                  <IconButton aria-label="Delete">
+                    <TrashIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+            floatingActionButton={
+              <Fab size="sm" aria-label="Create">
+                <PlusIcon />
+              </Fab>
+            }
+          />
+        </div>
         <div
           style={{
             display: "inline-flex",
@@ -405,6 +463,43 @@ export function App() {
             <NavigationRailItem icon={<SettingsIcon />} label="Settings" badge />
             <NavigationRailItem icon={<LayoutGridIcon />} label="All" />
           </NavigationRail>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationBar aria-label="Navigation bar">
+            <NavigationBarItem icon={<FolderOpenIcon />} label="Home" active />
+            <NavigationBarItem icon={<SearchIcon />} label="Search" badge={2} />
+            <NavigationBarItem icon={<SettingsIcon />} label="Settings" badge />
+            <NavigationBarItem icon={<LayoutGridIcon />} label="All" />
+          </NavigationBar>
+        </div>
+        <div
+          style={{
+            height: "16rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationDrawer
+            variant="standard"
+            aria-label="Navigation drawer"
+            headline="Mail"
+          >
+            <NavigationDrawerItem icon={<FolderOpenIcon />} label="Inbox" active badge={24} />
+            <NavigationDrawerItem icon={<SearchIcon />} label="Sent" />
+            <NavigationDrawerHeadline>Labels</NavigationDrawerHeadline>
+            <NavigationDrawerItem icon={<SettingsIcon />} label="Settings" badge />
+          </NavigationDrawer>
         </div>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
