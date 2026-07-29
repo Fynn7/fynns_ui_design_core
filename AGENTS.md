@@ -416,7 +416,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
   side?, modal?, headline?, children }` + **NavigationDrawerItem**
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
-  destination side sheet (360dp). Modal overlays with scrim (default
+  destination side sheet (280dp dense; stock M3 is 360dp). Modal overlays with scrim (default
   `side="left"`); `standard` is permanent in-layout. Item highlight is a
   full-width row highlight (`secondary-container`, `--fynns-radius-3xl`); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.

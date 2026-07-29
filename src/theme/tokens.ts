@@ -579,26 +579,27 @@ export const NAVBAR_TOKENS = {
 
 /**
  * Navigation drawer geometry (at 16px rem).
- * Modal / standard destination sheet — 360dp wide; 56dp pill destinations.
+ * Dense destination sheet — 280dp wide; 40dp rows (stock M3 is 360 / 56).
+ * Label / icon sizes stay on the shared chrome glyph scale.
  * `--fynns-navdrawer-<key>`.
  */
 export const NAVDRAWER_TOKENS = {
-  width: "22.5rem",
-  "pad-block": "0.75rem",
-  "pad-inline": "0.75rem",
-  "item-height": "3.5rem",
-  "item-pad-inline-start": "1rem",
-  "item-pad-inline-end": "1.5rem",
-  "item-gap": "0.75rem",
+  width: "17.5rem",
+  "pad-block": "0.5rem",
+  "pad-inline": "0.5rem",
+  "item-height": "2.5rem",
+  "item-pad-inline-start": "0.75rem",
+  "item-pad-inline-end": "1rem",
+  "item-gap": "0.5rem",
   /** Matches `--fynns-size-icon` (20dp). */
   "icon-size": "1.25rem",
   "label-size": "0.875rem",
   "label-line": "1.25",
   "headline-size": "0.875rem",
   "headline-line": "1.25",
-  "headline-pad-block": "1.125rem",
-  "headline-pad-inline": "1rem",
-  "section-gap": "0.5rem",
+  "headline-pad-block": "0.5rem",
+  "headline-pad-inline": "0.75rem",
+  "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
 } as const;
 

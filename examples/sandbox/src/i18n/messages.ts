@@ -307,7 +307,7 @@ const en = {
   "globals.navDrawerSection": "Labels",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "Destination side sheet (360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
+    "Destination side sheet (280dp dense; stock M3 is 360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -703,7 +703,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSection": "标签",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "目的地侧栏（360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
+    "目的地侧栏（280dp 紧凑；原版 M3 为 360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

@@ -4567,7 +4567,6 @@
 
 .fynns-nav-rail-item--active .fynns-nav-rail-label {
   color: var(--fynns-color-on-secondary-container);
-  font-weight: var(--fynns-font-weight-semibold);
 }
 
 .fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
@@ -4791,7 +4790,6 @@
 
 .fynns-nav-bar-item--active .fynns-nav-bar-label {
   color: var(--fynns-color-on-secondary-container);
-  font-weight: var(--fynns-font-weight-semibold);
 }
 
 .fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
@@ -4965,10 +4963,6 @@
   font-weight: var(--fynns-font-weight-medium);
   line-height: var(--fynns-navdrawer-label-line);
   color: inherit;
-}
-
-.fynns-nav-drawer-item--active .fynns-nav-drawer-label {
-  font-weight: var(--fynns-font-weight-semibold);
 }
 
 .fynns-nav-drawer-badge {

@@ -313,7 +313,7 @@ export function GlobalsPage() {
             <NavigationRailMenu>
               <Tooltip content={t("globals.navRailMenu")} side="right">
                 <IconButton aria-label={t("globals.navRailMenu")}>
-                  <MenuIcon size={24} />
+                  <MenuIcon />
                 </IconButton>
               </Tooltip>
             </NavigationRailMenu>
@@ -415,9 +415,9 @@ export function GlobalsPage() {
           className="sandbox-globals-navdrawer"
           style={{
             display: "flex",
-            width: "100%",
-            maxWidth: "28rem",
-            height: "18rem",
+            width: "fit-content",
+            maxWidth: "100%",
+            height: "14rem",
             border: "1px solid var(--fynns-color-border)",
             borderRadius: "var(--fynns-radius-md)",
             overflow: "hidden",
