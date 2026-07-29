@@ -1017,7 +1017,7 @@
      row when they fit; increase wrap gap when they cannot. */
   .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--fynns-space-md);
+    /* Keep row-to-row gap from the base toolbar rule (lg). */
   }
 
   .sandbox-preview
@@ -1026,11 +1026,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--fynns-space-sm);
+    /* Label → controls: keep a clear vertical rhythm when stacked. */
+    gap: var(--fynns-space-xs);
     width: 100%;
     max-width: 100%;
     grid-template-columns: unset;
-    row-gap: unset;
   }
 
   .sandbox-preview

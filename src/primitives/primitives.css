@@ -1470,6 +1470,8 @@
   /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
   grid-template-columns: var(--fynns-layout-control-row-label) max-content;
   column-gap: var(--fynns-space-sm);
+  /* Used when a consumer stacks label above controls (narrow toolbars). */
+  row-gap: var(--fynns-space-xs);
   align-items: center;
 }
 

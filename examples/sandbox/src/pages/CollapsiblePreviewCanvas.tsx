@@ -27,7 +27,7 @@ export function CollapsiblePreviewCanvas() {
 
   return (
     <div className="sandbox-preview">
-      <ControlStack className="sandbox-preview-toolbar" columns={2}>
+      <ControlStack className="sandbox-preview-toolbar" columns={2} gap="md">
         <ControlRow label={t("preview.states")}>
           <Switch
             size="sm"
