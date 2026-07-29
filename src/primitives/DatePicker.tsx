@@ -400,8 +400,20 @@ export type DatePickerDialogProps = {
   labels?: DatePickerLabels;
 };
 
+function formatSupportingDate(value: DateValue): string {
+  const parts = parseDateValue(value);
+  if (!parts) return "";
+  const date = new Date(parts.year, parts.monthIndex, parts.day);
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
 /**
  * Modal DatePicker — temporary selection until Confirm; Cancel / Esc discards.
+ * Minimal M3 modal cues: extra-large corners + supporting selected-date line.
  */
 export function DatePickerDialog({
   open,
@@ -437,18 +449,29 @@ export function DatePickerDialog({
     onOpenChange(false);
   };
 
+  const supporting = draft ? formatSupportingDate(draft) : null;
+
   return (
     <DialogFrame
       open={open}
       onClose={cancel}
       variant="centered"
       labelledBy={titleId}
+      panelClassName="fynns-datepicker-dialog"
     >
-      <div className="fynns-dialog-head fynns-dialog-head--centered">
+      <div className="fynns-dialog-head fynns-dialog-head--centered fynns-datepicker-dialog-head">
         <span aria-hidden />
-        <h2 id={titleId} className="fynns-dialog-title">
-          {title}
-        </h2>
+        <div className="fynns-datepicker-dialog-titles">
+          <h2 id={titleId} className="fynns-dialog-title">
+            {title}
+          </h2>
+          <p
+            className="fynns-datepicker-dialog-supporting"
+            aria-live="polite"
+          >
+            {supporting ?? "\u00a0"}
+          </p>
+        </div>
         <Button
           iconOnly
           variant="ghost"
