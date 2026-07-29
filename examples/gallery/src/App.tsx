@@ -217,6 +217,8 @@ export function App() {
         <Row>
           <Button>Default</Button>
           <Button variant="primary">Primary</Button>
+          <Button variant="tonal">Tonal</Button>
+          <Button variant="elevated">Elevated</Button>
           <Button variant="danger">Danger</Button>
           <Button variant="ghost">Ghost</Button>
           <Button active>Active</Button>
