@@ -6,7 +6,10 @@ import type { SVGProps } from "react";
  */
 export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number };
 
-function svgProps({ size = 16, ...rest }: IconProps) {
+/** Default glyph size in CSS pixels — matches `--fynns-size-icon` (20dp). */
+export const ICON_SIZE = 20;
+
+function svgProps({ size = ICON_SIZE, ...rest }: IconProps) {
   return {
     width: size,
     height: size,

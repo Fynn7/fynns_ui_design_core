@@ -114,7 +114,7 @@ export const SearchBar = forwardRef(function SearchBar(
     >
       <div className="fynns-search-bar-field">
         <span className="fynns-search-bar-leading">
-          {leading ?? <SearchIcon size={24} aria-hidden />}
+          {leading ?? <SearchIcon aria-hidden />}
         </span>
         <input
           {...rest}
@@ -170,7 +170,7 @@ export const SearchBar = forwardRef(function SearchBar(
                   if (onExpandedChange) setExpanded(true);
                 }}
               >
-                <CloseIcon size={20} />
+                <CloseIcon />
               </IconButton>
             </Tooltip>
           ) : null}

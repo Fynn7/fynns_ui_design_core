@@ -3,12 +3,11 @@ import {
   AlertCircleIcon,
   AlertTriangleIcon,
   CheckCircleIcon,
+  ICON_SIZE,
   InfoIcon,
 } from "./icons";
 
 export type AlertSeverity = "warning" | "error" | "info" | "success";
-
-const DEFAULT_ICON_SIZE = 16;
 
 export type AlertProps = Omit<HTMLAttributes<HTMLDivElement>, "role"> & {
   severity: AlertSeverity;
@@ -19,10 +18,10 @@ export type AlertProps = Omit<HTMLAttributes<HTMLDivElement>, "role"> & {
 };
 
 function defaultIcon(severity: AlertSeverity): ReactNode {
-  if (severity === "error") return <AlertCircleIcon size={DEFAULT_ICON_SIZE} />;
-  if (severity === "warning") return <AlertTriangleIcon size={DEFAULT_ICON_SIZE} />;
-  if (severity === "success") return <CheckCircleIcon size={DEFAULT_ICON_SIZE} />;
-  return <InfoIcon size={DEFAULT_ICON_SIZE} />;
+  if (severity === "error") return <AlertCircleIcon size={ICON_SIZE} />;
+  if (severity === "warning") return <AlertTriangleIcon size={ICON_SIZE} />;
+  if (severity === "success") return <CheckCircleIcon size={ICON_SIZE} />;
+  return <InfoIcon size={ICON_SIZE} />;
 }
 
 /** Inline alert banner. `.fynns-alert` / `.fynns-alert--<severity>`. */

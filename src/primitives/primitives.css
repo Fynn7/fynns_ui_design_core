@@ -213,6 +213,8 @@
 .fynns-btn--icon svg {
   display: block;
   flex-shrink: 0;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 /* ---------- SplitButton ---------- */

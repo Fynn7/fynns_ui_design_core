@@ -99,6 +99,7 @@
   --fynns-size-152: 152px;
   --fynns-size-240: 240px;
   --fynns-size-360: 360px;
+  --fynns-size-icon: 1.25rem;
   --fynns-radius-none: 0;
   --fynns-radius-2xs: 2px;
   --fynns-radius-xs: 4px;
@@ -246,12 +247,12 @@
   --fynns-bottomappbar-pad-block: 0.25rem;
   --fynns-bottomappbar-actions-gap: 0.125rem;
   --fynns-bottomappbar-action-size: 2.5rem;
-  --fynns-bottomappbar-action-icon-size: 1.5rem;
+  --fynns-bottomappbar-action-icon-size: 1.25rem;
   --fynns-bottomappbar-fab-pad-inline-end: 0.25rem;
   --fynns-searchbar-height: 3.5rem;
   --fynns-searchbar-pad-inline: 0.25rem;
   --fynns-searchbar-icon-slot: 3rem;
-  --fynns-searchbar-icon-size: 1.5rem;
+  --fynns-searchbar-icon-size: 1.25rem;
   --fynns-searchbar-input-pad-inline: 0.25rem;
   --fynns-searchbar-font-size: 1rem;
   --fynns-searchbar-line-height: 1.5;
@@ -264,7 +265,7 @@
   --fynns-banner-pad-inline: 1rem;
   --fynns-banner-pad-block: 0.75rem;
   --fynns-banner-gap: 0.75rem;
-  --fynns-banner-icon-size: 1.5rem;
+  --fynns-banner-icon-size: 1.25rem;
   --fynns-banner-text-size: 0.875rem;
   --fynns-banner-text-line: 1.25;
   --fynns-banner-actions-gap: 0.5rem;
@@ -274,7 +275,7 @@
   --fynns-navrail-indicator-size-labeled: 4rem;
   --fynns-navrail-indicator-pad-block: 0.5rem;
   --fynns-navrail-indicator-pad-inline: 0.5rem;
-  --fynns-navrail-icon-size: 1.5rem;
+  --fynns-navrail-icon-size: 1.25rem;
   --fynns-navrail-item-pad-block: 0;
   --fynns-navrail-destinations-gap: 0.5rem;
   --fynns-navrail-pad-block-start: 2.75rem;
@@ -295,7 +296,7 @@
   --fynns-navbar-indicator-height-icon: 3.5rem;
   --fynns-navbar-indicator-pad-block: 0.5rem;
   --fynns-navbar-indicator-pad-inline: 0.5rem;
-  --fynns-navbar-icon-size: 1.5rem;
+  --fynns-navbar-icon-size: 1.25rem;
   --fynns-navbar-label-size: 0.75rem;
   --fynns-navbar-label-line: 1.25;
   --fynns-navbar-label-gap: 0.125rem;
@@ -310,7 +311,7 @@
   --fynns-navdrawer-item-pad-inline-start: 1rem;
   --fynns-navdrawer-item-pad-inline-end: 1.5rem;
   --fynns-navdrawer-item-gap: 0.75rem;
-  --fynns-navdrawer-icon-size: 1.5rem;
+  --fynns-navdrawer-icon-size: 1.25rem;
   --fynns-navdrawer-label-size: 0.875rem;
   --fynns-navdrawer-label-line: 1.25;
   --fynns-navdrawer-headline-size: 0.875rem;

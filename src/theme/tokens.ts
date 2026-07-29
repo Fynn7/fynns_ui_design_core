@@ -143,6 +143,11 @@ export const SIZE_TOKENS = {
   "13": "13px",
   "14": "14px",
   "16": "16px",
+  /**
+   * Standard UI / chrome glyph (IconButton, nav destinations, Banner, …).
+   * 20dp — matches Fab `sm` icon; prefer over ad-hoc 16/24.
+   */
+  icon: "1.25rem",
   "20": "20px",
   "22": "22px",
   "24": "24px",
@@ -405,6 +410,7 @@ export const FAB_TOKENS = {
   "size-sm": "2.5rem",
   "size-lg": "6rem",
   "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
   "icon-size-sm": "1.25rem",
   "icon-size-lg": "2.25rem",
   "pad-inline-extended": "1.25rem",
@@ -454,7 +460,8 @@ export const BOTTOM_APPBAR_TOKENS = {
   "actions-gap": "0.125rem",
   /** IconButton / Fab sm hit target inside the bar. */
   "action-size": "2.5rem",
-  "action-icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "action-icon-size": "1.25rem",
   "fab-pad-inline-end": "0.25rem",
 } as const;
 
@@ -469,7 +476,8 @@ export const SEARCHBAR_TOKENS = {
   height: "3.5rem",
   "pad-inline": "0.25rem",
   "icon-slot": "3rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "input-pad-inline": "0.25rem",
   "font-size": "1rem",
   "line-height": "1.5",
@@ -495,7 +503,8 @@ export const BANNER_TOKENS = {
   "pad-inline": "1rem",
   "pad-block": "0.75rem",
   gap: "0.75rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "text-size": "0.875rem",
   "text-line": "1.25",
   "actions-gap": "0.5rem",
@@ -517,7 +526,8 @@ export const NAVRAIL_TOKENS = {
   /** Padding inside the labeled square (symmetric; keep content off the edge). */
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   /** Outer space around each destination button (keep tight — gap owns rhythm). */
   "item-pad-block": "0",
   /** Space between destination buttons. */
@@ -556,7 +566,8 @@ export const NAVBAR_TOKENS = {
   "indicator-height-icon": "3.5rem",
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "label-size": "0.75rem",
   "label-line": "1.25",
   "label-gap": "0.125rem",
@@ -579,7 +590,8 @@ export const NAVDRAWER_TOKENS = {
   "item-pad-inline-start": "1rem",
   "item-pad-inline-end": "1.5rem",
   "item-gap": "0.75rem",
-  "icon-size": "1.5rem",
+  /** Matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
   "label-size": "0.875rem",
   "label-line": "1.25",
   "headline-size": "0.875rem",

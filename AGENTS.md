@@ -169,6 +169,11 @@ Color tokens (`--fynns-color-*`):
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 
+Standard chrome glyph: `--fynns-size-icon` (`1.25rem` / 20dp) + TS `ICON_SIZE`
+(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar
+action icons share this; Fab `sm` matches. Dense micro glyphs (chip trailing,
+select chevron, steppers) may stay smaller.
+
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
 
