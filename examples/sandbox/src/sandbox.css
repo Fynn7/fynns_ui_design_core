@@ -35,7 +35,8 @@
 .sandbox-nav-list {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-2xs);
+  /* Keep hover/active pills from touching (2xs ≈ 2px is too tight). */
+  gap: var(--fynns-space-sm);
   flex: 1;
 }
 
@@ -856,6 +857,37 @@
   color: var(--fynns-color-text-muted);
 }
 
+.sandbox-globals-navrail {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 36rem;
+  min-height: 26rem;
+  border: 1px solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-globals-navrail-pane {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-lg);
+  border-inline-start: 1px solid var(--fynns-color-border);
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-globals-navrail-pane-body {
+  margin: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-normal, 1.45);
+}
+
 @media (max-width: 900px) {
   .sandbox-root {
     grid-template-columns: 1fr;
@@ -886,7 +918,7 @@
     flex-wrap: wrap;
     flex: 1 1 auto;
     min-width: 0;
-    gap: var(--fynns-space-2xs);
+    gap: var(--fynns-space-sm);
   }
 
   /* NavItem defaults to width:100% for sidebar rows — override for the chip strip. */
@@ -979,16 +1011,54 @@
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
-  /* Toolbar: stack label above controls when the label column would overflow. */
+  /* Toolbar: label above controls when the shared label|control tracks
+     would overflow. Keep control children as a real flex/grid (do not
+     dissolve with display:contents) so Grid x={2} switches stay on one
+     row when they fit; increase wrap gap when they cannot. */
   .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--fynns-space-md);
   }
 
   .sandbox-preview
     > .fynns-control-stack.sandbox-preview-toolbar
     > .fynns-control-row {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--fynns-space-2xs);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fynns-space-sm);
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: unset;
+    row-gap: unset;
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row
+    > .fynns-control-row__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fynns-space-sm);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row
+    > .fynns-control-row__controls
+    > .fynns-grid {
+    /* Flex instead of fixed 2-col grid: stay on one row when width allows,
+       wrap with comfortable gap when the pane is too narrow. */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fynns-space-sm);
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: unset;
   }
 
   .sandbox-preview-grid {

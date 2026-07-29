@@ -4190,3 +4190,334 @@
   }
 }
 
+/* ---------- NavigationRail (M3 anatomy) ---------- */
+.fynns-nav-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-width);
+  min-height: 100%;
+  height: 100%;
+  padding-block: var(--fynns-navrail-pad-block-start) var(--fynns-space-md);
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail[data-has-menu="true"] {
+  padding-block-start: 0;
+}
+
+.fynns-nav-rail-menu {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(
+    var(--fynns-navrail-menu-pad-block) * 2 + var(--fynns-navrail-menu-target)
+  );
+  padding-block: var(--fynns-navrail-menu-pad-block);
+  color: var(--fynns-color-text);
+}
+
+/* M3 menu icon: 24dp glyph inside a 48dp hover/press target. */
+.fynns-nav-rail-menu .fynns-tooltip-trigger {
+  display: inline-flex;
+}
+
+.fynns-nav-rail-menu .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-menu-target);
+  height: var(--fynns-navrail-menu-target);
+  min-width: var(--fynns-navrail-menu-target);
+  min-height: var(--fynns-navrail-menu-target);
+  padding: 0;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon svg {
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+}
+
+.fynns-nav-rail-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding-block: var(--fynns-navrail-header-pad-block);
+  margin-bottom: var(--fynns-navrail-header-gap);
+}
+
+.fynns-nav-rail-destinations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-height: 0;
+}
+
+.fynns-nav-rail--align-center .fynns-nav-rail-destinations {
+  margin-block: auto;
+}
+
+.fynns-nav-rail--align-end .fynns-nav-rail-destinations {
+  margin-block-start: auto;
+}
+
+.fynns-nav-rail-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0;
+  padding: var(--fynns-navrail-item-pad-block) 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-nav-rail-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Full destination highlight: icon + label (not an icon-only pill). */
+.fynns-nav-rail-indicator {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-navrail-label-gap);
+  box-sizing: border-box;
+  width: var(--fynns-navrail-indicator-width);
+  max-width: 100%;
+  height: auto;
+  padding-block: var(--fynns-navrail-indicator-pad-block);
+  padding-inline: var(--fynns-navrail-indicator-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  overflow: visible;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-item--labeled .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-size-labeled);
+  height: var(--fynns-navrail-indicator-size-labeled);
+  min-width: var(--fynns-navrail-indicator-size-labeled);
+  max-width: var(--fynns-navrail-indicator-size-labeled);
+  min-height: var(--fynns-navrail-indicator-size-labeled);
+  max-height: var(--fynns-navrail-indicator-size-labeled);
+  aspect-ratio: 1;
+}
+
+.fynns-nav-rail-item--icon .fynns-nav-rail-indicator,
+.fynns-nav-rail[data-label-visibility="unlabeled"] .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-height-icon);
+  height: var(--fynns-navrail-indicator-height-icon);
+  min-width: var(--fynns-navrail-indicator-height-icon);
+  max-width: var(--fynns-navrail-indicator-height-icon);
+  min-height: var(--fynns-navrail-indicator-height-icon);
+  max-height: var(--fynns-navrail-indicator-height-icon);
+  padding: 0;
+  border-radius: var(--fynns-radius-pill);
+  aspect-ratio: 1;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:active:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:focus-visible {
+  outline: none;
+}
+
+.fynns-nav-rail-item:focus-visible .fynns-nav-rail-indicator {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-rail-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  overflow: visible;
+}
+
+.fynns-nav-rail-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  color: inherit;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-icon {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:not(.fynns-nav-rail-item--active) .fynns-nav-rail-icon {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-icon {
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Badge center shares one anchor: the icon’s top-end corner (half outside).
+ * Size-specific offsets keep the “3” and the red dot on the same center point.
+ */
+.fynns-nav-rail-badge {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-danger);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-navrail-badge-font-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.fynns-nav-rail-badge--dot {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  width: var(--fynns-navrail-badge-dot);
+  height: var(--fynns-navrail-badge-dot);
+  min-width: var(--fynns-navrail-badge-dot);
+  padding: 0;
+}
+
+.fynns-nav-rail-badge--large {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  min-width: var(--fynns-navrail-badge-size);
+  height: var(--fynns-navrail-badge-size);
+  padding-inline: var(--fynns-space-2xs);
+}
+
+.fynns-nav-rail-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navrail-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navrail-label-line);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-label {
+  color: var(--fynns-color-on-secondary-container);
+  font-weight: var(--fynns-font-weight-semibold);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-label {
+  color: var(--fynns-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-rail-indicator {
+    transition: none;
+  }
+}
+
+

@@ -417,6 +417,29 @@ export function PanelLeftIcon(props: IconProps) {
   );
 }
 
+/** M3 navigation rail / drawer menu glyph (hamburger). */
+export function MenuIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+    </svg>
+  );
+}
+
+/** 2×2 grid — “all apps / all components” destinations. */
+export function LayoutGridIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect width="7" height="7" x="3" y="3" rx="1" />
+      <rect width="7" height="7" x="14" y="3" rx="1" />
+      <rect width="7" height="7" x="14" y="14" rx="1" />
+      <rect width="7" height="7" x="3" y="14" rx="1" />
+    </svg>
+  );
+}
+
 export function PanelRightIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

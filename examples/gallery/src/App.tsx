@@ -25,6 +25,7 @@ import {
   DropdownMenuItem,
   ErrorBanner,
   Fab,
+  FolderOpenIcon,
   IconButton,
   InfoBanner,
   InfoHint,
@@ -32,12 +33,19 @@ import {
   Kbd,
   Counter,
   LinearProgress,
+  LayoutGridIcon,
+  MenuIcon,
+  NavigationRail,
+  NavigationRailHeader,
+  NavigationRailItem,
+  NavigationRailMenu,
   PanelCard,
   PlusIcon,
   Radio,
   SearchIcon,
   SearchInput,
   Select,
+  SettingsIcon,
   Slider,
   Spinner,
   SplitButton,
@@ -368,6 +376,35 @@ export function App() {
               </Tooltip>
             }
           />
+        </div>
+        <div
+          style={{
+            display: "inline-flex",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            height: "22rem",
+            background: "var(--fynns-color-app-bg)",
+          }}
+        >
+          <NavigationRail aria-label="Navigation rail">
+            <NavigationRailMenu>
+              <Tooltip content="Menu">
+                <IconButton aria-label="Menu">
+                  <MenuIcon size={24} />
+                </IconButton>
+              </Tooltip>
+            </NavigationRailMenu>
+            <NavigationRailHeader>
+              <Fab size="sm" aria-label="Create">
+                <PlusIcon />
+              </Fab>
+            </NavigationRailHeader>
+            <NavigationRailItem icon={<FolderOpenIcon />} label="Home" active />
+            <NavigationRailItem icon={<SearchIcon />} label="Search" badge={2} />
+            <NavigationRailItem icon={<SettingsIcon />} label="Settings" badge />
+            <NavigationRailItem icon={<LayoutGridIcon />} label="All" />
+          </NavigationRail>
         </div>
         <div style={{ width: "100%", maxWidth: "20rem", display: "grid", gap: "var(--fynns-space-sm)" }}>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>

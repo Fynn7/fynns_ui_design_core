@@ -2,6 +2,7 @@ import {
   ArrowLeftIcon,
   Avatar,
   Badge,
+  BarChartIcon,
   BottomSheet,
   Button,
   Card,
@@ -14,9 +15,16 @@ import {
   Collapsible,
   Divider,
   Fab,
+  FolderOpenIcon,
   IconButton,
   Input,
+  LayoutGridIcon,
   LinearProgress,
+  MenuIcon,
+  NavigationRail,
+  NavigationRailHeader,
+  NavigationRailItem,
+  NavigationRailMenu,
   PlusIcon,
   Radio,
   SearchIcon,
@@ -37,6 +45,15 @@ const SWATCH_KEYS = [
   { key: "xl", usesKey: "globals.swatchXlUses" },
 ] as const satisfies ReadonlyArray<{ key: string; usesKey: MessageKey }>;
 
+type RailId = "home" | "search" | "charts" | "all";
+
+const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
+  home: "globals.navRailPaneHome",
+  search: "globals.navRailPaneSearch",
+  charts: "globals.navRailPaneCharts",
+  all: "globals.navRailPaneAll",
+};
+
 /**
  * Live stage proving `--fynns-radius-*` is system-wide: multiple primitives
  * share the same token ladder (not Card-only).
@@ -51,6 +68,7 @@ export function GlobalsPage() {
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
+  const [railId, setRailId] = useState<RailId>("home");
 
   return (
     <div className="sandbox-globals">
@@ -260,6 +278,68 @@ export function GlobalsPage() {
           checked={appBarScrolled}
           onCheckedChange={setAppBarScrolled}
         />
+        <div className="sandbox-globals-navrail">
+          <NavigationRail aria-label={t("globals.navRailAria")}>
+            <NavigationRailMenu>
+              <Tooltip content={t("globals.navRailMenu")} side="right">
+                <IconButton aria-label={t("globals.navRailMenu")}>
+                  <MenuIcon size={24} />
+                </IconButton>
+              </Tooltip>
+            </NavigationRailMenu>
+            <NavigationRailHeader>
+              <Tooltip content={t("globals.fabTip")} side="right">
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            </NavigationRailHeader>
+            <NavigationRailItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navRailHome")}
+              active={railId === "home"}
+              onClick={() => setRailId("home")}
+            />
+            <NavigationRailItem
+              icon={<SearchIcon />}
+              label={t("globals.navRailSearch")}
+              active={railId === "search"}
+              badge={3}
+              onClick={() => setRailId("search")}
+            />
+            <NavigationRailItem
+              icon={<BarChartIcon />}
+              label={t("globals.navRailCharts")}
+              active={railId === "charts"}
+              badge
+              onClick={() => setRailId("charts")}
+            />
+            <NavigationRailItem
+              icon={<LayoutGridIcon />}
+              label={t("globals.navRailAll")}
+              active={railId === "all"}
+              onClick={() => setRailId("all")}
+            />
+          </NavigationRail>
+          <div className="sandbox-globals-navrail-pane fynns-scroll">
+            <p className="sandbox-globals-navrail-pane-body">
+              {t(RAIL_PANE_BODY[railId])}
+            </p>
+            {railId === "all" ? (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  document
+                    .querySelector(".sandbox-globals-section")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+              >
+                {t("globals.navRailShowAll")}
+              </Button>
+            ) : null}
+          </div>
+        </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
       </section>
 

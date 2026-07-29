@@ -58,6 +58,13 @@ export const COLOR_TOKENS = {
   "accent-container": "rgba(45, 212, 191, 0.2)",
   /** Text/icons on accent-container. */
   "on-accent-container": "#7ee8d8",
+  /**
+   * M3 secondaryContainer — solid tonal fill for NavigationRail / NavigationBar
+   * active indicators (not a translucent overlay).
+   */
+  "secondary-container": "#1a4542",
+  /** Content on secondary-container (M3 onSecondaryContainer). */
+  "on-secondary-container": "#9eeae0",
   /** Quieter divider than border / border-strong. */
   "outline-subtle": "#0a2524",
   success: "#4ade80",
@@ -422,6 +429,48 @@ export const APPBAR_TOKENS = {
   "title-line-lg": "1.25",
 } as const;
 
+/**
+ * Navigation rail geometry (at 16px rem).
+ * Container 80dp; destination highlight wraps icon (+ label when shown).
+ * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
+ * `--fynns-navrail-<key>`.
+ */
+export const NAVRAIL_TOKENS = {
+  width: "5rem",
+  /** Icon-only destination highlight (56×56). */
+  "indicator-width": "3.5rem",
+  "indicator-height-icon": "3.5rem",
+  /** Labeled destination highlight — square, inset from the 80dp rail edge. */
+  "indicator-size-labeled": "4rem",
+  /** Padding inside the labeled square (symmetric; keep content off the edge). */
+  "indicator-pad-block": "0.5rem",
+  "indicator-pad-inline": "0.5rem",
+  "icon-size": "1.5rem",
+  /** Outer space around each destination button (keep tight — gap owns rhythm). */
+  "item-pad-block": "0",
+  /** Space between destination buttons. */
+  "destinations-gap": "0.5rem",
+  "pad-block-start": "2.75rem",
+  "menu-pad-block": "0.75rem",
+  /** Menu control min touch target (48dp). */
+  "menu-target": "3rem",
+  "header-gap": "0.75rem",
+  "header-pad-block": "0.25rem",
+  "label-size": "0.75rem",
+  "label-line": "1.25",
+  "label-gap": "0.125rem",
+  /** Small badge (dot) on destination icon. */
+  "badge-dot": "0.375rem",
+  /** Large badge min size (count / short text). */
+  "badge-size": "1rem",
+  "badge-font-size": "0.6875rem",
+  /**
+   * Extra outward shift past the icon corner so badge centers (dot and
+   * large) share one point and clear the glyph.
+   */
+  "badge-nudge": "0.125rem",
+} as const;
+
 /** Focus ring geometry. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
@@ -525,6 +574,8 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "on-accent": "#ffffff",
       "accent-container": "rgba(13, 148, 136, 0.14)",
       "on-accent-container": "#0f766e",
+      "secondary-container": "#cce8e3",
+      "on-secondary-container": "#0a3d3a",
       "outline-subtle": "#d5e8e4",
       success: "#16a34a",
       warning: "#d97706",
@@ -601,6 +652,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
+  ["navrail", NAVRAIL_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
