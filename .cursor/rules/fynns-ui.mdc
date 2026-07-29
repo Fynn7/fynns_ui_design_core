@@ -18,10 +18,13 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
   ToggleGroup, Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
-  Badge, Avatar, Fab, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
+  Badge, Avatar, Fab, TopAppBar, NavigationRail, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
+  Toolbar / inspector strips: prefer `ControlStack` + `ControlRow` and the
+  `--fynns-layout-control-*` rhythm tokens (see AGENTS.md **Toolbar rhythm**);
+  do not invent ad-hoc gaps.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)

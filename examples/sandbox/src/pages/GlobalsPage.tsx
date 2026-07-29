@@ -1,6 +1,8 @@
 import {
+  ArrowLeftIcon,
   Avatar,
   Badge,
+  BarChartIcon,
   BottomSheet,
   Button,
   Card,
@@ -13,13 +15,28 @@ import {
   Collapsible,
   Divider,
   Fab,
+  FolderOpenIcon,
+  IconButton,
   Input,
+  LayoutGridIcon,
   LinearProgress,
+  MenuIcon,
+  NavigationRail,
+  NavigationRailHeader,
+  NavigationRailItem,
+  NavigationRailMenu,
   PlusIcon,
   Radio,
+  SearchIcon,
   Select,
+  SettingsIcon,
   Switch,
+  ToggleGroup,
+  TopAppBar,
   Tooltip,
+  ControlRow,
+  ControlStack,
+  Grid,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -31,6 +48,15 @@ const SWATCH_KEYS = [
   { key: "lg", usesKey: "globals.swatchLgUses" },
   { key: "xl", usesKey: "globals.swatchXlUses" },
 ] as const satisfies ReadonlyArray<{ key: string; usesKey: MessageKey }>;
+
+type RailId = "home" | "search" | "charts" | "all";
+
+const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
+  home: "globals.navRailPaneHome",
+  search: "globals.navRailPaneSearch",
+  charts: "globals.navRailPaneCharts",
+  all: "globals.navRailPaneAll",
+};
 
 /**
  * Live stage proving `--fynns-radius-*` is system-wide: multiple primitives
@@ -45,6 +71,12 @@ export function GlobalsPage() {
   const [filterOn, setFilterOn] = useState(true);
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [appBarScrolled, setAppBarScrolled] = useState(false);
+  const [railId, setRailId] = useState<RailId>("home");
+  const [rhythmClickable, setRhythmClickable] = useState(true);
+  const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
+  const [rhythmMedia, setRhythmMedia] = useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -170,7 +202,7 @@ export function GlobalsPage() {
           <Avatar size="lg" name="Grace Hopper" alt={t("globals.avatarGrace")} />
           <Avatar alt={t("globals.avatarFallback")} />
           <Avatar
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%232dd4bf' width='40' height='40'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' fill='%23031417' font-size='16' font-family='sans-serif'%3EAL%3C/text%3E%3C/svg%3E"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%230a3d3a' width='40' height='40'/%3E%3Ccircle cx='20' cy='15' r='7' fill='%232dd4bf'/%3E%3Cellipse cx='20' cy='38' rx='14' ry='13' fill='%232dd4bf'/%3E%3C/svg%3E"
             name="Ada Lovelace"
             alt={t("globals.avatarImage")}
           />
@@ -211,7 +243,189 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+        <div
+          className="sandbox-globals-appbar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+          }}
+        >
+          <TopAppBar
+            title={t("globals.appBarTitle")}
+            scrolled={appBarScrolled}
+            leading={
+              <Tooltip content={t("globals.appBarBack")}>
+                <IconButton aria-label={t("globals.appBarBack")}>
+                  <ArrowLeftIcon />
+                </IconButton>
+              </Tooltip>
+            }
+            trailing={
+              <>
+                <Tooltip content={t("globals.appBarSearch")}>
+                  <IconButton aria-label={t("globals.appBarSearch")}>
+                    <SearchIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.appBarSettings")}>
+                  <IconButton aria-label={t("globals.appBarSettings")}>
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
+          />
+        </div>
+        <Switch
+          size="sm"
+          labelSide="end"
+          label={t("globals.appBarScrolled")}
+          checked={appBarScrolled}
+          onCheckedChange={setAppBarScrolled}
+        />
+        <div className="sandbox-globals-navrail">
+          <NavigationRail aria-label={t("globals.navRailAria")}>
+            <NavigationRailMenu>
+              <Tooltip content={t("globals.navRailMenu")} side="right">
+                <IconButton aria-label={t("globals.navRailMenu")}>
+                  <MenuIcon size={24} />
+                </IconButton>
+              </Tooltip>
+            </NavigationRailMenu>
+            <NavigationRailHeader>
+              <Tooltip content={t("globals.fabTip")} side="right">
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            </NavigationRailHeader>
+            <NavigationRailItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.navRailHome")}
+              active={railId === "home"}
+              onClick={() => setRailId("home")}
+            />
+            <NavigationRailItem
+              icon={<SearchIcon />}
+              label={t("globals.navRailSearch")}
+              active={railId === "search"}
+              badge={3}
+              onClick={() => setRailId("search")}
+            />
+            <NavigationRailItem
+              icon={<BarChartIcon />}
+              label={t("globals.navRailCharts")}
+              active={railId === "charts"}
+              badge
+              onClick={() => setRailId("charts")}
+            />
+            <NavigationRailItem
+              icon={<LayoutGridIcon />}
+              label={t("globals.navRailAll")}
+              active={railId === "all"}
+              onClick={() => setRailId("all")}
+            />
+          </NavigationRail>
+          <div className="sandbox-globals-navrail-pane">
+            <p className="sandbox-globals-navrail-pane-body">
+              {t(RAIL_PANE_BODY[railId])}
+            </p>
+            {railId === "all" ? (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  document
+                    .querySelector(".sandbox-globals-section")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+              >
+                {t("globals.navRailShowAll")}
+              </Button>
+            ) : null}
+          </div>
+        </div>
         <p className="sandbox-help">{t("globals.controlsRadiusHelp")}</p>
+      </section>
+
+      <section
+        className="sandbox-globals-section"
+        aria-label={t("globals.rhythmAria")}
+      >
+        <h3 className="sandbox-globals-heading">{t("globals.rhythm")}</h3>
+        <p className="sandbox-help">{t("globals.rhythmLead")}</p>
+        <div className="sandbox-globals-rhythm">
+          <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
+            <ControlRow label={t("globals.rhythmRowContent")}>
+              <Switch
+                size="sm"
+                labelSide="end"
+                label={t("globals.rhythmMedia")}
+                checked={rhythmMedia}
+                onCheckedChange={setRhythmMedia}
+              />
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmRowBehavior")}>
+              <Grid x={2} y="unbounded">
+                <Switch
+                  size="sm"
+                  labelSide="end"
+                  label={t("globals.rhythmClickable")}
+                  checked={rhythmClickable}
+                  onCheckedChange={setRhythmClickable}
+                />
+                <Switch
+                  size="sm"
+                  labelSide="end"
+                  label={t("globals.rhythmDisabled")}
+                  checked={rhythmDisabled}
+                  onCheckedChange={setRhythmDisabled}
+                />
+              </Grid>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmRowActions")}>
+              <ToggleGroup
+                size="compact"
+                value={rhythmAlign}
+                onChange={(id) => setRhythmAlign(id as "start" | "end")}
+                options={[
+                  { value: "start", label: t("globals.rhythmStart") },
+                  { value: "end", label: t("globals.rhythmEnd") },
+                ]}
+              />
+            </ControlRow>
+          </ControlStack>
+          <dl className="sandbox-globals-rhythm-legend">
+            <div>
+              <dt>
+                <code>--fynns-layout-control-stack-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenStack")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-row-column-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenRowCol")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-row-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenRow")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-control-cluster-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenCluster")}</dd>
+            </div>
+          </dl>
+        </div>
+        <p className="sandbox-help">{t("globals.rhythmAgentHint")}</p>
       </section>
 
       <section className="sandbox-globals-section" aria-label={t("globals.surfacesAria")}>

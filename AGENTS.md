@@ -131,7 +131,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `navrail`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -144,7 +144,8 @@ Color tokens (`--fynns-color-*`):
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
-    `accent-ring`, `on-accent`, `accent-container`, `on-accent-container`, `focus`.
+    `accent-ring`, `on-accent`, `accent-container`, `on-accent-container`,
+    `secondary-container`, `on-secondary-container`, `focus`.
   - Lines/text: `border` `#0d2e2c`, `border-strong`, `outline-subtle`, `text` `#e2f0ed`,
     `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
@@ -259,14 +260,35 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   grid for multi-row toolbars; each nested `ControlRow` spans the stack via
   CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
   short rows do not pack the next label into an empty control column.
+  Default row gap is `--fynns-layout-control-stack-gap` (omit `gap` unless you
+  need a deliberate density override via a `--fynns-space-*` t-shirt key).
   **ControlRow** `{ label, children }` — fixed label column
   (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
-  inside `ControlStack` spans the shared tracks via subgrid. **Grid** `{ x?, y?, gap?,
+  inside `ControlStack` spans the shared tracks via subgrid. Gaps:
+  `--fynns-layout-control-row-column-gap` (horizontal),
+  `--fynns-layout-control-row-gap` (stacked label above controls),
+  `--fynns-layout-control-cluster-gap` (siblings in the controls cluster).
+  **Grid** `{ x?, y?, gap?,
   children }` — X×Y layout; each axis is a fixed count or `"unbounded"` (default).
   Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
   are added (does not reflow into more columns). Tracks size to `max-content` and
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
-  match `columns` to `Grid`’s `x`. **Checkbox** `{ label, checked, onCheckedChange,
+  match `columns` to `Grid`’s `x`.
+
+  **Toolbar rhythm** (single source — do not invent ad-hoc gaps):
+
+  | Role | Token |
+  | --- | --- |
+  | Between `ControlRow`s | `--fynns-layout-control-stack-gap` |
+  | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
+  | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
+  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+
+  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
+  sample + legend: sandbox **Globals → Toolbar rhythm**. Values live in
+  [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
+  `npm run gen:theme`.
+  **Checkbox** `{ label, checked, onCheckedChange,
   indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
   (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
   checked, onCheckedChange, name, value, invalid?, disabled? }` — M3 circular
@@ -340,6 +362,21 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Pass into `CardHeader`’s `avatar` slot.
   **Fab** `{ children, label?, size?: "sm"|"md"|"lg" }` — M3 floating action (56dp);
   pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
+  **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
+  top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
+  at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
+  Prefer `Panel` for sidebar chrome.
+  **NavigationRail** `{ labelVisibility?, alignment?, children }` +
+  **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
+  24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
+  **NavigationRailHeader** / **NavigationRailItem**
+  `{ icon, label?, active?, alwaysShowLabel?, badge? }` / **NavigationRailBadge** —
+  M3 compact vertical destinations (80dp). Active/hover highlight is a square
+  wrapping icon + label (`secondary-container`); icon-only stays a 56dp
+  pill. Optional badge (dot or count) centers on the icon’s
+  top-end corner.
+  `labelVisibility`: `labeled` | `selected` | `unlabeled`. Prefer `NavItem` +
+  `Panel` for full sidebar rows; icon-only items need `aria-label`.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
@@ -353,7 +390,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
-  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`. Components also accept
+  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,
+  `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system

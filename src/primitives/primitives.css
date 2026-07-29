@@ -1420,6 +1420,7 @@
   grid-template-columns:
     var(--fynns-layout-control-row-label)
     repeat(var(--fynns-control-stack-cols, 2), max-content);
+  gap: var(--fynns-layout-control-stack-gap);
   /* start — not stretch: a narrower ToggleGroup must not expand to the
      shared column track width of a wider Switch in the same column. */
   align-items: center;
@@ -1437,7 +1438,9 @@
   grid-template-columns: subgrid;
   width: auto;
   max-width: none;
-  column-gap: unset;
+  /* Label | controls on shared tracks; cluster gap is for __controls / Grid siblings. */
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  row-gap: var(--fynns-layout-control-row-gap);
   align-items: center;
   /* Subgrid does not inherit the stack's justify-items; without this,
      a short ToggleGroup stretches to the shared track of a wider Switch. */
@@ -1469,7 +1472,9 @@
   box-sizing: border-box;
   /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
   grid-template-columns: var(--fynns-layout-control-row-label) max-content;
-  column-gap: var(--fynns-space-sm);
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  /* Used when a consumer stacks label above controls (narrow toolbars). */
+  row-gap: var(--fynns-layout-control-row-gap);
   align-items: center;
 }
 
@@ -1488,7 +1493,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--fynns-space-sm);
+  gap: var(--fynns-layout-control-cluster-gap);
   min-width: min-content;
   overflow: visible;
 }
@@ -4086,3 +4091,438 @@
 .fynns-fab-label {
   white-space: nowrap;
 }
+
+/* ---------- TopAppBar (M3 top app bar) ---------- */
+.fynns-top-app-bar {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--fynns-appbar-height);
+  margin: 0;
+  padding: 0;
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-none);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-top-app-bar--scrolled {
+  /* M3 on-scroll: surface-container + level-2 elevation. */
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-sm);
+}
+
+.fynns-top-app-bar--md {
+  min-height: var(--fynns-appbar-height-md);
+}
+
+.fynns-top-app-bar--lg {
+  min-height: var(--fynns-appbar-height-lg);
+}
+
+.fynns-top-app-bar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--fynns-appbar-row-height);
+  padding-inline: var(--fynns-appbar-pad-inline);
+}
+
+.fynns-top-app-bar-leading,
+.fynns-top-app-bar-trailing {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  color: var(--fynns-color-text);
+}
+
+.fynns-top-app-bar-trailing {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-top-app-bar-spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-top-app-bar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-appbar-title-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line);
+  color: var(--fynns-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-top-app-bar--md .fynns-top-app-bar-title,
+.fynns-top-app-bar--lg .fynns-top-app-bar-title {
+  flex: 0 0 auto;
+  padding-inline: var(--fynns-appbar-title-pad-inline);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-top-app-bar--md .fynns-top-app-bar-title {
+  padding-bottom: var(--fynns-appbar-title-pad-bottom-md);
+  font-size: var(--fynns-appbar-title-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line-md);
+}
+
+.fynns-top-app-bar--lg .fynns-top-app-bar-title {
+  padding-bottom: var(--fynns-appbar-title-pad-bottom-lg);
+  font-size: var(--fynns-appbar-title-size-lg);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-top-app-bar {
+    transition: none;
+  }
+}
+
+/* ---------- NavigationRail (M3 anatomy) ---------- */
+.fynns-nav-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-width);
+  min-height: 100%;
+  height: 100%;
+  padding-block: var(--fynns-navrail-pad-block-start) var(--fynns-space-md);
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail[data-has-menu="true"] {
+  padding-block-start: 0;
+}
+
+.fynns-nav-rail-menu {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(
+    var(--fynns-navrail-menu-pad-block) * 2 + var(--fynns-navrail-menu-target)
+  );
+  padding-block: var(--fynns-navrail-menu-pad-block);
+  color: var(--fynns-color-text);
+}
+
+/* M3 menu icon: 24dp glyph inside a 48dp hover/press target. */
+.fynns-nav-rail-menu .fynns-tooltip-trigger {
+  display: inline-flex;
+}
+
+.fynns-nav-rail-menu .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-menu-target);
+  height: var(--fynns-navrail-menu-target);
+  min-width: var(--fynns-navrail-menu-target);
+  min-height: var(--fynns-navrail-menu-target);
+  padding: 0;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon svg {
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+}
+
+.fynns-nav-rail-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding-block: var(--fynns-navrail-header-pad-block);
+  margin-bottom: var(--fynns-navrail-header-gap);
+}
+
+.fynns-nav-rail-destinations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-height: 0;
+}
+
+.fynns-nav-rail--align-center .fynns-nav-rail-destinations {
+  margin-block: auto;
+}
+
+.fynns-nav-rail--align-end .fynns-nav-rail-destinations {
+  margin-block-start: auto;
+}
+
+.fynns-nav-rail-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0;
+  padding: var(--fynns-navrail-item-pad-block) 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-nav-rail-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Full destination highlight: icon + label (not an icon-only pill). */
+.fynns-nav-rail-indicator {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-navrail-label-gap);
+  box-sizing: border-box;
+  width: var(--fynns-navrail-indicator-width);
+  max-width: 100%;
+  height: auto;
+  padding-block: var(--fynns-navrail-indicator-pad-block);
+  padding-inline: var(--fynns-navrail-indicator-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  overflow: visible;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-item--labeled .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-size-labeled);
+  height: var(--fynns-navrail-indicator-size-labeled);
+  min-width: var(--fynns-navrail-indicator-size-labeled);
+  max-width: var(--fynns-navrail-indicator-size-labeled);
+  min-height: var(--fynns-navrail-indicator-size-labeled);
+  max-height: var(--fynns-navrail-indicator-size-labeled);
+  aspect-ratio: 1;
+}
+
+.fynns-nav-rail-item--icon .fynns-nav-rail-indicator,
+.fynns-nav-rail[data-label-visibility="unlabeled"] .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-height-icon);
+  height: var(--fynns-navrail-indicator-height-icon);
+  min-width: var(--fynns-navrail-indicator-height-icon);
+  max-width: var(--fynns-navrail-indicator-height-icon);
+  min-height: var(--fynns-navrail-indicator-height-icon);
+  max-height: var(--fynns-navrail-indicator-height-icon);
+  padding: 0;
+  border-radius: var(--fynns-radius-pill);
+  aspect-ratio: 1;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:active:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:focus-visible {
+  outline: none;
+}
+
+.fynns-nav-rail-item:focus-visible .fynns-nav-rail-indicator {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-rail-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  overflow: visible;
+}
+
+.fynns-nav-rail-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  color: inherit;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-icon {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:not(.fynns-nav-rail-item--active) .fynns-nav-rail-icon {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-icon {
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Badge center shares one anchor: the icon’s top-end corner (half outside).
+ * Size-specific offsets keep the “3” and the red dot on the same center point.
+ */
+.fynns-nav-rail-badge {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-danger);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-navrail-badge-font-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.fynns-nav-rail-badge--dot {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  width: var(--fynns-navrail-badge-dot);
+  height: var(--fynns-navrail-badge-dot);
+  min-width: var(--fynns-navrail-badge-dot);
+  padding: 0;
+}
+
+.fynns-nav-rail-badge--large {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  min-width: var(--fynns-navrail-badge-size);
+  height: var(--fynns-navrail-badge-size);
+  padding-inline: var(--fynns-space-2xs);
+}
+
+.fynns-nav-rail-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navrail-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navrail-label-line);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-label {
+  color: var(--fynns-color-on-secondary-container);
+  font-weight: var(--fynns-font-weight-semibold);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-label {
+  color: var(--fynns-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-rail-indicator {
+    transition: none;
+  }
+}
+
+
