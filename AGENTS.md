@@ -38,7 +38,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 3. **Every action is an icon button + tooltip — never `title=`.** Use
    `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   `IconButton` paints as the glyph itself (ghost, no bordered tile). Pure
+   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined). Pure
    informational help uses **`InfoHint`**: standalone "i" when there is no
    visible name; for form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
@@ -154,7 +154,8 @@ Color tokens (`--fynns-color-*`):
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
     `accent-ring`, `on-accent`, `accent-container`, `on-accent-container`,
-    `secondary-container`, `on-secondary-container`, `focus`.
+    `secondary-container`, `on-secondary-container`, `tertiary-container`,
+    `on-tertiary-container`, `focus`.
   - Lines/text: `border` `#0d2e2c`, `border-strong`, `outline-subtle`, `text` `#e2f0ed`,
     `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
@@ -169,10 +170,10 @@ Color tokens (`--fynns-color-*`):
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 
-Standard chrome glyph: `--fynns-size-icon` (`1.25rem` / 20dp) + TS `ICON_SIZE`
+Standard chrome glyph: `--fynns-size-icon` (`1rem` / 16dp) + TS `ICON_SIZE`
 (default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar
-action icons share this; Fab `sm` matches. Dense micro glyphs (chip trailing,
-select chevron, steppers) may stay smaller.
+action icons share this. Fab `sm` stays on `--fynns-size-icon-md` (20dp). Dense
+micro glyphs (chip trailing, select chevron, steppers) may stay smaller.
 
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
@@ -191,17 +192,26 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 
-- **Button** `{ variant?: "default"|"primary"|"tonal"|"danger"|"ghost", size?: "md"|"sm"|"lg",
+- **Button** `{ variant?: "default"|"primary"|"tonal"|"elevated"|"danger"|"ghost", size?: "md"|"sm"|"lg",
   active?, danger?, iconOnly?, loading? }` + native button attrs. `forwardRef`.
-  Default `tonal` (`accent-container`, `radius-xl`, 40dp). `default` is the outlined
-  border style; `primary` is filled accent. `loading` shows a spinner and disables.
-- **IconButton** — `Button` with `iconOnly`; defaults to `ghost` so the control
-  reads as the icon itself (no bordered square tile). Pass `aria-label`.
+  Default `primary` (M3 filled accent, stadium `radius-pill`, 40dp). `tonal` is
+  secondary emphasis (`accent-container`); `elevated` is surface + shadow; `default`
+  is outlined; `ghost` is text. All variants share the same size padding /
+  `min-height` (M3: prefer one ContentPadding across types — text is not a
+  smaller target). `ghost` hover/press fills that stadium via background
+  state-layer mix; other variants use `::before` layers
+  (`--fynns-state-hover` / `--fynns-state-pressed`) — no scale-on-press.
+  `loading` shows a spinner and disables.
+- **IconButton** — `Button` with `iconOnly`; defaults to `ghost` (M3 standard).
+  40dp circular target (`--fynns-size-icon-target`) with 16dp glyph
+  (`--fynns-size-icon`); `primary` / `tonal` / `default` (outlined) / `elevated`
+  map to filled / tonal / outlined / elevated. Pass `aria-label`.
 - **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
   disabled?, mainAriaLabel?, menuAriaLabel? }`.
 - **Input** / **Textarea** — `{ invalid?, size?: "sm"|"md", variant?: "filled"|"outlined",
   supportingText?, errorText? }` (+ Input `leading?`/`trailing?`) and native attrs.
   `.fynns-input` / `.fynns-textarea`; hint rows use `.fynns-field-hint`.
+  Keep placeholder / external labels — do **not** chase M3 floating-label anatomy.
 - **Counter** `{ value, onChange, min?, max?, step?, ariaLabel?, disabled? }` — numeric
   field + press-and-hold steppers (`CounterRoot`, `CounterField`, `CounterSteppers`,
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
@@ -230,7 +240,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   calendar (`YYYY-MM-DD` local date-only). Docked surface; helpers
   `formatDateValue` / `parseDateValue`. **DatePickerDialog** `{ open,
   onOpenChange, value?, onConfirm, title?, confirmLabel?, cancelLabel?, … }`
-  wraps the picker in a centered dialog (draft until OK).
+  wraps the picker in a centered dialog (draft until OK). Minimal M3 modal
+  cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
+  title, and hairline dividers between head / calendar / foot (keeps the
+  compact calendar; no year menu / huge header).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -290,7 +303,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
   labelSide?: "start"|"end", disabled? }` (`role="switch"`). M3-aligned track /
   thumb (52×32dp proportions, outlined unchecked / soft `accent-24` track +
-  accent outline & thumb when checked, fixed-size handle); no handle icon. Use
+  accent outline & thumb when checked; handle morphs 18→22dp); no handle icon. Use
   `labelSide="end"` (track then label) in dense
   toolbars so tracks share a left edge with `ToggleGroup` / siblings instead of
   drifting with label length.
@@ -325,7 +338,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
   sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
   [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
-  `npm run gen:theme`.
+  `npm run gen:theme`. Sandbox demo wrap gaps (`--sandbox-row-gap`, …) and the
+  same control-* knobs are editable in the sandbox **Layout chrome** inspector
+  (`SANDBOX_LAYOUT_AGENT_CATALOG` in `examples/sandbox/src/state/baseline.ts`) —
+  agents must use that catalog, not ad-hoc gaps.
   **Checkbox** `{ label, checked, onCheckedChange,
   indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
   (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
@@ -333,18 +349,20 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   mark (20dp); group via shared `name`. **ToggleControl** —
   checkbox/radio styled as a switch (same M3 track/thumb as `Switch`); prefer
   `Checkbox` / `Radio` for true selection chrome.
-- **ToggleGroup** `{ options, value, onChange, fullWidth?, size? }`
-  — segmented chips. Options may include `tip` (per-segment tooltip) and
-  `ariaLabel`. `size="compact"` tightens padding for narrow panels.
-  Segments are always equal width (sized to the longest label) with centered
-  text; `fullWidth` stretches the group to its container. Chips fill the
-  group when it is stretched (a flex/grid child or `fullWidth`). **Chip** /
-  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
-  leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 chips (32dp);
+- **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, showCheck? }`
+  — M3 **Segmented button** (single-select). Outlined stadium row (`--fynns-segmented-*`),
+  40dp (compact 32dp), hairline dividers, selected = `secondary-container` + leading
+  check (disable with `showCheck={false}`). Options may include `tip`, `ariaLabel`,
+  and `icon` (replaced by the check while selected). Equal-width segments; `fullWidth`
+  justifies across the container. `role="radiogroup"` + arrow-key paging.
+  Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
+  **ChipSet** `{ variant?: "assist"|"filter"|"input"|"suggestion", selected?, elevated?,
+  leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
   filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
-  button. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
+  button (`aria-label` only, no Tooltip); suggestion is outlined. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
   segmented exclusivity. **Tabs**
-  `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }`.
+  `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }` — primary underline
+  indicator (3dp accent), not folder-style tops.
 - **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
   — **one-shot disclosure section** for agents and apps: pass `title` + `children`
   (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
@@ -385,7 +403,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   noScroll?, fillBody? }` / **ScrollArea** (custom scrollbar skin).
 - **Toaster** (mount once) + imperative **toast** `toast(msg, opts?)`,
   `toast.message/.success/.error/.warning/.info(msg, opts?)`, `toast.dismiss(id?)`
-  — drop-in for the `sonner` subset. Enter/exit uses motion tokens (`--fynns-duration-base`,
+  — drop-in for the `sonner` subset; defaults to **bottom-center** Snackbar-ish
+  inverse surface. Enter/exit uses motion tokens (`--fynns-duration-base`,
   `--fynns-ease-emphasized`): slides in from the toaster edge (bottom positions from below,
   top from above) with a fade; dismiss plays the reverse before unmount. **ToastProvider** +
   **useToast** compat; declarative `<Toast>` uses the same animation (bottom-center).
@@ -400,8 +419,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
   identity (40dp default); image → children → initials from `name` → person glyph.
   Pass into `CardHeader`’s `avatar` slot.
-  **Fab** `{ children, label?, size?: "sm"|"md"|"lg" }` — M3 floating action (56dp);
-  pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
+  **Fab** `{ children, label?, size?: "sm"|"md"|"lg",
+  variant?: "primary"|"secondary"|"tertiary"|"surface", lowered? }` — M3 floating
+  action (56dp default; sm 40 / lg 96). Color roles map to accent / secondary /
+  tertiary containers (or `surface-3` + accent ink). `lowered` drops elevation.
+  Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
+  Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
   top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
   at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
@@ -413,7 +436,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   cutout). Prefer `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
-  24dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
+  16dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
   **NavigationRailHeader** / **NavigationRailItem**
   `{ icon, label?, active?, alwaysShowLabel?, badge? }` / **NavigationRailBadge** —
   M3 compact vertical destinations (80dp). Active/hover highlight is a square
@@ -426,8 +449,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ icon, label?, active?, alwaysShowLabel?, badge? }` — horizontal bottom
   destinations (80dp, 3–5 items). Same labelVisibility + square
   `secondary-container` highlight as the rail; badge via `NavigationRailBadge`
-  (count folds into the item accessible name). Prefer `NavigationRail` on
-  medium+ layouts.
+  (count folds into the item accessible name).   Prefer `NavigationRail` on medium+ layouts; pair with `NavigationDrawer`
+  `standard` for M3 adaptive expand/collapse (drawer ↔ rail).
   **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
   side?, modal?, headline?, children }` + **NavigationDrawerItem**
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
