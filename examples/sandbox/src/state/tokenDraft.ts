@@ -3,6 +3,8 @@
  * (future) Agent bridge. Both are equal clients of the draft store.
  */
 
+import { SANDBOX_DEFAULT_OVERRIDES } from "./baseline";
+
 export type TokenGroup =
   | "radius"
   | "color"
@@ -10,7 +12,9 @@ export type TokenGroup =
   | "stateLayer"
   | "spacing"
   | "typography"
-  | "shadow";
+  | "shadow"
+  | "layout"
+  | "sandbox";
 
 export type TokenScope = "global" | "card-elevated" | "card-filled" | "card-outlined";
 
@@ -42,7 +46,7 @@ export const DRAFT_STORAGE_KEY = "fynns-sandbox-draft";
 export function emptyDraft(baseTokensHash: string): TokenDraft {
   return {
     baseTokensHash,
-    overrides: {},
+    overrides: { ...SANDBOX_DEFAULT_OVERRIDES },
     history: [],
     historyIndex: -1,
   };
@@ -50,6 +54,7 @@ export function emptyDraft(baseTokensHash: string): TokenDraft {
 
 /** Map a structured op onto the CSS variable name it mutates. */
 export function cssVarForOp(group: TokenGroup, key: string): string {
+  if (key.startsWith("--")) return key;
   switch (group) {
     case "radius":
       return `--fynns-radius-${key}`;
@@ -63,9 +68,13 @@ export function cssVarForOp(group: TokenGroup, key: string): string {
       return `--fynns-font-size-${key}`;
     case "shadow":
       return `--fynns-shadow-${key}`;
+    case "layout":
+      return `--fynns-layout-${key}`;
+    case "sandbox":
+      return `--sandbox-${key}`;
     case "elevation":
       // Elevation is a lookup; sandbox edits the underlying surface/shadow vars.
-      return key.startsWith("--") ? key : `--fynns-color-${key}`;
+      return `--fynns-color-${key}`;
     default:
       return `--fynns-${key}`;
   }

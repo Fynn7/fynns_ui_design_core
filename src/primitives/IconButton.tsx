@@ -5,12 +5,13 @@ import { Button, type ButtonProps } from "./Button";
 export type IconButtonProps = Omit<ButtonProps, "iconOnly">;
 
 /**
- * Icon-only button. Enforces `iconOnly` layout and defaults to `ghost` so the
- * control reads as the icon itself (no bordered tile). Pass `aria-label`.
+ * Icon-only button. Enforces `iconOnly` layout. Defaults to `ghost` (M3
+ * standard icon button). Filled / tonal / outlined via `variant`. Pass
+ * `aria-label`. Target is 40dp (md) with 16dp glyph unless size overrides.
  */
 export const IconButton = forwardRef(function IconButton(
-  { variant = "ghost", ...props }: IconButtonProps,
+  { variant = "ghost", size = "md", ...props }: IconButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
-  return <Button {...props} ref={ref} variant={variant} iconOnly />;
+  return <Button {...props} ref={ref} variant={variant} size={size} iconOnly />;
 });

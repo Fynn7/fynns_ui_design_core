@@ -6,8 +6,8 @@ import type { SVGProps } from "react";
  */
 export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number };
 
-/** Default glyph size in CSS pixels — matches `--fynns-size-icon` (20dp). */
-export const ICON_SIZE = 20;
+/** Default glyph size in CSS pixels — matches `--fynns-size-icon` (16dp). */
+export const ICON_SIZE = 16;
 
 function svgProps({ size = ICON_SIZE, ...rest }: IconProps) {
   return {
@@ -532,6 +532,18 @@ export function MoonIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  );
+}
+
+/** Calendar / date picker affordance. */
+export function CalendarIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 9h18" />
+      <path d="M8 3v4" />
+      <path d="M16 3v4" />
     </svg>
   );
 }

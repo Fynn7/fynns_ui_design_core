@@ -73,14 +73,28 @@ export function DialogFrame({
   useEffect(() => {
     if (!managesPresence) return;
     if (open) {
+      // Mount (or keep mounted) in the closed visual state first.
       setRendered(true);
-      const raf = requestAnimationFrame(() => setEntered(true));
-      return () => cancelAnimationFrame(raf);
+      return;
     }
     setEntered(false);
     const timer = setTimeout(() => setRendered(false), DIALOG_TRANSITION_MS);
     return () => clearTimeout(timer);
   }, [open, managesPresence]);
+
+  // Enter only after the closed frame has committed — otherwise React can paint
+  // `rendered` + `entered` together and skip the sheet/drawer slide-in.
+  useEffect(() => {
+    if (!managesPresence || !open || !rendered) return;
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setEntered(true));
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [open, rendered, managesPresence]);
 
   const visible = managesPresence ? rendered : open;
   const resolvedDataState: DialogDataState | undefined = managesPresence

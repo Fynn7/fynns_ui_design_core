@@ -9,10 +9,11 @@ import {
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { HueWheel } from "../manipulators/HueWheel";
-import { BASELINE, SANDBOX_BLOCK_GAP_VAR } from "../state/baseline";
+import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { estimateBrightnessDelta, shiftHexBrightness } from "../theme/colorUtils";
 import { ApplyChangesControl } from "./ApplyChangesControl";
+import { LayoutChromeSliders } from "./LayoutChromeSliders";
 
 function parsePercent(value: string): number {
   return Number.parseFloat(value) || 0;
@@ -84,7 +85,7 @@ const FONT_SIZE_HINT_KEYS = {
 
 export function PropertyInspector() {
   const { t, plural } = useLocale();
-  const { apply, mergeOverrides, resolved, draft } = useTokenDraft();
+  const { apply, resolved, draft } = useTokenDraft();
 
   const hover = parsePercent(resolved("--fynns-state-hover"));
   const focus = parsePercent(resolved("--fynns-state-focus"));
@@ -93,7 +94,6 @@ export function PropertyInspector() {
   const spaceLgPx = parseLengthToPx(resolved("--fynns-space-lg"));
   const spaceMdPx = parseLengthToPx(resolved("--fynns-space-md"));
   const spaceSmPx = parseLengthToPx(resolved("--fynns-space-sm"));
-  const blockGapPx = parseLengthToPx(resolved(SANDBOX_BLOCK_GAP_VAR));
   const borderStrong = resolved("--fynns-color-border-strong");
   const borderStrongBaseline = BASELINE["--fynns-color-border-strong"] ?? "#164038";
   const borderStrongDelta = estimateBrightnessDelta(borderStrongBaseline, borderStrong);
@@ -279,31 +279,11 @@ export function PropertyInspector() {
                 </div>
               );
             })}
-            <p className="sandbox-help">{t("inspector.blockGapHelp")}</p>
-            <div className="sandbox-field">
-              <div className="sandbox-field-row">
-                <InfoHint
-                  label={t("inspector.blockGap")}
-                  ariaLabel={t("inspector.blockGapAria")}
-                  content={t("inspector.blockGapHint")}
-                />
-                <code>{blockGapPx}px</code>
-              </div>
-              <Slider
-                ariaLabel={t("inspector.blockGapSlider")}
-                min={0}
-                max={32}
-                step={1}
-                value={blockGapPx}
-                onChange={(v) =>
-                  mergeOverrides(
-                    { [SANDBOX_BLOCK_GAP_VAR]: pxToRem(v) },
-                    { source: "slider", coalesce: true, group: "spacing" },
-                  )
-                }
-              />
-            </div>
           </div>
+        </Collapsible>
+
+        <Collapsible title={t("layoutChrome.collapsible")}>
+          <LayoutChromeSliders />
         </Collapsible>
 
         <Collapsible title={t("inspector.typography")}>

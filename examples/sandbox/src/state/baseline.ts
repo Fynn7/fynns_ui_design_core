@@ -1,16 +1,53 @@
 import {
   COLOR_TOKENS,
+  FONT_SIZE_TOKENS,
+  LAYOUT_TOKENS,
   RADIUS_TOKENS,
   SHADOW_TOKENS,
   SPACE_TOKENS,
   STATE_LAYER_TOKENS,
-  FONT_SIZE_TOKENS,
   fynnsVarName,
 } from "@fynns/ui";
 
-/** Sandbox chrome only — not part of `--fynns-*` / tokens.ts writeback. */
-export const SANDBOX_BLOCK_GAP_VAR = "--sandbox-block-gap";
-export const SANDBOX_BLOCK_GAP_BASELINE = "0.5rem";
+/**
+ * Sandbox-only chrome layout vars (`--sandbox-*`).
+ * Live in the token draft + GUI; **not** written to `tokens.ts` on Apply.
+ * Agents must use these (or `--fynns-layout-control-*`) instead of inventing gaps.
+ */
+export const SANDBOX_CHROME_TOKENS = {
+  /** Inspector Collapsible stack gap. */
+  "block-gap": "0.5rem",
+  /**
+   * Demo / gallery `Row` wrap gap (horizontal + between wrapped rows).
+   * Motion easing bars use this — raise it to separate wrap lines.
+   */
+  "row-gap": "1rem",
+  /** Gallery / demo `Section` title → body gap. */
+  "section-gap": "0.75rem",
+  /** Brand cell + page topbar shared strip height. */
+  "chrome-bar-height": "3.5rem",
+} as const;
+
+export type SandboxChromeKey = keyof typeof SANDBOX_CHROME_TOKENS;
+
+export function sandboxChromeVar(key: SandboxChromeKey): string {
+  return `--sandbox-${key}`;
+}
+
+/** Toolbar rhythm keys editable in the sandbox (Apply writes into LAYOUT_TOKENS). */
+export const EDITABLE_LAYOUT_CONTROL_KEYS = [
+  "control-stack-gap",
+  "control-row-gap",
+  "control-row-column-gap",
+  "control-cluster-gap",
+] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
+
+export type EditableLayoutControlKey = (typeof EDITABLE_LAYOUT_CONTROL_KEYS)[number];
+
+/** @deprecated Prefer `sandboxChromeVar("block-gap")`. */
+export const SANDBOX_BLOCK_GAP_VAR = sandboxChromeVar("block-gap");
+/** @deprecated Prefer `SANDBOX_CHROME_TOKENS["block-gap"]`. */
+export const SANDBOX_BLOCK_GAP_BASELINE = SANDBOX_CHROME_TOKENS["block-gap"];
 
 /** Snapshot of production baseline values the sandbox can override. */
 export const BASELINE: Record<string, string> = {
@@ -36,7 +73,32 @@ export const BASELINE: Record<string, string> = {
       .filter(([k]) => ["xs", "sm", "md", "lg", "xl", "2xl"].includes(k))
       .map(([k, v]) => [fynnsVarName("font-size", k), v]),
   ),
-  [SANDBOX_BLOCK_GAP_VAR]: SANDBOX_BLOCK_GAP_BASELINE,
+  ...Object.fromEntries(
+    EDITABLE_LAYOUT_CONTROL_KEYS.map((k) => [
+      fynnsVarName("layout", k),
+      LAYOUT_TOKENS[k],
+    ]),
+  ),
+  ...Object.fromEntries(
+    (Object.keys(SANDBOX_CHROME_TOKENS) as SandboxChromeKey[]).map((k) => [
+      sandboxChromeVar(k),
+      SANDBOX_CHROME_TOKENS[k],
+    ]),
+  ),
+};
+
+/**
+ * Sandbox aesthetic starting overrides (not written to `tokens.ts` until Apply).
+ * Fresh draft / full Reset land here; shape-ladder Reset restores these too.
+ */
+export const SANDBOX_DEFAULT_OVERRIDES: Record<string, string> = {
+  [fynnsVarName("radius", "md")]: "20px",
+};
+
+/** Resting values for sandbox knobs: production baseline + sandbox defaults. */
+export const SANDBOX_RESTING: Record<string, string> = {
+  ...BASELINE,
+  ...SANDBOX_DEFAULT_OVERRIDES,
 };
 
 /** Cheap content hash so drafts can detect stale baselines. */
@@ -53,3 +115,39 @@ export function hashBaseline(baseline: Record<string, string> = BASELINE): strin
 }
 
 export const BASE_TOKENS_HASH = hashBaseline();
+
+/**
+ * Agent-facing catalog: every gap / chrome length the sandbox owns.
+ * Prefer these CSS vars — do not invent ad-hoc `gap` / `margin` values.
+ */
+export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
+  cssVar: string;
+  role: string;
+  applyWrites: boolean;
+}> = [
+  {
+    cssVar: sandboxChromeVar("row-gap"),
+    role: "Demo Row wrap gap (Motion easing bars, gallery flex wraps)",
+    applyWrites: false,
+  },
+  {
+    cssVar: sandboxChromeVar("section-gap"),
+    role: "Demo Section title → body",
+    applyWrites: false,
+  },
+  {
+    cssVar: sandboxChromeVar("block-gap"),
+    role: "Inspector Collapsible stack",
+    applyWrites: false,
+  },
+  {
+    cssVar: sandboxChromeVar("chrome-bar-height"),
+    role: "Brand + topbar strip height",
+    applyWrites: false,
+  },
+  ...EDITABLE_LAYOUT_CONTROL_KEYS.map((k) => ({
+    cssVar: fynnsVarName("layout", k),
+    role: `Toolbar rhythm · ${k}`,
+    applyWrites: true,
+  })),
+];

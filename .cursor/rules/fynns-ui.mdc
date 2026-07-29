@@ -16,10 +16,11 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
 - Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
   Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
-  ToggleGroup, Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
+  ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
   Badge, Avatar, Fab, TopAppBar, BottomAppBar, SearchBar, Banner, List/ListItem,
-  NavigationRail, NavigationBar, NavigationDrawer, Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
+  DatePicker/DatePickerDialog, NavigationRail, NavigationBar, NavigationDrawer,
+  Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.

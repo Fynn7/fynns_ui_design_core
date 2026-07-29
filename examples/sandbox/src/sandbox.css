@@ -1,11 +1,17 @@
 :root {
-  /* Sandbox chrome — live-overridable via draft; not a --fynns-* token. */
+  /* Sandbox chrome — live-overridable via draft; not a --fynns-* token.
+   * Defaults mirror SANDBOX_CHROME_TOKENS in state/baseline.ts. */
   --sandbox-block-gap: 0.5rem;
+  --sandbox-row-gap: 1rem;
+  --sandbox-section-gap: 0.75rem;
+  /* Brand cell + page topbar share one horizontal strip. */
+  --sandbox-chrome-bar-height: 3.5rem;
 }
 
 .sandbox-root {
   display: grid;
-  grid-template-columns: 12rem 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   height: 100%;
   min-height: 100%;
   max-height: 100%;
@@ -14,46 +20,64 @@
   color: var(--fynns-color-text);
 }
 
-.sandbox-nav.fynns-panel-aside {
-  width: 12rem;
-  min-width: 12rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-md);
+/* M3 clipped shell: topbar full-bleed; nav | main only below (no crosshair). */
+.sandbox-shell-body {
+  display: grid;
+  grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  transition: grid-template-columns var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
+}
+
+.sandbox-root[data-nav="rail"] .sandbox-shell-body {
+  grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-shell-body {
+    transition: none;
+  }
+}
+
+/* Permanent nav clipped under the top app bar — vertical seam only (no brand hairline). */
+.sandbox-nav.fynns-nav-drawer {
+  height: 100%;
+  min-height: 0;
+  padding-block-start: 0;
   background: var(--fynns-color-surface-1);
-  border-right: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
-.sandbox-brand {
-  font-size: var(--fynns-font-size-sm);
-  font-weight: var(--fynns-font-weight-semibold);
-  color: var(--fynns-color-accent);
-  padding: var(--fynns-space-xs) var(--fynns-space-sm);
+.sandbox-nav .fynns-nav-drawer-body {
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.sandbox-nav-list {
+.sandbox-nav .fynns-nav-drawer-body .fynns-tooltip-trigger {
+  display: block;
+  width: 100%;
+}
+
+/* Collapsed rail under clipped topbar — no menu chrome row / bottom hairline. */
+.sandbox-nav-rail.fynns-nav-rail {
+  height: 100%;
+  min-height: 0;
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+  background: var(--fynns-color-surface-1);
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.sandbox-nav-rail .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+}
+
+.sandbox-nav-rail .fynns-tooltip-trigger {
   display: flex;
-  flex-direction: column;
-  /* Keep hover/active pills from touching (2xs ≈ 2px is too tight). */
-  gap: var(--fynns-space-sm);
-  flex: 1;
+  width: 100%;
+  justify-content: center;
 }
 
-.sandbox-nav-foot {
+.sandbox-nav-templates {
   margin-top: auto;
-  padding: var(--fynns-space-xs) var(--fynns-space-sm);
-  display: flex;
-  align-items: center;
-}
-
-.sandbox-nav-gear.fynns-btn {
-  color: var(--fynns-color-text-muted);
-}
-
-.sandbox-nav-gear--active.fynns-btn,
-.sandbox-nav-gear.fynns-btn[aria-pressed="true"] {
-  color: var(--fynns-color-accent);
 }
 
 .sandbox-file-input {
@@ -187,23 +211,42 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-sm) var(--fynns-space-lg);
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  box-sizing: border-box;
+  height: var(--sandbox-chrome-bar-height);
+  min-height: var(--sandbox-chrome-bar-height);
+  padding: 0 var(--fynns-space-lg);
+  /* Single full-bleed edge under the bar — vertical nav seam starts below. */
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   position: sticky;
   top: 0;
   z-index: 2;
 }
 
-.sandbox-topbar-title {
+.sandbox-topbar-leading {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.sandbox-topbar-brand {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--fynns-font-size-md);
   font-weight: var(--fynns-font-weight-semibold);
+  color: var(--fynns-color-text);
 }
 
 .sandbox-topbar-actions {
   display: flex;
   align-items: center;
   gap: var(--fynns-space-xs);
+  flex: 0 0 auto;
 }
 
 .sandbox-body {
@@ -236,7 +279,8 @@
   box-sizing: border-box;
   width: 22rem;
   max-width: 36vw;
-  border-left: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  /* Inspector pane seam — outline-subtle, not border-strong. */
+  border-left: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   min-height: 0;
   min-width: 0;
@@ -245,14 +289,12 @@
   overflow: hidden;
   transition:
     width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    border-left-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .sandbox-aside[data-state="closing"] {
   width: 0;
   max-width: 0;
-  border-left-color: transparent;
 }
 
 /* Keep inspector layout stable while the pane width clips — avoids reflow
@@ -459,6 +501,10 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  /* Narrow canvas (navdrawer + inspector) must reflow toolbar even when
+     the viewport itself is still wide. */
+  container-type: inline-size;
+  container-name: sandbox-preview;
 }
 
 .sandbox-preview-toolbar {
@@ -476,6 +522,58 @@
 .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+}
+
+/*
+ * When the preview column is squeezed (inspector open), stack label above
+ * controls and let switch clusters wrap — same idea as the ≤900px viewport
+ * rules below, but keyed to the canvas width rather than the window.
+ */
+@container sandbox-preview (max-width: 26rem) {
+  .sandbox-preview > .fynns-control-stack.sandbox-preview-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fynns-layout-control-row-gap);
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: unset;
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row
+    > .fynns-control-row__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fynns-layout-control-cluster-gap);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .sandbox-preview
+    > .fynns-control-stack.sandbox-preview-toolbar
+    > .fynns-control-row
+    > .fynns-control-row__controls
+    > .fynns-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--fynns-layout-control-cluster-gap);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: unset;
+  }
 }
 
 .sandbox-preview-grid {
@@ -952,51 +1050,32 @@
 
 @media (max-width: 900px) {
   .sandbox-root {
-    grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
     /* Prefer dynamic viewport so mobile browser chrome does not clip the shell. */
     height: 100dvh;
     max-height: 100dvh;
   }
 
-  .sandbox-nav.fynns-panel-aside {
-    width: auto;
-    min-width: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--fynns-space-xs) var(--fynns-space-sm);
-    border-right: none;
-    border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  .sandbox-shell-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .sandbox-brand {
-    flex: 0 0 auto;
+  .sandbox-root[data-nav="rail"] .sandbox-shell-body {
+    grid-template-columns: 1fr;
   }
 
-  .sandbox-nav-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex: 1 1 auto;
-    min-width: 0;
-    gap: var(--fynns-space-sm);
+  .sandbox-nav.fynns-nav-drawer {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: min(40vh, 20rem);
+    border-inline-end: none;
+    border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   }
 
-  /* NavItem defaults to width:100% for sidebar rows — override for the chip strip. */
-  .sandbox-nav-list .fynns-nav-item {
-    width: auto;
-    flex: 0 0 auto;
-    justify-content: center;
-    padding-inline: var(--fynns-space-sm);
-  }
-
-  .sandbox-nav-foot {
-    margin-top: 0;
-    margin-left: auto;
-    padding: 0;
-    border-top: none;
-    flex: 0 0 auto;
+  .sandbox-nav-templates {
+    margin-top: var(--fynns-space-sm);
   }
 
   .sandbox-main {
@@ -1006,14 +1085,14 @@
 
   .sandbox-topbar {
     flex-wrap: wrap;
+    height: auto;
+    min-height: var(--sandbox-chrome-bar-height);
     padding-inline: var(--fynns-space-md);
   }
 
-  .sandbox-topbar-title {
+  .sandbox-topbar-leading {
+    flex: 1 1 auto;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .sandbox-topbar-actions {
@@ -1046,12 +1125,11 @@
     width: 100%;
     max-width: none;
     border-left: none;
-    border-top: var(--fynns-border-hairline) solid var(--fynns-color-border);
+    border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
     max-height: min(45dvh, 22rem);
     box-shadow: var(--fynns-shadow-md);
     transition:
       max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
-      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
@@ -1064,12 +1142,9 @@
     width: 100%;
     max-width: none;
     max-height: 0;
-    border-left-color: transparent;
-    border-top-color: transparent;
     box-shadow: var(--fynns-shadow-none);
     transition:
       max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
-      border-top-color var(--fynns-duration-fast) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 

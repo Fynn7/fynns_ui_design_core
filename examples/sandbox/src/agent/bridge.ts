@@ -7,21 +7,33 @@
  */
 
 import type { TokenGroup, TokenScope } from "../state/tokenDraft";
+import { SANDBOX_LAYOUT_AGENT_CATALOG } from "../state/baseline";
 
 export const ADJUST_TOKEN_TOOL = {
   name: "adjust_token",
   description:
-    "Adjust one design token in the current sandbox draft. Applies immediately to the live preview after user confirmation.",
+    "Adjust one design token in the current sandbox draft. Applies immediately to the live preview after user confirmation. For gaps use group layout (control-*-gap) or sandbox (row-gap, section-gap, block-gap, chrome-bar-height) — see SANDBOX_LAYOUT_AGENT_CATALOG; never invent ad-hoc gaps.",
   input_schema: {
     type: "object",
     properties: {
       group: {
         type: "string",
-        enum: ["radius", "color", "elevation", "stateLayer", "spacing", "typography", "shadow"],
+        enum: [
+          "radius",
+          "color",
+          "elevation",
+          "stateLayer",
+          "spacing",
+          "typography",
+          "shadow",
+          "layout",
+          "sandbox",
+        ],
       },
       key: {
         type: "string",
-        description: "Token key within the group, e.g. 'md' or 'accent'.",
+        description:
+          "Token key within the group, e.g. 'md', 'accent', 'control-cluster-gap', or 'row-gap'.",
       },
       value: {
         type: "string",
@@ -42,18 +54,32 @@ export const ADJUST_TOKEN_TOOL = {
 
 export const READ_CURRENT_TOKENS_TOOL = {
   name: "read_current_tokens",
-  description: "Read the current resolved token values (baseline + draft overrides).",
+  description:
+    "Read the current resolved token values (baseline + draft overrides). Pass group sandbox or layout for chrome / toolbar rhythm gaps.",
   input_schema: {
     type: "object",
     properties: {
       group: {
         type: "string",
-        enum: ["radius", "color", "elevation", "stateLayer", "spacing", "typography", "shadow"],
+        enum: [
+          "radius",
+          "color",
+          "elevation",
+          "stateLayer",
+          "spacing",
+          "typography",
+          "shadow",
+          "layout",
+          "sandbox",
+        ],
       },
     },
     required: [],
   },
 } as const;
+
+/** Authoritative gap catalog for agents (re-exported). */
+export { SANDBOX_LAYOUT_AGENT_CATALOG };
 
 export const LIST_RECENT_OPERATIONS_TOOL = {
   name: "list_recent_operations",
@@ -128,6 +154,17 @@ export function proposeFromPrompt(prompt: string): PendingAgentProposal[] {
       value: "12%",
       scope: "global",
       reasoning: "Raise hover state-layer opacity for clearer interactive feedback.",
+    });
+  }
+  if (/more (row )?space|looser rows|larger row gap|easing.*(gap|space)/.test(lower)) {
+    proposals.push({
+      id: `p-${now}-row-gap`,
+      createdAt: now,
+      group: "sandbox",
+      key: "row-gap",
+      value: "1.5rem",
+      scope: "global",
+      reasoning: "Increase --sandbox-row-gap so wrapped demo rows (e.g. Motion easing) separate clearly.",
     });
   }
 

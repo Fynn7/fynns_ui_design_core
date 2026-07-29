@@ -36,6 +36,8 @@ import {
   Input,
   Kbd,
   Counter,
+  DatePicker,
+  DatePickerDialog,
   LinearProgress,
   List,
   ListItem,
@@ -89,6 +91,8 @@ export function App() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [dateDialogOpen, setDateDialogOpen] = useState(false);
+  const [galleryDate, setGalleryDate] = useState<string | null>("2026-07-15");
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
@@ -213,6 +217,8 @@ export function App() {
         <Row>
           <Button>Default</Button>
           <Button variant="primary">Primary</Button>
+          <Button variant="tonal">Tonal</Button>
+          <Button variant="elevated">Elevated</Button>
           <Button variant="danger">Danger</Button>
           <Button variant="ghost">Ghost</Button>
           <Button active>Active</Button>
@@ -573,6 +579,21 @@ export function App() {
               />
             </List>
           </div>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            DatePicker
+          </span>
+          <DatePicker defaultValue="2026-07-15" weekStartsOn={1} />
+          <Button size="sm" variant="tonal" onClick={() => setDateDialogOpen(true)}>
+            Open date dialog
+          </Button>
+          <DatePickerDialog
+            open={dateDialogOpen}
+            onOpenChange={setDateDialogOpen}
+            value={galleryDate}
+            onConfirm={setGalleryDate}
+            title="Select date"
+            weekStartsOn={1}
+          />
         </div>
       </Section>
 

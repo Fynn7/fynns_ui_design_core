@@ -65,6 +65,13 @@ export const COLOR_TOKENS = {
   "secondary-container": "#1a4542",
   /** Content on secondary-container (M3 onSecondaryContainer). */
   "on-secondary-container": "#9eeae0",
+  /**
+   * M3 tertiaryContainer — cooler blue tonal for FAB / accent hierarchy
+   * (distinct from teal primary / secondary).
+   */
+  "tertiary-container": "#1a2f4a",
+  /** Content on tertiary-container (M3 onTertiaryContainer). */
+  "on-tertiary-container": "#a8c7fa",
   /** Quieter divider than border / border-strong. */
   "outline-subtle": "#0a2524",
   success: "#4ade80",
@@ -145,9 +152,13 @@ export const SIZE_TOKENS = {
   "16": "16px",
   /**
    * Standard UI / chrome glyph (IconButton, nav destinations, Banner, …).
-   * 20dp — matches Fab `sm` icon; prefer over ad-hoc 16/24.
+   * 16dp — denser than stock M3 IconButton 24dp.
    */
-  icon: "1.25rem",
+  icon: "1rem",
+  /** Optional larger glyph (20dp) when a control needs more presence. */
+  "icon-md": "1.25rem",
+  /** IconButton / touch target (40dp). */
+  "icon-target": "2.5rem",
   "20": "20px",
   "22": "22px",
   "24": "24px",
@@ -311,34 +322,34 @@ export const Z_TOKENS = {
 
 /**
  * Toggle/switch geometry (M3 Switch proportions at 16px rem).
- * Track 52×32dp; fixed handle 20dp (between M3 unselected 16 / selected 24).
+ * Track 52×32dp; handle morphs modestly (18→22dp) so on still reads larger
+ * than off, without the full M3 16→24 jump.
  * Outline 2dp at md; sm uses 1.5px so the stroke does not look heavier.
- * `track-pad-*` = padding-box inset (outer gap ≈ pad + outline = (track-h − thumb)/2).
- * No selected-size morph.
+ * `track-pad-*` = padding-box inset (outer gap ≈ pad + outline).
  * `--fynns-toggle-<key>`.
  */
 export const TOGGLE_TOKENS = {
   "track-w": "3.25rem",
   "track-h": "2rem",
-  /** Fixed handle diameter (20dp both states). */
-  thumb: "1.25rem",
-  /** @deprecated Alias of `thumb` — kept so older CSS/refs stay valid. */
-  "thumb-checked": "1.25rem",
+  /** Unselected handle (18dp). */
+  thumb: "1.125rem",
+  /** Selected handle (22dp). */
+  "thumb-checked": "1.375rem",
   /** Legacy transform shift; prefer absolute left for Switch. */
   "thumb-shift": "1.25rem",
   /** Padding-box inset; pairs with `track-outline` for outer-edge symmetry. */
-  "track-pad-inline": "0.25rem",
-  "track-pad-checked": "0.25rem",
+  "track-pad-inline": "0.3125rem",
+  "track-pad-checked": "0.1875rem",
   /** M3 `track-outline-width` = 2dp. */
   "track-outline": "2px",
   /** Proportional outline for `size="sm"` (~75% track). */
   "track-outline-sm": "1.5px",
   "track-w-sm": "2.4375rem",
   "track-h-sm": "1.5rem",
-  "thumb-sm": "0.9375rem",
-  "thumb-checked-sm": "0.9375rem",
-  "track-pad-inline-sm": "0.1875rem",
-  "track-pad-checked-sm": "0.1875rem",
+  "thumb-sm": "0.875rem",
+  "thumb-checked-sm": "1.0625rem",
+  "track-pad-inline-sm": "0.21875rem",
+  "track-pad-checked-sm": "0.125rem",
   "margin-top": "0.08em",
 } as const;
 
@@ -368,6 +379,21 @@ export const CHIP_TOKENS = {
   "trailing-action-size": "1.5rem",
   "pad-inline": "0.75rem",
   "pad-inline-icon": "0.5rem",
+  gap: "0.5rem",
+  outline: "1px",
+} as const;
+
+/**
+ * M3 Segmented button (ToggleGroup) geometry at 16px rem.
+ * Container ~40dp; check icon 18dp; stadium outer outline.
+ * `--fynns-segmented-<key>`.
+ */
+export const SEGMENTED_TOKENS = {
+  height: "2.5rem",
+  "height-compact": "2rem",
+  "icon-size": "1.125rem",
+  "pad-inline": "0.75rem",
+  "pad-inline-compact": "0.5rem",
   gap: "0.5rem",
   outline: "1px",
 } as const;
@@ -410,7 +436,7 @@ export const FAB_TOKENS = {
   "size-sm": "2.5rem",
   "size-lg": "6rem",
   "icon-size": "1.5rem",
-  /** Matches `--fynns-size-icon` (20dp). */
+  /** Matches `--fynns-size-icon-md` (20dp). */
   "icon-size-sm": "1.25rem",
   "icon-size-lg": "2.25rem",
   "pad-inline-extended": "1.25rem",
@@ -460,8 +486,8 @@ export const BOTTOM_APPBAR_TOKENS = {
   "actions-gap": "0.125rem",
   /** IconButton / Fab sm hit target inside the bar. */
   "action-size": "2.5rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "action-icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "action-icon-size": "1rem",
   "fab-pad-inline-end": "0.25rem",
 } as const;
 
@@ -476,8 +502,8 @@ export const SEARCHBAR_TOKENS = {
   height: "3.5rem",
   "pad-inline": "0.25rem",
   "icon-slot": "3rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   "input-pad-inline": "0.25rem",
   "font-size": "1rem",
   "line-height": "1.5",
@@ -503,8 +529,8 @@ export const BANNER_TOKENS = {
   "pad-inline": "1rem",
   "pad-block": "0.75rem",
   gap: "0.75rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   "text-size": "0.875rem",
   "text-line": "1.25",
   "actions-gap": "0.5rem",
@@ -523,13 +549,28 @@ export const LIST_TOKENS = {
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
   gap: "1rem",
-  /** Leading / trailing glyph; matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Leading / trailing glyph; matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   /**
    * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
    * avatar rows share one vertical grid; glyphs center inside the slot.
    */
   "leading-width": "2.5rem",
+} as const;
+
+/**
+ * M3 DatePicker calendar geometry (at 16px rem).
+ * Day cells 40dp; 7-column week grid. `--fynns-datepicker-<key>`.
+ */
+export const DATEPICKER_TOKENS = {
+  "day-size": "2.5rem",
+  "pad-inline": "0.75rem",
+  "pad-block": "0.75rem",
+  "header-min-height": "3rem",
+  "weekday-size": "2.5rem",
+  "weekday-font": "0.75rem",
+  /** Keeps adjacent today/selected discs from touching (4dp). */
+  gap: "0.25rem",
 } as const;
 
 /**
@@ -548,12 +589,17 @@ export const NAVRAIL_TOKENS = {
   /** Padding inside the labeled square (symmetric; keep content off the edge). */
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   /** Outer space around each destination button (keep tight — gap owns rhythm). */
   "item-pad-block": "0",
   /** Space between destination buttons. */
   "destinations-gap": "0.5rem",
+  /**
+   * Inset before the first destination when a menu/header sits above
+   * (keeps hover/active indicators off the chrome hairline).
+   */
+  "destinations-pad-block-start": "0.75rem",
   "pad-block-start": "2.75rem",
   "menu-pad-block": "0.75rem",
   /** Menu control min touch target (48dp). */
@@ -588,8 +634,8 @@ export const NAVBAR_TOKENS = {
   "indicator-height-icon": "3.5rem",
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   "label-size": "0.75rem",
   "label-line": "1.25",
   "label-gap": "0.125rem",
@@ -608,13 +654,18 @@ export const NAVBAR_TOKENS = {
 export const NAVDRAWER_TOKENS = {
   width: "17.5rem",
   "pad-block": "0.5rem",
+  /**
+   * Extra inset between headline / chrome hairline and the first destination
+   * row (same role as navrail destinations-pad-block-start).
+   */
+  "body-pad-block-start": "0.75rem",
   "pad-inline": "0.5rem",
   "item-height": "2.5rem",
   "item-pad-inline-start": "0.75rem",
   "item-pad-inline-end": "1rem",
   "item-gap": "0.5rem",
-  /** Matches `--fynns-size-icon` (20dp). */
-  "icon-size": "1.25rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "icon-size": "1rem",
   "label-size": "0.875rem",
   "label-line": "1.25",
   "headline-size": "0.875rem",
@@ -741,6 +792,8 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "on-accent-container": "#0f766e",
       "secondary-container": "#cce8e3",
       "on-secondary-container": "#0a3d3a",
+      "tertiary-container": "#d6e3ff",
+      "on-tertiary-container": "#1a3a6e",
       "outline-subtle": "#d5e8e4",
       success: "#16a34a",
       warning: "#d97706",
@@ -813,6 +866,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["toggle", TOGGLE_TOKENS],
   ["selection", SELECTION_TOKENS],
   ["chip", CHIP_TOKENS],
+  ["segmented", SEGMENTED_TOKENS],
   ["progress", PROGRESS_TOKENS],
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
@@ -821,6 +875,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
   ["list", LIST_TOKENS],
+  ["datepicker", DATEPICKER_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

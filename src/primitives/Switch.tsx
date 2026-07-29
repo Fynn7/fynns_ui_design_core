@@ -6,7 +6,7 @@ import { forwardRef, useId } from "react";
  * `data-state` so CSS drives the visual. Replaces the radix switch.
  *
  * Visuals follow M3 Switch proportions (outlined unchecked / soft-filled
- * checked with accent thumb, fixed-size handle). No handle icon.
+ * checked with accent thumb; handle morphs 18→22dp). No handle icon.
  *
  * Sizes: `md` (default, forms/settings) and `sm` (dense panel headers).
  */

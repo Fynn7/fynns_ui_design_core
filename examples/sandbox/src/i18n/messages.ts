@@ -21,6 +21,10 @@ const en = {
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
     "M3 component catalog (collapsed sections) plus the shape / radius inspector.",
+  "nav.expand": "Expand navigation",
+  "nav.expandTip": "Expand to navigation drawer",
+  "nav.collapse": "Collapse navigation",
+  "nav.collapseTip": "Collapse to navigation rail",
 
   "topbar.undo": "Undo",
   "topbar.undoTip": "Undo (Ctrl+Z)",
@@ -207,6 +211,38 @@ const en = {
   "inspector.blockGapHint":
     "Uniform gap between inspector sections (sandbox-only; not Apply writeback).",
   "inspector.blockGapSlider": "Inspector section gap",
+
+  "layoutChrome.title": "Layout chrome",
+  "layoutChrome.collapsible": "Layout chrome & rhythm",
+  "layoutChrome.help":
+    "Sandbox-only gaps (--sandbox-*). Agents must use SANDBOX_LAYOUT_AGENT_CATALOG — do not invent ad-hoc gaps. Not written by Apply.",
+  "layoutChrome.rhythmHelp":
+    "Toolbar rhythm (--fynns-layout-control-*). Apply can write these into tokens.ts. Prefer ControlStack + ControlRow.",
+  "layoutChrome.rowGap": "Demo row wrap",
+  "layoutChrome.rowGapHint":
+    "--sandbox-row-gap — flex wrap gap for Motion easing bars / gallery Rows (horizontal and between wrapped lines).",
+  "layoutChrome.sectionGap": "Demo section gap",
+  "layoutChrome.sectionGapHint":
+    "--sandbox-section-gap — title to body inside gallery Section.",
+  "layoutChrome.blockGap": "Inspector section gap",
+  "layoutChrome.blockGapHint":
+    "--sandbox-block-gap — Collapsible stack in inspectors.",
+  "layoutChrome.chromeBar": "Chrome bar height",
+  "layoutChrome.chromeBarHint":
+    "--sandbox-chrome-bar-height — brand cell + page topbar strip.",
+  "layoutChrome.stackGap": "Control stack",
+  "layoutChrome.stackGapHint":
+    "--fynns-layout-control-stack-gap — between ControlRows.",
+  "layoutChrome.rowColGap": "Label | controls",
+  "layoutChrome.rowColGapHint":
+    "--fynns-layout-control-row-column-gap — horizontal label to controls.",
+  "layoutChrome.rowGapStack": "Label above controls",
+  "layoutChrome.rowGapStackHint":
+    "--fynns-layout-control-row-gap — stacked label above controls (narrow).",
+  "layoutChrome.clusterGap": "Control cluster",
+  "layoutChrome.clusterGapHint":
+    "--fynns-layout-control-cluster-gap — siblings inside one controls cluster (e.g. EasingBar track → Replay).",
+
   "inspector.typography": "Type size",
   "inspector.fontSmHint":
     "Small UI text (font-size-sm).",
@@ -245,10 +281,16 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: use ControlStack + ControlRow and the --fynns-layout-control-* tokens listed above. Do not invent ad-hoc gaps. Full recipe: AGENTS.md → Toolbar rhythm.",
   "globals.btnSmall": "Small",
-  "globals.btnDefault": "Default",
+  "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
   "globals.btnPrimary": "Primary",
-  "globals.btnGhost": "Subtle",
+  "globals.btnTonal": "Tonal",
+  "globals.btnElevated": "Elevated",
+  "globals.btnGhost": "Text",
+  "globals.iconBtnTip": "Standard icon button",
+  "globals.iconBtnFilled": "Filled icon button",
+  "globals.iconBtnTonal": "Tonal icon button",
+  "globals.iconBtnOutlined": "Outlined icon button",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -263,8 +305,45 @@ const en = {
   "globals.chipsAria": "Sample chips",
   "globals.chipAssist": "Assist",
   "globals.chipFilter": "Filter",
+  "globals.chipSuggestion": "Suggestion",
   "globals.chipElevated": "Elevated",
   "globals.chipRemove": "Remove chip",
+  "globals.segmentedAria": "Period",
+  "globals.segmentedHelp":
+    "M3 Segmented button (ToggleGroup): outlined stadium, selected check, radiogroup keyboard.",
+  "globals.segmentedDay": "Day",
+  "globals.segmentedWeek": "Week",
+  "globals.segmentedMonth": "Month",
+  "globals.dateHelp":
+    "M3 DatePicker (docked calendar). Values are YYYY-MM-DD. Use DatePickerDialog for a modal confirm flow.",
+  "globals.dateOpenDialog": "Open date dialog",
+  "globals.dateDialogTitle": "Select date",
+  "globals.dateConfirm": "OK",
+  "globals.dateCancel": "Cancel",
+  "globals.dateClose": "Close",
+  "globals.datePrev": "Previous month",
+  "globals.dateNext": "Next month",
+  "globals.dateNone": "No date selected",
+  "globals.dateSelected": "Selected: {date}",
+  "globals.dateWd0": "S",
+  "globals.dateWd1": "M",
+  "globals.dateWd2": "T",
+  "globals.dateWd3": "W",
+  "globals.dateWd4": "T",
+  "globals.dateWd5": "F",
+  "globals.dateWd6": "S",
+  "globals.dateM0": "January",
+  "globals.dateM1": "February",
+  "globals.dateM2": "March",
+  "globals.dateM3": "April",
+  "globals.dateM4": "May",
+  "globals.dateM5": "June",
+  "globals.dateM6": "July",
+  "globals.dateM7": "August",
+  "globals.dateM8": "September",
+  "globals.dateM9": "October",
+  "globals.dateM10": "November",
+  "globals.dateM11": "December",
   "globals.dividerFull": "Divider (full)",
   "globals.dividerInset": "Divider (inset)",
   "globals.dividerVerticalA": "A",
@@ -283,6 +362,11 @@ const en = {
   "globals.avatarCard": "Card author",
   "globals.fabTip": "Create",
   "globals.fabExtended": "Create item",
+  "globals.fabSecondary": "Secondary FAB",
+  "globals.fabTertiary": "Tertiary FAB",
+  "globals.fabSurface": "Surface + lowered",
+  "globals.fabHelp":
+    "M3 FAB: primary / secondary / tertiary / surface color roles; lowered drops elevation; pass label for Extended.",
   "globals.sheetOpen": "Open bottom sheet",
   "globals.sheetTitle": "Bottom sheet",
   "globals.sheetDescription": "Slides up from the bottom edge.",
@@ -406,8 +490,8 @@ const en = {
     "Circle (50%): switch thumb and other round controls.",
   "globalsInspector.resetLadder": "Reset levels",
   "globalsInspector.resetLadderTip":
-    "Restore radius 2xs–3xl to baseline; keep color and other overrides",
-  "globalsInspector.toastReset": "Radius levels reset to baseline",
+    "Restore radius 2xs–3xl to sandbox defaults (md = 20px); keep color and other overrides",
+  "globalsInspector.toastReset": "Radius levels reset to sandbox defaults",
 
   "hue.presetsAria": "Accent color presets",
   "hue.openPalette": "Open hue wheel",
@@ -453,6 +537,10 @@ const zh: Record<MessageKey, string> = {
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
     "按 M3 分类的组件样例（分区默认收起），右侧是圆角 / 形状检查器。",
+  "nav.expand": "展开导航",
+  "nav.expandTip": "展开为导航抽屉",
+  "nav.collapse": "收起导航",
+  "nav.collapseTip": "收起为导航轨",
 
   "topbar.undo": "撤销",
   "topbar.undoTip": "撤销 (Ctrl+Z)",
@@ -627,6 +715,38 @@ const zh: Record<MessageKey, string> = {
   "inspector.blockGapHint":
     "检查器各分区之间的统一间距（仅沙盒；不写回）。",
   "inspector.blockGapSlider": "检查器分区间距",
+
+  "layoutChrome.title": "布局 chrome",
+  "layoutChrome.collapsible": "布局 chrome 与节奏",
+  "layoutChrome.help":
+    "沙盒专用间距（--sandbox-*）。Agent 须使用 SANDBOX_LAYOUT_AGENT_CATALOG，禁止自创 gap。不会由 Apply 写入。",
+  "layoutChrome.rhythmHelp":
+    "工具栏节奏（--fynns-layout-control-*）。Apply 可写入 tokens.ts。优先 ControlStack + ControlRow。",
+  "layoutChrome.rowGap": "演示行换行间距",
+  "layoutChrome.rowGapHint":
+    "--sandbox-row-gap — 动效缓动条 / gallery Row 的 flex 换行间距（水平与换行后行距）。",
+  "layoutChrome.sectionGap": "演示分区间距",
+  "layoutChrome.sectionGapHint":
+    "--sandbox-section-gap — gallery Section 标题到正文。",
+  "layoutChrome.blockGap": "检查器分区间距",
+  "layoutChrome.blockGapHint":
+    "--sandbox-block-gap — 检查器内 Collapsible 堆叠间距。",
+  "layoutChrome.chromeBar": "顶栏条高度",
+  "layoutChrome.chromeBarHint":
+    "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度。",
+  "layoutChrome.stackGap": "控件栈",
+  "layoutChrome.stackGapHint":
+    "--fynns-layout-control-stack-gap — ControlRow 之间。",
+  "layoutChrome.rowColGap": "标签 | 控件",
+  "layoutChrome.rowColGapHint":
+    "--fynns-layout-control-row-column-gap — 横向标签到控件。",
+  "layoutChrome.rowGapStack": "标签在控件上方",
+  "layoutChrome.rowGapStackHint":
+    "--fynns-layout-control-row-gap — 窄屏标签叠在控件上方。",
+  "layoutChrome.clusterGap": "控件簇",
+  "layoutChrome.clusterGapHint":
+    "--fynns-layout-control-cluster-gap — 同一控件簇内兄弟（如缓动轨道 → 重放）。",
+
   "inspector.typography": "字号",
   "inspector.fontSmHint": "较小界面文字（font-size-sm）。",
   "inspector.fontMdHint": "默认正文 / 控件字号（font-size-md）。",
@@ -663,10 +783,16 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmAgentHint":
     "Agent：使用 ControlStack + ControlRow，以及上方列出的 --fynns-layout-control-* token。禁止自创间距。完整配方见 AGENTS.md → Toolbar rhythm。",
   "globals.btnSmall": "小号",
-  "globals.btnDefault": "默认",
+  "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
   "globals.btnPrimary": "主要",
-  "globals.btnGhost": "轻量",
+  "globals.btnTonal": "色调",
+  "globals.btnElevated": "浮起",
+  "globals.btnGhost": "文本",
+  "globals.iconBtnTip": "标准图标按钮",
+  "globals.iconBtnFilled": "实心图标按钮",
+  "globals.iconBtnTonal": "色调图标按钮",
+  "globals.iconBtnOutlined": "描边图标按钮",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
@@ -681,8 +807,45 @@ const zh: Record<MessageKey, string> = {
   "globals.chipsAria": "示例芯片",
   "globals.chipAssist": "辅助",
   "globals.chipFilter": "筛选",
+  "globals.chipSuggestion": "建议",
   "globals.chipElevated": "浮起",
   "globals.chipRemove": "移除芯片",
+  "globals.segmentedAria": "周期",
+  "globals.segmentedHelp":
+    "M3 Segmented button（ToggleGroup）：描边胶囊、选中勾、radiogroup 方向键。",
+  "globals.segmentedDay": "日",
+  "globals.segmentedWeek": "周",
+  "globals.segmentedMonth": "月",
+  "globals.dateHelp":
+    "M3 DatePicker（嵌入式日历）。值为 YYYY-MM-DD。模态确认流程请用 DatePickerDialog。",
+  "globals.dateOpenDialog": "打开日期对话框",
+  "globals.dateDialogTitle": "选择日期",
+  "globals.dateConfirm": "确定",
+  "globals.dateCancel": "取消",
+  "globals.dateClose": "关闭",
+  "globals.datePrev": "上个月",
+  "globals.dateNext": "下个月",
+  "globals.dateNone": "未选择日期",
+  "globals.dateSelected": "已选：{date}",
+  "globals.dateWd0": "日",
+  "globals.dateWd1": "一",
+  "globals.dateWd2": "二",
+  "globals.dateWd3": "三",
+  "globals.dateWd4": "四",
+  "globals.dateWd5": "五",
+  "globals.dateWd6": "六",
+  "globals.dateM0": "一月",
+  "globals.dateM1": "二月",
+  "globals.dateM2": "三月",
+  "globals.dateM3": "四月",
+  "globals.dateM4": "五月",
+  "globals.dateM5": "六月",
+  "globals.dateM6": "七月",
+  "globals.dateM7": "八月",
+  "globals.dateM8": "九月",
+  "globals.dateM9": "十月",
+  "globals.dateM10": "十一月",
+  "globals.dateM11": "十二月",
   "globals.dividerFull": "分割线（通栏）",
   "globals.dividerInset": "分割线（缩进）",
   "globals.dividerVerticalA": "甲",
@@ -701,6 +864,11 @@ const zh: Record<MessageKey, string> = {
   "globals.avatarCard": "卡片作者",
   "globals.fabTip": "创建",
   "globals.fabExtended": "新建条目",
+  "globals.fabSecondary": "次要 FAB",
+  "globals.fabTertiary": "第三色 FAB",
+  "globals.fabSurface": "表面 + 降低海拔",
+  "globals.fabHelp":
+    "M3 FAB：primary / secondary / tertiary / surface 色角色；lowered 降低海拔；传 label 为 Extended。",
   "globals.sheetOpen": "打开底部表单",
   "globals.sheetTitle": "底部表单",
   "globals.sheetDescription": "从底边向上滑入。",
@@ -824,8 +992,8 @@ const zh: Record<MessageKey, string> = {
     "圆形 (50%)：开关圆钮与其他圆形控件。",
   "globalsInspector.resetLadder": "重置等级",
   "globalsInspector.resetLadderTip":
-    "将 radius 2xs–3xl 恢复为基线；保留颜色与其他改动",
-  "globalsInspector.toastReset": "圆角等级已重置为基线",
+    "将 radius 2xs–3xl 恢复为沙盒默认（md = 20px）；保留颜色与其他改动",
+  "globalsInspector.toastReset": "圆角等级已重置为沙盒默认",
 
   "hue.presetsAria": "强调色预设",
   "hue.openPalette": "打开色相环",

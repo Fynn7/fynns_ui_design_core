@@ -254,7 +254,7 @@ function ToastEntry({ item }: ToastEntryProps) {
 }
 
 /** Renders the live toast stack. Mount once near the app root. */
-export function Toaster({ position = "bottom-right", className }: ToasterProps) {
+export function Toaster({ position = "bottom-center", className }: ToasterProps) {
   const items = useSyncExternalStore(store.subscribe, store.getSnapshot, () => EMPTY);
   return (
     <div
