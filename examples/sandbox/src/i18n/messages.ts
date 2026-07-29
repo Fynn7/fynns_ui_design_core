@@ -339,6 +339,18 @@ const en = {
   "globals.bannerShow": "Show banner",
   "globals.bannerHelp":
     "Full-width strip under TopAppBar (message + actions + dismiss). Prefer InfoBanner / WarningBanner for inline alerts inside panels.",
+  "globals.listAria": "Sample content list",
+  "globals.listOneLine": "Inbox",
+  "globals.listTwoLine": "Ada Lovelace",
+  "globals.listTwoLineSupporting": "Notes from yesterday’s review",
+  "globals.listOverline": "Label",
+  "globals.listThreeLine": "Design system sync",
+  "globals.listThreeLineSupporting":
+    "Token ladder, Banner strip, and navigation chrome landed on the shared radius band.",
+  "globals.listStatic": "Preferences",
+  "globals.listStaticSupporting": "Non-interactive row (no onClick)",
+  "globals.listHelp":
+    "M3 content List / ListItem (1–3 lines). Prefer ListGroup / ListRow for sidebar master/detail.",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -745,6 +757,18 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerShow": "显示横幅",
   "globals.bannerHelp":
     "顶栏下全宽条（文案 + 操作 + 关闭）。面板内联提示请优先用 InfoBanner / WarningBanner。",
+  "globals.listAria": "内容列表示例",
+  "globals.listOneLine": "收件箱",
+  "globals.listTwoLine": "Ada Lovelace",
+  "globals.listTwoLineSupporting": "昨天评审留下的备注",
+  "globals.listOverline": "标签",
+  "globals.listThreeLine": "设计系统同步",
+  "globals.listThreeLineSupporting":
+    "Token 阶梯、Banner 条与导航 chrome 已落到同一圆角档。",
+  "globals.listStatic": "偏好设置",
+  "globals.listStaticSupporting": "静态行（无 onClick）",
+  "globals.listHelp":
+    "M3 内容列表 List / ListItem（1–3 行）。侧栏主从列表请优先用 ListGroup / ListRow。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",

@@ -12,6 +12,7 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
+  ChevronRightIcon,
   Chip,
   ChipSet,
   CircularProgress,
@@ -25,6 +26,8 @@ import {
   Input,
   LayoutGridIcon,
   LinearProgress,
+  List,
+  ListItem,
   MenuIcon,
   NavigationRail,
   NavigationRailHeader,
@@ -111,6 +114,7 @@ export function GlobalsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
+  const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -292,6 +296,54 @@ export function GlobalsPage() {
             alt={t("globals.avatarBroken")}
           />
         </div>
+        <div
+          className="sandbox-globals-list"
+          style={{
+            width: "100%",
+            maxWidth: "22rem",
+            border: "1px solid var(--fynns-color-border)",
+            borderRadius: "var(--fynns-radius-md)",
+            overflow: "hidden",
+            background: "var(--fynns-color-surface-1)",
+          }}
+        >
+          <List aria-label={t("globals.listAria")}>
+            <ListItem
+              headline={t("globals.listOneLine")}
+              leading={<FolderOpenIcon />}
+              trailing={<ChevronRightIcon />}
+              trailingSupportingText="24"
+              selected={listId === "inbox"}
+              onClick={() => setListId("inbox")}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listTwoLine")}
+              supportingText={t("globals.listTwoLineSupporting")}
+              leading={<Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />}
+              trailingSupportingText="10:24"
+              selected={listId === "starred"}
+              onClick={() => setListId("starred")}
+            />
+            <Divider inset />
+            <ListItem
+              overline={t("globals.listOverline")}
+              headline={t("globals.listThreeLine")}
+              supportingText={t("globals.listThreeLineSupporting")}
+              leading={<InfoIcon />}
+              trailing={<ChevronRightIcon />}
+              selected={listId === "sent"}
+              onClick={() => setListId("sent")}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listStatic")}
+              supportingText={t("globals.listStaticSupporting")}
+              leading={<SettingsIcon />}
+            />
+          </List>
+        </div>
+        <p className="sandbox-help">{t("globals.listHelp")}</p>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <span className="sandbox-help">{t("globals.dividerFull")}</span>
           <Divider />

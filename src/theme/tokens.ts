@@ -511,6 +511,28 @@ export const BANNER_TOKENS = {
 } as const;
 
 /**
+ * M3 content List / ListItem geometry (at 16px rem).
+ * One-line 56dp; two-line 72dp; three-line 88dp. Distinct from sidebar
+ * `ListRow` / `ListGroup` chrome.
+ * `--fynns-list-<key>`.
+ */
+export const LIST_TOKENS = {
+  "height-1": "3.5rem",
+  "height-2": "4.5rem",
+  "height-3": "5.5rem",
+  "pad-inline": "1rem",
+  "pad-block": "0.5rem",
+  gap: "1rem",
+  /** Leading / trailing glyph; matches `--fynns-size-icon` (20dp). */
+  "icon-size": "1.25rem",
+  /**
+   * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
+   * avatar rows share one vertical grid; glyphs center inside the slot.
+   */
+  "leading-width": "2.5rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -798,6 +820,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
+  ["list", LIST_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

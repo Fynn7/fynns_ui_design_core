@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -217,6 +217,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` long-strip group
   with SearchBar / BottomAppBar / NavigationDrawer items / sheet tops). Prefer
   `InfoBanner` / `WarningBanner` for inline alerts inside panels.
+- **List** + **ListItem** `{ headline, supportingText?, overline?, leading?,
+  trailing?, trailingSupportingText?, lines?: 1|2|3, selected?, interactive?,
+  disabled? }` — M3 content list (56 / 72 / 88dp). Fixed `--fynns-list-leading-width`
+  (40dp, matches Avatar `md`) grids icon/avatar columns so headlines share one
+  start edge. Type roles map to the shared font-size ladder (`overline` → `xs`,
+  `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
+  `ListRow` for sidebar master/detail chrome.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -346,6 +353,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
   compact tree chevrons, and nested branches. `ListGroupTrigger` integrates chevron
   + title; `ListDisclosureToggle` is chevron-only for split headers or tree rows.
+  Prefer **List** / **ListItem** for main-content M3 lists.
 - **ListRow** / **ListRowSelectable** / **ListRowBody** / **ListRowTitle** /
   **ListRowName** / **ListRowSub** / **ListRowBadges** / **ListRowMain** —
   selectable sidebar rows (normal and bulk-select shells).
