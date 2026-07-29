@@ -10,6 +10,7 @@ import {
 } from "react";
 import { CloseIcon, SearchIcon } from "./icons";
 import { IconButton } from "./IconButton";
+import { Tooltip } from "./Tooltip";
 
 export type SearchBarProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -139,36 +140,39 @@ export const SearchBar = forwardRef(function SearchBar(
           }}
           onBlur={(event) => {
             onBlur?.(event);
-            // Collapse when focus leaves the whole search bar (field + results).
+            if (!onExpandedChange || !rootRef.current) return;
+            // relatedTarget is null when clicking non-focusable chrome; re-check
+            // after the browser updates document.activeElement.
+            const root = rootRef.current;
             const next = event.relatedTarget as Node | null;
-            if (
-              onExpandedChange &&
-              rootRef.current &&
-              next &&
-              !rootRef.current.contains(next)
-            ) {
-              setExpanded(false);
-            }
+            if (next && root.contains(next)) return;
+            requestAnimationFrame(() => {
+              if (!root.contains(document.activeElement)) {
+                setExpanded(false);
+              }
+            });
           }}
           onKeyDown={handleKeyDown}
         />
         <span className="fynns-search-bar-trailing">
           {showClear ? (
-            <IconButton
-              type="button"
-              aria-label={clearAriaLabel}
-              disabled={disabled}
-              onMouseDown={(event) => {
-                // Keep focus on the input / avoid blur-collapse before clear.
-                event.preventDefault();
-              }}
-              onClick={() => {
-                onChange("");
-                if (onExpandedChange) setExpanded(true);
-              }}
-            >
-              <CloseIcon size={20} />
-            </IconButton>
+            <Tooltip content={clearAriaLabel}>
+              <IconButton
+                type="button"
+                aria-label={clearAriaLabel}
+                disabled={disabled}
+                onMouseDown={(event) => {
+                  // Keep focus on the input / avoid blur-collapse before clear.
+                  event.preventDefault();
+                }}
+                onClick={() => {
+                  onChange("");
+                  if (onExpandedChange) setExpanded(true);
+                }}
+              >
+                <CloseIcon size={20} />
+              </IconButton>
+            </Tooltip>
           ) : null}
           {trailing}
         </span>
@@ -177,7 +181,7 @@ export const SearchBar = forwardRef(function SearchBar(
         <div
           id={resultsId}
           className="fynns-search-bar-results fynns-scroll"
-          role="listbox"
+          role="group"
           aria-label={ariaLabel}
         >
           {children}
@@ -207,8 +211,6 @@ export const SearchBarResult = forwardRef(function SearchBarResult(
       {...rest}
       ref={ref}
       type={type}
-      role="option"
-      aria-selected={active || undefined}
       className={[
         "fynns-search-bar-result",
         active ? "fynns-search-bar-result--active" : "",
