@@ -3270,7 +3270,7 @@
 .fynns-checkbox-box {
   width: var(--fynns-selection-box-size);
   height: var(--fynns-selection-box-size);
-  border-radius: var(--fynns-selection-box-radius);
+  border-radius: var(--fynns-radius-2xs);
   border: var(--fynns-selection-box-outline) solid var(--fynns-color-text-muted);
   background: transparent;
   color: var(--fynns-color-on-accent);
@@ -4824,7 +4824,7 @@
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
   border: 0;
-  border-radius: var(--fynns-navdrawer-item-radius);
+  border-radius: var(--fynns-radius-lg);
   background: transparent;
   color: var(--fynns-color-text-muted);
   font: inherit;
@@ -4996,4 +4996,175 @@
   height: var(--fynns-bottomappbar-action-size);
   min-width: var(--fynns-bottomappbar-action-size);
   min-height: var(--fynns-bottomappbar-action-size);
+}
+
+/* ---------- SearchBar (M3 elevated search) ---------- */
+.fynns-search-bar {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  z-index: var(--fynns-z-dropdown);
+}
+
+/* Collapsed: capsule field. Expanded: one continuous shell (Google-style). */
+.fynns-search-bar-field {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  min-height: var(--fynns-searchbar-height);
+  height: var(--fynns-searchbar-height);
+  padding-inline: var(--fynns-searchbar-pad-inline);
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-md);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-radius var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-search-bar--expanded {
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-lg);
+  overflow: hidden;
+}
+
+.fynns-search-bar--expanded:focus-within {
+  box-shadow:
+    var(--fynns-shadow-lg),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar--expanded .fynns-search-bar-field {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fynns-search-bar--disabled .fynns-search-bar-field {
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-search-bar-leading,
+.fynns-search-bar-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-space-2xs);
+  min-width: var(--fynns-searchbar-icon-slot);
+  height: var(--fynns-searchbar-height);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-search-bar-leading svg {
+  width: var(--fynns-searchbar-icon-size);
+  height: var(--fynns-searchbar-icon-size);
+}
+
+.fynns-search-bar-input {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding-inline: var(--fynns-searchbar-input-pad-inline);
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-searchbar-font-size);
+  line-height: var(--fynns-searchbar-line-height);
+  outline: none;
+  appearance: none;
+}
+
+.fynns-search-bar-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-search-bar-input::-webkit-search-decoration,
+.fynns-search-bar-input::-webkit-search-cancel-button,
+.fynns-search-bar-input::-webkit-search-results-button,
+.fynns-search-bar-input::-webkit-search-results-decoration {
+  appearance: none;
+}
+
+.fynns-search-bar:not(.fynns-search-bar--expanded) .fynns-search-bar-field:focus-within {
+  box-shadow:
+    var(--fynns-shadow-md),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+/* Results share the expanded shell. Suggestion hover stays slightly squarer
+   (`radius-sm`) and is inset from the shell edge so it does not fight the
+   large outer `--fynns-radius-3xl` curve (Google Search pattern). */
+.fynns-search-bar-results {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-searchbar-results-gap);
+  max-height: var(--fynns-searchbar-results-max-height);
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
+  overflow: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-search-bar-result {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: 2.5rem;
+  margin: 0;
+  padding-block: var(--fynns-space-xs);
+  padding-inline: var(--fynns-space-md);
+  border: 0;
+  border-radius: var(--fynns-radius-sm);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-search-bar-result:hover:not(:disabled),
+.fynns-search-bar-result--active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar-result:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-search-bar-field {
+    transition: none;
+  }
 }

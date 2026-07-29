@@ -156,9 +156,15 @@ export const SIZE_TOKENS = {
  * Corner radii. `--fynns-radius-<key>`.
  * T-shirt keys roughly track the M3 shape scale (see `tokens.m3-draft.ts`);
  * numeric values remain fynns overrides, not a 1:1 M3 copy.
+ *
+ * Hard rule: every key here MUST appear in the sandbox Globals shape inspector
+ * (`GlobalsInspector` EDITABLE_RADIUS or READONLY_RADIUS). Do not add radius
+ * tokens under other groups (`--fynns-<component>-*-radius`).
  */
 export const RADIUS_TOKENS = {
   none: "0",
+  /** Finer than xs — checkbox box (M3 ≈ 2dp). */
+  "2xs": "2px",
   /** M3 extra-small ≈ 4dp */
   xs: "4px",
   sm: "6px",
@@ -168,9 +174,8 @@ export const RADIUS_TOKENS = {
   /** M3 extra-large band */
   xl: "16px",
   "2xl": "24px",
-  /** M3 extra-large / sheet top corners ≈ 28dp. */
+  /** M3 extra-large / sheet top corners / SearchBar ≈ 28dp. */
   "3xl": "28px",
-  "flyout-glyph": "5px",
   pill: "999px",
   round: "50%",
 } as const;
@@ -337,7 +342,6 @@ export const TOGGLE_TOKENS = {
  */
 export const SELECTION_TOKENS = {
   "box-size": "1.125rem",
-  "box-radius": "2px",
   "box-outline": "2px",
   "radio-size": "1.25rem",
   "radio-dot": "0.625rem",
@@ -447,6 +451,32 @@ export const BOTTOM_APPBAR_TOKENS = {
 } as const;
 
 /**
+ * Search bar geometry (M3 SearchBar at 16px rem).
+ * Collapsed 56dp capsule; expanded merges field + results into one shell.
+ * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
+ * Prefer `SearchInput` for dense form rows.
+ * `--fynns-searchbar-<key>`.
+ */
+export const SEARCHBAR_TOKENS = {
+  height: "3.5rem",
+  "pad-inline": "0.25rem",
+  "icon-slot": "3rem",
+  "icon-size": "1.5rem",
+  "input-pad-inline": "0.25rem",
+  "font-size": "1rem",
+  "line-height": "1.5",
+  "results-max-height": "20rem",
+  /**
+   * Inset around suggestion rows (Google-style): hover chips stay off the
+   * shell’s large `--fynns-radius-3xl` corners — do not match radii; inset instead.
+   */
+  "results-pad-block-start": "0.5rem",
+  "results-pad-block-end": "0.75rem",
+  "results-pad-inline": "0.5rem",
+  "results-gap": "0.125rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -524,7 +554,6 @@ export const NAVDRAWER_TOKENS = {
   "item-pad-inline-start": "1rem",
   "item-pad-inline-end": "1.5rem",
   "item-gap": "0.75rem",
-  "item-radius": "var(--fynns-radius-lg)",
   "icon-size": "1.5rem",
   "label-size": "0.875rem",
   "label-line": "1.25",
@@ -605,7 +634,6 @@ export const SCROLLBAR_TOKENS = {
   "thumb-hover": "rgba(22, 159, 177, 0.384)",
   "thumb-active": "rgba(22, 159, 177, 0.678)",
   track: "transparent",
-  "thumb-radius": "10px",
   "thumb-border": "2px",
 } as const;
 
@@ -730,6 +758,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
+  ["searchbar", SEARCHBAR_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

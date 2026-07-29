@@ -100,6 +100,7 @@
   --fynns-size-240: 240px;
   --fynns-size-360: 360px;
   --fynns-radius-none: 0;
+  --fynns-radius-2xs: 2px;
   --fynns-radius-xs: 4px;
   --fynns-radius-sm: 6px;
   --fynns-radius-md: 8px;
@@ -107,7 +108,6 @@
   --fynns-radius-xl: 16px;
   --fynns-radius-2xl: 24px;
   --fynns-radius-3xl: 28px;
-  --fynns-radius-flyout-glyph: 5px;
   --fynns-radius-pill: 999px;
   --fynns-radius-round: 50%;
   --fynns-shadow-none: none;
@@ -195,7 +195,6 @@
   --fynns-toggle-track-pad-checked-sm: 0.1875rem;
   --fynns-toggle-margin-top: 0.08em;
   --fynns-selection-box-size: 1.125rem;
-  --fynns-selection-box-radius: 2px;
   --fynns-selection-box-outline: 2px;
   --fynns-selection-radio-size: 1.25rem;
   --fynns-selection-radio-dot: 0.625rem;
@@ -249,6 +248,18 @@
   --fynns-bottomappbar-action-size: 2.5rem;
   --fynns-bottomappbar-action-icon-size: 1.5rem;
   --fynns-bottomappbar-fab-pad-inline-end: 0.25rem;
+  --fynns-searchbar-height: 3.5rem;
+  --fynns-searchbar-pad-inline: 0.25rem;
+  --fynns-searchbar-icon-slot: 3rem;
+  --fynns-searchbar-icon-size: 1.5rem;
+  --fynns-searchbar-input-pad-inline: 0.25rem;
+  --fynns-searchbar-font-size: 1rem;
+  --fynns-searchbar-line-height: 1.5;
+  --fynns-searchbar-results-max-height: 20rem;
+  --fynns-searchbar-results-pad-block-start: 0.5rem;
+  --fynns-searchbar-results-pad-block-end: 0.75rem;
+  --fynns-searchbar-results-pad-inline: 0.5rem;
+  --fynns-searchbar-results-gap: 0.125rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;
@@ -291,7 +302,6 @@
   --fynns-navdrawer-item-pad-inline-start: 1rem;
   --fynns-navdrawer-item-pad-inline-end: 1.5rem;
   --fynns-navdrawer-item-gap: 0.75rem;
-  --fynns-navdrawer-item-radius: var(--fynns-radius-lg);
   --fynns-navdrawer-icon-size: 1.5rem;
   --fynns-navdrawer-label-size: 0.875rem;
   --fynns-navdrawer-label-line: 1.25;
@@ -338,7 +348,6 @@
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);
   --fynns-scrollbar-thumb-active: rgba(22, 159, 177, 0.678);
   --fynns-scrollbar-track: transparent;
-  --fynns-scrollbar-thumb-radius: 10px;
   --fynns-scrollbar-thumb-border: 2px;
   --fynns-border-hairline: 1px;
   --fynns-opacity-muted: 0.8;
@@ -453,7 +462,7 @@ button {
 
 *::-webkit-scrollbar-thumb {
   background-color: var(--fynns-scrollbar-thumb);
-  border-radius: var(--fynns-scrollbar-thumb-radius);
+  border-radius: var(--fynns-radius-lg);
   border: var(--fynns-scrollbar-thumb-border) solid transparent;
   background-clip: padding-box;
 }

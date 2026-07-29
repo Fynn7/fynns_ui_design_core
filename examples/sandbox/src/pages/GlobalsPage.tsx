@@ -36,6 +36,8 @@ import {
   PlusIcon,
   Radio,
   SearchIcon,
+  SearchBar,
+  SearchBarResult,
   Select,
   SettingsIcon,
   Switch,
@@ -88,6 +90,8 @@ export function GlobalsPage() {
     "inbox",
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -536,6 +540,51 @@ export function GlobalsPage() {
           />
         </div>
         <p className="sandbox-help">{t("globals.bottomAppBarHelp")}</p>
+        <div
+          className="sandbox-globals-search-bar"
+          style={{
+            width: "100%",
+            maxWidth: "28rem",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            ariaLabel={t("globals.searchBarAria")}
+            placeholder={t("globals.searchBarPlaceholder")}
+            clearAriaLabel={t("globals.searchBarClear")}
+            expanded={searchExpanded}
+            onExpandedChange={setSearchExpanded}
+            onSearch={() => setSearchExpanded(false)}
+          >
+            {(
+              [
+                t("globals.searchBarResultLibs"),
+                t("globals.searchBarResultDocs"),
+                t("globals.searchBarResultSettings"),
+              ] as const
+            )
+              .filter((label) =>
+                searchQuery.trim()
+                  ? label.toLowerCase().includes(searchQuery.trim().toLowerCase())
+                  : true,
+              )
+              .map((label) => (
+                <SearchBarResult
+                  key={label}
+                  onClick={() => {
+                    setSearchQuery(label);
+                    setSearchExpanded(false);
+                  }}
+                >
+                  {label}
+                </SearchBarResult>
+              ))}
+          </SearchBar>
+        </div>
+        <p className="sandbox-help">{t("globals.searchBarHelp")}</p>
       </section>
 
       <section

@@ -50,6 +50,8 @@ import {
   PlusIcon,
   Radio,
   SearchIcon,
+  SearchBar,
+  SearchBarResult,
   SearchInput,
   Select,
   SettingsIcon,
@@ -94,6 +96,8 @@ export function App() {
   const [count, setCount] = useState(5);
   const [speed, setSpeed] = useState(40);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchExpanded, setSearchExpanded] = useState(false);
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -242,6 +246,23 @@ export function App() {
           <Textarea placeholder="Textarea" style={{ minHeight: "3rem", width: "16rem" }} />
           <Counter value={count} onChange={setCount} min={1} max={20} ariaLabel="Count" />
           <SearchInput placeholder="Search..." wrapClassName="" style={{ width: "16rem" }} />
+          <div style={{ width: "20rem", position: "relative", zIndex: 1 }}>
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              ariaLabel="Search gallery"
+              placeholder="Search…"
+              expanded={searchExpanded}
+              onExpandedChange={setSearchExpanded}
+            >
+              <SearchBarResult onClick={() => { setSearchQuery("Buttons"); setSearchExpanded(false); }}>
+                Buttons
+              </SearchBarResult>
+              <SearchBarResult onClick={() => { setSearchQuery("Cards"); setSearchExpanded(false); }}>
+                Cards
+              </SearchBarResult>
+            </SearchBar>
+          </div>
           <Select
             value={fruit}
             onChange={setFruit}

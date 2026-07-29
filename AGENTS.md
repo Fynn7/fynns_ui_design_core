@@ -106,6 +106,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
   `npm run gen:theme`.
+- **DON'T** invent private radius CSS variables outside `--fynns-radius-*`
+  (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
+  `--fynns-<component>-*-radius`). Corner radius **must** use
+  `var(--fynns-radius-<key>)` from [`RADIUS_TOKENS`](src/theme/tokens.ts).
+  Every key in `RADIUS_TOKENS` **must** appear in the sandbox Globals shape
+  inspector (editable slider or explicit read-only row). If a new radius step is
+  required, add it to `RADIUS_TOKENS` **and** to
+  [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
+  same change — never ship a radius token that the GUI cannot show.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Every overlay, toggle, and
   toast here is self-developed. Extend these primitives instead.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
@@ -131,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -193,6 +202,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
 - **SearchInput** `{ leadingIcon?, trailing?, wrapClassName?, invalid?, size?,
   supportingText?, errorText?, ...inputAttrs }`.
+- **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
+  expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
+  elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
+  field + results merge into one docked shell. Prefer `SearchInput` for dense
+  form rows.
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
