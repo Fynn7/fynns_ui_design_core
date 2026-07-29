@@ -5560,16 +5560,20 @@
 }
 
 .fynns-datepicker-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(7, var(--fynns-datepicker-day-size));
+  gap: var(--fynns-datepicker-gap);
   align-items: center;
-  justify-content: space-between;
-  gap: var(--fynns-space-sm);
+  /* Explicit track sum so header/week/day grids share one alignment edge. */
+  width: calc(
+    7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap)
+  );
   min-height: var(--fynns-datepicker-header-min-height);
-  padding-inline: var(--fynns-space-2xs);
   margin-block-end: var(--fynns-space-xs);
 }
 
 .fynns-datepicker-title {
+  grid-column: 1 / span 5;
   margin: 0;
   font-size: var(--fynns-font-size-md);
   font-weight: var(--fynns-font-weight-medium);
@@ -5577,10 +5581,70 @@
   color: var(--fynns-color-text);
 }
 
+/* Children (tooltip triggers) occupy day columns 6–7 via the header grid. */
 .fynns-datepicker-nav {
+  display: contents;
+}
+
+/*
+ * Nav sits in day columns 6–7: button box = day cell (40dp). Hover/pressed
+ * disc matches TopAppBar (`--fynns-appbar-action-hover-size`, 36dp) — slightly
+ * under the cell, 20dp glyph, not glued to the icon.
+ */
+.fynns-datepicker-nav .fynns-tooltip-trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--fynns-space-2xs);
+  justify-content: center;
+  width: var(--fynns-datepicker-day-size);
+  height: var(--fynns-datepicker-day-size);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon {
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-datepicker-day-size);
+  height: var(--fynns-datepicker-day-size);
+  min-width: var(--fynns-datepicker-day-size);
+  min-height: var(--fynns-datepicker-day-size);
+  padding: 0;
+  overflow: visible;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--fynns-appbar-action-hover-size);
+  height: var(--fynns-appbar-action-hover-size);
+  transform: translate(-50%, -50%);
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:hover:not(:disabled),
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:active:not(:disabled) {
+  background: transparent;
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before {
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
 }
 
 .fynns-datepicker-weekdays,
@@ -5588,7 +5652,9 @@
   display: grid;
   grid-template-columns: repeat(7, var(--fynns-datepicker-day-size));
   gap: var(--fynns-datepicker-gap);
-  justify-content: center;
+  width: calc(
+    7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap)
+  );
 }
 
 .fynns-datepicker-weekday {

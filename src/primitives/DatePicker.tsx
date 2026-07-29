@@ -310,7 +310,6 @@ export function DatePicker({
           <Tooltip content={prevLabel}>
             <IconButton
               type="button"
-              size="sm"
               aria-label={prevLabel}
               disabled={prevDisabled}
               onClick={() => setMonth(prevMonth)}
@@ -321,7 +320,6 @@ export function DatePicker({
           <Tooltip content={nextLabel}>
             <IconButton
               type="button"
-              size="sm"
               aria-label={nextLabel}
               disabled={nextDisabled}
               onClick={() => setMonth(nextMonth)}
