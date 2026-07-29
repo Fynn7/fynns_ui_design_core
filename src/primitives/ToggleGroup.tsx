@@ -1,7 +1,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { Fragment, useId } from "react";
 import { CheckIcon } from "./icons";
-import { Tooltip } from "./Tooltip.tsx";
+import { Tooltip } from "./Tooltip";
 
 export type ToggleGroupOption<V extends string> = {
   value: V;
@@ -86,11 +86,17 @@ export function ToggleGroup<V extends string>({
       move(index, -1);
     } else if (event.key === "Home") {
       event.preventDefault();
-      if (enabled[0]) selectAt(enabled[0].i);
+      if (enabled[0]) {
+        selectAt(enabled[0].i);
+        document.getElementById(`${baseId}-seg-${enabled[0].i}`)?.focus();
+      }
     } else if (event.key === "End") {
       event.preventDefault();
       const last = enabled[enabled.length - 1];
-      if (last) selectAt(last.i);
+      if (last) {
+        selectAt(last.i);
+        document.getElementById(`${baseId}-seg-${last.i}`)?.focus();
+      }
     }
   };
 

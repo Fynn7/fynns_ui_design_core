@@ -1965,7 +1965,7 @@
   right: 0;
   bottom: 0;
   height: 3px;
-  border-radius: 3px 3px 0 0;
+  border-radius: var(--fynns-radius-2xs) var(--fynns-radius-2xs) 0 0;
   background: var(--fynns-color-accent);
 }
 

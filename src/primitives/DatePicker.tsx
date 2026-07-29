@@ -2,8 +2,10 @@ import {
   useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
   type HTMLAttributes,
+  type KeyboardEvent,
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
@@ -254,6 +256,7 @@ export function DatePicker({
     [year, monthIndex, weekStartsOn],
   );
   const today = todayValue();
+  const gridId = `${headingId}-grid`;
 
   const isOutOfRange = (date: DateValue) => {
     if (minDate && compareDateValues(date, minDate) < 0) return true;
@@ -261,14 +264,142 @@ export function DatePicker({
     return false;
   };
 
+  const isDayDisabled = (date: DateValue) =>
+    disabled || isOutOfRange(date) || Boolean(isDateDisabled?.(date));
+
+  /** Roving tabindex target: selected → today → first enabled cell in view. */
+  const tabbableValue = useMemo(() => {
+    const dayDisabled = (date: DateValue) =>
+      disabled ||
+      (minDate != null && compareDateValues(date, minDate) < 0) ||
+      (maxDate != null && compareDateValues(date, maxDate) > 0) ||
+      Boolean(isDateDisabled?.(date));
+    const enabled = cells.filter((c) => !dayDisabled(c.value));
+    if (enabled.length === 0) return null;
+    if (selected && enabled.some((c) => c.value === selected)) return selected;
+    if (enabled.some((c) => c.value === today && c.inMonth)) return today;
+    const inMonth = enabled.find((c) => c.inMonth);
+    return (inMonth ?? enabled[0]).value;
+  }, [cells, selected, today, disabled, minDate, maxDate, isDateDisabled]);
+
+  const [focusValue, setFocusValue] = useState<DateValue | null>(null);
+  const restoreFocusRef = useRef(false);
+  const activeFocus =
+    focusValue &&
+    cells.some((c) => c.value === focusValue && !isDayDisabled(c.value))
+      ? focusValue
+      : tabbableValue;
+
+  useEffect(() => {
+    if (!restoreFocusRef.current || !activeFocus) return;
+    restoreFocusRef.current = false;
+    document.getElementById(`${gridId}-day-${activeFocus}`)?.focus();
+  }, [activeFocus, gridId, year, monthIndex]);
+
+  const focusDay = (date: DateValue) => {
+    const parsed = parseDateValue(date);
+    if (parsed && (parsed.year !== year || parsed.monthIndex !== monthIndex)) {
+      setMonth({ year: parsed.year, monthIndex: parsed.monthIndex });
+    }
+    setFocusValue(date);
+    restoreFocusRef.current = true;
+  };
+
   const pick = (date: DateValue) => {
     if (disabled) return;
     if (isOutOfRange(date) || isDateDisabled?.(date)) return;
     if (valueProp === undefined) setUncontrolledValue(date);
     onChange?.(date);
-    const parsed = parseDateValue(date);
-    if (parsed && (parsed.year !== year || parsed.monthIndex !== monthIndex)) {
-      setMonth({ year: parsed.year, monthIndex: parsed.monthIndex });
+    focusDay(date);
+  };
+
+  const moveFocusByDays = (from: DateValue, delta: number) => {
+    const parts = parseDateValue(from);
+    if (!parts) return;
+    const step = delta >= 0 ? 1 : -1;
+    let candidate = formatDateValue(
+      parts.year,
+      parts.monthIndex,
+      parts.day + delta,
+    );
+    for (let i = 0; i < 62; i += 1) {
+      if (!isDayDisabled(candidate)) {
+        focusDay(candidate);
+        return;
+      }
+      const cp = parseDateValue(candidate);
+      if (!cp) return;
+      const d = new Date(cp.year, cp.monthIndex, cp.day + step);
+      candidate = formatDateValue(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+  };
+
+  const shiftMonthKeepDay = (deltaMonths: number) => {
+    const anchor = parseDateValue(activeFocus ?? selected ?? today);
+    if (!anchor) return;
+    const target = addMonths(year, monthIndex, deltaMonths);
+    const dim = daysInMonth(target.year, target.monthIndex);
+    const day = Math.min(anchor.day, dim);
+    focusDay(formatDateValue(target.year, target.monthIndex, day));
+  };
+
+  const onGridKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!activeFocus || disabled) return;
+    switch (event.key) {
+      case "ArrowLeft":
+        event.preventDefault();
+        moveFocusByDays(activeFocus, -1);
+        break;
+      case "ArrowRight":
+        event.preventDefault();
+        moveFocusByDays(activeFocus, 1);
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        moveFocusByDays(activeFocus, -7);
+        break;
+      case "ArrowDown":
+        event.preventDefault();
+        moveFocusByDays(activeFocus, 7);
+        break;
+      case "Home": {
+        event.preventDefault();
+        const idx = cells.findIndex((c) => c.value === activeFocus);
+        if (idx < 0) break;
+        const rowStart = idx - (idx % 7);
+        for (let i = rowStart; i < rowStart + 7; i += 1) {
+          const c = cells[i];
+          if (c && !isDayDisabled(c.value)) {
+            focusDay(c.value);
+            break;
+          }
+        }
+        break;
+      }
+      case "End": {
+        event.preventDefault();
+        const idx = cells.findIndex((c) => c.value === activeFocus);
+        if (idx < 0) break;
+        const rowStart = idx - (idx % 7);
+        for (let i = rowStart + 6; i >= rowStart; i -= 1) {
+          const c = cells[i];
+          if (c && !isDayDisabled(c.value)) {
+            focusDay(c.value);
+            break;
+          }
+        }
+        break;
+      }
+      case "PageUp":
+        event.preventDefault();
+        shiftMonthKeepDay(-1);
+        break;
+      case "PageDown":
+        event.preventDefault();
+        shiftMonthKeepDay(1);
+        break;
+      default:
+        break;
     }
   };
 
@@ -337,22 +468,23 @@ export function DatePicker({
         ))}
       </div>
       <div
+        id={gridId}
         className="fynns-datepicker-grid"
         role="grid"
         aria-labelledby={headingId}
+        onKeyDown={onGridKeyDown}
       >
         {Array.from({ length: cells.length / 7 }, (_, row) => (
           <div key={row} className="fynns-datepicker-row" role="row">
             {cells.slice(row * 7, row * 7 + 7).map((cell) => {
               const selectedDay = selected != null && cell.value === selected;
               const isToday = cell.value === today;
-              const dayDisabled =
-                disabled ||
-                isOutOfRange(cell.value) ||
-                Boolean(isDateDisabled?.(cell.value));
+              const dayDisabled = isDayDisabled(cell.value);
+              const isTabbable = !dayDisabled && cell.value === activeFocus;
               return (
                 <button
                   key={cell.value}
+                  id={`${gridId}-day-${cell.value}`}
                   type="button"
                   role="gridcell"
                   className={join(
@@ -365,12 +497,9 @@ export function DatePicker({
                   aria-current={isToday ? "date" : undefined}
                   aria-label={cell.value}
                   disabled={dayDisabled}
-                  tabIndex={
-                    selectedDay || (!selected && isToday && cell.inMonth)
-                      ? 0
-                      : -1
-                  }
+                  tabIndex={isTabbable ? 0 : -1}
                   onClick={() => pick(cell.value)}
+                  onFocus={() => setFocusValue(cell.value)}
                 >
                   <span className="fynns-datepicker-day-label">{cell.day}</span>
                 </button>
