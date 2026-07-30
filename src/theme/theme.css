@@ -130,7 +130,7 @@
   --fynns-state-pressed: 12%;
   --fynns-state-dragged: 16%;
   --fynns-font-ui: system-ui, "Segoe UI", Roboto, sans-serif;
-  --fynns-font-mono: "Cascadia Code", "Fira Code", ui-monospace, monospace;
+  --fynns-font-mono: Consolas, "Cascadia Code", "Fira Code", ui-monospace, monospace;
   --fynns-font-serif: "CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif;
   --fynns-font-size-xs: 0.75rem;
   --fynns-font-size-sm: 0.875rem;
@@ -243,6 +243,7 @@
   --fynns-appbar-height-lg: 6.5rem;
   --fynns-appbar-row-height: 2.5rem;
   --fynns-appbar-pad-inline: 0.5rem;
+  --fynns-appbar-actions-gap: 0;
   --fynns-appbar-action-hover-size: 2.25rem;
   --fynns-appbar-title-pad-inline: 0.75rem;
   --fynns-appbar-title-pad-bottom-md: 0.75rem;
@@ -491,6 +492,14 @@ body {
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-root);
+}
+
+/* Code-like text: always the mono stack (Consolas first). */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--fynns-font-mono);
 }
 
 button {

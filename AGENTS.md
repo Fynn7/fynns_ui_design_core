@@ -181,7 +181,9 @@ legacy semantic keys (`caption`, `form-label`, …) remain.
 Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thumb`,
 `glow-accent`, `glow-danger`.
 
-Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
+Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/Fira).
+`theme.css` resets `code` / `kbd` / `samp` / `pre` onto the mono stack so bare
+`<code>` labels never fall back to the browser default monospace.
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,toggle,fast,flyout,base,slow,pointer,loop-pulse,
 loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
@@ -258,9 +260,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   ends (no wrap). Track stays scrollable for drag/swipe but hides the
   scrollbar (chrome is arrows/dots).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
-  portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
-  (e.g. Collapsible / scroll panels) do not clip the flyout.
+  onChange, ariaLabel, disabled?, placeholder?, variant?: "filled"|"outlined",
+  size?: "sm"|"md" }` — M3 **exposed dropdown menu**: trigger reuses `Input`
+  field chrome (`.fynns-field-shell` + `.fynns-input--in-shell` + trailing
+  chevron); list portal rows reuse `.fynns-search-bar-result` (state-layer
+  hover) with an M3 leading check when selected — not accent ink / left bar.
+  Anchored flip top/bottom so overflow ancestors do not clip. Not SearchInput /
+  pill — that radius is search-only.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
@@ -366,8 +372,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   — M3 **Segmented button** (single-select). Outlined stadium row (`--fynns-segmented-*`),
   40dp (compact 32dp), hairline dividers, selected = `secondary-container` + leading
   check (disable with `showCheck={false}`). Options may include `tip`, `ariaLabel`,
-  and `icon` (replaced by the check while selected). Equal-width segments; `fullWidth`
-  justifies across the container. `role="radiogroup"` + arrow-key paging.
+  and `icon` (replaced by the check while selected). Equal-width segments; leading
+  check/icon slides open/closed (`--fynns-duration-fast` + `--fynns-ease-emphasized`)
+  so unselected labels stay centered. `fullWidth` justifies across the container.
+  `role="radiogroup"` + arrow-key paging.
   Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
   **ChipSet** `{ variant?: "assist"|"filter"|"input"|"suggestion", selected?, elevated?,
   leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
@@ -439,9 +447,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
   Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
-  top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
-  at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
-  Prefer `Panel` for sidebar chrome.
+  top app bar (40 / 80 / 104dp; denser than stock M3). Leading/trailing actions
+  keep the standard 40dp `IconButton` hit target (`--fynns-appbar-actions-gap`
+  between siblings). Title uses medium weight at compact type. `scrolled` →
+  surface-1 + shadow (caller owns scroll). Prefer `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
   action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` long-strip group
   with SearchBar / Banner / NavigationDrawer items / sheet tops). Actions

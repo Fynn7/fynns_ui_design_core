@@ -667,50 +667,46 @@
   appearance: none;
 }
 
-/* ---------- Select ---------- */
+/* ---------- Select (M3 exposed dropdown — Input field chrome + menu) ---------- */
 .fynns-select {
   position: relative;
+  width: 100%;
+}
+
+.fynns-select-shell {
   width: 100%;
 }
 
 .fynns-select-trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.35rem;
+  justify-content: flex-start;
   width: 100%;
   box-sizing: border-box;
-  padding: 0.45rem 0.6rem;
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface-muted);
-  color: var(--fynns-color-text);
-  font: inherit;
-  line-height: 1.2;
+  margin: 0;
+  text-align: left;
   cursor: pointer;
-  transition:
-    border-color var(--fynns-duration-fast),
-    background var(--fynns-duration-fast);
+  /* Chrome comes from `.fynns-field-shell` + `.fynns-input--in-shell` (same as Input). */
 }
 
-.fynns-select-trigger:hover:not(:disabled) {
-  border-color: var(--fynns-color-accent-mid);
-  background: var(--fynns-color-surface-hover);
-}
-
-.fynns-select-trigger--open,
-.fynns-select-trigger--open:hover:not(:disabled) {
-  border-color: var(--fynns-color-accent-ring);
-  background: var(--fynns-color-accent-soft);
-}
-
+.fynns-select-trigger:focus,
 .fynns-select-trigger:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: var(--fynns-focus-ring-offset-input);
+  /* Shell owns the focus ring via `:focus-within`. */
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .fynns-select-trigger:disabled {
-  opacity: 0.55;
+  cursor: not-allowed;
+  /* Shell owns muted surface; keep the in-shell button transparent. */
+  background: transparent;
+  opacity: 1;
+}
+
+.fynns-select--disabled .fynns-field-shell {
+  background: var(--fynns-color-surface-head);
+  opacity: var(--fynns-opacity-muted);
   cursor: not-allowed;
 }
 
@@ -720,20 +716,25 @@
   white-space: nowrap;
   flex: 1 1 auto;
   min-width: 0;
-  text-align: left;
+}
+
+.fynns-select-chevron {
+  cursor: pointer;
+}
+
+.fynns-select--disabled .fynns-select-chevron {
+  cursor: not-allowed;
 }
 
 .fynns-select-trigger-chevron {
   flex-shrink: 0;
   color: var(--fynns-color-text-muted);
-  transition:
-    transform var(--fynns-duration-fast),
-    color var(--fynns-duration-fast);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-select-trigger--open .fynns-select-trigger-chevron {
+.fynns-select-trigger--open ~ .fynns-select-chevron .fynns-select-trigger-chevron,
+.fynns-select-shell--open .fynns-select-trigger-chevron {
   transform: rotate(180deg);
-  color: var(--fynns-color-accent);
 }
 
 .fynns-select-list {
@@ -741,14 +742,19 @@
      (portaled to document.body so overflow:hidden ancestors cannot clip it). */
   z-index: var(--fynns-z-dropdown);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-searchbar-results-gap);
   margin: 0;
-  padding: 0.25rem 0;
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
   list-style: none;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
+  border-radius: var(--fynns-radius-lg);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
-  max-height: 14rem;
+  max-height: var(--fynns-searchbar-results-max-height);
   overflow: auto;
   transform-origin: top center;
   animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
@@ -763,41 +769,37 @@
   transform-origin: top center;
 }
 
-.fynns-select-option {
+.fynns-select-list > li {
   display: block;
-  width: 100%;
-  box-sizing: border-box;
   margin: 0;
-  padding: 0.45rem 0.65rem;
-  border: none;
-  background: transparent;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * Rows reuse `.fynns-search-bar-result` (hover / active state-layer). Selected
+ * = M3 menu leading check — not accent ink or left hairline bar.
+ */
+.fynns-select-option-leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
+}
+
+.fynns-select-option-check {
+  display: block;
   color: var(--fynns-color-text);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    background var(--fynns-duration-fast),
-    color var(--fynns-duration-fast);
 }
 
-.fynns-select-option:hover,
-.fynns-select-option--active {
-  background: var(--fynns-color-accent-soft);
-}
-
-.fynns-select-option--selected {
-  color: var(--fynns-color-accent);
-}
-
-.fynns-select-option--selected.fynns-select-option--active,
-.fynns-select-option--selected:hover {
-  background: var(--fynns-color-accent-24);
-  box-shadow: inset 2px 0 0 var(--fynns-color-accent);
-}
-
-.fynns-select-option:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.fynns-select-option-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ---------- DropdownMenu ---------- */
@@ -1795,7 +1797,8 @@
   min-width: max-content;
   margin: 0;
   padding: 0 var(--fynns-segmented-pad-inline);
-  gap: var(--fynns-segmented-gap);
+  /* Gap is applied via leading margin so closed (width:0) leading adds no space. */
+  gap: 0;
   border: none;
   border-radius: 0;
   border-inline-end: var(--fynns-segmented-outline) solid
@@ -1810,8 +1813,8 @@
   text-align: center;
   cursor: pointer;
   transition:
-    background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    background var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
 .fynns-toggle-group--compact .fynns-toggle-chip {
@@ -1849,7 +1852,7 @@
   background: transparent;
   pointer-events: none;
   z-index: -1;
-  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
 .fynns-toggle-chip:hover:not(:disabled)::before {
@@ -1889,14 +1892,61 @@
   );
 }
 
+/*
+ * M3-style select motion (Compose SegmentedButtonContent): leading slot
+ * expands/collapses; check scales+fades; label slides as the flex cluster
+ * recenters. Reverse plays on deselect.
+ */
+.fynns-toggle-chip-leading {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 0;
+  min-width: 0;
+  height: var(--fynns-segmented-icon-size);
+  margin-inline-end: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition:
+    width var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    margin-inline-end var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-toggle-chip-leading--open {
+  width: var(--fynns-segmented-icon-size);
+  margin-inline-end: var(--fynns-segmented-gap);
+}
+
 .fynns-toggle-chip-check,
 .fynns-toggle-chip-icon {
   display: inline-flex;
   flex-shrink: 0;
-  width: var(--fynns-segmented-icon-size);
-  height: var(--fynns-segmented-icon-size);
   align-items: center;
   justify-content: center;
+  width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-toggle-chip-check--on,
+.fynns-toggle-chip-icon--on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When both check + option icon exist, stack in the same slot (crossfade). */
+.fynns-toggle-chip-leading:has(.fynns-toggle-chip-icon) .fynns-toggle-chip-check,
+.fynns-toggle-chip-leading:has(.fynns-toggle-chip-check) .fynns-toggle-chip-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
 }
 
 .fynns-toggle-chip-icon > svg {
@@ -3921,7 +3971,7 @@
 /* ---------- Kbd ---------- */
 .fynns-kbd {
   display: inline-block;
-  font-family: var(--fynns-font-ui);
+  font-family: var(--fynns-font-mono);
   font-size: 0.7rem;
   font-weight: var(--fynns-font-weight-semibold);
   padding: 0.2rem 0.45rem;
@@ -4469,7 +4519,7 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-appbar-actions-gap);
   color: var(--fynns-color-text);
 }
 
@@ -4477,58 +4527,13 @@
   color: var(--fynns-color-text-muted);
 }
 
-/*
- * Keep IconButton compact (default glyph + padding). Enlarge only the circular
- * hover / pressed disc via ::before (slightly under the 40dp row).
- */
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon,
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon {
-  position: relative;
-  z-index: 0;
-  box-sizing: content-box;
-  width: auto;
-  height: auto;
-  min-width: 0;
-  min-height: 0;
-  overflow: visible;
-  border-radius: var(--fynns-radius-round);
-}
-
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon::before,
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--fynns-appbar-action-hover-size);
-  height: var(--fynns-appbar-action-hover-size);
-  transform: translate(-50%, -50%);
-  border-radius: var(--fynns-radius-round);
-  background: transparent;
-  pointer-events: none;
-  z-index: -1;
-  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:hover:not(:disabled),
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:hover:not(:disabled),
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:active:not(:disabled),
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:active:not(:disabled) {
-  background: transparent;
-}
-
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before,
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before {
-  background: var(--fynns-color-surface-hover);
-}
-
-.fynns-top-app-bar-leading .fynns-btn.fynns-btn--icon:active:not(:disabled)::before,
-.fynns-top-app-bar-trailing .fynns-btn.fynns-btn--icon:active:not(:disabled)::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
+/* Tooltip wrappers must not collapse IconButton hit targets in the action row. */
+.fynns-top-app-bar-leading .fynns-tooltip-trigger,
+.fynns-top-app-bar-trailing .fynns-tooltip-trigger {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
 }
 
 .fynns-top-app-bar-spacer {
@@ -5339,9 +5344,11 @@
   padding-inline: var(--fynns-bottomappbar-pad-inline);
   background: var(--fynns-color-surface-1);
   color: var(--fynns-color-text);
+  /* Elevation only — no top hairline. Hairline + radius-3xl + shadow stacked into
+   * a double stroke on the top edge (unlike flush NavigationBar). */
+  border: 0;
   border-radius: var(--fynns-radius-3xl);
   box-shadow: var(--fynns-shadow-sm);
-  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
 .fynns-bottom-app-bar-actions {
@@ -5920,8 +5927,8 @@
 
 /*
  * Nav sits in day columns 6–7: button box = day cell (40dp). Hover/pressed
- * disc matches TopAppBar (`--fynns-appbar-action-hover-size`, 36dp) — slightly
- * under the cell, 20dp glyph, not glued to the icon.
+ * disc uses `--fynns-appbar-action-hover-size` (36dp) — slightly under the
+ * 40dp day cell, 20dp glyph, not glued to the icon.
  */
 .fynns-datepicker-nav .fynns-tooltip-trigger {
   display: inline-flex;

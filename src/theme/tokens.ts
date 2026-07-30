@@ -256,7 +256,7 @@ export type CardVariant = keyof typeof CARD_VARIANT_MAP;
 /** Font stacks. `--fynns-font-<key>`. */
 export const FONT_FAMILY_TOKENS = {
   ui: 'system-ui, "Segoe UI", Roboto, sans-serif',
-  mono: '"Cascadia Code", "Fira Code", ui-monospace, monospace',
+  mono: 'Consolas, "Cascadia Code", "Fira Code", ui-monospace, monospace',
   serif: '"CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif',
 } as const;
 
@@ -456,8 +456,14 @@ export const APPBAR_TOKENS = {
   /** Inline inset for the action row (leading / trailing icons). */
   "pad-inline": "0.5rem",
   /**
-   * Hover / state-layer circle for IconButtons (glyph stays default size;
-   * disc is slightly under the 40dp row so it does not dominate).
+   * Gap between adjacent action IconButtons. Keep small — hit targets are the
+   * full `--fynns-size-icon-target` (40dp); zero/near-zero avoids cramped glyphs
+   * without stacking hover discs.
+   */
+  "actions-gap": "0",
+  /**
+   * Shared dense hover disc (DatePicker nav etc.). TopAppBar actions use the
+   * standard 40dp IconButton target instead.
    */
   "action-hover-size": "2.25rem",
   /** Title inset under the action row (medium / large only). */
