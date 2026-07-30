@@ -3757,12 +3757,6 @@
   box-shadow: var(--fynns-shadow-xs);
 }
 
-.fynns-chip--suggestion {
-  border-color: var(--fynns-color-border-strong);
-  background: transparent;
-  color: var(--fynns-color-text);
-}
-
 .fynns-chip--selected {
   border-color: transparent;
   background: var(--fynns-color-accent-container);

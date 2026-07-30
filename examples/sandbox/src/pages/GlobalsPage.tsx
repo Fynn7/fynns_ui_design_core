@@ -267,9 +267,6 @@ export function GlobalsPage() {
             >
               {t("globals.chipFilter")}
             </Chip>
-            <Chip variant="suggestion" onClick={() => {}}>
-              {t("globals.chipSuggestion")}
-            </Chip>
             <Chip elevated onClick={() => {}}>
               {t("globals.chipElevated")}
             </Chip>

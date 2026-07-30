@@ -381,10 +381,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   justifies across the container.
   `role="radiogroup"` + arrow-key paging.
   Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
-  **ChipSet** `{ variant?: "assist"|"filter"|"input"|"suggestion", selected?, elevated?,
+  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
   leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
   filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
-  button (`aria-label` only, no Tooltip); suggestion is outlined. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
+  `IconButton` + `Tooltip` (`removeAriaLabel`). Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
   segmented exclusivity. **Tabs**
   `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }` — primary underline
   indicator (3dp accent), not folder-style tops.
