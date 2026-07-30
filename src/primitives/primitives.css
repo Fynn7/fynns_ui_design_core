@@ -1797,7 +1797,6 @@
   min-width: max-content;
   margin: 0;
   padding: 0 var(--fynns-segmented-pad-inline);
-  /* Gap is applied via leading margin so closed (width:0) leading adds no space. */
   gap: 0;
   border: none;
   border-radius: 0;
@@ -1893,10 +1892,28 @@
 }
 
 /*
- * M3-style select motion (Compose SegmentedButtonContent): leading slot
- * expands/collapses; check scales+fades; label slides as the flex cluster
- * recenters. Reverse plays on deselect.
+ * M3 select motion without layout reflow: leading slot width is always
+ * reserved (equal columns / ControlStack max-content stay stable). Check
+ * scales+fades; unselected content translates so the label stays optically
+ * centered. Reverse on deselect.
  */
+.fynns-toggle-chip-content {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+/* Empty reserved leading would right-bias the label — pull cluster back. */
+.fynns-toggle-chip--with-icon:not(.fynns-toggle-chip--leading-open)
+  .fynns-toggle-chip-content {
+  transform: translateX(
+    calc(
+      -0.5 * (var(--fynns-segmented-icon-size) + var(--fynns-segmented-gap))
+    )
+  );
+}
+
 .fynns-toggle-chip-leading {
   position: relative;
   display: inline-flex;
@@ -1904,20 +1921,10 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  width: 0;
-  min-width: 0;
-  height: var(--fynns-segmented-icon-size);
-  margin-inline-end: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition:
-    width var(--fynns-duration-fast) var(--fynns-ease-emphasized),
-    margin-inline-end var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-toggle-chip-leading--open {
   width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
   margin-inline-end: var(--fynns-segmented-gap);
+  pointer-events: none;
 }
 
 .fynns-toggle-chip-check,

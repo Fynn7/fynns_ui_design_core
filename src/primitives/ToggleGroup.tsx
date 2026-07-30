@@ -40,8 +40,10 @@ export type ToggleGroupProps<V extends string> = {
 /**
  * M3 Segmented button — single-select outlined stadium group.
  * `.fynns-toggle-group`. Equal-width segments; pass `fullWidth` to stretch.
- * Leading check/icon slides open/closed (width + opacity) so labels stay
- * optically centered when unselected. Uses `radiogroup` / `radio` semantics.
+ * Leading check/icon fades/scales in; slot width is always reserved so equal
+ * columns (and ControlStack max-content tracks) do not reflow. Unselected
+ * labels stay optically centered via content translate. Uses `radiogroup` /
+ * `radio` semantics.
  * @see https://m3.material.io/components/segmented-buttons/overview
  */
 export function ToggleGroup<V extends string>({
@@ -142,6 +144,7 @@ export function ToggleGroup<V extends string>({
               "fynns-toggle-chip",
               on ? "fynns-toggle-chip--on" : "",
               useLeadingSlot ? "fynns-toggle-chip--with-icon" : "",
+              leadingOpen ? "fynns-toggle-chip--leading-open" : "",
             ]
               .filter(Boolean)
               .join(" ")}
@@ -152,43 +155,37 @@ export function ToggleGroup<V extends string>({
             onClick={() => onChange(option.value)}
             onKeyDown={(e) => onSegmentKeyDown(e, index)}
           >
-            {useLeadingSlot ? (
-              <span
-                className={[
-                  "fynns-toggle-chip-leading",
-                  leadingOpen ? "fynns-toggle-chip-leading--open" : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                aria-hidden
-              >
-                {showCheck ? (
-                  <CheckIcon
-                    className={[
-                      "fynns-toggle-chip-check",
-                      showLeadingCheck ? "fynns-toggle-chip-check--on" : "",
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                    size={18}
-                    aria-hidden
-                  />
-                ) : null}
-                {option.icon ? (
-                  <span
-                    className={[
-                      "fynns-toggle-chip-icon",
-                      showOptionIcon ? "fynns-toggle-chip-icon--on" : "",
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                  >
-                    {option.icon}
-                  </span>
-                ) : null}
-              </span>
-            ) : null}
-            <span className="fynns-toggle-chip-label">{option.label}</span>
+            <span className="fynns-toggle-chip-content">
+              {useLeadingSlot ? (
+                <span className="fynns-toggle-chip-leading" aria-hidden>
+                  {showCheck ? (
+                    <CheckIcon
+                      className={[
+                        "fynns-toggle-chip-check",
+                        showLeadingCheck ? "fynns-toggle-chip-check--on" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      size={18}
+                      aria-hidden
+                    />
+                  ) : null}
+                  {option.icon ? (
+                    <span
+                      className={[
+                        "fynns-toggle-chip-icon",
+                        showOptionIcon ? "fynns-toggle-chip-icon--on" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
+                      {option.icon}
+                    </span>
+                  ) : null}
+                </span>
+              ) : null}
+              <span className="fynns-toggle-chip-label">{option.label}</span>
+            </span>
           </button>
         );
 

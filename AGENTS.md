@@ -373,8 +373,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   40dp (compact 32dp), hairline dividers, selected = `secondary-container` + leading
   check (disable with `showCheck={false}`). Options may include `tip`, `ariaLabel`,
   and `icon` (replaced by the check while selected). Equal-width segments; leading
-  check/icon slides open/closed (`--fynns-duration-fast` + `--fynns-ease-emphasized`)
-  so unselected labels stay centered. `fullWidth` justifies across the container.
+  slot width is reserved (no column reflow); check fades/scales in with an optical
+  label slide (`--fynns-duration-fast` + `--fynns-ease-emphasized`). `fullWidth`
+  justifies across the container.
   `role="radiogroup"` + arrow-key paging.
   Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
   **ChipSet** `{ variant?: "assist"|"filter"|"input"|"suggestion", selected?, elevated?,
