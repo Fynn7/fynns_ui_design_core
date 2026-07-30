@@ -2501,8 +2501,9 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   min-height: 2rem;
   padding: 0 var(--fynns-space-md);
+  border: var(--fynns-border-hairline) solid transparent;
   color: var(--fynns-color-text);
-  font-size: var(--fynns-font-size-xs);
+  font-size: var(--fynns-breadcrumb-font-size);
   font-weight: var(--fynns-font-weight-medium);
   overflow: hidden;
   text-overflow: ellipsis;

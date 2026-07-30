@@ -655,7 +655,8 @@ export const TIMEPICKER_TOKENS = {
 export const BREADCRUMB_TOKENS = {
   gap: "0.125rem",
   "sep-pad-inline": "0.25rem",
-  "font-size": "var(--fynns-font-size-sm)",
+  /** Match `Button` `sm` label (`--fynns-font-size-xs`). */
+  "font-size": "var(--fynns-font-size-xs)",
 } as const;
 
 /**

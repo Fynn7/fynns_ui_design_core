@@ -74,7 +74,7 @@ export function Breadcrumb({
                 >
                   {item.label}
                 </a>
-              ) : (
+              ) : item.onClick != null ? (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -83,6 +83,8 @@ export function Breadcrumb({
                 >
                   {item.label}
                 </Button>
+              ) : (
+                <span className="fynns-breadcrumb-current">{item.label}</span>
               )}
             </li>
           );
