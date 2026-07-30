@@ -12,6 +12,7 @@ Machine contract: [`consume.json`](consume.json).
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit submodule sources for consumer features; bump the pin instead.
 6. **TypeScript:** set consumer `compilerOptions.target` and `lib` to **ES2022** (or later). `tsc` follows `@fynns/ui` into this repo’s `.ts` sources (e.g. `String.replaceAll`); `ES2020` alone will fail typecheck even when Vite builds fine.
+7. **Toaster:** if the app calls `toast.*`, mount **`<Toaster />` once** near the app root (same tree as the page). Importing `toast` without `<Toaster />` builds but shows no notifications.
 
 ## One-shot install (any consumer repo)
 
@@ -72,7 +73,13 @@ Ensure the consumer `tsconfig` (example):
 ```
 
 ```tsx
-import { Button, Collapsible, Toaster } from "@fynns/ui";
+import { Button, Collapsible, toast, Toaster } from "@fynns/ui";
+
+// Once per app (e.g. in App / root layout):
+<>
+  <Toaster />
+  {/* …page that may call toast.message(...) */}
+</>
 ```
 
 Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
