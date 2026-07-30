@@ -21,6 +21,8 @@ import {
   Collapsible,
   DatePicker,
   DatePickerDialog,
+  DateRangePicker,
+  DateRangePickerDialog,
   TimePicker,
   TimePickerDialog,
   Divider,
@@ -45,7 +47,9 @@ import {
   NavigationDrawerHeadline,
   NavigationDrawerItem,
   PlusIcon,
+  PencilIcon,
   Radio,
+  SaveIcon,
   SearchIcon,
   SearchBar,
   SearchBarResult,
@@ -54,8 +58,10 @@ import {
   Switch,
   ToggleGroup,
   TopAppBar,
+  Toolbar,
   Tooltip,
   TrashIcon,
+  UndoIcon,
   UploadIcon,
   ControlRow,
   ControlStack,
@@ -124,6 +130,11 @@ export function GlobalsPage() {
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
+  const [pickedRange, setPickedRange] = useState<{
+    start: string | null;
+    end: string | null;
+  }>({ start: null, end: null });
+  const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
   const [pickedTime, setPickedTime] = useState<string | null>("14:30");
   const [timeDialogOpen, setTimeDialogOpen] = useState(false);
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
@@ -350,6 +361,97 @@ export function GlobalsPage() {
           value={pickedDate}
           onConfirm={setPickedDate}
           title={t("globals.dateDialogTitle")}
+          confirmLabel={t("globals.dateConfirm")}
+          cancelLabel={t("globals.dateCancel")}
+          closeAriaLabel={t("globals.dateClose")}
+          weekStartsOn={1}
+          labels={{
+            previousMonth: t("globals.datePrev"),
+            nextMonth: t("globals.dateNext"),
+            weekdays: [
+              t("globals.dateWd0"),
+              t("globals.dateWd1"),
+              t("globals.dateWd2"),
+              t("globals.dateWd3"),
+              t("globals.dateWd4"),
+              t("globals.dateWd5"),
+              t("globals.dateWd6"),
+            ],
+            months: [
+              t("globals.dateM0"),
+              t("globals.dateM1"),
+              t("globals.dateM2"),
+              t("globals.dateM3"),
+              t("globals.dateM4"),
+              t("globals.dateM5"),
+              t("globals.dateM6"),
+              t("globals.dateM7"),
+              t("globals.dateM8"),
+              t("globals.dateM9"),
+              t("globals.dateM10"),
+              t("globals.dateM11"),
+            ],
+          }}
+        />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DateRangePicker
+            value={pickedRange}
+            onChange={setPickedRange}
+            weekStartsOn={1}
+            labels={{
+              previousMonth: t("globals.datePrev"),
+              nextMonth: t("globals.dateNext"),
+              weekdays: [
+                t("globals.dateWd0"),
+                t("globals.dateWd1"),
+                t("globals.dateWd2"),
+                t("globals.dateWd3"),
+                t("globals.dateWd4"),
+                t("globals.dateWd5"),
+                t("globals.dateWd6"),
+              ],
+              months: [
+                t("globals.dateM0"),
+                t("globals.dateM1"),
+                t("globals.dateM2"),
+                t("globals.dateM3"),
+                t("globals.dateM4"),
+                t("globals.dateM5"),
+                t("globals.dateM6"),
+                t("globals.dateM7"),
+                t("globals.dateM8"),
+                t("globals.dateM9"),
+                t("globals.dateM10"),
+                t("globals.dateM11"),
+              ],
+            }}
+          />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setRangeDialogOpen(true)}>
+              {t("globals.dateRangeOpenDialog")}
+            </Button>
+            <SandboxHelp
+              as="span"
+              text={
+                pickedRange.start && pickedRange.end
+                  ? t("globals.dateRangeSelected", {
+                      start: pickedRange.start,
+                      end: pickedRange.end,
+                    })
+                  : pickedRange.start
+                    ? t("globals.dateRangePartial", { start: pickedRange.start })
+                    : t("globals.dateRangeNone")
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.dateRangeHelp")} />
+        </div>
+        <DateRangePickerDialog
+          open={rangeDialogOpen}
+          onOpenChange={setRangeDialogOpen}
+          value={pickedRange}
+          onConfirm={setPickedRange}
+          title={t("globals.dateRangeDialogTitle")}
           confirmLabel={t("globals.dateConfirm")}
           cancelLabel={t("globals.dateCancel")}
           closeAriaLabel={t("globals.dateClose")}
@@ -885,6 +987,108 @@ export function GlobalsPage() {
           />
         </div>
         <SandboxHelp text={t("globals.bottomAppBarHelp")} />
+        <div
+          className="sandbox-globals-toolbar"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--fynns-space-md)",
+            width: "100%",
+            maxWidth: "28rem",
+          }}
+        >
+          <Toolbar
+            variant="docked"
+            aria-label={t("globals.toolbarDockedAria")}
+            floatingActionButton={
+              <Tooltip content={t("globals.fabTip")}>
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            }
+          >
+            <Tooltip content={t("globals.toolbarUndo")}>
+              <IconButton aria-label={t("globals.toolbarUndo")}>
+                <UndoIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.toolbarEdit")}>
+              <IconButton aria-label={t("globals.toolbarEdit")}>
+                <PencilIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.toolbarSave")}>
+              <IconButton aria-label={t("globals.toolbarSave")}>
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.bottomAppBarDelete")}>
+              <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--fynns-space-md)",
+              alignItems: "flex-end",
+            }}
+          >
+            <Toolbar
+              variant="floating"
+              aria-label={t("globals.toolbarFloatingAria")}
+              floatingActionButton={
+                <Tooltip content={t("globals.fabTip")}>
+                  <Fab size="sm" aria-label={t("globals.fabTip")}>
+                    <PlusIcon />
+                  </Fab>
+                </Tooltip>
+              }
+            >
+              <Tooltip content={t("globals.toolbarUndo")}>
+                <IconButton aria-label={t("globals.toolbarUndo")}>
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarEdit")}>
+                <IconButton aria-label={t("globals.toolbarEdit")}>
+                  <PencilIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarSave")}>
+                <IconButton aria-label={t("globals.toolbarSave")}>
+                  <SaveIcon />
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+            <Toolbar
+              variant="floating"
+              color="vibrant"
+              orientation="vertical"
+              aria-label={t("globals.toolbarVibrantAria")}
+            >
+              <Tooltip content={t("globals.toolbarUndo")} side="right">
+                <IconButton aria-label={t("globals.toolbarUndo")}>
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarEdit")} side="right">
+                <IconButton aria-label={t("globals.toolbarEdit")}>
+                  <PencilIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarSave")} side="right">
+                <IconButton aria-label={t("globals.toolbarSave")}>
+                  <SaveIcon />
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+          </div>
+        </div>
+        <SandboxHelp text={t("globals.toolbarHelp")} />
         <div
           className="sandbox-globals-search-bar"
           style={{

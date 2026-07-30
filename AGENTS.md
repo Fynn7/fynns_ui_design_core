@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -171,8 +171,8 @@ Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 
 Standard chrome glyph: `--fynns-size-icon` (`1rem` / 16dp) + TS `ICON_SIZE`
-(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar
-action icons share this. Fab `sm` stays on `--fynns-size-icon-md` (20dp). Dense
+(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar /
+Toolbar action icons share this. Fab `sm` stays on `--fynns-size-icon-md` (20dp). Dense
 micro glyphs (chip trailing, select chevron, steppers) may stay smaller.
 
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
@@ -248,6 +248,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
   title, and hairline dividers between head / calendar / foot (keeps the
   compact calendar; no year menu / huge header).
+  **DateRangePicker** `{ value?: { start, end }, defaultValue?, onChange?,
+  …same calendar props }` — start-then-end selection with a continuous
+  secondary-container strip between accent endpoint discs (range grid uses
+  gapless equal columns so the bar abuts; hover preview); complete range +
+  click restarts. Helpers share `DateValue` / `formatDateValue` /
+  `parseDateValue`. **DateRangePickerDialog** mirrors DatePickerDialog
+  (supporting `start – end` line; Confirm needs both).
 - **TimePicker** `{ value?, defaultValue?, onChange?, hourCycle?: "h23"|"h12",
   minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
   (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
@@ -355,7 +362,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
-  | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar) | `--fynns-layout-bar-height` |
+  | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar / Toolbar) | `--fynns-layout-bar-height` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
   sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
@@ -439,8 +446,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
   **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
   `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
-  determinate track gap + linear stop). Omit `value` for indeterminate. Prefer
-  `Spinner` for compact button/inline busy; use Progress for known % or section waits.
+  determinate track gap + linear stop). Omit `value` for indeterminate (the
+  loading ring for unknown waits). Prefer `Spinner` for compact button/inline
+  busy; use Progress for known % or section waits.
   **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
   identity (40dp default); image → children → initials from `name` → person glyph.
   Pass into `CardHeader`’s `avatar` slot.
@@ -462,7 +470,17 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   stock M3 is 80dp; `--fynns-radius-3xl` long-strip group with SearchBar /
   Banner / NavigationDrawer items / sheet tops). Actions start-aligned with
   40dp targets; optional FAB sits inside the bar (no cradle cutout). Prefer
-  `NavigationBar` for bottom destinations.
+  `NavigationBar` for bottom destinations. Prefer **Toolbar** (`docked`) for
+  flexible Expressive page actions.
+  **Toolbar** `{ variant?: "docked"|"floating", orientation?: "horizontal"|"vertical",
+  color?: "standard"|"vibrant", floatingActionButton?, children }` — M3 Expressive
+  action chrome (`role="toolbar"`; pass `aria-label`). Height
+  `--fynns-layout-bar-height` (56dp). `docked` is full-width long-strip
+  (`--fynns-radius-3xl`); `floating` is wrap-content pill (`--fynns-radius-pill`)
+  and may stack `vertical`. `vibrant` uses `accent-container`. Optional FAB:
+  end slot when docked; beside the capsule when floating. Prefer `ControlStack`
+  for labeled inspector rows; prefer `BottomAppBar` / `NavigationBar` when those
+  roles fit better.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   16dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /

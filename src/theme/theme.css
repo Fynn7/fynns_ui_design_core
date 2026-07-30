@@ -261,6 +261,13 @@
   --fynns-bottomappbar-action-size: 2.5rem;
   --fynns-bottomappbar-action-icon-size: 1rem;
   --fynns-bottomappbar-fab-pad-inline-end: 0.25rem;
+  --fynns-toolbar-height: var(--fynns-layout-bar-height);
+  --fynns-toolbar-pad-inline: 0.5rem;
+  --fynns-toolbar-pad-block: 0.25rem;
+  --fynns-toolbar-actions-gap: 0.125rem;
+  --fynns-toolbar-action-size: 2.5rem;
+  --fynns-toolbar-action-icon-size: 1rem;
+  --fynns-toolbar-fab-gap: 0.75rem;
   --fynns-searchbar-height: var(--fynns-layout-bar-height);
   --fynns-searchbar-pad-inline: 0.25rem;
   --fynns-searchbar-icon-slot: 3rem;

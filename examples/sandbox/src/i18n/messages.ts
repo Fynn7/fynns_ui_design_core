@@ -354,6 +354,13 @@ const en = {
   "globals.dateM9": "October",
   "globals.dateM10": "November",
   "globals.dateM11": "December",
+  "globals.dateRangeHelp":
+    "M3 DateRangePicker — pick start then end (soft fill between). Dialog confirms both ends.",
+  "globals.dateRangeOpenDialog": "Open date range dialog",
+  "globals.dateRangeDialogTitle": "Select dates",
+  "globals.dateRangeNone": "No range selected",
+  "globals.dateRangePartial": "Start: {start} (pick end)",
+  "globals.dateRangeSelected": "Range: {start} – {end}",
   "globals.timeHelp":
     "M3 TimePicker input (digital). Values are HH:mm (24h storage). Use TimePickerDialog for a modal confirm flow. Dial face not included yet.",
   "globals.timeOpenDialog": "Open time dialog",
@@ -435,6 +442,14 @@ const en = {
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
     "Bottom action chrome (56dp dense) with optional FAB inside the bar. Prefer NavigationBar for destinations.",
+  "globals.toolbarDockedAria": "Sample docked toolbar",
+  "globals.toolbarFloatingAria": "Sample floating toolbar",
+  "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
+  "globals.toolbarUndo": "Undo",
+  "globals.toolbarEdit": "Edit",
+  "globals.toolbarSave": "Save",
+  "globals.toolbarHelp":
+    "M3 Expressive Toolbar: docked full-width strip or floating pill (`standard` / `vibrant`). Prefer ControlStack for labeled inspector rows.",
   "globals.searchBarAria": "Search the library",
   "globals.searchBarPlaceholder": "Search…",
   "globals.searchBarClear": "Clear search",
@@ -883,6 +898,13 @@ const zh: Record<MessageKey, string> = {
   "globals.dateM9": "十月",
   "globals.dateM10": "十一月",
   "globals.dateM11": "十二月",
+  "globals.dateRangeHelp":
+    "M3 DateRangePicker — 先选起点再选终点（中间柔和填充）。对话框确认完整区间。",
+  "globals.dateRangeOpenDialog": "打开日期区间对话框",
+  "globals.dateRangeDialogTitle": "选择日期区间",
+  "globals.dateRangeNone": "未选择区间",
+  "globals.dateRangePartial": "起点：{start}（再选终点）",
+  "globals.dateRangeSelected": "区间：{start} – {end}",
   "globals.timeHelp":
     "M3 TimePicker 数字输入。值为 HH:mm（按 24 小时存储）。模态确认请用 TimePickerDialog。暂无表盘。",
   "globals.timeOpenDialog": "打开时间对话框",
@@ -964,6 +986,14 @@ const zh: Record<MessageKey, string> = {
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
     "底部操作栏（56dp 紧凑），可选 FAB 放在栏内。目的地导航请优先用 NavigationBar。",
+  "globals.toolbarDockedAria": "示例停靠工具栏",
+  "globals.toolbarFloatingAria": "示例浮动工具栏",
+  "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",
+  "globals.toolbarUndo": "撤销",
+  "globals.toolbarEdit": "编辑",
+  "globals.toolbarSave": "保存",
+  "globals.toolbarHelp":
+    "M3 Expressive Toolbar：停靠全宽条或浮动胶囊（`standard` / `vibrant`）。带标签的检查器行请优先用 ControlStack。",
   "globals.searchBarAria": "搜索资料库",
   "globals.searchBarPlaceholder": "搜索…",
   "globals.searchBarClear": "清除搜索",
