@@ -107,7 +107,7 @@ export function DropdownMenu({
       const target = event.target as Node;
       if (rootRef.current?.contains(target)) return;
       if (menuEl?.contains(target)) return;
-      setOpen(false);
+      close();
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -121,7 +121,7 @@ export function DropdownMenu({
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, menuEl, setOpen, close]);
+  }, [open, menuEl, close]);
 
   useEffect(() => {
     if (!open || !menuEl) return;
@@ -247,7 +247,7 @@ export type DropdownMenuCheckboxItemProps = Omit<
 > & {
   checked: boolean;
   onCheckedChange?: (checked: boolean) => void;
-  /** Keep open after toggle (default `true` for multi-select filters). */
+  /** Keep the menu open after toggle (default `false` for multi-select filters). */
   closeOnSelect?: boolean;
 };
 

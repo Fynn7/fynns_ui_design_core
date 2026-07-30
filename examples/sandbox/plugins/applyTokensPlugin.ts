@@ -16,6 +16,7 @@ const TABLE_BY_PREFIX: Array<{ prefix: string; table: string }> = [
   { prefix: "--fynns-shadow-", table: "SHADOW_TOKENS" },
   { prefix: "--fynns-state-", table: "STATE_LAYER_TOKENS" },
   { prefix: "--fynns-space-", table: "SPACE_TOKENS" },
+  { prefix: "--fynns-layout-", table: "LAYOUT_TOKENS" },
 ];
 
 export type FileDiff = {
