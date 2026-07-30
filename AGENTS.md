@@ -14,6 +14,8 @@ dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 `npm run consume:install -- --target <consumer-root>`
 (`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
 Never add this package to a consumer's `package.json` dependencies.
+**Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
+[`llm/opencode-fynns-ui-consume.md`](llm/opencode-fynns-ui-consume.md)) — do not expect a long task brief.
 
 ## Design philosophy & UX principles
 
@@ -140,7 +142,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -276,6 +278,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-radius-3xl` like `NavigationDrawerItem`). No SearchIcon; trigger
   uses a modest `--fynns-space-md` start inset (not the search leading slot).
   Trailing chevron opens/closes.
+- **Autocomplete** `{ value, options, onChange, ariaLabel, placeholder?,
+  emptyText?, invalid?, supportingText?, errorText?, disabled? }` — filterable
+  text field + docked suggestions using the same SearchBar/Select chrome.
+  Prefer `Select` when typing is not needed; prefer headless `Combobox` for
+  custom framing.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
@@ -458,6 +465,15 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   tertiary containers (or `surface-3` + accent ink). `lowered` drops elevation.
   Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
   Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
+  **FabMenu** `{ children, ariaLabel, closeAriaLabel?, icon?, expanded?,
+  defaultExpanded?, onExpandedChange?, variant?, itemVariant?, align?,
+  closeOnSelect? }` + **FabMenuItem** `{ icon, label, onClick?, disabled?,
+  variant? }` — M3 Expressive FAB menu: toggle FAB expands 2–6 labeled small
+  FABs stacked above it (items portal to `document.body` so Collapsible /
+  overflow parents cannot clip them; staggered enter/exit via `data-state`
+  closed/open/closing; collapsed footprint stays the toggle; Esc / outside
+  click dismiss; default Plus rotates 45° into Close). Prefer a lone `Fab`
+  when there is only one primary action.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
   top app bar (`sm` / action row = `--fynns-layout-bar-height` 56dp shared with
   BottomAppBar / SearchBar; md 80 / lg 104). Leading/trailing keep the standard

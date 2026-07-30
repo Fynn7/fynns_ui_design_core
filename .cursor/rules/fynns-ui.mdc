@@ -10,15 +10,17 @@ This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
 `packages/fynns_ui_design_core`). It is the single source of truth for UI.
 To install into a **new** consumer: follow `llm/CONSUME.md` and run
 `scripts/install-as-submodule.mjs` (never npm-install `@fynns/ui-design-core`).
+Short prompts still require reading `llm/CONSUME.md` first (see
+`llm/opencode-fynns-ui-consume.md`).
 
 ## Rules
 
 - Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
-  Counter, SearchInput, Select, Combobox, DropdownMenu, Popover, Tooltip,
+  Counter, SearchInput, Select, Combobox, Autocomplete, DropdownMenu, Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
   ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
-  Badge, Avatar, Fab, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner, List/ListItem,
+  Badge, Avatar, Fab, FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner, List/ListItem,
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,

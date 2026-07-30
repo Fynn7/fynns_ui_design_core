@@ -238,6 +238,12 @@
   --fynns-fab-icon-size-lg: 2.25rem;
   --fynns-fab-pad-inline-extended: 1.25rem;
   --fynns-fab-gap: 0.75rem;
+  --fynns-fabmenu-gap: 0.75rem;
+  --fynns-fabmenu-item-gap: 0.75rem;
+  --fynns-fabmenu-label-pad-block: 0.5rem;
+  --fynns-fabmenu-label-pad-inline: 0.75rem;
+  --fynns-fabmenu-stagger: 0.035s;
+  --fynns-fabmenu-stagger-exit: 0.025s;
   --fynns-appbar-height: var(--fynns-layout-bar-height);
   --fynns-appbar-height-md: 5rem;
   --fynns-appbar-height-lg: 6.5rem;
