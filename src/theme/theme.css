@@ -130,7 +130,7 @@
   --fynns-state-pressed: 12%;
   --fynns-state-dragged: 16%;
   --fynns-font-ui: system-ui, "Segoe UI", Roboto, sans-serif;
-  --fynns-font-mono: "Cascadia Code", "Fira Code", ui-monospace, monospace;
+  --fynns-font-mono: Consolas, "Cascadia Code", "Fira Code", ui-monospace, monospace;
   --fynns-font-serif: "CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif;
   --fynns-font-size-xs: 0.75rem;
   --fynns-font-size-sm: 0.875rem;
@@ -238,11 +238,12 @@
   --fynns-fab-icon-size-lg: 2.25rem;
   --fynns-fab-pad-inline-extended: 1.25rem;
   --fynns-fab-gap: 0.75rem;
-  --fynns-appbar-height: 2.5rem;
+  --fynns-appbar-height: var(--fynns-layout-bar-height);
   --fynns-appbar-height-md: 5rem;
   --fynns-appbar-height-lg: 6.5rem;
-  --fynns-appbar-row-height: 2.5rem;
+  --fynns-appbar-row-height: var(--fynns-layout-bar-height);
   --fynns-appbar-pad-inline: 0.5rem;
+  --fynns-appbar-actions-gap: 0;
   --fynns-appbar-action-hover-size: 2.25rem;
   --fynns-appbar-title-pad-inline: 0.75rem;
   --fynns-appbar-title-pad-bottom-md: 0.75rem;
@@ -253,14 +254,14 @@
   --fynns-appbar-title-line: 1.333;
   --fynns-appbar-title-line-md: 1.3;
   --fynns-appbar-title-line-lg: 1.25;
-  --fynns-bottomappbar-height: 3.5rem;
+  --fynns-bottomappbar-height: var(--fynns-layout-bar-height);
   --fynns-bottomappbar-pad-inline: 0.5rem;
   --fynns-bottomappbar-pad-block: 0.25rem;
   --fynns-bottomappbar-actions-gap: 0.125rem;
   --fynns-bottomappbar-action-size: 2.5rem;
   --fynns-bottomappbar-action-icon-size: 1rem;
   --fynns-bottomappbar-fab-pad-inline-end: 0.25rem;
-  --fynns-searchbar-height: 3.5rem;
+  --fynns-searchbar-height: var(--fynns-layout-bar-height);
   --fynns-searchbar-pad-inline: 0.25rem;
   --fynns-searchbar-icon-slot: 3rem;
   --fynns-searchbar-icon-size: 1rem;
@@ -286,7 +287,7 @@
   --fynns-list-pad-inline: 1rem;
   --fynns-list-pad-block: 0.5rem;
   --fynns-list-gap: 1rem;
-  --fynns-list-icon-size: 1rem;
+  --fynns-list-icon-size: 1.25rem;
   --fynns-list-leading-width: 2.5rem;
   --fynns-datepicker-day-size: 2.5rem;
   --fynns-datepicker-pad-inline: 0.75rem;
@@ -295,6 +296,24 @@
   --fynns-datepicker-weekday-size: 2.5rem;
   --fynns-datepicker-weekday-font: 0.75rem;
   --fynns-datepicker-gap: 0.25rem;
+  --fynns-timepicker-pad-inline: 0.75rem;
+  --fynns-timepicker-pad-block: 0.75rem;
+  --fynns-timepicker-field-min-width: 5.5rem;
+  --fynns-timepicker-field-min-height: 4.5rem;
+  --fynns-timepicker-field-font: 2.75rem;
+  --fynns-timepicker-colon-pad-inline: 0.25rem;
+  --fynns-timepicker-colon-dot: 0.375rem;
+  --fynns-timepicker-colon-gap: 0.75rem;
+  --fynns-timepicker-period-min-width: 3.25rem;
+  --fynns-timepicker-period-font: 0.875rem;
+  --fynns-timepicker-gap: 0.75rem;
+  --fynns-carousel-gap: 0.5rem;
+  --fynns-carousel-item-min-height: 11rem;
+  --fynns-carousel-item-width-multi: 72%;
+  --fynns-carousel-indicator-size: 0.5rem;
+  --fynns-carousel-indicator-gap: 0.5rem;
+  --fynns-carousel-controls-gap: 0.5rem;
+  --fynns-carousel-pad-block: 0.25rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;
@@ -380,6 +399,7 @@
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-switch-label-end: 7rem;
+  --fynns-layout-bar-height: 3.5rem;
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);
@@ -473,6 +493,14 @@ body {
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-root);
+}
+
+/* Code-like text: always the mono stack (Consolas first). */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--fynns-font-mono);
 }
 
 button {

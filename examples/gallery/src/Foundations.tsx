@@ -90,7 +90,7 @@ export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
               color: "var(--fynns-color-text)",
             }}
           >
-            font-size-{key} — The quick brown fox
+            <code>font-size-{key}</code> — The quick brown fox
           </p>
         ))}
       </Section>
@@ -113,7 +113,7 @@ export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
                 color: "var(--fynns-color-text-muted)",
               }}
             >
-              {r}
+              <code>{r}</code>
             </div>
           ))}
           {(["none", "xs", "sm", "md", "lg", "xl", "glow-accent"] as const).map((s) => (
@@ -132,7 +132,7 @@ export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
                 color: "var(--fynns-color-text-muted)",
               }}
             >
-              {s}
+              <code>{s}</code>
             </div>
           ))}
         </Row>

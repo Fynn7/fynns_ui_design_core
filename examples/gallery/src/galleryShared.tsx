@@ -36,21 +36,37 @@ export function Swatch({ label, token }: { label: string; token: string }) {
       style={{
         display: "flex",
         flexDirection: "column",
+        alignItems: "stretch",
         gap: "var(--sandbox-section-gap, var(--fynns-space-2xs))",
-        minWidth: "5.5rem",
+        width: "5.5rem",
       }}
     >
       <div
         style={{
+          boxSizing: "border-box",
+          width: "100%",
           height: "2.5rem",
           borderRadius: "var(--fynns-radius-md)",
           border: "var(--fynns-border-hairline) solid var(--fynns-color-border)",
           background: `var(${token})`,
         }}
       />
-      <span style={{ fontSize: "var(--fynns-font-size-caption)", color: "var(--fynns-color-text-muted)" }}>
+      <code
+        style={{
+          display: "block",
+          boxSizing: "border-box",
+          width: "100%",
+          margin: 0,
+          padding: 0,
+          fontSize: "var(--fynns-font-size-caption)",
+          lineHeight: 1.2,
+          color: "var(--fynns-color-text-muted)",
+          textAlign: "center",
+          overflowWrap: "anywhere",
+        }}
+      >
         {label}
-      </span>
+      </code>
     </div>
   );
 }

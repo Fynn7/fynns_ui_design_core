@@ -22,6 +22,8 @@ import {
   ChipSet,
   ChevronRightIcon,
   CircularProgress,
+  Carousel,
+  CarouselItem,
   Dialog,
   Divider,
   Drawer,
@@ -38,6 +40,8 @@ import {
   Counter,
   DatePicker,
   DatePickerDialog,
+  TimePicker,
+  TimePickerDialog,
   LinearProgress,
   List,
   ListItem,
@@ -93,6 +97,8 @@ export function App() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [galleryDate, setGalleryDate] = useState<string | null>("2026-07-15");
+  const [timeDialogOpen, setTimeDialogOpen] = useState(false);
+  const [galleryTime, setGalleryTime] = useState<string | null>("14:30");
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
@@ -580,6 +586,25 @@ export function App() {
             </List>
           </div>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Carousel
+          </span>
+          <div style={{ width: "100%", maxWidth: "28rem" }}>
+            <Carousel ariaLabel="Gallery carousel" variant="multi">
+              <CarouselItem label="One">
+                <strong>One</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Multi-browse peek</span>
+              </CarouselItem>
+              <CarouselItem label="Two">
+                <strong>Two</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Snap + arrows</span>
+              </CarouselItem>
+              <CarouselItem label="Three">
+                <strong>Three</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Indicator dots</span>
+              </CarouselItem>
+            </Carousel>
+          </div>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
             DatePicker
           </span>
           <DatePicker defaultValue="2026-07-15" weekStartsOn={1} />
@@ -593,6 +618,22 @@ export function App() {
             onConfirm={setGalleryDate}
             title="Select date"
             weekStartsOn={1}
+          />
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            TimePicker
+          </span>
+          <TimePicker value={galleryTime} onChange={setGalleryTime} hourCycle="h23" />
+          <TimePicker value={galleryTime} onChange={setGalleryTime} hourCycle="h12" />
+          <Button size="sm" variant="tonal" onClick={() => setTimeDialogOpen(true)}>
+            Open time dialog
+          </Button>
+          <TimePickerDialog
+            open={timeDialogOpen}
+            onOpenChange={setTimeDialogOpen}
+            value={galleryTime}
+            onConfirm={setGalleryTime}
+            title="Select time"
+            hourCycle="h12"
           />
         </div>
       </Section>

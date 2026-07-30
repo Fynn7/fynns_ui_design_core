@@ -478,6 +478,13 @@
   color: var(--fynns-color-text-muted);
 }
 
+.sandbox-help code,
+.sandbox-muted code {
+  font-family: var(--fynns-font-mono);
+  font-size: inherit;
+  color: inherit;
+}
+
 .sandbox-state-demo {
   margin-top: var(--fynns-space-sm);
 }
@@ -949,6 +956,10 @@
   align-items: flex-start;
   gap: 0.1rem;
   min-width: 0;
+}
+
+.sandbox-inspector code {
+  font-family: var(--fynns-font-mono);
 }
 
 .sandbox-radius-uses {

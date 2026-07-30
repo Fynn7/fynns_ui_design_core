@@ -14,7 +14,8 @@
     "NEVER publish-install from npm registry for day-to-day app work.",
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
     "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately).",
-    "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll)."
+    "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
+    "If the app uses toast.*, mount <Toaster /> once near the app root; toast without Toaster builds but shows nothing."
   ],
   "defaults": {
     "submodulePath": "packages/fynns_ui_design_core",
@@ -76,7 +77,8 @@
     "tsconfig paths map @fynns/ui to the same entry (when a tsconfig exists)",
     "tsconfig target/lib are ES2022+ when the consumer runs tsc against @fynns/ui",
     "package.json does not depend on @fynns/ui or @fynns/ui-design-core",
-    "import { Collapsible } from \"@fynns/ui\" typechecks / builds in the consumer"
+    "import { Collapsible } from \"@fynns/ui\" typechecks / builds in the consumer",
+    "when toast.* is used, <Toaster /> is mounted once in the app tree"
   ],
   "importExample": "import { Button, Collapsible, PanelCard, Toaster, toast } from \"@fynns/ui\";"
 }

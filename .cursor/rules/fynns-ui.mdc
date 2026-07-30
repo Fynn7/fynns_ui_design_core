@@ -19,7 +19,8 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
   Badge, Avatar, Fab, TopAppBar, BottomAppBar, SearchBar, Banner, List/ListItem,
-  DatePicker/DatePickerDialog, NavigationRail, NavigationBar, NavigationDrawer,
+  DatePicker/DatePickerDialog, TimePicker/TimePickerDialog, Carousel/CarouselItem,
+  NavigationRail, NavigationBar, NavigationDrawer,
   Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,

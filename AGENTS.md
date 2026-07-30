@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -181,7 +181,9 @@ legacy semantic keys (`caption`, `form-label`, …) remain.
 Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thumb`,
 `glow-accent`, `glow-danger`.
 
-Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Cascadia/Fira),
+Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/Fira).
+`theme.css` resets `code` / `kbd` / `samp` / `pre` onto the mono stack so bare
+`<code>` labels never fall back to the browser default monospace.
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,toggle,fast,flyout,base,slow,pointer,loop-pulse,
 loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
@@ -220,7 +222,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
   expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
   elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
-  field + results merge into one docked shell. Prefer `SearchInput` for dense
+  field + results merge into one docked shell. Result row hover/active uses the
+  same `--fynns-radius-3xl` as `NavigationDrawerItem`. Prefer `SearchInput` for dense
   form rows.
 - **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
   dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
@@ -231,7 +234,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   trailing?, trailingSupportingText?, lines?: 1|2|3, selected?, interactive?,
   disabled? }` — M3 content list (56 / 72 / 88dp). Fixed `--fynns-list-leading-width`
   (40dp, matches Avatar `md`) grids icon/avatar columns so headlines share one
-  start edge. Type roles map to the shared font-size ladder (`overline` → `xs`,
+  start edge. Leading/trailing glyphs use `--fynns-list-icon-size` (20dp /
+  `--fynns-size-icon-md`). Type roles map to the shared font-size ladder (`overline` → `xs`,
   `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
   `ListRow` for sidebar master/detail chrome.
 - **DatePicker** `{ value?, defaultValue?, onChange?, displayMonth?,
@@ -244,10 +248,27 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
   title, and hairline dividers between head / calendar / foot (keeps the
   compact calendar; no year menu / huge header).
+- **TimePicker** `{ value?, defaultValue?, onChange?, hourCycle?: "h23"|"h12",
+  minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
+  (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
+  arrow keys / digit entry. Helpers `formatTimeValue` / `parseTimeValue`.
+  Dial face not included yet. **TimePickerDialog** `{ open, onOpenChange,
+  value?, onConfirm, title?, … }` mirrors DatePickerDialog (supporting time
+  line under the title).
+- **Carousel** + **CarouselItem** `{ ariaLabel, variant?: "hero"|"multi",
+  index?, defaultIndex?, onIndexChange?, showArrows?, showIndicators?,
+  prevAriaLabel?, nextAriaLabel? }` — M3 horizontal snap strip (arrows +
+  dots; keyboard ←→ Home/End). `multi` peeks neighbors; indices clamp at
+  ends (no wrap). Track stays scrollable for drag/swipe but hides the
+  scrollbar (chrome is arrows/dots).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
-  portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
-  (e.g. Collapsible / scroll panels) do not clip the flyout.
+  onChange, ariaLabel, disabled?, placeholder? }` — same chrome as **SearchBar**:
+  `.fynns-search-bar` / `.fynns-search-bar-field` / `.fynns-search-bar-input`,
+  open = `.fynns-search-bar--expanded` + docked `.fynns-search-bar-results` /
+  `.fynns-search-bar-result` rows (same type + padding; row highlight
+  `--fynns-radius-3xl` like `NavigationDrawerItem`). No SearchIcon; trigger
+  uses a modest `--fynns-space-md` start inset (not the search leading slot).
+  Trailing chevron opens/closes.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
@@ -334,6 +355,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar) | `--fynns-layout-bar-height` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
   sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
@@ -353,13 +375,16 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   — M3 **Segmented button** (single-select). Outlined stadium row (`--fynns-segmented-*`),
   40dp (compact 32dp), hairline dividers, selected = `secondary-container` + leading
   check (disable with `showCheck={false}`). Options may include `tip`, `ariaLabel`,
-  and `icon` (replaced by the check while selected). Equal-width segments; `fullWidth`
-  justifies across the container. `role="radiogroup"` + arrow-key paging.
+  and `icon` (replaced by the check while selected). Equal-width segments; leading
+  slot width is reserved (no column reflow); check fades/scales in with an optical
+  label slide (`--fynns-duration-fast` + `--fynns-ease-emphasized`). `fullWidth`
+  justifies across the container.
+  `role="radiogroup"` + arrow-key paging.
   Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
-  **ChipSet** `{ variant?: "assist"|"filter"|"input"|"suggestion", selected?, elevated?,
+  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
   leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
   filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
-  button (`aria-label` only, no Tooltip); suggestion is outlined. Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
+  `IconButton` + `Tooltip` (`removeAriaLabel`). Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
   segmented exclusivity. **Tabs**
   `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }` — primary underline
   indicator (3dp accent), not folder-style tops.
@@ -426,14 +451,18 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
   Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
-  top app bar (40 / 80 / 104dp; denser than stock M3). Title uses medium weight
-  at compact type. `scrolled` → surface-1 + shadow (caller owns scroll).
-  Prefer `Panel` for sidebar chrome.
+  top app bar (`sm` / action row = `--fynns-layout-bar-height` 56dp shared with
+  BottomAppBar / SearchBar; md 80 / lg 104). Leading/trailing keep the standard
+  40dp `IconButton` so hover discs sit inset in the bar (not edge-flush).
+  `--fynns-appbar-actions-gap` between siblings. Title uses medium weight at
+  compact type. `scrolled` → surface-1 + shadow (caller owns scroll). Prefer
+  `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` long-strip group
-  with SearchBar / Banner / NavigationDrawer items / sheet tops). Actions
-  start-aligned with 40dp targets; optional FAB sits inside the bar (no cradle
-  cutout). Prefer `NavigationBar` for bottom destinations.
+  action bar (`--fynns-layout-bar-height` 56dp with TopAppBar sm / SearchBar;
+  stock M3 is 80dp; `--fynns-radius-3xl` long-strip group with SearchBar /
+  Banner / NavigationDrawer items / sheet tops). Actions start-aligned with
+  40dp targets; optional FAB sits inside the bar (no cradle cutout). Prefer
+  `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   16dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
@@ -456,7 +485,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
   destination side sheet (280dp dense; stock M3 is 360dp). Modal overlays with scrim (default
   `side="left"`); `standard` is permanent in-layout. Item highlight is a
-  full-width row highlight (`secondary-container`, `--fynns-radius-3xl`); trailing badge for counts.
+  full-width row highlight (`secondary-container`, `--fynns-radius-3xl` — same
+  long-strip step as SearchBar / Select suggestion rows); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
@@ -473,7 +503,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,
   `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`,
-  `CalendarIcon`. Components also accept
+  `CalendarIcon`, `ClockIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system

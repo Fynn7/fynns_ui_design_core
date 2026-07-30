@@ -1,8 +1,9 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { CheckIcon, CloseIcon } from "./icons";
 import { IconButton } from "./IconButton";
+import { Tooltip } from "./Tooltip";
 
-export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
+export type ChipVariant = "assist" | "filter" | "input";
 
 export type ChipProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -13,7 +14,6 @@ export type ChipProps = Omit<
    * - `assist` — action chip (default).
    * - `filter` — toggleable filter; pass `selected`.
    * - `input` — entry chip; pass `onRemove` for trailing dismiss.
-   * - `suggestion` — outlined suggestion chip (M3).
    */
   variant?: ChipVariant;
   /** Filter / input selected fill (`accent-container`). */
@@ -24,13 +24,12 @@ export type ChipProps = Omit<
   trailingIcon?: ReactNode;
   /** Trailing dismiss control (renders a sibling button — valid HTML). */
   onRemove?: () => void;
-  /** Accessible name for the dismiss control (`aria-label` only; no Tooltip). */
   removeAriaLabel?: string;
 };
 
 /**
- * M3 Chip — compact assist / filter / input / suggestion stadium chip.
- * Distinct from segmented `ToggleGroup` and from non-interactive `Badge`.
+ * M3 Chip — compact assist / filter / input pill. Distinct from segmented
+ * `ToggleGroup` and from non-interactive `Badge`.
  */
 export function Chip({
   children,
@@ -90,16 +89,18 @@ export function Chip({
           {leading}
           {label}
         </button>
-        <IconButton
-          type="button"
-          className="fynns-chip-remove-btn"
-          aria-label={removeAriaLabel}
-          disabled={disabled}
-          size="sm"
-          onClick={onRemove}
-        >
-          <CloseIcon size={18} />
-        </IconButton>
+        <Tooltip content={removeAriaLabel}>
+          <IconButton
+            type="button"
+            className="fynns-chip-remove-btn"
+            aria-label={removeAriaLabel}
+            disabled={disabled}
+            size="sm"
+            onClick={onRemove}
+          >
+            <CloseIcon size={14} />
+          </IconButton>
+        </Tooltip>
       </div>
     );
   }

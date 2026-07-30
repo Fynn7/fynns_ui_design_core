@@ -1,5 +1,5 @@
 import type { KeyboardEvent, ReactNode } from "react";
-import { Fragment, useId } from "react";
+import { useId } from "react";
 import { CheckIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
 
@@ -39,8 +39,11 @@ export type ToggleGroupProps<V extends string> = {
 
 /**
  * M3 Segmented button — single-select outlined stadium group.
- * `.fynns-toggle-group`. Equal-width segments (longest label wins); pass
- * `fullWidth` to stretch (justified). Uses `radiogroup` / `radio` semantics.
+ * `.fynns-toggle-group`. Equal-width segments; pass `fullWidth` to stretch.
+ * Leading check/icon fades/scales in; slot width is always reserved so equal
+ * columns (and ControlStack max-content tracks) do not reflow. Unselected
+ * labels stay optically centered via content translate. Uses `radiogroup` /
+ * `radio` semantics.
  * @see https://m3.material.io/components/segmented-buttons/overview
  */
 export function ToggleGroup<V extends string>({
@@ -57,6 +60,8 @@ export function ToggleGroup<V extends string>({
   const enabled = options
     .map((o, i) => ({ o, i }))
     .filter(({ o }) => !o.disabled);
+  /** Mount leading slot when checks or option icons can appear (for slide). */
+  const useLeadingSlot = showCheck || options.some((o) => Boolean(o.icon));
 
   const selectAt = (index: number) => {
     const opt = options[index];
@@ -126,7 +131,8 @@ export function ToggleGroup<V extends string>({
                 ? "end"
                 : "middle";
         const showLeadingCheck = showCheck && on;
-        const showOptionIcon = Boolean(option.icon) && !showLeadingCheck;
+        const showOptionIcon = Boolean(option.icon) && !(showCheck && on);
+        const leadingOpen = showLeadingCheck || showOptionIcon;
 
         const chip = (
           <button
@@ -137,9 +143,8 @@ export function ToggleGroup<V extends string>({
             className={[
               "fynns-toggle-chip",
               on ? "fynns-toggle-chip--on" : "",
-              showLeadingCheck || showOptionIcon
-                ? "fynns-toggle-chip--with-icon"
-                : "",
+              useLeadingSlot ? "fynns-toggle-chip--with-icon" : "",
+              leadingOpen ? "fynns-toggle-chip--leading-open" : "",
             ]
               .filter(Boolean)
               .join(" ")}
@@ -150,24 +155,46 @@ export function ToggleGroup<V extends string>({
             onClick={() => onChange(option.value)}
             onKeyDown={(e) => onSegmentKeyDown(e, index)}
           >
-            {showLeadingCheck ? (
-              <CheckIcon
-                className="fynns-toggle-chip-check"
-                size={18}
-                aria-hidden
-              />
-            ) : null}
-            {showOptionIcon ? (
-              <span className="fynns-toggle-chip-icon" aria-hidden>
-                {option.icon}
-              </span>
-            ) : null}
-            <span className="fynns-toggle-chip-label">{option.label}</span>
+            <span className="fynns-toggle-chip-content">
+              {useLeadingSlot ? (
+                <span className="fynns-toggle-chip-leading" aria-hidden>
+                  {showCheck ? (
+                    <CheckIcon
+                      className={[
+                        "fynns-toggle-chip-check",
+                        showLeadingCheck ? "fynns-toggle-chip-check--on" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      size={18}
+                      aria-hidden
+                    />
+                  ) : null}
+                  {option.icon ? (
+                    <span
+                      className={[
+                        "fynns-toggle-chip-icon",
+                        showOptionIcon ? "fynns-toggle-chip-icon--on" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
+                      {option.icon}
+                    </span>
+                  ) : null}
+                </span>
+              ) : null}
+              <span className="fynns-toggle-chip-label">{option.label}</span>
+            </span>
           </button>
         );
 
         if (!option.tip) {
-          return <Fragment key={option.value}>{chip}</Fragment>;
+          return (
+            <div key={option.value} className="fynns-toggle-group__segment">
+              {chip}
+            </div>
+          );
         }
 
         return (

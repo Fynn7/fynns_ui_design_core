@@ -16,9 +16,13 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  Carousel,
+  CarouselItem,
   Collapsible,
   DatePicker,
   DatePickerDialog,
+  TimePicker,
+  TimePickerDialog,
   Divider,
   Fab,
   FileIcon,
@@ -59,6 +63,7 @@ import {
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 
 const SWATCH_KEYS = [
   { key: "xs", usesKey: "globals.swatchXsUses" },
@@ -119,6 +124,10 @@ export function GlobalsPage() {
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
+  const [pickedTime, setPickedTime] = useState<string | null>("14:30");
+  const [timeDialogOpen, setTimeDialogOpen] = useState(false);
+  const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
@@ -190,7 +199,7 @@ export function GlobalsPage() {
             <PlusIcon />
           </Fab>
         </div>
-        <p className="sandbox-help">{t("globals.fabHelp")}</p>
+        <SandboxHelp text={t("globals.fabHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catTextInputs")}>
@@ -258,9 +267,6 @@ export function GlobalsPage() {
             >
               {t("globals.chipFilter")}
             </Chip>
-            <Chip variant="suggestion" onClick={() => {}}>
-              {t("globals.chipSuggestion")}
-            </Chip>
             <Chip elevated onClick={() => {}}>
               {t("globals.chipElevated")}
             </Chip>
@@ -288,7 +294,7 @@ export function GlobalsPage() {
               { value: "month", label: t("globals.segmentedMonth") },
             ]}
           />
-          <p className="sandbox-help">{t("globals.segmentedHelp")}</p>
+          <SandboxHelp text={t("globals.segmentedHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <DatePicker
@@ -327,13 +333,16 @@ export function GlobalsPage() {
             <Button size="sm" variant="tonal" onClick={() => setDateDialogOpen(true)}>
               {t("globals.dateOpenDialog")}
             </Button>
-            <span className="sandbox-help">
-              {pickedDate
-                ? t("globals.dateSelected", { date: pickedDate })
-                : t("globals.dateNone")}
-            </span>
+            <SandboxHelp
+              as="span"
+              text={
+                pickedDate
+                  ? t("globals.dateSelected", { date: pickedDate })
+                  : t("globals.dateNone")
+              }
+            />
           </div>
-          <p className="sandbox-help">{t("globals.dateHelp")}</p>
+          <SandboxHelp text={t("globals.dateHelp")} />
         </div>
         <DatePickerDialog
           open={dateDialogOpen}
@@ -373,6 +382,61 @@ export function GlobalsPage() {
             ],
           }}
         />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ToggleGroup
+            ariaLabel={t("globals.timeCycleAria")}
+            value={timeHourCycle}
+            onChange={setTimeHourCycle}
+            options={[
+              { value: "h23", label: t("globals.timeCycle24") },
+              { value: "h12", label: t("globals.timeCycle12") },
+            ]}
+          />
+          <TimePicker
+            value={pickedTime}
+            onChange={setPickedTime}
+            hourCycle={timeHourCycle}
+            labels={{
+              hour: t("globals.timeHour"),
+              minute: t("globals.timeMinute"),
+              am: t("globals.timeAm"),
+              pm: t("globals.timePm"),
+              periodAria: t("globals.timePeriodAria"),
+            }}
+          />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setTimeDialogOpen(true)}>
+              {t("globals.timeOpenDialog")}
+            </Button>
+            <SandboxHelp
+              as="span"
+              text={
+                pickedTime
+                  ? t("globals.timeSelected", { time: pickedTime })
+                  : t("globals.timeNone")
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.timeHelp")} />
+        </div>
+        <TimePickerDialog
+          open={timeDialogOpen}
+          onOpenChange={setTimeDialogOpen}
+          value={pickedTime}
+          onConfirm={setPickedTime}
+          title={t("globals.timeDialogTitle")}
+          confirmLabel={t("globals.timeConfirm")}
+          cancelLabel={t("globals.timeCancel")}
+          closeAriaLabel={t("globals.timeClose")}
+          hourCycle={timeHourCycle}
+          labels={{
+            hour: t("globals.timeHour"),
+            minute: t("globals.timeMinute"),
+            am: t("globals.timeAm"),
+            pm: t("globals.timePm"),
+            periodAria: t("globals.timePeriodAria"),
+          }}
+        />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catCommunication")}>
@@ -382,9 +446,9 @@ export function GlobalsPage() {
           <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <span className="sandbox-help">{t("globals.progressLinear")}</span>
+          <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
-          <span className="sandbox-help">{t("globals.progressLinearIndeterminate")}</span>
+          <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
           <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
             <CircularProgress value={0.65} label={t("globals.progressCircularAria")} size="sm" />
@@ -419,10 +483,37 @@ export function GlobalsPage() {
             {t("globals.bannerShow")}
           </Button>
         )}
-        <p className="sandbox-help">{t("globals.bannerHelp")}</p>
+        <SandboxHelp text={t("globals.bannerHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catContainment")}>
+        <div
+          className="sandbox-globals-row sandbox-globals-row--stack"
+          style={{ width: "100%", maxWidth: "28rem" }}
+        >
+          <Carousel
+            ariaLabel={t("globals.carouselAria")}
+            variant="multi"
+            index={carouselIndex}
+            onIndexChange={setCarouselIndex}
+            prevAriaLabel={t("globals.carouselPrev")}
+            nextAriaLabel={t("globals.carouselNext")}
+          >
+            <CarouselItem label={t("globals.carouselSlide1")}>
+              <strong>{t("globals.carouselSlide1")}</strong>
+              <SandboxHelp as="span" text={t("globals.carouselSlide1Body")} />
+            </CarouselItem>
+            <CarouselItem label={t("globals.carouselSlide2")}>
+              <strong>{t("globals.carouselSlide2")}</strong>
+              <SandboxHelp as="span" text={t("globals.carouselSlide2Body")} />
+            </CarouselItem>
+            <CarouselItem label={t("globals.carouselSlide3")}>
+              <strong>{t("globals.carouselSlide3")}</strong>
+              <SandboxHelp as="span" text={t("globals.carouselSlide3Body")} />
+            </CarouselItem>
+          </Carousel>
+          <SandboxHelp text={t("globals.carouselHelp")} />
+        </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
@@ -486,19 +577,19 @@ export function GlobalsPage() {
             />
           </List>
         </div>
-        <p className="sandbox-help">{t("globals.listHelp")}</p>
+        <SandboxHelp text={t("globals.listHelp")} />
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <span className="sandbox-help">{t("globals.dividerFull")}</span>
+          <SandboxHelp as="span" text={t("globals.dividerFull")} />
           <Divider />
-          <span className="sandbox-help">{t("globals.dividerInset")}</span>
+          <SandboxHelp as="span" text={t("globals.dividerInset")} />
           <Divider inset />
           <div
             className="sandbox-globals-row"
             style={{ alignItems: "stretch", height: "var(--fynns-space-2xl)" }}
           >
-            <span className="sandbox-help">{t("globals.dividerVerticalA")}</span>
+            <SandboxHelp as="span" text={t("globals.dividerVerticalA")} />
             <Divider orientation="vertical" />
-            <span className="sandbox-help">{t("globals.dividerVerticalB")}</span>
+            <SandboxHelp as="span" text={t("globals.dividerVerticalB")} />
           </div>
         </div>
         <div className="sandbox-globals-cards">
@@ -514,7 +605,7 @@ export function GlobalsPage() {
           ))}
         </div>
         <Collapsible title={t("globals.collapsible")} defaultOpen>
-          <p className="sandbox-help">{t("globals.collapsibleHelp")}</p>
+          <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Button size="sm" onClick={() => setSheetOpen(true)}>
@@ -634,10 +725,6 @@ export function GlobalsPage() {
           style={{
             width: "100%",
             maxWidth: "28rem",
-            border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-md)",
-            overflow: "hidden",
-            background: "var(--fynns-color-app-bg)",
           }}
         >
           <NavigationBar aria-label={t("globals.navBarAria")}>
@@ -669,7 +756,7 @@ export function GlobalsPage() {
             />
           </NavigationBar>
         </div>
-        <p className="sandbox-help">{t("globals.navBarHelp")}</p>
+        <SandboxHelp text={t("globals.navBarHelp")} />
         <div
           className="sandbox-globals-navdrawer"
           style={{
@@ -759,16 +846,12 @@ export function GlobalsPage() {
             }}
           />
         </NavigationDrawer>
-        <p className="sandbox-help">{t("globals.navDrawerHelp")}</p>
+        <SandboxHelp text={t("globals.navDrawerHelp")} />
         <div
           className="sandbox-globals-bottom-app-bar"
           style={{
             width: "100%",
             maxWidth: "28rem",
-            border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-3xl)",
-            overflow: "hidden",
-            background: "var(--fynns-color-app-bg)",
           }}
         >
           <BottomAppBar
@@ -794,14 +877,14 @@ export function GlobalsPage() {
             }
             floatingActionButton={
               <Tooltip content={t("globals.fabTip")}>
-                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                <IconButton variant="primary" aria-label={t("globals.fabTip")}>
                   <PlusIcon />
-                </Fab>
+                </IconButton>
               </Tooltip>
             }
           />
         </div>
-        <p className="sandbox-help">{t("globals.bottomAppBarHelp")}</p>
+        <SandboxHelp text={t("globals.bottomAppBarHelp")} />
         <div
           className="sandbox-globals-search-bar"
           style={{
@@ -846,11 +929,11 @@ export function GlobalsPage() {
               ))}
           </SearchBar>
         </div>
-        <p className="sandbox-help">{t("globals.searchBarHelp")}</p>
+        <SandboxHelp text={t("globals.searchBarHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.rhythm")}>
-        <p className="sandbox-help">{t("globals.rhythmLead")}</p>
+        <SandboxHelp text={t("globals.rhythmLead")} />
         <div className="sandbox-globals-rhythm">
           <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
             <ControlRow label={t("globals.rhythmRowContent")}>
@@ -919,11 +1002,11 @@ export function GlobalsPage() {
             </div>
           </dl>
         </div>
-        <p className="sandbox-help">{t("globals.rhythmAgentHint")}</p>
+        <SandboxHelp text={t("globals.rhythmAgentHint")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.swatches")}>
-        <p className="sandbox-help">{t("globals.swatchesHelp")}</p>
+        <SandboxHelp text={t("globals.swatchesHelp")} />
         <div className="sandbox-globals-swatches">
           {SWATCH_KEYS.map(({ key, usesKey }) => (
             <div key={key} className="sandbox-globals-swatch">
@@ -937,7 +1020,7 @@ export function GlobalsPage() {
             </div>
           ))}
         </div>
-        <p className="sandbox-help">{t("globals.swatchesSpecialHelp")}</p>
+        <SandboxHelp text={t("globals.swatchesSpecialHelp")} />
       </GlobalsCategory>
     </div>
   );

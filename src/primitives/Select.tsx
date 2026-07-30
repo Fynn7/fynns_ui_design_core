@@ -1,12 +1,6 @@
-import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import type { KeyboardEvent, ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ChevronDownIcon } from "./icons";
-import {
-  floatingViewportRect,
-  useAnchoredPosition,
-  type AnchoredPosition,
-} from "./Popover";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
 
 export type SelectOption = {
@@ -27,27 +21,21 @@ export type SelectProps = {
   className?: string;
 };
 
+function join(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(" ");
+}
+
 function normalize(option: string | SelectOption): SelectOption {
   return typeof option === "string" ? { value: option } : option;
 }
 
-function listBoxOrigin(
-  pos: AnchoredPosition,
-  size: { width: number; height: number },
-): { top: number; left: number } {
-  const box = floatingViewportRect(
-    { top: pos.top, left: pos.left },
-    pos.side,
-    pos.align,
-    size,
-  );
-  return { top: box.top, left: box.left };
-}
-
 /**
- * Custom single-select (listbox) with keyboard support. Portal-rendered
- * dropdown (avoids overflow clipping from ancestors such as Collapsible);
- * replaces native `<select>`. `.fynns-select-*`.
+ * Dropdown that reuses `SearchBar` chrome end-to-end: same elevated capsule,
+ * same docked results shell (`.fynns-search-bar--expanded` +
+ * `.fynns-search-bar-results` / `.fynns-search-bar-result`), same type tokens.
+ * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
+ * Replaces native `<select>`.
+ * @see https://m3.material.io/components/menus/overview
  */
 export function Select({
   value,
@@ -65,14 +53,8 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(() => Math.max(0, selectedIndex));
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const [listEl, setListEl] = useState<HTMLUListElement | null>(null);
-  const [triggerWidth, setTriggerWidth] = useState<number | null>(null);
   const listId = useId();
-  const pos = useAnchoredPosition(triggerRef.current, listEl, open, {
-    side: "bottom",
-    align: "start",
-    offset: 5,
-  });
+  const isDisabled = disabled || normalized.length === 0;
 
   const pick = useCallback(
     (nextValue: string) => {
@@ -83,17 +65,10 @@ export function Select({
     [onChange],
   );
 
-  useEffect(() => {
-    if (!open) setListEl(null);
-  }, [open]);
-
-  useLayoutEffect(() => {
-    if (!open || !triggerRef.current) {
-      setTriggerWidth(null);
-      return;
-    }
-    setTriggerWidth(triggerRef.current.getBoundingClientRect().width);
-  }, [open]);
+  const toggleOpen = useCallback(() => {
+    if (isDisabled) return;
+    setOpen((wasOpen) => !wasOpen);
+  }, [isDisabled]);
 
   useEffect(() => {
     if (!open) return;
@@ -101,10 +76,9 @@ export function Select({
     const onPointerDown = (event: MouseEvent) => {
       const target = event.target as Node;
       if (rootRef.current?.contains(target)) return;
-      if (listEl?.contains(target)) return;
       setOpen(false);
     };
-    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+    const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
         setOpen(false);
@@ -112,15 +86,15 @@ export function Select({
       }
     };
     document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKey);
     };
-  }, [open, selectedIndex, listEl]);
+  }, [open, selectedIndex]);
 
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    if (disabled || normalized.length === 0) return;
+    if (isDisabled) return;
     if (!open) {
       if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
         event.preventDefault();
@@ -146,89 +120,85 @@ export function Select({
     ? (selectedOption.label ?? selectedOption.value)
     : placeholder;
 
-  const listSize =
-    listEl != null
-      ? { width: listEl.offsetWidth, height: listEl.offsetHeight }
-      : triggerWidth != null
-        ? { width: triggerWidth, height: 40 }
-        : null;
-  const origin =
-    pos && listSize ? listBoxOrigin(pos, listSize) : null;
-
-  const listStyle: CSSProperties | undefined =
-    origin && triggerWidth != null
-      ? {
-          position: "fixed",
-          top: origin.top,
-          left: origin.left,
-          width: triggerWidth,
-        }
-      : undefined;
-
   return (
-    <div ref={rootRef} className={["fynns-select", className ?? ""].filter(Boolean).join(" ")}>
-      <button
-        ref={triggerRef}
-        id={id}
-        type="button"
-        disabled={disabled || normalized.length === 0}
-        className={["fynns-select-trigger", open ? "fynns-select-trigger--open" : ""]
-          .filter(Boolean)
-          .join(" ")}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls={listId}
-        aria-label={ariaLabel}
-        onClick={() => {
-          if (disabled || normalized.length === 0) return;
-          setOpen((wasOpen) => !wasOpen);
-        }}
-        onKeyDown={onTriggerKeyDown}
-      >
-        <span className="fynns-select-trigger-text">{displayValue}</span>
-        <ChevronDownIcon size={14} className="fynns-select-trigger-chevron" />
-      </button>
-      {open && pos && listStyle
-        ? createPortal(
-            <ul
-              ref={setListEl}
-              id={listId}
-              role="listbox"
-              aria-label={ariaLabel}
-              data-side={pos.side}
-              className={mergeScrollSurfaceClass("fynns-select-list")}
-              style={listStyle}
-            >
-              {normalized.map((option, index) => {
-                const selected = option.value === value;
-                const active = index === activeIndex;
-                return (
-                  <li key={option.value} role="presentation">
-                    <button
-                      type="button"
-                      role="option"
-                      aria-selected={selected}
-                      disabled={option.disabled}
-                      className={[
-                        "fynns-select-option",
-                        selected ? "fynns-select-option--selected" : "",
-                        active ? "fynns-select-option--active" : "",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                      onMouseDown={(event) => event.preventDefault()}
-                      onMouseEnter={() => setActiveIndex(index)}
-                      onClick={() => !option.disabled && pick(option.value)}
-                    >
-                      {option.label ?? option.value}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>,
-            document.body,
-          )
-        : null}
+    <div
+      ref={rootRef}
+      className={join(
+        "fynns-select",
+        "fynns-search-bar",
+        open && "fynns-search-bar--expanded",
+        isDisabled && "fynns-search-bar--disabled",
+        isDisabled && "fynns-select--disabled",
+        className,
+      )}
+      data-expanded={open ? "true" : undefined}
+    >
+      <div className="fynns-search-bar-field fynns-select-shell">
+        <button
+          ref={triggerRef}
+          id={id}
+          type="button"
+          disabled={isDisabled}
+          className={join(
+            "fynns-search-bar-input",
+            "fynns-select-trigger",
+            open && "fynns-select-trigger--open",
+          )}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={open ? listId : undefined}
+          aria-label={ariaLabel}
+          onClick={toggleOpen}
+          onKeyDown={onTriggerKeyDown}
+        >
+          <span className="fynns-select-trigger-text">{displayValue}</span>
+        </button>
+        <span
+          className="fynns-search-bar-trailing fynns-select-chevron"
+          aria-hidden="true"
+          onMouseDown={(event) => {
+            event.preventDefault();
+            if (isDisabled) return;
+            triggerRef.current?.focus();
+            toggleOpen();
+          }}
+        >
+          <ChevronDownIcon className="fynns-select-trigger-chevron" />
+        </span>
+      </div>
+      {open ? (
+        <div
+          id={listId}
+          role="listbox"
+          aria-label={ariaLabel}
+          className={mergeScrollSurfaceClass(
+            "fynns-search-bar-results fynns-select-list",
+          )}
+        >
+          {normalized.map((option, index) => {
+            const selected = option.value === value;
+            const active = index === activeIndex;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="option"
+                aria-selected={selected}
+                disabled={option.disabled}
+                className={join(
+                  "fynns-search-bar-result",
+                  (active || selected) && "fynns-search-bar-result--active",
+                )}
+                onMouseDown={(event) => event.preventDefault()}
+                onMouseEnter={() => setActiveIndex(index)}
+                onClick={() => !option.disabled && pick(option.value)}
+              >
+                {option.label ?? option.value}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -256,7 +256,7 @@ export type CardVariant = keyof typeof CARD_VARIANT_MAP;
 /** Font stacks. `--fynns-font-<key>`. */
 export const FONT_FAMILY_TOKENS = {
   ui: 'system-ui, "Segoe UI", Roboto, sans-serif',
-  mono: '"Cascadia Code", "Fira Code", ui-monospace, monospace',
+  mono: 'Consolas, "Cascadia Code", "Fira Code", ui-monospace, monospace',
   serif: '"CMU Serif", "Latin Modern Roman", Cambria, "Times New Roman", serif',
 } as const;
 
@@ -445,19 +445,26 @@ export const FAB_TOKENS = {
 
 /**
  * Top app bar geometry (M3-informed, denser for desktop/tool chrome).
- * Small 40dp; medium 80dp; large 104dp. Action row matches small height.
+ * Small uses shared `--fynns-layout-bar-height` (56dp); medium 80dp; large 104dp.
+ * Action row matches small height so 40dp IconButtons sit inset, not edge-flush.
  * `--fynns-appbar-<key>`.
  */
 export const APPBAR_TOKENS = {
-  height: "2.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "height-md": "5rem",
   "height-lg": "6.5rem",
-  "row-height": "2.5rem",
+  "row-height": "var(--fynns-layout-bar-height)",
   /** Inline inset for the action row (leading / trailing icons). */
   "pad-inline": "0.5rem",
   /**
-   * Hover / state-layer circle for IconButtons (glyph stays default size;
-   * disc is slightly under the 40dp row so it does not dominate).
+   * Gap between adjacent action IconButtons. Keep small — hit targets are the
+   * full `--fynns-size-icon-target` (40dp); zero/near-zero avoids cramped glyphs
+   * without stacking hover discs.
+   */
+  "actions-gap": "0",
+  /**
+   * Shared dense hover disc (DatePicker nav etc.). TopAppBar actions use the
+   * standard 40dp IconButton target instead.
    */
   "action-hover-size": "2.25rem",
   /** Title inset under the action row (medium / large only). */
@@ -475,12 +482,13 @@ export const APPBAR_TOKENS = {
 
 /**
  * Bottom app bar geometry (at 16px rem).
- * Dense 56dp (below stock M3 80dp) for tool chrome — matches TopAppBar densification.
- * Actions / FAB share a 40dp control size inside the bar (M3: FAB inside, no cradle).
+ * Height shares `--fynns-layout-bar-height` (56dp) with TopAppBar sm / SearchBar
+ * (below stock M3 80dp). Actions / FAB share a 40dp control size inside the bar
+ * (M3: FAB inside, no cradle).
  * `--fynns-bottomappbar-<key>`.
  */
 export const BOTTOM_APPBAR_TOKENS = {
-  height: "3.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.5rem",
   "pad-block": "0.25rem",
   "actions-gap": "0.125rem",
@@ -493,13 +501,14 @@ export const BOTTOM_APPBAR_TOKENS = {
 
 /**
  * Search bar geometry (M3 SearchBar at 16px rem).
- * Collapsed 56dp capsule; expanded merges field + results into one shell.
+ * Collapsed capsule height shares `--fynns-layout-bar-height` (56dp); expanded
+ * merges field + results into one shell.
  * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
  * Prefer `SearchInput` for dense form rows.
  * `--fynns-searchbar-<key>`.
  */
 export const SEARCHBAR_TOKENS = {
-  height: "3.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.25rem",
   "icon-slot": "3rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -509,8 +518,9 @@ export const SEARCHBAR_TOKENS = {
   "line-height": "1.5",
   "results-max-height": "20rem",
   /**
-   * Inset around suggestion rows (Google-style): hover chips stay off the
-   * shell’s large `--fynns-radius-3xl` corners — do not match radii; inset instead.
+   * Inset around suggestion rows: shell and result row highlights both use
+   * `--fynns-radius-3xl` (same long-strip chrome as NavigationDrawer items);
+   * pad keeps hover off the outer capsule edge.
    */
   "results-pad-block-start": "0.5rem",
   "results-pad-block-end": "0.75rem",
@@ -549,8 +559,11 @@ export const LIST_TOKENS = {
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
   gap: "1rem",
-  /** Leading / trailing glyph; matches `--fynns-size-icon` (16dp). */
-  "icon-size": "1rem",
+  /**
+   * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
+   * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
+   */
+  "icon-size": "1.25rem",
   /**
    * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
    * avatar rows share one vertical grid; glyphs center inside the slot.
@@ -571,6 +584,44 @@ export const DATEPICKER_TOKENS = {
   "weekday-font": "0.75rem",
   /** Keeps adjacent today/selected discs from touching (4dp). */
   gap: "0.25rem",
+} as const;
+
+/**
+ * M3 TimePicker input geometry (at 16px rem).
+ * Large hour/minute fields + colon; optional AM/PM column for `h12`.
+ * `--fynns-timepicker-<key>`. Dial variant is out of scope for now.
+ */
+export const TIMEPICKER_TOKENS = {
+  "pad-inline": "0.75rem",
+  "pad-block": "0.75rem",
+  /** Hour / minute field (≈96×80dp denser). */
+  "field-min-width": "5.5rem",
+  "field-min-height": "4.5rem",
+  "field-font": "2.75rem",
+  "colon-pad-inline": "0.25rem",
+  /** Decorative colon dots (avoids font glyph bias). */
+  "colon-dot": "0.375rem",
+  "colon-gap": "0.75rem",
+  /** AM/PM stacked period control. */
+  "period-min-width": "3.25rem",
+  "period-font": "0.875rem",
+  gap: "0.75rem",
+} as const;
+
+/**
+ * M3 Carousel geometry (at 16px rem).
+ * Horizontal snap strip; hero = full-bleed slide, multi = peek neighbors.
+ * `--fynns-carousel-<key>`.
+ */
+export const CAROUSEL_TOKENS = {
+  gap: "0.5rem",
+  "item-min-height": "11rem",
+  /** Multi-browse slide width (peek neighbors). */
+  "item-width-multi": "72%",
+  "indicator-size": "0.5rem",
+  "indicator-gap": "0.5rem",
+  "controls-gap": "0.5rem",
+  "pad-block": "0.25rem",
 } as const;
 
 /**
@@ -733,6 +784,13 @@ export const LAYOUT_TOKENS = {
   "control-cluster-gap": "0.5rem",
   /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
   "switch-label-end": "7rem",
+  /**
+   * Single-line chrome bar height (56dp): TopAppBar `sm` row, BottomAppBar,
+   * SearchBar field. Taller than `--fynns-size-icon-target` (40dp) so IconButton
+   * hover discs are not flush with the bar edge. Multi-line app bars use
+   * `--fynns-appbar-height-md` / `-lg` instead.
+   */
+  "bar-height": "3.5rem",
 } as const;
 
 /**
@@ -876,6 +934,8 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["banner", BANNER_TOKENS],
   ["list", LIST_TOKENS],
   ["datepicker", DATEPICKER_TOKENS],
+  ["timepicker", TIMEPICKER_TOKENS],
+  ["carousel", CAROUSEL_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

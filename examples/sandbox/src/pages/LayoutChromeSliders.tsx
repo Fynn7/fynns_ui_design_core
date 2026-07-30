@@ -1,5 +1,6 @@
 import { InfoHint, Slider } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 import {
   SANDBOX_CHROME_TOKENS,
   sandboxChromeVar,
@@ -91,7 +92,7 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
 
   return (
     <div className="sandbox-stack">
-      <p className="sandbox-help">{t("layoutChrome.help")}</p>
+      <SandboxHelp text={t("layoutChrome.help")} />
       {showChrome
         ? CHROME_ROWS.map(({ key, labelKey, hintKey, max }) => {
             const cssVar = sandboxChromeVar(key);
@@ -129,7 +130,7 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
             );
           })
         : null}
-      <p className="sandbox-help">{t("layoutChrome.rhythmHelp")}</p>
+      <SandboxHelp text={t("layoutChrome.rhythmHelp")} />
       {LAYOUT_ROWS.map(({ key, labelKey, hintKey, max }) => {
         const cssVar = `--fynns-layout-${key}`;
         const px = parseLengthToPx(resolved(cssVar));

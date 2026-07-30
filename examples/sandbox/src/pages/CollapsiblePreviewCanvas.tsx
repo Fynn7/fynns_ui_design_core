@@ -10,6 +10,7 @@ import {
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 
 export type CollapsiblePreviewOptions = {
   open: boolean;
@@ -69,7 +70,7 @@ export function CollapsiblePreviewCanvas() {
                 ) : undefined
               }
             >
-              <p className="sandbox-help">{t("preview.collapsibleBody")}</p>
+              <SandboxHelp text={t("preview.collapsibleBody")} />
             </Collapsible>
           </div>
         </div>

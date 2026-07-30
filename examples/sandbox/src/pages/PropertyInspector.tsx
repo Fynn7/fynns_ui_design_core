@@ -8,6 +8,7 @@ import {
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -120,7 +121,7 @@ export function PropertyInspector() {
         <Collapsible title={t("inspector.color")} defaultOpen>
           <div className="sandbox-stack">
             <HueWheel />
-            <p className="sandbox-help">{t("inspector.colorHelp")}</p>
+            <SandboxHelp text={t("inspector.colorHelp")} />
             {SURFACE_KEYS.map(({ cssVar, key, labelKey, hintKey }) => {
               const baseline = BASELINE[cssVar] ?? "#000000";
               const current = resolved(cssVar);
@@ -204,7 +205,7 @@ export function PropertyInspector() {
                   })
                 }
               />
-              <p className="sandbox-help">{t("inspector.outlineHelp")}</p>
+              <SandboxHelp text={t("inspector.outlineHelp")} />
             </div>
           </div>
         </Collapsible>
@@ -250,7 +251,7 @@ export function PropertyInspector() {
 
         <Collapsible title={t("inspector.spacing")} defaultOpen>
           <div className="sandbox-stack">
-            <p className="sandbox-help">{t("inspector.spacingHelp")}</p>
+            <SandboxHelp text={t("inspector.spacingHelp")} />
             {SPACE_KEYS.map(({ key, labelKey, hintKey }) => {
               const pxByKey = { lg: spaceLgPx, md: spaceMdPx, sm: spaceSmPx } as const;
               const px = pxByKey[key];
