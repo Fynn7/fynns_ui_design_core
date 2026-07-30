@@ -555,8 +555,11 @@ export const LIST_TOKENS = {
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
   gap: "1rem",
-  /** Leading / trailing glyph; matches `--fynns-size-icon` (16dp). */
-  "icon-size": "1rem",
+  /**
+   * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
+   * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
+   */
+  "icon-size": "1.25rem",
   /**
    * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
    * avatar rows share one vertical grid; glyphs center inside the slot.

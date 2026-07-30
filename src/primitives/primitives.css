@@ -667,7 +667,7 @@
   appearance: none;
 }
 
-/* ---------- Select (M3 exposed dropdown — Input field chrome + menu) ---------- */
+/* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
 .fynns-select {
   position: relative;
   width: 100%;
@@ -686,27 +686,14 @@
   margin: 0;
   text-align: left;
   cursor: pointer;
-  /* Chrome comes from `.fynns-field-shell` + `.fynns-input--in-shell` (same as Input). */
 }
 
 .fynns-select-trigger:focus,
 .fynns-select-trigger:focus-visible {
-  /* Shell owns the focus ring via `:focus-within`. */
-  border: none;
-  box-shadow: none;
   outline: none;
 }
 
 .fynns-select-trigger:disabled {
-  cursor: not-allowed;
-  /* Shell owns muted surface; keep the in-shell button transparent. */
-  background: transparent;
-  opacity: 1;
-}
-
-.fynns-select--disabled .fynns-field-shell {
-  background: var(--fynns-color-surface-head);
-  opacity: var(--fynns-opacity-muted);
   cursor: not-allowed;
 }
 
@@ -728,78 +715,21 @@
 
 .fynns-select-trigger-chevron {
   flex-shrink: 0;
+  width: var(--fynns-searchbar-icon-size);
+  height: var(--fynns-searchbar-icon-size);
   color: var(--fynns-color-text-muted);
   transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-select-trigger--open ~ .fynns-select-chevron .fynns-select-trigger-chevron,
-.fynns-select-shell--open .fynns-select-trigger-chevron {
+.fynns-search-bar--expanded .fynns-select-trigger-chevron {
   transform: rotate(180deg);
 }
 
+/* Results are `.fynns-search-bar-results` — no separate flyout skin. */
 .fynns-select-list {
-  /* Positioned via inline `position:fixed` + top/left from useAnchoredPosition
-     (portaled to document.body so overflow:hidden ancestors cannot clip it). */
-  z-index: var(--fynns-z-dropdown);
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-searchbar-results-gap);
-  margin: 0;
-  padding-block: var(--fynns-searchbar-results-pad-block-start)
-    var(--fynns-searchbar-results-pad-block-end);
-  padding-inline: var(--fynns-searchbar-results-pad-inline);
   list-style: none;
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface-2);
-  box-shadow: var(--fynns-shadow-flyout);
-  max-height: var(--fynns-searchbar-results-max-height);
-  overflow: auto;
-  transform-origin: top center;
-  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out) both;
-}
-
-.fynns-select-list[data-side="top"] {
-  transform-origin: bottom center;
-  animation-name: fynns-flyout-enter-top;
-}
-
-.fynns-select-list[data-side="bottom"] {
-  transform-origin: top center;
-}
-
-.fynns-select-list > li {
-  display: block;
   margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/*
- * Rows reuse `.fynns-search-bar-result` (hover / active state-layer). Selected
- * = M3 menu leading check — not accent ink or left hairline bar.
- */
-.fynns-select-option-leading {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: var(--fynns-segmented-icon-size);
-  height: var(--fynns-segmented-icon-size);
-}
-
-.fynns-select-option-check {
-  display: block;
-  color: var(--fynns-color-text);
-}
-
-.fynns-select-option-label {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* ---------- DropdownMenu ---------- */
@@ -5485,6 +5415,11 @@
   line-height: var(--fynns-searchbar-line-height);
   outline: none;
   appearance: none;
+}
+
+/* Select has no leading icon; SearchBar's tiny input pad would leave the label flush. */
+.fynns-select .fynns-search-bar-input.fynns-select-trigger {
+  padding-inline-start: var(--fynns-space-md);
 }
 
 .fynns-search-bar-input::placeholder {

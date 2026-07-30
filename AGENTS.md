@@ -233,7 +233,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   trailing?, trailingSupportingText?, lines?: 1|2|3, selected?, interactive?,
   disabled? }` — M3 content list (56 / 72 / 88dp). Fixed `--fynns-list-leading-width`
   (40dp, matches Avatar `md`) grids icon/avatar columns so headlines share one
-  start edge. Type roles map to the shared font-size ladder (`overline` → `xs`,
+  start edge. Leading/trailing glyphs use `--fynns-list-icon-size` (20dp /
+  `--fynns-size-icon-md`). Type roles map to the shared font-size ladder (`overline` → `xs`,
   `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
   `ListRow` for sidebar master/detail chrome.
 - **DatePicker** `{ value?, defaultValue?, onChange?, displayMonth?,
@@ -260,13 +261,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   ends (no wrap). Track stays scrollable for drag/swipe but hides the
   scrollbar (chrome is arrows/dots).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder?, variant?: "filled"|"outlined",
-  size?: "sm"|"md" }` — M3 **exposed dropdown menu**: trigger reuses `Input`
-  field chrome (`.fynns-field-shell` + `.fynns-input--in-shell` + trailing
-  chevron); list portal rows reuse `.fynns-search-bar-result` (state-layer
-  hover) with an M3 leading check when selected — not accent ink / left bar.
-  Anchored flip top/bottom so overflow ancestors do not clip. Not SearchInput /
-  pill — that radius is search-only.
+  onChange, ariaLabel, disabled?, placeholder? }` — same chrome as **SearchBar**:
+  `.fynns-search-bar` / `.fynns-search-bar-field` / `.fynns-search-bar-input`,
+  open = `.fynns-search-bar--expanded` + docked `.fynns-search-bar-results` /
+  `.fynns-search-bar-result` rows (same type + padding). No SearchIcon; trigger
+  uses a modest `--fynns-space-md` start inset (not the search leading slot).
+  Trailing chevron opens/closes.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
