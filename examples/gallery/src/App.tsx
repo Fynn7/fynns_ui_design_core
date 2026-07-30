@@ -38,6 +38,8 @@ import {
   Counter,
   DatePicker,
   DatePickerDialog,
+  TimePicker,
+  TimePickerDialog,
   LinearProgress,
   List,
   ListItem,
@@ -93,6 +95,8 @@ export function App() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [galleryDate, setGalleryDate] = useState<string | null>("2026-07-15");
+  const [timeDialogOpen, setTimeDialogOpen] = useState(false);
+  const [galleryTime, setGalleryTime] = useState<string | null>("14:30");
   const [checked, setChecked] = useState(true);
   const [toggleChecked, setToggleChecked] = useState(false);
   const [checkboxOn, setCheckboxOn] = useState(true);
@@ -593,6 +597,22 @@ export function App() {
             onConfirm={setGalleryDate}
             title="Select date"
             weekStartsOn={1}
+          />
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            TimePicker
+          </span>
+          <TimePicker value={galleryTime} onChange={setGalleryTime} hourCycle="h23" />
+          <TimePicker value={galleryTime} onChange={setGalleryTime} hourCycle="h12" />
+          <Button size="sm" variant="tonal" onClick={() => setTimeDialogOpen(true)}>
+            Open time dialog
+          </Button>
+          <TimePickerDialog
+            open={timeDialogOpen}
+            onOpenChange={setTimeDialogOpen}
+            value={galleryTime}
+            onConfirm={setGalleryTime}
+            title="Select time"
+            hourCycle="h12"
           />
         </div>
       </Section>

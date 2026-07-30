@@ -295,6 +295,17 @@
   --fynns-datepicker-weekday-size: 2.5rem;
   --fynns-datepicker-weekday-font: 0.75rem;
   --fynns-datepicker-gap: 0.25rem;
+  --fynns-timepicker-pad-inline: 0.75rem;
+  --fynns-timepicker-pad-block: 0.75rem;
+  --fynns-timepicker-field-min-width: 5.5rem;
+  --fynns-timepicker-field-min-height: 4.5rem;
+  --fynns-timepicker-field-font: 2.75rem;
+  --fynns-timepicker-colon-pad-inline: 0.25rem;
+  --fynns-timepicker-colon-dot: 0.375rem;
+  --fynns-timepicker-colon-gap: 0.75rem;
+  --fynns-timepicker-period-min-width: 3.25rem;
+  --fynns-timepicker-period-font: 0.875rem;
+  --fynns-timepicker-gap: 0.75rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

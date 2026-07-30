@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -244,6 +244,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
   title, and hairline dividers between head / calendar / foot (keeps the
   compact calendar; no year menu / huge header).
+- **TimePicker** `{ value?, defaultValue?, onChange?, hourCycle?: "h23"|"h12",
+  minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
+  (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
+  arrow keys / digit entry. Helpers `formatTimeValue` / `parseTimeValue`.
+  Dial face not included yet. **TimePickerDialog** `{ open, onOpenChange,
+  value?, onConfirm, title?, … }` mirrors DatePickerDialog (supporting time
+  line under the title).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors
@@ -473,7 +480,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,
   `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`,
-  `CalendarIcon`. Components also accept
+  `CalendarIcon`, `ClockIcon`. Components also accept
   your own icon nodes where an `icon` prop exists.
 
 ## Adding to the system

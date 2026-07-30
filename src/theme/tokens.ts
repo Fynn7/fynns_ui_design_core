@@ -574,6 +574,28 @@ export const DATEPICKER_TOKENS = {
 } as const;
 
 /**
+ * M3 TimePicker input geometry (at 16px rem).
+ * Large hour/minute fields + colon; optional AM/PM column for `h12`.
+ * `--fynns-timepicker-<key>`. Dial variant is out of scope for now.
+ */
+export const TIMEPICKER_TOKENS = {
+  "pad-inline": "0.75rem",
+  "pad-block": "0.75rem",
+  /** Hour / minute field (≈96×80dp denser). */
+  "field-min-width": "5.5rem",
+  "field-min-height": "4.5rem",
+  "field-font": "2.75rem",
+  "colon-pad-inline": "0.25rem",
+  /** Decorative colon dots (avoids font glyph bias). */
+  "colon-dot": "0.375rem",
+  "colon-gap": "0.75rem",
+  /** AM/PM stacked period control. */
+  "period-min-width": "3.25rem",
+  "period-font": "0.875rem",
+  gap: "0.75rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -876,6 +898,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["banner", BANNER_TOKENS],
   ["list", LIST_TOKENS],
   ["datepicker", DATEPICKER_TOKENS],
+  ["timepicker", TIMEPICKER_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

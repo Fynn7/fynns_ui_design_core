@@ -28,6 +28,7 @@ export * from "./primitives/SearchBar";
 export * from "./primitives/Banner";
 export * from "./primitives/List";
 export * from "./primitives/DatePicker";
+export * from "./primitives/TimePicker";
 export * from "./primitives/Select";
 export * from "./primitives/Combobox";
 export * from "./primitives/DropdownMenu";

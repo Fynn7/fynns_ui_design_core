@@ -19,6 +19,8 @@ import {
   Collapsible,
   DatePicker,
   DatePickerDialog,
+  TimePicker,
+  TimePickerDialog,
   Divider,
   Fab,
   FileIcon,
@@ -119,6 +121,9 @@ export function GlobalsPage() {
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
+  const [pickedTime, setPickedTime] = useState<string | null>("14:30");
+  const [timeDialogOpen, setTimeDialogOpen] = useState(false);
+  const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
@@ -371,6 +376,58 @@ export function GlobalsPage() {
               t("globals.dateM10"),
               t("globals.dateM11"),
             ],
+          }}
+        />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ToggleGroup
+            ariaLabel={t("globals.timeCycleAria")}
+            value={timeHourCycle}
+            onChange={setTimeHourCycle}
+            options={[
+              { value: "h23", label: t("globals.timeCycle24") },
+              { value: "h12", label: t("globals.timeCycle12") },
+            ]}
+          />
+          <TimePicker
+            value={pickedTime}
+            onChange={setPickedTime}
+            hourCycle={timeHourCycle}
+            labels={{
+              hour: t("globals.timeHour"),
+              minute: t("globals.timeMinute"),
+              am: t("globals.timeAm"),
+              pm: t("globals.timePm"),
+              periodAria: t("globals.timePeriodAria"),
+            }}
+          />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setTimeDialogOpen(true)}>
+              {t("globals.timeOpenDialog")}
+            </Button>
+            <span className="sandbox-help">
+              {pickedTime
+                ? t("globals.timeSelected", { time: pickedTime })
+                : t("globals.timeNone")}
+            </span>
+          </div>
+          <p className="sandbox-help">{t("globals.timeHelp")}</p>
+        </div>
+        <TimePickerDialog
+          open={timeDialogOpen}
+          onOpenChange={setTimeDialogOpen}
+          value={pickedTime}
+          onConfirm={setPickedTime}
+          title={t("globals.timeDialogTitle")}
+          confirmLabel={t("globals.timeConfirm")}
+          cancelLabel={t("globals.timeCancel")}
+          closeAriaLabel={t("globals.timeClose")}
+          hourCycle={timeHourCycle}
+          labels={{
+            hour: t("globals.timeHour"),
+            minute: t("globals.timeMinute"),
+            am: t("globals.timeAm"),
+            pm: t("globals.timePm"),
+            periodAria: t("globals.timePeriodAria"),
           }}
         />
       </GlobalsCategory>

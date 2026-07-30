@@ -6124,3 +6124,207 @@
   padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
 }
 
+/* —— TimePicker (M3 input / digital) ————————————————————————— */
+
+.fynns-timepicker {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  padding-block: var(--fynns-timepicker-pad-block);
+  padding-inline: var(--fynns-timepicker-pad-inline);
+  background: var(--fynns-color-surface-1);
+  border-radius: var(--fynns-radius-xl);
+  color: var(--fynns-color-text);
+}
+
+.fynns-timepicker--disabled {
+  opacity: var(--fynns-opacity-muted);
+  pointer-events: none;
+}
+
+.fynns-timepicker-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--fynns-timepicker-gap);
+}
+
+.fynns-timepicker-field-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.fynns-timepicker-field {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--fynns-timepicker-field-min-width);
+  min-height: var(--fynns-timepicker-field-min-height);
+  margin: 0;
+  padding: 0 var(--fynns-space-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-timepicker-field-font);
+  font-weight: var(--fynns-font-weight-regular);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-timepicker-field:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-field:focus-visible {
+  outline: none;
+  box-shadow: var(--fynns-focus);
+}
+
+.fynns-timepicker-field--active {
+  border-color: var(--fynns-color-accent);
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-timepicker-field--active:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    var(--fynns-color-accent-container)
+  );
+}
+
+.fynns-timepicker-colon {
+  /* Two dots — avoids font glyph metrics that make ":" look low. */
+  box-sizing: border-box;
+  align-self: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-timepicker-colon-gap);
+  min-height: var(--fynns-timepicker-field-min-height);
+  padding-inline: var(--fynns-timepicker-colon-pad-inline);
+  user-select: none;
+}
+
+.fynns-timepicker-colon-dot {
+  width: var(--fynns-timepicker-colon-dot);
+  height: var(--fynns-timepicker-colon-dot);
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-text);
+}
+
+.fynns-timepicker-period {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: var(--fynns-timepicker-period-min-width);
+  min-height: var(--fynns-timepicker-field-min-height);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+}
+
+.fynns-timepicker-period-btn {
+  box-sizing: border-box;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: var(--fynns-space-xs) var(--fynns-space-sm);
+  border: none;
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-timepicker-period-font);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-timepicker-period-btn + .fynns-timepicker-period-btn {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-timepicker-period-btn:hover:not(:disabled):not(
+    .fynns-timepicker-period-btn--selected
+  ) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-period-btn:focus-visible {
+  outline: none;
+  z-index: 1;
+  box-shadow: var(--fynns-focus);
+}
+
+.fynns-timepicker-period-btn--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-timepicker-dialog-body {
+  display: flex;
+  justify-content: center;
+  padding: var(--fynns-space-md) var(--fynns-space-lg);
+}
+
+.fynns-timepicker-dialog-body .fynns-timepicker {
+  background: transparent;
+  padding: 0;
+}
+
+.fynns-dialog-panel.fynns-timepicker-dialog {
+  border-radius: var(--fynns-radius-3xl);
+  max-width: min(100%, 22rem);
+}
+
+.fynns-timepicker-dialog .fynns-timepicker-dialog-head {
+  border-bottom: var(--fynns-border-hairline) solid
+    var(--fynns-color-outline-subtle);
+}
+
+.fynns-timepicker-dialog-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  min-width: 0;
+}
+
+.fynns-timepicker-dialog .fynns-timepicker-dialog-head .fynns-dialog-title {
+  text-align: center;
+}
+
+.fynns-timepicker-dialog-supporting {
+  margin: 0;
+  font-size: var(--fynns-font-size-xl);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-timepicker-dialog .fynns-dialog-foot {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
+}
+
