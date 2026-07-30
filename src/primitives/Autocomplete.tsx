@@ -74,7 +74,6 @@ export function Autocomplete({
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return normalized.filter((option) => {
-      if (option.disabled) return false;
       if (!needle) return true;
       const label = optionLabel(option).toLowerCase();
       return label.includes(needle) || option.value.toLowerCase().includes(needle);
@@ -117,12 +116,13 @@ export function Autocomplete({
     if (!open || filtered.length === 0) return;
     const option = filtered[activeIndex];
     if (!option) return;
-    const el = document.getElementById(`${listId}-opt-${option.value}`);
+    const el = document.getElementById(`${listId}-opt-${activeIndex}`);
     el?.scrollIntoView({ block: "nearest" });
   }, [activeIndex, filtered, listId, open]);
 
   const pick = useCallback(
     (option: AutocompleteOption) => {
+      if (option.disabled) return;
       onChange(option.value);
       setQuery(optionLabel(option));
       setOpen(false);
@@ -139,6 +139,18 @@ export function Autocomplete({
     if (value && next !== selectedLabel) onChange("");
   };
 
+  const moveActive = (delta: number) => {
+    if (filtered.length === 0) return;
+    let next = activeIndex;
+    for (let step = 0; step < filtered.length; step += 1) {
+      next = (next + delta + filtered.length) % filtered.length;
+      if (!filtered[next]?.disabled) {
+        setActiveIndex(next);
+        return;
+      }
+    }
+  };
+
   const onInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (isDisabled) return;
     if (!open) {
@@ -150,16 +162,14 @@ export function Autocomplete({
     }
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      if (filtered.length === 0) return;
-      setActiveIndex((i) => (i + 1) % filtered.length);
+      moveActive(1);
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      if (filtered.length === 0) return;
-      setActiveIndex((i) => (i - 1 + filtered.length) % filtered.length);
+      moveActive(-1);
     } else if (event.key === "Enter") {
       event.preventDefault();
       const next = filtered[activeIndex];
-      if (next) pick(next);
+      if (next && !next.disabled) pick(next);
     }
   };
 
@@ -170,9 +180,8 @@ export function Autocomplete({
   };
 
   const activeOption = filtered[activeIndex];
-  const activeOptionId = activeOption
-    ? `${listId}-opt-${activeOption.value}`
-    : undefined;
+  const activeOptionId =
+    activeOption != null ? `${listId}-opt-${activeIndex}` : undefined;
 
   return (
     <div className={join("fynns-autocomplete-field", className)}>
@@ -243,17 +252,18 @@ export function Autocomplete({
                 return (
                   <button
                     key={option.value}
-                    id={`${listId}-opt-${option.value}`}
+                    id={`${listId}-opt-${index}`}
                     type="button"
                     role="option"
-                    aria-selected={selectedRow || active}
+                    aria-selected={selectedRow}
+                    disabled={option.disabled}
                     className={join(
                       "fynns-search-bar-result",
                       (active || selectedRow) && "fynns-search-bar-result--active",
                     )}
                     onMouseDown={(event) => event.preventDefault()}
                     onMouseEnter={() => setActiveIndex(index)}
-                    onClick={() => pick(option)}
+                    onClick={() => !option.disabled && pick(option)}
                   >
                     {optionLabel(option)}
                   </button>

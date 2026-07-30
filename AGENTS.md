@@ -471,9 +471,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   variant? }` — M3 Expressive FAB menu: toggle FAB expands 2–6 labeled small
   FABs stacked above it (items portal to `document.body` so Collapsible /
   overflow parents cannot clip them; staggered enter/exit via `data-state`
-  open/closing; collapsed footprint stays the toggle; Esc / outside click
-  dismiss; default Plus rotates 45° into Close). Prefer a lone `Fab` when
-  there is only one primary action.
+  closed/open/closing; collapsed footprint stays the toggle; Esc / outside
+  click dismiss; default Plus rotates 45° into Close). Prefer a lone `Fab`
+  when there is only one primary action.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
   top app bar (`sm` / action row = `--fynns-layout-bar-height` 56dp shared with
   BottomAppBar / SearchBar; md 80 / lg 104). Leading/trailing keep the standard

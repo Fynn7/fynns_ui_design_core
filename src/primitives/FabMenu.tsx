@@ -1,5 +1,6 @@
 import type {
   ButtonHTMLAttributes,
+  KeyboardEvent as ReactKeyboardEvent,
   MouseEvent as ReactMouseEvent,
   ReactElement,
   ReactNode,
@@ -22,14 +23,31 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-/** Item motion = `--fynns-duration-base` (240ms) + stagger × (n − 1). */
+/** Matches `--fynns-duration-base`. */
 const FABMENU_ITEM_MS = 240;
-const FABMENU_STAGGER_MS = 35;
+/** Matches `--fynns-fabmenu-stagger-exit` (exit unmount budget). */
+const FABMENU_STAGGER_EXIT_MS = 25;
 const FABMENU_MAX_ITEMS = 6;
+/** Matches `--fynns-fabmenu-gap` at 16px rem (`0.75rem`). */
+const FABMENU_GAP_PX = 12;
 
 function fabMenuExitMs(itemCount: number): number {
   const n = Math.max(1, Math.min(itemCount, FABMENU_MAX_ITEMS));
-  return FABMENU_ITEM_MS + FABMENU_STAGGER_MS * (n - 1);
+  return FABMENU_ITEM_MS + FABMENU_STAGGER_EXIT_MS * (n - 1);
+}
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+function menuItemButtons(root: HTMLElement | null): HTMLButtonElement[] {
+  if (!root) return [];
+  return Array.from(
+    root.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)'),
+  );
 }
 
 /** Place the menu stack above the toggle; flip below if it would leave the viewport. */
@@ -120,6 +138,7 @@ export function FabMenuItem({
         disabled={disabled}
         onClick={onClick}
         role="menuitem"
+        tabIndex={-1}
         className="fynns-fab-menu-item-fab"
       >
         {icon}
@@ -176,6 +195,7 @@ export function FabMenu({
   const rootRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const itemsRef = useRef<HTMLDivElement | null>(null);
+  const wasExpandedRef = useRef(expandedProp ?? defaultExpanded);
   const [itemsEl, setItemsEl] = useState<HTMLDivElement | null>(null);
   const menuId = useId();
   const [uncontrolled, setUncontrolled] = useState(defaultExpanded);
@@ -200,11 +220,18 @@ export function FabMenu({
       return;
     }
     setEntered(false);
-    const timer = setTimeout(() => setRendered(false), fabMenuExitMs(itemCount));
+    const delay = prefersReducedMotion() ? 0 : fabMenuExitMs(itemCount);
+    const timer = setTimeout(() => setRendered(false), delay);
     return () => clearTimeout(timer);
   }, [expanded, itemCount]);
 
-  const pos = useFabMenuBox(toggleRef.current, itemsEl, rendered, align, 12);
+  const pos = useFabMenuBox(
+    toggleRef.current,
+    itemsEl,
+    rendered,
+    align,
+    FABMENU_GAP_PX,
+  );
 
   // Wait until the portal is measured/positioned, then paint `closed` for a
   // frame and flip to `open` so the enter animation starts from opacity 0 —
@@ -224,6 +251,20 @@ export function FabMenu({
   const dataState = entered ? "open" : expanded ? "closed" : "closing";
 
   useEffect(() => {
+    if (entered && expanded) {
+      const first = menuItemButtons(itemsRef.current)[0];
+      first?.focus();
+    }
+  }, [entered, expanded]);
+
+  useEffect(() => {
+    if (wasExpandedRef.current && !expanded) {
+      toggleRef.current?.focus();
+    }
+    wasExpandedRef.current = expanded;
+  }, [expanded]);
+
+  useEffect(() => {
     if (!expanded) return;
     const onPointerDown = (event: MouseEvent) => {
       const target = event.target;
@@ -233,7 +274,10 @@ export function FabMenu({
       setExpanded(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setExpanded(false);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setExpanded(false);
+      }
     };
     document.addEventListener("mousedown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -242,6 +286,37 @@ export function FabMenu({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [expanded, controlled, onExpandedChange]);
+
+  const onMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const buttons = menuItemButtons(itemsRef.current);
+    if (buttons.length === 0) return;
+    const current = document.activeElement;
+    const index = buttons.findIndex((btn) => btn === current);
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      buttons[(index + 1 + buttons.length) % buttons.length]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      buttons[(index - 1 + buttons.length) % buttons.length]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      buttons[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      buttons[buttons.length - 1]?.focus();
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      setExpanded(false);
+    }
+  };
+
+  const onToggleKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+    if (disabled) return;
+    if (!expanded && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
+      event.preventDefault();
+      setExpanded(true);
+    }
+  };
 
   const items = Children.map(children, (child) => {
     if (!isValidElement(child) || child.type !== FabMenuItem) return child;
@@ -274,6 +349,8 @@ export function FabMenu({
             aria-label={ariaLabel}
             data-state={dataState}
             aria-hidden={!expanded}
+            tabIndex={-1}
+            onKeyDown={onMenuKeyDown}
             style={
               pos
                 ? { position: "fixed", top: pos.top, left: pos.left }
@@ -306,6 +383,7 @@ export function FabMenu({
         aria-haspopup="menu"
         aria-controls={rendered ? menuId : undefined}
         onClick={() => setExpanded(!expanded)}
+        onKeyDown={onToggleKeyDown}
         className="fynns-fab-menu-toggle"
       >
         <span

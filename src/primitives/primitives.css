@@ -4499,6 +4499,10 @@
   flex-direction: row;
   align-items: center;
   gap: var(--fynns-fabmenu-item-gap);
+}
+
+.fynns-fab-menu-items[data-state="open"] .fynns-fab-menu-item,
+.fynns-fab-menu-items[data-state="closing"] .fynns-fab-menu-item {
   will-change: transform, opacity;
 }
 
