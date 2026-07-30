@@ -9,6 +9,7 @@ import {
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 import { BASELINE, SANDBOX_RESTING } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 import { ApplyChangesControl } from "./ApplyChangesControl";
@@ -144,7 +145,7 @@ export function GlobalsInspector() {
 
         <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
           <div className="sandbox-stack">
-            <p className="sandbox-help">{t("globalsInspector.shapeLadderHelp")}</p>
+            <SandboxHelp text={t("globalsInspector.shapeLadderHelp")} />
             {EDITABLE_RADIUS.map(({ key, label, max, usesKey, hintKey }) => {
               const cssVar = `--fynns-radius-${key}`;
               const px = parseLengthToPx(resolved(cssVar));

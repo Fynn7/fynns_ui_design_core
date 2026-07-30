@@ -60,6 +60,14 @@ body {
   line-height: var(--fynns-line-height-root);
 }
 
+/* Code-like text: always the mono stack (Consolas first). */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--fynns-font-mono);
+}
+
 button {
   font: inherit;
   cursor: pointer;

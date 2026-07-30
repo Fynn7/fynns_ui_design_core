@@ -165,47 +165,47 @@ const en = {
   "inspector.brightness": "Brightness",
   "inspector.brightnessOf": "{name} brightness",
   "inspector.brightnessHint":
-    "Lighten or darken this fill relative to the tokens.ts baseline (hue stays the same).",
+    "Lighten or darken this fill relative to the `tokens.ts` baseline (hue stays the same).",
   "inspector.surface1": "Elevated card",
   "inspector.surface1Hint":
-    "Fill for elevated cards and sidebar panels (surface-1).",
+    "Fill for elevated cards and sidebar panels (`surface-1`).",
   "inspector.surface4": "Filled card",
   "inspector.surface4Hint":
-    "Fill for filled cards and strong emphasis (surface-4).",
+    "Fill for filled cards and strong emphasis (`surface-4`).",
   "inspector.appBg": "Page background (app-bg)",
   "inspector.appBgHint":
-    "App background (app-bg). Outlined cards sit on this lowest surface.",
+    "App background (`app-bg`). Outlined cards sit on this lowest surface.",
   "inspector.outlineBorder": "Outlined card border",
   "inspector.outlineBorderAria": "About outlined card border",
   "inspector.outlineBorderHint":
-    "Stroke color for outlined cards and strong borders (border-strong).",
+    "Stroke color for outlined cards and strong borders (`border-strong`).",
   "inspector.outlineBorderBrightness": "Outlined card border brightness",
   "inspector.outlineHelp": "Stroke color used by outlined cards.",
   "inspector.stateLayers": "Hover overlays",
   "inspector.stateHoverHint":
-    "How strong the hover tint is (state-hover).",
+    "How strong the hover tint is (`state-hover`).",
   "inspector.stateFocusHint":
-    "How strong the keyboard-focus tint is (state-focus).",
+    "How strong the keyboard-focus tint is (`state-focus`).",
   "inspector.statePressedHint":
-    "How strong the pressed tint is (state-pressed).",
+    "How strong the pressed tint is (`state-pressed`).",
   "inspector.stateDraggedHint":
-    "How strong the drag / high-emphasis tint is (state-dragged).",
+    "How strong the drag / high-emphasis tint is (`state-dragged`).",
   "inspector.stateDemoTitle": "Try hover / press",
   "inspector.stateDemoSubtitle": "Interactive sample",
   "inspector.stateDemoBody": "Overlay strength follows the sliders above.",
   "inspector.spacing": "Spacing",
   "inspector.spacingHelp":
-    "Padding and gaps inside cards (--fynns-space-*). Apply changes can write these back.",
+    "Padding and gaps inside cards (`--fynns-space-*`). Apply changes can write these back.",
   "inspector.spaceLg": "Body padding",
   "inspector.spaceLgHint":
-    "Padding inside the card body (space-lg).",
+    "Padding inside the card body (`space-lg`).",
   "inspector.spaceMd": "Title row spacing",
-  "inspector.spaceMdHint": "Spacing in the card title row (space-md).",
+  "inspector.spaceMdHint": "Spacing in the card title row (`space-md`).",
   "inspector.spaceSm": "Footer button gap",
   "inspector.spaceSmHint":
-    "Gap between footer buttons (space-sm).",
+    "Gap between footer buttons (`space-sm`).",
   "inspector.blockGapHelp":
-    "Gap between sections in this inspector only (--sandbox-block-gap). Not written by Apply changes.",
+    "Gap between sections in this inspector only (`--sandbox-block-gap`). Not written by Apply changes.",
   "inspector.blockGap": "Section gap",
   "inspector.blockGapAria": "About section gap",
   "inspector.blockGapHint":
@@ -215,9 +215,9 @@ const en = {
   "layoutChrome.title": "Layout chrome",
   "layoutChrome.collapsible": "Layout chrome & rhythm",
   "layoutChrome.help":
-    "Sandbox-only gaps (--sandbox-*). Agents must use SANDBOX_LAYOUT_AGENT_CATALOG — do not invent ad-hoc gaps. Not written by Apply.",
+    "Sandbox-only gaps (`--sandbox-*`). Agents must use `SANDBOX_LAYOUT_AGENT_CATALOG` — do not invent ad-hoc gaps. Not written by Apply.",
   "layoutChrome.rhythmHelp":
-    "Toolbar rhythm (--fynns-layout-control-*). Apply can write these into tokens.ts. Prefer ControlStack + ControlRow.",
+    "Toolbar rhythm (`--fynns-layout-control-*`). Apply can write these into `tokens.ts`. Prefer `ControlStack` + `ControlRow`.",
   "layoutChrome.rowGap": "Demo row wrap",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — flex wrap gap for Motion easing bars / gallery Rows (horizontal and between wrapped lines).",
@@ -265,18 +265,18 @@ const en = {
   "globals.carouselSlide1": "Surface tones",
   "globals.carouselSlide1Body": "Elevation climbs brighter in dark mode.",
   "globals.carouselSlide2": "Token rhythm",
-  "globals.carouselSlide2Body": "Gaps and radii stay on --fynns-* only.",
+  "globals.carouselSlide2Body": "Gaps and radii stay on `--fynns-*` only.",
   "globals.carouselSlide3": "Keyboard first",
   "globals.carouselSlide3Body": "Arrow keys page; indicators jump.",
   "globals.catNavigation": "Navigation",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
-    "Buttons / badges → radius-xl for buttons, radius-sm for badges. Input / Select → radius-md. Switch track → radius-pill (not on the xs–xl levels).",
+    "Buttons / badges → `radius-xl` for buttons, `radius-sm` for badges. Input / Select → `radius-md`. Switch track → `radius-pill` (not on the xs–xl levels).",
   "globals.rhythm": "Toolbar rhythm",
   "globals.rhythmAria": "Toolbar rhythm",
   "globals.rhythmLead":
-    "Reusable ControlStack + ControlRow spacing. Prefer these layout tokens over raw --fynns-space-* when building toolbars or inspectors.",
+    "Reusable `ControlStack` + `ControlRow` spacing. Prefer these layout tokens over raw `--fynns-space-*` when building toolbars or inspectors.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
   "globals.rhythmRowActions": "Actions",
@@ -290,7 +290,7 @@ const en = {
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: use ControlStack + ControlRow and the --fynns-layout-control-* tokens listed above. Do not invent ad-hoc gaps. Full recipe: AGENTS.md → Toolbar rhythm.",
+    "Agents: use `ControlStack` + `ControlRow` and the `--fynns-layout-control-*` tokens listed above. Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -468,36 +468,36 @@ const en = {
   "globals.cardSubtitle": "Uses radius-md",
   "globals.cardBody": "Card corners follow radius-md on the global levels.",
   "globals.collapsible": "Fold section sample",
-  "globals.collapsibleHelp": "Collapsible headers also use radius-md.",
+  "globals.collapsibleHelp": "Collapsible headers also use `radius-md`.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
-    "Each box is one token step. Cards / inputs = md; buttons = xl; badges / chips = sm.",
+    "Each box is one token step. Cards / inputs = `md`; buttons = `xl`; badges / chips = `sm`.",
   "globals.swatchXsUses": "finest chips",
   "globals.swatchSmUses": "badges, chips",
   "globals.swatchMdUses": "cards, inputs",
   "globals.swatchLgUses": "menus, dialogs",
   "globals.swatchXlUses": "buttons, soft shells",
   "globals.swatchesSpecialHelp":
-    "Special (not in this row): pill = switch track / SearchInput; round = switch thumb; none = sharp.",
+    "Special (not in this row): `pill` = switch track / `SearchInput`; `round` = switch thumb; `none` = sharp.",
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = 2xs; cards / inputs = md; buttons = xl; long chrome strips (SearchBar / Banner / BottomAppBar / NavigationDrawer items / sheet tops) = 3xl; badges / chips = sm; switch capsule = pill (read-only below). Every RADIUS_TOKENS key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = `2xs`; cards / inputs = `md`; buttons = `xl`; long chrome strips (`SearchBar` shell + suggestion rows / `Select` options / `Banner` / `BottomAppBar` / `NavigationDrawer` items / sheet tops) = `3xl`; badges / chips = `sm`; switch capsule = `pill` (read-only below). Every `RADIUS_TOKENS` key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
-  "globalsInspector.radiusSmUses": "Badges, toggle chips, compact chrome",
+  "globalsInspector.radiusSmUses": "Badges, toggle chips",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
   "globalsInspector.radiusLgUses": "Menus, dialogs, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
   "globalsInspector.radius3xlUses":
-    "SearchBar, Banner, BottomAppBar, NavigationDrawer items, sheet tops",
+    "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, sheet tops",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
     "Smallest general level (M3 XS ≈ 4dp). Keep below sm on the scale.",
   "globalsInspector.radiusSmHint":
-    "Compact chrome: badges, toggle groups, toast action chips — not the default Button.",
+    "Badges, toggle groups, toast action chips — not SearchBar suggestion rows and not the default Button.",
   "globalsInspector.radiusMdHint":
     "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
   "globalsInspector.radiusLgHint":
@@ -505,7 +505,7 @@ const en = {
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
   "globalsInspector.radius3xlHint":
-    "≈28dp long chrome strips: SearchBar, Banner, BottomAppBar, NavigationDrawer destination rows, and BottomSheet top edge. Slide this to reshape that group.",
+    "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, BottomSheet top edge. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track, SearchInput",
@@ -516,10 +516,10 @@ const en = {
     "Pill shape (999px): switch track, SearchInput — higher than xl on purpose. Readonly; SearchBar uses radius-3xl.",
   "globalsInspector.radiusRoundHint":
     "Circle (50%): switch thumb and other round controls.",
-  "globalsInspector.resetLadder": "Reset levels",
+  "globalsInspector.resetLadder": "Reset radius parameters",
   "globalsInspector.resetLadderTip":
     "Restore radius 2xs–3xl to sandbox defaults (md = 20px); keep color and other overrides",
-  "globalsInspector.toastReset": "Radius levels reset to sandbox defaults",
+  "globalsInspector.toastReset": "Radius parameters reset to sandbox defaults",
 
   "hue.presetsAria": "Accent color presets",
   "hue.openPalette": "Open hue wheel",
@@ -699,45 +699,45 @@ const zh: Record<MessageKey, string> = {
   "inspector.overrides": "{count} 项改动{plural}",
   "inspector.overridesAria": "改动项说明",
   "inspector.overridesHint":
-    "草稿相对基线改了多少项。重置会清空；「应用更改」只把 --fynns-* 写入 tokens.ts。",
+    "草稿相对基线改了多少项。重置会清空；「应用更改」只把 `--fynns-*` 写入 `tokens.ts`。",
   "inspector.color": "颜色",
   "inspector.colorHelp":
     "点色块可快速换强调色；点彩虹色块打开完整色相环。卡片底色仍走表面等级 —— 只会动强调色族。",
   "inspector.brightness": "亮度",
   "inspector.brightnessOf": "{name} 亮度",
   "inspector.brightnessHint":
-    "相对 tokens.ts 基线调亮或调暗（色相不变）。",
+    "相对 `tokens.ts` 基线调亮或调暗（色相不变）。",
   "inspector.surface1": "抬升卡片 (elevated)",
-  "inspector.surface1Hint": "elevated 卡片与侧栏面板的底色（surface-1）。",
+  "inspector.surface1Hint": "elevated 卡片与侧栏面板的底色（`surface-1`）。",
   "inspector.surface4": "填充卡片 (filled)",
-  "inspector.surface4Hint": "filled 卡片与强调区域的底色（surface-4）。",
+  "inspector.surface4Hint": "filled 卡片与强调区域的底色（`surface-4`）。",
   "inspector.appBg": "页面背景 (app-bg)",
-  "inspector.appBgHint": "应用背景（app-bg）。outlined 卡片落在这层最低表面上。",
+  "inspector.appBgHint": "应用背景（`app-bg`）。outlined 卡片落在这层最低表面上。",
   "inspector.outlineBorder": "描边卡片边框 (outlined)",
   "inspector.outlineBorderAria": "关于描边卡片边框",
   "inspector.outlineBorderHint":
-    "outlined 卡片与强边框的描边色（border-strong）。",
+    "outlined 卡片与强边框的描边色（`border-strong`）。",
   "inspector.outlineBorderBrightness": "描边卡片边框 (outlined) 亮度",
   "inspector.outlineHelp": "outlined 卡片使用的边框颜色。",
   "inspector.stateLayers": "悬停叠加",
-  "inspector.stateHoverHint": "悬停时叠色有多强（state-hover）。",
-  "inspector.stateFocusHint": "键盘聚焦时叠色有多强（state-focus）。",
-  "inspector.statePressedHint": "按下时叠色有多强（state-pressed）。",
-  "inspector.stateDraggedHint": "拖拽 / 高强调时叠色有多强（state-dragged）。",
+  "inspector.stateHoverHint": "悬停时叠色有多强（`state-hover`）。",
+  "inspector.stateFocusHint": "键盘聚焦时叠色有多强（`state-focus`）。",
+  "inspector.statePressedHint": "按下时叠色有多强（`state-pressed`）。",
+  "inspector.stateDraggedHint": "拖拽 / 高强调时叠色有多强（`state-dragged`）。",
   "inspector.stateDemoTitle": "试悬停 / 按压",
   "inspector.stateDemoSubtitle": "可交互示例",
   "inspector.stateDemoBody": "叠色强度跟随上方滑条。",
   "inspector.spacing": "间距",
   "inspector.spacingHelp":
-    "卡片内部的内边距与间隙（--fynns-space-*）。「应用更改」可写回源码。",
+    "卡片内部的内边距与间隙（`--fynns-space-*`）。「应用更改」可写回源码。",
   "inspector.spaceLg": "正文内边距",
-  "inspector.spaceLgHint": "卡片正文区域内边距（space-lg）。",
+  "inspector.spaceLgHint": "卡片正文区域内边距（`space-lg`）。",
   "inspector.spaceMd": "标题行间距",
-  "inspector.spaceMdHint": "卡片标题行间距（space-md）。",
+  "inspector.spaceMdHint": "卡片标题行间距（`space-md`）。",
   "inspector.spaceSm": "底部按钮间隙",
-  "inspector.spaceSmHint": "底部按钮之间的间隙（space-sm）。",
+  "inspector.spaceSmHint": "底部按钮之间的间隙（`space-sm`）。",
   "inspector.blockGapHelp":
-    "仅本检查器各分区之间的间距（--sandbox-block-gap）。不会由「应用更改」写入。",
+    "仅本检查器各分区之间的间距（`--sandbox-block-gap`）。不会由「应用更改」写入。",
   "inspector.blockGap": "分区间距",
   "inspector.blockGapAria": "关于分区间距",
   "inspector.blockGapHint":
@@ -747,9 +747,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.title": "布局 chrome",
   "layoutChrome.collapsible": "布局 chrome 与节奏",
   "layoutChrome.help":
-    "沙盒专用间距（--sandbox-*）。Agent 须使用 SANDBOX_LAYOUT_AGENT_CATALOG，禁止自创 gap。不会由 Apply 写入。",
+    "沙盒专用间距（`--sandbox-*`）。Agent 须使用 `SANDBOX_LAYOUT_AGENT_CATALOG`，禁止自创 gap。不会由 Apply 写入。",
   "layoutChrome.rhythmHelp":
-    "工具栏节奏（--fynns-layout-control-*）。Apply 可写入 tokens.ts。优先 ControlStack + ControlRow。",
+    "工具栏节奏（`--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。优先 `ControlStack` + `ControlRow`。",
   "layoutChrome.rowGap": "演示行换行间距",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — 动效缓动条 / gallery Row 的 flex 换行间距（水平与换行后行距）。",
@@ -795,18 +795,18 @@ const zh: Record<MessageKey, string> = {
   "globals.carouselSlide1": "表面明度",
   "globals.carouselSlide1Body": "暗色主题下海拔越高越亮。",
   "globals.carouselSlide2": "Token 节奏",
-  "globals.carouselSlide2Body": "间距与圆角只用 --fynns-*。",
+  "globals.carouselSlide2Body": "间距与圆角只用 `--fynns-*`。",
   "globals.carouselSlide3": "键盘优先",
   "globals.carouselSlide3Body": "方向键翻页；指示点可跳转。",
   "globals.catNavigation": "导航",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
-    "按钮 → radius-xl。徽章 / 芯片 → radius-sm。输入框 / 选择器 → radius-md。开关轨道 → radius-pill（不在 xs–xl 等级上）。",
+    "按钮 → `radius-xl`。徽章 / 芯片 → `radius-sm`。输入框 / 选择器 → `radius-md`。开关轨道 → `radius-pill`（不在 xs–xl 等级上）。",
   "globals.rhythm": "工具栏节奏",
   "globals.rhythmAria": "工具栏节奏",
   "globals.rhythmLead":
-    "可复用的 ControlStack + ControlRow 间距。做工具栏 / 检查器时优先用这些 layout token，不要手写 --fynns-space-*。",
+    "可复用的 `ControlStack` + `ControlRow` 间距。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
   "globals.rhythmRowActions": "底部按钮",
@@ -820,7 +820,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：使用 ControlStack + ControlRow，以及上方列出的 --fynns-layout-control-* token。禁止自创间距。完整配方见 AGENTS.md → Toolbar rhythm。",
+    "Agent：使用 `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-control-*` token。禁止自创间距。完整配方见 `AGENTS.md` → Toolbar rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
@@ -998,36 +998,36 @@ const zh: Record<MessageKey, string> = {
   "globals.cardSubtitle": "使用 radius-md",
   "globals.cardBody": "卡片圆角跟随全局等级的 md。",
   "globals.collapsible": "折叠分区示例",
-  "globals.collapsibleHelp": "折叠分区标题栏也使用 radius-md。",
+  "globals.collapsibleHelp": "折叠分区标题栏也使用 `radius-md`。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":
-    "每个色块是一档 token。卡片 / 输入 = md；按钮 = xl；徽章 / 芯片 = sm。",
+    "每个色块是一档 token。卡片 / 输入 = `md`；按钮 = `xl`；徽章 / 芯片 = `sm`。",
   "globals.swatchXsUses": "最细芯片",
   "globals.swatchSmUses": "徽章、芯片",
   "globals.swatchMdUses": "卡片、输入框",
   "globals.swatchLgUses": "菜单、对话框",
   "globals.swatchXlUses": "按钮、柔和外壳",
   "globals.swatchesSpecialHelp":
-    "特殊形（不在上排）：pill = 开关轨道 / SearchInput；round = 开关圆钮；none = 直角。",
+    "特殊形（不在上排）：`pill` = 开关轨道 / `SearchInput`；`round` = 开关圆钮；`none` = 直角。",
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = 2xs；卡片 / 输入 = md；按钮 = xl；长条 chrome（SearchBar / Banner / BottomAppBar / 导航抽屉项 / 表单顶角）= 3xl；徽章 / 芯片 = sm；开关胶囊 = pill（下方只读）。RADIUS_TOKENS 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = `2xs`；卡片 / 输入 = `md`；按钮 = `xl`；长条 chrome（`SearchBar` 外壳与建议行 / `Select` 选项 / `Banner` / `BottomAppBar` / 导航抽屉项 / 表单顶角）= `3xl`；徽章 / 芯片 = `sm`；开关胶囊 = `pill`（下方只读）。`RADIUS_TOKENS` 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
-  "globalsInspector.radiusSmUses": "徽章、切换芯片、紧凑控件",
+  "globalsInspector.radiusSmUses": "徽章、切换芯片",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
   "globalsInspector.radiusLgUses": "菜单、对话框、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
   "globalsInspector.radius3xlUses":
-    "SearchBar、Banner、BottomAppBar、导航抽屉项、底部表单顶角",
+    "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、底部表单顶角",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
     "通用最小圆角（M3 XS ≈ 4dp）。在尺度上应小于 sm。",
   "globalsInspector.radiusSmHint":
-    "紧凑控件：徽章、切换组、toast 操作芯片 —— 不是默认 Button。",
+    "徽章、切换组、toast 操作芯片 —— 不是 SearchBar 建议行，也不是默认 Button。",
   "globalsInspector.radiusMdHint":
     "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
   "globalsInspector.radiusLgHint":
@@ -1035,7 +1035,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
   "globalsInspector.radius3xlHint":
-    "≈28dp 长条 chrome：SearchBar、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
+    "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道、SearchInput",
@@ -1046,10 +1046,10 @@ const zh: Record<MessageKey, string> = {
     "胶囊形 (999px)：开关轨道、SearchInput —— 刻意高于 xl。只读；SearchBar 用 radius-3xl。",
   "globalsInspector.radiusRoundHint":
     "圆形 (50%)：开关圆钮与其他圆形控件。",
-  "globalsInspector.resetLadder": "重置等级",
+  "globalsInspector.resetLadder": "重置圆角参数",
   "globalsInspector.resetLadderTip":
     "将 radius 2xs–3xl 恢复为沙盒默认（md = 20px）；保留颜色与其他改动",
-  "globalsInspector.toastReset": "圆角等级已重置为沙盒默认",
+  "globalsInspector.toastReset": "圆角参数已重置为沙盒默认",
 
   "hue.presetsAria": "强调色预设",
   "hue.openPalette": "打开色相环",

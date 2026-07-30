@@ -10,6 +10,7 @@ import {
 } from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
 import { useLocale } from "../i18n";
+import { SandboxHelp } from "../components/SandboxHelp";
 import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
@@ -117,7 +118,7 @@ export function AgentInputBar() {
               </div>
             </div>
           ) : (
-            <p className="sandbox-help">{t("agent.help")}</p>
+            <SandboxHelp text={t("agent.help")} />
           )}
         </div>
       </Popover>
