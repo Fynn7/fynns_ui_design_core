@@ -463,13 +463,18 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
   color: var(--fynns-color-text);
-  padding: 0.45rem 0.6rem;
+  /* Match Select/Autocomplete label inset (field pad + space-md), minus hairline. */
+  padding-block: var(--fynns-space-25);
+  padding-inline: calc(
+    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md) - var(--fynns-border-hairline)
+  );
   font: inherit;
   outline: none;
 }
 
 .fynns-input--sm {
-  padding: 0.28rem 0.45rem;
+  padding-block: var(--fynns-space-2);
+  padding-inline: var(--fynns-space-md);
   font-size: var(--fynns-font-size-sm);
 }
 
