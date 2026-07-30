@@ -11,6 +11,7 @@ When the user says **下一个** (or “next” in the same sense):
 2. Prefer net-new primitives over polish of existing ones, unless polish is clearly higher value.
 3. Follow the usual ship shape: tokens + `gen:theme`, primitive + CSS, export, AGENTS / Cursor rules, sandbox Globals sample (+ gallery when cheap), `typecheck`.
 4. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
-   DateRangePicker → (next gap).
-   Do **not** reintroduce LoadingIndicator / ButtonGroup — skipped as redundant with
-   CircularProgress (indeterminate) / existing patterns.
+   DateRangePicker → Autocomplete → (next gap).
+   Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider — skipped
+   as redundant with CircularProgress (indeterminate) / existing patterns /
+   single Slider.

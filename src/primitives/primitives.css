@@ -732,6 +732,45 @@
   margin: 0;
 }
 
+/* ---------- Autocomplete (Select chrome + filterable input) ---------- */
+.fynns-autocomplete-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+  width: 100%;
+  max-width: 100%;
+}
+
+.fynns-autocomplete {
+  width: 100%;
+}
+
+.fynns-autocomplete-chevron {
+  cursor: pointer;
+}
+
+.fynns-autocomplete--disabled .fynns-autocomplete-chevron {
+  cursor: not-allowed;
+}
+
+.fynns-autocomplete--invalid .fynns-search-bar-field {
+  box-shadow:
+    var(--fynns-shadow-md),
+    0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger);
+}
+
+.fynns-autocomplete-list {
+  list-style: none;
+  margin: 0;
+}
+
+.fynns-autocomplete-empty {
+  box-sizing: border-box;
+  padding: var(--fynns-space-sm) var(--fynns-searchbar-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+}
+
 /* ---------- DropdownMenu ---------- */
 .fynns-menu-root {
   position: relative;
@@ -5528,8 +5567,9 @@
   appearance: none;
 }
 
-/* Select has no leading icon; SearchBar's tiny input pad would leave the label flush. */
-.fynns-select .fynns-search-bar-input.fynns-select-trigger {
+/* No leading icon; SearchBar's tiny input pad would leave the label flush. */
+.fynns-select .fynns-search-bar-input.fynns-select-trigger,
+.fynns-autocomplete .fynns-search-bar-input.fynns-autocomplete-input {
   padding-inline-start: var(--fynns-space-md);
 }
 

@@ -278,6 +278,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-radius-3xl` like `NavigationDrawerItem`). No SearchIcon; trigger
   uses a modest `--fynns-space-md` start inset (not the search leading slot).
   Trailing chevron opens/closes.
+- **Autocomplete** `{ value, options, onChange, ariaLabel, placeholder?,
+  emptyText?, invalid?, supportingText?, errorText?, disabled? }` — filterable
+  text field + docked suggestions using the same SearchBar/Select chrome.
+  Prefer `Select` when typing is not needed; prefer headless `Combobox` for
+  custom framing.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
 - **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,

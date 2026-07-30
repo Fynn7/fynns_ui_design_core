@@ -32,6 +32,7 @@ export * from "./primitives/TimePicker";
 export * from "./primitives/Carousel";
 export * from "./primitives/Select";
 export * from "./primitives/Combobox";
+export * from "./primitives/Autocomplete";
 export * from "./primitives/DropdownMenu";
 export * from "./primitives/Popover";
 export * from "./primitives/Tooltip";

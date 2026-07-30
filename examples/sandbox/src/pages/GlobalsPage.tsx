@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
@@ -66,6 +67,7 @@ import {
   ControlRow,
   ControlStack,
   Grid,
+  Slider,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -140,6 +142,8 @@ export function GlobalsPage() {
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
+  const [sliderValue, setSliderValue] = useState(40);
+  const [autoValue, setAutoValue] = useState("");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -221,6 +225,29 @@ export function GlobalsPage() {
             value="one"
             options={["one", "two", "three"]}
             onChange={() => {}}
+          />
+          <div style={{ width: "min(100%, 20rem)" }}>
+            <Autocomplete
+              ariaLabel={t("globals.autocompleteAria")}
+              placeholder={t("globals.autocompletePlaceholder")}
+              emptyText={t("globals.autocompleteEmpty")}
+              value={autoValue}
+              onChange={setAutoValue}
+              options={[
+                t("globals.autocompleteOptTeal"),
+                t("globals.autocompleteOptCyan"),
+                t("globals.autocompleteOptBlue"),
+                t("globals.autocompleteOptViolet"),
+                t("globals.autocompleteOptAmber"),
+              ]}
+            />
+          </div>
+          <SandboxHelp
+            text={
+              autoValue
+                ? t("globals.autocompleteSelected", { value: autoValue })
+                : t("globals.autocompleteHelp")
+            }
           />
         </div>
       </GlobalsCategory>
@@ -306,6 +333,16 @@ export function GlobalsPage() {
             ]}
           />
           <SandboxHelp text={t("globals.segmentedHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div style={{ width: "min(100%, 20rem)" }}>
+            <Slider
+              value={sliderValue}
+              onChange={setSliderValue}
+              ariaLabel={t("globals.sliderAria")}
+            />
+          </div>
+          <SandboxHelp text={t("globals.sliderHelp", { value: String(sliderValue) })} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <DatePicker
