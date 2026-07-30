@@ -648,6 +648,17 @@ export const TIMEPICKER_TOKENS = {
 } as const;
 
 /**
+ * Breadcrumb trail geometry (at 16px rem).
+ * Hierarchical path chrome (not an M3 catalog component).
+ * `--fynns-breadcrumb-<key>`.
+ */
+export const BREADCRUMB_TOKENS = {
+  gap: "0.125rem",
+  "sep-pad-inline": "0.25rem",
+  "font-size": "var(--fynns-font-size-sm)",
+} as const;
+
+/**
  * M3 Carousel geometry (at 16px rem).
  * Horizontal snap strip; hero = full-bleed slide, multi = peek neighbors.
  * `--fynns-carousel-<key>`.
@@ -983,6 +994,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["datepicker", DATEPICKER_TOKENS],
   ["timepicker", TIMEPICKER_TOKENS],
   ["carousel", CAROUSEL_TOKENS],
+  ["breadcrumb", BREADCRUMB_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

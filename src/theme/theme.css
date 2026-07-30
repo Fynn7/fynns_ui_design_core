@@ -327,6 +327,9 @@
   --fynns-carousel-indicator-gap: 0.5rem;
   --fynns-carousel-controls-gap: 0.5rem;
   --fynns-carousel-pad-block: 0.25rem;
+  --fynns-breadcrumb-gap: 0.125rem;
+  --fynns-breadcrumb-sep-pad-inline: 0.25rem;
+  --fynns-breadcrumb-font-size: var(--fynns-font-size-sm);
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

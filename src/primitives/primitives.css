@@ -2444,6 +2444,71 @@
 }
 
 /* ---------- App shell nav / text buttons ---------- */
+
+/* ---------- Breadcrumb ---------- */
+.fynns-breadcrumb {
+  min-width: 0;
+}
+
+.fynns-breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-breadcrumb-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: var(--fynns-breadcrumb-font-size);
+  line-height: var(--fynns-line-height-compact);
+}
+
+.fynns-breadcrumb-sep {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-inline: var(--fynns-breadcrumb-sep-pad-inline);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-breadcrumb-sep-icon {
+  display: block;
+}
+
+/* Ancestor crumbs: geometry + hover/press come from `.fynns-btn--ghost.fynns-btn--sm`.
+   This class only sets M3 text-button ink (accent) + anchor reset. */
+.fynns-breadcrumb-link {
+  color: var(--fynns-color-accent);
+  text-decoration: none;
+}
+
+a.fynns-breadcrumb-link:hover,
+a.fynns-breadcrumb-link:active,
+a.fynns-breadcrumb-link:visited {
+  color: var(--fynns-color-accent);
+  text-decoration: none;
+}
+
+.fynns-breadcrumb-current {
+  /* Same content box as `.fynns-btn--sm` so label insets align with ancestor crumbs. */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 var(--fynns-space-md);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fynns-nav-item {
   display: flex;
   align-items: center;
