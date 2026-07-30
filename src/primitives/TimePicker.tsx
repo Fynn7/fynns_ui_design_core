@@ -97,7 +97,7 @@ export type TimePickerProps = Omit<
 /**
  * M3 TimePicker — input (digital) variant for picking a clock time.
  * Values are `HH:mm` in 24-hour local time. Embed docked, or wrap with
- * `TimePickerDialog` for a modal confirm flow. Dial face is not included yet.
+ * `TimePickerDialog` for a modal confirm flow. Dial / clock face is out of scope.
  * @see https://m3.material.io/components/time-pickers/overview
  */
 export function TimePicker({

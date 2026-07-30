@@ -261,9 +261,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
   (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
   arrow keys / digit entry. Helpers `formatTimeValue` / `parseTimeValue`.
-  Dial face not included yet. **TimePickerDialog** `{ open, onOpenChange,
-  value?, onConfirm, title?, … }` mirrors DatePickerDialog (supporting time
-  line under the title).
+  Dial / clock face is **out of scope** (do not implement). **TimePickerDialog**
+  `{ open, onOpenChange, value?, onConfirm, title?, … }` mirrors DatePickerDialog
+  (supporting time line under the title).
 - **Carousel** + **CarouselItem** `{ ariaLabel, variant?: "hero"|"multi",
   index?, defaultIndex?, onIndexChange?, showArrows?, showIndicators?,
   prevAriaLabel?, nextAriaLabel? }` — M3 horizontal snap strip (arrows +
@@ -285,8 +285,14 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   custom framing.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
   supplies `filter`, `onPick`, `renderRow`, `classes`.
-- **DropdownMenu** + **DropdownMenuItem** `{ trigger, children, ariaLabel?,
-  align? }`.
+- **DropdownMenu** `{ trigger, children, ariaLabel?, align?, open?,
+  onOpenChange?, disabled? }` + **DropdownMenuItem** `{ icon?, closeOnSelect? }`
+  + **DropdownMenuCheckboxItem** `{ checked, onCheckedChange?, closeOnSelect? }`
+  + **DropdownMenuGroup** `{ label? }` + **DropdownMenuLabel** +
+  **DropdownMenuSeparator** — M3 menu: portaled flyout (viewport-aware via
+  `useFloatingBoxPosition`), section labels / hairline dividers, checkbox rows
+  (stay open by default), arrow-key paging + Esc. Prefer over ad-hoc absolute
+  menus when the trigger sits in an overflow/scroll ancestor.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
   positions via `useFloatingBoxPosition` (top/left box coords, no CSS
   transform). Placement tries all four sides (preferred first, then opposite,

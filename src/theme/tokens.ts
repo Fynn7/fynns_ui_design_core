@@ -628,7 +628,7 @@ export const DATEPICKER_TOKENS = {
 /**
  * M3 TimePicker input geometry (at 16px rem).
  * Large hour/minute fields + colon; optional AM/PM column for `h12`.
- * `--fynns-timepicker-<key>`. Dial variant is out of scope for now.
+ * `--fynns-timepicker-<key>`. Dial / clock face is permanently out of scope.
  */
 export const TIMEPICKER_TOKENS = {
   "pad-inline": "0.75rem",

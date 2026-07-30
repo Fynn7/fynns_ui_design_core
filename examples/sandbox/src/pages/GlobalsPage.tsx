@@ -27,6 +27,11 @@ import {
   TimePicker,
   TimePickerDialog,
   Divider,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
   Fab,
   FabMenu,
   FabMenuItem,
@@ -147,6 +152,8 @@ export function GlobalsPage() {
   const [sliderValue, setSliderValue] = useState(40);
   const [autoValue, setAutoValue] = useState("");
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
+  const [menuStarred, setMenuStarred] = useState(true);
+  const [menuNotify, setMenuNotify] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -239,6 +246,38 @@ export function GlobalsPage() {
           </FabMenu>
         </div>
         <SandboxHelp text={t("globals.fabHelp")} />
+        <div className="sandbox-globals-row">
+          <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+            <DropdownMenuGroup label={t("globals.menuGroupFile")}>
+              <DropdownMenuItem icon={<FileIcon />}>
+                {t("globals.menuNew")}
+              </DropdownMenuItem>
+              <DropdownMenuItem icon={<FolderOpenIcon />}>
+                {t("globals.menuOpen")}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup label={t("globals.menuGroupView")}>
+              <DropdownMenuCheckboxItem
+                checked={menuStarred}
+                onCheckedChange={setMenuStarred}
+              >
+                {t("globals.menuStarred")}
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={menuNotify}
+                onCheckedChange={setMenuNotify}
+              >
+                {t("globals.menuNotify")}
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem icon={<PencilIcon />}>
+              {t("globals.menuRename")}
+            </DropdownMenuItem>
+          </DropdownMenu>
+        </div>
+        <SandboxHelp text={t("globals.menuHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catTextInputs")}>
