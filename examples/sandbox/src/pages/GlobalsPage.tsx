@@ -28,6 +28,8 @@ import {
   TimePickerDialog,
   Divider,
   Fab,
+  FabMenu,
+  FabMenuItem,
   FileIcon,
   FolderOpenIcon,
   IconButton,
@@ -144,6 +146,7 @@ export function GlobalsPage() {
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
   const [sliderValue, setSliderValue] = useState(40);
   const [autoValue, setAutoValue] = useState("");
+  const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
@@ -213,6 +216,27 @@ export function GlobalsPage() {
           <Fab label={t("globals.fabExtended")} aria-label={t("globals.fabExtended")}>
             <PlusIcon />
           </Fab>
+        </div>
+        <div className="sandbox-globals-row" style={{ justifyContent: "flex-end" }}>
+          <FabMenu
+            ariaLabel={t("globals.fabMenuOpen")}
+            closeAriaLabel={t("globals.fabMenuClose")}
+            expanded={fabMenuOpen}
+            onExpandedChange={setFabMenuOpen}
+          >
+            <FabMenuItem
+              icon={<FileIcon />}
+              label={t("globals.fabMenuFile")}
+            />
+            <FabMenuItem
+              icon={<FolderOpenIcon />}
+              label={t("globals.fabMenuFolder")}
+            />
+            <FabMenuItem
+              icon={<PencilIcon />}
+              label={t("globals.fabMenuEdit")}
+            />
+          </FabMenu>
         </div>
         <SandboxHelp text={t("globals.fabHelp")} />
       </GlobalsCategory>

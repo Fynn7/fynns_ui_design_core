@@ -444,6 +444,23 @@ export const FAB_TOKENS = {
 } as const;
 
 /**
+ * FAB menu geometry (M3 Expressive FAB menu — items stack above the toggle).
+ * `--fynns-fabmenu-<key>`.
+ */
+export const FABMENU_TOKENS = {
+  /** Vertical gap between menu items, and between the stack and the toggle. */
+  gap: "0.75rem",
+  /** Horizontal gap between the item label chip and its small FAB. */
+  "item-gap": "0.75rem",
+  "label-pad-block": "0.5rem",
+  "label-pad-inline": "0.75rem",
+  /** Stagger step between successive item enter animations (M3 ~35ms). */
+  stagger: "0.035s",
+  /** Slightly snappier stagger on exit (M3 ~25ms). */
+  "stagger-exit": "0.025s",
+} as const;
+
+/**
  * Top app bar geometry (M3-informed, denser for desktop/tool chrome).
  * Small uses shared `--fynns-layout-bar-height` (56dp); medium 80dp; large 104dp.
  * Action row matches small height so 40dp IconButtons sit inset, not edge-flush.
@@ -950,6 +967,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["progress", PROGRESS_TOKENS],
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
+  ["fabmenu", FABMENU_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
   ["toolbar", TOOLBAR_TOKENS],

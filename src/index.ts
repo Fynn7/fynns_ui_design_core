@@ -65,6 +65,7 @@ export * from "./primitives/Progress";
 export * from "./primitives/Badge";
 export * from "./primitives/Avatar";
 export * from "./primitives/Fab";
+export * from "./primitives/FabMenu";
 export * from "./primitives/TopAppBar";
 export * from "./primitives/BottomAppBar";
 export * from "./primitives/Toolbar";

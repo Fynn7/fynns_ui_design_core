@@ -1,0 +1,327 @@
+import type {
+  ButtonHTMLAttributes,
+  MouseEvent as ReactMouseEvent,
+  ReactElement,
+  ReactNode,
+} from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import { Fab, type FabVariant } from "./Fab";
+import { CloseIcon, PlusIcon } from "./icons";
+
+function join(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(" ");
+}
+
+/** Item motion = `--fynns-duration-base` (240ms) + stagger × (n − 1). */
+const FABMENU_ITEM_MS = 240;
+const FABMENU_STAGGER_MS = 35;
+const FABMENU_MAX_ITEMS = 6;
+
+function fabMenuExitMs(itemCount: number): number {
+  const n = Math.max(1, Math.min(itemCount, FABMENU_MAX_ITEMS));
+  return FABMENU_ITEM_MS + FABMENU_STAGGER_MS * (n - 1);
+}
+
+/** Place the menu stack above the toggle; flip below if it would leave the viewport. */
+function useFabMenuBox(
+  anchorEl: HTMLElement | null,
+  floatingEl: HTMLElement | null,
+  open: boolean,
+  align: "start" | "end",
+  gapPx: number,
+): { top: number; left: number } | null {
+  const [box, setBox] = useState<{ top: number; left: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!open || !anchorEl) {
+      setBox(null);
+      return;
+    }
+    const margin = 8;
+    const compute = () => {
+      const anchor = anchorEl.getBoundingClientRect();
+      const width = floatingEl?.offsetWidth ?? 0;
+      const height = floatingEl?.offsetHeight ?? 0;
+      let top = anchor.top - height - gapPx;
+      if (height > 0 && top < margin) {
+        top = anchor.bottom + gapPx;
+      }
+      let left = align === "end" ? anchor.right - width : anchor.left;
+      if (width > 0) {
+        left = Math.min(left, window.innerWidth - width - margin);
+        left = Math.max(margin, left);
+      }
+      setBox({ top, left });
+    };
+    compute();
+    const ro =
+      floatingEl && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(compute)
+        : null;
+    if (floatingEl) ro?.observe(floatingEl);
+    window.addEventListener("scroll", compute, true);
+    window.addEventListener("resize", compute);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("scroll", compute, true);
+      window.removeEventListener("resize", compute);
+    };
+  }, [anchorEl, floatingEl, open, align, gapPx]);
+
+  return box;
+}
+
+export type FabMenuItemProps = {
+  /** Leading glyph inside the small FAB. */
+  icon: ReactNode;
+  /** Visible label chip + accessible name for the item FAB. */
+  label: string;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>["onClick"];
+  disabled?: boolean;
+  className?: string;
+  /**
+   * Color role for the small FAB. Defaults to the menu’s `itemVariant`
+   * (usually `secondary` for contrast against a primary toggle).
+   */
+  variant?: FabVariant;
+};
+
+/**
+ * One FAB menu row: label chip + small FAB.
+ * Use only as a child of `FabMenu`.
+ */
+export function FabMenuItem({
+  icon,
+  label,
+  onClick,
+  disabled = false,
+  className,
+  variant = "secondary",
+}: FabMenuItemProps) {
+  return (
+    <div className={join("fynns-fab-menu-item", className)} role="none">
+      <span className="fynns-fab-menu-item-label" aria-hidden>
+        {label}
+      </span>
+      <Fab
+        size="sm"
+        variant={variant}
+        aria-label={label}
+        disabled={disabled}
+        onClick={onClick}
+        role="menuitem"
+        className="fynns-fab-menu-item-fab"
+      >
+        {icon}
+      </Fab>
+    </div>
+  );
+}
+
+export type FabMenuProps = {
+  children: ReactNode;
+  /** Accessible name for the toggle when collapsed. */
+  ariaLabel: string;
+  /** Accessible name for the toggle when expanded. Default `"Close"`. */
+  closeAriaLabel?: string;
+  /** Toggle glyph when collapsed. Default `PlusIcon`. */
+  icon?: ReactNode;
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
+  /** Toggle FAB color role. Default `primary`. */
+  variant?: FabVariant;
+  /** Default color role for item FABs. Default `secondary`. */
+  itemVariant?: FabVariant;
+  /** Horizontal alignment of the item stack. Default `end`. */
+  align?: "start" | "end";
+  disabled?: boolean;
+  className?: string;
+  /** Collapse after an item is activated. Default `true`. */
+  closeOnSelect?: boolean;
+};
+
+/**
+ * M3 Expressive FAB menu — toggle FAB expands a short stack of labeled
+ * secondary actions above it (typically 2–6). Items portal to `document.body`
+ * so overflow ancestors (e.g. Collapsible) cannot clip them. Enter/exit uses
+ * staggered fade+scale (presence lifecycle); Esc / outside click dismiss.
+ * @see https://m3.material.io/components/fab-menu/overview
+ */
+export function FabMenu({
+  children,
+  ariaLabel,
+  closeAriaLabel = "Close",
+  icon,
+  expanded: expandedProp,
+  defaultExpanded = false,
+  onExpandedChange,
+  variant = "primary",
+  itemVariant = "secondary",
+  align = "end",
+  disabled = false,
+  className,
+  closeOnSelect = true,
+}: FabMenuProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const itemsRef = useRef<HTMLDivElement | null>(null);
+  const [itemsEl, setItemsEl] = useState<HTMLDivElement | null>(null);
+  const menuId = useId();
+  const [uncontrolled, setUncontrolled] = useState(defaultExpanded);
+  const controlled = expandedProp !== undefined;
+  const expanded = controlled ? expandedProp : uncontrolled;
+
+  const itemCount = Children.toArray(children).filter(
+    (child) => isValidElement(child) && child.type === FabMenuItem,
+  ).length;
+
+  const [rendered, setRendered] = useState(expanded);
+  const [entered, setEntered] = useState(false);
+
+  const setExpanded = (next: boolean) => {
+    if (!controlled) setUncontrolled(next);
+    onExpandedChange?.(next);
+  };
+
+  useEffect(() => {
+    if (expanded) {
+      setRendered(true);
+      return;
+    }
+    setEntered(false);
+    const timer = setTimeout(() => setRendered(false), fabMenuExitMs(itemCount));
+    return () => clearTimeout(timer);
+  }, [expanded, itemCount]);
+
+  const pos = useFabMenuBox(toggleRef.current, itemsEl, rendered, align, 12);
+
+  // Wait until the portal is measured/positioned, then paint `closed` for a
+  // frame and flip to `open` so the enter animation starts from opacity 0 —
+  // never mount as `closing` (that keyframe begins at opacity 1 → flash).
+  useEffect(() => {
+    if (!expanded || !rendered || !pos) return;
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setEntered(true));
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [expanded, rendered, pos]);
+
+  const dataState = entered ? "open" : expanded ? "closed" : "closing";
+
+  useEffect(() => {
+    if (!expanded) return;
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (rootRef.current?.contains(target)) return;
+      if (itemsRef.current?.contains(target)) return;
+      setExpanded(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setExpanded(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [expanded, controlled, onExpandedChange]);
+
+  const items = Children.map(children, (child) => {
+    if (!isValidElement(child) || child.type !== FabMenuItem) return child;
+    const item = child as ReactElement<FabMenuItemProps>;
+    const itemVariantResolved = item.props.variant ?? itemVariant;
+    return cloneElement(item, {
+      variant: itemVariantResolved,
+      onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
+        item.props.onClick?.(event);
+        if (!event.defaultPrevented && closeOnSelect) setExpanded(false);
+      },
+    });
+  });
+
+  const defaultPlus = !icon;
+  const menu =
+    rendered && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            ref={(node) => {
+              itemsRef.current = node;
+              setItemsEl(node);
+            }}
+            id={menuId}
+            className={join(
+              "fynns-fab-menu-items",
+              `fynns-fab-menu-items--align-${align}`,
+            )}
+            role="menu"
+            aria-label={ariaLabel}
+            data-state={dataState}
+            aria-hidden={!expanded}
+            style={
+              pos
+                ? { position: "fixed", top: pos.top, left: pos.left }
+                : { position: "fixed", top: 0, left: 0, visibility: "hidden" }
+            }
+          >
+            {items}
+          </div>,
+          document.body,
+        )
+      : null;
+
+  return (
+    <div
+      ref={rootRef}
+      className={join(
+        "fynns-fab-menu",
+        `fynns-fab-menu--align-${align}`,
+        className,
+      )}
+      data-expanded={expanded ? "true" : "false"}
+    >
+      {menu}
+      <Fab
+        ref={toggleRef}
+        variant={variant}
+        disabled={disabled}
+        aria-label={expanded ? closeAriaLabel : ariaLabel}
+        aria-expanded={expanded}
+        aria-haspopup="menu"
+        aria-controls={rendered ? menuId : undefined}
+        onClick={() => setExpanded(!expanded)}
+        className="fynns-fab-menu-toggle"
+      >
+        <span
+          className="fynns-fab-menu-toggle-icon"
+          data-expanded={expanded ? "true" : "false"}
+          data-morph={defaultPlus ? "plus" : "swap"}
+        >
+          {defaultPlus ? (
+            <PlusIcon />
+          ) : expanded ? (
+            <CloseIcon />
+          ) : (
+            icon
+          )}
+        </span>
+      </Fab>
+    </div>
+  );
+}
