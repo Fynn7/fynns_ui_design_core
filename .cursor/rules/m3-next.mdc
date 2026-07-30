@@ -1,5 +1,5 @@
 ---
-description: When user says 下一个, start next M3 component without asking
+description: When user says 下一个, start next M3 / uncovered common component without asking
 alwaysApply: true
 ---
 
@@ -7,11 +7,22 @@ alwaysApply: true
 
 When the user says **下一个** (or “next” in the same sense):
 
-1. **Do not ask for confirmation.** Pick the next missing M3 catalog gap and implement immediately so they can review the UI.
-2. Prefer net-new primitives over polish of existing ones, unless polish is clearly higher value.
-3. Follow the usual ship shape: tokens + `gen:theme`, primitive + CSS, export, AGENTS / Cursor rules, sandbox Globals sample (+ gallery when cheap), `typecheck`.
-4. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
-   DateRangePicker → Autocomplete → FabMenu → Menu anatomy → (next gap).
+1. **Do not ask for confirmation.** Pick the next **uncovered** important
+   component and implement immediately so they can review the UI.
+2. **No stacking.** Do **not** ship a new variant / synonym / thin wrapper of
+   something already in the kit (e.g. Suggestion Chip when `Chip` exists,
+   “Snackbar” when `Toaster`/`toast` exists, dial TimePicker when digital
+   TimePicker exists). Prefer a **net-new** control that apps do not already
+   have.
+3. Priority: (a) Material 3 catalog gaps that are still missing, then
+   (b) high-frequency app chrome not in M3 but not covered here (e.g. path
+   trails). Skip polish-only work unless the user asks for it.
+4. Follow the usual ship shape: tokens + `gen:theme` when needed, primitive +
+   CSS, export, AGENTS / Cursor rules, sandbox Globals sample (+ gallery when
+   cheap), `typecheck`.
+5. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
+   DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
+   (next gap).
    Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
    **TimePicker dial (表盘/时钟面)** — skipped forever (user asked twice; digital
    TimePicker input is enough). LoadingIndicator / ButtonGroup / RangeSlider

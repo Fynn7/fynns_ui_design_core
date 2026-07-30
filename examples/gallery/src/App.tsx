@@ -8,6 +8,7 @@ import {
   Banner,
   BottomAppBar,
   BottomSheet,
+  Breadcrumb,
   Button,
   Card,
   CardActionArea,
@@ -409,6 +410,16 @@ export function App() {
           <Fab label="Create item">
             <PlusIcon />
           </Fab>
+        </Row>
+        <Row>
+          <Breadcrumb
+            ariaLabel="Breadcrumb"
+            items={[
+              { label: "Home", onClick: () => {} },
+              { label: "Library", onClick: () => {} },
+              { label: "Radius", current: true },
+            ]}
+          />
         </Row>
         <div style={{ width: "100%", maxWidth: "24rem" }}>
           <TopAppBar

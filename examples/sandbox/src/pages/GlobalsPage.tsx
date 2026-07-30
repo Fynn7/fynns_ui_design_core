@@ -8,6 +8,7 @@ import {
   BarChartIcon,
   BottomAppBar,
   BottomSheet,
+  Breadcrumb,
   Button,
   Card,
   CardContent,
@@ -125,6 +126,9 @@ export function GlobalsPage() {
   const [radioValue, setRadioValue] = useState<"a" | "b">("a");
   const [filterOn, setFilterOn] = useState(true);
   const [inputChips, setInputChips] = useState(["Alpha", "Beta"]);
+  const [breadcrumbLeaf, setBreadcrumbLeaf] = useState<"library" | "folder" | "page">(
+    "page",
+  );
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
@@ -830,6 +834,50 @@ export function GlobalsPage() {
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catNavigation")}>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Breadcrumb
+            ariaLabel={t("globals.breadcrumbAria")}
+            items={[
+              {
+                label: t("globals.breadcrumbHome"),
+                onClick: () => setBreadcrumbLeaf("library"),
+              },
+              ...(breadcrumbLeaf === "library"
+                ? [
+                    {
+                      label: t("globals.breadcrumbLibrary"),
+                      current: true as const,
+                    },
+                  ]
+                : [
+                    {
+                      label: t("globals.breadcrumbLibrary"),
+                      onClick: () => setBreadcrumbLeaf("library"),
+                    },
+                  ]),
+              ...(breadcrumbLeaf === "folder"
+                ? [
+                    {
+                      label: t("globals.breadcrumbFolder"),
+                      current: true as const,
+                    },
+                  ]
+                : breadcrumbLeaf === "page"
+                  ? [
+                      {
+                        label: t("globals.breadcrumbFolder"),
+                        onClick: () => setBreadcrumbLeaf("folder"),
+                      },
+                      {
+                        label: t("globals.breadcrumbPage"),
+                        current: true as const,
+                      },
+                    ]
+                  : []),
+            ]}
+          />
+          <SandboxHelp text={t("globals.breadcrumbHelp")} />
+        </div>
         <div
           className="sandbox-globals-appbar"
           style={{

@@ -44,8 +44,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    informational help uses **`InfoHint`**: standalone "i" when there is no
    visible name; for form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
-   Tooltips also describe *dynamic* state (e.g. why a
-   control is disabled).
+   **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
+   ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
+   (`TextLinkButton`) keep a resting solid underline; import/diff actions
+   (`DottedLinkButton`) keep dotted. Do not strip underlines from the latter
+   two. Tooltips also describe *dynamic* state (e.g. why a control is
+   disabled).
    **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
    cover its trigger or the adjacent related content; the caret links the bubble
    to the anchor so it need not touch the text):
@@ -142,7 +146,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -435,8 +439,17 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   selectable sidebar rows (normal and bulk-select shells).
 - **NavItem** / **NavItemLabel** / **NavItemIcon** / **NavCount** / **NavBrandButton**
   — primary sidebar navigation buttons.
-- **TextLinkButton** — inline accent text link control.
-- **DottedLinkButton** — dotted-underline action link (e.g. import diff rows).
+- **TextLinkButton** — inline accent text link control (body/paragraph links:
+  resting solid underline — M3/a11y; not a chrome text button). Prefer
+  `Button` `ghost` for undecorated toolbar/dialog actions.
+- **Breadcrumb** `{ items: { label, href?, onClick?, current? }[], ariaLabel?,
+  separator? }` — hierarchical path trail (`nav` + ordered list). Last item
+  (or `current`) is plain text with `aria-current="page"`; ancestors compose
+  **`Button` `ghost` `sm`** (or the same classes on `<a href>`) — stadium
+  radius, compact height, ghost state-layer; accent label. Prefer over
+  hand-rolled chevron rows in app chrome.
+- **DottedLinkButton** — dotted-underline action link (e.g. import diff rows);
+  keep the dotted resting decoration (distinct from TextLink / Breadcrumb).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
 - **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, selected?, disabled? }`
   + anatomy: **CardMedia** `{ src?, alt?, height?, children? }` (custom media via

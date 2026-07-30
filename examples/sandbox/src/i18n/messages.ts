@@ -261,6 +261,13 @@ const en = {
   "globals.carouselSlide3": "Keyboard first",
   "globals.carouselSlide3Body": "Arrow keys page; indicators jump.",
   "globals.catNavigation": "Navigation",
+  "globals.breadcrumbAria": "Sample breadcrumb",
+  "globals.breadcrumbHelp":
+    "Breadcrumb path trail for hierarchical pages. Ancestors are `Button` ghost sm (stadium + state-layer); the current crumb is plain text (`aria-current=\"page\"`). Prefer over hand-rolled chevron rows.",
+  "globals.breadcrumbHome": "Home",
+  "globals.breadcrumbLibrary": "Library",
+  "globals.breadcrumbFolder": "Tokens",
+  "globals.breadcrumbPage": "Radius",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
@@ -827,6 +834,13 @@ const zh: Record<MessageKey, string> = {
   "globals.carouselSlide3": "键盘优先",
   "globals.carouselSlide3Body": "方向键翻页；指示点可跳转。",
   "globals.catNavigation": "导航",
+  "globals.breadcrumbAria": "示例面包屑",
+  "globals.breadcrumbHelp":
+    "层级路径面包屑。祖先直接复用 `Button` ghost sm（胶囊圆角 + state-layer）；当前页为纯文本（`aria-current=\"page\"`）。请优先用它，不要手写 chevron 行。",
+  "globals.breadcrumbHome": "首页",
+  "globals.breadcrumbLibrary": "资料库",
+  "globals.breadcrumbFolder": "Token",
+  "globals.breadcrumbPage": "圆角",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
