@@ -2,20 +2,25 @@
   "schemaVersion": 1,
   "name": "fynns-ui-consume",
   "title": "Install @fynns/ui via git submodule (LLM contract)",
-  "description": "Machine-readable API for agents: add fynns_ui_design_core as a submodule and wire Vite/tsconfig aliases. Never npm-install this package.",
+  "description": "Machine-readable API for agents: add fynns_ui_design_core as a submodule and wire Vite/tsconfig aliases. Never npm-install this package. Short user prompts still require reading this contract before UI work.",
   "docs": {
     "human": "llm/CONSUME.md",
     "designSystem": "AGENTS.md",
-    "propagation": "docs/submodule-propagation.md"
+    "propagation": "docs/submodule-propagation.md",
+    "opencodeRule": "llm/opencode-fynns-ui-consume.md"
   },
   "rules": [
+    "On any short prompt involving @fynns/ui / fynns UI / Collapsible (etc.), read llm/CONSUME.md before writing app code.",
     "Consume as git submodule + Vite source alias @fynns/ui.",
     "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
     "NEVER publish-install from npm registry for day-to-day app work.",
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
     "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
-    "If the app uses toast.*, mount <Toaster /> once near the app root; toast without Toaster builds but shows nothing."
+    "If the app uses toast.*, mount <Toaster /> once near the app root; toast without Toaster builds but shows nothing.",
+    "App entry must createRoot and render App (CSS-only main.tsx is a fail).",
+    "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
+    "For preview/playground pages, mirror examples/sandbox/src/pages/*PreviewCanvas.tsx and skim AGENTS.md."
   ],
   "defaults": {
     "submodulePath": "packages/fynns_ui_design_core",

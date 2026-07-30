@@ -14,6 +14,8 @@ dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 `npm run consume:install -- --target <consumer-root>`
 (`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
 Never add this package to a consumer's `package.json` dependencies.
+**Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
+[`llm/opencode-fynns-ui-consume.md`](llm/opencode-fynns-ui-consume.md)) — do not expect a long task brief.
 
 ## Design philosophy & UX principles
 
