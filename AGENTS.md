@@ -140,7 +140,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `appbar`, `bottomappbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -251,6 +251,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Dial face not included yet. **TimePickerDialog** `{ open, onOpenChange,
   value?, onConfirm, title?, … }` mirrors DatePickerDialog (supporting time
   line under the title).
+- **Carousel** + **CarouselItem** `{ ariaLabel, variant?: "hero"|"multi",
+  index?, defaultIndex?, onIndexChange?, showArrows?, showIndicators?,
+  prevAriaLabel?, nextAriaLabel? }` — M3 horizontal snap strip (arrows +
+  dots; keyboard ←→ Home/End). `multi` peeks neighbors; indices clamp at
+  ends (no wrap). Track stays scrollable for drag/swipe but hides the
+  scrollbar (chrome is arrows/dots).
 - **Select** `{ value, options: (string | { value, label?, disabled? })[],
   onChange, ariaLabel, disabled?, placeholder? }` — custom listbox; options
   portal to `document.body` (anchored, flip top/bottom) so overflow ancestors

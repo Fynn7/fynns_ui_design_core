@@ -306,6 +306,13 @@
   --fynns-timepicker-period-min-width: 3.25rem;
   --fynns-timepicker-period-font: 0.875rem;
   --fynns-timepicker-gap: 0.75rem;
+  --fynns-carousel-gap: 0.5rem;
+  --fynns-carousel-item-min-height: 11rem;
+  --fynns-carousel-item-width-multi: 72%;
+  --fynns-carousel-indicator-size: 0.5rem;
+  --fynns-carousel-indicator-gap: 0.5rem;
+  --fynns-carousel-controls-gap: 0.5rem;
+  --fynns-carousel-pad-block: 0.25rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

@@ -22,6 +22,8 @@ import {
   ChipSet,
   ChevronRightIcon,
   CircularProgress,
+  Carousel,
+  CarouselItem,
   Dialog,
   Divider,
   Drawer,
@@ -582,6 +584,25 @@ export function App() {
                 onClick={() => {}}
               />
             </List>
+          </div>
+          <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
+            Carousel
+          </span>
+          <div style={{ width: "100%", maxWidth: "28rem" }}>
+            <Carousel ariaLabel="Gallery carousel" variant="multi">
+              <CarouselItem label="One">
+                <strong>One</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Multi-browse peek</span>
+              </CarouselItem>
+              <CarouselItem label="Two">
+                <strong>Two</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Snap + arrows</span>
+              </CarouselItem>
+              <CarouselItem label="Three">
+                <strong>Three</strong>
+                <span style={{ color: "var(--fynns-color-text-muted)" }}>Indicator dots</span>
+              </CarouselItem>
+            </Carousel>
           </div>
           <span style={{ color: "var(--fynns-color-text-muted)", fontSize: "var(--fynns-font-size-caption)" }}>
             DatePicker

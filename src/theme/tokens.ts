@@ -596,6 +596,22 @@ export const TIMEPICKER_TOKENS = {
 } as const;
 
 /**
+ * M3 Carousel geometry (at 16px rem).
+ * Horizontal snap strip; hero = full-bleed slide, multi = peek neighbors.
+ * `--fynns-carousel-<key>`.
+ */
+export const CAROUSEL_TOKENS = {
+  gap: "0.5rem",
+  "item-min-height": "11rem",
+  /** Multi-browse slide width (peek neighbors). */
+  "item-width-multi": "72%",
+  "indicator-size": "0.5rem",
+  "indicator-gap": "0.5rem",
+  "controls-gap": "0.5rem",
+  "pad-block": "0.25rem",
+} as const;
+
+/**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
@@ -899,6 +915,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["list", LIST_TOKENS],
   ["datepicker", DATEPICKER_TOKENS],
   ["timepicker", TIMEPICKER_TOKENS],
+  ["carousel", CAROUSEL_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],

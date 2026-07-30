@@ -16,6 +16,8 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  Carousel,
+  CarouselItem,
   Collapsible,
   DatePicker,
   DatePickerDialog,
@@ -124,6 +126,7 @@ export function GlobalsPage() {
   const [pickedTime, setPickedTime] = useState<string | null>("14:30");
   const [timeDialogOpen, setTimeDialogOpen] = useState(false);
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
   const [rhythmClickable, setRhythmClickable] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
@@ -480,6 +483,33 @@ export function GlobalsPage() {
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catContainment")}>
+        <div
+          className="sandbox-globals-row sandbox-globals-row--stack"
+          style={{ width: "100%", maxWidth: "28rem" }}
+        >
+          <Carousel
+            ariaLabel={t("globals.carouselAria")}
+            variant="multi"
+            index={carouselIndex}
+            onIndexChange={setCarouselIndex}
+            prevAriaLabel={t("globals.carouselPrev")}
+            nextAriaLabel={t("globals.carouselNext")}
+          >
+            <CarouselItem label={t("globals.carouselSlide1")}>
+              <strong>{t("globals.carouselSlide1")}</strong>
+              <span className="sandbox-help">{t("globals.carouselSlide1Body")}</span>
+            </CarouselItem>
+            <CarouselItem label={t("globals.carouselSlide2")}>
+              <strong>{t("globals.carouselSlide2")}</strong>
+              <span className="sandbox-help">{t("globals.carouselSlide2Body")}</span>
+            </CarouselItem>
+            <CarouselItem label={t("globals.carouselSlide3")}>
+              <strong>{t("globals.carouselSlide3")}</strong>
+              <span className="sandbox-help">{t("globals.carouselSlide3Body")}</span>
+            </CarouselItem>
+          </Carousel>
+          <p className="sandbox-help">{t("globals.carouselHelp")}</p>
+        </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />

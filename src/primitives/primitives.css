@@ -255,6 +255,25 @@
   background: transparent;
 }
 
+/* Ghost icon (M3 standard): circular hover/press state layer.
+ * `.fynns-btn--icon:hover` clears background after ghost paints it, and ghost
+ * zeros `::before` — restore the circle here via background (radius-round). */
+.fynns-btn--icon.fynns-btn--ghost:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    currentColor var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-btn--icon.fynns-btn--ghost:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    currentColor var(--fynns-state-pressed),
+    transparent
+  );
+}
+
 .fynns-btn--icon.fynns-btn--primary {
   border-color: transparent;
   background: var(--fynns-color-accent);
@@ -6326,5 +6345,134 @@
 .fynns-timepicker-dialog .fynns-dialog-foot {
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
+}
+
+/* —— Carousel (M3 horizontal snap) ——————————————————————————— */
+
+.fynns-carousel {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-carousel-controls-gap);
+  padding-block: var(--fynns-carousel-pad-block);
+  outline: none;
+  color: var(--fynns-color-text);
+}
+
+.fynns-carousel:focus-visible {
+  box-shadow: var(--fynns-focus);
+  border-radius: var(--fynns-radius-md);
+}
+
+.fynns-carousel-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--fynns-carousel-controls-gap);
+}
+
+.fynns-carousel-track {
+  display: flex;
+  gap: var(--fynns-carousel-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-block: var(--fynns-space-2xs);
+  -webkit-overflow-scrolling: touch;
+  /* Drag/swipe stays; chrome is arrows + dots — no scrollbar. */
+  scrollbar-width: none;
+}
+
+.fynns-carousel-track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Side gutters so first/last multi slides can center in the viewport. */
+.fynns-carousel--multi .fynns-carousel-track::before,
+.fynns-carousel--multi .fynns-carousel-track::after {
+  content: "";
+  flex: 0 0 calc((100% - var(--fynns-carousel-item-width-multi)) / 2);
+  scroll-snap-align: none;
+  pointer-events: none;
+}
+
+.fynns-carousel-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  min-width: 0;
+}
+
+.fynns-carousel--hero .fynns-carousel-slide {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.fynns-carousel--multi .fynns-carousel-slide {
+  flex-basis: var(--fynns-carousel-item-width-multi);
+  width: var(--fynns-carousel-item-width-multi);
+}
+
+.fynns-carousel-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--fynns-space-xs);
+  min-height: var(--fynns-carousel-item-min-height);
+  height: 100%;
+  padding: var(--fynns-space-md);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-2);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  overflow: hidden;
+}
+
+.fynns-carousel-arrow {
+  flex-shrink: 0;
+}
+
+.fynns-carousel-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--fynns-carousel-indicator-gap);
+}
+
+.fynns-carousel-indicator {
+  box-sizing: border-box;
+  width: var(--fynns-carousel-indicator-size);
+  height: var(--fynns-carousel-indicator-size);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-pill);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) 32%,
+    transparent
+  );
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-carousel-indicator:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) 48%,
+    transparent
+  );
+}
+
+.fynns-carousel-indicator:focus-visible {
+  outline: none;
+  box-shadow: var(--fynns-focus);
+}
+
+.fynns-carousel-indicator--active {
+  background: var(--fynns-color-accent);
 }
 
