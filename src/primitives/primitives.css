@@ -5323,6 +5323,123 @@
   min-height: var(--fynns-bottomappbar-action-size);
 }
 
+/* ---------- Toolbar (M3 Expressive docked / floating) ---------- */
+.fynns-toolbar-cluster {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-toolbar-fab-gap);
+}
+
+.fynns-toolbar-cluster--vertical {
+  flex-direction: column;
+}
+
+.fynns-toolbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding-block: var(--fynns-toolbar-pad-block);
+  padding-inline: var(--fynns-toolbar-pad-inline);
+  border: 0;
+  color: var(--fynns-color-text);
+}
+
+.fynns-toolbar--horizontal {
+  flex-direction: row;
+  min-height: var(--fynns-toolbar-height);
+}
+
+.fynns-toolbar--vertical {
+  flex-direction: column;
+  min-width: var(--fynns-toolbar-height);
+}
+
+.fynns-toolbar--docked {
+  width: 100%;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  background: var(--fynns-color-surface-1);
+  border-radius: var(--fynns-radius-3xl);
+  box-shadow: var(--fynns-shadow-sm);
+}
+
+.fynns-toolbar--floating {
+  width: max-content;
+  max-width: 100%;
+  justify-content: center;
+  background: var(--fynns-color-surface-2);
+  border-radius: var(--fynns-radius-pill);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+.fynns-toolbar--vibrant {
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-toolbar--vibrant.fynns-toolbar--docked {
+  box-shadow: none;
+}
+
+.fynns-toolbar-actions {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-toolbar-actions-gap);
+  min-width: 0;
+  color: inherit;
+}
+
+.fynns-toolbar--docked .fynns-toolbar-actions {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-toolbar--docked.fynns-toolbar--vibrant .fynns-toolbar-actions {
+  color: inherit;
+}
+
+.fynns-toolbar--vertical .fynns-toolbar-actions {
+  flex-direction: column;
+}
+
+.fynns-toolbar-actions .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  width: var(--fynns-toolbar-action-size);
+  height: var(--fynns-toolbar-action-size);
+  min-width: var(--fynns-toolbar-action-size);
+  min-height: var(--fynns-toolbar-action-size);
+  padding: 0;
+}
+
+.fynns-toolbar-actions .fynns-btn--icon svg {
+  width: var(--fynns-toolbar-action-icon-size);
+  height: var(--fynns-toolbar-action-icon-size);
+}
+
+.fynns-toolbar--vibrant .fynns-toolbar-actions .fynns-btn--ghost {
+  color: inherit;
+}
+
+.fynns-toolbar-fab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-toolbar-fab .fynns-fab--sm,
+.fynns-toolbar-fab .fynns-btn.fynns-btn--icon {
+  width: var(--fynns-toolbar-action-size);
+  height: var(--fynns-toolbar-action-size);
+  min-width: var(--fynns-toolbar-action-size);
+  min-height: var(--fynns-toolbar-action-size);
+}
+
 /* ---------- SearchBar (M3 elevated search) ---------- */
 .fynns-search-bar {
   box-sizing: border-box;

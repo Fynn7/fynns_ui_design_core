@@ -45,7 +45,9 @@ import {
   NavigationDrawerHeadline,
   NavigationDrawerItem,
   PlusIcon,
+  PencilIcon,
   Radio,
+  SaveIcon,
   SearchIcon,
   SearchBar,
   SearchBarResult,
@@ -54,8 +56,10 @@ import {
   Switch,
   ToggleGroup,
   TopAppBar,
+  Toolbar,
   Tooltip,
   TrashIcon,
+  UndoIcon,
   UploadIcon,
   ControlRow,
   ControlStack,
@@ -885,6 +889,108 @@ export function GlobalsPage() {
           />
         </div>
         <SandboxHelp text={t("globals.bottomAppBarHelp")} />
+        <div
+          className="sandbox-globals-toolbar"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--fynns-space-md)",
+            width: "100%",
+            maxWidth: "28rem",
+          }}
+        >
+          <Toolbar
+            variant="docked"
+            aria-label={t("globals.toolbarDockedAria")}
+            floatingActionButton={
+              <Tooltip content={t("globals.fabTip")}>
+                <Fab size="sm" aria-label={t("globals.fabTip")}>
+                  <PlusIcon />
+                </Fab>
+              </Tooltip>
+            }
+          >
+            <Tooltip content={t("globals.toolbarUndo")}>
+              <IconButton aria-label={t("globals.toolbarUndo")}>
+                <UndoIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.toolbarEdit")}>
+              <IconButton aria-label={t("globals.toolbarEdit")}>
+                <PencilIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.toolbarSave")}>
+              <IconButton aria-label={t("globals.toolbarSave")}>
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.bottomAppBarDelete")}>
+              <IconButton aria-label={t("globals.bottomAppBarDelete")}>
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "var(--fynns-space-md)",
+              alignItems: "flex-end",
+            }}
+          >
+            <Toolbar
+              variant="floating"
+              aria-label={t("globals.toolbarFloatingAria")}
+              floatingActionButton={
+                <Tooltip content={t("globals.fabTip")}>
+                  <Fab size="sm" aria-label={t("globals.fabTip")}>
+                    <PlusIcon />
+                  </Fab>
+                </Tooltip>
+              }
+            >
+              <Tooltip content={t("globals.toolbarUndo")}>
+                <IconButton aria-label={t("globals.toolbarUndo")}>
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarEdit")}>
+                <IconButton aria-label={t("globals.toolbarEdit")}>
+                  <PencilIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarSave")}>
+                <IconButton aria-label={t("globals.toolbarSave")}>
+                  <SaveIcon />
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+            <Toolbar
+              variant="floating"
+              color="vibrant"
+              orientation="vertical"
+              aria-label={t("globals.toolbarVibrantAria")}
+            >
+              <Tooltip content={t("globals.toolbarUndo")} side="right">
+                <IconButton aria-label={t("globals.toolbarUndo")}>
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarEdit")} side="right">
+                <IconButton aria-label={t("globals.toolbarEdit")}>
+                  <PencilIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.toolbarSave")} side="right">
+                <IconButton aria-label={t("globals.toolbarSave")}>
+                  <SaveIcon />
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+          </div>
+        </div>
+        <SandboxHelp text={t("globals.toolbarHelp")} />
         <div
           className="sandbox-globals-search-bar"
           style={{

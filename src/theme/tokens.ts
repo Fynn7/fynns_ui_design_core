@@ -500,6 +500,26 @@ export const BOTTOM_APPBAR_TOKENS = {
 } as const;
 
 /**
+ * Toolbar geometry (M3 Expressive docked / floating at 16px rem).
+ * Height shares `--fynns-layout-bar-height` (56dp; stock floating is 64dp).
+ * Docked uses long-strip `--fynns-radius-3xl`; floating uses `--fynns-radius-pill`.
+ * Distinct from ControlStack “toolbar rhythm” (label | control form rows).
+ * `--fynns-toolbar-<key>`.
+ */
+export const TOOLBAR_TOKENS = {
+  height: "var(--fynns-layout-bar-height)",
+  "pad-inline": "0.5rem",
+  "pad-block": "0.25rem",
+  "actions-gap": "0.125rem",
+  /** IconButton / Fab sm hit target inside the bar. */
+  "action-size": "2.5rem",
+  /** Matches `--fynns-size-icon` (16dp). */
+  "action-icon-size": "1rem",
+  /** Gap between floating toolbar capsule and optional adjacent FAB. */
+  "fab-gap": "0.75rem",
+} as const;
+
+/**
  * Search bar geometry (M3 SearchBar at 16px rem).
  * Collapsed capsule height shares `--fynns-layout-bar-height` (56dp); expanded
  * merges field + results into one shell.
@@ -786,9 +806,9 @@ export const LAYOUT_TOKENS = {
   "switch-label-end": "7rem",
   /**
    * Single-line chrome bar height (56dp): TopAppBar `sm` row, BottomAppBar,
-   * SearchBar field. Taller than `--fynns-size-icon-target` (40dp) so IconButton
-   * hover discs are not flush with the bar edge. Multi-line app bars use
-   * `--fynns-appbar-height-md` / `-lg` instead.
+   * SearchBar field, Toolbar. Taller than `--fynns-size-icon-target` (40dp) so
+   * IconButton hover discs are not flush with the bar edge. Multi-line app bars
+   * use `--fynns-appbar-height-md` / `-lg` instead.
    */
   "bar-height": "3.5rem",
 } as const;
@@ -930,6 +950,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["fab", FAB_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
+  ["toolbar", TOOLBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
   ["list", LIST_TOKENS],

@@ -435,6 +435,14 @@ const en = {
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
     "Bottom action chrome (56dp dense) with optional FAB inside the bar. Prefer NavigationBar for destinations.",
+  "globals.toolbarDockedAria": "Sample docked toolbar",
+  "globals.toolbarFloatingAria": "Sample floating toolbar",
+  "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
+  "globals.toolbarUndo": "Undo",
+  "globals.toolbarEdit": "Edit",
+  "globals.toolbarSave": "Save",
+  "globals.toolbarHelp":
+    "M3 Expressive Toolbar: docked full-width strip or floating pill (`standard` / `vibrant`). Prefer ControlStack for labeled inspector rows.",
   "globals.searchBarAria": "Search the library",
   "globals.searchBarPlaceholder": "Search…",
   "globals.searchBarClear": "Clear search",
@@ -964,6 +972,14 @@ const zh: Record<MessageKey, string> = {
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
     "底部操作栏（56dp 紧凑），可选 FAB 放在栏内。目的地导航请优先用 NavigationBar。",
+  "globals.toolbarDockedAria": "示例停靠工具栏",
+  "globals.toolbarFloatingAria": "示例浮动工具栏",
+  "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",
+  "globals.toolbarUndo": "撤销",
+  "globals.toolbarEdit": "编辑",
+  "globals.toolbarSave": "保存",
+  "globals.toolbarHelp":
+    "M3 Expressive Toolbar：停靠全宽条或浮动胶囊（`standard` / `vibrant`）。带标签的检查器行请优先用 ControlStack。",
   "globals.searchBarAria": "搜索资料库",
   "globals.searchBarPlaceholder": "搜索…",
   "globals.searchBarClear": "清除搜索",

@@ -66,6 +66,7 @@ export * from "./primitives/Avatar";
 export * from "./primitives/Fab";
 export * from "./primitives/TopAppBar";
 export * from "./primitives/BottomAppBar";
+export * from "./primitives/Toolbar";
 export * from "./primitives/NavigationRail";
 export * from "./primitives/NavigationBar";
 export * from "./primitives/NavigationDrawer";

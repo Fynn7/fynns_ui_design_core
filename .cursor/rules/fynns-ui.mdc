@@ -18,7 +18,7 @@ To install into a **new** consumer: follow `llm/CONSUME.md` and run
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
   ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
-  Badge, Avatar, Fab, TopAppBar, BottomAppBar, SearchBar, Banner, List/ListItem,
+  Badge, Avatar, Fab, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner, List/ListItem,
   DatePicker/DatePickerDialog, TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
   Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
