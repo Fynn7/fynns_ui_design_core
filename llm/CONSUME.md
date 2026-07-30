@@ -17,7 +17,8 @@ Machine contract: [`consume.json`](consume.json).
 7. **Toaster:** if the app calls `toast.*`, mount **`<Toaster />` once** near the app root (same tree as the page). Importing `toast` without `<Toaster />` builds but shows no notifications.
 8. **Entry:** `main.tsx` (or equivalent) must `createRoot(...).render(<App />)` (or equivalent). Importing CSS alone produces an empty build that still “succeeds”.
 9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`.
-10. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
+10. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
+11. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
 
 ## Agent checklist (greenfield / short prompt)
 
@@ -84,6 +85,12 @@ Ensure the consumer `tsconfig` (example):
     "paths": { "@fynns/ui": ["./packages/fynns_ui_design_core/src/index.ts"] }
   }
 }
+```
+
+And `src/vite-env.d.ts` (when `tsc` is part of build):
+
+```ts
+/// <reference types="vite/client" />
 ```
 
 ```tsx
