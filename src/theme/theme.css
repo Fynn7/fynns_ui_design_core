@@ -238,10 +238,10 @@
   --fynns-fab-icon-size-lg: 2.25rem;
   --fynns-fab-pad-inline-extended: 1.25rem;
   --fynns-fab-gap: 0.75rem;
-  --fynns-appbar-height: 2.5rem;
+  --fynns-appbar-height: var(--fynns-layout-bar-height);
   --fynns-appbar-height-md: 5rem;
   --fynns-appbar-height-lg: 6.5rem;
-  --fynns-appbar-row-height: 2.5rem;
+  --fynns-appbar-row-height: var(--fynns-layout-bar-height);
   --fynns-appbar-pad-inline: 0.5rem;
   --fynns-appbar-actions-gap: 0;
   --fynns-appbar-action-hover-size: 2.25rem;
@@ -254,14 +254,14 @@
   --fynns-appbar-title-line: 1.333;
   --fynns-appbar-title-line-md: 1.3;
   --fynns-appbar-title-line-lg: 1.25;
-  --fynns-bottomappbar-height: 3.5rem;
+  --fynns-bottomappbar-height: var(--fynns-layout-bar-height);
   --fynns-bottomappbar-pad-inline: 0.5rem;
   --fynns-bottomappbar-pad-block: 0.25rem;
   --fynns-bottomappbar-actions-gap: 0.125rem;
   --fynns-bottomappbar-action-size: 2.5rem;
   --fynns-bottomappbar-action-icon-size: 1rem;
   --fynns-bottomappbar-fab-pad-inline-end: 0.25rem;
-  --fynns-searchbar-height: 3.5rem;
+  --fynns-searchbar-height: var(--fynns-layout-bar-height);
   --fynns-searchbar-pad-inline: 0.25rem;
   --fynns-searchbar-icon-slot: 3rem;
   --fynns-searchbar-icon-size: 1rem;
@@ -399,6 +399,7 @@
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-switch-label-end: 7rem;
+  --fynns-layout-bar-height: 3.5rem;
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);

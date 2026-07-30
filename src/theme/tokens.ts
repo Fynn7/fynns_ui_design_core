@@ -445,14 +445,15 @@ export const FAB_TOKENS = {
 
 /**
  * Top app bar geometry (M3-informed, denser for desktop/tool chrome).
- * Small 40dp; medium 80dp; large 104dp. Action row matches small height.
+ * Small uses shared `--fynns-layout-bar-height` (56dp); medium 80dp; large 104dp.
+ * Action row matches small height so 40dp IconButtons sit inset, not edge-flush.
  * `--fynns-appbar-<key>`.
  */
 export const APPBAR_TOKENS = {
-  height: "2.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "height-md": "5rem",
   "height-lg": "6.5rem",
-  "row-height": "2.5rem",
+  "row-height": "var(--fynns-layout-bar-height)",
   /** Inline inset for the action row (leading / trailing icons). */
   "pad-inline": "0.5rem",
   /**
@@ -481,12 +482,13 @@ export const APPBAR_TOKENS = {
 
 /**
  * Bottom app bar geometry (at 16px rem).
- * Dense 56dp (below stock M3 80dp) for tool chrome — matches TopAppBar densification.
- * Actions / FAB share a 40dp control size inside the bar (M3: FAB inside, no cradle).
+ * Height shares `--fynns-layout-bar-height` (56dp) with TopAppBar sm / SearchBar
+ * (below stock M3 80dp). Actions / FAB share a 40dp control size inside the bar
+ * (M3: FAB inside, no cradle).
  * `--fynns-bottomappbar-<key>`.
  */
 export const BOTTOM_APPBAR_TOKENS = {
-  height: "3.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.5rem",
   "pad-block": "0.25rem",
   "actions-gap": "0.125rem",
@@ -499,13 +501,14 @@ export const BOTTOM_APPBAR_TOKENS = {
 
 /**
  * Search bar geometry (M3 SearchBar at 16px rem).
- * Collapsed 56dp capsule; expanded merges field + results into one shell.
+ * Collapsed capsule height shares `--fynns-layout-bar-height` (56dp); expanded
+ * merges field + results into one shell.
  * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
  * Prefer `SearchInput` for dense form rows.
  * `--fynns-searchbar-<key>`.
  */
 export const SEARCHBAR_TOKENS = {
-  height: "3.5rem",
+  height: "var(--fynns-layout-bar-height)",
   "pad-inline": "0.25rem",
   "icon-slot": "3rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -515,8 +518,9 @@ export const SEARCHBAR_TOKENS = {
   "line-height": "1.5",
   "results-max-height": "20rem",
   /**
-   * Inset around suggestion rows (Google-style): hover chips stay off the
-   * shell’s large `--fynns-radius-3xl` corners — do not match radii; inset instead.
+   * Inset around suggestion rows: shell and result row highlights both use
+   * `--fynns-radius-3xl` (same long-strip chrome as NavigationDrawer items);
+   * pad keeps hover off the outer capsule edge.
    */
   "results-pad-block-start": "0.5rem",
   "results-pad-block-end": "0.75rem",
@@ -780,6 +784,13 @@ export const LAYOUT_TOKENS = {
   "control-cluster-gap": "0.5rem",
   /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
   "switch-label-end": "7rem",
+  /**
+   * Single-line chrome bar height (56dp): TopAppBar `sm` row, BottomAppBar,
+   * SearchBar field. Taller than `--fynns-size-icon-target` (40dp) so IconButton
+   * hover discs are not flush with the bar edge. Multi-line app bars use
+   * `--fynns-appbar-height-md` / `-lg` instead.
+   */
+  "bar-height": "3.5rem",
 } as const;
 
 /**

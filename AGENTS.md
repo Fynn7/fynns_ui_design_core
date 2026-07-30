@@ -222,7 +222,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
   expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
   elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
-  field + results merge into one docked shell. Prefer `SearchInput` for dense
+  field + results merge into one docked shell. Result row hover/active uses the
+  same `--fynns-radius-3xl` as `NavigationDrawerItem`. Prefer `SearchInput` for dense
   form rows.
 - **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
   dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
@@ -264,7 +265,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   onChange, ariaLabel, disabled?, placeholder? }` — same chrome as **SearchBar**:
   `.fynns-search-bar` / `.fynns-search-bar-field` / `.fynns-search-bar-input`,
   open = `.fynns-search-bar--expanded` + docked `.fynns-search-bar-results` /
-  `.fynns-search-bar-result` rows (same type + padding). No SearchIcon; trigger
+  `.fynns-search-bar-result` rows (same type + padding; row highlight
+  `--fynns-radius-3xl` like `NavigationDrawerItem`). No SearchIcon; trigger
   uses a modest `--fynns-space-md` start inset (not the search leading slot).
   Trailing chevron opens/closes.
 - **Combobox** — headless search + keyboard list (generic `<Item>`); caller
@@ -353,6 +355,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar) | `--fynns-layout-bar-height` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
   sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
@@ -448,15 +451,18 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
   Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
   **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
-  top app bar (40 / 80 / 104dp; denser than stock M3). Leading/trailing actions
-  keep the standard 40dp `IconButton` hit target (`--fynns-appbar-actions-gap`
-  between siblings). Title uses medium weight at compact type. `scrolled` →
-  surface-1 + shadow (caller owns scroll). Prefer `Panel` for sidebar chrome.
+  top app bar (`sm` / action row = `--fynns-layout-bar-height` 56dp shared with
+  BottomAppBar / SearchBar; md 80 / lg 104). Leading/trailing keep the standard
+  40dp `IconButton` so hover discs sit inset in the bar (not edge-flush).
+  `--fynns-appbar-actions-gap` between siblings. Title uses medium weight at
+  compact type. `scrolled` → surface-1 + shadow (caller owns scroll). Prefer
+  `Panel` for sidebar chrome.
   **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (56dp dense; stock M3 is 80dp; `--fynns-radius-3xl` long-strip group
-  with SearchBar / Banner / NavigationDrawer items / sheet tops). Actions
-  start-aligned with 40dp targets; optional FAB sits inside the bar (no cradle
-  cutout). Prefer `NavigationBar` for bottom destinations.
+  action bar (`--fynns-layout-bar-height` 56dp with TopAppBar sm / SearchBar;
+  stock M3 is 80dp; `--fynns-radius-3xl` long-strip group with SearchBar /
+  Banner / NavigationDrawer items / sheet tops). Actions start-aligned with
+  40dp targets; optional FAB sits inside the bar (no cradle cutout). Prefer
+  `NavigationBar` for bottom destinations.
   **NavigationRail** `{ labelVisibility?, alignment?, children }` +
   **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
   16dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
@@ -479,7 +485,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
   destination side sheet (280dp dense; stock M3 is 360dp). Modal overlays with scrim (default
   `side="left"`); `standard` is permanent in-layout. Item highlight is a
-  full-width row highlight (`secondary-container`, `--fynns-radius-3xl`); trailing badge for counts.
+  full-width row highlight (`secondary-container`, `--fynns-radius-3xl` — same
+  long-strip step as SearchBar / Select suggestion rows); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
