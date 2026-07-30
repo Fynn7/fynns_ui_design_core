@@ -248,6 +248,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
   title, and hairline dividers between head / calendar / foot (keeps the
   compact calendar; no year menu / huge header).
+  **DateRangePicker** `{ value?: { start, end }, defaultValue?, onChange?,
+  …same calendar props }` — start-then-end selection with a continuous
+  secondary-container strip between accent endpoint discs (range grid uses
+  gapless equal columns so the bar abuts; hover preview); complete range +
+  click restarts. Helpers share `DateValue` / `formatDateValue` /
+  `parseDateValue`. **DateRangePickerDialog** mirrors DatePickerDialog
+  (supporting `start – end` line; Confirm needs both).
 - **TimePicker** `{ value?, defaultValue?, onChange?, hourCycle?: "h23"|"h12",
   minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
   (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
@@ -439,8 +446,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
   **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
   `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
-  determinate track gap + linear stop). Omit `value` for indeterminate. Prefer
-  `Spinner` for compact button/inline busy; use Progress for known % or section waits.
+  determinate track gap + linear stop). Omit `value` for indeterminate (the
+  loading ring for unknown waits). Prefer `Spinner` for compact button/inline
+  busy; use Progress for known % or section waits.
   **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
   identity (40dp default); image → children → initials from `name` → person glyph.
   Pass into `CardHeader`’s `avatar` slot.

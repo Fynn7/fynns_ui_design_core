@@ -592,8 +592,10 @@ export const LIST_TOKENS = {
 } as const;
 
 /**
- * M3 DatePicker calendar geometry (at 16px rem).
- * Day cells 40dp; 7-column week grid. `--fynns-datepicker-<key>`.
+ * M3 DatePicker / DateRangePicker calendar geometry (at 16px rem).
+ * Day cells 40dp; 7-column week grid. Range uses secondary-container fill
+ * between accent endpoints (no private range color tokens).
+ * `--fynns-datepicker-<key>`.
  */
 export const DATEPICKER_TOKENS = {
   "day-size": "2.5rem",

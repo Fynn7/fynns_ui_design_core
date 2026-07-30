@@ -21,6 +21,8 @@ import {
   Collapsible,
   DatePicker,
   DatePickerDialog,
+  DateRangePicker,
+  DateRangePickerDialog,
   TimePicker,
   TimePickerDialog,
   Divider,
@@ -128,6 +130,11 @@ export function GlobalsPage() {
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
+  const [pickedRange, setPickedRange] = useState<{
+    start: string | null;
+    end: string | null;
+  }>({ start: null, end: null });
+  const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
   const [pickedTime, setPickedTime] = useState<string | null>("14:30");
   const [timeDialogOpen, setTimeDialogOpen] = useState(false);
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
@@ -354,6 +361,97 @@ export function GlobalsPage() {
           value={pickedDate}
           onConfirm={setPickedDate}
           title={t("globals.dateDialogTitle")}
+          confirmLabel={t("globals.dateConfirm")}
+          cancelLabel={t("globals.dateCancel")}
+          closeAriaLabel={t("globals.dateClose")}
+          weekStartsOn={1}
+          labels={{
+            previousMonth: t("globals.datePrev"),
+            nextMonth: t("globals.dateNext"),
+            weekdays: [
+              t("globals.dateWd0"),
+              t("globals.dateWd1"),
+              t("globals.dateWd2"),
+              t("globals.dateWd3"),
+              t("globals.dateWd4"),
+              t("globals.dateWd5"),
+              t("globals.dateWd6"),
+            ],
+            months: [
+              t("globals.dateM0"),
+              t("globals.dateM1"),
+              t("globals.dateM2"),
+              t("globals.dateM3"),
+              t("globals.dateM4"),
+              t("globals.dateM5"),
+              t("globals.dateM6"),
+              t("globals.dateM7"),
+              t("globals.dateM8"),
+              t("globals.dateM9"),
+              t("globals.dateM10"),
+              t("globals.dateM11"),
+            ],
+          }}
+        />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DateRangePicker
+            value={pickedRange}
+            onChange={setPickedRange}
+            weekStartsOn={1}
+            labels={{
+              previousMonth: t("globals.datePrev"),
+              nextMonth: t("globals.dateNext"),
+              weekdays: [
+                t("globals.dateWd0"),
+                t("globals.dateWd1"),
+                t("globals.dateWd2"),
+                t("globals.dateWd3"),
+                t("globals.dateWd4"),
+                t("globals.dateWd5"),
+                t("globals.dateWd6"),
+              ],
+              months: [
+                t("globals.dateM0"),
+                t("globals.dateM1"),
+                t("globals.dateM2"),
+                t("globals.dateM3"),
+                t("globals.dateM4"),
+                t("globals.dateM5"),
+                t("globals.dateM6"),
+                t("globals.dateM7"),
+                t("globals.dateM8"),
+                t("globals.dateM9"),
+                t("globals.dateM10"),
+                t("globals.dateM11"),
+              ],
+            }}
+          />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setRangeDialogOpen(true)}>
+              {t("globals.dateRangeOpenDialog")}
+            </Button>
+            <SandboxHelp
+              as="span"
+              text={
+                pickedRange.start && pickedRange.end
+                  ? t("globals.dateRangeSelected", {
+                      start: pickedRange.start,
+                      end: pickedRange.end,
+                    })
+                  : pickedRange.start
+                    ? t("globals.dateRangePartial", { start: pickedRange.start })
+                    : t("globals.dateRangeNone")
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.dateRangeHelp")} />
+        </div>
+        <DateRangePickerDialog
+          open={rangeDialogOpen}
+          onOpenChange={setRangeDialogOpen}
+          value={pickedRange}
+          onConfirm={setPickedRange}
+          title={t("globals.dateRangeDialogTitle")}
           confirmLabel={t("globals.dateConfirm")}
           cancelLabel={t("globals.dateCancel")}
           closeAriaLabel={t("globals.dateClose")}

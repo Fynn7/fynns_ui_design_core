@@ -6097,7 +6097,11 @@
   opacity: 0.55;
 }
 
-.fynns-datepicker-day:hover:not(:disabled):not(.fynns-datepicker-day--selected) {
+.fynns-datepicker-day:hover:not(:disabled):not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end):not(.fynns-datepicker-day--in-range):not(
+  .fynns-datepicker-day--range-preview
+) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -6105,7 +6109,11 @@
   );
 }
 
-.fynns-datepicker-day:active:not(:disabled):not(.fynns-datepicker-day--selected) {
+.fynns-datepicker-day:active:not(:disabled):not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end):not(.fynns-datepicker-day--in-range):not(
+  .fynns-datepicker-day--range-preview
+) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -6118,7 +6126,9 @@
   outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
-.fynns-datepicker-day--today:not(.fynns-datepicker-day--selected) {
+.fynns-datepicker-day--today:not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end) {
   border-color: var(--fynns-color-accent);
   color: var(--fynns-color-accent);
 }
@@ -6135,6 +6145,171 @@
 
 .fynns-datepicker-day--selected:active:not(:disabled) {
   background: var(--fynns-color-accent-active);
+}
+
+/*
+ * Date range: continuous horizontal strip (M3). Column tracks absorb the
+ * usual day-gap into equal 1fr cells (gap: 0). Day hairline borders are zeroed
+ * in range mode — otherwise ::before (padding-box) leaves a visible seam
+ * between adjacent cells. Bars also overlap 1px trailing to kill subpixel
+ * cracks. Start/end keep a day-size accent disc centered in the wider cell.
+ * Row wraps stay separate strips (round on first/last cell of the row).
+ */
+.fynns-datepicker--range .fynns-datepicker-header,
+.fynns-datepicker--range .fynns-datepicker-weekdays,
+.fynns-datepicker--range .fynns-datepicker-row {
+  gap: 0;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.fynns-datepicker--range .fynns-datepicker-day,
+.fynns-datepicker--range .fynns-datepicker-weekday {
+  width: 100%;
+}
+
+/* Hairline borders would show as cracks between abutting range bars. */
+.fynns-datepicker--range .fynns-datepicker-day {
+  border-width: 0;
+}
+
+/* Today cue without reintroducing a layout border. */
+.fynns-datepicker--range
+  .fynns-datepicker-day--today:not(.fynns-datepicker-day--selected):not(
+    .fynns-datepicker-day--range-start
+  ):not(.fynns-datepicker-day--range-end) {
+  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start,
+.fynns-datepicker--range .fynns-datepicker-day--range-end,
+.fynns-datepicker--range .fynns-datepicker-day--in-range,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview {
+  background: transparent;
+  border-radius: 0;
+  z-index: 0;
+  overflow: visible;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start,
+.fynns-datepicker--range .fynns-datepicker-day--range-end {
+  color: var(--fynns-color-on-accent);
+  z-index: 1;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--in-range,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:not(.fynns-datepicker-day--range-end)::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  background: var(--fynns-color-secondary-container);
+  pointer-events: none;
+}
+
+/*
+ * Middle / start bars: full width + 1px trailing overlap so fractional track
+ * widths never leave a hairline of the surface between cells.
+ */
+.fynns-datepicker--range .fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview::before {
+  inset-inline-start: 0;
+  inset-inline-end: -1px;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:not(.fynns-datepicker-day--range-end)::before {
+  inset-inline-start: 50%;
+  inset-inline-end: -1px;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
+  inset-inline-start: 0;
+  inset-inline-end: 50%;
+}
+
+/* Do not spill past the row's trailing edge. */
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-start:last-child:not(
+    .fynns-datepicker-day--range-end
+  )::before {
+  inset-inline-end: 0;
+}
+
+/* Accent discs stay day-size (cell is wider than the disc in range layout). */
+.fynns-datepicker--range .fynns-datepicker-day--range-start::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: var(--fynns-datepicker-day-size);
+  height: var(--fynns-datepicker-day-size);
+  translate: -50% -50%;
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  pointer-events: none;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start:hover:not(:disabled)::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end:hover:not(:disabled)::after {
+  background: var(--fynns-color-accent-hover);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start:active:not(:disabled)::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end:active:not(:disabled)::after {
+  background: var(--fynns-color-accent-active);
+}
+
+/* Soften row-wrap ends (not the true range start/end). */
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:first-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:first-child::before {
+  border-start-start-radius: var(--fynns-radius-round);
+  border-end-start-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:last-child::before {
+  border-start-end-radius: var(--fynns-radius-round);
+  border-end-end-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-end:first-child:not(
+    .fynns-datepicker-day--range-start
+  )::before {
+  border-start-start-radius: var(--fynns-radius-round);
+  border-end-start-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-start:last-child:not(
+    .fynns-datepicker-day--range-end
+  )::before {
+  border-start-end-radius: var(--fynns-radius-round);
+  border-end-end-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day-label {
+  z-index: 2;
 }
 
 .fynns-datepicker-day:disabled {
