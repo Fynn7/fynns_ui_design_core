@@ -6,6 +6,7 @@ import {
   Slider,
   toast,
   Tooltip,
+  UnitStack,
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -144,7 +145,7 @@ export function GlobalsInspector() {
         </header>
 
         <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
-          <div className="sandbox-stack">
+          <UnitStack>
             <SandboxHelp text={t("globalsInspector.shapeLadderHelp")} />
             {EDITABLE_RADIUS.map(({ key, label, max, usesKey, hintKey }) => {
               const cssVar = `--fynns-radius-${key}`;
@@ -208,7 +209,7 @@ export function GlobalsInspector() {
                 </Button>
               </Tooltip>
             </CardActions>
-          </div>
+          </UnitStack>
         </Collapsible>
 
         <Collapsible title={t("layoutChrome.collapsible")} defaultOpen>

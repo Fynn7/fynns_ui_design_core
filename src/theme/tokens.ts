@@ -810,8 +810,8 @@ export const LAYOUT_TOKENS = {
   /** Fixed label column for `ControlRow` (toolbars / settings strips). */
   "control-row-label": "7.5rem",
   /**
-   * Toolbar rhythm — prefer these over raw `--fynns-space-*` in ControlStack/
-   * ControlRow layouts (see AGENTS.md “Toolbar rhythm”).
+   * Toolbar / unit rhythm — prefer these over raw `--fynns-space-*`
+   * (see AGENTS.md “Toolbar / unit rhythm”).
    */
   /** Gap between ControlRows in a ControlStack. */
   "control-stack-gap": "0.75rem",
@@ -821,6 +821,12 @@ export const LAYOUT_TOKENS = {
   "control-row-column-gap": "0.5rem",
   /** Sibling switches / chips / Grid cells inside one controls cluster. */
   "control-cluster-gap": "0.5rem",
+  /**
+   * Vertical gap between stacked *units* (inspector fields, HueWheel + help,
+   * Collapsible body blocks). Prefer `UnitStack` / `.fynns-unit-stack` over
+   * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows).
+   */
+  "unit-stack-gap": "1rem",
   /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
   "switch-label-end": "7rem",
   /**

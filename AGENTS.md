@@ -354,6 +354,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   short rows do not pack the next label into an empty control column.
   Default row gap is `--fynns-layout-control-stack-gap` (omit `gap` unless you
   need a deliberate density override via a `--fynns-space-*` t-shirt key).
+  **UnitStack** `{ gap?, children }` — vertical list of *units* (inspector
+  fields, HueWheel + help, Collapsible body blocks). Default gap
+  `--fynns-layout-unit-stack-gap`. Prefer over ad-hoc margins when stacking
+  unrelated blocks; use `ControlStack` when rows share a label column.
   **ControlRow** `{ label, children }` — fixed label column
   (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
   inside `ControlStack` spans the shared tracks via subgrid. Gaps:
@@ -367,21 +371,23 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
   match `columns` to `Grid`’s `x`.
 
-  **Toolbar rhythm** (single source — do not invent ad-hoc gaps):
+  **Toolbar / unit rhythm** (single source — do not invent ad-hoc gaps):
 
-  | Role | Token |
+  | Role | Token / API |
   | --- | --- |
-  | Between `ControlRow`s | `--fynns-layout-control-stack-gap` |
+  | Between stacked *units* (inspector fields, help + control blocks) | `--fynns-layout-unit-stack-gap` via **`UnitStack`** |
+  | Between `ControlRow`s | `--fynns-layout-control-stack-gap` via **`ControlStack`** |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar / Toolbar) | `--fynns-layout-bar-height` |
 
-  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Live
-  sample + legend: sandbox **Components → Toolbar rhythm**. Values live in
+  Prefer `UnitStack` for vertical unit lists; `ControlStack` + `ControlRow`
+  (+ `Grid` for multi-control rows) for labeled toolbar strips. Live sample +
+  legend: sandbox **Components → Toolbar / unit rhythm**. Values live in
   [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
   `npm run gen:theme`. Sandbox demo wrap gaps (`--sandbox-row-gap`, …) and the
-  same control-* knobs are editable in the sandbox **Layout chrome** inspector
+  same layout knobs are editable in the sandbox **Layout chrome** inspector
   (`SANDBOX_LAYOUT_AGENT_CATALOG` in `examples/sandbox/src/state/baseline.ts`) —
   agents must use that catalog, not ad-hoc gaps.
   **Checkbox** `{ label, checked, onCheckedChange,

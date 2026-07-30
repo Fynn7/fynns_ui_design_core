@@ -1569,6 +1569,15 @@
   }
 }
 
+/* ---------- UnitStack ---------- */
+/* Vertical unit rhythm for inspectors / form blocks (not ControlRow grids). */
+.fynns-unit-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+}
+
 /* ---------- ControlStack ---------- */
 /* Shared label + X control tracks across nested ControlRow / Grid.
    Each ControlRow is one stack row via subgrid — NOT display:contents on the

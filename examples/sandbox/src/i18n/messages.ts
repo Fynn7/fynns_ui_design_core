@@ -204,29 +204,21 @@ const en = {
   "inspector.spaceSm": "Footer button gap",
   "inspector.spaceSmHint":
     "Gap between footer buttons (`space-sm`).",
-  "inspector.blockGapHelp":
-    "Gap between sections in this inspector only (`--sandbox-block-gap`). Not written by Apply changes.",
-  "inspector.blockGap": "Section gap",
-  "inspector.blockGapAria": "About section gap",
-  "inspector.blockGapHint":
-    "Uniform gap between inspector sections (sandbox-only; not Apply writeback).",
-  "inspector.blockGapSlider": "Inspector section gap",
-
   "layoutChrome.title": "Layout chrome",
   "layoutChrome.collapsible": "Layout chrome & rhythm",
   "layoutChrome.help":
     "Sandbox-only gaps (`--sandbox-*`). Agents must use `SANDBOX_LAYOUT_AGENT_CATALOG` — do not invent ad-hoc gaps. Not written by Apply.",
   "layoutChrome.rhythmHelp":
-    "Toolbar rhythm (`--fynns-layout-control-*`). Apply can write these into `tokens.ts`. Prefer `ControlStack` + `ControlRow`.",
+    "Layout rhythm (`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`). Apply writes into `tokens.ts`. Prefer `UnitStack` for vertical units; `ControlStack` + `ControlRow` for labeled toolbar rows.",
   "layoutChrome.rowGap": "Demo row wrap",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — flex wrap gap for Motion easing bars / gallery Rows (horizontal and between wrapped lines).",
   "layoutChrome.sectionGap": "Demo section gap",
   "layoutChrome.sectionGapHint":
     "--sandbox-section-gap — title to body inside gallery Section.",
-  "layoutChrome.blockGap": "Inspector section gap",
-  "layoutChrome.blockGapHint":
-    "--sandbox-block-gap — Collapsible stack in inspectors.",
+  "layoutChrome.unitStackGap": "Unit stack",
+  "layoutChrome.unitStackGapHint":
+    "--fynns-layout-unit-stack-gap — between UnitStack children (inspector fields, Collapsible body units).",
   "layoutChrome.chromeBar": "Chrome bar height",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — brand cell + page topbar strip.",
@@ -273,10 +265,10 @@ const en = {
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
     "Buttons / badges → `radius-xl` for buttons, `radius-sm` for badges. Input / Select → `radius-md`. Switch track → `radius-pill` (not on the xs–xl levels).",
-  "globals.rhythm": "Toolbar rhythm",
-  "globals.rhythmAria": "Toolbar rhythm",
+  "globals.rhythm": "Toolbar / unit rhythm",
+  "globals.rhythmAria": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Reusable `ControlStack` + `ControlRow` spacing. Prefer these layout tokens over raw `--fynns-space-*` when building toolbars or inspectors.",
+    "Reusable `UnitStack` (vertical units) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
   "globals.rhythmRowActions": "Actions",
@@ -285,12 +277,13 @@ const en = {
   "globals.rhythmDisabled": "Disabled",
   "globals.rhythmStart": "Start",
   "globals.rhythmEnd": "End",
+  "globals.rhythmTokenUnit": "Between UnitStack children (inspector fields, Collapsible body units).",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: use `ControlStack` + `ControlRow` and the `--fynns-layout-control-*` tokens listed above. Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar rhythm.",
+    "Agents: use `UnitStack` / `ControlStack` + `ControlRow` and the `--fynns-layout-*` tokens listed above (`SANDBOX_LAYOUT_AGENT_CATALOG`). Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -779,29 +772,21 @@ const zh: Record<MessageKey, string> = {
   "inspector.spaceMdHint": "卡片标题行间距（`space-md`）。",
   "inspector.spaceSm": "底部按钮间隙",
   "inspector.spaceSmHint": "底部按钮之间的间隙（`space-sm`）。",
-  "inspector.blockGapHelp":
-    "仅本检查器各分区之间的间距（`--sandbox-block-gap`）。不会由「应用更改」写入。",
-  "inspector.blockGap": "分区间距",
-  "inspector.blockGapAria": "关于分区间距",
-  "inspector.blockGapHint":
-    "检查器各分区之间的统一间距（仅沙盒；不写回）。",
-  "inspector.blockGapSlider": "检查器分区间距",
-
   "layoutChrome.title": "布局 chrome",
   "layoutChrome.collapsible": "布局 chrome 与节奏",
   "layoutChrome.help":
     "沙盒专用间距（`--sandbox-*`）。Agent 须使用 `SANDBOX_LAYOUT_AGENT_CATALOG`，禁止自创 gap。不会由 Apply 写入。",
   "layoutChrome.rhythmHelp":
-    "工具栏节奏（`--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。优先 `ControlStack` + `ControlRow`。",
+    "布局节奏（`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。纵向单元用 `UnitStack`；带标签工具栏行用 `ControlStack` + `ControlRow`。",
   "layoutChrome.rowGap": "演示行换行间距",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — 动效缓动条 / gallery Row 的 flex 换行间距（水平与换行后行距）。",
   "layoutChrome.sectionGap": "演示分区间距",
   "layoutChrome.sectionGapHint":
     "--sandbox-section-gap — gallery Section 标题到正文。",
-  "layoutChrome.blockGap": "检查器分区间距",
-  "layoutChrome.blockGapHint":
-    "--sandbox-block-gap — 检查器内 Collapsible 堆叠间距。",
+  "layoutChrome.unitStackGap": "单元栈",
+  "layoutChrome.unitStackGapHint":
+    "--fynns-layout-unit-stack-gap — UnitStack 子项之间（检查器字段、Collapsible 正文单元）。",
   "layoutChrome.chromeBar": "顶栏条高度",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度。",
@@ -846,10 +831,10 @@ const zh: Record<MessageKey, string> = {
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":
     "按钮 → `radius-xl`。徽章 / 芯片 → `radius-sm`。输入框 / 选择器 → `radius-md`。开关轨道 → `radius-pill`（不在 xs–xl 等级上）。",
-  "globals.rhythm": "工具栏节奏",
-  "globals.rhythmAria": "工具栏节奏",
+  "globals.rhythm": "工具栏 / 单元节奏",
+  "globals.rhythmAria": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "可复用的 `ControlStack` + `ControlRow` 间距。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
+    "可复用的 `UnitStack`（纵向单元）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
   "globals.rhythmRowActions": "底部按钮",
@@ -858,12 +843,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmDisabled": "禁用",
   "globals.rhythmStart": "靠左",
   "globals.rhythmEnd": "靠右",
+  "globals.rhythmTokenUnit": "UnitStack 子项之间（检查器字段、Collapsible 正文单元）。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：使用 `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-control-*` token。禁止自创间距。完整配方见 `AGENTS.md` → Toolbar rhythm。",
+    "Agent：使用 `UnitStack` / `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-*`（`SANDBOX_LAYOUT_AGENT_CATALOG`）。禁止自创间距。完整配方见 `AGENTS.md` → Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",

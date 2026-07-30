@@ -1282,6 +1282,12 @@ export function GlobalsPage() {
           <dl className="sandbox-globals-rhythm-legend">
             <div>
               <dt>
+                <code>--fynns-layout-unit-stack-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenUnit")}</dd>
+            </div>
+            <div>
+              <dt>
                 <code>--fynns-layout-control-stack-gap</code>
               </dt>
               <dd>{t("globals.rhythmTokenStack")}</dd>

@@ -1,7 +1,7 @@
 :root {
   /* Sandbox chrome — live-overridable via draft; not a --fynns-* token.
-   * Defaults mirror SANDBOX_CHROME_TOKENS in state/baseline.ts. */
-  --sandbox-block-gap: 0.5rem;
+   * Defaults mirror SANDBOX_CHROME_TOKENS in state/baseline.ts.
+   * Inspector / form unit stacks use --fynns-layout-unit-stack-gap (UnitStack). */
   --sandbox-row-gap: 1rem;
   --sandbox-section-gap: 0.75rem;
   /* Brand cell + page topbar share one horizontal strip. */
@@ -328,7 +328,7 @@
   padding: var(--fynns-space-md);
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-sm);
+  gap: var(--fynns-layout-unit-stack-gap);
 }
 
 /* Collapsibles must not flex-shrink — their own overflow:hidden would clip help text. */
@@ -443,14 +443,15 @@
 .sandbox-field {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
-  margin-bottom: var(--fynns-space-sm);
+  gap: var(--fynns-space-sm);
+  margin-bottom: 0;
 }
 
 .sandbox-stack {
+  /* Alias of UnitStack — prefer <UnitStack> from @fynns/ui for new code. */
   display: flex;
   flex-direction: column;
-  gap: var(--sandbox-block-gap);
+  gap: var(--fynns-layout-unit-stack-gap);
   min-width: 0;
 }
 
