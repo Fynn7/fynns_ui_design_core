@@ -15,8 +15,6 @@ import {
  * Agents must use these (or `--fynns-layout-control-*`) instead of inventing gaps.
  */
 export const SANDBOX_CHROME_TOKENS = {
-  /** Inspector Collapsible stack gap. */
-  "block-gap": "0.5rem",
   /**
    * Demo / gallery `Row` wrap gap (horizontal + between wrapped rows).
    * Motion easing bars use this — raise it to separate wrap lines.
@@ -34,8 +32,9 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
   return `--sandbox-${key}`;
 }
 
-/** Toolbar rhythm keys editable in the sandbox (Apply writes into LAYOUT_TOKENS). */
+/** Toolbar / unit-stack rhythm keys editable in the sandbox (Apply → LAYOUT_TOKENS). */
 export const EDITABLE_LAYOUT_CONTROL_KEYS = [
+  "unit-stack-gap",
   "control-stack-gap",
   "control-row-gap",
   "control-row-column-gap",
@@ -44,10 +43,10 @@ export const EDITABLE_LAYOUT_CONTROL_KEYS = [
 
 export type EditableLayoutControlKey = (typeof EDITABLE_LAYOUT_CONTROL_KEYS)[number];
 
-/** @deprecated Prefer `sandboxChromeVar("block-gap")`. */
-export const SANDBOX_BLOCK_GAP_VAR = sandboxChromeVar("block-gap");
-/** @deprecated Prefer `SANDBOX_CHROME_TOKENS["block-gap"]`. */
-export const SANDBOX_BLOCK_GAP_BASELINE = SANDBOX_CHROME_TOKENS["block-gap"];
+/** @deprecated Prefer `--fynns-layout-unit-stack-gap` / `UnitStack`. */
+export const SANDBOX_BLOCK_GAP_VAR = "--fynns-layout-unit-stack-gap";
+/** @deprecated Prefer `LAYOUT_TOKENS["unit-stack-gap"]`. */
+export const SANDBOX_BLOCK_GAP_BASELINE = LAYOUT_TOKENS["unit-stack-gap"];
 
 /** Snapshot of production baseline values the sandbox can override. */
 export const BASELINE: Record<string, string> = {
@@ -136,18 +135,16 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
     applyWrites: false,
   },
   {
-    cssVar: sandboxChromeVar("block-gap"),
-    role: "Inspector Collapsible stack",
-    applyWrites: false,
-  },
-  {
     cssVar: sandboxChromeVar("chrome-bar-height"),
     role: "Brand + topbar strip height",
     applyWrites: false,
   },
   ...EDITABLE_LAYOUT_CONTROL_KEYS.map((k) => ({
     cssVar: fynnsVarName("layout", k),
-    role: `Toolbar rhythm · ${k}`,
+    role:
+      k === "unit-stack-gap"
+        ? "Unit stack · between inspector/form units (UnitStack)"
+        : `Toolbar rhythm · ${k}`,
     applyWrites: true,
   })),
 ];

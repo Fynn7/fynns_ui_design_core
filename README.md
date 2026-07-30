@@ -104,8 +104,8 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
   (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
-  [`examples/sandbox`](examples/sandbox) (Globals shape levels, **Toolbar rhythm**
-  sample for ControlStack spacing tokens, live Card
+  [`examples/sandbox`](examples/sandbox) (Globals shape levels, **Toolbar / unit rhythm**
+  sample for `UnitStack` + `ControlStack` spacing tokens, live Card
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.

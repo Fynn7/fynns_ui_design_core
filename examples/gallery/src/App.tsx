@@ -28,7 +28,9 @@ import {
   Divider,
   Drawer,
   DropdownMenu,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   ErrorBanner,
   Fab,
   FolderOpenIcon,
@@ -250,6 +252,11 @@ export function App() {
             Generate
           </SplitButton>
           <DropdownMenu trigger="Menu" ariaLabel="Actions">
+            <DropdownMenuGroup label="File">
+              <DropdownMenuItem>New</DropdownMenuItem>
+              <DropdownMenuItem>Open</DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
             <DropdownMenuItem>Rename</DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenu>

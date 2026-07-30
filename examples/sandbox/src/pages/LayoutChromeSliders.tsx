@@ -1,4 +1,4 @@
-import { InfoHint, Slider } from "@fynns/ui";
+import { InfoHint, Slider, UnitStack } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import {
@@ -40,12 +40,6 @@ const CHROME_ROWS: ReadonlyArray<{
     max: 32,
   },
   {
-    key: "block-gap",
-    labelKey: "layoutChrome.blockGap",
-    hintKey: "layoutChrome.blockGapHint",
-    max: 32,
-  },
-  {
     key: "chrome-bar-height",
     labelKey: "layoutChrome.chromeBar",
     hintKey: "layoutChrome.chromeBarHint",
@@ -59,6 +53,12 @@ const LAYOUT_ROWS: ReadonlyArray<{
   hintKey: MessageKey;
   max: number;
 }> = [
+  {
+    key: "unit-stack-gap",
+    labelKey: "layoutChrome.unitStackGap",
+    hintKey: "layoutChrome.unitStackGapHint",
+    max: 40,
+  },
   {
     key: "control-stack-gap",
     labelKey: "layoutChrome.stackGap",
@@ -91,7 +91,7 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
   const { resolved, mergeOverrides, apply } = useTokenDraft();
 
   return (
-    <div className="sandbox-stack">
+    <UnitStack>
       <SandboxHelp text={t("layoutChrome.help")} />
       {showChrome
         ? CHROME_ROWS.map(({ key, labelKey, hintKey, max }) => {
@@ -164,10 +164,10 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
                   source: "slider",
                 })
               }
-        />
-              </div>
-            );
-          })}
-      </div>
-    );
+            />
+          </div>
+        );
+      })}
+    </UnitStack>
+  );
 }

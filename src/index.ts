@@ -46,6 +46,7 @@ export * from "./primitives/Radio";
 export * from "./primitives/Chip";
 export * from "./primitives/ControlRow";
 export * from "./primitives/ControlStack";
+export * from "./primitives/UnitStack";
 export * from "./primitives/Grid";
 export * from "./primitives/ToggleControl";
 export * from "./primitives/ToggleGroup";

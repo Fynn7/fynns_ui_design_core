@@ -16,7 +16,8 @@ Short prompts still require reading `llm/CONSUME.md` first (see
 ## Rules
 
 - Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
-  Counter, SearchInput, Select, Combobox, Autocomplete, DropdownMenu, Popover, Tooltip,
+  Counter, SearchInput, Select, Combobox, Autocomplete, DropdownMenu
+  (+ Group / Label / Separator / CheckboxItem), Popover, Tooltip,
   InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
   ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
   Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
@@ -24,13 +25,15 @@ Short prompts still require reading `llm/CONSUME.md` first (see
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
-  Divider, Checkbox, Radio, Chip, Kbd, CommandPalette).
+  Divider, Checkbox, Radio, Chip, Kbd, CommandPalette, UnitStack,
+  ControlStack/ControlRow/Grid).
   Reach for an existing primitive before writing a new control.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
-  Toolbar / inspector strips: prefer `ControlStack` + `ControlRow` and the
-  `--fynns-layout-control-*` rhythm tokens (see AGENTS.md **Toolbar rhythm**);
-  do not invent ad-hoc gaps.
+  Vertical unit lists (inspector fields, Collapsible bodies): prefer
+  `UnitStack` + `--fynns-layout-unit-stack-gap`. Toolbar / labeled strips:
+  prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
+  (see AGENTS.md **Toolbar / unit rhythm**); do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
