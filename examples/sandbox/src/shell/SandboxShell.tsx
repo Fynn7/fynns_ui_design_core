@@ -1,21 +1,22 @@
 import {
   applyFynnsThemeMode,
-  ArrowLeftIcon,
-  BarChartIcon,
   EyeIcon,
-  EyeOffIcon,
   FileIcon,
   getFynnsThemeMode,
   IconButton,
   LayoutGridIcon,
   MenuIcon,
+  MoonIcon,
   NavigationDrawer,
   NavigationDrawerItem,
   NavigationRail,
   NavigationRailItem,
-  PencilIcon,
+  PanelLeftIcon,
+  PanelRightIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
+  SparklesIcon,
+  SunIcon,
   ToggleGroup,
   Tooltip,
   type FynnsThemeMode,
@@ -180,7 +181,7 @@ export function SandboxShell() {
         onClick={() => setPage("foundations")}
       />
       <NavigationDrawerItem
-        icon={<BarChartIcon />}
+        icon={<SparklesIcon />}
         label={t("nav.motion")}
         active={page === "motion"}
         onClick={() => setPage("motion")}
@@ -216,7 +217,7 @@ export function SandboxShell() {
                 onClick={() => setPreferNavExpanded((open) => !open)}
               >
                 {navExpanded ? (
-                  <ArrowLeftIcon size={16} aria-hidden />
+                  <PanelLeftIcon size={16} aria-hidden />
                 ) : (
                   <MenuIcon aria-hidden />
                 )}
@@ -234,7 +235,7 @@ export function SandboxShell() {
                 aria-pressed={asideOpen}
                 onClick={() => setAsideOpen((open) => !open)}
               >
-                <PencilIcon size={16} aria-hidden />
+                <PanelRightIcon size={16} aria-hidden />
               </IconButton>
             </Tooltip>
           ) : null}
@@ -244,7 +245,7 @@ export function SandboxShell() {
               aria-pressed={theme === "light"}
               onClick={toggleTheme}
             >
-              {theme === "light" ? <EyeOffIcon size={16} aria-hidden /> : <EyeIcon size={16} aria-hidden />}
+              {theme === "light" ? <MoonIcon size={16} aria-hidden /> : <SunIcon size={16} aria-hidden />}
             </IconButton>
           </Tooltip>
         </div>
@@ -288,7 +289,7 @@ export function SandboxShell() {
               onClick={() => setPage("foundations")}
             />
             <NavigationRailItem
-              icon={<BarChartIcon />}
+              icon={<SparklesIcon />}
               label={t("nav.motion")}
               active={page === "motion"}
               onClick={() => setPage("motion")}

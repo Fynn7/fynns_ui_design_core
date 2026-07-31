@@ -1542,8 +1542,16 @@ export function GlobalsPage() {
                 value={rhythmAlign}
                 onChange={(id) => setRhythmAlign(id as "start" | "end")}
                 options={[
-                  { value: "start", label: t("globals.rhythmStart") },
-                  { value: "end", label: t("globals.rhythmEnd") },
+                  {
+                    value: "start",
+                    label: t("globals.rhythmStart"),
+                    tip: t("globals.rhythmStartTip"),
+                  },
+                  {
+                    value: "end",
+                    label: t("globals.rhythmEnd"),
+                    tip: t("globals.rhythmEndTip"),
+                  },
                 ]}
               />
             </ControlRow>

@@ -5,7 +5,8 @@ export type Align = "start" | "center" | "end";
 
 export type AnchoredPosition = { top: number; left: number; side: Side; align: Align };
 
-const VIEWPORT_MARGIN = 8;
+/** Inset from each viewport edge when placing floating layers (tooltips, menus). */
+export const VIEWPORT_MARGIN = 8;
 /** Sub-pixel slack when comparing layout math to rendered bounds. */
 const VIEWPORT_EPSILON = 1;
 const OPPOSITE_SIDE: Record<Side, Side> = {
@@ -15,9 +16,31 @@ const OPPOSITE_SIDE: Record<Side, Side> = {
   right: "left",
 };
 
-/** Matches `--fynns-layout-tooltip-max-width`: min(14rem, 85vw). */
+export type FloatingSize = { width: number; height: number };
+
+export type FloatingBoxPosition = {
+  top: number;
+  left: number;
+  side: Side;
+  align: Align;
+  /**
+   * Pixel cap matching the viewport inset (`vw - 2×margin`). Consumers should
+   * set this as inline `maxWidth` so long content wraps instead of overflowing.
+   */
+  maxWidth: number;
+};
+
+/** Max content width that still fits inside the viewport margin inset. */
+export function viewportFloatMaxWidth(
+  vw: number = typeof window !== "undefined" ? window.innerWidth : 1024,
+  margin: number = VIEWPORT_MARGIN,
+): number {
+  return Math.max(0, vw - margin * 2);
+}
+
+/** Matches `--fynns-layout-tooltip-max-width` token width (14rem) capped to the viewport inset. */
 export function estimatedFloatSize(vw: number): FloatingSize {
-  return { width: Math.min(224, vw * 0.85), height: 48 };
+  return { width: Math.min(224, viewportFloatMaxWidth(vw)), height: 48 };
 }
 
 /** Prefer the visible child control over the inline trigger wrapper when measuring. */
@@ -30,20 +53,26 @@ export function anchorTargetRect(anchorEl: HTMLElement): DOMRect {
   return anchorEl.getBoundingClientRect();
 }
 
+/** Shrink a measured size so placement math never assumes a box wider than the viewport. */
+function clampFloatingSize(size: FloatingSize, maxWidth: number): FloatingSize {
+  if (size.width <= maxWidth) return size;
+  return { width: maxWidth, height: size.height };
+}
+
 /** Top-left viewport coordinates for the floating box (no CSS transform). */
 export function resolveFloatingBox(
   anchorRect: DOMRect,
   floatingSize: FloatingSize | null,
   opts: { side?: Side; align?: Align; offset?: number } = {},
-): { top: number; left: number; side: Side; align: Align } {
-  const pos = resolveAnchoredPosition(anchorRect, floatingSize, opts);
+): FloatingBoxPosition {
   const vw = window.innerWidth;
-  const size = floatingSize ?? estimatedFloatSize(vw);
+  const maxWidth = viewportFloatMaxWidth(vw);
+  const raw = floatingSize ?? estimatedFloatSize(vw);
+  const size = clampFloatingSize(raw, maxWidth);
+  const pos = resolveAnchoredPosition(anchorRect, size, opts);
   const box = floatingViewportRect({ top: pos.top, left: pos.left }, pos.side, pos.align, size);
-  return { top: box.top, left: box.left, side: pos.side, align: pos.align };
+  return { top: box.top, left: box.left, side: pos.side, align: pos.align, maxWidth };
 }
-
-export type FloatingSize = { width: number; height: number };
 
 /**
  * When align is center, snap to start/end near the relevant viewport edge.
@@ -294,7 +323,8 @@ export function resolveAnchoredPosition(
   const { side: preferred = "bottom", align = "center", offset = 6 } = opts;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const size = floatingSize ?? estimatedFloatSize(vw);
+  const maxWidth = viewportFloatMaxWidth(vw);
+  const size = clampFloatingSize(floatingSize ?? estimatedFloatSize(vw), maxWidth);
 
   type Candidate = AnchoredPosition & { score: number };
   let best: Candidate | null = null;
@@ -393,11 +423,9 @@ export function useFloatingBoxPosition(
   floatingEl: HTMLElement | null,
   open: boolean,
   opts: { side?: Side; align?: Align; offset?: number } = {},
-): { top: number; left: number; side: Side; align: Align } | null {
+): FloatingBoxPosition | null {
   const { side = "bottom", align = "center", offset = 6 } = opts;
-  const [box, setBox] = useState<{ top: number; left: number; side: Side; align: Align } | null>(
-    null,
-  );
+  const [box, setBox] = useState<FloatingBoxPosition | null>(null);
 
   useLayoutEffect(() => {
     if (!open || !anchorEl) {

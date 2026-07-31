@@ -358,6 +358,10 @@ const en = {
   "globals.rhythmDisabled": "Disabled",
   "globals.rhythmStart": "Start",
   "globals.rhythmEnd": "End",
+  "globals.rhythmStartTip":
+    "Align footer actions to the start edge. Long tip — must stay inside the viewport even in a narrow inspector.",
+  "globals.rhythmEndTip":
+    "Align footer actions to the end edge. Long tip — must stay inside the viewport even when this segment sits on the panel’s right edge.",
   "globals.rhythmTokenUnit": "Between stacked inspector/form units (Collapsible body units).",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
@@ -1005,6 +1009,10 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmDisabled": "禁用",
   "globals.rhythmStart": "靠左",
   "globals.rhythmEnd": "靠右",
+  "globals.rhythmStartTip":
+    "底部按钮靠左对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
+  "globals.rhythmEndTip":
+    "底部按钮靠右对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
   "globals.rhythmTokenUnit": "纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",

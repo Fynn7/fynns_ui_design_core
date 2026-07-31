@@ -59,7 +59,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
 | `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `EmptyState`, or app-local busy UI. `Spinner` remains internal for `Button` `loading`. |
 | `CardActionArea` | Make the `Card` `interactive` or wrap children in a button. |
-| `DownloadIcon` / `MoonIcon` / `SunIcon` / `SparklesIcon` / `PanelLeftIcon` / `PanelRightIcon` / `BotIcon` / … | Use the public icon subset from the barrel (see Globals imports) or ship app icons. |
+| `PanelLeftIcon` / … (other unused glyphs) | Prefer the public icon subset from the barrel, or ship app icons. Sandbox chrome keeps `Sun`/`Moon`/`PanelLeft`/`PanelRight`/`Sparkles`/`Bot`/`Download` exported. |
 
 ## Related docs
 

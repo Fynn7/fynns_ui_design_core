@@ -52,18 +52,44 @@
 @keyframes fynns-tooltip-enter {
   from {
     opacity: 0;
+    transform: translateY(0.25rem);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes fynns-tooltip-enter-bottom {
   from {
     opacity: 0;
+    transform: translateY(-0.25rem);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fynns-tooltip-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fynns-tooltip-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -809,24 +835,35 @@
   line-height: var(--fynns-line-height-snug);
   box-shadow: var(--fynns-shadow-tooltip);
   pointer-events: none;
-  /* Long content wraps inside max-width (token + viewport-aware inline cap from
-     useAnchoredPosition) instead of spilling past the bubble or the window. */
+  /* Long content wraps inside max-width: CSS token plus the inline pixel cap
+     from resolveFloatingBox (`vw − 2×viewport margin`) so the bubble cannot
+     spill past the window even when the trigger sits on a panel edge. */
   white-space: normal;
   overflow-wrap: anywhere;
   overflow: visible;
-  /* Opacity-only: animating `transform` would override the inline placement
-     translate (e.g. translate(-50%)) via fill-mode and clip tooltips at the
-     viewport edge — a recurring consumer-side bug when fixed locally. */
+  /* Placement is absolute top/left (no transform). Enter motion waits until
+     `data-ready` so measuring with visibility:hidden does not burn the fade. */
+  opacity: 0;
+}
+
+.fynns-tooltip[data-ready="true"] {
   animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
-  /* Opacity-only enter animation; placement is absolute top/left (no transform). */
 }
 
 .fynns-tooltip--interactive {
   pointer-events: auto;
 }
 
-.fynns-tooltip[data-side="bottom"] {
+.fynns-tooltip[data-side="bottom"][data-ready="true"] {
   animation-name: fynns-tooltip-enter-bottom;
+}
+
+.fynns-tooltip[data-side="left"][data-ready="true"] {
+  animation-name: fynns-tooltip-enter-left;
+}
+
+.fynns-tooltip[data-side="right"][data-ready="true"] {
+  animation-name: fynns-tooltip-enter-right;
 }
 
 /* Caret: a rotated square straddling the bubble edge that faces the trigger,
@@ -1315,6 +1352,10 @@
   .fynns-tooltip {
     animation: none;
     transition: none;
+  }
+
+  .fynns-tooltip[data-ready="true"] {
+    opacity: 1;
   }
 }
 

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
   Button,
+  BotIcon,
   IconButton,
   Input,
-  SettingsIcon,
   Tooltip,
 } from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
@@ -13,8 +13,8 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
  * Phase 4 stub: natural-language proposals become TokenOperations after
- * explicit user confirmation. Top-bar icon toggles an inline panel; no model
- * backend yet — local heuristics only.
+ * explicit user confirmation. Top-bar icon opens a popover; no model backend
+ * yet — local heuristics only.
  */
 export function AgentInputBar() {
   const { t } = useLocale();
@@ -80,7 +80,7 @@ export function AgentInputBar() {
           }
           onClick={() => setOpen((wasOpen) => !wasOpen)}
         >
-          <SettingsIcon size={16} aria-hidden />
+          <BotIcon size={16} aria-hidden />
         </IconButton>
       </Tooltip>
       {status ? (
