@@ -7193,3 +7193,57 @@ a.fynns-breadcrumb-link:visited {
   background: var(--fynns-color-accent);
 }
 
+/* ---------- BadgedBox / AvatarGroup ---------- */
+.fynns-badged-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fynns-badged-box > .fynns-nav-rail-badge {
+  /* Anchor to the box top-end (same chrome as rail icon wrap). */
+  pointer-events: none;
+}
+
+.fynns-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  isolation: isolate;
+}
+
+.fynns-avatar-group-item {
+  display: inline-flex;
+  position: relative;
+  margin-inline-start: calc(-1 * var(--fynns-space-sm));
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-avatar-group-item:first-child {
+  margin-inline-start: 0;
+}
+
+/*
+ * Standalone Avatar uses translucent accent-container; stacked copies would
+ * double-tint at overlaps. Bake the fill onto surface-1 and paint an opaque
+ * surface ring so crescents stay even.
+ */
+.fynns-avatar-group .fynns-avatar {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 20%,
+    var(--fynns-color-surface-1)
+  );
+  box-shadow: 0 0 0 2px var(--fynns-color-surface-1);
+}
+
+.fynns-avatar-group .fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-group .fynns-avatar.fynns-avatar-group-overflow {
+  background: var(--fynns-color-surface-3);
+  color: var(--fynns-color-text-muted);
+}
