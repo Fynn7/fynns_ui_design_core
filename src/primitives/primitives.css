@@ -2203,6 +2203,20 @@
   cursor: pointer;
 }
 
+/*
+ * Parent `.fynns-collapsible` uses overflow:hidden + radius to clip the hover
+ * wash; a trigger outline is clipped off at the rounded corners. Paint the
+ * focus ring on the rounded shell instead (inset so it is not clipped).
+ */
+.fynns-collapsible-trigger:focus,
+.fynns-collapsible-trigger:focus-visible {
+  outline: none;
+}
+
+.fynns-collapsible:has(.fynns-collapsible-trigger:focus-visible) {
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
 .fynns-collapsible-title {
   flex: 1 1 auto;
   min-width: 0;
