@@ -1091,6 +1091,48 @@
   padding: var(--fynns-layout-command-palette-top-padding) 1rem 1rem;
 }
 
+.fynns-dialog-overlay--fullscreen {
+  display: flex;
+  padding: 0;
+}
+
+.fynns-dialog--fullscreen {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog--fullscreen[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-dialog--fullscreen[data-state="closing"] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
+}
+
+.fynns-dialog-head--fullscreen {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dialog-head--fullscreen .fynns-dialog-title {
+  min-width: 0;
+}
+
 .fynns-dialog-scrim {
   position: absolute;
   inset: 0;
@@ -1452,6 +1494,7 @@
   .fynns-dialog-overlay,
   .fynns-dialog-panel--centered,
   .fynns-dialog-panel--command,
+  .fynns-dialog--fullscreen,
   .fynns-menu,
   .fynns-select-list,
   .fynns-popover,
