@@ -824,8 +824,8 @@ export const LAYOUT_TOKENS = {
   /** Actions: top 16dp / bottom 24dp. */
   "sheet-actions-pad-top": "1rem",
   "sheet-actions-pad-bottom": "1.5rem",
-  /** Cap to token width and viewport inset (2×8dp margin — matches Popover). */
-  "tooltip-max-width": "min(14rem, calc(100vw - 1rem))",
+  /** Cap to token width and viewport inset (2×8px margin — matches Popover VIEWPORT_MARGIN). */
+  "tooltip-max-width": "min(14rem, calc(100vw - 16px))",
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
   "command-palette-top-padding": "12vh",

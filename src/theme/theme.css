@@ -408,7 +408,7 @@
   --fynns-layout-sheet-header-gap: 0.75rem;
   --fynns-layout-sheet-actions-pad-top: 1rem;
   --fynns-layout-sheet-actions-pad-bottom: 1.5rem;
-  --fynns-layout-tooltip-max-width: min(14rem, calc(100vw - 1rem));
+  --fynns-layout-tooltip-max-width: min(14rem, calc(100vw - 16px));
   --fynns-layout-command-palette-width: min(100%, 34rem);
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
   --fynns-layout-command-palette-top-padding: 12vh;
