@@ -2510,6 +2510,62 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
 }
 
+/* ---------- Pagination ---------- */
+.fynns-pagination {
+  min-width: 0;
+}
+
+.fynns-pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-pagination-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-pagination-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-pagination-ellipsis {
+  min-width: 2rem;
+  min-height: 2rem;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  user-select: none;
+}
+
+/* Match IconButton sm circle. No bg/border transition — sliding the page window
+   must not animate ghost↔tonal (that read as a flashing selected disc). */
+.fynns-btn.fynns-pagination-page {
+  box-sizing: border-box;
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  border-radius: var(--fynns-radius-round);
+  border-color: transparent;
+  transition: none;
+}
+
+.fynns-btn.fynns-pagination-page:hover:not(:disabled),
+.fynns-btn.fynns-pagination-page:active:not(:disabled) {
+  border-color: transparent;
+}
+
+.fynns-pagination-page--md {
+  width: var(--fynns-size-icon-target);
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+  min-height: var(--fynns-size-icon-target);
+}
+
 .fynns-nav-item {
   display: flex;
   align-items: center;

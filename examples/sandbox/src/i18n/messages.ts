@@ -268,6 +268,11 @@ const en = {
   "globals.breadcrumbLibrary": "Library",
   "globals.breadcrumbFolder": "Tokens",
   "globals.breadcrumbPage": "Radius",
+  "globals.paginationAria": "Sample pagination",
+  "globals.paginationHelp":
+    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). Prefer over hand-rolled page chips.",
+  "globals.paginationPrev": "Previous page",
+  "globals.paginationNext": "Next page",
   "globals.controls": "Controls",
   "globals.controlsAria": "Controls",
   "globals.controlsRadiusHelp":
@@ -841,6 +846,11 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbLibrary": "资料库",
   "globals.breadcrumbFolder": "Token",
   "globals.breadcrumbPage": "圆角",
+  "globals.paginationAria": "示例分页",
+  "globals.paginationHelp":
+    "列表/表格分页。上一页/下一页为 IconButton + Tooltip；页码复用 Button ghost（当前页 = tonal）。请优先用它，不要手写页码芯片。",
+  "globals.paginationPrev": "上一页",
+  "globals.paginationNext": "下一页",
   "globals.controls": "控件",
   "globals.controlsAria": "控件",
   "globals.controlsRadiusHelp":

@@ -660,6 +660,15 @@ export const BREADCRUMB_TOKENS = {
 } as const;
 
 /**
+ * Pagination trail geometry (at 16px rem).
+ * List/table page navigator chrome (not an M3 catalog component).
+ * `--fynns-pagination-<key>`.
+ */
+export const PAGINATION_TOKENS = {
+  gap: "0.125rem",
+} as const;
+
+/**
  * M3 Carousel geometry (at 16px rem).
  * Horizontal snap strip; hero = full-bleed slide, multi = peek neighbors.
  * `--fynns-carousel-<key>`.
@@ -996,6 +1005,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["timepicker", TIMEPICKER_TOKENS],
   ["carousel", CAROUSEL_TOKENS],
   ["breadcrumb", BREADCRUMB_TOKENS],
+  ["pagination", PAGINATION_TOKENS],
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
