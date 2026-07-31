@@ -27,6 +27,7 @@ export * from "./primitives/SearchInput";
 export * from "./primitives/SearchBar";
 export * from "./primitives/Banner";
 export * from "./primitives/Breadcrumb";
+export * from "./primitives/Pagination";
 export * from "./primitives/List";
 export * from "./primitives/DatePicker";
 export * from "./primitives/TimePicker";

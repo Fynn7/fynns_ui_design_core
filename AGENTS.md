@@ -146,7 +146,7 @@ scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `pagination`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -448,6 +448,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **`Button` `ghost` `sm`** (or the same classes on `<a href>`) — stadium
   radius, compact height, ghost state-layer; accent label. Prefer over
   hand-rolled chevron rows in app chrome.
+- **Pagination** `{ page, pageCount, onPageChange, siblingCount?,
+  boundaryCount?, size?: "sm"|"md", ariaLabel?, previousAriaLabel?,
+  nextAriaLabel?, getPageAriaLabel?, disabled? }` — list/table page navigator
+  (`nav` + list). Prev/next are `IconButton` + `Tooltip`; page numbers are
+  `Button` `ghost` (current = `tonal` + `aria-current="page"`). Ellipses when
+  the range is long. Prefer over hand-rolled prev/next + page chips.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows);
   keep the dotted resting decoration (distinct from TextLink / Breadcrumb).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.

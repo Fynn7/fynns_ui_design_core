@@ -330,6 +330,7 @@
   --fynns-breadcrumb-gap: 0.125rem;
   --fynns-breadcrumb-sep-pad-inline: 0.25rem;
   --fynns-breadcrumb-font-size: var(--fynns-font-size-xs);
+  --fynns-pagination-gap: 0.125rem;
   --fynns-navrail-width: 5rem;
   --fynns-navrail-indicator-width: 3.5rem;
   --fynns-navrail-indicator-height-icon: 3.5rem;

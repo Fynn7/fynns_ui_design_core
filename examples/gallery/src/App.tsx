@@ -10,6 +10,7 @@ import {
   BottomSheet,
   Breadcrumb,
   Button,
+  Pagination,
   Card,
   CardActionArea,
   CardActions,
@@ -115,6 +116,7 @@ export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const [galleryPage, setGalleryPage] = useState(3);
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -420,6 +422,9 @@ export function App() {
               { label: "Radius", current: true },
             ]}
           />
+        </Row>
+        <Row>
+          <Pagination page={galleryPage} pageCount={12} onPageChange={setGalleryPage} />
         </Row>
         <div style={{ width: "100%", maxWidth: "24rem" }}>
           <TopAppBar

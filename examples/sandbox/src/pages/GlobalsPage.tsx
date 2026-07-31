@@ -10,6 +10,7 @@ import {
   BottomSheet,
   Breadcrumb,
   Button,
+  Pagination,
   Card,
   CardContent,
   CardHeader,
@@ -129,6 +130,7 @@ export function GlobalsPage() {
   const [breadcrumbLeaf, setBreadcrumbLeaf] = useState<"library" | "folder" | "page">(
     "page",
   );
+  const [page, setPage] = useState(3);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
@@ -877,6 +879,20 @@ export function GlobalsPage() {
             ]}
           />
           <SandboxHelp text={t("globals.breadcrumbHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Pagination
+            page={page}
+            pageCount={12}
+            onPageChange={setPage}
+            ariaLabel={t("globals.paginationAria")}
+            previousAriaLabel={t("globals.paginationPrev")}
+            nextAriaLabel={t("globals.paginationNext")}
+            getPageAriaLabel={(n) =>
+              t("globals.paginationPage").replace("{n}", String(n))
+            }
+          />
+          <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
         <div
           className="sandbox-globals-appbar"
