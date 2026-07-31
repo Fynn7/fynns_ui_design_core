@@ -1,6 +1,4 @@
-import type { ReactNode, RefObject } from "react";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useLayoutEffect, useState } from "react";
 
 export type Side = "top" | "bottom" | "left" | "right";
 export type Align = "start" | "center" | "end";
@@ -429,70 +427,4 @@ export function useFloatingBoxPosition(
   }, [anchorEl, floatingEl, open, side, align, offset]);
 
   return box;
-}
-
-export type PopoverProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  anchorRef: RefObject<HTMLElement | null>;
-  children: ReactNode;
-  side?: Side;
-  align?: Align;
-  offset?: number;
-  className?: string;
-  role?: string;
-};
-
-/**
- * Portal-rendered floating panel anchored to `anchorRef`, with outside-click
- * and Escape dismissal. Self-positioned (no third-party positioning engine).
- */
-export function Popover({
-  open,
-  onOpenChange,
-  anchorRef,
-  children,
-  side = "bottom",
-  align = "start",
-  offset = 6,
-  className,
-  role = "dialog",
-}: PopoverProps) {
-  const [panelEl, setPanelEl] = useState<HTMLDivElement | null>(null);
-  // Use box top-left (not the raw anchor attachment point) so align=end/center
-  // stay inside the viewport without a CSS transform.
-  const pos = useFloatingBoxPosition(anchorRef.current, panelEl, open, { side, align, offset });
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (anchorRef.current?.contains(target)) return;
-      if (panelEl?.contains(target)) return;
-      onOpenChange(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onOpenChange(false);
-    };
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open, onOpenChange, anchorRef, panelEl]);
-
-  if (!open || !pos) return null;
-  return createPortal(
-    <div
-      ref={setPanelEl}
-      role={role}
-      className={["fynns-popover", className ?? ""].filter(Boolean).join(" ")}
-      data-side={pos.side}
-      style={{ position: "fixed", top: pos.top, left: pos.left }}
-    >
-      {children}
-    </div>,
-    document.body,
-  );
 }

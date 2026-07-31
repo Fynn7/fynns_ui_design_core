@@ -5,7 +5,6 @@ import {
   Collapsible,
   InfoHint,
   Slider,
-  UnitStack,
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -120,7 +119,7 @@ export function PropertyInspector() {
         </header>
 
         <Collapsible title={t("inspector.color")} defaultOpen>
-          <UnitStack>
+          <div className="sandbox-stack">
             <HueWheel />
             <SandboxHelp text={t("inspector.colorHelp")} />
             {SURFACE_KEYS.map(({ cssVar, key, labelKey, hintKey }) => {
@@ -208,11 +207,11 @@ export function PropertyInspector() {
               />
               <SandboxHelp text={t("inspector.outlineHelp")} />
             </div>
-          </UnitStack>
+          </div>
         </Collapsible>
 
         <Collapsible title={t("inspector.stateLayers")} defaultOpen>
-          <UnitStack>
+          <div className="sandbox-stack">
             {STATE_LAYER_KEYS.map(({ key, hintKey }) => {
               const valueByKey = { hover, focus, pressed, dragged } as const;
               const value = valueByKey[key];
@@ -247,11 +246,11 @@ export function PropertyInspector() {
               />
               <CardContent>{t("inspector.stateDemoBody")}</CardContent>
             </Card>
-          </UnitStack>
+          </div>
         </Collapsible>
 
         <Collapsible title={t("inspector.spacing")} defaultOpen>
-          <UnitStack>
+          <div className="sandbox-stack">
             <SandboxHelp text={t("inspector.spacingHelp")} />
             {SPACE_KEYS.map(({ key, labelKey, hintKey }) => {
               const pxByKey = { lg: spaceLgPx, md: spaceMdPx, sm: spaceSmPx } as const;
@@ -281,7 +280,7 @@ export function PropertyInspector() {
                 </div>
               );
             })}
-          </UnitStack>
+          </div>
         </Collapsible>
 
         <Collapsible title={t("layoutChrome.collapsible")}>
@@ -289,7 +288,7 @@ export function PropertyInspector() {
         </Collapsible>
 
         <Collapsible title={t("inspector.typography")}>
-          <UnitStack>
+          <div className="sandbox-stack">
             {(["sm", "md", "lg"] as const).map((key) => {
               const raw = resolved(`--fynns-font-size-${key}`);
               const px = parseLengthToPx(raw);
@@ -321,7 +320,7 @@ export function PropertyInspector() {
                 </div>
               );
             })}
-          </UnitStack>
+          </div>
         </Collapsible>
       </div>
 

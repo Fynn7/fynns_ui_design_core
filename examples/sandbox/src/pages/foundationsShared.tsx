@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 /**
- * Gallery / sandbox demo chrome.
- * Gaps use `--sandbox-*` (draft + GUI). Fallbacks keep standalone gallery usable.
+ * Sandbox Foundations / Motion demo chrome.
+ * Gaps use `--sandbox-*` (draft + GUI).
  * Agents: see `SANDBOX_LAYOUT_AGENT_CATALOG` in sandbox `state/baseline.ts`.
  */
 export function Section({ title, children }: { title: string; children: ReactNode }) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Card } from "@fynns/ui";
-import { Row, Section } from "./galleryShared";
+import { Row, Section } from "./foundationsShared";
 
 const EASING_DEMOS = [
   { label: "ease-out", token: "var(--fynns-ease-out)" },
@@ -53,7 +53,7 @@ function EasingBar({
             height: "1.25rem",
             borderRadius: "var(--fynns-radius-round)",
             background: "var(--fynns-color-accent)",
-            animation: `fynns-gallery-ease var(--fynns-duration-slow) ${easing} both`,
+            animation: `fynns-sandbox-ease var(--fynns-duration-slow) ${easing} both`,
           }}
         />
       </Card>
@@ -76,7 +76,7 @@ export function Motion({ titles }: { titles?: MotionTitles } = {}) {
   return (
     <>
       <style>{`
-        @keyframes fynns-gallery-ease {
+        @keyframes fynns-sandbox-ease {
           from { transform: translateX(0); }
           to { transform: translateX(calc(100% + 6rem)); }
         }

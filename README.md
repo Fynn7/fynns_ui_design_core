@@ -9,9 +9,11 @@ projects and are easy for humans and agents to reuse.
 - **Tokens:** single source of truth in [`src/theme/tokens.ts`](src/theme/tokens.ts)
   (+ [`motionTokens.ts`](src/theme/motionTokens.ts)) → generated, committed
   [`src/theme/theme.css`](src/theme/theme.css).
-- **Components:** [`src/primitives/`](src/primitives) — Button, Input, Select,
-  Dialog, Switch, Toast, Tooltip, and more (see [AGENTS.md](AGENTS.md)).
+- **Components:** [`src/primitives/`](src/primitives) — public surface is sandbox
+  Globals + Preview only (see [AGENTS.md](AGENTS.md) and
+  [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
+  **Breaking purge / consumer migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 - **Submodule propagation:** push-triggered + Dependabot fallback workflow is
   documented in [`docs/submodule-propagation.md`](docs/submodule-propagation.md).
 
@@ -75,9 +77,11 @@ point the alias up to the repo-root submodule:
 4. Use it (the barrel imports the theme + component CSS for you):
 
 ```tsx
-import { Button, Dialog, toast, Toaster } from "@fynns/ui";
+import { Button, Collapsible, FullscreenDialog } from "@fynns/ui";
 ```
 
+Do not import purged symbols (`toast`, `Dialog`, `PanelCard`, …) — see
+[`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 If you prefer to load only the stylesheet (no JS), import
 `@fynns/ui-design-core/theme.css` or `@fynns/ui-design-core/styles.css`.
 
@@ -101,11 +105,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run consume:install -- --target <dir>` — add this repo as a consumer
   submodule and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).
 - `npm run consume:check -- --target <dir>` — validate submodule + alias.
-- `npm run gallery` — run the design gallery in [`examples/gallery`](examples/gallery)
-  (foundations, motion, component state matrix, dark/light toggle).
 - `npm run sandbox` — run the aesthetic sandbox in
   [`examples/sandbox`](examples/sandbox) (Globals shape levels, **Toolbar / unit rhythm**
-  sample for `UnitStack` + `ControlStack` spacing tokens, live Card
+  sample for `ControlStack` / unit-stack gap tokens, live Card
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
@@ -120,13 +122,12 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. **Every new primitive must ship with a sandbox
-preview** (usually on Globals or Surfaces) in the same change set — gallery
-alone is not enough. Pages: **Surfaces** (Card or Collapsible target),
-**Globals** (system shape / radius + control samples), Foundations, Motion, and
-**Templates**
+Globals or Preview sample** in the same change set. Pages: **Surfaces** (Card or
+Collapsible target), **Globals** (system shape / radius + control samples),
+Foundations, Motion, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
-(`PanelRightIcon`) shows or hides the right aside; when hidden (and on pages
+shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
 Editing `--fynns-radius-*` on Globals

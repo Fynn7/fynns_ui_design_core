@@ -14,7 +14,9 @@ Machine contract: [`consume.json`](consume.json).
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit submodule sources for consumer features; bump the pin instead.
 6. **TypeScript:** set consumer `compilerOptions.target` and `lib` to **ES2022** (or later). `tsc` follows `@fynns/ui` into this repo’s `.ts` sources (e.g. `String.replaceAll`); `ES2020` alone will fail typecheck even when Vite builds fine.
-7. **Toaster:** if the app calls `toast.*`, mount **`<Toaster />` once** near the app root (same tree as the page). Importing `toast` without `<Toaster />` builds but shows no notifications.
+7. **Do not** import deleted symbols (`toast`, `Toaster`, `Dialog`, `Popover`,
+   `UnitStack`, …). Migration table: [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
+   M3 Snackbar is TBD (sandbox-first); there is no toast substitute yet.
 8. **Entry:** `main.tsx` (or equivalent) must `createRoot(...).render(<App />)` (or equivalent). Importing CSS alone produces an empty build that still “succeeds”.
 9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`.
 10. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
@@ -26,7 +28,7 @@ Machine contract: [`consume.json`](consume.json).
 2. Run the one-shot installer (below) against the **consumer** root (use `--url` to a local checkout when offline).
 3. Run `--check` until exit 0.
 4. Scaffold React + Vite + TS only (no design-system npm dep); keep `lib`/`target` at ES2022+.
-5. Implement the page from sandbox preview + AGENTS catalog; mount `Toaster` if using `toast`.
+5. Implement the page from sandbox Globals/Preview + AGENTS catalog (never deleted symbols — see `BREAKING_PURGE.md`).
 6. `npm install` → `npm run build` must exit 0.
 
 ## One-shot install (any consumer repo)
@@ -94,14 +96,11 @@ And `src/vite-env.d.ts` (when `tsc` is part of build):
 ```
 
 ```tsx
-import { Button, Collapsible, toast, Toaster } from "@fynns/ui";
-
-// Once per app (e.g. in App / root layout):
-<>
-  <Toaster />
-  {/* …page that may call toast.message(...) */}
-</>
+import { Button, Collapsible, FullscreenDialog } from "@fynns/ui";
 ```
+
+Do not import deleted APIs (`toast`, `Toaster`, `PanelCard`, …) — see
+[`BREAKING_PURGE.md`](BREAKING_PURGE.md).
 
 Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 

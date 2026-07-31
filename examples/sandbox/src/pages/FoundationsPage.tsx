@@ -1,4 +1,4 @@
-import { Foundations } from "../../../gallery/src/Foundations";
+import { Foundations } from "./FoundationsContent";
 import { useLocale } from "../i18n";
 
 export function FoundationsPage() {

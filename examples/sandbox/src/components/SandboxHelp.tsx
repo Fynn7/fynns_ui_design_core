@@ -1,5 +1,5 @@
 import { Fragment, type ElementType } from "react";
-import { splitCaptionByBackticks } from "@fynns/ui";
+import { splitCaptionByBackticks } from "../utils/captionSegments";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");

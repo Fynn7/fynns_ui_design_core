@@ -47,7 +47,7 @@ export type SearchBarProps = Omit<
  * M3 Search bar — elevated 56dp capsule for chrome search (not form fields).
  * Optional docked results via `expanded` + `children` merge into one shell
  * (Google-style). Expand/collapse animates via `.fynns-expand` (including
- * blur/Esc). Prefer `SearchInput` inside dense forms / toolbars.
+ * blur/Esc). Prefer `Input` inside dense forms / toolbars (SearchInput removed).
  * @see https://m3.material.io/components/search/overview
  */
 export const SearchBar = forwardRef(function SearchBar(

@@ -5,7 +5,6 @@ import {
   IconButton,
   SettingsIcon,
   Switch,
-  toast,
   Tooltip,
 } from "@fynns/ui";
 import { useState } from "react";
@@ -62,7 +61,7 @@ export function CollapsiblePreviewCanvas() {
                   <Tooltip content={t("preview.collapsibleActionTip")}>
                     <IconButton
                       aria-label={t("preview.collapsibleActionAria")}
-                      onClick={() => toast.message(t("preview.collapsibleActionToast"))}
+                      onClick={() => undefined}
                     >
                       <SettingsIcon size={16} aria-hidden />
                     </IconButton>

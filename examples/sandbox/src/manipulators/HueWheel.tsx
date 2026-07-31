@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
-import { Input, Popover, Slider, Tooltip } from "@fynns/ui";
+import { Input, Slider, Tooltip } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import {
   approxHueFromHex,
@@ -37,7 +37,7 @@ const HUE_DEGREE_MAX = 359;
 
 /**
  * Accent hue controls: preset chips stay on the inspector; the full hue ring
- * opens from a rainbow trigger chip (Popover). Degree and hex fields edit
+ * opens from a rainbow trigger chip (inline panel). Degree and hex fields edit
  * independently. One coalesced undo step per gesture.
  */
 export function HueWheel() {
@@ -255,21 +255,19 @@ export function HueWheel() {
               .filter(Boolean)
               .join(" ")}
             aria-label={t("hue.openPalette")}
-            aria-haspopup="dialog"
+            aria-haspopup="true"
             aria-expanded={paletteOpen}
             onClick={() => setPaletteOpen((wasOpen) => !wasOpen)}
           />
         </Tooltip>
       </div>
 
-      <Popover
-        open={paletteOpen}
-        onOpenChange={setPaletteOpen}
-        anchorRef={triggerRef}
-        side="bottom"
-        align="start"
-        className="sandbox-hue-popover"
-      >
+      {paletteOpen ? (
+        <div
+          className="sandbox-hue-popover sandbox-hue-popover--inline"
+          role="region"
+          aria-label={t("hue.paletteAria")}
+        >
         <div
           ref={diskRef}
           className="sandbox-hue-disk"
@@ -300,7 +298,8 @@ export function HueWheel() {
             <span className="sandbox-hue-disk-marker" style={{ background: accentHex }} />
           </div>
         </div>
-      </Popover>
+        </div>
+      ) : null}
 
       <Slider
         value={Math.min(HUE_DEGREE_MAX, ((Math.round(hue) % 360) + 360) % 360)}

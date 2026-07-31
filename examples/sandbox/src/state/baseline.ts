@@ -16,7 +16,7 @@ import {
  */
 export const SANDBOX_CHROME_TOKENS = {
   /**
-   * Demo / gallery `Row` wrap gap (horizontal + between wrapped rows).
+   * Demo / Foundations `Row` wrap gap (horizontal + between wrapped rows).
    * Motion easing bars use this — raise it to separate wrap lines.
    */
   "row-gap": "1rem",
@@ -43,7 +43,7 @@ export const EDITABLE_LAYOUT_CONTROL_KEYS = [
 
 export type EditableLayoutControlKey = (typeof EDITABLE_LAYOUT_CONTROL_KEYS)[number];
 
-/** @deprecated Prefer `--fynns-layout-unit-stack-gap` / `UnitStack`. */
+/** Prefer `--fynns-layout-unit-stack-gap` / sandbox `.sandbox-stack`. */
 export const SANDBOX_BLOCK_GAP_VAR = "--fynns-layout-unit-stack-gap";
 /** @deprecated Prefer `LAYOUT_TOKENS["unit-stack-gap"]`. */
 export const SANDBOX_BLOCK_GAP_BASELINE = LAYOUT_TOKENS["unit-stack-gap"];
@@ -126,7 +126,7 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
 }> = [
   {
     cssVar: sandboxChromeVar("row-gap"),
-    role: "Demo Row wrap gap (Motion easing bars, gallery flex wraps)",
+    role: "Demo Row wrap gap (Motion easing bars, Foundations flex wraps)",
     applyWrites: false,
   },
   {
@@ -143,7 +143,7 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
     cssVar: fynnsVarName("layout", k),
     role:
       k === "unit-stack-gap"
-        ? "Unit stack · between inspector/form units (UnitStack)"
+        ? "Unit stack · between inspector/form units (.sandbox-stack)"
         : `Toolbar rhythm · ${k}`,
     applyWrites: true,
   })),

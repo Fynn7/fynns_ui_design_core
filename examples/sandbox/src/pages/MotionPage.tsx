@@ -1,4 +1,4 @@
-import { Motion } from "../../../gallery/src/Motion";
+import { Motion } from "./MotionContent";
 import { useLocale } from "../i18n";
 
 export function MotionPage() {

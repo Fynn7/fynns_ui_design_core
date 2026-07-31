@@ -1,24 +1,21 @@
 import {
   applyFynnsThemeMode,
-  DIALOG_TRANSITION_MS,
+  ArrowLeftIcon,
+  BarChartIcon,
   EyeIcon,
+  EyeOffIcon,
   FileIcon,
   getFynnsThemeMode,
   IconButton,
   LayoutGridIcon,
   MenuIcon,
-  MoonIcon,
   NavigationDrawer,
   NavigationDrawerItem,
   NavigationRail,
   NavigationRailItem,
-  PanelLeftIcon,
-  PanelRightIcon,
+  PencilIcon,
   restoreFynnsThemeMode,
   SettingsIcon,
-  SparklesIcon,
-  SunIcon,
-  Toaster,
   ToggleGroup,
   Tooltip,
   type FynnsThemeMode,
@@ -47,6 +44,9 @@ export type SandboxPage =
 
 const NAV_EXPANDED_KEY = "fynns-sandbox-nav-expanded";
 
+/** Keep in sync with `--fynns-duration-base` (aside expand/collapse). */
+const ASIDE_TRANSITION_MS = 240;
+
 function asideTransitionMs(): number {
   if (
     typeof window !== "undefined" &&
@@ -54,7 +54,7 @@ function asideTransitionMs(): number {
   ) {
     return 0;
   }
-  return DIALOG_TRANSITION_MS;
+  return ASIDE_TRANSITION_MS;
 }
 
 /** Right inspector pane: width expand/collapse (no translate — keeps the
@@ -180,7 +180,7 @@ export function SandboxShell() {
         onClick={() => setPage("foundations")}
       />
       <NavigationDrawerItem
-        icon={<SparklesIcon />}
+        icon={<BarChartIcon />}
         label={t("nav.motion")}
         active={page === "motion"}
         onClick={() => setPage("motion")}
@@ -205,7 +205,6 @@ export function SandboxShell() {
       className="sandbox-root"
       data-nav={navExpanded ? "drawer" : "rail"}
     >
-      <Toaster position="bottom-right" />
       {/* M3 clipped shell: top app bar spans the window; nav sits below (no crosshair). */}
       <header className="sandbox-topbar">
         <div className="sandbox-topbar-leading">
@@ -217,7 +216,7 @@ export function SandboxShell() {
                 onClick={() => setPreferNavExpanded((open) => !open)}
               >
                 {navExpanded ? (
-                  <PanelLeftIcon size={16} aria-hidden />
+                  <ArrowLeftIcon size={16} aria-hidden />
                 ) : (
                   <MenuIcon aria-hidden />
                 )}
@@ -235,7 +234,7 @@ export function SandboxShell() {
                 aria-pressed={asideOpen}
                 onClick={() => setAsideOpen((open) => !open)}
               >
-                <PanelRightIcon size={16} aria-hidden />
+                <PencilIcon size={16} aria-hidden />
               </IconButton>
             </Tooltip>
           ) : null}
@@ -245,7 +244,7 @@ export function SandboxShell() {
               aria-pressed={theme === "light"}
               onClick={toggleTheme}
             >
-              {theme === "light" ? <MoonIcon size={16} aria-hidden /> : <SunIcon size={16} aria-hidden />}
+              {theme === "light" ? <EyeOffIcon size={16} aria-hidden /> : <EyeIcon size={16} aria-hidden />}
             </IconButton>
           </Tooltip>
         </div>
@@ -289,7 +288,7 @@ export function SandboxShell() {
               onClick={() => setPage("foundations")}
             />
             <NavigationRailItem
-              icon={<SparklesIcon />}
+              icon={<BarChartIcon />}
               label={t("nav.motion")}
               active={page === "motion"}
               onClick={() => setPage("motion")}

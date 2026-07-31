@@ -1,7 +1,7 @@
 :root {
   /* Sandbox chrome — live-overridable via draft; not a --fynns-* token.
    * Defaults mirror SANDBOX_CHROME_TOKENS in state/baseline.ts.
-   * Inspector / form unit stacks use --fynns-layout-unit-stack-gap (UnitStack). */
+   * Inspector / form unit stacks use --fynns-layout-unit-stack-gap (.sandbox-stack). */
   --sandbox-row-gap: 1rem;
   --sandbox-section-gap: 0.75rem;
   /* Brand cell + page topbar share one horizontal strip. */
@@ -448,7 +448,7 @@
 }
 
 .sandbox-stack {
-  /* Alias of UnitStack — prefer <UnitStack> from @fynns/ui for new code. */
+  /* Vertical unit stack — gap via --fynns-layout-unit-stack-gap. */
   display: flex;
   flex-direction: column;
   gap: var(--fynns-layout-unit-stack-gap);
@@ -727,6 +727,13 @@
   box-sizing: border-box;
 }
 
+.sandbox-hue-popover--inline {
+  margin-block: var(--fynns-space-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-2);
+}
+
 .sandbox-hue-disk {
   position: relative;
   width: 11.5rem;
@@ -796,8 +803,27 @@
   box-shadow: var(--fynns-shadow-sm);
 }
 
+.sandbox-agent {
+  position: relative;
+}
+
 .sandbox-agent-trigger--pending {
   color: var(--fynns-color-accent);
+}
+
+.sandbox-agent-panel--inline {
+  position: absolute;
+  top: calc(100% + var(--fynns-space-xs));
+  right: 0;
+  z-index: var(--fynns-z-flyout);
+  min-width: min(22rem, 85vw);
+  max-width: min(28rem, 92vw);
+  padding: var(--fynns-space-sm);
+  box-sizing: border-box;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-flyout);
 }
 
 .sandbox-agent-popover {
