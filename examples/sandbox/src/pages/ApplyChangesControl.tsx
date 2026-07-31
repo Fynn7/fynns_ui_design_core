@@ -1,4 +1,4 @@
-import { Button, Dialog, toast, Tooltip } from "@fynns/ui";
+import { Button, FullscreenDialog, Tooltip } from "@fynns/ui";
 import { useState } from "react";
 import {
   applyTokenOverrides,
@@ -21,6 +21,7 @@ export function ApplyChangesControl() {
   const [files, setFiles] = useState<ApplyFileDiff[]>([]);
   const [appliedCount, setAppliedCount] = useState(0);
   const [skippedCount, setSkippedCount] = useState(0);
+  const [status, setStatus] = useState<string | null>(null);
 
   const busy = phase === "previewing" || phase === "applying";
   const reviewOpen = phase === "review" || phase === "applying";
@@ -29,10 +30,11 @@ export function ApplyChangesControl() {
   const openReview = async () => {
     if (overrideCount === 0 || busy) return;
     setPhase("previewing");
+    setStatus(null);
     try {
       const preview = await previewTokenOverrides(draft.overrides);
       if (!preview.ok) {
-        toast.error(preview.error ?? t("apply.toastPreviewFailed"));
+        setStatus(preview.error ?? t("apply.toastPreviewFailed"));
         setPhase("idle");
         return;
       }
@@ -41,7 +43,7 @@ export function ApplyChangesControl() {
       setSkippedCount(preview.skipped.length);
       setPhase("review");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
+      setStatus(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
       setPhase("idle");
     }
   };
@@ -58,7 +60,7 @@ export function ApplyChangesControl() {
     try {
       const result = await applyTokenOverrides(draft.overrides);
       if (!result.ok) {
-        toast.error(result.error ?? t("apply.toastApplyFailed"));
+        setStatus(result.error ?? t("apply.toastApplyFailed"));
         setPhase("review");
         return;
       }
@@ -66,17 +68,17 @@ export function ApplyChangesControl() {
       setPhase("idle");
       setFiles([]);
       if (result.skipped.length > 0) {
-        toast.warning(
+        setStatus(
           t("apply.toastPartial", {
             applied: result.applied.length,
             skipped: result.skipped.length,
           }),
         );
       } else {
-        toast.success(t("apply.toastOk", { applied: result.applied.length }));
+        setStatus(t("apply.toastOk", { applied: result.applied.length }));
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
+      setStatus(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
       setPhase("review");
     }
   };
@@ -90,7 +92,7 @@ export function ApplyChangesControl() {
           disabled={overrideCount === 0 || busy}
           onClick={() => {
             reset();
-            toast.message(t("topbar.resetToast"));
+            setStatus(t("topbar.resetToast"));
           }}
         >
           {t("topbar.reset")}
@@ -106,15 +108,31 @@ export function ApplyChangesControl() {
           {phase === "previewing" ? t("apply.preparing") : t("apply.button")}
         </Button>
       </Tooltip>
+      {status ? <p className="sandbox-muted sandbox-apply-status">{status}</p> : null}
 
-      <Dialog
+      <FullscreenDialog
         open={reviewOpen}
         onOpenChange={(open) => {
           if (!open) closeReview();
         }}
         title={t("apply.dialogTitle")}
-        description={
-          skippedCount > 0
+        actions={
+          <>
+            <Button variant="ghost" onClick={closeReview} disabled={phase === "applying"}>
+              {t("apply.cancel")}
+            </Button>
+            <Button
+              variant="primary"
+              disabled={phase === "applying" || changedFiles.length === 0}
+              onClick={() => void confirmApply()}
+            >
+              {phase === "applying" ? t("apply.applying") : t("apply.confirm")}
+            </Button>
+          </>
+        }
+      >
+        <p className="sandbox-muted">
+          {skippedCount > 0
             ? t("apply.dialogDescSkipped", {
                 applied: appliedCount,
                 skipped: skippedCount,
@@ -122,11 +140,8 @@ export function ApplyChangesControl() {
             : t("apply.dialogDesc", {
                 applied: appliedCount,
                 files: changedFiles.length,
-              })
-        }
-        className="sandbox-apply-diff-dialog"
-        showCloseButton={phase !== "applying"}
-      >
+              })}
+        </p>
         <div className="sandbox-apply-diff-list fynns-scroll">
           {files.length === 0 ? (
             <p className="sandbox-muted">{t("apply.noDiffs")}</p>
@@ -148,19 +163,7 @@ export function ApplyChangesControl() {
             ))
           )}
         </div>
-        <div className="sandbox-apply-diff-foot">
-          <Button variant="ghost" onClick={closeReview} disabled={phase === "applying"}>
-            {t("apply.cancel")}
-          </Button>
-          <Button
-            variant="primary"
-            disabled={phase === "applying" || changedFiles.length === 0}
-            onClick={() => void confirmApply()}
-          >
-            {phase === "applying" ? t("apply.applying") : t("apply.confirm")}
-          </Button>
-        </div>
-      </Dialog>
+      </FullscreenDialog>
     </>
   );
 }

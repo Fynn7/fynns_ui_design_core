@@ -11,7 +11,6 @@ import {
   InfoHint,
   Switch,
   ToggleGroup,
-  toast,
 } from "@fynns/ui";
 import { useState } from "react";
 import { useLocale } from "../i18n";
@@ -91,11 +90,7 @@ export function CardPreviewCanvas() {
                   variant={variant}
                   interactive={interactive}
                   disabled={options.disabled}
-                  onClick={
-                    interactive
-                      ? () => toast.message(t("preview.cardActivated", { variant }))
-                      : undefined
-                  }
+                  onClick={interactive ? () => undefined : undefined}
                 >
                   {options.showMedia ? (
                     <CardMedia>

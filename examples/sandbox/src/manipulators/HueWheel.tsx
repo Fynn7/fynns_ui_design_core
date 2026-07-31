@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
-import { Input, Popover, Slider, Tooltip } from "@fynns/ui";
+import { Input, Slider, Tooltip } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import {
   approxHueFromHex,
@@ -262,14 +262,8 @@ export function HueWheel() {
         </Tooltip>
       </div>
 
-      <Popover
-        open={paletteOpen}
-        onOpenChange={setPaletteOpen}
-        anchorRef={triggerRef}
-        side="bottom"
-        align="start"
-        className="sandbox-hue-popover"
-      >
+      {paletteOpen ? (
+        <div className="sandbox-hue-popover sandbox-hue-popover--inline" role="dialog">
         <div
           ref={diskRef}
           className="sandbox-hue-disk"
@@ -300,7 +294,8 @@ export function HueWheel() {
             <span className="sandbox-hue-disk-marker" style={{ background: accentHex }} />
           </div>
         </div>
-      </Popover>
+        </div>
+      ) : null}
 
       <Slider
         value={Math.min(HUE_DEGREE_MAX, ((Math.round(hue) % 360) + 360) % 360)}

@@ -14,6 +14,7 @@ dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
 `npm run consume:install -- --target <consumer-root>`
 (`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
 Never add this package to a consumer's `package.json` dependencies.
+**Public API purge / migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 **Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
 [`llm/opencode-fynns-ui-consume.md`](llm/opencode-fynns-ui-consume.md)) — do not expect a long task brief.
 
@@ -60,21 +61,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
      `side="top" align="start"`; never `side="right"` (it would cover the content
      to the right).
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
-4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
-   carries the `fynns-scroll` class or uses `ScrollArea`. Browser-default
-   scrollbars are the most common source of visual drift — never ship them.
-5. **Always show loading / empty / error state.** The kit is `Spinner`,
-   `LinearProgress` / `CircularProgress`, `PanelSkeleton`,
-   `BlockingLoadingOverlay`, and `toast` (+ the `*Banner`
-   primitives). Prefer *layered* loading for heavy boots: an inline pre-mount
-   spinner → a full-screen `BlockingLoadingOverlay` while the engine isn't ready
-   → a scoped per-action spinner; freeze the whole UI with an overlay during a
-   blocking batch run. Use Progress when the fraction is known (upload, batch).
-   Color status semantically — `danger` (fatal), `warning`
-   (recoverable/render), `info` (static/notice), `success` (ok) — typically as a
-   `border-left: 3px solid var(--fynns-color-*)` or a `Badge` variant. Use
-   `Badge` variants to build the information architecture (source / mode /
-   confirmed-state), not ad-hoc colored text.
+4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
+5. **Always show loading / empty / error state.** Prefer `LinearProgress` / `CircularProgress`, `EmptyState`, and `Banner` / `Badge` semantics. Do **not** use deleted Toast APIs (see `llm/BREAKING_PURGE.md`; M3 Snackbar TBD). Color status as `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
    `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
@@ -121,8 +109,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
   same change — never ship a radius token that the GUI cannot show.
-- **DON'T** reintroduce `@radix-ui/*` or `sonner`. Every overlay, toggle, and
-  toast here is self-developed. Extend these primitives instead.
+- **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
+  primitives instead. Do not resurrect purged Toast / Dialog / Popover APIs
+  (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
@@ -198,439 +187,36 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 ## Component catalog
 
-Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
+**Breaking surface:** only symbols demoed in sandbox Globals + Preview are
+public. Removed APIs and migration table: [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
+Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 
-- **Button** `{ variant?: "default"|"primary"|"tonal"|"elevated"|"danger"|"ghost", size?: "md"|"sm"|"lg",
-  active?, danger?, iconOnly?, loading? }` + native button attrs. `forwardRef`.
-  Default `primary` (M3 filled accent, stadium `radius-pill`, 40dp). `tonal` is
-  secondary emphasis (`accent-container`); `elevated` is surface + shadow; `default`
-  is outlined; `ghost` is text. All variants share the same size padding /
-  `min-height` (M3: prefer one ContentPadding across types — text is not a
-  smaller target). `ghost` hover/press fills that stadium via background
-  state-layer mix; other variants use `::before` layers
-  (`--fynns-state-hover` / `--fynns-state-pressed`) — no scale-on-press.
-  `loading` shows a spinner and disables.
-- **IconButton** — `Button` with `iconOnly`; defaults to `ghost` (M3 standard).
-  40dp circular target (`--fynns-size-icon-target`) with 16dp glyph
-  (`--fynns-size-icon`); `primary` / `tonal` / `default` (outlined) / `elevated`
-  map to filled / tonal / outlined / elevated. Pass `aria-label`.
-- **SplitButton** `{ children, onMainClick, menu, menuOpen, onMenuOpenChange,
-  disabled?, mainAriaLabel?, menuAriaLabel? }`.
-- **Input** / **Textarea** — `{ invalid?, size?: "sm"|"md", variant?: "filled"|"outlined",
-  supportingText?, errorText? }` (+ Input `leading?`/`trailing?`) and native attrs.
-  `.fynns-input` / `.fynns-textarea`; hint rows use `.fynns-field-hint`.
-  Keep placeholder / external labels — do **not** chase M3 floating-label anatomy.
-- **Counter** `{ value, onChange, min?, max?, step?, ariaLabel?, disabled? }` — numeric
-  field + press-and-hold steppers (`CounterRoot`, `CounterField`, `CounterSteppers`,
-  `CounterIncrement`, `CounterDecrement` for custom layouts via `CounterProvider`).
-- **SearchInput** `{ leadingIcon?, trailing?, wrapClassName?, invalid?, size?,
-  supportingText?, errorText?, ...inputAttrs }`.
-- **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
-  expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
-  elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
-  field + results merge into one docked shell. Expand/collapse uses shared
-  `.fynns-expand` height morph + shell shadow/radius (including blur/Esc
-  collapse). Result row hover/active uses the same `--fynns-radius-3xl` as
-  `NavigationDrawerItem`. Prefer `SearchInput` for dense form rows.
-- **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
-  dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
-  TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` long-strip group
-  with SearchBar / BottomAppBar / NavigationDrawer items / sheet tops). Prefer
-  `InfoBanner` / `WarningBanner` for inline alerts inside panels.
-- **List** + **ListItem** `{ headline, supportingText?, overline?, leading?,
-  trailing?, trailingSupportingText?, lines?: 1|2|3, selected?, interactive?,
-  disabled? }` — M3 content list (56 / 72 / 88dp). Fixed `--fynns-list-leading-width`
-  (40dp, matches Avatar `md`) grids icon/avatar columns so headlines share one
-  start edge. Leading/trailing glyphs use `--fynns-list-icon-size` (20dp /
-  `--fynns-size-icon-md`). Type roles map to the shared font-size ladder (`overline` → `xs`,
-  `supporting` / trailing meta → `sm`, `headline` → `md`). Prefer `ListGroup` /
-  `ListRow` for sidebar master/detail chrome.
-- **DatePicker** `{ value?, defaultValue?, onChange?, displayMonth?,
-  defaultDisplayMonth?, onDisplayMonthChange?, minDate?, maxDate?,
-  isDateDisabled?, weekStartsOn?: 0|1, labels?, disabled? }` — M3 month
-  calendar (`YYYY-MM-DD` local date-only). Docked surface; helpers
-  `formatDateValue` / `parseDateValue`. **DatePickerDialog** `{ open,
-  onOpenChange, value?, onConfirm, title?, confirmLabel?, cancelLabel?, … }`
-  wraps the picker in a centered dialog (draft until OK). Minimal M3 modal
-  cues: `--fynns-radius-3xl` shell, supporting selected-date line under the
-  title, and hairline dividers between head / calendar / foot (keeps the
-  compact calendar; no year menu / huge header).
-  **DateRangePicker** `{ value?: { start, end }, defaultValue?, onChange?,
-  …same calendar props }` — start-then-end selection with a continuous
-  secondary-container strip between accent endpoint discs (range grid uses
-  gapless equal columns so the bar abuts; hover preview); complete range +
-  click restarts. Helpers share `DateValue` / `formatDateValue` /
-  `parseDateValue`. **DateRangePickerDialog** mirrors DatePickerDialog
-  (supporting `start – end` line; Confirm needs both).
-- **TimePicker** `{ value?, defaultValue?, onChange?, hourCycle?: "h23"|"h12",
-  minuteStep?, labels?, disabled? }` — M3 **input** (digital) time picker
-  (`HH:mm` 24-hour storage). Hour/minute spinbuttons + optional AM/PM column;
-  arrow keys / digit entry. Helpers `formatTimeValue` / `parseTimeValue`.
-  Dial / clock face is **out of scope** (do not implement). **TimePickerDialog**
-  `{ open, onOpenChange, value?, onConfirm, title?, … }` mirrors DatePickerDialog
-  (supporting time line under the title).
-- **Carousel** + **CarouselItem** `{ ariaLabel, variant?: "hero"|"multi",
-  index?, defaultIndex?, onIndexChange?, showArrows?, showIndicators?,
-  prevAriaLabel?, nextAriaLabel? }` — M3 horizontal snap strip (arrows +
-  dots; keyboard ←→ Home/End). `multi` peeks neighbors; indices clamp at
-  ends (no wrap). Track stays scrollable for drag/swipe but hides the
-  scrollbar (chrome is arrows/dots).
-- **Select** `{ value, options: (string | { value, label?, disabled? })[],
-  onChange, ariaLabel, disabled?, placeholder? }` — same chrome as **SearchBar**:
-  `.fynns-search-bar` / `.fynns-search-bar-field` / `.fynns-search-bar-input`,
-  open = `.fynns-search-bar--expanded` + docked `.fynns-search-bar-results` /
-  `.fynns-search-bar-result` rows (same type + padding; row highlight
-  `--fynns-radius-3xl` like `NavigationDrawerItem`). No SearchIcon; trigger
-  uses a modest `--fynns-space-md` start inset (not the search leading slot).
-  Trailing chevron opens/closes.
-- **Autocomplete** `{ value, options, onChange, ariaLabel, placeholder?,
-  emptyText?, invalid?, supportingText?, errorText?, disabled? }` — filterable
-  text field + docked suggestions using the same SearchBar/Select chrome.
-  Prefer `Select` when typing is not needed; prefer headless `Combobox` for
-  custom framing.
-- **Combobox** — headless search + keyboard list (generic `<Item>`); caller
-  supplies `filter`, `onPick`, `renderRow`, `classes`.
-- **DropdownMenu** `{ trigger, children, ariaLabel?, align?, open?,
-  onOpenChange?, disabled? }` + **DropdownMenuItem** `{ icon?, closeOnSelect? }`
-  + **DropdownMenuCheckboxItem** `{ checked, onCheckedChange?, closeOnSelect? }`
-  + **DropdownMenuGroup** `{ label? }` + **DropdownMenuLabel** +
-  **DropdownMenuSeparator** — M3 menu: portaled flyout (viewport-aware via
-  `useFloatingBoxPosition`), section labels / hairline dividers, checkbox rows
-  (stay open by default), arrow-key paging + Esc. Prefer over ad-hoc absolute
-  menus when the trigger sits in an overflow/scroll ancestor.
-  Shared **MenuSurface** `{ open, onClose, children, style?, id?, … }` provides
-  MenuContext + portal panel with enter/exit presence (`data-state` + flyout
-  motion tokens; also used by ContextMenu).
-- **ContextMenu** `{ open, onOpenChange, x, y, children, ariaLabel? }` —
-  controlled right-click menu at client coords (clamped to viewport); reuses
-  DropdownMenuItem / Group / CheckboxItem / Separator via MenuSurface. Esc /
-  outside dismiss (exit animates before unmount). **ContextMenuTrigger** `{ onOpenChange, onPositionChange,
-  children }` wraps a region and `preventDefault`s contextmenu to open.
-- **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
-  positions via `useFloatingBoxPosition` (top/left box coords, no CSS
-  transform). Placement tries all four sides (preferred first, then opposite,
-  then the rest), auto `align` start/end near viewport edges, shifts the bubble
-  inside the viewport margin, and **flips to the opposite side** when the
-  preferred side would overlap the anchor after clamping.
-  `useAnchoredPosition` returns the raw attachment point (for caret math);
-  prefer `useFloatingBoxPosition` / `resolveFloatingBox` when rendering a panel
-  with `top`/`left` only.
-- **Tooltip** `{ content, side?, align?, interactive?, children, className? }` + **TooltipProvider**
-  (compat passthrough). Renders a caret aimed at the trigger's center (preferring
-  the child control over the inline wrapper), clamped inside the bubble: dead-center
-  when the bubble is centered on the anchor (the default, since alignment prefers
-  `center`), and tracking the anchor when the bubble shifts to fit the viewport. Pass **`interactive`** when the bubble
-  contains buttons or other controls (pointer events on + delayed hide while the
-  cursor is over the bubble). **InfoHint** `{ content, label?, ariaLabel?, iconSize? }` —
-  icon-only help glyph, or `label` as a plain help trigger (prefer for
-  form/inspector rows; no underline fence, no trailing "i").
-- **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
-  headActions?, variant?: "centered"|"command"|"fullscreen", size?: "sm"|"md"|"lg",
-  showCloseButton?, closeAriaLabel?
-  }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in
-  via the shared frame presence lifecycle. `size` maps to
-  `--fynns-layout-dialog-max-width-*` (centered only). **DialogShell** is the low-level shell
-  `{ open, onClose, labelledBy?, ariaLabel?, variant?, children }`. **DialogFrame**
-  is the shared low-level frame reused by Dialog/Drawer/BottomSheet (`modal?`, `side?`,
-  `dataState?`); manages enter/exit when `dataState` is omitted. **ConfirmDialog** `{ open, onOpenChange, title, description?,
-  children?, confirmLabel?, cancelLabel?, onConfirm, onCancel?, danger?,
-  confirmDisabled?, loading?, confirmIcon?, closeAriaLabel? }` — yes/no
-  confirmation with a centered bold title, top-right close (X), and a
-  right-aligned Cancel + Confirm footer. `danger` makes Confirm destructive;
-  `loading` shows a spinner and blocks close (X/Esc/scrim). Labels default to
-  English ("Confirm"/"Cancel"). **FullscreenDialog** `{ open, onOpenChange,
-  title, children, actions?, closeAriaLabel? }` — full-viewport panel
-  (`variant="fullscreen"`, `.fynns-dialog--fullscreen`); head is close
-  IconButton + title + optional actions, body scrollable.
-- **Drawer** `{ open, onClose, side?: "left"|"right", modal?, title?, visibleTitle?,
-  description?, headActions?, showCloseButton?, closeAriaLabel?, ariaLabel?,
-  className?, children }` — side sheet that slides in from `side` (default right).
-  Enter/exit animation is handled by `DialogFrame`. `modal` defaults to `true`; pass
-  `modal={false}` for a non-modal drawer that leaves the page behind interactive
-  (no scroll lock / focus trap / blocking scrim). Width via
-  `--fynns-layout-drawer-width`.
-  **BottomSheet** `{ open, onClose, modal?, title?, description?,
-  showCloseButton?, showHandle?, size?: "content"|"half"|"full", actions?,
-  closeAriaLabel?, ariaLabel?, className?, children }` — M3 bottom sheet
-  ([specs](https://m3.material.io/components/bottom-sheets/specs)):
-  `surface-1` container, 28dp top corners, level-1 shadow, visual drag-handle
-  chrome (not interactive drag),
-  `title-large` headline. Close icon **off** by default (dismiss via Esc/scrim).
-  Prefer `Drawer` for desktop side panels.
-- **Switch** `{ label, checked, onCheckedChange, ariaLabel?, size?,
-  labelSide?: "start"|"end", disabled? }` (`role="switch"`). M3-aligned track /
-  thumb (52×32dp proportions, outlined unchecked / soft `accent-24` track +
-  accent outline & thumb when checked; handle morphs 18→22dp); no handle icon. Use
-  `labelSide="end"` (track then label) in dense
-  toolbars so tracks share a left edge with `ToggleGroup` / siblings instead of
-  drifting with label length.
-  **ControlStack** `{ columns?, gap?, children }` — shared `label | control₁…ₙ`
-  grid for multi-row toolbars; each nested `ControlRow` spans the stack via
-  CSS subgrid (controls / optional `Grid` flatten with `display: contents`) so
-  short rows do not pack the next label into an empty control column.
-  Default row gap is `--fynns-layout-control-stack-gap` (omit `gap` unless you
-  need a deliberate density override via a `--fynns-space-*` t-shirt key).
-  **UnitStack** `{ gap?, children }` — vertical list of *units* (inspector
-  fields, HueWheel + help, Collapsible body blocks). Default gap
-  `--fynns-layout-unit-stack-gap`. Prefer over ad-hoc margins when stacking
-  unrelated blocks; use `ControlStack` when rows share a label column.
-  **ControlRow** `{ label, children }` — fixed label column
-  (`--fynns-layout-control-row-label`) + controls; alone uses its own row grid,
-  inside `ControlStack` spans the shared tracks via subgrid. Gaps:
-  `--fynns-layout-control-row-column-gap` (horizontal),
-  `--fynns-layout-control-row-gap` (stacked label above controls),
-  `--fynns-layout-control-cluster-gap` (siblings in the controls cluster).
-  **Grid** `{ x?, y?, gap?,
-  children }` — X×Y layout; each axis is a fixed count or `"unbounded"` (default).
-  Example: `x={2} y="unbounded"` always keeps 2 columns and grows rows as items
-  are added (does not reflow into more columns). Tracks size to `max-content` and
-  do not clip / ellipsize cell text — grow the grid instead. Inside `ControlStack`,
-  match `columns` to `Grid`’s `x`.
+### Keep set (summary)
 
-  **Toolbar / unit rhythm** (single source — do not invent ad-hoc gaps):
+- **Actions:** Button, IconButton, Fab, FabMenu / FabMenuItem
+- **Fields:** Input, Select, Autocomplete, OtpInput, SearchBar / SearchBarResult,
+  Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup
+- **Feedback:** Banner, Badge / BadgedBox, LinearProgress / CircularProgress,
+  EmptyState, Tooltip, InfoHint
+- **Overlay / sheets:** FullscreenDialog, BottomSheet, DropdownMenu (+ Item /
+  CheckboxItem / Group / Separator), ContextMenu / ContextMenuTrigger
+- **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
+  DateRangePickerDialog, TimePicker / TimePickerDialog
+- **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
+  Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
+  Breadcrumb, Pagination
+- **Content:** List / ListItem, Card (+ Media / Header / Content / Actions),
+  Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
+  HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
+  AvatarGroup
+- **Layout helpers:** ControlStack, ControlRow, Grid
+- **Icons (public subset):** Archive, ArrowLeft, BarChart, ChevronRight,
+  Clipboard, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu, Pencil,
+  Plus, Save, Search, Settings, Trash, Undo, Upload — plus any glyph still
+  imported by Globals/Preview. Prefer `IconButton` + `Tooltip` over `title=`.
 
-  | Role | Token / API |
-  | --- | --- |
-  | Between stacked *units* (inspector fields, help + control blocks) | `--fynns-layout-unit-stack-gap` via **`UnitStack`** |
-  | Between `ControlRow`s | `--fynns-layout-control-stack-gap` via **`ControlStack`** |
-  | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
-  | Label above controls (narrow / stacked) | `--fynns-layout-control-row-gap` |
-  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
-  | Single-line chrome bar (TopAppBar sm / BottomAppBar / SearchBar / Toolbar) | `--fynns-layout-bar-height` |
-
-  Prefer `UnitStack` for vertical unit lists; `ControlStack` + `ControlRow`
-  (+ `Grid` for multi-control rows) for labeled toolbar strips. Live sample +
-  legend: sandbox **Components → Toolbar / unit rhythm**. Values live in
-  [`src/theme/tokens.ts`](src/theme/tokens.ts) (`LAYOUT_TOKENS`); after edits run
-  `npm run gen:theme`. Sandbox demo wrap gaps (`--sandbox-row-gap`, …) and the
-  same layout knobs are editable in the sandbox **Layout chrome** inspector
-  (`SANDBOX_LAYOUT_AGENT_CATALOG` in `examples/sandbox/src/state/baseline.ts`) —
-  agents must use that catalog, not ad-hoc gaps.
-  **Checkbox** `{ label, checked, onCheckedChange,
-  indeterminate?, invalid?, disabled?, …inputAttrs }` — M3 square selection mark
-  (18dp) with state layer; real `<input type="checkbox">`. **Radio** `{ label,
-  checked, onCheckedChange, name, value, invalid?, disabled? }` — M3 circular
-  mark (20dp); group via shared `name`. **ToggleControl** —
-  checkbox/radio styled as a switch (same M3 track/thumb as `Switch`); prefer
-  `Checkbox` / `Radio` for true selection chrome.
-- **ToggleGroup** `{ options, value, onChange, multiple?, fullWidth?, size?, showCheck? }`
-  — M3 **Segmented button**. Default single-select (`value: V`, `onChange: (V) => void`,
-  `role="radiogroup"` + arrow-key paging selects). Pass `multiple` for multi-select
-  (`value: V[]`, `onChange: (V[]) => void`, `role="group"`, `aria-pressed` on
-  segments; Space toggles, arrows move focus only). Outlined stadium row
-  (`--fynns-segmented-*`), 40dp (compact 32dp), hairline dividers, selected =
-  `secondary-container` + leading check (disable with `showCheck={false}`). Options
-  may include `tip`, `ariaLabel`, and `icon` (replaced by the check while selected).
-  Equal-width segments; leading slot width is reserved (no column reflow); check
-  fades/scales in with an optical label slide (`--fynns-duration-fast` +
-  `--fynns-ease-emphasized`). `fullWidth` justifies across the container.
-  Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
-  **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
-  leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
-  filter uses `aria-pressed` + optional leading check; input uses sibling dismiss
-  `IconButton` + `Tooltip` (`removeAriaLabel`). Prefer over `Badge` when interactive; prefer `ToggleGroup` for equal-width
-  segmented exclusivity. **Tabs**
-  `{ tabs, activeId, onChange, size?: "sm"|"md", fullWidth? }` — primary underline
-  indicator (3dp accent), not folder-style tops.
-- **Collapsible** `{ title, actions?, open?, defaultOpen?, onOpenChange?, children }`
-  — **one-shot disclosure section** for agents and apps: pass `title` + `children`
-  (optional `actions` / controlled `open`). Chevron, head, trigger, and body chrome
-  are built in — do **not** hand-assemble `.fynns-collapsible-*` pieces. Controlled
-  via `open` or uncontrolled via `defaultOpen`. `actions` sits outside the toggle
-  button. Body stays mounted so open and close both animate height + fade
-  (`data-state` open/closed). No head/body hairline (spacing only). Respects
-  `prefers-reduced-motion`.
-  Reusable utility: `.fynns-expand` / `.fynns-expand-inner`. Use to keep long
-  repeated form sections scannable.
-- **ListGroup** / **ListGroupHead** / **ListGroupTrigger** / **ListDisclosureToggle**
-  / **ListDisclosureToggleSpacer** / **ListTree** / **ListTreeRow** / **ListTreeSlot**
-  / **ListTreeBranch** — sidebar master/detail list: collapsible project groups,
-  compact tree chevrons, and nested branches. `ListGroupTrigger` integrates chevron
-  + title; `ListDisclosureToggle` is chevron-only for split headers or tree rows.
-  Prefer **List** / **ListItem** for main-content M3 lists.
-- **ListRow** / **ListRowSelectable** / **ListRowBody** / **ListRowTitle** /
-  **ListRowName** / **ListRowSub** / **ListRowBadges** / **ListRowMain** —
-  selectable sidebar rows (normal and bulk-select shells).
-- **NavItem** / **NavItemLabel** / **NavItemIcon** / **NavCount** / **NavBrandButton**
-  — primary sidebar navigation buttons.
-- **TextLinkButton** — inline accent text link control (body/paragraph links:
-  resting solid underline — M3/a11y; not a chrome text button). Prefer
-  `Button` `ghost` for undecorated toolbar/dialog actions.
-- **Breadcrumb** `{ items: { label, href?, onClick?, current? }[], ariaLabel?,
-  separator? }` — hierarchical path trail (`nav` + ordered list). Last item
-  (or `current`) is plain text with `aria-current="page"`; ancestors compose
-  **`Button` `ghost` `sm`** (or the same classes on `<a href>`) — stadium
-  radius, compact height, ghost state-layer; accent label. Prefer over
-  hand-rolled chevron rows in app chrome. **Reuse rule:** interactive chrome
-  must compose `Button` / `IconButton` / shared `::before` state-layers
-  (`--fynns-state-*`); never invent a private hover wash (Breadcrumb lesson).
-- **Pagination** `{ page, pageCount, onPageChange, siblingCount?,
-  boundaryCount?, size?: "sm"|"md", ariaLabel?, previousAriaLabel?,
-  nextAriaLabel?, getPageAriaLabel?, disabled? }` — list/table page navigator
-  (`nav` + list). Prev/next are `IconButton` + `Tooltip`; page numbers are
-  `Button` `ghost` (current = `tonal` + `aria-current="page"`). Ellipses when
-  the range is long. Slot-stable keys keep the tonal disc from flashing when
-  the window slides; page labels remount with a short enter motion. Prefer over
-  hand-rolled prev/next + page chips.
-- **DottedLinkButton** — dotted-underline action link (e.g. import diff rows);
-  keep the dotted resting decoration (distinct from TextLink / Breadcrumb).
-- **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
-- **Card** `{ variant?: "elevated"|"filled"|"outlined", interactive?, selected?, disabled? }`
-  + anatomy: **CardMedia** `{ src?, alt?, height?, children? }` (custom media via
-  `children` when not using a plain image), **CardHeader**
-  `{ title, subtitle?, avatar?, action? }`, **CardContent**, **CardActions**
-  `{ align?: "start"|"end", disableSpacing? }`, **CardActionArea**. M3-informed
-  subject card (distinct from `PanelCard` layout shell). Uses elevation /
-  state-layer tokens; elevated+interactive hovers to a stronger shadow;
-  `selected` uses `accent-container`. Aesthetic sandbox (`npm run sandbox`) exposes preview
-  toggles + token knobs listed in [README.md](README.md#aesthetic-sandbox).
-- **CardOpenButton** — full-width card primary action area (quicklinks).
-- **Slider** `{ value, onChange, min?, max?, step?, ariaLabel, disabled? }` —
-  styled native range.
-- **Panel** (sidebar `<aside>`) / **PanelCard** `{ title, actions?, fill?,
-  noScroll?, fillBody? }` / **ScrollArea** (custom scrollbar skin).
-- **Toaster** (mount once) + imperative **toast** `toast(msg, opts?)`,
-  `toast.message/.success/.error/.warning/.info(msg, opts?)`, `toast.dismiss(id?)`
-  — drop-in for the `sonner` subset; defaults to **bottom-center** Snackbar-ish
-  inverse surface. Enter/exit uses motion tokens (`--fynns-duration-base`,
-  `--fynns-ease-emphasized`): slides in from the toaster edge (bottom positions from below,
-  top from above) with a fade; dismiss plays the reverse before unmount. **ToastProvider** +
-  **useToast** compat; declarative `<Toast>` uses the same animation (bottom-center).
-- **AlertMessageBase** `{ severity: "warning"|"error"|"info"|"success", message? }`
-  + **WarningBanner / ErrorBanner / InfoBanner / SuccessBanner** — inline panel
-  alerts (not the M3 chrome `Banner`).
-- **Spinner / PanelSkeleton / BlockingLoadingOverlay** (loading states).
-  **LinearProgress** `{ value?, label, stopIndicator? }` / **CircularProgress**
-  `{ value?, label, size?: "sm"|"md"|"lg" }` — M3 progress (4dp track, rounded caps,
-  determinate track gap + linear stop). Omit `value` for indeterminate (the
-  loading ring for unknown waits). Prefer `Spinner` for compact button/inline
-  busy; use Progress for known % or section waits.
-  **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
-  identity (40dp default); image → children → initials from `name` → person glyph.
-  Pass into `CardHeader`’s `avatar` slot.
-  **AvatarGroup** `{ children, max?, size? }` — overlapping Avatar stack; shows
-  `+N` overflow when children exceed `max` (default 3). Nested `Avatar`s that
-  omit `size` inherit the group's `size`. Overflow uses literal `+N` children
-  (not initials from `name`). Group fills are opaque (accent baked onto
-  `surface-1`) plus a `surface-1` ring so overlaps do not double-tint
-  translucent `accent-container`.
-  **Fab** `{ children, label?, size?: "sm"|"md"|"lg",
-  variant?: "primary"|"secondary"|"tertiary"|"surface", lowered? }` — M3 floating
-  action (56dp default; sm 40 / lg 96). Color roles map to accent / secondary /
-  tertiary containers (or `surface-3` + accent ink). `lowered` drops elevation.
-  Pass `label` for Extended FAB. Icon-only needs `aria-label` (+ usually `Tooltip`).
-  Shape: md `radius-xl` (16dp), lg `radius-3xl` (28dp); state layers via `::before`.
-  **FabMenu** `{ children, ariaLabel, closeAriaLabel?, icon?, expanded?,
-  defaultExpanded?, onExpandedChange?, variant?, itemVariant?, align?,
-  closeOnSelect? }` + **FabMenuItem** `{ icon, label, onClick?, disabled?,
-  variant? }` — M3 Expressive FAB menu: toggle FAB expands 2–6 labeled small
-  FABs stacked above it (items portal to `document.body` so Collapsible /
-  overflow parents cannot clip them; staggered enter/exit via `data-state`
-  closed/open/closing; collapsed footprint stays the toggle; Esc / outside
-  click dismiss; default Plus rotates 45° into Close). Prefer a lone `Fab`
-  when there is only one primary action.
-  **TopAppBar** `{ title?, leading?, trailing?, size?: "sm"|"md"|"lg", scrolled? }` —
-  top app bar (`sm` / action row = `--fynns-layout-bar-height` 56dp shared with
-  BottomAppBar / SearchBar; md 80 / lg 104). Leading/trailing keep the standard
-  40dp `IconButton` so hover discs sit inset in the bar (not edge-flush).
-  `--fynns-appbar-actions-gap` between siblings. Title uses medium weight at
-  compact type. `scrolled` → surface-1 + shadow (caller owns scroll). Prefer
-  `Panel` for sidebar chrome.
-  **BottomAppBar** `{ actions?, floatingActionButton?, children? }` — bottom
-  action bar (`--fynns-layout-bar-height` 56dp with TopAppBar sm / SearchBar;
-  stock M3 is 80dp; `--fynns-radius-3xl` long-strip group with SearchBar /
-  Banner / NavigationDrawer items / sheet tops). Actions start-aligned with
-  40dp targets; optional FAB sits inside the bar (no cradle cutout). Prefer
-  `NavigationBar` for bottom destinations. Prefer **Toolbar** (`docked`) for
-  flexible Expressive page actions.
-  **Toolbar** `{ variant?: "docked"|"floating", orientation?: "horizontal"|"vertical",
-  color?: "standard"|"vibrant", floatingActionButton?, children }` — M3 Expressive
-  action chrome (`role="toolbar"`; pass `aria-label`). Height
-  `--fynns-layout-bar-height` (56dp). `docked` is full-width long-strip
-  (`--fynns-radius-3xl`); `floating` is wrap-content pill (`--fynns-radius-pill`)
-  and may stack `vertical`. `vibrant` uses `accent-container`. Optional FAB:
-  end slot when docked; beside the capsule when floating. Prefer `ControlStack`
-  for labeled inspector rows; prefer `BottomAppBar` / `NavigationBar` when those
-  roles fit better.
-  **NavigationRail** `{ labelVisibility?, alignment?, children }` +
-  **NavigationRailMenu** (menu `IconButton` uses a 48dp hover target /
-  16dp glyph via `--fynns-navrail-menu-target` / `icon-size`) /
-  **NavigationRailHeader** / **NavigationRailItem**
-  `{ icon, label?, active?, alwaysShowLabel?, badge? }` / **NavigationRailBadge** —
-  M3 compact vertical destinations (80dp). Active/hover highlight is a square
-  wrapping icon + label (`secondary-container`); icon-only stays a 56dp
-  circle. Active fill scales/fades on a `::before` layer (activate ↔
-  deactivate). Circle ↔ rounded-square morph uses half-size radius →
-  `radius-md` (not `radius-pill`, which will not interpolate smoothly);
-  size/radius use `--fynns-duration-slow`. Morphs on
-  `labelVisibility="selected"`; press scales slightly; labels fade in.
-  Optional badge (dot or count) centers on the icon’s top-end corner.
-  `labelVisibility`: `labeled` | `selected` | `unlabeled`. Prefer `NavItem` +
-  `Panel` for full sidebar rows; icon-only items need `aria-label`.
-  **NavigationBar** `{ labelVisibility?, children }` + **NavigationBarItem**
-  `{ icon, label?, active?, alwaysShowLabel?, badge? }` — horizontal bottom
-  destinations (80dp, 3–5 items). Same labelVisibility + square
-  `secondary-container` highlight as the rail; badge via `NavigationRailBadge`
-  (count folds into the item accessible name).   Prefer `NavigationRail` on medium+ layouts; pair with `NavigationDrawer`
-  `standard` for M3 adaptive expand/collapse (drawer ↔ rail).
-  **NavigationDrawer** `{ variant?: "modal"|"standard", open?, onClose?,
-  side?, modal?, headline?, children }` + **NavigationDrawerItem**
-  `{ icon?, label, active?, badge? }` + **NavigationDrawerHeadline** —
-  destination side sheet (280dp dense; stock M3 is 360dp). Modal overlays with scrim (default
-  `side="left"`); `standard` is permanent in-layout. Item highlight is a
-  full-width row highlight (`secondary-container`, `--fynns-radius-3xl` — same
-  long-strip step as SearchBar / Select suggestion rows); trailing badge for counts.
-  Prefer generic `Drawer` for inspector / form panels.
-- **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
-  **BadgedBox** `{ badge?, children }` — positions a notification badge over an
-  arbitrary child (icon button, avatar, …). Scalar / `true` (dot) values reuse
-  `NavigationRailBadge` (`aria-hidden`); fold the count into the child's
-  `aria-label`. Pass a custom node when needed. Layout-only wrapper — no
-  private hover wash.
-  **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
-  M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
-  (16dp). Vertical stretches in a flex row (`align-self: stretch`).
-  **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
-- **OtpInput** `{ value, onChange, length?, invalid?, supportingText?, errorText?,
-  ariaLabel?, disabled? }` — one-time-code digit row (`.fynns-input` cells);
-  paste splits across cells; arrows / Backspace move focus.
-- **EmptyState** `{ title, description?, icon?, actions?, size?: "sm"|"md" }` —
-  layout-only empty / zero-result placeholder (no Card chrome, no hover).
-  Compose CTAs with `Button` / `IconButton` yourself.
-- **SkipLink** `{ href?, label?, children? }` — a11y skip-to-content link;
-  visually hidden until `:focus-visible`, then appears via **`Button` `ghost`**
-  classes (`fynns-btn fynns-btn--ghost`). Default `href="#main"`.
-- **Stepper** `{ steps: { label, description?, optional? }[], activeIndex,
-  onStepChange?, orientation?: "horizontal"|"vertical", disabled?, ariaLabel? }` —
-  linear step indicator; completed steps before `activeIndex` are clickable
-  when `onStepChange` is set and reuse **`Button` `ghost` `sm`** (no private
-  hover). Active step uses `aria-current="step"`. Circle fill / check glyph /
-  label emphasis animate with motion tokens (`prefers-reduced-motion` safe).
-- **Dropzone** `{ onFiles, accept?, multiple?, disabled?, busy?, label?, hint?,
-  browseLabel? }` — file drop surface (`role="group"`) + hidden
-  `<input type="file">`; browse uses `Button` `tonal` (keyboard target). Click
-  / drop on the surface also opens the picker. `busy` shows indeterminate
-  `LinearProgress`.
-- **Table** `{ stickyHeader? }` + anatomy: **TableHead** / **TableBody** /
-  **TableRow** / **TableHeaderCell** `{ align? }` / **TableCell** `{ align? }` /
-  **TableCaption** — native `<table>` with `.fynns-table` chrome. Scroll shells
-  use `.fynns-table-wrap` (scrollbar tokens) and/or `fynns-scroll` /
-  `ScrollArea`. Prefer over ad-hoc grid markup for tabular data.
-- **CodeBlock** `{ code, language?, label?, copyAriaLabel?, showCopy?, maxHeight? }` —
-  monospace sample (`fynns-scroll` `<pre>`); optional copy is `IconButton` +
-  `Tooltip` + `ClipboardIcon`.
-- Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
-  `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
-  `PersonIcon`,
-  `InfoIcon`, `SearchIcon`, `AlertCircleIcon`, `AlertTriangleIcon`,
-  `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
-  `PencilIcon`, `EyeIcon`, `EyeOffIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
-  `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
-  `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
-  `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,
-  `LayoutGridIcon`, `LockIcon`, `SettingsIcon`, `SunIcon`, `MoonIcon`,
-  `CalendarIcon`, `ClockIcon`. Components also accept
-  your own icon nodes where an `icon` prop exists.
+Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
+`DialogFrame`, `Spinner`, and floating-box helpers are **internal**.
 
 ## Adding to the system
 
@@ -638,8 +224,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
    reference it as `var(--fynns-...)`.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
-   `src/index.ts`, document it here, **and add a live sample to the aesthetic
-   sandbox** (`examples/sandbox`, typically Components catalog or the Preview
-   Card/Collapsible stage). Gallery (`examples/gallery`) is optional extra coverage, not a
-   substitute for sandbox.
+   `src/index.ts`, document it here, **and add a live sample to sandbox
+   Globals or Preview** in the same change. Do not expand the public barrel
+   without that demo (see `llm/BREAKING_PURGE.md`).
 3. Keep `npm run typecheck` and `npm run lint` green.

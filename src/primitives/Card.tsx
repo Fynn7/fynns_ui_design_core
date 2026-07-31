@@ -1,5 +1,4 @@
 import type {
-  ButtonHTMLAttributes,
   HTMLAttributes,
   ImgHTMLAttributes,
   KeyboardEvent,
@@ -26,8 +25,7 @@ export type CardProps = HTMLAttributes<HTMLDivElement> & {
 
 /**
  * Subject card with M3-informed variants (`elevated` / `filled` / `outlined`).
- * Compose with `CardMedia`, `CardHeader`, `CardContent`, `CardActions`, and
- * optional `CardActionArea`. Distinct from `PanelCard` (layout shell).
+ * Compose with `CardMedia`, `CardHeader`, `CardContent`, and `CardActions`.
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   {
@@ -175,18 +173,3 @@ export function CardActions({
     </div>
   );
 }
-
-export type CardActionAreaProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  children: ReactNode;
-};
-
-/** Clickable content region inside a non-interactive Card shell. */
-export const CardActionArea = forwardRef<HTMLButtonElement, CardActionAreaProps>(
-  function CardActionArea({ className, type = "button", children, ...rest }, ref) {
-    return (
-      <button {...rest} ref={ref} type={type} className={join("fynns-card-action-area", className)}>
-        {children}
-      </button>
-    );
-  },
-);

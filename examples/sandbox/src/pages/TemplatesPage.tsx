@@ -1,11 +1,9 @@
 import {
   applyFynnsThemeMode,
   Button,
-  Dialog,
-  DownloadIcon,
+  FullscreenDialog,
   Input,
-  Textarea,
-  toast,
+  SaveIcon,
   ToggleGroup,
   Tooltip,
   TrashIcon,
@@ -59,6 +57,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
   const [saveDescription, setSaveDescription] = useState("");
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameName, setRenameName] = useState("");
+  const [status, setStatus] = useState<string | null>(null);
 
   const refresh = useCallback(() => setTemplates(listTemplates()), []);
 
@@ -76,7 +75,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
       applyFynnsThemeMode(bundle.theme);
       onThemeChange(bundle.theme);
       const n = Object.keys(bundle.overrides).length;
-      toast.success(
+      setStatus(
         t("templates.toastLoaded", {
           label,
           count: n,
@@ -90,14 +89,14 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
 
   const exportCurrent = () => {
     downloadConfigJson(currentBundle());
-    toast.message(t("templates.toastDownloaded"));
+    setStatus(t("templates.toastDownloaded"));
   };
 
   const onImportFile = async (file: File | undefined) => {
     if (!file) return;
     const result = await readConfigFromFile(file);
     if (!result.ok) {
-      toast.error(result.error);
+      setStatus(result.error);
       return;
     }
     applyBundle(result.bundle, file.name);
@@ -106,7 +105,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
   const confirmSaveTemplate = () => {
     const name = saveName.trim();
     if (!name) {
-      toast.error(t("templates.toastNameRequired"));
+      setStatus(t("templates.toastNameRequired"));
       return;
     }
     saveTemplateFromBundle(currentBundle(), {
@@ -117,7 +116,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
     setSaveName("");
     setSaveDescription("");
     refresh();
-    toast.success(t("templates.toastSaved", { name }));
+    setStatus(t("templates.toastSaved", { name }));
   };
 
   const exportTemplate = (tpl: SandboxTemplate) => {
@@ -130,7 +129,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
       baseTokensHash: tpl.baseTokensHash,
     };
     downloadConfigJson(bundle, `fynns-template-${slugify(tpl.name)}.json`);
-    toast.message(t("templates.toastExported", { name: tpl.name }));
+    setStatus(t("templates.toastExported", { name: tpl.name }));
   };
 
   const overrideCount = Object.keys(draft.overrides).length;
@@ -159,7 +158,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
         <div className="sandbox-templates-actions">
           <Tooltip content={t("templates.exportTip")}>
             <Button size="sm" variant="primary" onClick={exportCurrent}>
-              <DownloadIcon size={14} />
+              <SaveIcon size={14} />
               {t("templates.export")}
             </Button>
           </Tooltip>
@@ -202,6 +201,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
             theme,
           })}
         </p>
+        {status ? <p className="sandbox-muted">{status}</p> : null}
       </header>
 
       <section className="sandbox-templates-list" aria-label={t("templates.savedAria")}>
@@ -237,7 +237,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                       aria-label={t("templates.exportOneAria", { name: tpl.name })}
                       onClick={() => exportTemplate(tpl)}
                     >
-                      <DownloadIcon size={14} />
+                      <SaveIcon size={14} />
                     </Button>
                   </Tooltip>
                   <Button
@@ -258,7 +258,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                       onClick={() => {
                         deleteTemplate(tpl.id);
                         refresh();
-                        toast.message(t("templates.toastDeleted", { name: tpl.name }));
+                        setStatus(t("templates.toastDeleted", { name: tpl.name }));
                       }}
                     >
                       <TrashIcon size={14} />
@@ -271,12 +271,22 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
         )}
       </section>
 
-      <Dialog
+      <FullscreenDialog
         open={saveOpen}
         onOpenChange={setSaveOpen}
         title={t("templates.saveDialogTitle")}
-        description={t("templates.saveDialogDesc")}
+        actions={
+          <>
+            <Button size="sm" variant="ghost" onClick={() => setSaveOpen(false)}>
+              {t("templates.cancel")}
+            </Button>
+            <Button size="sm" variant="primary" onClick={confirmSaveTemplate}>
+              {t("templates.saveTemplate")}
+            </Button>
+          </>
+        }
       >
+        <p className="sandbox-muted">{t("templates.saveDialogDesc")}</p>
         <div className="sandbox-templates-form">
           <label className="sandbox-templates-field">
             <span>{t("templates.name")}</span>
@@ -289,41 +299,23 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
           </label>
           <label className="sandbox-templates-field">
             <span>{t("templates.description")}</span>
-            <Textarea
+            <Input
               value={saveDescription}
               onChange={(event) => setSaveDescription(event.target.value)}
-              rows={3}
               aria-label={t("templates.descriptionAria")}
             />
           </label>
-          <div className="sandbox-apply-diff-foot">
-            <Button size="sm" variant="ghost" onClick={() => setSaveOpen(false)}>
-              {t("templates.cancel")}
-            </Button>
-            <Button size="sm" variant="primary" onClick={confirmSaveTemplate}>
-              {t("templates.saveTemplate")}
-            </Button>
-          </div>
         </div>
-      </Dialog>
+      </FullscreenDialog>
 
-      <Dialog
+      <FullscreenDialog
         open={renameId != null}
         onOpenChange={(open) => {
           if (!open) setRenameId(null);
         }}
         title={t("templates.renameTitle")}
-      >
-        <div className="sandbox-templates-form">
-          <label className="sandbox-templates-field">
-            <span>{t("templates.name")}</span>
-            <Input
-              value={renameName}
-              onChange={(event) => setRenameName(event.target.value)}
-              aria-label={t("templates.nameAria")}
-            />
-          </label>
-          <div className="sandbox-apply-diff-foot">
+        actions={
+          <>
             <Button size="sm" variant="ghost" onClick={() => setRenameId(null)}>
               {t("templates.cancel")}
             </Button>
@@ -334,19 +326,30 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                 if (!renameId) return;
                 const updated = updateTemplateMeta(renameId, { name: renameName });
                 if (!updated) {
-                  toast.error(t("templates.toastNotFound"));
+                  setStatus(t("templates.toastNotFound"));
                   return;
                 }
                 setRenameId(null);
                 refresh();
-                toast.message(t("templates.toastRenamed"));
+                setStatus(t("templates.toastRenamed"));
               }}
             >
               {t("templates.save")}
             </Button>
-          </div>
+          </>
+        }
+      >
+        <div className="sandbox-templates-form">
+          <label className="sandbox-templates-field">
+            <span>{t("templates.name")}</span>
+            <Input
+              value={renameName}
+              onChange={(event) => setRenameName(event.target.value)}
+              aria-label={t("templates.nameAria")}
+            />
+          </label>
         </div>
-      </Dialog>
+      </FullscreenDialog>
     </div>
   );
 }

@@ -7,7 +7,8 @@
     "human": "llm/CONSUME.md",
     "designSystem": "AGENTS.md",
     "propagation": "docs/submodule-propagation.md",
-    "opencodeRule": "llm/opencode-fynns-ui-consume.md"
+    "opencodeRule": "llm/opencode-fynns-ui-consume.md",
+    "breakingPurge": "llm/BREAKING_PURGE.md"
   },
   "rules": [
     "On any short prompt involving @fynns/ui / fynns UI / Collapsible (etc.), read llm/CONSUME.md before writing app code.",
@@ -17,7 +18,7 @@
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
     "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
-    "If the app uses toast.*, mount <Toaster /> once near the app root; toast without Toaster builds but shows nothing.",
+    "Do not import purged symbols (toast/Toaster/Dialog/Popover/UnitStack/…). See llm/BREAKING_PURGE.md. M3 Snackbar TBD.",
     "App entry must createRoot and render App (CSS-only main.tsx is a fail).",
     "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
     "If build uses tsc, add vite-env.d.ts with /// <reference types=\"vite/client\" /> so CSS imports from @fynns/ui typecheck.",
@@ -84,7 +85,7 @@
     "tsconfig target/lib are ES2022+ when the consumer runs tsc against @fynns/ui",
     "package.json does not depend on @fynns/ui or @fynns/ui-design-core",
     "import { Collapsible } from \"@fynns/ui\" typechecks / builds in the consumer",
-    "when toast.* is used, <Toaster /> is mounted once in the app tree"
+    "no imports of purged symbols listed in llm/BREAKING_PURGE.md"
   ],
-  "importExample": "import { Button, Collapsible, PanelCard, Toaster, toast } from \"@fynns/ui\";"
+  "importExample": "import { Button, Collapsible, FullscreenDialog } from \"@fynns/ui\";"
 }

@@ -1,6 +1,6 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button, Card } from "@fynns/ui";
-import { Row, Section } from "./galleryShared";
+import { Row, Section } from "./foundationsShared";
 
 const EASING_DEMOS = [
   { label: "ease-out", token: "var(--fynns-ease-out)" },

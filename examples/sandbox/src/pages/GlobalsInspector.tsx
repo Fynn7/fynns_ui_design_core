@@ -4,9 +4,7 @@ import {
   Collapsible,
   InfoHint,
   Slider,
-  toast,
   Tooltip,
-  UnitStack,
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -124,7 +122,7 @@ export function GlobalsInspector() {
       patch[cssVar] = SANDBOX_RESTING[cssVar] ?? BASELINE[cssVar] ?? "0";
     }
     mergeOverrides(patch, { source: "reset", group: "radius" });
-    toast.message(t("globalsInspector.toastReset"));
+    /* feedback removed with toast purge */
   };
 
   return (
@@ -145,7 +143,7 @@ export function GlobalsInspector() {
         </header>
 
         <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
-          <UnitStack>
+          <div className="sandbox-stack">
             <SandboxHelp text={t("globalsInspector.shapeLadderHelp")} />
             {EDITABLE_RADIUS.map(({ key, label, max, usesKey, hintKey }) => {
               const cssVar = `--fynns-radius-${key}`;
@@ -209,7 +207,7 @@ export function GlobalsInspector() {
                 </Button>
               </Tooltip>
             </CardActions>
-          </UnitStack>
+          </div>
         </Collapsible>
 
         <Collapsible title={t("layoutChrome.collapsible")} defaultOpen>

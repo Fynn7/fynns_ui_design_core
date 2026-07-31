@@ -1,11 +1,9 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
-  BotIcon,
   Button,
   IconButton,
   Input,
-  Popover,
-  toast,
+  SettingsIcon,
   Tooltip,
 } from "@fynns/ui";
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
@@ -15,26 +13,26 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
 
 /**
  * Phase 4 stub: natural-language proposals become TokenOperations after
- * explicit user confirmation. Top-bar icon opens a popover; no model backend
- * yet — local heuristics only.
+ * explicit user confirmation. Top-bar icon toggles an inline panel; no model
+ * backend yet — local heuristics only.
  */
 export function AgentInputBar() {
   const { t } = useLocale();
-  const triggerRef = useRef<HTMLButtonElement>(null);
   const { apply } = useTokenDraft();
   const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
+  const [status, setStatus] = useState<string | null>(null);
 
   const run = () => {
     const proposals = proposeFromPrompt(prompt);
     if (proposals.length === 0) {
-      toast.warning(t("agent.toastNone"));
+      setStatus(t("agent.toastNone"));
       return;
     }
     setPending(proposals);
     setOpen(true);
-    toast.info(t("agent.toastReady", { count: proposals.length }));
+    setStatus(t("agent.toastReady", { count: proposals.length }));
   };
 
   const confirmAll = () => {
@@ -48,7 +46,7 @@ export function AgentInputBar() {
         reasoning: p.reasoning,
       });
     }
-    toast.success(t("agent.toastApplied"));
+    setStatus(t("agent.toastApplied"));
     setPending([]);
     setPrompt("");
     setOpen(false);
@@ -60,30 +58,24 @@ export function AgentInputBar() {
       : t("agent.tipIdle");
 
   return (
-    <>
+    <div className="sandbox-agent">
       <Tooltip content={tooltip}>
         <IconButton
-          ref={triggerRef}
           aria-label={t("agent.triggerAria")}
           aria-haspopup="dialog"
           aria-expanded={open}
           className={
-            pending.length > 0 ? "sandbox-agent-trigger sandbox-agent-trigger--pending" : "sandbox-agent-trigger"
+            pending.length > 0
+              ? "sandbox-agent-trigger sandbox-agent-trigger--pending"
+              : "sandbox-agent-trigger"
           }
           onClick={() => setOpen((wasOpen) => !wasOpen)}
         >
-          <BotIcon size={16} aria-hidden />
+          <SettingsIcon size={16} aria-hidden />
         </IconButton>
       </Tooltip>
-      <Popover
-        open={open}
-        onOpenChange={setOpen}
-        anchorRef={triggerRef}
-        side="bottom"
-        align="end"
-        className="sandbox-agent-popover"
-      >
-        <div className="sandbox-agent-panel">
+      {open ? (
+        <div className="sandbox-agent-panel sandbox-agent-panel--inline" role="dialog">
           <div className="sandbox-agent-row">
             <Input
               value={prompt}
@@ -98,6 +90,7 @@ export function AgentInputBar() {
               {t("agent.propose")}
             </Button>
           </div>
+          {status ? <p className="sandbox-muted">{status}</p> : null}
           {pending.length > 0 ? (
             <div className="sandbox-agent-pending">
               {pending.map((p) => (
@@ -121,7 +114,7 @@ export function AgentInputBar() {
             <SandboxHelp text={t("agent.help")} />
           )}
         </div>
-      </Popover>
-    </>
+      ) : null}
+    </div>
   );
 }

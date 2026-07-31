@@ -4823,7 +4823,7 @@ a.fynns-breadcrumb-link:visited {
   height: var(--fynns-fab-icon-size-lg);
 }
 
-.fynns-fab-icon > svg {
+.fynns-fab-icon svg {
   width: 100%;
   height: 100%;
 }

@@ -1,4 +1,4 @@
-import { InfoHint, Slider, UnitStack } from "@fynns/ui";
+﻿import { InfoHint, Slider } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import {
@@ -91,7 +91,7 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
   const { resolved, mergeOverrides, apply } = useTokenDraft();
 
   return (
-    <UnitStack>
+    <div className="sandbox-stack">
       <SandboxHelp text={t("layoutChrome.help")} />
       {showChrome
         ? CHROME_ROWS.map(({ key, labelKey, hintKey, max }) => {
@@ -168,6 +168,6 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
           </div>
         );
       })}
-    </UnitStack>
+    </div>
   );
 }

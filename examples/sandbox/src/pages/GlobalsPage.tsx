@@ -98,7 +98,6 @@ import {
   ControlStack,
   Grid,
   Slider,
-  toast,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -1023,9 +1022,6 @@ export function GlobalsPage() {
             onFiles={(files) => {
               const names = files.map((f) => f.name);
               setDropNames(names);
-              toast.message(
-                t("globals.dropzoneToast", { names: names.join(", ") }),
-              );
             }}
           />
           <SandboxHelp
