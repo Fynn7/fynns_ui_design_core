@@ -7192,3 +7192,89 @@ a.fynns-breadcrumb-link:visited {
 .fynns-code-block-pre code {
   font: inherit;
 }
+
+/* ---------- Snackbar (M3) ---------- */
+.fynns-snackbar-host {
+  position: fixed;
+  z-index: var(--fynns-z-toast);
+  left: 50%;
+  bottom: var(--fynns-layout-snackbar-inset);
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  max-width: var(--fynns-layout-snackbar-max-width);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.fynns-snackbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-layout-snackbar-gap);
+  width: max-content;
+  max-width: var(--fynns-layout-snackbar-max-width);
+  min-height: 3rem;
+  padding: var(--fynns-layout-snackbar-pad-block) var(--fynns-layout-snackbar-pad-inline);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-toast-surface);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-md);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-snackbar[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-snackbar__message {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.fynns-snackbar__trailing {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  margin-inline-start: var(--fynns-space-xs);
+}
+
+.fynns-snackbar__action.fynns-btn {
+  color: var(--fynns-color-accent);
+  flex-shrink: 0;
+  min-height: var(--fynns-layout-snackbar-dismiss-size);
+}
+
+.fynns-snackbar__dismiss.fynns-btn.fynns-btn--icon {
+  flex-shrink: 0;
+  width: var(--fynns-layout-snackbar-dismiss-size);
+  min-width: var(--fynns-layout-snackbar-dismiss-size);
+  height: var(--fynns-layout-snackbar-dismiss-size);
+  min-height: var(--fynns-layout-snackbar-dismiss-size);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-snackbar {
+    transform: none;
+    transition: opacity var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  }
+
+  .fynns-snackbar[data-state="open"] {
+    transform: none;
+  }
+}

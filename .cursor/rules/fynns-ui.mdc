@@ -25,7 +25,8 @@ Popover, UnitStack, SearchInput, Panel*, …).
   BottomSheet, Switch, ToggleGroup, Slider, Card (+ Media/Header/Content/Actions),
   LinearProgress/CircularProgress, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
-  List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper, EmptyState, Dropzone,
+  snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
+  EmptyState, Dropzone,
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock,
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
@@ -45,7 +46,7 @@ Popover, UnitStack, SearchInput, Panel*, …).
   new radius steps require a GUI row in the same change.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast / Dialog /
-  Popover APIs (Snackbar TBD — sandbox-first).
+  Popover APIs. Transient feedback: `snackbar` + `SnackbarHost`.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the submodule

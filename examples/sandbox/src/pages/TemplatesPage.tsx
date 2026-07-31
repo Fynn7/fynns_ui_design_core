@@ -4,6 +4,7 @@ import {
   DownloadIcon,
   FullscreenDialog,
   Input,
+  snackbar,
   ToggleGroup,
   Tooltip,
   TrashIcon,
@@ -89,7 +90,9 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
 
   const exportCurrent = () => {
     downloadConfigJson(currentBundle());
-    setStatus(t("templates.toastDownloaded"));
+    snackbar(t("templates.toastDownloaded"), {
+      dismissAriaLabel: t("globals.snackbarDismiss"),
+    });
   };
 
   const onImportFile = async (file: File | undefined) => {
@@ -116,7 +119,9 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
     setSaveName("");
     setSaveDescription("");
     refresh();
-    setStatus(t("templates.toastSaved", { name }));
+    snackbar(t("templates.toastSaved", { name }), {
+      dismissAriaLabel: t("globals.snackbarDismiss"),
+    });
   };
 
   const exportTemplate = (tpl: SandboxTemplate) => {

@@ -78,6 +78,7 @@ import {
   Select,
   SettingsIcon,
   SkipLink,
+  snackbar,
   Stepper,
   Switch,
   Table,
@@ -798,6 +799,48 @@ export function GlobalsPage() {
           </Button>
         )}
         <SandboxHelp text={t("globals.bannerHelp")} />
+        <div className="sandbox-globals-row">
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
+              snackbar(t("globals.snackbarShort"), {
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            {t("globals.snackbarShortBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
+              snackbar(t("globals.snackbarUndoMsg"), {
+                action: {
+                  label: t("globals.snackbarUndo"),
+                  onClick: () => snackbar(t("globals.snackbarUndone")),
+                },
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            {t("globals.snackbarUndoBtn")}
+          </Button>
+          <Button
+            size="sm"
+            variant="tonal"
+            onClick={() =>
+              snackbar(t("globals.snackbarIndefiniteMsg"), {
+                duration: "indefinite",
+                dismissible: true,
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            {t("globals.snackbarIndefiniteBtn")}
+          </Button>
+        </div>
+        <SandboxHelp text={t("globals.snackbarHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catContainment")}>

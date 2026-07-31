@@ -120,6 +120,13 @@ export { Tooltip } from "./primitives/Tooltip";
 export type { TooltipProps } from "./primitives/Tooltip";
 export { InfoHint } from "./primitives/InfoHint";
 export type { InfoHintProps } from "./primitives/InfoHint";
+export { snackbar, SnackbarHost } from "./primitives/Snackbar";
+export type {
+  SnackbarAction,
+  SnackbarDuration,
+  SnackbarHostProps,
+  SnackbarOptions,
+} from "./primitives/Snackbar";
 export { FullscreenDialog } from "./primitives/Dialog";
 export type { FullscreenDialogProps } from "./primitives/Dialog";
 export { BottomSheet } from "./primitives/BottomSheet";
