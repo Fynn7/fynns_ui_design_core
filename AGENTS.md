@@ -180,7 +180,7 @@ Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/
 `theme.css` resets `code` / `kbd` / `samp` / `pre` onto the mono stack so bare
 `<code>` labels never fall back to the browser default monospace.
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
-`--fynns-duration-{instant,tooltip,toggle,fast,flyout,base,slow,pointer,loop-pulse,
+`--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,pointer,loop-pulse,
 loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
 
 For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
@@ -197,7 +197,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Fields:** Input, Select, Autocomplete, OtpInput, SearchBar / SearchBarResult,
   Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup
 - **Feedback:** Banner, Badge / BadgedBox, LinearProgress / CircularProgress,
-  EmptyState, Tooltip, InfoHint
+  EmptyState, Tooltip (hover opens after `--fynns-duration-tooltip-show-delay`;
+  leave hides immediately; focus opens at once; after any tip has shown,
+  further tips skip the delay for `--fynns-duration-tooltip-skip-delay` so
+  consecutive toolbar hovers are instant; enter fades/slides via
+  `--fynns-duration-tooltip` once placement is ready; bubble stays inside the
+  viewport via flip/shift + inline `maxWidth` from the floating placer), InfoHint
 - **Overlay / sheets:** FullscreenDialog, BottomSheet, DropdownMenu (+ Item /
   CheckboxItem / Group / Separator), ContextMenu / ContextMenuTrigger
 - **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
@@ -210,10 +215,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid
-- **Icons (public subset):** Archive, ArrowLeft, BarChart, ChevronRight,
-  Clipboard, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu, Pencil,
-  Plus, Save, Search, Settings, Trash, Undo, Upload — plus any glyph still
-  imported by Globals/Preview. Prefer `IconButton` + `Tooltip` over `title=`.
+- **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
+  Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
+  Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,
+  Sun, Trash, Undo, Upload — plus any glyph still imported by Globals/Preview.
+  Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
 `DialogFrame`, `Spinner`, and floating-box helpers are **internal**.
