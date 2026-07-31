@@ -16,6 +16,7 @@ import {
   restoreFynnsThemeMode,
   SettingsIcon,
   SparklesIcon,
+  SnackbarHost,
   SunIcon,
   ToggleGroup,
   Tooltip,
@@ -353,6 +354,7 @@ export function SandboxShell() {
           </div>
         </div>
       </div>
+      <SnackbarHost />
     </div>
   );
 }

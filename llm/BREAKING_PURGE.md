@@ -25,7 +25,7 @@ sandbox Globals/Preview demo and review.
 ```text
 Imports from @fynns/ui in GlobalsPage + CardPreviewCanvas + CollapsiblePreviewCanvas
   ∪ theme exports from src/theme/*
-  − toast / Toaster / Toast*   (hard-deleted; never re-add without Snackbar review)
+  − toast / Toaster / Toast*   (hard-deleted; use snackbar + SnackbarHost)
 = allowed public surface
 ```
 
@@ -34,15 +34,15 @@ Anything else must be deleted or kept as a non-exported internal.
 ## Snackbar status
 
 - Old **Toast / Toaster / toast / ToastProvider / useToast** are **deleted**.
-- **Do not** import or reimplement them in consumers or this core.
-- A future M3 Snackbar must first appear as a sandbox sample, pass design
-  review, then land in `src/primitives` — not before.
+- **Do not** import or reimplement those names.
+- Use **`snackbar(...)` + `<SnackbarHost />`** (M3 Snackbar). Mount the host
+  once near the app root. Never re-add sonner-shaped toast APIs.
 
 ## Removed → how consumers should fix
 
 | Removed | Consumer fix |
 | --- | --- |
-| `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | No substitute yet. Inline status text, or wait for M3 Snackbar (sandbox-first). |
+| `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
 | `Drawer` | Prefer `NavigationDrawer` for destinations; otherwise build on app layout. |
 | `Dialog` / `ConfirmDialog` / `DialogShell` | Prefer `FullscreenDialog` or `BottomSheet`; short confirms can be app-local. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |

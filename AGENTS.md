@@ -62,7 +62,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
      to the right).
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
-5. **Always show loading / empty / error state.** Prefer `LinearProgress` / `CircularProgress`, `EmptyState`, and `Banner` / `Badge` semantics. Do **not** use deleted Toast APIs (see `llm/BREAKING_PURGE.md`; M3 Snackbar TBD). Color status as `danger` / `warning` / `info` / `success`.
+5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
+   `CircularProgress`, `EmptyState`, `Banner` / `Badge`, and imperative
+   `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do **not**
+   use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
+   `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
    `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
@@ -197,7 +201,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Fields:** Input, Select, Autocomplete, OtpInput, SearchBar / SearchBarResult,
   Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup
 - **Feedback:** Banner, Badge / BadgedBox, LinearProgress / CircularProgress,
-  EmptyState, Tooltip (hover opens after `--fynns-duration-tooltip-show-delay`;
+  EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
+  + root `<SnackbarHost />`;
+  one at a time, bottom-center; optional single action; `short` / `long` /
+  `indefinite`; surface `--fynns-color-toast-surface`, z `--fynns-z-toast`),
+  Tooltip (hover opens after `--fynns-duration-tooltip-show-delay`;
   leave hides immediately; focus opens at once; after any tip has shown,
   further tips skip the delay for `--fynns-duration-tooltip-skip-delay` so
   consecutive toolbar hovers are instant; enter fades/slides via

@@ -409,6 +409,14 @@
   --fynns-layout-sheet-actions-pad-top: 1rem;
   --fynns-layout-sheet-actions-pad-bottom: 1.5rem;
   --fynns-layout-tooltip-max-width: min(14rem, calc(100vw - 16px));
+  --fynns-layout-snackbar-max-width: min(35rem, calc(100vw - 2rem));
+  --fynns-layout-snackbar-min-height: 3rem;
+  --fynns-layout-snackbar-pad-inline: 1rem;
+  --fynns-layout-snackbar-pad-block: 0.5rem;
+  --fynns-layout-snackbar-gap: 0.5rem;
+  --fynns-layout-snackbar-dismiss-size: 2rem;
+  --fynns-layout-snackbar-enter-offset: 0.5rem;
+  --fynns-layout-snackbar-inset: 1rem;
   --fynns-layout-command-palette-width: min(100%, 34rem);
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
   --fynns-layout-command-palette-top-padding: 12vh;

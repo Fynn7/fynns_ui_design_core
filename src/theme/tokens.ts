@@ -826,6 +826,20 @@ export const LAYOUT_TOKENS = {
   "sheet-actions-pad-bottom": "1.5rem",
   /** Cap to token width and viewport inset (2×8px margin — matches Popover VIEWPORT_MARGIN). */
   "tooltip-max-width": "min(14rem, calc(100vw - 16px))",
+  /** M3 Snackbar — max width (~560dp) capped to viewport. */
+  "snackbar-max-width": "min(35rem, calc(100vw - 2rem))",
+  /** Single-line bar target (~48dp). */
+  "snackbar-min-height": "3rem",
+  "snackbar-pad-inline": "1rem",
+  /** Vertical pad so single-line + sm dismiss (32dp) stays ~48dp (M3). */
+  "snackbar-pad-block": "0.5rem",
+  "snackbar-gap": "0.5rem",
+  /** Trailing dismiss target inside the bar (not the 40dp chrome IconButton). */
+  "snackbar-dismiss-size": "2rem",
+  /** Enter slide distance (reduced-motion disables translate). */
+  "snackbar-enter-offset": "0.5rem",
+  /** Distance from the viewport bottom edge. */
+  "snackbar-inset": "1rem",
   "command-palette-width": "min(100%, 34rem)",
   "command-palette-max-height": "min(70vh, 28rem)",
   "command-palette-top-padding": "12vh",
