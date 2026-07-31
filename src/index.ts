@@ -84,4 +84,8 @@ export * from "./primitives/CommandPalette";
 export * from "./primitives/OtpInput";
 export * from "./primitives/EmptyState";
 export * from "./primitives/SkipLink";
+export * from "./primitives/Stepper";
+export * from "./primitives/Dropzone";
+export * from "./primitives/Table";
+export * from "./primitives/CodeBlock";
 export * from "./primitives/captions";

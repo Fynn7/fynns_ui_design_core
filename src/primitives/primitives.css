@@ -7328,3 +7328,278 @@ a.fynns-breadcrumb-link:visited {
 .fynns-skip-link:focus-visible {
   transform: translateY(0);
 }
+
+/* ---------- Stepper ---------- */
+.fynns-stepper-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-stepper--vertical .fynns-stepper-list {
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+}
+
+.fynns-stepper-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-item {
+  flex: 1 1 0;
+  position: relative;
+}
+
+.fynns-stepper-circle {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--fynns-radius-round);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-stepper-item--active .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-accent);
+  color: var(--fynns-color-on-accent);
+}
+
+.fynns-stepper-item--completed .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-stepper-label {
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+/*
+ * Completed clickable labels reuse Button ghost sm, but must keep the same
+ * box as the plain `<span>` or “Next” shifts every label right (btn pad + border).
+ */
+.fynns-stepper-item .fynns-btn.fynns-stepper-label {
+  min-height: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-sm);
+  justify-content: flex-start;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+  white-space: normal;
+}
+
+.fynns-stepper-description {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-stepper-optional {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-stepper--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ---------- Dropzone ---------- */
+.fynns-dropzone {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl);
+  border: var(--fynns-border-hairline) dashed var(--fynns-color-border-strong);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  cursor: pointer;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-dropzone:hover:not(.fynns-dropzone--disabled):not(.fynns-dropzone--busy) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--active {
+  border-color: var(--fynns-color-accent);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--disabled,
+.fynns-dropzone--busy {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fynns-dropzone-label {
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-dropzone-hint {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-dropzone-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dropzone-progress {
+  width: 100%;
+}
+
+.fynns-dropzone-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Table ---------- */
+.fynns-table-wrap {
+  overflow: auto;
+  max-width: 100%;
+}
+
+.fynns-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text);
+}
+
+.fynns-table-caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+}
+
+.fynns-table-header-cell,
+.fynns-table-cell {
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  vertical-align: middle;
+}
+
+.fynns-table-header-cell {
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  text-align: start;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-table--sticky-header .fynns-table-head .fynns-table-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.fynns-table-header-cell--align-center,
+.fynns-table-cell--align-center {
+  text-align: center;
+}
+
+.fynns-table-header-cell--align-end,
+.fynns-table-cell--align-end {
+  text-align: end;
+}
+
+.fynns-table-row[data-selected="true"] {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+/* ---------- CodeBlock ---------- */
+.fynns-code-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+}
+
+.fynns-code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-2xs) var(--fynns-space-xs) var(--fynns-space-2xs)
+    var(--fynns-space-md);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-code-block-label {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-code-block-pre {
+  margin: 0;
+  padding: var(--fynns-space-md);
+  overflow: auto;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text);
+}
+
+.fynns-code-block-pre code {
+  font: inherit;
+}
