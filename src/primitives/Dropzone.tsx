@@ -103,22 +103,17 @@ export function Dropzone({
     className,
   );
 
+  const groupLabel = typeof label === "string" ? label : undefined;
+
   return (
     <div
       {...rest}
       className={rootClass}
-      role="button"
-      tabIndex={blocked ? -1 : 0}
+      role="group"
+      aria-label={groupLabel}
       aria-disabled={blocked || undefined}
       aria-busy={busy || undefined}
       onClick={openDialog}
-      onKeyDown={(event) => {
-        if (blocked) return;
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openDialog();
-        }
-      }}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
       onDrop={onDrop}

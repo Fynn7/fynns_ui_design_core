@@ -1,7 +1,22 @@
-import { useState, type HTMLAttributes, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
 import { PersonIcon } from "./icons";
 
 export type AvatarSize = "sm" | "md" | "lg";
+
+/** Size hint from a parent `AvatarGroup` when `Avatar` omits `size`. */
+export const AvatarGroupSizeContext = createContext<AvatarSize | undefined>(
+  undefined,
+);
+
+export function useAvatarGroupSize(): AvatarSize | undefined {
+  return useContext(AvatarGroupSizeContext);
+}
 
 export type AvatarProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
   /** Image URL. Falls back to initials / icon when missing or load fails. */
@@ -15,7 +30,10 @@ export type AvatarProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
   name?: string;
   /** Custom content (icon, etc.). Wins over initials; loses to a loaded image. */
   children?: ReactNode;
-  /** Default `md` (40dp — M3 list leading avatar). */
+  /**
+   * Default `md` (40dp — M3 list leading avatar). Inside `AvatarGroup`, falls
+   * back to the group's `size` when omitted.
+   */
   size?: AvatarSize;
 };
 
@@ -46,10 +64,12 @@ export function Avatar({
   alt,
   name,
   children,
-  size = "md",
+  size: sizeProp,
   className,
   ...rest
 }: AvatarProps) {
+  const groupSize = useAvatarGroupSize();
+  const size = sizeProp ?? groupSize ?? "md";
   const [broken, setBroken] = useState(false);
   const showImage = Boolean(src) && !broken;
   const initials = !showImage && !children && name ? initialsFromName(name) : "";

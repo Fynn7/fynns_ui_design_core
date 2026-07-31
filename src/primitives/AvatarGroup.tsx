@@ -1,18 +1,11 @@
 import {
   Children,
-  createContext,
-  useContext,
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-import { Avatar, type AvatarSize } from "./Avatar";
+import { Avatar, AvatarGroupSizeContext, type AvatarSize } from "./Avatar";
 
-const AvatarGroupContext = createContext<AvatarSize | undefined>(undefined);
-
-/** Optional size from a parent `AvatarGroup` (consumers may read it later). */
-export function useAvatarGroupSize(): AvatarSize | undefined {
-  return useContext(AvatarGroupContext);
-}
+export { useAvatarGroupSize } from "./Avatar";
 
 export type AvatarGroupProps = Omit<
   HTMLAttributes<HTMLSpanElement>,
@@ -22,7 +15,7 @@ export type AvatarGroupProps = Omit<
   children: ReactNode;
   /** Max visible avatars before `+N` overflow. Default `3`. */
   max?: number;
-  /** Optional size hint for overflow avatar / nested context. */
+  /** Size for nested Avatars (when they omit `size`) and the overflow mark. */
   size?: AvatarSize;
 };
 
@@ -41,7 +34,7 @@ export function AvatarGroup({
   const overflow = items.length - max;
 
   return (
-    <AvatarGroupContext.Provider value={size}>
+    <AvatarGroupSizeContext.Provider value={size}>
       <span
         {...rest}
         className={["fynns-avatar-group", className ?? ""]
@@ -56,13 +49,15 @@ export function AvatarGroup({
         {overflow > 0 ? (
           <span className="fynns-avatar-group-item">
             <Avatar
-              name={`+${overflow}`}
               size={size}
               className="fynns-avatar-group-overflow"
-            />
+              alt={`+${overflow}`}
+            >
+              {`+${overflow}`}
+            </Avatar>
           </span>
         ) : null}
       </span>
-    </AvatarGroupContext.Provider>
+    </AvatarGroupSizeContext.Provider>
   );
 }

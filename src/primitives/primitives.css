@@ -7886,7 +7886,41 @@ a.fynns-breadcrumb-link:visited {
 .fynns-table-wrap {
   overflow: auto;
   max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
 }
+
+.fynns-table-wrap::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-track {
+  background: var(--fynns-scrollbar-track);
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--fynns-scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb:active {
+  background: var(--fynns-scrollbar-thumb-active);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-corner {
+  background: var(--fynns-scrollbar-track);
+}
+
+/* Prefer pairing with `.fynns-scroll` on the wrap (or use `ScrollArea`). */
 
 .fynns-table {
   width: 100%;

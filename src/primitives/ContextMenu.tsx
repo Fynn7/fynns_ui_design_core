@@ -3,6 +3,7 @@ import {
   useEffect,
   useId,
   useLayoutEffect,
+  useRef,
   useState,
   type HTMLAttributes,
   type ReactNode,
@@ -41,8 +42,22 @@ export function ContextMenu({
   const menuId = useId();
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
   const [pos, setPos] = useState({ left: x, top: y });
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+
+  useEffect(() => {
+    if (open) {
+      const active = document.activeElement;
+      if (active instanceof HTMLElement) restoreFocusRef.current = active;
+      return;
+    }
+    const prev = restoreFocusRef.current;
+    restoreFocusRef.current = null;
+    if (prev && document.contains(prev)) {
+      prev.focus();
+    }
+  }, [open]);
 
   useLayoutEffect(() => {
     if (!open) return;

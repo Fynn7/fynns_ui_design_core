@@ -854,7 +854,9 @@ export function GlobalsPage() {
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <BadgedBox badge={3}>
             <Tooltip content={t("globals.badgedBoxIconTip")}>
-              <IconButton aria-label={t("globals.badgedBoxIconTip")}>
+              <IconButton
+                aria-label={`${t("globals.badgedBoxIconTip")}, 3`}
+              >
                 <InfoIcon />
               </IconButton>
             </Tooltip>
@@ -1056,7 +1058,7 @@ export function GlobalsPage() {
           />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <div style={{ width: "100%", maxWidth: "28rem", overflow: "auto" }}>
+          <div className="fynns-table-wrap fynns-scroll" style={{ width: "100%", maxWidth: "28rem" }}>
             <Table>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
               <TableHead>

@@ -152,6 +152,8 @@ export function MenuSurface({
         role="menu"
         aria-label={ariaLabel}
         aria-hidden={!presenting}
+        // Keep focus out of the panel while the exit animation plays.
+        {...(!presenting ? { inert: true } : {})}
         data-side={dataSide}
         data-state={presenting ? "open" : "closing"}
         className={join("fynns-menu", className)}

@@ -75,7 +75,7 @@ export function OtpInput({
 
   const handleInput = (index: number, event: FormEvent<HTMLInputElement>) => {
     const raw = event.currentTarget.value;
-    const digit = Array.from(raw).pop() ?? "";
+    const digit = (Array.from(raw).pop() ?? "").replace(/\D/gu, "");
     const next = [...chars];
     next[index] = digit;
     commit(next);
@@ -109,7 +109,9 @@ export function OtpInput({
 
   const handlePaste = (index: number, event: ClipboardEvent<HTMLInputElement>) => {
     event.preventDefault();
-    const pasted = event.clipboardData.getData("text").replace(/\s/gu, "");
+    const pasted = event.clipboardData
+      .getData("text")
+      .replace(/\D/gu, "");
     if (!pasted) return;
     const next = [...chars];
     const slice = Array.from(pasted);

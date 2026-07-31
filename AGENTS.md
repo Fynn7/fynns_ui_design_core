@@ -509,9 +509,11 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   identity (40dp default); image → children → initials from `name` → person glyph.
   Pass into `CardHeader`’s `avatar` slot.
   **AvatarGroup** `{ children, max?, size? }` — overlapping Avatar stack; shows
-  `+N` overflow when children exceed `max` (default 3). Group fills are opaque
-  (accent baked onto `surface-1`) plus a `surface-1` ring so overlaps do not
-  double-tint translucent `accent-container`.
+  `+N` overflow when children exceed `max` (default 3). Nested `Avatar`s that
+  omit `size` inherit the group's `size`. Overflow uses literal `+N` children
+  (not initials from `name`). Group fills are opaque (accent baked onto
+  `surface-1`) plus a `surface-1` ring so overlaps do not double-tint
+  translucent `accent-container`.
   **Fab** `{ children, label?, size?: "sm"|"md"|"lg",
   variant?: "primary"|"secondary"|"tertiary"|"surface", lowered? }` — M3 floating
   action (56dp default; sm 40 / lg 96). Color roles map to accent / secondary /
@@ -582,8 +584,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
   **BadgedBox** `{ badge?, children }` — positions a notification badge over an
   arbitrary child (icon button, avatar, …). Scalar / `true` (dot) values reuse
-  `NavigationRailBadge`; pass a custom node when needed. Layout-only wrapper —
-  no private hover wash.
+  `NavigationRailBadge` (`aria-hidden`); fold the count into the child's
+  `aria-label`. Pass a custom node when needed. Layout-only wrapper — no
+  private hover wash.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
   (16dp). Vertical stretches in a flex row (`align-self: stretch`).
@@ -604,12 +607,15 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   hover). Active step uses `aria-current="step"`. Circle fill / check glyph /
   label emphasis animate with motion tokens (`prefers-reduced-motion` safe).
 - **Dropzone** `{ onFiles, accept?, multiple?, disabled?, busy?, label?, hint?,
-  browseLabel? }` — file drop surface + hidden `<input type="file">`; browse
-  uses `Button` `tonal`. `busy` shows indeterminate `LinearProgress`.
+  browseLabel? }` — file drop surface (`role="group"`) + hidden
+  `<input type="file">`; browse uses `Button` `tonal` (keyboard target). Click
+  / drop on the surface also opens the picker. `busy` shows indeterminate
+  `LinearProgress`.
 - **Table** `{ stickyHeader? }` + anatomy: **TableHead** / **TableBody** /
   **TableRow** / **TableHeaderCell** `{ align? }` / **TableCell** `{ align? }` /
-  **TableCaption** — native `<table>` with `.fynns-table` chrome. Prefer over
-  ad-hoc grid markup for tabular data.
+  **TableCaption** — native `<table>` with `.fynns-table` chrome. Scroll shells
+  use `.fynns-table-wrap` (scrollbar tokens) and/or `fynns-scroll` /
+  `ScrollArea`. Prefer over ad-hoc grid markup for tabular data.
 - **CodeBlock** `{ code, language?, label?, copyAriaLabel?, showCopy?, maxHeight? }` —
   monospace sample (`fynns-scroll` `<pre>`); optional copy is `IconButton` +
   `Tooltip` + `ClipboardIcon`.
