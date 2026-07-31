@@ -206,7 +206,6 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
   return createPortal(
     <div
       className={["fynns-snackbar-host", className ?? ""].filter(Boolean).join(" ")}
-      data-state={open ? "open" : "closed"}
     >
       <div
         className="fynns-snackbar"

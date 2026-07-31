@@ -7214,7 +7214,7 @@ a.fynns-breadcrumb-link:visited {
   gap: var(--fynns-layout-snackbar-gap);
   width: max-content;
   max-width: var(--fynns-layout-snackbar-max-width);
-  min-height: 3rem;
+  min-height: var(--fynns-layout-snackbar-min-height);
   padding: var(--fynns-layout-snackbar-pad-block) var(--fynns-layout-snackbar-pad-inline);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
@@ -7223,7 +7223,7 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-md);
   pointer-events: auto;
   opacity: 0;
-  transform: translateY(0.5rem);
+  transform: translateY(var(--fynns-layout-snackbar-enter-offset));
   transition:
     opacity var(--fynns-duration-base) var(--fynns-ease-emphasized),
     transform var(--fynns-duration-base) var(--fynns-ease-emphasized);

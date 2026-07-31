@@ -201,7 +201,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Fields:** Input, Select, Autocomplete, OtpInput, SearchBar / SearchBarResult,
   Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup
 - **Feedback:** Banner, Badge / BadgedBox, LinearProgress / CircularProgress,
-  EmptyState, **Snackbar** (`snackbar(message, opts?)` + root `<SnackbarHost />`;
+  EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
+  + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
   `indefinite`; surface `--fynns-color-toast-surface`, z `--fynns-z-toast`),
   Tooltip (hover opens after `--fynns-duration-tooltip-show-delay`;
