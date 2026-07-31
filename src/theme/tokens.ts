@@ -541,7 +541,7 @@ export const TOOLBAR_TOKENS = {
  * Collapsed capsule height shares `--fynns-layout-bar-height` (56dp); expanded
  * merges field + results into one shell.
  * Corner radius uses `--fynns-radius-3xl` (not a private searchbar token).
- * Prefer `SearchInput` for dense form rows.
+ * Prefer `Input` for dense form rows (SearchInput removed).
  * `--fynns-searchbar-<key>`.
  */
 export const SEARCHBAR_TOKENS = {
@@ -844,7 +844,7 @@ export const LAYOUT_TOKENS = {
   "control-cluster-gap": "0.5rem",
   /**
    * Vertical gap between stacked *units* (inspector fields, HueWheel + help,
-   * Collapsible body blocks). Prefer `UnitStack` / `.fynns-unit-stack` over
+   * Collapsible body blocks). Prefer flex + `--fynns-layout-unit-stack-gap` (sandbox `.sandbox-stack`) over
    * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows).
    */
   "unit-stack-gap": "1rem",

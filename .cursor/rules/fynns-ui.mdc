@@ -38,7 +38,7 @@ Popover, UnitStack, SearchInput, Panel*, …).
   Vertical unit lists (inspector fields, Collapsible bodies): flex column +
   `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
-  (see AGENTS.md **Toolbar / unit rhythm**); do not invent ad-hoc gaps.
+  (see AGENTS.md layout helpers / `LAYOUT_TOKENS`); do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
