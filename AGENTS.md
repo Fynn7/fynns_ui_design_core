@@ -228,9 +228,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **SearchBar** `{ value, onChange, ariaLabel, onSearch?, leading?, trailing?,
   expanded?, onExpandedChange?, clearAriaLabel?, children? }` + **SearchBarResult** —
   elevated 56dp capsule for chrome search (`--fynns-radius-3xl`); when `expanded`,
-  field + results merge into one docked shell. Result row hover/active uses the
-  same `--fynns-radius-3xl` as `NavigationDrawerItem`. Prefer `SearchInput` for dense
-  form rows.
+  field + results merge into one docked shell. Expand/collapse uses shared
+  `.fynns-expand` height morph + shell shadow/radius (including blur/Esc
+  collapse). Result row hover/active uses the same `--fynns-radius-3xl` as
+  `NavigationDrawerItem`. Prefer `SearchInput` for dense form rows.
 - **Banner** `{ text, supportingText?, icon?, actions?, onDismiss?,
   dismissAriaLabel?, variant?: "default"|"tonal" }` — full-width strip under
   TopAppBar (message + actions + dismiss; `--fynns-radius-3xl` long-strip group
@@ -298,11 +299,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   (stay open by default), arrow-key paging + Esc. Prefer over ad-hoc absolute
   menus when the trigger sits in an overflow/scroll ancestor.
   Shared **MenuSurface** `{ open, onClose, children, style?, id?, … }` provides
-  MenuContext + portal panel (also used by ContextMenu).
+  MenuContext + portal panel with enter/exit presence (`data-state` + flyout
+  motion tokens; also used by ContextMenu).
 - **ContextMenu** `{ open, onOpenChange, x, y, children, ariaLabel? }` —
   controlled right-click menu at client coords (clamped to viewport); reuses
   DropdownMenuItem / Group / CheckboxItem / Separator via MenuSurface. Esc /
-  outside dismiss. **ContextMenuTrigger** `{ onOpenChange, onPositionChange,
+  outside dismiss (exit animates before unmount). **ContextMenuTrigger** `{ onOpenChange, onPositionChange,
   children }` wraps a region and `preventDefault`s contextmenu to open.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
   positions via `useFloatingBoxPosition` (top/left box coords, no CSS
@@ -467,7 +469,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   nextAriaLabel?, getPageAriaLabel?, disabled? }` — list/table page navigator
   (`nav` + list). Prev/next are `IconButton` + `Tooltip`; page numbers are
   `Button` `ghost` (current = `tonal` + `aria-current="page"`). Ellipses when
-  the range is long. Prefer over hand-rolled prev/next + page chips.
+  the range is long. Slot-stable keys keep the tonal disc from flashing when
+  the window slides; page labels remount with a short enter motion. Prefer over
+  hand-rolled prev/next + page chips.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows);
   keep the dotted resting decoration (distinct from TextLink / Breadcrumb).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
@@ -553,8 +557,12 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `{ icon, label?, active?, alwaysShowLabel?, badge? }` / **NavigationRailBadge** —
   M3 compact vertical destinations (80dp). Active/hover highlight is a square
   wrapping icon + label (`secondary-container`); icon-only stays a 56dp
-  pill. Optional badge (dot or count) centers on the icon’s
-  top-end corner.
+  circle. Active fill scales/fades on a `::before` layer (activate ↔
+  deactivate). Circle ↔ rounded-square morph uses half-size radius →
+  `radius-md` (not `radius-pill`, which will not interpolate smoothly);
+  size/radius use `--fynns-duration-slow`. Morphs on
+  `labelVisibility="selected"`; press scales slightly; labels fade in.
+  Optional badge (dot or count) centers on the icon’s top-end corner.
   `labelVisibility`: `labeled` | `selected` | `unlabeled`. Prefer `NavItem` +
   `Panel` for full sidebar rows; icon-only items need `aria-label`.
   **NavigationBar** `{ labelVisibility?, children }` + **NavigationBarItem**
@@ -593,7 +601,8 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   onStepChange?, orientation?: "horizontal"|"vertical", disabled?, ariaLabel? }` —
   linear step indicator; completed steps before `activeIndex` are clickable
   when `onStepChange` is set and reuse **`Button` `ghost` `sm`** (no private
-  hover). Active step uses `aria-current="step"`.
+  hover). Active step uses `aria-current="step"`. Circle fill / check glyph /
+  label emphasis animate with motion tokens (`prefers-reduced-motion` safe).
 - **Dropzone** `{ onFiles, accept?, multiple?, disabled?, busy?, label?, hint?,
   browseLabel? }` — file drop surface + hidden `<input type="file">`; browse
   uses `Button` `tonal`. `busy` shows indeterminate `LinearProgress`.

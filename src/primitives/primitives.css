@@ -27,6 +27,28 @@
   }
 }
 
+@keyframes fynns-flyout-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+}
+
+@keyframes fynns-flyout-exit-top {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+}
+
 @keyframes fynns-tooltip-enter {
   from {
     opacity: 0;
@@ -42,6 +64,57 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fynns-nav-rail-label-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.125rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fynns-stepper-circle-activate {
+  from {
+    transform: scale(0.88);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-stepper-glyph-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-pagination-label-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-pagination-current-activate {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
   }
 }
 
@@ -774,7 +847,7 @@
   cursor: not-allowed;
 }
 
-.fynns-autocomplete--invalid .fynns-search-bar-field {
+.fynns-autocomplete--invalid.fynns-search-bar {
   box-shadow:
     var(--fynns-shadow-md),
     0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger);
@@ -813,17 +886,33 @@
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
-  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
-    both;
 }
 
 .fynns-menu[data-side="top"] {
   transform-origin: bottom center;
-  animation-name: fynns-flyout-enter-top;
 }
 
 .fynns-menu[data-side="bottom"] {
   transform-origin: top center;
+}
+
+.fynns-menu[data-state="open"] {
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="open"] {
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-menu[data-state="closing"] {
+  pointer-events: none;
+  animation: fynns-flyout-exit var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="closing"] {
+  animation-name: fynns-flyout-exit-top;
 }
 
 .fynns-menu-group {
@@ -2614,7 +2703,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* Match IconButton sm circle. No bg/border transition — sliding the page window
-   must not animate ghost↔tonal (that read as a flashing selected disc). */
+   must not animate ghost↔tonal (that read as a flashing selected disc). Motion
+   is limited to transform + label remount so the tonal slot can stay put. */
 .fynns-btn.fynns-pagination-page {
   box-sizing: border-box;
   width: 2rem;
@@ -2624,7 +2714,7 @@ a.fynns-breadcrumb-link:visited {
   padding: 0;
   border-radius: var(--fynns-radius-round);
   border-color: transparent;
-  transition: none;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-spring);
 }
 
 .fynns-btn.fynns-pagination-page:hover:not(:disabled),
@@ -2632,11 +2722,40 @@ a.fynns-breadcrumb-link:visited {
   border-color: transparent;
 }
 
+.fynns-btn.fynns-pagination-page:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.fynns-btn.fynns-pagination-page--current {
+  animation: fynns-pagination-current-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-pagination-page-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-pagination-label-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
 .fynns-btn.fynns-pagination-page--md {
   width: var(--fynns-size-icon-target);
   min-width: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);
   min-height: var(--fynns-size-icon-target);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-btn.fynns-pagination-page,
+  .fynns-pagination-page-label {
+    transition: none;
+    animation: none;
+  }
+
+  .fynns-btn.fynns-pagination-page:active:not(:disabled) {
+    transform: none;
+  }
 }
 
 .fynns-nav-item {
@@ -5156,9 +5275,14 @@ a.fynns-breadcrumb-link:visited {
   cursor: not-allowed;
 }
 
-/* Full destination highlight: icon + label (not an icon-only pill). */
+/* Full destination highlight: icon + label (not an icon-only pill).
+   Active fill lives on ::before so activate ↔ deactivate both morph
+   (transform + opacity) instead of a one-shot keyframe pop.
+   Shape morph (circle ↔ rounded square) uses interpolable radii — never
+   `--fynns-radius-pill` (999px), which stays circular until the last frames. */
 .fynns-nav-rail-indicator {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -5173,9 +5297,38 @@ a.fynns-breadcrumb-link:visited {
   border-radius: var(--fynns-radius-md);
   background: transparent;
   overflow: visible;
+  transform: scale(1);
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    gap var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-nav-rail-item--labeled .fynns-nav-rail-indicator {
@@ -5186,7 +5339,7 @@ a.fynns-breadcrumb-link:visited {
   max-width: var(--fynns-navrail-indicator-size-labeled);
   min-height: var(--fynns-navrail-indicator-size-labeled);
   max-height: var(--fynns-navrail-indicator-size-labeled);
-  aspect-ratio: 1;
+  border-radius: var(--fynns-radius-md);
 }
 
 .fynns-nav-rail-item--icon .fynns-nav-rail-indicator,
@@ -5199,13 +5352,18 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-navrail-indicator-height-icon);
   max-height: var(--fynns-navrail-indicator-height-icon);
   padding: 0;
-  border-radius: var(--fynns-radius-pill);
-  aspect-ratio: 1;
+  /* Half of icon size (= circle). Interpolates cleanly to radius-md. */
+  border-radius: calc(var(--fynns-navrail-indicator-height-icon) / 2);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-indicator {
-  background: var(--fynns-color-secondary-container);
+  background: transparent;
   color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
@@ -5217,7 +5375,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator {
+.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -5232,9 +5390,14 @@ a.fynns-breadcrumb-link:visited {
     var(--fynns-color-text) var(--fynns-state-pressed),
     transparent
   );
+  transform: scale(0.96);
 }
 
 .fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -5252,6 +5415,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-rail-icon-wrap {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -5269,6 +5433,7 @@ a.fynns-breadcrumb-link:visited {
   width: var(--fynns-navrail-icon-size);
   height: var(--fynns-navrail-icon-size);
   color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-icon {
@@ -5336,6 +5501,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-rail-label {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5345,6 +5512,9 @@ a.fynns-breadcrumb-link:visited {
   line-height: var(--fynns-navrail-label-line);
   color: var(--fynns-color-text-muted);
   text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-label {
@@ -5357,8 +5527,24 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-nav-rail-indicator {
+  .fynns-nav-rail-indicator,
+  .fynns-nav-rail-indicator::before,
+  .fynns-nav-rail-icon,
+  .fynns-nav-rail-label {
     transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-rail-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-rail-item:active:not(:disabled) .fynns-nav-rail-indicator {
+    transform: none;
   }
 }
 
@@ -5412,6 +5598,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-bar-indicator {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -5429,9 +5616,35 @@ a.fynns-breadcrumb-link:visited {
   border-radius: var(--fynns-radius-md);
   background: transparent;
   overflow: visible;
+  transform: scale(1);
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-bar-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-nav-bar-item--icon .fynns-nav-bar-indicator,
@@ -5441,12 +5654,17 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-navbar-indicator-height-icon);
   max-height: var(--fynns-navbar-indicator-height-icon);
   padding: 0;
-  border-radius: var(--fynns-radius-pill);
+  border-radius: calc(var(--fynns-navbar-indicator-height-icon) / 2);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-indicator {
-  background: var(--fynns-color-secondary-container);
+  background: transparent;
   color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
@@ -5458,7 +5676,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator {
+.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -5473,9 +5691,14 @@ a.fynns-breadcrumb-link:visited {
     var(--fynns-color-text) var(--fynns-state-pressed),
     transparent
   );
+  transform: scale(0.96);
 }
 
 .fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -5493,6 +5716,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-bar-icon-wrap {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -5510,6 +5734,7 @@ a.fynns-breadcrumb-link:visited {
   width: var(--fynns-navbar-icon-size);
   height: var(--fynns-navbar-icon-size);
   color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-icon {
@@ -5559,6 +5784,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-bar-label {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5568,6 +5795,9 @@ a.fynns-breadcrumb-link:visited {
   line-height: var(--fynns-navbar-label-line);
   color: var(--fynns-color-text-muted);
   text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-label {
@@ -5580,8 +5810,24 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-nav-bar-indicator {
+  .fynns-nav-bar-indicator,
+  .fynns-nav-bar-indicator::before,
+  .fynns-nav-bar-icon,
+  .fynns-nav-bar-label {
     transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-bar-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-bar-item:active:not(:disabled) .fynns-nav-bar-indicator {
+    transform: none;
   }
 }
 
@@ -5960,6 +6206,13 @@ a.fynns-breadcrumb-link:visited {
   align-items: stretch;
   width: 100%;
   z-index: var(--fynns-z-dropdown);
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-md);
+  overflow: hidden;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 /* Collapsed: capsule field. Expanded: one continuous shell (Google-style). */
@@ -5972,21 +6225,14 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-searchbar-height);
   height: var(--fynns-searchbar-height);
   padding-inline: var(--fynns-searchbar-pad-inline);
-  border-radius: var(--fynns-radius-3xl);
-  background: var(--fynns-color-surface-2);
+  border-radius: 0;
+  background: transparent;
   color: var(--fynns-color-text);
-  box-shadow: var(--fynns-shadow-md);
-  transition:
-    background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
-    border-radius var(--fynns-duration-fast) var(--fynns-ease-standard);
+  box-shadow: none;
 }
 
 .fynns-search-bar--expanded {
-  border-radius: var(--fynns-radius-3xl);
-  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-lg);
-  overflow: hidden;
 }
 
 .fynns-search-bar--expanded:focus-within {
@@ -5995,14 +6241,18 @@ a.fynns-breadcrumb-link:visited {
     0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
 }
 
-.fynns-search-bar--expanded .fynns-search-bar-field {
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow:
+    var(--fynns-shadow-md),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar--disabled {
+  opacity: var(--fynns-opacity-muted);
 }
 
 .fynns-search-bar--disabled .fynns-search-bar-field {
-  opacity: var(--fynns-opacity-muted);
+  opacity: 1;
 }
 
 .fynns-search-bar-leading,
@@ -6056,15 +6306,10 @@ a.fynns-breadcrumb-link:visited {
   appearance: none;
 }
 
-.fynns-search-bar:not(.fynns-search-bar--expanded) .fynns-search-bar-field:focus-within {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
-}
-
 /* Results share the expanded shell. Row highlight matches NavigationDrawer
    items (`radius-3xl`); inset from the shell edge so hover does not kiss the
-   outer curve. */
+   outer curve. Height morph via shared `.fynns-expand` (open ↔ closed). */
+
 .fynns-search-bar-results {
   box-sizing: border-box;
   display: flex;
@@ -6079,6 +6324,17 @@ a.fynns-breadcrumb-link:visited {
   background: transparent;
   box-shadow: none;
   border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+/* Opacity fade only for SearchBar’s expand panel — Select/Autocomplete mount
+   `.fynns-search-bar-results` directly and must stay fully visible. */
+.fynns-search-bar-panel .fynns-search-bar-results {
+  opacity: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-search-bar-panel[data-state="open"] .fynns-search-bar-results {
+  opacity: 1;
 }
 
 .fynns-search-bar-result {
@@ -6123,7 +6379,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-search-bar-field {
+  .fynns-search-bar,
+  .fynns-search-bar-field,
+  .fynns-search-bar-results {
     transition: none;
   }
 }
@@ -6606,6 +6864,11 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-datepicker-day--outside {
   color: var(--fynns-color-text-muted);
+}
+
+/* Mute only the numeral — never the whole cell. Range `::before` bars must
+   stay full-strength or outside days look like a darker seam in the strip. */
+.fynns-datepicker-day--outside .fynns-datepicker-day-label {
   opacity: 0.55;
 }
 
@@ -6713,6 +6976,27 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-on-secondary-container);
 }
 
+/* Outside numerals stay muted; ink on the range strip uses the role color. */
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--in-range
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview
+  .fynns-datepicker-day-label {
+  opacity: 0.72;
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-start
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-end
+  .fynns-datepicker-day-label {
+  opacity: 1;
+  color: var(--fynns-color-on-accent);
+}
+
 .fynns-datepicker--range .fynns-datepicker-day--in-range::before,
 .fynns-datepicker--range .fynns-datepicker-day--range-preview::before,
 .fynns-datepicker--range
@@ -6743,10 +7027,14 @@ a.fynns-breadcrumb-link:visited {
   inset-inline-end: -1px;
 }
 
+/*
+ * End bar: from cell start through disc center. Overlap 1px past center so the
+ * opaque accent disc does not leave a dark crack against the previous cell.
+ */
 .fynns-datepicker--range
   .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
   inset-inline-start: 0;
-  inset-inline-end: 50%;
+  inset-inline-end: calc(50% - 1px);
 }
 
 /* Do not spill past the row's trailing edge. */
@@ -6759,6 +7047,21 @@ a.fynns-breadcrumb-link:visited {
     .fynns-datepicker-day--range-end
   )::before {
   inset-inline-end: 0;
+}
+
+/* Keep the strip flush into a same-row range-end (no rounded “pill end”). */
+.fynns-datepicker--range
+  .fynns-datepicker-day--in-range:has(+ .fynns-datepicker-day--range-end)::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-preview:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
 }
 
 /* Accent discs stay day-size (cell is wider than the disc in range layout). */
@@ -7405,23 +7708,49 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-xs);
   font-weight: var(--fynns-font-weight-medium);
+  transform: scale(1);
+  transition:
+    background var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    border-color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-spring),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-number,
+.fynns-stepper-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-stepper-glyph-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
 .fynns-stepper-item--active .fynns-stepper-circle {
   border-color: transparent;
   background: var(--fynns-color-accent);
   color: var(--fynns-color-on-accent);
+  box-shadow: 0 0 0 3px var(--fynns-color-accent-soft);
+  animation: fynns-stepper-circle-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-stepper-item--completed .fynns-stepper-circle {
   border-color: transparent;
   background: var(--fynns-color-secondary-container);
   color: var(--fynns-color-on-secondary-container);
+  box-shadow: none;
 }
 
 .fynns-stepper-label {
   font-size: var(--fynns-font-size-sm);
   font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item--active .fynns-stepper-label,
+.fynns-stepper-item--completed .fynns-stepper-label {
   color: var(--fynns-color-text);
 }
 
@@ -7445,6 +7774,14 @@ a.fynns-breadcrumb-link:visited {
 .fynns-stepper-description {
   font-size: var(--fynns-font-size-xs);
   color: var(--fynns-color-text-muted);
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item:not(.fynns-stepper-item--active):not(
+    .fynns-stepper-item--completed
+  )
+  .fynns-stepper-description {
+  opacity: 0.72;
 }
 
 .fynns-stepper-optional {
@@ -7455,6 +7792,20 @@ a.fynns-breadcrumb-link:visited {
 .fynns-stepper--disabled {
   opacity: 0.55;
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-stepper-circle,
+  .fynns-stepper-label,
+  .fynns-stepper-description {
+    transition: none;
+  }
+
+  .fynns-stepper-circle,
+  .fynns-stepper-number,
+  .fynns-stepper-check {
+    animation: none;
+  }
 }
 
 /* ---------- Dropzone ---------- */

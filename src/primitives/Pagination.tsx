@@ -165,10 +165,13 @@ export function Pagination({
                 className={join(
                   "fynns-pagination-page",
                   size === "md" && "fynns-pagination-page--md",
+                  isCurrent && "fynns-pagination-page--current",
                 )}
                 onClick={() => onPageChange(item)}
               >
-                {item}
+                <span key={item} className="fynns-pagination-page-label">
+                  {item}
+                </span>
               </Button>
             </li>
           );

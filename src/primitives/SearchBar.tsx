@@ -46,7 +46,8 @@ export type SearchBarProps = Omit<
 /**
  * M3 Search bar — elevated 56dp capsule for chrome search (not form fields).
  * Optional docked results via `expanded` + `children` merge into one shell
- * (Google-style). Prefer `SearchInput` inside dense forms / toolbars.
+ * (Google-style). Expand/collapse animates via `.fynns-expand` (including
+ * blur/Esc). Prefer `SearchInput` inside dense forms / toolbars.
  * @see https://m3.material.io/components/search/overview
  */
 export const SearchBar = forwardRef(function SearchBar(
@@ -128,7 +129,7 @@ export const SearchBar = forwardRef(function SearchBar(
           placeholder={placeholder}
           aria-label={ariaLabel}
           aria-expanded={onExpandedChange ? isExpanded : undefined}
-          aria-controls={isExpanded && children != null ? resultsId : undefined}
+          aria-controls={children != null ? resultsId : undefined}
           autoComplete="off"
           onChange={(event) => {
             onChange(event.target.value);
@@ -177,14 +178,23 @@ export const SearchBar = forwardRef(function SearchBar(
           {trailing}
         </span>
       </div>
-      {isExpanded && children != null ? (
+      {children != null ? (
         <div
-          id={resultsId}
-          className="fynns-search-bar-results fynns-scroll"
-          role="group"
-          aria-label={ariaLabel}
+          className="fynns-expand fynns-search-bar-panel"
+          data-state={isExpanded ? "open" : "closed"}
         >
-          {children}
+          <div className="fynns-expand-inner">
+            <div
+              id={resultsId}
+              className="fynns-search-bar-results fynns-scroll"
+              role="group"
+              aria-label={ariaLabel}
+              aria-hidden={!isExpanded}
+              inert={isExpanded ? undefined : true}
+            >
+              {children}
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

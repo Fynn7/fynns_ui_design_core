@@ -35,6 +35,19 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+/** Keep in sync with `--fynns-duration-flyout`. */
+export const FLYOUT_TRANSITION_MS = 160;
+
+function flyoutExitMs(): number {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return 0;
+  }
+  return FLYOUT_TRANSITION_MS;
+}
+
 function itemSelector(root: HTMLElement | null): HTMLElement[] {
   if (!root) return [];
   return Array.from(
@@ -52,15 +65,15 @@ export type MenuSurfaceProps = {
   id?: string;
   ariaLabel?: string;
   className?: string;
-  /** Flyout origin side (drives enter animation). */
+  /** Flyout origin side (drives enter/exit animation). */
   dataSide?: "top" | "bottom" | "left" | "right";
   /** Called when the portaled panel mounts / unmounts (for positioning). */
   onPanelElement?: (el: HTMLDivElement | null) => void;
 };
 
 /**
- * Shared menu panel: MenuContext + portal + arrow-key paging.
- * Used by `DropdownMenu` and `ContextMenu`.
+ * Shared menu panel: MenuContext + portal + arrow-key paging + enter/exit
+ * presence. Used by `DropdownMenu` and `ContextMenu`.
  */
 export function MenuSurface({
   open,
@@ -76,6 +89,8 @@ export function MenuSurface({
   const generatedId = useId();
   const menuId = id ?? generatedId;
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(open);
+  const [presenting, setPresenting] = useState(open);
 
   const setPanelRef = useCallback(
     (el: HTMLDivElement | null) => {
@@ -86,12 +101,25 @@ export function MenuSurface({
   );
 
   useEffect(() => {
-    if (!open || !menuEl) return;
+    if (open) {
+      setMounted(true);
+      setPresenting(true);
+      return;
+    }
+    if (!mounted) return;
+    setPresenting(false);
+    const timer = setTimeout(() => setMounted(false), flyoutExitMs());
+    return () => clearTimeout(timer);
+  }, [open, mounted]);
+
+  useEffect(() => {
+    if (!open || !presenting || !menuEl) return;
     const items = itemSelector(menuEl);
     items[0]?.focus();
-  }, [open, menuEl]);
+  }, [open, presenting, menuEl]);
 
   const onMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (!presenting) return;
     const items = itemSelector(menuEl);
     if (items.length === 0) return;
     const current = document.activeElement as HTMLElement | null;
@@ -114,7 +142,7 @@ export function MenuSurface({
     }
   };
 
-  if (!open || typeof document === "undefined") return null;
+  if (!mounted || typeof document === "undefined") return null;
 
   return createPortal(
     <MenuContext.Provider value={{ close: onClose, menuId }}>
@@ -123,7 +151,9 @@ export function MenuSurface({
         id={menuId}
         role="menu"
         aria-label={ariaLabel}
+        aria-hidden={!presenting}
         data-side={dataSide}
+        data-state={presenting ? "open" : "closing"}
         className={join("fynns-menu", className)}
         style={style}
         onKeyDown={onMenuKeyDown}
@@ -187,6 +217,10 @@ export function DropdownMenu({
     align: floatingAlign,
     offset: 6,
   });
+  // Keep last box while MenuSurface plays exit (hook clears box when `open` is false).
+  const lastPosRef = useRef(pos);
+  if (pos) lastPosRef.current = pos;
+  const displayPos = pos ?? lastPosRef.current;
 
   const close = useCallback(() => {
     setOpen(false);
@@ -248,11 +282,11 @@ export function DropdownMenu({
         id={menuId}
         ariaLabel={ariaLabel}
         className={`fynns-menu--${align}`}
-        dataSide={pos?.side ?? "bottom"}
+        dataSide={displayPos?.side ?? "bottom"}
         onPanelElement={setMenuEl}
         style={
-          pos
-            ? { top: pos.top, left: pos.left }
+          displayPos
+            ? { top: displayPos.top, left: displayPos.left }
             : { top: 0, left: 0, visibility: "hidden" as const }
         }
       >
