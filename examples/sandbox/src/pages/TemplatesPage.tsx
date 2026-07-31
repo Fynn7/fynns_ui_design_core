@@ -1,9 +1,9 @@
 import {
   applyFynnsThemeMode,
   Button,
+  DownloadIcon,
   FullscreenDialog,
   Input,
-  SaveIcon,
   ToggleGroup,
   Tooltip,
   TrashIcon,
@@ -158,7 +158,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
         <div className="sandbox-templates-actions">
           <Tooltip content={t("templates.exportTip")}>
             <Button size="sm" variant="primary" onClick={exportCurrent}>
-              <SaveIcon size={14} />
+              <DownloadIcon size={14} />
               {t("templates.export")}
             </Button>
           </Tooltip>
@@ -237,7 +237,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
                       aria-label={t("templates.exportOneAria", { name: tpl.name })}
                       onClick={() => exportTemplate(tpl)}
                     >
-                      <SaveIcon size={14} />
+                      <DownloadIcon size={14} />
                     </Button>
                   </Tooltip>
                   <Button
