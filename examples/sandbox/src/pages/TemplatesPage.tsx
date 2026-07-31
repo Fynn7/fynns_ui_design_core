@@ -201,7 +201,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
             theme,
           })}
         </p>
-        {status ? <p className="sandbox-muted">{status}</p> : null}
+        {status ? <p className="sandbox-muted" role="status">{status}</p> : null}
       </header>
 
       <section className="sandbox-templates-list" aria-label={t("templates.savedAria")}>

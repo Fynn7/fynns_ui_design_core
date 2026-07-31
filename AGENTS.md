@@ -78,12 +78,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   `Panel`/`PanelCard` for sections; `Dialog` (centered/command), `Drawer`
-   (side sheet), and `BottomSheet` (bottom edge) for overlays; **progressive disclosure** (reveal results only
-   once they exist); and **safety-first interactivity** — disable/refuse a
-   destructive action while it is unsafe and say why in a tooltip (e.g. disabling
-   a rescan while a conflicting process holds the file), rather than letting it
-   fail.
+   `Card` / section layout + `fynns-scroll` for scroll regions;
+   `FullscreenDialog` / `BottomSheet` / `NavigationDrawer` for overlays;
+   **progressive disclosure** (reveal results only once they exist); and
+   **safety-first interactivity** — disable/refuse a destructive action while
+   it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
+   conflicting process holds the file), rather than letting it fail.
 10. **Language.** Design-system docs, default primitive labels, and source comments
  stay **English or German**. Consumer apps (and the aesthetic sandbox) may offer
  an **English ↔ Chinese** UI locale switch for their own chrome strings; Chinese

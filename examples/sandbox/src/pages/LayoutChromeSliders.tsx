@@ -1,4 +1,4 @@
-﻿import { InfoHint, Slider } from "@fynns/ui";
+import { InfoHint, Slider } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import {

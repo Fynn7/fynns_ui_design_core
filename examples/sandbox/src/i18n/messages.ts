@@ -209,16 +209,16 @@ const en = {
   "layoutChrome.help":
     "Sandbox-only gaps (`--sandbox-*`). Agents must use `SANDBOX_LAYOUT_AGENT_CATALOG` — do not invent ad-hoc gaps. Not written by Apply.",
   "layoutChrome.rhythmHelp":
-    "Layout rhythm (`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`). Apply writes into `tokens.ts`. Prefer `UnitStack` for vertical units; `ControlStack` + `ControlRow` for labeled toolbar rows.",
+    "Layout rhythm (`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`). Apply writes into `tokens.ts`. Prefer flex + `--fynns-layout-unit-stack-gap` (sandbox `.sandbox-stack`) for vertical units; `ControlStack` + `ControlRow` for labeled toolbar rows.",
   "layoutChrome.rowGap": "Demo row wrap",
   "layoutChrome.rowGapHint":
-    "--sandbox-row-gap — flex wrap gap for Motion easing bars / gallery Rows (horizontal and between wrapped lines).",
+    "--sandbox-row-gap — flex wrap gap for Motion easing bars / Foundations Rows (horizontal and between wrapped lines).",
   "layoutChrome.sectionGap": "Demo section gap",
   "layoutChrome.sectionGapHint":
-    "--sandbox-section-gap — title to body inside gallery Section.",
+    "--sandbox-section-gap — title to body inside Foundations Section.",
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — between UnitStack children (inspector fields, Collapsible body units).",
+    "--fynns-layout-unit-stack-gap — between stacked inspector/form units (Collapsible body units).",
   "layoutChrome.chromeBar": "Chrome bar height",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — brand cell + page topbar strip.",
@@ -329,7 +329,7 @@ const en = {
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
   "globals.fullscreenHelp":
-    "FullscreenDialog uses DialogFrame variant=\"fullscreen\". Prefer centered Dialog for short confirms.",
+    "FullscreenDialog uses internal DialogFrame variant=\"fullscreen\". Prefer FullscreenDialog or BottomSheet for confirms (centered Dialog removed).",
   "globals.contextMenuHint": "Right-click this region",
   "globals.contextMenuAria": "Sample context menu",
   "globals.contextMenuHelp":
@@ -349,7 +349,7 @@ const en = {
   "globals.rhythm": "Toolbar / unit rhythm",
   "globals.rhythmAria": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Reusable `UnitStack` (vertical units) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
+    "Reusable unit-stack gap (`.sandbox-stack`) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
   "globals.rhythmRowActions": "Actions",
@@ -358,13 +358,13 @@ const en = {
   "globals.rhythmDisabled": "Disabled",
   "globals.rhythmStart": "Start",
   "globals.rhythmEnd": "End",
-  "globals.rhythmTokenUnit": "Between UnitStack children (inspector fields, Collapsible body units).",
+  "globals.rhythmTokenUnit": "Between stacked inspector/form units (Collapsible body units).",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: use `UnitStack` / `ControlStack` + `ControlRow` and the `--fynns-layout-*` tokens listed above (`SANDBOX_LAYOUT_AGENT_CATALOG`). Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar / unit rhythm.",
+    "Agents: use `.sandbox-stack` / `ControlStack` + `ControlRow` and the `--fynns-layout-*` tokens listed above (`SANDBOX_LAYOUT_AGENT_CATALOG`). Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar / unit rhythm. See `llm/BREAKING_PURGE.md`.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -560,7 +560,7 @@ const en = {
   "globals.searchBarResultDocs": "Documentation",
   "globals.searchBarResultSettings": "Settings",
   "globals.searchBarHelp":
-    "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer SearchInput in dense forms.",
+    "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer `Input` in dense forms (SearchInput removed).",
   "globals.bannerText": "A new version is available",
   "globals.bannerSupporting": "Restart to apply updates when you are ready.",
   "globals.bannerAction": "Learn more",
@@ -596,7 +596,7 @@ const en = {
   "globals.swatchLgUses": "menus, dialogs",
   "globals.swatchXlUses": "buttons, soft shells",
   "globals.swatchesSpecialHelp":
-    "Special (not in this row): `pill` = switch track / `SearchInput`; `round` = switch thumb; `none` = sharp.",
+    "Special (not in this row): `pill` = switch track; `round` = switch thumb; `none` = sharp.",
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
@@ -625,12 +625,12 @@ const en = {
     "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, BottomSheet top edge. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
-  "globalsInspector.radiusPillUses": "Switch track, SearchInput",
+  "globalsInspector.radiusPillUses": "Switch track",
   "globalsInspector.radiusRoundUses": "Switch thumb (circle)",
   "globalsInspector.radiusNoneHint":
     "Sharp corners (0). Use when a control must meet a hard edge.",
   "globalsInspector.radiusPillHint":
-    "Pill shape (999px): switch track, SearchInput — higher than xl on purpose. Readonly; SearchBar uses radius-3xl.",
+    "Pill shape (999px): switch track — higher than xl on purpose. Readonly; SearchBar uses radius-3xl.",
   "globalsInspector.radiusRoundHint":
     "Circle (50%): switch thumb and other round controls.",
   "globalsInspector.resetLadder": "Reset radius parameters",
@@ -858,16 +858,16 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.help":
     "沙盒专用间距（`--sandbox-*`）。Agent 须使用 `SANDBOX_LAYOUT_AGENT_CATALOG`，禁止自创 gap。不会由 Apply 写入。",
   "layoutChrome.rhythmHelp":
-    "布局节奏（`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。纵向单元用 `UnitStack`；带标签工具栏行用 `ControlStack` + `ControlRow`。",
+    "布局节奏（`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。纵向单元用 flex + `--fynns-layout-unit-stack-gap`（sandbox `.sandbox-stack`）；带标签工具栏行用 `ControlStack` + `ControlRow`。",
   "layoutChrome.rowGap": "演示行换行间距",
   "layoutChrome.rowGapHint":
-    "--sandbox-row-gap — 动效缓动条 / gallery Row 的 flex 换行间距（水平与换行后行距）。",
+    "--sandbox-row-gap — 动效缓动条 / Foundations Row 的 flex 换行间距（水平与换行后行距）。",
   "layoutChrome.sectionGap": "演示分区间距",
   "layoutChrome.sectionGapHint":
-    "--sandbox-section-gap — gallery Section 标题到正文。",
+    "--sandbox-section-gap — Foundations Section 标题到正文。",
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — UnitStack 子项之间（检查器字段、Collapsible 正文单元）。",
+    "--fynns-layout-unit-stack-gap — 纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
   "layoutChrome.chromeBar": "顶栏条高度",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度。",
@@ -976,7 +976,7 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
   "globals.fullscreenHelp":
-    "FullscreenDialog 使用 DialogFrame 的 fullscreen 变体。短确认请优先用居中 Dialog。",
+    "FullscreenDialog 使用内部 DialogFrame 的 fullscreen 变体。短确认请用 FullscreenDialog 或 BottomSheet（居中 Dialog 已删除）。",
   "globals.contextMenuHint": "在此区域右键",
   "globals.contextMenuAria": "示例上下文菜单",
   "globals.contextMenuHelp":
@@ -996,7 +996,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythm": "工具栏 / 单元节奏",
   "globals.rhythmAria": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "可复用的 `UnitStack`（纵向单元）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
+    "可复用的 unit-stack 间距（`.sandbox-stack`）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
   "globals.rhythmRowActions": "底部按钮",
@@ -1005,13 +1005,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmDisabled": "禁用",
   "globals.rhythmStart": "靠左",
   "globals.rhythmEnd": "靠右",
-  "globals.rhythmTokenUnit": "UnitStack 子项之间（检查器字段、Collapsible 正文单元）。",
+  "globals.rhythmTokenUnit": "纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：使用 `UnitStack` / `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-*`（`SANDBOX_LAYOUT_AGENT_CATALOG`）。禁止自创间距。完整配方见 `AGENTS.md` → Toolbar / unit rhythm。",
+    "Agent：使用 `.sandbox-stack` / `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-*`（`SANDBOX_LAYOUT_AGENT_CATALOG`）。禁止自创间距。见 `AGENTS.md` 与 `llm/BREAKING_PURGE.md`。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
@@ -1207,7 +1207,7 @@ const zh: Record<MessageKey, string> = {
   "globals.searchBarResultDocs": "文档",
   "globals.searchBarResultSettings": "设置",
   "globals.searchBarHelp":
-    "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 SearchInput。",
+    "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 `Input`（SearchInput 已删除）。",
   "globals.bannerText": "有新版本可用",
   "globals.bannerSupporting": "准备好后重启即可应用更新。",
   "globals.bannerAction": "了解更多",
@@ -1243,7 +1243,7 @@ const zh: Record<MessageKey, string> = {
   "globals.swatchLgUses": "菜单、对话框",
   "globals.swatchXlUses": "按钮、柔和外壳",
   "globals.swatchesSpecialHelp":
-    "特殊形（不在上排）：`pill` = 开关轨道 / `SearchInput`；`round` = 开关圆钮；`none` = 直角。",
+    "特殊形（不在上排）：`pill` = 开关轨道；`round` = 开关圆钮；`none` = 直角。",
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
@@ -1272,12 +1272,12 @@ const zh: Record<MessageKey, string> = {
     "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
-  "globalsInspector.radiusPillUses": "开关轨道、SearchInput",
+  "globalsInspector.radiusPillUses": "开关轨道",
   "globalsInspector.radiusRoundUses": "开关圆钮（圆形）",
   "globalsInspector.radiusNoneHint":
     "直角 (0)。需要贴齐硬边时使用。",
   "globalsInspector.radiusPillHint":
-    "胶囊形 (999px)：开关轨道、SearchInput —— 刻意高于 xl。只读；SearchBar 用 radius-3xl。",
+    "胶囊形 (999px)：开关轨道 —— 刻意高于 xl。只读；SearchBar 用 radius-3xl。",
   "globalsInspector.radiusRoundHint":
     "圆形 (50%)：开关圆钮与其他圆形控件。",
   "globalsInspector.resetLadder": "重置圆角参数",

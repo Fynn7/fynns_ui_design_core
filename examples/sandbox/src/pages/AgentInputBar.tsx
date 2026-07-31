@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   IconButton,
@@ -23,6 +23,15 @@ export function AgentInputBar() {
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
   const [status, setStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const run = () => {
     const proposals = proposeFromPrompt(prompt);
@@ -62,7 +71,7 @@ export function AgentInputBar() {
       <Tooltip content={tooltip}>
         <IconButton
           aria-label={t("agent.triggerAria")}
-          aria-haspopup="dialog"
+          aria-haspopup="true"
           aria-expanded={open}
           className={
             pending.length > 0
@@ -74,8 +83,17 @@ export function AgentInputBar() {
           <SettingsIcon size={16} aria-hidden />
         </IconButton>
       </Tooltip>
+      {status ? (
+        <p className="sandbox-muted sandbox-agent-status" role="status">
+          {status}
+        </p>
+      ) : null}
       {open ? (
-        <div className="sandbox-agent-panel sandbox-agent-panel--inline" role="dialog">
+        <div
+          className="sandbox-agent-panel sandbox-agent-panel--inline"
+          role="region"
+          aria-label={t("agent.triggerAria")}
+        >
           <div className="sandbox-agent-row">
             <Input
               value={prompt}
@@ -90,7 +108,6 @@ export function AgentInputBar() {
               {t("agent.propose")}
             </Button>
           </div>
-          {status ? <p className="sandbox-muted">{status}</p> : null}
           {pending.length > 0 ? (
             <div className="sandbox-agent-pending">
               {pending.map((p) => (

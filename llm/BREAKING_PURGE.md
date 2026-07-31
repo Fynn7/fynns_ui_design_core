@@ -55,6 +55,8 @@ Anything else must be deleted or kept as a non-exported internal.
 | `Kbd` / `Combobox` / `CommandPalette` / `SplitButton` | Delete usage or reimplement in the app. |
 | `Textarea` | `Input` or native `<textarea>` styled with `--fynns-*` tokens. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
+| `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
+| `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
 | `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `EmptyState`, or app-local busy UI. `Spinner` remains internal for `Button` `loading`. |
 | `CardActionArea` | Make the `Card` `interactive` or wrap children in a button. |
 | `DownloadIcon` / `MoonIcon` / `SunIcon` / `SparklesIcon` / `PanelLeftIcon` / `PanelRightIcon` / `BotIcon` / … | Use the public icon subset from the barrel (see Globals imports) or ship app icons. |

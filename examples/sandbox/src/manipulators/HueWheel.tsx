@@ -37,7 +37,7 @@ const HUE_DEGREE_MAX = 359;
 
 /**
  * Accent hue controls: preset chips stay on the inspector; the full hue ring
- * opens from a rainbow trigger chip (Popover). Degree and hex fields edit
+ * opens from a rainbow trigger chip (inline panel). Degree and hex fields edit
  * independently. One coalesced undo step per gesture.
  */
 export function HueWheel() {
@@ -255,7 +255,7 @@ export function HueWheel() {
               .filter(Boolean)
               .join(" ")}
             aria-label={t("hue.openPalette")}
-            aria-haspopup="dialog"
+            aria-haspopup="true"
             aria-expanded={paletteOpen}
             onClick={() => setPaletteOpen((wasOpen) => !wasOpen)}
           />
@@ -263,7 +263,11 @@ export function HueWheel() {
       </div>
 
       {paletteOpen ? (
-        <div className="sandbox-hue-popover sandbox-hue-popover--inline" role="dialog">
+        <div
+          className="sandbox-hue-popover sandbox-hue-popover--inline"
+          role="region"
+          aria-label={t("hue.paletteAria")}
+        >
         <div
           ref={diskRef}
           className="sandbox-hue-disk"

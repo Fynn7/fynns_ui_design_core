@@ -108,7 +108,7 @@ export function ApplyChangesControl() {
           {phase === "previewing" ? t("apply.preparing") : t("apply.button")}
         </Button>
       </Tooltip>
-      {status ? <p className="sandbox-muted sandbox-apply-status">{status}</p> : null}
+      {status ? <p className="sandbox-muted sandbox-apply-status" role="status">{status}</p> : null}
 
       <FullscreenDialog
         open={reviewOpen}

@@ -1,4 +1,4 @@
-﻿import { Row, Section, Swatch } from "./foundationsShared";
+import { Row, Section, Swatch } from "./foundationsShared";
 
 const SURFACE_SWATCHES = [
   { label: "app-bg", token: "--fynns-color-app-bg" },

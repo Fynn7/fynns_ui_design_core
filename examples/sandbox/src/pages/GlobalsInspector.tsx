@@ -6,7 +6,7 @@ import {
   Slider,
   Tooltip,
 } from "@fynns/ui";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { BASELINE, SANDBOX_RESTING } from "../state/baseline";
@@ -113,6 +113,8 @@ export function GlobalsInspector() {
   const { t, plural } = useLocale();
   const { apply, resolved, draft, mergeOverrides } = useTokenDraft();
 
+  const [status, setStatus] = useState<string | null>(null);
+
   const overrideCount = useMemo(() => Object.keys(draft.overrides).length, [draft.overrides]);
 
   const resetShapeLadder = () => {
@@ -122,11 +124,16 @@ export function GlobalsInspector() {
       patch[cssVar] = SANDBOX_RESTING[cssVar] ?? BASELINE[cssVar] ?? "0";
     }
     mergeOverrides(patch, { source: "reset", group: "radius" });
-    /* feedback removed with toast purge */
+    setStatus(t("globalsInspector.toastReset"));
   };
 
   return (
     <div className="sandbox-inspector">
+      {status ? (
+        <p className="sandbox-muted" role="status">
+          {status}
+        </p>
+      ) : null}
       <div className="sandbox-inspector-scroll fynns-scroll">
         <header className="sandbox-inspector-head">
           <h2>{t("inspector.globalTitle")}</h2>
