@@ -888,6 +888,9 @@ export function GlobalsPage() {
             ariaLabel={t("globals.paginationAria")}
             previousAriaLabel={t("globals.paginationPrev")}
             nextAriaLabel={t("globals.paginationNext")}
+            getPageAriaLabel={(n) =>
+              t("globals.paginationPage").replace("{n}", String(n))
+            }
           />
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>

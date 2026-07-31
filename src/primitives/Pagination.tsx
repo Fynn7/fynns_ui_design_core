@@ -21,6 +21,8 @@ export type PaginationProps = Omit<HTMLAttributes<HTMLElement>, "children" | "on
   previousAriaLabel?: string;
   /** @default "Next page" */
   nextAriaLabel?: string;
+  /** Accessible name for a page number button. @default `(n) => \`Page ${n}\`` */
+  getPageAriaLabel?: (page: number) => string;
   /** Page button size; prev/next IconButtons match. @default "sm" */
   size?: "sm" | "md";
 };
@@ -104,6 +106,7 @@ export function Pagination({
   ariaLabel = "Pagination",
   previousAriaLabel = "Previous page",
   nextAriaLabel = "Next page",
+  getPageAriaLabel = (n: number) => `Page ${n}`,
   size = "sm",
   className,
   ...rest
@@ -157,7 +160,7 @@ export function Pagination({
                 variant={isCurrent ? "tonal" : "ghost"}
                 size={size}
                 disabled={disabled}
-                aria-label={`Page ${item}`}
+                aria-label={getPageAriaLabel(item)}
                 aria-current={isCurrent ? "page" : undefined}
                 className={join(
                   "fynns-pagination-page",

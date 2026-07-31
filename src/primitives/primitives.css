@@ -2559,7 +2559,7 @@ a.fynns-breadcrumb-link:visited {
   border-color: transparent;
 }
 
-.fynns-pagination-page--md {
+.fynns-btn.fynns-pagination-page--md {
   width: var(--fynns-size-icon-target);
   min-width: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);

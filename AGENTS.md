@@ -450,10 +450,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   hand-rolled chevron rows in app chrome.
 - **Pagination** `{ page, pageCount, onPageChange, siblingCount?,
   boundaryCount?, size?: "sm"|"md", ariaLabel?, previousAriaLabel?,
-  nextAriaLabel?, disabled? }` — list/table page navigator (`nav` + list).
-  Prev/next are `IconButton` + `Tooltip`; page numbers are `Button` `ghost`
-  (current = `tonal` + `aria-current="page"`). Ellipses when the range
-  is long. Prefer over hand-rolled prev/next + page chips.
+  nextAriaLabel?, getPageAriaLabel?, disabled? }` — list/table page navigator
+  (`nav` + list). Prev/next are `IconButton` + `Tooltip`; page numbers are
+  `Button` `ghost` (current = `tonal` + `aria-current="page"`). Ellipses when
+  the range is long. Prefer over hand-rolled prev/next + page chips.
 - **DottedLinkButton** — dotted-underline action link (e.g. import diff rows);
   keep the dotted resting decoration (distinct from TextLink / Breadcrumb).
 - **PickList** / **PickListItem** — bordered mono pick lists in dialogs.
