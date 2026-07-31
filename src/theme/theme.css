@@ -166,6 +166,8 @@
   --fynns-z-tooltip: 8000;
   --fynns-duration-instant: 1ms;
   --fynns-duration-tooltip: 120ms;
+  --fynns-duration-tooltip-show-delay: 500ms;
+  --fynns-duration-tooltip-skip-delay: 500ms;
   --fynns-duration-toggle: 140ms;
   --fynns-duration-fast: 140ms;
   --fynns-duration-flyout: 160ms;
@@ -406,7 +408,7 @@
   --fynns-layout-sheet-header-gap: 0.75rem;
   --fynns-layout-sheet-actions-pad-top: 1rem;
   --fynns-layout-sheet-actions-pad-bottom: 1.5rem;
-  --fynns-layout-tooltip-max-width: min(14rem, 85vw);
+  --fynns-layout-tooltip-max-width: min(14rem, calc(100vw - 1rem));
   --fynns-layout-command-palette-width: min(100%, 34rem);
   --fynns-layout-command-palette-max-height: min(70vh, 28rem);
   --fynns-layout-command-palette-top-padding: 12vh;

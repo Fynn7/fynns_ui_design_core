@@ -24,7 +24,21 @@ export const EASING_TOKENS = {
 export const DURATION_TOKENS = {
   /** Near-zero; used by the reduced-motion override. */
   instant: "1ms",
+  /** Fade / motion for tooltip bubble enter/exit. */
   tooltip: "120ms",
+  /**
+   * Hover intent delay before a plain tooltip opens (MDC `SHOW_DELAY_MS`).
+   * Leave / blur hides immediately; keyboard focus skips this delay.
+   * After any tip has opened, further tips skip this delay while the pointer
+   * stays in the “warm” window (`tooltip-skip-delay`) — consecutive toolbar
+   * hovers feel instant (M3 / Cursor / native UI).
+   */
+  "tooltip-show-delay": "500ms",
+  /**
+   * After the last tooltip closes, how long subsequent hovers still skip the
+   * show delay (Radix `skipDelayDuration` analogue; M3 consecutive-tooltip UX).
+   */
+  "tooltip-skip-delay": "500ms",
   toggle: "140ms",
   fast: "140ms",
   flyout: "160ms",
