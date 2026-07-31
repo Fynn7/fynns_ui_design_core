@@ -7247,3 +7247,84 @@ a.fynns-breadcrumb-link:visited {
   background: var(--fynns-color-surface-3);
   color: var(--fynns-color-text-muted);
 }
+
+/* ---------- OtpInput ---------- */
+.fynns-otp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+}
+
+.fynns-otp-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-otp-cell.fynns-input {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  padding-inline: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- EmptyState ---------- */
+.fynns-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl) var(--fynns-space-lg);
+  max-width: 24rem;
+  margin-inline: auto;
+}
+
+.fynns-empty-state--sm {
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-lg) var(--fynns-space-md);
+}
+
+.fynns-empty-state-icon {
+  display: inline-flex;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-empty-state-title {
+  font-size: var(--fynns-font-size-lg);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.fynns-empty-state--sm .fynns-empty-state-title {
+  font-size: var(--fynns-font-size-md);
+}
+
+.fynns-empty-state-description {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+}
+
+/* ---------- SkipLink ---------- */
+.fynns-skip-link {
+  position: absolute;
+  inset-inline-start: var(--fynns-space-md);
+  top: var(--fynns-space-md);
+  z-index: var(--fynns-z-tooltip);
+  transform: translateY(-200%);
+}
+
+.fynns-skip-link:focus-visible {
+  transform: translateY(0);
+}

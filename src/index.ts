@@ -81,4 +81,7 @@ export * from "./primitives/NavigationDrawer";
 export * from "./primitives/Divider";
 export * from "./primitives/Kbd";
 export * from "./primitives/CommandPalette";
+export * from "./primitives/OtpInput";
+export * from "./primitives/EmptyState";
+export * from "./primitives/SkipLink";
 export * from "./primitives/captions";
