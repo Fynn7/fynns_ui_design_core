@@ -2,10 +2,12 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./Button";
+import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
 import { Spinner } from "./Loading";
+import { Tooltip } from "./Tooltip";
 
-export type DialogVariant = "centered" | "command" | "drawer" | "sheet";
+export type DialogVariant = "centered" | "command" | "drawer" | "sheet" | "fullscreen";
 
 export type DrawerSide = "left" | "right";
 
@@ -179,7 +181,9 @@ export function DialogFrame({
         ? "fynns-dialog-overlay--drawer"
         : variant === "sheet"
           ? "fynns-dialog-overlay--sheet"
-          : "fynns-dialog-overlay--centered";
+          : variant === "fullscreen"
+            ? "fynns-dialog-overlay--fullscreen"
+            : "fynns-dialog-overlay--centered";
   const panelVariantClass =
     variant === "command"
       ? "fynns-dialog-panel--command"
@@ -187,7 +191,9 @@ export function DialogFrame({
         ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
         : variant === "sheet"
           ? "fynns-dialog-panel--sheet"
-          : "fynns-dialog-panel--centered";
+          : variant === "fullscreen"
+            ? "fynns-dialog--fullscreen"
+            : "fynns-dialog-panel--centered";
 
   return createPortal(
     <div
@@ -446,6 +452,61 @@ export function ConfirmDialog({
           {confirmLabel}
         </Button>
       </div>
+    </DialogFrame>
+  );
+}
+
+/**
+ * Full-viewport dialog: close IconButton + title + optional actions in the
+ * head, scrollable body. Uses `DialogFrame` with `variant="fullscreen"`.
+ */
+export type FullscreenDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: ReactNode;
+  children: ReactNode;
+  actions?: ReactNode;
+  closeAriaLabel?: string;
+};
+
+export function FullscreenDialog({
+  open,
+  onOpenChange,
+  title,
+  children,
+  actions,
+  closeAriaLabel = "Close",
+}: FullscreenDialogProps) {
+  const titleId = useId();
+  const close = () => onOpenChange(false);
+  return (
+    <DialogFrame
+      open={open}
+      onClose={close}
+      variant="fullscreen"
+      labelledBy={titleId}
+    >
+      <div className="fynns-dialog-head fynns-dialog-head--fullscreen">
+        <Tooltip content={closeAriaLabel}>
+          <IconButton
+            variant="ghost"
+            className="fynns-dialog-close"
+            aria-label={closeAriaLabel}
+            onClick={close}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Tooltip>
+        <h2 id={titleId} className="fynns-dialog-title">
+          {title}
+        </h2>
+        {actions ? (
+          <div className="fynns-dialog-head-actions">{actions}</div>
+        ) : (
+          <span aria-hidden />
+        )}
+      </div>
+      <div className="fynns-dialog-body fynns-scroll">{children}</div>
     </DialogFrame>
   );
 }

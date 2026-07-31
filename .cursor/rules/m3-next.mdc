@@ -22,9 +22,14 @@ When the user says **下一个** (or “next” in the same sense):
    cheap), `typecheck`.
 5. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
    DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
-   Pagination → (next gap).
+   Pagination → BadgedBox / AvatarGroup / OtpInput / EmptyState / SkipLink /
+   Stepper / Dropzone / Table / CodeBlock / FullscreenDialog / ContextMenu /
+   ToggleGroup `multiple` / EyeOffIcon → (next gap).
    Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
    **TimePicker dial (表盘/时钟面)** — skipped forever (user asked twice; digital
    TimePicker input is enough). LoadingIndicator / ButtonGroup / RangeSlider
    stay skipped as redundant with CircularProgress (indeterminate) / existing
    patterns / single Slider.
+6. **Reuse existing hover/state-layer** (`Button` ghost/tonal classes or
+   `::before` + `--fynns-state-*`); never invent private washes (Breadcrumb
+   lesson).

@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type ButtonHTMLAttributes,
+  type CSSProperties,
   type HTMLAttributes,
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
@@ -34,12 +35,135 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+/** Keep in sync with `--fynns-duration-flyout`. */
+export const FLYOUT_TRANSITION_MS = 160;
+
+function flyoutExitMs(): number {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return 0;
+  }
+  return FLYOUT_TRANSITION_MS;
+}
+
 function itemSelector(root: HTMLElement | null): HTMLElement[] {
   if (!root) return [];
   return Array.from(
     root.querySelectorAll<HTMLElement>(
       '[role="menuitem"]:not([disabled]), [role="menuitemcheckbox"]:not([disabled])',
     ),
+  );
+}
+
+export type MenuSurfaceProps = {
+  open: boolean;
+  onClose: () => void;
+  children: ReactNode;
+  style?: CSSProperties;
+  id?: string;
+  ariaLabel?: string;
+  className?: string;
+  /** Flyout origin side (drives enter/exit animation). */
+  dataSide?: "top" | "bottom" | "left" | "right";
+  /** Called when the portaled panel mounts / unmounts (for positioning). */
+  onPanelElement?: (el: HTMLDivElement | null) => void;
+};
+
+/**
+ * Shared menu panel: MenuContext + portal + arrow-key paging + enter/exit
+ * presence. Used by `DropdownMenu` and `ContextMenu`.
+ */
+export function MenuSurface({
+  open,
+  onClose,
+  children,
+  style,
+  id,
+  ariaLabel = "Menu",
+  className,
+  dataSide = "bottom",
+  onPanelElement,
+}: MenuSurfaceProps) {
+  const generatedId = useId();
+  const menuId = id ?? generatedId;
+  const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(open);
+  const [presenting, setPresenting] = useState(open);
+
+  const setPanelRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      setMenuEl(el);
+      onPanelElement?.(el);
+    },
+    [onPanelElement],
+  );
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      setPresenting(true);
+      return;
+    }
+    if (!mounted) return;
+    setPresenting(false);
+    const timer = setTimeout(() => setMounted(false), flyoutExitMs());
+    return () => clearTimeout(timer);
+  }, [open, mounted]);
+
+  useEffect(() => {
+    if (!open || !presenting || !menuEl) return;
+    const items = itemSelector(menuEl);
+    items[0]?.focus();
+  }, [open, presenting, menuEl]);
+
+  const onMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (!presenting) return;
+    const items = itemSelector(menuEl);
+    if (items.length === 0) return;
+    const current = document.activeElement as HTMLElement | null;
+    const index = current ? items.indexOf(current) : -1;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      const next = index < 0 ? 0 : (index + 1) % items.length;
+      items[next]?.focus();
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      const next = index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
+      items[next]?.focus();
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      items[0]?.focus();
+    } else if (event.key === "End") {
+      event.preventDefault();
+      items[items.length - 1]?.focus();
+    }
+  };
+
+  if (!mounted || typeof document === "undefined") return null;
+
+  return createPortal(
+    <MenuContext.Provider value={{ close: onClose, menuId }}>
+      <div
+        ref={setPanelRef}
+        id={menuId}
+        role="menu"
+        aria-label={ariaLabel}
+        aria-hidden={!presenting}
+        // Keep focus out of the panel while the exit animation plays.
+        {...(!presenting ? { inert: true } : {})}
+        data-side={dataSide}
+        data-state={presenting ? "open" : "closing"}
+        className={join("fynns-menu", className)}
+        style={style}
+        onKeyDown={onMenuKeyDown}
+      >
+        {children}
+      </div>
+    </MenuContext.Provider>,
+    document.body,
   );
 }
 
@@ -95,6 +219,10 @@ export function DropdownMenu({
     align: floatingAlign,
     offset: 6,
   });
+  // Keep last box while MenuSurface plays exit (hook clears box when `open` is false).
+  const lastPosRef = useRef(pos);
+  if (pos) lastPosRef.current = pos;
+  const displayPos = pos ?? lastPosRef.current;
 
   const close = useCallback(() => {
     setOpen(false);
@@ -123,35 +251,6 @@ export function DropdownMenu({
     };
   }, [open, menuEl, close]);
 
-  useEffect(() => {
-    if (!open || !menuEl) return;
-    const items = itemSelector(menuEl);
-    items[0]?.focus();
-  }, [open, menuEl]);
-
-  const onMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-    const items = itemSelector(menuEl);
-    if (items.length === 0) return;
-    const current = document.activeElement as HTMLElement | null;
-    const index = current ? items.indexOf(current) : -1;
-
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      const next = index < 0 ? 0 : (index + 1) % items.length;
-      items[next]?.focus();
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      const next = index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;
-      items[next]?.focus();
-    } else if (event.key === "Home") {
-      event.preventDefault();
-      items[0]?.focus();
-    } else if (event.key === "End") {
-      event.preventDefault();
-      items[items.length - 1]?.focus();
-    }
-  };
-
   const onTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (disabled) return;
     if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
@@ -159,31 +258,6 @@ export function DropdownMenu({
       setOpen(true);
     }
   };
-
-  const menu =
-    open && typeof document !== "undefined"
-      ? createPortal(
-          <MenuContext.Provider value={{ close, menuId }}>
-            <div
-              ref={setMenuEl}
-              id={menuId}
-              role="menu"
-              aria-label={ariaLabel}
-              data-side={pos?.side ?? "bottom"}
-              className={join("fynns-menu", `fynns-menu--${align}`)}
-              style={
-                pos
-                  ? { top: pos.top, left: pos.left }
-                  : { top: 0, left: 0, visibility: "hidden" as const }
-              }
-              onKeyDown={onMenuKeyDown}
-            >
-              {children}
-            </div>
-          </MenuContext.Provider>,
-          document.body,
-        )
-      : null;
 
   return (
     <div
@@ -204,7 +278,22 @@ export function DropdownMenu({
       >
         {trigger}
       </button>
-      {menu}
+      <MenuSurface
+        open={open}
+        onClose={close}
+        id={menuId}
+        ariaLabel={ariaLabel}
+        className={`fynns-menu--${align}`}
+        dataSide={displayPos?.side ?? "bottom"}
+        onPanelElement={setMenuEl}
+        style={
+          displayPos
+            ? { top: displayPos.top, left: displayPos.left }
+            : { top: 0, left: 0, visibility: "hidden" as const }
+        }
+      >
+        {children}
+      </MenuSurface>
     </div>
   );
 }

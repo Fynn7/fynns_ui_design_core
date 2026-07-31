@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, ReactElement, ReactNode } from "react";
 import { useId } from "react";
 import { CheckIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
@@ -17,10 +17,8 @@ export type ToggleGroupOption<V extends string> = {
   icon?: ReactNode;
 };
 
-export type ToggleGroupProps<V extends string> = {
+type ToggleGroupSharedProps<V extends string> = {
   options: ToggleGroupOption<V>[];
-  value: V;
-  onChange: (value: V) => void;
   ariaLabel?: string;
   className?: string;
   /**
@@ -37,15 +35,43 @@ export type ToggleGroupProps<V extends string> = {
   showCheck?: boolean;
 };
 
+export type ToggleGroupSingleProps<V extends string> = ToggleGroupSharedProps<V> & {
+  /** Single-select (default). Omit or pass `false`. */
+  multiple?: false;
+  value: V;
+  onChange: (value: V) => void;
+};
+
+export type ToggleGroupMultipleProps<V extends string> =
+  ToggleGroupSharedProps<V> & {
+    /** Multi-select: `value` / `onChange` use `V[]`; segments use `aria-pressed`. */
+    multiple: true;
+    value: V[];
+    onChange: (value: V[]) => void;
+  };
+
+export type ToggleGroupProps<V extends string> =
+  | ToggleGroupSingleProps<V>
+  | ToggleGroupMultipleProps<V>;
+
 /**
- * M3 Segmented button — single-select outlined stadium group.
+ * M3 Segmented button — outlined stadium group.
  * `.fynns-toggle-group`. Equal-width segments; pass `fullWidth` to stretch.
  * Leading check/icon fades/scales in; slot width is always reserved so equal
  * columns (and ControlStack max-content tracks) do not reflow. Unselected
- * labels stay optically centered via content translate. Uses `radiogroup` /
- * `radio` semantics.
+ * labels stay optically centered via content translate.
+ *
+ * Default: single-select (`radiogroup` / `radio`, arrows select).
+ * `multiple`: multi-select (`group` / `aria-pressed`, Space toggles, arrows
+ * move focus only).
  * @see https://m3.material.io/components/segmented-buttons/overview
  */
+export function ToggleGroup<V extends string>(
+  props: ToggleGroupSingleProps<V>,
+): ReactElement;
+export function ToggleGroup<V extends string>(
+  props: ToggleGroupMultipleProps<V>,
+): ReactElement;
 export function ToggleGroup<V extends string>({
   options,
   value,
@@ -55,6 +81,7 @@ export function ToggleGroup<V extends string>({
   fullWidth = false,
   size = "default",
   showCheck = true,
+  multiple = false,
 }: ToggleGroupProps<V>) {
   const baseId = useId();
   const enabled = options
@@ -63,20 +90,52 @@ export function ToggleGroup<V extends string>({
   /** Mount leading slot when checks or option icons can appear (for slide). */
   const useLeadingSlot = showCheck || options.some((o) => Boolean(o.icon));
 
-  const selectAt = (index: number) => {
+  const isSelected = (v: V) =>
+    multiple ? (value as V[]).includes(v) : (value as V) === v;
+
+  const selectSingle = (index: number) => {
     const opt = options[index];
     if (!opt || opt.disabled) return;
-    onChange(opt.value);
+    (onChange as (value: V) => void)(opt.value);
   };
 
+  const toggleMultiple = (index: number) => {
+    const opt = options[index];
+    if (!opt || opt.disabled) return;
+    const current = value as V[];
+    const next = current.includes(opt.value)
+      ? current.filter((v) => v !== opt.value)
+      : [...current, opt.value];
+    (onChange as (value: V[]) => void)(next);
+  };
+
+  const focusAt = (index: number) => {
+    document.getElementById(`${baseId}-seg-${index}`)?.focus();
+  };
+
+  /** Arrow/Home/End: multi = focus only; single = select + focus. */
   const move = (fromIndex: number, delta: number) => {
     if (enabled.length === 0) return;
     const pos = enabled.findIndex(({ i }) => i === fromIndex);
     const start = pos < 0 ? 0 : pos;
     const next = enabled[(start + delta + enabled.length) % enabled.length];
-    selectAt(next.i);
-    const el = document.getElementById(`${baseId}-seg-${next.i}`);
-    el?.focus();
+    if (multiple) {
+      focusAt(next.i);
+    } else {
+      selectSingle(next.i);
+      focusAt(next.i);
+    }
+  };
+
+  const jumpToEnabled = (enabledIndex: number) => {
+    const target = enabled[enabledIndex];
+    if (!target) return;
+    if (multiple) {
+      focusAt(target.i);
+    } else {
+      selectSingle(target.i);
+      focusAt(target.i);
+    }
   };
 
   const onSegmentKeyDown = (
@@ -91,21 +150,27 @@ export function ToggleGroup<V extends string>({
       move(index, -1);
     } else if (event.key === "Home") {
       event.preventDefault();
-      if (enabled[0]) {
-        selectAt(enabled[0].i);
-        document.getElementById(`${baseId}-seg-${enabled[0].i}`)?.focus();
-      }
+      jumpToEnabled(0);
     } else if (event.key === "End") {
       event.preventDefault();
-      const last = enabled[enabled.length - 1];
-      if (last) {
-        selectAt(last.i);
-        document.getElementById(`${baseId}-seg-${last.i}`)?.focus();
-      }
+      jumpToEnabled(enabled.length - 1);
+    } else if (multiple && (event.key === " " || event.key === "Spacebar")) {
+      event.preventDefault();
+      toggleMultiple(index);
     }
   };
 
   const count = options.length;
+
+  /** Roving tabindex: selected (first match) or first enabled. */
+  const focusIndex = (() => {
+    if (multiple) {
+      const selected = enabled.find(({ o }) => (value as V[]).includes(o.value));
+      return selected?.i ?? enabled[0]?.i ?? 0;
+    }
+    const selected = options.findIndex((o) => o.value === (value as V));
+    return selected >= 0 ? selected : (enabled[0]?.i ?? 0);
+  })();
 
   return (
     <div
@@ -117,11 +182,11 @@ export function ToggleGroup<V extends string>({
       ]
         .filter(Boolean)
         .join(" ")}
-      role="radiogroup"
+      role={multiple ? "group" : "radiogroup"}
       aria-label={ariaLabel}
     >
       {options.map((option, index) => {
-        const on = option.value === value;
+        const on = isSelected(option.value);
         const pos =
           count === 1
             ? "only"
@@ -138,7 +203,7 @@ export function ToggleGroup<V extends string>({
           <button
             id={`${baseId}-seg-${index}`}
             type="button"
-            role="radio"
+            role={multiple ? undefined : "radio"}
             data-pos={pos}
             className={[
               "fynns-toggle-chip",
@@ -148,11 +213,14 @@ export function ToggleGroup<V extends string>({
             ]
               .filter(Boolean)
               .join(" ")}
-            aria-checked={on}
+            aria-checked={multiple ? undefined : on}
+            aria-pressed={multiple ? on : undefined}
             aria-label={option.ariaLabel}
             disabled={option.disabled}
-            tabIndex={on ? 0 : -1}
-            onClick={() => onChange(option.value)}
+            tabIndex={index === focusIndex ? 0 : -1}
+            onClick={() =>
+              multiple ? toggleMultiple(index) : selectSingle(index)
+            }
             onKeyDown={(e) => onSegmentKeyDown(e, index)}
           >
             <span className="fynns-toggle-chip-content">

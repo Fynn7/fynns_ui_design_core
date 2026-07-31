@@ -27,6 +27,28 @@
   }
 }
 
+@keyframes fynns-flyout-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+}
+
+@keyframes fynns-flyout-exit-top {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+}
+
 @keyframes fynns-tooltip-enter {
   from {
     opacity: 0;
@@ -42,6 +64,57 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fynns-nav-rail-label-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.125rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fynns-stepper-circle-activate {
+  from {
+    transform: scale(0.88);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-stepper-glyph-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-pagination-label-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fynns-pagination-current-activate {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
   }
 }
 
@@ -415,7 +488,8 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
-  padding-inline: var(--fynns-space-sm);
+  /* Match SearchBar / Select / Autocomplete field chrome pad. */
+  padding-inline: var(--fynns-searchbar-pad-inline);
 }
 
 .fynns-field-shell--filled {
@@ -496,10 +570,16 @@
   box-shadow: none;
 }
 
-.fynns-input--in-shell:focus,
-.fynns-input--in-shell:focus-visible {
-  border: none;
-  box-shadow: none;
+/*
+ * No leading affix: same label inset as standalone Input / Select / Autocomplete.
+ * Shell already has hairline + searchbar-pad-inline; add space-md − hairline so
+ * text start = searchbar-pad-inline + space-md (matches `.fynns-input` recipe).
+ */
+.fynns-field-shell:not(:has(.fynns-field-affix--leading))
+  .fynns-input.fynns-input--in-shell {
+  padding-inline-start: calc(
+    var(--fynns-space-md) - var(--fynns-border-hairline)
+  );
 }
 
 .fynns-input:focus,
@@ -516,6 +596,15 @@
   box-shadow:
     inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger-border),
     0 0 0 3px color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+}
+
+/* Shell owns the focus ring via `:focus-within` — keep the nested input quiet.
+   Must follow `.fynns-input:focus` (equal specificity otherwise loses by order). */
+.fynns-input.fynns-input--in-shell:focus,
+.fynns-input.fynns-input--in-shell:focus-visible {
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .fynns-input::placeholder {
@@ -758,7 +847,7 @@
   cursor: not-allowed;
 }
 
-.fynns-autocomplete--invalid .fynns-search-bar-field {
+.fynns-autocomplete--invalid.fynns-search-bar {
   box-shadow:
     var(--fynns-shadow-md),
     0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger);
@@ -797,17 +886,33 @@
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
-  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
-    both;
 }
 
 .fynns-menu[data-side="top"] {
   transform-origin: bottom center;
-  animation-name: fynns-flyout-enter-top;
 }
 
 .fynns-menu[data-side="bottom"] {
   transform-origin: top center;
+}
+
+.fynns-menu[data-state="open"] {
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="open"] {
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-menu[data-state="closing"] {
+  pointer-events: none;
+  animation: fynns-flyout-exit var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="closing"] {
+  animation-name: fynns-flyout-exit-top;
 }
 
 .fynns-menu-group {
@@ -1089,6 +1194,48 @@
   justify-content: center;
   align-items: flex-start;
   padding: var(--fynns-layout-command-palette-top-padding) 1rem 1rem;
+}
+
+.fynns-dialog-overlay--fullscreen {
+  display: flex;
+  padding: 0;
+}
+
+.fynns-dialog--fullscreen {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog--fullscreen[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-dialog--fullscreen[data-state="closing"] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
+}
+
+.fynns-dialog-head--fullscreen {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dialog-head--fullscreen .fynns-dialog-title {
+  min-width: 0;
 }
 
 .fynns-dialog-scrim {
@@ -1452,6 +1599,7 @@
   .fynns-dialog-overlay,
   .fynns-dialog-panel--centered,
   .fynns-dialog-panel--command,
+  .fynns-dialog--fullscreen,
   .fynns-menu,
   .fynns-select-list,
   .fynns-popover,
@@ -2144,6 +2292,20 @@
   cursor: pointer;
 }
 
+/*
+ * Parent `.fynns-collapsible` uses overflow:hidden + radius to clip the hover
+ * wash; a trigger outline is clipped off at the rounded corners. Paint the
+ * focus ring on the rounded shell instead (inset so it is not clipped).
+ */
+.fynns-collapsible-trigger:focus,
+.fynns-collapsible-trigger:focus-visible {
+  outline: none;
+}
+
+.fynns-collapsible:has(.fynns-collapsible-trigger:focus-visible) {
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
 .fynns-collapsible-title {
   flex: 1 1 auto;
   min-width: 0;
@@ -2541,7 +2703,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* Match IconButton sm circle. No bg/border transition — sliding the page window
-   must not animate ghost↔tonal (that read as a flashing selected disc). */
+   must not animate ghost↔tonal (that read as a flashing selected disc). Motion
+   is limited to transform + label remount so the tonal slot can stay put. */
 .fynns-btn.fynns-pagination-page {
   box-sizing: border-box;
   width: 2rem;
@@ -2551,7 +2714,7 @@ a.fynns-breadcrumb-link:visited {
   padding: 0;
   border-radius: var(--fynns-radius-round);
   border-color: transparent;
-  transition: none;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-spring);
 }
 
 .fynns-btn.fynns-pagination-page:hover:not(:disabled),
@@ -2559,11 +2722,40 @@ a.fynns-breadcrumb-link:visited {
   border-color: transparent;
 }
 
+.fynns-btn.fynns-pagination-page:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.fynns-btn.fynns-pagination-page--current {
+  animation: fynns-pagination-current-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-pagination-page-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-pagination-label-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
 .fynns-btn.fynns-pagination-page--md {
   width: var(--fynns-size-icon-target);
   min-width: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);
   min-height: var(--fynns-size-icon-target);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-btn.fynns-pagination-page,
+  .fynns-pagination-page-label {
+    transition: none;
+    animation: none;
+  }
+
+  .fynns-btn.fynns-pagination-page:active:not(:disabled) {
+    transform: none;
+  }
 }
 
 .fynns-nav-item {
@@ -5083,9 +5275,14 @@ a.fynns-breadcrumb-link:visited {
   cursor: not-allowed;
 }
 
-/* Full destination highlight: icon + label (not an icon-only pill). */
+/* Full destination highlight: icon + label (not an icon-only pill).
+   Active fill lives on ::before so activate ↔ deactivate both morph
+   (transform + opacity) instead of a one-shot keyframe pop.
+   Shape morph (circle ↔ rounded square) uses interpolable radii — never
+   `--fynns-radius-pill` (999px), which stays circular until the last frames. */
 .fynns-nav-rail-indicator {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -5100,9 +5297,38 @@ a.fynns-breadcrumb-link:visited {
   border-radius: var(--fynns-radius-md);
   background: transparent;
   overflow: visible;
+  transform: scale(1);
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    gap var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-nav-rail-item--labeled .fynns-nav-rail-indicator {
@@ -5113,7 +5339,7 @@ a.fynns-breadcrumb-link:visited {
   max-width: var(--fynns-navrail-indicator-size-labeled);
   min-height: var(--fynns-navrail-indicator-size-labeled);
   max-height: var(--fynns-navrail-indicator-size-labeled);
-  aspect-ratio: 1;
+  border-radius: var(--fynns-radius-md);
 }
 
 .fynns-nav-rail-item--icon .fynns-nav-rail-indicator,
@@ -5126,13 +5352,18 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-navrail-indicator-height-icon);
   max-height: var(--fynns-navrail-indicator-height-icon);
   padding: 0;
-  border-radius: var(--fynns-radius-pill);
-  aspect-ratio: 1;
+  /* Half of icon size (= circle). Interpolates cleanly to radius-md. */
+  border-radius: calc(var(--fynns-navrail-indicator-height-icon) / 2);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-indicator {
-  background: var(--fynns-color-secondary-container);
+  background: transparent;
   color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
@@ -5144,7 +5375,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator {
+.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -5159,9 +5390,14 @@ a.fynns-breadcrumb-link:visited {
     var(--fynns-color-text) var(--fynns-state-pressed),
     transparent
   );
+  transform: scale(0.96);
 }
 
 .fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -5179,6 +5415,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-rail-icon-wrap {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -5196,6 +5433,7 @@ a.fynns-breadcrumb-link:visited {
   width: var(--fynns-navrail-icon-size);
   height: var(--fynns-navrail-icon-size);
   color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-icon {
@@ -5263,6 +5501,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-rail-label {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5272,6 +5512,9 @@ a.fynns-breadcrumb-link:visited {
   line-height: var(--fynns-navrail-label-line);
   color: var(--fynns-color-text-muted);
   text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-rail-item--active .fynns-nav-rail-label {
@@ -5284,8 +5527,24 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-nav-rail-indicator {
+  .fynns-nav-rail-indicator,
+  .fynns-nav-rail-indicator::before,
+  .fynns-nav-rail-icon,
+  .fynns-nav-rail-label {
     transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-rail-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-rail-item:active:not(:disabled) .fynns-nav-rail-indicator {
+    transform: none;
   }
 }
 
@@ -5339,6 +5598,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-bar-indicator {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -5356,9 +5616,35 @@ a.fynns-breadcrumb-link:visited {
   border-radius: var(--fynns-radius-md);
   background: transparent;
   overflow: visible;
+  transform: scale(1);
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-bar-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-nav-bar-item--icon .fynns-nav-bar-indicator,
@@ -5368,12 +5654,17 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-navbar-indicator-height-icon);
   max-height: var(--fynns-navbar-indicator-height-icon);
   padding: 0;
-  border-radius: var(--fynns-radius-pill);
+  border-radius: calc(var(--fynns-navbar-indicator-height-icon) / 2);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-indicator {
-  background: var(--fynns-color-secondary-container);
+  background: transparent;
   color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
@@ -5385,7 +5676,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator {
+.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -5400,9 +5691,14 @@ a.fynns-breadcrumb-link:visited {
     var(--fynns-color-text) var(--fynns-state-pressed),
     transparent
   );
+  transform: scale(0.96);
 }
 
 .fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator::before {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -5420,6 +5716,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-bar-icon-wrap {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -5437,6 +5734,7 @@ a.fynns-breadcrumb-link:visited {
   width: var(--fynns-navbar-icon-size);
   height: var(--fynns-navbar-icon-size);
   color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-icon {
@@ -5486,6 +5784,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-bar-label {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5495,6 +5795,9 @@ a.fynns-breadcrumb-link:visited {
   line-height: var(--fynns-navbar-label-line);
   color: var(--fynns-color-text-muted);
   text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
 }
 
 .fynns-nav-bar-item--active .fynns-nav-bar-label {
@@ -5507,8 +5810,24 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-nav-bar-indicator {
+  .fynns-nav-bar-indicator,
+  .fynns-nav-bar-indicator::before,
+  .fynns-nav-bar-icon,
+  .fynns-nav-bar-label {
     transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-bar-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-bar-item:active:not(:disabled) .fynns-nav-bar-indicator {
+    transform: none;
   }
 }
 
@@ -5887,6 +6206,13 @@ a.fynns-breadcrumb-link:visited {
   align-items: stretch;
   width: 100%;
   z-index: var(--fynns-z-dropdown);
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-md);
+  overflow: hidden;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 /* Collapsed: capsule field. Expanded: one continuous shell (Google-style). */
@@ -5899,21 +6225,14 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-searchbar-height);
   height: var(--fynns-searchbar-height);
   padding-inline: var(--fynns-searchbar-pad-inline);
-  border-radius: var(--fynns-radius-3xl);
-  background: var(--fynns-color-surface-2);
+  border-radius: 0;
+  background: transparent;
   color: var(--fynns-color-text);
-  box-shadow: var(--fynns-shadow-md);
-  transition:
-    background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard),
-    border-radius var(--fynns-duration-fast) var(--fynns-ease-standard);
+  box-shadow: none;
 }
 
 .fynns-search-bar--expanded {
-  border-radius: var(--fynns-radius-3xl);
-  background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-lg);
-  overflow: hidden;
 }
 
 .fynns-search-bar--expanded:focus-within {
@@ -5922,14 +6241,18 @@ a.fynns-breadcrumb-link:visited {
     0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
 }
 
-.fynns-search-bar--expanded .fynns-search-bar-field {
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow:
+    var(--fynns-shadow-md),
+    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-search-bar--disabled {
+  opacity: var(--fynns-opacity-muted);
 }
 
 .fynns-search-bar--disabled .fynns-search-bar-field {
-  opacity: var(--fynns-opacity-muted);
+  opacity: 1;
 }
 
 .fynns-search-bar-leading,
@@ -5983,15 +6306,10 @@ a.fynns-breadcrumb-link:visited {
   appearance: none;
 }
 
-.fynns-search-bar:not(.fynns-search-bar--expanded) .fynns-search-bar-field:focus-within {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
-}
-
 /* Results share the expanded shell. Row highlight matches NavigationDrawer
    items (`radius-3xl`); inset from the shell edge so hover does not kiss the
-   outer curve. */
+   outer curve. Height morph via shared `.fynns-expand` (open ↔ closed). */
+
 .fynns-search-bar-results {
   box-sizing: border-box;
   display: flex;
@@ -6006,6 +6324,17 @@ a.fynns-breadcrumb-link:visited {
   background: transparent;
   box-shadow: none;
   border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+/* Opacity fade only for SearchBar’s expand panel — Select/Autocomplete mount
+   `.fynns-search-bar-results` directly and must stay fully visible. */
+.fynns-search-bar-panel .fynns-search-bar-results {
+  opacity: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-search-bar-panel[data-state="open"] .fynns-search-bar-results {
+  opacity: 1;
 }
 
 .fynns-search-bar-result {
@@ -6050,7 +6379,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-search-bar-field {
+  .fynns-search-bar,
+  .fynns-search-bar-field,
+  .fynns-search-bar-results {
     transition: none;
   }
 }
@@ -6533,6 +6864,11 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-datepicker-day--outside {
   color: var(--fynns-color-text-muted);
+}
+
+/* Mute only the numeral — never the whole cell. Range `::before` bars must
+   stay full-strength or outside days look like a darker seam in the strip. */
+.fynns-datepicker-day--outside .fynns-datepicker-day-label {
   opacity: 0.55;
 }
 
@@ -6640,6 +6976,27 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-on-secondary-container);
 }
 
+/* Outside numerals stay muted; ink on the range strip uses the role color. */
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--in-range
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview
+  .fynns-datepicker-day-label {
+  opacity: 0.72;
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-start
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-end
+  .fynns-datepicker-day-label {
+  opacity: 1;
+  color: var(--fynns-color-on-accent);
+}
+
 .fynns-datepicker--range .fynns-datepicker-day--in-range::before,
 .fynns-datepicker--range .fynns-datepicker-day--range-preview::before,
 .fynns-datepicker--range
@@ -6670,10 +7027,14 @@ a.fynns-breadcrumb-link:visited {
   inset-inline-end: -1px;
 }
 
+/*
+ * End bar: from cell start through disc center. Overlap 1px past center so the
+ * opaque accent disc does not leave a dark crack against the previous cell.
+ */
 .fynns-datepicker--range
   .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
   inset-inline-start: 0;
-  inset-inline-end: 50%;
+  inset-inline-end: calc(50% - 1px);
 }
 
 /* Do not spill past the row's trailing edge. */
@@ -6686,6 +7047,21 @@ a.fynns-breadcrumb-link:visited {
     .fynns-datepicker-day--range-end
   )::before {
   inset-inline-end: 0;
+}
+
+/* Keep the strip flush into a same-row range-end (no rounded “pill end”). */
+.fynns-datepicker--range
+  .fynns-datepicker-day--in-range:has(+ .fynns-datepicker-day--range-end)::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-preview:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
 }
 
 /* Accent discs stay day-size (cell is wider than the disc in range layout). */
@@ -7150,3 +7526,496 @@ a.fynns-breadcrumb-link:visited {
   background: var(--fynns-color-accent);
 }
 
+
+/* ---------- BadgedBox / AvatarGroup ---------- */
+.fynns-badged-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fynns-badged-box > .fynns-nav-rail-badge {
+  /* Anchor to the box top-end (same chrome as rail icon wrap). */
+  pointer-events: none;
+}
+
+.fynns-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  isolation: isolate;
+}
+
+.fynns-avatar-group-item {
+  display: inline-flex;
+  position: relative;
+  margin-inline-start: calc(-1 * var(--fynns-space-sm));
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-avatar-group-item:first-child {
+  margin-inline-start: 0;
+}
+
+/*
+ * Standalone Avatar uses translucent accent-container; stacked copies would
+ * double-tint at overlaps. Bake the fill onto surface-1 and paint an opaque
+ * surface ring so crescents stay even.
+ */
+.fynns-avatar-group .fynns-avatar {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 20%,
+    var(--fynns-color-surface-1)
+  );
+  box-shadow: 0 0 0 2px var(--fynns-color-surface-1);
+}
+
+.fynns-avatar-group .fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-group .fynns-avatar.fynns-avatar-group-overflow {
+  background: var(--fynns-color-surface-3);
+  color: var(--fynns-color-text-muted);
+}
+
+/* ---------- OtpInput ---------- */
+.fynns-otp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+}
+
+.fynns-otp-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-otp-cell.fynns-input {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  padding-inline: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- EmptyState ---------- */
+.fynns-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl) var(--fynns-space-lg);
+  max-width: 24rem;
+  margin-inline: auto;
+}
+
+.fynns-empty-state--sm {
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-lg) var(--fynns-space-md);
+}
+
+.fynns-empty-state-icon {
+  display: inline-flex;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-empty-state-title {
+  font-size: var(--fynns-font-size-lg);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.fynns-empty-state--sm .fynns-empty-state-title {
+  font-size: var(--fynns-font-size-md);
+}
+
+.fynns-empty-state-description {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+}
+
+/* ---------- SkipLink ---------- */
+.fynns-skip-link {
+  position: absolute;
+  inset-inline-start: var(--fynns-space-md);
+  top: var(--fynns-space-md);
+  z-index: var(--fynns-z-tooltip);
+  transform: translateY(-200%);
+}
+
+.fynns-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ---------- Stepper ---------- */
+.fynns-stepper-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-stepper--vertical .fynns-stepper-list {
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+}
+
+.fynns-stepper-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-item {
+  flex: 1 1 0;
+  position: relative;
+}
+
+.fynns-stepper-circle {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--fynns-radius-round);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  transform: scale(1);
+  transition:
+    background var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    border-color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-spring),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-number,
+.fynns-stepper-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-stepper-glyph-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-stepper-item--active .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-accent);
+  color: var(--fynns-color-on-accent);
+  box-shadow: 0 0 0 3px var(--fynns-color-accent-soft);
+  animation: fynns-stepper-circle-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-stepper-item--completed .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+  box-shadow: none;
+}
+
+.fynns-stepper-label {
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item--active .fynns-stepper-label,
+.fynns-stepper-item--completed .fynns-stepper-label {
+  color: var(--fynns-color-text);
+}
+
+/*
+ * Completed clickable labels reuse Button ghost sm, but must keep the same
+ * box as the plain `<span>` or “Next” shifts every label right (btn pad + border).
+ */
+.fynns-stepper-item .fynns-btn.fynns-stepper-label {
+  min-height: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-sm);
+  justify-content: flex-start;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+  white-space: normal;
+}
+
+.fynns-stepper-description {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item:not(.fynns-stepper-item--active):not(
+    .fynns-stepper-item--completed
+  )
+  .fynns-stepper-description {
+  opacity: 0.72;
+}
+
+.fynns-stepper-optional {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-stepper--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-stepper-circle,
+  .fynns-stepper-label,
+  .fynns-stepper-description {
+    transition: none;
+  }
+
+  .fynns-stepper-circle,
+  .fynns-stepper-number,
+  .fynns-stepper-check {
+    animation: none;
+  }
+}
+
+/* ---------- Dropzone ---------- */
+.fynns-dropzone {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl);
+  border: var(--fynns-border-hairline) dashed var(--fynns-color-border-strong);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  cursor: pointer;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-dropzone:hover:not(.fynns-dropzone--disabled):not(.fynns-dropzone--busy) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--active {
+  border-color: var(--fynns-color-accent);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--disabled,
+.fynns-dropzone--busy {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fynns-dropzone-label {
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-dropzone-hint {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-dropzone-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dropzone-progress {
+  width: 100%;
+}
+
+.fynns-dropzone-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Table ---------- */
+.fynns-table-wrap {
+  overflow: auto;
+  max-width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
+}
+
+.fynns-table-wrap::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-track {
+  background: var(--fynns-scrollbar-track);
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--fynns-scrollbar-thumb-hover);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-thumb:active {
+  background: var(--fynns-scrollbar-thumb-active);
+  background-clip: padding-box;
+}
+
+.fynns-table-wrap::-webkit-scrollbar-corner {
+  background: var(--fynns-scrollbar-track);
+}
+
+/* Prefer pairing with `.fynns-scroll` on the wrap (or use `ScrollArea`). */
+
+.fynns-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text);
+}
+
+.fynns-table-caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+}
+
+.fynns-table-header-cell,
+.fynns-table-cell {
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  vertical-align: middle;
+}
+
+.fynns-table-header-cell {
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  text-align: start;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-table--sticky-header .fynns-table-head .fynns-table-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.fynns-table-header-cell--align-center,
+.fynns-table-cell--align-center {
+  text-align: center;
+}
+
+.fynns-table-header-cell--align-end,
+.fynns-table-cell--align-end {
+  text-align: end;
+}
+
+.fynns-table-row[data-selected="true"] {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+/* ---------- CodeBlock ---------- */
+.fynns-code-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+}
+
+.fynns-code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-2xs) var(--fynns-space-xs) var(--fynns-space-2xs)
+    var(--fynns-space-md);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-code-block-label {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-code-block-pre {
+  margin: 0;
+  padding: var(--fynns-space-md);
+  overflow: auto;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text);
+}
+
+.fynns-code-block-pre code {
+  font: inherit;
+}
