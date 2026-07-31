@@ -3,7 +3,9 @@ import {
   ArchiveIcon,
   ArrowLeftIcon,
   Avatar,
+  AvatarGroup,
   Badge,
+  BadgedBox,
   Banner,
   BarChartIcon,
   BottomAppBar,
@@ -19,9 +21,13 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  ClipboardIcon,
   Carousel,
   CarouselItem,
+  CodeBlock,
   Collapsible,
+  ContextMenu,
+  ContextMenuTrigger,
   DatePicker,
   DatePickerDialog,
   DateRangePicker,
@@ -34,11 +40,16 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  Dropzone,
+  EmptyState,
+  EyeIcon,
+  EyeOffIcon,
   Fab,
   FabMenu,
   FabMenuItem,
   FileIcon,
   FolderOpenIcon,
+  FullscreenDialog,
   IconButton,
   InfoIcon,
   Input,
@@ -56,6 +67,7 @@ import {
   NavigationDrawer,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
+  OtpInput,
   PlusIcon,
   PencilIcon,
   Radio,
@@ -65,7 +77,16 @@ import {
   SearchBarResult,
   Select,
   SettingsIcon,
+  SkipLink,
+  Stepper,
   Switch,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
   ToggleGroup,
   TopAppBar,
   Toolbar,
@@ -77,6 +98,7 @@ import {
   ControlStack,
   Grid,
   Slider,
+  toast,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -155,8 +177,17 @@ export function GlobalsPage() {
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
+  const [styleMarks, setStyleMarks] = useState<Array<"bold" | "italic">>(["bold"]);
   const [sliderValue, setSliderValue] = useState(40);
   const [autoValue, setAutoValue] = useState("");
+  const [otpValue, setOtpValue] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [stepperIndex, setStepperIndex] = useState(1);
+  const [dropNames, setDropNames] = useState<string[]>([]);
+  const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [ctxOpen, setCtxOpen] = useState(false);
+  const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [menuStarred, setMenuStarred] = useState(true);
   const [menuNotify, setMenuNotify] = useState(false);
@@ -166,8 +197,10 @@ export function GlobalsPage() {
   const [rhythmMedia, setRhythmMedia] = useState(false);
 
   return (
-    <div className="sandbox-globals">
+    <div className="sandbox-globals" id="main">
+      <SkipLink href="#main" label={t("globals.skipLink")} />
       <p className="sandbox-globals-lead">{t("globals.lead")}</p>
+      <SandboxHelp text={t("globals.skipLinkHelp")} />
 
       <GlobalsCategory title={t("globals.catActions")}>
         <div className="sandbox-globals-row">
@@ -284,6 +317,39 @@ export function GlobalsPage() {
           </DropdownMenu>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ContextMenuTrigger
+            onOpenChange={setCtxOpen}
+            onPositionChange={(x, y) => setCtxPos({ x, y })}
+            style={{
+              padding: "var(--fynns-space-lg)",
+              border: "1px dashed var(--fynns-color-border)",
+              borderRadius: "var(--fynns-radius-md)",
+              color: "var(--fynns-color-text-muted)",
+            }}
+          >
+            {t("globals.contextMenuHint")}
+          </ContextMenuTrigger>
+          <ContextMenu
+            open={ctxOpen}
+            onOpenChange={setCtxOpen}
+            x={ctxPos.x}
+            y={ctxPos.y}
+            ariaLabel={t("globals.contextMenuAria")}
+          >
+            <DropdownMenuItem icon={<ClipboardIcon />}>
+              {t("globals.contextMenuCopy")}
+            </DropdownMenuItem>
+            <DropdownMenuItem icon={<FileIcon />}>
+              {t("globals.contextMenuPaste")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem icon={<TrashIcon />}>
+              {t("globals.contextMenuDelete")}
+            </DropdownMenuItem>
+          </ContextMenu>
+          <SandboxHelp text={t("globals.contextMenuHelp")} />
+        </div>
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catTextInputs")}>
@@ -318,6 +384,42 @@ export function GlobalsPage() {
                 : t("globals.autocompleteHelp")
             }
           />
+          <OtpInput
+            value={otpValue}
+            onChange={setOtpValue}
+            ariaLabel={t("globals.otpAria")}
+            supportingText={t("globals.otpSupporting")}
+          />
+          <SandboxHelp text={t("globals.otpHelp")} />
+          <Input
+            type={passwordVisible ? "text" : "password"}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder={t("globals.passwordPlaceholder")}
+            aria-label={t("globals.passwordAria")}
+            trailing={
+              <Tooltip
+                content={
+                  passwordVisible
+                    ? t("globals.passwordHide")
+                    : t("globals.passwordShow")
+                }
+              >
+                <IconButton
+                  size="sm"
+                  aria-label={
+                    passwordVisible
+                      ? t("globals.passwordHide")
+                      : t("globals.passwordShow")
+                  }
+                  onClick={() => setPasswordVisible((v) => !v)}
+                >
+                  {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
+                </IconButton>
+              </Tooltip>
+            }
+          />
+          <SandboxHelp text={t("globals.passwordHelp")} />
         </div>
       </GlobalsCategory>
 
@@ -402,6 +504,17 @@ export function GlobalsPage() {
             ]}
           />
           <SandboxHelp text={t("globals.segmentedHelp")} />
+          <ToggleGroup
+            multiple
+            ariaLabel={t("globals.segmentedMultiAria")}
+            value={styleMarks}
+            onChange={setStyleMarks}
+            options={[
+              { value: "bold", label: t("globals.segmentedBold") },
+              { value: "italic", label: t("globals.segmentedItalic") },
+            ]}
+          />
+          <SandboxHelp text={t("globals.segmentedMultiHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <div style={{ width: "min(100%, 20rem)" }}>
@@ -738,6 +851,27 @@ export function GlobalsPage() {
             alt={t("globals.avatarBroken")}
           />
         </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <BadgedBox badge={3}>
+            <Tooltip content={t("globals.badgedBoxIconTip")}>
+              <IconButton aria-label={t("globals.badgedBoxIconTip")}>
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
+          </BadgedBox>
+          <BadgedBox badge>
+            <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
+          </BadgedBox>
+          <AvatarGroup max={3} size="sm" aria-label={t("globals.avatarGroupHelp")}>
+            <Avatar name="Ada Lovelace" alt="Ada" />
+            <Avatar name="Grace Hopper" alt="Grace" />
+            <Avatar name="Katherine Johnson" alt="Katherine" />
+            <Avatar name="Dorothy Vaughan" alt="Dorothy" />
+            <Avatar name="Mary Jackson" alt="Mary" />
+          </AvatarGroup>
+        </div>
+        <SandboxHelp text={t("globals.badgedBoxHelp")} />
+        <SandboxHelp text={t("globals.avatarGroupHelp")} />
         <div
           className="sandbox-globals-list"
           style={{
@@ -833,6 +967,140 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setFullscreenOpen(true)}>
+            {t("globals.fullscreenOpen")}
+          </Button>
+        </div>
+        <FullscreenDialog
+          open={fullscreenOpen}
+          onOpenChange={setFullscreenOpen}
+          title={t("globals.fullscreenTitle")}
+          closeAriaLabel={t("globals.fullscreenClose")}
+          actions={
+            <Button size="sm" onClick={() => setFullscreenOpen(false)}>
+              {t("globals.fullscreenDone")}
+            </Button>
+          }
+        >
+          <p style={{ margin: 0 }}>{t("globals.fullscreenBody")}</p>
+        </FullscreenDialog>
+        <SandboxHelp text={t("globals.fullscreenHelp")} />
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catPatterns")}>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <EmptyState
+            icon={<FolderOpenIcon />}
+            title={t("globals.emptyTitle")}
+            description={t("globals.emptyDescription")}
+            actions={
+              <Button>{t("globals.emptyAction")}</Button>
+            }
+          />
+          <SandboxHelp text={t("globals.emptyHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Stepper
+            ariaLabel={t("globals.stepperAria")}
+            activeIndex={stepperIndex}
+            onStepChange={setStepperIndex}
+            steps={[
+              {
+                label: t("globals.stepperStep1"),
+                description: t("globals.stepperStep1Desc"),
+              },
+              {
+                label: t("globals.stepperStep2"),
+                description: t("globals.stepperStep2Desc"),
+              },
+              {
+                label: t("globals.stepperStep3"),
+                description: t("globals.stepperStep3Desc"),
+                optional: true,
+              },
+            ]}
+          />
+          <Button
+            size="sm"
+            variant="tonal"
+            disabled={stepperIndex >= 2}
+            onClick={() => setStepperIndex((i) => Math.min(2, i + 1))}
+          >
+            {t("globals.stepperNext")}
+          </Button>
+          <SandboxHelp text={t("globals.stepperHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div style={{ width: "min(100%, 24rem)" }}>
+            <Dropzone
+              multiple
+              label={t("globals.dropzoneLabel")}
+              hint={t("globals.dropzoneHint")}
+              browseLabel={t("globals.dropzoneBrowse")}
+              onFiles={(files) => {
+                const names = files.map((f) => f.name);
+                setDropNames(names);
+                toast.message(
+                  t("globals.dropzoneToast", { names: names.join(", ") }),
+                );
+              }}
+            />
+          </div>
+          <SandboxHelp
+            text={
+              dropNames.length > 0
+                ? t("globals.dropzoneToast", { names: dropNames.join(", ") })
+                : t("globals.dropzoneHelp")
+            }
+          />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div style={{ width: "100%", maxWidth: "28rem", overflow: "auto" }}>
+            <Table>
+              <TableCaption>{t("globals.tableCaption")}</TableCaption>
+              <TableHead>
+                <TableRow>
+                  <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+                  <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColQty")}
+                  </TableHeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Teal ink</TableCell>
+                  <TableCell>Ready</TableCell>
+                  <TableCell align="end">12</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Surface kit</TableCell>
+                  <TableCell>Draft</TableCell>
+                  <TableCell align="end">4</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Focus ring</TableCell>
+                  <TableCell>Ready</TableCell>
+                  <TableCell align="end">28</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <SandboxHelp text={t("globals.tableHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div style={{ width: "min(100%, 28rem)" }}>
+            <CodeBlock
+              label={t("globals.codeBlockLabel")}
+              language="ts"
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              code={`export const accent = "var(--fynns-color-accent)";\nexport const radius = "var(--fynns-radius-md)";`}
+              maxHeight="8rem"
+            />
+          </div>
+          <SandboxHelp text={t("globals.codeBlockHelp")} />
+        </div>
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catNavigation")}>

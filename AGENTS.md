@@ -297,6 +297,13 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   `useFloatingBoxPosition`), section labels / hairline dividers, checkbox rows
   (stay open by default), arrow-key paging + Esc. Prefer over ad-hoc absolute
   menus when the trigger sits in an overflow/scroll ancestor.
+  Shared **MenuSurface** `{ open, onClose, children, style?, id?, … }` provides
+  MenuContext + portal panel (also used by ContextMenu).
+- **ContextMenu** `{ open, onOpenChange, x, y, children, ariaLabel? }` —
+  controlled right-click menu at client coords (clamped to viewport); reuses
+  DropdownMenuItem / Group / CheckboxItem / Separator via MenuSurface. Esc /
+  outside dismiss. **ContextMenuTrigger** `{ onOpenChange, onPositionChange,
+  children }` wraps a region and `preventDefault`s contextmenu to open.
 - **Popover** `{ open, onOpenChange, anchorRef, side?, align?, offset? }` —
   positions via `useFloatingBoxPosition` (top/left box coords, no CSS
   transform). Placement tries all four sides (preferred first, then opposite,
@@ -316,7 +323,7 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   icon-only help glyph, or `label` as a plain help trigger (prefer for
   form/inspector rows; no underline fence, no trailing "i").
 - **Dialog** `{ open, onOpenChange, title, visibleTitle?, description?,
-  headActions?, variant?: "centered"|"command", size?: "sm"|"md"|"lg",
+  headActions?, variant?: "centered"|"command"|"fullscreen", size?: "sm"|"md"|"lg",
   showCloseButton?, closeAriaLabel?
   }` — portal + focus-trap + scrim + Esc; centered/command variants fade/scale in
   via the shared frame presence lifecycle. `size` maps to
@@ -329,7 +336,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   confirmation with a centered bold title, top-right close (X), and a
   right-aligned Cancel + Confirm footer. `danger` makes Confirm destructive;
   `loading` shows a spinner and blocks close (X/Esc/scrim). Labels default to
-  English ("Confirm"/"Cancel").
+  English ("Confirm"/"Cancel"). **FullscreenDialog** `{ open, onOpenChange,
+  title, children, actions?, closeAriaLabel? }` — full-viewport panel
+  (`variant="fullscreen"`, `.fynns-dialog--fullscreen`); head is close
+  IconButton + title + optional actions, body scrollable.
 - **Drawer** `{ open, onClose, side?: "left"|"right", modal?, title?, visibleTitle?,
   description?, headActions?, showCloseButton?, closeAriaLabel?, ariaLabel?,
   className?, children }` — side sheet that slides in from `side` (default right).
@@ -401,15 +411,17 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   mark (20dp); group via shared `name`. **ToggleControl** —
   checkbox/radio styled as a switch (same M3 track/thumb as `Switch`); prefer
   `Checkbox` / `Radio` for true selection chrome.
-- **ToggleGroup** `{ options, value, onChange, fullWidth?, size?, showCheck? }`
-  — M3 **Segmented button** (single-select). Outlined stadium row (`--fynns-segmented-*`),
-  40dp (compact 32dp), hairline dividers, selected = `secondary-container` + leading
-  check (disable with `showCheck={false}`). Options may include `tip`, `ariaLabel`,
-  and `icon` (replaced by the check while selected). Equal-width segments; leading
-  slot width is reserved (no column reflow); check fades/scales in with an optical
-  label slide (`--fynns-duration-fast` + `--fynns-ease-emphasized`). `fullWidth`
-  justifies across the container.
-  `role="radiogroup"` + arrow-key paging.
+- **ToggleGroup** `{ options, value, onChange, multiple?, fullWidth?, size?, showCheck? }`
+  — M3 **Segmented button**. Default single-select (`value: V`, `onChange: (V) => void`,
+  `role="radiogroup"` + arrow-key paging selects). Pass `multiple` for multi-select
+  (`value: V[]`, `onChange: (V[]) => void`, `role="group"`, `aria-pressed` on
+  segments; Space toggles, arrows move focus only). Outlined stadium row
+  (`--fynns-segmented-*`), 40dp (compact 32dp), hairline dividers, selected =
+  `secondary-container` + leading check (disable with `showCheck={false}`). Options
+  may include `tip`, `ariaLabel`, and `icon` (replaced by the check while selected).
+  Equal-width segments; leading slot width is reserved (no column reflow); check
+  fades/scales in with an optical label slide (`--fynns-duration-fast` +
+  `--fynns-ease-emphasized`). `fullWidth` justifies across the container.
   Prefer over `Chip` filter for exclusive equal-width segments. **Chip** /
   **ChipSet** `{ variant?: "assist"|"filter"|"input", selected?, elevated?,
   leadingIcon?, trailingIcon?, onRemove?, removeAriaLabel? }` — M3 stadium chips (32dp);
@@ -447,7 +459,9 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   (or `current`) is plain text with `aria-current="page"`; ancestors compose
   **`Button` `ghost` `sm`** (or the same classes on `<a href>`) — stadium
   radius, compact height, ghost state-layer; accent label. Prefer over
-  hand-rolled chevron rows in app chrome.
+  hand-rolled chevron rows in app chrome. **Reuse rule:** interactive chrome
+  must compose `Button` / `IconButton` / shared `::before` state-layers
+  (`--fynns-state-*`); never invent a private hover wash (Breadcrumb lesson).
 - **Pagination** `{ page, pageCount, onPageChange, siblingCount?,
   boundaryCount?, size?: "sm"|"md", ariaLabel?, previousAriaLabel?,
   nextAriaLabel?, getPageAriaLabel?, disabled? }` — list/table page navigator
@@ -490,6 +504,10 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Avatar** `{ src?, alt?, name?, size?: "sm"|"md"|"lg", children? }` — M3 circular
   identity (40dp default); image → children → initials from `name` → person glyph.
   Pass into `CardHeader`’s `avatar` slot.
+  **AvatarGroup** `{ children, max?, size? }` — overlapping Avatar stack; shows
+  `+N` overflow when children exceed `max` (default 3). Group fills are opaque
+  (accent baked onto `surface-1`) plus a `surface-1` ring so overlaps do not
+  double-tint translucent `accent-container`.
   **Fab** `{ children, label?, size?: "sm"|"md"|"lg",
   variant?: "primary"|"secondary"|"tertiary"|"surface", lowered? }` — M3 floating
   action (56dp default; sm 40 / lg 96). Color roles map to accent / secondary /
@@ -554,16 +572,44 @@ Import everything from `@fynns/ui`. Components emit `.fynns-*` classes.
   long-strip step as SearchBar / Select suggestion rows); trailing badge for counts.
   Prefer generic `Drawer` for inspector / form panels.
 - **Badge** `{ variant?: "neutral"|"success"|"danger"|"warning"|"info"|"accent", size?: "sm"|"md", icon? }`.
+  **BadgedBox** `{ badge?, children }` — positions a notification badge over an
+  arbitrary child (icon button, avatar, …). Scalar / `true` (dot) values reuse
+  `NavigationRailBadge`; pass a custom node when needed. Layout-only wrapper —
+  no private hover wash.
   **Divider** `{ orientation?: "horizontal"|"vertical", inset?, insetStart?, insetEnd? }` —
   M3 hairline separator (`outline-subtle`); `inset` indents both ends by `--fynns-space-lg`
   (16dp). Vertical stretches in a flex row (`align-self: stretch`).
   **Kbd**. **CommandPalette** (generic shell over Combobox + DialogShell).
+- **OtpInput** `{ value, onChange, length?, invalid?, supportingText?, errorText?,
+  ariaLabel?, disabled? }` — one-time-code digit row (`.fynns-input` cells);
+  paste splits across cells; arrows / Backspace move focus.
+- **EmptyState** `{ title, description?, icon?, actions?, size?: "sm"|"md" }` —
+  layout-only empty / zero-result placeholder (no Card chrome, no hover).
+  Compose CTAs with `Button` / `IconButton` yourself.
+- **SkipLink** `{ href?, label?, children? }` — a11y skip-to-content link;
+  visually hidden until `:focus-visible`, then appears via **`Button` `ghost`**
+  classes (`fynns-btn fynns-btn--ghost`). Default `href="#main"`.
+- **Stepper** `{ steps: { label, description?, optional? }[], activeIndex,
+  onStepChange?, orientation?: "horizontal"|"vertical", disabled?, ariaLabel? }` —
+  linear step indicator; completed steps before `activeIndex` are clickable
+  when `onStepChange` is set and reuse **`Button` `ghost` `sm`** (no private
+  hover). Active step uses `aria-current="step"`.
+- **Dropzone** `{ onFiles, accept?, multiple?, disabled?, busy?, label?, hint?,
+  browseLabel? }` — file drop surface + hidden `<input type="file">`; browse
+  uses `Button` `tonal`. `busy` shows indeterminate `LinearProgress`.
+- **Table** `{ stickyHeader? }` + anatomy: **TableHead** / **TableBody** /
+  **TableRow** / **TableHeaderCell** `{ align? }` / **TableCell** `{ align? }` /
+  **TableCaption** — native `<table>` with `.fynns-table` chrome. Prefer over
+  ad-hoc grid markup for tabular data.
+- **CodeBlock** `{ code, language?, label?, copyAriaLabel?, showCopy?, maxHeight? }` —
+  monospace sample (`fynns-scroll` `<pre>`); optional copy is `IconButton` +
+  `Tooltip` + `ClipboardIcon`.
 - Inline icons (dependency-free): `ChevronDownIcon`, `ChevronUpIcon`,
   `ChevronRightIcon`, `ChevronLeftIcon`, `ArrowLeftIcon`, `CloseIcon`,
   `PersonIcon`,
   `InfoIcon`, `SearchIcon`, `AlertCircleIcon`, `AlertTriangleIcon`,
   `CheckCircleIcon`, `CheckIcon`, `PlusIcon`, `SaveIcon`, `TrashIcon`,
-  `PencilIcon`, `EyeIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
+  `PencilIcon`, `EyeIcon`, `EyeOffIcon`, `RocketIcon`, `RefreshIcon`, `ArchiveIcon`, `FileIcon`,
   `FolderOpenIcon`, `UndoIcon`, `DownloadIcon`, `UploadIcon`, `ClipboardIcon`, `ScrollTextIcon`, `TerminalIcon`,
   `BotIcon`, `SparklesIcon`, `PlugIcon`, `GlobeIcon`, `CpuIcon`, `MessageSquareIcon`,
   `BarChartIcon`, `StopIcon`, `PanelLeftIcon`, `PanelRightIcon`, `MenuIcon`,

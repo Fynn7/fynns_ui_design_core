@@ -16,13 +16,15 @@ Short prompts still require reading `llm/CONSUME.md` first (see
 ## Rules
 
 - Build UI from `@fynns/ui` primitives (Button, IconButton, Input, Textarea,
-  Counter, SearchInput, Select, Combobox, Autocomplete, DropdownMenu
-  (+ Group / Label / Separator / CheckboxItem), Popover, Tooltip,
-  InfoHint, Dialog/DialogShell, Drawer, BottomSheet, Switch, ToggleControl,
-  ToggleGroup (M3 Segmented button), Tabs, Slider, Panel, PanelCard, Card, ScrollArea, Toaster/toast,
-  Alert banners, Spinner/ Skeleton/Overlay, LinearProgress/CircularProgress,
-  Badge, Avatar, Fab, FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar,
-  Banner, List/ListItem, Breadcrumb, Pagination,
+  Counter, SearchInput, Select, Combobox, Autocomplete, OtpInput, DropdownMenu
+ (+ Group / Label / Separator / CheckboxItem), ContextMenu (+ ContextMenuTrigger), Popover, Tooltip,
+  InfoHint, Dialog/DialogShell/ConfirmDialog/FullscreenDialog, Drawer, BottomSheet, Switch, ToggleControl,
+  ToggleGroup (M3 Segmented button; supports `multiple`), Tabs, Slider, Panel, PanelCard, Card,
+  ScrollArea, Toaster/toast, Alert banners, Spinner/ Skeleton/Overlay,
+  LinearProgress/CircularProgress, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
+  FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
+  List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper, EmptyState, Dropzone,
+  Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock,
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,

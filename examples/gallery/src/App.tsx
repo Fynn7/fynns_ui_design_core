@@ -17,6 +17,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  CodeBlock,
   Collapsible,
   ConfirmDialog,
   Checkbox,
@@ -33,6 +34,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  EmptyState,
   ErrorBanner,
   Fab,
   FolderOpenIcon,
@@ -60,6 +62,7 @@ import {
   NavigationRailHeader,
   NavigationRailItem,
   NavigationRailMenu,
+  OtpInput,
   PanelCard,
   PlusIcon,
   Radio,
@@ -72,8 +75,15 @@ import {
   Slider,
   Spinner,
   SplitButton,
+  Stepper,
   SuccessBanner,
   Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRow,
   Tabs,
   Textarea,
   Toaster,
@@ -117,6 +127,11 @@ export function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [galleryPage, setGalleryPage] = useState(3);
+  const [galleryOtp, setGalleryOtp] = useState("");
+  const [galleryStep, setGalleryStep] = useState(1);
+  const [galleryStyles, setGalleryStyles] = useState<Array<"bold" | "italic">>([
+    "bold",
+  ]);
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -425,6 +440,62 @@ export function App() {
         </Row>
         <Row>
           <Pagination page={galleryPage} pageCount={12} onPageChange={setGalleryPage} />
+        </Row>
+        <Row>
+          <EmptyState
+            icon={<FolderOpenIcon />}
+            title="No items"
+            description="Nothing to show yet."
+            actions={<Button size="sm">Create</Button>}
+            size="sm"
+          />
+          <OtpInput value={galleryOtp} onChange={setGalleryOtp} length={4} />
+          <ToggleGroup
+            multiple
+            ariaLabel="Style"
+            value={galleryStyles}
+            onChange={setGalleryStyles}
+            options={[
+              { value: "bold", label: "Bold" },
+              { value: "italic", label: "Italic" },
+            ]}
+          />
+        </Row>
+        <Row>
+          <Stepper
+            activeIndex={galleryStep}
+            onStepChange={setGalleryStep}
+            steps={[
+              { label: "One" },
+              { label: "Two" },
+              { label: "Three" },
+            ]}
+          />
+        </Row>
+        <Row>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeaderCell>Name</TableHeaderCell>
+                <TableHeaderCell align="end">Qty</TableHeaderCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>Accent</TableCell>
+                <TableCell align="end">3</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Surface</TableCell>
+                <TableCell align="end">8</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <CodeBlock
+            label="sample.ts"
+            code={`const accent = "var(--fynns-color-accent)";`}
+            showCopy={false}
+          />
         </Row>
         <div style={{ width: "100%", maxWidth: "24rem" }}>
           <TopAppBar
