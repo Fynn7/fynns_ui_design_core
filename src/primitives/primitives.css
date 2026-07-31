@@ -2674,6 +2674,9 @@ a.fynns-breadcrumb-link:visited {
 
 /* ---------- Pagination ---------- */
 .fynns-pagination {
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
   min-width: 0;
 }
 
@@ -2682,6 +2685,8 @@ a.fynns-breadcrumb-link:visited {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-pagination-gap);
+  width: fit-content;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -6866,8 +6871,8 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text-muted);
 }
 
-/* Mute only the numeral — never the whole cell. Range `::before` bars must
-   stay full-strength or outside days look like a darker seam in the strip. */
+/* Mute only the numeral by default. In-range outside cells additionally use a
+   quieter strip fill (see range rules below). */
 .fynns-datepicker-day--outside .fynns-datepicker-day-label {
   opacity: 0.55;
 }
@@ -6976,15 +6981,18 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-on-secondary-container);
 }
 
-/* Outside numerals stay muted; ink on the range strip uses the role color. */
+/*
+ * Outside days in a range stay visually “other month”: muted numerals and a
+ * quieter strip fill — not the same ink/bar as in-month in-range cells.
+ */
 .fynns-datepicker--range
   .fynns-datepicker-day--outside.fynns-datepicker-day--in-range
   .fynns-datepicker-day-label,
 .fynns-datepicker--range
   .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview
   .fynns-datepicker-day-label {
-  opacity: 0.72;
-  color: var(--fynns-color-on-secondary-container);
+  opacity: 0.55;
+  color: var(--fynns-color-text-muted);
 }
 
 .fynns-datepicker--range
@@ -6993,8 +7001,27 @@ a.fynns-breadcrumb-link:visited {
 .fynns-datepicker--range
   .fynns-datepicker-day--outside.fynns-datepicker-day--range-end
   .fynns-datepicker-day-label {
-  opacity: 1;
+  opacity: 0.78;
   color: var(--fynns-color-on-accent);
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-start:not(
+    .fynns-datepicker-day--range-end
+  )::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-end:not(
+    .fynns-datepicker-day--range-start
+  )::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-secondary-container) 40%,
+    var(--fynns-color-surface-1)
+  );
 }
 
 .fynns-datepicker--range .fynns-datepicker-day--in-range::before,
@@ -7403,6 +7430,8 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
   gap: var(--fynns-carousel-controls-gap);
   padding-block: var(--fynns-carousel-pad-block);
   outline: none;
@@ -7815,6 +7844,7 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   gap: var(--fynns-space-md);
   padding: var(--fynns-space-xl);
   border: var(--fynns-border-hairline) dashed var(--fynns-color-border-strong);
@@ -7885,6 +7915,7 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- Table ---------- */
 .fynns-table-wrap {
   overflow: auto;
+  width: 100%;
   max-width: 100%;
   scrollbar-width: thin;
   scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
@@ -7978,9 +8009,11 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- CodeBlock ---------- */
 .fynns-code-block {
   position: relative;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-xs);
+  width: 100%;
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
