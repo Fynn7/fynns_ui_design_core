@@ -778,13 +778,7 @@ export function GlobalsPage() {
           </div>
         </div>
         {bannerVisible ? (
-          <div
-            className="sandbox-globals-banner"
-            style={{
-              width: "100%",
-              maxWidth: "28rem",
-            }}
-          >
+          <div className="sandbox-globals-banner">
             <Banner
               variant="tonal"
               icon={<InfoIcon />}
@@ -808,10 +802,7 @@ export function GlobalsPage() {
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catContainment")}>
-        <div
-          className="sandbox-globals-row sandbox-globals-row--stack"
-          style={{ width: "100%", maxWidth: "28rem" }}
-        >
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Carousel
             ariaLabel={t("globals.carouselAria")}
             variant="multi"
@@ -874,17 +865,7 @@ export function GlobalsPage() {
         </div>
         <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
-        <div
-          className="sandbox-globals-list"
-          style={{
-            width: "100%",
-            maxWidth: "22rem",
-            border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-md)",
-            overflow: "hidden",
-            background: "var(--fynns-color-surface-1)",
-          }}
-        >
+        <div className="sandbox-globals-list">
           <List aria-label={t("globals.listAria")}>
             <ListItem
               headline={t("globals.listOneLine")}
@@ -1034,21 +1015,19 @@ export function GlobalsPage() {
           <SandboxHelp text={t("globals.stepperHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <div style={{ width: "min(100%, 24rem)" }}>
-            <Dropzone
-              multiple
-              label={t("globals.dropzoneLabel")}
-              hint={t("globals.dropzoneHint")}
-              browseLabel={t("globals.dropzoneBrowse")}
-              onFiles={(files) => {
-                const names = files.map((f) => f.name);
-                setDropNames(names);
-                toast.message(
-                  t("globals.dropzoneToast", { names: names.join(", ") }),
-                );
-              }}
-            />
-          </div>
+          <Dropzone
+            multiple
+            label={t("globals.dropzoneLabel")}
+            hint={t("globals.dropzoneHint")}
+            browseLabel={t("globals.dropzoneBrowse")}
+            onFiles={(files) => {
+              const names = files.map((f) => f.name);
+              setDropNames(names);
+              toast.message(
+                t("globals.dropzoneToast", { names: names.join(", ") }),
+              );
+            }}
+          />
           <SandboxHelp
             text={
               dropNames.length > 0
@@ -1058,7 +1037,7 @@ export function GlobalsPage() {
           />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <div className="fynns-table-wrap fynns-scroll" style={{ width: "100%", maxWidth: "28rem" }}>
+          <div className="fynns-table-wrap fynns-scroll">
             <Table>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
               <TableHead>
@@ -1092,15 +1071,13 @@ export function GlobalsPage() {
           <SandboxHelp text={t("globals.tableHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <div style={{ width: "min(100%, 28rem)" }}>
-            <CodeBlock
-              label={t("globals.codeBlockLabel")}
-              language="ts"
-              copyAriaLabel={t("globals.codeBlockCopy")}
-              code={`export const accent = "var(--fynns-color-accent)";\nexport const radius = "var(--fynns-radius-md)";`}
-              maxHeight="8rem"
-            />
-          </div>
+          <CodeBlock
+            label={t("globals.codeBlockLabel")}
+            language="ts"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`export const accent = "var(--fynns-color-accent)";\nexport const radius = "var(--fynns-radius-md)";`}
+            maxHeight="8rem"
+          />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
         </div>
       </GlobalsCategory>
@@ -1164,16 +1141,7 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
-        <div
-          className="sandbox-globals-appbar"
-          style={{
-            width: "100%",
-            maxWidth: "28rem",
-            border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-md)",
-            overflow: "hidden",
-          }}
-        >
+        <div className="sandbox-globals-appbar">
           <TopAppBar
             title={t("globals.appBarTitle")}
             scrolled={appBarScrolled}
@@ -1256,13 +1224,7 @@ export function GlobalsPage() {
             </p>
           </div>
         </div>
-        <div
-          className="sandbox-globals-navbar"
-          style={{
-            width: "100%",
-            maxWidth: "28rem",
-          }}
-        >
+        <div className="sandbox-globals-navbar">
           <NavigationBar aria-label={t("globals.navBarAria")}>
             <NavigationBarItem
               icon={<FolderOpenIcon />}
@@ -1383,13 +1345,7 @@ export function GlobalsPage() {
           />
         </NavigationDrawer>
         <SandboxHelp text={t("globals.navDrawerHelp")} />
-        <div
-          className="sandbox-globals-bottom-app-bar"
-          style={{
-            width: "100%",
-            maxWidth: "28rem",
-          }}
-        >
+        <div className="sandbox-globals-bottom-app-bar">
           <BottomAppBar
             aria-label={t("globals.bottomAppBarAria")}
             actions={
@@ -1421,16 +1377,7 @@ export function GlobalsPage() {
           />
         </div>
         <SandboxHelp text={t("globals.bottomAppBarHelp")} />
-        <div
-          className="sandbox-globals-toolbar"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "var(--fynns-space-md)",
-            width: "100%",
-            maxWidth: "28rem",
-          }}
-        >
+        <div className="sandbox-globals-toolbar">
           <Toolbar
             variant="docked"
             aria-label={t("globals.toolbarDockedAria")}
@@ -1523,15 +1470,7 @@ export function GlobalsPage() {
           </div>
         </div>
         <SandboxHelp text={t("globals.toolbarHelp")} />
-        <div
-          className="sandbox-globals-search-bar"
-          style={{
-            width: "100%",
-            maxWidth: "28rem",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
+        <div className="sandbox-globals-search-bar">
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
