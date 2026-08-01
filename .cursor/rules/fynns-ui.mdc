@@ -14,24 +14,28 @@ Short prompts still require reading `llm/CONSUME.md` first (see
 `llm/opencode-fynns-ui-consume.md`).
 
 **Public API purge / migration:** `llm/BREAKING_PURGE.md` — only symbols demoed in
-sandbox Globals + Preview are public; do not import deleted APIs (Toast, Dialog,
-Popover, UnitStack, SearchInput, Panel*, …).
+sandbox Globals + Preview are public; do not import deleted APIs (Toast, Popover,
+UnitStack, SearchInput, Panel*, …). Dialog / Drawer / Textarea / Tabs /
+InlineAlert are restored.
 
 ## Rules
 
-- Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, Input, Select,
+- Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, Input,
+  Textarea, Select,
   Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
-  ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, FullscreenDialog,
-  BottomSheet, Switch, ToggleGroup, Slider, Card (+ Media/Header/Content/Actions),
+  ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
+  ConfirmDialog, Drawer, FullscreenDialog,
+  BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (+ Media/Header/Content/Actions),
   LinearProgress/CircularProgress, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
-  snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
+  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
   EmptyState, Dropzone,
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock,
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
-  Divider, Checkbox, Radio, Chip, ControlStack/ControlRow/Grid, Collapsible).
+  Divider, Checkbox, Radio, Chip, ControlStack/ControlRow/Grid,
+  measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
@@ -45,8 +49,8 @@ Popover, UnitStack, SearchInput, Panel*, …).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
   new radius steps require a GUI row in the same change.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
-  primitives in the submodule instead. Do not resurrect purged Toast / Dialog /
-  Popover APIs. Transient feedback: `snackbar` + `SnackbarHost`.
+  primitives in the submodule instead. Do not resurrect purged Toast /
+  Popover / Panel APIs. Transient feedback: `snackbar` + `SnackbarHost`.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the submodule

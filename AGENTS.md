@@ -82,8 +82,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   `Card` / section layout + `fynns-scroll` for scroll regions;
-   `FullscreenDialog` / `BottomSheet` / `NavigationDrawer` for overlays;
+   workspace panes: titled head strip + `body` with `fynns-scroll` (do **not**
+   expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
+   `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
+   `NavigationDrawer`; blocking busy: app-local fixed scrim + `CircularProgress`
+   + label (do not revive `BlockingLoadingOverlay`);
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
    it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
@@ -114,7 +117,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
   same change — never ship a radius token that the GUI cannot show.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
-  primitives instead. Do not resurrect purged Toast / Dialog / Popover APIs
+  primitives instead. Do not resurrect purged Toast / Popover / Panel APIs
   (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
@@ -198,9 +201,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 ### Keep set (summary)
 
 - **Actions:** Button, IconButton, Fab, FabMenu / FabMenuItem
-- **Fields:** Input, Select, Autocomplete, OtpInput, SearchBar / SearchBarResult,
-  Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup
-- **Feedback:** Banner, Badge / BadgedBox, LinearProgress / CircularProgress,
+- **Fields:** Input, Textarea (dense multiline; no floating label — not full M3
+  Text Field anatomy), Select, Autocomplete, OtpInput, SearchBar /
+  SearchBarResult, Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup,
+  Tabs (M3 Primary underline — not a ToggleGroup substitute)
+- **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
+  M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
+  CircularProgress,
   EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
@@ -211,8 +218,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   consecutive toolbar hovers are instant; enter fades/slides via
   `--fynns-duration-tooltip` once placement is ready; bubble stays inside the
   viewport via flip/shift + inline `maxWidth` from the floating placer), InfoHint
-- **Overlay / sheets:** FullscreenDialog, BottomSheet, DropdownMenu (+ Item /
-  CheckboxItem / Group / Separator), ContextMenu / ContextMenuTrigger
+- **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog (M3 basic shape:
+  `radius-3xl`, no default close X on Dialog/Confirm), Drawer (content side
+  sheet ~400dp, open-edge `radius-xl`; always modal), FullscreenDialog, BottomSheet,
+  DropdownMenu (+ Item / CheckboxItem / Group / Separator), ContextMenu /
+  ContextMenuTrigger
 - **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
   DateRangePickerDialog, TimePicker / TimePickerDialog
 - **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
@@ -222,7 +232,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
-- **Layout helpers:** ControlStack, ControlRow, Grid
+- **Layout helpers:** ControlStack, ControlRow, Grid,
+  `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
+  `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
+  the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
+  (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard)
 - **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
   Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
   Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,

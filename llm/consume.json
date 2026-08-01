@@ -18,7 +18,7 @@
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
     "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
-    "Do not import purged symbols (toast/Toaster/Dialog/Popover/UnitStack/…). See llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
+    "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
     "App entry must createRoot and render App (CSS-only main.tsx is a fail).",
     "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
     "If build uses tsc, add vite-env.d.ts with /// <reference types=\"vite/client\" /> so CSS imports from @fynns/ui typecheck.",

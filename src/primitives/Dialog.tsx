@@ -1,6 +1,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
@@ -236,6 +237,214 @@ export function DialogFrame({
       </div>
     </div>,
     document.body,
+  );
+}
+
+/**
+ * Low-level modal shell. The caller renders the full panel content (head +
+ * body). Use this when you need full control of the panel layout.
+ */
+export type DialogShellProps = {
+  open: boolean;
+  onClose: () => void;
+  labelledBy?: string;
+  ariaLabel?: string;
+  variant?: DialogVariant;
+  className?: string;
+  children: ReactNode;
+};
+
+export function DialogShell({
+  open,
+  onClose,
+  labelledBy,
+  ariaLabel,
+  variant = "centered",
+  className,
+  children,
+}: DialogShellProps) {
+  return (
+    <DialogFrame
+      open={open}
+      onClose={onClose}
+      variant={variant}
+      panelClassName={className}
+      labelledBy={labelledBy}
+      ariaLabel={ariaLabel}
+    >
+      {children}
+    </DialogFrame>
+  );
+}
+
+/**
+ * High-level dialog with a standard head (title + actions + close) and a body
+ * slot. Focus trap, scroll lock, Esc + scrim dismiss are built in via
+ * `DialogFrame`.
+ */
+export type DialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: ReactNode;
+  visibleTitle?: boolean;
+  description?: ReactNode;
+  children: ReactNode;
+  headActions?: ReactNode;
+  variant?: DialogVariant;
+  /** Maps to `--fynns-layout-dialog-max-width-*` for centered dialogs. */
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  showCloseButton?: boolean;
+  closeAriaLabel?: string;
+};
+
+export function Dialog({
+  open,
+  onOpenChange,
+  title,
+  visibleTitle = true,
+  description,
+  children,
+  headActions,
+  variant = "centered",
+  size = "md",
+  className,
+  showCloseButton = false,
+  closeAriaLabel = "Close",
+}: DialogProps) {
+  const titleId = useId();
+  const close = () => onOpenChange(false);
+  const showHead = visibleTitle || !!headActions || showCloseButton;
+  const sizeClass =
+    variant === "centered"
+      ? size === "sm"
+        ? "fynns-dialog-panel--size-sm"
+        : size === "lg"
+          ? "fynns-dialog-panel--size-lg"
+          : "fynns-dialog-panel--size-md"
+      : "";
+  return (
+    <DialogFrame
+      open={open}
+      onClose={close}
+      variant={variant}
+      panelClassName={[sizeClass, className ?? ""].filter(Boolean).join(" ") || undefined}
+      labelledBy={titleId}
+    >
+      {showHead ? (
+        <div className="fynns-dialog-head">
+          <h2
+            id={titleId}
+            className={visibleTitle ? "fynns-dialog-title" : "fynns-sr-only"}
+          >
+            {title}
+          </h2>
+          <div className="fynns-dialog-head-actions">
+            {headActions}
+            {showCloseButton ? (
+              <Tooltip content={closeAriaLabel}>
+                <IconButton
+                  variant="ghost"
+                  className="fynns-dialog-close"
+                  aria-label={closeAriaLabel}
+                  onClick={close}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <h2 id={titleId} className="fynns-sr-only">
+          {title}
+        </h2>
+      )}
+      {description ? <p className="fynns-dialog-description">{description}</p> : null}
+      <div className="fynns-dialog-body fynns-scroll">{children}</div>
+    </DialogFrame>
+  );
+}
+
+/**
+ * Confirmation dialog with a start-aligned title and a right-aligned footer of
+ * Cancel + Confirm. Dismiss via Cancel, Esc, or scrim (no close X — M3 basic
+ * dialog anatomy). `danger` styles Confirm destructively; `loading` blocks
+ * dismiss when `blockCloseWhileLoading` (default).
+ */
+export type ConfirmDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: ReactNode;
+  description?: ReactNode;
+  children?: ReactNode;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm: () => void;
+  onCancel?: () => void;
+  danger?: boolean;
+  confirmDisabled?: boolean;
+  loading?: boolean;
+  blockCloseWhileLoading?: boolean;
+  /** When false, scrim click does not dismiss (use Cancel instead). */
+  scrimDismiss?: boolean;
+  confirmIcon?: ReactNode;
+};
+
+export function ConfirmDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
+  onConfirm,
+  onCancel,
+  danger = false,
+  confirmDisabled = false,
+  loading = false,
+  blockCloseWhileLoading = true,
+  scrimDismiss = true,
+  confirmIcon,
+}: ConfirmDialogProps) {
+  const titleId = useId();
+  const closeBlocked = loading && blockCloseWhileLoading;
+  const cancel = () => {
+    if (closeBlocked) return;
+    if (onCancel) onCancel();
+    else onOpenChange(false);
+  };
+  return (
+    <DialogFrame
+      open={open}
+      onClose={cancel}
+      variant="centered"
+      labelledBy={titleId}
+      scrimDismiss={scrimDismiss && !closeBlocked}
+    >
+      <div className="fynns-dialog-head fynns-dialog-head--confirm">
+        <h2 id={titleId} className="fynns-dialog-title">
+          {title}
+        </h2>
+      </div>
+      {description ? <p className="fynns-dialog-description">{description}</p> : null}
+      {children ? <div className="fynns-dialog-body fynns-scroll">{children}</div> : null}
+      <div className="fynns-dialog-foot">
+        <Button variant="ghost" onClick={cancel} disabled={closeBlocked}>
+          {cancelLabel}
+        </Button>
+        <Button
+          variant={danger ? "danger" : "primary"}
+          onClick={onConfirm}
+          disabled={confirmDisabled}
+          loading={loading}
+        >
+          {confirmIcon}
+          {confirmLabel}
+        </Button>
+      </div>
+    </DialogFrame>
   );
 }
 
