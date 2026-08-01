@@ -803,6 +803,12 @@ export const LAYOUT_TOKENS = {
   "dialog-max-width-lg": "35rem",
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
+  /**
+   * Equal outer inset for panel shells (Collapsible head/body, Drawer content).
+   * Centered Dialog keeps `--fynns-space-xl` (24dp M3). Do not force Card/Sheet
+   * onto this — those stay M3 block≠inline.
+   */
+  "content-inset": "1rem",
   /** Bottom sheet — M3 max width 640dp. */
   "sheet-max-width": "40rem",
   /** Near-fullscreen height (leaves a peek of the page above). */

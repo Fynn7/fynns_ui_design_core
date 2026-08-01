@@ -236,7 +236,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
-  (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard)
+  (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
+  Panel shells (Collapsible head/body, Drawer content): equal outer inset via
+  `--fynns-layout-content-inset`. Centered Dialog outer inset stays
+  `--fynns-space-xl` (24dp M3). Do not force Card / BottomSheet / Snackbar /
+  ListItem onto equal four-side padding (those keep M3 block≠inline).
 - **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
   Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
   Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,
