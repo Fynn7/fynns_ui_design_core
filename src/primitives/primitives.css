@@ -1168,21 +1168,22 @@
 }
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
- * Outer inset 24dp (`space-xl`) on all sides — top/bottom and left/right match.
- * (Collapsible / Drawer panel shells use `--fynns-layout-content-inset` instead.) */
+ * Outer inset via `--fynns-layout-dialog-inset` (24dp) on all sides.
+ * Collapsible / Drawer / Card use `--fynns-layout-content-inset` (20dp). */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
-  padding: var(--fynns-space-xl) var(--fynns-space-xl) 0;
+  padding: var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset) 0;
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-description {
-  padding: var(--fynns-space-sm) var(--fynns-space-xl) 0;
+  padding: var(--fynns-space-sm) var(--fynns-layout-dialog-inset) 0;
   font-size: var(--fynns-font-size-sm);
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-body {
-  padding: var(--fynns-space-md) var(--fynns-space-xl) var(--fynns-space-xl);
+  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset)
+    var(--fynns-layout-dialog-inset);
 }
 
 /* Body/description before actions: drop bottom pad so foot owns the outer inset. */
@@ -1193,7 +1194,8 @@
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-foot {
-  padding: var(--fynns-space-lg) var(--fynns-space-xl) var(--fynns-space-xl);
+  padding: var(--fynns-space-lg) var(--fynns-layout-dialog-inset)
+    var(--fynns-layout-dialog-inset);
   gap: var(--fynns-space-sm);
 }
 
@@ -3150,7 +3152,7 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-md) var(--fynns-space-lg);
+  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
   position: relative;
   z-index: 2;
 }
@@ -3209,7 +3211,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-content {
-  padding: var(--fynns-space-lg);
+  padding: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-color-text);
@@ -3218,7 +3220,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-header + .fynns-card-content {
-  padding-top: 0;
+  padding-top: var(--fynns-space-sm);
+}
+
+/* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath
+ * (content bottom lg + actions top sm), matching pre-inset Card rhythm. */
+.fynns-card-content:has(+ .fynns-card-actions) {
+  padding-bottom: var(--fynns-space-lg);
 }
 
 .fynns-card-actions {
@@ -3226,9 +3234,14 @@ a.fynns-breadcrumb-link:visited {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-sm) var(--fynns-space-lg) var(--fynns-space-md);
+  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-inset);
   position: relative;
   z-index: 2;
+}
+
+.fynns-card-header + .fynns-card-actions {
+  padding-top: var(--fynns-space-sm);
 }
 
 .fynns-card-actions--end {

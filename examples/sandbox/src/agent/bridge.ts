@@ -12,7 +12,7 @@ import { SANDBOX_LAYOUT_AGENT_CATALOG } from "../state/baseline";
 export const ADJUST_TOKEN_TOOL = {
   name: "adjust_token",
   description:
-    "Adjust one design token in the current sandbox draft. Applies immediately to the live preview after user confirmation. For gaps use layout unit-stack-gap / control-*-gap or sandbox (row-gap, section-gap, chrome-bar-height) — see SANDBOX_LAYOUT_AGENT_CATALOG; prefer .sandbox-stack / ControlStack; never invent ad-hoc gaps.",
+    "Adjust one design token in the current sandbox draft. Applies immediately to the live preview after user confirmation. For layout use SANDBOX_LAYOUT_AGENT_CATALOG sections: sandbox / rhythm / panelInsets / sheetPads / shellSize — never invent ad-hoc gaps.",
   input_schema: {
     type: "object",
     properties: {
@@ -55,7 +55,7 @@ export const ADJUST_TOKEN_TOOL = {
 export const READ_CURRENT_TOKENS_TOOL = {
   name: "read_current_tokens",
   description:
-    "Read the current resolved token values (baseline + draft overrides). Pass group sandbox or layout for chrome / unit-stack / toolbar rhythm gaps.",
+    "Read the current resolved token values (baseline + draft overrides). Pass group sandbox or layout for SANDBOX_LAYOUT_AGENT_CATALOG sections: sandbox / rhythm / panelInsets / sheetPads / shellSize.",
   input_schema: {
     type: "object",
     properties: {

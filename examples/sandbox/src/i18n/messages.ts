@@ -207,9 +207,15 @@ const en = {
   "layoutChrome.title": "Layout chrome",
   "layoutChrome.collapsible": "Layout chrome & rhythm",
   "layoutChrome.help":
-    "Sandbox-only gaps (`--sandbox-*`). Agents must use `SANDBOX_LAYOUT_AGENT_CATALOG` — do not invent ad-hoc gaps. Not written by Apply.",
+    "Sandbox demo only (`--sandbox-*`). Not written by Apply. Distinct from product `--fynns-layout-bar-height`.",
   "layoutChrome.rhythmHelp":
-    "Layout rhythm (`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`). Apply writes into `tokens.ts`. Prefer flex + `--fynns-layout-unit-stack-gap` (sandbox `.sandbox-stack`) for vertical units; `ControlStack` + `ControlRow` for labeled toolbar rows.",
+    "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
+  "layoutChrome.panelInsetsHelp":
+    "Panel content insets — equal four-side outer pad. `content-inset` (Card / Collapsible / Drawer) vs `dialog-inset` (centered Dialog; larger breath). Not for BottomSheet.",
+  "layoutChrome.sheetPadsHelp":
+    "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
+  "layoutChrome.shellSizeHelp":
+    "Shell size — container width / product chrome bar height (not padding). `bar-height` drives TopAppBar sm / BottomAppBar / SearchBar / Toolbar; sandbox page strip stays `--sandbox-chrome-bar-height`.",
   "layoutChrome.rowGap": "Demo row wrap",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — flex wrap gap for Motion easing bars / Foundations Rows (horizontal and between wrapped lines).",
@@ -219,9 +225,9 @@ const en = {
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — between stacked inspector/form units (Collapsible body units).",
-  "layoutChrome.chromeBar": "Chrome bar height",
+  "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
-    "--sandbox-chrome-bar-height — brand cell + page topbar strip.",
+    "--sandbox-chrome-bar-height — brand cell + page topbar strip (sandbox only).",
   "layoutChrome.stackGap": "Control stack",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap — between ControlRows.",
@@ -234,6 +240,36 @@ const en = {
   "layoutChrome.clusterGap": "Control cluster",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — siblings inside one controls cluster (e.g. EasingBar track → Replay).",
+  "layoutChrome.controlRowLabel": "Label column",
+  "layoutChrome.controlRowLabelHint":
+    "--fynns-layout-control-row-label — fixed ControlRow label track width.",
+  "layoutChrome.contentInset": "Panel inset",
+  "layoutChrome.contentInsetHint":
+    "--fynns-layout-content-inset — equal outer pad for Card / Collapsible / Drawer (20dp default).",
+  "layoutChrome.dialogInset": "Dialog inset",
+  "layoutChrome.dialogInsetHint":
+    "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog (24dp default).",
+  "layoutChrome.sheetPadInline": "Sheet pad inline",
+  "layoutChrome.sheetPadInlineHint":
+    "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
+  "layoutChrome.sheetPadBlock": "Sheet pad block",
+  "layoutChrome.sheetPadBlockHint":
+    "--fynns-layout-sheet-pad-block — BottomSheet vertical content pad (M3 16dp).",
+  "layoutChrome.drawerWidth": "Drawer width",
+  "layoutChrome.drawerWidthHint":
+    "--fynns-layout-drawer-width — content Drawer side sheet width (not NavigationDrawer).",
+  "layoutChrome.dialogMaxSm": "Dialog max sm",
+  "layoutChrome.dialogMaxSmHint":
+    "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\".",
+  "layoutChrome.dialogMaxMd": "Dialog max md",
+  "layoutChrome.dialogMaxMdHint":
+    "--fynns-layout-dialog-max-width-md — Dialog size=\"md\".",
+  "layoutChrome.dialogMaxLg": "Dialog max lg",
+  "layoutChrome.dialogMaxLgHint":
+    "--fynns-layout-dialog-max-width-lg — Dialog size=\"lg\".",
+  "layoutChrome.barHeight": "Product bar height",
+  "layoutChrome.barHeightHint":
+    "--fynns-layout-bar-height — TopAppBar sm / BottomAppBar / SearchBar / Toolbar (56dp). Not the sandbox page strip.",
 
   "inspector.typography": "Type size",
   "inspector.fontSmHint":
@@ -917,9 +953,15 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.title": "布局 chrome",
   "layoutChrome.collapsible": "布局 chrome 与节奏",
   "layoutChrome.help":
-    "沙盒专用间距（`--sandbox-*`）。Agent 须使用 `SANDBOX_LAYOUT_AGENT_CATALOG`，禁止自创 gap。不会由 Apply 写入。",
+    "仅沙盒演示（`--sandbox-*`）。不会由 Apply 写入。与产品 `--fynns-layout-bar-height` 分开。",
   "layoutChrome.rhythmHelp":
-    "布局节奏（`--fynns-layout-unit-stack-gap` + `--fynns-layout-control-*`）。Apply 可写入 `tokens.ts`。纵向单元用 flex + `--fynns-layout-unit-stack-gap`（sandbox `.sandbox-stack`）；带标签工具栏行用 `ControlStack` + `ControlRow`。",
+    "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
+  "layoutChrome.panelInsetsHelp":
+    "面板内容边距 — 四边等距外缘。`content-inset`（Card / Collapsible / Drawer）与 `dialog-inset`（居中 Dialog，更大呼吸）。BottomSheet 不用这组。",
+  "layoutChrome.sheetPadsHelp":
+    "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
+  "layoutChrome.shellSizeHelp":
+    "壳尺寸 — 容器宽 / 产品 chrome 条高（不是 padding）。`bar-height` 驱动 TopAppBar sm / BottomAppBar / SearchBar / Toolbar；沙盒页顶条仍是 `--sandbox-chrome-bar-height`。",
   "layoutChrome.rowGap": "演示行换行间距",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — 动效缓动条 / Foundations Row 的 flex 换行间距（水平与换行后行距）。",
@@ -929,9 +971,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — 纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
-  "layoutChrome.chromeBar": "顶栏条高度",
+  "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
-    "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度。",
+    "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度（仅沙盒）。",
   "layoutChrome.stackGap": "控件栈",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap — ControlRow 之间。",
@@ -944,6 +986,36 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.clusterGap": "控件簇",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — 同一控件簇内兄弟（如缓动轨道 → 重放）。",
+  "layoutChrome.controlRowLabel": "标签列宽",
+  "layoutChrome.controlRowLabelHint":
+    "--fynns-layout-control-row-label — ControlRow 固定标签列宽。",
+  "layoutChrome.contentInset": "面板内边距",
+  "layoutChrome.contentInsetHint":
+    "--fynns-layout-content-inset — Card / Collapsible / Drawer 四边等距外缘（默认 20dp）。",
+  "layoutChrome.dialogInset": "对话框内边距",
+  "layoutChrome.dialogInsetHint":
+    "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 四边等距外缘（默认 24dp）。",
+  "layoutChrome.sheetPadInline": "Sheet 行向边距",
+  "layoutChrome.sheetPadInlineHint":
+    "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
+  "layoutChrome.sheetPadBlock": "Sheet 块向边距",
+  "layoutChrome.sheetPadBlockHint":
+    "--fynns-layout-sheet-pad-block — BottomSheet 垂直内容边距（M3 16dp）。",
+  "layoutChrome.drawerWidth": "Drawer 宽度",
+  "layoutChrome.drawerWidthHint":
+    "--fynns-layout-drawer-width — 内容 Drawer 侧栏宽度（非 NavigationDrawer）。",
+  "layoutChrome.dialogMaxSm": "Dialog 最大宽 sm",
+  "layoutChrome.dialogMaxSmHint":
+    "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\"。",
+  "layoutChrome.dialogMaxMd": "Dialog 最大宽 md",
+  "layoutChrome.dialogMaxMdHint":
+    "--fynns-layout-dialog-max-width-md — Dialog size=\"md\"。",
+  "layoutChrome.dialogMaxLg": "Dialog 最大宽 lg",
+  "layoutChrome.dialogMaxLgHint":
+    "--fynns-layout-dialog-max-width-lg — Dialog size=\"lg\"。",
+  "layoutChrome.barHeight": "产品条高度",
+  "layoutChrome.barHeightHint":
+    "--fynns-layout-bar-height — TopAppBar sm / BottomAppBar / SearchBar / Toolbar（56dp）。不是沙盒页顶条。",
 
   "inspector.typography": "字号",
   "inspector.fontSmHint": "较小界面文字（font-size-sm）。",

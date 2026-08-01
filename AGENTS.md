@@ -237,10 +237,14 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
   (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
-  Panel shells (Collapsible head/body, Drawer content): equal outer inset via
-  `--fynns-layout-content-inset`. Centered Dialog outer inset stays
-  `--fynns-space-xl` (24dp M3). Do not force Card / BottomSheet / Snackbar /
-  ListItem onto equal four-side padding (those keep M3 block≠inline).
+  Panel shells (Collapsible, Drawer, Card): equal outer inset via
+  `--fynns-layout-content-inset` (20dp). Centered Dialog / ConfirmDialog use
+  `--fynns-layout-dialog-inset` (24dp). BottomSheet keeps asymmetric
+  `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline).
+  Do not force Snackbar / ListItem onto equal four-side padding.
+  Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
+  shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
+  `examples/sandbox/src/state/baseline.ts`).
 - **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
   Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
   Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,
