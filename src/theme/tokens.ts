@@ -797,10 +797,12 @@ export const FOCUS_TOKENS = {
 /** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
   "dialog-max-width": "32rem",
+  /** Within M3 basic dialog max (560dp). */
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",
-  "dialog-max-width-lg": "42rem",
-  "drawer-width": "72vw",
+  "dialog-max-width-lg": "35rem",
+  /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
+  "drawer-width": "25rem",
   /** Bottom sheet — M3 max width 640dp. */
   "sheet-max-width": "40rem",
   /** Near-fullscreen height (leaves a peek of the page above). */

@@ -30,8 +30,7 @@ export type BannerProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
 
 /**
  * M3 Banner — full-width strip for persistent messages under a TopAppBar.
- * Prefer `InfoBanner` / `WarningBanner` / … for inline alert chips inside
- * panels; use this for app-chrome announcements with actions + dismiss.
+ * For in-panel severity use `InlineAlert` (fynns utility, not an M3 component).
  * @see https://m3.material.io/components/banners/overview
  */
 export function Banner({

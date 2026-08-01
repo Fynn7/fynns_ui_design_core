@@ -43,23 +43,31 @@ Anything else must be deleted or kept as a non-exported internal.
 | Removed | Consumer fix |
 | --- | --- |
 | `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
-| `Drawer` | Prefer `NavigationDrawer` for destinations; otherwise build on app layout. |
-| `Dialog` / `ConfirmDialog` / `DialogShell` | Prefer `FullscreenDialog` or `BottomSheet`; short confirms can be app-local. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |
 | `Counter` | `Input type="number"` (+ steppers if needed in the app). |
-| `Tabs` / `ToggleControl` | Prefer `ToggleGroup` (M3 segmented). |
-| `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Prefer chrome `Banner`, or app-local alert strip with tokens. |
+| `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
+| `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive `*Banner` names. |
 | `ListGroup*` / `ListRow*` / `NavItem*` / `ShellNav*` | Deleted — rebuild with `List`/`ListItem`, `Navigation*` chrome, or app layout. |
-| `Panel` / `PanelCard` / `ScrollArea` | Use layout + `fynns-scroll` (or `overflow` + class); no Panel shell. |
+| `Panel` / `PanelCard` / `ScrollArea` | Workspace panes: head strip + `fynns-scroll` body (or `overflow` + class). No Panel shell. |
 | `Kbd` / `Combobox` / `CommandPalette` / `SplitButton` | Delete usage or reimplement in the app. |
-| `Textarea` | `Input` or native `<textarea>` styled with `--fynns-*` tokens. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
 | `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
-| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `EmptyState`, or app-local busy UI. `Spinner` remains internal for `Button` `loading`. |
+| `measureOverflow` / `overflowsBounds` / `measureContentOverflow` / `useOverflowBounds` | Layout overflow helpers (demoed next to DatePicker in Globals). Prefer over ad-hoc rect math. |
+| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `EmptyState`, or app-local busy UI (`position:fixed` scrim + `CircularProgress` + label). `Spinner` remains internal for `Button` `loading`. |
 | `CardActionArea` | Make the `Card` `interactive` or wrap children in a button. |
 | `PanelLeftIcon` / … (other unused glyphs) | Prefer the public icon subset from the barrel, or ship app icons. Sandbox chrome keeps `Sun`/`Moon`/`PanelLeft`/`PanelRight`/`Sparkles`/`Bot`/`Download` exported. |
+
+## Restored after purge (use these)
+
+| Symbol | Notes |
+| --- | --- |
+| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. |
+| `Drawer` | Content side sheet (~25rem / open-edge `radius-xl`); not `NavigationDrawer`. Always modal (no `modal={false}`). |
+| `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
+| `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |
+| `InlineAlert` | In-panel severity strip (**fynns utility, not M3**). Replaces old Alert `*Banner` exports. |
 
 ## Related docs
 

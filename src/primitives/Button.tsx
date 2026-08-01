@@ -20,7 +20,7 @@ export type ButtonSize = "md" | "sm" | "lg";
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Pressed / selected styling. */
+  /** Selected / toggled-on (M3 container or filled + state layer — not a dark wash). */
   active?: boolean;
   /** Shorthand for `variant="danger"`. */
   danger?: boolean;
@@ -32,7 +32,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
-  default: "",
+  default: "fynns-btn--default",
   primary: "fynns-btn--primary",
   tonal: "fynns-btn--tonal",
   elevated: "fynns-btn--elevated",
@@ -77,6 +77,7 @@ export const Button = forwardRef(function Button(
       className={classes}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
+      aria-pressed={active || undefined}
     >
       {loading ? (
         <span className="fynns-btn-loading">

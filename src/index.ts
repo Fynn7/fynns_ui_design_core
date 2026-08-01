@@ -127,10 +127,32 @@ export type {
   SnackbarHostProps,
   SnackbarOptions,
 } from "./primitives/Snackbar";
-export { FullscreenDialog } from "./primitives/Dialog";
-export type { FullscreenDialogProps } from "./primitives/Dialog";
+export { FullscreenDialog, Dialog, DialogShell, ConfirmDialog } from "./primitives/Dialog";
+export type {
+  FullscreenDialogProps,
+  DialogProps,
+  DialogShellProps,
+  ConfirmDialogProps,
+  DialogVariant,
+  DrawerSide,
+} from "./primitives/Dialog";
+export { Drawer } from "./primitives/Drawer";
+export type { DrawerProps } from "./primitives/Drawer";
 export { BottomSheet } from "./primitives/BottomSheet";
 export type { BottomSheetProps, BottomSheetSize } from "./primitives/BottomSheet";
+export { Textarea } from "./primitives/Textarea";
+export type {
+  TextareaProps,
+  TextareaSize,
+  TextareaVariant,
+} from "./primitives/Textarea";
+export { Tabs } from "./primitives/Tabs";
+export type { TabsProps, TabItem, TabsSize } from "./primitives/Tabs";
+export { InlineAlert } from "./primitives/InlineAlert";
+export type {
+  InlineAlertProps,
+  InlineAlertSeverity,
+} from "./primitives/InlineAlert";
 export { Switch } from "./primitives/Switch";
 export type { SwitchProps } from "./primitives/Switch";
 export { Checkbox } from "./primitives/Checkbox";
@@ -227,6 +249,21 @@ export { Stepper } from "./primitives/Stepper";
 export type { StepperProps, StepperStep } from "./primitives/Stepper";
 export { Dropzone } from "./primitives/Dropzone";
 export type { DropzoneProps } from "./primitives/Dropzone";
+export {
+  measureContentOverflow,
+  measureOverflow,
+  overflowsBounds,
+  OVERFLOW_EPSILON,
+} from "./layout/overflowBounds";
+export type {
+  BoundsOverflow,
+  MeasureOverflowOptions,
+  OverflowContainer,
+  OverflowDelta,
+  OverflowEdges,
+} from "./layout/overflowBounds";
+export { useOverflowBounds } from "./layout/useOverflowBounds";
+export type { UseOverflowBoundsOptions } from "./layout/useOverflowBounds";
 export {
   Table,
   TableBody,

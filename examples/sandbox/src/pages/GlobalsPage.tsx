@@ -50,9 +50,15 @@ import {
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
+  Dialog,
+  ConfirmDialog,
+  Drawer,
   IconButton,
   InfoIcon,
+  InlineAlert,
   Input,
+  Textarea,
+  Tabs,
   LayoutGridIcon,
   LinearProgress,
   List,
@@ -99,8 +105,9 @@ import {
   ControlStack,
   Grid,
   Slider,
+  useOverflowBounds,
 } from "@fynns/ui";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 
@@ -133,6 +140,53 @@ function GlobalsCategory({
     <Collapsible title={title} className="sandbox-globals-category">
       <div className="sandbox-globals-section-body">{children}</div>
     </Collapsible>
+  );
+}
+
+/** Live demo of `useOverflowBounds` (content mode + ellipsis truncation). */
+function OverflowBoundsDemo() {
+  const { t } = useLocale();
+  const lineRef = useRef<HTMLDivElement>(null);
+  const overflow = useOverflowBounds(lineRef, "viewport", { mode: "content" });
+  const edges =
+    [
+      overflow.edges.left ? "L" : null,
+      overflow.edges.right ? "R" : null,
+      overflow.edges.top ? "T" : null,
+      overflow.edges.bottom ? "B" : null,
+    ]
+      .filter(Boolean)
+      .join("") || "—";
+
+  return (
+    <div className="sandbox-globals-row sandbox-globals-row--stack">
+      <div
+        ref={lineRef}
+        style={{
+          boxSizing: "border-box",
+          width: "min(100%, 12rem)",
+          maxWidth: "100%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          border: "var(--fynns-border-hairline) solid var(--fynns-color-border)",
+          borderRadius: "var(--fynns-radius-md)",
+          padding: "var(--fynns-space-sm)",
+          background: "var(--fynns-color-surface-1)",
+          color: "var(--fynns-color-text-muted)",
+          fontSize: "var(--fynns-font-size-sm)",
+        }}
+      >
+        {t("globals.overflowSample")}
+      </div>
+      <SandboxHelp
+        text={t("globals.overflowHelp", {
+          overflows: overflow.overflows ? "true" : "false",
+          edges,
+          right: String(Math.round(overflow.delta.right)),
+        })}
+      />
+    </div>
   );
 }
 
@@ -186,6 +240,12 @@ export function GlobalsPage() {
   const [stepperIndex, setStepperIndex] = useState(1);
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const [tabsId, setTabsId] = useState<"single" | "batch">("single");
+  const [textareaValue, setTextareaValue] = useState("");
+  const [btnActive, setBtnActive] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
@@ -206,14 +266,31 @@ export function GlobalsPage() {
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
+          <Button size="lg">{t("globals.btnLarge")}</Button>
           <Button variant="tonal">{t("globals.btnTonal")}</Button>
           <Button variant="elevated">{t("globals.btnElevated")}</Button>
           <Button variant="default">{t("globals.btnOutlined")}</Button>
           <Button variant="ghost">{t("globals.btnGhost")}</Button>
+          <Button variant="danger">{t("globals.btnDanger")}</Button>
+          <Button loading>{t("globals.btnLoading")}</Button>
+          <Button disabled>{t("globals.btnDisabled")}</Button>
+          <Button active={btnActive} onClick={() => setBtnActive((v) => !v)}>
+            {t("globals.btnActive")}
+          </Button>
         </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.iconBtnTip")}>
+            <IconButton size="sm" aria-label={t("globals.iconBtnTip")}>
+              <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnTip")}>
             <IconButton aria-label={t("globals.iconBtnTip")}>
+              <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnTip")}>
+            <IconButton size="lg" aria-label={t("globals.iconBtnTip")}>
               <PlusIcon />
             </IconButton>
           </Tooltip>
@@ -230,6 +307,11 @@ export function GlobalsPage() {
           <Tooltip content={t("globals.iconBtnOutlined")}>
             <IconButton variant="default" aria-label={t("globals.iconBtnOutlined")}>
               <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnDanger")}>
+            <IconButton variant="danger" aria-label={t("globals.iconBtnDanger")}>
+              <TrashIcon />
             </IconButton>
           </Tooltip>
         </div>
@@ -420,7 +502,37 @@ export function GlobalsPage() {
             }
           />
           <SandboxHelp text={t("globals.passwordHelp")} />
+          <Textarea
+            value={textareaValue}
+            onChange={(event) => setTextareaValue(event.target.value)}
+            placeholder={t("globals.textareaPlaceholder")}
+            aria-label={t("globals.textareaAria")}
+            supportingText={t("globals.textareaSupporting")}
+            rows={4}
+          />
+          <SandboxHelp text={t("globals.textareaHelp")} />
         </div>
+      </GlobalsCategory>
+
+      <GlobalsCategory title={t("globals.catTabs")}>
+        <Tabs
+          ariaLabel={t("globals.tabsAria")}
+          tabs={[
+            { id: "single", label: t("globals.tabsSingle") },
+            { id: "batch", label: t("globals.tabsBatch") },
+          ]}
+          activeId={tabsId}
+          onChange={setTabsId}
+          fullWidth
+        />
+        <SandboxHelp
+          text={
+            tabsId === "single"
+              ? t("globals.tabsPaneSingle")
+              : t("globals.tabsPaneBatch")
+          }
+        />
+        <SandboxHelp text={t("globals.tabsHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catSelection")}>
@@ -573,6 +685,7 @@ export function GlobalsPage() {
             />
           </div>
           <SandboxHelp text={t("globals.dateHelp")} />
+          <OverflowBoundsDemo />
         </div>
         <DatePickerDialog
           open={dateDialogOpen}
@@ -799,6 +912,13 @@ export function GlobalsPage() {
           </Button>
         )}
         <SandboxHelp text={t("globals.bannerHelp")} />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <InlineAlert severity="info" message={t("globals.inlineAlertInfo")} />
+          <InlineAlert severity="success" message={t("globals.inlineAlertSuccess")} />
+          <InlineAlert severity="warning" message={t("globals.inlineAlertWarning")} />
+          <InlineAlert severity="error" message={t("globals.inlineAlertError")} />
+        </div>
+        <SandboxHelp text={t("globals.inlineAlertHelp")} />
         <div className="sandbox-globals-row">
           <Button
             size="sm"
@@ -978,6 +1098,15 @@ export function GlobalsPage() {
           <Button size="sm" onClick={() => setSheetOpen(true)}>
             {t("globals.sheetOpen")}
           </Button>
+          <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
+            {t("globals.dialogOpen")}
+          </Button>
+          <Button size="sm" variant="danger" onClick={() => setConfirmOpen(true)}>
+            {t("globals.confirmOpen")}
+          </Button>
+          <Button size="sm" variant="tonal" onClick={() => setSideDrawerOpen(true)}>
+            {t("globals.drawerOpen")}
+          </Button>
         </div>
         <BottomSheet
           open={sheetOpen}
@@ -992,6 +1121,36 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+        <Dialog
+          open={centeredDialogOpen}
+          onOpenChange={setCenteredDialogOpen}
+          title={t("globals.dialogTitle")}
+          description={t("globals.dialogDescription")}
+          size="sm"
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
+        </Dialog>
+        <ConfirmDialog
+          open={confirmOpen}
+          onOpenChange={setConfirmOpen}
+          title={t("globals.confirmTitle")}
+          description={t("globals.confirmDescription")}
+          confirmLabel={t("globals.confirmOk")}
+          cancelLabel={t("globals.confirmCancel")}
+          danger
+          onConfirm={() => setConfirmOpen(false)}
+        />
+        <Drawer
+          open={sideDrawerOpen}
+          onClose={() => setSideDrawerOpen(false)}
+          side="right"
+          title={t("globals.drawerTitle")}
+          description={t("globals.drawerDescription")}
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <p style={{ margin: 0 }}>{t("globals.drawerBody")}</p>
+        </Drawer>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Button size="sm" onClick={() => setFullscreenOpen(true)}>
             {t("globals.fullscreenOpen")}
@@ -1010,7 +1169,7 @@ export function GlobalsPage() {
         >
           <p style={{ margin: 0 }}>{t("globals.fullscreenBody")}</p>
         </FullscreenDialog>
-        <SandboxHelp text={t("globals.fullscreenHelp")} />
+        <SandboxHelp text={t("globals.overlayHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catPatterns")}>
