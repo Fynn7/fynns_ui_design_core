@@ -3,7 +3,7 @@ import { CheckIcon, CloseIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 
-export type ChipVariant = "assist" | "filter" | "input";
+export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
 
 export type ChipProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -14,6 +14,7 @@ export type ChipProps = Omit<
    * - `assist` — action chip (default).
    * - `filter` — toggleable filter; pass `selected`.
    * - `input` — entry chip; pass `onRemove` for trailing dismiss.
+   * - `suggestion` — outlined suggestion; not pressed, no leading check.
    */
   variant?: ChipVariant;
   /** Filter / input selected fill (`accent-container`). */
@@ -28,8 +29,8 @@ export type ChipProps = Omit<
 };
 
 /**
- * M3 Chip — compact assist / filter / input pill. Distinct from segmented
- * `ToggleGroup` and from non-interactive `Badge`.
+ * M3 Chip — compact assist / filter / input / suggestion pill. Distinct from
+ * segmented `ToggleGroup` and from non-interactive `Badge`.
  */
 export function Chip({
   children,

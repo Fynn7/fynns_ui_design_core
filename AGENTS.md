@@ -200,10 +200,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 
 ### Keep set (summary)
 
-- **Actions:** Button, IconButton, Fab, FabMenu / FabMenuItem
+- **Actions:** Button, IconButton, SplitButton (M3 Expressive: leading action +
+  trailing `DropdownMenu`; variants `primary` / `tonal` / `default` /
+  `elevated`; sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (dense multiline; no floating label — not full M3
   Text Field anatomy), Select, Autocomplete, OtpInput, SearchBar /
-  SearchBarResult, Switch, Checkbox, Radio, Chip / ChipSet, Slider, ToggleGroup,
+  SearchBarResult, Switch, Checkbox, Radio, Chip / ChipSet (`assist` | `filter`
+  | `input` | `suggestion`), Slider, ToggleGroup,
   Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
@@ -238,7 +241,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
   (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
   Panel shells (Collapsible, Drawer, Card): equal outer inset via
-  `--fynns-layout-content-inset` (20dp). Centered Dialog / ConfirmDialog use
+  `--fynns-layout-content-inset` (18dp). Centered Dialog / ConfirmDialog use
   `--fynns-layout-dialog-inset` (24dp). BottomSheet keeps asymmetric
   `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline).
   Do not force Snackbar / ListItem onto equal four-side padding.

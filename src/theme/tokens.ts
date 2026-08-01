@@ -805,10 +805,10 @@ export const LAYOUT_TOKENS = {
   "drawer-width": "25rem",
   /**
    * Equal outer inset for panel shells (Collapsible, Drawer, Card content).
-   * 20dp — between `space-lg` (16dp) and Dialog `dialog-inset` (24dp).
+   * 18dp — between `space-lg` (16dp) and Dialog `dialog-inset` (24dp).
    * Do not force BottomSheet / Snackbar / ListItem onto this.
    */
-  "content-inset": "1.25rem",
+  "content-inset": "1.125rem",
   /**
    * Equal outer inset for centered Dialog / ConfirmDialog (24dp).
    * Distinct from `content-inset` — dialogs keep a larger breath.

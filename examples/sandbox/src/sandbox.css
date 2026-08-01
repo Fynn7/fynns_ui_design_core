@@ -943,6 +943,22 @@
   box-sizing: border-box;
 }
 
+/* useOverflowBounds demo — equal inset via layout content-inset (not ad-hoc space). */
+.sandbox-overflow-sample {
+  box-sizing: border-box;
+  width: min(100%, 12rem);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  padding: var(--fynns-layout-content-inset);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+}
+
 .sandbox-globals-list {
   box-sizing: border-box;
   width: 100%;
