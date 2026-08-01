@@ -85,6 +85,7 @@ import {
   SettingsIcon,
   SkipLink,
   snackbar,
+  SplitButton,
   Stepper,
   Switch,
   Table,
@@ -160,23 +161,7 @@ function OverflowBoundsDemo() {
 
   return (
     <div className="sandbox-globals-row sandbox-globals-row--stack">
-      <div
-        ref={lineRef}
-        style={{
-          boxSizing: "border-box",
-          width: "min(100%, 12rem)",
-          maxWidth: "100%",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-          border: "var(--fynns-border-hairline) solid var(--fynns-color-border)",
-          borderRadius: "var(--fynns-radius-md)",
-          padding: "var(--fynns-space-sm)",
-          background: "var(--fynns-color-surface-1)",
-          color: "var(--fynns-color-text-muted)",
-          fontSize: "var(--fynns-font-size-sm)",
-        }}
-      >
+      <div ref={lineRef} className="sandbox-overflow-sample">
         {t("globals.overflowSample")}
       </div>
       <SandboxHelp
@@ -277,6 +262,102 @@ export function GlobalsPage() {
           <Button active={btnActive} onClick={() => setBtnActive((v) => !v)}>
             {t("globals.btnActive")}
           </Button>
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <SplitButton
+            label={t("globals.splitBtnLabel")}
+            leadingIcon={<SaveIcon />}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() =>
+              snackbar(t("globals.splitBtnMainToast"), {
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            <DropdownMenuItem
+              icon={<SaveIcon />}
+              onClick={() =>
+                snackbar(t("globals.splitBtnSaveToast"), {
+                  dismissAriaLabel: t("globals.snackbarDismiss"),
+                })
+              }
+            >
+              {t("globals.splitBtnSave")}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              icon={<UploadIcon />}
+              onClick={() =>
+                snackbar(t("globals.splitBtnExportToast"), {
+                  dismissAriaLabel: t("globals.snackbarDismiss"),
+                })
+              }
+            >
+              {t("globals.splitBtnExport")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              icon={<TrashIcon />}
+              onClick={() =>
+                snackbar(t("globals.splitBtnDeleteToast"), {
+                  dismissAriaLabel: t("globals.snackbarDismiss"),
+                })
+              }
+            >
+              {t("globals.splitBtnDelete")}
+            </DropdownMenuItem>
+          </SplitButton>
+          <SplitButton
+            variant="tonal"
+            label={t("globals.splitBtnTonal")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() =>
+              snackbar(t("globals.splitBtnMainToast"), {
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionA")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionB")}
+            </DropdownMenuItem>
+          </SplitButton>
+          <SplitButton
+            variant="default"
+            label={t("globals.splitBtnOutlined")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() =>
+              snackbar(t("globals.splitBtnMainToast"), {
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionA")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionB")}
+            </DropdownMenuItem>
+          </SplitButton>
+          <SplitButton
+            variant="elevated"
+            size="sm"
+            label={t("globals.splitBtnElevated")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() =>
+              snackbar(t("globals.splitBtnMainToast"), {
+                dismissAriaLabel: t("globals.snackbarDismiss"),
+              })
+            }
+          >
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionA")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {}}>
+              {t("globals.splitBtnOptionB")}
+            </DropdownMenuItem>
+          </SplitButton>
         </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.iconBtnTip")}>
@@ -590,6 +671,9 @@ export function GlobalsPage() {
             </Chip>
             <Chip elevated onClick={() => {}}>
               {t("globals.chipElevated")}
+            </Chip>
+            <Chip variant="suggestion" onClick={() => {}}>
+              {t("globals.chipSuggestion")}
             </Chip>
             {inputChips.map((name) => (
               <Chip

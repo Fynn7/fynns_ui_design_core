@@ -50,7 +50,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive `*Banner` names. |
 | `ListGroup*` / `ListRow*` / `NavItem*` / `ShellNav*` | Deleted — rebuild with `List`/`ListItem`, `Navigation*` chrome, or app layout. |
 | `Panel` / `PanelCard` / `ScrollArea` | Workspace panes: head strip + `fynns-scroll` body (or `overflow` + class). No Panel shell. |
-| `Kbd` / `Combobox` / `CommandPalette` / `SplitButton` | Delete usage or reimplement in the app. |
+| `Kbd` / `Combobox` / `CommandPalette` | Delete usage or reimplement in the app. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
 | `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
@@ -69,6 +69,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |
 | `InlineAlert` | In-panel severity strip (**fynns utility, not M3**). Replaces old Alert `*Banner` exports. |
 | Dialog sizes | `--fynns-layout-dialog-max-width-lg` is now `35rem` (was `42rem`; stays within M3 ≤560dp). |
+| `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 
 ## Related docs
 

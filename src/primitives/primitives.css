@@ -474,6 +474,121 @@
   height: var(--fynns-size-icon);
 }
 
+/* ---------- Split button (M3 Expressive: leading + trailing menu) ---------- */
+.fynns-splitbtn {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  vertical-align: middle;
+}
+
+.fynns-splitbtn-main.fynns-btn {
+  position: relative;
+  /* Outer start stadium; flush inner end. */
+  border-radius: var(--fynns-radius-pill) 0 0 var(--fynns-radius-pill);
+  /* Join side open — one shared divider is painted via ::after. */
+  border-inline-end: none;
+  /* Match glyph box — default body line-height makes CJK read high. */
+  line-height: var(--fynns-line-height-tight);
+  /* Outer curve needs a touch more pad so the label reads centered in the half. */
+  padding-inline: var(--fynns-space-lg) var(--fynns-space-md);
+}
+
+.fynns-splitbtn-main.fynns-btn--sm {
+  padding-inline: var(--fynns-space-md) var(--fynns-space-sm);
+}
+
+.fynns-splitbtn-main.fynns-btn--lg {
+  padding-inline: var(--fynns-space-xl) var(--fynns-space-lg);
+}
+
+/* Single hairline at the join (not border + shadow + overlap). */
+.fynns-splitbtn-main.fynns-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: var(--fynns-border-hairline);
+  background: color-mix(
+    in srgb,
+    currentColor var(--fynns-state-pressed),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+/*
+ * Outlined: join tracks the accent outline (not border-strong — that disappears
+ * against the dark fill when the outer stroke brightens on hover).
+ */
+.fynns-splitbtn[data-variant="default"] .fynns-splitbtn-main.fynns-btn::after {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 55%,
+    var(--fynns-color-border)
+  );
+}
+
+.fynns-splitbtn[data-variant="default"]
+  .fynns-splitbtn-main.fynns-btn:hover:not(:disabled)::after,
+.fynns-splitbtn[data-variant="default"]:has(
+    .fynns-splitbtn-menu-trigger:hover:not(:disabled)
+  )
+  .fynns-splitbtn-main.fynns-btn::after {
+  background: var(--fynns-color-accent);
+}
+
+.fynns-splitbtn-main-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+.fynns-splitbtn-main-icon svg {
+  display: block;
+}
+
+.fynns-splitbtn-main-label {
+  display: inline-block;
+  line-height: var(--fynns-line-height-tight);
+}
+
+.fynns-splitbtn-menu-root.fynns-menu-root {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.fynns-splitbtn-menu-trigger.fynns-btn {
+  /* Flush inner start; outer end stadium. No open-state radius morph. */
+  border-radius: 0 var(--fynns-radius-pill) var(--fynns-radius-pill) 0;
+  border-inline-start: none;
+  /* Match leading height instead of a shorter fixed square. */
+  align-self: stretch;
+  height: auto;
+  min-height: 0;
+}
+
+.fynns-splitbtn-chevron {
+  display: block;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-splitbtn-menu-trigger--open .fynns-splitbtn-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-splitbtn-chevron {
+    transition: none;
+  }
+}
+
 /* ---------- Input ---------- */
 .fynns-field {
   display: flex;
@@ -1169,7 +1284,7 @@
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
  * Outer inset via `--fynns-layout-dialog-inset` (24dp) on all sides.
- * Collapsible / Drawer / Card use `--fynns-layout-content-inset` (20dp). */
+ * Collapsible / Drawer / Card use `--fynns-layout-content-inset` (18dp). */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
@@ -1532,7 +1647,6 @@
   .fynns-menu,
   .fynns-select-list,
   .fynns-popover,
-  .fynns-splitbtn-menu,
   .fynns-tooltip {
     animation: none;
     transition: none;

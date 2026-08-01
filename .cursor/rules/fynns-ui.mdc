@@ -20,7 +20,8 @@ InlineAlert are restored.
 
 ## Rules
 
-- Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, Input,
+- Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, SplitButton,
+  Input,
   Textarea, Select,
   Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
@@ -34,7 +35,8 @@ InlineAlert are restored.
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
-  Divider, Checkbox, Radio, Chip, ControlStack/ControlRow/Grid,
+  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
+  ControlStack/ControlRow/Grid,
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.

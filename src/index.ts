@@ -47,6 +47,12 @@ export {
 /* Primitives — named keep-list only */
 export { Button } from "./primitives/Button";
 export type { ButtonProps, ButtonSize, ButtonVariant } from "./primitives/Button";
+export { SplitButton } from "./primitives/SplitButton";
+export type {
+  SplitButtonProps,
+  SplitButtonSize,
+  SplitButtonVariant,
+} from "./primitives/SplitButton";
 export { IconButton } from "./primitives/IconButton";
 export { Input } from "./primitives/Input";
 export type { InputProps, InputSize, InputVariant } from "./primitives/Input";
