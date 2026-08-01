@@ -804,11 +804,16 @@ export const LAYOUT_TOKENS = {
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
   /**
-   * Equal outer inset for panel shells (Collapsible head/body, Drawer content).
-   * Centered Dialog keeps `--fynns-space-xl` (24dp M3). Do not force Card/Sheet
-   * onto this — those stay M3 block≠inline.
+   * Equal outer inset for panel shells (Collapsible, Drawer, Card content).
+   * 20dp — between `space-lg` (16dp) and Dialog `dialog-inset` (24dp).
+   * Do not force BottomSheet / Snackbar / ListItem onto this.
    */
-  "content-inset": "1rem",
+  "content-inset": "1.25rem",
+  /**
+   * Equal outer inset for centered Dialog / ConfirmDialog (24dp).
+   * Distinct from `content-inset` — dialogs keep a larger breath.
+   */
+  "dialog-inset": "1.5rem",
   /** Bottom sheet — M3 max width 640dp. */
   "sheet-max-width": "40rem",
   /** Near-fullscreen height (leaves a peek of the page above). */
