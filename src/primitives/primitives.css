@@ -1168,7 +1168,8 @@
 }
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
- * Outer inset 24dp (`space-xl`) on all sides — top/bottom and left/right match. */
+ * Outer inset 24dp (`space-xl`) on all sides — top/bottom and left/right match.
+ * (Collapsible / Drawer panel shells use `--fynns-layout-content-inset` instead.) */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
@@ -1354,10 +1355,21 @@
   transform: translateX(-100%);
 }
 
-/* Side sheet head: no IDE surface-head strip. */
+/* Side sheet head: no IDE surface-head strip; equal content-inset outer edges. */
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
   background: transparent;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
+}
+
+.fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer)
+  > .fynns-dialog-description {
+  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset) 0;
+}
+
+.fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
+  padding: var(--fynns-space-md) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-inset);
 }
 
 /* ---------- Bottom sheet (M3) ---------- */
@@ -2139,7 +2151,7 @@
   align-items: center;
   gap: var(--fynns-space-2);
   min-width: 0;
-  padding: 0.6rem 0.8rem;
+  padding: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
   color: var(--fynns-color-text);
@@ -2187,12 +2199,12 @@
   display: flex;
   align-items: center;
   gap: var(--fynns-space-2);
-  padding-right: 0.6rem;
+  padding-inline-end: var(--fynns-layout-content-inset);
 }
 
 .fynns-collapsible-body {
-  /* Spacing only — no head/body hairline (avoids mid/bottom border stack). */
-  padding: var(--fynns-space-2) 0.8rem 0.8rem;
+  /* Equal outer inset — matches trigger; no head/body hairline. */
+  padding: var(--fynns-layout-content-inset);
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }

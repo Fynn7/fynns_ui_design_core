@@ -394,6 +394,7 @@
   --fynns-layout-dialog-max-width-md: 32rem;
   --fynns-layout-dialog-max-width-lg: 35rem;
   --fynns-layout-drawer-width: 25rem;
+  --fynns-layout-content-inset: 1rem;
   --fynns-layout-sheet-max-width: 40rem;
   --fynns-layout-sheet-max-height: 90vh;
   --fynns-layout-sheet-half-height: 50vh;
