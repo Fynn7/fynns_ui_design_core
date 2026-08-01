@@ -3223,8 +3223,10 @@ a.fynns-breadcrumb-link:visited {
   padding-top: var(--fynns-space-sm);
 }
 
+/* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath
+ * (content bottom lg + actions top sm), matching pre-inset Card rhythm. */
 .fynns-card-content:has(+ .fynns-card-actions) {
-  padding-bottom: var(--fynns-space-sm);
+  padding-bottom: var(--fynns-space-lg);
 }
 
 .fynns-card-actions {
@@ -3232,7 +3234,8 @@ a.fynns-breadcrumb-link:visited {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: 0 var(--fynns-layout-content-inset) var(--fynns-layout-content-inset);
+  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-inset);
   position: relative;
   z-index: 2;
 }

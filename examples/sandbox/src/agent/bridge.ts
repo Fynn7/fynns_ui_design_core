@@ -55,7 +55,7 @@ export const ADJUST_TOKEN_TOOL = {
 export const READ_CURRENT_TOKENS_TOOL = {
   name: "read_current_tokens",
   description:
-    "Read the current resolved token values (baseline + draft overrides). Pass group sandbox or layout for chrome / unit-stack / toolbar rhythm gaps.",
+    "Read the current resolved token values (baseline + draft overrides). Pass group sandbox or layout for SANDBOX_LAYOUT_AGENT_CATALOG sections: sandbox / rhythm / panelInsets / sheetPads / shellSize.",
   input_schema: {
     type: "object",
     properties: {

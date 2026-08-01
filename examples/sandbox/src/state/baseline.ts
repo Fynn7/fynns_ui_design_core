@@ -73,7 +73,10 @@ export const EDITABLE_LAYOUT_KEYS = [
 
 export type EditableLayoutKey = (typeof EDITABLE_LAYOUT_KEYS)[number];
 
-/** @deprecated Prefer `EDITABLE_LAYOUT_KEYS`. */
+/**
+ * @deprecated Prefer `EDITABLE_LAYOUT_KEYS` — now includes panel insets / sheet
+ * pads / shell size, not only control-* gaps.
+ */
 export const EDITABLE_LAYOUT_CONTROL_KEYS = EDITABLE_LAYOUT_KEYS;
 /** @deprecated Prefer `EditableLayoutKey`. */
 export type EditableLayoutControlKey = EditableLayoutKey;
