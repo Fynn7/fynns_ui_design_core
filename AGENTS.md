@@ -96,8 +96,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
-   non-dismissible scrim + `CircularProgress` + message) or `BusyRegion`
-   (relative dim layer over children); do not revive `BlockingLoadingOverlay`;
+   non-dismissible scrim + focus trap + `CircularProgress` + message) or
+   `BusyRegion` (relative dim layer over children; content is `inert` while
+   busy); do not revive `BlockingLoadingOverlay`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`

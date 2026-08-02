@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -8,6 +8,13 @@ import {
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
+}
+
+const FOCUSABLE_SELECTOR =
+  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getFocusable(container: HTMLElement): HTMLElement[] {
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
 }
 
 function BusyStack({
@@ -67,20 +74,52 @@ export function BusyScrim({
     document.body.style.overflow = "hidden";
     rootRef.current?.focus();
 
-    const onKeyDown = (event: KeyboardEvent) => {
+    const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
       }
     };
-    window.addEventListener("keydown", onKeyDown, true);
+    window.addEventListener("keydown", onWindowKeyDown, true);
 
     return () => {
       document.body.style.overflow = prevOverflow;
-      window.removeEventListener("keydown", onKeyDown, true);
+      window.removeEventListener("keydown", onWindowKeyDown, true);
       previous?.focus?.();
     };
   }, [open]);
+
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const container = rootRef.current;
+    if (!container) return;
+    const focusable = getFocusable(container);
+    if (focusable.length === 0) {
+      event.preventDefault();
+      container.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+    if (!active || !container.contains(active)) {
+      event.preventDefault();
+      first.focus();
+      return;
+    }
+    if (event.shiftKey && (active === first || active === container)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
 
   if (!open || typeof document === "undefined") return null;
 
@@ -93,6 +132,7 @@ export function BusyScrim({
       aria-busy="true"
       aria-labelledby={messageId}
       tabIndex={-1}
+      onKeyDown={onKeyDown}
     >
       <BusyStack
         label={label}
@@ -142,7 +182,12 @@ export function BusyRegion({
       className={join("fynns-busy-region", busy && "fynns-busy-region--busy", className)}
       aria-busy={busy || undefined}
     >
-      <div className="fynns-busy-region-content">{children}</div>
+      <div
+        className="fynns-busy-region-content"
+        {...(busy ? { inert: true } : {})}
+      >
+        {children}
+      </div>
       {busy ? (
         <div
           className="fynns-busy-region-overlay"
