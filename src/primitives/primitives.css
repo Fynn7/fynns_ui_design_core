@@ -961,7 +961,7 @@
 
 .fynns-menu-item:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-menu-item:disabled {
@@ -1161,14 +1161,15 @@
 .fynns-dialog-overlay--centered {
   display: grid;
   place-items: center;
-  padding: 1rem;
+  padding: var(--fynns-space-lg);
 }
 
 .fynns-dialog-overlay--command {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: var(--fynns-layout-command-palette-top-padding) 1rem 1rem;
+  padding: var(--fynns-layout-command-palette-top-padding) var(--fynns-space-lg)
+    var(--fynns-space-lg);
 }
 
 .fynns-dialog-overlay--fullscreen {
@@ -1333,8 +1334,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.65rem 0.75rem;
+  gap: var(--fynns-space-md);
+  /* Base for FullscreenDialog / non-centered shells; centered overrides below. */
+  padding: var(--fynns-layout-content-inset);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-head);
 }
@@ -1350,7 +1352,7 @@
 .fynns-dialog-head-actions {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--fynns-space-15);
   flex-shrink: 0;
 }
 
@@ -1390,13 +1392,13 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
-  gap: var(--fynns-space-2);
-  padding: 0 0.85rem 1rem;
+  gap: var(--fynns-space-sm);
+  padding: 0 var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset);
 }
 
 .fynns-dialog-description {
   margin: 0;
-  padding: 0.75rem 0.85rem 0;
+  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset) 0;
   font-size: var(--fynns-font-size-form-label);
   color: var(--fynns-color-text-muted);
 }
@@ -1405,7 +1407,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 1rem 0.85rem;
+  /* FullscreenDialog + other non-centered shells; centered overrides inset. */
+  padding: var(--fynns-layout-content-inset);
 }
 
 .fynns-dialog-panel--command .fynns-dialog-body {
@@ -6993,7 +6996,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-timepicker-field:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-timepicker-field--active {
@@ -7078,7 +7081,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-timepicker-period-btn:focus-visible {
   outline: none;
   z-index: 1;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-timepicker-period-btn--selected {
@@ -7149,7 +7152,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-carousel:focus-visible {
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
   border-radius: var(--fynns-radius-md);
 }
 
@@ -7258,7 +7261,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-carousel-indicator:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-carousel-indicator--active {

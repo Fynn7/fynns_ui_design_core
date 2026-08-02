@@ -815,7 +815,7 @@
   position: absolute;
   top: calc(100% + var(--fynns-space-xs));
   right: 0;
-  z-index: var(--fynns-z-flyout);
+  z-index: var(--fynns-z-popover);
   min-width: min(22rem, 85vw);
   max-width: min(28rem, 92vw);
   padding: var(--fynns-space-sm);
@@ -1161,7 +1161,7 @@
   margin: 0;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
-  line-height: var(--fynns-line-height-normal, 1.45);
+  line-height: var(--fynns-line-height-body);
 }
 
 @media (max-width: 900px) {

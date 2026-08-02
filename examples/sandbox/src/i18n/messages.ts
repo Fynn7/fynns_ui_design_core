@@ -702,7 +702,7 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Prefer ListGroup / ListRow for sidebar master/detail.",
+    "M3 content List / ListItem (1–3 lines). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -1472,7 +1472,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。侧栏主从列表请优先用 ListGroup / ListRow。",
+    "M3 内容列表 List / ListItem（1–3 行）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",

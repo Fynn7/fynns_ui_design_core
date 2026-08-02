@@ -26,6 +26,7 @@ export {
   EyeOffIcon,
   FileIcon,
   FolderOpenIcon,
+  ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,
   MenuIcon,

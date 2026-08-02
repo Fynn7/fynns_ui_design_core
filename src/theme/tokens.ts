@@ -585,8 +585,8 @@ export const BANNER_TOKENS = {
 
 /**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Distinct from sidebar
- * `ListRow` / `ListGroup` chrome.
+ * One-line 56dp; two-line 72dp; three-line 88dp. Sidebar destinations use
+ * Navigation* chrome (not deleted ListRow / ListGroup).
  * `--fynns-list-<key>`.
  */
 export const LIST_TOKENS = {

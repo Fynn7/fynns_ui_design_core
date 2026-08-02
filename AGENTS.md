@@ -79,7 +79,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
    `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
-   from `--fynns-focus`/`--fynns-color-focus`, and keyboard affordances
+   from `--fynns-focus-ring-width` + `--fynns-color-focus`, and keyboard affordances
    (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
 7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
    motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already
@@ -193,9 +193,10 @@ Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 
 Standard chrome glyph: `--fynns-size-icon` (`1rem` / 16dp) + TS `ICON_SIZE`
-(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar /
-Toolbar action icons share this. Fab `sm` stays on `--fynns-size-icon-md` (20dp). Dense
-micro glyphs (chip trailing, select chevron, steppers) may stay smaller.
+(exported from `@fynns/ui`; default for inline icons / IconButton). Nav / Banner /
+SearchBar / BottomAppBar / Toolbar action icons share this. Fab `sm` stays on
+`--fynns-size-icon-md` (20dp). Dense micro glyphs (chip trailing, select chevron,
+steppers) may stay smaller.
 
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
@@ -252,7 +253,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
-- **Content:** List / ListItem, Card (+ Media / Header / Content / Actions),
+- **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
+  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
+  `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
   Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
@@ -261,14 +264,29 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
   (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
-  Panel shells (Collapsible, Drawer, Card): equal outer inset via
-  `--fynns-layout-content-inset` (18dp). Centered Dialog / ConfirmDialog use
-  `--fynns-layout-dialog-inset` (24dp) on head / foot / body inline; body
-  block (top = bottom) uses `--fynns-layout-content-inset` so nested content
-  is slightly denser but still symmetric — do not substitute `--fynns-space-*`
-  for dialog shell insets. BottomSheet keeps asymmetric
-  `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline).
-  Do not force Snackbar / ListItem onto equal four-side padding.
+
+  **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
+
+  | Role | Token |
+  | --- | --- |
+  | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` |
+  | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
+  | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
+  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Vertical stacked units (inspector fields, Collapsible body) | `--fynns-layout-unit-stack-gap` |
+
+  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
+  live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits them via
+  `SANDBOX_LAYOUT_AGENT_CATALOG`.
+
+  **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
+  inset via `--fynns-layout-content-inset` (18dp). Centered Dialog /
+  ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
+  inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
+  FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
+  asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
+  block≠inline). Do not force Snackbar / ListItem onto equal four-side padding.
+  Do not substitute raw `--fynns-space-*` for dialog/panel shell insets.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
