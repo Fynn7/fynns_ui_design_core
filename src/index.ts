@@ -193,6 +193,11 @@ export type {
   CardMediaProps,
   CardProps,
 } from "./primitives/Card";
+export { FieldBlock, FieldHeader } from "./primitives/FieldHeader";
+export type {
+  FieldBlockProps,
+  FieldHeaderProps,
+} from "./primitives/FieldHeader";
 export { LinearProgress, CircularProgress } from "./primitives/Progress";
 export type {
   CircularProgressProps,

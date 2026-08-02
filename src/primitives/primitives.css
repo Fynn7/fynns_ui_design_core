@@ -594,7 +594,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-xs);
+  width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 .fynns-field-shell {
@@ -650,6 +652,9 @@
 }
 
 .fynns-input {
+  /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
+  width: 100%;
+  box-sizing: border-box;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
@@ -739,6 +744,8 @@
 }
 
 .fynns-textarea {
+  width: 100%;
+  box-sizing: border-box;
   min-height: 6rem;
   resize: vertical;
   line-height: var(--fynns-line-height-body);
@@ -3335,6 +3342,53 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-card-header + .fynns-card-content {
   padding-top: var(--fynns-space-sm);
+}
+
+/* FieldHeader / FieldBlock as first child: denser top than full content-inset. */
+.fynns-card-content:has(> .fynns-field-header:first-child),
+.fynns-card-content:has(> .fynns-field-block:first-child) {
+  padding-top: var(--fynns-space-sm);
+}
+
+/* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
+.fynns-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  /* Breath around sm IconButton hover disks (avoid clipping the state layer). */
+  padding-block: var(--fynns-space-xs);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-header__label {
+  margin: 0;
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-field-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  flex-shrink: 0;
+}
+
+.fynns-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-block:not(:last-child) {
+  margin-bottom: var(--fynns-space-md);
 }
 
 /* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath

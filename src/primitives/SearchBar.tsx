@@ -10,7 +10,6 @@ import {
 } from "react";
 import { CloseIcon, SearchIcon } from "./icons";
 import { IconButton } from "./IconButton";
-import { Tooltip } from "./Tooltip";
 
 export type SearchBarProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -36,7 +35,7 @@ export type SearchBarProps = Omit<
   onExpandedChange?: (expanded: boolean) => void;
   /** Accessible name for the search field (required when no visible label). */
   ariaLabel: string;
-  /** Clear-button tooltip / aria-label. Default `"Clear"`. */
+  /** Clear-button `aria-label`. Default `"Clear"`. */
   clearAriaLabel?: string;
   /** Docked results body — shown under the bar when `expanded`. */
   children?: ReactNode;
@@ -157,23 +156,21 @@ export const SearchBar = forwardRef(function SearchBar(
         />
         <span className="fynns-search-bar-trailing">
           {showClear ? (
-            <Tooltip content={clearAriaLabel}>
-              <IconButton
-                type="button"
-                aria-label={clearAriaLabel}
-                disabled={disabled}
-                onMouseDown={(event) => {
-                  // Keep focus on the input / avoid blur-collapse before clear.
-                  event.preventDefault();
-                }}
-                onClick={() => {
-                  onChange("");
-                  if (onExpandedChange) setExpanded(true);
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              type="button"
+              aria-label={clearAriaLabel}
+              disabled={disabled}
+              onMouseDown={(event) => {
+                // Keep focus on the input / avoid blur-collapse before clear.
+                event.preventDefault();
+              }}
+              onClick={() => {
+                onChange("");
+                if (onExpandedChange) setExpanded(true);
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
           ) : null}
           {trailing}
         </span>

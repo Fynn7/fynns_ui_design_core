@@ -38,13 +38,22 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    token>)`, **not** a new hex. Missing value → add a token in `tokens.ts` and run
    `npm run gen:theme`. App/teaching tokens stay namespaced in the app (`--afs-*`
    automata canvas, `--dsa-*` DSA visuals); never add them to this core.
-3. **Every action is an icon button + tooltip — never `title=`.** Use
-   `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
+3. **Icon actions: tooltip when the glyph is not self-evident — never `title=`.**
+   Use `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined). Pure
-   informational help uses **`InfoHint`**: standalone "i" when there is no
+   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined).
+   **Skip Tooltip** on chrome dismiss/clear whose glyph already means the action
+   (Dialog / FullscreenDialog / Drawer / BottomSheet close X, Banner / Snackbar
+   dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
+   Pure informational help uses **`InfoHint`**: standalone "i" when there is no
    visible name; for form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   **Field header actions** (e.g. expand / reset next to a Textarea label): use
+   **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
+   `Tooltip` above the control — not overlaid on the textarea corner). Default
+   `ghost`; dense forms may use `size="sm"`. As the first child of
+   `CardContent`, top inset shrinks to `--fynns-space-sm` (not full
+   `content-inset`). Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
    (`TextLinkButton`) keep a resting solid underline; import/diff actions
@@ -87,6 +96,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking busy: app-local fixed scrim + `CircularProgress`
    + label (do not revive `BlockingLoadingOverlay`);
+   **Nested containment** (Dialog → section → field): centered Dialog is already
+   `surface-1` + `--fynns-layout-dialog-inset`. Inner sections use
+   `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
+   (same surface + stacked shadow). Rely on Card’s `--fynns-layout-content-inset`;
+   do not add a second page-level outer pad. Simple forms may put fields directly
+   in the Dialog body. Avoid semantic-free card-in-card (nest Card only when the
+   inner block is an independent interactive subject). Live sample: sandbox
+   Globals → Containment → nested dialog. `Input` / `Textarea` fill the parent
+   width by default (`width: 100%`).
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
    it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
@@ -203,11 +221,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive: leading action +
   trailing `DropdownMenu`; variants `primary` / `tonal` / `default` /
   `elevated`; sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
-- **Fields:** Input, Textarea (dense multiline; no floating label — not full M3
-  Text Field anatomy), Select, Autocomplete, OtpInput, SearchBar /
-  SearchBarResult, Switch, Checkbox, Radio, Chip / ChipSet (`assist` | `filter`
-  | `input` | `suggestion`), Slider, ToggleGroup,
-  Tabs (M3 Primary underline — not a ToggleGroup substitute)
+- **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
+  floating label — not full M3 Text Field anatomy), **FieldHeader** /
+  **FieldBlock** (label | trailing IconButtons above a control), Select,
+  Autocomplete, OtpInput, SearchBar / SearchBarResult, Switch, Checkbox, Radio,
+  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
+  ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
   CircularProgress,

@@ -4,7 +4,6 @@ import { DialogFrame } from "./Dialog";
 import type { DrawerSide } from "./Dialog";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
-import { Tooltip } from "./Tooltip";
 
 export type DrawerProps = {
   open: boolean;
@@ -71,16 +70,14 @@ export function Drawer({
           <div className="fynns-dialog-head-actions">
             {headActions}
             {showCloseButton ? (
-              <Tooltip content={closeAriaLabel}>
-                <IconButton
-                  variant="ghost"
-                  className="fynns-dialog-close"
-                  aria-label={closeAriaLabel}
-                  onClick={onClose}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                variant="ghost"
+                className="fynns-dialog-close"
+                aria-label={closeAriaLabel}
+                onClick={onClose}
+              >
+                <CloseIcon />
+              </IconButton>
             ) : null}
           </div>
         </div>

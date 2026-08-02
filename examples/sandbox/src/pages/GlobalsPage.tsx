@@ -47,6 +47,7 @@ import {
   Fab,
   FabMenu,
   FabMenuItem,
+  FieldBlock,
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
@@ -226,6 +227,10 @@ export function GlobalsPage() {
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
+  const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
+  const [nestedPrompt, setNestedPrompt] = useState(
+    "You translate natural-language requests into structured camera commands.",
+  );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
@@ -1185,6 +1190,9 @@ export function GlobalsPage() {
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
           </Button>
+          <Button size="sm" variant="tonal" onClick={() => setNestedDialogOpen(true)}>
+            {t("globals.nestedDialogOpen")}
+          </Button>
           <Button size="sm" variant="danger" onClick={() => setConfirmOpen(true)}>
             {t("globals.confirmOpen")}
           </Button>
@@ -1192,6 +1200,7 @@ export function GlobalsPage() {
             {t("globals.drawerOpen")}
           </Button>
         </div>
+        <SandboxHelp text={t("globals.nestedDialogHelp")} />
         <BottomSheet
           open={sheetOpen}
           onClose={() => setSheetOpen(false)}
@@ -1214,6 +1223,57 @@ export function GlobalsPage() {
           closeAriaLabel={t("globals.dialogClose")}
         >
           <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
+        </Dialog>
+        <Dialog
+          open={nestedDialogOpen}
+          onOpenChange={setNestedDialogOpen}
+          title={t("globals.nestedDialogTitle")}
+          description={t("globals.nestedDialogDescription")}
+          size="md"
+          closeAriaLabel={t("globals.dialogClose")}
+          showCloseButton
+        >
+          <Card variant="outlined">
+            <CardContent>
+              <FieldBlock
+                label={t("globals.nestedDialogFieldLabel")}
+                htmlFor="sandbox-nested-prompt"
+                actions={
+                  <>
+                    <Tooltip content={t("globals.nestedDialogExpandTip")}>
+                      <IconButton
+                        size="sm"
+                        aria-label={t("globals.nestedDialogExpandTip")}
+                      >
+                        <LayoutGridIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.nestedDialogResetTip")}>
+                      <IconButton
+                        size="sm"
+                        aria-label={t("globals.nestedDialogResetTip")}
+                        onClick={() =>
+                          setNestedPrompt(
+                            "You translate natural-language requests into structured camera commands.",
+                          )
+                        }
+                      >
+                        <UndoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                }
+              >
+                <Textarea
+                  id="sandbox-nested-prompt"
+                  value={nestedPrompt}
+                  onChange={(event) => setNestedPrompt(event.target.value)}
+                  placeholder={t("globals.textareaPlaceholder")}
+                  aria-label={t("globals.nestedDialogFieldLabel")}
+                />
+              </FieldBlock>
+            </CardContent>
+          </Card>
         </Dialog>
         <ConfirmDialog
           open={confirmOpen}

@@ -374,6 +374,15 @@ const en = {
   "globals.dialogDescription": "Floating modal with focus trap and scrim.",
   "globals.dialogBody": "Use for settings and short forms that should not fill the viewport.",
   "globals.dialogClose": "Close",
+  "globals.nestedDialogOpen": "Open nested dialog",
+  "globals.nestedDialogTitle": "LLM-style form",
+  "globals.nestedDialogDescription":
+    "Dialog (surface-1) → outlined Card section → full-width Textarea.",
+  "globals.nestedDialogFieldLabel": "System prompt",
+  "globals.nestedDialogExpandTip": "Open in large editor",
+  "globals.nestedDialogResetTip": "Restore default",
+  "globals.nestedDialogHelp":
+    "Nested containment: never stack elevated Card inside Dialog. Use FieldBlock (FieldHeader + control) for label-row IconButtons; CardContent top inset densifies when FieldBlock leads.",
   "globals.confirmOpen": "Open confirm",
   "globals.confirmTitle": "Delete history?",
   "globals.confirmDescription": "This cannot be undone.",
@@ -1133,6 +1142,15 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogDescription": "带焦点陷阱与遮罩的浮动模态。",
   "globals.dialogBody": "适合设置与短表单，不必占满视口。",
   "globals.dialogClose": "关闭",
+  "globals.nestedDialogOpen": "打开嵌套对话框",
+  "globals.nestedDialogTitle": "类 LLM 表单",
+  "globals.nestedDialogDescription":
+    "Dialog（surface-1）→ outlined Card 分区 → 满宽 Textarea。",
+  "globals.nestedDialogFieldLabel": "系统提示词",
+  "globals.nestedDialogExpandTip": "在大编辑器中打开",
+  "globals.nestedDialogResetTip": "恢复默认",
+  "globals.nestedDialogHelp":
+    "嵌套容器：勿在 Dialog 内再叠 elevated Card。字段头用 FieldBlock（FieldHeader + 控件）；CardContent 以 FieldBlock 开头时上边距收紧。",
   "globals.confirmOpen": "打开确认框",
   "globals.confirmTitle": "删除历史？",
   "globals.confirmDescription": "此操作无法撤销。",
