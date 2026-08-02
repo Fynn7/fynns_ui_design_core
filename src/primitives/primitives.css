@@ -1290,8 +1290,10 @@
 }
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
- * Outer inset via `--fynns-layout-dialog-inset` (24dp) on all sides.
- * Collapsible / Drawer / Card use `--fynns-layout-content-inset` (18dp). */
+ * Shell breath uses layout inset tokens only (no ad-hoc `--fynns-space-*`):
+ * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
+ * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
+ * Card sits a touch denser while staying symmetric. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
@@ -1304,8 +1306,8 @@
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-body {
-  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset)
-    var(--fynns-layout-dialog-inset);
+  padding-block: var(--fynns-layout-content-inset);
+  padding-inline: var(--fynns-layout-dialog-inset);
 }
 
 /* Body/description before actions: drop bottom pad so foot owns the outer inset. */
@@ -1479,16 +1481,20 @@
   transform: translateX(-100%);
 }
 
-/* Side sheet head: no IDE surface-head strip; equal content-inset outer edges. */
+/* Side sheet head: no IDE surface-head strip; equal content-inset on all
+ * edges so the close IconButton hover disk clears the hairline (padding-bottom
+ * must not be 0 — that was clipping the state layer into the divider). */
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
   background: transparent;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
+  padding: var(--fynns-layout-content-inset);
+  align-items: center;
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer)
   > .fynns-dialog-description {
   padding: var(--fynns-space-sm) var(--fynns-layout-content-inset) 0;
+  font-size: var(--fynns-font-size-sm);
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
@@ -6414,6 +6420,10 @@ a.fynns-breadcrumb-link:visited {
   grid-column: 1 / span 5;
   margin: 0;
   min-width: 0;
+  /* Optical align with centered weekday/day glyphs in column 1. */
+  padding-inline-start: calc(
+    (var(--fynns-datepicker-day-size) - 1em) / 2
+  );
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -6775,7 +6785,8 @@ a.fynns-breadcrumb-link:visited {
   inset-inline-end: -1px;
 }
 
-/* Accent discs stay day-size (cell is wider than the disc in range layout). */
+/* Accent discs: never exceed the cell (narrow dialog hosts used to keep a
+ * fixed day-size disc → overflow + body scrollbar). */
 .fynns-datepicker--range .fynns-datepicker-day--range-start::after,
 .fynns-datepicker--range .fynns-datepicker-day--range-end::after {
   content: "";
@@ -6783,8 +6794,8 @@ a.fynns-breadcrumb-link:visited {
   z-index: 1;
   top: 50%;
   left: 50%;
-  width: var(--fynns-datepicker-day-size);
-  height: var(--fynns-datepicker-day-size);
+  width: min(100%, var(--fynns-datepicker-day-size));
+  height: min(100%, var(--fynns-datepicker-day-size));
   translate: -50% -50%;
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-accent);
@@ -6845,20 +6856,14 @@ a.fynns-breadcrumb-link:visited {
   background: transparent;
 }
 
-.fynns-datepicker-dialog-body {
-  display: flex;
-  justify-content: center;
-  padding-block: var(--fynns-space-sm);
-}
-
-.fynns-datepicker-dialog-body .fynns-datepicker {
-  box-shadow: none;
-  background: transparent;
-  padding: 0;
-}
-
-/* Minimal M3 modal date picker: ExtraLarge corners + supporting selection line. */
+/*
+ * Modal DatePicker / DateRangePicker: same calendar metrics as the docked
+ * control. Do not strip pad-inline (that + dialog-inset squeezed day cells
+ * below day-size and made range discs overflow into a scrollbar).
+ */
 .fynns-dialog-panel.fynns-datepicker-dialog {
+  /* Fit the calendar; ignore the generic centered min 280dp squeeze. */
+  min-width: max-content;
   width: max-content;
   max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
   border-radius: var(--fynns-radius-3xl);
@@ -6867,11 +6872,32 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-xl);
 }
 
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-datepicker-dialog-body {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  /* Light outer breath; calendar keeps its own pad-* tokens. */
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-md);
+  overflow: hidden;
+}
+
+.fynns-datepicker-dialog-body .fynns-datepicker {
+  box-shadow: none;
+  background: transparent;
+  /* Keep --fynns-datepicker-pad-* so metrics match the docked picker. */
+  flex: 0 0 auto;
+  width: calc(
+    7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap) +
+      2 * var(--fynns-datepicker-pad-inline)
+  );
+  max-width: 100%;
+}
+
 .fynns-datepicker-dialog .fynns-datepicker-dialog-head {
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: transparent;
   align-items: flex-start;
-  padding: var(--fynns-space-lg) var(--fynns-space-md) var(--fynns-space-sm);
+  padding: var(--fynns-space-lg) var(--fynns-space-lg) var(--fynns-space-md);
 }
 
 .fynns-datepicker-dialog-titles {
@@ -6899,9 +6925,9 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
 }
 
-.fynns-datepicker-dialog .fynns-dialog-foot {
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-dialog-foot {
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
+  padding: var(--fynns-space-md) var(--fynns-space-lg) var(--fynns-space-lg);
 }
 
 /* —— TimePicker (M3 input / digital) ————————————————————————— */

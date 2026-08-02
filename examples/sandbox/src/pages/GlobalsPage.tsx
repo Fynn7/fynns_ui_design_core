@@ -246,6 +246,50 @@ export function GlobalsPage() {
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
   const [rhythmMedia, setRhythmMedia] = useState(false);
 
+  const nestedPromptDefault =
+    "You translate natural-language requests into structured camera commands.";
+
+  /** Host-agnostic section recipe — reuse inline or inside Dialog/Drawer. */
+  const renderNestedPromptSection = (fieldId: string) => (
+    <Card variant="outlined">
+      <CardContent>
+        <FieldBlock
+          label={t("globals.nestedDialogFieldLabel")}
+          htmlFor={fieldId}
+          actions={
+            <>
+              <Tooltip content={t("globals.nestedDialogExpandTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.nestedDialogExpandTip")}
+                >
+                  <LayoutGridIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.nestedDialogResetTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.nestedDialogResetTip")}
+                  onClick={() => setNestedPrompt(nestedPromptDefault)}
+                >
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          }
+        >
+          <Textarea
+            id={fieldId}
+            value={nestedPrompt}
+            onChange={(event) => setNestedPrompt(event.target.value)}
+            placeholder={t("globals.textareaPlaceholder")}
+            aria-label={t("globals.nestedDialogFieldLabel")}
+          />
+        </FieldBlock>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="sandbox-globals" id="main">
       <SkipLink href="#main" label={t("globals.skipLink")} />
@@ -1180,6 +1224,10 @@ export function GlobalsPage() {
             </Card>
           ))}
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          {renderNestedPromptSection("sandbox-nested-prompt")}
+          <SandboxHelp text={t("globals.nestedSectionHelp")} />
+        </div>
         <Collapsible title={t("globals.collapsible")} defaultOpen>
           <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
@@ -1233,47 +1281,7 @@ export function GlobalsPage() {
           closeAriaLabel={t("globals.dialogClose")}
           showCloseButton
         >
-          <Card variant="outlined">
-            <CardContent>
-              <FieldBlock
-                label={t("globals.nestedDialogFieldLabel")}
-                htmlFor="sandbox-nested-prompt"
-                actions={
-                  <>
-                    <Tooltip content={t("globals.nestedDialogExpandTip")}>
-                      <IconButton
-                        size="sm"
-                        aria-label={t("globals.nestedDialogExpandTip")}
-                      >
-                        <LayoutGridIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip content={t("globals.nestedDialogResetTip")}>
-                      <IconButton
-                        size="sm"
-                        aria-label={t("globals.nestedDialogResetTip")}
-                        onClick={() =>
-                          setNestedPrompt(
-                            "You translate natural-language requests into structured camera commands.",
-                          )
-                        }
-                      >
-                        <UndoIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                }
-              >
-                <Textarea
-                  id="sandbox-nested-prompt"
-                  value={nestedPrompt}
-                  onChange={(event) => setNestedPrompt(event.target.value)}
-                  placeholder={t("globals.textareaPlaceholder")}
-                  aria-label={t("globals.nestedDialogFieldLabel")}
-                />
-              </FieldBlock>
-            </CardContent>
-          </Card>
+          {renderNestedPromptSection("sandbox-nested-prompt-dialog")}
         </Dialog>
         <ConfirmDialog
           open={confirmOpen}

@@ -60,10 +60,11 @@ InlineAlert are restored.
 - Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.
-- Nested containment (Dialog → section → field): inner sections use
-  `Card outlined` (not elevated); field-header trailing actions use
-  `FieldHeader` / `FieldBlock` (`IconButton` + `Tooltip`). See AGENTS.md
-  **Nested containment** / **Field header actions**.
+- Nested containment (host → section → field): page / Dialog / Drawer may host
+  `Card outlined` (not elevated) sections; field-header trailing actions use
+  `FieldHeader` / `FieldBlock` (`IconButton` + `Tooltip`). Overlay optional —
+  agents choose the host. See AGENTS.md **Nested containment** /
+  **Field header actions**.
 - Skip `Tooltip` on self-evident dismiss/clear chrome (Dialog / Drawer /
   FullscreenDialog close X, Banner / Snackbar dismiss, Chip remove,
   SearchBar clear) — `aria-label` only. See AGENTS.md principle 3.

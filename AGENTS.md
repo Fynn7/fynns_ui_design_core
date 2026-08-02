@@ -96,15 +96,17 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking busy: app-local fixed scrim + `CircularProgress`
    + label (do not revive `BlockingLoadingOverlay`);
-   **Nested containment** (Dialog → section → field): centered Dialog is already
-   `surface-1` + `--fynns-layout-dialog-inset`. Inner sections use
+   **Nested containment** (host → section → field): any `surface-1` (or higher)
+   host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
-   (same surface + stacked shadow). Rely on Card’s `--fynns-layout-content-inset`;
-   do not add a second page-level outer pad. Simple forms may put fields directly
-   in the Dialog body. Avoid semantic-free card-in-card (nest Card only when the
-   inner block is an independent interactive subject). Live sample: sandbox
-   Globals → Containment → nested dialog. `Input` / `Textarea` fill the parent
-   width by default (`width: 100%`).
+   (same surface + stacked shadow). Prefer `FieldBlock` for label-row
+   IconButtons above the control. Rely on Card’s `--fynns-layout-content-inset`;
+   do not add a second page-level outer pad. Consumers choose whether the
+   section lives inline or inside an overlay. Simple forms may put fields
+   directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
+   only when the inner block is an independent interactive subject). Live
+   sample: sandbox Globals → Containment → nested section (+ optional Dialog
+   host). `Input` / `Textarea` fill the parent width by default (`width: 100%`).
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
    it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
@@ -261,7 +263,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
   Panel shells (Collapsible, Drawer, Card): equal outer inset via
   `--fynns-layout-content-inset` (18dp). Centered Dialog / ConfirmDialog use
-  `--fynns-layout-dialog-inset` (24dp). BottomSheet keeps asymmetric
+  `--fynns-layout-dialog-inset` (24dp) on head / foot / body inline; body
+  block (top = bottom) uses `--fynns-layout-content-inset` so nested content
+  is slightly denser but still symmetric — do not substitute `--fynns-space-*`
+  for dialog shell insets. BottomSheet keeps asymmetric
   `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline).
   Do not force Snackbar / ListItem onto equal four-side padding.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /

@@ -377,12 +377,14 @@ const en = {
   "globals.nestedDialogOpen": "Open nested dialog",
   "globals.nestedDialogTitle": "LLM-style form",
   "globals.nestedDialogDescription":
-    "Dialog (surface-1) → outlined Card section → full-width Textarea.",
+    "Same outlined Card section as the page sample — Dialog is only one optional host.",
   "globals.nestedDialogFieldLabel": "System prompt",
   "globals.nestedDialogExpandTip": "Open in large editor",
   "globals.nestedDialogResetTip": "Restore default",
+  "globals.nestedSectionHelp":
+    "Nested section recipe (host-agnostic): Card outlined + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Never stack elevated Card on the same surface.",
   "globals.nestedDialogHelp":
-    "Nested containment: never stack elevated Card inside Dialog. Use FieldBlock (FieldHeader + control) for label-row IconButtons; CardContent top inset densifies when FieldBlock leads.",
+    "Optional Dialog host of the same Card + FieldBlock recipe (not required for nesting).",
   "globals.confirmOpen": "Open confirm",
   "globals.confirmTitle": "Delete history?",
   "globals.confirmDescription": "This cannot be undone.",
@@ -1145,12 +1147,14 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedDialogOpen": "打开嵌套对话框",
   "globals.nestedDialogTitle": "类 LLM 表单",
   "globals.nestedDialogDescription":
-    "Dialog（surface-1）→ outlined Card 分区 → 满宽 Textarea。",
+    "与页内样例相同的 outlined Card 分区 — Dialog 只是可选宿主之一。",
   "globals.nestedDialogFieldLabel": "系统提示词",
   "globals.nestedDialogExpandTip": "在大编辑器中打开",
   "globals.nestedDialogResetTip": "恢复默认",
+  "globals.nestedSectionHelp":
+    "嵌套分区配方（宿主无关）：Card outlined + FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。勿在同层表面再叠 elevated Card。",
   "globals.nestedDialogHelp":
-    "嵌套容器：勿在 Dialog 内再叠 elevated Card。字段头用 FieldBlock（FieldHeader + 控件）；CardContent 以 FieldBlock 开头时上边距收紧。",
+    "可选：把同一 Card + FieldBlock 配方放进 Dialog（嵌套并不要求 Dialog）。",
   "globals.confirmOpen": "打开确认框",
   "globals.confirmTitle": "删除历史？",
   "globals.confirmDescription": "此操作无法撤销。",
