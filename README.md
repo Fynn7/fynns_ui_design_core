@@ -13,6 +13,8 @@ projects and are easy for humans and agents to reuse.
   Globals + Preview only (see [AGENTS.md](AGENTS.md) and
   [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
+  **Agent wiki (nav + workflows):** [`openwiki/quickstart.md`](openwiki/quickstart.md)
+  (seeded; refresh via Agents Hub → OpenWiki).
   **Breaking purge / consumer migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 - **Submodule propagation:** push-triggered + Dependabot fallback workflow is
   documented in [`docs/submodule-propagation.md`](docs/submodule-propagation.md).

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>OpenWiki smoke — @fynns/ui-design-core</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.45; }
+    code, pre { font-family: ui-monospace, Consolas, monospace; }
+    .ok { color: #0a7; } .bad { color: #c33; }
+    ul { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>OpenWiki smoke viewer</h1>
+  <p>Static check page for agent wiki under <code>openwiki/</code>. Not the design-system sandbox.</p>
+  <ul id="list"></ul>
+  <p id="status">loading…</p>
+  <script type="module">
+    const files = [
+      "index.md",
+      "quickstart.md",
+      "INSTRUCTIONS.md",
+      "architecture/overview.md",
+      "workflows/add-primitive.md",
+      "operations/consume.md",
+    ];
+    const list = document.getElementById("list");
+    let ok = 0;
+    for (const f of files) {
+      const li = document.createElement("li");
+      try {
+        const res = await fetch("../" + f);
+        const text = await res.text();
+        const pass = res.ok && text.length > 40;
+        if (pass) ok++;
+        li.innerHTML = `<span class="${pass ? "ok" : "bad"}">${pass ? "OK" : "FAIL"}</span> <a href="../${f}">${f}</a> (${text.length} bytes)`;
+      } catch (e) {
+        li.innerHTML = `<span class="bad">FAIL</span> ${f} — ${e.message}`;
+      }
+      list.appendChild(li);
+    }
+    document.getElementById("status").textContent = `fetched ${ok}/${files.length} wiki pages`;
+    document.title = `OpenWiki smoke ${ok}/${files.length}`;
+  </script>
+</body>
+</html>
