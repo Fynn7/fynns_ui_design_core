@@ -334,6 +334,19 @@ const en = {
   "globals.emptyAction": "Create project",
   "globals.emptyHelp":
     "EmptyState is layout-only (icon + title + description + actions). Pass Button CTAs yourself.",
+  "globals.busyRegionLabel": "Loading section",
+  "globals.busyRegionMessage": "Refreshing this block…",
+  "globals.busyRegionBody":
+    "Section content stays mounted under a dim layer while BusyRegion is busy.",
+  "globals.busyRegionStart": "Show busy",
+  "globals.busyRegionStop": "Clear busy",
+  "globals.busyRegionHelp":
+    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root.",
+  "globals.busyScrimOpen": "Show fullscreen busy (2s)",
+  "globals.busyScrimLabel": "Loading",
+  "globals.busyScrimMessage": "Working — please wait…",
+  "globals.busyScrimHelp":
+    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + ring + message. Auto-closes here after 2s.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -1104,6 +1117,19 @@ const zh: Record<MessageKey, string> = {
   "globals.emptyAction": "创建项目",
   "globals.emptyHelp":
     "EmptyState 只负责布局（图标 + 标题 + 说明 + 操作区）。CTA 自行传入 Button。",
+  "globals.busyRegionLabel": "区块加载中",
+  "globals.busyRegionMessage": "正在刷新此区域…",
+  "globals.busyRegionBody":
+    "BusyRegion 为 busy 时，区块内容仍挂载在半透明遮罩下方。",
+  "globals.busyRegionStart": "显示 busy",
+  "globals.busyRegionStop": "清除 busy",
+  "globals.busyRegionHelp":
+    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。",
+  "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
+  "globals.busyScrimLabel": "加载中",
+  "globals.busyScrimMessage": "处理中，请稍候…",
+  "globals.busyScrimHelp":
+    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 圆环 + 文案。此处 2 秒后自动关闭。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",

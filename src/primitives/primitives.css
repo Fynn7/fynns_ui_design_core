@@ -484,6 +484,8 @@
 
 .fynns-splitbtn-main.fynns-btn {
   position: relative;
+  /* Keep the join hairline above the trailing half (boxes abut with 0 gap). */
+  z-index: 1;
   /* Outer start stadium; flush inner end. */
   border-radius: var(--fynns-radius-pill) 0 0 var(--fynns-radius-pill);
   /* Join side open — one shared divider is painted via ::after. */
@@ -508,7 +510,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  inset-inline-end: 0;
+  /* Sit on the abutting edge so the trailing half cannot cover it. */
+  inset-inline-end: calc(var(--fynns-border-hairline) / -2);
   width: var(--fynns-border-hairline);
   background: color-mix(
     in srgb,
@@ -516,29 +519,39 @@
     transparent
   );
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 /*
- * Outlined: join tracks the accent outline (not border-strong — that disappears
- * against the dark fill when the outer stroke brightens on hover).
+ * Outlined: join matches the shared outer stroke (`--fynns-color-border`),
+ * and tracks the same hover mix as `.fynns-btn:hover` — not solid accent
+ * (that read as a bright seam between two dark outlined halves).
  */
 .fynns-splitbtn[data-variant="default"] .fynns-splitbtn-main.fynns-btn::after {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) 55%,
-    var(--fynns-color-border)
-  );
+  background: var(--fynns-color-border);
 }
 
+/*
+ * Mid seam tracks whichever half is active at the join — never the other
+ * half's outer stroke. Trigger has no start border; if the seam stayed dark
+ * while the trigger outline brightened, the hairline read as "vanished".
+ */
 .fynns-splitbtn[data-variant="default"]
   .fynns-splitbtn-main.fynns-btn:hover:not(:disabled)::after,
 .fynns-splitbtn[data-variant="default"]:has(
     .fynns-splitbtn-menu-trigger:hover:not(:disabled)
   )
+  .fynns-splitbtn-main.fynns-btn::after,
+.fynns-splitbtn[data-variant="default"]:has(
+    .fynns-splitbtn-menu-trigger--open
+  )
   .fynns-splitbtn-main.fynns-btn::after {
-  background: var(--fynns-color-accent);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 60%,
+    var(--fynns-color-border)
+  );
 }
 
 .fynns-splitbtn-main-icon {
@@ -562,6 +575,8 @@
   display: flex;
   align-items: stretch;
   flex: 0 0 auto;
+  position: relative;
+  z-index: 0;
 }
 
 .fynns-splitbtn-menu-trigger.fynns-btn {
@@ -572,6 +587,24 @@
   align-self: stretch;
   height: auto;
   min-height: 0;
+}
+
+/*
+ * Outlined trailing: standalone IconButton `default` uses border-strong (brighter).
+ * Rest stroke matches the leading half / mid seam. Do not sync hover across
+ * halves — only the hovered segment brightens.
+ */
+.fynns-splitbtn[data-variant="default"] .fynns-splitbtn-menu-trigger.fynns-btn {
+  border-color: var(--fynns-color-border);
+}
+
+.fynns-splitbtn[data-variant="default"]
+  .fynns-splitbtn-menu-trigger.fynns-btn:hover:not(:disabled) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 60%,
+    var(--fynns-color-border)
+  );
 }
 
 .fynns-splitbtn-chevron {
@@ -862,6 +895,10 @@
   display: inline-flex;
 }
 
+/*
+ * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
+ * state layers never kiss the outer edge.
+ */
 .fynns-menu {
   position: fixed;
   z-index: var(--fynns-z-dropdown);
@@ -871,9 +908,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-2xs);
-  padding: var(--fynns-space-xs);
+  padding: var(--fynns-space-sm);
   border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  border-radius: var(--fynns-radius-lg);
+  border-radius: var(--fynns-radius-xl);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
@@ -915,7 +952,7 @@
 .fynns-menu-label {
   box-sizing: border-box;
   /* Extra block-start so section titles clear the menu edge / prior separator. */
-  padding: var(--fynns-space-sm) var(--fynns-space-sm) var(--fynns-space-xs);
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-xs);
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-xs);
   font-weight: var(--fynns-font-weight-medium);
@@ -931,6 +968,11 @@
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
+/*
+ * Menu item: 48dp row, 12dp inline pad. Highlight shape matches SearchBar /
+ * Select / Autocomplete results (`radius-3xl` long-strip) so all “dropdown
+ * list” surfaces share one hover language. Fill state-layer, not an outer ring.
+ */
 .fynns-menu-item {
   display: flex;
   align-items: center;
@@ -938,9 +980,9 @@
   width: 100%;
   min-height: var(--fynns-size-icon-target);
   margin: 0;
-  padding: var(--fynns-space-xs) var(--fynns-space-sm);
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
   border: 0;
-  border-radius: var(--fynns-radius-md);
+  border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
   text-align: left;
@@ -961,7 +1003,20 @@
 
 .fynns-menu-item:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-menu-item:hover:not(:disabled):focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
 }
 
 .fynns-menu-item:disabled {
@@ -3083,31 +3138,56 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
-.fynns-loading-blocking-overlay {
+/* ---------- BusyScrim / BusyRegion (M3 scrim + progress + message) ---------- */
+.fynns-busy-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-layout-unit-stack-gap);
+  max-width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
+  padding: var(--fynns-space-lg);
+  box-sizing: border-box;
+}
+
+.fynns-busy-message {
+  margin: 0;
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-busy-scrim {
   position: fixed;
   inset: 0;
   z-index: var(--fynns-z-modal);
   display: grid;
   place-items: center;
   background: var(--fynns-color-overlay);
+  outline: none;
 }
 
-.fynns-loading-blocking-overlay-card {
-  display: grid;
-  justify-items: center;
-  gap: 0.75rem;
-  min-width: 14rem;
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface-head);
-  padding: 1.2rem;
-  box-shadow: var(--fynns-shadow-lg);
-}
-
-.fynns-loading-blocking-overlay-text {
-  margin: 0;
+.fynns-busy-scrim .fynns-busy-message {
   color: var(--fynns-color-text);
-  font-size: var(--fynns-font-size-form-label);
+}
+
+.fynns-busy-region {
+  position: relative;
+  isolation: isolate;
+}
+
+.fynns-busy-region-content {
+  min-width: 0;
+}
+
+.fynns-busy-region-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--fynns-color-surface-1) 78%, transparent);
+  pointer-events: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5868,16 +5948,13 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-lg);
 }
 
+/* No accent ring on the shell (collapsed or expanded) — elevation only. */
 .fynns-search-bar--expanded:focus-within {
-  box-shadow:
-    var(--fynns-shadow-lg),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: var(--fynns-shadow-lg);
 }
 
 .fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: var(--fynns-shadow-md);
 }
 
 .fynns-search-bar--disabled {
@@ -5939,9 +6016,10 @@ a.fynns-breadcrumb-link:visited {
   appearance: none;
 }
 
-/* Results share the expanded shell. Row highlight matches NavigationDrawer
-   items (`radius-3xl`); inset from the shell edge so hover does not kiss the
-   outer curve. Height morph via shared `.fynns-expand` (open ↔ closed). */
+/* Results share the expanded shell. Row highlight matches DropdownMenu items
+   (`radius-3xl` long-strip) — one hover language for all dropdown lists.
+   Inset from the shell edge so hover does not kiss the outer curve.
+   Height morph via shared `.fynns-expand` (open ↔ closed). */
 
 .fynns-search-bar-results {
   box-sizing: border-box;
@@ -5978,9 +6056,10 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   min-height: 2.5rem;
   margin: 0;
-  padding-block: var(--fynns-space-xs);
+  padding-block: var(--fynns-space-sm);
   padding-inline: var(--fynns-space-md);
   border: 0;
+  /* Same long-strip highlight as `.fynns-menu-item`. */
   border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
@@ -6002,7 +6081,21 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-search-bar-result:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:hover:not(:disabled):focus-visible,
+.fynns-search-bar-result--active:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
 }
 
 .fynns-search-bar-result:disabled {

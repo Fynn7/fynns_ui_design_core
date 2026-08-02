@@ -11,6 +11,8 @@ import {
   BottomAppBar,
   BottomSheet,
   Breadcrumb,
+  BusyRegion,
+  BusyScrim,
   Button,
   Pagination,
   Card,
@@ -109,7 +111,7 @@ import {
   Slider,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 
@@ -226,6 +228,8 @@ export function GlobalsPage() {
   const [stepperIndex, setStepperIndex] = useState(1);
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [busyRegion, setBusyRegion] = useState(false);
+  const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -245,6 +249,12 @@ export function GlobalsPage() {
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
   const [rhythmMedia, setRhythmMedia] = useState(false);
+
+  useEffect(() => {
+    if (!busyScrimOpen) return;
+    const timer = window.setTimeout(() => setBusyScrimOpen(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [busyScrimOpen]);
 
   const nestedPromptDefault =
     "You translate natural-language requests into structured camera commands.";
@@ -1335,6 +1345,44 @@ export function GlobalsPage() {
             }
           />
           <SandboxHelp text={t("globals.emptyHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <BusyRegion
+            busy={busyRegion}
+            label={t("globals.busyRegionLabel")}
+            message={t("globals.busyRegionMessage")}
+          >
+            <Card variant="outlined">
+              <CardContent>
+                <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
+              </CardContent>
+            </Card>
+          </BusyRegion>
+          <div className="sandbox-globals-row">
+            <Button size="sm" onClick={() => setBusyRegion(true)} disabled={busyRegion}>
+              {t("globals.busyRegionStart")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegion(false)}
+              disabled={!busyRegion}
+            >
+              {t("globals.busyRegionStop")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.busyRegionHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Button onClick={() => setBusyScrimOpen(true)}>
+            {t("globals.busyScrimOpen")}
+          </Button>
+          <BusyScrim
+            open={busyScrimOpen}
+            label={t("globals.busyScrimLabel")}
+            message={t("globals.busyScrimMessage")}
+          />
+          <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Stepper

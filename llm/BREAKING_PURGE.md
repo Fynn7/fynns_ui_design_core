@@ -55,7 +55,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
 | `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
 | `measureOverflow` / `overflowsBounds` / `measureContentOverflow` / `useOverflowBounds` | Layout overflow helpers (demoed next to DatePicker in Globals). Prefer over ad-hoc rect math. |
-| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `EmptyState`, or app-local busy UI (`position:fixed` scrim + `CircularProgress` + label). `Spinner` remains internal for `Button` `loading`. |
+| `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `BusyScrim` (fullscreen) / `BusyRegion` (section), or `EmptyState`. Do not revive the old `BlockingLoadingOverlay` name. `Spinner` remains internal for `Button` `loading`. |
 | `CardActionArea` | Make the `Card` `interactive` or wrap children in a button. |
 | `PanelLeftIcon` / … (other unused glyphs) | Prefer the public icon subset from the barrel, or ship app icons. Sandbox chrome keeps `Sun`/`Moon`/`PanelLeft`/`PanelRight`/`Sparkles`/`Bot`/`Download` exported. |
 

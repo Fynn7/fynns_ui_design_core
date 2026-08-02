@@ -72,9 +72,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
-   `CircularProgress`, `EmptyState`, `Banner` / `Badge`, and imperative
-   `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do **not**
-   use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
+   `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
+   (sectional dim + ring + message), `EmptyState`, `Banner` / `Badge`, and
+   imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
+   **not** use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
    `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
@@ -94,8 +95,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    workspace panes: titled head strip + `body` with `fynns-scroll` (do **not**
    expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
-   `NavigationDrawer`; blocking busy: app-local fixed scrim + `CircularProgress`
-   + label (do not revive `BlockingLoadingOverlay`);
+   `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
+   non-dismissible scrim + `CircularProgress` + message) or `BusyRegion`
+   (relative dim layer over children); do not revive `BlockingLoadingOverlay`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
@@ -232,7 +234,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
-  CircularProgress,
+  CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
+  **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
+  fullscreen non-dismissible scrim or sectional dim + ring + visible message;
+  `label` is the progress accessible name and the default visible copy when
+  `message` is omitted; `value` in `[0, 1]` for determinate, omit for
+  indeterminate; `size` defaults `md`),
   EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
