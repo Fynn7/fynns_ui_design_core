@@ -7,16 +7,10 @@ tags: [consume, submodule, vite]
 
 # Consume into apps
 
-**Authority:** [`llm/CONSUME.md`](../../llm/CONSUME.md) and [`llm/consume.json`](../../llm/consume.json). This page is a pointer only.
-
-## Hard rules (short)
-
-1. Git submodule + source alias `@fynns/ui` → `packages/fynns_ui_design_core/src/index.ts`.
-2. Never add `@fynns/ui` / `@fynns/ui-design-core` to consumer `package.json` dependencies.
-3. Vite `dedupe: ["react", "react-dom"]`.
-4. Consumer `compilerOptions.target` / `lib` ≥ **ES2022**.
-5. Do not import purged symbols — [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md).
-6. Transient feedback: `snackbar(...)` + mount **one** root `<SnackbarHost />` near the app entry (not per-page).
+**Authority (do not restate):** [`llm/CONSUME.md`](../../llm/CONSUME.md) and
+[`llm/consume.json`](../../llm/consume.json). Migration table:
+[`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md). Submodule pin propagation:
+[`docs/submodule-propagation.md`](../../docs/submodule-propagation.md).
 
 ## One-shot
 

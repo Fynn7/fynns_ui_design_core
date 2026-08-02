@@ -19,7 +19,7 @@ tags: [workflow, primitives, sandbox]
 
 ## Permanent skips
 
-Do **not** implement: TimePicker dial / 表盘, LoadingIndicator, ButtonGroup, RangeSlider, BlockingLoadingOverlay, PanelSkeleton.
+Do **not** implement: TimePicker dial / clock face, LoadingIndicator, ButtonGroup, RangeSlider, BlockingLoadingOverlay, PanelSkeleton.
 
 ## Source map
 
