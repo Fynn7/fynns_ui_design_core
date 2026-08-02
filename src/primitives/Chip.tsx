@@ -1,7 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { CheckIcon, CloseIcon } from "./icons";
 import { IconButton } from "./IconButton";
-import { Tooltip } from "./Tooltip";
 
 export type ChipVariant = "assist" | "filter" | "input" | "suggestion";
 
@@ -90,18 +89,16 @@ export function Chip({
           {leading}
           {label}
         </button>
-        <Tooltip content={removeAriaLabel}>
-          <IconButton
-            type="button"
-            className="fynns-chip-remove-btn"
-            aria-label={removeAriaLabel}
-            disabled={disabled}
-            size="sm"
-            onClick={onRemove}
-          >
-            <CloseIcon size={14} />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          type="button"
+          className="fynns-chip-remove-btn"
+          aria-label={removeAriaLabel}
+          disabled={disabled}
+          size="sm"
+          onClick={onRemove}
+        >
+          <CloseIcon size={14} />
+        </IconButton>
       </div>
     );
   }

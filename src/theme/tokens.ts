@@ -585,8 +585,8 @@ export const BANNER_TOKENS = {
 
 /**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Distinct from sidebar
- * `ListRow` / `ListGroup` chrome.
+ * One-line 56dp; two-line 72dp; three-line 88dp. Sidebar destinations use
+ * Navigation* chrome (not deleted ListRow / ListGroup).
  * `--fynns-list-<key>`.
  */
 export const LIST_TOKENS = {
@@ -804,14 +804,17 @@ export const LAYOUT_TOKENS = {
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
   /**
-   * Equal outer inset for panel shells (Collapsible, Drawer, Card content).
-   * 18dp — between `space-lg` (16dp) and Dialog `dialog-inset` (24dp).
-   * Do not force BottomSheet / Snackbar / ListItem onto this.
+   * Equal outer inset for Collapsible / Drawer / Card content (18dp).
+   * Also: centered Dialog body **block** padding (top = bottom) — denser than
+   * `dialog-inset` while staying symmetric. Between `space-lg` (16dp) and
+   * Dialog `dialog-inset` (24dp). Do not force BottomSheet / Snackbar /
+   * ListItem onto this.
    */
   "content-inset": "1.125rem",
   /**
-   * Equal outer inset for centered Dialog / ConfirmDialog (24dp).
-   * Distinct from `content-inset` — dialogs keep a larger breath.
+   * Dialog shell inset (24dp): head / foot / body **inline**. Distinct from
+   * `content-inset` (body block). Prefer these two over ad-hoc `--fynns-space-*`
+   * so nested Card sits symmetrically in the shell.
    */
   "dialog-inset": "1.5rem",
   /** Bottom sheet — M3 max width 640dp. */

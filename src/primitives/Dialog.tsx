@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
-import { Tooltip } from "./Tooltip";
 
 export type DialogVariant = "centered" | "command" | "drawer" | "sheet" | "fullscreen";
 
@@ -342,16 +341,14 @@ export function Dialog({
           <div className="fynns-dialog-head-actions">
             {headActions}
             {showCloseButton ? (
-              <Tooltip content={closeAriaLabel}>
-                <IconButton
-                  variant="ghost"
-                  className="fynns-dialog-close"
-                  aria-label={closeAriaLabel}
-                  onClick={close}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                variant="ghost"
+                className="fynns-dialog-close"
+                aria-label={closeAriaLabel}
+                onClick={close}
+              >
+                <CloseIcon />
+              </IconButton>
             ) : null}
           </div>
         </div>
@@ -479,16 +476,14 @@ export function FullscreenDialog({
       labelledBy={titleId}
     >
       <div className="fynns-dialog-head fynns-dialog-head--fullscreen">
-        <Tooltip content={closeAriaLabel}>
-          <IconButton
-            variant="ghost"
-            className="fynns-dialog-close"
-            aria-label={closeAriaLabel}
-            onClick={close}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          variant="ghost"
+          className="fynns-dialog-close"
+          aria-label={closeAriaLabel}
+          onClick={close}
+        >
+          <CloseIcon />
+        </IconButton>
         <h2 id={titleId} className="fynns-dialog-title">
           {title}
         </h2>

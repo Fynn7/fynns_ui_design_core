@@ -334,6 +334,19 @@ const en = {
   "globals.emptyAction": "Create project",
   "globals.emptyHelp":
     "EmptyState is layout-only (icon + title + description + actions). Pass Button CTAs yourself.",
+  "globals.busyRegionLabel": "Loading section",
+  "globals.busyRegionMessage": "Refreshing this block…",
+  "globals.busyRegionBody":
+    "Section content stays mounted under a dim layer while BusyRegion is busy.",
+  "globals.busyRegionStart": "Show busy",
+  "globals.busyRegionStop": "Clear busy",
+  "globals.busyRegionHelp":
+    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root.",
+  "globals.busyScrimOpen": "Show fullscreen busy (2s)",
+  "globals.busyScrimLabel": "Loading",
+  "globals.busyScrimMessage": "Working — please wait…",
+  "globals.busyScrimHelp":
+    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + ring + message. Auto-closes here after 2s.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -374,6 +387,17 @@ const en = {
   "globals.dialogDescription": "Floating modal with focus trap and scrim.",
   "globals.dialogBody": "Use for settings and short forms that should not fill the viewport.",
   "globals.dialogClose": "Close",
+  "globals.nestedDialogOpen": "Open nested dialog",
+  "globals.nestedDialogTitle": "LLM-style form",
+  "globals.nestedDialogDescription":
+    "Same outlined Card section as the page sample — Dialog is only one optional host.",
+  "globals.nestedDialogFieldLabel": "System prompt",
+  "globals.nestedDialogExpandTip": "Open in large editor",
+  "globals.nestedDialogResetTip": "Restore default",
+  "globals.nestedSectionHelp":
+    "Nested section recipe (host-agnostic): Card outlined + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Never stack elevated Card on the same surface.",
+  "globals.nestedDialogHelp":
+    "Optional Dialog host of the same Card + FieldBlock recipe (not required for nesting).",
   "globals.confirmOpen": "Open confirm",
   "globals.confirmTitle": "Delete history?",
   "globals.confirmDescription": "This cannot be undone.",
@@ -691,7 +715,7 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Prefer ListGroup / ListRow for sidebar master/detail.",
+    "M3 content List / ListItem (1–3 lines). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardSubtitle": "Uses radius-md",
@@ -1093,6 +1117,19 @@ const zh: Record<MessageKey, string> = {
   "globals.emptyAction": "创建项目",
   "globals.emptyHelp":
     "EmptyState 只负责布局（图标 + 标题 + 说明 + 操作区）。CTA 自行传入 Button。",
+  "globals.busyRegionLabel": "区块加载中",
+  "globals.busyRegionMessage": "正在刷新此区域…",
+  "globals.busyRegionBody":
+    "BusyRegion 为 busy 时，区块内容仍挂载在半透明遮罩下方。",
+  "globals.busyRegionStart": "显示 busy",
+  "globals.busyRegionStop": "清除 busy",
+  "globals.busyRegionHelp":
+    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。",
+  "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
+  "globals.busyScrimLabel": "加载中",
+  "globals.busyScrimMessage": "处理中，请稍候…",
+  "globals.busyScrimHelp":
+    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 圆环 + 文案。此处 2 秒后自动关闭。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",
@@ -1133,6 +1170,17 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogDescription": "带焦点陷阱与遮罩的浮动模态。",
   "globals.dialogBody": "适合设置与短表单，不必占满视口。",
   "globals.dialogClose": "关闭",
+  "globals.nestedDialogOpen": "打开嵌套对话框",
+  "globals.nestedDialogTitle": "类 LLM 表单",
+  "globals.nestedDialogDescription":
+    "与页内样例相同的 outlined Card 分区 — Dialog 只是可选宿主之一。",
+  "globals.nestedDialogFieldLabel": "系统提示词",
+  "globals.nestedDialogExpandTip": "在大编辑器中打开",
+  "globals.nestedDialogResetTip": "恢复默认",
+  "globals.nestedSectionHelp":
+    "嵌套分区配方（宿主无关）：Card outlined + FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。勿在同层表面再叠 elevated Card。",
+  "globals.nestedDialogHelp":
+    "可选：把同一 Card + FieldBlock 配方放进 Dialog（嵌套并不要求 Dialog）。",
   "globals.confirmOpen": "打开确认框",
   "globals.confirmTitle": "删除历史？",
   "globals.confirmDescription": "此操作无法撤销。",
@@ -1450,7 +1498,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。侧栏主从列表请优先用 ListGroup / ListRow。",
+    "M3 内容列表 List / ListItem（1–3 行）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardSubtitle": "使用 radius-md",

@@ -11,6 +11,8 @@ import {
   BottomAppBar,
   BottomSheet,
   Breadcrumb,
+  BusyRegion,
+  BusyScrim,
   Button,
   Pagination,
   Card,
@@ -47,6 +49,7 @@ import {
   Fab,
   FabMenu,
   FabMenuItem,
+  FieldBlock,
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
@@ -108,7 +111,7 @@ import {
   Slider,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 
@@ -225,7 +228,13 @@ export function GlobalsPage() {
   const [stepperIndex, setStepperIndex] = useState(1);
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [busyRegion, setBusyRegion] = useState(false);
+  const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
+  const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
+  const [nestedPrompt, setNestedPrompt] = useState(
+    "You translate natural-language requests into structured camera commands.",
+  );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
@@ -240,6 +249,56 @@ export function GlobalsPage() {
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
   const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
   const [rhythmMedia, setRhythmMedia] = useState(false);
+
+  useEffect(() => {
+    if (!busyScrimOpen) return;
+    const timer = window.setTimeout(() => setBusyScrimOpen(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [busyScrimOpen]);
+
+  const nestedPromptDefault =
+    "You translate natural-language requests into structured camera commands.";
+
+  /** Host-agnostic section recipe — reuse inline or inside Dialog/Drawer. */
+  const renderNestedPromptSection = (fieldId: string) => (
+    <Card variant="outlined">
+      <CardContent>
+        <FieldBlock
+          label={t("globals.nestedDialogFieldLabel")}
+          htmlFor={fieldId}
+          actions={
+            <>
+              <Tooltip content={t("globals.nestedDialogExpandTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.nestedDialogExpandTip")}
+                >
+                  <LayoutGridIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.nestedDialogResetTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.nestedDialogResetTip")}
+                  onClick={() => setNestedPrompt(nestedPromptDefault)}
+                >
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          }
+        >
+          <Textarea
+            id={fieldId}
+            value={nestedPrompt}
+            onChange={(event) => setNestedPrompt(event.target.value)}
+            placeholder={t("globals.textareaPlaceholder")}
+            aria-label={t("globals.nestedDialogFieldLabel")}
+          />
+        </FieldBlock>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="sandbox-globals" id="main">
@@ -1175,6 +1234,10 @@ export function GlobalsPage() {
             </Card>
           ))}
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          {renderNestedPromptSection("sandbox-nested-prompt")}
+          <SandboxHelp text={t("globals.nestedSectionHelp")} />
+        </div>
         <Collapsible title={t("globals.collapsible")} defaultOpen>
           <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
@@ -1185,6 +1248,9 @@ export function GlobalsPage() {
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
           </Button>
+          <Button size="sm" variant="tonal" onClick={() => setNestedDialogOpen(true)}>
+            {t("globals.nestedDialogOpen")}
+          </Button>
           <Button size="sm" variant="danger" onClick={() => setConfirmOpen(true)}>
             {t("globals.confirmOpen")}
           </Button>
@@ -1192,6 +1258,7 @@ export function GlobalsPage() {
             {t("globals.drawerOpen")}
           </Button>
         </div>
+        <SandboxHelp text={t("globals.nestedDialogHelp")} />
         <BottomSheet
           open={sheetOpen}
           onClose={() => setSheetOpen(false)}
@@ -1214,6 +1281,17 @@ export function GlobalsPage() {
           closeAriaLabel={t("globals.dialogClose")}
         >
           <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
+        </Dialog>
+        <Dialog
+          open={nestedDialogOpen}
+          onOpenChange={setNestedDialogOpen}
+          title={t("globals.nestedDialogTitle")}
+          description={t("globals.nestedDialogDescription")}
+          size="md"
+          closeAriaLabel={t("globals.dialogClose")}
+          showCloseButton
+        >
+          {renderNestedPromptSection("sandbox-nested-prompt-dialog")}
         </Dialog>
         <ConfirmDialog
           open={confirmOpen}
@@ -1267,6 +1345,44 @@ export function GlobalsPage() {
             }
           />
           <SandboxHelp text={t("globals.emptyHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <BusyRegion
+            busy={busyRegion}
+            label={t("globals.busyRegionLabel")}
+            message={t("globals.busyRegionMessage")}
+          >
+            <Card variant="outlined">
+              <CardContent>
+                <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
+              </CardContent>
+            </Card>
+          </BusyRegion>
+          <div className="sandbox-globals-row">
+            <Button size="sm" onClick={() => setBusyRegion(true)} disabled={busyRegion}>
+              {t("globals.busyRegionStart")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegion(false)}
+              disabled={!busyRegion}
+            >
+              {t("globals.busyRegionStop")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.busyRegionHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Button onClick={() => setBusyScrimOpen(true)}>
+            {t("globals.busyScrimOpen")}
+          </Button>
+          <BusyScrim
+            open={busyScrimOpen}
+            label={t("globals.busyScrimLabel")}
+            message={t("globals.busyScrimMessage")}
+          />
+          <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Stepper

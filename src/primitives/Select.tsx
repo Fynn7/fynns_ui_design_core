@@ -32,7 +32,8 @@ function normalize(option: string | SelectOption): SelectOption {
 /**
  * Dropdown that reuses `SearchBar` chrome end-to-end: same elevated capsule,
  * same docked results shell (`.fynns-search-bar--expanded` +
- * `.fynns-search-bar-results` / `.fynns-search-bar-result`), same type tokens.
+ * `.fynns-search-bar-results` / `.fynns-search-bar-result`), same type tokens,
+ * and the same `.fynns-expand` open/close height morph.
  * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
  * Replaces native `<select>`.
  * @see https://m3.material.io/components/menus/overview
@@ -146,7 +147,7 @@ export function Select({
           )}
           aria-haspopup="listbox"
           aria-expanded={open}
-          aria-controls={open ? listId : undefined}
+          aria-controls={listId}
           aria-label={ariaLabel}
           onClick={toggleOpen}
           onKeyDown={onTriggerKeyDown}
@@ -166,37 +167,47 @@ export function Select({
           <ChevronDownIcon className="fynns-select-trigger-chevron" />
         </span>
       </div>
-      {open ? (
+      {normalized.length > 0 ? (
         <div
-          id={listId}
-          role="listbox"
-          aria-label={ariaLabel}
-          className={mergeScrollSurfaceClass(
-            "fynns-search-bar-results fynns-select-list",
-          )}
+          className="fynns-expand fynns-search-bar-panel"
+          data-state={open ? "open" : "closed"}
         >
-          {normalized.map((option, index) => {
-            const selected = option.value === value;
-            const active = index === activeIndex;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                role="option"
-                aria-selected={selected}
-                disabled={option.disabled}
-                className={join(
-                  "fynns-search-bar-result",
-                  (active || selected) && "fynns-search-bar-result--active",
-                )}
-                onMouseDown={(event) => event.preventDefault()}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={() => !option.disabled && pick(option.value)}
-              >
-                {option.label ?? option.value}
-              </button>
-            );
-          })}
+          <div className="fynns-expand-inner">
+            <div
+              id={listId}
+              role="listbox"
+              aria-label={ariaLabel}
+              aria-hidden={!open}
+              inert={open ? undefined : true}
+              className={mergeScrollSurfaceClass(
+                "fynns-search-bar-results fynns-select-list",
+              )}
+            >
+              {normalized.map((option, index) => {
+                const selected = option.value === value;
+                const active = index === activeIndex;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={selected}
+                    disabled={option.disabled}
+                    tabIndex={open ? undefined : -1}
+                    className={join(
+                      "fynns-search-bar-result",
+                      (active || selected) && "fynns-search-bar-result--active",
+                    )}
+                    onMouseDown={(event) => event.preventDefault()}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    onClick={() => !option.disabled && pick(option.value)}
+                  >
+                    {option.label ?? option.value}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

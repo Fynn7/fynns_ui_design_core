@@ -1,4 +1,4 @@
-import { Button, FullscreenDialog, Tooltip } from "@fynns/ui";
+import { Button, FullscreenDialog, Tooltip, snackbar } from "@fynns/ui";
 import { useState } from "react";
 import {
   applyTokenOverrides,
@@ -12,6 +12,7 @@ type Phase = "idle" | "previewing" | "review" | "applying";
 
 /**
  * Inspector footer controls: reset draft, then preview/confirm writeback.
+ * Transient feedback goes through imperative `snackbar` (not inline footer text).
  */
 export function ApplyChangesControl() {
   const { t } = useLocale();
@@ -21,20 +22,23 @@ export function ApplyChangesControl() {
   const [files, setFiles] = useState<ApplyFileDiff[]>([]);
   const [appliedCount, setAppliedCount] = useState(0);
   const [skippedCount, setSkippedCount] = useState(0);
-  const [status, setStatus] = useState<string | null>(null);
 
   const busy = phase === "previewing" || phase === "applying";
   const reviewOpen = phase === "review" || phase === "applying";
   const changedFiles = files.filter((f) => f.changed);
+  const dismissAriaLabel = t("globals.snackbarDismiss");
+
+  const notify = (message: string) => {
+    snackbar(message, { dismissAriaLabel });
+  };
 
   const openReview = async () => {
     if (overrideCount === 0 || busy) return;
     setPhase("previewing");
-    setStatus(null);
     try {
       const preview = await previewTokenOverrides(draft.overrides);
       if (!preview.ok) {
-        setStatus(preview.error ?? t("apply.toastPreviewFailed"));
+        notify(preview.error ?? t("apply.toastPreviewFailed"));
         setPhase("idle");
         return;
       }
@@ -43,7 +47,7 @@ export function ApplyChangesControl() {
       setSkippedCount(preview.skipped.length);
       setPhase("review");
     } catch (err) {
-      setStatus(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
+      notify(err instanceof Error ? err.message : t("apply.toastPreviewFailed"));
       setPhase("idle");
     }
   };
@@ -60,7 +64,7 @@ export function ApplyChangesControl() {
     try {
       const result = await applyTokenOverrides(draft.overrides);
       if (!result.ok) {
-        setStatus(result.error ?? t("apply.toastApplyFailed"));
+        notify(result.error ?? t("apply.toastApplyFailed"));
         setPhase("review");
         return;
       }
@@ -68,17 +72,17 @@ export function ApplyChangesControl() {
       setPhase("idle");
       setFiles([]);
       if (result.skipped.length > 0) {
-        setStatus(
+        notify(
           t("apply.toastPartial", {
             applied: result.applied.length,
             skipped: result.skipped.length,
           }),
         );
       } else {
-        setStatus(t("apply.toastOk", { applied: result.applied.length }));
+        notify(t("apply.toastOk", { applied: result.applied.length }));
       }
     } catch (err) {
-      setStatus(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
+      notify(err instanceof Error ? err.message : t("apply.toastApplyFailed"));
       setPhase("review");
     }
   };
@@ -92,7 +96,7 @@ export function ApplyChangesControl() {
           disabled={overrideCount === 0 || busy}
           onClick={() => {
             reset();
-            setStatus(t("topbar.resetToast"));
+            notify(t("topbar.resetToast"));
           }}
         >
           {t("topbar.reset")}
@@ -108,7 +112,6 @@ export function ApplyChangesControl() {
           {phase === "previewing" ? t("apply.preparing") : t("apply.button")}
         </Button>
       </Tooltip>
-      {status ? <p className="sandbox-muted sandbox-apply-status" role="status">{status}</p> : null}
 
       <FullscreenDialog
         open={reviewOpen}

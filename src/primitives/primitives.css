@@ -484,6 +484,8 @@
 
 .fynns-splitbtn-main.fynns-btn {
   position: relative;
+  /* Keep the join hairline above the trailing half (boxes abut with 0 gap). */
+  z-index: 1;
   /* Outer start stadium; flush inner end. */
   border-radius: var(--fynns-radius-pill) 0 0 var(--fynns-radius-pill);
   /* Join side open — one shared divider is painted via ::after. */
@@ -508,7 +510,8 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  inset-inline-end: 0;
+  /* Sit on the abutting edge so the trailing half cannot cover it. */
+  inset-inline-end: calc(var(--fynns-border-hairline) / -2);
   width: var(--fynns-border-hairline);
   background: color-mix(
     in srgb,
@@ -516,29 +519,39 @@
     transparent
   );
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
   transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 /*
- * Outlined: join tracks the accent outline (not border-strong — that disappears
- * against the dark fill when the outer stroke brightens on hover).
+ * Outlined: join matches the shared outer stroke (`--fynns-color-border`),
+ * and tracks the same hover mix as `.fynns-btn:hover` — not solid accent
+ * (that read as a bright seam between two dark outlined halves).
  */
 .fynns-splitbtn[data-variant="default"] .fynns-splitbtn-main.fynns-btn::after {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) 55%,
-    var(--fynns-color-border)
-  );
+  background: var(--fynns-color-border);
 }
 
+/*
+ * Mid seam tracks whichever half is active at the join — never the other
+ * half's outer stroke. Trigger has no start border; if the seam stayed dark
+ * while the trigger outline brightened, the hairline read as "vanished".
+ */
 .fynns-splitbtn[data-variant="default"]
   .fynns-splitbtn-main.fynns-btn:hover:not(:disabled)::after,
 .fynns-splitbtn[data-variant="default"]:has(
     .fynns-splitbtn-menu-trigger:hover:not(:disabled)
   )
+  .fynns-splitbtn-main.fynns-btn::after,
+.fynns-splitbtn[data-variant="default"]:has(
+    .fynns-splitbtn-menu-trigger--open
+  )
   .fynns-splitbtn-main.fynns-btn::after {
-  background: var(--fynns-color-accent);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 60%,
+    var(--fynns-color-border)
+  );
 }
 
 .fynns-splitbtn-main-icon {
@@ -562,6 +575,8 @@
   display: flex;
   align-items: stretch;
   flex: 0 0 auto;
+  position: relative;
+  z-index: 0;
 }
 
 .fynns-splitbtn-menu-trigger.fynns-btn {
@@ -572,6 +587,24 @@
   align-self: stretch;
   height: auto;
   min-height: 0;
+}
+
+/*
+ * Outlined trailing: standalone IconButton `default` uses border-strong (brighter).
+ * Rest stroke matches the leading half / mid seam. Do not sync hover across
+ * halves — only the hovered segment brightens.
+ */
+.fynns-splitbtn[data-variant="default"] .fynns-splitbtn-menu-trigger.fynns-btn {
+  border-color: var(--fynns-color-border);
+}
+
+.fynns-splitbtn[data-variant="default"]
+  .fynns-splitbtn-menu-trigger.fynns-btn:hover:not(:disabled) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 60%,
+    var(--fynns-color-border)
+  );
 }
 
 .fynns-splitbtn-chevron {
@@ -594,7 +627,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-xs);
+  width: 100%;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 .fynns-field-shell {
@@ -650,6 +685,9 @@
 }
 
 .fynns-input {
+  /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
+  width: 100%;
+  box-sizing: border-box;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
@@ -739,6 +777,8 @@
 }
 
 .fynns-textarea {
+  width: 100%;
+  box-sizing: border-box;
   min-height: 6rem;
   resize: vertical;
   line-height: var(--fynns-line-height-body);
@@ -855,6 +895,10 @@
   display: inline-flex;
 }
 
+/*
+ * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
+ * state layers never kiss the outer edge.
+ */
 .fynns-menu {
   position: fixed;
   z-index: var(--fynns-z-dropdown);
@@ -864,9 +908,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-2xs);
-  padding: var(--fynns-space-xs);
+  padding: var(--fynns-space-sm);
   border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  border-radius: var(--fynns-radius-lg);
+  border-radius: var(--fynns-radius-xl);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
@@ -908,7 +952,7 @@
 .fynns-menu-label {
   box-sizing: border-box;
   /* Extra block-start so section titles clear the menu edge / prior separator. */
-  padding: var(--fynns-space-sm) var(--fynns-space-sm) var(--fynns-space-xs);
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-xs);
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-xs);
   font-weight: var(--fynns-font-weight-medium);
@@ -924,6 +968,11 @@
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
+/*
+ * Menu item: 48dp row, 12dp inline pad. Highlight shape matches SearchBar /
+ * Select / Autocomplete results (`radius-3xl` long-strip) so all “dropdown
+ * list” surfaces share one hover language. Fill state-layer, not an outer ring.
+ */
 .fynns-menu-item {
   display: flex;
   align-items: center;
@@ -931,9 +980,9 @@
   width: 100%;
   min-height: var(--fynns-size-icon-target);
   margin: 0;
-  padding: var(--fynns-space-xs) var(--fynns-space-sm);
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
   border: 0;
-  border-radius: var(--fynns-radius-md);
+  border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
   text-align: left;
@@ -954,7 +1003,20 @@
 
 .fynns-menu-item:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-menu-item:hover:not(:disabled):focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
 }
 
 .fynns-menu-item:disabled {
@@ -1154,14 +1216,15 @@
 .fynns-dialog-overlay--centered {
   display: grid;
   place-items: center;
-  padding: 1rem;
+  padding: var(--fynns-space-lg);
 }
 
 .fynns-dialog-overlay--command {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: var(--fynns-layout-command-palette-top-padding) 1rem 1rem;
+  padding: var(--fynns-layout-command-palette-top-padding) var(--fynns-space-lg)
+    var(--fynns-space-lg);
 }
 
 .fynns-dialog-overlay--fullscreen {
@@ -1283,8 +1346,10 @@
 }
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
- * Outer inset via `--fynns-layout-dialog-inset` (24dp) on all sides.
- * Collapsible / Drawer / Card use `--fynns-layout-content-inset` (18dp). */
+ * Shell breath uses layout inset tokens only (no ad-hoc `--fynns-space-*`):
+ * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
+ * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
+ * Card sits a touch denser while staying symmetric. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
@@ -1297,8 +1362,8 @@
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-body {
-  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset)
-    var(--fynns-layout-dialog-inset);
+  padding-block: var(--fynns-layout-content-inset);
+  padding-inline: var(--fynns-layout-dialog-inset);
 }
 
 /* Body/description before actions: drop bottom pad so foot owns the outer inset. */
@@ -1324,8 +1389,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.65rem 0.75rem;
+  gap: var(--fynns-space-md);
+  /* Base for FullscreenDialog / non-centered shells; centered overrides below. */
+  padding: var(--fynns-layout-content-inset);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-head);
 }
@@ -1341,7 +1407,7 @@
 .fynns-dialog-head-actions {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--fynns-space-15);
   flex-shrink: 0;
 }
 
@@ -1381,13 +1447,13 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
-  gap: var(--fynns-space-2);
-  padding: 0 0.85rem 1rem;
+  gap: var(--fynns-space-sm);
+  padding: 0 var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset);
 }
 
 .fynns-dialog-description {
   margin: 0;
-  padding: 0.75rem 0.85rem 0;
+  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset) 0;
   font-size: var(--fynns-font-size-form-label);
   color: var(--fynns-color-text-muted);
 }
@@ -1396,7 +1462,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 1rem 0.85rem;
+  /* FullscreenDialog + other non-centered shells; centered overrides inset. */
+  padding: var(--fynns-layout-content-inset);
 }
 
 .fynns-dialog-panel--command .fynns-dialog-body {
@@ -1472,16 +1539,20 @@
   transform: translateX(-100%);
 }
 
-/* Side sheet head: no IDE surface-head strip; equal content-inset outer edges. */
+/* Side sheet head: no IDE surface-head strip; equal content-inset on all
+ * edges so the close IconButton hover disk clears the hairline (padding-bottom
+ * must not be 0 — that was clipping the state layer into the divider). */
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
   background: transparent;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
+  padding: var(--fynns-layout-content-inset);
+  align-items: center;
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer)
   > .fynns-dialog-description {
   padding: var(--fynns-space-sm) var(--fynns-layout-content-inset) 0;
+  font-size: var(--fynns-font-size-sm);
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
@@ -3067,31 +3138,56 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
-.fynns-loading-blocking-overlay {
+/* ---------- BusyScrim / BusyRegion (M3 scrim + progress + message) ---------- */
+.fynns-busy-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-layout-unit-stack-gap);
+  max-width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
+  padding: var(--fynns-space-lg);
+  box-sizing: border-box;
+}
+
+.fynns-busy-message {
+  margin: 0;
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-busy-scrim {
   position: fixed;
   inset: 0;
   z-index: var(--fynns-z-modal);
   display: grid;
   place-items: center;
   background: var(--fynns-color-overlay);
+  outline: none;
 }
 
-.fynns-loading-blocking-overlay-card {
-  display: grid;
-  justify-items: center;
-  gap: 0.75rem;
-  min-width: 14rem;
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-surface-head);
-  padding: 1.2rem;
-  box-shadow: var(--fynns-shadow-lg);
-}
-
-.fynns-loading-blocking-overlay-text {
-  margin: 0;
+.fynns-busy-scrim .fynns-busy-message {
   color: var(--fynns-color-text);
-  font-size: var(--fynns-font-size-form-label);
+}
+
+.fynns-busy-region {
+  position: relative;
+  isolation: isolate;
+}
+
+.fynns-busy-region-content {
+  min-width: 0;
+}
+
+.fynns-busy-region-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--fynns-color-surface-1) 78%, transparent);
+  pointer-events: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3335,6 +3431,53 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-card-header + .fynns-card-content {
   padding-top: var(--fynns-space-sm);
+}
+
+/* FieldHeader / FieldBlock as first child: denser top than full content-inset. */
+.fynns-card-content:has(> .fynns-field-header:first-child),
+.fynns-card-content:has(> .fynns-field-block:first-child) {
+  padding-top: var(--fynns-space-sm);
+}
+
+/* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
+.fynns-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  /* Breath around sm IconButton hover disks (avoid clipping the state layer). */
+  padding-block: var(--fynns-space-xs);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-header__label {
+  margin: 0;
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-field-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  flex-shrink: 0;
+}
+
+.fynns-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-block:not(:last-child) {
+  margin-bottom: var(--fynns-space-md);
 }
 
 /* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath
@@ -5805,16 +5948,20 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-lg);
 }
 
+/*
+ * Keyboard focus: elevation + system focus ring (color-focus). Do not use
+ * accent-ring / accent-soft glow on the shell.
+ */
 .fynns-search-bar--expanded:focus-within {
-  box-shadow:
-    var(--fynns-shadow-lg),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: var(--fynns-shadow-lg);
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 .fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: var(--fynns-shadow-md);
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 .fynns-search-bar--disabled {
@@ -5876,9 +6023,10 @@ a.fynns-breadcrumb-link:visited {
   appearance: none;
 }
 
-/* Results share the expanded shell. Row highlight matches NavigationDrawer
-   items (`radius-3xl`); inset from the shell edge so hover does not kiss the
-   outer curve. Height morph via shared `.fynns-expand` (open ↔ closed). */
+/* Results share the expanded shell. Row highlight matches DropdownMenu items
+   (`radius-3xl` long-strip) — one hover language for all dropdown lists.
+   Inset from the shell edge so hover does not kiss the outer curve.
+   Height morph via shared `.fynns-expand` (open ↔ closed). */
 
 .fynns-search-bar-results {
   box-sizing: border-box;
@@ -5896,8 +6044,7 @@ a.fynns-breadcrumb-link:visited {
   border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
-/* Opacity fade only for SearchBar’s expand panel — Select/Autocomplete mount
-   `.fynns-search-bar-results` directly and must stay fully visible. */
+/* Opacity fade for SearchBar / Select / Autocomplete expand panels. */
 .fynns-search-bar-panel .fynns-search-bar-results {
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
@@ -5916,9 +6063,10 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   min-height: 2.5rem;
   margin: 0;
-  padding-block: var(--fynns-space-xs);
+  padding-block: var(--fynns-space-sm);
   padding-inline: var(--fynns-space-md);
   border: 0;
+  /* Same long-strip highlight as `.fynns-menu-item`. */
   border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
@@ -5940,7 +6088,21 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-search-bar-result:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:hover:not(:disabled):focus-visible,
+.fynns-search-bar-result--active:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
 }
 
 .fynns-search-bar-result:disabled {
@@ -6361,6 +6523,10 @@ a.fynns-breadcrumb-link:visited {
   grid-column: 1 / span 5;
   margin: 0;
   min-width: 0;
+  /* Optical align with centered weekday/day glyphs in column 1. */
+  padding-inline-start: calc(
+    (var(--fynns-datepicker-day-size) - 1em) / 2
+  );
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -6722,7 +6888,8 @@ a.fynns-breadcrumb-link:visited {
   inset-inline-end: -1px;
 }
 
-/* Accent discs stay day-size (cell is wider than the disc in range layout). */
+/* Accent discs: never exceed the cell (narrow dialog hosts used to keep a
+ * fixed day-size disc → overflow + body scrollbar). */
 .fynns-datepicker--range .fynns-datepicker-day--range-start::after,
 .fynns-datepicker--range .fynns-datepicker-day--range-end::after {
   content: "";
@@ -6730,8 +6897,8 @@ a.fynns-breadcrumb-link:visited {
   z-index: 1;
   top: 50%;
   left: 50%;
-  width: var(--fynns-datepicker-day-size);
-  height: var(--fynns-datepicker-day-size);
+  width: min(100%, var(--fynns-datepicker-day-size));
+  height: min(100%, var(--fynns-datepicker-day-size));
   translate: -50% -50%;
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-accent);
@@ -6792,20 +6959,14 @@ a.fynns-breadcrumb-link:visited {
   background: transparent;
 }
 
-.fynns-datepicker-dialog-body {
-  display: flex;
-  justify-content: center;
-  padding-block: var(--fynns-space-sm);
-}
-
-.fynns-datepicker-dialog-body .fynns-datepicker {
-  box-shadow: none;
-  background: transparent;
-  padding: 0;
-}
-
-/* Minimal M3 modal date picker: ExtraLarge corners + supporting selection line. */
+/*
+ * Modal DatePicker / DateRangePicker: same calendar metrics as the docked
+ * control. Do not strip pad-inline (that + dialog-inset squeezed day cells
+ * below day-size and made range discs overflow into a scrollbar).
+ */
 .fynns-dialog-panel.fynns-datepicker-dialog {
+  /* Fit the calendar; ignore the generic centered min 280dp squeeze. */
+  min-width: max-content;
   width: max-content;
   max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
   border-radius: var(--fynns-radius-3xl);
@@ -6814,11 +6975,32 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-xl);
 }
 
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-datepicker-dialog-body {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  /* Light outer breath; calendar keeps its own pad-* tokens. */
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-md);
+  overflow: hidden;
+}
+
+.fynns-datepicker-dialog-body .fynns-datepicker {
+  box-shadow: none;
+  background: transparent;
+  /* Keep --fynns-datepicker-pad-* so metrics match the docked picker. */
+  flex: 0 0 auto;
+  width: calc(
+    7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap) +
+      2 * var(--fynns-datepicker-pad-inline)
+  );
+  max-width: 100%;
+}
+
 .fynns-datepicker-dialog .fynns-datepicker-dialog-head {
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: transparent;
   align-items: flex-start;
-  padding: var(--fynns-space-lg) var(--fynns-space-md) var(--fynns-space-sm);
+  padding: var(--fynns-space-lg) var(--fynns-space-lg) var(--fynns-space-md);
 }
 
 .fynns-datepicker-dialog-titles {
@@ -6846,9 +7028,9 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
 }
 
-.fynns-datepicker-dialog .fynns-dialog-foot {
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-dialog-foot {
   border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
+  padding: var(--fynns-space-md) var(--fynns-space-lg) var(--fynns-space-lg);
 }
 
 /* —— TimePicker (M3 input / digital) ————————————————————————— */
@@ -6914,7 +7096,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-timepicker-field:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-timepicker-field--active {
@@ -6999,7 +7181,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-timepicker-period-btn:focus-visible {
   outline: none;
   z-index: 1;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-timepicker-period-btn--selected {
@@ -7070,7 +7252,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-carousel:focus-visible {
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
   border-radius: var(--fynns-radius-md);
 }
 
@@ -7179,7 +7361,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-carousel-indicator:focus-visible {
   outline: none;
-  box-shadow: var(--fynns-focus);
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-carousel-indicator--active {

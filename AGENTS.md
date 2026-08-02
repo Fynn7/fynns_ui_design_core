@@ -38,13 +38,22 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    token>)`, **not** a new hex. Missing value → add a token in `tokens.ts` and run
    `npm run gen:theme`. App/teaching tokens stay namespaced in the app (`--afs-*`
    automata canvas, `--dsa-*` DSA visuals); never add them to this core.
-3. **Every action is an icon button + tooltip — never `title=`.** Use
-   `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
+3. **Icon actions: tooltip when the glyph is not self-evident — never `title=`.**
+   Use `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined). Pure
-   informational help uses **`InfoHint`**: standalone "i" when there is no
+   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined).
+   **Skip Tooltip** on chrome dismiss/clear whose glyph already means the action
+   (Dialog / FullscreenDialog / Drawer / BottomSheet close X, Banner / Snackbar
+   dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
+   Pure informational help uses **`InfoHint`**: standalone "i" when there is no
    visible name; for form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   **Field header actions** (e.g. expand / reset next to a Textarea label): use
+   **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
+   `Tooltip` above the control — not overlaid on the textarea corner). Default
+   `ghost`; dense forms may use `size="sm"`. As the first child of
+   `CardContent`, top inset shrinks to `--fynns-space-sm` (not full
+   `content-inset`). Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
    (`TextLinkButton`) keep a resting solid underline; import/diff actions
@@ -63,14 +72,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
-   `CircularProgress`, `EmptyState`, `Banner` / `Badge`, and imperative
-   `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do **not**
-   use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
+   `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
+   (sectional dim + ring + message), `EmptyState`, `Banner` / `Badge`, and
+   imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
+   **not** use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
    `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
    `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
-   from `--fynns-focus`/`--fynns-color-focus`, and keyboard affordances
+   from `--fynns-focus-ring-width` + `--fynns-color-focus`, and keyboard affordances
    (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
 7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
    motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already
@@ -85,8 +95,21 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    workspace panes: titled head strip + `body` with `fynns-scroll` (do **not**
    expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
-   `NavigationDrawer`; blocking busy: app-local fixed scrim + `CircularProgress`
-   + label (do not revive `BlockingLoadingOverlay`);
+   `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
+   non-dismissible scrim + focus trap + `CircularProgress` + message) or
+   `BusyRegion` (relative dim layer over children; content is `inert` while
+   busy); do not revive `BlockingLoadingOverlay`;
+   **Nested containment** (host → section → field): any `surface-1` (or higher)
+   host — page body, Dialog, Drawer, etc. — may group fields with
+   `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
+   (same surface + stacked shadow). Prefer `FieldBlock` for label-row
+   IconButtons above the control. Rely on Card’s `--fynns-layout-content-inset`;
+   do not add a second page-level outer pad. Consumers choose whether the
+   section lives inline or inside an overlay. Simple forms may put fields
+   directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
+   only when the inner block is an independent interactive subject). Live
+   sample: sandbox Globals → Containment → nested section (+ optional Dialog
+   host). `Input` / `Textarea` fill the parent width by default (`width: 100%`).
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
    it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
@@ -173,9 +196,10 @@ Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
 
 Standard chrome glyph: `--fynns-size-icon` (`1rem` / 16dp) + TS `ICON_SIZE`
-(default for inline icons / IconButton). Nav / Banner / SearchBar / BottomAppBar /
-Toolbar action icons share this. Fab `sm` stays on `--fynns-size-icon-md` (20dp). Dense
-micro glyphs (chip trailing, select chevron, steppers) may stay smaller.
+(exported from `@fynns/ui`; default for inline icons / IconButton). Nav / Banner /
+SearchBar / BottomAppBar / Toolbar action icons share this. Fab `sm` stays on
+`--fynns-size-icon-md` (20dp). Dense micro glyphs (chip trailing, select chevron,
+steppers) may stay smaller.
 
 Font sizes: prefer t-shirt keys `--fynns-font-size-{xs,sm,md,lg,xl,2xl}`;
 legacy semantic keys (`caption`, `form-label`, …) remain.
@@ -203,14 +227,20 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive: leading action +
   trailing `DropdownMenu`; variants `primary` / `tonal` / `default` /
   `elevated`; sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
-- **Fields:** Input, Textarea (dense multiline; no floating label — not full M3
-  Text Field anatomy), Select, Autocomplete, OtpInput, SearchBar /
-  SearchBarResult, Switch, Checkbox, Radio, Chip / ChipSet (`assist` | `filter`
-  | `input` | `suggestion`), Slider, ToggleGroup,
-  Tabs (M3 Primary underline — not a ToggleGroup substitute)
+- **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
+  floating label — not full M3 Text Field anatomy), **FieldHeader** /
+  **FieldBlock** (label | trailing IconButtons above a control), Select,
+  Autocomplete, OtpInput, SearchBar / SearchBarResult, Switch, Checkbox, Radio,
+  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
+  ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
-  CircularProgress,
+  CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
+  **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
+  fullscreen non-dismissible scrim or sectional dim + ring + visible message;
+  `label` is the progress accessible name and the default visible copy when
+  `message` is omitted; `value` in `[0, 1]` for determinate, omit for
+  indeterminate; `size` defaults `md`),
   EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
@@ -231,7 +261,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
-- **Content:** List / ListItem, Card (+ Media / Header / Content / Actions),
+- **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
+  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
+  `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
   Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
@@ -240,11 +272,29 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
   (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
-  Panel shells (Collapsible, Drawer, Card): equal outer inset via
-  `--fynns-layout-content-inset` (18dp). Centered Dialog / ConfirmDialog use
-  `--fynns-layout-dialog-inset` (24dp). BottomSheet keeps asymmetric
-  `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline).
-  Do not force Snackbar / ListItem onto equal four-side padding.
+
+  **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
+
+  | Role | Token |
+  | --- | --- |
+  | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` |
+  | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
+  | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
+  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Vertical stacked units (inspector fields, Collapsible body) | `--fynns-layout-unit-stack-gap` |
+
+  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
+  live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits them via
+  `SANDBOX_LAYOUT_AGENT_CATALOG`.
+
+  **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
+  inset via `--fynns-layout-content-inset` (18dp). Centered Dialog /
+  ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
+  inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
+  FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
+  asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
+  block≠inline). Do not force Snackbar / ListItem onto equal four-side padding.
+  Do not substitute raw `--fynns-space-*` for dialog/panel shell insets.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).

@@ -106,6 +106,17 @@ Do not import deleted APIs (`toast`, `Toaster`, `PanelCard`, …) — see
 
 Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 
+**Token / layout pointers (do not invent hex or rem):**
+- Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
+- Shell insets: Collapsible / Drawer / Card / Fullscreen →
+  `--fynns-layout-content-inset`; centered Dialog head/foot/inline →
+  `--fynns-layout-dialog-inset` (body block also uses content-inset). See
+  AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm**.
+- Focus rings: `--fynns-focus-ring-width` + `--fynns-color-focus` (there is no
+  bare `--fynns-focus`).
+- Design language lives in the submodule’s `AGENTS.md` — the installer does not
+  copy it to the consumer root; open `packages/fynns_ui_design_core/AGENTS.md`.
+
 ## Verify
 
 ```bash

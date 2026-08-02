@@ -5,7 +5,6 @@ import { DURATION_TOKENS } from "../theme/motionTokens";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
-import { Tooltip } from "./Tooltip";
 
 export type SnackbarDuration = "short" | "long" | "indefinite";
 
@@ -228,17 +227,15 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
               </Button>
             ) : null}
             {item.dismissible ? (
-              <Tooltip content={item.dismissAriaLabel}>
-                <IconButton
-                  type="button"
-                  size="sm"
-                  className="fynns-snackbar__dismiss"
-                  aria-label={item.dismissAriaLabel}
-                  onClick={() => store.dismiss(item.id)}
-                >
-                  <CloseIcon size={16} aria-hidden />
-                </IconButton>
-              </Tooltip>
+              <IconButton
+                type="button"
+                size="sm"
+                className="fynns-snackbar__dismiss"
+                aria-label={item.dismissAriaLabel}
+                onClick={() => store.dismiss(item.id)}
+              >
+                <CloseIcon size={16} aria-hidden />
+              </IconButton>
             ) : null}
           </div>
         ) : null}

@@ -14,8 +14,9 @@ export type ListProps = HTMLAttributes<HTMLUListElement>;
 
 /**
  * M3 content List — vertical index of text / images for main content,
- * search results, settings, etc. Prefer `ListGroup` / `ListRow` for
- * sidebar master/detail chrome.
+ * search results, settings, etc. Sidebar destinations: prefer
+ * `NavigationDrawer` / `NavigationRail` / `NavigationBar` (not deleted
+ * `ListGroup` / `ListRow` — see `llm/BREAKING_PURGE.md`).
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(
@@ -70,7 +71,7 @@ function resolveLines(
 
 /**
  * M3 ListItem — one-, two-, or three-line content row with optional
- * leading / trailing slots. Use inside `List`. Not a sidebar `ListRow`.
+ * leading / trailing slots. Use inside `List`.
  */
 export const ListItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,

@@ -15,8 +15,9 @@ Short prompts still require reading `llm/CONSUME.md` first (see
 
 **Public API purge / migration:** `llm/BREAKING_PURGE.md` — only symbols demoed in
 sandbox Globals + Preview are public; do not import deleted APIs (Toast, Popover,
-UnitStack, SearchInput, Panel*, …). Dialog / Drawer / Textarea / Tabs /
-InlineAlert are restored.
+UnitStack, SearchInput, Panel*, BlockingLoadingOverlay, PanelSkeleton, …).
+Dialog / Drawer / Textarea / Tabs / InlineAlert are restored; blocking /
+sectional busy → BusyScrim / BusyRegion.
 
 ## Rules
 
@@ -27,7 +28,7 @@ InlineAlert are restored.
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog, Drawer, FullscreenDialog,
   BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (+ Media/Header/Content/Actions),
-  LinearProgress/CircularProgress, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
+  LinearProgress/CircularProgress, BusyScrim/BusyRegion, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
   EmptyState, Dropzone,
@@ -45,14 +46,18 @@ InlineAlert are restored.
   Vertical unit lists (inspector fields, Collapsible bodies): flex column +
   `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
-  (see AGENTS.md layout helpers / `LAYOUT_TOKENS`); do not invent ad-hoc gaps.
+  (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
+  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog
+  chrome) — AGENTS.md **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
   new radius steps require a GUI row in the same change.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast /
-  Popover / Panel APIs. Transient feedback: `snackbar` + `SnackbarHost`.
+  Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient
+  feedback: `snackbar` + `SnackbarHost`. Blocking / sectional busy:
+  `BusyScrim` / `BusyRegion`.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the submodule
@@ -60,6 +65,14 @@ InlineAlert are restored.
 - Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.
+- Nested containment (host → section → field): page / Dialog / Drawer may host
+  `Card outlined` (not elevated) sections; field-header trailing actions use
+  `FieldHeader` / `FieldBlock` (`IconButton` + `Tooltip`). Overlay optional —
+  agents choose the host. See AGENTS.md **Nested containment** /
+  **Field header actions**.
+- Skip `Tooltip` on self-evident dismiss/clear chrome (Dialog / Drawer /
+  FullscreenDialog close X, Banner / Snackbar dismiss, Chip remove,
+  SearchBar clear) — `aria-label` only. See AGENTS.md principle 3.
 
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
 catalog. Text in this package (docs / default labels) is English or German;

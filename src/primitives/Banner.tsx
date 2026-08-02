@@ -1,7 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { CloseIcon } from "./icons";
 import { IconButton } from "./IconButton";
-import { Tooltip } from "./Tooltip";
 
 export type BannerVariant = "default" | "tonal";
 
@@ -71,16 +70,14 @@ export function Banner({
             <div className="fynns-banner-actions">{actions}</div>
           ) : null}
           {onDismiss != null ? (
-            <Tooltip content={dismissAriaLabel}>
-              <IconButton
-                type="button"
-                size="sm"
-                aria-label={dismissAriaLabel}
-                onClick={onDismiss}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
+            <IconButton
+              type="button"
+              size="sm"
+              aria-label={dismissAriaLabel}
+              onClick={onDismiss}
+            >
+              <CloseIcon />
+            </IconButton>
           ) : null}
         </div>
       ) : null}
