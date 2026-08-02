@@ -5950,8 +5950,7 @@ a.fynns-breadcrumb-link:visited {
   border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
-/* Opacity fade only for SearchBar’s expand panel — Select/Autocomplete mount
-   `.fynns-search-bar-results` directly and must stay fully visible. */
+/* Opacity fade for SearchBar / Select / Autocomplete expand panels. */
 .fynns-search-bar-panel .fynns-search-bar-results {
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);

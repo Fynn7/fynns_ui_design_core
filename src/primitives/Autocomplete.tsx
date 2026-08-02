@@ -39,8 +39,9 @@ function optionLabel(option: AutocompleteOption): string {
 
 /**
  * M3 Autocomplete — filterable text field + docked suggestion list.
- * Chrome matches `Select` / `SearchBar` (elevated capsule + results). Prefer
- * `Select` when typing is not needed; prefer headless `Combobox` for custom UI.
+ * Chrome matches `Select` / `SearchBar` (elevated capsule + results +
+ * `.fynns-expand` open/close morph). Prefer `Select` when typing is not needed;
+ * prefer headless `Combobox` for custom UI.
  */
 export function Autocomplete({
   value,
@@ -209,7 +210,7 @@ export function Autocomplete({
             placeholder={placeholder}
             aria-label={ariaLabel}
             aria-expanded={open}
-            aria-controls={open ? listId : undefined}
+            aria-controls={listId}
             aria-autocomplete="list"
             aria-activedescendant={open ? activeOptionId : undefined}
             aria-invalid={invalid || undefined}
@@ -234,42 +235,53 @@ export function Autocomplete({
             <ChevronDownIcon className="fynns-select-trigger-chevron" />
           </span>
         </div>
-        {open ? (
+        {normalized.length > 0 ? (
           <div
-            id={listId}
-            role="listbox"
-            aria-label={ariaLabel}
-            className={mergeScrollSurfaceClass(
-              "fynns-search-bar-results fynns-autocomplete-list",
-            )}
+            className="fynns-expand fynns-search-bar-panel"
+            data-state={open ? "open" : "closed"}
           >
-            {filtered.length === 0 ? (
-              <div className="fynns-autocomplete-empty">{emptyText}</div>
-            ) : (
-              filtered.map((option, index) => {
-                const selectedRow = option.value === value;
-                const active = index === activeIndex;
-                return (
-                  <button
-                    key={option.value}
-                    id={`${listId}-opt-${index}`}
-                    type="button"
-                    role="option"
-                    aria-selected={selectedRow}
-                    disabled={option.disabled}
-                    className={join(
-                      "fynns-search-bar-result",
-                      (active || selectedRow) && "fynns-search-bar-result--active",
-                    )}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onClick={() => !option.disabled && pick(option)}
-                  >
-                    {optionLabel(option)}
-                  </button>
-                );
-              })
-            )}
+            <div className="fynns-expand-inner">
+              <div
+                id={listId}
+                role="listbox"
+                aria-label={ariaLabel}
+                aria-hidden={!open}
+                inert={open ? undefined : true}
+                className={mergeScrollSurfaceClass(
+                  "fynns-search-bar-results fynns-autocomplete-list",
+                )}
+              >
+                {filtered.length === 0 ? (
+                  <div className="fynns-autocomplete-empty">{emptyText}</div>
+                ) : (
+                  filtered.map((option, index) => {
+                    const selectedRow = option.value === value;
+                    const active = index === activeIndex;
+                    return (
+                      <button
+                        key={option.value}
+                        id={`${listId}-opt-${index}`}
+                        type="button"
+                        role="option"
+                        aria-selected={selectedRow}
+                        disabled={option.disabled}
+                        tabIndex={open ? undefined : -1}
+                        className={join(
+                          "fynns-search-bar-result",
+                          (active || selectedRow) &&
+                            "fynns-search-bar-result--active",
+                        )}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onMouseEnter={() => setActiveIndex(index)}
+                        onClick={() => !option.disabled && pick(option)}
+                      >
+                        {optionLabel(option)}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
           </div>
         ) : null}
       </div>
