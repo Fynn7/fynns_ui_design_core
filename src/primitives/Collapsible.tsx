@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useId, useState } from "react";
-import { ChevronDownIcon } from "./icons";
+import { ChevronRightIcon } from "./icons";
 
 export type CollapsibleProps = {
   /** Header content shown in the always-visible trigger row. */
@@ -70,7 +70,7 @@ export function Collapsible({
           aria-controls={bodyId}
           onClick={toggle}
         >
-          <ChevronDownIcon className="fynns-collapsible-chevron" size={18} />
+          <ChevronRightIcon className="fynns-collapsible-chevron" size={18} />
           <span className="fynns-collapsible-title">{title}</span>
         </button>
         {actions ? <div className="fynns-collapsible-actions">{actions}</div> : null}
