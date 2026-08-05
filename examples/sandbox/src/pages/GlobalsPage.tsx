@@ -110,6 +110,7 @@ import {
   UploadIcon,
   ControlRow,
   ControlStack,
+  Grid,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -1750,7 +1751,9 @@ export function GlobalsPage() {
               />
             </div>
           </Dialog>
-          <div
+          <Grid
+            equalCells
+            gap="sm"
             className="sandbox-globals-code-tokens"
             role="list"
             aria-label={t("globals.codeTokensAria")}
@@ -1765,7 +1768,7 @@ export function GlobalsPage() {
                 <code>{key}</code>
               </div>
             ))}
-          </div>
+          </Grid>
           <SandboxHelp text={t("globals.codeTokensHelp")} />
         </div>
       </GlobalsCategory>

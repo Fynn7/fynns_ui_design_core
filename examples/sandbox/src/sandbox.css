@@ -935,9 +935,7 @@
 }
 
 .sandbox-globals-code-tokens {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  gap: var(--fynns-space-sm);
+  /* Grid equalCells owns tracks; keep full-width in the stack. */
   width: 100%;
 }
 
@@ -951,7 +949,7 @@
 }
 
 .sandbox-globals-code-token code {
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .sandbox-globals-code-token-swatch {
