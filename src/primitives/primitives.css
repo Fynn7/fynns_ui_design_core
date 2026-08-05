@@ -252,12 +252,15 @@
 }
 
 .fynns-btn--danger {
-  border-color: var(--fynns-color-danger-border);
-  color: var(--fynns-color-danger);
+  /* Filled danger — high contrast vs teal accent; ink matches primary on-accent. */
+  background: var(--fynns-color-danger);
+  border-color: transparent;
+  color: var(--fynns-color-on-accent);
 }
 
 .fynns-btn--danger:hover:not(:disabled) {
-  border-color: var(--fynns-color-danger);
+  border-color: transparent;
+  box-shadow: var(--fynns-shadow-glow-danger);
 }
 
 .fynns-btn--ghost {
@@ -335,9 +338,9 @@
 }
 
 .fynns-btn--danger.fynns-btn--active {
-  background: color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+  background: var(--fynns-color-danger);
   border-color: transparent;
-  color: var(--fynns-color-danger);
+  color: var(--fynns-color-on-accent);
 }
 
 .fynns-btn--sm {
@@ -459,7 +462,6 @@
 
 .fynns-btn--icon.fynns-btn--danger:hover:not(:disabled) {
   border-color: transparent;
-  background: transparent;
 }
 
 .fynns-btn--icon svg {
