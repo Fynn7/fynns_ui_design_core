@@ -294,7 +294,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   open: full-bleed hairline under head; focus = quiet Input-like border),
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
+  HeaderCell / Cell / Caption), CodeBlock (`default` head or `plain` headless;
+  copy fades in on hover, keyboard via :focus-visible), Stepper, Dropzone, Avatar /
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid,
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /

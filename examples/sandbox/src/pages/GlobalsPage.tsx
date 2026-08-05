@@ -1582,6 +1582,12 @@ export function GlobalsPage() {
             code={`export const accent = "var(--fynns-color-accent)";\nexport const radius = "var(--fynns-radius-md)";`}
             maxHeight="8rem"
           />
+          <CodeBlock
+            variant="plain"
+            language="py"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))`}
+          />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
         </div>
       </GlobalsCategory>
