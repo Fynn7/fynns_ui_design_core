@@ -19,6 +19,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Surface,
   Checkbox,
   ChevronRightIcon,
   Chip,
@@ -1268,6 +1269,37 @@ export function GlobalsPage() {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           {renderNestedPromptSection("sandbox-nested-prompt")}
           <SandboxHelp text={t("globals.nestedSectionHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Surface padded style={{ maxWidth: "24rem" }}>
+            <div className="sandbox-stack">
+              <Input
+                placeholder={t("globals.surfaceFieldPlaceholder")}
+                aria-label={t("globals.surfaceFieldAria")}
+              />
+              <Button size="sm">{t("globals.surfaceAction")}</Button>
+            </div>
+          </Surface>
+          <Surface
+            style={{
+              height: "7.5rem",
+              maxWidth: "24rem",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "var(--fynns-color-surface-head)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                color: "var(--fynns-color-text-muted)",
+                fontSize: "var(--fynns-font-size-sm)",
+              }}
+            >
+              {t("globals.surfacePreviewLabel")}
+            </p>
+          </Surface>
+          <SandboxHelp text={t("globals.surfaceHelp")} />
         </div>
         <Collapsible title={t("globals.collapsible")} defaultOpen>
           <SandboxHelp text={t("globals.collapsibleHelp")} />

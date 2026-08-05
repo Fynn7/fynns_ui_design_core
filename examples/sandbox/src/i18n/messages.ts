@@ -405,6 +405,12 @@ const en = {
   "globals.nestedDialogResetTip": "Restore default",
   "globals.nestedSectionHelp":
     "Nested section recipe (host-agnostic): Card outlined + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Never stack elevated Card on the same surface.",
+  "globals.surfaceHelp":
+    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need Header / Content / Actions.",
+  "globals.surfaceFieldPlaceholder": "Any control inside",
+  "globals.surfaceFieldAria": "Sample field in Surface",
+  "globals.surfaceAction": "Action",
+  "globals.surfacePreviewLabel": "Preview well",
   "globals.nestedDialogHelp":
     "Optional Dialog host of the same Card + FieldBlock recipe (not required for nesting).",
   "globals.confirmOpen": "Open confirm",
@@ -1211,6 +1217,12 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedDialogResetTip": "恢复默认",
   "globals.nestedSectionHelp":
     "嵌套分区配方（宿主无关）：Card outlined + FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。勿在同层表面再叠 elevated Card。",
+  "globals.surfaceHelp":
+    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要 Header / Content / Actions 时仍用 Card。",
+  "globals.surfaceFieldPlaceholder": "井内任意控件",
+  "globals.surfaceFieldAria": "Surface 内示例字段",
+  "globals.surfaceAction": "操作",
+  "globals.surfacePreviewLabel": "预览井",
   "globals.nestedDialogHelp":
     "可选：把同一 Card + FieldBlock 配方放进 Dialog（嵌套并不要求 Dialog）。",
   "globals.confirmOpen": "打开确认框",
