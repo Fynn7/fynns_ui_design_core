@@ -39,9 +39,8 @@ function optionLabel(option: AutocompleteOption): string {
 
 /**
  * M3 Autocomplete — filterable text field + docked suggestion list.
- * Chrome matches `Select` / `SearchBar` (elevated capsule + results +
- * `.fynns-expand` open/close morph). Prefer `Select` when typing is not needed;
- * prefer headless `Combobox` for custom UI.
+ * Form density matches `Select` / Input (40dp outlined), not chrome SearchBar
+ * 56dp. Prefer `Select` when typing is not needed.
  */
 export function Autocomplete({
   value,

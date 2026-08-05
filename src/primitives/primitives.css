@@ -874,9 +874,8 @@
 }
 
 .fynns-autocomplete--invalid.fynns-search-bar {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 .fynns-autocomplete-list {
@@ -6103,6 +6102,44 @@ a.fynns-breadcrumb-link:visited {
 .fynns-select .fynns-search-bar-input.fynns-select-trigger,
 .fynns-autocomplete .fynns-search-bar-input.fynns-autocomplete-input {
   padding-inline-start: var(--fynns-space-md);
+}
+
+/*
+ * Form density: Select / Autocomplete sit beside Input — use 40dp control
+ * height + Input surface/radius/border, not chrome SearchBar 56dp capsule.
+ * SearchBar itself keeps `--fynns-searchbar-height` / elevation.
+ */
+.fynns-select.fynns-search-bar,
+.fynns-autocomplete.fynns-search-bar {
+  border-radius: var(--fynns-radius-md);
+  border-color: var(--fynns-color-border);
+  background: var(--fynns-color-surface-muted);
+  box-shadow: none;
+}
+
+.fynns-select .fynns-search-bar-field,
+.fynns-autocomplete .fynns-search-bar-field {
+  min-height: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select .fynns-search-bar-trailing,
+.fynns-autocomplete .fynns-search-bar-trailing {
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within,
+.fynns-autocomplete.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow: none;
+}
+
+.fynns-select.fynns-search-bar--expanded,
+.fynns-autocomplete.fynns-search-bar--expanded,
+.fynns-select.fynns-search-bar--expanded:focus-within,
+.fynns-autocomplete.fynns-search-bar--expanded:focus-within {
+  /* Docked results: light elevation only (still not the chrome 56dp field). */
+  box-shadow: var(--fynns-shadow-md);
 }
 
 .fynns-search-bar-input::placeholder {
