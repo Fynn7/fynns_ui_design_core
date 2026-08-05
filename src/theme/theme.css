@@ -346,7 +346,7 @@
   --fynns-navrail-pad-block-start: 2.75rem;
   --fynns-navrail-menu-pad-block: 0.75rem;
   --fynns-navrail-menu-target: 3rem;
-  --fynns-navrail-header-gap: 0.75rem;
+  --fynns-navrail-header-gap: 0.5rem;
   --fynns-navrail-header-pad-block: 0.25rem;
   --fynns-navrail-label-size: 0.75rem;
   --fynns-navrail-label-line: 1.25;
@@ -395,6 +395,7 @@
   --fynns-layout-dialog-max-width-lg: 35rem;
   --fynns-layout-drawer-width: 25rem;
   --fynns-layout-content-inset: 1.125rem;
+  --fynns-layout-content-pad-block: 1rem;
   --fynns-layout-dialog-inset: 1.5rem;
   --fynns-layout-sheet-max-width: 40rem;
   --fynns-layout-sheet-max-height: 90vh;
@@ -427,6 +428,7 @@
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
+  --fynns-layout-field-hint-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;

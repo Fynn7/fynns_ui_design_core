@@ -37,7 +37,7 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
  *
  * 1. sandbox — demo-only `--sandbox-*` (not Apply)
  * 2. rhythm — gaps between units / ControlRows + toolbar label column
- * 3. panelInsets — equal four-side outer pad (Card / Collapsible / Drawer / Dialog)
+ * 3. panelInsets — content-inset (inline) / content-pad-block (body block) / dialog-inset
  * 4. sheetPads — BottomSheet M3 asymmetric pads (do not merge with panelInsets)
  * 5. shellSize — container width / chrome bar height (not padding)
  */
@@ -50,7 +50,7 @@ export type LayoutChromeSectionId =
 
 /** Apply-writable `--fynns-layout-*` keys exposed in the sandbox GUI. */
 export const EDITABLE_LAYOUT_KEYS = [
-  // rhythm
+  // rhythm — field-hint-gap aliases unit-stack-gap in CSS (not separately editable)
   "unit-stack-gap",
   "control-stack-gap",
   "control-row-gap",
@@ -59,6 +59,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "control-row-label",
   // panelInsets
   "content-inset",
+  "content-pad-block",
   "dialog-inset",
   // sheetPads
   "sheet-pad-inline",
@@ -93,7 +94,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "control-cluster-gap",
     "control-row-label",
   ],
-  panelInsets: ["content-inset", "dialog-inset"],
+  panelInsets: ["content-inset", "content-pad-block", "dialog-inset"],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
     "drawer-width",
@@ -174,13 +175,17 @@ export function hashBaseline(baseline: Record<string, string> = BASELINE): strin
 export const BASE_TOKENS_HASH = hashBaseline();
 
 const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
-  "unit-stack-gap": "Unit stack · between inspector/form units (.sandbox-stack)",
+  "unit-stack-gap":
+    "Unit stack · between siblings / demos; also control→hint via field-hint-gap alias",
   "control-stack-gap": "Toolbar rhythm · between ControlRows",
   "control-row-gap": "Toolbar rhythm · stacked label above controls",
   "control-row-column-gap": "Toolbar rhythm · horizontal label | controls",
   "control-cluster-gap": "Toolbar rhythm · siblings in one controls cluster",
   "control-row-label": "Toolbar structure · ControlRow fixed label column",
-  "content-inset": "Panel inset · Card / Collapsible / Drawer equal outer pad",
+  "content-inset":
+    "Panel inset · Card / Collapsible / Drawer equal **inline** pad",
+  "content-pad-block":
+    "Panel inset · Collapsible / CardContent / Surface padded / CodeBlock **block** (16dp)",
   "dialog-inset": "Panel inset · centered Dialog / ConfirmDialog equal outer pad",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",

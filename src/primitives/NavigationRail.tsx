@@ -53,7 +53,7 @@ function isElementOfType(
 /**
  * M3 Navigation rail — compact vertical destinations (80dp) for medium+
  * layouts. Anatomy: optional menu → optional header/FAB → destinations.
- * Prefer `NavItem` + `Panel` for full sidebar lists.
+ * Prefer `NavigationDrawer` for full sidebar destination lists.
  * @see https://m3.material.io/components/navigation-rail/overview
  */
 export function NavigationRail({

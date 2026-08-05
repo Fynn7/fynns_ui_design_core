@@ -30,10 +30,9 @@ function normalize(option: string | SelectOption): SelectOption {
 }
 
 /**
- * Dropdown that reuses `SearchBar` chrome end-to-end: same elevated capsule,
- * same docked results shell (`.fynns-search-bar--expanded` +
- * `.fynns-search-bar-results` / `.fynns-search-bar-result`), same type tokens,
- * and the same `.fynns-expand` open/close height morph.
+ * Dropdown that reuses SearchBar's docked results shell (`.fynns-expand` +
+ * `.fynns-search-bar-results`), but **form density** matches Input (40dp /
+ * `--fynns-size-icon-target`, outlined surface) — not chrome SearchBar 56dp.
  * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
  * Replaces native `<select>`.
  * @see https://m3.material.io/components/menus/overview

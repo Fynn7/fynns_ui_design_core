@@ -211,7 +211,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel content insets — equal four-side outer pad. `content-inset` (Card / Collapsible / Drawer) vs `dialog-inset` (centered Dialog; larger breath). Not for BottomSheet.",
+    "Panel content insets — `content-inset` (inline: Card / Collapsible / Drawer), `content-pad-block` (vertical body under section chrome), `dialog-inset` (centered Dialog; larger breath). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -224,7 +224,10 @@ const en = {
     "--sandbox-section-gap — title to body inside Foundations Section.",
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — between stacked inspector/form units (Collapsible body units).",
+    "--fynns-layout-unit-stack-gap — between stacked units / sibling demos; field-hint-gap aliases this.",
+  "layoutChrome.fieldHintGap": "Field hint",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap — control → supporting / error hint (aliases unit-stack-gap).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — brand cell + page topbar strip (sandbox only).",
@@ -243,9 +246,12 @@ const en = {
   "layoutChrome.controlRowLabel": "Label column",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — fixed ControlRow label track width.",
-  "layoutChrome.contentInset": "Panel inset",
+  "layoutChrome.contentInset": "Panel inset (inline)",
   "layoutChrome.contentInsetHint":
-    "--fynns-layout-content-inset — equal outer pad for Card / Collapsible / Drawer (18dp default).",
+    "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
+  "layoutChrome.contentPadBlock": "Panel pad (block)",
+  "layoutChrome.contentPadBlockHint":
+    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / CardContent / Surface padded / CodeBlock pre (16dp default).",
   "layoutChrome.dialogInset": "Dialog inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog (24dp default).",
@@ -347,6 +353,12 @@ const en = {
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
     "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + ring + message. Auto-closes here after 2s.",
+  "globals.busyPaintBad": "Anti-pattern: busy then stall",
+  "globals.busyPaintGood": "runBusyTask then stall",
+  "globals.busyPaintLabel": "Heavy work",
+  "globals.busyPaintMessage": "Simulated 800ms main-thread stall…",
+  "globals.busyPaintHelp":
+    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the ring can start. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -396,6 +408,12 @@ const en = {
   "globals.nestedDialogResetTip": "Restore default",
   "globals.nestedSectionHelp":
     "Nested section recipe (host-agnostic): Card outlined + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Never stack elevated Card on the same surface.",
+  "globals.surfaceHelp":
+    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need Header / Content / Actions.",
+  "globals.surfaceFieldPlaceholder": "Any control inside",
+  "globals.surfaceFieldAria": "Sample field in Surface",
+  "globals.surfaceAction": "Action",
+  "globals.surfacePreviewLabel": "Preview well",
   "globals.nestedDialogHelp":
     "Optional Dialog host of the same Card + FieldBlock recipe (not required for nesting).",
   "globals.confirmOpen": "Open confirm",
@@ -464,7 +482,10 @@ const en = {
     "Align footer actions to the start edge. Long tip — must stay inside the viewport even in a narrow inspector.",
   "globals.rhythmEndTip":
     "Align footer actions to the end edge. Long tip — must stay inside the viewport even when this segment sits on the panel’s right edge.",
-  "globals.rhythmTokenUnit": "Between stacked inspector/form units (Collapsible body units).",
+  "globals.rhythmTokenUnit":
+    "Between stacked units / sibling demos (also drives control → field hint via field-hint-gap alias).",
+  "globals.rhythmTokenFieldHint":
+    "Alias of unit-stack-gap — Input / Otp / Autocomplete control → supporting hint.",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
@@ -503,16 +524,13 @@ const en = {
   "globals.autocompletePlaceholder": "Filter colors…",
   "globals.autocompleteEmpty": "No matches",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — type to filter; pick a suggestion. Same SearchBar/Select chrome.",
+    "M3 Autocomplete — click/type to open, filter, then pick. Same docked shell as Select.",
   "globals.autocompleteSelected": "Selected: {value}",
   "globals.autocompleteOptTeal": "Teal",
   "globals.autocompleteOptCyan": "Cyan",
   "globals.autocompleteOptBlue": "Blue",
   "globals.autocompleteOptViolet": "Violet",
   "globals.autocompleteOptAmber": "Amber",
-  "globals.badgeNeutral": "Neutral",
-  "globals.badgeAccent": "Accent",
-  "globals.badgeSuccess": "Success",
   "globals.switchPill": "Switch",
   "globals.checkbox": "Checkbox",
   "globals.checkboxMixed": "Indeterminate",
@@ -735,7 +753,8 @@ const en = {
   "globals.cardSubtitle": "Uses radius-md",
   "globals.cardBody": "Card corners follow radius-md on the global levels.",
   "globals.collapsible": "Fold section sample",
-  "globals.collapsibleHelp": "Collapsible headers also use `radius-md`.",
+  "globals.collapsibleHelp":
+    "Collapsible headers use `radius-md`. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
@@ -1010,7 +1029,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板内容边距 — 四边等距外缘。`content-inset`（Card / Collapsible / Drawer）与 `dialog-inset`（居中 Dialog，更大呼吸）。BottomSheet 不用这组。",
+    "面板内容边距 — `content-inset`（行向：Card / Collapsible / Drawer）、`content-pad-block`（块向：章节标题下到首个控件）、`dialog-inset`（居中 Dialog，更大呼吸）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1023,7 +1042,10 @@ const zh: Record<MessageKey, string> = {
     "--sandbox-section-gap — Foundations Section 标题到正文。",
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — 纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
+    "--fynns-layout-unit-stack-gap — 纵向堆叠单元 / 并列 demo；field-hint-gap 为其别名。",
+  "layoutChrome.fieldHintGap": "字段提示",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap — 控件到 supporting / error 提示（同 unit-stack-gap）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度（仅沙盒）。",
@@ -1042,9 +1064,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.controlRowLabel": "标签列宽",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — ControlRow 固定标签列宽。",
-  "layoutChrome.contentInset": "面板内边距",
+  "layoutChrome.contentInset": "面板内边距（行向）",
   "layoutChrome.contentInsetHint":
-    "--fynns-layout-content-inset — Card / Collapsible / Drawer 四边等距外缘（默认 18dp）。",
+    "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
+  "layoutChrome.contentPadBlock": "面板内边距（块向）",
+  "layoutChrome.contentPadBlockHint":
+    "--fynns-layout-content-pad-block — Collapsible 正文 / CardContent / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。",
   "layoutChrome.dialogInset": "对话框内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 四边等距外缘（默认 24dp）。",
@@ -1144,6 +1169,12 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
     "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 圆环 + 文案。此处 2 秒后自动关闭。",
+  "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
+  "globals.busyPaintGood": "runBusyTask 后再卡主线程",
+  "globals.busyPaintLabel": "繁重工作",
+  "globals.busyPaintMessage": "模拟主线程占用 800ms…",
+  "globals.busyPaintHelp":
+    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，圆环才有机会转起来。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",
@@ -1193,6 +1224,12 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedDialogResetTip": "恢复默认",
   "globals.nestedSectionHelp":
     "嵌套分区配方（宿主无关）：Card outlined + FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。勿在同层表面再叠 elevated Card。",
+  "globals.surfaceHelp":
+    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要 Header / Content / Actions 时仍用 Card。",
+  "globals.surfaceFieldPlaceholder": "井内任意控件",
+  "globals.surfaceFieldAria": "Surface 内示例字段",
+  "globals.surfaceAction": "操作",
+  "globals.surfacePreviewLabel": "预览井",
   "globals.nestedDialogHelp":
     "可选：把同一 Card + FieldBlock 配方放进 Dialog（嵌套并不要求 Dialog）。",
   "globals.confirmOpen": "打开确认框",
@@ -1261,7 +1298,10 @@ const zh: Record<MessageKey, string> = {
     "底部按钮靠左对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
   "globals.rhythmEndTip":
     "底部按钮靠右对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
-  "globals.rhythmTokenUnit": "纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
+  "globals.rhythmTokenUnit":
+    "纵向堆叠单元 / 并列 demo 间距（控件→field hint 经 field-hint-gap 别名同源）。",
+  "globals.rhythmTokenFieldHint":
+    "unit-stack-gap 别名 — Input / Otp / Autocomplete 控件到 supporting 提示。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
@@ -1300,16 +1340,13 @@ const zh: Record<MessageKey, string> = {
   "globals.autocompletePlaceholder": "筛选颜色…",
   "globals.autocompleteEmpty": "无匹配",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — 输入筛选后点选建议。外观与 SearchBar/Select 一致。",
+    "M3 Autocomplete — 点击/输入展开，筛选后点选。与 Select 同一 docked 壳。",
   "globals.autocompleteSelected": "已选：{value}",
   "globals.autocompleteOptTeal": "青绿",
   "globals.autocompleteOptCyan": "青色",
   "globals.autocompleteOptBlue": "蓝色",
   "globals.autocompleteOptViolet": "紫罗兰",
   "globals.autocompleteOptAmber": "琥珀",
-  "globals.badgeNeutral": "中性",
-  "globals.badgeAccent": "强调",
-  "globals.badgeSuccess": "成功",
   "globals.switchPill": "开关",
   "globals.checkbox": "复选框",
   "globals.checkboxMixed": "半选",
@@ -1532,7 +1569,8 @@ const zh: Record<MessageKey, string> = {
   "globals.cardSubtitle": "使用 radius-md",
   "globals.cardBody": "卡片圆角跟随全局等级的 md。",
   "globals.collapsible": "折叠分区示例",
-  "globals.collapsibleHelp": "折叠分区标题栏也使用 `radius-md`。",
+  "globals.collapsibleHelp":
+    "折叠分区标题栏使用 `radius-md`。展开时标题下为通栏 hairline（与外框相接）；焦点边框与 Input 相同的淡青绿。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":

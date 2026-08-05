@@ -4,7 +4,6 @@ import {
   ArrowLeftIcon,
   Avatar,
   AvatarGroup,
-  Badge,
   BadgedBox,
   Banner,
   BarChartIcon,
@@ -14,10 +13,12 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
+  useBusyTask,
   Pagination,
   Card,
   CardContent,
   CardHeader,
+  Surface,
   Checkbox,
   ChevronRightIcon,
   Chip,
@@ -231,6 +232,8 @@ export function GlobalsPage() {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
+  const [busyPaintBad, setBusyPaintBad] = useState(false);
+  const busyPaintGood = useBusyTask();
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -611,22 +614,20 @@ export function GlobalsPage() {
             options={["one", "two", "three"]}
             onChange={() => {}}
           />
-          <div style={{ width: "min(100%, 20rem)" }}>
-            <Autocomplete
-              ariaLabel={t("globals.autocompleteAria")}
-              placeholder={t("globals.autocompletePlaceholder")}
-              emptyText={t("globals.autocompleteEmpty")}
-              value={autoValue}
-              onChange={setAutoValue}
-              options={[
-                t("globals.autocompleteOptTeal"),
-                t("globals.autocompleteOptCyan"),
-                t("globals.autocompleteOptBlue"),
-                t("globals.autocompleteOptViolet"),
-                t("globals.autocompleteOptAmber"),
-              ]}
-            />
-          </div>
+          <Autocomplete
+            ariaLabel={t("globals.autocompleteAria")}
+            placeholder={t("globals.autocompletePlaceholder")}
+            emptyText={t("globals.autocompleteEmpty")}
+            value={autoValue}
+            onChange={setAutoValue}
+            options={[
+              t("globals.autocompleteOptTeal"),
+              t("globals.autocompleteOptCyan"),
+              t("globals.autocompleteOptBlue"),
+              t("globals.autocompleteOptViolet"),
+              t("globals.autocompleteOptAmber"),
+            ]}
+          />
           <SandboxHelp
             text={
               autoValue
@@ -1045,11 +1046,6 @@ export function GlobalsPage() {
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catCommunication")}>
-        <div className="sandbox-globals-row">
-          <Badge>{t("globals.badgeNeutral")}</Badge>
-          <Badge variant="accent">{t("globals.badgeAccent")}</Badge>
-          <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
-        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
@@ -1266,6 +1262,37 @@ export function GlobalsPage() {
           {renderNestedPromptSection("sandbox-nested-prompt")}
           <SandboxHelp text={t("globals.nestedSectionHelp")} />
         </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Surface padded style={{ maxWidth: "24rem" }}>
+            <div className="sandbox-stack">
+              <Input
+                placeholder={t("globals.surfaceFieldPlaceholder")}
+                aria-label={t("globals.surfaceFieldAria")}
+              />
+              <Button size="sm">{t("globals.surfaceAction")}</Button>
+            </div>
+          </Surface>
+          <Surface
+            style={{
+              height: "7.5rem",
+              maxWidth: "24rem",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "var(--fynns-color-surface-head)",
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                color: "var(--fynns-color-text-muted)",
+                fontSize: "var(--fynns-font-size-sm)",
+              }}
+            >
+              {t("globals.surfacePreviewLabel")}
+            </p>
+          </Surface>
+          <SandboxHelp text={t("globals.surfaceHelp")} />
+        </div>
         <Collapsible title={t("globals.collapsible")} defaultOpen>
           <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
@@ -1411,6 +1438,49 @@ export function GlobalsPage() {
             message={t("globals.busyScrimMessage")}
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              variant="danger"
+              disabled={busyPaintBad || busyPaintGood.busy}
+              onClick={() => {
+                setBusyPaintBad(true);
+                const until = performance.now() + 800;
+                while (performance.now() < until) {
+                  /* intentional main-thread stall — anti-pattern demo */
+                }
+                setBusyPaintBad(false);
+              }}
+            >
+              {t("globals.busyPaintBad")}
+            </Button>
+            <Button
+              size="sm"
+              disabled={busyPaintBad || busyPaintGood.busy}
+              onClick={() => {
+                void busyPaintGood.run(t("globals.busyPaintLabel"), async () => {
+                  const until = performance.now() + 800;
+                  while (performance.now() < until) {
+                    /* same stall after paint — ring can start first */
+                  }
+                });
+              }}
+            >
+              {t("globals.busyPaintGood")}
+            </Button>
+          </div>
+          <BusyScrim
+            open={busyPaintBad || busyPaintGood.busy}
+            label={
+              busyPaintGood.busy
+                ? (busyPaintGood.label ?? t("globals.busyPaintLabel"))
+                : t("globals.busyPaintLabel")
+            }
+            message={t("globals.busyPaintMessage")}
+          />
+          <SandboxHelp text={t("globals.busyPaintHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Stepper
@@ -1992,6 +2062,12 @@ export function GlobalsPage() {
                 <code>--fynns-layout-unit-stack-gap</code>
               </dt>
               <dd>{t("globals.rhythmTokenUnit")}</dd>
+            </div>
+            <div>
+              <dt>
+                <code>--fynns-layout-field-hint-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenFieldHint")}</dd>
             </div>
             <div>
               <dt>

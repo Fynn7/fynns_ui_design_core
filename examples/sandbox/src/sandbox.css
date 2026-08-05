@@ -524,7 +524,8 @@
   max-width: 100%;
   box-sizing: border-box;
   padding: var(--fynns-space-md);
-  border-radius: var(--fynns-radius-md);
+  /* Same stage chrome as `.sandbox-preview-grid` (xl reads on large wells). */
+  border-radius: var(--fynns-radius-xl);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-1);
 }
@@ -597,7 +598,8 @@
   max-width: 100%;
   box-sizing: border-box;
   padding: var(--fynns-space-lg);
-  border-radius: var(--fynns-radius-lg);
+  /* xl (16px): large stage wells look square with md/lg (8–10px). */
+  border-radius: var(--fynns-radius-xl);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: color-mix(in srgb, var(--fynns-color-surface-2) 55%, var(--fynns-color-app-bg));
 }
@@ -905,7 +907,7 @@
 .sandbox-globals-section-body {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-md);
+  gap: var(--fynns-layout-unit-stack-gap);
   padding-block-end: var(--fynns-space-sm);
   width: 100%;
   min-width: 0;
@@ -937,13 +939,15 @@
 .sandbox-globals-row--stack {
   flex-direction: column;
   align-items: stretch;
+  /* Same vertical unit rhythm as `.sandbox-stack` — not the row wrap gap. */
+  gap: var(--fynns-layout-unit-stack-gap);
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
 }
 
-/* useOverflowBounds demo — equal inset via layout content-inset (not ad-hoc space). */
+/* useOverflowBounds demo — tight single-line chip (not section content-inset). */
 .sandbox-overflow-sample {
   box-sizing: border-box;
   width: min(100%, 12rem);
@@ -953,10 +957,11 @@
   white-space: nowrap;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
-  padding: var(--fynns-layout-content-inset);
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
   background: var(--fynns-color-surface-1);
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-compact);
 }
 
 .sandbox-globals-list {

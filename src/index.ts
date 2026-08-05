@@ -194,6 +194,8 @@ export type {
   CardMediaProps,
   CardProps,
 } from "./primitives/Card";
+export { Surface } from "./primitives/Surface";
+export type { SurfaceProps, SurfaceVariant } from "./primitives/Surface";
 export { FieldBlock, FieldHeader } from "./primitives/FieldHeader";
 export type {
   FieldBlockProps,
@@ -206,6 +208,13 @@ export type {
 } from "./primitives/Progress";
 export { BusyScrim, BusyRegion } from "./primitives/Busy";
 export type { BusyScrimProps, BusyRegionProps } from "./primitives/Busy";
+export {
+  afterNextPaint,
+  yieldToMain,
+  runBusyTask,
+  useBusyTask,
+} from "./scheduling/busyTask";
+export type { UseBusyTaskResult } from "./scheduling/busyTask";
 export { Badge } from "./primitives/Badge";
 export type { BadgeProps, BadgeSize, BadgeVariant } from "./primitives/Badge";
 export { BadgedBox } from "./primitives/BadgedBox";

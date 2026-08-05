@@ -50,9 +50,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
-   `Tooltip` above the control — not overlaid on the textarea corner). Default
-   `ghost`; dense forms may use `size="sm"`. As the first child of
-   `CardContent`, top inset shrinks to `--fynns-space-sm` (not full
+   `Tooltip` above the control — not overlaid on the textarea corner). Label
+   text starts at the same inline inset as Input / Textarea value text (add
+   control border + padding-inline on top of the shared CardContent inset).
+   Default `ghost`; dense forms may use `size="sm"`. As the first child of
+   `CardContent`, top inset shrinks to `--fynns-space-xs` (Card content
+   block pad is `--fynns-layout-content-pad-block` at 16dp; inline stays
    `content-inset`). Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
@@ -92,19 +95,27 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   workspace panes: titled head strip + `body` with `fynns-scroll` (do **not**
-   expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
+   overlays via `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
    `BusyRegion` (relative dim layer over children; content is `inert` while
-   busy); do not revive `BlockingLoadingOverlay`;
+   busy); for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
+   paint → then work) so the ring can start before the main thread blocks;
+   do not revive `BlockingLoadingOverlay` or purged `Panel` /
+   `PanelCard`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
-   (same surface + stacked shadow). Prefer `FieldBlock` for label-row
-   IconButtons above the control. Rely on Card’s `--fynns-layout-content-inset`;
-   do not add a second page-level outer pad. Consumers choose whether the
+   (same surface + stacked shadow). Prefer **`Surface`** for a bordered /
+   tonal well with **no** title/actions anatomy (preview iframe, chart stage,
+   arbitrary children; default unpadded + optional `fill`). Prefer `FieldBlock`
+   for label-row
+   IconButtons above the control. Card inline pad uses
+   `--fynns-layout-content-inset`; CardContent / Header / Actions **block** pad
+   uses `--fynns-layout-content-pad-block` (same as Collapsible body).
+   Do not add a second page-level outer
+   pad. Consumers choose whether the
    section lives inline or inside an overlay. Simple forms may put fields
    directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
    only when the inner block is an independent interactive subject). Live
@@ -230,7 +241,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
-  Autocomplete, OtpInput, SearchBar / SearchBarResult, Switch, Checkbox, Radio,
+  Autocomplete (same docked SearchBar expand shell as Select; open on
+  click/type/ArrowDown, not focus alone; hint wrap only when
+  supporting/error text), OtpInput, SearchBar / SearchBarResult, Switch,
+  Checkbox, Radio,
   Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
@@ -241,6 +255,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `label` is the progress accessible name and the default visible copy when
   `message` is omitted; `value` in `[0, 1]` for determinate, omit for
   indeterminate; `size` defaults `md`),
+  **paint-before-work:** `afterNextPaint` / `yieldToMain` / `runBusyTask(setBusy,
+  task)` / `useBusyTask()` — `flushSync` busy on → wait one paint → then run
+  the async task so `CircularProgress` can start spinning. Does **not** keep
+  the ring smooth through long sync / WASM compile on the main thread (use a
+  Worker or `yieldToMain` slices for that). Prefer over `setBusy(true)` then
+  immediately blocking work.
   EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
@@ -266,14 +286,17 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
-  Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
+  **Surface** (generic bordered / tonal well; any children; no Card anatomy —
+  use for preview wells / stages), Collapsible (open: full-bleed hairline under
+  head; focus = quiet Input-like border),
+  Carousel / CarouselItem,
+  Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid,
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
-  the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
-  (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
+  the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 
@@ -283,14 +306,19 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
-  | Vertical stacked units (inspector fields, Collapsible body) | `--fynns-layout-unit-stack-gap` |
+  | Control → supporting / error hint (`.fynns-field` / Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (= `unit-stack-gap`) |
+  | Vertical stacked units (inspector fields, Collapsible body, sibling demos) | `--fynns-layout-unit-stack-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
   live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits them via
   `SANDBOX_LAYOUT_AGENT_CATALOG`.
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
-  inset via `--fynns-layout-content-inset` (18dp). Centered Dialog /
+  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges.
+  Collapsible body and Card content anatomy use shared **block** pad
+  `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
+  under section chrome; Collapsible trigger stays denser (`--fynns-space-sm`).
+  Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
   Width: content-fit (`max-content`) up to the `size` token ceiling

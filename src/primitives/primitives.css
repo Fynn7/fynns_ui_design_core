@@ -626,7 +626,7 @@
 .fynns-field {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-field-hint-gap);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -653,17 +653,18 @@
 }
 
 .fynns-field-shell:focus-within {
-  border-color: var(--fynns-color-accent-mid);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
-    0 0 0 3px var(--fynns-color-accent-soft);
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-field-shell--invalid:focus-within {
-  border-color: var(--fynns-color-danger);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger-border),
-    0 0 0 3px color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 .fynns-field-affix {
@@ -739,18 +740,19 @@
 
 .fynns-input:focus,
 .fynns-input:focus-visible {
-  border-color: var(--fynns-color-accent-mid);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
-    0 0 0 3px var(--fynns-color-accent-soft);
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-input--invalid:focus,
 .fynns-input--invalid:focus-visible {
-  border-color: var(--fynns-color-danger);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger-border),
-    0 0 0 3px color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 /* Shell owns the focus ring via `:focus-within` — keep the nested input quiet.
@@ -802,6 +804,7 @@
   width: 100%;
   box-sizing: border-box;
   margin: 0;
+  padding-block: 0;
   text-align: left;
   cursor: pointer;
 }
@@ -854,13 +857,22 @@
 .fynns-autocomplete-field {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-layout-field-hint-gap);
   width: 100%;
   max-width: 100%;
 }
 
 .fynns-autocomplete {
   width: 100%;
+}
+
+.fynns-autocomplete-shell {
+  width: 100%;
+}
+
+.fynns-autocomplete .fynns-autocomplete-input {
+  width: 100%;
+  padding-block: 0;
 }
 
 .fynns-autocomplete-chevron {
@@ -872,9 +884,8 @@
 }
 
 .fynns-autocomplete--invalid.fynns-search-bar {
-  box-shadow:
-    var(--fynns-shadow-md),
-    0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 .fynns-autocomplete-list {
@@ -1623,7 +1634,8 @@
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
-  padding: var(--fynns-space-md) var(--fynns-layout-content-inset)
+  /* Block-start matches Card/Collapsible section body; sides/bottom stay content-inset. */
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset)
     var(--fynns-layout-content-inset);
 }
 
@@ -2043,7 +2055,8 @@
 
 .fynns-tabs--sm .fynns-tab {
   min-height: 2.5rem;
-  padding: 0 var(--fynns-space-md);
+  padding-inline: var(--fynns-space-md);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
   font-size: var(--fynns-font-size-caption);
 }
 
@@ -2058,7 +2071,9 @@
   margin: 0;
   border: none;
   border-radius: 0;
-  padding: 0 var(--fynns-space-lg);
+  /* Indicator track below the label; label centers in the remaining content box. */
+  padding-inline: var(--fynns-space-lg);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
   background: transparent;
   color: var(--fynns-color-text-muted);
   cursor: pointer;
@@ -2071,7 +2086,11 @@
 .fynns-tab::before {
   content: "";
   position: absolute;
-  inset: var(--fynns-space-xs);
+  top: var(--fynns-space-xs);
+  right: var(--fynns-space-xs);
+  left: var(--fynns-space-xs);
+  /* Same inset as padding-block-end — state layer wraps the label only. */
+  bottom: calc(3px + var(--fynns-space-sm));
   border-radius: var(--fynns-radius-lg);
   background: transparent;
   pointer-events: none;
@@ -2367,6 +2386,7 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-1);
   overflow: hidden;
+  transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-collapsible-head {
@@ -2397,6 +2417,15 @@
   opacity: 1;
 }
 
+/*
+ * Open: full-bleed hairline under the head — meets the outer border
+ * (no inset gap). Focus uses quiet border-color only (no inset ring),
+ * so the join stays a clean T, not a cut through a thick highlight.
+ */
+.fynns-collapsible--open > .fynns-collapsible-head {
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
 .fynns-collapsible-trigger {
   position: relative;
   z-index: 1;
@@ -2405,7 +2434,11 @@
   align-items: center;
   gap: var(--fynns-space-2);
   min-width: 0;
-  padding: var(--fynns-layout-content-inset);
+  /* Dense chrome row; slightly tighter start so the chevron sits closer to
+   * the card edge. End / body still use content-inset. */
+  padding-block: var(--fynns-space-sm);
+  padding-inline-start: var(--fynns-space-md);
+  padding-inline-end: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
   color: var(--fynns-color-text);
@@ -2414,18 +2447,19 @@
   cursor: pointer;
 }
 
-/*
- * Parent `.fynns-collapsible` uses overflow:hidden + radius to clip the hover
- * wash; a trigger outline is clipped off at the rounded corners. Paint the
- * focus ring on the rounded shell instead (inset so it is not clipped).
- */
 .fynns-collapsible-trigger:focus,
 .fynns-collapsible-trigger:focus-visible {
   outline: none;
 }
 
+/* Same quiet accent-tinted border as `.fynns-input` — no inset focus ring. */
 .fynns-collapsible:has(.fynns-collapsible-trigger:focus-visible) {
-  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-collapsible-title {
@@ -2458,8 +2492,9 @@
 }
 
 .fynns-collapsible-body {
-  /* Equal outer inset — matches trigger; no head/body hairline. */
-  padding: var(--fynns-layout-content-inset);
+  /* Shared block pad with Card — breathing room under the header. */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
@@ -3175,8 +3210,8 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-loading-panel-skeleton {
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset);
 }
 
 .fynns-loading-skeleton {
@@ -3430,7 +3465,8 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
+  /* Block: content-pad-block; inline: content-inset (same as Collapsible). */
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset) 0;
   position: relative;
   z-index: 2;
 }
@@ -3489,7 +3525,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-content {
-  padding: var(--fynns-layout-content-inset);
+  /* Shared block pad with Collapsible body (content-pad-block). */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-color-text);
@@ -3498,13 +3536,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-header + .fynns-card-content {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
-/* FieldHeader / FieldBlock as first child: denser top than full content-inset. */
+/* FieldHeader / FieldBlock as first child: keep dense top. */
 .fynns-card-content:has(> .fynns-field-header:first-child),
 .fynns-card-content:has(> .fynns-field-block:first-child) {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
@@ -3523,6 +3561,14 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-header__label {
   margin: 0;
   min-width: 0;
+  /*
+   * Optical align with Input / Textarea value text: control outer edge is
+   * shared with this row; add the same inset as border + `.fynns-input`
+   * padding-inline (searchbar-pad-inline + space-md − hairline + hairline).
+   */
+  padding-inline-start: calc(
+    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md)
+  );
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
@@ -3548,10 +3594,9 @@ a.fynns-breadcrumb-link:visited {
   margin-bottom: var(--fynns-space-md);
 }
 
-/* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath
- * (content bottom lg + actions top sm), matching pre-inset Card rhythm. */
+/* Sides stay content-inset; body↔actions breath stays compact. */
 .fynns-card-content:has(+ .fynns-card-actions) {
-  padding-bottom: var(--fynns-space-lg);
+  padding-bottom: var(--fynns-space-xs);
 }
 
 .fynns-card-actions {
@@ -3559,14 +3604,14 @@ a.fynns-breadcrumb-link:visited {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset)
-    var(--fynns-layout-content-inset);
+  padding: var(--fynns-space-xs) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-pad-block);
   position: relative;
   z-index: 2;
 }
 
 .fynns-card-header + .fynns-card-actions {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
 .fynns-card-actions--end {
@@ -5020,9 +5065,10 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
 }
 
-/* Keep destination hover/active indicators clear of menu / header chrome. */
-.fynns-nav-rail[data-has-menu="true"] .fynns-nav-rail-destinations,
-.fynns-nav-rail[data-has-header="true"] .fynns-nav-rail-destinations {
+/* Keep destination indicators clear of menu chrome when there is no header.
+ * Header → first item uses `header-gap` only (= destinations-gap). */
+.fynns-nav-rail[data-has-menu="true"]:not([data-has-header="true"])
+  .fynns-nav-rail-destinations {
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
@@ -5988,11 +6034,13 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   z-index: var(--fynns-z-dropdown);
   border-radius: var(--fynns-radius-3xl);
+  border: var(--fynns-border-hairline) solid transparent;
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-md);
   overflow: hidden;
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
     box-shadow var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
@@ -6016,20 +6064,38 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-lg);
 }
 
+/* Field / results join: paint on the field as soon as `--expanded` is set
+ * (not on `.fynns-search-bar-results`, which fades in after the panel opens). */
+.fynns-search-bar--expanded > .fynns-search-bar-field {
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
 /*
- * Keyboard focus: elevation + system focus ring (color-focus). Do not use
- * accent-ring / accent-soft glow on the shell.
+ * Focus: same quiet teal border tint as `.fynns-input` — keep elevation,
+ * no outline / accent-soft glow (SearchBar, Select, Autocomplete).
  */
 .fynns-search-bar--expanded:focus-within {
   box-shadow: var(--fynns-shadow-lg);
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  outline: none;
 }
 
 .fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
   box-shadow: var(--fynns-shadow-md);
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: var(--fynns-focus-ring-offset-control);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  outline: none;
+}
+
+.fynns-autocomplete--invalid.fynns-search-bar:focus-within {
+  border-color: var(--fynns-color-danger-border);
 }
 
 .fynns-search-bar--disabled {
@@ -6080,6 +6146,44 @@ a.fynns-breadcrumb-link:visited {
   padding-inline-start: var(--fynns-space-md);
 }
 
+/*
+ * Form density: Select / Autocomplete sit beside Input — use 40dp control
+ * height + Input surface/radius/border, not chrome SearchBar 56dp capsule.
+ * SearchBar itself keeps `--fynns-searchbar-height` / elevation.
+ */
+.fynns-select.fynns-search-bar,
+.fynns-autocomplete.fynns-search-bar {
+  border-radius: var(--fynns-radius-md);
+  border-color: var(--fynns-color-border);
+  background: var(--fynns-color-surface-muted);
+  box-shadow: none;
+}
+
+.fynns-select .fynns-search-bar-field,
+.fynns-autocomplete .fynns-search-bar-field {
+  min-height: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select .fynns-search-bar-trailing,
+.fynns-autocomplete .fynns-search-bar-trailing {
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within,
+.fynns-autocomplete.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow: none;
+}
+
+.fynns-select.fynns-search-bar--expanded,
+.fynns-autocomplete.fynns-search-bar--expanded,
+.fynns-select.fynns-search-bar--expanded:focus-within,
+.fynns-autocomplete.fynns-search-bar--expanded:focus-within {
+  /* Docked results: light elevation only (still not the chrome 56dp field). */
+  box-shadow: var(--fynns-shadow-md);
+}
+
 .fynns-search-bar-input::placeholder {
   color: var(--fynns-color-text-muted);
 }
@@ -6109,18 +6213,14 @@ a.fynns-breadcrumb-link:visited {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
-/* Opacity fade for SearchBar / Select / Autocomplete expand panels. */
-.fynns-search-bar-panel .fynns-search-bar-results {
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-search-bar-panel[data-state="open"] .fynns-search-bar-results {
-  opacity: 1;
-}
+/*
+ * No opacity fade on docked results — height morph via `.fynns-expand` only.
+ * A results fade made the field↔list hairline feel late (empty panel grows,
+ * then content appears). Hairline stays on
+ * `.fynns-search-bar--expanded > .fynns-search-bar-field`.
+ */
 
 .fynns-search-bar-result {
   box-sizing: border-box;
@@ -7496,7 +7596,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-otp {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-field-hint-gap);
   min-width: 0;
 }
 
@@ -7922,7 +8022,9 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-code-block-pre {
   margin: 0;
-  padding: var(--fynns-space-md);
+  /* Same section-body rhythm as CardContent / Collapsible body. */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   overflow: auto;
   font-family: var(--fynns-font-mono);
   font-size: var(--fynns-font-size-xs);
@@ -8019,3 +8121,50 @@ a.fynns-breadcrumb-link:visited {
     transform: none;
   }
 }
+
+/* ---------- Surface (generic bordered / tonal well) ---------- */
+.fynns-surface {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  color: var(--fynns-color-text);
+  border: var(--fynns-border-hairline) solid transparent;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-surface--outlined {
+  background: var(--fynns-color-app-bg);
+  border-color: var(--fynns-color-outline-subtle);
+}
+
+.fynns-surface--filled {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+}
+
+.fynns-surface--elevated {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-surface--fill {
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.fynns-surface--padded {
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+}
+
+.fynns-surface--fill > * {
+  min-height: 0;
+  min-width: 0;
+}
+

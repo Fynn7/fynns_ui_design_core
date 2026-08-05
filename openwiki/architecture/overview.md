@@ -37,8 +37,11 @@ Surfaces climb `app-bg` → `surface-1` … `surface-5`. Dark is default; light 
 Full text: [`AGENTS.md`](../../AGENTS.md). Agents must:
 
 - Style with `var(--fynns-*)` only; no hardcoded hex/rgba.
-- No `@radix-ui/*` / `sonner`; no resurrected Toast / Popover / Panel / BlockingLoadingOverlay.
-- Blocking / sectional busy → `BusyScrim` / `BusyRegion`; transient → `snackbar` + `SnackbarHost`.
+- No `@radix-ui/*` / `sonner`; no resurrected Toast / Popover / Panel /
+  BlockingLoadingOverlay. Docked inspectors: app layout or `Drawer modal={false}`.
+- Blocking / sectional busy → `BusyScrim` / `BusyRegion` (+ `runBusyTask` /
+  `afterNextPaint` so the ring can paint before heavy work); transient →
+  `snackbar` + `SnackbarHost`.
 
 ## Source map
 
