@@ -387,9 +387,30 @@ const en = {
   "globals.tableHelp":
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — native table chrome.",
   "globals.codeBlockLabel": "tokens.ts",
+  "globals.codeBlockCssLabel": "hero.css",
+  "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: `default` optional head; `plain` headless. Copy fades in on hover (keyboard: focus-visible; always visible on touch).",
+    "CodeBlock: `default` optional head; `plain` headless. Supported languages (`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`) get zero-dep spans colored with `--fynns-code-*`. Copy fades in on hover (keyboard: focus-visible; always visible on touch); clipboard stays the raw source string.",
+  "globals.codeTokensAria": "Code highlight tokens",
+  "globals.codeTokensHelp":
+    "`--fynns-code-*` roles distilled from the cpptools VS dark/light themes (last-wins TextMate colors). Light theme overrides via `data-fynns-theme=\"light\"`.",
+  "globals.codeLangDemoOpen": "Language showcase",
+  "globals.codeLangDemoHelp":
+    "Opens a dialog with ToggleGroup → Python / TypeScript / C++ CodeBlock samples (same `--fynns-code-*` highlighter).",
+  "globals.codeLangDemoTitle": "CodeBlock languages",
+  "globals.codeLangDemoDescription":
+    "Switch the sample language. Highlighting stays on the zero-dep tokenizer.",
+  "globals.codeLangDemoAria": "Sample language",
+  "globals.codeLangDemoPy": "Python",
+  "globals.codeLangDemoTs": "TypeScript",
+  "globals.codeLangDemoCpp": "C++",
+  "globals.codeLangDemoPyFile": "point.py",
+  "globals.codeLangDemoTsFile": "point.ts",
+  "globals.codeLangDemoCppFile": "point.cpp",
+  "globals.codeSimpleProfileLabel": "scene.gsc (highlightProfile)",
+  "globals.codeSimpleProfileHelp":
+    "Consumer line-command DSL via `highlightProfile` / `registerHighlightLanguage` (Raycaster `.gsc` shape). Roles map to `--fynns-code-*`. Spec: `llm/AGENT_INTERFACES.md`.",
   "globals.fullscreenOpen": "Open fullscreen dialog",
   "globals.fullscreenTitle": "Fullscreen dialog",
   "globals.fullscreenBody":
@@ -1222,9 +1243,30 @@ const zh: Record<MessageKey, string> = {
   "globals.tableHelp":
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — 原生表格外观。",
   "globals.codeBlockLabel": "tokens.ts",
+  "globals.codeBlockCssLabel": "hero.css",
+  "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：`default` 可选标题头；`plain` 无头。悬停渐显复制（键盘 focus-visible；触控常显）。",
+    "CodeBlock：`default` 可选标题头；`plain` 无头。支持语言（`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`）用零依赖分词 + `--fynns-code-*` 着色。悬停渐显复制（键盘 focus-visible；触控常显）；剪贴板仍是原始源码。",
+  "globals.codeTokensAria": "代码高亮 token",
+  "globals.codeTokensHelp":
+    "`--fynns-code-*` 角色色来自 cpptools VS 深/浅主题（TextMate last-wins）。浅色经 `data-fynns-theme=\"light\"` 覆盖。",
+  "globals.codeLangDemoOpen": "语言展示",
+  "globals.codeLangDemoHelp":
+    "打开对话框，用 ToggleGroup 切换 Python / TypeScript / C++ 的 CodeBlock 样例（同一套 `--fynns-code-*` 高亮）。",
+  "globals.codeLangDemoTitle": "CodeBlock 语言",
+  "globals.codeLangDemoDescription":
+    "切换样例语言。高亮仍走零依赖分词器。",
+  "globals.codeLangDemoAria": "样例语言",
+  "globals.codeLangDemoPy": "Python",
+  "globals.codeLangDemoTs": "TypeScript",
+  "globals.codeLangDemoCpp": "C++",
+  "globals.codeLangDemoPyFile": "point.py",
+  "globals.codeLangDemoTsFile": "point.ts",
+  "globals.codeLangDemoCppFile": "point.cpp",
+  "globals.codeSimpleProfileLabel": "scene.gsc（highlightProfile）",
+  "globals.codeSimpleProfileHelp":
+    "消费仓行首命令 DSL：`highlightProfile` / `registerHighlightLanguage`（Raycaster `.gsc` 形）。角色映射到 `--fynns-code-*`。规格：`llm/AGENT_INTERFACES.md`。",
   "globals.fullscreenOpen": "打开全屏对话框",
   "globals.fullscreenTitle": "全屏对话框",
   "globals.fullscreenBody":
