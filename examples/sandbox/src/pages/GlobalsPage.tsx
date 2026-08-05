@@ -1087,6 +1087,7 @@ export function GlobalsPage() {
           <InlineAlert severity="success" message={t("globals.inlineAlertSuccess")} />
           <InlineAlert severity="warning" message={t("globals.inlineAlertWarning")} />
           <InlineAlert severity="error" message={t("globals.inlineAlertError")} />
+          <InlineAlert severity="success" message={t("globals.inlineAlertWrap")} />
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
         <div className="sandbox-globals-row">
