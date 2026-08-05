@@ -247,7 +247,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
-  M3; do not confuse with Banner), Badge / BadgedBox, LinearProgress /
+  M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
+  on-surface; long copy wraps — do not confuse with Banner), Badge / BadgedBox,
+  LinearProgress /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
   **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
   fullscreen non-dismissible scrim or sectional dim + ring + visible message;
@@ -318,6 +320,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Collapsible body and Card content anatomy use shared **block** pad
   `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
   under section chrome; Collapsible trigger stays denser (`--fynns-space-sm`).
+  Do **not** add a second padding wrapper inside those shells. Stack siblings
+  (section label → `InlineAlert` → next block) with
+  `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
+  second custom status box (use `InlineAlert` for in-panel severity).
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.

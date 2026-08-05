@@ -568,7 +568,8 @@ export const SEARCHBAR_TOKENS = {
 /**
  * Banner geometry (M3 Banner at 16px rem).
  * Full-width strip under TopAppBar: message + actions + optional dismiss.
- * Distinct from inline `*Banner` / `AlertMessageBase` helpers.
+ * Also used by in-panel `InlineAlert` for pad / gap / icon-size (same strip
+ * rhythm — do not invent a parallel pad set).
  * `--fynns-banner-<key>`.
  */
 export const BANNER_TOKENS = {

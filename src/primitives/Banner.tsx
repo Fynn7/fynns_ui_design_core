@@ -29,7 +29,7 @@ export type BannerProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
 
 /**
  * M3 Banner — full-width strip for persistent messages under a TopAppBar.
- * For in-panel severity use `InlineAlert` (fynns utility, not an M3 component).
+ * For in-panel severity use `InlineAlert` (soft tonal fill; fynns utility, not M3).
  * @see https://m3.material.io/components/banners/overview
  */
 export function Banner({
