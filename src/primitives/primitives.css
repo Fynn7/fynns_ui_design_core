@@ -8229,7 +8229,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-clipped-nav-shell[data-drawer-resizing="true"]
   > .fynns-clipped-nav-shell-body
   > .fynns-clipped-nav-shell-resize {
-  background: color-mix(in srgb, var(--fynns-color-accent) 42%, transparent);
+  background: var(--fynns-color-accent-42);
 }
 
 .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
@@ -8445,11 +8445,19 @@ a.fynns-breadcrumb-link:visited {
      * Rem-only cap: `%` max-height does not resolve against an `auto` grid
      * row, so a stacked drawer would otherwise grow to every destination.
      * Nested demos prefer rail (side column) over this stack path.
+     * Clip here; scroll on `.fynns-nav-drawer-body.fynns-scroll` (not the
+     * outer shell — avoids browser-default scrollbars).
      */
     max-height: 9rem;
-    overflow: auto;
+    overflow: hidden;
     border-inline-end: none;
     border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  }
+
+  .fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 100%;
   }
 
   .fynns-clipped-nav-shell-main {

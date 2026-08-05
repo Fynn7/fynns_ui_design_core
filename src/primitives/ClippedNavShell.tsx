@@ -321,6 +321,23 @@ export function ClippedNavShell({
       ? ({ ["--fynns-navdrawer-width" as string]: `${drawerWidthPx}px` } as CSSProperties)
       : undefined;
 
+  const resizeBounds = (() => {
+    const root = rootRef.current;
+    if (!root || !showResize) return null;
+    const min = readVarPx(root, "--fynns-navdrawer-min-width") || 192;
+    const tokenMax = readVarPx(root, "--fynns-navdrawer-max-width") || 448;
+    const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
+    const main = root.querySelector(".fynns-clipped-nav-shell-main");
+    const hasAside = !!main?.querySelector(
+      ".fynns-end-aside:not([data-state='closing'])",
+    );
+    const asideMin = hasAside
+      ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+      : 0;
+    const roomMax = Math.max(min, root.clientWidth - mainMin - asideMin);
+    return { min, max: Math.min(tokenMax, roomMax) };
+  })();
+
   return (
     <div
       ref={rootRef}
@@ -339,6 +356,12 @@ export function ClippedNavShell({
             role="separator"
             aria-orientation="vertical"
             aria-label="Resize navigation drawer"
+            aria-valuemin={
+              resizeBounds != null ? Math.round(resizeBounds.min) : undefined
+            }
+            aria-valuemax={
+              resizeBounds != null ? Math.round(resizeBounds.max) : undefined
+            }
             aria-valuenow={
               drawerWidthPx != null ? Math.round(drawerWidthPx) : undefined
             }
