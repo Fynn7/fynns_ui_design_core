@@ -6351,51 +6351,80 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* ---------- InlineAlert (in-panel severity; not chrome Banner) ---------- */
+/* Soft tonal fill. Icon carries severity; body is on-surface (readable).
+   Pad rhythm shared with Banner strip tokens. Not M3 — maps to Banner / Snackbar. */
 .fynns-inline-alert {
-  display: inline-flex;
+  display: flex;
   align-items: flex-start;
-  gap: var(--fynns-space-2);
-  border: var(--fynns-border-hairline) solid transparent;
+  gap: var(--fynns-banner-gap);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding-block: var(--fynns-banner-pad-block);
+  padding-inline: var(--fynns-banner-pad-inline);
+  border: 0;
   border-radius: var(--fynns-radius-md);
-  padding: var(--fynns-space-2) var(--fynns-space-3);
+  background: transparent;
+  color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-body);
-  font-size: var(--fynns-font-size-panel-heading);
+  font-size: var(--fynns-font-size-sm);
 }
 
 .fynns-inline-alert__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1px;
+  margin-top: 0.125rem;
   flex: 0 0 auto;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  line-height: 0;
+}
+
+.fynns-inline-alert__icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
 }
 
 .fynns-inline-alert__text {
+  flex: 1 1 auto;
   min-width: 0;
-}
-
-.fynns-inline-alert--warning {
-  color: var(--fynns-color-warning);
-  border-color: color-mix(in srgb, var(--fynns-color-warning) 45%, transparent);
-  background: color-mix(in srgb, var(--fynns-color-warning) 10%, transparent);
-}
-
-.fynns-inline-alert--error {
-  color: var(--fynns-color-danger);
-  border-color: var(--fynns-color-danger-border);
-  background: color-mix(in srgb, var(--fynns-color-danger) 10%, transparent);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .fynns-inline-alert--info {
+  background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent);
+}
+
+.fynns-inline-alert--info .fynns-inline-alert__icon {
   color: var(--fynns-color-info);
-  border-color: color-mix(in srgb, var(--fynns-color-info) 45%, transparent);
-  background: color-mix(in srgb, var(--fynns-color-info) 10%, transparent);
 }
 
 .fynns-inline-alert--success {
+  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+}
+
+.fynns-inline-alert--success .fynns-inline-alert__icon {
   color: var(--fynns-color-success);
-  border-color: color-mix(in srgb, var(--fynns-color-success) 45%, transparent);
-  background: color-mix(in srgb, var(--fynns-color-success) 10%, transparent);
+}
+
+.fynns-inline-alert--warning {
+  background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent);
+}
+
+.fynns-inline-alert--warning .fynns-inline-alert__icon {
+  color: var(--fynns-color-warning);
+}
+
+.fynns-inline-alert--error {
+  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+}
+
+.fynns-inline-alert--error .fynns-inline-alert__icon {
+  color: var(--fynns-color-danger);
 }
 
 /* ---------- Banner (M3 full-width strip) ---------- */
