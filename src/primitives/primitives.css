@@ -1230,6 +1230,12 @@
   display: grid;
   place-items: center;
   padding: var(--fynns-space-lg);
+  /*
+   * Cap the sole column to the overlay. Long `pre` / CodeBlock min-content
+   * must not inflate the track and shove a max-width-clamped panel off-screen
+   * (panel used width stays ~560px while left jumps to ~17k).
+   */
+  grid-template-columns: minmax(0, 100%);
 }
 
 .fynns-dialog-overlay--command {
@@ -8120,6 +8126,8 @@ a.fynns-breadcrumb-link:visited {
   /* Same section-body rhythm as CardContent / Collapsible body. */
   padding-block: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
+  min-width: 0;
+  max-width: 100%;
   overflow: auto;
   font-family: var(--fynns-font-mono);
   font-size: var(--fynns-font-size-xs);
