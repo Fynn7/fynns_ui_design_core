@@ -216,7 +216,7 @@ const en = {
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
-    "Shell size — container width / product chrome bar height (not padding). `bar-height` drives TopAppBar sm / BottomAppBar / SearchBar / Toolbar; sandbox page strip stays `--sandbox-chrome-bar-height`.",
+    "Shell size — container width / product chrome bar height (not padding). `bar-height` drives TopAppBar sm / BottomAppBar / SearchBar / Toolbar; sandbox TopAppBar height override stays `--sandbox-chrome-bar-height`.",
   "layoutChrome.rowGap": "Demo row wrap",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — flex wrap gap for Motion easing bars / Foundations Rows (horizontal and between wrapped lines).",
@@ -231,7 +231,7 @@ const en = {
     "--fynns-layout-field-hint-gap — control → supporting / error hint (aliases unit-stack-gap).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
-    "--sandbox-chrome-bar-height — brand cell + page topbar strip (sandbox only).",
+    "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
   "layoutChrome.stackGap": "Control stack",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap — between ControlRows.",
@@ -265,6 +265,9 @@ const en = {
   "layoutChrome.drawerWidth": "Drawer width",
   "layoutChrome.drawerWidthHint":
     "--fynns-layout-drawer-width — content Drawer side sheet width (not NavigationDrawer).",
+  "layoutChrome.endAsideWidth": "EndAside width",
+  "layoutChrome.endAsideWidthHint":
+    "--fynns-layout-end-aside-width — EndAside open width (width morph pane). Cap `--fynns-layout-end-aside-max-width` stays a CSS token (often vw; not rem-slider editable).",
   "layoutChrome.dialogMaxSm": "Dialog max sm",
   "layoutChrome.dialogMaxSmHint":
     "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\".",
@@ -669,6 +672,8 @@ const en = {
   "globals.appBarSearch": "Search",
   "globals.appBarSettings": "Settings",
   "globals.appBarScrolled": "Scrolled surface",
+  "globals.appBarHelp":
+    "[both] TopAppBar — page header on phone and desktop. Standalone sample below; not the sandbox shell bar. Prefer ClippedNavShell.topBar when composing an app.",
   "globals.navRailAria": "Sample navigation rail",
   "globals.navRailMenu": "Menu",
   "globals.navRailHome": "Home",
@@ -682,7 +687,9 @@ const en = {
   "globals.navRailPaneAll": "Browse every control sample on this Components page.",
   "globals.navBarAria": "Sample navigation bar",
   "globals.navBarHelp":
-    "Bottom destinations for compact layouts (80dp). Same square active highlight as the rail; prefer NavigationRail on medium+ widths.",
+    "[mobile-first] NavigationBar — bottom destinations for compact / phone. Prefer NavigationRail on medium+. Standalone sample — not stacked with the Rail demo into one app.",
+  "globals.navRailHelp":
+    "[desktop-first] NavigationRail — vertical destinations for medium+. Prefer NavigationBar on phone. Standalone sample beside a fake pane; not mobile chrome.",
   "globals.navDrawerAria": "Sample navigation drawer",
   "globals.navDrawerModalAria": "Modal navigation drawer",
   "globals.navDrawerHeadline": "Mail",
@@ -693,13 +700,24 @@ const en = {
   "globals.navDrawerSection": "Labels",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "Destination side sheet (280dp dense; stock M3 is 360dp). Standard sits in layout; modal overlays with scrim. Prefer Drawer for generic inspector panels.",
+    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. Prefer Drawer for generic inspector panels.",
+  "globals.shellTitle": "Clipped shell",
+  "globals.shellNavAria": "Sample clipped destinations",
+  "globals.shellNavMode": "Drawer destinations (off = rail)",
+  "globals.shellAsideOpen": "EndAside open",
+  "globals.shellToggleNav": "Toggle drawer / rail",
+  "globals.shellToggleAside": "Toggle EndAside",
+  "globals.shellCanvas":
+    "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drawer is for modal content sheets — not this destination column.",
+  "globals.shellAsideBody": "Supporting inspector pane (EndAside).",
+  "globals.shellHelp":
+    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail; narrow stacks nav) + EndAside (width morph; narrow → bottom overlay). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
-    "Bottom action chrome (56dp dense) with optional FAB inside the bar. Prefer NavigationBar for destinations.",
+    "[mobile-first] BottomAppBar — bottom action chrome (56dp) with optional FAB. Destinations → NavigationBar. Not a duplicate of NavigationBar.",
   "globals.toolbarDockedAria": "Sample docked toolbar",
   "globals.toolbarFloatingAria": "Sample floating toolbar",
   "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
@@ -1035,7 +1053,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
-    "壳尺寸 — 容器宽 / 产品 chrome 条高（不是 padding）。`bar-height` 驱动 TopAppBar sm / BottomAppBar / SearchBar / Toolbar；沙盒页顶条仍是 `--sandbox-chrome-bar-height`。",
+    "壳尺寸 — 容器宽 / 产品 chrome 条高（不是 padding）。`bar-height` 驱动 TopAppBar sm / BottomAppBar / SearchBar / Toolbar；沙盒 TopAppBar 高度覆盖仍是 `--sandbox-chrome-bar-height`。",
   "layoutChrome.rowGap": "演示行换行间距",
   "layoutChrome.rowGapHint":
     "--sandbox-row-gap — 动效缓动条 / Foundations Row 的 flex 换行间距（水平与换行后行距）。",
@@ -1050,7 +1068,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-field-hint-gap — 控件到 supporting / error 提示（同 unit-stack-gap）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
-    "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度（仅沙盒）。",
+    "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
   "layoutChrome.stackGap": "控件栈",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap — ControlRow 之间。",
@@ -1084,6 +1102,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.drawerWidth": "Drawer 宽度",
   "layoutChrome.drawerWidthHint":
     "--fynns-layout-drawer-width — 内容 Drawer 侧栏宽度（非 NavigationDrawer）。",
+  "layoutChrome.endAsideWidth": "EndAside 宽度",
+  "layoutChrome.endAsideWidthHint":
+    "--fynns-layout-end-aside-width — EndAside 展开宽度（宽度开合窗格）。上限 `--fynns-layout-end-aside-max-width` 仍是 CSS token（常用 vw；不可用 rem 滑块编辑）。",
   "layoutChrome.dialogMaxSm": "Dialog 最大宽 sm",
   "layoutChrome.dialogMaxSmHint":
     "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\"。",
@@ -1486,6 +1507,8 @@ const zh: Record<MessageKey, string> = {
   "globals.appBarSearch": "搜索",
   "globals.appBarSettings": "设置",
   "globals.appBarScrolled": "滚动后表面",
+  "globals.appBarHelp":
+    "[两端通用] TopAppBar — 手机与桌面页头。下方为独立样例，不是沙盒壳顶栏。组装应用时放进 ClippedNavShell.topBar。",
   "globals.navRailAria": "示例导航栏",
   "globals.navRailMenu": "菜单",
   "globals.navRailHome": "首页",
@@ -1499,7 +1522,9 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneAll": "浏览本页「组件」中的全部控件样例。",
   "globals.navBarAria": "示例底部导航栏",
   "globals.navBarHelp":
-    "紧凑布局的底部目的地（80dp）。与导航轨相同的方形选中高亮；中等及以上宽度请优先用 NavigationRail。",
+    "[偏移动端] NavigationBar — 紧凑/手机底栏目的地。中等及以上宽度优先 NavigationRail。独立样例 — 勿与上方 Rail 当成同一应用。",
+  "globals.navRailHelp":
+    "[偏桌面端] NavigationRail — 中等及以上宽度的纵向目的地。手机优先 NavigationBar。旁侧假内容区仅为演示，不是移动端 chrome。",
   "globals.navDrawerAria": "示例导航抽屉",
   "globals.navDrawerModalAria": "模态导航抽屉",
   "globals.navDrawerHeadline": "邮件",
@@ -1510,13 +1535,24 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSection": "标签",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "目的地侧栏（280dp 紧凑；原版 M3 为 360dp）。Standard 常驻布局；Modal 带遮罩覆盖。通用检查器面板请优先用 Drawer。",
+    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。通用检查器请用 Drawer。",
+  "globals.shellTitle": "裁切壳",
+  "globals.shellNavAria": "裁切壳示例目的地",
+  "globals.shellNavMode": "抽屉目的地（关 = 导航轨）",
+  "globals.shellAsideOpen": "打开 EndAside",
+  "globals.shellToggleNav": "切换抽屉 / 导航轨",
+  "globals.shellToggleAside": "切换 EndAside",
+  "globals.shellCanvas":
+    "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。Drawer 用于模态内容侧栏，不是这列目的地。",
+  "globals.shellAsideBody": "支撑检查器窗格（EndAside）。",
+  "globals.shellHelp":
+    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail；窄屏上叠导航）+ EndAside（宽度开合；窄屏底缘叠层）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
-    "底部操作栏（56dp 紧凑），可选 FAB 放在栏内。目的地导航请优先用 NavigationBar。",
+    "[偏移动端] BottomAppBar — 底部操作栏（56dp），可选 FAB。目的地请用 NavigationBar。与 NavigationBar 不是同一组件。",
   "globals.toolbarDockedAria": "示例停靠工具栏",
   "globals.toolbarFloatingAria": "示例浮动工具栏",
   "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",

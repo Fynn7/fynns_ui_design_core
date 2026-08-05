@@ -2502,8 +2502,9 @@
   outline: none;
 }
 
-/* Same quiet accent-tinted border as `.fynns-input` — no inset focus ring. */
-.fynns-collapsible:has(.fynns-collapsible-trigger:focus-visible) {
+/* Same quiet accent-tinted border as `.fynns-input` — no inset focus ring.
+ * Scope to this instance's trigger (nested Collapsibles must not light the parent). */
+.fynns-collapsible:has(> .fynns-collapsible-head > .fynns-collapsible-trigger:focus-visible) {
   border-color: color-mix(
     in srgb,
     var(--fynns-color-accent) 28%,
@@ -2548,8 +2549,9 @@
     opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-/* Collapsed = `>` (ChevronRight); open rotates to point down. */
-.fynns-collapsible--open .fynns-collapsible-chevron {
+/* Collapsed = `>` (ChevronRight); open rotates to point down.
+ * Child combinator: nested Collapsibles must not inherit the parent's --open. */
+.fynns-collapsible--open > .fynns-collapsible-head .fynns-collapsible-chevron {
   transform: rotate(90deg);
 }
 
@@ -2577,31 +2579,34 @@
  * → chevron. Do not use :focus-within — mouse click leaves focus on the
  * trigger and would keep the chevron after unhover.
  * Card never swaps — icon stays visible (no chevron rules).
+ * Scope via `>` so a parent `--has-icon` / hover does not drive nested slots.
  */
-.fynns-collapsible--has-icon .fynns-collapsible-chevron {
+.fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-chevron {
   opacity: 0;
 }
 
-.fynns-collapsible--has-icon .fynns-collapsible-head:hover .fynns-collapsible-chevron,
+.fynns-collapsible--has-icon > .fynns-collapsible-head:hover .fynns-collapsible-chevron,
 .fynns-collapsible--has-icon
-  .fynns-collapsible-trigger:focus-visible
+  > .fynns-collapsible-head
+  > .fynns-collapsible-trigger:focus-visible
   .fynns-collapsible-chevron {
   opacity: 1;
 }
 
-.fynns-collapsible--has-icon .fynns-collapsible-head:hover .fynns-collapsible-icon,
+.fynns-collapsible--has-icon > .fynns-collapsible-head:hover .fynns-collapsible-icon,
 .fynns-collapsible--has-icon
-  .fynns-collapsible-trigger:focus-visible
+  > .fynns-collapsible-head
+  > .fynns-collapsible-trigger:focus-visible
   .fynns-collapsible-icon {
   opacity: 0;
 }
 
 @media (hover: none) {
-  .fynns-collapsible--has-icon .fynns-collapsible-icon {
+  .fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-icon {
     opacity: 0;
   }
 
-  .fynns-collapsible--has-icon .fynns-collapsible-chevron {
+  .fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-chevron {
     opacity: 1;
   }
 }
@@ -8062,5 +8067,188 @@ a.fynns-breadcrumb-link:visited {
 .fynns-surface--fill > * {
   min-height: 0;
   min-width: 0;
+}
+
+/* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */
+.fynns-clipped-nav-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+}
+
+/* Prefer clipped chrome: surface-1 + hairline under the bar (no crosshair). */
+.fynns-clipped-nav-shell > .fynns-top-app-bar {
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-none);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.fynns-clipped-nav-shell-body {
+  display: grid;
+  grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  transition: grid-template-columns var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
+}
+
+.fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
+  grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-clipped-nav-shell-body {
+    transition: none;
+  }
+}
+
+/* Permanent destinations clipped under the top bar. */
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-body > .fynns-nav-rail {
+  height: 100%;
+  min-height: 0;
+  background: var(--fynns-color-surface-1);
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer {
+  padding-block-start: 0;
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+  display: block;
+  width: 100%;
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-rail {
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+}
+
+.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-tooltip-trigger {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.fynns-clipped-nav-shell-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---------- EndAside (width-morph supporting pane) ---------- */
+.fynns-end-aside {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: var(--fynns-layout-end-aside-width);
+  max-width: var(--fynns-layout-end-aside-max-width);
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  background: var(--fynns-color-surface-1);
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-end-aside[data-state="closing"] {
+  width: 0;
+  max-width: 0;
+}
+
+/* Lock child width while the pane clips — avoids seam reflow. */
+.fynns-end-aside > * {
+  width: var(--fynns-layout-end-aside-width);
+  max-width: var(--fynns-layout-end-aside-max-width);
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-end-aside,
+  .fynns-end-aside[data-state="closing"] {
+    transition: none;
+  }
+}
+
+/* Narrow: stack nav above main; EndAside overlays as a bottom sheet. */
+@media (max-width: 56.25rem) {
+  .fynns-clipped-nav-shell-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: 1fr;
+  }
+
+  .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: min(40vh, 20rem);
+    border-inline-end: none;
+    border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  }
+
+  .fynns-clipped-nav-shell-main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .fynns-clipped-nav-shell-main:has(.fynns-end-aside) {
+    position: relative;
+  }
+
+  .fynns-end-aside {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    max-width: none;
+    border-inline-start: none;
+    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+    max-height: min(45dvh, 22rem);
+    box-shadow: var(--fynns-shadow-md);
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  }
+
+  .fynns-end-aside > * {
+    width: 100%;
+    max-width: none;
+  }
+
+  .fynns-end-aside[data-state="closing"] {
+    width: 100%;
+    max-width: none;
+    max-height: 0;
+    box-shadow: var(--fynns-shadow-none);
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  }
 }
 

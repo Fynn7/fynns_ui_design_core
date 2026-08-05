@@ -432,6 +432,8 @@
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;
+  --fynns-layout-end-aside-width: 22rem;
+  --fynns-layout-end-aside-max-width: 36vw;
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);

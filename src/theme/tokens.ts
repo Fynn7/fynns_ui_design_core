@@ -893,6 +893,13 @@ export const LAYOUT_TOKENS = {
    * use `--fynns-appbar-height-md` / `-lg` instead.
    */
   "bar-height": "3.5rem",
+  /**
+   * `EndAside` supporting pane width (desktop). Child content locks to the same
+   * width while the pane morphs so the canvas seam does not reflow.
+   */
+  "end-aside-width": "22rem",
+  /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
+  "end-aside-max-width": "36vw",
 } as const;
 
 /**

@@ -113,6 +113,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.drawerWidthHint",
     max: 560,
   },
+  "end-aside-width": {
+    labelKey: "layoutChrome.endAsideWidth",
+    hintKey: "layoutChrome.endAsideWidthHint",
+    max: 480,
+  },
   "dialog-max-width-sm": {
     labelKey: "layoutChrome.dialogMaxSm",
     hintKey: "layoutChrome.dialogMaxSmHint",

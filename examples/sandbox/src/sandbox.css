@@ -8,72 +8,11 @@
   --sandbox-chrome-bar-height: 3.5rem;
 }
 
-.sandbox-root {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-columns: minmax(0, 1fr);
-  height: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  overflow: hidden;
-  background: var(--fynns-color-app-bg);
-  color: var(--fynns-color-text);
-}
-
-/* M3 clipped shell: topbar full-bleed; nav | main only below (no crosshair). */
-.sandbox-shell-body {
-  display: grid;
-  grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
-  min-width: 0;
-  min-height: 0;
-  transition: grid-template-columns var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
-}
-
-.sandbox-root[data-nav="rail"] .sandbox-shell-body {
-  grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sandbox-shell-body {
-    transition: none;
-  }
-}
-
-/* Permanent nav clipped under the top app bar — vertical seam only (no brand hairline). */
-.sandbox-nav.fynns-nav-drawer {
-  height: 100%;
-  min-height: 0;
-  padding-block-start: 0;
-  background: var(--fynns-color-surface-1);
-  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-}
-
-.sandbox-nav .fynns-nav-drawer-body {
-  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
-}
-
-.sandbox-nav .fynns-nav-drawer-body .fynns-tooltip-trigger {
-  display: block;
-  width: 100%;
-}
-
-/* Collapsed rail under clipped topbar — no menu chrome row / bottom hairline. */
-.sandbox-nav-rail.fynns-nav-rail {
-  height: 100%;
-  min-height: 0;
-  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
-  background: var(--fynns-color-surface-1);
-  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-}
-
-.sandbox-nav-rail .fynns-nav-rail-destinations {
-  flex: 1 1 auto;
-}
-
-.sandbox-nav-rail .fynns-tooltip-trigger {
-  display: flex;
-  width: 100%;
-  justify-content: center;
+/* Layout chrome lives on ClippedNavShell / EndAside in @fynns/ui.
+ * Sandbox keeps brand height knob + destination spacer. */
+.sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {
+  height: var(--sandbox-chrome-bar-height);
+  min-height: var(--sandbox-chrome-bar-height);
 }
 
 .sandbox-nav-templates {
@@ -199,49 +138,6 @@
   color: var(--fynns-color-text-muted);
 }
 
-.sandbox-main {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 0;
-}
-
-.sandbox-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--fynns-space-sm);
-  box-sizing: border-box;
-  height: var(--sandbox-chrome-bar-height);
-  min-height: var(--sandbox-chrome-bar-height);
-  padding: 0 var(--fynns-space-lg);
-  /* Single full-bleed edge under the bar — vertical nav seam starts below. */
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  background: var(--fynns-color-surface-1);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.sandbox-topbar-leading {
-  display: flex;
-  align-items: center;
-  gap: var(--fynns-space-sm);
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.sandbox-topbar-brand {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: var(--fynns-font-size-md);
-  font-weight: var(--fynns-font-weight-semibold);
-  color: var(--fynns-color-text);
-}
-
 .sandbox-topbar-actions {
   display: flex;
   align-items: center;
@@ -272,45 +168,6 @@
   gap: var(--fynns-space-sm);
   width: 100%;
   min-width: 0;
-}
-
-.sandbox-aside {
-  flex: 0 0 auto;
-  box-sizing: border-box;
-  width: 22rem;
-  max-width: 36vw;
-  /* Inspector pane seam — outline-subtle, not border-strong. */
-  border-left: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  background: var(--fynns-color-surface-1);
-  min-height: 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition:
-    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
-}
-
-.sandbox-aside[data-state="closing"] {
-  width: 0;
-  max-width: 0;
-}
-
-/* Keep inspector layout stable while the pane width clips — avoids reflow
-   that reads as a morphing corner at the canvas / aside seam. */
-.sandbox-aside > * {
-  width: 22rem;
-  max-width: 36vw;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sandbox-aside,
-  .sandbox-aside[data-state="closing"] {
-    transition: none;
-  }
 }
 
 .sandbox-inspector {
@@ -1186,51 +1043,67 @@
   line-height: var(--fynns-line-height-body);
 }
 
+.sandbox-globals-clipped-shell {
+  width: 100%;
+  max-width: 44rem;
+  height: 18rem;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-globals-clipped-shell > .fynns-clipped-nav-shell {
+  height: 100%;
+  max-height: 100%;
+}
+
+.sandbox-globals-shell-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.sandbox-globals-shell-canvas,
+.sandbox-globals-shell-aside {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--fynns-space-md);
+  overflow: auto;
+}
+
+.sandbox-globals-shell-canvas {
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-globals-shell-aside {
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-globals-shell-canvas-body,
+.sandbox-globals-shell-aside-body {
+  margin: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
 @media (max-width: 900px) {
-  .sandbox-root {
-    grid-template-rows: auto minmax(0, 1fr);
+  .sandbox-root.fynns-clipped-nav-shell {
     /* Prefer dynamic viewport so mobile browser chrome does not clip the shell. */
     height: 100dvh;
     max-height: 100dvh;
-  }
-
-  .sandbox-shell-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .sandbox-root[data-nav="rail"] .sandbox-shell-body {
-    grid-template-columns: 1fr;
-  }
-
-  .sandbox-nav.fynns-nav-drawer {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    max-height: min(40vh, 20rem);
-    border-inline-end: none;
-    border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   }
 
   .sandbox-nav-templates {
     margin-top: var(--fynns-space-sm);
   }
 
-  .sandbox-main {
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .sandbox-topbar {
-    flex-wrap: wrap;
+  .sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {
     height: auto;
     min-height: var(--sandbox-chrome-bar-height);
-    padding-inline: var(--fynns-space-md);
-  }
-
-  .sandbox-topbar-leading {
-    flex: 1 1 auto;
-    min-width: 0;
   }
 
   .sandbox-topbar-actions {
@@ -1248,42 +1121,6 @@
     flex: 1 1 auto;
     min-height: 0;
     padding: var(--fynns-space-md);
-  }
-
-  /*
-   * Overlay the inspector as a bottom sheet so the canvas keeps full height
-   * (in-flow 50vh aside previously crushed the preview).
-   */
-  .sandbox-aside {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 3;
-    width: 100%;
-    max-width: none;
-    border-left: none;
-    border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    max-height: min(45dvh, 22rem);
-    box-shadow: var(--fynns-shadow-md);
-    transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
-      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-  }
-
-  .sandbox-aside > * {
-    width: 100%;
-    max-width: none;
-  }
-
-  .sandbox-aside[data-state="closing"] {
-    width: 100%;
-    max-width: none;
-    max-height: 0;
-    box-shadow: var(--fynns-shadow-none);
-    transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
-      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
   /* Toolbar: label above controls when the shared label|control tracks
@@ -1356,7 +1193,7 @@
 }
 
 @media (max-width: 900px) and (max-height: 640px) {
-  .sandbox-aside {
+  .sandbox-root .fynns-end-aside {
     max-height: min(38dvh, 16rem);
   }
 }
