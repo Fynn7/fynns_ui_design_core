@@ -88,6 +88,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.contentInsetHint",
     max: 48,
   },
+  "content-pad-block": {
+    labelKey: "layoutChrome.contentPadBlock",
+    hintKey: "layoutChrome.contentPadBlockHint",
+    max: 48,
+  },
   "dialog-inset": {
     labelKey: "layoutChrome.dialogInset",
     hintKey: "layoutChrome.dialogInsetHint",

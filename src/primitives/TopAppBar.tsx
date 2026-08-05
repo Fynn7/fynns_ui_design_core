@@ -26,7 +26,7 @@ export type TopAppBarProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
  * Dense heights (sm/row = `--fynns-layout-bar-height` 56dp; md 80 / lg 104).
  * Sticky positioning is left to the caller.
  * M3-informed layout, denser heights/type for desktop tool chrome.
- * Prefer `Panel` for sidebar chrome; use this for the main content top edge.
+ * Prefer `NavigationDrawer` / `NavigationRail` for destination chrome.
  * @see https://m3.material.io/components/top-app-bar/overview
  */
 export function TopAppBar({

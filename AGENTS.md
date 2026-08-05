@@ -52,7 +52,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Default
    `ghost`; dense forms may use `size="sm"`. As the first child of
-   `CardContent`, top inset shrinks to `--fynns-space-sm` (not full
+   `CardContent`, top inset shrinks to `--fynns-space-xs` (Card content
+   already uses dense `--fynns-space-sm` block pad; inline stays
    `content-inset`). Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
@@ -92,19 +93,22 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   workspace panes: titled head strip + `body` with `fynns-scroll` (do **not**
-   expect a `Panel`/`PanelCard` primitive); overlays via `Dialog` /
+   overlays via `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
    `BusyRegion` (relative dim layer over children; content is `inert` while
-   busy); do not revive `BlockingLoadingOverlay`;
+   busy); do not revive `BlockingLoadingOverlay` or purged `Panel` /
+   `PanelCard`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
    (same surface + stacked shadow). Prefer `FieldBlock` for label-row
-   IconButtons above the control. Rely on Card’s `--fynns-layout-content-inset`;
-   do not add a second page-level outer pad. Consumers choose whether the
+   IconButtons above the control. Card inline pad uses
+   `--fynns-layout-content-inset`; CardContent / Header / Actions **block** pad
+   uses `--fynns-layout-content-pad-block` (same as Collapsible body).
+   Do not add a second page-level outer
+   pad. Consumers choose whether the
    section lives inline or inside an overlay. Simple forms may put fields
    directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
    only when the inner block is an independent interactive subject). Live
@@ -272,8 +276,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Layout helpers:** ControlStack, ControlRow, Grid,
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
-  the viewport — small public API; prefer over ad-hoc getBoundingClientRect)
-  (workspace IDE panes: compose head + `fynns-scroll` body; no Panel/PanelCard).
+  the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 
@@ -290,7 +293,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `SANDBOX_LAYOUT_AGENT_CATALOG`.
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
-  inset via `--fynns-layout-content-inset` (18dp). Centered Dialog /
+  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges.
+  Collapsible body and Card content anatomy use shared **block** pad
+  `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
+  under section chrome; Collapsible trigger stays denser (`--fynns-space-sm`).
+  Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
   Width: content-fit (`max-content`) up to the `size` token ceiling

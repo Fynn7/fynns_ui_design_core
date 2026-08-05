@@ -211,7 +211,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel content insets — equal four-side outer pad. `content-inset` (Card / Collapsible / Drawer) vs `dialog-inset` (centered Dialog; larger breath). Not for BottomSheet.",
+    "Panel content insets — `content-inset` (inline: Card / Collapsible / Drawer), `content-pad-block` (vertical body under section chrome), `dialog-inset` (centered Dialog; larger breath). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -243,9 +243,12 @@ const en = {
   "layoutChrome.controlRowLabel": "Label column",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — fixed ControlRow label track width.",
-  "layoutChrome.contentInset": "Panel inset",
+  "layoutChrome.contentInset": "Panel inset (inline)",
   "layoutChrome.contentInsetHint":
-    "--fynns-layout-content-inset — equal outer pad for Card / Collapsible / Drawer (18dp default).",
+    "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
+  "layoutChrome.contentPadBlock": "Panel pad (block)",
+  "layoutChrome.contentPadBlockHint":
+    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / CardContent (16dp default).",
   "layoutChrome.dialogInset": "Dialog inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog (24dp default).",
@@ -1010,7 +1013,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板内容边距 — 四边等距外缘。`content-inset`（Card / Collapsible / Drawer）与 `dialog-inset`（居中 Dialog，更大呼吸）。BottomSheet 不用这组。",
+    "面板内容边距 — `content-inset`（行向：Card / Collapsible / Drawer）、`content-pad-block`（块向：章节标题下到首个控件）、`dialog-inset`（居中 Dialog，更大呼吸）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1042,9 +1045,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.controlRowLabel": "标签列宽",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — ControlRow 固定标签列宽。",
-  "layoutChrome.contentInset": "面板内边距",
+  "layoutChrome.contentInset": "面板内边距（行向）",
   "layoutChrome.contentInsetHint":
-    "--fynns-layout-content-inset — Card / Collapsible / Drawer 四边等距外缘（默认 18dp）。",
+    "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
+  "layoutChrome.contentPadBlock": "面板内边距（块向）",
+  "layoutChrome.contentPadBlockHint":
+    "--fynns-layout-content-pad-block — Collapsible 正文 / CardContent 垂直边距（默认 16dp）。",
   "layoutChrome.dialogInset": "对话框内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 四边等距外缘（默认 24dp）。",

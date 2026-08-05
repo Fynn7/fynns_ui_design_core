@@ -804,13 +804,19 @@ export const LAYOUT_TOKENS = {
   /** Content side sheet (M3 ~400dp); not NavigationDrawer width. */
   "drawer-width": "25rem",
   /**
-   * Equal outer inset for Collapsible / Drawer / Card content (18dp).
+   * Equal **inline** inset for Collapsible / Drawer / Card (18dp).
    * Also: centered Dialog body **block** padding (top = bottom) — denser than
    * `dialog-inset` while staying symmetric. Between `space-lg` (16dp) and
    * Dialog `dialog-inset` (24dp). Do not force BottomSheet / Snackbar /
-   * ListItem onto this.
+   * ListItem onto this. Section body **block** pad uses `content-pad-block`.
    */
   "content-inset": "1.125rem",
+  /**
+   * Vertical pad under section chrome before the first control (16dp):
+   * Collapsible body, CardContent / CardHeader top / CardActions bottom.
+   * Larger than `--fynns-space-sm` so headers don’t sit on Inputs.
+   */
+  "content-pad-block": "1rem",
   /**
    * Dialog shell inset (24dp): head / foot / body **inline**. Distinct from
    * `content-inset` (body block). Prefer these two over ad-hoc `--fynns-space-*`

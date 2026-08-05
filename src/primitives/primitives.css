@@ -1,4 +1,4 @@
-/*
+﻿/*
  * fynns design system -- component styles.
  * Every value here references a `--fynns-*` token (see ../theme/theme.css).
  * Never hardcode raw colors. Classes use the `.fynns-*` namespace.
@@ -2405,7 +2405,9 @@
   align-items: center;
   gap: var(--fynns-space-2);
   min-width: 0;
-  padding: var(--fynns-layout-content-inset);
+  /* Dense chrome row; body uses content-pad-block. Inline stays content-inset. */
+  padding-block: var(--fynns-space-sm);
+  padding-inline: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
   color: var(--fynns-color-text);
@@ -2458,8 +2460,9 @@
 }
 
 .fynns-collapsible-body {
-  /* Equal outer inset — matches trigger; no head/body hairline. */
-  padding: var(--fynns-layout-content-inset);
+  /* Shared block pad with Card — breathing room under the header. */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
@@ -3430,7 +3433,8 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-layout-content-inset) var(--fynns-layout-content-inset) 0;
+  /* Block: content-pad-block; inline: content-inset (same as Collapsible). */
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset) 0;
   position: relative;
   z-index: 2;
 }
@@ -3489,7 +3493,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-content {
-  padding: var(--fynns-layout-content-inset);
+  /* Shared block pad with Collapsible body (content-pad-block). */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-color-text);
@@ -3498,13 +3504,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-card-header + .fynns-card-content {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
-/* FieldHeader / FieldBlock as first child: denser top than full content-inset. */
+/* FieldHeader / FieldBlock as first child: keep dense top. */
 .fynns-card-content:has(> .fynns-field-header:first-child),
 .fynns-card-content:has(> .fynns-field-block:first-child) {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
@@ -3548,10 +3554,9 @@ a.fynns-breadcrumb-link:visited {
   margin-bottom: var(--fynns-space-md);
 }
 
-/* Outer sides/bottom stay content-inset; keep ~24dp body↔actions breath
- * (content bottom lg + actions top sm), matching pre-inset Card rhythm. */
+/* Sides stay content-inset; body↔actions breath stays compact. */
 .fynns-card-content:has(+ .fynns-card-actions) {
-  padding-bottom: var(--fynns-space-lg);
+  padding-bottom: var(--fynns-space-xs);
 }
 
 .fynns-card-actions {
@@ -3559,14 +3564,14 @@ a.fynns-breadcrumb-link:visited {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset)
-    var(--fynns-layout-content-inset);
+  padding: var(--fynns-space-xs) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-pad-block);
   position: relative;
   z-index: 2;
 }
 
 .fynns-card-header + .fynns-card-actions {
-  padding-top: var(--fynns-space-sm);
+  padding-top: var(--fynns-space-xs);
 }
 
 .fynns-card-actions--end {
@@ -8019,3 +8024,4 @@ a.fynns-breadcrumb-link:visited {
     transform: none;
   }
 }
+
