@@ -239,19 +239,8 @@ export const ELEVATION_TOKENS = {
   5: { surfaceVar: "--fynns-color-surface-5", shadowVar: "--fynns-shadow-xl" },
 } as const;
 
-/**
- * Card variant → surface / elevation / border mapping.
- * Lookup table for the Card primitive — not a CSS token group.
- */
-export const CARD_VARIANT_MAP = {
-  elevated: { surfaceContainer: "surface-1", elevation: 1, border: false },
-  filled: { surfaceContainer: "surface-4", elevation: 0, border: false },
-  outlined: { surfaceContainer: "app-bg", elevation: 0, border: true },
-} as const;
-
 export type ElevationLevel = keyof typeof ELEVATION_TOKENS;
 export type StateLayerName = keyof typeof STATE_LAYER_TOKENS;
-export type CardVariant = keyof typeof CARD_VARIANT_MAP;
 
 /** Font stacks. `--fynns-font-<key>`. */
 export const FONT_FAMILY_TOKENS = {
@@ -816,10 +805,8 @@ export const LAYOUT_TOKENS = {
   "content-inset": "1.125rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
-   * Collapsible body, CardContent / CardHeader top / CardActions bottom,
-   * Surface `padded`, CodeBlock pre. Larger than `--fynns-space-sm` so
-   * headers don’t sit on Inputs. Do not densify this for Card previews —
-   * Card anatomy reads as subject cards at 16dp.
+   * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than
+   * `--fynns-space-sm` so headers don’t sit on Inputs.
    */
   "content-pad-block": "1rem",
   /**

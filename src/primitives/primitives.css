@@ -2407,20 +2407,36 @@
   cursor: not-allowed;
 }
 
-/* ---------- Collapsible ---------- */
-.fynns-collapsible {
+/* ---------- Collapsible / Card (shared shell) ---------- */
+.fynns-collapsible,
+.fynns-card {
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-1);
   overflow: hidden;
+}
+
+.fynns-collapsible {
   transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-collapsible-head {
+.fynns-collapsible-head,
+.fynns-card-head {
   position: relative;
   display: flex;
   align-items: center;
   gap: var(--fynns-space-2);
+  /*
+   * One header height for every anatomy (title-only / icon / trailing IconButton).
+   * Theme reset uses border-box everywhere, so include the open/Card hairline in
+   * min-height. Otherwise IconButton + space-xs×2 (= content 48) overflows the
+   * content box (48 − hairline) and grows the head ~1px vs title-only.
+   */
+  min-height: calc(
+    var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs) + var(--fynns-border-hairline)
+  );
+}
+.fynns-collapsible-head {
   /* M3 state layer: full-bleed inside the card outline (no inset gutter).
      Parent `overflow` + `border-radius` clip the layer to the outer shape. */
   transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
@@ -2445,33 +2461,39 @@
 }
 
 /*
- * Open: full-bleed hairline under the head — meets the outer border
- * (no inset gap). Focus uses quiet border-color only (no inset ring),
- * so the join stays a clean T, not a cut through a thick highlight.
+ * Open Collapsible / always-visible Card: full-bleed hairline under the head —
+ * meets the outer border (no inset gap). Focus uses quiet border-color only
+ * (no inset ring), so the join stays a clean T, not a cut through a thick highlight.
  */
-.fynns-collapsible--open > .fynns-collapsible-head {
+.fynns-collapsible--open > .fynns-collapsible-head,
+.fynns-card > .fynns-card-head {
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
-.fynns-collapsible-trigger {
+.fynns-collapsible-trigger,
+.fynns-card-lead {
   position: relative;
   z-index: 1;
   flex: 1 1 auto;
+  align-self: stretch;
   display: flex;
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
   min-width: 0;
-  /* Dense chrome row; start inset a step above space-md so the disclose
-   * glyph isn’t flush to the card edge. End / body still use content-inset. */
-  padding-block: var(--fynns-space-sm);
+  /* Vertical rhythm comes from the shared head min-height + flex centering —
+   * no padding-block (it fought IconButton+xs and caused variant drift). */
+  padding-block: 0;
   padding-inline-start: var(--fynns-layout-content-inset);
   padding-inline-end: var(--fynns-layout-content-inset);
+  color: var(--fynns-color-text);
+  text-align: left;
+}
+
+.fynns-collapsible-trigger {
   background: transparent;
   border: none;
-  color: var(--fynns-color-text);
   font: inherit;
-  text-align: left;
   cursor: pointer;
 }
 
@@ -2490,7 +2512,8 @@
   box-shadow: none;
 }
 
-.fynns-collapsible-title {
+.fynns-collapsible-title,
+.fynns-card-title {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -2500,7 +2523,8 @@
 
 /* Single disclose slot: optional rest icon stacked with expand chevron.
  * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
-.fynns-collapsible-disclose {
+.fynns-collapsible-disclose,
+.fynns-card-disclose {
   flex: 0 0 auto;
   display: inline-grid;
   place-items: center;
@@ -2529,16 +2553,21 @@
   transform: rotate(90deg);
 }
 
-.fynns-collapsible-icon {
+.fynns-collapsible-icon,
+.fynns-card-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: inherit;
   line-height: 0;
+}
+
+.fynns-collapsible-icon {
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-collapsible-icon > svg {
+.fynns-collapsible-icon > svg,
+.fynns-card-icon > svg {
   width: var(--fynns-size-icon);
   height: var(--fynns-size-icon);
 }
@@ -2547,6 +2576,7 @@
  * With `icon`: rest = custom glyph; header hover (or keyboard focus-visible)
  * → chevron. Do not use :focus-within — mouse click leaves focus on the
  * trigger and would keep the chevron after unhover.
+ * Card never swaps — icon stays visible (no chevron rules).
  */
 .fynns-collapsible--has-icon .fynns-collapsible-chevron {
   opacity: 0;
@@ -2576,7 +2606,8 @@
   }
 }
 
-.fynns-collapsible-actions {
+.fynns-collapsible-actions,
+.fynns-card-actions {
   position: relative;
   z-index: 1;
   flex: 0 0 auto;
@@ -2588,10 +2619,14 @@
   padding-inline-end: var(--fynns-space-xs);
 }
 
-.fynns-collapsible-body {
-  /* Shared block pad with Card — breathing room under the header. */
+.fynns-collapsible-body,
+.fynns-card-body {
+  /* Shared block pad — breathing room under the header. */
   padding-block: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
+}
+
+.fynns-collapsible-body {
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
@@ -3179,26 +3214,6 @@ a.fynns-breadcrumb-link:visited {
   opacity: 0.45;
 }
 
-.fynns-card-open-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  text-align: left;
-  cursor: pointer;
-  color: inherit;
-  font: inherit;
-  width: 100%;
-}
-
-.fynns-card-open-btn:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: var(--fynns-focus-ring-offset-control);
-}
-
 /* ---------- Slider ---------- */
 .fynns-slider {
   width: 100%;
@@ -3450,200 +3465,6 @@ a.fynns-breadcrumb-link:visited {
   border-color: color-mix(in srgb, var(--fynns-color-accent) 50%, var(--fynns-color-border));
 }
 
-/* ---------- Card (M3-informed subject card) ---------- */
-.fynns-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  border-radius: var(--fynns-radius-md);
-  overflow: hidden;
-  color: var(--fynns-color-text);
-  background: var(--fynns-color-surface-1);
-  box-shadow: var(--fynns-shadow-none);
-  border: var(--fynns-border-hairline) solid transparent;
-  transition:
-    background-color var(--fynns-duration-fast) var(--fynns-ease-standard),
-    box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized),
-    border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-card--elevated {
-  background: var(--fynns-color-surface-1);
-  box-shadow: var(--fynns-shadow-xs);
-}
-
-.fynns-card--elevated.fynns-card--interactive:hover {
-  box-shadow: var(--fynns-shadow-sm);
-}
-
-.fynns-card--filled {
-  background: var(--fynns-color-surface-4);
-}
-
-.fynns-card--outlined {
-  background: var(--fynns-color-app-bg);
-  border-color: var(--fynns-color-border-strong);
-}
-
-.fynns-card--selected {
-  background: var(--fynns-color-accent-container);
-  color: var(--fynns-color-on-accent-container);
-  border-color: var(--fynns-color-accent-ring);
-}
-
-.fynns-card--interactive {
-  cursor: pointer;
-}
-
-.fynns-card--interactive::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: transparent;
-  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
-  z-index: 1;
-}
-
-.fynns-card--interactive:hover::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-card--interactive:focus-visible {
-  outline: none;
-  box-shadow:
-    var(--fynns-shadow-xs),
-    0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
-}
-
-.fynns-card--interactive:focus-visible::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-focus),
-    transparent
-  );
-}
-
-.fynns-card--interactive:active::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-card--disabled {
-  opacity: var(--fynns-opacity-muted);
-  pointer-events: none;
-}
-
-.fynns-card-media {
-  position: relative;
-  width: 100%;
-  height: var(--fynns-size-152);
-  overflow: hidden;
-  background: var(--fynns-color-surface-2);
-  /* Above interactive card state layer so media / actions stay crisp. */
-  z-index: 2;
-}
-
-.fynns-card-media-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.fynns-card-header {
-  display: flex;
-  align-items: center;
-  gap: var(--fynns-space-sm);
-  /* Block: content-pad-block; inline: content-inset (same as Collapsible). */
-  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset) 0;
-  position: relative;
-  z-index: 2;
-}
-
-.fynns-card-header-avatar {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--fynns-size-34);
-  height: var(--fynns-size-34);
-  border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-accent-soft);
-  color: var(--fynns-color-accent);
-  font-size: var(--fynns-font-size-sm);
-  font-weight: var(--fynns-font-weight-semibold);
-  overflow: hidden;
-}
-
-/* Prefer the Avatar primitive inside the slot — drop the legacy chrome. */
-.fynns-card-header-avatar:has(.fynns-avatar) {
-  width: auto;
-  height: auto;
-  background: transparent;
-  color: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  overflow: visible;
-}
-
-.fynns-card-header-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-2xs);
-}
-
-.fynns-card-header-title {
-  font-size: var(--fynns-font-size-md);
-  font-weight: var(--fynns-font-weight-semibold);
-  line-height: var(--fynns-line-height-snug);
-  color: var(--fynns-color-text);
-}
-
-.fynns-card-header-subtitle {
-  font-size: var(--fynns-font-size-sm);
-  line-height: var(--fynns-line-height-body);
-  color: var(--fynns-color-text-muted);
-}
-
-.fynns-card-header-action {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-}
-
-.fynns-card-content {
-  /* Shared block pad with Collapsible body (content-pad-block). */
-  padding-block: var(--fynns-layout-content-pad-block);
-  padding-inline: var(--fynns-layout-content-inset);
-  font-size: var(--fynns-font-size-sm);
-  line-height: var(--fynns-line-height-body);
-  color: var(--fynns-color-text);
-  position: relative;
-  z-index: 2;
-}
-
-.fynns-card-header + .fynns-card-content {
-  padding-top: var(--fynns-space-xs);
-}
-
-/* FieldHeader / FieldBlock as first child: keep dense top. */
-.fynns-card-content:has(> .fynns-field-header:first-child),
-.fynns-card-content:has(> .fynns-field-block:first-child) {
-  padding-top: var(--fynns-space-xs);
-}
-
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
 .fynns-field-header {
   display: flex;
@@ -3686,101 +3507,10 @@ a.fynns-breadcrumb-link:visited {
   margin-bottom: var(--fynns-space-md);
 }
 
-/* Sides stay content-inset; body↔actions breath stays compact. */
-.fynns-card-content:has(+ .fynns-card-actions) {
-  padding-bottom: var(--fynns-space-xs);
-}
-
-.fynns-card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-xs) var(--fynns-layout-content-inset)
-    var(--fynns-layout-content-pad-block);
-  position: relative;
-  z-index: 2;
-}
-
-.fynns-card-header + .fynns-card-actions {
+/* FieldHeader / FieldBlock as first child of Card body: keep dense top. */
+.fynns-card-body:has(> .fynns-field-header:first-child),
+.fynns-card-body:has(> .fynns-field-block:first-child) {
   padding-top: var(--fynns-space-xs);
-}
-
-.fynns-card-actions--end {
-  justify-content: flex-end;
-}
-
-.fynns-card-actions--dense {
-  gap: 0;
-  padding: 0;
-}
-
-.fynns-card-media-custom {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.fynns-card-media-placeholder {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--fynns-color-accent) 28%, var(--fynns-color-surface-2)),
-    var(--fynns-color-surface-3)
-  );
-  color: var(--fynns-color-text-muted);
-  font-size: var(--fynns-font-size-caption);
-  letter-spacing: var(--fynns-letter-spacing-wide);
-  text-transform: uppercase;
-}
-
-.fynns-card-action-area {
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: inherit;
-  text-align: inherit;
-  cursor: pointer;
-  font: inherit;
-  position: relative;
-  z-index: 0;
-}
-
-.fynns-card-action-area:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
-}
-
-.fynns-card-action-area::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: transparent;
-  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-card-action-area:hover::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-card-action-area:active::before {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-state-pressed),
-    transparent
-  );
 }
 
 /* ---------- Divider (M3) ---------- */

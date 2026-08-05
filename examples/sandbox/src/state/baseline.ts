@@ -185,7 +185,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "content-inset":
     "Panel inset · Card / Collapsible / Drawer equal **inline** pad",
   "content-pad-block":
-    "Panel inset · Collapsible / CardContent / Surface padded / CodeBlock **block** (16dp)",
+    "Panel inset · Collapsible / Card body / Surface padded / CodeBlock **block** (16dp)",
   "dialog-inset": "Panel inset · centered Dialog / ConfirmDialog equal outer pad",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",

@@ -1,6 +1,5 @@
 import {
   Button,
-  CardActions,
   Collapsible,
   InfoHint,
   Slider,
@@ -207,13 +206,13 @@ export function GlobalsInspector() {
                 ))}
               </ul>
             </div>
-            <CardActions align="end" className="sandbox-field-actions">
+            <div className="sandbox-field-actions">
               <Tooltip content={t("globalsInspector.resetLadderTip")}>
                 <Button size="sm" variant="ghost" onClick={resetShapeLadder}>
                   {t("globalsInspector.resetLadder")}
                 </Button>
               </Tooltip>
-            </CardActions>
+            </div>
           </div>
         </Collapsible>
 

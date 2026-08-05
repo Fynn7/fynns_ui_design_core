@@ -28,7 +28,8 @@ ring can paint before heavy work).
   Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog, Drawer, FullscreenDialog,
-  BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (+ Media/Header/Content/Actions),
+  BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
+  Collapsible shell, static head),
   Surface,
   LinearProgress/CircularProgress, BusyScrim/BusyRegion,
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
@@ -70,7 +71,8 @@ ring can paint before heavy work).
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.
 - Nested containment (host → section → field): page / Dialog / Drawer may host
-  `Card outlined` (not elevated) sections; field-header trailing actions use
+  `Card` sections (static `title` / optional `icon` / `actions`); title-less
+  wells use `Surface`. Field-header trailing actions use
   `FieldHeader` / `FieldBlock` (`IconButton` + `Tooltip`). Overlay optional —
   agents choose the host. See AGENTS.md **Nested containment** /
   **Field header actions**.
