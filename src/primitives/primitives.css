@@ -2432,12 +2432,13 @@
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: var(--fynns-space-2);
+  /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
+  gap: var(--fynns-space-3);
   min-width: 0;
-  /* Dense chrome row; slightly tighter start so the chevron sits closer to
-   * the card edge. End / body still use content-inset. */
+  /* Dense chrome row; start inset a step above space-md so the disclose
+   * glyph isn’t flush to the card edge. End / body still use content-inset. */
   padding-block: var(--fynns-space-sm);
-  padding-inline-start: var(--fynns-space-md);
+  padding-inline-start: var(--fynns-layout-content-inset);
   padding-inline-end: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
@@ -2470,13 +2471,14 @@
   white-space: nowrap;
 }
 
-/* Single disclose slot: optional rest icon stacked with expand chevron. */
+/* Single disclose slot: optional rest icon stacked with expand chevron.
+ * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
 .fynns-collapsible-disclose {
   flex: 0 0 auto;
   display: inline-grid;
   place-items: center;
-  width: 1.125rem;
-  height: 1.125rem;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
   color: var(--fynns-color-text-muted);
   line-height: 0;
 }
@@ -2487,6 +2489,8 @@
 }
 
 .fynns-collapsible-chevron {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
   color: inherit;
   transition:
     transform var(--fynns-duration-base) var(--fynns-ease-emphasized),
@@ -2552,7 +2556,9 @@
   display: flex;
   align-items: center;
   gap: var(--fynns-space-2);
-  padding-inline-end: var(--fynns-layout-content-inset);
+  /* Keep IconButton hover disks off the card edge (not full content-inset). */
+  padding-block: var(--fynns-space-xs);
+  padding-inline-end: var(--fynns-space-xs);
 }
 
 .fynns-collapsible-body {

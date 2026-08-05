@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useId, useState } from "react";
-import { ChevronRightIcon } from "./icons";
+import { ChevronRightIcon, ICON_SIZE } from "./icons";
 
 export type CollapsibleProps = {
   /** Header content shown in the always-visible trigger row. */
@@ -95,7 +95,7 @@ export function Collapsible({
         >
           <span className="fynns-collapsible-disclose" aria-hidden>
             {hasIcon ? <span className="fynns-collapsible-icon">{icon}</span> : null}
-            <ChevronRightIcon className="fynns-collapsible-chevron" size={18} />
+            <ChevronRightIcon className="fynns-collapsible-chevron" size={ICON_SIZE} />
           </span>
           <span className="fynns-collapsible-title">{title}</span>
         </button>
