@@ -343,6 +343,14 @@
   color: var(--fynns-color-on-accent);
 }
 
+.fynns-btn--danger.fynns-btn--active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent) var(--fynns-state-dragged),
+    transparent
+  );
+}
+
 .fynns-btn--sm {
   min-height: 2rem;
   font-size: var(--fynns-font-size-xs);
@@ -432,6 +440,16 @@
   background: var(--fynns-color-accent);
 }
 
+.fynns-btn--icon.fynns-btn--danger {
+  border-color: transparent;
+  background: var(--fynns-color-danger);
+  color: var(--fynns-color-on-accent);
+}
+
+.fynns-btn--icon.fynns-btn--danger:hover:not(:disabled) {
+  background: var(--fynns-color-danger);
+}
+
 .fynns-btn--icon.fynns-btn--tonal {
   border-color: transparent;
   background: var(--fynns-color-accent-container);
@@ -458,10 +476,6 @@
 .fynns-btn--icon.fynns-btn--default:hover:not(:disabled) {
   border-color: var(--fynns-color-accent);
   background: transparent;
-}
-
-.fynns-btn--icon.fynns-btn--danger:hover:not(:disabled) {
-  border-color: transparent;
 }
 
 .fynns-btn--icon svg {
@@ -3275,8 +3289,9 @@ a.fynns-breadcrumb-link:visited {
   animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
 }
 
-/* Filled buttons use accent background — default accent ring is invisible there. */
-.fynns-btn--primary .fynns-loading-spinner-ring {
+/* Filled buttons use accent/danger background — default accent ring is invisible there. */
+.fynns-btn--primary .fynns-loading-spinner-ring,
+.fynns-btn--danger .fynns-loading-spinner-ring {
   border-color: color-mix(in srgb, currentColor 25%, transparent);
   border-top-color: currentColor;
 }

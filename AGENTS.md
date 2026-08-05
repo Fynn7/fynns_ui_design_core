@@ -236,7 +236,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive: leading action +
   trailing `DropdownMenu`; variants `primary` / `tonal` / `default` /
-  `elevated`; sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
+  `elevated` / `danger` (filled like primary: danger surface + on-accent ink);
+  sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
