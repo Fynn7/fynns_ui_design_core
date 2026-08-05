@@ -4,7 +4,6 @@ import {
   ArrowLeftIcon,
   Avatar,
   AvatarGroup,
-  Badge,
   BadgedBox,
   Banner,
   BarChartIcon,
@@ -1049,11 +1048,6 @@ export function GlobalsPage() {
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catCommunication")}>
-        <div className="sandbox-globals-row">
-          <Badge>{t("globals.badgeNeutral")}</Badge>
-          <Badge variant="accent">{t("globals.badgeAccent")}</Badge>
-          <Badge variant="success">{t("globals.badgeSuccess")}</Badge>
-        </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
