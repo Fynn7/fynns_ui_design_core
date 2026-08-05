@@ -2,7 +2,8 @@
 
 **Single source of truth for *installing* this design system into any app repo.**  
 Design language & component catalog remain in [`AGENTS.md`](../AGENTS.md).  
-Machine contract: [`consume.json`](consume.json).
+Machine contract: [`consume.json`](consume.json).  
+**Consumer-agent doc + custom-highlight map:** [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) / [`agent-interfaces.json`](agent-interfaces.json).
 
 **Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
 

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "name": "fynns-ui-agent-interfaces",
+  "title": "Consumer-agent interfaces for @fynns/ui",
+  "description": "Two stable entry points for agents in consumer repos: a documentation catalog (all human/agent NL docs in this package) and a technical API for lightweight custom CodeBlock highlighting of app-owned languages.",
+  "human": "llm/AGENT_INTERFACES.md",
+  "documentation": [
+    {
+      "path": "llm/AGENT_INTERFACES.md",
+      "role": "agent-interfaces",
+      "summary": "Authoritative human index of documentation + custom highlight technical API."
+    },
+    {
+      "path": "llm/agent-interfaces.json",
+      "role": "agent-interfaces-machine",
+      "summary": "Machine-readable twin of AGENT_INTERFACES.md."
+    },
+    {
+      "path": "AGENTS.md",
+      "role": "design-system",
+      "summary": "Design language, tokens, keep-set catalog, UX rules (single source of truth)."
+    },
+    {
+      "path": "README.md",
+      "role": "repo-entry",
+      "summary": "Package overview, sandbox, consume pointers."
+    },
+    {
+      "path": "llm/CONSUME.md",
+      "role": "consume-install",
+      "summary": "Install @fynns/ui via git submodule + Vite alias (human contract)."
+    },
+    {
+      "path": "llm/consume.json",
+      "role": "consume-install-machine",
+      "summary": "Machine contract for consume:install / check."
+    },
+    {
+      "path": "llm/BREAKING_PURGE.md",
+      "role": "breaking-purge",
+      "summary": "Public API purge / migration table for deleted symbols."
+    },
+    {
+      "path": "llm/opencode-fynns-ui-consume.md",
+      "role": "opencode-short-prompt",
+      "summary": "Reminder: always read CONSUME on short @fynns/ui prompts."
+    },
+    {
+      "path": "docs/submodule-propagation.md",
+      "role": "submodule-propagation",
+      "summary": "How submodule pins propagate to consumer repos."
+    },
+    {
+      "path": "openwiki/index.md",
+      "role": "openwiki-index",
+      "summary": "OpenWiki navigation hub for agents working inside this package."
+    },
+    {
+      "path": "openwiki/quickstart.md",
+      "role": "openwiki-quickstart",
+      "summary": "OpenWiki quickstart for coding agents."
+    },
+    {
+      "path": "openwiki/architecture/overview.md",
+      "role": "openwiki-architecture",
+      "summary": "Architecture overview of the design-system package."
+    },
+    {
+      "path": "openwiki/workflows/add-primitive.md",
+      "role": "openwiki-add-primitive",
+      "summary": "Workflow: add a new primitive."
+    },
+    {
+      "path": "openwiki/operations/consume.md",
+      "role": "openwiki-consume",
+      "summary": "OpenWiki consume operations notes."
+    },
+    {
+      "path": "openwiki/INSTRUCTIONS.md",
+      "role": "openwiki-brief",
+      "summary": "Authoritative brief for OpenWiki regenerations."
+    },
+    {
+      "path": ".cursor/rules/fynns-ui.mdc",
+      "role": "cursor-rule",
+      "summary": "Always-on Cursor rule: keep-set primitives + --fynns-* tokens."
+    },
+    {
+      "path": ".opencode/rules/fynns-ui.md",
+      "role": "opencode-rule",
+      "summary": "OpenCode rule mirroring design-system constraints."
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "claude-entry",
+      "summary": "Short Claude/agent entry that points at AGENTS + CONSUME."
+    }
+  ],
+  "technical": {
+    "codeHighlight": {
+      "summary": "Zero-dep CodeBlock highlighting. Built-ins (ts/js/py/cpp/css/json/bash) plus consumer-registered SimpleHighlightProfile for line-command DSLs (Raycaster .gsc shape).",
+      "colors": "--fynns-code-* (CODE_TOKENS); no Shiki/Prism/Monaco in core",
+      "exports": [
+        "SimpleHighlightProfile",
+        "highlightWithProfile",
+        "registerHighlightLanguage",
+        "unregisterHighlightLanguage",
+        "getRegisteredHighlightLanguage",
+        "highlightCode",
+        "isHighlightableLanguage",
+        "CodeBlock.highlightProfile"
+      ],
+      "roleMap": {
+        "keyword": "keyword",
+        "command": "function",
+        "constant": "constant",
+        "number": "number",
+        "parameter": "parameter",
+        "comment": "comment",
+        "variable": "variable",
+        "operator": "operator",
+        "unknownLineHead": "invalid"
+      },
+      "note": "Core does not ship a built-in gsc language. Consumers register their own command/keyword lists (e.g. from Raycaster signatures)."
+    }
+  }
+}

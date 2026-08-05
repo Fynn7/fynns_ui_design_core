@@ -171,12 +171,12 @@ override + reset + scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>`
 **Light theme:** dark is the default (no attribute). Activate light via
 `applyFynnsThemeMode("light")` from `@fynns/ui`, which sets
 `data-fynns-theme="light"` on `<html>` and overrides a subset of color/shadow/
-scrollbar tokens. `restoreFynnsThemeMode()` reads `localStorage` key
+scrollbar/`code` tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 `fynns-theme-mode`.
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `pagination`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `pagination`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, `code` (CodeBlock highlight roles — see below), plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -224,6 +224,16 @@ Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,pointer,loop-pulse,
 loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
+
+**Code highlight (`--fynns-code-*`):** semantic roles for `CodeBlock` (fg, bg,
+comment, keyword, string, number, type, function, variable, property, parameter,
+operator, module, constant, constant-named, escape, invalid). Distilled from the
+cpptools VS dark/light TextMate themes (last-wins colors) — readable CodeBlock
+ink, not a full VS Code grammar. Zero-dep tokenizer in
+`src/primitives/codeHighlight/`; no Shiki/Prism. **Consumer custom languages**
+(line-command / Raycaster `.gsc` shape): see
+[`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md) technical interface
+(`SimpleHighlightProfile` / `registerHighlightLanguage`).
 
 For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
@@ -308,6 +318,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock (`default` head or `plain` headless;
+  supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
+  `css`/`json`/`bash`/… or consumer `registerHighlightLanguage` /
+  `highlightProfile`); unknown → plain mono;
   copy fades in on hover, keyboard via :focus-visible), Stepper, Dropzone, Avatar /
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid,
