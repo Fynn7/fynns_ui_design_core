@@ -28,7 +28,9 @@ function defaultRole(severity: InlineAlertSeverity): "alert" | "status" {
 }
 
 /**
- * In-panel semantic severity strip (fynns utility — **not** an M3 component).
+ * In-panel severity strip (fynns utility — **not** M3): soft tonal fill,
+ * icon tinted by severity, body on-surface. Pad / gap / icon size share Banner
+ * strip tokens (`--fynns-banner-pad-*` / `gap` / `icon-size`). Long paths wrap.
  * M3 maps: chrome `Banner` under TopAppBar, or `snackbar` for transient feedback.
  * `.fynns-inline-alert` / `.fynns-inline-alert--<severity>`.
  */

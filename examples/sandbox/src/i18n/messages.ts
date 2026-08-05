@@ -440,12 +440,14 @@ const en = {
   "globals.tabsPaneBatch": "Batch-run pane (sample).",
   "globals.tabsHelp":
     "M3 Primary tabs: 48dp underline indicator. Hover uses an inset rounded state layer (not a sharp full-bleed rectangle). Not ToggleGroup.",
-  "globals.inlineAlertInfo": "Informational inline alert",
-  "globals.inlineAlertSuccess": "Success inline alert",
-  "globals.inlineAlertWarning": "Warning inline alert",
-  "globals.inlineAlertError": "Error inline alert",
+  "globals.inlineAlertInfo": "Informational notice",
+  "globals.inlineAlertSuccess": "Ready (render probe passed).",
+  "globals.inlineAlertWarning": "Warning — recoverable issue",
+  "globals.inlineAlertError": "Error — action blocked",
+  "globals.inlineAlertWrap":
+    "Ready. cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
-    "fynns in-panel severity strip — not an M3 component. M3 maps: chrome Banner (below TopAppBar) and Snackbar (transient).",
+    "fynns in-panel severity (not M3): soft tonal fill. Pad/gap/icon share Banner strip tokens. Icon tinted; body on-surface. Full-width like other strips; stack with `--fynns-layout-unit-stack-gap`. M3 maps: chrome Banner and Snackbar.",
   "globals.btnLarge": "Large",
   "globals.btnDanger": "Danger",
   "globals.btnLoading": "Loading",
@@ -726,7 +728,7 @@ const en = {
   "globals.bannerDismiss": "Dismiss banner",
   "globals.bannerShow": "Show banner",
   "globals.bannerHelp":
-    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). For in-panel severity use InlineAlert (fynns utility, not M3).",
+    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
   "globals.snackbarIndefiniteBtn": "Indefinite snackbar",
@@ -1258,12 +1260,14 @@ const zh: Record<MessageKey, string> = {
   "globals.tabsPaneBatch": "批量运行面板（示例）。",
   "globals.tabsHelp":
     "M3 Primary 标签页：48dp 下划线指示条。悬停为内缩圆角 state layer（不是铺满的直角矩形）。不是 ToggleGroup。",
-  "globals.inlineAlertInfo": "信息类行内提示",
-  "globals.inlineAlertSuccess": "成功类行内提示",
-  "globals.inlineAlertWarning": "警告类行内提示",
-  "globals.inlineAlertError": "错误类行内提示",
+  "globals.inlineAlertInfo": "信息提示",
+  "globals.inlineAlertSuccess": "就绪（渲染探测通过）。",
+  "globals.inlineAlertWarning": "警告 — 可恢复问题",
+  "globals.inlineAlertError": "错误 — 操作已阻止",
+  "globals.inlineAlertWrap":
+    "就绪。cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
-    "fynns 面板内严重度条 — 不是 M3 组件。M3 对位：chrome Banner（顶栏下）与 Snackbar（瞬时）。",
+    "fynns 面板内严重度（非 M3）：轻底色。内边距/间距/图标与 Banner 条状共用 `--fynns-banner-*`。图标染色，正文 on-surface。全宽与其他条状一致；纵向用 `--fynns-layout-unit-stack-gap`。M3 对位：chrome Banner 与 Snackbar。",
   "globals.btnLarge": "大号",
   "globals.btnDanger": "危险",
   "globals.btnLoading": "加载中",
@@ -1544,7 +1548,7 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerDismiss": "关闭横幅",
   "globals.bannerShow": "显示横幅",
   "globals.bannerHelp":
-    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。面板内严重度请用 InlineAlert（fynns 工具，非 M3）。",
+    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
   "globals.snackbarIndefiniteBtn": "不自动关闭",
