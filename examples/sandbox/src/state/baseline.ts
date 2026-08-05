@@ -67,7 +67,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   // shellSize
   "drawer-width",
   "end-aside-width",
-  "end-aside-max-width",
+  // end-aside-max-width stays a CSS token (often vw) — not rem-slider editable
   "dialog-max-width-sm",
   "dialog-max-width-md",
   "dialog-max-width-lg",
@@ -101,7 +101,6 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
   shellSize: [
     "drawer-width",
     "end-aside-width",
-    "end-aside-max-width",
     "dialog-max-width-sm",
     "dialog-max-width-md",
     "dialog-max-width-lg",
@@ -195,7 +194,6 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",
   "end-aside-width": "Shell size · EndAside open width",
-  "end-aside-max-width": "Shell size · EndAside max-width cap (wide viewports)",
   "dialog-max-width-sm": "Shell size · Dialog size=sm max width",
   "dialog-max-width-md": "Shell size · Dialog size=md max width",
   "dialog-max-width-lg": "Shell size · Dialog size=lg max width",

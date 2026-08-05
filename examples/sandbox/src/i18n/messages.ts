@@ -267,10 +267,7 @@ const en = {
     "--fynns-layout-drawer-width — content Drawer side sheet width (not NavigationDrawer).",
   "layoutChrome.endAsideWidth": "EndAside width",
   "layoutChrome.endAsideWidthHint":
-    "--fynns-layout-end-aside-width — EndAside open width (width morph pane).",
-  "layoutChrome.endAsideMaxWidth": "EndAside max width",
-  "layoutChrome.endAsideMaxWidthHint":
-    "--fynns-layout-end-aside-max-width — EndAside max-width cap on wide viewports (often vw).",
+    "--fynns-layout-end-aside-width — EndAside open width (width morph pane). Cap `--fynns-layout-end-aside-max-width` stays a CSS token (often vw; not rem-slider editable).",
   "layoutChrome.dialogMaxSm": "Dialog max sm",
   "layoutChrome.dialogMaxSmHint":
     "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\".",
@@ -1107,10 +1104,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-drawer-width — 内容 Drawer 侧栏宽度（非 NavigationDrawer）。",
   "layoutChrome.endAsideWidth": "EndAside 宽度",
   "layoutChrome.endAsideWidthHint":
-    "--fynns-layout-end-aside-width — EndAside 展开宽度（宽度开合窗格）。",
-  "layoutChrome.endAsideMaxWidth": "EndAside 最大宽度",
-  "layoutChrome.endAsideMaxWidthHint":
-    "--fynns-layout-end-aside-max-width — 宽屏 EndAside max-width 上限（常用 vw）。",
+    "--fynns-layout-end-aside-width — EndAside 展开宽度（宽度开合窗格）。上限 `--fynns-layout-end-aside-max-width` 仍是 CSS token（常用 vw；不可用 rem 滑块编辑）。",
   "layoutChrome.dialogMaxSm": "Dialog 最大宽 sm",
   "layoutChrome.dialogMaxSmHint":
     "--fynns-layout-dialog-max-width-sm — Dialog size=\"sm\"。",
