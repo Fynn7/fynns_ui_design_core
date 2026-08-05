@@ -35,7 +35,6 @@ export {
   PanelRightIcon,
   PencilIcon,
   PlusIcon,
-  RocketIcon,
   SaveIcon,
   SearchIcon,
   SettingsIcon,
