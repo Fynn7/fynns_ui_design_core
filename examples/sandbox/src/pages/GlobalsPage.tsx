@@ -14,6 +14,7 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
+  useBusyTask,
   Pagination,
   Card,
   CardContent,
@@ -231,6 +232,8 @@ export function GlobalsPage() {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
+  const [busyPaintBad, setBusyPaintBad] = useState(false);
+  const busyPaintGood = useBusyTask();
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -1411,6 +1414,49 @@ export function GlobalsPage() {
             message={t("globals.busyScrimMessage")}
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
+        </div>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              variant="danger"
+              disabled={busyPaintBad || busyPaintGood.busy}
+              onClick={() => {
+                setBusyPaintBad(true);
+                const until = performance.now() + 800;
+                while (performance.now() < until) {
+                  /* intentional main-thread stall — anti-pattern demo */
+                }
+                setBusyPaintBad(false);
+              }}
+            >
+              {t("globals.busyPaintBad")}
+            </Button>
+            <Button
+              size="sm"
+              disabled={busyPaintBad || busyPaintGood.busy}
+              onClick={() => {
+                void busyPaintGood.run(t("globals.busyPaintLabel"), async () => {
+                  const until = performance.now() + 800;
+                  while (performance.now() < until) {
+                    /* same stall after paint — ring can start first */
+                  }
+                });
+              }}
+            >
+              {t("globals.busyPaintGood")}
+            </Button>
+          </div>
+          <BusyScrim
+            open={busyPaintBad || busyPaintGood.busy}
+            label={
+              busyPaintGood.busy
+                ? (busyPaintGood.label ?? t("globals.busyPaintLabel"))
+                : t("globals.busyPaintLabel")
+            }
+            message={t("globals.busyPaintMessage")}
+          />
+          <SandboxHelp text={t("globals.busyPaintHelp")} />
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Stepper

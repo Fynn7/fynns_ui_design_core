@@ -98,7 +98,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
    `BusyRegion` (relative dim layer over children; content is `inert` while
-   busy); do not revive `BlockingLoadingOverlay` or purged `Panel` /
+   busy); for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
+   paint → then work) so the ring can start before the main thread blocks;
+   do not revive `BlockingLoadingOverlay` or purged `Panel` /
    `PanelCard`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
@@ -245,6 +247,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `label` is the progress accessible name and the default visible copy when
   `message` is omitted; `value` in `[0, 1]` for determinate, omit for
   indeterminate; `size` defaults `md`),
+  **paint-before-work:** `afterNextPaint` / `yieldToMain` / `runBusyTask(setBusy,
+  task)` / `useBusyTask()` — `flushSync` busy on → wait one paint → then run
+  the async task so `CircularProgress` can start spinning. Does **not** keep
+  the ring smooth through long sync / WASM compile on the main thread (use a
+  Worker or `yieldToMain` slices for that). Prefer over `setBusy(true)` then
+  immediately blocking work.
   EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /

@@ -55,6 +55,8 @@ export type BusyScrimProps = {
 /**
  * Full-viewport blocking busy layer (M3 scrim + circular progress + message).
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
+ * For heavy boots, open via `runBusyTask` / `useBusyTask` so the ring can paint
+ * before the main thread blocks (see AGENTS.md Feedback).
  */
 export function BusyScrim({
   open,

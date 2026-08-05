@@ -350,6 +350,12 @@ const en = {
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
     "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + ring + message. Auto-closes here after 2s.",
+  "globals.busyPaintBad": "Anti-pattern: busy then stall",
+  "globals.busyPaintGood": "runBusyTask then stall",
+  "globals.busyPaintLabel": "Heavy work",
+  "globals.busyPaintMessage": "Simulated 800ms main-thread stall…",
+  "globals.busyPaintHelp":
+    "`runBusyTask` / `useBusyTask`: flushSync busy on → afterNextPaint → then work so the ring can start. Same sync stall can still hitch afterward; use a Worker for true smoothness.",
   "globals.stepperAria": "Setup progress",
   "globals.stepperHelp":
     "Stepper marks the active step; completed labels reuse Button ghost sm when onStepChange is set.",
@@ -1150,6 +1156,12 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
     "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 圆环 + 文案。此处 2 秒后自动关闭。",
+  "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
+  "globals.busyPaintGood": "runBusyTask 后再卡主线程",
+  "globals.busyPaintLabel": "繁重工作",
+  "globals.busyPaintMessage": "模拟主线程占用 800ms…",
+  "globals.busyPaintHelp":
+    "`runBusyTask` / `useBusyTask`：flushSync 打开 busy → afterNextPaint → 再跑任务，圆环才有机会转起来。之后同样的同步卡顿仍可能顿一下；真正丝滑需 Worker。",
   "globals.stepperAria": "设置进度",
   "globals.stepperHelp":
     "Stepper 标出当前步；提供 onStepChange 时，已完成步骤的标签复用 Button ghost sm。",
