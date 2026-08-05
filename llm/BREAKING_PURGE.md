@@ -56,7 +56,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
 | `measureOverflow` / `overflowsBounds` / `measureContentOverflow` / `useOverflowBounds` | Layout overflow helpers (demoed next to DatePicker in Globals). Prefer over ad-hoc rect math. |
 | `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `BusyScrim` (fullscreen) / `BusyRegion` (section), or `EmptyState`. Do not revive the old `BlockingLoadingOverlay` name. `Spinner` remains internal for `Button` `loading`. |
-| `CardActionArea` | Make the `Card` `interactive` or wrap children in a button. |
+| `CardHeader` / `CardContent` / `CardActions` / `CardMedia` / `CardActionArea` / `variant` / `interactive` / `selected` / `CARD_VARIANT_MAP` | Use one-shot `Card` (`title` / optional `icon` / `actions` + children). Same shell as Collapsible; head is static (no hover layer, no chevron). Title-less wells → `Surface`. App-level selected chrome via consumer class / `Surface`, not Card `selected`. |
 | `PanelLeftIcon` / … (other unused glyphs) | Prefer the public icon subset from the barrel, or ship app icons. Sandbox chrome keeps `Sun`/`Moon`/`PanelLeft`/`PanelRight`/`Sparkles`/`Bot`/`Download` exported. |
 
 ## Restored after purge (use these)
@@ -71,6 +71,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | Dialog sizes | `--fynns-layout-dialog-max-width-lg` is now `35rem` (was `42rem`; stays within M3 ≤560dp). |
 | `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 | `Button` `danger` | Filled like `primary`: `--fynns-color-danger` surface + `--fynns-color-on-accent` ink (outlined red chrome retired). IconButton danger mirrors filled primary. |
+| `Card` | One-shot static section: `title` + optional `icon` / `actions` + always-visible `children`. Shares Collapsible shell; not a disclosure. Anatomy parts and elevated/filled/outlined variants deleted. |
 
 ## Related docs
 

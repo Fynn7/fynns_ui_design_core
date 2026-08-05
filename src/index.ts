@@ -180,20 +180,8 @@ export { Collapsible } from "./primitives/Collapsible";
 export type { CollapsibleProps } from "./primitives/Collapsible";
 export { Slider } from "./primitives/Slider";
 export type { SliderProps } from "./primitives/Slider";
-export {
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-} from "./primitives/Card";
-export type {
-  CardActionsProps,
-  CardContentProps,
-  CardHeaderProps,
-  CardMediaProps,
-  CardProps,
-} from "./primitives/Card";
+export { Card } from "./primitives/Card";
+export type { CardProps } from "./primitives/Card";
 export { Surface } from "./primitives/Surface";
 export type { SurfaceProps, SurfaceVariant } from "./primitives/Surface";
 export { FieldBlock, FieldHeader } from "./primitives/FieldHeader";

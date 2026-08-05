@@ -92,22 +92,21 @@ const en = {
   "templates.toastLoaded": "Loaded {label} ({count} override{plural}, {theme})",
 
   "preview.anatomy": "Contents",
-  "preview.media": "Image",
   "preview.states": "Behavior",
-  "preview.interactive": "Clickable",
-  "preview.disabled": "Disabled",
   "preview.actions": "Footer buttons",
   "preview.start": "Left",
   "preview.end": "Right",
+  "preview.cardLabel": "Sample",
   "preview.cardTitle": "Aurora project",
-  "preview.cardSubtitle": "Updated just now",
-  "preview.cardInfo": "More about this card.",
-  "preview.cardInfoAria": "More info",
+  "preview.cardPlain": "Title only",
+  "preview.cardIcon": "Header icon",
+  "preview.cardActions": "Header actions",
+  "preview.cardActionTip": "Sample button in the header",
+  "preview.cardActionAria": "Sample header button",
   "preview.cardBody":
-    "Sample card. Use the inspector on the right to tweak colors and spacing — this preview updates live. Corner rounding is on the Components page.",
+    "Sample card — same shell as Collapsible, but the header is static (no hover layer, no chevron). Use the switches for icon / actions.",
   "preview.dismiss": "Dismiss",
   "preview.open": "Open",
-  "preview.cardActivated": "{variant} card activated",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
@@ -253,7 +252,7 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / CardContent / Surface padded / CodeBlock pre (16dp default).",
+    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / Card body / Surface padded / CodeBlock pre (16dp default).",
   "layoutChrome.dialogInset": "Dialog inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog (24dp default).",
@@ -343,6 +342,7 @@ const en = {
   "globals.emptyHelp":
     "EmptyState is layout-only (icon + title + description + actions). Pass Button CTAs yourself.",
   "globals.busyRegionLabel": "Loading section",
+  "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
     "Section content stays mounted under a dim layer while BusyRegion is busy.",
@@ -410,9 +410,9 @@ const en = {
   "globals.nestedDialogExpandTip": "Open in large editor",
   "globals.nestedDialogResetTip": "Restore default",
   "globals.nestedSectionHelp":
-    "Nested section recipe (host-agnostic): Card outlined + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Never stack elevated Card on the same surface.",
+    "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
-    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need Header / Content / Actions.",
+    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need a static title / icon / actions head.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -477,16 +477,9 @@ const en = {
     "Reusable unit-stack gap (`.sandbox-stack`) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
-  "globals.rhythmRowActions": "Actions",
-  "globals.rhythmMedia": "Media",
-  "globals.rhythmClickable": "Clickable",
+  "globals.rhythmShowIcon": "Header icon",
+  "globals.rhythmShowActions": "Header actions",
   "globals.rhythmDisabled": "Disabled",
-  "globals.rhythmStart": "Start",
-  "globals.rhythmEnd": "End",
-  "globals.rhythmStartTip":
-    "Align footer actions to the start edge. Long tip — must stay inside the viewport even in a narrow inspector.",
-  "globals.rhythmEndTip":
-    "Align footer actions to the end edge. Long tip — must stay inside the viewport even when this segment sits on the panel’s right edge.",
   "globals.rhythmTokenUnit":
     "Between stacked units / sibling demos (also drives control → field hint via field-hint-gap alias).",
   "globals.rhythmTokenFieldHint":
@@ -755,8 +748,11 @@ const en = {
     "M3 content List / ListItem (1–3 lines). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
-  "globals.cardSubtitle": "Uses radius-md",
-  "globals.cardBody": "Card corners follow radius-md on the global levels.",
+  "globals.cardTitle": "Section with icon",
+  "globals.cardTitlePlain": "Title only",
+  "globals.cardActionTip": "Sample header action",
+  "globals.cardActionAria": "Sample header action",
+  "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
@@ -926,22 +922,21 @@ const zh: Record<MessageKey, string> = {
   "templates.toastLoaded": "已加载 {label}（{count} 项改动{plural}，{theme}）",
 
   "preview.anatomy": "内容",
-  "preview.media": "图片",
   "preview.states": "行为",
-  "preview.interactive": "可点击",
-  "preview.disabled": "禁用",
   "preview.actions": "底部按钮",
   "preview.start": "靠左",
   "preview.end": "靠右",
+  "preview.cardLabel": "示例",
   "preview.cardTitle": "Aurora 项目",
-  "preview.cardSubtitle": "刚刚更新",
-  "preview.cardInfo": "关于这张卡片的更多说明。",
-  "preview.cardInfoAria": "更多信息",
+  "preview.cardPlain": "仅标题",
+  "preview.cardIcon": "标题图标",
+  "preview.cardActions": "标题旁操作",
+  "preview.cardActionTip": "标题栏上的示例按钮",
+  "preview.cardActionAria": "示例标题按钮",
   "preview.cardBody":
-    "示例卡片。右侧检查器可调颜色与间距，预览会即时更新。圆角请到「组件」页。",
+    "示例卡片 — 与 Collapsible 同壳，但标题栏是静态的（无悬停层、无 chevron）。用上方开关控制图标 / actions。",
   "preview.dismiss": "关闭",
   "preview.open": "打开",
-  "preview.cardActivated": "已激活 {variant} 卡片",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
@@ -1076,7 +1071,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — Collapsible 正文 / CardContent / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。",
+    "--fynns-layout-content-pad-block — Collapsible 正文 / Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。",
   "layoutChrome.dialogInset": "对话框内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 四边等距外缘（默认 24dp）。",
@@ -1164,6 +1159,7 @@ const zh: Record<MessageKey, string> = {
   "globals.emptyHelp":
     "EmptyState 只负责布局（图标 + 标题 + 说明 + 操作区）。CTA 自行传入 Button。",
   "globals.busyRegionLabel": "区块加载中",
+  "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
   "globals.busyRegionBody":
     "BusyRegion 为 busy 时，区块内容仍挂载在半透明遮罩下方。",
@@ -1231,9 +1227,9 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedDialogExpandTip": "在大编辑器中打开",
   "globals.nestedDialogResetTip": "恢复默认",
   "globals.nestedSectionHelp":
-    "嵌套分区配方（宿主无关）：Card outlined + FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。勿在同层表面再叠 elevated Card。",
+    "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
-    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要 Header / Content / Actions 时仍用 Card。",
+    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要静态 title / icon / actions 头时用 Card。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -1298,16 +1294,9 @@ const zh: Record<MessageKey, string> = {
     "可复用的 unit-stack 间距（`.sandbox-stack`）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
-  "globals.rhythmRowActions": "底部按钮",
-  "globals.rhythmMedia": "图片",
-  "globals.rhythmClickable": "可点击",
+  "globals.rhythmShowIcon": "标题图标",
+  "globals.rhythmShowActions": "标题旁操作",
   "globals.rhythmDisabled": "禁用",
-  "globals.rhythmStart": "靠左",
-  "globals.rhythmEnd": "靠右",
-  "globals.rhythmStartTip":
-    "底部按钮靠左对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
-  "globals.rhythmEndTip":
-    "底部按钮靠右对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
   "globals.rhythmTokenUnit":
     "纵向堆叠单元 / 并列 demo 间距（控件→field hint 经 field-hint-gap 别名同源）。",
   "globals.rhythmTokenFieldHint":
@@ -1576,8 +1565,11 @@ const zh: Record<MessageKey, string> = {
     "M3 内容列表 List / ListItem（1–3 行）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
-  "globals.cardSubtitle": "使用 radius-md",
-  "globals.cardBody": "卡片圆角跟随全局等级的 md。",
+  "globals.cardTitle": "带图标的分区",
+  "globals.cardTitlePlain": "仅标题",
+  "globals.cardActionTip": "示例标题操作",
+  "globals.cardActionAria": "示例标题操作",
+  "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。",

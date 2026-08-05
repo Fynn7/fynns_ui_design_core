@@ -164,7 +164,7 @@ reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 - Shape levels: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Reset levels)
 - Read-only: `none` / `pill` / `round`
 - Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
-- Preview stage shows Button, Input, Select, Badge, Switch, Card variants,
+- Preview stage shows Button, Input, Select, Badge, Switch, Card,
   Collapsible, plus an xs–xl levels legend labeled with which components use each
   step (buttons use **xl**; cards / inputs use **md**; badges / chips use **sm**;
   switch track uses **radius-pill**)
@@ -176,9 +176,8 @@ change Apply writeback).
 
 **Card**
 
-- Contents: Image on/off
-- Behavior: Clickable, Disabled
-- Footer buttons: align left|right
+- Contents: Header icon on/off, header actions on/off
+- Same shell as Collapsible; head is static (no hover layer, no chevron)
 
 **Collapsible**
 

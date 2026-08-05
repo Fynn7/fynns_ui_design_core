@@ -16,8 +16,6 @@ import {
   useBusyTask,
   Pagination,
   Card,
-  CardContent,
-  CardHeader,
   Surface,
   Checkbox,
   ChevronRightIcon,
@@ -108,7 +106,6 @@ import {
   UploadIcon,
   ControlRow,
   ControlStack,
-  Grid,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -252,10 +249,9 @@ export function GlobalsPage() {
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [menuStarred, setMenuStarred] = useState(true);
   const [menuNotify, setMenuNotify] = useState(false);
-  const [rhythmClickable, setRhythmClickable] = useState(true);
+  const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
+  const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
-  const [rhythmAlign, setRhythmAlign] = useState<"start" | "end">("end");
-  const [rhythmMedia, setRhythmMedia] = useState(false);
 
   useEffect(() => {
     if (!busyScrimOpen) return;
@@ -268,42 +264,40 @@ export function GlobalsPage() {
 
   /** Host-agnostic section recipe — reuse inline or inside Dialog/Drawer. */
   const renderNestedPromptSection = (fieldId: string) => (
-    <Card variant="outlined">
-      <CardContent>
-        <FieldBlock
-          label={t("globals.nestedDialogFieldLabel")}
-          htmlFor={fieldId}
-          actions={
-            <>
-              <Tooltip content={t("globals.nestedDialogExpandTip")}>
-                <IconButton
-                  size="sm"
-                  aria-label={t("globals.nestedDialogExpandTip")}
-                >
-                  <LayoutGridIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.nestedDialogResetTip")}>
-                <IconButton
-                  size="sm"
-                  aria-label={t("globals.nestedDialogResetTip")}
-                  onClick={() => setNestedPrompt(nestedPromptDefault)}
-                >
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-            </>
-          }
-        >
-          <Textarea
-            id={fieldId}
-            value={nestedPrompt}
-            onChange={(event) => setNestedPrompt(event.target.value)}
-            placeholder={t("globals.textareaPlaceholder")}
-            aria-label={t("globals.nestedDialogFieldLabel")}
-          />
-        </FieldBlock>
-      </CardContent>
+    <Card title={t("globals.nestedDialogTitle")}>
+      <FieldBlock
+        label={t("globals.nestedDialogFieldLabel")}
+        htmlFor={fieldId}
+        actions={
+          <>
+            <Tooltip content={t("globals.nestedDialogExpandTip")}>
+              <IconButton
+                size="sm"
+                aria-label={t("globals.nestedDialogExpandTip")}
+              >
+                <LayoutGridIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.nestedDialogResetTip")}>
+              <IconButton
+                size="sm"
+                aria-label={t("globals.nestedDialogResetTip")}
+                onClick={() => setNestedPrompt(nestedPromptDefault)}
+              >
+                <UndoIcon />
+              </IconButton>
+            </Tooltip>
+          </>
+        }
+      >
+        <Textarea
+          id={fieldId}
+          value={nestedPrompt}
+          onChange={(event) => setNestedPrompt(event.target.value)}
+          placeholder={t("globals.textareaPlaceholder")}
+          aria-label={t("globals.nestedDialogFieldLabel")}
+        />
+      </FieldBlock>
     </Card>
   );
 
@@ -1251,16 +1245,23 @@ export function GlobalsPage() {
           </div>
         </div>
         <div className="sandbox-globals-cards">
-          {(["elevated", "filled", "outlined"] as const).map((variant) => (
-            <Card key={variant} variant={variant} className="sandbox-globals-card">
-              <CardHeader
-                title={variant}
-                subtitle={t("globals.cardSubtitle")}
-                avatar={<Avatar name="FY" alt={t("globals.avatarCard")} size="sm" />}
-              />
-              <CardContent>{t("globals.cardBody")}</CardContent>
-            </Card>
-          ))}
+          <Card
+            className="sandbox-globals-card"
+            title={t("globals.cardTitle")}
+            icon={<FolderOpenIcon aria-hidden />}
+            actions={
+              <Tooltip content={t("globals.cardActionTip")}>
+                <IconButton aria-label={t("globals.cardActionAria")}>
+                  <SettingsIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            }
+          >
+            {t("globals.cardBody")}
+          </Card>
+          <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
+            {t("globals.cardBody")}
+          </Card>
         </div>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           {renderNestedPromptSection("sandbox-nested-prompt")}
@@ -1415,10 +1416,8 @@ export function GlobalsPage() {
             label={t("globals.busyRegionLabel")}
             message={t("globals.busyRegionMessage")}
           >
-            <Card variant="outlined">
-              <CardContent>
-                <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
-              </CardContent>
+            <Card title={t("globals.busyRegionTitle")}>
+              <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
             </Card>
           </BusyRegion>
           <div className="sandbox-globals-row">
@@ -2027,46 +2026,27 @@ export function GlobalsPage() {
               <Switch
                 size="sm"
                 labelSide="end"
-                label={t("globals.rhythmMedia")}
-                checked={rhythmMedia}
-                onCheckedChange={setRhythmMedia}
+                label={t("globals.rhythmShowIcon")}
+                checked={rhythmShowIcon}
+                onCheckedChange={setRhythmShowIcon}
+                disabled={rhythmDisabled}
+              />
+              <Switch
+                size="sm"
+                labelSide="end"
+                label={t("globals.rhythmShowActions")}
+                checked={rhythmShowActions}
+                onCheckedChange={setRhythmShowActions}
+                disabled={rhythmDisabled}
               />
             </ControlRow>
             <ControlRow label={t("globals.rhythmRowBehavior")}>
-              <Grid x={2} y="unbounded">
-                <Switch
-                  size="sm"
-                  labelSide="end"
-                  label={t("globals.rhythmClickable")}
-                  checked={rhythmClickable}
-                  onCheckedChange={setRhythmClickable}
-                />
-                <Switch
-                  size="sm"
-                  labelSide="end"
-                  label={t("globals.rhythmDisabled")}
-                  checked={rhythmDisabled}
-                  onCheckedChange={setRhythmDisabled}
-                />
-              </Grid>
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmRowActions")}>
-              <ToggleGroup
-                size="compact"
-                value={rhythmAlign}
-                onChange={(id) => setRhythmAlign(id as "start" | "end")}
-                options={[
-                  {
-                    value: "start",
-                    label: t("globals.rhythmStart"),
-                    tip: t("globals.rhythmStartTip"),
-                  },
-                  {
-                    value: "end",
-                    label: t("globals.rhythmEnd"),
-                    tip: t("globals.rhythmEndTip"),
-                  },
-                ]}
+              <Switch
+                size="sm"
+                labelSide="end"
+                label={t("globals.rhythmDisabled")}
+                checked={rhythmDisabled}
+                onCheckedChange={setRhythmDisabled}
               />
             </ControlRow>
           </ControlStack>

@@ -52,8 +52,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
    text is flush with the control’s outer start edge. Default `ghost`; dense
-   forms may use `size="sm"`. As the first child of `CardContent`, top inset
-   shrinks to `--fynns-space-xs` (Card content block pad is
+   forms may use `size="sm"`. As the first child of `Card` body, top inset
+   shrinks to `--fynns-space-xs` (Card body block pad is
    `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
    Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -105,13 +105,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `PanelCard`;
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
-   `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
-   (same surface + stacked shadow). Prefer **`Surface`** for a bordered /
-   tonal well with **no** title/actions anatomy (preview iframe, chart stage,
-   arbitrary children; default unpadded + optional `fill`). Prefer `FieldBlock`
-   for label-row
+   `Card` (static head: `title` / optional `icon` / `actions` + always-visible
+   body; same shell as Collapsible, no collapse / head hover / chevron). Prefer
+   **`Surface`** for a bordered / tonal well with **no** title/actions head
+   (preview iframe, chart stage, arbitrary children; default unpadded + optional
+   `fill`). Prefer `FieldBlock` for label-row
    IconButtons above the control. Card inline pad uses
-   `--fynns-layout-content-inset`; CardContent / Header / Actions **block** pad
+   `--fynns-layout-content-inset`; Card body **block** pad
    uses `--fynns-layout-content-pad-block` (same as Collapsible body).
    Do not add a second page-level outer
    pad. Consumers choose whether the
@@ -199,7 +199,7 @@ Color tokens (`--fynns-color-*`):
   `scrollbar-thumb*` (also under the `scrollbar` group).
 - State layers (`--fynns-state-*`): `hover` `8%`, `focus` `10%`, `pressed`
   `12%`, `dragged` `16%` — used via `color-mix(...)` for interactive overlays.
-- Card lookups (TS only, not CSS vars): `CARD_VARIANT_MAP`, `ELEVATION_TOKENS`.
+- Elevation lookups (TS only, not CSS vars): `ELEVATION_TOKENS`.
   M3 reference mirror: [`src/theme/tokens.m3-draft.ts`](src/theme/tokens.m3-draft.ts).
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
@@ -287,8 +287,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Breadcrumb, Pagination
 - **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
-  `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
-  **Surface** (generic bordered / tonal well; any children; no Card anatomy —
+  `ListGroup` / `ListRow`), Card (`title` / optional `icon` / `actions` + body;
+  same shell as Collapsible, static head — no collapse / hover layer / chevron;
+  old Media/Header/Content/Actions / variant APIs deleted),
+  **Surface** (generic bordered / tonal well; any children; no Card head —
   use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
   open: full-bleed hairline under head; focus = quiet Input-like border),
@@ -319,9 +321,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
   inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges.
-  Collapsible body and Card content anatomy use shared **block** pad
+  Collapsible body and Card body use shared **block** pad
   `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
-  under section chrome; Collapsible trigger stays denser (`--fynns-space-sm`).
+  under section chrome; Collapsible trigger / Card lead stay denser (`--fynns-space-sm`).
   Do **not** add a second padding wrapper inside those shells. Stack siblings
   (section label → `InlineAlert` → next block) with
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a

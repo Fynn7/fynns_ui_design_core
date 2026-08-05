@@ -21,7 +21,7 @@ export type SurfaceProps = HTMLAttributes<HTMLDivElement> & {
 
 /**
  * Generic bordered / tonal well for any children (iframe, forms, BusyRegion, …).
- * No title/actions anatomy — prefer `Card` when you need Header / Content / Actions.
+ * No title/actions head — prefer `Card` when you need a static title / icon / actions row.
  * Not a revival of purged `Panel` / `Pane`.
  */
 export function Surface({

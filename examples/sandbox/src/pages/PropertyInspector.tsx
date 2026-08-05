@@ -1,7 +1,6 @@
 import {
+  Button,
   Card,
-  CardContent,
-  CardHeader,
   Collapsible,
   InfoHint,
   Slider,
@@ -239,12 +238,11 @@ export function PropertyInspector() {
                 </div>
               );
             })}
-            <Card variant="filled" interactive className="sandbox-state-demo">
-              <CardHeader
-                title={t("inspector.stateDemoTitle")}
-                subtitle={t("inspector.stateDemoSubtitle")}
-              />
-              <CardContent>{t("inspector.stateDemoBody")}</CardContent>
+            <Card title={t("inspector.stateDemoTitle")}>
+              <p style={{ margin: "0 0 var(--fynns-space-sm)" }}>{t("inspector.stateDemoBody")}</p>
+              <Button size="sm" variant="tonal">
+                {t("inspector.stateDemoSubtitle")}
+              </Button>
             </Card>
           </div>
         </Collapsible>

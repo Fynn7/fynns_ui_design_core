@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card } from "@fynns/ui";
+import { Button, Surface } from "@fynns/ui";
 import { Row, Section } from "./foundationsShared";
 
 const EASING_DEMOS = [
@@ -32,9 +32,8 @@ function EasingBar({
       <span style={{ fontSize: "var(--fynns-font-size-caption)", color: "var(--fynns-color-text-muted)" }}>
         {label}
       </span>
-      {/* Outlined Card = shared container radius (`--fynns-radius-md`), not a one-off sm. */}
-      <Card
-        variant="outlined"
+      {/* Track well — Surface (title-less), not Card. */}
+      <Surface
         style={{
           position: "relative",
           height: "2rem",
@@ -56,7 +55,7 @@ function EasingBar({
             animation: `fynns-sandbox-ease var(--fynns-duration-slow) ${easing} both`,
           }}
         />
-      </Card>
+      </Surface>
       <Button size="sm" onClick={() => setRun((n) => n + 1)}>
         {replayLabel}
       </Button>
