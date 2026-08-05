@@ -482,6 +482,20 @@ const en = {
   "globals.iconBtnFilled": "Filled icon button",
   "globals.iconBtnTonal": "Tonal icon button",
   "globals.iconBtnOutlined": "Outlined icon button",
+  "globals.infoHintIconBody":
+    "Standalone help: hover or focus the “i” for a short explanation. Prefer InfoHint over inventing an IconButton + Tooltip for pure information.",
+  "globals.infoHintIconAria": "More about InfoHint",
+  "globals.infoHintLabeledTrigger": "What is this?",
+  "globals.infoHintLabeledBody":
+    "Labeled help: the plain text is the trigger (`cursor: help`, no underline / trailing “i”). Prefer for dense form or inspector rows.",
+  "globals.infoHintLabeledAria": "What is this help",
+  "globals.infoHintRowLabel": "Preview",
+  "globals.infoHintRowSwitch": "Skip batch commands",
+  "globals.infoHintRowBody":
+    "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
+  "globals.infoHintRowAria": "Preview mode help",
+  "globals.infoHintHelp":
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only when there is no visible name; pass `label` for a plain help trigger. Not a chrome `IconButton`.",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -1265,6 +1279,20 @@ const zh: Record<MessageKey, string> = {
   "globals.iconBtnFilled": "实心图标按钮",
   "globals.iconBtnTonal": "色调图标按钮",
   "globals.iconBtnOutlined": "描边图标按钮",
+  "globals.infoHintIconBody":
+    "独立帮助：悬停或聚焦 “i” 查看简短说明。纯信息请用 InfoHint，不要手写 IconButton + Tooltip。",
+  "globals.infoHintIconAria": "关于 InfoHint 的更多说明",
+  "globals.infoHintLabeledTrigger": "这是什么？",
+  "globals.infoHintLabeledBody":
+    "标签型帮助：纯文字为触发器（`cursor: help`，无下划线 / 无尾随 “i”）。适合密排表单或 inspector 行。",
+  "globals.infoHintLabeledAria": "这是什么的帮助",
+  "globals.infoHintRowLabel": "预览",
+  "globals.infoHintRowSwitch": "跳过批处理命令",
+  "globals.infoHintRowBody":
+    "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
+  "globals.infoHintRowAria": "预览模式帮助",
+  "globals.infoHintHelp":
+    "`InfoHint` — 信息型帮助（对应 M3：Tooltip 锚在帮助触发器上）。无可见名称时用图标 “i”；传 `label` 则为纯文字触发。不是界面用的 `IconButton`。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
