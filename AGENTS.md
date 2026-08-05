@@ -323,7 +323,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges.
   Collapsible body and Card body use shared **block** pad
   `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
-  under section chrome; Collapsible trigger / Card lead stay denser (`--fynns-space-sm`).
+  under section chrome. Card / Collapsible **heads** share one
+  `min-height` (`icon-target` + `space-xs`×2 + hairline); lead/trigger use
+  `padding-block: 0` (flex-centered). Trailing head actions keep
+  `space-xs` block pad so IconButton hover disks clear the edge.
   Do **not** add a second padding wrapper inside those shells. Stack siblings
   (section label → `InlineAlert` → next block) with
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a

@@ -191,9 +191,9 @@ const en = {
     "How strong the pressed tint is (`state-pressed`).",
   "inspector.stateDraggedHint":
     "How strong the drag / high-emphasis tint is (`state-dragged`).",
-  "inspector.stateDemoTitle": "Try hover / press",
-  "inspector.stateDemoSubtitle": "Interactive sample",
-  "inspector.stateDemoBody": "Overlay strength follows the sliders above.",
+  "inspector.stateDemoTitle": "Hover / press on Button",
+  "inspector.stateDemoSubtitle": "Try the button",
+  "inspector.stateDemoBody": "State-layer tint on the button follows the sliders above.",
   "inspector.spacing": "Spacing",
   "inspector.spacingHelp":
     "Padding and gaps inside cards (`--fynns-space-*`). Apply changes can write these back.",
@@ -477,9 +477,9 @@ const en = {
     "Reusable unit-stack gap (`.sandbox-stack`) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
-  "globals.rhythmShowIcon": "Header icon",
-  "globals.rhythmShowActions": "Header actions",
-  "globals.rhythmDisabled": "Disabled",
+  "globals.rhythmShowIcon": "Option A",
+  "globals.rhythmShowActions": "Option B",
+  "globals.rhythmDisabled": "Disable cluster",
   "globals.rhythmTokenUnit":
     "Between stacked units / sibling demos (also drives control → field hint via field-hint-gap alias).",
   "globals.rhythmTokenFieldHint":
@@ -1012,9 +1012,9 @@ const zh: Record<MessageKey, string> = {
   "inspector.stateFocusHint": "键盘聚焦时叠色有多强（`state-focus`）。",
   "inspector.statePressedHint": "按下时叠色有多强（`state-pressed`）。",
   "inspector.stateDraggedHint": "拖拽 / 高强调时叠色有多强（`state-dragged`）。",
-  "inspector.stateDemoTitle": "试悬停 / 按压",
-  "inspector.stateDemoSubtitle": "可交互示例",
-  "inspector.stateDemoBody": "叠色强度跟随上方滑条。",
+  "inspector.stateDemoTitle": "在 Button 上试悬停 / 按压",
+  "inspector.stateDemoSubtitle": "点按按钮试试",
+  "inspector.stateDemoBody": "按钮上的 state-layer 叠色跟随上方滑条。",
   "inspector.spacing": "间距",
   "inspector.spacingHelp":
     "卡片内部的内边距与间隙（`--fynns-space-*`）。「应用更改」可写回源码。",
@@ -1294,9 +1294,9 @@ const zh: Record<MessageKey, string> = {
     "可复用的 unit-stack 间距（`.sandbox-stack`）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
-  "globals.rhythmShowIcon": "标题图标",
-  "globals.rhythmShowActions": "标题旁操作",
-  "globals.rhythmDisabled": "禁用",
+  "globals.rhythmShowIcon": "选项 A",
+  "globals.rhythmShowActions": "选项 B",
+  "globals.rhythmDisabled": "禁用整组",
   "globals.rhythmTokenUnit":
     "纵向堆叠单元 / 并列 demo 间距（控件→field hint 经 field-hint-gap 别名同源）。",
   "globals.rhythmTokenFieldHint":

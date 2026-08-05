@@ -496,6 +496,10 @@
 
 .sandbox-state-demo {
   margin-top: var(--fynns-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  align-items: flex-start;
 }
 
 .sandbox-playground-target {

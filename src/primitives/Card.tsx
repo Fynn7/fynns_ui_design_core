@@ -29,16 +29,11 @@ export type CardProps = {
  * ```
  */
 export function Card({ title, icon, actions, className, children }: CardProps) {
-  const hasIcon = icon != null;
   return (
-    <div
-      className={["fynns-card", hasIcon ? "fynns-card--has-icon" : "", className ?? ""]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <div className={["fynns-card", className ?? ""].filter(Boolean).join(" ")}>
       <div className="fynns-card-head">
         <div className="fynns-card-lead">
-          {hasIcon ? (
+          {icon != null ? (
             <span className="fynns-card-disclose" aria-hidden>
               <span className="fynns-card-icon">{icon}</span>
             </span>
