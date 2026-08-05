@@ -24,5 +24,6 @@ Documentation for coding agents working in this design-system package.
 
 - [AGENTS.md](../AGENTS.md) — design language + keep-set catalog
 - [llm/CONSUME.md](../llm/CONSUME.md) — consumer install contract
+- [llm/AGENT_INTERFACES.md](../llm/AGENT_INTERFACES.md) — consumer-agent doc + custom highlight APIs
 - [llm/BREAKING_PURGE.md](../llm/BREAKING_PURGE.md) — public API migration
 - [README.md](../README.md) — repo entry

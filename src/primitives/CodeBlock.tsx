@@ -1,7 +1,14 @@
-import type { CSSProperties, HTMLAttributes } from "react";
+import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { ClipboardIcon } from "./icons";
+import {
+  highlightCode,
+  highlightWithProfile,
+  isHighlightableLanguage,
+  type CodeSegment,
+  type SimpleHighlightProfile,
+} from "./codeHighlight";
 
 export type CodeBlockVariant = "default" | "plain";
 
@@ -13,8 +20,18 @@ export type CodeBlockProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & 
    * `plain` — code only; copy floats and fades in on hover.
    */
   variant?: CodeBlockVariant;
-  /** Optional language tag (also sets `data-language` on the root). */
+  /**
+   * Language id for syntax highlighting (`ts` / `tsx` / `js` / `jsx` / `py` /
+   * `cpp` / `css` / `json` / `bash` / `sh`, or a consumer-registered id).
+   * Also sets `data-language` on the root. Unknown values render as plain mono
+   * unless `highlightProfile` is set.
+   */
   language?: string;
+  /**
+   * One-shot line-command profile (Raycaster `.gsc` shape). Wins over
+   * `language` lookup. See `llm/AGENT_INTERFACES.md`.
+   */
+  highlightProfile?: SimpleHighlightProfile;
   /** Visible label above the code (e.g. file name / language). Ignored for `plain`. */
   label?: string;
   /** Copy button tooltip / aria-label. @default "Copy" */
@@ -29,15 +46,31 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function renderSegments(segments: CodeSegment[]): ReactNode {
+  return segments.map((seg, index) => {
+    if (seg.kind === "plain") {
+      return <span key={index}>{seg.text}</span>;
+    }
+    return (
+      <span key={index} className={`fynns-code-${seg.kind}`}>
+        {seg.text}
+      </span>
+    );
+  });
+}
+
 /**
  * Monospace code sample with optional copy affordance (`IconButton` +
- * `Tooltip` + `ClipboardIcon`). The `<pre>` uses `fynns-scroll`.
+ * `Tooltip` + `ClipboardIcon`). Supported `language` values get zero-dep
+ * syntax coloring via `--fynns-code-*` tokens. Pass `highlightProfile` for
+ * app-owned line-command languages. The `<pre>` uses `fynns-scroll`.
  * Copy fades in on hover (keyboard: :focus-visible); `plain` has no head.
  */
 export function CodeBlock({
   code,
   variant = "default",
   language,
+  highlightProfile,
   label,
   copyAriaLabel = "Copy",
   showCopy = true,
@@ -47,6 +80,8 @@ export function CodeBlock({
   ...rest
 }: CodeBlockProps) {
   const plain = variant === "plain";
+  const highlighted =
+    highlightProfile != null || isHighlightableLanguage(language);
   const preStyle: CSSProperties | undefined =
     maxHeight == null
       ? undefined
@@ -75,12 +110,21 @@ export function CodeBlock({
     </div>
   ) : null;
 
+  const codeBody = highlighted
+    ? renderSegments(
+        highlightProfile != null
+          ? highlightWithProfile(code, highlightProfile)
+          : highlightCode(code, language),
+      )
+    : code;
+
   return (
     <div
       {...rest}
       className={join(
         "fynns-code-block",
         plain && "fynns-code-block--plain",
+        highlighted && "fynns-code-block--highlighted",
         className,
       )}
       data-language={language}
@@ -99,7 +143,7 @@ export function CodeBlock({
         </div>
       ) : null}
       <pre className="fynns-code-block-pre fynns-scroll" style={preStyle}>
-        <code className="fynns-code-block-code">{code}</code>
+        <code className="fynns-code-block-code">{codeBody}</code>
       </pre>
     </div>
   );

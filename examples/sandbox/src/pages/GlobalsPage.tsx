@@ -110,6 +110,7 @@ import {
   UploadIcon,
   ControlRow,
   ControlStack,
+  Grid,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -126,6 +127,100 @@ const SWATCH_KEYS = [
   { key: "lg", usesKey: "globals.swatchLgUses" },
   { key: "xl", usesKey: "globals.swatchXlUses" },
 ] as const satisfies ReadonlyArray<{ key: string; usesKey: MessageKey }>;
+
+type CodeLangDemoId = "py" | "ts" | "cpp";
+
+const CODE_LANG_DEMO: Record<
+  CodeLangDemoId,
+  { language: string; labelKey: MessageKey; code: string }
+> = {
+  ts: {
+    language: "ts",
+    labelKey: "globals.codeLangDemoTsFile",
+    code: [
+      "type Point = { x: number; y: number };",
+      "",
+      "export function distance(a: Point, b: Point): number {",
+      "  const dx = a.x - b.x;",
+      "  const dy = a.y - b.y;",
+      "  // Euclidean length",
+      '  return Math.sqrt(dx * dx + dy * dy);',
+      "}",
+    ].join("\n"),
+  },
+  py: {
+    language: "py",
+    labelKey: "globals.codeLangDemoPyFile",
+    code: [
+      "from dataclasses import dataclass",
+      "",
+      "@dataclass",
+      "class Point:",
+      "    x: float",
+      "    y: float",
+      "",
+      "def distance(a: Point, b: Point) -> float:",
+      "    # Euclidean length",
+      "    return ((a.x - b.x) ** 2 + (a.y - b.y) ** 2) ** 0.5",
+    ].join("\n"),
+  },
+  cpp: {
+    language: "cpp",
+    labelKey: "globals.codeLangDemoCppFile",
+    code: [
+      "#include <cmath>",
+      "#include <iostream>",
+      "",
+      "struct Point {",
+      "  double x;",
+      "  double y;",
+      "};",
+      "",
+      "double distance(const Point& a, const Point& b) {",
+      "  const double dx = a.x - b.x;",
+      "  const double dy = a.y - b.y;",
+      "  // Euclidean length",
+      "  return std::sqrt(dx * dx + dy * dy);",
+      "}",
+    ].join("\n"),
+  },
+};
+
+/** Minimal line-command profile (Raycaster `.gsc` shape) — not a full command table. */
+const GSC_DEMO_PROFILE = {
+  keywords: ["if", "else", "endif", "repeat", "endrepeat", "set", "unset"],
+  commands: ["setvolume", "setrotation", "reset", "quit"],
+};
+
+const GSC_DEMO_CODE = [
+  "# sample GSC-shaped DSL (consumer highlightProfile)",
+  "setvolume $vol 0.8",
+  "if true",
+  "  setrotation 15 0 0",
+  "endif",
+  "unknownCmd 1 2",
+].join("\n");
+
+/** `--fynns-code-*` roles shown next to CodeBlock demos (swatches, not inspectors). */
+const CODE_TOKEN_KEYS = [
+  "fg",
+  "bg",
+  "comment",
+  "keyword",
+  "string",
+  "number",
+  "type",
+  "function",
+  "variable",
+  "property",
+  "parameter",
+  "operator",
+  "module",
+  "constant",
+  "constant-named",
+  "escape",
+  "invalid",
+] as const;
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -209,9 +304,10 @@ export function GlobalsPage() {
     "inbox",
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [shellNavExpanded, setShellNavExpanded] = useState(true);
+  const [shellNavOpen, setShellNavOpen] = useState(true);
+  const [shellNavCompact, setShellNavCompact] = useState(false);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
-  const [shellDest, setShellDest] = useState<"home" | "search">("home");
+  const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -247,6 +343,8 @@ export function GlobalsPage() {
     "You translate natural-language requests into structured camera commands.",
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
+  const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
   const [textareaValue, setTextareaValue] = useState("");
@@ -309,12 +407,13 @@ export function GlobalsPage() {
   );
 
   return (
-    <div className="sandbox-globals" id="main">
-      <SkipLink href="#main" label={t("globals.skipLink")} />
-      <p className="sandbox-globals-lead">{t("globals.lead")}</p>
-      <SandboxHelp text={t("globals.skipLinkHelp")} />
+    <div className="sandbox-globals">
+      <SkipLink href="#globals-content" label={t("globals.skipLink")} />
+      <div id="globals-content" className="sandbox-globals-content" tabIndex={-1}>
+        <p className="sandbox-globals-lead">{t("globals.lead")}</p>
+        <SandboxHelp text={t("globals.skipLinkHelp")} />
 
-      <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
+        <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
@@ -1594,7 +1693,85 @@ export function GlobalsPage() {
             copyAriaLabel={t("globals.codeBlockCopy")}
             code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))`}
           />
+          <CodeBlock
+            label={t("globals.codeBlockCssLabel")}
+            language="css"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`.hero {\n  color: var(--fynns-color-accent);\n  /* tokenized ink */\n  padding: 1rem;\n}`}
+            maxHeight="8rem"
+          />
+          <CodeBlock
+            label={t("globals.codeBlockJsonLabel")}
+            language="json"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`{\n  "accent": "#2dd4bf",\n  "radius": "md",\n  "enabled": true\n}`}
+            maxHeight="8rem"
+          />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button size="sm" variant="tonal" onClick={() => setCodeLangDialogOpen(true)}>
+              {t("globals.codeLangDemoOpen")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.codeLangDemoHelp")} />
+          <CodeBlock
+            label={t("globals.codeSimpleProfileLabel")}
+            language="gsc"
+            highlightProfile={GSC_DEMO_PROFILE}
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={GSC_DEMO_CODE}
+            maxHeight="10rem"
+          />
+          <SandboxHelp text={t("globals.codeSimpleProfileHelp")} />
+          <Dialog
+            open={codeLangDialogOpen}
+            onOpenChange={setCodeLangDialogOpen}
+            title={t("globals.codeLangDemoTitle")}
+            description={t("globals.codeLangDemoDescription")}
+            size="md"
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+          >
+            <div className="sandbox-stack">
+              <ToggleGroup
+                ariaLabel={t("globals.codeLangDemoAria")}
+                value={codeLangDemo}
+                onChange={setCodeLangDemo}
+                fullWidth
+                options={[
+                  { value: "py", label: t("globals.codeLangDemoPy") },
+                  { value: "ts", label: t("globals.codeLangDemoTs") },
+                  { value: "cpp", label: t("globals.codeLangDemoCpp") },
+                ]}
+              />
+              <CodeBlock
+                label={t(CODE_LANG_DEMO[codeLangDemo].labelKey)}
+                language={CODE_LANG_DEMO[codeLangDemo].language}
+                copyAriaLabel={t("globals.codeBlockCopy")}
+                code={CODE_LANG_DEMO[codeLangDemo].code}
+                maxHeight="16rem"
+              />
+            </div>
+          </Dialog>
+          <Grid
+            equalCells
+            gap="sm"
+            className="sandbox-globals-code-tokens"
+            role="list"
+            aria-label={t("globals.codeTokensAria")}
+          >
+            {CODE_TOKEN_KEYS.map((key) => (
+              <div key={key} className="sandbox-globals-code-token" role="listitem">
+                <span
+                  className="sandbox-globals-code-token-swatch"
+                  style={{ background: `var(--fynns-code-${key})` }}
+                  aria-hidden
+                />
+                <code>{key}</code>
+              </div>
+            ))}
+          </Grid>
+          <SandboxHelp text={t("globals.codeTokensHelp")} />
         </div>
       </GlobalsCategory>
 
@@ -1868,8 +2045,11 @@ export function GlobalsPage() {
             size="sm"
             labelSide="end"
             label={t("globals.shellNavMode")}
-            checked={shellNavExpanded}
-            onCheckedChange={setShellNavExpanded}
+            checked={shellNavOpen}
+            onCheckedChange={(open) => {
+              setShellNavOpen(open);
+              if (open) setShellNavCompact(false);
+            }}
           />
           <Switch
             size="sm"
@@ -1881,7 +2061,10 @@ export function GlobalsPage() {
         </div>
         <div className="sandbox-globals-clipped-shell">
           <ClippedNavShell
-            navMode={shellNavExpanded ? "drawer" : "rail"}
+            navMode={
+              !shellNavOpen ? "hidden" : shellNavCompact ? "rail" : "drawer"
+            }
+            onNavCrowded={() => setShellNavCompact(true)}
             topBar={
               <TopAppBar
                 title={t("globals.shellTitle")}
@@ -1889,10 +2072,17 @@ export function GlobalsPage() {
                   <Tooltip content={t("globals.shellToggleNav")}>
                     <IconButton
                       aria-label={t("globals.shellToggleNav")}
-                      aria-pressed={shellNavExpanded}
-                      onClick={() => setShellNavExpanded((open) => !open)}
+                      aria-pressed={shellNavOpen}
+                      onClick={() => {
+                        if (shellNavOpen) {
+                          setShellNavOpen(false);
+                        } else {
+                          setShellNavCompact(false);
+                          setShellNavOpen(true);
+                        }
+                      }}
                     >
-                      {shellNavExpanded ? (
+                      {shellNavOpen ? (
                         <PanelLeftIcon size={16} aria-hidden />
                       ) : (
                         <MenuIcon aria-hidden />
@@ -1914,25 +2104,7 @@ export function GlobalsPage() {
               />
             }
             nav={
-              shellNavExpanded ? (
-                <NavigationDrawer
-                  variant="standard"
-                  ariaLabel={t("globals.shellNavAria")}
-                >
-                  <NavigationDrawerItem
-                    icon={<FolderOpenIcon />}
-                    label={t("globals.navRailHome")}
-                    active={shellDest === "home"}
-                    onClick={() => setShellDest("home")}
-                  />
-                  <NavigationDrawerItem
-                    icon={<SearchIcon />}
-                    label={t("globals.navRailSearch")}
-                    active={shellDest === "search"}
-                    onClick={() => setShellDest("search")}
-                  />
-                </NavigationDrawer>
-              ) : (
+              !shellNavOpen ? null : shellNavCompact ? (
                 <NavigationRail
                   aria-label={t("globals.shellNavAria")}
                   labelVisibility="selected"
@@ -1950,6 +2122,30 @@ export function GlobalsPage() {
                     onClick={() => setShellDest("search")}
                   />
                 </NavigationRail>
+              ) : (
+                <NavigationDrawer
+                  variant="standard"
+                  ariaLabel={t("globals.shellNavAria")}
+                >
+                  <NavigationDrawerItem
+                    icon={<FolderOpenIcon />}
+                    label={t("globals.navRailHome")}
+                    active={shellDest === "home"}
+                    onClick={() => setShellDest("home")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<SearchIcon />}
+                    label={t("globals.navRailSearch")}
+                    active={shellDest === "search"}
+                    onClick={() => setShellDest("search")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<ArchiveIcon />}
+                    label={t("globals.shellNavLongLabel")}
+                    active={shellDest === "long"}
+                    onClick={() => setShellDest("long")}
+                  />
+                </NavigationDrawer>
               )
             }
           >
@@ -2225,6 +2421,7 @@ export function GlobalsPage() {
         </div>
         <SandboxHelp text={t("globals.swatchesSpecialHelp")} />
       </GlobalsCategory>
+      </div>
     </div>
   );
 }

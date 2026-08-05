@@ -8,7 +8,9 @@
     "designSystem": "AGENTS.md",
     "propagation": "docs/submodule-propagation.md",
     "opencodeRule": "llm/opencode-fynns-ui-consume.md",
-    "breakingPurge": "llm/BREAKING_PURGE.md"
+    "breakingPurge": "llm/BREAKING_PURGE.md",
+    "agentInterfaces": "llm/AGENT_INTERFACES.md",
+    "agentInterfacesMachine": "llm/agent-interfaces.json"
   },
   "rules": [
     "On any short prompt involving @fynns/ui / fynns UI / Collapsible (etc.), read llm/CONSUME.md before writing app code.",

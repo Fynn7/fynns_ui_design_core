@@ -153,13 +153,14 @@
 }
 
 .sandbox-canvas {
-  flex: 1 1 auto;
+  flex: 1 1 var(--fynns-layout-main-min-width);
   padding: var(--fynns-space-lg);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
-  min-width: 0;
+  /* Soft floor — hard rem mins fight EndAside / narrow shell tracks. */
+  min-width: min(var(--fynns-layout-main-min-width), 100%);
 }
 
 .sandbox-playground {
@@ -771,6 +772,15 @@
   max-width: 56rem;
 }
 
+/* SkipLink target — same stack rhythm as `.sandbox-globals` (categories used to
+ * be direct children; wrapping them must not collapse the gap). */
+.sandbox-globals-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+  min-width: 0;
+}
+
 .sandbox-globals-lead {
   margin: 0;
   color: var(--fynns-color-text-muted);
@@ -934,6 +944,32 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
 }
 
+.sandbox-globals-code-tokens {
+  /* Grid equalCells owns tracks; keep full-width in the stack. */
+  width: 100%;
+}
+
+.sandbox-globals-code-token {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  min-width: 0;
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-globals-code-token code {
+  white-space: nowrap;
+}
+
+.sandbox-globals-code-token-swatch {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  border-radius: var(--fynns-radius-xs);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+}
+
 .sandbox-radius-label {
   display: flex;
   flex-direction: column;
@@ -1046,7 +1082,9 @@
 .sandbox-globals-clipped-shell {
   width: 100%;
   max-width: 44rem;
-  height: 18rem;
+  /* Taller than 18rem so phone stacked nav + EndAside bottom sheet still leave a usable main. */
+  height: 22rem;
+  min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   overflow: hidden;
@@ -1076,6 +1114,9 @@
 
 .sandbox-globals-shell-canvas {
   background: var(--fynns-color-app-bg);
+  /* Soft floor — hard rem floors fight EndAside in the nested demo frame. */
+  min-width: min(var(--fynns-layout-main-min-width), 100%);
+  flex: 1 1 var(--fynns-layout-main-min-width);
 }
 
 .sandbox-globals-shell-aside {

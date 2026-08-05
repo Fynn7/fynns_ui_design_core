@@ -756,6 +756,20 @@ export const NAVBAR_TOKENS = {
  */
 export const NAVDRAWER_TOKENS = {
   width: "17.5rem",
+  /**
+   * Floor when the ClippedNavShell drawer column is resized (or flex-shrunk).
+   * Absolute rem only — do **not** use `%` here: on `.fynns-nav-drawer` the
+   * percentage resolves against the grid track (≈ current width), which collapses
+   * `clamp(…, N%, …)` to the preferred width and makes the seam undraggable.
+   * Labels ellipsize below preferred `width`.
+   */
+  "min-width": "12rem",
+  /**
+   * Cap for manual drawer resize in ClippedNavShell (pairs with `width`).
+   * Absolute rem only (see `min-width`). Drag also respects remaining room for
+   * main / EndAside mins.
+   */
+  "max-width": "28rem",
   "pad-block": "0.5rem",
   /**
    * Extra inset between headline / chrome hairline and the first destination
@@ -900,6 +914,20 @@ export const LAYOUT_TOKENS = {
   "end-aside-width": "22rem",
   /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
   "end-aside-max-width": "36vw",
+  /**
+   * Floor for `EndAside` when open. Applied as soft
+   * `min(token, 100%)` so a single pane cannot force the shell past its track.
+   * Pair with `main-min-width`. When the main track is ≤32rem (container query),
+   * EndAside leaves flex flow and overlays the end edge at this floor — mins are
+   * kept without horizontal overflow. Also: `onNavCrowded` → rail when drawer
+   * + floors still overflow; ≤56.25rem viewport → bottom sheet.
+   */
+  "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
+  /**
+   * Floor for the main canvas beside `EndAside` (flex sibling). Soft
+   * `min(token, 100%)` in CSS; dropped while EndAside overlays (≤32rem main).
+   */
+  "main-min-width": "clamp(10rem, 36%, 20rem)",
 } as const;
 
 /**
@@ -913,6 +941,37 @@ export const SCROLLBAR_TOKENS = {
   "thumb-active": "rgba(22, 159, 177, 0.678)",
   track: "transparent",
   "thumb-border": "2px",
+} as const;
+
+/**
+ * CodeBlock syntax colors — distilled from Fynn’s VS C/C++ theme
+ * (`cpptools_dark_vs_new` / `cpptools_light_vs_new` TextMate last-wins).
+ * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
+ * full TextMate engine).
+ */
+export const CODE_TOKENS = {
+  /** Default code ink (`editor.foreground`). */
+  fg: "#b2cacd",
+  /** Optional code well (`editor.background`). */
+  bg: "#031417",
+  comment: "#848484",
+  keyword: "#df769b",
+  string: "#16b673",
+  number: "#7060eb",
+  type: "#4EC9B0",
+  function: "#c3c37a",
+  variable: "#75b4e8",
+  property: "#2ab4ff",
+  parameter: "#ff53ff",
+  operator: "#b4b4b4",
+  /** Namespaces / modules (`std::`, Python import) — grassy green. */
+  module: "#75c94e",
+  /** Language constants (`true` / `null` / …). */
+  constant: "#7060eb",
+  /** Named constants (`MAX`, `PI`, …). */
+  "constant-named": "#d5971a",
+  escape: "#FFD68F",
+  invalid: "#f44747",
 } as const;
 
 /** Ungrouped tokens. Emitted as `--fynns-<key>` (no sub-prefix). */
@@ -1005,6 +1064,28 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "thumb-active": "rgba(13, 148, 136, 0.65)",
     },
   ],
+  [
+    "code",
+    {
+      fg: "#000000",
+      bg: "#ffffff",
+      comment: "#008000",
+      keyword: "#0000ff",
+      string: "#a31515",
+      number: "#098658",
+      type: "#2B91AF",
+      function: "#74531F",
+      variable: "#1F377F",
+      property: "#0451a5",
+      parameter: "#808080",
+      operator: "#000000",
+      module: "#098658",
+      constant: "#0000ff",
+      "constant-named": "#000000",
+      escape: "#B776FB",
+      invalid: "#cd3131",
+    },
+  ],
 ];
 
 export type ColorTokenName = keyof typeof COLOR_TOKENS;
@@ -1055,6 +1136,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
+  ["code", CODE_TOKENS],
   ["", MISC_TOKENS],
 ];
 

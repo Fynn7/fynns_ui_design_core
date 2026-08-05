@@ -36,7 +36,10 @@ ring can paint before heavy work).
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
   EmptyState, Dropzone,
-  Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock,
+  Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock
+  (zero-dep `--fynns-code-*` highlight for ts/js/py/cpp/css/json/bash;
+  consumer DSLs via `highlightProfile` / `registerHighlightLanguage` —
+  see `llm/AGENT_INTERFACES.md`; unknown language stays plain),
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,

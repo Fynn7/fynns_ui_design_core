@@ -370,6 +370,8 @@
   --fynns-navbar-badge-font-size: 0.625rem;
   --fynns-navbar-badge-nudge: 0.125rem;
   --fynns-navdrawer-width: 17.5rem;
+  --fynns-navdrawer-min-width: 12rem;
+  --fynns-navdrawer-max-width: 28rem;
   --fynns-navdrawer-pad-block: 0.5rem;
   --fynns-navdrawer-body-pad-block-start: 0.75rem;
   --fynns-navdrawer-pad-inline: 0.5rem;
@@ -434,12 +436,31 @@
   --fynns-layout-bar-height: 3.5rem;
   --fynns-layout-end-aside-width: 22rem;
   --fynns-layout-end-aside-max-width: 36vw;
+  --fynns-layout-end-aside-min-width: clamp(12rem, 28%, 18rem);
+  --fynns-layout-main-min-width: clamp(10rem, 36%, 20rem);
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);
   --fynns-scrollbar-thumb-active: rgba(22, 159, 177, 0.678);
   --fynns-scrollbar-track: transparent;
   --fynns-scrollbar-thumb-border: 2px;
+  --fynns-code-fg: #b2cacd;
+  --fynns-code-bg: #031417;
+  --fynns-code-comment: #848484;
+  --fynns-code-keyword: #df769b;
+  --fynns-code-string: #16b673;
+  --fynns-code-number: #7060eb;
+  --fynns-code-type: #4EC9B0;
+  --fynns-code-function: #c3c37a;
+  --fynns-code-variable: #75b4e8;
+  --fynns-code-property: #2ab4ff;
+  --fynns-code-parameter: #ff53ff;
+  --fynns-code-operator: #b4b4b4;
+  --fynns-code-module: #75c94e;
+  --fynns-code-constant: #7060eb;
+  --fynns-code-constant-named: #d5971a;
+  --fynns-code-escape: #FFD68F;
+  --fynns-code-invalid: #f44747;
   --fynns-border-hairline: 1px;
   --fynns-opacity-muted: 0.8;
 }
@@ -507,6 +528,23 @@
   --fynns-scrollbar-thumb: rgba(90, 122, 116, 0.35);
   --fynns-scrollbar-thumb-hover: rgba(13, 148, 136, 0.45);
   --fynns-scrollbar-thumb-active: rgba(13, 148, 136, 0.65);
+  --fynns-code-fg: #000000;
+  --fynns-code-bg: #ffffff;
+  --fynns-code-comment: #008000;
+  --fynns-code-keyword: #0000ff;
+  --fynns-code-string: #a31515;
+  --fynns-code-number: #098658;
+  --fynns-code-type: #2B91AF;
+  --fynns-code-function: #74531F;
+  --fynns-code-variable: #1F377F;
+  --fynns-code-property: #0451a5;
+  --fynns-code-parameter: #808080;
+  --fynns-code-operator: #000000;
+  --fynns-code-module: #098658;
+  --fynns-code-constant: #0000ff;
+  --fynns-code-constant-named: #000000;
+  --fynns-code-escape: #B776FB;
+  --fynns-code-invalid: #cd3131;
 }
 
 *,

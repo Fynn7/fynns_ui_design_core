@@ -22,9 +22,9 @@ const en = {
   "nav.globalsHint":
     "M3 component catalog (collapsed sections) plus the shape / radius inspector.",
   "nav.expand": "Expand navigation",
-  "nav.expandTip": "Expand to navigation drawer",
-  "nav.collapse": "Collapse navigation",
-  "nav.collapseTip": "Collapse to navigation rail",
+  "nav.expandTip": "Show the navigation drawer",
+  "nav.collapse": "Hide navigation",
+  "nav.collapseTip": "Hide the navigation column",
 
   "topbar.undo": "Undo",
   "topbar.undoTip": "Undo (Ctrl+Z)",
@@ -324,7 +324,7 @@ const en = {
   "globals.paginationPage": "Page {n}",
   "globals.skipLink": "Skip to content",
   "globals.skipLinkHelp":
-    "SkipLink is visually hidden until focused; then it appears as Button ghost so keyboard users jump past chrome.",
+    "SkipLink stays fully clipped until keyboard focus; then a fixed Button ghost at the viewport top-start jumps past chrome into `#globals-content`.",
   "globals.badgedBoxHelp":
     "BadgedBox positions a notification badge over IconButton / Avatar. Dot or count reuses NavigationRailBadge.",
   "globals.badgedBoxIconTip": "Notifications",
@@ -387,9 +387,30 @@ const en = {
   "globals.tableHelp":
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — native table chrome.",
   "globals.codeBlockLabel": "tokens.ts",
+  "globals.codeBlockCssLabel": "hero.css",
+  "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: `default` optional head; `plain` headless. Copy fades in on hover (keyboard: focus-visible; always visible on touch).",
+    "CodeBlock: `default` optional head; `plain` headless. Supported languages (`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`) get zero-dep spans colored with `--fynns-code-*`. Copy fades in on hover (keyboard: focus-visible; always visible on touch); clipboard stays the raw source string.",
+  "globals.codeTokensAria": "Code highlight tokens",
+  "globals.codeTokensHelp":
+    "`--fynns-code-*` roles distilled from the cpptools VS dark/light themes (last-wins TextMate colors). Light theme overrides via `data-fynns-theme=\"light\"`.",
+  "globals.codeLangDemoOpen": "Language showcase",
+  "globals.codeLangDemoHelp":
+    "Opens a dialog with ToggleGroup → Python / TypeScript / C++ CodeBlock samples (same `--fynns-code-*` highlighter).",
+  "globals.codeLangDemoTitle": "CodeBlock languages",
+  "globals.codeLangDemoDescription":
+    "Switch the sample language. Highlighting stays on the zero-dep tokenizer.",
+  "globals.codeLangDemoAria": "Sample language",
+  "globals.codeLangDemoPy": "Python",
+  "globals.codeLangDemoTs": "TypeScript",
+  "globals.codeLangDemoCpp": "C++",
+  "globals.codeLangDemoPyFile": "point.py",
+  "globals.codeLangDemoTsFile": "point.ts",
+  "globals.codeLangDemoCppFile": "point.cpp",
+  "globals.codeSimpleProfileLabel": "scene.gsc (highlightProfile)",
+  "globals.codeSimpleProfileHelp":
+    "Consumer line-command DSL via `highlightProfile` / `registerHighlightLanguage` (Raycaster `.gsc` shape). Roles map to `--fynns-code-*`. Spec: `llm/AGENT_INTERFACES.md`.",
   "globals.fullscreenOpen": "Open fullscreen dialog",
   "globals.fullscreenTitle": "Fullscreen dialog",
   "globals.fullscreenBody":
@@ -703,15 +724,17 @@ const en = {
     "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. Prefer Drawer for generic inspector panels.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
-  "globals.shellNavMode": "Drawer destinations (off = rail)",
+  "globals.shellNavMode": "Destinations open (off = hidden)",
   "globals.shellAsideOpen": "EndAside open",
-  "globals.shellToggleNav": "Toggle drawer / rail",
+  "globals.shellToggleNav": "Toggle destinations open / closed",
   "globals.shellToggleAside": "Toggle EndAside",
+  "globals.shellNavLongLabel":
+    "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellCanvas":
-    "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drawer is for modal content sheets — not this destination column.",
+    "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drag the drawer’s trailing seam to resize (min clamp). Drawer is for modal content sheets — not this destination column.",
   "globals.shellAsideBody": "Supporting inspector pane (EndAside).",
   "globals.shellHelp":
-    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail; narrow stacks nav) + EndAside (width morph; narrow → bottom overlay). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
+    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` collapses destinations to rail. Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -871,9 +894,9 @@ const zh: Record<MessageKey, string> = {
   "nav.globalsHint":
     "按 M3 分类的组件样例（分区默认收起），右侧是圆角 / 形状检查器。",
   "nav.expand": "展开导航",
-  "nav.expandTip": "展开为导航抽屉",
-  "nav.collapse": "收起导航",
-  "nav.collapseTip": "收起为导航轨",
+  "nav.expandTip": "展开导航抽屉",
+  "nav.collapse": "关闭导航",
+  "nav.collapseTip": "完全收起左侧导航",
 
   "topbar.undo": "撤销",
   "topbar.undoTip": "撤销 (Ctrl+Z)",
@@ -1159,7 +1182,7 @@ const zh: Record<MessageKey, string> = {
   "globals.paginationPage": "第 {n} 页",
   "globals.skipLink": "跳到正文",
   "globals.skipLinkHelp":
-    "SkipLink 在未聚焦时视觉隐藏；聚焦后以 Button ghost 出现，方便键盘用户跳过顶栏。",
+    "SkipLink 未聚焦时完全裁剪隐藏；键盘聚焦后以固定在视口左上的 Button ghost 出现，可跳到 `#globals-content`。",
   "globals.badgedBoxHelp":
     "BadgedBox 把通知角标叠在 IconButton / Avatar 上。圆点或数字复用 NavigationRailBadge。",
   "globals.badgedBoxIconTip": "通知",
@@ -1222,9 +1245,30 @@ const zh: Record<MessageKey, string> = {
   "globals.tableHelp":
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — 原生表格外观。",
   "globals.codeBlockLabel": "tokens.ts",
+  "globals.codeBlockCssLabel": "hero.css",
+  "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：`default` 可选标题头；`plain` 无头。悬停渐显复制（键盘 focus-visible；触控常显）。",
+    "CodeBlock：`default` 可选标题头；`plain` 无头。支持语言（`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`）用零依赖分词 + `--fynns-code-*` 着色。悬停渐显复制（键盘 focus-visible；触控常显）；剪贴板仍是原始源码。",
+  "globals.codeTokensAria": "代码高亮 token",
+  "globals.codeTokensHelp":
+    "`--fynns-code-*` 角色色来自 cpptools VS 深/浅主题（TextMate last-wins）。浅色经 `data-fynns-theme=\"light\"` 覆盖。",
+  "globals.codeLangDemoOpen": "语言展示",
+  "globals.codeLangDemoHelp":
+    "打开对话框，用 ToggleGroup 切换 Python / TypeScript / C++ 的 CodeBlock 样例（同一套 `--fynns-code-*` 高亮）。",
+  "globals.codeLangDemoTitle": "CodeBlock 语言",
+  "globals.codeLangDemoDescription":
+    "切换样例语言。高亮仍走零依赖分词器。",
+  "globals.codeLangDemoAria": "样例语言",
+  "globals.codeLangDemoPy": "Python",
+  "globals.codeLangDemoTs": "TypeScript",
+  "globals.codeLangDemoCpp": "C++",
+  "globals.codeLangDemoPyFile": "point.py",
+  "globals.codeLangDemoTsFile": "point.ts",
+  "globals.codeLangDemoCppFile": "point.cpp",
+  "globals.codeSimpleProfileLabel": "scene.gsc（highlightProfile）",
+  "globals.codeSimpleProfileHelp":
+    "消费仓行首命令 DSL：`highlightProfile` / `registerHighlightLanguage`（Raycaster `.gsc` 形）。角色映射到 `--fynns-code-*`。规格：`llm/AGENT_INTERFACES.md`。",
   "globals.fullscreenOpen": "打开全屏对话框",
   "globals.fullscreenTitle": "全屏对话框",
   "globals.fullscreenBody":
@@ -1538,15 +1582,17 @@ const zh: Record<MessageKey, string> = {
     "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。通用检查器请用 Drawer。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
-  "globals.shellNavMode": "抽屉目的地（关 = 导航轨）",
+  "globals.shellNavMode": "打开目的地（关 = 完全收起）",
   "globals.shellAsideOpen": "打开 EndAside",
-  "globals.shellToggleNav": "切换抽屉 / 导航轨",
+  "globals.shellToggleNav": "切换目的地展开 / 关闭",
   "globals.shellToggleAside": "切换 EndAside",
+  "globals.shellNavLongLabel":
+    "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellCanvas":
-    "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。Drawer 用于模态内容侧栏，不是这列目的地。",
+    "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。可拖抽屉右缘调宽（有 min clamp）。Drawer 用于模态内容侧栏，不是这列目的地。",
   "globals.shellAsideBody": "支撑检查器窗格（EndAside）。",
   "globals.shellHelp":
-    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail；窄屏上叠导航）+ EndAside（宽度开合；窄屏底缘叠层）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
+    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` 才将目的地收成 rail。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
