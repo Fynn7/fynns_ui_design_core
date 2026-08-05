@@ -93,8 +93,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `app-bg` → `surface-1` (panels) → `surface-2` (flyouts) → `surface-3`
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
-9. **Layout patterns.** Sidebar + sticky topbar + master/detail shell;
-   overlays via `Dialog` /
+9. **Layout patterns.** Destination apps: `ClippedNavShell` (full-bleed
+   TopAppBar + drawer|rail) + optional `EndAside` inspector; overlays via
+   `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
@@ -285,6 +286,16 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
+- **App shells:** **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
+  under it — M3 clipped; no topbar×sidebar crosshair; `navMode` `drawer`|`rail`
+  drives column width via `--fynns-navdrawer-width` / `--fynns-navrail-width`) and
+  **EndAside** (end-edge supporting pane with **width** open/close; tokens
+  `--fynns-layout-end-aside-width` / `end-aside-max-width`; ≤56.25rem overlays as
+  a bottom sheet). Slot-only — destinations stay in `nav`, inspector content in
+  `EndAside` children; toggle IconButtons live in the consumer `TopAppBar`.
+  Prefer for destination chrome apps. **Not** `Drawer` (modal content side sheet)
+  and **not** a revived `Panel` / `ListGroup` shell. Demo: sandbox Globals →
+  Navigation.
 - **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (`title` / optional `icon` / `actions` + body;
@@ -303,6 +314,45 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
+
+  ### Platform targeting (agents — authoritative)
+
+  Labels: **`both`** = any viewport; **`mobile-first`** = prefer on compact /
+  phone (pair with a desktop sibling when adapting); **`desktop-first`** =
+  prefer on medium+ / pointer (pair with a mobile sibling when adapting);
+  **`adaptive`** = same component changes layout by breakpoint or
+  `(hover: none)`. Most controls are **`both`**. Only **ClippedNavShell** /
+  **EndAside** implement a real viewport break (`max-width: 56.25rem`). Destination
+  chrome does **not** auto-swap — the **app** chooses Rail vs Bar vs Drawer.
+
+  **Destination ladder (not duplicates):** phone → `NavigationBar`; medium →
+  `NavigationRail`; wide labeled → `NavigationDrawer` `standard`; overlay →
+  `modal`. Compose with `ClippedNavShell` + `TopAppBar`. Globals Navigation
+  stacks **standalone** demos of each part — they are not one composed app.
+
+  | Symbol | Platform | Notes |
+  | --- | --- | --- |
+  | TopAppBar | both | Page header; denser tool chrome. Slot into `ClippedNavShell.topBar`. |
+  | BottomAppBar | mobile-first | Bottom **actions** + optional FAB — not destinations. |
+  | Toolbar | both | Contextual actions (`docked` / `floating`). |
+  | NavigationBar | mobile-first | Bottom **destinations** (phone). Prefer Rail on medium+. |
+  | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
+  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; narrow stacks nav. |
+  | EndAside | adaptive | Inspector width morph; ≤56.25rem → bottom overlay. Not Drawer. |
+  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
+  | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
+  | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
+  | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. |
+  | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
+  | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
+  | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
+  | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
+  | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
+  | Stepper | both | `orientation` is caller-chosen — no auto breakpoint. |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

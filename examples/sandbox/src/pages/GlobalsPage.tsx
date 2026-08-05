@@ -22,11 +22,13 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  ClippedNavShell,
   ClipboardIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
   Collapsible,
+  EndAside,
   ContextMenu,
   ContextMenuTrigger,
   DatePicker,
@@ -76,6 +78,8 @@ import {
   NavigationDrawerHeadline,
   NavigationDrawerItem,
   OtpInput,
+  PanelLeftIcon,
+  PanelRightIcon,
   PlusIcon,
   PencilIcon,
   Radio,
@@ -205,6 +209,9 @@ export function GlobalsPage() {
     "inbox",
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [shellNavExpanded, setShellNavExpanded] = useState(true);
+  const [shellAsideOpen, setShellAsideOpen] = useState(true);
+  const [shellDest, setShellDest] = useState<"home" | "search">("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -1684,6 +1691,7 @@ export function GlobalsPage() {
           checked={appBarScrolled}
           onCheckedChange={setAppBarScrolled}
         />
+        <SandboxHelp text={t("globals.appBarHelp")} />
         <div className="sandbox-globals-navrail">
           <NavigationRail aria-label={t("globals.navRailAria")}>
             <NavigationRailMenu>
@@ -1733,6 +1741,7 @@ export function GlobalsPage() {
             </p>
           </div>
         </div>
+        <SandboxHelp text={t("globals.navRailHelp")} />
         <div className="sandbox-globals-navbar">
           <NavigationBar aria-label={t("globals.navBarAria")}>
             <NavigationBarItem
@@ -1854,6 +1863,113 @@ export function GlobalsPage() {
           />
         </NavigationDrawer>
         <SandboxHelp text={t("globals.navDrawerHelp")} />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Switch
+            size="sm"
+            labelSide="end"
+            label={t("globals.shellNavMode")}
+            checked={shellNavExpanded}
+            onCheckedChange={setShellNavExpanded}
+          />
+          <Switch
+            size="sm"
+            labelSide="end"
+            label={t("globals.shellAsideOpen")}
+            checked={shellAsideOpen}
+            onCheckedChange={setShellAsideOpen}
+          />
+        </div>
+        <div className="sandbox-globals-clipped-shell">
+          <ClippedNavShell
+            navMode={shellNavExpanded ? "drawer" : "rail"}
+            topBar={
+              <TopAppBar
+                title={t("globals.shellTitle")}
+                leading={
+                  <Tooltip content={t("globals.shellToggleNav")}>
+                    <IconButton
+                      aria-label={t("globals.shellToggleNav")}
+                      aria-pressed={shellNavExpanded}
+                      onClick={() => setShellNavExpanded((open) => !open)}
+                    >
+                      {shellNavExpanded ? (
+                        <PanelLeftIcon size={16} aria-hidden />
+                      ) : (
+                        <MenuIcon aria-hidden />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                }
+                trailing={
+                  <Tooltip content={t("globals.shellToggleAside")}>
+                    <IconButton
+                      aria-label={t("globals.shellToggleAside")}
+                      aria-pressed={shellAsideOpen}
+                      onClick={() => setShellAsideOpen((open) => !open)}
+                    >
+                      <PanelRightIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                }
+              />
+            }
+            nav={
+              shellNavExpanded ? (
+                <NavigationDrawer
+                  variant="standard"
+                  ariaLabel={t("globals.shellNavAria")}
+                >
+                  <NavigationDrawerItem
+                    icon={<FolderOpenIcon />}
+                    label={t("globals.navRailHome")}
+                    active={shellDest === "home"}
+                    onClick={() => setShellDest("home")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<SearchIcon />}
+                    label={t("globals.navRailSearch")}
+                    active={shellDest === "search"}
+                    onClick={() => setShellDest("search")}
+                  />
+                </NavigationDrawer>
+              ) : (
+                <NavigationRail
+                  aria-label={t("globals.shellNavAria")}
+                  labelVisibility="selected"
+                >
+                  <NavigationRailItem
+                    icon={<FolderOpenIcon />}
+                    label={t("globals.navRailHome")}
+                    active={shellDest === "home"}
+                    onClick={() => setShellDest("home")}
+                  />
+                  <NavigationRailItem
+                    icon={<SearchIcon />}
+                    label={t("globals.navRailSearch")}
+                    active={shellDest === "search"}
+                    onClick={() => setShellDest("search")}
+                  />
+                </NavigationRail>
+              )
+            }
+          >
+            <div className="sandbox-globals-shell-body">
+              <div className="sandbox-globals-shell-canvas fynns-scroll">
+                <p className="sandbox-globals-shell-canvas-body">
+                  {t("globals.shellCanvas")}
+                </p>
+              </div>
+              <EndAside open={shellAsideOpen}>
+                <div className="sandbox-globals-shell-aside fynns-scroll">
+                  <p className="sandbox-globals-shell-aside-body">
+                    {t("globals.shellAsideBody")}
+                  </p>
+                </div>
+              </EndAside>
+            </div>
+          </ClippedNavShell>
+        </div>
+        <SandboxHelp text={t("globals.shellHelp")} />
         <div className="sandbox-globals-bottom-app-bar">
           <BottomAppBar
             aria-label={t("globals.bottomAppBarAria")}

@@ -49,7 +49,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
 | `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive `*Banner` names. |
 | `ListGroup*` / `ListRow*` / `NavItem*` / `ShellNav*` | Deleted — rebuild with `List`/`ListItem`, `Navigation*` chrome, or app layout. |
-| `Panel` / `PanelCard` / `ScrollArea` | Compose with `Surface` (bordered / tonal well, any children), `Card`, `Drawer` (`modal={false}` for docked inspectors), app flex/grid, and `fynns-scroll`. Do not revive the old `Panel` / `PanelCard` / `ScrollArea` names. |
+| `Panel` / `PanelCard` / `ScrollArea` | Compose with `Surface` (bordered / tonal well, any children), `Card`, `ClippedNavShell` + `EndAside` (destination + inspector), `Drawer` for modal content sheets, app flex/grid, and `fynns-scroll`. Do not revive the old `Panel` / `PanelCard` / `ScrollArea` names. |
 | `Kbd` / `Combobox` / `CommandPalette` | Delete usage or reimplement in the app. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
@@ -72,8 +72,9 @@ Anything else must be deleted or kept as a non-exported internal.
 | `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 | `Button` `danger` | Filled like `primary`: `--fynns-color-danger` surface + `--fynns-color-on-accent` ink (outlined red chrome retired). IconButton danger mirrors filled primary. |
 | `Card` | One-shot static section: `title` + optional `icon` / `actions` + always-visible `children`. Shares Collapsible shell; not a disclosure. Anatomy parts and elevated/filled/outlined variants deleted. |
+| `ClippedNavShell` / `EndAside` | Destination app chrome (full-bleed TopAppBar + drawer\|rail) and end-edge inspector width morph. Not `Drawer` (modal content). Demoed in Globals Navigation. |
 
 ## Related docs
 
-- Catalog summary: [`AGENTS.md`](../AGENTS.md)
+- Catalog summary + **Platform targeting**: [`AGENTS.md`](../AGENTS.md)
 - Install contract: [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json)

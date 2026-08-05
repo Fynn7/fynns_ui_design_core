@@ -217,6 +217,13 @@ export { FabMenu, FabMenuItem } from "./primitives/FabMenu";
 export type { FabMenuItemProps, FabMenuProps } from "./primitives/FabMenu";
 export { TopAppBar } from "./primitives/TopAppBar";
 export type { TopAppBarProps } from "./primitives/TopAppBar";
+export { ClippedNavShell } from "./primitives/ClippedNavShell";
+export type {
+  ClippedNavShellNavMode,
+  ClippedNavShellProps,
+} from "./primitives/ClippedNavShell";
+export { EndAside } from "./primitives/EndAside";
+export type { EndAsideProps } from "./primitives/EndAside";
 export { BottomAppBar } from "./primitives/BottomAppBar";
 export type { BottomAppBarProps } from "./primitives/BottomAppBar";
 export { Toolbar } from "./primitives/Toolbar";

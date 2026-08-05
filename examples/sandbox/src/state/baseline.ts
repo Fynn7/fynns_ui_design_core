@@ -66,6 +66,8 @@ export const EDITABLE_LAYOUT_KEYS = [
   "sheet-pad-block",
   // shellSize
   "drawer-width",
+  "end-aside-width",
+  "end-aside-max-width",
   "dialog-max-width-sm",
   "dialog-max-width-md",
   "dialog-max-width-lg",
@@ -98,6 +100,8 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
     "drawer-width",
+    "end-aside-width",
+    "end-aside-max-width",
     "dialog-max-width-sm",
     "dialog-max-width-md",
     "dialog-max-width-lg",
@@ -190,6 +194,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",
+  "end-aside-width": "Shell size · EndAside open width",
+  "end-aside-max-width": "Shell size · EndAside max-width cap (wide viewports)",
   "dialog-max-width-sm": "Shell size · Dialog size=sm max width",
   "dialog-max-width-md": "Shell size · Dialog size=md max width",
   "dialog-max-width-lg": "Shell size · Dialog size=lg max width",
@@ -221,7 +227,7 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
   },
   {
     cssVar: sandboxChromeVar("chrome-bar-height"),
-    role: "Sandbox brand + page topbar strip (not product --fynns-layout-bar-height)",
+    role: "Sandbox TopAppBar height override (not product --fynns-layout-bar-height)",
     section: "sandbox",
     applyWrites: false,
   },
