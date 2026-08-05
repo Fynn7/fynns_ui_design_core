@@ -1,0 +1,15 @@
+export type {
+  CodeLanguageId,
+  CodeSegment,
+  CodeTokenKind,
+  LangProfile,
+} from "./types";
+export type { SimpleHighlightProfile } from "./simple";
+export { normalizeLanguage, profileFor } from "./languages";
+export { highlightCode, isHighlightableLanguage } from "./tokenize";
+export {
+  highlightWithProfile,
+  registerHighlightLanguage,
+  unregisterHighlightLanguage,
+  getRegisteredHighlightLanguage,
+} from "./simple";

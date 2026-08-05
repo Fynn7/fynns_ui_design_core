@@ -7890,11 +7890,61 @@ a.fynns-breadcrumb-link:visited {
   font-family: var(--fynns-font-mono);
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
-  color: var(--fynns-color-text);
+  color: var(--fynns-code-fg);
 }
 
 .fynns-code-block-pre code {
   font: inherit;
+  color: inherit;
+}
+
+/* Syntax spans — colors from `--fynns-code-*` (VS C++ theme distill). */
+.fynns-code-block-code .fynns-code-comment {
+  color: var(--fynns-code-comment);
+}
+.fynns-code-block-code .fynns-code-keyword {
+  color: var(--fynns-code-keyword);
+  font-weight: var(--fynns-font-weight-bold);
+}
+.fynns-code-block-code .fynns-code-string {
+  color: var(--fynns-code-string);
+}
+.fynns-code-block-code .fynns-code-number {
+  color: var(--fynns-code-number);
+}
+.fynns-code-block-code .fynns-code-type {
+  color: var(--fynns-code-type);
+}
+.fynns-code-block-code .fynns-code-function {
+  color: var(--fynns-code-function);
+}
+.fynns-code-block-code .fynns-code-variable {
+  color: var(--fynns-code-variable);
+}
+.fynns-code-block-code .fynns-code-property {
+  color: var(--fynns-code-property);
+}
+.fynns-code-block-code .fynns-code-parameter {
+  color: var(--fynns-code-parameter);
+}
+.fynns-code-block-code .fynns-code-operator {
+  color: var(--fynns-code-operator);
+}
+.fynns-code-block-code .fynns-code-module {
+  color: var(--fynns-code-module);
+  font-weight: var(--fynns-font-weight-bold);
+}
+.fynns-code-block-code .fynns-code-constant {
+  color: var(--fynns-code-constant);
+}
+.fynns-code-block-code .fynns-code-constant-named {
+  color: var(--fynns-code-constant-named);
+}
+.fynns-code-block-code .fynns-code-escape {
+  color: var(--fynns-code-escape);
+}
+.fynns-code-block-code .fynns-code-invalid {
+  color: var(--fynns-code-invalid);
 }
 
 /* Copy fades in on hover; keyboard uses :focus-visible (not sticky :focus). */

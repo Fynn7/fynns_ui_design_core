@@ -305,3 +305,18 @@ export type {
   CodeBlockProps,
   CodeBlockVariant,
 } from "./primitives/CodeBlock";
+export {
+  highlightCode,
+  highlightWithProfile,
+  isHighlightableLanguage,
+  normalizeLanguage,
+  registerHighlightLanguage,
+  unregisterHighlightLanguage,
+  getRegisteredHighlightLanguage,
+} from "./primitives/codeHighlight";
+export type {
+  CodeLanguageId,
+  CodeSegment,
+  CodeTokenKind,
+  SimpleHighlightProfile,
+} from "./primitives/codeHighlight";
