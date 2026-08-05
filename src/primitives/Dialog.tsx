@@ -290,7 +290,13 @@ export type DialogProps = {
   children: ReactNode;
   headActions?: ReactNode;
   variant?: DialogVariant;
-  /** Maps to `--fynns-layout-dialog-max-width-*` for centered dialogs. */
+  /**
+   * Centered only: max-width ceiling via `--fynns-layout-dialog-max-width-*`
+   * (`sm` / `md` / `lg`). Panel width is content-fit by default (`max-content`);
+   * it grows with body content up to this ceiling (and the viewport). At the
+   * ceiling, ControlStack / Switch labels wrap — body never shows a horizontal
+   * scrollbar (`overflow-x: clip`).
+   */
   size?: "sm" | "md" | "lg";
   className?: string;
   showCloseButton?: boolean;

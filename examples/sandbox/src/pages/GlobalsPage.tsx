@@ -108,6 +108,7 @@ import {
   ControlRow,
   ControlStack,
   Grid,
+  InfoHint,
   Slider,
   useOverflowBounds,
 } from "@fynns/ui";
@@ -455,6 +456,33 @@ export function GlobalsPage() {
             </IconButton>
           </Tooltip>
         </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <InfoHint
+            content={t("globals.infoHintIconBody")}
+            ariaLabel={t("globals.infoHintIconAria")}
+          />
+          <InfoHint
+            label={t("globals.infoHintLabeledTrigger")}
+            content={t("globals.infoHintLabeledBody")}
+            ariaLabel={t("globals.infoHintLabeledAria")}
+          />
+          <ControlStack columns={2}>
+            <ControlRow label={t("globals.infoHintRowLabel")}>
+              <Switch
+                size="sm"
+                labelSide="end"
+                label={t("globals.infoHintRowSwitch")}
+                checked={switchOn}
+                onCheckedChange={setSwitchOn}
+              />
+              <InfoHint
+                content={t("globals.infoHintRowBody")}
+                ariaLabel={t("globals.infoHintRowAria")}
+              />
+            </ControlRow>
+          </ControlStack>
+        </div>
+        <SandboxHelp text={t("globals.infoHintHelp")} />
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.fabTip")}>
             <Fab size="sm" aria-label={t("globals.fabTip")}>
