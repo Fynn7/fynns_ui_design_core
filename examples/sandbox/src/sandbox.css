@@ -590,10 +590,10 @@
 
 .sandbox-preview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  /* Equal columns when 2+ fit; single sample stretches full stage width. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   gap: var(--fynns-space-lg);
   align-items: start;
-  justify-content: start;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -608,7 +608,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-sm);
-  max-width: 18rem;
   width: 100%;
   min-width: 0;
 }
@@ -628,6 +627,15 @@
 
 .sandbox-preview-card-wrap {
   position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.sandbox-preview-card-wrap > .fynns-card,
+.sandbox-preview-card-wrap > .fynns-collapsible {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sandbox-hue-wheel {
@@ -1322,10 +1330,6 @@
   .sandbox-preview-grid {
     grid-template-columns: minmax(0, 1fr);
     padding: var(--fynns-space-md);
-  }
-
-  .sandbox-preview-slot {
-    max-width: none;
   }
 
   .sandbox-globals-row {
