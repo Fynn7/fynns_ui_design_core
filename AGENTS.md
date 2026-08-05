@@ -286,9 +286,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
   **Surface** (generic bordered / tonal well; any children; no Card anatomy —
-  use for preview wells / stages),   Collapsible (optional `icon` in the chevron slot — header hover /
-  keyboard focus-visible swaps to expand chevron; open: full-bleed hairline
-  under head; focus = quiet Input-like border),
+  use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
+  keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
+  open: full-bleed hairline under head; focus = quiet Input-like border),
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /

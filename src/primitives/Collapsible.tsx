@@ -8,7 +8,8 @@ export type CollapsibleProps = {
   /**
    * Optional glyph that occupies the disclose slot at rest (same place as the
    * chevron). On header hover (or keyboard focus-visible) the chevron replaces
-   * it (direction still follows open state). Omit to always show the chevron.
+   * it (direction still follows open state). On `(hover: none)` the slot stays
+   * chevron-only. Omit to always show the chevron.
    * Prefer a ~16dp glyph (`--fynns-size-icon`). Decorative (`aria-hidden`);
    * put meaning in `title`.
    */
@@ -36,7 +37,8 @@ export type CollapsibleProps = {
  * accent-tinted border as Input — not an inset focus ring.
  *
  * Optional `icon`: rests in the chevron slot; header hover / focus-visible
- * swaps to the expand chevron. No separate leading column.
+ * swaps to the expand chevron (`(hover: none)` keeps chevron only). No
+ * separate leading column.
  *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
  * head, trigger, or body chrome.
