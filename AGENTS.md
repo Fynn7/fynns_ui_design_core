@@ -349,7 +349,9 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
    `src/index.ts`, document it here, **and add a live sample to sandbox
-   Globals or Preview** in the same change. Do not expand the public barrel
+   Globals or Preview** in the same change. Prefer **one live sample +
+   Preview switches** for optional anatomy (`icon`, `actions`, …) — do not
+   stack every combo in Components. Do not expand the public barrel
    without that demo (see `llm/BREAKING_PURGE.md`).
 3. Keep `npm run typecheck` and `npm run lint` green.
 

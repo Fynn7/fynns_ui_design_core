@@ -109,11 +109,13 @@ const en = {
   "preview.open": "Open",
   "preview.cardActivated": "{variant} card activated",
   "preview.collapsibleOpen": "Expanded",
+  "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
+  "preview.collapsiblePlain": "Title only",
   "preview.collapsibleLabel": "Sample",
   "preview.collapsibleTitle": "Section title",
   "preview.collapsibleBody":
-    "Fold/unfold section: pass a title and body content. The chevron and header are built in — no need to assemble them yourself.",
+    "One live sample — hover the header to swap rest icon ↔ chevron. Use the switches for icon / actions / open.",
   "preview.collapsibleActionTip": "Sample button in the header (does not fold the section)",
   "preview.collapsibleActionAria": "Sample header button",
   "preview.collapsibleActionToast": "Header button clicked",
@@ -754,7 +756,7 @@ const en = {
   "globals.cardBody": "Card corners follow radius-md on the global levels.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
-    "Collapsible headers use `radius-md`. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
+    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
@@ -938,11 +940,13 @@ const zh: Record<MessageKey, string> = {
   "preview.open": "打开",
   "preview.cardActivated": "已激活 {variant} 卡片",
   "preview.collapsibleOpen": "展开",
+  "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
+  "preview.collapsiblePlain": "仅标题",
   "preview.collapsibleLabel": "示例",
   "preview.collapsibleTitle": "分区标题",
   "preview.collapsibleBody":
-    "可折叠分区：传入标题和正文即可。箭头与标题栏已内置，不必自己拼。",
+    "只保留一个实时样例 — 悬停标题栏可在静止图标与 chevron 间切换。用上方开关控制图标 / actions / 展开。",
   "preview.collapsibleActionTip": "标题栏上的示例按钮（不会折叠分区）",
   "preview.collapsibleActionAria": "示例标题按钮",
   "preview.collapsibleActionToast": "已点击标题按钮",
@@ -1570,7 +1574,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardBody": "卡片圆角跟随全局等级的 md。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
-    "折叠分区标题栏使用 `radius-md`。展开时标题下为通栏 hairline（与外框相接）；焦点边框与 Input 相同的淡青绿。",
+    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":
