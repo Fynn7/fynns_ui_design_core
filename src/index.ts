@@ -35,6 +35,7 @@ export {
   PanelRightIcon,
   PencilIcon,
   PlusIcon,
+  RocketIcon,
   SaveIcon,
   SearchIcon,
   SettingsIcon,
@@ -306,4 +307,7 @@ export type {
   TableRowProps,
 } from "./primitives/Table";
 export { CodeBlock } from "./primitives/CodeBlock";
-export type { CodeBlockProps } from "./primitives/CodeBlock";
+export type {
+  CodeBlockProps,
+  CodeBlockVariant,
+} from "./primitives/CodeBlock";

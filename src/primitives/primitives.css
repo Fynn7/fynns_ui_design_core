@@ -653,6 +653,8 @@
   align-items: center;
   gap: var(--fynns-space-xs);
   min-width: 0;
+  /* Match densified Select / Input control height (40dp). */
+  min-height: var(--fynns-size-icon-target);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
@@ -705,6 +707,8 @@
   /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
   width: 100%;
   box-sizing: border-box;
+  /* Same form control height as densified Select / Autocomplete (40dp). */
+  min-height: var(--fynns-size-icon-target);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
@@ -719,6 +723,7 @@
 }
 
 .fynns-input--sm {
+  min-height: 2rem;
   padding-block: var(--fynns-space-2);
   padding-inline: var(--fynns-space-md);
   font-size: var(--fynns-font-size-sm);
@@ -8109,7 +8114,8 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  /* Head hairline separates chrome from code — no extra column gap. */
+  gap: 0;
   width: 100%;
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -8123,8 +8129,9 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  padding: var(--fynns-space-2xs) var(--fynns-space-xs) var(--fynns-space-2xs)
-    var(--fynns-space-md);
+  /* Inline-start matches `.fynns-code-block-pre` so label lines up with code. */
+  padding-block: var(--fynns-space-2xs);
+  padding-inline: var(--fynns-layout-content-inset) var(--fynns-space-xs);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
@@ -8138,8 +8145,9 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-code-block-pre {
   margin: 0;
-  /* Same section-body rhythm as CardContent / Collapsible body. */
-  padding-block: var(--fynns-layout-content-pad-block);
+  /* Slightly denser start under the head hairline; keep section inset on end. */
+  padding-block-start: var(--fynns-space-md);
+  padding-block-end: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
   min-width: 0;
   max-width: 100%;
@@ -8152,6 +8160,46 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-code-block-pre code {
   font: inherit;
+}
+
+/* Copy fades in on hover; keyboard uses :focus-visible (not sticky :focus). */
+.fynns-code-block-copy {
+  flex: 0 0 auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-code-block:hover .fynns-code-block-copy,
+.fynns-code-block-copy:has(:focus-visible) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Headless: code only; copy floats over the pre. */
+.fynns-code-block--plain .fynns-code-block-copy {
+  position: absolute;
+  top: var(--fynns-space-sm);
+  inset-inline-end: var(--fynns-space-sm);
+  z-index: 1;
+}
+
+.fynns-code-block--plain .fynns-code-block-pre {
+  /* No head hairline — restore equal section pad on both block edges. */
+  padding-block: var(--fynns-layout-content-pad-block);
+}
+
+@media (hover: none) {
+  .fynns-code-block-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-code-block-copy {
+    transition: none;
+  }
 }
 
 /* ---------- Snackbar (M3) ---------- */

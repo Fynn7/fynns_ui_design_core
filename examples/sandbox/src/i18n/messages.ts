@@ -385,7 +385,8 @@ const en = {
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — native table chrome.",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCopy": "Copy",
-  "globals.codeBlockHelp": "CodeBlock shows monospace source with an optional IconButton copy control.",
+  "globals.codeBlockHelp":
+    "CodeBlock: `default` optional head; `plain` headless. Copy fades in on hover (keyboard: focus-visible; always visible on touch).",
   "globals.fullscreenOpen": "Open fullscreen dialog",
   "globals.fullscreenTitle": "Fullscreen dialog",
   "globals.fullscreenBody":
@@ -1205,7 +1206,8 @@ const zh: Record<MessageKey, string> = {
     "Table + Head / Body / Row / HeaderCell / Cell / Caption — 原生表格外观。",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCopy": "复制",
-  "globals.codeBlockHelp": "CodeBlock 展示等宽源码，可选 IconButton 复制。",
+  "globals.codeBlockHelp":
+    "CodeBlock：`default` 可选标题头；`plain` 无头。悬停渐显复制（键盘 focus-visible；触控常显）。",
   "globals.fullscreenOpen": "打开全屏对话框",
   "globals.fullscreenTitle": "全屏对话框",
   "globals.fullscreenBody":
