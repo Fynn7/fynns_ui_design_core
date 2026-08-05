@@ -2075,8 +2075,8 @@
   top: var(--fynns-space-xs);
   right: var(--fynns-space-xs);
   left: var(--fynns-space-xs);
-  /* Clear the 3dp underline + breath above it (was flush via equal inset). */
-  bottom: calc(3px + var(--fynns-space-sm));
+  /* Clear the 3dp underline only — keep label optically centered in the tab. */
+  bottom: calc(3px + var(--fynns-space-xs));
   border-radius: var(--fynns-radius-lg);
   background: transparent;
   pointer-events: none;
