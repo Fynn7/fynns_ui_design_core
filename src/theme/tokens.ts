@@ -915,6 +915,37 @@ export const SCROLLBAR_TOKENS = {
   "thumb-border": "2px",
 } as const;
 
+/**
+ * CodeBlock syntax colors — distilled from Fynn’s VS C/C++ theme
+ * (`cpptools_dark_vs_new` / `cpptools_light_vs_new` TextMate last-wins).
+ * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
+ * full TextMate engine).
+ */
+export const CODE_TOKENS = {
+  /** Default code ink (`editor.foreground`). */
+  fg: "#b2cacd",
+  /** Optional code well (`editor.background`). */
+  bg: "#031417",
+  comment: "#848484",
+  keyword: "#df769b",
+  string: "#16b673",
+  number: "#7060eb",
+  type: "#4EC9B0",
+  function: "#c3c37a",
+  variable: "#75b4e8",
+  property: "#2ab4ff",
+  parameter: "#ff53ff",
+  operator: "#b4b4b4",
+  /** Namespaces / modules (`std::`, Python import) — grassy green. */
+  module: "#75c94e",
+  /** Language constants (`true` / `null` / …). */
+  constant: "#7060eb",
+  /** Named constants (`MAX`, `PI`, …). */
+  "constant-named": "#d5971a",
+  escape: "#FFD68F",
+  invalid: "#f44747",
+} as const;
+
 /** Ungrouped tokens. Emitted as `--fynns-<key>` (no sub-prefix). */
 export const MISC_TOKENS = {
   "border-hairline": "1px",
@@ -1005,6 +1036,28 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "thumb-active": "rgba(13, 148, 136, 0.65)",
     },
   ],
+  [
+    "code",
+    {
+      fg: "#000000",
+      bg: "#ffffff",
+      comment: "#008000",
+      keyword: "#0000ff",
+      string: "#a31515",
+      number: "#098658",
+      type: "#2B91AF",
+      function: "#74531F",
+      variable: "#1F377F",
+      property: "#0451a5",
+      parameter: "#808080",
+      operator: "#000000",
+      module: "#098658",
+      constant: "#0000ff",
+      "constant-named": "#000000",
+      escape: "#B776FB",
+      invalid: "#cd3131",
+    },
+  ],
 ];
 
 export type ColorTokenName = keyof typeof COLOR_TOKENS;
@@ -1055,6 +1108,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],
+  ["code", CODE_TOKENS],
   ["", MISC_TOKENS],
 ];
 
