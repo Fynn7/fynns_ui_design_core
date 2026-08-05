@@ -51,12 +51,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
-   text starts at the same inline inset as Input / Textarea value text (add
-   control border + padding-inline on top of the shared CardContent inset).
-   Default `ghost`; dense forms may use `size="sm"`. As the first child of
-   `CardContent`, top inset shrinks to `--fynns-space-xs` (Card content
-   block pad is `--fynns-layout-content-pad-block` at 16dp; inline stays
-   `content-inset`). Do not reinvent this with sandbox-only CSS.
+   text is flush with the control’s outer start edge. Default `ghost`; dense
+   forms may use `size="sm"`. As the first child of `CardContent`, top inset
+   shrinks to `--fynns-space-xs` (Card content block pad is
+   `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
+   Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
    (`TextLinkButton`) keep a resting solid underline; import/diff actions

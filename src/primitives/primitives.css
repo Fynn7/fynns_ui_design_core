@@ -3561,14 +3561,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-header__label {
   margin: 0;
   min-width: 0;
-  /*
-   * Optical align with Input / Textarea value text: control outer edge is
-   * shared with this row; add the same inset as border + `.fynns-input`
-   * padding-inline (searchbar-pad-inline + space-md − hairline + hairline).
-   */
-  padding-inline-start: calc(
-    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md)
-  );
+  padding: 0;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
