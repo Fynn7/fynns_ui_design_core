@@ -524,7 +524,8 @@
   max-width: 100%;
   box-sizing: border-box;
   padding: var(--fynns-space-md);
-  border-radius: var(--fynns-radius-md);
+  /* Same stage chrome as `.sandbox-preview-grid` (xl reads on large wells). */
+  border-radius: var(--fynns-radius-xl);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: var(--fynns-color-surface-1);
 }
@@ -597,7 +598,8 @@
   max-width: 100%;
   box-sizing: border-box;
   padding: var(--fynns-space-lg);
-  border-radius: var(--fynns-radius-lg);
+  /* xl (16px): large stage wells look square with md/lg (8–10px). */
+  border-radius: var(--fynns-radius-xl);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   background: color-mix(in srgb, var(--fynns-color-surface-2) 55%, var(--fynns-color-app-bg));
 }
