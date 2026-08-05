@@ -1323,9 +1323,13 @@
 }
 
 .fynns-dialog-panel--centered {
-  /* M3 basic dialog: ExtraLarge 28dp, min 280 / max via size tokens (≤560dp). */
+  /* M3 basic dialog: ExtraLarge 28dp, min 280.
+   * Default width is content-fit (`max-content`); `size` only sets the
+   * max-width ceiling so short copy / ControlStack+Switch rows do not sit
+   * in empty space and consumers need not invent width hacks. */
   min-width: min(100%, 17.5rem);
-  width: min(100%, var(--fynns-layout-dialog-max-width));
+  width: max-content;
+  max-width: min(100%, var(--fynns-layout-dialog-max-width));
   max-height: min(90vh, 48rem);
   border: none;
   border-radius: var(--fynns-radius-3xl);
@@ -1334,15 +1338,74 @@
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-sm {
-  width: min(100%, var(--fynns-layout-dialog-max-width-sm));
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-md {
-  width: min(100%, var(--fynns-layout-dialog-max-width-md));
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-md));
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-lg {
-  width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+}
+
+/*
+ * Contained body: never grow a horizontal scrollbar from long Switch /
+ * ControlStack labels. `overflow-y: auto` alone promotes overflow-x to auto
+ * (CSS overflow pairing) — pin overflow-x to clip. Vertical scroll only when
+ * body exceeds the panel max-height.
+ *
+ * ControlStack defaults use `min-width: min-content` so toolbar rows don't
+ * ellipsis; that must lose inside a sized dialog or labels refuse to wrap.
+ */
+.fynns-dialog-panel--centered > .fynns-dialog-body {
+  min-width: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.fynns-dialog-panel--centered .fynns-control-stack,
+.fynns-dialog-panel--centered .fynns-control-row {
+  max-width: 100%;
+}
+
+.fynns-dialog-panel--centered .fynns-control-stack {
+  /* First control track shrinks/wraps; trailing tracks (InfoHint, …) stay content-sized. */
+  grid-template-columns:
+    var(--fynns-layout-control-row-label)
+    minmax(0, max-content)
+    repeat(calc(var(--fynns-control-stack-cols, 2) - 1), max-content);
+}
+
+.fynns-dialog-panel--centered .fynns-control-row {
+  grid-template-columns:
+    var(--fynns-layout-control-row-label) minmax(0, max-content);
+}
+
+.fynns-dialog-panel--centered .fynns-control-row__controls {
+  min-width: 0;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-dialog-panel--centered .fynns-switch {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.fynns-dialog-panel--centered .fynns-switch-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 /* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
@@ -1460,7 +1523,11 @@
 
 .fynns-dialog-body {
   flex: 1;
+  min-width: 0;
   min-height: 0;
+  /* Pin x so `overflow-y: auto` does not promote x→auto (CSS overflow pairing)
+     and invent a horizontal scrollbar for wrapping text. */
+  overflow-x: clip;
   overflow-y: auto;
   /* FullscreenDialog + other non-centered shells; centered overrides inset. */
   padding: var(--fynns-layout-content-inset);

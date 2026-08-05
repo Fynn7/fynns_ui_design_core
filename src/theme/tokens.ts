@@ -797,7 +797,7 @@ export const FOCUS_TOKENS = {
 /** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
   "dialog-max-width": "32rem",
-  /** Within M3 basic dialog max (560dp). */
+  /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
   "dialog-max-width-sm": "24rem",
   "dialog-max-width-md": "32rem",
   "dialog-max-width-lg": "35rem",

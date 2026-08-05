@@ -252,7 +252,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-duration-tooltip` once placement is ready; bubble stays inside the
   viewport via flip/shift + inline `maxWidth` from the floating placer), InfoHint
 - **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog (M3 basic shape:
-  `radius-3xl`, no default close X on Dialog/Confirm), Drawer (content side
+  `radius-3xl`, no default close X on Dialog/Confirm; centered width is
+  content-fit by default — `size` only sets the `--fynns-layout-dialog-max-width-*`
+  ceiling), Drawer (content side
   sheet ~400dp, open-edge `radius-xl`; always modal), FullscreenDialog, BottomSheet,
   DropdownMenu (+ Item / CheckboxItem / Group / Separator), ContextMenu /
   ContextMenuTrigger
@@ -291,6 +293,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   inset via `--fynns-layout-content-inset` (18dp). Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
+  Width: content-fit (`max-content`) up to the `size` token ceiling
+  (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
+  labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
+  invent consumer width or wrap hacks. Vertical scroll only when body exceeds
+  panel `max-height`.
   FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
   asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
   block≠inline). Do not force Snackbar / ListItem onto equal four-side padding.
