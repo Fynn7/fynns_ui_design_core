@@ -323,7 +323,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `highlightProfile`); unknown → plain mono;
   copy fades in on hover, keyboard via :focus-visible), Stepper, Dropzone, Avatar /
   AvatarGroup
-- **Layout helpers:** ControlStack, ControlRow, Grid,
+- **Layout helpers:** ControlStack, ControlRow, Grid (`equalCells` makes every
+  cell match the largest content width/height via measure),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
