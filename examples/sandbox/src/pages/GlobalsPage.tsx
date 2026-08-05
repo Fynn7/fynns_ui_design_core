@@ -614,22 +614,20 @@ export function GlobalsPage() {
             options={["one", "two", "three"]}
             onChange={() => {}}
           />
-          <div style={{ width: "min(100%, 20rem)" }}>
-            <Autocomplete
-              ariaLabel={t("globals.autocompleteAria")}
-              placeholder={t("globals.autocompletePlaceholder")}
-              emptyText={t("globals.autocompleteEmpty")}
-              value={autoValue}
-              onChange={setAutoValue}
-              options={[
-                t("globals.autocompleteOptTeal"),
-                t("globals.autocompleteOptCyan"),
-                t("globals.autocompleteOptBlue"),
-                t("globals.autocompleteOptViolet"),
-                t("globals.autocompleteOptAmber"),
-              ]}
-            />
-          </div>
+          <Autocomplete
+            ariaLabel={t("globals.autocompleteAria")}
+            placeholder={t("globals.autocompletePlaceholder")}
+            emptyText={t("globals.autocompleteEmpty")}
+            value={autoValue}
+            onChange={setAutoValue}
+            options={[
+              t("globals.autocompleteOptTeal"),
+              t("globals.autocompleteOptCyan"),
+              t("globals.autocompleteOptBlue"),
+              t("globals.autocompleteOptViolet"),
+              t("globals.autocompleteOptAmber"),
+            ]}
+          />
           <SandboxHelp
             text={
               autoValue

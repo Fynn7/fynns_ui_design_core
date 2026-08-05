@@ -1,4 +1,4 @@
-﻿/*
+/*
  * fynns design system -- component styles.
  * Every value here references a `--fynns-*` token (see ../theme/theme.css).
  * Never hardcode raw colors. Classes use the `.fynns-*` namespace.
@@ -804,6 +804,7 @@
   width: 100%;
   box-sizing: border-box;
   margin: 0;
+  padding-block: 0;
   text-align: left;
   cursor: pointer;
 }
@@ -856,13 +857,22 @@
 .fynns-autocomplete-field {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-layout-field-hint-gap);
   width: 100%;
   max-width: 100%;
 }
 
 .fynns-autocomplete {
   width: 100%;
+}
+
+.fynns-autocomplete-shell {
+  width: 100%;
+}
+
+.fynns-autocomplete .fynns-autocomplete-input {
+  width: 100%;
+  padding-block: 0;
 }
 
 .fynns-autocomplete-chevron {
@@ -1624,7 +1634,8 @@
 }
 
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
-  padding: var(--fynns-space-md) var(--fynns-layout-content-inset)
+  /* Block-start matches Card/Collapsible section body; sides/bottom stay content-inset. */
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset)
     var(--fynns-layout-content-inset);
 }
 
@@ -2044,7 +2055,8 @@
 
 .fynns-tabs--sm .fynns-tab {
   min-height: 2.5rem;
-  padding: 0 var(--fynns-space-md);
+  padding-inline: var(--fynns-space-md);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
   font-size: var(--fynns-font-size-caption);
 }
 
@@ -2059,7 +2071,9 @@
   margin: 0;
   border: none;
   border-radius: 0;
-  padding: 0 var(--fynns-space-lg);
+  /* Indicator track below the label; label centers in the remaining content box. */
+  padding-inline: var(--fynns-space-lg);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
   background: transparent;
   color: var(--fynns-color-text-muted);
   cursor: pointer;
@@ -2075,8 +2089,8 @@
   top: var(--fynns-space-xs);
   right: var(--fynns-space-xs);
   left: var(--fynns-space-xs);
-  /* Clear the 3dp underline only — keep label optically centered in the tab. */
-  bottom: calc(3px + var(--fynns-space-xs));
+  /* Same inset as padding-block-end — state layer wraps the label only. */
+  bottom: calc(3px + var(--fynns-space-sm));
   border-radius: var(--fynns-radius-lg);
   background: transparent;
   pointer-events: none;
@@ -3196,8 +3210,8 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-loading-panel-skeleton {
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset);
 }
 
 .fynns-loading-skeleton {
@@ -3547,6 +3561,14 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-header__label {
   margin: 0;
   min-width: 0;
+  /*
+   * Optical align with Input / Textarea value text: control outer edge is
+   * shared with this row; add the same inset as border + `.fynns-input`
+   * padding-inline (searchbar-pad-inline + space-md − hairline + hairline).
+   */
+  padding-inline-start: calc(
+    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md)
+  );
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
@@ -5043,9 +5065,10 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
 }
 
-/* Keep destination hover/active indicators clear of menu / header chrome. */
-.fynns-nav-rail[data-has-menu="true"] .fynns-nav-rail-destinations,
-.fynns-nav-rail[data-has-header="true"] .fynns-nav-rail-destinations {
+/* Keep destination indicators clear of menu chrome when there is no header.
+ * Header → first item uses `header-gap` only (= destinations-gap). */
+.fynns-nav-rail[data-has-menu="true"]:not([data-has-header="true"])
+  .fynns-nav-rail-destinations {
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
@@ -6041,6 +6064,12 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-lg);
 }
 
+/* Field / results join: paint on the field as soon as `--expanded` is set
+ * (not on `.fynns-search-bar-results`, which fades in after the panel opens). */
+.fynns-search-bar--expanded > .fynns-search-bar-field {
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
 /*
  * Focus: same quiet teal border tint as `.fynns-input` — keep elevation,
  * no outline / accent-soft glow (SearchBar, Select, Autocomplete).
@@ -6184,18 +6213,14 @@ a.fynns-breadcrumb-link:visited {
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
 }
 
-/* Opacity fade for SearchBar / Select / Autocomplete expand panels. */
-.fynns-search-bar-panel .fynns-search-bar-results {
-  opacity: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-}
-
-.fynns-search-bar-panel[data-state="open"] .fynns-search-bar-results {
-  opacity: 1;
-}
+/*
+ * No opacity fade on docked results — height morph via `.fynns-expand` only.
+ * A results fade made the field↔list hairline feel late (empty panel grows,
+ * then content appears). Hairline stays on
+ * `.fynns-search-bar--expanded > .fynns-search-bar-field`.
+ */
 
 .fynns-search-bar-result {
   box-sizing: border-box;
@@ -7571,7 +7596,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-otp {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-field-hint-gap);
   min-width: 0;
 }
 
@@ -7997,7 +8022,9 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-code-block-pre {
   margin: 0;
-  padding: var(--fynns-space-md);
+  /* Same section-body rhythm as CardContent / Collapsible body. */
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
   overflow: auto;
   font-family: var(--fynns-font-mono);
   font-size: var(--fynns-font-size-xs);

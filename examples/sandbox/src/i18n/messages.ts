@@ -224,10 +224,10 @@ const en = {
     "--sandbox-section-gap — title to body inside Foundations Section.",
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — between stacked inspector/form units (Collapsible body units).",
+    "--fynns-layout-unit-stack-gap — between stacked units / sibling demos; field-hint-gap aliases this.",
   "layoutChrome.fieldHintGap": "Field hint",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap — control → supporting / error hint inside `.fynns-field`.",
+    "--fynns-layout-field-hint-gap — control → supporting / error hint (aliases unit-stack-gap).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — brand cell + page topbar strip (sandbox only).",
@@ -251,7 +251,7 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / CardContent (16dp default).",
+    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / CardContent / Surface padded / CodeBlock pre (16dp default).",
   "layoutChrome.dialogInset": "Dialog inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog (24dp default).",
@@ -482,8 +482,10 @@ const en = {
     "Align footer actions to the start edge. Long tip — must stay inside the viewport even in a narrow inspector.",
   "globals.rhythmEndTip":
     "Align footer actions to the end edge. Long tip — must stay inside the viewport even when this segment sits on the panel’s right edge.",
-  "globals.rhythmTokenUnit": "Between stacked inspector/form units (Collapsible body units).",
-  "globals.rhythmTokenFieldHint": "Control → supporting / error hint inside `.fynns-field`.",
+  "globals.rhythmTokenUnit":
+    "Between stacked units / sibling demos (also drives control → field hint via field-hint-gap alias).",
+  "globals.rhythmTokenFieldHint":
+    "Alias of unit-stack-gap — Input / Otp / Autocomplete control → supporting hint.",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
@@ -522,7 +524,7 @@ const en = {
   "globals.autocompletePlaceholder": "Filter colors…",
   "globals.autocompleteEmpty": "No matches",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — type to filter; pick a suggestion. Same SearchBar/Select chrome.",
+    "M3 Autocomplete — click/type to open, filter, then pick. Same docked shell as Select.",
   "globals.autocompleteSelected": "Selected: {value}",
   "globals.autocompleteOptTeal": "Teal",
   "globals.autocompleteOptCyan": "Cyan",
@@ -1040,10 +1042,10 @@ const zh: Record<MessageKey, string> = {
     "--sandbox-section-gap — Foundations Section 标题到正文。",
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — 纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
+    "--fynns-layout-unit-stack-gap — 纵向堆叠单元 / 并列 demo；field-hint-gap 为其别名。",
   "layoutChrome.fieldHintGap": "字段提示",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap — `.fynns-field` 内控件到 supporting / error 提示。",
+    "--fynns-layout-field-hint-gap — 控件到 supporting / error 提示（同 unit-stack-gap）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度（仅沙盒）。",
@@ -1067,7 +1069,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — Collapsible 正文 / CardContent 垂直边距（默认 16dp）。",
+    "--fynns-layout-content-pad-block — Collapsible 正文 / CardContent / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。",
   "layoutChrome.dialogInset": "对话框内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 四边等距外缘（默认 24dp）。",
@@ -1296,8 +1298,10 @@ const zh: Record<MessageKey, string> = {
     "底部按钮靠左对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
   "globals.rhythmEndTip":
     "底部按钮靠右对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
-  "globals.rhythmTokenUnit": "纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
-  "globals.rhythmTokenFieldHint": "`.fynns-field` 内控件到 supporting / error 提示。",
+  "globals.rhythmTokenUnit":
+    "纵向堆叠单元 / 并列 demo 间距（控件→field hint 经 field-hint-gap 别名同源）。",
+  "globals.rhythmTokenFieldHint":
+    "unit-stack-gap 别名 — Input / Otp / Autocomplete 控件到 supporting 提示。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
@@ -1336,7 +1340,7 @@ const zh: Record<MessageKey, string> = {
   "globals.autocompletePlaceholder": "筛选颜色…",
   "globals.autocompleteEmpty": "无匹配",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — 输入筛选后点选建议。外观与 SearchBar/Select 一致。",
+    "M3 Autocomplete — 点击/输入展开，筛选后点选。与 Select 同一 docked 壳。",
   "globals.autocompleteSelected": "已选：{value}",
   "globals.autocompleteOptTeal": "青绿",
   "globals.autocompleteOptCyan": "青色",

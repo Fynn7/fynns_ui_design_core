@@ -50,10 +50,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
-   `Tooltip` above the control — not overlaid on the textarea corner). Default
-   `ghost`; dense forms may use `size="sm"`. As the first child of
+   `Tooltip` above the control — not overlaid on the textarea corner). Label
+   text starts at the same inline inset as Input / Textarea value text (add
+   control border + padding-inline on top of the shared CardContent inset).
+   Default `ghost`; dense forms may use `size="sm"`. As the first child of
    `CardContent`, top inset shrinks to `--fynns-space-xs` (Card content
-   already uses dense `--fynns-space-sm` block pad; inline stays
+   block pad is `--fynns-layout-content-pad-block` at 16dp; inline stays
    `content-inset`). Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
@@ -239,7 +241,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
-  Autocomplete, OtpInput, SearchBar / SearchBarResult, Switch, Checkbox, Radio,
+  Autocomplete (same docked SearchBar expand shell as Select; open on
+  click/type/ArrowDown, not focus alone; hint wrap only when
+  supporting/error text), OtpInput, SearchBar / SearchBarResult, Switch,
+  Checkbox, Radio,
   Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
@@ -301,8 +306,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
-  | Control → supporting / error hint (`.fynns-field`) | `--fynns-layout-field-hint-gap` |
-  | Vertical stacked units (inspector fields, Collapsible body) | `--fynns-layout-unit-stack-gap` |
+  | Control → supporting / error hint (`.fynns-field` / Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (= `unit-stack-gap`) |
+  | Vertical stacked units (inspector fields, Collapsible body, sibling demos) | `--fynns-layout-unit-stack-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
   live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits them via

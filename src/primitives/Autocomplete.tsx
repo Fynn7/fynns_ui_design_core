@@ -39,8 +39,10 @@ function optionLabel(option: AutocompleteOption): string {
 
 /**
  * M3 Autocomplete — filterable text field + docked suggestion list.
- * Form density matches `Select` / Input (40dp outlined), not chrome SearchBar
- * 56dp. Prefer `Select` when typing is not needed.
+ * Reuses the same SearchBar expand shell as `Select` (field hairline +
+ * `.fynns-expand`); form density matches Input (40dp outlined), not chrome
+ * SearchBar 56dp. Opens on click / type / ArrowDown (like Select), not on
+ * focus alone. Prefer `Select` when typing is not needed.
  */
 export function Autocomplete({
   value,
@@ -112,8 +114,11 @@ export function Autocomplete({
     };
   }, [open]);
 
+  const wasOpenRef = useRef(false);
   useEffect(() => {
-    if (!open || filtered.length === 0) return;
+    const justOpened = open && !wasOpenRef.current;
+    wasOpenRef.current = open;
+    if (!open || filtered.length === 0 || justOpened) return;
     const option = filtered[activeIndex];
     if (!option) return;
     const el = document.getElementById(`${listId}-opt-${activeIndex}`);
@@ -183,115 +188,122 @@ export function Autocomplete({
   const activeOptionId =
     activeOption != null ? `${listId}-opt-${activeIndex}` : undefined;
 
-  return (
-    <div className={join("fynns-autocomplete-field", className)}>
-      <div
-        ref={rootRef}
-        className={join(
-          "fynns-autocomplete",
-          "fynns-search-bar",
-          open && "fynns-search-bar--expanded",
-          isDisabled && "fynns-search-bar--disabled",
-          isDisabled && "fynns-autocomplete--disabled",
-          invalid && "fynns-autocomplete--invalid",
-        )}
-        data-expanded={open ? "true" : undefined}
-      >
-        <div className="fynns-search-bar-field fynns-autocomplete-shell">
-          <input
-            ref={inputRef}
-            id={id}
-            type="text"
-            role="combobox"
-            className="fynns-search-bar-input fynns-autocomplete-input"
-            value={query}
-            disabled={isDisabled}
-            placeholder={placeholder}
-            aria-label={ariaLabel}
-            aria-expanded={open}
-            aria-controls={listId}
-            aria-autocomplete="list"
-            aria-activedescendant={open ? activeOptionId : undefined}
-            aria-invalid={invalid || undefined}
-            aria-describedby={describedBy}
-            autoComplete="off"
-            autoCorrect="off"
-            spellCheck={false}
-            onChange={onInputChange}
-            onKeyDown={onInputKeyDown}
-            onFocus={() => {
-              if (!isDisabled) setOpen(true);
-            }}
-          />
-          <span
-            className="fynns-search-bar-trailing fynns-autocomplete-chevron"
-            aria-hidden="true"
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleOpen();
-            }}
-          >
-            <ChevronDownIcon className="fynns-select-trigger-chevron" />
-          </span>
-        </div>
-        {normalized.length > 0 ? (
-          <div
-            className="fynns-expand fynns-search-bar-panel"
-            data-state={open ? "open" : "closed"}
-          >
-            <div className="fynns-expand-inner">
-              <div
-                id={listId}
-                role="listbox"
-                aria-label={ariaLabel}
-                aria-hidden={!open}
-                inert={open ? undefined : true}
-                className={mergeScrollSurfaceClass(
-                  "fynns-search-bar-results fynns-autocomplete-list",
-                )}
-              >
-                {filtered.length === 0 ? (
-                  <div className="fynns-autocomplete-empty">{emptyText}</div>
-                ) : (
-                  filtered.map((option, index) => {
-                    const selectedRow = option.value === value;
-                    const active = index === activeIndex;
-                    return (
-                      <button
-                        key={option.value}
-                        id={`${listId}-opt-${index}`}
-                        type="button"
-                        role="option"
-                        aria-selected={selectedRow}
-                        disabled={option.disabled}
-                        tabIndex={open ? undefined : -1}
-                        className={join(
-                          "fynns-search-bar-result",
-                          (active || selectedRow) &&
-                            "fynns-search-bar-result--active",
-                        )}
-                        onMouseDown={(event) => event.preventDefault()}
-                        onMouseEnter={() => setActiveIndex(index)}
-                        onClick={() => !option.disabled && pick(option)}
-                      >
-                        {optionLabel(option)}
-                      </button>
-                    );
-                  })
-                )}
-              </div>
+  /* Same docked shell as Select; outer field wrap is only for hint gap. */
+  const shell = (
+    <div
+      ref={rootRef}
+      className={join(
+        "fynns-autocomplete",
+        "fynns-search-bar",
+        open && "fynns-search-bar--expanded",
+        isDisabled && "fynns-search-bar--disabled",
+        isDisabled && "fynns-autocomplete--disabled",
+        invalid && "fynns-autocomplete--invalid",
+        hint == null && className,
+      )}
+      data-expanded={open ? "true" : undefined}
+    >
+      <div className="fynns-search-bar-field fynns-autocomplete-shell">
+        <input
+          ref={inputRef}
+          id={id}
+          type="text"
+          role="combobox"
+          className="fynns-search-bar-input fynns-autocomplete-input"
+          value={query}
+          disabled={isDisabled}
+          placeholder={placeholder}
+          aria-label={ariaLabel}
+          aria-expanded={open}
+          aria-controls={listId}
+          aria-autocomplete="list"
+          aria-activedescendant={open ? activeOptionId : undefined}
+          aria-invalid={invalid || undefined}
+          aria-describedby={describedBy}
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
+          onChange={onInputChange}
+          onKeyDown={onInputKeyDown}
+          /* Match Select: open on activate, not merely on focus. */
+          onClick={() => {
+            if (!isDisabled) setOpen(true);
+          }}
+        />
+        <span
+          className="fynns-search-bar-trailing fynns-autocomplete-chevron"
+          aria-hidden="true"
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleOpen();
+          }}
+        >
+          <ChevronDownIcon className="fynns-select-trigger-chevron" />
+        </span>
+      </div>
+      {normalized.length > 0 ? (
+        <div
+          className="fynns-expand fynns-search-bar-panel"
+          data-state={open ? "open" : "closed"}
+        >
+          <div className="fynns-expand-inner">
+            <div
+              id={listId}
+              role="listbox"
+              aria-label={ariaLabel}
+              aria-hidden={!open}
+              inert={open ? undefined : true}
+              className={mergeScrollSurfaceClass(
+                "fynns-search-bar-results fynns-autocomplete-list",
+              )}
+            >
+              {filtered.length === 0 ? (
+                <div className="fynns-autocomplete-empty">{emptyText}</div>
+              ) : (
+                filtered.map((option, index) => {
+                  const selectedRow = option.value === value;
+                  const active = index === activeIndex;
+                  return (
+                    <button
+                      key={option.value}
+                      id={`${listId}-opt-${index}`}
+                      type="button"
+                      role="option"
+                      aria-selected={selectedRow}
+                      disabled={option.disabled}
+                      tabIndex={open ? undefined : -1}
+                      className={join(
+                        "fynns-search-bar-result",
+                        (active || selectedRow) &&
+                          "fynns-search-bar-result--active",
+                      )}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onClick={() => !option.disabled && pick(option)}
+                    >
+                      {optionLabel(option)}
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
-        ) : null}
-      </div>
-      {hint != null ? (
-        <div
-          id={hintId}
-          className={join("fynns-field-hint", !!errorText && "fynns-field-hint--error")}
-        >
-          {hint}
         </div>
       ) : null}
+    </div>
+  );
+
+  if (hint == null) return shell;
+
+  return (
+    <div className={join("fynns-autocomplete-field", className)}>
+      {shell}
+      <div
+        id={hintId}
+        className={join("fynns-field-hint", !!errorText && "fynns-field-hint--error")}
+      >
+        {hint}
+      </div>
     </div>
   );
 }

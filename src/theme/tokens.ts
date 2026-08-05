@@ -707,15 +707,17 @@ export const NAVRAIL_TOKENS = {
   /** Space between destination buttons. */
   "destinations-gap": "0.5rem",
   /**
-   * Inset before the first destination when a menu/header sits above
-   * (keeps hover/active indicators off the chrome hairline).
+   * Inset before the first destination when a **menu** sits above with no
+   * header (keeps hover/active indicators off the menu chrome). When a header
+   * is present, `header-gap` alone matches `destinations-gap` — do not stack.
    */
   "destinations-pad-block-start": "0.75rem",
   "pad-block-start": "2.75rem",
   "menu-pad-block": "0.75rem",
   /** Menu control min touch target (48dp). */
   "menu-target": "3rem",
-  "header-gap": "0.75rem",
+  /** Space below header FAB — same as `destinations-gap` (item rhythm). */
+  "header-gap": "0.5rem",
   "header-pad-block": "0.25rem",
   "label-size": "0.75rem",
   "label-line": "1.25",
@@ -813,8 +815,10 @@ export const LAYOUT_TOKENS = {
   "content-inset": "1.125rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
-   * Collapsible body, CardContent / CardHeader top / CardActions bottom.
-   * Larger than `--fynns-space-sm` so headers don’t sit on Inputs.
+   * Collapsible body, CardContent / CardHeader top / CardActions bottom,
+   * Surface `padded`, CodeBlock pre. Larger than `--fynns-space-sm` so
+   * headers don’t sit on Inputs. Do not densify this for Card previews —
+   * Card anatomy reads as subject cards at 16dp.
    */
   "content-pad-block": "1rem",
   /**
@@ -880,15 +884,16 @@ export const LAYOUT_TOKENS = {
   /** Sibling switches / chips / Grid cells inside one controls cluster. */
   "control-cluster-gap": "0.5rem",
   /**
-   * Gap between a form control and its supporting / error hint inside
-   * `.fynns-field` (Input / Textarea / Otp / …). Prefer this over raw
-   * `--fynns-space-*`. Smaller than `unit-stack-gap` (separate fields).
+   * Gap between a form control and its supporting / error hint (`.fynns-field`,
+   * Otp, Autocomplete, …). Same rhythm as `unit-stack-gap` — control→hint
+   * matches stacked unit spacing (sandbox Autocomplete → help).
    */
-  "field-hint-gap": "0.5rem",
+  "field-hint-gap": "var(--fynns-layout-unit-stack-gap)",
   /**
-   * Vertical gap between stacked *units* (inspector fields, HueWheel + help,
-   * Collapsible body blocks). Prefer flex + `--fynns-layout-unit-stack-gap` (sandbox `.sandbox-stack`) over
-   * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows).
+   * Vertical gap between stacked *units* (inspector fields, sibling demos,
+   * Collapsible body blocks, control → field hint). Prefer flex + this token
+   * (sandbox `.sandbox-stack` / `.sandbox-globals-row--stack`) over ad-hoc
+   * margins. Distinct from toolbar `control-stack-gap` (ControlRows).
    */
   "unit-stack-gap": "1rem",
   /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
