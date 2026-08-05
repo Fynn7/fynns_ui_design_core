@@ -653,17 +653,18 @@
 }
 
 .fynns-field-shell:focus-within {
-  border-color: var(--fynns-color-accent-mid);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
-    0 0 0 3px var(--fynns-color-accent-soft);
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-field-shell--invalid:focus-within {
-  border-color: var(--fynns-color-danger);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger-border),
-    0 0 0 3px color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 .fynns-field-affix {
@@ -739,18 +740,19 @@
 
 .fynns-input:focus,
 .fynns-input:focus-visible {
-  border-color: var(--fynns-color-accent-mid);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring),
-    0 0 0 3px var(--fynns-color-accent-soft);
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-input--invalid:focus,
 .fynns-input--invalid:focus-visible {
-  border-color: var(--fynns-color-danger);
-  box-shadow:
-    inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-danger-border),
-    0 0 0 3px color-mix(in srgb, var(--fynns-color-danger) 24%, transparent);
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
 }
 
 /* Shell owns the focus ring via `:focus-within` — keep the nested input quiet.
