@@ -751,7 +751,8 @@ const en = {
   "globals.cardSubtitle": "Uses radius-md",
   "globals.cardBody": "Card corners follow radius-md on the global levels.",
   "globals.collapsible": "Fold section sample",
-  "globals.collapsibleHelp": "Collapsible headers also use `radius-md`.",
+  "globals.collapsibleHelp":
+    "Collapsible headers use `radius-md`. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
@@ -1564,7 +1565,8 @@ const zh: Record<MessageKey, string> = {
   "globals.cardSubtitle": "使用 radius-md",
   "globals.cardBody": "卡片圆角跟随全局等级的 md。",
   "globals.collapsible": "折叠分区示例",
-  "globals.collapsibleHelp": "折叠分区标题栏也使用 `radius-md`。",
+  "globals.collapsibleHelp":
+    "折叠分区标题栏使用 `radius-md`。展开时标题下为通栏 hairline（与外框相接）；焦点边框与 Input 相同的淡青绿。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":

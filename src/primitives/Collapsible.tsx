@@ -23,8 +23,9 @@ export type CollapsibleProps = {
  * uncontrolled (`defaultOpen`). `.fynns-collapsible*`.
  *
  * Body stays mounted so open and close both run the same CSS height + fade
- * transitions (M3-inspired container morph). No head/body hairline — spacing
- * only. Uses motion tokens; honors `prefers-reduced-motion` in CSS.
+ * transitions (M3-inspired container morph). When open, a full-bleed hairline
+ * under the head meets the outer border. Focus uses the same quiet
+ * accent-tinted border as Input — not an inset focus ring.
  *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
  * head, trigger, or body chrome.

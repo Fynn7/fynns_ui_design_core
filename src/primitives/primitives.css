@@ -2372,6 +2372,7 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-1);
   overflow: hidden;
+  transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-collapsible-head {
@@ -2402,6 +2403,15 @@
   opacity: 1;
 }
 
+/*
+ * Open: full-bleed hairline under the head — meets the outer border
+ * (no inset gap). Focus uses quiet border-color only (no inset ring),
+ * so the join stays a clean T, not a cut through a thick highlight.
+ */
+.fynns-collapsible--open > .fynns-collapsible-head {
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
 .fynns-collapsible-trigger {
   position: relative;
   z-index: 1;
@@ -2410,9 +2420,11 @@
   align-items: center;
   gap: var(--fynns-space-2);
   min-width: 0;
-  /* Dense chrome row; body uses content-pad-block. Inline stays content-inset. */
+  /* Dense chrome row; slightly tighter start so the chevron sits closer to
+   * the card edge. End / body still use content-inset. */
   padding-block: var(--fynns-space-sm);
-  padding-inline: var(--fynns-layout-content-inset);
+  padding-inline-start: var(--fynns-space-md);
+  padding-inline-end: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
   color: var(--fynns-color-text);
@@ -2421,18 +2433,19 @@
   cursor: pointer;
 }
 
-/*
- * Parent `.fynns-collapsible` uses overflow:hidden + radius to clip the hover
- * wash; a trigger outline is clipped off at the rounded corners. Paint the
- * focus ring on the rounded shell instead (inset so it is not clipped).
- */
 .fynns-collapsible-trigger:focus,
 .fynns-collapsible-trigger:focus-visible {
   outline: none;
 }
 
+/* Same quiet accent-tinted border as `.fynns-input` — no inset focus ring. */
 .fynns-collapsible:has(.fynns-collapsible-trigger:focus-visible) {
-  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 28%,
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-collapsible-title {
