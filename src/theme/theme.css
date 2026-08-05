@@ -434,6 +434,8 @@
   --fynns-layout-bar-height: 3.5rem;
   --fynns-layout-end-aside-width: 22rem;
   --fynns-layout-end-aside-max-width: 36vw;
+  --fynns-layout-end-aside-min-width: clamp(12rem, 28%, 18rem);
+  --fynns-layout-main-min-width: clamp(10rem, 36%, 20rem);
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);

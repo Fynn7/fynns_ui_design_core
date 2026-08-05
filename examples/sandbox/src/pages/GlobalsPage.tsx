@@ -2057,6 +2057,7 @@ export function GlobalsPage() {
         <div className="sandbox-globals-clipped-shell">
           <ClippedNavShell
             navMode={shellNavExpanded ? "drawer" : "rail"}
+            onNavCrowded={() => setShellNavExpanded(false)}
             topBar={
               <TopAppBar
                 title={t("globals.shellTitle")}

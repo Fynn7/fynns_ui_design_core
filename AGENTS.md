@@ -300,8 +300,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   under it — M3 clipped; no topbar×sidebar crosshair; `navMode` `drawer`|`rail`
   drives column width via `--fynns-navdrawer-width` / `--fynns-navrail-width`) and
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
-  `--fynns-layout-end-aside-width` / `end-aside-max-width`; ≤56.25rem overlays as
-  a bottom sheet). Slot-only — destinations stay in `nav`, inspector content in
+  `--fynns-layout-end-aside-width` / `end-aside-max-width` /
+  `end-aside-min-width`; canvas floor `--fynns-layout-main-min-width`; when both
+  floors still overflow, `ClippedNavShell.onNavCrowded` collapses destinations to
+  rail. ≤56.25rem overlays as a bottom sheet). Slot-only — destinations stay in
+  `nav`, inspector content in
   `EndAside` children; toggle IconButtons live in the consumer `TopAppBar`.
   Prefer for destination chrome apps. **Not** `Drawer` (modal content side sheet)
   and **not** a revived `Panel` / `ListGroup` shell. Demo: sandbox Globals →
@@ -352,8 +355,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | NavigationBar | mobile-first | Bottom **destinations** (phone). Prefer Rail on medium+. |
   | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
-  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; narrow stacks nav. |
-  | EndAside | adaptive | Inspector width morph; ≤56.25rem → bottom overlay. Not Drawer. |
+  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; narrow stacks nav. `onNavCrowded` → collapse drawer to rail when canvas+aside mins overflow. |
+  | EndAside | adaptive | Inspector width morph; min `--fynns-layout-end-aside-min-width`; ≤56.25rem → bottom overlay. Not Drawer. Canvas keeps `--fynns-layout-main-min-width`. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |

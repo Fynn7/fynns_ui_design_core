@@ -224,6 +224,9 @@ export function SandboxShell() {
       <ClippedNavShell
         className="sandbox-root"
         navMode={navMode}
+        onNavCrowded={() => {
+          if (!narrow) setPreferNavExpanded(false);
+        }}
         topBar={
           <TopAppBar
             className="sandbox-topbar"

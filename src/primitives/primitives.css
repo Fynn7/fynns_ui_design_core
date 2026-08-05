@@ -8233,33 +8233,44 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
 }
 
+/*
+ * Canvas | EndAside flex rows: keep a clamp floor on the main column so the
+ * aside cannot crush the center to a sliver (Globals shell demo + app shells).
+ */
+*:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+  min-width: var(--fynns-layout-main-min-width);
+}
+
 /* ---------- EndAside (width-morph supporting pane) ---------- */
 .fynns-end-aside {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
+  min-width: var(--fynns-layout-end-aside-min-width);
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   min-height: 0;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transition:
     width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
+    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
 .fynns-end-aside[data-state="closing"] {
   width: 0;
   max-width: 0;
+  min-width: 0;
 }
 
 /* Lock child width while the pane clips — avoids seam reflow. */
 .fynns-end-aside > * {
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
+  min-width: var(--fynns-layout-end-aside-min-width);
   flex: 1 1 auto;
   min-height: 0;
 }

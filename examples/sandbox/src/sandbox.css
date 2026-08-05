@@ -153,13 +153,13 @@
 }
 
 .sandbox-canvas {
-  flex: 1 1 auto;
+  flex: 1 1 var(--fynns-layout-main-min-width);
   padding: var(--fynns-space-lg);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
-  min-width: 0;
+  min-width: var(--fynns-layout-main-min-width);
 }
 
 .sandbox-playground {
@@ -1102,6 +1102,8 @@
 
 .sandbox-globals-shell-canvas {
   background: var(--fynns-color-app-bg);
+  min-width: var(--fynns-layout-main-min-width);
+  flex: 1 1 var(--fynns-layout-main-min-width);
 }
 
 .sandbox-globals-shell-aside {

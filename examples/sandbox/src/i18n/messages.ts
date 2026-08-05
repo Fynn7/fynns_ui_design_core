@@ -732,7 +732,7 @@ const en = {
     "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drawer is for modal content sheets — not this destination column.",
   "globals.shellAsideBody": "Supporting inspector pane (EndAside).",
   "globals.shellHelp":
-    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail; narrow stacks nav) + EndAside (width morph; narrow → bottom overlay). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
+    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail; narrow stacks nav) + EndAside (width morph + min clamp; narrow → bottom overlay). If canvas + EndAside mins still overflow, `onNavCrowded` collapses destinations to rail. Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1588,7 +1588,7 @@ const zh: Record<MessageKey, string> = {
     "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。Drawer 用于模态内容侧栏，不是这列目的地。",
   "globals.shellAsideBody": "支撑检查器窗格（EndAside）。",
   "globals.shellHelp":
-    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail；窄屏上叠导航）+ EndAside（宽度开合；窄屏底缘叠层）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
+    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail；窄屏上叠导航）+ EndAside（宽度开合 + min clamp；窄屏底缘叠层）。画布与 EndAside 都触底仍溢出时，`onNavCrowded` 将目的地收成 rail。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

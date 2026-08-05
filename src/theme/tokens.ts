@@ -900,6 +900,17 @@ export const LAYOUT_TOKENS = {
   "end-aside-width": "22rem",
   /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
   "end-aside-max-width": "36vw",
+  /**
+   * Floor for `EndAside` when open (flex may shrink preferred width, not below
+   * this). Pair with `main-min-width`; if both floors still overflow the shell,
+   * collapse destinations to rail via `ClippedNavShell.onNavCrowded`.
+   */
+  "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
+  /**
+   * Floor for the main canvas beside `EndAside` (flex sibling). Prevents the
+   * center column from collapsing when nav + aside consume the row.
+   */
+  "main-min-width": "clamp(10rem, 36%, 20rem)",
 } as const;
 
 /**
