@@ -194,6 +194,8 @@ export type {
   CardMediaProps,
   CardProps,
 } from "./primitives/Card";
+export { Surface } from "./primitives/Surface";
+export type { SurfaceProps, SurfaceVariant } from "./primitives/Surface";
 export { FieldBlock, FieldHeader } from "./primitives/FieldHeader";
 export type {
   FieldBlockProps,

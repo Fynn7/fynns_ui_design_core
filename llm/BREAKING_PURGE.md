@@ -49,7 +49,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
 | `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive `*Banner` names. |
 | `ListGroup*` / `ListRow*` / `NavItem*` / `ShellNav*` | Deleted — rebuild with `List`/`ListItem`, `Navigation*` chrome, or app layout. |
-| `Panel` / `PanelCard` / `ScrollArea` | Compose layout with `Card`, `Drawer` (`modal={false}` for docked inspectors), app flex/grid, and `fynns-scroll`. Do not revive the old `Panel` / `PanelCard` / `ScrollArea` names. |
+| `Panel` / `PanelCard` / `ScrollArea` | Compose with `Surface` (bordered / tonal well, any children), `Card`, `Drawer` (`modal={false}` for docked inspectors), app flex/grid, and `fynns-scroll`. Do not revive the old `Panel` / `PanelCard` / `ScrollArea` names. |
 | `Kbd` / `Combobox` / `CommandPalette` | Delete usage or reimplement in the app. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |

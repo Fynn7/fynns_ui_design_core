@@ -105,7 +105,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Nested containment** (host → section → field): any `surface-1` (or higher)
    host — page body, Dialog, Drawer, etc. — may group fields with
    `Card variant="outlined"` (or `filled` for emphasis) — **not** `elevated`
-   (same surface + stacked shadow). Prefer `FieldBlock` for label-row
+   (same surface + stacked shadow). Prefer **`Surface`** for a bordered /
+   tonal well with **no** title/actions anatomy (preview iframe, chart stage,
+   arbitrary children; default unpadded + optional `fill`). Prefer `FieldBlock`
+   for label-row
    IconButtons above the control. Card inline pad uses
    `--fynns-layout-content-inset`; CardContent / Header / Actions **block** pad
    uses `--fynns-layout-content-pad-block` (same as Collapsible body).
@@ -278,7 +281,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
-  Collapsible, Carousel / CarouselItem, Divider, Table (+ Head / Body / Row /
+  **Surface** (generic bordered / tonal well; any children; no Card anatomy —
+  use for preview wells / stages), Collapsible, Carousel / CarouselItem,
+  Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid,

@@ -29,6 +29,7 @@ ring can paint before heavy work).
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog, Drawer, FullscreenDialog,
   BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (+ Media/Header/Content/Actions),
+  Surface,
   LinearProgress/CircularProgress, BusyScrim/BusyRegion,
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,

@@ -8025,3 +8025,49 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
+/* ---------- Surface (generic bordered / tonal well) ---------- */
+.fynns-surface {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  color: var(--fynns-color-text);
+  border: var(--fynns-border-hairline) solid transparent;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-surface--outlined {
+  background: var(--fynns-color-app-bg);
+  border-color: var(--fynns-color-outline-subtle);
+}
+
+.fynns-surface--filled {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+}
+
+.fynns-surface--elevated {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-surface--fill {
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.fynns-surface--padded {
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+}
+
+.fynns-surface--fill > * {
+  min-height: 0;
+  min-width: 0;
+}
+
