@@ -27,19 +27,24 @@ function isDigit(ch: string): boolean {
   return ch >= "0" && ch <= "9";
 }
 
+type ImportPhase = "module" | "names" | null;
+
 function classifyIdent(
   word: string,
   profile: LangProfile,
   afterDot: boolean,
   nextNonWs: string | undefined,
   nextTwo: string,
+  importPhase: ImportPhase,
 ): CodeTokenKind {
   if (profile.constants.has(word)) return "constant";
   if (profile.keywords.has(word)) return "keyword";
+  if (importPhase === "module") return "module";
   if (profile.types.has(word)) return "type";
   if (profile.modules?.has(word) || nextTwo === "::") return "module";
   if (/^[A-Z][A-Z0-9_]+$/.test(word)) return "constant-named";
   if (/^[A-Z][A-Za-z0-9_]*$/.test(word)) return "type";
+  if (importPhase === "names") return "function";
   if (afterDot) return "property";
   if (nextNonWs === "(") return "function";
   return "variable";
@@ -57,6 +62,7 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
   const out: CodeSegment[] = [];
   let i = 0;
   let afterDot = false;
+  let importPhase: ImportPhase = null;
 
   while (i < code.length) {
     const ch = code[i];
@@ -76,11 +82,43 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
     if (profile.preprocessor && ch === "#") {
       let j = i + 1;
       while (j < code.length && (code[j] === " " || code[j] === "\t")) j += 1;
+      const dirStart = j;
       if (j < code.length && isIdentStart(code[j]!)) {
         while (j < code.length && isIdentCont(code[j]!)) j += 1;
       }
+      const dirWord = code.slice(dirStart, j);
       push(out, "keyword", code.slice(i, j));
       i = j;
+
+      // `#include <cmath>` / `#include "foo.h"` — header names are modules
+      // (cpptools: grassy green, same as Python module).
+      if (dirWord === "include") {
+        while (i < code.length && (code[i] === " " || code[i] === "\t")) {
+          push(out, "plain", code[i]!);
+          i += 1;
+        }
+        if (i < code.length && code[i] === "<") {
+          push(out, "operator", "<");
+          i += 1;
+          const start = i;
+          while (i < code.length && code[i] !== ">" && code[i] !== "\n") i += 1;
+          if (i > start) push(out, "module", code.slice(start, i));
+          if (i < code.length && code[i] === ">") {
+            push(out, "operator", ">");
+            i += 1;
+          }
+        } else if (i < code.length && code[i] === '"') {
+          push(out, "operator", '"');
+          i += 1;
+          const start = i;
+          while (i < code.length && code[i] !== '"' && code[i] !== "\n") i += 1;
+          if (i > start) push(out, "module", code.slice(start, i));
+          if (i < code.length && code[i] === '"') {
+            push(out, "operator", '"');
+            i += 1;
+          }
+        }
+      }
       afterDot = false;
       continue;
     }
@@ -190,6 +228,17 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
       continue;
     }
 
+    // Decorator `@name` / `@name(` → function (Python / TS)
+    if (ch === "@" && next !== undefined && isIdentStart(next)) {
+      push(out, "operator", "@");
+      let j = i + 2;
+      while (j < code.length && isIdentCont(code[j]!)) j += 1;
+      push(out, "function", code.slice(i + 1, j));
+      i = j;
+      afterDot = false;
+      continue;
+    }
+
     // Identifiers
     if (isIdentStart(ch)) {
       let j = i + 1;
@@ -202,14 +251,24 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
         afterDot,
         peekNonWs(code, j),
         nextTwo,
+        importPhase,
       );
       push(out, kind, word);
+      if (profile.importAware) {
+        if (word === "from" && kind === "keyword") {
+          importPhase = "module";
+        } else if (word === "import" && kind === "keyword") {
+          importPhase = importPhase === "module" ? "names" : "module";
+        } else if (word === "as" && kind === "keyword") {
+          /* alias stays in current phase */
+        }
+      }
       i = j;
       afterDot = false;
       continue;
     }
 
-    // Dot (property access marker)
+    // Dot (property access marker; module path while importing)
     if (ch === ".") {
       push(out, "operator", ".");
       i += 1;
@@ -217,7 +276,7 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
       continue;
     }
 
-    // Whitespace
+    // Whitespace (newline ends an import statement)
     if (ch === " " || ch === "\t" || ch === "\n" || ch === "\r") {
       let j = i + 1;
       while (
@@ -226,6 +285,7 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
       ) {
         j += 1;
       }
+      if (code.slice(i, j).includes("\n")) importPhase = null;
       push(out, "plain", code.slice(i, j));
       i = j;
       continue;

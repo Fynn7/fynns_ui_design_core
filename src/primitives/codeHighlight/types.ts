@@ -48,4 +48,9 @@ export type LangProfile = {
   hashComment?: boolean;
   /** When true, `#directive` is colored as a keyword (C / C++). */
   preprocessor?: boolean;
+  /**
+   * When true, `from` / `import` paths are `module` and imported names
+   * default to `function` (Python).
+   */
+  importAware?: boolean;
 };

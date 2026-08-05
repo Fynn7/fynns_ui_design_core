@@ -330,6 +330,7 @@ const PY_PROFILE: LangProfile = {
   lineComment: null,
   blockComment: null,
   hashComment: true,
+  importAware: true,
 };
 
 const CSS_PROFILE: LangProfile = {
