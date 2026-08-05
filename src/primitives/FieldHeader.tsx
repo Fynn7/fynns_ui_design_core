@@ -18,10 +18,9 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Form field label row with optional trailing icon actions (expand / reset).
  * Place above the control — not overlaid on a Textarea corner. Label text is
- * optically inset to match Input / Textarea value text (control border +
- * padding-inline). Dense Card nesting: when this is the first child of
- * `CardContent`, top inset shrinks to `--fynns-space-xs` (see
- * `.fynns-card-content:has(> .fynns-field-header)`).
+ * flush with the control’s outer start edge. Dense Card nesting: when this is
+ * the first child of `CardContent`, top inset shrinks to `--fynns-space-xs`
+ * (see `.fynns-card-content:has(> .fynns-field-header)`).
  * Prefer `FieldBlock` when wrapping label + control together.
  */
 export function FieldHeader({

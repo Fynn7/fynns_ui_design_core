@@ -51,12 +51,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
-   text starts at the same inline inset as Input / Textarea value text (add
-   control border + padding-inline on top of the shared CardContent inset).
-   Default `ghost`; dense forms may use `size="sm"`. As the first child of
-   `CardContent`, top inset shrinks to `--fynns-space-xs` (Card content
-   block pad is `--fynns-layout-content-pad-block` at 16dp; inline stays
-   `content-inset`). Do not reinvent this with sandbox-only CSS.
+   text is flush with the control’s outer start edge. Default `ghost`; dense
+   forms may use `size="sm"`. As the first child of `CardContent`, top inset
+   shrinks to `--fynns-space-xs` (Card content block pad is
+   `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
+   Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
    (`TextLinkButton`) keep a resting solid underline; import/diff actions
@@ -287,8 +286,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (+ Media / Header / Content / Actions),
   **Surface** (generic bordered / tonal well; any children; no Card anatomy —
-  use for preview wells / stages), Collapsible (open: full-bleed hairline under
-  head; focus = quiet Input-like border),
+  use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
+  keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
+  open: full-bleed hairline under head; focus = quiet Input-like border),
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock, Stepper, Dropzone, Avatar /
@@ -349,7 +349,9 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
 2. New component → add `src/primitives/X.tsx` (+ styles in
    `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
    `src/index.ts`, document it here, **and add a live sample to sandbox
-   Globals or Preview** in the same change. Do not expand the public barrel
+   Globals or Preview** in the same change. Prefer **one live sample +
+   Preview switches** for optional anatomy (`icon`, `actions`, …) — do not
+   stack every combo in Components. Do not expand the public barrel
    without that demo (see `llm/BREAKING_PURGE.md`).
 3. Keep `npm run typecheck` and `npm run lint` green.
 

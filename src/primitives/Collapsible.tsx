@@ -1,10 +1,19 @@
 import type { ReactNode } from "react";
 import { useId, useState } from "react";
-import { ChevronRightIcon } from "./icons";
+import { ChevronRightIcon, ICON_SIZE } from "./icons";
 
 export type CollapsibleProps = {
   /** Header content shown in the always-visible trigger row. */
   title: ReactNode;
+  /**
+   * Optional glyph that occupies the disclose slot at rest (same place as the
+   * chevron). On header hover (or keyboard focus-visible) the chevron replaces
+   * it (direction still follows open state). On `(hover: none)` the slot stays
+   * chevron-only. Omit to always show the chevron.
+   * Prefer a ~16dp glyph (`--fynns-size-icon`). Decorative (`aria-hidden`);
+   * put meaning in `title`.
+   */
+  icon?: ReactNode;
   /** Optional right-aligned content in the header (e.g. action buttons). Not part of the toggle button. */
   actions?: ReactNode;
   /** Controlled open state. Omit to use the uncontrolled `defaultOpen`. */
@@ -27,6 +36,10 @@ export type CollapsibleProps = {
  * under the head meets the outer border. Focus uses the same quiet
  * accent-tinted border as Input — not an inset focus ring.
  *
+ * Optional `icon`: rests in the chevron slot; header hover / focus-visible
+ * swaps to the expand chevron (`(hover: none)` keeps chevron only). No
+ * separate leading column.
+ *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
  * head, trigger, or body chrome.
  *
@@ -35,10 +48,15 @@ export type CollapsibleProps = {
  * <Collapsible title="Presets" defaultOpen>
  *   {children}
  * </Collapsible>
+ *
+ * <Collapsible title="Scripts" icon={<FolderOpenIcon aria-hidden />} actions={…}>
+ *   {children}
+ * </Collapsible>
  * ```
  */
 export function Collapsible({
   title,
+  icon,
   actions,
   open,
   defaultOpen = false,
@@ -50,6 +68,7 @@ export function Collapsible({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
+  const hasIcon = icon != null;
 
   const toggle = () => {
     const next = !isOpen;
@@ -59,7 +78,12 @@ export function Collapsible({
 
   return (
     <div
-      className={["fynns-collapsible", isOpen ? "fynns-collapsible--open" : "", className ?? ""]
+      className={[
+        "fynns-collapsible",
+        isOpen ? "fynns-collapsible--open" : "",
+        hasIcon ? "fynns-collapsible--has-icon" : "",
+        className ?? "",
+      ]
         .filter(Boolean)
         .join(" ")}
     >
@@ -71,7 +95,10 @@ export function Collapsible({
           aria-controls={bodyId}
           onClick={toggle}
         >
-          <ChevronRightIcon className="fynns-collapsible-chevron" size={18} />
+          <span className="fynns-collapsible-disclose" aria-hidden>
+            {hasIcon ? <span className="fynns-collapsible-icon">{icon}</span> : null}
+            <ChevronRightIcon className="fynns-collapsible-chevron" size={ICON_SIZE} />
+          </span>
           <span className="fynns-collapsible-title">{title}</span>
         </button>
         {actions ? <div className="fynns-collapsible-actions">{actions}</div> : null}

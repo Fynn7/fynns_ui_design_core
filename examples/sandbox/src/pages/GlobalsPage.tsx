@@ -111,6 +111,7 @@ import {
   Grid,
   InfoHint,
   Slider,
+  SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -137,13 +138,15 @@ const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
 /** One M3 / sandbox category — Collapsible defaults to collapsed. */
 function GlobalsCategory({
   title,
+  icon,
   children,
 }: {
   title: string;
+  icon: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <Collapsible title={title} className="sandbox-globals-category">
+    <Collapsible title={title} icon={icon} className="sandbox-globals-category">
       <div className="sandbox-globals-section-body">{children}</div>
     </Collapsible>
   );
@@ -310,7 +313,7 @@ export function GlobalsPage() {
       <p className="sandbox-globals-lead">{t("globals.lead")}</p>
       <SandboxHelp text={t("globals.skipLinkHelp")} />
 
-      <GlobalsCategory title={t("globals.catActions")}>
+      <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
@@ -605,7 +608,7 @@ export function GlobalsPage() {
         </div>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catTextInputs")}>
+      <GlobalsCategory title={t("globals.catTextInputs")} icon={<PencilIcon aria-hidden />}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
           <Select
@@ -683,7 +686,7 @@ export function GlobalsPage() {
         </div>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catTabs")}>
+      <GlobalsCategory title={t("globals.catTabs")} icon={<LayoutGridIcon aria-hidden />}>
         <Tabs
           ariaLabel={t("globals.tabsAria")}
           tabs={[
@@ -704,7 +707,7 @@ export function GlobalsPage() {
         <SandboxHelp text={t("globals.tabsHelp")} />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catSelection")}>
+      <GlobalsCategory title={t("globals.catSelection")} icon={<ClipboardIcon aria-hidden />}>
         <div className="sandbox-globals-row">
           <Switch
             size="sm"
@@ -1045,7 +1048,7 @@ export function GlobalsPage() {
         />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catCommunication")}>
+      <GlobalsCategory title={t("globals.catCommunication")} icon={<InfoIcon aria-hidden />}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
@@ -1130,7 +1133,7 @@ export function GlobalsPage() {
         <SandboxHelp text={t("globals.snackbarHelp")} />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catContainment")}>
+      <GlobalsCategory title={t("globals.catContainment")} icon={<FolderOpenIcon aria-hidden />}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Carousel
             ariaLabel={t("globals.carouselAria")}
@@ -1293,7 +1296,11 @@ export function GlobalsPage() {
           </Surface>
           <SandboxHelp text={t("globals.surfaceHelp")} />
         </div>
-        <Collapsible title={t("globals.collapsible")} defaultOpen>
+        <Collapsible
+          title={t("globals.collapsible")}
+          icon={<FolderOpenIcon aria-hidden />}
+          defaultOpen
+        >
           <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
@@ -1389,7 +1396,7 @@ export function GlobalsPage() {
         <SandboxHelp text={t("globals.overlayHelp")} />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catPatterns")}>
+      <GlobalsCategory title={t("globals.catPatterns")} icon={<SparklesIcon aria-hidden />}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <EmptyState
             icon={<FolderOpenIcon />}
@@ -1578,7 +1585,7 @@ export function GlobalsPage() {
         </div>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catNavigation")}>
+      <GlobalsCategory title={t("globals.catNavigation")} icon={<MenuIcon aria-hidden />}>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Breadcrumb
             ariaLabel={t("globals.breadcrumbAria")}
@@ -2005,7 +2012,7 @@ export function GlobalsPage() {
         <SandboxHelp text={t("globals.searchBarHelp")} />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.rhythm")}>
+      <GlobalsCategory title={t("globals.rhythm")} icon={<SettingsIcon aria-hidden />}>
         <SandboxHelp text={t("globals.rhythmLead")} />
         <div className="sandbox-globals-rhythm">
           <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
@@ -2098,7 +2105,7 @@ export function GlobalsPage() {
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.swatches")}>
+      <GlobalsCategory title={t("globals.swatches")} icon={<BarChartIcon aria-hidden />}>
         <SandboxHelp text={t("globals.swatchesHelp")} />
         <div className="sandbox-globals-swatches">
           {SWATCH_KEYS.map(({ key, usesKey }) => (

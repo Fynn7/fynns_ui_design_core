@@ -2432,12 +2432,13 @@
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: var(--fynns-space-2);
+  /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
+  gap: var(--fynns-space-3);
   min-width: 0;
-  /* Dense chrome row; slightly tighter start so the chevron sits closer to
-   * the card edge. End / body still use content-inset. */
+  /* Dense chrome row; start inset a step above space-md so the disclose
+   * glyph isn’t flush to the card edge. End / body still use content-inset. */
   padding-block: var(--fynns-space-sm);
-  padding-inline-start: var(--fynns-space-md);
+  padding-inline-start: var(--fynns-layout-content-inset);
   padding-inline-end: var(--fynns-layout-content-inset);
   background: transparent;
   border: none;
@@ -2470,15 +2471,82 @@
   white-space: nowrap;
 }
 
-.fynns-collapsible-chevron {
+/* Single disclose slot: optional rest icon stacked with expand chevron.
+ * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
+.fynns-collapsible-disclose {
   flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
   color: var(--fynns-color-text-muted);
-  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  line-height: 0;
+}
+
+.fynns-collapsible-disclose > .fynns-collapsible-chevron,
+.fynns-collapsible-disclose > .fynns-collapsible-icon {
+  grid-area: 1 / 1;
+}
+
+.fynns-collapsible-chevron {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: inherit;
+  transition:
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 /* Collapsed = `>` (ChevronRight); open rotates to point down. */
 .fynns-collapsible--open .fynns-collapsible-chevron {
   transform: rotate(90deg);
+}
+
+.fynns-collapsible-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  line-height: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+/*
+ * With `icon`: rest = custom glyph; header hover (or keyboard focus-visible)
+ * → chevron. Do not use :focus-within — mouse click leaves focus on the
+ * trigger and would keep the chevron after unhover.
+ */
+.fynns-collapsible--has-icon .fynns-collapsible-chevron {
+  opacity: 0;
+}
+
+.fynns-collapsible--has-icon .fynns-collapsible-head:hover .fynns-collapsible-chevron,
+.fynns-collapsible--has-icon
+  .fynns-collapsible-trigger:focus-visible
+  .fynns-collapsible-chevron {
+  opacity: 1;
+}
+
+.fynns-collapsible--has-icon .fynns-collapsible-head:hover .fynns-collapsible-icon,
+.fynns-collapsible--has-icon
+  .fynns-collapsible-trigger:focus-visible
+  .fynns-collapsible-icon {
+  opacity: 0;
+}
+
+@media (hover: none) {
+  .fynns-collapsible--has-icon .fynns-collapsible-icon {
+    opacity: 0;
+  }
+
+  .fynns-collapsible--has-icon .fynns-collapsible-chevron {
+    opacity: 1;
+  }
 }
 
 .fynns-collapsible-actions {
@@ -2488,7 +2556,9 @@
   display: flex;
   align-items: center;
   gap: var(--fynns-space-2);
-  padding-inline-end: var(--fynns-layout-content-inset);
+  /* Keep IconButton hover disks off the card edge (not full content-inset). */
+  padding-block: var(--fynns-space-xs);
+  padding-inline-end: var(--fynns-space-xs);
 }
 
 .fynns-collapsible-body {
@@ -2523,6 +2593,7 @@
   .fynns-expand,
   .fynns-collapsible-body,
   .fynns-collapsible-chevron,
+  .fynns-collapsible-icon,
   .fynns-collapsible-head::before {
     transition: none;
   }
@@ -3561,14 +3632,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-header__label {
   margin: 0;
   min-width: 0;
-  /*
-   * Optical align with Input / Textarea value text: control outer edge is
-   * shared with this row; add the same inset as border + `.fynns-input`
-   * padding-inline (searchbar-pad-inline + space-md − hairline + hairline).
-   */
-  padding-inline-start: calc(
-    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md)
-  );
+  padding: 0;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);

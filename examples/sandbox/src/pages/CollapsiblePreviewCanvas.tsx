@@ -2,6 +2,7 @@ import {
   Collapsible,
   ControlRow,
   ControlStack,
+  FolderOpenIcon,
   IconButton,
   SettingsIcon,
   Switch,
@@ -13,11 +14,13 @@ import { SandboxHelp } from "../components/SandboxHelp";
 
 export type CollapsiblePreviewOptions = {
   open: boolean;
+  showIcon: boolean;
   showActions: boolean;
 };
 
 const DEFAULT_OPTIONS: CollapsiblePreviewOptions = {
   open: true,
+  showIcon: true,
   showActions: true,
 };
 
@@ -41,6 +44,13 @@ export function CollapsiblePreviewCanvas() {
           <Switch
             size="sm"
             labelSide="end"
+            label={t("preview.collapsibleIcon")}
+            checked={options.showIcon}
+            onCheckedChange={(checked) => setOptions((o) => ({ ...o, showIcon: checked }))}
+          />
+          <Switch
+            size="sm"
+            labelSide="end"
             label={t("preview.collapsibleActions")}
             checked={options.showActions}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showActions: checked }))}
@@ -50,12 +60,23 @@ export function CollapsiblePreviewCanvas() {
 
       <div className="sandbox-preview-grid">
         <div className="sandbox-preview-slot">
-          <div className="sandbox-preview-label">{t("preview.collapsibleLabel")}</div>
+          <div className="sandbox-preview-label">
+            {t("preview.collapsibleLabel")}
+            {options.showIcon || options.showActions
+              ? ` · ${[
+                  options.showIcon ? t("preview.collapsibleIcon") : null,
+                  options.showActions ? t("preview.collapsibleActions") : null,
+                ]
+                  .filter(Boolean)
+                  .join(" + ")}`
+              : ` · ${t("preview.collapsiblePlain")}`}
+          </div>
           <div className="sandbox-preview-card-wrap">
             <Collapsible
               title={t("preview.collapsibleTitle")}
               open={options.open}
               onOpenChange={(open) => setOptions((o) => ({ ...o, open }))}
+              icon={options.showIcon ? <FolderOpenIcon aria-hidden /> : undefined}
               actions={
                 options.showActions ? (
                   <Tooltip content={t("preview.collapsibleActionTip")}>
