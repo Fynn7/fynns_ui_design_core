@@ -2073,7 +2073,11 @@
 .fynns-tab::before {
   content: "";
   position: absolute;
-  inset: var(--fynns-space-xs);
+  top: var(--fynns-space-xs);
+  right: var(--fynns-space-xs);
+  left: var(--fynns-space-xs);
+  /* Clear the 3dp underline + breath above it (was flush via equal inset). */
+  bottom: calc(3px + var(--fynns-space-sm));
   border-radius: var(--fynns-radius-lg);
   background: transparent;
   pointer-events: none;
