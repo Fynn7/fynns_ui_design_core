@@ -2067,6 +2067,12 @@ export function GlobalsPage() {
             </div>
             <div>
               <dt>
+                <code>--fynns-layout-field-hint-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenFieldHint")}</dd>
+            </div>
+            <div>
+              <dt>
                 <code>--fynns-layout-control-stack-gap</code>
               </dt>
               <dd>{t("globals.rhythmTokenStack")}</dd>

@@ -47,7 +47,8 @@ ring can paint before heavy work).
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists (inspector fields, Collapsible bodies): flex column +
-  `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Toolbar / labeled
+  `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Form control →
+  hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
   (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog

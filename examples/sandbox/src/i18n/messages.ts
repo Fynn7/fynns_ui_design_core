@@ -225,6 +225,9 @@ const en = {
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — between stacked inspector/form units (Collapsible body units).",
+  "layoutChrome.fieldHintGap": "Field hint",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap — control → supporting / error hint inside `.fynns-field`.",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — brand cell + page topbar strip (sandbox only).",
@@ -480,6 +483,7 @@ const en = {
   "globals.rhythmEndTip":
     "Align footer actions to the end edge. Long tip — must stay inside the viewport even when this segment sits on the panel’s right edge.",
   "globals.rhythmTokenUnit": "Between stacked inspector/form units (Collapsible body units).",
+  "globals.rhythmTokenFieldHint": "Control → supporting / error hint inside `.fynns-field`.",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
@@ -1036,6 +1040,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — 纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
+  "layoutChrome.fieldHintGap": "字段提示",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap — `.fynns-field` 内控件到 supporting / error 提示。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 品牌格与页面顶栏共用高度（仅沙盒）。",
@@ -1289,6 +1296,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmEndTip":
     "底部按钮靠右对齐。这段较长提示在窄检查器靠右时也须留在视口内，不得溢出窗口边缘。",
   "globals.rhythmTokenUnit": "纵向堆叠检查器/表单单元之间（Collapsible 正文单元）。",
+  "globals.rhythmTokenFieldHint": "`.fynns-field` 内控件到 supporting / error 提示。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",

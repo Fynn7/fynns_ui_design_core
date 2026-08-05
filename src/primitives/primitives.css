@@ -626,7 +626,7 @@
 .fynns-field {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-field-hint-gap);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;

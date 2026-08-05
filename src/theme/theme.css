@@ -428,6 +428,7 @@
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
+  --fynns-layout-field-hint-gap: 0.5rem;
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;

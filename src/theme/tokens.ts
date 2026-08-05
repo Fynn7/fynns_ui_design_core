@@ -880,6 +880,12 @@ export const LAYOUT_TOKENS = {
   /** Sibling switches / chips / Grid cells inside one controls cluster. */
   "control-cluster-gap": "0.5rem",
   /**
+   * Gap between a form control and its supporting / error hint inside
+   * `.fynns-field` (Input / Textarea / Otp / …). Prefer this over raw
+   * `--fynns-space-*`. Smaller than `unit-stack-gap` (separate fields).
+   */
+  "field-hint-gap": "0.5rem",
+  /**
    * Vertical gap between stacked *units* (inspector fields, HueWheel + help,
    * Collapsible body blocks). Prefer flex + `--fynns-layout-unit-stack-gap` (sandbox `.sandbox-stack`) over
    * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows).

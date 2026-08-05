@@ -299,6 +299,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Control → supporting / error hint (`.fynns-field`) | `--fynns-layout-field-hint-gap` |
   | Vertical stacked units (inspector fields, Collapsible body) | `--fynns-layout-unit-stack-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
