@@ -16,9 +16,9 @@ function join(...parts: Array<string | false | null | undefined>) {
 }
 
 /**
- * Accessibility skip link: visually hidden until `:focus-visible`, then
- * appears as a ghost button (`fynns-btn fynns-btn--ghost`) so keyboard users
- * can jump past chrome into main content.
+ * Accessibility skip link: fully clipped (`.fynns-sr-only`-style) until
+ * `:focus-visible`, then a fixed ghost button at the viewport top-start so
+ * keyboard users can jump past chrome into main content.
  */
 export function SkipLink({
   href = "#main",

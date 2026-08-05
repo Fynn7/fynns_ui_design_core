@@ -2550,6 +2550,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
 }
 
 /* Single disclose slot: optional rest icon stacked with expand chevron.
@@ -2659,6 +2662,9 @@
   /* Shared block pad — breathing room under the header. */
   padding-block: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
 }
 
 .fynns-collapsible-body {
@@ -7549,14 +7555,28 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- SkipLink ---------- */
 .fynns-skip-link {
   position: absolute;
-  inset-inline-start: var(--fynns-space-md);
-  top: var(--fynns-space-md);
-  z-index: var(--fynns-z-tooltip);
-  transform: translateY(-200%);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .fynns-skip-link:focus-visible {
-  transform: translateY(0);
+  position: fixed;
+  inset-inline-start: var(--fynns-space-md);
+  top: var(--fynns-space-md);
+  z-index: var(--fynns-z-tooltip);
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: var(--fynns-space-2xs) var(--fynns-space-sm);
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
 
 /* ---------- Stepper ---------- */
@@ -8157,6 +8177,7 @@ a.fynns-breadcrumb-link:visited {
   height: 100%;
   min-height: 100%;
   max-height: 100%;
+  min-width: 0;
   overflow: hidden;
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
@@ -8173,6 +8194,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-clipped-nav-shell-body {
+  position: relative;
   display: grid;
   grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
   min-width: 0;
@@ -8180,8 +8202,47 @@ a.fynns-breadcrumb-link:visited {
   transition: grid-template-columns var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
 }
 
+.fynns-clipped-nav-shell[data-drawer-resizing="true"] > .fynns-clipped-nav-shell-body {
+  transition: none;
+}
+
+.fynns-clipped-nav-shell-resize {
+  position: absolute;
+  z-index: 4;
+  inset-block: 0;
+  inset-inline-start: calc(var(--fynns-navdrawer-width) - 0.1875rem);
+  width: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-clipped-nav-shell-resize:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-clipped-nav-shell-resize:hover,
+.fynns-clipped-nav-shell[data-drawer-resizing="true"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-resize {
+  background: color-mix(in srgb, var(--fynns-color-accent) 42%, transparent);
+}
+
 .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
   grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+}
+
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer,
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8199,7 +8260,14 @@ a.fynns-breadcrumb-link:visited {
   border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
+/*
+ * Column width is owned by the body grid track. Fill the track — strip the
+ * drawer’s own width/min/max so they cannot fight resize.
+ */
 .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
   padding-block-start: 0;
 }
 
@@ -8231,14 +8299,19 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
+  /* Drive EndAside overlay when the main track is too narrow for both floors. */
+  container-type: inline-size;
+  container-name: fynns-shell-main;
 }
 
 /*
- * Canvas | EndAside flex rows: keep a clamp floor on the main column so the
- * aside cannot crush the center to a sliver (Globals shell demo + app shells).
+ * Soft floors: honor `--fynns-layout-*-min-width` when space allows, but never
+ * claim more than the flex parent (`min(..., 100%)`) so a single pane cannot
+ * force the shell wider than its track.
  */
 *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
-  min-width: var(--fynns-layout-main-min-width);
+  min-width: min(var(--fynns-layout-main-min-width), 100%);
 }
 
 /* ---------- EndAside (width-morph supporting pane) ---------- */
@@ -8247,7 +8320,7 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
-  min-width: var(--fynns-layout-end-aside-min-width);
+  min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   min-height: 0;
@@ -8266,13 +8339,22 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
 }
 
-/* Lock child width while the pane clips — avoids seam reflow. */
+/*
+ * Preferred child width while open; cap at 100% so a flex-shrunk aside cannot
+ * spill its layout box past ClippedNavShell / demo frames.
+ */
 .fynns-end-aside > * {
+  box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
-  max-width: var(--fynns-layout-end-aside-max-width);
-  min-width: var(--fynns-layout-end-aside-min-width);
+  max-width: 100%;
+  min-width: 0;
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.fynns-end-aside[data-state="closing"] > * {
+  max-width: none;
+  min-width: var(--fynns-layout-end-aside-min-width);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8282,22 +8364,90 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
-/* Narrow: stack nav above main; EndAside overlays as a bottom sheet. */
+/*
+ * Extreme: main track narrower than both floors (~10rem + 12rem). Keep the
+ * EndAside min clamp as an end-edge overlay (out of flex flow) so canvas can
+ * fill the track without horizontal overflow. Works for nested demos too
+ * (viewport media queries do not see the demo frame width).
+ */
+/*
+ * Extreme (desktop / nested demos): main track narrower than both floors.
+ * EndAside leaves flex flow and overlays the end edge. Skip below the phone
+ * breakpoint — that path uses a bottom sheet (higher-specificity container
+ * selectors must not override it).
+ */
+@container fynns-shell-main (max-width: 32rem) {
+  @media (min-width: 56.26rem) {
+    *:has(> .fynns-end-aside) {
+      position: relative;
+    }
+
+    *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+      min-width: 0;
+      flex: 1 1 auto;
+      max-width: 100%;
+    }
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: 0;
+      z-index: 3;
+      width: min(var(--fynns-layout-end-aside-width), 100%);
+      min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
+      max-width: min(var(--fynns-layout-end-aside-max-width), 100%);
+      box-shadow: var(--fynns-shadow-md);
+    }
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside > * {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+    }
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside[data-state="closing"] {
+      width: 0;
+      max-width: 0;
+      min-width: 0;
+      box-shadow: var(--fynns-shadow-none);
+    }
+  }
+}
+
+/* Narrow viewport: stack *drawer* above main; rail stays a side column. */
 @media (max-width: 56.25rem) {
   .fynns-clipped-nav-shell-body {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
   }
 
+  /* Keep densified destinations as a vertical rail — do not re-stack full-width. */
   .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer,
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
+    display: none;
   }
 
   .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
     width: 100%;
     max-width: none;
     height: auto;
-    max-height: min(40vh, 20rem);
+    /*
+     * Rem-only cap: `%` max-height does not resolve against an `auto` grid
+     * row, so a stacked drawer would otherwise grow to every destination.
+     * Nested demos prefer rail (side column) over this stack path.
+     */
+    max-height: 9rem;
+    overflow: auto;
     border-inline-end: none;
     border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   }
@@ -8318,9 +8468,10 @@ a.fynns-breadcrumb-link:visited {
     z-index: 3;
     width: 100%;
     max-width: none;
+    min-width: 0;
     border-inline-start: none;
     border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    max-height: min(45dvh, 22rem);
+    max-height: min(48%, 12rem);
     box-shadow: var(--fynns-shadow-md);
     transition:
       max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
@@ -8330,6 +8481,7 @@ a.fynns-breadcrumb-link:visited {
   .fynns-end-aside > * {
     width: 100%;
     max-width: none;
+    min-width: 0;
   }
 
   .fynns-end-aside[data-state="closing"] {

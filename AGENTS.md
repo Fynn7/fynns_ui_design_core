@@ -94,7 +94,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Destination apps: `ClippedNavShell` (full-bleed
-   TopAppBar + drawer|rail) + optional `EndAside` inspector; overlays via
+   TopAppBar + drawer|rail|hidden; toggle = open↔closed) + optional `EndAside`
+   inspector; overlays via
    `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
@@ -297,27 +298,48 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
-  under it — M3 clipped; no topbar×sidebar crosshair; `navMode` `drawer`|`rail`
-  drives column width via `--fynns-navdrawer-width` / `--fynns-navrail-width`) and
+  under it — M3 clipped; no topbar×sidebar crosshair; `navMode`
+  `drawer`|`rail`|`hidden` drives column width via `--fynns-navdrawer-width` /
+  `--fynns-navrail-width` / `0`. TopAppBar leading toggle is **open ↔ closed**
+  only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
+  narrow viewports (apps should pass `rail` below ~900px — do not keep a
+  labeled `drawer` mode that stacks above the canvas).
+  In `drawer` mode the nav|main seam is **resizable** (local
+  `--fynns-navdrawer-width`; drawer fills the grid track; clamped by absolute
+  `--fynns-navdrawer-min-width` / `max-width` rem tokens and remaining room for
+  main / EndAside mins — do not use `%` in those tokens). `onNavCrowded` also
+  watches **main-column** overflow (canvas + `EndAside` floors vs the main
+  track), not only the outer shell scrollWidth — also when shrink-to-fit hides
+  overflow (drawer track starves main below `main-min` + `end-aside-min`, or
+  nav column ≥ main while EndAside is open).
+  and
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
   `--fynns-layout-end-aside-width` / `end-aside-max-width` /
-  `end-aside-min-width`; canvas floor `--fynns-layout-main-min-width`; when both
-  floors still overflow, `ClippedNavShell.onNavCrowded` collapses destinations to
-  rail. ≤56.25rem overlays as a bottom sheet). Slot-only — destinations stay in
-  `nav`, inspector content in
-  `EndAside` children; toggle IconButtons live in the consumer `TopAppBar`.
-  Prefer for destination chrome apps. **Not** `Drawer` (modal content side sheet)
-  and **not** a revived `Panel` / `ListGroup` shell. Demo: sandbox Globals →
-  Navigation.
+  `end-aside-min-width`; canvas floor `--fynns-layout-main-min-width`). Floors are
+  **soft** (`min(token, 100%)`) so one pane cannot force the shell past its
+  track. When `.fynns-clipped-nav-shell-main` is ≤32rem (container query — works
+  for nested demos), EndAside **overlays** the end edge at its min/preferred
+  width (out of flex flow) so both mins stay usable without horizontal overflow.
+  Drawer still open + floors overflowing → `onNavCrowded` → rail. Viewport
+  ≤56.25rem → bottom sheet. If `navMode` stays `"drawer"` on a narrow viewport,
+  CSS stacks that drawer above main (rem-capped); prefer `"rail"` so destinations
+  stay a side column. Slot-only — destinations stay in `nav`, inspector
+  content in `EndAside` children; toggle IconButtons live in the consumer
+  `TopAppBar`. Prefer for destination chrome apps. **Not** `Drawer` (modal
+  content side sheet) and **not** a revived `Panel` / `ListGroup` shell. Demo:
+  sandbox Globals → Navigation.
 - **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`), Card (`title` / optional `icon` / `actions` + body;
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
+  title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
+  body line-height — do not leave both on inherited root size;
   old Media/Header/Content/Actions / variant APIs deleted),
   **Surface** (generic bordered / tonal well; any children; no Card head —
   use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
-  open: full-bleed hairline under head; focus = quiet Input-like border),
+  open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
+  type roles as Card),
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock (`default` head or `plain` headless;
@@ -355,8 +377,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | NavigationBar | mobile-first | Bottom **destinations** (phone). Prefer Rail on medium+. |
   | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
-  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; narrow stacks nav. `onNavCrowded` → collapse drawer to rail when canvas+aside mins overflow. |
-  | EndAside | adaptive | Inspector width morph; min `--fynns-layout-end-aside-min-width`; ≤56.25rem → bottom overlay. Not Drawer. Canvas keeps `--fynns-layout-main-min-width`. |
+  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed; drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
+  | EndAside | adaptive | Inspector width morph; soft min + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet. Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |

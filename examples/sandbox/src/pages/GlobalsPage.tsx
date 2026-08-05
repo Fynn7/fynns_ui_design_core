@@ -304,9 +304,10 @@ export function GlobalsPage() {
     "inbox",
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [shellNavExpanded, setShellNavExpanded] = useState(true);
+  const [shellNavOpen, setShellNavOpen] = useState(true);
+  const [shellNavCompact, setShellNavCompact] = useState(false);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
-  const [shellDest, setShellDest] = useState<"home" | "search">("home");
+  const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -406,12 +407,13 @@ export function GlobalsPage() {
   );
 
   return (
-    <div className="sandbox-globals" id="main">
-      <SkipLink href="#main" label={t("globals.skipLink")} />
-      <p className="sandbox-globals-lead">{t("globals.lead")}</p>
-      <SandboxHelp text={t("globals.skipLinkHelp")} />
+    <div className="sandbox-globals">
+      <SkipLink href="#globals-content" label={t("globals.skipLink")} />
+      <div id="globals-content" className="sandbox-globals-content" tabIndex={-1}>
+        <p className="sandbox-globals-lead">{t("globals.lead")}</p>
+        <SandboxHelp text={t("globals.skipLinkHelp")} />
 
-      <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
+        <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
@@ -2043,8 +2045,11 @@ export function GlobalsPage() {
             size="sm"
             labelSide="end"
             label={t("globals.shellNavMode")}
-            checked={shellNavExpanded}
-            onCheckedChange={setShellNavExpanded}
+            checked={shellNavOpen}
+            onCheckedChange={(open) => {
+              setShellNavOpen(open);
+              if (open) setShellNavCompact(false);
+            }}
           />
           <Switch
             size="sm"
@@ -2056,8 +2061,10 @@ export function GlobalsPage() {
         </div>
         <div className="sandbox-globals-clipped-shell">
           <ClippedNavShell
-            navMode={shellNavExpanded ? "drawer" : "rail"}
-            onNavCrowded={() => setShellNavExpanded(false)}
+            navMode={
+              !shellNavOpen ? "hidden" : shellNavCompact ? "rail" : "drawer"
+            }
+            onNavCrowded={() => setShellNavCompact(true)}
             topBar={
               <TopAppBar
                 title={t("globals.shellTitle")}
@@ -2065,10 +2072,17 @@ export function GlobalsPage() {
                   <Tooltip content={t("globals.shellToggleNav")}>
                     <IconButton
                       aria-label={t("globals.shellToggleNav")}
-                      aria-pressed={shellNavExpanded}
-                      onClick={() => setShellNavExpanded((open) => !open)}
+                      aria-pressed={shellNavOpen}
+                      onClick={() => {
+                        if (shellNavOpen) {
+                          setShellNavOpen(false);
+                        } else {
+                          setShellNavCompact(false);
+                          setShellNavOpen(true);
+                        }
+                      }}
                     >
-                      {shellNavExpanded ? (
+                      {shellNavOpen ? (
                         <PanelLeftIcon size={16} aria-hidden />
                       ) : (
                         <MenuIcon aria-hidden />
@@ -2090,25 +2104,7 @@ export function GlobalsPage() {
               />
             }
             nav={
-              shellNavExpanded ? (
-                <NavigationDrawer
-                  variant="standard"
-                  ariaLabel={t("globals.shellNavAria")}
-                >
-                  <NavigationDrawerItem
-                    icon={<FolderOpenIcon />}
-                    label={t("globals.navRailHome")}
-                    active={shellDest === "home"}
-                    onClick={() => setShellDest("home")}
-                  />
-                  <NavigationDrawerItem
-                    icon={<SearchIcon />}
-                    label={t("globals.navRailSearch")}
-                    active={shellDest === "search"}
-                    onClick={() => setShellDest("search")}
-                  />
-                </NavigationDrawer>
-              ) : (
+              !shellNavOpen ? null : shellNavCompact ? (
                 <NavigationRail
                   aria-label={t("globals.shellNavAria")}
                   labelVisibility="selected"
@@ -2126,6 +2122,30 @@ export function GlobalsPage() {
                     onClick={() => setShellDest("search")}
                   />
                 </NavigationRail>
+              ) : (
+                <NavigationDrawer
+                  variant="standard"
+                  ariaLabel={t("globals.shellNavAria")}
+                >
+                  <NavigationDrawerItem
+                    icon={<FolderOpenIcon />}
+                    label={t("globals.navRailHome")}
+                    active={shellDest === "home"}
+                    onClick={() => setShellDest("home")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<SearchIcon />}
+                    label={t("globals.navRailSearch")}
+                    active={shellDest === "search"}
+                    onClick={() => setShellDest("search")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<ArchiveIcon />}
+                    label={t("globals.shellNavLongLabel")}
+                    active={shellDest === "long"}
+                    onClick={() => setShellDest("long")}
+                  />
+                </NavigationDrawer>
               )
             }
           >
@@ -2401,6 +2421,7 @@ export function GlobalsPage() {
         </div>
         <SandboxHelp text={t("globals.swatchesSpecialHelp")} />
       </GlobalsCategory>
+      </div>
     </div>
   );
 }

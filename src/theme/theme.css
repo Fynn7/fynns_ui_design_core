@@ -370,6 +370,8 @@
   --fynns-navbar-badge-font-size: 0.625rem;
   --fynns-navbar-badge-nudge: 0.125rem;
   --fynns-navdrawer-width: 17.5rem;
+  --fynns-navdrawer-min-width: 12rem;
+  --fynns-navdrawer-max-width: 28rem;
   --fynns-navdrawer-pad-block: 0.5rem;
   --fynns-navdrawer-body-pad-block-start: 0.75rem;
   --fynns-navdrawer-pad-inline: 0.5rem;

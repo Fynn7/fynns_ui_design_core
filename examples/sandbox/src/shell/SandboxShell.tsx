@@ -47,7 +47,7 @@ export type SandboxPage =
   | "motion"
   | "templates";
 
-const NAV_EXPANDED_KEY = "fynns-sandbox-nav-expanded";
+const NAV_OPEN_KEY = "fynns-sandbox-nav-open";
 
 export function SandboxShell() {
   const { t } = useLocale();
@@ -57,11 +57,13 @@ export function SandboxShell() {
     if (typeof window === "undefined") return true;
     return !window.matchMedia("(max-width: 900px)").matches;
   });
-  /** User preference for drawer vs rail; narrow viewports always use the drawer. */
-  const [preferNavExpanded, setPreferNavExpanded] = useState(() => {
+  /** User preference: destinations fully open vs fully closed. */
+  const [preferNavOpen, setPreferNavOpen] = useState(() => {
     if (typeof window === "undefined") return true;
-    return window.localStorage.getItem(NAV_EXPANDED_KEY) !== "0";
+    return window.localStorage.getItem(NAV_OPEN_KEY) !== "0";
   });
+  /** Automatic icon rail when open drawer + EndAside mins still overflow. */
+  const [navCompact, setNavCompact] = useState(false);
   const [narrow, setNarrow] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 900px)").matches;
@@ -69,8 +71,17 @@ export function SandboxShell() {
   const { undo, redo } = useTokenDraft();
   const { target, setTarget } = usePlaygroundTarget();
 
-  const navExpanded = narrow || preferNavExpanded;
-  const navMode = navExpanded ? "drawer" : "rail";
+  /** Prefer user choice on all widths — do not force destinations open on phone. */
+  const navOpen = preferNavOpen;
+  /**
+   * Narrow / crowded → icon rail (side column). Full drawer only when there is
+   * room; stacking a labeled drawer above the canvas starves the main stage.
+   */
+  const navMode = !navOpen
+    ? "hidden"
+    : narrow || navCompact
+      ? "rail"
+      : "drawer";
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -85,8 +96,8 @@ export function SandboxShell() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(NAV_EXPANDED_KEY, preferNavExpanded ? "1" : "0");
-  }, [preferNavExpanded]);
+    window.localStorage.setItem(NAV_OPEN_KEY, preferNavOpen ? "1" : "0");
+  }, [preferNavOpen]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -162,15 +173,8 @@ export function SandboxShell() {
     </>
   );
 
-  const nav = navExpanded ? (
-    <NavigationDrawer
-      variant="standard"
-      className="sandbox-nav"
-      ariaLabel={t("nav.aria")}
-    >
-      {destinations}
-    </NavigationDrawer>
-  ) : (
+  const nav =
+    !navOpen ? null : navMode === "rail" ? (
     <NavigationRail
       className="sandbox-nav-rail"
       aria-label={t("nav.aria")}
@@ -217,6 +221,14 @@ export function SandboxShell() {
         />
       </Tooltip>
     </NavigationRail>
+  ) : (
+    <NavigationDrawer
+      variant="standard"
+      className="sandbox-nav"
+      ariaLabel={t("nav.aria")}
+    >
+      {destinations}
+    </NavigationDrawer>
   );
 
   return (
@@ -225,27 +237,32 @@ export function SandboxShell() {
         className="sandbox-root"
         navMode={navMode}
         onNavCrowded={() => {
-          if (!narrow) setPreferNavExpanded(false);
+          setNavCompact(true);
         }}
         topBar={
           <TopAppBar
             className="sandbox-topbar"
             leading={
-              !narrow ? (
-                <Tooltip content={navExpanded ? t("nav.collapseTip") : t("nav.expandTip")}>
-                  <IconButton
-                    aria-label={navExpanded ? t("nav.collapse") : t("nav.expand")}
-                    aria-pressed={navExpanded}
-                    onClick={() => setPreferNavExpanded((open) => !open)}
-                  >
-                    {navExpanded ? (
-                      <PanelLeftIcon size={16} aria-hidden />
-                    ) : (
-                      <MenuIcon aria-hidden />
-                    )}
-                  </IconButton>
-                </Tooltip>
-              ) : undefined
+              <Tooltip content={navOpen ? t("nav.collapseTip") : t("nav.expandTip")}>
+                <IconButton
+                  aria-label={navOpen ? t("nav.collapse") : t("nav.expand")}
+                  aria-pressed={navOpen}
+                  onClick={() => {
+                    if (preferNavOpen) {
+                      setPreferNavOpen(false);
+                    } else {
+                      setNavCompact(false);
+                      setPreferNavOpen(true);
+                    }
+                  }}
+                >
+                  {navOpen ? (
+                    <PanelLeftIcon size={16} aria-hidden />
+                  ) : (
+                    <MenuIcon aria-hidden />
+                  )}
+                </IconButton>
+              </Tooltip>
             }
             title={t("brand.name")}
             trailing={

@@ -756,6 +756,20 @@ export const NAVBAR_TOKENS = {
  */
 export const NAVDRAWER_TOKENS = {
   width: "17.5rem",
+  /**
+   * Floor when the ClippedNavShell drawer column is resized (or flex-shrunk).
+   * Absolute rem only — do **not** use `%` here: on `.fynns-nav-drawer` the
+   * percentage resolves against the grid track (≈ current width), which collapses
+   * `clamp(…, N%, …)` to the preferred width and makes the seam undraggable.
+   * Labels ellipsize below preferred `width`.
+   */
+  "min-width": "12rem",
+  /**
+   * Cap for manual drawer resize in ClippedNavShell (pairs with `width`).
+   * Absolute rem only (see `min-width`). Drag also respects remaining room for
+   * main / EndAside mins.
+   */
+  "max-width": "28rem",
   "pad-block": "0.5rem",
   /**
    * Extra inset between headline / chrome hairline and the first destination
@@ -901,14 +915,17 @@ export const LAYOUT_TOKENS = {
   /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
   "end-aside-max-width": "36vw",
   /**
-   * Floor for `EndAside` when open (flex may shrink preferred width, not below
-   * this). Pair with `main-min-width`; if both floors still overflow the shell,
-   * collapse destinations to rail via `ClippedNavShell.onNavCrowded`.
+   * Floor for `EndAside` when open. Applied as soft
+   * `min(token, 100%)` so a single pane cannot force the shell past its track.
+   * Pair with `main-min-width`. When the main track is ≤32rem (container query),
+   * EndAside leaves flex flow and overlays the end edge at this floor — mins are
+   * kept without horizontal overflow. Also: `onNavCrowded` → rail when drawer
+   * + floors still overflow; ≤56.25rem viewport → bottom sheet.
    */
   "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
   /**
-   * Floor for the main canvas beside `EndAside` (flex sibling). Prevents the
-   * center column from collapsing when nav + aside consume the row.
+   * Floor for the main canvas beside `EndAside` (flex sibling). Soft
+   * `min(token, 100%)` in CSS; dropped while EndAside overlays (≤32rem main).
    */
   "main-min-width": "clamp(10rem, 36%, 20rem)",
 } as const;
