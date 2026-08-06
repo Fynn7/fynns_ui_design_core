@@ -105,7 +105,6 @@ export const READONLY_LAYOUT_KEYS = [
   "sheet-half-height",
   "tooltip-max-width",
   "snackbar-max-width",
-  // command-palette-* not in LAYOUT_TOKENS yet — i18n keys retained for later
   "field-hint-gap",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 

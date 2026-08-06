@@ -301,15 +301,6 @@ const en = {
   "layoutChrome.roSnackbarMax": "Snackbar max (min())",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, viewport).",
-  "layoutChrome.roCmdWidth": "Command palette width",
-  "layoutChrome.roCmdWidthHint":
-    "--fynns-layout-command-palette-width — preferred command palette width.",
-  "layoutChrome.roCmdMaxH": "Command palette max height",
-  "layoutChrome.roCmdMaxHHint":
-    "--fynns-layout-command-palette-max-height — command palette height ceiling.",
-  "layoutChrome.roCmdTopPad": "Command palette top pad",
-  "layoutChrome.roCmdTopPadHint":
-    "--fynns-layout-command-palette-top-pad — top inset for the command palette.",
   "layoutChrome.roFieldHint": "Field hint gap (alias)",
   "layoutChrome.roFieldHintHint":
     "--fynns-layout-field-hint-gap — aliases unit-stack-gap; edit unit-stack-gap instead.",
@@ -1411,15 +1402,6 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roSnackbarMax": "Snackbar 上限（min()）",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, 视口)。",
-  "layoutChrome.roCmdWidth": "命令面板宽度",
-  "layoutChrome.roCmdWidthHint":
-    "--fynns-layout-command-palette-width — 命令面板首选宽度。",
-  "layoutChrome.roCmdMaxH": "命令面板最大高度",
-  "layoutChrome.roCmdMaxHHint":
-    "--fynns-layout-command-palette-max-height — 命令面板高度上限。",
-  "layoutChrome.roCmdTopPad": "命令面板顶边距",
-  "layoutChrome.roCmdTopPadHint":
-    "--fynns-layout-command-palette-top-pad — 命令面板距顶边距。",
   "layoutChrome.roFieldHint": "字段提示间距（别名）",
   "layoutChrome.roFieldHintHint":
     "--fynns-layout-field-hint-gap — 别名 unit-stack-gap；请改 unit-stack-gap。",

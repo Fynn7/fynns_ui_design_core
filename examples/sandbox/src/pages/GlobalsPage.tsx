@@ -1012,7 +1012,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.fabHelp")} />
         <TokenList group="fab" title={t("globals.tokenListFab")} />
-        <TokenList group="fabmenu" title={t("globals.tokenListFab")} />
+        <TokenList group="fabmenu" title={t("globals.tokenListFabMenu")} />
         </GlobalsDemo>
         <GlobalsDemo id="menu">
         <div className="sandbox-globals-row">
