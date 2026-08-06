@@ -52,6 +52,12 @@ type CodeBlockShared = Omit<
   copyAriaLabel?: string;
   /** Show the copy control. @default true */
   showCopy?: boolean;
+  /**
+   * Soft-wrap long lines inside the block (no horizontal scrollbar).
+   * Pass `false` for classic `pre` scrolling when a line overflows.
+   * @default true
+   */
+  wrap?: boolean;
   /** Max height of the scrollable code surface (CSS length). */
   maxHeight?: string | number;
 };
@@ -147,6 +153,7 @@ export function CodeBlock(props: CodeBlockProps) {
     label,
     copyAriaLabel = "Copy",
     showCopy = true,
+    wrap = true,
     maxHeight,
     className,
     style,
@@ -287,6 +294,7 @@ export function CodeBlock(props: CodeBlockProps) {
     "label",
     "copyAriaLabel",
     "showCopy",
+    "wrap",
     "maxHeight",
     "className",
     "style",
@@ -310,6 +318,7 @@ export function CodeBlock(props: CodeBlockProps) {
         plain && "fynns-code-block--plain",
         editable && "fynns-code-block--editable",
         highlighted && "fynns-code-block--highlighted",
+        !wrap && "fynns-code-block--nowrap",
         className,
       )}
       data-language={language}
@@ -345,7 +354,7 @@ export function CodeBlock(props: CodeBlockProps) {
             onBlur={onInputBlur}
             onScroll={onInputScroll}
             spellCheck={false}
-            wrap="off"
+            wrap={wrap ? "soft" : "off"}
             disabled={disabled}
             readOnly={readOnly}
             placeholder={placeholder}
