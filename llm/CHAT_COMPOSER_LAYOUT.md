@@ -47,11 +47,17 @@ collapsed (unless attachments force expand).
 
 Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
-- Shell pad: `composer-pad-inline` (= capsule chrome ~4dp), `composer-pad-block`
-  (3dp; with 32dp line + hairline → ~40dp shell = Input)
-- Gap: `composer-gap` (4px)
-- Controls: `composer-control-size` (32dp; matches text line)
-- Line / max: `composer-line-height` (32dp) / `composer-max-height` (13rem)
+- **Collapsed** shell pad: `composer-pad-inline` (capsule ~4dp),
+  `composer-pad-block` (3dp; + 32dp control row + hairline → ~40dp = Input)
+- **Expanded** shell pad: `composer-expanded-pad-inline` /
+  `composer-expanded-pad-block` (**12dp** — Cursor breath; owns inset for
+  text **and** toolbar so + / Send share one vertical edge)
+- Gap: `composer-gap` (4px collapsed); `composer-expanded-gap` (8dp
+  text↔toolbar)
+- Controls: `composer-control-size` (32dp)
+- Line: `composer-line-height` (32dp **control-row** / collapsed
+  `line-height`); `composer-text-line-height` (22dp **typography** when
+  `data-expanded`); max `composer-max-height` (13rem)
 - Radius: `--fynns-radius-3xl` (not Cursor’s pill→12px compact switch; not
   Input’s `radius-md`)
 
@@ -60,8 +66,8 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Collapsed, no leading: textarea start = strip breath
   (`strip-pad-inline − capsule-chrome`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
-- Expanded: textarea is full-bleed above the toolbar; start uses strip breath;
-  toolbar controls stay capsule-flush to the shell edges.
+- Expanded: shell `expanded-pad-*` only — textarea has no extra inline pad;
+  toolbar sits inside the same inset.
 
 ## Not this primitive
 

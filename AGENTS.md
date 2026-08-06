@@ -210,8 +210,8 @@ Color tokens (`--fynns-color-*`):
   `control-surface`, `control-surface-hover`, `flyout-item`,
   `flyout-item-hover`, `input-fill`,
   `chat-user-bubble` (quiet Chat user-bubble lift; light override).
-  - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
-    `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
+- Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
+  `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
     `accent-ring` (soft mark for small controls / nav indicators), `on-accent`, `accent-container`, `on-accent-container`,
     `secondary-container`, `on-secondary-container`, `tertiary-container`,
     `on-tertiary-container`, `focus` (faint keyboard ring fill).
@@ -348,7 +348,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
-    live — no LLM; **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
+    live — no LLM; caret height `--fynns-chatmessage-cursor-height` (**1em**
+    of body face — Cursor / native I-beam; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
     **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
@@ -418,10 +419,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
     Outer form inset uses `strip-pad-inline`. **Multiline layout** is model C
     + compact morph (Cursor): collapsed ≈ one horizontal row (~40dp = Input /
-    field-shell density, not SearchBar 56dp; toolbar `display: contents`);
-    expanded = full-width textarea above a
-    bottom `role="toolbar"` (leading start, Send end) — never leave icons
-    vertically centered beside tall text. Spec:
+    field-shell density, not SearchBar 56dp; toolbar `display: contents`;
+    `line-height` = 32dp control row); expanded = full-width textarea above a
+    bottom `role="toolbar"` (leading start, Send end) with **12dp** shell pad
+    (`composer-expanded-pad-*`), **8dp** text↔toolbar gap, and
+    `composer-text-line-height` (22dp) — never leave icons vertically centered
+    beside tall text. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
     Collapsed shell ≈ 40dp (ChatGPT `rounded-[28px]` /
     `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
