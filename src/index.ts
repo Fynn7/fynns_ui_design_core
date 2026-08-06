@@ -39,6 +39,10 @@ export {
   SearchIcon,
   SettingsIcon,
   SparklesIcon,
+  ArrowUpIcon,
+  MicIcon,
+  StopSquareIcon,
+  ChevronDownIcon,
   SunIcon,
   TrashIcon,
   UndoIcon,
@@ -217,7 +221,7 @@ export { FabMenu, FabMenuItem } from "./primitives/FabMenu";
 export type { FabMenuItemProps, FabMenuProps } from "./primitives/FabMenu";
 export { TopAppBar } from "./primitives/TopAppBar";
 export type { TopAppBarProps } from "./primitives/TopAppBar";
-export { ClippedNavShell } from "./primitives/ClippedNavShell";
+export { ClippedNavShell, wouldClippedNavDrawerCrowd } from "./primitives/ClippedNavShell";
 export type {
   ClippedNavShellNavMode,
   ClippedNavShellProps,
@@ -261,6 +265,32 @@ export { OtpInput } from "./primitives/OtpInput";
 export type { OtpInputProps } from "./primitives/OtpInput";
 export { EmptyState } from "./primitives/EmptyState";
 export type { EmptyStateProps } from "./primitives/EmptyState";
+export {
+  Chat,
+  ChatComposer,
+  ChatScrollToBottom,
+  ChatThread,
+} from "./primitives/Chat";
+export type {
+  ChatComposerProps,
+  ChatProps,
+  ChatScrollToBottomProps,
+  ChatThreadProps,
+} from "./primitives/Chat";
+export { ChatMessage } from "./primitives/ChatMessage";
+export type {
+  ChatMessageProps,
+  ChatMessageRole,
+} from "./primitives/ChatMessage";
+export {
+  ChatCitationChip,
+  ChatCitations,
+} from "./primitives/ChatCitation";
+export type {
+  ChatCitation,
+  ChatCitationChipProps,
+  ChatCitationsProps,
+} from "./primitives/ChatCitation";
 export { SkipLink } from "./primitives/SkipLink";
 export type { SkipLinkProps } from "./primitives/SkipLink";
 export { Stepper } from "./primitives/Stepper";
