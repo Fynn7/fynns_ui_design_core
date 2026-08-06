@@ -1707,7 +1707,17 @@ export function GlobalsPage() {
             code={`{\n  "accent": "#2dd4bf",\n  "radius": "md",\n  "enabled": true\n}`}
             maxHeight="8rem"
           />
+          <CodeBlock
+            variant="editable"
+            label={t("globals.codeBlockEditableLabel")}
+            language="ts"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            defaultValue={`export const accent = "var(--fynns-color-accent)";\n`}
+            maxHeight="8rem"
+            rows={5}
+          />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
+          <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
             <Button size="sm" variant="tonal" onClick={() => setCodeLangDialogOpen(true)}>
               {t("globals.codeLangDemoOpen")}

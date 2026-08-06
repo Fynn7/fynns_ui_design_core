@@ -342,7 +342,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   type roles as Card),
   Carousel / CarouselItem,
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock (`default` head or `plain` headless;
+  HeaderCell / Cell / Caption), CodeBlock (`default` head, `plain` headless, or
+  `editable` live highlight via pre backdrop + transparent textarea —
+  `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
+  `onChange` coalesced while typing / flushed on blur);
   supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
   `css`/`json`/`bash`/… or consumer `registerHighlightLanguage` /
   `highlightProfile`); unknown → plain mono;
