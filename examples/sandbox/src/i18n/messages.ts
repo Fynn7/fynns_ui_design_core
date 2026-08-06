@@ -1,4 +1,4 @@
-import type { Locale } from "./types";
+﻿import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -826,7 +826,7 @@ const en = {
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatAsideLabel": "Aside (~22rem) — same 70% / composer 100%",
   "globals.chatAsideUserBody":
     "Bubble max is 70% of this aside’s content width, not the main column.",
@@ -888,7 +888,7 @@ const en = {
   "globalsInspector.radiusSmHint":
     "Badges, toggle groups, toast action chips — not SearchBar suggestion rows and not the default Button.",
   "globalsInspector.radiusMdHint":
-    "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, list rows, alerts/toasts.",
+    "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, alerts/toasts. ListItem selected rows use `3xl`.",
   "globalsInspector.radiusLgHint":
     "Larger chrome: dropdown menus, dialogs, scrollbar thumbs.",
   "globalsInspector.radiusXlHint":
@@ -1746,7 +1746,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 同 70% / composer 100%",
   "globals.chatAsideUserBody": "气泡上限是本侧栏内容宽的 70%，不是主栏宽。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
@@ -1806,7 +1806,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusSmHint":
     "徽章、切换组、toast 操作芯片 —— 不是 SearchBar 建议行，也不是默认 Button。",
   "globalsInspector.radiusMdHint":
-    "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、列表行、提示条。",
+    "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、提示条。ListItem 选中行用 `3xl`。",
   "globalsInspector.radiusLgHint":
     "较大界面：下拉菜单、对话框、滚动条滑块。",
   "globalsInspector.radiusXlHint":

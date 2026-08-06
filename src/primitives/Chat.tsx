@@ -18,7 +18,7 @@ import {
   type RefObject,
   type TextareaHTMLAttributes,
 } from "react";
-import { ArrowUpIcon, ChevronDownIcon, MicIcon, PlusIcon, StopSquareIcon } from "./icons";
+import { ArrowUpIcon, ChevronDownIcon, MicIcon, StopSquareIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 
@@ -221,7 +221,7 @@ export type ChatComposerProps = Omit<
   onSubmit?: (value: string) => void;
   /** @default "Message" */
   placeholder?: string;
-  /** Leading control (default +). Pass `null` to hide. */
+  /** Leading control. Omit or pass `null` to hide (no default Attach). */
   leading?: ReactNode | null;
   /** Optional attachment previews above the field (caller-owned). */
   attachments?: ReactNode;
@@ -415,22 +415,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       }
     };
 
-    const showLeading = leading !== null;
-    const leadingNode =
-      leading === undefined ? (
-        <IconButton
-          type="button"
-          size="sm"
-          variant="ghost"
-          aria-label="Attach"
-          disabled={disabled}
-          className="fynns-chat-composer-leading"
-        >
-          <PlusIcon />
-        </IconButton>
-      ) : (
-        leading
-      );
+    const showLeading = leading != null;
+    const leadingNode = leading;
 
     let primary: ReactNode = null;
     if (trailing !== undefined) {
@@ -507,7 +493,9 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       >
         <div className="fynns-chat-composer-shell">
           {attachments != null ? (
-            <div className="fynns-chat-composer-attachments">{attachments}</div>
+            <div className="fynns-chat-composer-attachments fynns-scroll">
+              {attachments}
+            </div>
           ) : null}
           <div className="fynns-chat-composer-row">
             {showLeading ? leadingNode : null}

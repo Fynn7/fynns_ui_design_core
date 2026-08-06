@@ -153,11 +153,7 @@ export function ChatMessage({
           <div className="fynns-chat-message-name">{name}</div>
         ) : null}
         {showBubble ? (
-          <div
-            className="fynns-chat-message-bubble"
-            aria-live={isStreaming ? "polite" : undefined}
-            aria-relevant={isStreaming ? "additions text" : undefined}
-          >
+          <div className="fynns-chat-message-bubble">
             {hasBody ? (
               <div className="fynns-chat-message-body">{children}</div>
             ) : null}

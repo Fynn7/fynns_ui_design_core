@@ -363,10 +363,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `--fynns-radius-xs` (4px), size `.875em`, weight medium; user bubble uses
     the same wash + tighter pad.
     `pre code` stays unstyled by these rules.
-    **ARIA (ChatGPT parity):** skip → `#main`; dual sr-only notify regions
-    for respond/complete (not token-live on the bubble); keep composer
-    focus after send; Send/Stop/dictate labels — full contract:
-    [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md).
+    **ARIA (ChatGPT parity):** skip → `#main`; **prefer** dual sr-only notify
+    regions for respond/complete (app-owned today — not token-live on the
+    bubble; core ships `role="log"` on `ChatThread` + `aria-busy` on the
+    row). Keep composer focus after send; Send/Stop/dictate labels — full
+    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md).
   - **Composer keys (ChatGPT parity):** Enter sends; Shift+Enter newline;
     Esc stops while `busy`. **CJK IME:** Enter during composition (or the
     confirming Enter some browsers fire just after `compositionend`)
@@ -622,10 +623,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
-- **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
-  Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
-  Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,
-  Sun, Trash, Undo, Upload — plus any glyph still imported by Globals/Preview.
+- **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
+  ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
+  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
+  Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
+  Undo, Upload — plus any glyph still imported by Globals/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
