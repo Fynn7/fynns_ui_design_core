@@ -878,7 +878,7 @@ const en = {
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
   "globalsInspector.radiusLgUses": "Menus, dialogs, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
-  "globalsInspector.radius22Uses": "Chat user message bubble",
+  "globalsInspector.radius22Uses": "Chat user message bubble + citation footnote cards",
   "globalsInspector.radius3xlUses":
     "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, ListItem rows, sheet tops, Chat composer shell",
   "globalsInspector.radius2xsHint":
@@ -894,7 +894,7 @@ const en = {
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
   "globalsInspector.radius22Hint":
-    "≈22dp ChatGPT user-message bubble (`rounded-[22px]`). Between xl and 3xl; composer shell stays on 3xl.",
+    "≈22dp ChatGPT user-message bubble (`rounded-[22px]`) — Chat container floor (bubble + citation footnote cards). Between xl and 3xl; composer shell stays on 3xl (rounder).",
   "globalsInspector.radius3xlHint":
     "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, ListItem rows, BottomSheet top edge, Chat composer shell. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
@@ -1796,7 +1796,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
   "globalsInspector.radiusLgUses": "菜单、对话框、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
-  "globalsInspector.radius22Uses": "Chat 用户消息气泡",
+  "globalsInspector.radius22Uses": "Chat 用户消息气泡 + 引用脚注卡",
   "globalsInspector.radius3xlUses":
     "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、ListItem 行、底部表单顶角、Chat 输入壳",
   "globalsInspector.radius2xsHint":
@@ -1812,9 +1812,9 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
   "globalsInspector.radius22Hint":
-    "≈22dp ChatGPT 用户消息气泡（`rounded-[22px]`）。介于 xl 与 3xl；输入壳仍用 3xl。",
+    "≈22dp ChatGPT 用户消息气泡（`rounded-[22px]`）— Chat 容器圆角下限（气泡 + 引用脚注卡）。介于 xl 与 3xl；输入壳仍用更圆的 3xl。",
   "globalsInspector.radius3xlHint":
-    "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行、BottomSheet 顶边、Chat 输入壳。调这一档即可改整组圆角。",
+    "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行、ListItem 行、BottomSheet 顶边、Chat 输入壳。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道",

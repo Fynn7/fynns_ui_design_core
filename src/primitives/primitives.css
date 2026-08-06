@@ -9071,7 +9071,8 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   padding: var(--fynns-chatmessage-citation-card-pad);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-lg);
+  /* Chat container floor = user bubble (`radius-22`); never squarer. */
+  border-radius: var(--fynns-radius-22);
   background: var(--fynns-color-surface-1);
   color: inherit;
   text-decoration: none;
