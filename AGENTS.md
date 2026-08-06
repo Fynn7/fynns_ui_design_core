@@ -98,7 +98,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    (tooltips/toasts) → `surface-4` / `surface-5` (dragged / reserved emphasis).
    Higher surfaces are brighter, not darker.
 9. **Layout patterns.** Destination apps: `ClippedNavShell` (full-bleed
-   TopAppBar + drawer|rail|hidden; toggle = open↔closed) + optional `EndAside`
+   TopAppBar + drawer|rail|hidden; toggle = open↔closed; destination column
+   **width-morphs** like `EndAside`) + optional `EndAside`
    inspector; overlays via
    `Dialog` /
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
@@ -306,7 +307,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
 - **App shells:** **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
   under it — M3 clipped; no topbar×sidebar crosshair; `navMode`
   `drawer`|`rail`|`hidden` drives column width via `--fynns-navdrawer-width` /
-  `--fynns-navrail-width` / `0`. TopAppBar leading toggle is **open ↔ closed**
+  `--fynns-navrail-width` / `0`. Open↔closed **width-morphs** the destination
+  track (two grid columns → `0px`; shell keeps the last `nav` through
+  `--fynns-duration-flyout` so consumers may pass `null` when hidden).
+  TopAppBar leading toggle is **open ↔ closed**
   only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
   narrow viewports (apps should pass `rail` below ~900px — do not keep a
   labeled `drawer` mode that stacks above the canvas).
@@ -389,7 +393,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | NavigationBar | mobile-first | Bottom **destinations** (phone). Prefer Rail on medium+. |
   | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
-  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed; drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
+  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed with destination **width morph** (two grid tracks → `0px`; shell holds `nav` through flyout). Drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
   | EndAside | adaptive | Inspector width morph; soft min + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet. Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
