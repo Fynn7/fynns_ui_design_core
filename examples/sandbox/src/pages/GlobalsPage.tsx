@@ -22,6 +22,11 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  Chat,
+  ChatComposer,
+  ChatMessage,
+  ChatScrollToBottom,
+  ChatThread,
   ClippedNavShell,
   ClipboardIcon,
   Carousel,
@@ -116,9 +121,17 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, Fragment, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { splitCaptionByBackticks } from "../utils/captionSegments";
+
+/** Render sandbox chat copy with `` `code` `` → `<code>` (ChatGPT inline pill). */
+function chatCaption(text: string): ReactNode {
+  return splitCaptionByBackticks(text).map((seg, i) =>
+    seg.code ? <code key={i}>{seg.text}</code> : <Fragment key={i}>{seg.text}</Fragment>,
+  );
+}
 
 const SWATCH_KEYS = [
   { key: "xs", usesKey: "globals.swatchXsUses" },
@@ -337,6 +350,15 @@ export function GlobalsPage() {
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
   const busyPaintGood = useBusyTask();
+  const [chatStreaming, setChatStreaming] = useState(false);
+  const [chatStreamText, setChatStreamText] = useState("");
+  const chatStreamFullRef = useRef("");
+  const [chatFailed, setChatFailed] = useState(true);
+  const [chatDraft, setChatDraft] = useState("");
+  const [chatAsideDraft, setChatAsideDraft] = useState("");
+  const [shellChatDraft, setShellChatDraft] = useState("");
+  const [shellChatBusy, setShellChatBusy] = useState(false);
+  const [shellChatReply, setShellChatReply] = useState("");
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -363,6 +385,19 @@ export function GlobalsPage() {
     const timer = window.setTimeout(() => setBusyScrimOpen(false), 2000);
     return () => window.clearTimeout(timer);
   }, [busyScrimOpen]);
+
+  useEffect(() => {
+    if (!chatStreaming) return;
+    const full = chatStreamFullRef.current;
+    if (chatStreamText.length >= full.length) {
+      setChatStreaming(false);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setChatStreamText(full.slice(0, chatStreamText.length + 1));
+    }, 28);
+    return () => window.clearTimeout(timer);
+  }, [chatStreaming, chatStreamText]);
 
   const nestedPromptDefault =
     "You translate natural-language requests into structured camera commands.";
@@ -1232,6 +1267,164 @@ export function GlobalsPage() {
           </Button>
         </div>
         <SandboxHelp text={t("globals.snackbarHelp")} />
+        <div className="sandbox-globals-row sandbox-chat-dual">
+          <div className="sandbox-chat-main">
+            <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
+              <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
+                <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
+                <ChatMessage role="user">
+                  {chatCaption(t("globals.chatUserBody"))}
+                </ChatMessage>
+                <ChatMessage
+                  role="assistant"
+                  citations={[
+                    {
+                      id: "reuters",
+                      publisher: t("globals.chatCiteReuters"),
+                      href: "https://www.reuters.com/",
+                      title: t("globals.chatCiteReutersTitle"),
+                      snippet: t("globals.chatCiteReutersSnippet"),
+                    },
+                    {
+                      id: "ap",
+                      publisher: t("globals.chatCiteAp"),
+                      href: "https://apnews.com/",
+                      title: t("globals.chatCiteApTitle"),
+                      snippet: t("globals.chatCiteApSnippet"),
+                    },
+                    {
+                      id: "bbc",
+                      publisher: t("globals.chatCiteBbc"),
+                      href: "https://www.bbc.com/news",
+                      title: t("globals.chatCiteBbcTitle"),
+                      snippet: t("globals.chatCiteBbcSnippet"),
+                    },
+                    {
+                      id: "nyt",
+                      publisher: t("globals.chatCiteNyt"),
+                      href: "https://www.nytimes.com/",
+                      title: t("globals.chatCiteNytTitle"),
+                      snippet: t("globals.chatCiteNytSnippet"),
+                    },
+                  ]}
+                  citationsLabel={t("globals.chatCitationsLabel")}
+                  citationsVisibleCount={3}
+                  actions={
+                    <Tooltip content={t("globals.chatCopyTip")}>
+                      <IconButton size="sm" aria-label={t("globals.chatCopyTip")}>
+                        <ClipboardIcon />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                >
+                  {chatCaption(t("globals.chatAssistantBody"))}
+                </ChatMessage>
+                <ChatMessage
+                  role="assistant"
+                  streaming={chatStreaming}
+                  streamingLabel={t("globals.chatStreamingLabel")}
+                >
+                  {chatStreamText ||
+                    (chatStreaming ? undefined : t("globals.chatStreamPrompt"))}
+                </ChatMessage>
+                <ChatMessage
+                  role="assistant"
+                  error={chatFailed ? t("globals.chatError") : undefined}
+                  onRetry={
+                    chatFailed ? () => setChatFailed(false) : undefined
+                  }
+                  retryLabel={t("globals.chatRetry")}
+                  actions={
+                    chatFailed ? undefined : (
+                      <Tooltip content={t("globals.chatCopyTip")}>
+                        <IconButton
+                          size="sm"
+                          aria-label={t("globals.chatCopyTip")}
+                        >
+                          <ClipboardIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )
+                  }
+                >
+                  {chatFailed ? undefined : t("globals.chatRetrySuccess")}
+                </ChatMessage>
+              </ChatThread>
+              <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
+              <ChatComposer
+                value={chatDraft}
+                onChange={setChatDraft}
+                ariaLabel={t("globals.chatComposerAria")}
+                placeholder={t("globals.chatComposerPlaceholder")}
+                busy={chatStreaming}
+                onStop={() => setChatStreaming(false)}
+                onSubmit={() => {
+                  chatStreamFullRef.current = t("globals.chatStreamFull");
+                  setChatStreamText("");
+                  setChatStreaming(true);
+                  setChatDraft("");
+                }}
+                sendLabel={t("globals.chatSend")}
+                stopLabel={t("globals.chatStop")}
+                leading={null}
+              />
+            </Chat>
+            <div className="sandbox-globals-row">
+              <Button
+                size="sm"
+                disabled={chatStreaming}
+                onClick={() => {
+                  chatStreamFullRef.current = t("globals.chatStreamFull");
+                  setChatStreamText("");
+                  setChatStreaming(true);
+                }}
+              >
+                {t("globals.chatStreamStart")}
+              </Button>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={!chatStreaming && !chatStreamText}
+                onClick={() => {
+                  setChatStreaming(false);
+                  setChatStreamText("");
+                }}
+              >
+                {t("globals.chatStreamReset")}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={chatFailed}
+                onClick={() => setChatFailed(true)}
+              >
+                {t("globals.chatFailDemo")}
+              </Button>
+            </div>
+          </div>
+          <div className="fynns-chat-host--fill sandbox-chat-aside">
+            <p className="sandbox-chat-aside-label">{t("globals.chatAsideLabel")}</p>
+            <Chat label={t("globals.chatAsideLabel")} className="sandbox-chat-frame sandbox-chat-frame--aside">
+              <ChatThread>
+                <ChatMessage role="user">
+                  {t("globals.chatAsideUserBody")}
+                </ChatMessage>
+                <ChatMessage role="assistant">
+                  {t("globals.chatAsideAssistantBody")}
+                </ChatMessage>
+              </ChatThread>
+              <ChatComposer
+                value={chatAsideDraft}
+                onChange={setChatAsideDraft}
+                ariaLabel={t("globals.chatAsideComposerAria")}
+                placeholder={t("globals.chatAsideComposerPlaceholder")}
+                onSubmit={() => setChatAsideDraft("")}
+                leading={null}
+              />
+            </Chat>
+          </div>
+        </div>
+        <SandboxHelp text={t("globals.chatHelp")} />
       </GlobalsCategory>
 
       <GlobalsCategory title={t("globals.catContainment")} icon={<FolderOpenIcon aria-hidden />}>
@@ -2169,16 +2362,67 @@ export function GlobalsPage() {
             }
           >
             <div className="sandbox-globals-shell-body">
-              <div className="sandbox-globals-shell-canvas fynns-scroll">
-                <p className="sandbox-globals-shell-canvas-body">
-                  {t("globals.shellCanvas")}
-                </p>
+              <div className="sandbox-globals-shell-canvas">
+                <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
+                  <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
+                    <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
+                    <ChatMessage role="user">
+                      {chatCaption(t("globals.chatUserBody"))}
+                    </ChatMessage>
+                    <ChatMessage role="assistant">
+                      {shellChatReply
+                        ? shellChatReply
+                        : chatCaption(t("globals.chatAssistantBody"))}
+                    </ChatMessage>
+                  </ChatThread>
+                  <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
+                  <ChatComposer
+                    value={shellChatDraft}
+                    onChange={setShellChatDraft}
+                    ariaLabel={t("globals.chatComposerAria")}
+                    placeholder={t("globals.chatComposerPlaceholder")}
+                    busy={shellChatBusy}
+                    onStop={() => setShellChatBusy(false)}
+                    onSubmit={(v) => {
+                      setShellChatBusy(true);
+                      setShellChatDraft("");
+                      window.setTimeout(() => {
+                        setShellChatReply(t("globals.shellChatEcho", { msg: v }));
+                        setShellChatBusy(false);
+                      }, 600);
+                    }}
+                    sendLabel={t("globals.chatSend")}
+                    stopLabel={t("globals.chatStop")}
+                    leading={null}
+                  />
+                </Chat>
               </div>
               <EndAside open={shellAsideOpen}>
-                <div className="sandbox-globals-shell-aside fynns-scroll">
-                  <p className="sandbox-globals-shell-aside-body">
-                    {t("globals.shellAsideBody")}
+                <div className="fynns-chat-host--fill sandbox-globals-shell-aside">
+                  <p className="sandbox-chat-aside-label">
+                    {t("globals.shellAsideChatLabel")}
                   </p>
+                  <Chat
+                    label={t("globals.shellAsideChatLabel")}
+                    className="sandbox-chat-frame sandbox-chat-frame--aside"
+                  >
+                    <ChatThread>
+                      <ChatMessage role="user">
+                        {t("globals.chatAsideUserBody")}
+                      </ChatMessage>
+                      <ChatMessage role="assistant">
+                        {t("globals.chatAsideAssistantBody")}
+                      </ChatMessage>
+                    </ChatThread>
+                    <ChatComposer
+                      value={chatAsideDraft}
+                      onChange={setChatAsideDraft}
+                      ariaLabel={t("globals.chatAsideComposerAria")}
+                      placeholder={t("globals.chatAsideComposerPlaceholder")}
+                      onSubmit={() => setChatAsideDraft("")}
+                      leading={null}
+                    />
+                  </Chat>
                 </div>
               </EndAside>
             </div>

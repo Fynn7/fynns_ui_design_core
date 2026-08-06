@@ -831,6 +831,62 @@
   box-sizing: border-box;
 }
 
+/* Chat dual placement — main rem-capped column + aside fill host. */
+.sandbox-chat-dual {
+  align-items: stretch;
+  gap: var(--fynns-layout-unit-stack-gap);
+}
+
+.sandbox-chat-main {
+  flex: 1 1 20rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  width: 100%;
+  max-width: 40rem;
+  min-width: 0;
+  min-height: 28rem;
+}
+
+.sandbox-chat-aside {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-sm);
+  width: var(--fynns-layout-end-aside-width);
+  max-width: 100%;
+  min-width: 0;
+  min-height: 28rem;
+  box-sizing: border-box;
+  padding: var(--fynns-space-md);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  /* Match chat chrome (bubble / composer) — not radius-lg (10px looks square on a tall pane). */
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-chat-aside-label {
+  margin: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.sandbox-chat-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-app-bg);
+}
+
+.sandbox-chat-frame--aside {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
 /* useOverflowBounds demo — tight single-line chip (not section content-inset). */
 .sandbox-overflow-sample {
   box-sizing: border-box;
@@ -1109,7 +1165,10 @@
   min-width: 0;
   min-height: 0;
   padding: var(--fynns-space-md);
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .sandbox-globals-shell-canvas {
@@ -1121,6 +1180,7 @@
 
 .sandbox-globals-shell-aside {
   background: var(--fynns-color-surface-1);
+  gap: var(--fynns-space-sm);
 }
 
 .sandbox-globals-shell-canvas-body,

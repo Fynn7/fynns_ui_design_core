@@ -29,6 +29,12 @@ function endAsideTransitionMs(): number {
  * `TopAppBar` trailing (IconButton) — not inside this component.
  *
  * Place beside the canvas inside `ClippedNavShell`’s main column (flex row).
+ * Soft floor: `--fynns-layout-end-aside-min-width` (`min(token, 100%)`).
+ *
+ * **Chat dual placement:** `ChatMessage` / composer may fill this pane —
+ * host = 100% of aside content (rem ceiling dropped); user bubble stays 70%
+ * of that host; composer 100%. Start-edge chat hosts use `.fynns-chat-host--fill`
+ * instead. See AGENTS.md Feedback → ChatMessage.
  *
  * @example
  * ```tsx

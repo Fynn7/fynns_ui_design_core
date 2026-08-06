@@ -740,7 +740,7 @@ const en = {
     "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drag the drawer’s trailing seam to resize (min clamp). Drawer is for modal content sheets — not this destination column.",
   "globals.shellAsideBody": "Supporting inspector pane (EndAside).",
   "globals.shellHelp":
-    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` collapses destinations to rail. Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
+    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). EndAside may host Chat (bubble 70% of aside content; composer 100% — same as main, no density mode). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` collapses destinations to rail. Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -781,6 +781,60 @@ const en = {
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
     "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Optional single action; `short` / `long` / `indefinite`. Do not use deleted toast APIs.",
+  "globals.chatSystem": "This is a demo thread — no model is connected.",
+  "globals.chatLabel": "Chat",
+  "globals.chatEmpty": "What can I help with?",
+  "globals.chatUserName": "You",
+  "globals.chatUserBody":
+    "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
+  "globals.chatAssistantName": "Assistant",
+  "globals.chatAssistantBody":
+    "`streaming` only paints incomplete cues (caret + aria-busy); the app appends tokens itself.",
+  "globals.chatCopyTip": "Copy message",
+  "globals.chatStreamingLabel": "Generating response",
+  "globals.chatStreamFull":
+    "Streaming is a UI flag: show the caret while incomplete, then clear it when the reply finishes.",
+  "globals.chatStreamPrompt": "Press “Simulate stream” to see the incomplete caret.",
+  "globals.chatStreamStart": "Simulate stream",
+  "globals.chatStreamReset": "Reset",
+  "globals.chatError": "There was an error generating a response.",
+  "globals.chatRetry": "Regenerate",
+  "globals.chatRetrySuccess":
+    "Regenerated — the failed-generation footer is gone and normal actions return.",
+  "globals.chatFailDemo": "Show failed turn",
+  "globals.chatCitationsLabel": "Sources",
+  "globals.chatCiteReuters": "Reuters",
+  "globals.chatCiteReutersTitle": "Markets open mixed after overnight futures swing",
+  "globals.chatCiteReutersSnippet":
+    "U.S. equity futures were little changed as traders weighed soft economic data against resilient corporate earnings.",
+  "globals.chatCiteAp": "AP News",
+  "globals.chatCiteApTitle": "Central banks signal patience on rate cuts",
+  "globals.chatCiteApSnippet":
+    "Officials reiterated that inflation progress remains uneven, keeping policy on hold for now.",
+  "globals.chatCiteBbc": "BBC",
+  "globals.chatCiteBbcTitle": "How search grounding shows up in chat UIs",
+  "globals.chatCiteBbcSnippet":
+    "Publisher chips under answers let readers verify claims without leaving the thread.",
+  "globals.chatCiteNyt": "NYTimes",
+  "globals.chatCiteNytTitle": "Why citation chips beat bare footnotes",
+  "globals.chatCiteNytSnippet":
+    "Favicon plus publisher name makes the source recognizable before the link opens.",
+  "globals.chatComposerAria": "Message",
+  "globals.chatComposerPlaceholder": "Message…",
+  "globals.chatSend": "Send",
+  "globals.chatStop": "Stop generating",
+  "globals.chatScrollBottom": "Scroll to bottom",
+  "globals.shellChatEcho": "Echo: {msg}",
+  "globals.chatHelp":
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+  "globals.chatAsideLabel": "Aside (~22rem) — same 70% / composer 100%",
+  "globals.chatAsideUserBody":
+    "Bubble max is 70% of this aside’s content width, not the main column.",
+  "globals.chatAsideAssistantBody":
+    "Composer below fills 100% of the aside content track.",
+  "globals.chatAsideComposerAria": "Chat composer (aside demo)",
+  "globals.chatAsideComposerPlaceholder": "Message…",
+  "globals.shellAsideChatLabel": "EndAside chat (resizable pane)",
   "globals.listAria": "Sample content list",
   "globals.listOneLine": "Inbox",
   "globals.listTwoLine": "Ada Lovelace",
@@ -817,15 +871,16 @@ const en = {
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = `2xs`; cards / inputs = `md`; buttons = `xl`; long chrome strips (`SearchBar` shell + suggestion rows / `Select` options / `Banner` / `BottomAppBar` / `NavigationDrawer` items / sheet tops) = `3xl`; badges / chips = `sm`; switch capsule = `pill` (read-only below). Every `RADIUS_TOKENS` key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = `2xs`; cards / inputs = `md`; buttons = `xl`; Chat user bubble = `22`; long chrome strips (`SearchBar` shell + suggestion rows / `Select` options / `Banner` / `BottomAppBar` / `NavigationDrawer` items / sheet tops / Chat composer) = `3xl`; badges / chips = `sm`; switch capsule = `pill` (read-only below). Every `RADIUS_TOKENS` key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips",
   "globalsInspector.radiusMdUses": "Cards, inputs, panels (this page)",
   "globalsInspector.radiusLgUses": "Menus, dialogs, scrollbar thumb",
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
+  "globalsInspector.radius22Uses": "Chat user message bubble",
   "globalsInspector.radius3xlUses":
-    "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, sheet tops",
+    "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, sheet tops, Chat composer shell",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
@@ -838,8 +893,10 @@ const en = {
     "Larger chrome: dropdown menus, dialogs, scrollbar thumbs.",
   "globalsInspector.radiusXlHint":
     "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
+  "globalsInspector.radius22Hint":
+    "≈22dp ChatGPT user-message bubble (`rounded-[22px]`). Between xl and 3xl; composer shell stays on 3xl.",
   "globalsInspector.radius3xlHint":
-    "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, BottomSheet top edge. Slide this to reshape that group.",
+    "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, BottomSheet top edge, Chat composer shell. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track",
@@ -1604,7 +1661,7 @@ const zh: Record<MessageKey, string> = {
     "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。可拖抽屉右缘调宽（有 min clamp）。Drawer 用于模态内容侧栏，不是这列目的地。",
   "globals.shellAsideBody": "支撑检查器窗格（EndAside）。",
   "globals.shellHelp":
-    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` 才将目的地收成 rail。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
+    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。EndAside 可承载 Chat（气泡为侧栏内容宽 70%；composer 100% — 与主栏同一套比例，无 density）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` 才将目的地收成 rail。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -1645,6 +1702,57 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
     "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。可选单个 action；时长 `short` / `long` / `indefinite`。勿使用已删除的 toast API。",
+  "globals.chatSystem": "演示会话 — 未连接任何模型。",
+  "globals.chatLabel": "聊天",
+  "globals.chatEmpty": "有什么可以帮你？",
+  "globals.chatUserName": "你",
+  "globals.chatUserBody":
+    "用一句话概括 ChatMessage 的 `streaming` 属性，并说明用户气泡最大为行宽的 70%，短回复仍会收缩贴合内容。",
+  "globals.chatAssistantName": "助手",
+  "globals.chatAssistantBody":
+    "`streaming` 只负责未完成态 UI（光标 + aria-busy）；由应用自行追加 token。",
+  "globals.chatCopyTip": "复制消息",
+  "globals.chatStreamingLabel": "正在生成回复",
+  "globals.chatStreamFull":
+    "streaming 是 UI 标志：未完成时显示光标，回复结束后关闭即可。",
+  "globals.chatStreamPrompt": "点击「模拟流式输出」查看未完成光标。",
+  "globals.chatStreamStart": "模拟流式输出",
+  "globals.chatStreamReset": "重置",
+  "globals.chatError": "生成回复时出错。",
+  "globals.chatRetry": "重新生成",
+  "globals.chatRetrySuccess": "已重新生成 — 失败态页脚消失，常规操作按钮恢复。",
+  "globals.chatFailDemo": "显示失败回合",
+  "globals.chatCitationsLabel": "来源",
+  "globals.chatCiteReuters": "Reuters",
+  "globals.chatCiteReutersTitle": "隔夜期货波动后市场开盘分化",
+  "globals.chatCiteReutersSnippet":
+    "在疲软经济数据与企业盈利韧性之间权衡时，美股期货几乎持平。",
+  "globals.chatCiteAp": "AP News",
+  "globals.chatCiteApTitle": "央行暗示对降息保持耐心",
+  "globals.chatCiteApSnippet":
+    "官员重申通胀进展仍不均衡，政策暂时维持不变。",
+  "globals.chatCiteBbc": "BBC",
+  "globals.chatCiteBbcTitle": "搜索 grounding 如何出现在聊天界面",
+  "globals.chatCiteBbcSnippet":
+    "回答下方的发布方 chips 让读者无需离开会话即可核对主张。",
+  "globals.chatCiteNyt": "NYTimes",
+  "globals.chatCiteNytTitle": "为何来源 chips 优于裸脚注",
+  "globals.chatCiteNytSnippet":
+    "favicon + 发布方名称让来源在打开链接前即可识别。",
+  "globals.chatComposerAria": "消息",
+  "globals.chatComposerPlaceholder": "发消息…",
+  "globals.chatSend": "发送",
+  "globals.chatStop": "停止生成",
+  "globals.chatScrollBottom": "滚到最新",
+  "globals.shellChatEcho": "回显：{msg}",
+  "globals.chatHelp":
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+  "globals.chatAsideLabel": "侧栏（~22rem）— 同 70% / composer 100%",
+  "globals.chatAsideUserBody": "气泡上限是本侧栏内容宽的 70%，不是主栏宽。",
+  "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
+  "globals.chatAsideComposerAria": "聊天输入（侧栏演示）",
+  "globals.chatAsideComposerPlaceholder": "发消息…",
+  "globals.shellAsideChatLabel": "EndAside 聊天（可调窗格）",
   "globals.listAria": "内容列表示例",
   "globals.listOneLine": "收件箱",
   "globals.listTwoLine": "Ada Lovelace",
@@ -1681,15 +1789,16 @@ const zh: Record<MessageKey, string> = {
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = `2xs`；卡片 / 输入 = `md`；按钮 = `xl`；长条 chrome（`SearchBar` 外壳与建议行 / `Select` 选项 / `Banner` / `BottomAppBar` / 导航抽屉项 / 表单顶角）= `3xl`；徽章 / 芯片 = `sm`；开关胶囊 = `pill`（下方只读）。`RADIUS_TOKENS` 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = `2xs`；卡片 / 输入 = `md`；按钮 = `xl`；Chat 用户气泡 = `22`；长条 chrome（`SearchBar` 外壳与建议行 / `Select` 选项 / `Banner` / `BottomAppBar` / 导航抽屉项 / 表单顶角 / Chat 输入壳）= `3xl`；徽章 / 芯片 = `sm`；开关胶囊 = `pill`（下方只读）。`RADIUS_TOKENS` 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片",
   "globalsInspector.radiusMdUses": "卡片、输入框、面板（本页）",
   "globalsInspector.radiusLgUses": "菜单、对话框、滚动条滑块",
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
+  "globalsInspector.radius22Uses": "Chat 用户消息气泡",
   "globalsInspector.radius3xlUses":
-    "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、底部表单顶角",
+    "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、底部表单顶角、Chat 输入壳",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":
@@ -1702,8 +1811,10 @@ const zh: Record<MessageKey, string> = {
     "较大界面：下拉菜单、对话框、滚动条滑块。",
   "globalsInspector.radiusXlHint":
     "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
+  "globalsInspector.radius22Hint":
+    "≈22dp ChatGPT 用户消息气泡（`rounded-[22px]`）。介于 xl 与 3xl；输入壳仍用 3xl。",
   "globalsInspector.radius3xlHint":
-    "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行与 BottomSheet 顶边。调这一档即可改整组圆角。",
+    "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行、BottomSheet 顶边、Chat 输入壳。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
   "globalsInspector.radiusNoneUses": "需要直角时",
   "globalsInspector.radiusPillUses": "开关轨道",

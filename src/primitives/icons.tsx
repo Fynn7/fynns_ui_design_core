@@ -424,6 +424,34 @@ export function StopIcon(props: IconProps) {
   );
 }
 
+/** Compact stop glyph for ChatComposer primary (circle host + small square). */
+export function StopSquareIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="8" y="8" width="8" height="8" rx="1" />
+    </svg>
+  );
+}
+
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M12 19V5" />
+      <path d="m5 12 7-7 7 7" />
+    </svg>
+  );
+}
+
+export function MicIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+      <path d="M19 10v1a7 7 0 0 1-14 0v-1" />
+      <line x1="12" y1="19" x2="12" y2="22" />
+    </svg>
+  );
+}
+
 export function PanelLeftIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

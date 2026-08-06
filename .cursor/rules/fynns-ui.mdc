@@ -35,7 +35,21 @@ ring can paint before heavy work).
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, Badge, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
-  EmptyState, Dropzone,
+  EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
+  ChatMessage (dual placement: main 48rem host or EndAside /
+  `.fynns-chat-host--fill` — bubble 70% of host, composer 100%; soft floor
+  `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
+  generation footer under assistant turns; `citations` /
+  `ChatCitations` / `ChatCitationChip` = browsing source chips under
+  assistant body; inline `code` = ChatGPT pill
+  (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
+  task-list checkboxes — caller owns `children`; CJK IME Enter while
+  composing does not send — AGENTS.md Composer keys; composer =
+  growing `<textarea>` not ChatGPT ProseMirror — AGENTS.md Chat
+  **composer input model**; reduced-motion
+  caret / scroll / shell — AGENTS.md Chat **Parity note
+  (`prefers-reduced-motion`)**; user-edit parity:
+  `llm/CHAT_USER_EDIT_UX.md`),
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock
   (zero-dep `--fynns-code-*` highlight for ts/js/py/cpp/css/json/bash;
   consumer DSLs via `highlightProfile` / `registerHighlightLanguage` —
