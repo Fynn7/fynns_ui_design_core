@@ -22,5 +22,13 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src", "scripts", "examples"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "scripts/_focus-verify",
+    "scripts/_scale-out",
+    "scripts/_tmp-*",
+    "scripts/_verify-*"
+  ]
 }
+
