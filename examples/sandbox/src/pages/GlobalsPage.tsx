@@ -463,6 +463,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const chatStreamFullRef = useRef("");
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
+  const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
+    "Rotate the view to the RIGHT\nside view of the head, using\northographic projection.",
+  );
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
@@ -1956,7 +1959,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 }}
                 sendLabel={t("globals.chatSend")}
                 stopLabel={t("globals.chatStop")}
-                leading={null}
+                leading={
+                  <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                    <IconButton
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.chatComposerLeadingTip")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
               />
             </Chat>
             <div className="sandbox-globals-row">
@@ -2014,6 +2028,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Chat>
           </div>
         </div>
+        <p className="sandbox-chat-aside-label">{t("globals.chatComposerMultiLabel")}</p>
+        <ChatComposer
+          value={chatComposerMultiDraft}
+          onChange={setChatComposerMultiDraft}
+          ariaLabel={t("globals.chatComposerMultiAria")}
+          placeholder={t("globals.chatComposerPlaceholder")}
+          onSubmit={() => setChatComposerMultiDraft("")}
+          sendLabel={t("globals.chatSend")}
+          leading={
+            <Tooltip content={t("globals.chatComposerLeadingTip")}>
+              <IconButton
+                type="button"
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.chatComposerLeadingTip")}
+              >
+                <LayoutGridIcon />
+              </IconButton>
+            </Tooltip>
+          }
+        />
+        <SandboxHelp text={t("globals.chatComposerMultiHelp")} />
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />

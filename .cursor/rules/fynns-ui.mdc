@@ -47,7 +47,9 @@ ring can paint before heavy work).
   task-list checkboxes — caller owns `children`; CJK IME Enter while
   composing does not send — AGENTS.md Composer keys; composer =
   growing `<textarea>` not ChatGPT ProseMirror — AGENTS.md Chat
-  **composer input model**; reduced-motion
+  **composer input model** + `llm/CHAT_COMPOSER_LAYOUT.md` (multiline =
+  bottom toolbar when expanded, compact single row when collapsed);
+  reduced-motion
   caret / scroll / shell — AGENTS.md Chat **Parity note
   (`prefers-reduced-motion`)**; user-edit parity:
   `llm/CHAT_USER_EDIT_UX.md`),

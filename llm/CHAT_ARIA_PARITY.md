@@ -268,6 +268,7 @@ Priority for code changes (this doc is the contract; implementation is separate)
 
 ## Related
 
+- Multiline composer layout (compact ↔ expanded): [`llm/CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)
 - User-edit UX: [`llm/CHAT_USER_EDIT_UX.md`](CHAT_USER_EDIT_UX.md)
 - Catalog / composer keys / reduced-motion: [`AGENTS.md`](../AGENTS.md) Chat keep-set
 - Action anatomy HTML: `scripts/_focus-verify/chatgpt-{user-actions,assistant-anatomy}.html`

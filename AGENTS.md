@@ -340,7 +340,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     (short copy shrinks; `radius-22` / ChatGPT `rounded-[22px]`;
     `--fynns-color-chat-user-bubble`; body `1rem` / pad-inline `1rem`).
     Composer = **100%** of the same host (`radius-3xl`, ~52px collapsed
-    shell with 36dp controls + `composer-gap` 4px; not viewport full-bleed).
+    shell with 32dp controls + `composer-gap` 4px; not viewport full-bleed).
   - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
     aside content (rem ceiling dropped). Bubble still **70%** of that host;
     composer **100%**. Pane soft mins + chat stage min on the shell root.
@@ -415,9 +415,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
     control, textarea start adds pad so text lands at
     `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
-    Outer form inset uses `strip-pad-inline`; row `align-items: center` +
-    `line-height` = composer line height for vertical centering. Collapsed
-    shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
+    Outer form inset uses `strip-pad-inline`. **Multiline layout** is model C
+    + compact morph (Cursor): collapsed ≈ one horizontal row (~52–54px,
+    toolbar `display: contents`); expanded = full-width textarea above a
+    bottom `role="toolbar"` (leading start, Send end) — never leave icons
+    vertically centered beside tall text. Spec:
+    [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
+    Collapsed shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
     `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
     Plain-text prompts only, zero ProseMirror dependency. Do **not** swap
     to contenteditable for visual parity alone.
@@ -543,7 +547,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `radius-22` / body `1rem` —
   main: 48rem column; aside: 100% pane via `.fynns-end-aside` /
   `.fynns-chat-host--fill`; composer 100% of same host (`radius-3xl`,
-  36dp controls); soft mins on the
+  32dp controls); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /

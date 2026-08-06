@@ -8999,23 +8999,49 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
 }
 
-.fynns-chat-composer-row {
+/*
+ * Compact morph (Cursor / ChatGPT capsule):
+ * - Collapsed: horizontal row; toolbar `display: contents` so leading |
+ *   textarea | primary share one ~52–54px line.
+ * - Expanded (`data-expanded`): column; full-width text above bottom toolbar.
+ * Spec: llm/CHAT_COMPOSER_LAYOUT.md.
+ */
+.fynns-chat-composer-body {
   display: flex;
-  /* Match SearchBar / field-shell — center controls + single-line text. */
+  flex-direction: row;
   align-items: center;
   gap: var(--fynns-chat-composer-gap);
   min-width: 0;
-  /* Single-line ChatGPT collapsed row ≈ size-9 (36dp) control + pad. */
   min-height: var(--fynns-chat-composer-min-height);
 }
 
+.fynns-chat-composer-toolbar {
+  display: contents;
+}
+
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-body {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-chat-composer-gap);
+  width: 100%;
+  min-width: 0;
+}
+
 /*
- * ChatGPT prompt controls are size-9 (36dp), not the global 40dp IconButton.
- * Class sits on the IconButton itself and/or a wrapper.
+ * Composer controls are 32dp (`composer-control-size`), not the global 40dp
+ * IconButton. Class sits on the IconButton itself and/or a wrapper.
  */
 .fynns-btn--icon.fynns-chat-composer-leading,
 .fynns-btn--icon.fynns-chat-composer-primary,
 .fynns-chat-composer-leading .fynns-btn--icon,
+.fynns-chat-composer-primary-slot .fynns-btn--icon,
 .fynns-chat-composer-primary .fynns-btn--icon {
   width: var(--fynns-chat-composer-control-size);
   min-width: var(--fynns-chat-composer-control-size);
@@ -9026,6 +9052,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-composer-input {
   flex: 1 1 auto;
   align-self: center;
+  order: 2;
   min-width: 0;
   /* One text line at rest — never stretch to fill the chat column. */
   height: auto;
@@ -9057,11 +9084,26 @@ a.fynns-breadcrumb-link:visited {
   field-sizing: fixed;
 }
 
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-input {
+  order: 0;
+  width: 100%;
+  align-self: stretch;
+  /* Tools live in the footer — text uses strip breath on both sides. */
+  padding-inline-start: calc(
+    var(--fynns-layout-strip-pad-inline) -
+      var(--fynns-layout-capsule-chrome-pad-inline)
+  );
+  padding-inline-end: calc(
+    var(--fynns-layout-strip-pad-inline) -
+      var(--fynns-layout-capsule-chrome-pad-inline)
+  );
+}
+
 /*
- * No leading affix: text start = strip-pad from shell edge (Banner breath).
+ * No leading affix (collapsed): text start = strip-pad from shell edge.
  * Shell end stays capsule-chrome (~4dp) so Send matches ChatGPT mic/send flush.
  */
-.fynns-chat-composer-row:not(:has(.fynns-chat-composer-leading))
+.fynns-chat-composer-body:not(:has(.fynns-chat-composer-leading))
   .fynns-chat-composer-input {
   padding-inline-start: calc(
     var(--fynns-layout-strip-pad-inline) -
@@ -9069,8 +9111,9 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-/* Trailing IconButton owns the end inset — drop the Input end pad. */
-.fynns-chat-composer-row:has(.fynns-chat-composer-primary)
+/* Collapsed: trailing control owns the end inset — drop the Input end pad. */
+.fynns-chat-composer-shell:not([data-expanded])
+  .fynns-chat-composer-body:has(.fynns-chat-composer-primary-slot)
   .fynns-chat-composer-input {
   padding-inline-end: 0;
 }
@@ -9088,11 +9131,27 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-composer-leading,
-.fynns-chat-composer-primary {
+.fynns-chat-composer-primary-slot {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Collapsed display:contents order — leading | text | primary. */
+.fynns-chat-composer-leading {
+  order: 1;
+}
+
+.fynns-chat-composer-primary-slot {
+  order: 3;
+  /* Keep Send at the end when there is no leading (collapsed or expanded). */
+  margin-inline-start: auto;
+}
+
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
+  order: unset;
 }
 
 @media (prefers-reduced-motion: reduce) {
