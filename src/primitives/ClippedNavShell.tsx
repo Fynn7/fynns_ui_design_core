@@ -125,16 +125,29 @@ export function ClippedNavShell({
   onDrawerWidthChangeRef.current = onDrawerWidthChange;
 
   /**
-   * Last destination node — kept in a ref so open mode can render `nav` from
-   * props directly. Used only while `holdingExit` after close so the width
-   * morph can finish (consumers may pass `null` when `navMode="hidden"`).
+   * Last destination node for the close morph. `phase` moves open → closing on
+   * the same render as `navMode="hidden"` (React render-time adjust) so
+   * consumers that pass `nav={null}` do not flash an empty slot before the
+   * effect runs. After `--fynns-duration-flyout`, phase → closed and unmounts.
    */
   const lastNavRef = useRef(nav);
   if (nav != null) lastNavRef.current = nav;
-  const [holdingExit, setHoldingExit] = useState(false);
+  const [phase, setPhase] = useState<"open" | "closing" | "closed">(
+    navMode === "hidden" ? "closed" : "open",
+  );
+
+  if (navMode !== "hidden" && phase !== "open") {
+    setPhase("open");
+  } else if (navMode === "hidden" && phase === "open") {
+    setPhase("closing");
+  }
 
   const renderedNav =
-    navMode !== "hidden" ? nav : holdingExit ? lastNavRef.current : null;
+    phase === "closed"
+      ? null
+      : navMode !== "hidden"
+        ? nav
+        : lastNavRef.current;
 
   const [uncontrolledWidth, setUncontrolledWidth] = useState<number | null>(
     defaultDrawerWidth ?? null,
@@ -144,15 +157,11 @@ export function ClippedNavShell({
   const drawerWidthPx = controlled ? drawerWidthProp : uncontrolledWidth;
 
   useEffect(() => {
-    if (navMode !== "hidden") {
-      setHoldingExit(false);
-      return;
-    }
-    setHoldingExit(true);
+    if (phase !== "closing") return;
     const ms = readFlyoutMs(rootRef.current);
-    const timer = window.setTimeout(() => setHoldingExit(false), ms);
+    const timer = window.setTimeout(() => setPhase("closed"), ms);
     return () => window.clearTimeout(timer);
-  }, [navMode]);
+  }, [phase]);
 
   const setDrawerWidthPx = useCallback(
     (next: number) => {
