@@ -821,6 +821,21 @@
   resize: vertical;
   line-height: var(--fynns-line-height-body);
   font-family: inherit;
+  /*
+   * Multiline needs real block pad. `.fynns-input--sm` zeroes padding-block for
+   * 32dp single-line Input — override here with layout field-pad-block.
+   */
+  padding-block: calc(
+    var(--fynns-layout-field-pad-block) - var(--fynns-border-hairline)
+  );
+}
+
+.fynns-textarea.fynns-input--sm {
+  /* Keep sm type; do not inherit Input sm’s padding-block: 0. */
+  padding-block: calc(
+    var(--fynns-layout-field-pad-block) - var(--fynns-border-hairline)
+  );
+  min-height: 6rem;
 }
 
 /* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
@@ -1831,12 +1846,12 @@
   }
 }
 
-/* ---------- Switch (M3-aligned track / thumb; no handle icon) ---------- */
+/* ---------- Switch (dense track / thumb; no handle icon; no md size) ---------- */
 .fynns-switch {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fynns-space-md);
+  gap: var(--fynns-space-sm);
   color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-tight);
 }
@@ -1847,24 +1862,9 @@
 }
 
 .fynns-switch-label {
-  font-size: var(--fynns-font-size-form-label);
-  white-space: nowrap;
-}
-
-.fynns-switch--sm {
-  gap: var(--fynns-space-sm);
-  --fynns-toggle-track-w: var(--fynns-toggle-track-w-sm);
-  --fynns-toggle-track-h: var(--fynns-toggle-track-h-sm);
-  --fynns-toggle-thumb: var(--fynns-toggle-thumb-sm);
-  --fynns-toggle-thumb-checked: var(--fynns-toggle-thumb-checked-sm);
-  --fynns-toggle-track-pad-inline: var(--fynns-toggle-track-pad-inline-sm);
-  --fynns-toggle-track-pad-checked: var(--fynns-toggle-track-pad-checked-sm);
-  --fynns-toggle-track-outline: var(--fynns-toggle-track-outline-sm);
-}
-
-.fynns-switch--sm .fynns-switch-label {
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
+  white-space: nowrap;
 }
 
 .fynns-switch-track {

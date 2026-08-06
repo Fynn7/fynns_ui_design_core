@@ -197,7 +197,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer text start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell — not capsule). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer text start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -247,6 +247,9 @@ const en = {
   "layoutChrome.fieldPadInline": "Form field pad",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell horizontal pad (12dp). Do not reuse capsule chrome.",
+  "layoutChrome.fieldPadBlock": "Form field pad (block)",
+  "layoutChrome.fieldPadBlockHint":
+    "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -1087,7 +1090,7 @@ const en = {
   "globals.surfaceFillLabel": "fill — stretches parent height",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
-  "globals.switchMdStart": "Switch md · label start",
+  "globals.switchLabelStart": "Switch · label start",
   "globals.tabsSmA": "Alpha",
   "globals.tabsSmAria": "Small tabs with disabled tab",
   "globals.tabsSmB": "Beta",
@@ -1319,7 +1322,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell，非 capsule）。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1369,6 +1372,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.fieldPadInline": "表单字段边距",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell 水平内边距（默认 12dp）。不要复用 capsule chrome。",
+  "layoutChrome.fieldPadBlock": "表单字段边距（块向）",
+  "layoutChrome.fieldPadBlockHint":
+    "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -2202,7 +2208,7 @@ const zh: Record<MessageKey, string> = {
   "globals.surfaceFillLabel": "fill — 撑满父高度",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
-  "globals.switchMdStart": "Switch md · 标签在前",
+  "globals.switchLabelStart": "Switch · 标签在前",
   "globals.tabsSmA": "甲",
   "globals.tabsSmAria": "小号标签（含禁用项）",
   "globals.tabsSmB": "乙",

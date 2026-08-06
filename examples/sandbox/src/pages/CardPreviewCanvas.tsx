@@ -1,4 +1,4 @@
-import {
+﻿import {
   Card,
   ControlRow,
   ControlStack,
@@ -31,14 +31,12 @@ export function CardPreviewCanvas() {
       <ControlStack className="sandbox-preview-toolbar" columns={2}>
         <ControlRow label={t("preview.anatomy")}>
           <Switch
-            size="sm"
             labelSide="end"
             label={t("preview.cardIcon")}
             checked={options.showIcon}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showIcon: checked }))}
           />
           <Switch
-            size="sm"
             labelSide="end"
             label={t("preview.cardActions")}
             checked={options.showActions}

@@ -5,20 +5,18 @@ import { forwardRef, useId } from "react";
  * Switch (toggle) primitive. Self-implemented `<button role="switch">` with
  * `data-state` so CSS drives the visual. Replaces the radix switch.
  *
- * Visuals follow M3 Switch proportions (outlined unchecked / soft-filled
- * checked with accent thumb; handle morphs 18→22dp). No handle icon.
+ * Single dense size only (former `sm`: ~39×24dp track). The large M3 md
+ * variant (52×32) was removed — do not reintroduce a `size` prop.
  *
- * Sizes: `md` (default, forms/settings) and `sm` (dense panel headers).
+ * Visuals: outlined unchecked / soft-filled checked with accent thumb;
+ * handle morphs. No handle icon.
  */
-export type SwitchSize = "md" | "sm";
-
 export type SwitchProps = {
   /** Visible inline label; also the accessible name unless `ariaLabel` is set. */
   label: ReactNode;
   checked: boolean;
   onCheckedChange: (next: boolean) => void;
   ariaLabel?: string;
-  size?: SwitchSize;
   /**
    * Where the text sits relative to the track.
    * - `start` (default): label then track — settings / form rows.
@@ -37,7 +35,6 @@ export const Switch = forwardRef(function Switch(
     checked,
     onCheckedChange,
     ariaLabel,
-    size = "md",
     labelSide = "start",
     className,
     disabled = false,
@@ -49,7 +46,6 @@ export const Switch = forwardRef(function Switch(
   const resolvedLabelId = labelId ?? `${autoId}-label`;
   const rootClass = [
     "fynns-switch",
-    size === "sm" ? "fynns-switch--sm" : "fynns-switch--md",
     labelSide === "end" ? "fynns-switch--label-end" : "",
     className ?? "",
   ]

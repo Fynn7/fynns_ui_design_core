@@ -1,4 +1,4 @@
-import {
+﻿import {
   Autocomplete,
   ArchiveIcon,
   ArrowLeftIcon,
@@ -488,7 +488,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [textareaValue, setTextareaValue] = useState("");
   const [btnActive, setBtnActive] = useState(false);
   const [iconBtnActive, setIconBtnActive] = useState(false);
-  const [switchMdOn, setSwitchMdOn] = useState(true);
+  const [switchStartOn, setSwitchStartOn] = useState(true);
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
@@ -939,7 +939,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <ControlStack columns={2}>
             <ControlRow label={t("globals.infoHintRowLabel")}>
               <Switch
-                size="sm"
                 labelSide="end"
                 label={t("globals.infoHintRowSwitch")}
                 checked={switchOn}
@@ -1328,7 +1327,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="switch">
         <div className="sandbox-globals-row">
           <Switch
-            size="sm"
             labelSide="end"
             label={t("globals.switchPill")}
             checked={switchOn}
@@ -1336,9 +1334,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <Switch
             labelSide="start"
-            label={t("globals.switchMdStart")}
-            checked={switchMdOn}
-            onCheckedChange={setSwitchMdOn}
+            label={t("globals.switchLabelStart")}
+            checked={switchStartOn}
+            onCheckedChange={setSwitchStartOn}
           />
         </div>
         </GlobalsDemo>
@@ -2425,8 +2423,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Button>
         </div>
         <div className="sandbox-globals-row" style={{ alignItems: "center", flexWrap: "wrap" }}>
-          <Switch size="sm" labelSide="end" label={t("globals.confirmLoading")} checked={confirmLoading} onCheckedChange={setConfirmLoading} />
-          <Switch size="sm" labelSide="end" label={t("globals.confirmDisabled")} checked={confirmDisabled} onCheckedChange={setConfirmDisabled} />
+          <Switch labelSide="end" label={t("globals.confirmLoading")} checked={confirmLoading} onCheckedChange={setConfirmLoading} />
+          <Switch labelSide="end" label={t("globals.confirmDisabled")} checked={confirmDisabled} onCheckedChange={setConfirmDisabled} />
         </div>
         <SandboxHelp text={t("globals.nestedDialogHelp")} />
         <BottomSheet
@@ -2801,7 +2799,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             onFiles={(files) => setDropNames(files.map((f) => f.name))}
           />
           <Switch
-            size="sm"
             labelSide="end"
             label={t("globals.dropzoneBusy")}
             checked={dropBusy}
@@ -3079,7 +3076,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </div>
         <Switch
-          size="sm"
           labelSide="end"
           label={t("globals.appBarScrolled")}
           checked={appBarScrolled}
@@ -3307,7 +3303,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="shell">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Switch
-            size="sm"
             labelSide="end"
             label={t("globals.shellNavMode")}
             checked={shellNavOpen}
@@ -3322,7 +3317,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }}
           />
           <Switch
-            size="sm"
             labelSide="end"
             label={t("globals.shellAsideOpen")}
             checked={shellAsideOpen}
@@ -3674,7 +3668,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
             <ControlRow label={t("globals.rhythmRowContent")}>
               <Switch
-                size="sm"
                 labelSide="end"
                 label={t("globals.rhythmShowIcon")}
                 checked={rhythmShowIcon}
@@ -3682,7 +3675,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 disabled={rhythmDisabled}
               />
               <Switch
-                size="sm"
                 labelSide="end"
                 label={t("globals.rhythmShowActions")}
                 checked={rhythmShowActions}
@@ -3692,7 +3684,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlRow>
             <ControlRow label={t("globals.rhythmRowBehavior")}>
               <Switch
-                size="sm"
                 labelSide="end"
                 label={t("globals.rhythmDisabled")}
                 checked={rhythmDisabled}

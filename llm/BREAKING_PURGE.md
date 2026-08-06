@@ -62,6 +62,7 @@ Anything else must be deleted or kept as a non-exported internal.
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |
 | `Counter` | `Input type="number"` (+ steppers if needed in the app). |
 | `ToggleControl` | Prefer `Checkbox` / `Radio` / `Switch` / `ToggleGroup`. |
+| `Switch` `size="md"` / `size="sm"` / `SwitchSize` | Dense track only (former sm ~39×24). Drop the `size` prop; `--fynns-toggle-*-sm` keys removed — use `--fynns-toggle-track-*` etc. |
 | `*Banner` from Alert (`InfoBanner`, `WarningBanner`, …) | Use `InlineAlert` for in-panel severity, or chrome `Banner`. Do not revive `*Banner` names. |
 | `ListGroup*` / `ListRow*` / `NavItem*` / `ShellNav*` | Deleted — rebuild with `List`/`ListItem`, `Navigation*` chrome, or app layout. |
 | `Panel` / `PanelCard` / `ScrollArea` | Compose with `Surface` (bordered / tonal well, any children), `Card`, `ClippedNavShell` + `EndAside` (destination + inspector), `Drawer` for modal content sheets, app flex/grid, and `fynns-scroll`. Do not revive the old `Panel` / `PanelCard` / `ScrollArea` names. |

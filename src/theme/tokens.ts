@@ -326,33 +326,24 @@ export const Z_TOKENS = {
 } as const;
 
 /**
- * Toggle/switch geometry (M3 Switch proportions at 16px rem).
- * Track 52×32dp; handle morphs modestly (18→22dp) so on still reads larger
- * than off, without the full M3 16→24 jump.
- * Outline 2dp at md; sm uses 1.5px so the stroke does not look heavier.
+ * Toggle/switch geometry (dense Switch only — former `sm` proportions).
+ * Track ~39×24dp; handle morphs modestly. Outline 1.5px.
  * `track-pad-*` = padding-box inset (outer gap ≈ pad + outline).
+ * The large M3 md ladder (52×32) was removed — do not reintroduce `*-sm`
+ * dual keys or a Switch `size` prop.
  * `--fynns-toggle-<key>`.
  */
 export const TOGGLE_TOKENS = {
-  "track-w": "3.25rem",
-  "track-h": "2rem",
-  /** Unselected handle (18dp). */
-  thumb: "1.125rem",
-  /** Selected handle (22dp). */
-  "thumb-checked": "1.375rem",
+  "track-w": "2.4375rem",
+  "track-h": "1.5rem",
+  /** Unselected handle. */
+  thumb: "0.875rem",
+  /** Selected handle. */
+  "thumb-checked": "1.0625rem",
   /** Padding-box inset; pairs with `track-outline` for outer-edge symmetry. */
-  "track-pad-inline": "0.3125rem",
-  "track-pad-checked": "0.1875rem",
-  /** M3 `track-outline-width` = 2dp. */
-  "track-outline": "2px",
-  /** Proportional outline for `size="sm"` (~75% track). */
-  "track-outline-sm": "1.5px",
-  "track-w-sm": "2.4375rem",
-  "track-h-sm": "1.5rem",
-  "thumb-sm": "0.875rem",
-  "thumb-checked-sm": "1.0625rem",
-  "track-pad-inline-sm": "0.21875rem",
-  "track-pad-checked-sm": "0.125rem",
+  "track-pad-inline": "0.21875rem",
+  "track-pad-checked": "0.125rem",
+  "track-outline": "1.5px",
 } as const;
 
 /**
@@ -1042,6 +1033,13 @@ export const LAYOUT_TOKENS = {
    * here — that 4dp token is for SearchBar / Composer IconButton flush.
    */
   "field-pad-inline": "var(--fynns-space-md)",
+  /**
+   * Block pad for multiline form fields (`Textarea`). Same default as
+   * `field-pad-inline` (12dp). Single-line `Input` keeps a tighter
+   * `space-25` / `sm` zero block pad to fit 40dp / 32dp control height —
+   * do **not** apply this to `Input`.
+   */
+  "field-pad-block": "var(--fynns-space-md)",
   /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than

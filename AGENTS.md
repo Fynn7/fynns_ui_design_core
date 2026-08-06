@@ -275,11 +275,14 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `elevated` / `danger` (filled like primary: danger surface + on-accent ink);
   sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
-  floating label — not full M3 Text Field anatomy), **FieldHeader** /
+  floating label — not full M3 Text Field anatomy; Textarea block pad →
+  `--fynns-layout-field-pad-block`), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
-  supporting/error text), OtpInput, SearchBar / SearchBarResult, Switch,
+  supporting/error text), OtpInput, SearchBar / SearchBarResult, Switch
+  (dense track only — no `size` / no former md 52×32; `labelSide`
+  `start`|`end`),
   Checkbox, Radio,
   Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
@@ -649,10 +652,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
   — do **not** put strip pad on the Send side. ChatComposer **outer** form
   inset also uses `strip-pad-inline`.
-  **Form fields** (`Input` / `.fynns-field-shell` with optional leading):
-  `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). Do **not**
-  reuse capsule chrome for form affix shells — that 4dp token is SearchBar /
-  Composer IconButton flush only. Affix → text gap uses
+  **Form fields:** `Input` / `.fynns-field-shell` →
+  `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). `Textarea` →
+  same inline recipe **plus** `--fynns-layout-field-pad-block` (12dp) so
+  multiline copy is not flush to the top/bottom — do **not** let
+  `.fynns-input--sm`’s zero block pad (32dp single-line Input) apply to
+  Textarea. Do **not** reuse capsule chrome for form affix shells — that 4dp
+  token is SearchBar / Composer IconButton flush only. Affix → text gap uses
   `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body

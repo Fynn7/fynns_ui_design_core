@@ -117,6 +117,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.fieldPadInlineHint",
     max: 32,
   },
+  "field-pad-block": {
+    labelKey: "layoutChrome.fieldPadBlock",
+    hintKey: "layoutChrome.fieldPadBlockHint",
+    max: 32,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",
