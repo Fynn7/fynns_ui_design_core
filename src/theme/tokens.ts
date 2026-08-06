@@ -725,18 +725,24 @@ export const CHAT_TOKENS = {
    */
   "composer-max-height": "13rem",
   /**
-   * Shell pad — start/end share one token for the capsule chrome next to
-   * IconButtons (`capsule-chrome-pad-inline`, ~4dp — ChatGPT Send/mic flush).
-   * Collapsed, when there is **no** leading control, CSS adds start pad on
-   * the textarea so text lands at `--fynns-layout-strip-pad-inline`.
-   * Expanded textarea uses strip breath on both sides (tools are in the
-   * footer). Do **not** put `strip-pad-inline` on the shell end.
+   * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
+   * Expanded uses `composer-expanded-pad-*` (Cursor ~12dp breath). When
+   * collapsed with **no** leading, CSS adds start pad on the textarea so
+   * text lands at `--fynns-layout-strip-pad-inline`.
    */
   "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
-  /** Block pad: 3dp×2 + 32dp line + hairline → ~40dp shell (= Input offset). */
+  /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
   "composer-pad-block": "0.1875rem",
-  /** ChatGPT composer control cluster `gap-1` (4px). */
+  /**
+   * Expanded shell pad (Cursor multiline ~12–16dp). Owns the inset for both
+   * textarea and bottom toolbar so + / Send share one vertical edge.
+   */
+  "composer-expanded-pad-inline": "0.75rem",
+  "composer-expanded-pad-block": "0.75rem",
+  /** Collapsed control cluster gap (4px). */
   "composer-gap": "0.25rem",
+  /** Expanded gap between full-width text and bottom toolbar (Cursor ~8–12dp). */
+  "composer-expanded-gap": "0.5rem",
   /**
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
@@ -752,11 +758,15 @@ export const CHAT_TOKENS = {
   "composer-inset-block": "0.75rem",
   "composer-offset": "0.5rem",
   /**
-   * Collapsed textarea text line (32dp). With pad-block → ~40dp shell
-   * (Input density). Grows with wrap / Shift+Enter → `data-expanded`
-   * bottom toolbar.
+   * Collapsed control-row floor / min-height (32dp) — **not** multiline
+   * typography. With pad-block → ~40dp shell (Input density).
    */
   "composer-line-height": "2rem",
+  /**
+   * Textarea typography line-height (22dp). Always used for glyph metrics;
+   * collapsed centers this shorter line in the 32dp control row via pad.
+   */
+  "composer-text-line-height": "1.375rem",
   /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
   "scroll-fab-inset": "0.75rem",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
