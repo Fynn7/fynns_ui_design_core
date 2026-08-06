@@ -8061,6 +8061,8 @@ a.fynns-breadcrumb-link:visited {
   white-space: pre;
   overflow-wrap: normal;
   word-break: normal;
+  /* Keep content-box width aligned when the textarea shows a scrollbar. */
+  scrollbar-gutter: stable;
 }
 
 .fynns-code-block-highlight {
@@ -8112,7 +8114,8 @@ a.fynns-breadcrumb-link:visited {
   cursor: not-allowed;
 }
 
-.fynns-code-block--editable:focus-within {
+/* Ring only while the editor is focused — not when Copy in the head is focused. */
+.fynns-code-block--editable:has(.fynns-code-block-input:focus-visible) {
   outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
   outline-offset: calc(-1 * var(--fynns-focus-ring-width));
 }
