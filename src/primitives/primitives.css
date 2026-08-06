@@ -8478,12 +8478,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-message-cursor {
   display: inline-block;
   width: var(--fynns-chatmessage-cursor-width);
-  /*
-   * Cap-height bar (not `1em`): the em square sits above x-height and looks
-   * like an oversized pipe next to lowercase streaming glyphs.
-   */
-  height: 0.8em;
-  height: 1cap;
+  /* Full em of body face — Cursor / native I-beam (was 1cap, too short). */
+  height: var(--fynns-chatmessage-cursor-height);
   margin-inline-start: 0.1em;
   vertical-align: baseline;
   border-radius: var(--fynns-radius-2xs);

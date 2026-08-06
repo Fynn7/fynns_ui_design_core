@@ -635,10 +635,12 @@ export const CHATMESSAGE_TOKENS = {
   "name-size": "0.75rem",
   "actions-gap": "0",
   /**
-   * Streaming caret thickness (2dp). Height is CSS `1cap` (fallback `0.8em`)
-   * on `.fynns-chat-message-cursor` — not a token — so it tracks the body face.
+   * Streaming caret thickness (2dp). Height: `cursor-height` (~1em body face —
+   * Cursor / native I-beam; was `1cap` and read too short).
    */
   "cursor-width": "0.125rem",
+  /** Streaming caret length — full em square of `body-size` (not 1cap). */
+  "cursor-height": "1em",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
   "error-gap": "0.75rem",
   /**

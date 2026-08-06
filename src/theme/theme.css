@@ -296,6 +296,7 @@
   --fynns-chatmessage-name-size: 0.75rem;
   --fynns-chatmessage-actions-gap: 0;
   --fynns-chatmessage-cursor-width: 0.125rem;
+  --fynns-chatmessage-cursor-height: 1em;
   --fynns-chatmessage-error-gap: 0.75rem;
   --fynns-chatmessage-code-pad-block: 0.15rem;
   --fynns-chatmessage-code-pad-inline: 0.3rem;
