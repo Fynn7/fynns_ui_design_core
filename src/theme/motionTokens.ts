@@ -44,11 +44,8 @@ export const DURATION_TOKENS = {
   flyout: "160ms",
   base: "240ms",
   slow: "360ms",
-  pointer: "420ms",
-  "loop-pulse": "450ms",
   "loading-spin": "750ms",
   "presentation-hint": "1200ms",
-  "loading-skeleton": "1250ms",
   "reduced-motion-spin": "2200ms",
 } as const;
 

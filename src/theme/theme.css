@@ -51,8 +51,6 @@
   --fynns-color-flyout-item-hover: rgba(255, 255, 255, 0.08);
   --fynns-color-toggle-track: rgba(255, 255, 255, 0.06);
   --fynns-color-toggle-track-hover: rgba(255, 255, 255, 0.1);
-  --fynns-color-skeleton-base: rgba(255, 255, 255, 0.06);
-  --fynns-color-skeleton-sheen: rgba(255, 255, 255, 0.14);
   --fynns-color-chat-user-bubble: #0c3237;
   --fynns-color-chat-inline-code-bg: color-mix(in srgb, var(--fynns-color-text) var(--fynns-chatmessage-code-user-bg-mix), transparent);
   --fynns-space-1: 0.25rem;
@@ -176,11 +174,8 @@
   --fynns-duration-flyout: 160ms;
   --fynns-duration-base: 240ms;
   --fynns-duration-slow: 360ms;
-  --fynns-duration-pointer: 420ms;
-  --fynns-duration-loop-pulse: 450ms;
   --fynns-duration-loading-spin: 750ms;
   --fynns-duration-presentation-hint: 1200ms;
-  --fynns-duration-loading-skeleton: 1250ms;
   --fynns-duration-reduced-motion-spin: 2200ms;
   --fynns-ease-standard: ease;
   --fynns-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
@@ -191,7 +186,6 @@
   --fynns-toggle-track-h: 2rem;
   --fynns-toggle-thumb: 1.125rem;
   --fynns-toggle-thumb-checked: 1.375rem;
-  --fynns-toggle-thumb-shift: 1.25rem;
   --fynns-toggle-track-pad-inline: 0.3125rem;
   --fynns-toggle-track-pad-checked: 0.1875rem;
   --fynns-toggle-track-outline: 2px;
@@ -202,7 +196,6 @@
   --fynns-toggle-thumb-checked-sm: 1.0625rem;
   --fynns-toggle-track-pad-inline-sm: 0.21875rem;
   --fynns-toggle-track-pad-checked-sm: 0.125rem;
-  --fynns-toggle-margin-top: 0.08em;
   --fynns-selection-box-size: 1.125rem;
   --fynns-selection-box-outline: 2px;
   --fynns-selection-radio-size: 1.25rem;
@@ -355,7 +348,6 @@
   --fynns-datepicker-pad-inline: 0.75rem;
   --fynns-datepicker-pad-block: 0.75rem;
   --fynns-datepicker-header-min-height: 3rem;
-  --fynns-datepicker-weekday-size: 2.5rem;
   --fynns-datepicker-weekday-font: 0.75rem;
   --fynns-datepicker-gap: 0.25rem;
   --fynns-timepicker-pad-inline: 0.75rem;
@@ -470,9 +462,6 @@
   --fynns-layout-snackbar-dismiss-size: 2rem;
   --fynns-layout-snackbar-enter-offset: 0.5rem;
   --fynns-layout-snackbar-inset: 1rem;
-  --fynns-layout-command-palette-width: min(100%, 34rem);
-  --fynns-layout-command-palette-max-height: min(70vh, 28rem);
-  --fynns-layout-command-palette-top-padding: 12vh;
   --fynns-layout-control-row-label: 7.5rem;
   --fynns-layout-control-stack-gap: 0.75rem;
   --fynns-layout-control-row-gap: 0.25rem;
@@ -562,8 +551,6 @@
   --fynns-color-flyout-item-hover: rgba(0, 0, 0, 0.05);
   --fynns-color-toggle-track: rgba(0, 0, 0, 0.08);
   --fynns-color-toggle-track-hover: rgba(0, 0, 0, 0.12);
-  --fynns-color-skeleton-base: rgba(0, 0, 0, 0.06);
-  --fynns-color-skeleton-sheen: rgba(0, 0, 0, 0.12);
   --fynns-color-chat-user-bubble: #e8f0ee;
   --fynns-chatmessage-code-user-bg-mix: 10%;
   --fynns-shadow-none: none;

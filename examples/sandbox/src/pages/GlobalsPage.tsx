@@ -4,6 +4,7 @@ import {
   ArrowLeftIcon,
   Avatar,
   AvatarGroup,
+  Badge,
   BadgedBox,
   Banner,
   BarChartIcon,
@@ -14,6 +15,10 @@ import {
   BusyScrim,
   Button,
   useBusyTask,
+  afterNextPaint,
+  yieldToMain,
+  runBusyTask,
+  registerHighlightLanguage,
   Pagination,
   Card,
   Surface,
@@ -23,6 +28,8 @@ import {
   ChipSet,
   CircularProgress,
   Chat,
+  ChatCitationChip,
+  ChatCitations,
   ChatComposer,
   ChatMessage,
   ChatScrollToBottom,
@@ -43,6 +50,8 @@ import {
   DateRangePickerDialog,
   TimePicker,
   TimePickerDialog,
+  formatTimeValue,
+  parseTimeValue,
   Divider,
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -57,10 +66,12 @@ import {
   FabMenu,
   FabMenuItem,
   FieldBlock,
+  FieldHeader,
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
   Dialog,
+  DialogShell,
   ConfirmDialog,
   Drawer,
   IconButton,
@@ -125,6 +136,7 @@ import {
 import { useEffect, useRef, useState, Fragment, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { TokenList } from "../components/TokenList";
 import { splitCaptionByBackticks } from "../utils/captionSegments";
 import {
   GLOBALS_CATEGORY_TITLE_KEY,
@@ -214,13 +226,16 @@ const GSC_DEMO_PROFILE = {
 };
 
 const GSC_DEMO_CODE = [
-  "# sample GSC-shaped DSL (consumer highlightProfile)",
+  "# sample GSC-shaped DSL (registerHighlightLanguage)",
   "setvolume $vol 0.8",
   "if true",
   "  setrotation 15 0 0",
   "endif",
   "unknownCmd 1 2",
 ].join("\n");
+
+/** Wave 3: live registry path — CodeBlock resolves language="gsc" via this. */
+registerHighlightLanguage("gsc", GSC_DEMO_PROFILE);
 
 /** `--fynns-code-*` roles shown next to CodeBlock demos (swatches, not inspectors). */
 const CODE_TOKEN_KEYS = [
@@ -293,17 +308,31 @@ function GlobalsCategory({
   );
 }
 
-/** Live demo of `useOverflowBounds` (content mode + ellipsis truncation). */
+/** Live demo of `useOverflowBounds` (content ellipsis + bounds vs parent). */
 function OverflowBoundsDemo() {
   const { t } = useLocale();
   const lineRef = useRef<HTMLDivElement>(null);
+  const boundsParentRef = useRef<HTMLDivElement>(null);
+  const boundsChildRef = useRef<HTMLDivElement>(null);
   const overflow = useOverflowBounds(lineRef, "viewport", { mode: "content" });
+  const boundsOverflow = useOverflowBounds(boundsChildRef, boundsParentRef, {
+    mode: "bounds",
+  });
   const edges =
     [
       overflow.edges.left ? "L" : null,
       overflow.edges.right ? "R" : null,
       overflow.edges.top ? "T" : null,
       overflow.edges.bottom ? "B" : null,
+    ]
+      .filter(Boolean)
+      .join("") || "—";
+  const boundsEdges =
+    [
+      boundsOverflow.edges.left ? "L" : null,
+      boundsOverflow.edges.right ? "R" : null,
+      boundsOverflow.edges.top ? "T" : null,
+      boundsOverflow.edges.bottom ? "B" : null,
     ]
       .filter(Boolean)
       .join("") || "—";
@@ -318,6 +347,18 @@ function OverflowBoundsDemo() {
           overflows: overflow.overflows ? "true" : "false",
           edges,
           right: String(Math.round(overflow.delta.right)),
+        })}
+      />
+      <div ref={boundsParentRef} className="sandbox-overflow-bounds-parent">
+        <div ref={boundsChildRef} className="sandbox-overflow-bounds-child">
+          {t("globals.overflowBoundsSample")}
+        </div>
+      </div>
+      <SandboxHelp
+        text={t("globals.overflowBoundsHelp", {
+          overflows: boundsOverflow.overflows ? "true" : "false",
+          edges: boundsEdges,
+          right: String(Math.round(boundsOverflow.delta.right)),
         })}
       />
     </div>
@@ -355,9 +396,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [page, setPage] = useState(3);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetHalfOpen, setSheetHalfOpen] = useState(false);
+  const [sheetFullOpen, setSheetFullOpen] = useState(false);
   const [appBarScrolled, setAppBarScrolled] = useState(false);
   const [railId, setRailId] = useState<RailId>("home");
+  const [railLabelVisibility, setRailLabelVisibility] = useState<
+    "labeled" | "selected" | "unlabeled"
+  >("labeled");
   const [barId, setBarId] = useState<"home" | "search" | "charts" | "all">("home");
+  const [barLabelVisibility, setBarLabelVisibility] = useState<
+    "labeled" | "selected" | "unlabeled"
+  >("labeled");
   const [drawerId, setDrawerId] = useState<"inbox" | "sent" | "drafts" | "settings">(
     "inbox",
   );
@@ -370,6 +419,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
+  const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
@@ -382,20 +432,31 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [timeDialogOpen, setTimeDialogOpen] = useState(false);
   const [timeHourCycle, setTimeHourCycle] = useState<"h23" | "h12">("h23");
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselHeroIndex, setCarouselHeroIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
+  const [segmentCompact, setSegmentCompact] = useState<"list" | "grid">("list");
   const [styleMarks, setStyleMarks] = useState<Array<"bold" | "italic">>(["bold"]);
   const [sliderValue, setSliderValue] = useState(40);
   const [autoValue, setAutoValue] = useState("");
+  const [autoObjValue, setAutoObjValue] = useState("");
+  const [selectObjValue, setSelectObjValue] = useState("teal");
   const [otpValue, setOtpValue] = useState("");
+  const [otpShortValue, setOtpShortValue] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [stepperIndex, setStepperIndex] = useState(1);
+  const [stepperVerticalIndex, setStepperVerticalIndex] = useState(0);
   const [dropNames, setDropNames] = useState<string[]>([]);
+  const [dropBusy, setDropBusy] = useState(false);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [busyRegion, setBusyRegion] = useState(false);
+  const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
+  const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
   const busyPaintGood = useBusyTask();
+  const [busyYield, setBusyYield] = useState(false);
+  const [busyRunDirect, setBusyRunDirect] = useState(false);
   const [chatStreaming, setChatStreaming] = useState(false);
   const [chatStreamText, setChatStreamText] = useState("");
   const chatStreamFullRef = useRef("");
@@ -406,20 +467,29 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [shellChatBusy, setShellChatBusy] = useState(false);
   const [shellChatReply, setShellChatReply] = useState("");
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
+  const [dialogShellOpen, setDialogShellOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
     "You translate natural-language requests into structured camera commands.",
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmDisabled, setConfirmDisabled] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
+  const [tabsSmId, setTabsSmId] = useState<"a" | "b" | "c">("a");
   const [textareaValue, setTextareaValue] = useState("");
   const [btnActive, setBtnActive] = useState(false);
+  const [iconBtnActive, setIconBtnActive] = useState(false);
+  const [switchMdOn, setSwitchMdOn] = useState(true);
+  const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
+  const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
   const [menuStarred, setMenuStarred] = useState(true);
   const [menuNotify, setMenuNotify] = useState(false);
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
@@ -431,6 +501,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     const timer = window.setTimeout(() => setBusyScrimOpen(false), 2000);
     return () => window.clearTimeout(timer);
   }, [busyScrimOpen]);
+
+  useEffect(() => {
+    if (!busyScrimDeterminateOpen) return;
+    const timer = window.setTimeout(() => setBusyScrimDeterminateOpen(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [busyScrimDeterminateOpen]);
 
   useEffect(() => {
     if (!chatStreaming) return;
@@ -553,6 +629,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
       <div id="globals-content" className="sandbox-globals-content" tabIndex={-1}>
         <p className="sandbox-globals-lead">{t("globals.lead")}</p>
         <SandboxHelp text={t("globals.skipLinkHelp")} />
+        <GlobalsDemo id="skip-link">
+          <div className="sandbox-skip-link-teach">
+            <SkipLink href="#globals-content" label={t("globals.skipLinkTeach")} />
+          </div>
+          <SandboxHelp text={t("globals.skipLinkTeachHelp")} />
+        </GlobalsDemo>
 
         <div className="sandbox-globals-search">
           <SearchBar
@@ -741,6 +823,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               {t("globals.splitBtnOptionB")}
             </DropdownMenuItem>
           </SplitButton>
+          <SplitButton
+            size="lg"
+            label={t("globals.splitBtnLarge")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() => {}}
+          >
+            <DropdownMenuItem onClick={() => {}}>{t("globals.splitBtnOptionA")}</DropdownMenuItem>
+          </SplitButton>
+          <SplitButton
+            disabled
+            label={t("globals.splitBtnDisabled")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() => {}}
+          >
+            <DropdownMenuItem onClick={() => {}}>{t("globals.splitBtnOptionA")}</DropdownMenuItem>
+          </SplitButton>
+          <SplitButton
+            loading
+            label={t("globals.splitBtnLoading")}
+            menuAriaLabel={t("globals.splitBtnMenuAria")}
+            onMainClick={() => {}}
+          >
+            <DropdownMenuItem onClick={() => {}}>{t("globals.splitBtnOptionA")}</DropdownMenuItem>
+          </SplitButton>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="icon-button">
@@ -778,6 +884,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Tooltip content={t("globals.iconBtnDanger")}>
             <IconButton variant="danger" aria-label={t("globals.iconBtnDanger")}>
               <TrashIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnElevated")}>
+            <IconButton variant="elevated" aria-label={t("globals.iconBtnElevated")}>
+              <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnLoading")}>
+            <IconButton loading aria-label={t("globals.iconBtnLoading")}>
+              <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnDisabled")}>
+            <IconButton disabled aria-label={t("globals.iconBtnDisabled")}>
+              <PlusIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content={t("globals.iconBtnActive")}>
+            <IconButton
+              active={iconBtnActive}
+              aria-label={t("globals.iconBtnActive")}
+              onClick={() => setIconBtnActive((v) => !v)}
+            >
+              <PlusIcon />
             </IconButton>
           </Tooltip>
         </div>
@@ -823,6 +953,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <PlusIcon />
             </Fab>
           </Tooltip>
+          <Tooltip content={t("globals.fabLarge")}>
+            <Fab size="lg" aria-label={t("globals.fabLarge")}>
+              <PlusIcon />
+            </Fab>
+          </Tooltip>
           <Tooltip content={t("globals.fabSecondary")}>
             <Fab variant="secondary" aria-label={t("globals.fabSecondary")}>
               <PlusIcon />
@@ -862,8 +997,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               label={t("globals.fabMenuEdit")}
             />
           </FabMenu>
+          <FabMenu
+            ariaLabel={t("globals.fabMenuAlignOpen")}
+            closeAriaLabel={t("globals.fabMenuClose")}
+            expanded={fabMenuAlignOpen}
+            onExpandedChange={setFabMenuAlignOpen}
+            variant="tertiary"
+            itemVariant="surface"
+            align="start"
+          >
+            <FabMenuItem icon={<FileIcon />} label={t("globals.fabMenuFile")} />
+            <FabMenuItem icon={<FolderOpenIcon />} label={t("globals.fabMenuFolder")} />
+          </FabMenu>
         </div>
         <SandboxHelp text={t("globals.fabHelp")} />
+        <TokenList group="fab" title={t("globals.tokenListFab")} />
+        <TokenList group="fabmenu" title={t("globals.tokenListFab")} />
         </GlobalsDemo>
         <GlobalsDemo id="menu">
         <div className="sandbox-globals-row">
@@ -944,47 +1093,123 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
       >
         <div className="sandbox-globals-row sandbox-globals-row--stack">
         <GlobalsDemo id="input">
-          <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
+            <Input
+              variant="filled"
+              size="sm"
+              leading={<SearchIcon aria-hidden />}
+              placeholder={t("globals.inputFilledPlaceholder")}
+              aria-label={t("globals.inputFilledAria")}
+              supportingText={t("globals.inputFilledSupporting")}
+            />
+            <Input
+              invalid
+              errorText={t("globals.inputError")}
+              placeholder={t("globals.inputInvalidPlaceholder")}
+              aria-label={t("globals.inputInvalidAria")}
+            />
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="select">
-          <Select
-            ariaLabel={t("globals.selectAria")}
-            value="one"
-            options={["one", "two", "three"]}
-            onChange={() => {}}
-          />
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Select
+              ariaLabel={t("globals.selectAria")}
+              value="one"
+              options={["one", "two", "three"]}
+              onChange={() => {}}
+            />
+            <Select
+              ariaLabel={t("globals.selectObjectAria")}
+              value={selectObjValue}
+              options={[
+                { value: "teal", label: t("globals.autocompleteOptTeal") },
+                { value: "cyan", label: t("globals.autocompleteOptCyan") },
+                { value: "blue", label: t("globals.autocompleteOptBlue"), disabled: true },
+              ]}
+              onChange={setSelectObjValue}
+            />
+            <Select
+              disabled
+              ariaLabel={t("globals.selectDisabledAria")}
+              value="one"
+              options={["one", "two"]}
+              onChange={() => {}}
+            />
+            <SandboxHelp text={t("globals.selectHelp")} />
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="autocomplete">
-          <Autocomplete
-            ariaLabel={t("globals.autocompleteAria")}
-            placeholder={t("globals.autocompletePlaceholder")}
-            emptyText={t("globals.autocompleteEmpty")}
-            value={autoValue}
-            onChange={setAutoValue}
-            options={[
-              t("globals.autocompleteOptTeal"),
-              t("globals.autocompleteOptCyan"),
-              t("globals.autocompleteOptBlue"),
-              t("globals.autocompleteOptViolet"),
-              t("globals.autocompleteOptAmber"),
-            ]}
-          />
-          <SandboxHelp
-            text={
-              autoValue
-                ? t("globals.autocompleteSelected", { value: autoValue })
-                : t("globals.autocompleteHelp")
-            }
-          />
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Autocomplete
+              ariaLabel={t("globals.autocompleteAria")}
+              placeholder={t("globals.autocompletePlaceholder")}
+              emptyText={t("globals.autocompleteEmpty")}
+              value={autoValue}
+              onChange={setAutoValue}
+              options={[
+                t("globals.autocompleteOptTeal"),
+                t("globals.autocompleteOptCyan"),
+                t("globals.autocompleteOptBlue"),
+                t("globals.autocompleteOptViolet"),
+                t("globals.autocompleteOptAmber"),
+              ]}
+              supportingText={
+                autoValue
+                  ? t("globals.autocompleteSelected", { value: autoValue })
+                  : t("globals.autocompleteSupporting")
+              }
+            />
+            <Autocomplete
+              ariaLabel={t("globals.autocompleteObjectAria")}
+              placeholder={t("globals.autocompleteObjectPlaceholder")}
+              emptyText={t("globals.autocompleteEmpty")}
+              value={autoObjValue}
+              onChange={setAutoObjValue}
+              options={[
+                { value: "teal", label: t("globals.autocompleteOptTeal") },
+                { value: "cyan", label: t("globals.autocompleteOptCyan") },
+                { value: "blue", label: t("globals.autocompleteOptBlue"), disabled: true },
+              ]}
+              errorText={autoObjValue === "cyan" ? t("globals.autocompleteError") : undefined}
+            />
+            <Autocomplete
+              disabled
+              ariaLabel={t("globals.autocompleteDisabledAria")}
+              value=""
+              onChange={() => {}}
+              options={[t("globals.autocompleteOptTeal")]}
+              placeholder={t("globals.autocompleteDisabledPlaceholder")}
+            />
+            <SandboxHelp text={t("globals.autocompleteHelp")} />
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="otp">
-          <OtpInput
-            value={otpValue}
-            onChange={setOtpValue}
-            ariaLabel={t("globals.otpAria")}
-            supportingText={t("globals.otpSupporting")}
-          />
-          <SandboxHelp text={t("globals.otpHelp")} />
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <OtpInput
+              value={otpValue}
+              onChange={setOtpValue}
+              ariaLabel={t("globals.otpAria")}
+              supportingText={t("globals.otpSupporting")}
+            />
+            <OtpInput
+              length={4}
+              value={otpShortValue}
+              onChange={setOtpShortValue}
+              ariaLabel={t("globals.otpShortAria")}
+              errorText={t("globals.otpError")}
+              invalid
+            />
+            <OtpInput
+              length={4}
+              value="12"
+              onChange={() => {}}
+              disabled
+              ariaLabel={t("globals.otpDisabledAria")}
+              supportingText={t("globals.otpDisabledSupporting")}
+            />
+            <SandboxHelp text={t("globals.otpHelp")} />
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="password">
           <Input
@@ -1018,15 +1243,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.passwordHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="textarea">
-          <Textarea
-            value={textareaValue}
-            onChange={(event) => setTextareaValue(event.target.value)}
-            placeholder={t("globals.textareaPlaceholder")}
-            aria-label={t("globals.textareaAria")}
-            supportingText={t("globals.textareaSupporting")}
-            rows={4}
-          />
-          <SandboxHelp text={t("globals.textareaHelp")} />
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Textarea
+              value={textareaValue}
+              onChange={(event) => setTextareaValue(event.target.value)}
+              placeholder={t("globals.textareaPlaceholder")}
+              aria-label={t("globals.textareaAria")}
+              supportingText={t("globals.textareaSupporting")}
+              rows={4}
+            />
+            <Textarea
+              variant="filled"
+              size="sm"
+              defaultValue=""
+              placeholder={t("globals.textareaFilledPlaceholder")}
+              aria-label={t("globals.textareaFilledAria")}
+              errorText={t("globals.textareaError")}
+              rows={3}
+            />
+            <SandboxHelp text={t("globals.textareaHelp")} />
+          </div>
         </GlobalsDemo>
         </div>
       </GlobalsCategory>
@@ -1055,6 +1291,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               : t("globals.tabsPaneBatch")
           }
         />
+        <Tabs
+          size="sm"
+          ariaLabel={t("globals.tabsSmAria")}
+          tabs={[
+            { id: "a", label: t("globals.tabsSmA") },
+            { id: "b", label: t("globals.tabsSmB") },
+            { id: "c", label: t("globals.tabsSmDisabled"), disabled: true },
+          ]}
+          activeId={tabsSmId}
+          onChange={setTabsSmId}
+        />
         <SandboxHelp text={t("globals.tabsHelp")} />
         </GlobalsDemo>
       </GlobalsCategory>
@@ -1073,6 +1320,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={t("globals.switchPill")}
             checked={switchOn}
             onCheckedChange={setSwitchOn}
+          />
+          <Switch
+            labelSide="start"
+            label={t("globals.switchMdStart")}
+            checked={switchMdOn}
+            onCheckedChange={setSwitchMdOn}
           />
         </div>
         </GlobalsDemo>
@@ -1095,6 +1348,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               setCheckMixed(false);
             }}
           />
+          <Checkbox label={t("globals.checkboxInvalid")} invalid checked={false} onCheckedChange={() => {}} />
+          <Checkbox
+            label={t("globals.checkboxDisabled")}
+            disabled
+            checked
+            onCheckedChange={() => {}}
+          />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="radio">
@@ -1113,6 +1373,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               checked={radioValue === "b"}
               onCheckedChange={() => setRadioValue("b")}
             />
+            <Radio
+              name="sandbox-globals-radio-invalid"
+              value="bad"
+              label={t("globals.radioInvalid")}
+              invalid
+              checked={false}
+              onCheckedChange={() => {}}
+            />
+            <Radio
+              name="sandbox-globals-radio-disabled"
+              value="off"
+              label={t("globals.radioDisabled")}
+              disabled
+              checked
+              onCheckedChange={() => {}}
+            />
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="chip">
@@ -1130,6 +1406,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Chip>
             <Chip variant="suggestion" onClick={() => {}}>
               {t("globals.chipSuggestion")}
+            </Chip>
+            <Chip leadingIcon={<SparklesIcon aria-hidden />} onClick={() => {}}>
+              {t("globals.chipLeading")}
+            </Chip>
+            <Chip trailingIcon={<ChevronRightIcon aria-hidden />} onClick={() => {}}>
+              {t("globals.chipTrailing")}
             </Chip>
             {inputChips.map((name) => (
               <Chip
@@ -1168,6 +1450,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ]}
           />
           <SandboxHelp text={t("globals.segmentedMultiHelp")} />
+          <ToggleGroup
+            size="compact"
+            showCheck={false}
+            ariaLabel={t("globals.segmentedCompactAria")}
+            value={segmentCompact}
+            onChange={setSegmentCompact}
+            options={[
+              { value: "list", label: t("globals.segmentedList"), icon: <LayoutGridIcon aria-hidden /> },
+              { value: "grid", label: t("globals.segmentedGrid"), icon: <BarChartIcon aria-hidden /> },
+            ]}
+          />
+          <SandboxHelp text={t("globals.segmentedCompactHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="slider">
@@ -1403,6 +1697,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </div>
           <SandboxHelp text={t("globals.timeHelp")} />
+          <SandboxHelp
+            text={(() => {
+              const parts = parseTimeValue(pickedTime);
+              return parts
+                ? `formatTimeValue/parseTimeValue: ${JSON.stringify(parts)} → ${formatTimeValue(parts.hours, parts.minutes)}`
+                : "formatTimeValue/parseTimeValue: —";
+            })()}
+          />
         </div>
         <TimePickerDialog
           open={timeDialogOpen}
@@ -1435,6 +1737,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
+          <SandboxHelp as="span" text={t("globals.progressLinearNoStop")} />
+          <LinearProgress
+            value={0.42}
+            stopIndicator={false}
+            label={t("globals.progressLinearNoStopAria")}
+          />
           <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
           <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
@@ -1445,6 +1753,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="banner">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+        {bannerDefaultVisible ? (
+          <div className="sandbox-globals-banner">
+            <Banner
+              variant="default"
+              text={t("globals.bannerDefaultText")}
+              supportingText={t("globals.bannerDefaultSupporting")}
+            />
+          </div>
+        ) : null}
         {bannerVisible ? (
           <div className="sandbox-globals-banner">
             <Banner
@@ -1466,7 +1784,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.bannerShow")}
           </Button>
         )}
+        <Button size="sm" variant="ghost" onClick={() => setBannerDefaultVisible((v) => !v)}>
+          {bannerDefaultVisible ? t("globals.bannerHideDefault") : t("globals.bannerShowDefault")}
+        </Button>
         <SandboxHelp text={t("globals.bannerHelp")} />
+        <TokenList group="banner" title={t("globals.tokenListBanner")} />
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="inline-alert">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
@@ -1681,6 +2004,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         <SandboxHelp text={t("globals.chatHelp")} />
+        <TokenList group="chat" title={t("globals.tokenListChat")} />
+        <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="chat-citations">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ChatCitationChip
+            citation={{
+              id: "inline-reuters",
+              publisher: t("globals.chatCiteReuters"),
+              href: "https://www.reuters.com/",
+              title: t("globals.chatCiteReutersTitle"),
+              snippet: t("globals.chatCiteReutersSnippet"),
+            }}
+          />
+          <ChatCitations
+            label={t("globals.chatCitationsLabel")}
+            visibleCount={2}
+            citations={[
+              {
+                id: "s1",
+                publisher: t("globals.chatCiteReuters"),
+                href: "https://www.reuters.com/",
+                title: t("globals.chatCiteReutersTitle"),
+                snippet: t("globals.chatCiteReutersSnippet"),
+              },
+              {
+                id: "s2",
+                publisher: t("globals.chatCiteAp"),
+                href: "https://apnews.com/",
+                title: t("globals.chatCiteApTitle"),
+                snippet: t("globals.chatCiteApSnippet"),
+              },
+              {
+                id: "s3",
+                publisher: t("globals.chatCiteBbc"),
+                href: "https://www.bbc.com/news",
+                title: t("globals.chatCiteBbcTitle"),
+                snippet: t("globals.chatCiteBbcSnippet"),
+              },
+            ]}
+          />
+          <SandboxHelp text={t("globals.chatCitationsAnatomyHelp")} />
+        </div>
         </GlobalsDemo>
       </GlobalsCategory>
 
@@ -1714,6 +2080,24 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </CarouselItem>
           </Carousel>
           <SandboxHelp text={t("globals.carouselHelp")} />
+          <Carousel
+            ariaLabel={t("globals.carouselHeroAria")}
+            variant="hero"
+            index={carouselHeroIndex}
+            onIndexChange={setCarouselHeroIndex}
+            prevAriaLabel={t("globals.carouselPrev")}
+            nextAriaLabel={t("globals.carouselNext")}
+          >
+            <CarouselItem label={t("globals.carouselHeroSlide1")}>
+              <strong>{t("globals.carouselHeroSlide1")}</strong>
+              <SandboxHelp as="span" text={t("globals.carouselHeroSlide1Body")} />
+            </CarouselItem>
+            <CarouselItem label={t("globals.carouselHeroSlide2")}>
+              <strong>{t("globals.carouselHeroSlide2")}</strong>
+              <SandboxHelp as="span" text={t("globals.carouselHeroSlide2Body")} />
+            </CarouselItem>
+          </Carousel>
+          <SandboxHelp text={t("globals.carouselHeroHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="avatar">
@@ -1759,6 +2143,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
         </GlobalsDemo>
+        <GlobalsDemo id="badge">
+        <div className="sandbox-globals-row" style={{ alignItems: "center", flexWrap: "wrap" }}>
+          <Badge variant="neutral">neutral</Badge>
+          <Badge variant="accent">accent</Badge>
+          <Badge variant="success">success</Badge>
+          <Badge variant="warning">warning</Badge>
+          <Badge variant="danger">danger</Badge>
+          <Badge variant="info">info</Badge>
+          <Badge size="sm" variant="accent" icon={<InfoIcon aria-hidden />}>
+            sm
+          </Badge>
+        </div>
+        <SandboxHelp text={t("globals.badgeHelp")} />
+        </GlobalsDemo>
         <GlobalsDemo id="list">
         <div className="sandbox-globals-list">
           <List aria-label={t("globals.listAria")}>
@@ -1795,6 +2193,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               supportingText={t("globals.listStaticSupporting")}
               leading={<SettingsIcon />}
             />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listDisabled")}
+              supportingText={t("globals.listDisabledSupporting")}
+              leading={<ArchiveIcon />}
+              disabled
+              onClick={() => {}}
+            />
           </List>
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
@@ -1805,6 +2211,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Divider />
           <SandboxHelp as="span" text={t("globals.dividerInset")} />
           <Divider inset />
+          <SandboxHelp as="span" text={t("globals.dividerInsetStart")} />
+          <Divider insetStart />
+          <SandboxHelp as="span" text={t("globals.dividerInsetEnd")} />
+          <Divider insetEnd />
           <div
             className="sandbox-globals-row"
             style={{ alignItems: "stretch", height: "var(--fynns-space-2xl)" }}
@@ -1851,41 +2261,87 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Button size="sm">{t("globals.surfaceAction")}</Button>
             </div>
           </Surface>
-          <Surface
-            style={{
-              height: "7.5rem",
-              maxWidth: "24rem",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "var(--fynns-color-surface-head)",
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                color: "var(--fynns-color-text-muted)",
-                fontSize: "var(--fynns-font-size-sm)",
-              }}
-            >
-              {t("globals.surfacePreviewLabel")}
-            </p>
-          </Surface>
+          <div className="sandbox-globals-row" style={{ alignItems: "stretch", flexWrap: "wrap" }}>
+            <Surface variant="outlined" padded style={{ minWidth: "8rem" }}>
+              <SandboxHelp as="span" text={t("globals.surfaceOutlined")} />
+            </Surface>
+            <Surface variant="filled" padded style={{ minWidth: "8rem" }}>
+              <SandboxHelp as="span" text={t("globals.surfaceFilled")} />
+            </Surface>
+            <Surface variant="elevated" padded style={{ minWidth: "8rem" }}>
+              <SandboxHelp as="span" text={t("globals.surfaceElevated")} />
+            </Surface>
+          </div>
+          <div className="sandbox-surface-fill-host">
+            <Surface fill variant="filled" style={{ alignItems: "center", justifyContent: "center" }}>
+              <p
+                style={{
+                  margin: 0,
+                  color: "var(--fynns-color-text-muted)",
+                  fontSize: "var(--fynns-font-size-sm)",
+                }}
+              >
+                {t("globals.surfaceFillLabel")}
+              </p>
+            </Surface>
+          </div>
           <SandboxHelp text={t("globals.surfaceHelp")} />
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="field-header">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <FieldHeader
+            label={t("globals.fieldHeaderLabel")}
+            htmlFor="sandbox-field-header-demo"
+            actions={
+              <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                  <UndoIcon />
+                </IconButton>
+              </Tooltip>
+            }
+          />
+          <Input
+            id="sandbox-field-header-demo"
+            placeholder={t("globals.fieldHeaderPlaceholder")}
+            aria-label={t("globals.fieldHeaderLabel")}
+          />
+          <SandboxHelp text={t("globals.fieldHeaderHelp")} />
+        </div>
+        </GlobalsDemo>
         <GlobalsDemo id="collapsible">
-        <Collapsible
-          title={t("globals.collapsible")}
-          icon={<FolderOpenIcon aria-hidden />}
-          defaultOpen
-        >
-          <SandboxHelp text={t("globals.collapsibleHelp")} />
-        </Collapsible>
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Collapsible
+            title={t("globals.collapsible")}
+            icon={<FolderOpenIcon aria-hidden />}
+            open={collapsibleOpen}
+            onOpenChange={setCollapsibleOpen}
+            actions={
+              <Tooltip content={t("globals.collapsibleActionTip")}>
+                <IconButton size="sm" aria-label={t("globals.collapsibleActionTip")}>
+                  <SettingsIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            }
+          >
+            <SandboxHelp text={t("globals.collapsibleBody")} />
+          </Collapsible>
+          <SandboxHelp text={t("globals.collapsibleHelpPreview")} />
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="overlays">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Button size="sm" onClick={() => setSheetOpen(true)}>
             {t("globals.sheetOpen")}
+          </Button>
+          <Button size="sm" onClick={() => setSheetHalfOpen(true)}>
+            {t("globals.sheetHalfOpen")}
+          </Button>
+          <Button size="sm" onClick={() => setSheetFullOpen(true)}>
+            {t("globals.sheetFullOpen")}
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => setDialogShellOpen(true)}>
+            {t("globals.dialogShellOpen")}
           </Button>
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
@@ -1899,6 +2355,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" variant="tonal" onClick={() => setSideDrawerOpen(true)}>
             {t("globals.drawerOpen")}
           </Button>
+          <Button size="sm" variant="tonal" onClick={() => setLeftDrawerOpen(true)}>
+            {t("globals.drawerLeftOpen")}
+          </Button>
+        </div>
+        <div className="sandbox-globals-row" style={{ alignItems: "center", flexWrap: "wrap" }}>
+          <Switch size="sm" labelSide="end" label={t("globals.confirmLoading")} checked={confirmLoading} onCheckedChange={setConfirmLoading} />
+          <Switch size="sm" labelSide="end" label={t("globals.confirmDisabled")} checked={confirmDisabled} onCheckedChange={setConfirmDisabled} />
         </div>
         <SandboxHelp text={t("globals.nestedDialogHelp")} />
         <BottomSheet
@@ -1914,6 +2377,39 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         >
           <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
         </BottomSheet>
+        <BottomSheet
+          open={sheetHalfOpen}
+          onClose={() => setSheetHalfOpen(false)}
+          size="half"
+          title={t("globals.sheetHalfTitle")}
+          description={t("globals.sheetDescription")}
+          actions={<Button onClick={() => setSheetHalfOpen(false)}>{t("globals.sheetDone")}</Button>}
+        >
+          <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
+        </BottomSheet>
+        <BottomSheet
+          open={sheetFullOpen}
+          onClose={() => setSheetFullOpen(false)}
+          size="full"
+          title={t("globals.sheetFullTitle")}
+          description={t("globals.sheetDescription")}
+          actions={<Button onClick={() => setSheetFullOpen(false)}>{t("globals.sheetDone")}</Button>}
+        >
+          <p style={{ margin: 0 }}>{t("globals.sheetBody")}</p>
+        </BottomSheet>
+        <DialogShell
+          open={dialogShellOpen}
+          onClose={() => setDialogShellOpen(false)}
+          ariaLabel={t("globals.dialogShellTitle")}
+        >
+          <div className="sandbox-stack" style={{ padding: "var(--fynns-space-lg)" }}>
+            <strong>{t("globals.dialogShellTitle")}</strong>
+            <p style={{ margin: 0 }}>{t("globals.dialogShellBody")}</p>
+            <Button size="sm" onClick={() => setDialogShellOpen(false)}>
+              {t("globals.dialogShellClose")}
+            </Button>
+          </div>
+        </DialogShell>
         <Dialog
           open={centeredDialogOpen}
           onOpenChange={setCenteredDialogOpen}
@@ -1943,6 +2439,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           confirmLabel={t("globals.confirmOk")}
           cancelLabel={t("globals.confirmCancel")}
           danger
+          loading={confirmLoading}
+          confirmDisabled={confirmDisabled}
           onConfirm={() => setConfirmOpen(false)}
         />
         <Drawer
@@ -1950,6 +2448,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           onClose={() => setSideDrawerOpen(false)}
           side="right"
           title={t("globals.drawerTitle")}
+          description={t("globals.drawerDescription")}
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <p style={{ margin: 0 }}>{t("globals.drawerBody")}</p>
+        </Drawer>
+        <Drawer
+          open={leftDrawerOpen}
+          onClose={() => setLeftDrawerOpen(false)}
+          side="left"
+          title={t("globals.drawerLeftTitle")}
           description={t("globals.drawerDescription")}
           closeAriaLabel={t("globals.dialogClose")}
         >
@@ -1993,6 +2501,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Button>{t("globals.emptyAction")}</Button>
             }
           />
+          <EmptyState
+            size="sm"
+            title={t("globals.emptySmTitle")}
+            description={t("globals.emptySmDescription")}
+          />
           <SandboxHelp text={t("globals.emptyHelp")} />
         </div>
         </GlobalsDemo>
@@ -2019,7 +2532,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               {t("globals.busyRegionStop")}
             </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setBusyRegionDeterminate((v) => !v)}
+            >
+              {t("globals.busyRegionDeterminate")}
+            </Button>
           </div>
+          <BusyRegion
+            busy={busyRegionDeterminate}
+            label={t("globals.busyRegionLabel")}
+            message={t("globals.busyRegionMessage")}
+            value={0.55}
+            size="sm"
+          >
+            <Card title={t("globals.busyRegionTitle")}>
+              <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
+            </Card>
+          </BusyRegion>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
         </div>
         </GlobalsDemo>
@@ -2028,10 +2559,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button onClick={() => setBusyScrimOpen(true)}>
             {t("globals.busyScrimOpen")}
           </Button>
+          <Button variant="tonal" onClick={() => setBusyScrimDeterminateOpen(true)}>
+            {t("globals.busyScrimDeterminate")}
+          </Button>
           <BusyScrim
             open={busyScrimOpen}
             label={t("globals.busyScrimLabel")}
             message={t("globals.busyScrimMessage")}
+          />
+          <BusyScrim
+            open={busyScrimDeterminateOpen}
+            label={t("globals.busyScrimLabel")}
+            message={t("globals.busyScrimMessage")}
+            value={0.7}
+            size="lg"
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>
@@ -2056,7 +2597,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
             <Button
               size="sm"
-              disabled={busyPaintBad || busyPaintGood.busy}
+              disabled={busyPaintBad || busyPaintGood.busy || busyYield || busyRunDirect}
               onClick={() => {
                 void busyPaintGood.run(t("globals.busyPaintLabel"), async () => {
                   const until = performance.now() + 800;
@@ -2068,9 +2609,45 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               {t("globals.busyPaintGood")}
             </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              disabled={busyPaintBad || busyPaintGood.busy || busyYield || busyRunDirect}
+              onClick={() => {
+                void (async () => {
+                  setBusyYield(true);
+                  await afterNextPaint();
+                  for (let i = 0; i < 4; i++) {
+                    const until = performance.now() + 200;
+                    while (performance.now() < until) {
+                      /* slice */
+                    }
+                    await yieldToMain();
+                  }
+                  setBusyYield(false);
+                })();
+              }}
+            >
+              {t("globals.busyPaintYield")}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={busyPaintBad || busyPaintGood.busy || busyYield || busyRunDirect}
+              onClick={() => {
+                void runBusyTask(setBusyRunDirect, async () => {
+                  const until = performance.now() + 800;
+                  while (performance.now() < until) {
+                    /* stall after paint via runBusyTask */
+                  }
+                });
+              }}
+            >
+              {t("globals.busyPaintRunDirect")}
+            </Button>
           </div>
           <BusyScrim
-            open={busyPaintBad || busyPaintGood.busy}
+            open={busyPaintBad || busyPaintGood.busy || busyYield || busyRunDirect}
             label={
               busyPaintGood.busy
                 ? (busyPaintGood.label ?? t("globals.busyPaintLabel"))
@@ -2079,6 +2656,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             message={t("globals.busyPaintMessage")}
           />
           <SandboxHelp text={t("globals.busyPaintHelp")} />
+          <SandboxHelp text={t("globals.busyPaintYieldHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="stepper">
@@ -2112,6 +2690,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.stepperNext")}
           </Button>
           <SandboxHelp text={t("globals.stepperHelp")} />
+          <Stepper
+            orientation="vertical"
+            ariaLabel={t("globals.stepperVerticalAria")}
+            activeIndex={stepperVerticalIndex}
+            onStepChange={setStepperVerticalIndex}
+            steps={[
+              { label: t("globals.stepperStep1"), description: t("globals.stepperStep1Desc") },
+              { label: t("globals.stepperStep2"), description: t("globals.stepperStep2Desc") },
+              { label: t("globals.stepperStep3"), description: t("globals.stepperStep3Desc"), optional: true },
+            ]}
+          />
+          <SandboxHelp text={t("globals.stepperVerticalHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="dropzone">
@@ -2126,6 +2716,32 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               setDropNames(names);
             }}
           />
+          <Dropzone
+            busy={dropBusy}
+            label={t("globals.dropzoneBusy")}
+            browseLabel={t("globals.dropzoneBrowse")}
+            onFiles={() => {}}
+          />
+          <Dropzone
+            disabled
+            label={t("globals.dropzoneDisabled")}
+            browseLabel={t("globals.dropzoneBrowse")}
+            onFiles={() => {}}
+          />
+          <Dropzone
+            accept="image/*"
+            label={t("globals.dropzoneAccept")}
+            hint={t("globals.dropzoneAcceptHint")}
+            browseLabel={t("globals.dropzoneBrowse")}
+            onFiles={(files) => setDropNames(files.map((f) => f.name))}
+          />
+          <Switch
+            size="sm"
+            labelSide="end"
+            label={t("globals.dropzoneBusy")}
+            checked={dropBusy}
+            onCheckedChange={setDropBusy}
+          />
           <SandboxHelp
             text={
               dropNames.length > 0
@@ -2137,8 +2753,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="table">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <div className="fynns-table-wrap fynns-scroll">
-            <Table>
+          <div className="fynns-table-wrap fynns-scroll sandbox-table-sticky">
+            <Table stickyHeader>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
               <TableHead>
                 <TableRow>
@@ -2169,6 +2785,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Table>
           </div>
           <SandboxHelp text={t("globals.tableHelp")} />
+          <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="code-block">
@@ -2227,14 +2844,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
           <SandboxHelp text={t("globals.codeLangDemoHelp")} />
           <CodeBlock
-            label={t("globals.codeSimpleProfileLabel")}
+            label={t("globals.codeRegisterLabel")}
             language="gsc"
-            highlightProfile={GSC_DEMO_PROFILE}
             copyAriaLabel={t("globals.codeBlockCopy")}
             code={GSC_DEMO_CODE}
             maxHeight="10rem"
           />
-          <SandboxHelp text={t("globals.codeSimpleProfileHelp")} />
+          <SandboxHelp text={t("globals.codeRegisterHelp")} />
           <Dialog
             open={codeLangDialogOpen}
             onOpenChange={setCodeLangDialogOpen}
@@ -2353,6 +2969,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               t("globals.paginationPage").replace("{n}", String(n))
             }
           />
+          <SandboxHelp as="span" text={t("globals.paginationMd")} />
+          <Pagination
+            size="md"
+            page={page}
+            pageCount={12}
+            onPageChange={setPage}
+            ariaLabel={t("globals.paginationAria")}
+            previousAriaLabel={t("globals.paginationPrev")}
+            nextAriaLabel={t("globals.paginationNext")}
+            getPageAriaLabel={(n) =>
+              t("globals.paginationPage").replace("{n}", String(n))
+            }
+          />
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
         </GlobalsDemo>
@@ -2391,11 +3020,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           checked={appBarScrolled}
           onCheckedChange={setAppBarScrolled}
         />
+        <div className="sandbox-globals-appbar">
+          <TopAppBar size="md" title={t("globals.appBarMdTitle")} scrolled={appBarScrolled} />
+        </div>
+        <div className="sandbox-globals-appbar">
+          <TopAppBar size="lg" title={t("globals.appBarLgTitle")} scrolled={appBarScrolled} />
+        </div>
         <SandboxHelp text={t("globals.appBarHelp")} />
+        <SandboxHelp text={t("globals.appBarSizeHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="navigation-rail">
+        <ToggleGroup
+          size="compact"
+          showCheck={false}
+          ariaLabel={t("globals.navLabelVisibilityAria")}
+          value={railLabelVisibility}
+          onChange={setRailLabelVisibility}
+          options={[
+            { value: "labeled", label: t("globals.navLabelLabeled") },
+            { value: "selected", label: t("globals.navLabelSelected") },
+            { value: "unlabeled", label: t("globals.navLabelUnlabeled") },
+          ]}
+        />
         <div className="sandbox-globals-navrail">
-          <NavigationRail aria-label={t("globals.navRailAria")}>
+          <NavigationRail
+            aria-label={t("globals.navRailAria")}
+            labelVisibility={railLabelVisibility}
+          >
             <NavigationRailMenu>
               <Tooltip content={t("globals.navRailMenu")} side="right">
                 <IconButton aria-label={t("globals.navRailMenu")}>
@@ -2444,10 +3095,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         <SandboxHelp text={t("globals.navRailHelp")} />
+        <SandboxHelp text={t("globals.navRailLabelHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="navigation-bar">
+        <ToggleGroup
+          size="compact"
+          showCheck={false}
+          ariaLabel={t("globals.navLabelVisibilityAria")}
+          value={barLabelVisibility}
+          onChange={setBarLabelVisibility}
+          options={[
+            { value: "labeled", label: t("globals.navLabelLabeled") },
+            { value: "selected", label: t("globals.navLabelSelected") },
+            { value: "unlabeled", label: t("globals.navLabelUnlabeled") },
+          ]}
+        />
         <div className="sandbox-globals-navbar">
-          <NavigationBar aria-label={t("globals.navBarAria")}>
+          <NavigationBar
+            aria-label={t("globals.navBarAria")}
+            labelVisibility={barLabelVisibility}
+          >
             <NavigationBarItem
               icon={<FolderOpenIcon />}
               label={t("globals.navRailHome")}
@@ -2477,6 +3144,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </NavigationBar>
         </div>
         <SandboxHelp text={t("globals.navBarHelp")} />
+        <SandboxHelp text={t("globals.navBarLabelHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="navigation-drawer">
         <div
@@ -2569,6 +3237,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </NavigationDrawer>
         <SandboxHelp text={t("globals.navDrawerHelp")} />
+        <TokenList group="navdrawer" title={t("globals.tokenListNavdrawer")} />
         </GlobalsDemo>
         <GlobalsDemo id="shell">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
@@ -3005,6 +3674,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </dl>
         </div>
+        <SandboxHelp text={t("globals.rhythmGridHelp")} />
+        <Grid x={2} y={2} gap="sm" equalCells>
+          <Button size="sm">{t("globals.rhythmGridA")}</Button>
+          <Button size="sm" variant="tonal">{t("globals.rhythmGridB")}</Button>
+          <Button size="sm" variant="ghost">{t("globals.rhythmGridC")}</Button>
+          <Button size="sm" variant="default">{t("globals.rhythmGridD")}</Button>
+        </Grid>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
         </GlobalsDemo>
       </GlobalsCategory>

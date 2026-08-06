@@ -3,7 +3,6 @@ dist
 *.local
 .DS_Store
 .vite
-examples/gallery/dist
 examples/sandbox/dist
 
 # Local research / measurement dumps (do not commit)

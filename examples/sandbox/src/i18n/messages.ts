@@ -16,7 +16,6 @@ const en = {
   "nav.motion": "Motion",
   "nav.templates": "Templates",
   "nav.templatesTip": "Templates & config export/import",
-  "nav.templatesAria": "Templates and config",
   "nav.playgroundHint":
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
@@ -26,16 +25,9 @@ const en = {
   "nav.collapse": "Hide navigation",
   "nav.collapseTip": "Hide the navigation column",
 
-  "topbar.undo": "Undo",
-  "topbar.undoTip": "Undo (Ctrl+Z)",
-  "topbar.redo": "Redo",
-  "topbar.redoTip": "Redo (Ctrl+Y)",
   "topbar.reset": "Reset",
-  "topbar.resetAria": "Reset draft overrides",
   "topbar.resetTip": "Clear all token changes in the draft (hue, radius, …)",
   "topbar.resetToast": "Draft reset",
-  "topbar.themeLight": "Light theme",
-  "topbar.themeDark": "Dark theme",
   "topbar.themeToLight": "Switch to light theme",
   "topbar.themeToDark": "Switch to dark theme",
   "topbar.hideAside": "Hide inspector",
@@ -94,9 +86,6 @@ const en = {
 
   "preview.anatomy": "Contents",
   "preview.states": "Behavior",
-  "preview.actions": "Footer buttons",
-  "preview.start": "Left",
-  "preview.end": "Right",
   "preview.cardLabel": "Sample",
   "preview.cardTitle": "Aurora project",
   "preview.cardPlain": "Title only",
@@ -106,8 +95,6 @@ const en = {
   "preview.cardActionAria": "Sample header button",
   "preview.cardBody":
     "Sample card — same shell as Collapsible, but the header is static (no hover layer, no chevron). Use the switches for icon / actions.",
-  "preview.dismiss": "Dismiss",
-  "preview.open": "Open",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
@@ -118,8 +105,6 @@ const en = {
     "One live sample — hover the header to swap rest icon ↔ chevron. Use the switches for icon / actions / open.",
   "preview.collapsibleActionTip": "Sample button in the header (does not fold the section)",
   "preview.collapsibleActionAria": "Sample header button",
-  "preview.collapsibleActionToast": "Header button clicked",
-
   "agent.hint": 'Try: "make corners rounder" or "softer hover"',
   "agent.promptAria": "Agent prompt",
   "agent.triggerAria": "Agent proposals",
@@ -192,7 +177,6 @@ const en = {
     "How strong the pressed tint is (`state-pressed`).",
   "inspector.stateDraggedHint":
     "How strong the drag / high-emphasis tint is (`state-dragged`).",
-  "inspector.stateDemoTitle": "Hover / press on Button",
   "inspector.stateDemoSubtitle": "Try the button",
   "inspector.stateDemoBody": "State-layer tint on the button follows the sliders above.",
   "inspector.spacing": "Spacing",
@@ -227,9 +211,6 @@ const en = {
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — between stacked units / sibling demos; field-hint-gap aliases this.",
-  "layoutChrome.fieldHintGap": "Field hint",
-  "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap — control → supporting / error hint (aliases unit-stack-gap).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -281,13 +262,82 @@ const en = {
   "layoutChrome.barHeight": "Product bar height",
   "layoutChrome.barHeightHint":
     "--fynns-layout-bar-height — TopAppBar sm / BottomAppBar / SearchBar / Toolbar (56dp). Not the sandbox page strip.",
+  "layoutChrome.chatMaxWidth": "Chat max width",
+  "layoutChrome.chatMaxWidthHint":
+    "--fynns-layout-chat-max-width — Chat main column ceiling (keep in sync with chatmessage-max-width).",
+  "layoutChrome.chatMinWidth": "Chat min width",
+  "layoutChrome.chatMinWidthHint":
+    "--fynns-layout-chat-min-width — soft floor; CSS uses min(token, 100%).",
+  "layoutChrome.navDrawerHelp":
+    "NavigationDrawer width track — absolute rem only (no %). Apply writes `NAVDRAWER_TOKENS`.",
+  "layoutChrome.navdrawerWidth": "Nav drawer width",
+  "layoutChrome.navdrawerWidthHint":
+    "--fynns-navdrawer-width — preferred NavigationDrawer / ClippedNavShell drawer width.",
+  "layoutChrome.navdrawerMinWidth": "Nav drawer min",
+  "layoutChrome.navdrawerMinWidthHint":
+    "--fynns-navdrawer-min-width — resize floor (absolute rem).",
+  "layoutChrome.navdrawerMaxWidth": "Nav drawer max",
+  "layoutChrome.navdrawerMaxWidthHint":
+    "--fynns-navdrawer-max-width — resize cap (absolute rem).",
+  "layoutChrome.readonlyHelp":
+    "Complex layout units (vh / min() / clamp() / var aliases) — visible only; edit in tokens.ts if needed.",
+  "layoutChrome.specialReadonly": "Read-only layout tokens",
+  "layoutChrome.roEndAsideMax": "EndAside max (often vw)",
+  "layoutChrome.roEndAsideMaxHint":
+    "--fynns-layout-end-aside-max-width — typically a viewport fraction; not rem-slider editable.",
+  "layoutChrome.roEndAsideMin": "EndAside min (clamp)",
+  "layoutChrome.roEndAsideMinHint":
+    "--fynns-layout-end-aside-min-width — clamp(…) soft floor.",
+  "layoutChrome.roMainMin": "Main min (clamp)",
+  "layoutChrome.roMainMinHint":
+    "--fynns-layout-main-min-width — clamp(…) canvas floor beside EndAside.",
+  "layoutChrome.roSheetMaxH": "Sheet max height (vh)",
+  "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — viewport height unit.",
+  "layoutChrome.roSheetHalfH": "Sheet half height (vh)",
+  "layoutChrome.roSheetHalfHHint": "--fynns-layout-sheet-half-height — viewport height unit.",
+  "layoutChrome.roTooltipMax": "Tooltip max (min())",
+  "layoutChrome.roTooltipMaxHint":
+    "--fynns-layout-tooltip-max-width — min(rem, viewport).",
+  "layoutChrome.roSnackbarMax": "Snackbar max (min())",
+  "layoutChrome.roSnackbarMaxHint":
+    "--fynns-layout-snackbar-max-width — min(rem, viewport).",
+  "layoutChrome.roCmdWidth": "Command palette width",
+  "layoutChrome.roCmdWidthHint":
+    "--fynns-layout-command-palette-width — preferred command palette width.",
+  "layoutChrome.roCmdMaxH": "Command palette max height",
+  "layoutChrome.roCmdMaxHHint":
+    "--fynns-layout-command-palette-max-height — command palette height ceiling.",
+  "layoutChrome.roCmdTopPad": "Command palette top pad",
+  "layoutChrome.roCmdTopPadHint":
+    "--fynns-layout-command-palette-top-pad — top inset for the command palette.",
+  "layoutChrome.roFieldHint": "Field hint gap (alias)",
+  "layoutChrome.roFieldHintHint":
+    "--fynns-layout-field-hint-gap — aliases unit-stack-gap; edit unit-stack-gap instead.",
 
+  "inspector.lightThemeHelp":
+    "Apply writes dark source tokens only. Light overrides need a hand-edit of `LIGHT_THEME_OVERRIDES` + `npm run gen:theme`. Live draft can preview light via CSS injection.",
   "inspector.typography": "Type size",
+  "inspector.fontXsHint": "Caption / dense UI text (font-size-xs).",
   "inspector.fontSmHint":
     "Small UI text (font-size-sm).",
   "inspector.fontMdHint": "Default body / control text (font-size-md).",
   "inspector.fontLgHint":
     "Larger titles and chrome text (font-size-lg).",
+  "inspector.fontTitleLargeHint":
+    "M3 title-large ≈ 22sp (font-size-title-large).",
+  "inspector.fontXlHint": "Large display / section titles (font-size-xl).",
+  "inspector.font2xlHint": "Hero / page titles (font-size-2xl).",
+  "inspector.spaceTshirtHint":
+    "T-shirt spacing step `space-{key}` (`--fynns-space-{key}`). Apply writes SPACE_TOKENS.",
+  "inspector.spaceLegacyTitle": "Legacy space aliases (read-only)",
+
+  "globals.tokenListTitle": "Tokens",
+  "globals.tokenListFab": "Tokens · fab",
+  "globals.tokenListFabMenu": "Tokens · fabmenu",
+  "globals.tokenListChat": "Tokens · chat",
+  "globals.tokenListChatMessage": "Tokens · chatmessage",
+  "globals.tokenListBanner": "Tokens · banner",
+  "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
     "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
@@ -332,6 +382,8 @@ const en = {
     "SkipLink stays fully clipped until keyboard focus; then a fixed Button ghost at the viewport top-start jumps past chrome into `#globals-content`.",
   "globals.badgedBoxHelp":
     "BadgedBox positions a notification badge over IconButton / Avatar. Dot or count reuses NavigationRailBadge.",
+  "globals.badgeHelp":
+    "Standalone pill `Badge` — variants `neutral` / `accent` / `success` / `warning` / `danger` / `info`; sizes `md` (default) and `sm`; optional leading `icon`.",
   "globals.badgedBoxIconTip": "Notifications",
   "globals.avatarGroupHelp":
     "AvatarGroup stacks Avatars; `max` shows a +N overflow mark (here max=3 with 5 people).",
@@ -384,7 +436,6 @@ const en = {
   "globals.dropzoneBrowse": "Browse",
   "globals.dropzoneHelp": "Dropzone calls onFiles with the selected list. Busy shows LinearProgress.",
   "globals.dropzoneToast": "Selected: {names}",
-  "globals.dropzoneNone": "No files yet",
   "globals.tableCaption": "Sample inventory",
   "globals.tableColName": "Name",
   "globals.tableColStatus": "Status",
@@ -428,11 +479,14 @@ const en = {
     "Full-viewport panel: close IconButton + title + optional actions, scrollable body.",
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
-  "globals.fullscreenHelp":
-    "FullscreenDialog uses DialogFrame variant=\"fullscreen\" for near-full editors.",
   "globals.overlayHelp":
-    "M3-shaped Dialog (28dp corners, no default X) + ConfirmDialog; Drawer as side sheet (25rem, open-edge radius); BottomSheet; FullscreenDialog for large editors. NavigationDrawer for destinations only.",
+    "M3-shaped Dialog (28dp corners, no default X) + ConfirmDialog; Drawer as side sheet (25rem, open-edge radius); BottomSheet; FullscreenDialog for large editors. NavigationDrawer for destinations only. `DialogShell` is the low-level frame when you own head/body chrome.",
   "globals.dialogOpen": "Open dialog",
+  "globals.dialogShellOpen": "Open DialogShell",
+  "globals.dialogShellTitle": "Custom shell",
+  "globals.dialogShellBody":
+    "Low-level DialogShell — bring your own head/body. Esc and scrim still dismiss.",
+  "globals.dialogShellClose": "Close shell",
   "globals.dialogTitle": "Centered dialog",
   "globals.dialogDescription": "Floating modal with focus trap and scrim.",
   "globals.dialogBody": "Use for settings and short forms that should not fill the viewport.",
@@ -448,6 +502,11 @@ const en = {
     "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
     "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need a static title / icon / actions head.",
+  "globals.fieldHeaderLabel": "Bare FieldHeader",
+  "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
+  "globals.fieldHeaderActionTip": "Reset field",
+  "globals.fieldHeaderHelp":
+    "`FieldHeader` is the label + trailing actions row alone. Prefer `FieldBlock` when wrapping label + control together (see nested Dialog demo).",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -502,12 +561,7 @@ const en = {
     "ToggleGroup `multiple`: value is V[]; segments use aria-pressed. Space toggles; arrows move focus only.",
   "globals.segmentedBold": "Bold",
   "globals.segmentedItalic": "Italic",
-  "globals.controls": "Controls",
-  "globals.controlsAria": "Controls",
-  "globals.controlsRadiusHelp":
-    "Buttons / badges → `radius-xl` for buttons, `radius-sm` for badges. Input / Select → `radius-md`. Switch track → `radius-pill` (not on the xs–xl levels).",
   "globals.rhythm": "Toolbar / unit rhythm",
-  "globals.rhythmAria": "Toolbar / unit rhythm",
   "globals.rhythmLead":
     "Reusable unit-stack gap (`.sandbox-stack`) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
@@ -528,7 +582,6 @@ const en = {
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
-  "globals.btnPrimary": "Primary",
   "globals.btnTonal": "Tonal",
   "globals.btnElevated": "Elevated",
   "globals.btnGhost": "Text",
@@ -608,6 +661,10 @@ const en = {
   "globals.dateNext": "Next month",
   "globals.dateNone": "No date selected",
   "globals.dateSelected": "Selected: {date}",
+    "globals.overflowBoundsSample":
+    "This child is wider than its parent — bounds mode detects overflow.",
+  "globals.overflowBoundsHelp":
+    "useOverflowBounds mode=bounds vs parent: overflows={overflows} edges={edges} delta.right={right}",
   "globals.overflowSample":
     "Wide sample line — truncated with an ellipsis when it exceeds the box (useOverflowBounds content mode).",
   "globals.overflowHelp":
@@ -640,6 +697,8 @@ const en = {
   "globals.dateRangeSelected": "Range: {start} – {end}",
   "globals.timeHelp":
     "M3 TimePicker input (digital). Values are HH:mm (24h storage). Use TimePickerDialog for a modal confirm flow. Dial / clock face is out of scope.",
+  "globals.timeHelpersLive":
+    "Helpers: `formatTimeValue(14, 30)` → `{sample}`; `parseTimeValue(selected)` → `{parsed}`.",
   "globals.timeOpenDialog": "Open time dialog",
   "globals.timeDialogTitle": "Select time",
   "globals.timeConfirm": "OK",
@@ -670,7 +729,6 @@ const en = {
   "globals.avatarFallback": "Anonymous user",
   "globals.avatarImage": "Ada Lovelace (image)",
   "globals.avatarBroken": "Broken image falls back to initials",
-  "globals.avatarCard": "Card author",
   "globals.fabTip": "Create",
   "globals.fabExtended": "Create item",
   "globals.fabSecondary": "Secondary FAB",
@@ -712,7 +770,6 @@ const en = {
   "globals.navRailSearch": "Search",
   "globals.navRailCharts": "Charts",
   "globals.navRailAll": "All",
-  "globals.navRailShowAll": "Show all components",
   "globals.navRailPaneHome": "Home destination — sample content beside the rail.",
   "globals.navRailPaneSearch": "Search destination — badge count demo (3).",
   "globals.navRailPaneCharts": "Charts destination — notification dot on the icon.",
@@ -741,9 +798,6 @@ const en = {
   "globals.shellToggleAside": "Toggle EndAside",
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
-  "globals.shellCanvas":
-    "Main canvas. Destinations use ClippedNavShell; supporting inspector uses EndAside (width morph). Drag the drawer’s trailing seam to resize (min clamp). Drawer is for modal content sheets — not this destination column.",
-  "globals.shellAsideBody": "Supporting inspector pane (EndAside).",
   "globals.shellHelp":
     "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). EndAside may host Chat (bubble 70% of aside content; composer 100% — same as main, no density mode). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` / `wouldClippedNavDrawerCrowd` densify to rail before paint (no full-drawer flash; skipped while dragging the drawer seam or while EndAside is closing). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
@@ -786,13 +840,13 @@ const en = {
   "globals.snackbarDismiss": "Dismiss",
   "globals.snackbarHelp":
     "Imperative `snackbar(message, opts?)` + root `<SnackbarHost />`. One at a time (bottom-center). Optional single action; `short` / `long` / `indefinite`. Do not use deleted toast APIs.",
+  "globals.snackbarHostNote":
+    "`SnackbarHost` is mounted once in SandboxShell (companion API) — not duplicated in this row.",
   "globals.chatSystem": "This is a demo thread — no model is connected.",
   "globals.chatLabel": "Chat",
   "globals.chatEmpty": "What can I help with?",
-  "globals.chatUserName": "You",
   "globals.chatUserBody":
     "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
-  "globals.chatAssistantName": "Assistant",
   "globals.chatAssistantBody":
     "`streaming` only paints incomplete cues (caret + aria-busy); the app appends tokens itself.",
   "globals.chatCopyTip": "Copy message",
@@ -832,6 +886,8 @@ const en = {
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
     "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+  "globals.chatCitationsAnatomyHelp":
+    "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
   "globals.chatAsideLabel": "Aside (~22rem) — same 70% / composer 100%",
   "globals.chatAsideUserBody":
     "Bubble max is 70% of this aside’s content width, not the main column.",
@@ -852,8 +908,6 @@ const en = {
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
     "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
-  "globals.surfaces": "Cards & sections",
-  "globals.surfacesAria": "Cards and sections",
   "globals.cardTitle": "Section with icon",
   "globals.cardTitlePlain": "Title only",
   "globals.cardActionTip": "Sample header action",
@@ -863,7 +917,6 @@ const en = {
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
   "globals.swatches": "Radius levels (who uses what)",
-  "globals.swatchesAria": "Radius levels",
   "globals.swatchesHelp":
     "Each box is one token step. Cards / inputs = `md`; buttons = `xl`; badges / chips = `sm`.",
   "globals.swatchXsUses": "finest chips",
@@ -932,16 +985,145 @@ const en = {
 
   "foundations.elevation": "Surfaces (elevation levels)",
   "foundations.accent": "Accent palette",
+  "foundations.containers": "M3 container pairs",
+  "foundations.textBorder": "Text & border",
+  "foundations.controlSurfaces": "Control surfaces",
+  "foundations.legacyColors": "Legacy color aliases (read-only)",
   "foundations.semantic": "Status colors",
   "foundations.spacing": "Spacing scale",
+  "foundations.spaceLegacy": "Legacy space aliases (read-only)",
+  "foundations.size": "Size (icons & targets)",
   "foundations.type": "Type scale",
+  "foundations.fontFamily": "Font families",
+  "foundations.fontWeight": "Font weights",
   "foundations.radiusShadow": "Radius & shadow",
+  "foundations.lightTheme": "Light theme (Apply guardrail)",
+  "foundations.lightThemeHelp":
+    "Apply writes dark source tokens only (`COLOR_TOKENS` / … in tokens.ts). Light overrides live in `LIGHT_THEME_OVERRIDES` — edit by hand and run `npm run gen:theme`. The live draft can preview light via CSS injection, but Apply does not mirror into the light table.",
 
   "motion.easing": "Easing curves",
+  "motion.duration": "Duration ladder",
   "motion.replay": "Replay",
   "motion.flyout": "Menus & overlays",
   "motion.flyoutHelp":
-    "Open a dialog, select, split-button menu, or tooltip elsewhere to preview enter animations.",
+    "Replay a compact flyout enter (ease-out × duration-flyout). Dialogs / menus / tooltips in Components use the same tokens.",
+  "motion.flyoutPanel": "Menu / flyout",
+
+  
+  // --- Wave 3 anatomy / Foundations sibling ---
+  "globals.autocompleteDisabledAria": "Disabled autocomplete",
+  "globals.autocompleteDisabledPlaceholder": "Disabled…",
+  "globals.autocompleteError": "Cyan is not available in this sample.",
+  "globals.autocompleteObjectAria": "Autocomplete with object options",
+  "globals.autocompleteObjectPlaceholder": "Filter object options…",
+  "globals.autocompleteSupporting": "Type to filter, then pick a color.",
+  "globals.bannerDefaultSupporting": "Surface-2 strip without dismiss.",
+  "globals.bannerDefaultText": "Default banner (no icon / dismiss)",
+  "globals.bannerHideDefault": "Hide default banner",
+  "globals.bannerShowDefault": "Show default banner",
+  "globals.carouselHeroAria": "Hero carousel",
+  "globals.carouselHeroHelp": "Carousel `variant=\"hero\"` — full-width slides.",
+  "globals.carouselHeroSlide1": "Hero one",
+  "globals.carouselHeroSlide1Body": "Full-bleed slide.",
+  "globals.carouselHeroSlide2": "Hero two",
+  "globals.carouselHeroSlide2Body": "Neighbors do not peek.",
+  "globals.checkboxDisabled": "Disabled checkbox",
+  "globals.checkboxInvalid": "Invalid checkbox",
+  "globals.chipLeading": "Leading icon",
+  "globals.chipTrailing": "Trailing icon",
+  "globals.collapsibleActionTip": "Section settings",
+  "globals.collapsibleBody": "Closed by default here; Preview toggles open / icon / actions.",
+  "globals.dividerInsetEnd": "Divider insetEnd",
+  "globals.dividerInsetStart": "Divider insetStart",
+  "globals.fabLarge": "Large FAB",
+  "globals.fabMenuAlignOpen": "Open FAB menu (align start)",
+  "globals.iconBtnActive": "Active icon button",
+  "globals.iconBtnDisabled": "Disabled icon button",
+  "globals.iconBtnElevated": "Elevated icon button",
+  "globals.iconBtnLoading": "Loading icon button",
+  "globals.inputError": "This field is required.",
+  "globals.inputFilledAria": "Filled small input with leading",
+  "globals.inputFilledPlaceholder": "Filled sm + leading",
+  "globals.inputFilledSupporting": "Filled variant, size sm, Search leading.",
+  "globals.inputInvalidAria": "Invalid input",
+  "globals.inputInvalidPlaceholder": "Invalid sample",
+  "globals.listDisabled": "Archived",
+  "globals.listDisabledSupporting": "Disabled ListItem (button disabled).",
+  "globals.otpDisabledAria": "Disabled OTP",
+  "globals.otpDisabledSupporting": "Disabled 4-digit OTP.",
+  "globals.otpError": "Code is incomplete.",
+  "globals.otpShortAria": "Four-digit code",
+  "globals.progressLinearNoStop": "Linear progress (no stop indicator)",
+  "globals.progressLinearNoStopAria": "Upload progress without stop indicator",
+  "globals.radioDisabled": "Disabled radio",
+  "globals.radioInvalid": "Invalid radio",
+  "globals.segmentedCompactAria": "Compact view mode",
+  "globals.segmentedCompactHelp": "ToggleGroup `size=\"compact\"` + `showCheck={false}` + option icons.",
+  "globals.segmentedGrid": "Grid",
+  "globals.segmentedList": "List",
+  "globals.selectDisabledAria": "Disabled select",
+  "globals.selectHelp":
+    "Select supports string or `{ value, label, disabled? }` options. No native supporting/error props — use Autocomplete for field hints.",
+  "globals.selectObjectAria": "Select with object options",
+  "globals.skipLinkTeach": "Skip to content (always visible sample)",
+  "globals.skipLinkTeachHelp":
+    "Teaching sample: sandbox CSS forces the SkipLink visible. Real page-top SkipLink stays clipped until focus-visible.",
+  "globals.splitBtnDisabled": "Disabled split",
+  "globals.splitBtnLarge": "Large split",
+  "globals.splitBtnLoading": "Loading split",
+  "globals.surfaceElevated": "elevated",
+  "globals.surfaceFillLabel": "fill — stretches parent height",
+  "globals.surfaceFilled": "filled",
+  "globals.surfaceOutlined": "outlined",
+  "globals.switchMdStart": "Switch md · label start",
+  "globals.tabsSmA": "Alpha",
+  "globals.tabsSmAria": "Small tabs with disabled tab",
+  "globals.tabsSmB": "Beta",
+  "globals.tabsSmDisabled": "Disabled",
+  "globals.textareaError": "Prompt is too short.",
+  "globals.textareaFilledAria": "Filled small textarea",
+  "globals.textareaFilledPlaceholder": "Filled sm + error…",
+  "globals.sheetHalfOpen": "Open half sheet",
+  "globals.sheetFullOpen": "Open full sheet",
+  "globals.sheetHalfTitle": "Half bottom sheet",
+  "globals.sheetFullTitle": "Full bottom sheet",
+  "globals.drawerLeftOpen": "Open left drawer",
+  "globals.drawerLeftTitle": "Start-edge drawer",
+  "globals.confirmLoading": "Confirm loading",
+  "globals.confirmDisabled": "Confirm disabled",
+  "globals.busyPaintYield": "yieldToMain slices",
+  "globals.busyPaintRunDirect": "runBusyTask(setBusy, …)",
+  "globals.busyPaintYieldHelp": "Third path: show busy → afterNextPaint → yieldToMain slices while working.",
+  "globals.busyRegionDeterminate": "BusyRegion value + size sm",
+  "globals.busyScrimDeterminate": "BusyScrim value + size lg (2s)",
+  "globals.emptySmTitle": "Nothing here",
+  "globals.emptySmDescription": "EmptyState size=\"sm\".",
+  "globals.stepperVerticalAria": "Vertical setup",
+  "globals.stepperVerticalHelp": "Stepper orientation=\"vertical\".",
+  "globals.dropzoneBusy": "Busy dropzone",
+  "globals.dropzoneDisabled": "Disabled dropzone",
+  "globals.dropzoneAccept": "Images only (accept)",
+  "globals.dropzoneAcceptHint": "accept=\"image/*\"",
+  "globals.tableStickyHelp": "Table stickyHeader inside a fixed-height scroll host.",
+  "globals.paginationMd": "Pagination size md",
+  "globals.appBarMdTitle": "Medium top app bar",
+  "globals.appBarLgTitle": "Large top app bar",
+  "globals.appBarSizeHelp": "TopAppBar size md (80dp) / lg (104dp); default demo above is sm.",
+  "globals.navLabelLabeled": "labeled",
+  "globals.navLabelSelected": "selected",
+  "globals.navLabelUnlabeled": "unlabeled",
+  "globals.navLabelVisibilityAria": "Label visibility",
+  "globals.navRailLabelHelp": "NavigationRail labelVisibility: labeled / selected / unlabeled.",
+  "globals.navBarLabelHelp": "NavigationBar labelVisibility: labeled / selected / unlabeled.",
+  "globals.rhythmGridHelp": "Grid with fixed x={2} / y={2} in the rhythm section.",
+  "globals.rhythmGridA": "A",
+  "globals.rhythmGridB": "B",
+  "globals.rhythmGridC": "C",
+  "globals.rhythmGridD": "D",
+  "globals.codeRegisterLabel": "scene.gsc (registerHighlightLanguage)",
+  "globals.codeRegisterHelp":
+    "CodeBlock language=\"gsc\" resolves via registerHighlightLanguage — no highlightProfile prop.",
+  "globals.collapsibleHelpPreview": "Globals shows actions + closed default. Preview already toggles open / icon / actions.",
 
   "hue.cyan": "Cyan",
 } as const;
@@ -956,7 +1138,6 @@ const zh: Record<MessageKey, string> = {
   "nav.motion": "动效",
   "nav.templates": "模板",
   "nav.templatesTip": "模板与配置导入导出",
-  "nav.templatesAria": "模板与配置",
   "nav.playgroundHint":
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
@@ -966,16 +1147,9 @@ const zh: Record<MessageKey, string> = {
   "nav.collapse": "关闭导航",
   "nav.collapseTip": "完全收起左侧导航",
 
-  "topbar.undo": "撤销",
-  "topbar.undoTip": "撤销 (Ctrl+Z)",
-  "topbar.redo": "重做",
-  "topbar.redoTip": "重做 (Ctrl+Y)",
   "topbar.reset": "重置",
-  "topbar.resetAria": "重置草稿改动",
   "topbar.resetTip": "清除草稿中的全部 token 改动（色相、圆角等）",
   "topbar.resetToast": "草稿已重置",
-  "topbar.themeLight": "浅色主题",
-  "topbar.themeDark": "深色主题",
   "topbar.themeToLight": "切换到浅色主题",
   "topbar.themeToDark": "切换到深色主题",
   "topbar.hideAside": "隐藏检查器",
@@ -1033,9 +1207,6 @@ const zh: Record<MessageKey, string> = {
 
   "preview.anatomy": "内容",
   "preview.states": "行为",
-  "preview.actions": "底部按钮",
-  "preview.start": "靠左",
-  "preview.end": "靠右",
   "preview.cardLabel": "示例",
   "preview.cardTitle": "Aurora 项目",
   "preview.cardPlain": "仅标题",
@@ -1045,8 +1216,6 @@ const zh: Record<MessageKey, string> = {
   "preview.cardActionAria": "示例标题按钮",
   "preview.cardBody":
     "示例卡片 — 与 Collapsible 同壳，但标题栏是静态的（无悬停层、无 chevron）。用上方开关控制图标 / actions。",
-  "preview.dismiss": "关闭",
-  "preview.open": "打开",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
@@ -1057,8 +1226,6 @@ const zh: Record<MessageKey, string> = {
     "只保留一个实时样例 — 悬停标题栏可在静止图标与 chevron 间切换。用上方开关控制图标 / actions / 展开。",
   "preview.collapsibleActionTip": "标题栏上的示例按钮（不会折叠分区）",
   "preview.collapsibleActionAria": "示例标题按钮",
-  "preview.collapsibleActionToast": "已点击标题按钮",
-
   "agent.hint": "试试：「圆角更大」或「悬停更柔和」",
   "agent.promptAria": "智能体提示",
   "agent.triggerAria": "智能体提案",
@@ -1122,7 +1289,6 @@ const zh: Record<MessageKey, string> = {
   "inspector.stateFocusHint": "键盘聚焦时叠色有多强（`state-focus`）。",
   "inspector.statePressedHint": "按下时叠色有多强（`state-pressed`）。",
   "inspector.stateDraggedHint": "拖拽 / 高强调时叠色有多强（`state-dragged`）。",
-  "inspector.stateDemoTitle": "在 Button 上试悬停 / 按压",
   "inspector.stateDemoSubtitle": "点按按钮试试",
   "inspector.stateDemoBody": "按钮上的 state-layer 叠色跟随上方滑条。",
   "inspector.spacing": "间距",
@@ -1155,9 +1321,6 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap — 纵向堆叠单元 / 并列 demo；field-hint-gap 为其别名。",
-  "layoutChrome.fieldHintGap": "字段提示",
-  "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap — 控件到 supporting / error 提示（同 unit-stack-gap）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -1209,11 +1372,80 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.barHeight": "产品条高度",
   "layoutChrome.barHeightHint":
     "--fynns-layout-bar-height — TopAppBar sm / BottomAppBar / SearchBar / Toolbar（56dp）。不是沙盒页顶条。",
+  "layoutChrome.chatMaxWidth": "Chat 最大宽度",
+  "layoutChrome.chatMaxWidthHint":
+    "--fynns-layout-chat-max-width — Chat 主栏列宽上限（与 chatmessage-max-width 同步）。",
+  "layoutChrome.chatMinWidth": "Chat 最小宽度",
+  "layoutChrome.chatMinWidthHint":
+    "--fynns-layout-chat-min-width — 软底；CSS 使用 min(token, 100%)。",
+  "layoutChrome.navDrawerHelp":
+    "NavigationDrawer 宽度轨道 — 仅绝对 rem（禁止 %）。Apply 写入 `NAVDRAWER_TOKENS`。",
+  "layoutChrome.navdrawerWidth": "导航抽屉宽度",
+  "layoutChrome.navdrawerWidthHint":
+    "--fynns-navdrawer-width — NavigationDrawer / ClippedNavShell 抽屉首选宽度。",
+  "layoutChrome.navdrawerMinWidth": "导航抽屉最小宽度",
+  "layoutChrome.navdrawerMinWidthHint":
+    "--fynns-navdrawer-min-width — 拖拽缩放下限（绝对 rem）。",
+  "layoutChrome.navdrawerMaxWidth": "导航抽屉最大宽度",
+  "layoutChrome.navdrawerMaxWidthHint":
+    "--fynns-navdrawer-max-width — 拖拽缩放上限（绝对 rem）。",
+  "layoutChrome.readonlyHelp":
+    "复杂 layout 单位（vh / min() / clamp() / var 别名）— 只读可见；需要时在 tokens.ts 手改。",
+  "layoutChrome.specialReadonly": "只读 layout token",
+  "layoutChrome.roEndAsideMax": "EndAside 上限（常为 vw）",
+  "layoutChrome.roEndAsideMaxHint":
+    "--fynns-layout-end-aside-max-width — 多为视口比例；不可用 rem 滑杆编辑。",
+  "layoutChrome.roEndAsideMin": "EndAside 下限（clamp）",
+  "layoutChrome.roEndAsideMinHint":
+    "--fynns-layout-end-aside-min-width — clamp(…) 软底。",
+  "layoutChrome.roMainMin": "主栏下限（clamp）",
+  "layoutChrome.roMainMinHint":
+    "--fynns-layout-main-min-width — clamp(…) 画布底限。",
+  "layoutChrome.roSheetMaxH": "Sheet 最大高度（vh）",
+  "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — 视口高度单位。",
+  "layoutChrome.roSheetHalfH": "Sheet 半高（vh）",
+  "layoutChrome.roSheetHalfHHint": "--fynns-layout-sheet-half-height — 视口高度单位。",
+  "layoutChrome.roTooltipMax": "Tooltip 上限（min()）",
+  "layoutChrome.roTooltipMaxHint":
+    "--fynns-layout-tooltip-max-width — min(rem, 视口)。",
+  "layoutChrome.roSnackbarMax": "Snackbar 上限（min()）",
+  "layoutChrome.roSnackbarMaxHint":
+    "--fynns-layout-snackbar-max-width — min(rem, 视口)。",
+  "layoutChrome.roCmdWidth": "命令面板宽度",
+  "layoutChrome.roCmdWidthHint":
+    "--fynns-layout-command-palette-width — 命令面板首选宽度。",
+  "layoutChrome.roCmdMaxH": "命令面板最大高度",
+  "layoutChrome.roCmdMaxHHint":
+    "--fynns-layout-command-palette-max-height — 命令面板高度上限。",
+  "layoutChrome.roCmdTopPad": "命令面板顶边距",
+  "layoutChrome.roCmdTopPadHint":
+    "--fynns-layout-command-palette-top-pad — 命令面板距顶边距。",
+  "layoutChrome.roFieldHint": "字段提示间距（别名）",
+  "layoutChrome.roFieldHintHint":
+    "--fynns-layout-field-hint-gap — 别名 unit-stack-gap；请改 unit-stack-gap。",
 
+  "inspector.lightThemeHelp":
+    "Apply 只写入深色源 token。浅色覆盖需手改 `LIGHT_THEME_OVERRIDES` 并运行 `npm run gen:theme`。实时草稿可通过 CSS 注入预览浅色。",
   "inspector.typography": "字号",
+  "inspector.fontXsHint": "说明 / 密集界面文字（font-size-xs）。",
   "inspector.fontSmHint": "较小界面文字（font-size-sm）。",
   "inspector.fontMdHint": "默认正文 / 控件字号（font-size-md）。",
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
+  "inspector.fontTitleLargeHint":
+    "M3 title-large ≈ 22sp（font-size-title-large）。",
+  "inspector.fontXlHint": "大标题 / 分区标题（font-size-xl）。",
+  "inspector.font2xlHint": "英雄 / 页面标题（font-size-2xl）。",
+  "inspector.spaceTshirtHint":
+    "T-shirt 间距阶 `space-{key}`（`--fynns-space-{key}`）。Apply 写入 SPACE_TOKENS。",
+  "inspector.spaceLegacyTitle": "遗留间距别名（只读）",
+
+  "globals.tokenListTitle": "Tokens",
+  "globals.tokenListFab": "Tokens · fab",
+  "globals.tokenListFabMenu": "Tokens · fabmenu",
+  "globals.tokenListChat": "Tokens · chat",
+  "globals.tokenListChatMessage": "Tokens · chatmessage",
+  "globals.tokenListBanner": "Tokens · banner",
+  "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
     "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
@@ -1258,6 +1490,8 @@ const zh: Record<MessageKey, string> = {
     "SkipLink 未聚焦时完全裁剪隐藏；键盘聚焦后以固定在视口左上的 Button ghost 出现，可跳到 `#globals-content`。",
   "globals.badgedBoxHelp":
     "BadgedBox 把通知角标叠在 IconButton / Avatar 上。圆点或数字复用 NavigationRailBadge。",
+  "globals.badgeHelp":
+    "独立药丸 `Badge` — 变体 `neutral` / `accent` / `success` / `warning` / `danger` / `info`；尺寸 `md`（默认）与 `sm`；可选 leading `icon`。",
   "globals.badgedBoxIconTip": "通知",
   "globals.avatarGroupHelp":
     "AvatarGroup 叠放 Avatar；超过 `max` 显示 +N（此处 max=3，共 5 人）。",
@@ -1310,7 +1544,6 @@ const zh: Record<MessageKey, string> = {
   "globals.dropzoneBrowse": "浏览",
   "globals.dropzoneHelp": "Dropzone 通过 onFiles 回传文件列表。busy 时显示 LinearProgress。",
   "globals.dropzoneToast": "已选：{names}",
-  "globals.dropzoneNone": "尚未选择文件",
   "globals.tableCaption": "示例库存",
   "globals.tableColName": "名称",
   "globals.tableColStatus": "状态",
@@ -1354,11 +1587,14 @@ const zh: Record<MessageKey, string> = {
     "全视口面板：关闭 IconButton + 标题 + 可选操作，正文可滚动。",
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
-  "globals.fullscreenHelp":
-    "FullscreenDialog 使用 DialogFrame 的 fullscreen 变体，适合接近全屏的编辑器。",
   "globals.overlayHelp":
-    "M3 形 Dialog（28dp 圆角、默认无 X）+ ConfirmDialog；Drawer 侧栏（25rem、开合边圆角）；BottomSheet；FullscreenDialog 用于大型编辑器。目的地请用 NavigationDrawer。",
+    "M3 形 Dialog（28dp 圆角、默认无 X）+ ConfirmDialog；Drawer 侧栏（25rem、开合边圆角）；BottomSheet；FullscreenDialog 用于大型编辑器。目的地请用 NavigationDrawer。自管头/身时用底层 `DialogShell`。",
   "globals.dialogOpen": "打开对话框",
+  "globals.dialogShellOpen": "打开 DialogShell",
+  "globals.dialogShellTitle": "自定义壳",
+  "globals.dialogShellBody":
+    "底层 DialogShell — 自行提供头/身。Esc 与遮罩仍可关闭。",
+  "globals.dialogShellClose": "关闭壳",
   "globals.dialogTitle": "居中对话框",
   "globals.dialogDescription": "带焦点陷阱与遮罩的浮动模态。",
   "globals.dialogBody": "适合设置与短表单，不必占满视口。",
@@ -1374,6 +1610,11 @@ const zh: Record<MessageKey, string> = {
     "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
     "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要静态 title / icon / actions 头时用 Card。",
+  "globals.fieldHeaderLabel": "裸 FieldHeader",
+  "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
+  "globals.fieldHeaderActionTip": "重置字段",
+  "globals.fieldHeaderHelp":
+    "`FieldHeader` 仅是标签 + 尾部操作行。标签 + 控件一起包时优先用 `FieldBlock`（见嵌套 Dialog 演示）。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -1428,12 +1669,7 @@ const zh: Record<MessageKey, string> = {
     "ToggleGroup `multiple`：value 为 V[]；分段用 aria-pressed。空格切换，方向键只移动焦点。",
   "globals.segmentedBold": "粗体",
   "globals.segmentedItalic": "斜体",
-  "globals.controls": "控件",
-  "globals.controlsAria": "控件",
-  "globals.controlsRadiusHelp":
-    "按钮 → `radius-xl`。徽章 / 芯片 → `radius-sm`。输入框 / 选择器 → `radius-md`。开关轨道 → `radius-pill`（不在 xs–xl 等级上）。",
   "globals.rhythm": "工具栏 / 单元节奏",
-  "globals.rhythmAria": "工具栏 / 单元节奏",
   "globals.rhythmLead":
     "可复用的 unit-stack 间距（`.sandbox-stack`）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
@@ -1454,7 +1690,6 @@ const zh: Record<MessageKey, string> = {
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
-  "globals.btnPrimary": "主要",
   "globals.btnTonal": "色调",
   "globals.btnElevated": "浮起",
   "globals.btnGhost": "文本",
@@ -1534,6 +1769,10 @@ const zh: Record<MessageKey, string> = {
   "globals.dateNext": "下个月",
   "globals.dateNone": "未选择日期",
   "globals.dateSelected": "已选：{date}",
+    "globals.overflowBoundsSample":
+    "此子元素比父容器更宽 — bounds 模式检测溢出。",
+  "globals.overflowBoundsHelp":
+    "useOverflowBounds mode=bounds 相对父容器：overflows={overflows} edges={edges} delta.right={right}",
   "globals.overflowSample":
     "故意超宽的示例行 — 超出盒子时用省略号截断（useOverflowBounds content 模式）。",
   "globals.overflowHelp":
@@ -1566,6 +1805,8 @@ const zh: Record<MessageKey, string> = {
   "globals.dateRangeSelected": "区间：{start} – {end}",
   "globals.timeHelp":
     "M3 TimePicker 数字输入。值为 HH:mm（按 24 小时存储）。模态确认请用 TimePickerDialog。表盘 / 时钟面不做。",
+  "globals.timeHelpersLive":
+    "Helpers：`formatTimeValue(14, 30)` → `{sample}`；`parseTimeValue(selected)` → `{parsed}`。",
   "globals.timeOpenDialog": "打开时间对话框",
   "globals.timeDialogTitle": "选择时间",
   "globals.timeConfirm": "确定",
@@ -1596,7 +1837,6 @@ const zh: Record<MessageKey, string> = {
   "globals.avatarFallback": "匿名用户",
   "globals.avatarImage": "Ada Lovelace（图片）",
   "globals.avatarBroken": "坏链回退到首字母",
-  "globals.avatarCard": "卡片作者",
   "globals.fabTip": "创建",
   "globals.fabExtended": "新建条目",
   "globals.fabSecondary": "次要 FAB",
@@ -1638,7 +1878,6 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailSearch": "搜索",
   "globals.navRailCharts": "图表",
   "globals.navRailAll": "全部",
-  "globals.navRailShowAll": "展示全部组件",
   "globals.navRailPaneHome": "首页目的地 — 导航轨旁侧示例内容。",
   "globals.navRailPaneSearch": "搜索目的地 — 数字徽章示例（3）。",
   "globals.navRailPaneCharts": "图表目的地 — 图标上的通知圆点。",
@@ -1667,9 +1906,6 @@ const zh: Record<MessageKey, string> = {
   "globals.shellToggleAside": "切换 EndAside",
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
-  "globals.shellCanvas":
-    "主画布。目的地用 ClippedNavShell；末端检查器用 EndAside（宽度开合）。可拖抽屉右缘调宽（有 min clamp）。Drawer 用于模态内容侧栏，不是这列目的地。",
-  "globals.shellAsideBody": "支撑检查器窗格（EndAside）。",
   "globals.shellHelp":
     "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。EndAside 可承载 Chat（气泡为侧栏内容宽 70%；composer 100% — 与主栏同一套比例，无 density）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` / `wouldClippedNavDrawerCrowd` 在绘制前收成 rail（不先满宽再缩；拖抽屉缝或 EndAside 正在收合时不触发）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
@@ -1712,13 +1948,13 @@ const zh: Record<MessageKey, string> = {
   "globals.snackbarDismiss": "关闭",
   "globals.snackbarHelp":
     "命令式 `snackbar(message, opts?)` + 根级 `<SnackbarHost />`。同时只显示一条（底部居中）。可选单个 action；时长 `short` / `long` / `indefinite`。勿使用已删除的 toast API。",
+  "globals.snackbarHostNote":
+    "`SnackbarHost` 挂在 SandboxShell 一次（companion API）— 本行不重复挂载。",
   "globals.chatSystem": "演示会话 — 未连接任何模型。",
   "globals.chatLabel": "聊天",
   "globals.chatEmpty": "有什么可以帮你？",
-  "globals.chatUserName": "你",
   "globals.chatUserBody":
     "用一句话概括 ChatMessage 的 `streaming` 属性，并说明用户气泡最大为行宽的 70%，短回复仍会收缩贴合内容。",
-  "globals.chatAssistantName": "助手",
   "globals.chatAssistantBody":
     "`streaming` 只负责未完成态 UI（光标 + aria-busy）；由应用自行追加 token。",
   "globals.chatCopyTip": "复制消息",
@@ -1757,6 +1993,8 @@ const zh: Record<MessageKey, string> = {
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
     "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+  "globals.chatCitationsAnatomyHelp":
+    "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 同 70% / composer 100%",
   "globals.chatAsideUserBody": "气泡上限是本侧栏内容宽的 70%，不是主栏宽。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
@@ -1775,8 +2013,6 @@ const zh: Record<MessageKey, string> = {
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
     "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
-  "globals.surfaces": "卡片与分区",
-  "globals.surfacesAria": "卡片与分区",
   "globals.cardTitle": "带图标的分区",
   "globals.cardTitlePlain": "仅标题",
   "globals.cardActionTip": "示例标题操作",
@@ -1786,7 +2022,6 @@ const zh: Record<MessageKey, string> = {
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。",
   "globals.swatches": "圆角等级（谁用哪档）",
-  "globals.swatchesAria": "圆角等级",
   "globals.swatchesHelp":
     "每个色块是一档 token。卡片 / 输入 = `md`；按钮 = `xl`；徽章 / 芯片 = `sm`。",
   "globals.swatchXsUses": "最细芯片",
@@ -1855,17 +2090,142 @@ const zh: Record<MessageKey, string> = {
 
   "foundations.elevation": "表面（海拔等级）",
   "foundations.accent": "强调色板",
+  "foundations.containers": "M3 容器色对",
+  "foundations.textBorder": "文字与边框",
+  "foundations.controlSurfaces": "控件表面",
+  "foundations.legacyColors": "遗留颜色别名（只读）",
   "foundations.semantic": "状态色",
   "foundations.spacing": "间距尺度",
+  "foundations.spaceLegacy": "遗留间距别名（只读）",
+  "foundations.size": "尺寸（图标与触控靶）",
   "foundations.type": "字号尺度",
+  "foundations.fontFamily": "字族",
+  "foundations.fontWeight": "字重",
   "foundations.radiusShadow": "圆角与阴影",
+  "foundations.lightTheme": "浅色主题（Apply 护栏）",
+  "foundations.lightThemeHelp":
+    "Apply 只写入深色源 token（tokens.ts 中的 `COLOR_TOKENS` 等）。浅色覆盖在 `LIGHT_THEME_OVERRIDES` — 需手改并运行 `npm run gen:theme`。实时草稿可通过 CSS 注入预览浅色，但 Apply 不会写入浅色表。",
 
   "motion.easing": "缓动曲线",
+  "motion.duration": "时长阶梯",
   "motion.replay": "重放",
   "motion.flyout": "菜单与浮层",
   "motion.flyoutHelp":
-    "在别处打开对话框、选择框、拆分按钮菜单或提示，即可预览进入动画。",
+    "在此重放紧凑浮层进入动画（ease-out × duration-flyout）。组件页中的对话框 / 菜单 / 提示使用相同 token。",
+  "motion.flyoutPanel": "菜单 / 浮层",
 
+  
+  // --- Wave 3 anatomy / Foundations sibling ---
+  "globals.autocompleteDisabledAria": "禁用的自动完成",
+  "globals.autocompleteDisabledPlaceholder": "已禁用…",
+  "globals.autocompleteError": "此示例中不可用青色。",
+  "globals.autocompleteObjectAria": "对象选项自动完成",
+  "globals.autocompleteObjectPlaceholder": "筛选对象选项…",
+  "globals.autocompleteSupporting": "输入筛选后选择颜色。",
+  "globals.bannerDefaultSupporting": "无关闭的 surface-2 横幅。",
+  "globals.bannerDefaultText": "默认横幅（无图标 / 关闭）",
+  "globals.bannerHideDefault": "隐藏默认横幅",
+  "globals.bannerShowDefault": "显示默认横幅",
+  "globals.carouselHeroAria": "英雄轮播",
+  "globals.carouselHeroHelp": "Carousel `variant=\"hero\"` — 全宽幻灯片。",
+  "globals.carouselHeroSlide1": "英雄一",
+  "globals.carouselHeroSlide1Body": "全幅幻灯片。",
+  "globals.carouselHeroSlide2": "英雄二",
+  "globals.carouselHeroSlide2Body": "不露邻片。",
+  "globals.checkboxDisabled": "禁用复选",
+  "globals.checkboxInvalid": "无效复选",
+  "globals.chipLeading": "前导图标",
+  "globals.chipTrailing": "尾随图标",
+  "globals.collapsibleActionTip": "分区设置",
+  "globals.collapsibleBody": "此处默认收起；Preview 可切换打开 / 图标 / actions。",
+  "globals.dividerInsetEnd": "分割线 insetEnd",
+  "globals.dividerInsetStart": "分割线 insetStart",
+  "globals.fabLarge": "大号 FAB",
+  "globals.fabMenuAlignOpen": "打开 FAB 菜单（align start）",
+  "globals.iconBtnActive": "激活图标按钮",
+  "globals.iconBtnDisabled": "禁用图标按钮",
+  "globals.iconBtnElevated": "浮起图标按钮",
+  "globals.iconBtnLoading": "加载中图标按钮",
+  "globals.inputError": "此字段为必填。",
+  "globals.inputFilledAria": "带前缀的 filled 小输入框",
+  "globals.inputFilledPlaceholder": "Filled sm + 前缀",
+  "globals.inputFilledSupporting": "Filled 变体、sm 尺寸、Search 前缀。",
+  "globals.inputInvalidAria": "无效输入框",
+  "globals.inputInvalidPlaceholder": "无效示例",
+  "globals.listDisabled": "已归档",
+  "globals.listDisabledSupporting": "禁用的 ListItem（按钮 disabled）。",
+  "globals.otpDisabledAria": "禁用验证码",
+  "globals.otpDisabledSupporting": "禁用的 4 位验证码。",
+  "globals.otpError": "验证码不完整。",
+  "globals.otpShortAria": "四位验证码",
+  "globals.progressLinearNoStop": "线性进度（无止点）",
+  "globals.progressLinearNoStopAria": "无止点的上传进度",
+  "globals.radioDisabled": "禁用单选",
+  "globals.radioInvalid": "无效单选",
+  "globals.segmentedCompactAria": "紧凑视图模式",
+  "globals.segmentedCompactHelp": "ToggleGroup `size=\"compact\"` + `showCheck={false}` + 选项图标。",
+  "globals.segmentedGrid": "网格",
+  "globals.segmentedList": "列表",
+  "globals.selectDisabledAria": "禁用选择器",
+  "globals.selectHelp": "Select 支持字符串或 `{ value, label, disabled? }` 选项。无原生 supporting/error — 字段提示用 Autocomplete。",
+  "globals.selectObjectAria": "对象选项选择器",
+  "globals.skipLinkTeach": "跳到内容（常显教学样例）",
+  "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",
+  "globals.splitBtnDisabled": "禁用拆分",
+  "globals.splitBtnLarge": "大号拆分",
+  "globals.splitBtnLoading": "加载中拆分",
+  "globals.surfaceElevated": "elevated",
+  "globals.surfaceFillLabel": "fill — 撑满父高度",
+  "globals.surfaceFilled": "filled",
+  "globals.surfaceOutlined": "outlined",
+  "globals.switchMdStart": "Switch md · 标签在前",
+  "globals.tabsSmA": "甲",
+  "globals.tabsSmAria": "小号标签（含禁用项）",
+  "globals.tabsSmB": "乙",
+  "globals.tabsSmDisabled": "禁用",
+  "globals.textareaError": "提示过短。",
+  "globals.textareaFilledAria": "Filled 小多行",
+  "globals.textareaFilledPlaceholder": "Filled sm + 错误…",
+  "globals.sheetHalfOpen": "打开半高表单",
+  "globals.sheetFullOpen": "打开全高表单",
+  "globals.sheetHalfTitle": "半高底部表单",
+  "globals.sheetFullTitle": "全高底部表单",
+  "globals.drawerLeftOpen": "打开左侧抽屉",
+  "globals.drawerLeftTitle": "起始边抽屉",
+  "globals.confirmLoading": "确认加载中",
+  "globals.confirmDisabled": "确认禁用",
+  "globals.busyPaintYield": "yieldToMain 切片",
+  "globals.busyPaintRunDirect": "runBusyTask(setBusy, …)",
+  "globals.busyPaintYieldHelp": "第三路径：显示 busy → afterNextPaint → 工作中用 yieldToMain 切片。",
+  "globals.busyRegionDeterminate": "BusyRegion value + size sm",
+  "globals.busyScrimDeterminate": "BusyScrim value + size lg（2 秒）",
+  "globals.emptySmTitle": "这里空空",
+  "globals.emptySmDescription": "EmptyState size=\"sm\"。",
+  "globals.stepperVerticalAria": "竖向步骤",
+  "globals.stepperVerticalHelp": "Stepper orientation=\"vertical\"。",
+  "globals.dropzoneBusy": "忙碌拖放区",
+  "globals.dropzoneDisabled": "禁用拖放区",
+  "globals.dropzoneAccept": "仅图片（accept）",
+  "globals.dropzoneAcceptHint": "accept=\"image/*\"",
+  "globals.tableStickyHelp": "固定高度滚动容器内的 stickyHeader 表格。",
+  "globals.paginationMd": "分页 size md",
+  "globals.appBarMdTitle": "中等顶栏",
+  "globals.appBarLgTitle": "大号顶栏",
+  "globals.appBarSizeHelp": "TopAppBar size md（80dp）/ lg（104dp）；上方默认样例为 sm。",
+  "globals.navLabelLabeled": "始终显示标签",
+  "globals.navLabelSelected": "仅选中显示",
+  "globals.navLabelUnlabeled": "无标签",
+  "globals.navLabelVisibilityAria": "标签可见性",
+  "globals.navRailLabelHelp": "NavigationRail labelVisibility：labeled / selected / unlabeled。",
+  "globals.navBarLabelHelp": "NavigationBar labelVisibility：labeled / selected / unlabeled。",
+  "globals.rhythmGridHelp": "节奏区固定 x={2} / y={2} 的 Grid。",
+  "globals.rhythmGridA": "甲",
+  "globals.rhythmGridB": "乙",
+  "globals.rhythmGridC": "丙",
+  "globals.rhythmGridD": "丁",
+  "globals.codeRegisterLabel": "scene.gsc（registerHighlightLanguage）",
+  "globals.codeRegisterHelp": "CodeBlock language=\"gsc\" 经 registerHighlightLanguage 解析 — 无需 highlightProfile。",
+  "globals.collapsibleHelpPreview": "Globals 展示 actions + 默认收起。Preview 已可切换打开 / 图标 / actions。",
   "hue.cyan": "青色",
 };
 

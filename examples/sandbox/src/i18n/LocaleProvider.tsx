@@ -79,9 +79,4 @@ export function useLocale(): LocaleContextValue {
   return ctx;
 }
 
-/** Optional hook for shared gallery pages that may run outside the provider. */
-export function useOptionalLocale(): LocaleContextValue | null {
-  return useContext(LocaleContext);
-}
-
 export type { MessageKey, Locale };

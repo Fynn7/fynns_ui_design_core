@@ -1,12 +1,16 @@
-import { InfoHint, Slider } from "@fynns/ui";
+import { InfoHint, LAYOUT_TOKENS, Slider } from "@fynns/ui";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import {
   EDITABLE_LAYOUT_BY_SECTION,
+  EDITABLE_NAVDRAWER_KEYS,
+  READONLY_LAYOUT_KEYS,
   SANDBOX_CHROME_TOKENS,
   sandboxChromeVar,
   type EditableLayoutKey,
+  type EditableNavdrawerKey,
   type LayoutChromeSectionId,
+  type ReadonlyLayoutKey,
   type SandboxChromeKey,
 } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -138,10 +142,79 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.barHeightHint",
     max: 96,
   },
+  "chat-max-width": {
+    labelKey: "layoutChrome.chatMaxWidth",
+    hintKey: "layoutChrome.chatMaxWidthHint",
+    max: 960,
+  },
+  "chat-min-width": {
+    labelKey: "layoutChrome.chatMinWidth",
+    hintKey: "layoutChrome.chatMinWidthHint",
+    max: 480,
+  },
+};
+
+const NAVDRAWER_ROW_META: Record<
+  EditableNavdrawerKey,
+  { labelKey: MessageKey; hintKey: MessageKey; max: number }
+> = {
+  width: {
+    labelKey: "layoutChrome.navdrawerWidth",
+    hintKey: "layoutChrome.navdrawerWidthHint",
+    max: 400,
+  },
+  "min-width": {
+    labelKey: "layoutChrome.navdrawerMinWidth",
+    hintKey: "layoutChrome.navdrawerMinWidthHint",
+    max: 320,
+  },
+  "max-width": {
+    labelKey: "layoutChrome.navdrawerMaxWidth",
+    hintKey: "layoutChrome.navdrawerMaxWidthHint",
+    max: 560,
+  },
+};
+
+const READONLY_LAYOUT_META: Record<
+  ReadonlyLayoutKey,
+  { labelKey: MessageKey; hintKey: MessageKey }
+> = {
+  "end-aside-max-width": {
+    labelKey: "layoutChrome.roEndAsideMax",
+    hintKey: "layoutChrome.roEndAsideMaxHint",
+  },
+  "end-aside-min-width": {
+    labelKey: "layoutChrome.roEndAsideMin",
+    hintKey: "layoutChrome.roEndAsideMinHint",
+  },
+  "main-min-width": {
+    labelKey: "layoutChrome.roMainMin",
+    hintKey: "layoutChrome.roMainMinHint",
+  },
+  "sheet-max-height": {
+    labelKey: "layoutChrome.roSheetMaxH",
+    hintKey: "layoutChrome.roSheetMaxHHint",
+  },
+  "sheet-half-height": {
+    labelKey: "layoutChrome.roSheetHalfH",
+    hintKey: "layoutChrome.roSheetHalfHHint",
+  },
+  "tooltip-max-width": {
+    labelKey: "layoutChrome.roTooltipMax",
+    hintKey: "layoutChrome.roTooltipMaxHint",
+  },
+  "snackbar-max-width": {
+    labelKey: "layoutChrome.roSnackbarMax",
+    hintKey: "layoutChrome.roSnackbarMaxHint",
+  },
+  "field-hint-gap": {
+    labelKey: "layoutChrome.roFieldHint",
+    hintKey: "layoutChrome.roFieldHintHint",
+  },
 };
 
 const LAYOUT_SECTIONS: ReadonlyArray<{
-  id: Exclude<LayoutChromeSectionId, "sandbox">;
+  id: Exclude<LayoutChromeSectionId, "sandbox" | "navDrawer">;
   helpKey: MessageKey;
 }> = [
   { id: "rhythm", helpKey: "layoutChrome.rhythmHelp" },
@@ -241,6 +314,80 @@ export function LayoutChromeSliders({ showChrome = true }: { showChrome?: boolea
           })}
         </div>
       ))}
+
+      <div className="sandbox-stack">
+        <SandboxHelp text={t("layoutChrome.navDrawerHelp")} />
+        {EDITABLE_NAVDRAWER_KEYS.map((key) => {
+          const { labelKey, hintKey, max } = NAVDRAWER_ROW_META[key];
+          const cssVar = `--fynns-navdrawer-${key}`;
+          const px = parseLengthToPx(resolved(cssVar));
+          const label = t(labelKey);
+          return (
+            <div key={key} className="sandbox-field">
+              <div className="sandbox-field-row">
+                <InfoHint
+                  label={
+                    <span className="sandbox-radius-label">
+                      <code>navdrawer-{key}</code>
+                      <span className="sandbox-radius-uses">{label}</span>
+                    </span>
+                  }
+                  ariaLabel={`${cssVar}: ${label}`}
+                  content={t(hintKey)}
+                />
+                <code>{px}px</code>
+              </div>
+              <Slider
+                ariaLabel={label}
+                min={0}
+                max={max}
+                step={1}
+                value={px}
+                onChange={(v) =>
+                  apply({
+                    group: "navdrawer",
+                    key,
+                    value: pxToRem(v),
+                    source: "slider",
+                  })
+                }
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="sandbox-stack">
+        <SandboxHelp text={t("layoutChrome.readonlyHelp")} />
+        <div className="sandbox-field">
+          <div className="sandbox-field-row">
+            <span>{t("layoutChrome.specialReadonly")}</span>
+          </div>
+          <ul className="sandbox-globals-readonly">
+            {READONLY_LAYOUT_KEYS.map((key) => {
+              const { labelKey, hintKey } = READONLY_LAYOUT_META[key];
+              const cssVar = `--fynns-layout-${key}`;
+              const value = resolved(cssVar) || LAYOUT_TOKENS[key];
+              return (
+                <li key={key}>
+                  <InfoHint
+                    label={
+                      <span className="sandbox-radius-label">
+                        <code>
+                          layout-{key}: {value}
+                        </code>
+                        <span className="sandbox-radius-uses">{t(labelKey)}</span>
+                      </span>
+                    }
+                    ariaLabel={`${cssVar}: ${t(labelKey)}`}
+                    content={t(hintKey)}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

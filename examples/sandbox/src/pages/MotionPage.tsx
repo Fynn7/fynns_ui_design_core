@@ -7,8 +7,10 @@ export function MotionPage() {
     <Motion
       titles={{
         easing: t("motion.easing"),
+        duration: t("motion.duration"),
         flyout: t("motion.flyout"),
         flyoutHelp: t("motion.flyoutHelp"),
+        flyoutPanel: t("motion.flyoutPanel"),
         replay: t("motion.replay"),
       }}
     />

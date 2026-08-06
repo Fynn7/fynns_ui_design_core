@@ -57,10 +57,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
    Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
-   ancestors are real `Button` `ghost` `sm` (stadium + state-layer); body links
-   (`TextLinkButton`) keep a resting solid underline; import/diff actions
-   (`DottedLinkButton`) keep dotted. Do not strip underlines from the latter
-   two. Tooltips also describe *dynamic* state (e.g. why a control is
+   ancestors are real `Button` `ghost` `sm` (stadium + state-layer). Tooltips also describe *dynamic* state (e.g. why a control is
    disabled).
    **Positioning conventions** (per NN/g, Material 3, Carbon — a tooltip must not
    cover its trigger or the adjacent related content; the caret links the bubble
@@ -84,7 +81,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
-   `.sr-only` class for screen-reader-only text, a visible `:focus-visible` cue —
+   `.fynns-sr-only` class for screen-reader-only text, a visible `:focus-visible` cue —
    soft ring (`--fynns-focus-ring-width` + `--fynns-color-focus` / `accent-ring`),
    quiet border tint (`--fynns-focus-border-mix` into `--fynns-color-border` for
    fields / SearchBar / Select / Autocomplete / editable CodeBlock / Carousel /
@@ -211,7 +208,7 @@ Color tokens (`--fynns-color-*`):
   filled card), `surface-5` (reserved). Legacy aliases kept: `surface`,
   `surface-head`, `toast-surface`. Also `surface-muted`, `surface-hover`,
   `control-surface`, `control-surface-hover`, `flyout-item`,
-  `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`,
+  `flyout-item-hover`, `input-fill`,
   `chat-user-bubble` (quiet Chat user-bubble lift; light override).
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
@@ -229,7 +226,7 @@ Color tokens (`--fynns-color-*`):
 - State layers (`--fynns-state-*`): `hover` `8%`, `focus` `10%`, `pressed`
   `12%`, `dragged` `16%` — used via `color-mix(...)` for interactive overlays.
 - Elevation lookups (TS only, not CSS vars): `ELEVATION_TOKENS`.
-  M3 reference mirror: [`src/theme/tokens.m3-draft.ts`](src/theme/tokens.m3-draft.ts).
+  M3 reference mirror: [`llm/m3-draft-tokens.md`](llm/m3-draft-tokens.md).
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases.
@@ -250,8 +247,8 @@ Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/
 `theme.css` resets `code` / `kbd` / `samp` / `pre` onto the mono stack so bare
 `<code>` labels never fall back to the browser default monospace.
 `--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
-`--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,pointer,loop-pulse,
-loading-spin,loading-skeleton,presentation-hint,reduced-motion-spin}`.
+`--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
+loading-spin,presentation-hint,reduced-motion-spin}`.
 
 **Code highlight (`--fynns-code-*`):** semantic roles for `CodeBlock` (fg, bg,
 comment, keyword, string, number, type, function, variable, property, parameter,
@@ -363,7 +360,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `--fynns-radius-xs` (4px), size `.875em`, weight medium; user bubble uses
     the same wash + tighter pad.
     `pre code` stays unstyled by these rules.
-    **ARIA (ChatGPT parity):** skip → `#main`; **prefer** dual sr-only notify
+    **ARIA (ChatGPT parity):** skip → `#main`; **prefer** dual `.fynns-sr-only` notify
     regions for respond/complete (app-owned today — not token-live on the
     bubble; core ships `role="log"` on `ChatThread` + `aria-busy` on the
     row). Keep composer focus after send; Send/Stop/dictate labels — full
@@ -476,10 +473,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   watches **main-column** overflow (canvas + `EndAside` floors vs the main
   track), not only the outer shell scrollWidth — also when shrink-to-fit hides
   overflow (drawer track starves main below `main-min` + `end-aside-min`, or
-  nav column ≥ main while EndAside is open). On open, crowding is predicted from
-  **target** drawer width (`wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so
-  destinations densify to rail **before paint** — no full-drawer → icon snap.
-  It **must not** fire while the
+  nav column ≥ main while EndAside is open).   On open, crowding is predicted from
+  **target** drawer width (`wouldClippedNavDrawerCrowd(shellEl, { endAsideOpen })`)
+  in `useLayoutEffect` **before** applying `navMode="drawer"` paint — if the open
+  width would crowd, densify to `"rail"` first so destinations never flash as a
+  full labeled drawer then snap. Export is also available for apps that open
+  destinations themselves. It **must not** fire while the
   drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
   (closing morph would otherwise false-trip overflow and collapse labeled
   drawer → rail).

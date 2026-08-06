@@ -12,7 +12,7 @@ export type BannerProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   /** Leading icon (decorative). Defaults to none. */
   icon?: ReactNode;
   /**
-   * Trailing text actions (typically `Button` `variant="ghost"` / `TextLinkButton`).
+   * Trailing text actions (typically `Button` `variant="ghost"`).
    * Laid out before the dismiss control.
    */
   actions?: ReactNode;
