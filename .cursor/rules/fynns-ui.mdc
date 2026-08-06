@@ -78,8 +78,10 @@ ring can paint before heavy work).
   hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
-  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog
-  chrome) — AGENTS.md **Inset decision tree**; do not invent ad-hoc gaps.
+  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog)
+  vs strip-pad-inline (Banner / Snackbar / ChatComposer text start) vs
+  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) — AGENTS.md
+  **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;

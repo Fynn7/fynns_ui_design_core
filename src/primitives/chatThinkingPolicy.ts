@@ -4,7 +4,7 @@
  */
 
 export type ThinkingLabelLabels = {
-  /** While `streaming`. Default `"Thinking…"`. */
+  /** While `streaming`. Default `"Thinking"`. */
   streamingLabel?: string;
   /** Done, no duration. Default `"Thinking"`. */
   label?: string;
@@ -12,7 +12,7 @@ export type ThinkingLabelLabels = {
   durationLabel?: (seconds: number) => string;
 };
 
-const DEFAULT_STREAMING = "Thinking…";
+const DEFAULT_STREAMING = "Thinking";
 const DEFAULT_DONE = "Thinking";
 
 /** Wall-clock ms → whole seconds (min 1 when ms > 0). */

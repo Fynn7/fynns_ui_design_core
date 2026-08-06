@@ -348,7 +348,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
     **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
-    between `name` and the answer bubble (ChatGPT / Claude “Thinking… /
+    between `name` and the answer bubble (ChatGPT / Claude “Thinking /
     Thought for Ns”; `.fynns-expand` height morph — not Collapsible card chrome;
     muted trigger; streaming label opacity pulse via
     `--fynns-duration-presentation-hint`; force-open while streaming unless
@@ -408,10 +408,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `field-sizing: fixed`, layout-effect auto-grow). Empty value forces
     height to `--fynns-chat-composer-line-height` (~`min-h-9` / 36px) so
     placeholder wrap cannot inflate a narrow EndAside; shell pad is
-    `--fynns-chat-composer-pad-*` (= SearchBar capsule `pad-inline` 4px) +
-    Input-in-shell text inset (`space-md − hairline` when no leading /
-    trailing control) so placeholder start matches Input / Select /
-    Autocomplete (~15–16px from shell edge); row `align-items: center` +
+    `--fynns-chat-composer-pad-inline` (= layout `capsule-chrome-pad-inline`
+    ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
+    control, textarea start adds pad so text lands at
+    `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
+    Outer form inset uses `strip-pad-inline`; row `align-items: center` +
     `line-height` = composer line height for vertical centering. Collapsed
     shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
     `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
@@ -637,6 +638,17 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   (section label → `InlineAlert` → next block) with
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
   second custom status box (use `InlineAlert` for in-panel severity).
+  **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
+  and ChatComposer **text start** when there is no leading control):
+  `--fynns-layout-strip-pad-inline` (20dp default). Banner /
+  InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
+  `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
+  **Capsule chrome** (SearchBar field / ChatComposer **shell** next to
+  IconButtons — ChatGPT Send/mic flush):
+  `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer shell uses this
+  on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
+  — do **not** put strip pad on the Send side. ChatComposer **outer** form
+  inset also uses `strip-pad-inline`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
@@ -647,8 +659,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   panel `max-height`.
   FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
   asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
-  block≠inline). Do not force Snackbar / ListItem onto equal four-side padding.
-  Do not substitute raw `--fynns-space-*` for dialog/panel shell insets.
+  block≠inline). Do not force ListItem onto equal four-side padding.
+  Do not substitute raw `--fynns-space-*` for dialog/panel/strip shell insets.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).

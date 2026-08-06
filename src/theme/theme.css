@@ -273,10 +273,10 @@
   --fynns-toolbar-action-icon-size: 1rem;
   --fynns-toolbar-fab-gap: 0.75rem;
   --fynns-searchbar-height: var(--fynns-layout-bar-height);
-  --fynns-searchbar-pad-inline: 0.25rem;
+  --fynns-searchbar-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-searchbar-icon-slot: 3rem;
   --fynns-searchbar-icon-size: 1rem;
-  --fynns-searchbar-input-pad-inline: 0.25rem;
+  --fynns-searchbar-input-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-searchbar-font-size: 1rem;
   --fynns-searchbar-line-height: 1.5;
   --fynns-searchbar-results-max-height: 20rem;
@@ -285,7 +285,7 @@
   --fynns-searchbar-results-pad-inline: 0.5rem;
   --fynns-searchbar-results-gap: 0.125rem;
   --fynns-banner-min-height: 3.25rem;
-  --fynns-banner-pad-inline: 1rem;
+  --fynns-banner-pad-inline: var(--fynns-layout-strip-pad-inline);
   --fynns-banner-pad-block: 0.75rem;
   --fynns-banner-gap: 0.75rem;
   --fynns-banner-icon-size: 1rem;
@@ -328,11 +328,11 @@
   --fynns-chat-composer-scroll-pad: 1.75rem;
   --fynns-chat-composer-min-height: 2.25rem;
   --fynns-chat-composer-max-height: 13rem;
-  --fynns-chat-composer-pad-inline: 0.25rem;
+  --fynns-chat-composer-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-chat-composer-pad-block: 0.5rem;
   --fynns-chat-composer-gap: 0.25rem;
   --fynns-chat-composer-control-size: 2.25rem;
-  --fynns-chat-composer-inset-inline: 0.75rem;
+  --fynns-chat-composer-inset-inline: var(--fynns-layout-strip-pad-inline);
   --fynns-chat-composer-inset-block: 0.75rem;
   --fynns-chat-composer-offset: 0.5rem;
   --fynns-chat-composer-line-height: 2.25rem;
@@ -441,6 +441,8 @@
   --fynns-layout-dialog-max-width-lg: 35rem;
   --fynns-layout-drawer-width: 25rem;
   --fynns-layout-content-inset: 1.125rem;
+  --fynns-layout-strip-pad-inline: 1.25rem;
+  --fynns-layout-capsule-chrome-pad-inline: 0.25rem;
   --fynns-layout-content-pad-block: 1rem;
   --fynns-layout-dialog-inset: 1.5rem;
   --fynns-layout-sheet-max-width: 40rem;
@@ -460,7 +462,7 @@
   --fynns-layout-tooltip-max-width: min(14rem, calc(100vw - 16px));
   --fynns-layout-snackbar-max-width: min(35rem, calc(100vw - 2rem));
   --fynns-layout-snackbar-min-height: 3rem;
-  --fynns-layout-snackbar-pad-inline: 1rem;
+  --fynns-layout-snackbar-pad-inline: var(--fynns-layout-strip-pad-inline);
   --fynns-layout-snackbar-pad-block: 0.5rem;
   --fynns-layout-snackbar-gap: 0.5rem;
   --fynns-layout-snackbar-dismiss-size: 2rem;

@@ -9023,7 +9023,7 @@ a.fynns-breadcrumb-link:visited {
   margin: 0;
   /*
    * End inset mirrors Input-in-shell when there is no trailing control.
-   * Start inset: see :has(.fynns-chat-composer-leading) rules below.
+   * Start inset: see no-leading rule below (strip breath for text-only start).
    */
   padding-block: 0;
   padding-inline-start: 0;
@@ -9047,14 +9047,14 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * No leading affix: same label inset as Input / Select / Autocomplete.
- * Shell already has composer-pad-inline (= searchbar-pad-inline); add
- * space-md − hairline so text start = pad-inline + space-md.
+ * No leading affix: text start = strip-pad from shell edge (Banner breath).
+ * Shell end stays capsule-chrome (~4dp) so Send matches ChatGPT mic/send flush.
  */
 .fynns-chat-composer-row:not(:has(.fynns-chat-composer-leading))
   .fynns-chat-composer-input {
   padding-inline-start: calc(
-    var(--fynns-space-md) - var(--fynns-border-hairline)
+    var(--fynns-layout-strip-pad-inline) -
+      var(--fynns-layout-capsule-chrome-pad-inline)
   );
 }
 

@@ -15,9 +15,9 @@ import { ChevronRightIcon, ICON_SIZE } from "./icons";
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   /** Thought body (caller-owned summary — core does not parse markdown). */
   children?: ReactNode;
-  /** While true: "Thinking…" label, force-open (unless user pinned closed), opacity pulse. */
+  /** While true: "Thinking" label, force-open (unless user pinned closed), opacity pulse. */
   streaming?: boolean;
-  /** Label while `streaming`. @default "Thinking…" */
+  /** Label while `streaming`. @default "Thinking" */
   streamingLabel?: string;
   /** Done label when `durationMs` is omitted. @default "Thinking" */
   label?: string;
@@ -39,7 +39,7 @@ function join(...parts: Array<string | false | null | undefined>) {
 }
 
 /**
- * Single-block reasoning disclosure (ChatGPT / Claude “Thinking… / Thought for Ns”).
+ * Single-block reasoning disclosure (ChatGPT / Claude “Thinking / Thought for Ns”).
  * Compose via `ChatMessage.thinking`. UI chrome only — no LLM / markdown.
  *
  * Open policy (uncontrolled): force open while `streaming` unless the user
