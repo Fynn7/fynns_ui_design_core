@@ -82,7 +82,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
    `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
-   from `--fynns-focus-ring-width` + `--fynns-color-focus`, and keyboard affordances
+   from `--fynns-focus-ring-width` + `--fynns-color-focus` (keep faint), or for
+   text fields / editable CodeBlock a quiet border tint via
+   `--fynns-focus-border-mix` into `--fynns-color-border` (not a full accent ring),
+   and keyboard affordances
    (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
 7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
    motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already
@@ -190,9 +193,11 @@ Color tokens (`--fynns-color-*`):
   `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
-    `accent-ring`, `on-accent`, `accent-container`, `on-accent-container`,
+    `accent-ring` (soft mark for small controls / nav indicators), `on-accent`, `accent-container`, `on-accent-container`,
     `secondary-container`, `on-secondary-container`, `tertiary-container`,
-    `on-tertiary-container`, `focus`.
+    `on-tertiary-container`, `focus` (faint keyboard ring fill).
+  - Focus geometry (`--fynns-focus-*`): `ring-width`, `ring-offset-control`,
+    `ring-offset-input`, `border-mix` (accent % into resting border for fields).
   - Lines/text: `border` `#0d2e2c`, `border-strong`, `outline-subtle`, `text` `#e2f0ed`,
     `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
@@ -345,7 +350,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   HeaderCell / Cell / Caption), CodeBlock (`default` head, `plain` headless, or
   `editable` live highlight via pre backdrop + transparent textarea —
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
-  `onChange` coalesced while typing / flushed on blur);
+  `onChange` coalesced while typing / flushed on blur); focus = quiet
+  Input-like border (`--fynns-focus-border-mix`), not an inset ring;
   supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
   `css`/`json`/`bash`/… or consumer `registerHighlightLanguage` /
   `highlightProfile`); unknown → plain mono;

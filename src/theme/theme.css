@@ -27,7 +27,7 @@
   --fynns-color-accent-mid: rgba(45, 212, 191, 0.5);
   --fynns-color-accent-24: rgba(45, 212, 191, 0.24);
   --fynns-color-accent-42: rgba(45, 212, 191, 0.42);
-  --fynns-color-accent-ring: rgba(45, 212, 191, 0.4);
+  --fynns-color-accent-ring: rgba(45, 212, 191, 0.18);
   --fynns-color-on-accent: #031417;
   --fynns-color-accent-container: rgba(45, 212, 191, 0.2);
   --fynns-color-on-accent-container: #7ee8d8;
@@ -41,7 +41,7 @@
   --fynns-color-danger: #f87171;
   --fynns-color-danger-border: rgba(248, 113, 113, 0.5);
   --fynns-color-info: #60a5fa;
-  --fynns-color-focus: rgba(45, 212, 191, 0.48);
+  --fynns-color-focus: rgba(45, 212, 191, 0.22);
   --fynns-color-overlay: rgba(0, 0, 0, 0.48);
   --fynns-color-toast-surface: #062126;
   --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
@@ -391,6 +391,7 @@
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
+  --fynns-focus-border-mix: 12%;
   --fynns-layout-dialog-max-width: 32rem;
   --fynns-layout-dialog-max-width-sm: 24rem;
   --fynns-layout-dialog-max-width-md: 32rem;
@@ -488,7 +489,7 @@
   --fynns-color-accent-mid: rgba(13, 148, 136, 0.45);
   --fynns-color-accent-24: rgba(13, 148, 136, 0.18);
   --fynns-color-accent-42: rgba(13, 148, 136, 0.32);
-  --fynns-color-accent-ring: rgba(13, 148, 136, 0.38);
+  --fynns-color-accent-ring: rgba(13, 148, 136, 0.16);
   --fynns-color-on-accent: #ffffff;
   --fynns-color-accent-container: rgba(13, 148, 136, 0.14);
   --fynns-color-on-accent-container: #0f766e;
@@ -502,7 +503,7 @@
   --fynns-color-danger: #dc2626;
   --fynns-color-danger-border: rgba(220, 38, 38, 0.45);
   --fynns-color-info: #2563eb;
-  --fynns-color-focus: rgba(13, 148, 136, 0.42);
+  --fynns-color-focus: rgba(13, 148, 136, 0.2);
   --fynns-color-overlay: rgba(0, 0, 0, 0.32);
   --fynns-color-toast-surface: #ffffff;
   --fynns-color-control-surface: rgba(0, 0, 0, 0.02);
