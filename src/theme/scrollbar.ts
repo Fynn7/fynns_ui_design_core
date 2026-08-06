@@ -6,7 +6,7 @@
  * by editors like Monaco whose theme colors do not accept `rgba()`.
  *
  *   - DOM overflow surfaces inherit the skin from `theme.css` (every `*`) or via
- *     the `.fynns-scroll` / `.fynns-scroll-area` classes (see `primitives.css`).
+ *     the `.fynns-scroll` class ({@link SCROLL_SURFACE_CLASS}).
  *   - Monaco reads the palette through {@link monacoScrollbarColors}.
  */
 
@@ -33,9 +33,6 @@ export const SCROLLBAR_CSS_VARS = {
   thumbActive: "--fynns-scrollbar-thumb-active",
   track: "--fynns-scrollbar-track",
 } as const;
-
-/** Class that turns an element into a scrollable container with the skin. */
-export const SCROLL_CONTAINER_CLASS = "fynns-scroll-area";
 
 /** Class that paints any scrollable element with the custom skin. */
 export const SCROLL_SURFACE_CLASS = "fynns-scroll";

@@ -3,6 +3,7 @@ import {
   Collapsible,
   InfoHint,
   Slider,
+  SPACE_TOKENS,
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -58,29 +59,31 @@ const STATE_LAYER_KEYS = [
   { key: "dragged", hintKey: "inspector.stateDraggedHint" as const },
 ] as const;
 
-const SPACE_KEYS = [
-  {
-    key: "lg",
-    labelKey: "inspector.spaceLg" as const,
-    hintKey: "inspector.spaceLgHint" as const,
-  },
-  {
-    key: "md",
-    labelKey: "inspector.spaceMd" as const,
-    hintKey: "inspector.spaceMdHint" as const,
-  },
-  {
-    key: "sm",
-    labelKey: "inspector.spaceSm" as const,
-    hintKey: "inspector.spaceSmHint" as const,
-  },
+/** Full t-shirt ladder — editable in inspector. */
+const SPACE_TSHIRT = [
+  { key: "2xs", max: 8 },
+  { key: "xs", max: 16 },
+  { key: "sm", max: 24 },
+  { key: "md", max: 32 },
+  { key: "lg", max: 40 },
+  { key: "xl", max: 48 },
+  { key: "2xl", max: 64 },
+  { key: "3xl", max: 96 },
 ] as const;
 
-const FONT_SIZE_HINT_KEYS = {
-  sm: "inspector.fontSmHint",
-  md: "inspector.fontMdHint",
-  lg: "inspector.fontLgHint",
-} as const satisfies Record<"sm" | "md" | "lg", MessageKey>;
+const SPACE_LEGACY_KEYS = (
+  Object.keys(SPACE_TOKENS) as Array<keyof typeof SPACE_TOKENS>
+).filter((k) => !(SPACE_TSHIRT.map((r) => r.key) as readonly string[]).includes(k));
+
+const FONT_SIZE_ROWS = [
+  { key: "xs", hintKey: "inspector.fontXsHint" as const, max: 18 },
+  { key: "sm", hintKey: "inspector.fontSmHint" as const, max: 22 },
+  { key: "md", hintKey: "inspector.fontMdHint" as const, max: 28 },
+  { key: "lg", hintKey: "inspector.fontLgHint" as const, max: 32 },
+  { key: "title-large", hintKey: "inspector.fontTitleLargeHint" as const, max: 36 },
+  { key: "xl", hintKey: "inspector.fontXlHint" as const, max: 40 },
+  { key: "2xl", hintKey: "inspector.font2xlHint" as const, max: 48 },
+] as const;
 
 export function PropertyInspector() {
   const { t, plural } = useLocale();
@@ -90,9 +93,6 @@ export function PropertyInspector() {
   const focus = parsePercent(resolved("--fynns-state-focus"));
   const pressed = parsePercent(resolved("--fynns-state-pressed"));
   const dragged = parsePercent(resolved("--fynns-state-dragged"));
-  const spaceLgPx = parseLengthToPx(resolved("--fynns-space-lg"));
-  const spaceMdPx = parseLengthToPx(resolved("--fynns-space-md"));
-  const spaceSmPx = parseLengthToPx(resolved("--fynns-space-sm"));
   const borderStrong = resolved("--fynns-color-border-strong");
   const borderStrongBaseline = BASELINE["--fynns-color-border-strong"] ?? "#164038";
   const borderStrongDelta = estimateBrightnessDelta(borderStrongBaseline, borderStrong);
@@ -115,6 +115,8 @@ export function PropertyInspector() {
             />
           </span>
         </header>
+
+        <SandboxHelp text={t("inspector.lightThemeHelp")} />
 
         <Collapsible title={t("inspector.color")} defaultOpen>
           <div className="sandbox-stack">
@@ -249,20 +251,23 @@ export function PropertyInspector() {
         <Collapsible title={t("inspector.spacing")} defaultOpen>
           <div className="sandbox-stack">
             <SandboxHelp text={t("inspector.spacingHelp")} />
-            {SPACE_KEYS.map(({ key, labelKey, hintKey }) => {
-              const pxByKey = { lg: spaceLgPx, md: spaceMdPx, sm: spaceSmPx } as const;
-              const px = pxByKey[key];
-              const label = t(labelKey);
+            {SPACE_TSHIRT.map(({ key, max }) => {
+              const px = parseLengthToPx(resolved(`--fynns-space-${key}`));
+              const label = `space-${key}`;
               return (
                 <div key={key} className="sandbox-field">
                   <div className="sandbox-field-row">
-                    <InfoHint label={label} ariaLabel={label} content={t(hintKey)} />
+                    <InfoHint
+                      label={label}
+                      ariaLabel={label}
+                      content={t("inspector.spaceTshirtHint", { key })}
+                    />
                     <code>{px}px</code>
                   </div>
                   <Slider
                     ariaLabel={label}
-                    min={4}
-                    max={32}
+                    min={0}
+                    max={max}
                     step={1}
                     value={px}
                     onChange={(v) =>
@@ -277,6 +282,20 @@ export function PropertyInspector() {
                 </div>
               );
             })}
+            <div className="sandbox-field">
+              <div className="sandbox-field-row">
+                <span>{t("inspector.spaceLegacyTitle")}</span>
+              </div>
+              <ul className="sandbox-globals-readonly">
+                {SPACE_LEGACY_KEYS.map((key) => (
+                  <li key={key}>
+                    <code>
+                      space-{key}: {SPACE_TOKENS[key]}
+                    </code>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </Collapsible>
 
@@ -286,7 +305,7 @@ export function PropertyInspector() {
 
         <Collapsible title={t("inspector.typography")}>
           <div className="sandbox-stack">
-            {(["sm", "md", "lg"] as const).map((key) => {
+            {FONT_SIZE_ROWS.map(({ key, hintKey, max }) => {
               const raw = resolved(`--fynns-font-size-${key}`);
               const px = parseLengthToPx(raw);
               return (
@@ -295,14 +314,14 @@ export function PropertyInspector() {
                     <InfoHint
                       label={`font-size-${key}`}
                       ariaLabel={`font-size-${key}`}
-                      content={t(FONT_SIZE_HINT_KEYS[key])}
+                      content={t(hintKey as MessageKey)}
                     />
                     <code>{raw}</code>
                   </div>
                   <Slider
                     ariaLabel={`font-size-${key}`}
                     min={10}
-                    max={28}
+                    max={max}
                     step={1}
                     value={px}
                     onChange={(v) =>

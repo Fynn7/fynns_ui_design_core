@@ -90,10 +90,16 @@ export type {
   DateRangeValue,
   DateValue,
 } from "./primitives/DatePicker";
-export { TimePicker, TimePickerDialog } from "./primitives/TimePicker";
+export {
+  TimePicker,
+  TimePickerDialog,
+  formatTimeValue,
+  parseTimeValue,
+} from "./primitives/TimePicker";
 export type {
   TimePickerDialogProps,
   TimePickerProps,
+  TimeValue,
 } from "./primitives/TimePicker";
 export { Carousel, CarouselItem } from "./primitives/Carousel";
 export type {

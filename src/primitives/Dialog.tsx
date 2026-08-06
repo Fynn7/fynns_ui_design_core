@@ -5,7 +5,7 @@ import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
 
-export type DialogVariant = "centered" | "command" | "drawer" | "sheet" | "fullscreen";
+export type DialogVariant = "centered" | "drawer" | "sheet" | "fullscreen";
 
 export type DrawerSide = "left" | "right";
 
@@ -173,25 +173,21 @@ export function DialogFrame({
   if (!visible) return null;
 
   const overlayVariantClass =
-    variant === "command"
-      ? "fynns-dialog-overlay--command"
-      : variant === "drawer"
-        ? "fynns-dialog-overlay--drawer"
-        : variant === "sheet"
-          ? "fynns-dialog-overlay--sheet"
-          : variant === "fullscreen"
-            ? "fynns-dialog-overlay--fullscreen"
-            : "fynns-dialog-overlay--centered";
+    variant === "drawer"
+      ? "fynns-dialog-overlay--drawer"
+      : variant === "sheet"
+        ? "fynns-dialog-overlay--sheet"
+        : variant === "fullscreen"
+          ? "fynns-dialog-overlay--fullscreen"
+          : "fynns-dialog-overlay--centered";
   const panelVariantClass =
-    variant === "command"
-      ? "fynns-dialog-panel--command"
-      : variant === "drawer"
-        ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
-        : variant === "sheet"
-          ? "fynns-dialog-panel--sheet"
-          : variant === "fullscreen"
-            ? "fynns-dialog--fullscreen"
-            : "fynns-dialog-panel--centered";
+    variant === "drawer"
+      ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
+      : variant === "sheet"
+        ? "fynns-dialog-panel--sheet"
+        : variant === "fullscreen"
+          ? "fynns-dialog--fullscreen"
+          : "fynns-dialog-panel--centered";
 
   return createPortal(
     <div

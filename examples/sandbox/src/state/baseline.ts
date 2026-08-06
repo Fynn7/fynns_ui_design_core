@@ -2,6 +2,7 @@ import {
   COLOR_TOKENS,
   FONT_SIZE_TOKENS,
   LAYOUT_TOKENS,
+  NAVDRAWER_TOKENS,
   RADIUS_TOKENS,
   SHADOW_TOKENS,
   SPACE_TOKENS,
@@ -40,13 +41,15 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
  * 3. panelInsets — content-inset (inline) / content-pad-block (body block) / dialog-inset
  * 4. sheetPads — BottomSheet M3 asymmetric pads (do not merge with panelInsets)
  * 5. shellSize — container width / chrome bar height (not padding)
+ * 6. navDrawer — NavigationDrawer absolute rem width / min / max
  */
 export type LayoutChromeSectionId =
   | "sandbox"
   | "rhythm"
   | "panelInsets"
   | "sheetPads"
-  | "shellSize";
+  | "shellSize"
+  | "navDrawer";
 
 /** Apply-writable `--fynns-layout-*` keys exposed in the sandbox GUI. */
 export const EDITABLE_LAYOUT_KEYS = [
@@ -72,9 +75,40 @@ export const EDITABLE_LAYOUT_KEYS = [
   "dialog-max-width-md",
   "dialog-max-width-lg",
   "bar-height",
+  "chat-max-width",
+  "chat-min-width",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type EditableLayoutKey = (typeof EDITABLE_LAYOUT_KEYS)[number];
+
+/**
+ * `--fynns-navdrawer-*` absolute rem keys (ClippedNavShell drawer track).
+ * Apply writes `NAVDRAWER_TOKENS`.
+ */
+export const EDITABLE_NAVDRAWER_KEYS = [
+  "width",
+  "min-width",
+  "max-width",
+] as const satisfies ReadonlyArray<keyof typeof NAVDRAWER_TOKENS>;
+
+export type EditableNavdrawerKey = (typeof EDITABLE_NAVDRAWER_KEYS)[number];
+
+/**
+ * Layout keys with vh / `min()` / `clamp()` / `var()` — visible read-only
+ * (same pattern as radius none/pill/round).
+ */
+export const READONLY_LAYOUT_KEYS = [
+  "end-aside-max-width",
+  "end-aside-min-width",
+  "main-min-width",
+  "sheet-max-height",
+  "sheet-half-height",
+  "tooltip-max-width",
+  "snackbar-max-width",
+  "field-hint-gap",
+] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
+
+export type ReadonlyLayoutKey = (typeof READONLY_LAYOUT_KEYS)[number];
 
 /**
  * @deprecated Prefer `EDITABLE_LAYOUT_KEYS` — now includes panel insets / sheet
@@ -85,7 +119,7 @@ export const EDITABLE_LAYOUT_CONTROL_KEYS = EDITABLE_LAYOUT_KEYS;
 export type EditableLayoutControlKey = EditableLayoutKey;
 
 export const EDITABLE_LAYOUT_BY_SECTION: Record<
-  Exclude<LayoutChromeSectionId, "sandbox">,
+  Exclude<LayoutChromeSectionId, "sandbox" | "navDrawer">,
   ReadonlyArray<EditableLayoutKey>
 > = {
   rhythm: [
@@ -105,6 +139,8 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "dialog-max-width-md",
     "dialog-max-width-lg",
     "bar-height",
+    "chat-max-width",
+    "chat-min-width",
   ],
 };
 
@@ -134,11 +170,19 @@ export const BASELINE: Record<string, string> = {
   ),
   ...Object.fromEntries(
     Object.entries(FONT_SIZE_TOKENS)
-      .filter(([k]) => ["xs", "sm", "md", "lg", "xl", "2xl"].includes(k))
+      .filter(([k]) =>
+        ["xs", "sm", "md", "lg", "title-large", "xl", "2xl"].includes(k),
+      )
       .map(([k, v]) => [fynnsVarName("font-size", k), v]),
   ),
   ...Object.fromEntries(
     EDITABLE_LAYOUT_KEYS.map((k) => [fynnsVarName("layout", k), LAYOUT_TOKENS[k]]),
+  ),
+  ...Object.fromEntries(
+    EDITABLE_NAVDRAWER_KEYS.map((k) => [
+      fynnsVarName("navdrawer", k),
+      NAVDRAWER_TOKENS[k],
+    ]),
   ),
   ...Object.fromEntries(
     (Object.keys(SANDBOX_CHROME_TOKENS) as SandboxChromeKey[]).map((k) => [
@@ -199,6 +243,16 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "dialog-max-width-lg": "Shell size · Dialog size=lg max width",
   "bar-height":
     "Shell size · product chrome bar (TopAppBar sm / BottomAppBar / SearchBar / Toolbar)",
+  "chat-max-width":
+    "Shell size · Chat main column ceiling (sync chatmessage-max-width)",
+  "chat-min-width":
+    "Shell size · Chat soft floor (apply as min(token, 100%))",
+};
+
+const NAVDRAWER_KEY_ROLES: Record<EditableNavdrawerKey, string> = {
+  width: "NavigationDrawer preferred width (absolute rem)",
+  "min-width": "ClippedNavShell drawer resize floor (absolute rem — no %)",
+  "max-width": "ClippedNavShell drawer resize cap (absolute rem — no %)",
 };
 
 /**
@@ -232,7 +286,7 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
   ...EDITABLE_LAYOUT_KEYS.map((k) => {
     const section = (
       Object.entries(EDITABLE_LAYOUT_BY_SECTION) as Array<
-        [Exclude<LayoutChromeSectionId, "sandbox">, ReadonlyArray<EditableLayoutKey>]
+        [Exclude<LayoutChromeSectionId, "sandbox" | "navDrawer">, ReadonlyArray<EditableLayoutKey>]
       >
     ).find(([, keys]) => keys.includes(k))?.[0];
     if (!section) {
@@ -245,4 +299,10 @@ export const SANDBOX_LAYOUT_AGENT_CATALOG: ReadonlyArray<{
       applyWrites: true,
     };
   }),
+  ...EDITABLE_NAVDRAWER_KEYS.map((k) => ({
+    cssVar: fynnsVarName("navdrawer", k),
+    role: NAVDRAWER_KEY_ROLES[k],
+    section: "navDrawer" as const,
+    applyWrites: true,
+  })),
 ];

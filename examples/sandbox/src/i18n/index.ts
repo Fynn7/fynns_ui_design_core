@@ -11,6 +11,5 @@ export {
 export {
   LocaleProvider,
   useLocale,
-  useOptionalLocale,
   type LocaleContextValue,
 } from "./LocaleProvider";

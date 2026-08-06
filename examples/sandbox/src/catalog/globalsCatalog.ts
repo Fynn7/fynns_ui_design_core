@@ -211,6 +211,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["聊天", "chat", "composer", "message", "对话"],
   },
   {
+    id: "chat-citations",
+    categoryId: "communication",
+    label: "ChatCitationChip / ChatCitations",
+    keywords: ["引用", "citation", "sources", "来源"],
+  },
+  {
     id: "carousel",
     categoryId: "containment",
     label: "Carousel",
@@ -227,6 +233,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "containment",
     label: "BadgedBox",
     keywords: ["角标", "badge", "badged"],
+  },
+  {
+    id: "badge",
+    categoryId: "containment",
+    label: "Badge",
+    keywords: ["徽章", "badge", "pill", "标签"],
   },
   {
     id: "list",
@@ -253,6 +265,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["表面", "surface"],
   },
   {
+    id: "field-header",
+    categoryId: "containment",
+    label: "FieldHeader",
+    keywords: ["字段头", "fieldheader", "label row", "fieldblock"],
+  },
+  {
     id: "collapsible",
     categoryId: "containment",
     label: "Collapsible",
@@ -265,6 +283,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: [
       "对话框",
       "dialog",
+      "dialogshell",
       "drawer",
       "bottomsheet",
       "sheet",
@@ -387,6 +406,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "navigation",
     label: "SearchBar",
     keywords: ["搜索栏", "searchbar", "search bar"],
+  },
+  {
+    id: "skip-link",
+    categoryId: "navigation",
+    label: "SkipLink",
+    keywords: ["跳过", "skip", "a11y", "accessibility", "跳转"],
   },
   {
     id: "rhythm",

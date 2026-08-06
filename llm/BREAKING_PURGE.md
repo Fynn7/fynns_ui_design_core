@@ -22,12 +22,27 @@ sandbox Globals/Preview demo and review.
 
 ## How to verify the allowlist
 
-```text
-Imports from @fynns/ui in GlobalsPage + CardPreviewCanvas + CollapsiblePreviewCanvas
-  ∪ theme exports from src/theme/*
-  − toast / Toaster / Toast*   (hard-deleted; use snackbar + SnackbarHost)
-= allowed public surface
+Run the machine check (fails CI / local when a barrel value has no demo and is
+not listed as companion):
+
+```bash
+npm run check:wysiwyg
 ```
+
+Contract:
+
+```text
+Value exports from src/index.ts
+  − imports in GlobalsPage + CardPreviewCanvas + CollapsiblePreviewCanvas
+    + SandboxShell
+  − symbols in llm/wysiwyg-companion.json
+= must be empty
+```
+
+Companions are theme/token infrastructure, mount-once hosts (`SnackbarHost`),
+shell-only icons, and pure helpers (date/time formatters, highlight registry,
+overflow free functions, busy schedulers). Components and visual anatomy must
+be demoed — do not park them in the companion list.
 
 Anything else must be deleted or kept as a non-exported internal.
 
@@ -53,8 +68,8 @@ Anything else must be deleted or kept as a non-exported internal.
 | `Kbd` / `Combobox` / `CommandPalette` | Delete usage or reimplement in the app. |
 | `UnitStack` | `display: flex; flex-direction: column; gap: var(--fynns-layout-unit-stack-gap)` (sandbox: `.sandbox-stack`). |
 | `captions` / `splitCaptionByBackticks` | Copy helper into the app (sandbox: `examples/sandbox/src/utils/captionSegments.ts`). |
-| `formatDateValue` / `parseDateValue` | Still public with `DatePicker` (date helpers); not a Globals import but kept as companion APIs. |
-| `measureOverflow` / `overflowsBounds` / `measureContentOverflow` / `useOverflowBounds` | Layout overflow helpers (demoed next to DatePicker in Globals). Prefer over ad-hoc rect math. |
+| `formatDateValue` / `parseDateValue` / `formatTimeValue` / `parseTimeValue` | Companion APIs with DatePicker / TimePicker (listed in `llm/wysiwyg-companion.json`; Time helpers also echoed beside TimePicker in Globals). |
+| `measureOverflow` / `overflowsBounds` / `measureContentOverflow` / `OVERFLOW_EPSILON` | Layout overflow free functions — companion APIs. Prefer `useOverflowBounds` (demoed in Globals Selection / date area with content + bounds samples). |
 | `Spinner` / `PanelSkeleton` / `BlockingLoadingOverlay` | Use `LinearProgress` / `CircularProgress`, `BusyScrim` (fullscreen) / `BusyRegion` (section), or `EmptyState`. Do not revive the old `BlockingLoadingOverlay` name. `Spinner` remains internal for `Button` `loading`. |
 | `CardHeader` / `CardContent` / `CardActions` / `CardMedia` / `CardActionArea` / `variant` / `interactive` / `selected` / `CARD_VARIANT_MAP` | Use one-shot `Card` (`title` / optional `icon` / `actions` + children). Same shell as Collapsible; head is static (no hover layer, no chevron). Title-less wells → `Surface`. App-level selected chrome via consumer class / `Surface`, not Card `selected`. |
 | `PanelLeftIcon` / … (other unused glyphs) | Prefer the public icon subset from the barrel, or ship app icons. Sandbox chrome keeps `Sun`/`Moon`/`PanelLeft`/`PanelRight`/`Sparkles`/`Bot`/`Download` exported. |

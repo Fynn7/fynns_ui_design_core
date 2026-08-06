@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { Button, Surface } from "@fynns/ui";
+import { DurationTokenTable, easingDemoList } from "../components/TokenList";
 import { Row, Section } from "./foundationsShared";
-
-const EASING_DEMOS = [
-  { label: "ease-out", token: "var(--fynns-ease-out)" },
-  { label: "emphasized", token: "var(--fynns-ease-emphasized)" },
-  { label: "spring", token: "var(--fynns-ease-spring)" },
-  { label: "in-out", token: "var(--fynns-ease-in-out)" },
-] as const;
 
 function EasingBar({
   label,
@@ -24,7 +18,6 @@ function EasingBar({
       style={{
         display: "flex",
         flexDirection: "column",
-        /* M3 4dp grid: related control cluster = 8dp (same as --fynns-layout-control-cluster-gap). */
         gap: "var(--fynns-layout-control-cluster-gap)",
         flex: "1 1 10rem",
       }}
@@ -32,7 +25,6 @@ function EasingBar({
       <span style={{ fontSize: "var(--fynns-font-size-caption)", color: "var(--fynns-color-text-muted)" }}>
         {label}
       </span>
-      {/* Track well — Surface (title-less), not Card. */}
       <Surface
         style={{
           position: "relative",
@@ -63,10 +55,46 @@ function EasingBar({
   );
 }
 
+/** Mini flyout enter/exit on the Motion page (not only an external-link tip). */
+function FlyoutReplay({
+  replayLabel,
+  panelLabel,
+}: {
+  replayLabel: string;
+  panelLabel: string;
+}) {
+  const [run, setRun] = useState(0);
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--fynns-layout-control-cluster-gap)",
+        maxWidth: "16rem",
+      }}
+    >
+      <div className="sandbox-flyout-replay-stage">
+        <div
+          key={run}
+          className="sandbox-flyout-replay-panel"
+          role="presentation"
+        >
+          {panelLabel}
+        </div>
+      </div>
+      <Button size="sm" onClick={() => setRun((n) => n + 1)}>
+        {replayLabel}
+      </Button>
+    </div>
+  );
+}
+
 export type MotionTitles = {
   easing?: string;
+  duration?: string;
   flyout?: string;
   flyoutHelp?: string;
+  flyoutPanel?: string;
   replay?: string;
 };
 
@@ -79,10 +107,20 @@ export function Motion({ titles }: { titles?: MotionTitles } = {}) {
           from { transform: translateX(0); }
           to { transform: translateX(calc(100% + 6rem)); }
         }
+        @keyframes fynns-sandbox-flyout {
+          from {
+            opacity: 0;
+            transform: translateY(0.35rem) scale(0.96);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
       `}</style>
       <Section title={titles?.easing ?? "Easing curves"}>
         <Row>
-          {EASING_DEMOS.map((demo) => (
+          {easingDemoList().map((demo) => (
             <EasingBar
               key={demo.label}
               label={demo.label}
@@ -92,11 +130,24 @@ export function Motion({ titles }: { titles?: MotionTitles } = {}) {
           ))}
         </Row>
       </Section>
+      <Section title={titles?.duration ?? "Duration ladder"}>
+        <DurationTokenTable />
+      </Section>
       <Section title={titles?.flyout ?? "Flyout & overlay motion"}>
-        <p style={{ margin: 0, fontSize: "var(--fynns-font-size-form-label)", color: "var(--fynns-color-text-muted)" }}>
+        <p
+          style={{
+            margin: "0 0 var(--fynns-space-sm)",
+            fontSize: "var(--fynns-font-size-form-label)",
+            color: "var(--fynns-color-text-muted)",
+          }}
+        >
           {titles?.flyoutHelp ??
-            "Open a dialog, select, split-button menu, or tooltip in the Components section to preview enter animations."}
+            "Replay a compact flyout enter (ease-out × duration-flyout). Dialogs / menus / tooltips in Components use the same tokens."}
         </p>
+        <FlyoutReplay
+          replayLabel={replay}
+          panelLabel={titles?.flyoutPanel ?? "Menu / flyout"}
+        />
       </Section>
     </>
   );

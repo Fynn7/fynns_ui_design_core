@@ -14,6 +14,7 @@ export type TokenGroup =
   | "typography"
   | "shadow"
   | "layout"
+  | "navdrawer"
   | "sandbox";
 
 export type TokenScope = "global" | "card-elevated" | "card-filled" | "card-outlined";
@@ -70,6 +71,8 @@ export function cssVarForOp(group: TokenGroup, key: string): string {
       return `--fynns-shadow-${key}`;
     case "layout":
       return `--fynns-layout-${key}`;
+    case "navdrawer":
+      return `--fynns-navdrawer-${key}`;
     case "sandbox":
       return `--sandbox-${key}`;
     case "elevation":

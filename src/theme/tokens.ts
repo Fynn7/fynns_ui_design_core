@@ -93,10 +93,6 @@ export const COLOR_TOKENS = {
   "flyout-item-hover": "rgba(255, 255, 255, 0.08)",
   "toggle-track": "rgba(255, 255, 255, 0.06)",
   "toggle-track-hover": "rgba(255, 255, 255, 0.1)",
-  /** Skeleton shimmer base. */
-  "skeleton-base": "rgba(255, 255, 255, 0.06)",
-  /** Skeleton shimmer highlight. */
-  "skeleton-sheen": "rgba(255, 255, 255, 0.14)",
   /**
    * Quiet lift for Chat user bubbles (ChatGPT message-surface role; teal tint).
    * Not accent / secondary-container — those read as selected chips.
@@ -185,7 +181,7 @@ export const SIZE_TOKENS = {
 
 /**
  * Corner radii. `--fynns-radius-<key>`.
- * T-shirt keys roughly track the M3 shape scale (see `tokens.m3-draft.ts`);
+ * T-shirt keys roughly track the M3 shape scale (see `llm/m3-draft-tokens.md`);
  * numeric values remain fynns overrides, not a 1:1 M3 copy.
  *
  * Hard rule: every key here MUST appear in the sandbox Globals shape inspector
@@ -344,8 +340,6 @@ export const TOGGLE_TOKENS = {
   thumb: "1.125rem",
   /** Selected handle (22dp). */
   "thumb-checked": "1.375rem",
-  /** Legacy transform shift; prefer absolute left for Switch. */
-  "thumb-shift": "1.25rem",
   /** Padding-box inset; pairs with `track-outline` for outer-edge symmetry. */
   "track-pad-inline": "0.3125rem",
   "track-pad-checked": "0.1875rem",
@@ -359,7 +353,6 @@ export const TOGGLE_TOKENS = {
   "thumb-checked-sm": "1.0625rem",
   "track-pad-inline-sm": "0.21875rem",
   "track-pad-checked-sm": "0.125rem",
-  "margin-top": "0.08em",
 } as const;
 
 /**
@@ -781,7 +774,6 @@ export const DATEPICKER_TOKENS = {
   "pad-inline": "0.75rem",
   "pad-block": "0.75rem",
   "header-min-height": "3rem",
-  "weekday-size": "2.5rem",
   "weekday-font": "0.75rem",
   /** Keeps adjacent today/selected discs from touching (4dp). */
   gap: "0.25rem",
@@ -977,7 +969,7 @@ export const FOCUS_TOKENS = {
   "border-mix": "12%",
 } as const;
 
-/** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
+/** Generic layout sizes for modals / sheets / tooltips / chrome. `--fynns-layout-<key>`. */
 export const LAYOUT_TOKENS = {
   "dialog-max-width": "32rem",
   /** Within M3 basic dialog max (560dp). Ceiling only — panel is content-fit. */
@@ -1045,9 +1037,6 @@ export const LAYOUT_TOKENS = {
   "snackbar-enter-offset": "0.5rem",
   /** Distance from the viewport bottom edge. */
   "snackbar-inset": "1rem",
-  "command-palette-width": "min(100%, 34rem)",
-  "command-palette-max-height": "min(70vh, 28rem)",
-  "command-palette-top-padding": "12vh",
   /** Fixed label column for `ControlRow` (toolbars / settings strips). */
   "control-row-label": "7.5rem",
   /**
@@ -1225,8 +1214,6 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "flyout-item-hover": "rgba(0, 0, 0, 0.05)",
       "toggle-track": "rgba(0, 0, 0, 0.08)",
       "toggle-track-hover": "rgba(0, 0, 0, 0.12)",
-      "skeleton-base": "rgba(0, 0, 0, 0.06)",
-      "skeleton-sheen": "rgba(0, 0, 0, 0.12)",
       "chat-user-bubble": "#e8f0ee",
     },
   ],

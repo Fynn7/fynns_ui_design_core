@@ -103,6 +103,8 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 
 - `npm run gen:theme` — regenerate `src/theme/theme.css` from the token tables.
 - `npm run typecheck` — `tsc --noEmit`.
+- `npm run check:wysiwyg` — public barrel must appear in Globals/Preview/Shell
+  or `llm/wysiwyg-companion.json` (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - `npm run lint` — ESLint.
 - `npm run consume:install -- --target <dir>` — add this repo as a consumer
   submodule and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).
@@ -116,18 +118,21 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
   Collapsible sections animate open/close with a height slide; the inspector
   aside opens/closes by clipping its width on wide layouts (hard seam with the
   canvas — no translate slide that morphs the corner). Below 900px the shell
-  stacks: nav becomes a compact chip strip, the inspector overlays as a bottom
+  stacks: nav densifies to an icon **rail** (not a chip strip), the inspector
+  overlays as a bottom
   sheet (canvas keeps full height), and it starts closed so the preview is not
   crushed.
 
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. **Every new primitive must ship with a sandbox
-Globals or Preview sample** in the same change set. Pages: **Surfaces** (Card or
-Collapsible target), **Globals / Components** (system shape / radius + control
-samples; keyword SearchBar jumps to a demo), Foundations, Motion, and
-**Templates**
+separate design language. **Every new public symbol must ship with a sandbox
+Globals or Surfaces Preview sample** (or an explicit companion entry in
+[`llm/wysiwyg-companion.json`](llm/wysiwyg-companion.json)) in the same change
+set — enforce with `npm run check:wysiwyg`. Pages: **Surfaces** (preview target
+**Card | Collapsible**), **Globals / Components** (full catalog via
+`globalsCatalog` + SearchBar jump-to-demo; system radius + live control anatomy),
+**Foundations**, **Motion**, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
 shows or hides the right aside; when hidden (and on pages
@@ -136,7 +141,7 @@ viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
 Editing `--fynns-radius-*` on Globals
 injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
-sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
+sandbox chrome update together. See the plan layers: `llm/m3-draft-tokens.md` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
 A topbar search icon focuses the Components SearchBar from any page.
 
@@ -161,20 +166,23 @@ A topbar search icon focuses the Components SearchBar from any page.
 - Templates do not write `tokens.ts` by themselves — use **Apply changes** on
   Surfaces / Globals after loading a template if you want source writeback.
 
-### Globals (system shape)
+### Globals (system shape + Components catalog)
 
-- Shape levels: editable `--fynns-radius-{xs,sm,md,lg,xl}` (+ Reset levels)
+- Shape levels: every `RADIUS_TOKENS` key is listed in the Globals shape
+  inspector — editable `--fynns-radius-{2xs,xs,sm,md,lg,xl,22,3xl}` (+ Reset)
 - Read-only: `none` / `pill` / `round`
 - Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
-- Preview stage shows Button, Input, Select, Badge, Switch, Card,
-  Collapsible, plus an xs–xl levels legend labeled with which components use each
-  step (buttons use **xl**; cards / inputs use **md**; badges / chips use **sm**;
-  switch track uses **radius-pill**)
+- Live Components catalog: Actions, Fields, Selection, Communication,
+  Containment, Patterns, Navigation, Toolbar rhythm, Swatches — see
+  [`examples/sandbox/src/catalog/globalsCatalog.ts`](examples/sandbox/src/catalog/globalsCatalog.ts)
+- Radius legend: Checkbox ≈ `2xs`; badges / chips ≈ `sm`; cards / inputs ≈ `md`;
+  buttons ≈ `xl`; Chat user bubble ≈ `22`; long chrome strips ≈ `3xl`; switch
+  capsule ≈ `pill`
 
 ### Preview toggles (Surfaces)
 
-Switch the canvas target with **Card | Collapsible** (preview-only; does not
-change Apply writeback).
+Switch the canvas target with **Card | Collapsible** (Surfaces page only;
+preview-only — does not change Apply writeback).
 
 **Card**
 
