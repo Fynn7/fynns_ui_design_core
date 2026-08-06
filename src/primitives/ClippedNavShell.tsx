@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -54,7 +55,9 @@ export type ClippedNavShellProps = {
   disableDrawerResize?: boolean;
 };
 
-function readFlyoutMs(el: Element): number {
+function readFlyoutMs(el: Element | null): number {
+  if (!el || typeof window === "undefined") return 320;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return 0;
   const raw = getComputedStyle(el).getPropertyValue("--fynns-duration-flyout").trim();
   if (!raw) return 320;
   if (raw.endsWith("ms")) return Math.max(0, Number.parseFloat(raw) || 320);
@@ -84,9 +87,12 @@ function readVarPx(host: Element, varName: string): number {
  * M3 clipped app shell: full-bleed top bar, then `nav | main` below (no
  * topbar×sidebar crosshair). Pair with `EndAside` inside `children` for a
  * supporting inspector pane. Destinations stay in the `nav` slot — this shell
- * only owns layout. In `drawer` mode the nav|main seam is draggable (updates
- * local `--fynns-navdrawer-width`, clamped by navdrawer min/max and remaining
- * room for main / EndAside mins).
+ * only owns layout. Open/close **width-morphs** the destination track (same
+ * idea as `EndAside`): keep two grid columns and animate the nav track to
+ * `0px`; the shell holds the last `nav` node until the flyout duration ends so
+ * consumers may pass `null` when `navMode="hidden"`. In `drawer` mode the
+ * nav|main seam is draggable (updates local `--fynns-navdrawer-width`, clamped
+ * by navdrawer min/max and remaining room for main / EndAside mins).
  *
  * @example
  * ```tsx
@@ -118,12 +124,35 @@ export function ClippedNavShell({
   const onDrawerWidthChangeRef = useRef(onDrawerWidthChange);
   onDrawerWidthChangeRef.current = onDrawerWidthChange;
 
+  /**
+   * Last destination node — kept in a ref so open mode can render `nav` from
+   * props directly. Used only while `holdingExit` after close so the width
+   * morph can finish (consumers may pass `null` when `navMode="hidden"`).
+   */
+  const lastNavRef = useRef(nav);
+  if (nav != null) lastNavRef.current = nav;
+  const [holdingExit, setHoldingExit] = useState(false);
+
+  const renderedNav =
+    navMode !== "hidden" ? nav : holdingExit ? lastNavRef.current : null;
+
   const [uncontrolledWidth, setUncontrolledWidth] = useState<number | null>(
     defaultDrawerWidth ?? null,
   );
   const [dragging, setDragging] = useState(false);
   const controlled = drawerWidthProp !== undefined;
   const drawerWidthPx = controlled ? drawerWidthProp : uncontrolledWidth;
+
+  useEffect(() => {
+    if (navMode !== "hidden") {
+      setHoldingExit(false);
+      return;
+    }
+    setHoldingExit(true);
+    const ms = readFlyoutMs(rootRef.current);
+    const timer = window.setTimeout(() => setHoldingExit(false), ms);
+    return () => window.clearTimeout(timer);
+  }, [navMode]);
 
   const setDrawerWidthPx = useCallback(
     (next: number) => {
@@ -176,7 +205,7 @@ export function ClippedNavShell({
         if (floor > 0 && mainW + 1 < floor) return true;
 
         const navCol = body.querySelector(
-          ":scope > .fynns-nav-drawer, :scope > .fynns-nav-rail",
+          ":scope > .fynns-clipped-nav-shell-nav > .fynns-nav-drawer, :scope > .fynns-clipped-nav-shell-nav > .fynns-nav-rail",
         );
         const navW = navCol?.getBoundingClientRect().width ?? 0;
         if (aside && navW > 0 && mainW > 0 && navW >= mainW) return true;
@@ -348,7 +377,14 @@ export function ClippedNavShell({
     >
       {topBar}
       <div className="fynns-clipped-nav-shell-body">
-        {nav}
+        <div
+          className="fynns-clipped-nav-shell-nav"
+          data-state={navMode === "hidden" ? "closed" : "open"}
+          aria-hidden={navMode === "hidden" || undefined}
+          {...(navMode === "hidden" ? ({ inert: true } as { inert: boolean }) : {})}
+        >
+          {renderedNav}
+        </div>
         <div className="fynns-clipped-nav-shell-main">{children}</div>
         {showResize ? (
           <div

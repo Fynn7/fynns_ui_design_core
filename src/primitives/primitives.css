@@ -1,4 +1,4 @@
-/*
+﻿/*
  * fynns design system -- component styles.
  * Every value here references a `--fynns-*` token (see ../theme/theme.css).
  * Never hardcode raw colors. Classes use the `.fynns-*` namespace.
@@ -8424,13 +8424,32 @@ a.fynns-breadcrumb-link:visited {
   grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
 }
 
+/*
+ * Keep two tracks so width can interpolate (1-track `1fr` cannot morph from
+ * `drawer|rail + main`). Permanent `.fynns-clipped-nav-shell-nav` slot holds
+ * the first track even when empty so main never falls into the 0px column.
+ */
 .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 0px minmax(0, 1fr);
 }
 
-.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer,
-.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
-  display: none;
+.fynns-clipped-nav-shell-nav {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fynns-clipped-nav-shell[data-nav="hidden"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer,
+.fynns-clipped-nav-shell[data-nav="hidden"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-nav
+  > .fynns-nav-rail {
+  pointer-events: none;
+  border-inline-end-color: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -8440,43 +8459,46 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* Permanent destinations clipped under the top bar. */
-.fynns-clipped-nav-shell-body > .fynns-nav-drawer,
-.fynns-clipped-nav-shell-body > .fynns-nav-rail {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
   height: 100%;
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
   background: var(--fynns-color-surface-1);
   border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
 /*
  * Column width is owned by the body grid track. Fill the track — strip the
- * drawer’s own width/min/max so they cannot fight resize.
+ * drawer/rail’s own width/min/max so they cannot fight resize or the close morph.
  */
-.fynns-clipped-nav-shell-body > .fynns-nav-drawer {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
   width: 100%;
-  min-width: 0;
   max-width: none;
   padding-block-start: 0;
 }
 
-.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
   display: block;
   width: 100%;
 }
 
-.fynns-clipped-nav-shell-body > .fynns-nav-rail {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+  width: 100%;
+  max-width: none;
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-nav-rail-destinations {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-nav-rail-destinations {
   flex: 1 1 auto;
 }
 
-.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -8609,23 +8631,41 @@ a.fynns-breadcrumb-link:visited {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  /* Keep densified destinations as a vertical rail — do not re-stack full-width. */
   .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
-    grid-template-columns: 1fr;
+  /* Rail close: keep two columns and collapse the rail track. */
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-rail) {
+    grid-template-columns: 0px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer,
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
-    display: none;
+  /* Stacked drawer close: collapse max-height (auto row shrinks with it). */
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-drawer) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
+  .fynns-clipped-nav-shell[data-nav="hidden"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav
+    > .fynns-nav-drawer {
+    max-height: 0;
+    border-block-end-color: transparent;
+    pointer-events: none;
+  }
+
+  .fynns-clipped-nav-shell[data-nav="hidden"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav
+    > .fynns-nav-rail {
+    pointer-events: none;
+    border-inline-end-color: transparent;
+  }
+
+  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
     width: 100%;
     max-width: none;
     height: auto;
@@ -8640,9 +8680,18 @@ a.fynns-breadcrumb-link:visited {
     overflow: hidden;
     border-inline-end: none;
     border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+    transition:
+      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
+      border-block-end-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
-  .fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
+  @media (prefers-reduced-motion: reduce) {
+    .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+      transition: none;
+    }
+  }
+
+  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
     flex: 1 1 auto;
     min-height: 0;
     max-height: 100%;
