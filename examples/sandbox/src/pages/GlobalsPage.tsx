@@ -344,6 +344,9 @@ export function GlobalsPage() {
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
+  const [editableCode, setEditableCode] = useState(
+    `export const accent = "var(--fynns-color-accent)";\n`,
+  );
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
@@ -1707,7 +1710,18 @@ export function GlobalsPage() {
             code={`{\n  "accent": "#2dd4bf",\n  "radius": "md",\n  "enabled": true\n}`}
             maxHeight="8rem"
           />
+          <CodeBlock
+            variant="editable"
+            label={t("globals.codeBlockEditableLabel")}
+            language="ts"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            value={editableCode}
+            onChange={setEditableCode}
+            maxHeight="8rem"
+            rows={5}
+          />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
+          <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
             <Button size="sm" variant="tonal" onClick={() => setCodeLangDialogOpen(true)}>
               {t("globals.codeLangDemoOpen")}

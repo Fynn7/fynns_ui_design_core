@@ -1,4 +1,12 @@
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import {
+  useRef,
+  useState,
+  type ChangeEvent,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ReactNode,
+  type UIEvent,
+} from "react";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { ClipboardIcon } from "./icons";
@@ -10,14 +18,16 @@ import {
   type SimpleHighlightProfile,
 } from "./codeHighlight";
 
-export type CodeBlockVariant = "default" | "plain";
+export type CodeBlockVariant = "default" | "plain" | "editable";
 
-export type CodeBlockProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
-  /** Source text shown inside `<pre><code>`. */
-  code: string;
+type CodeBlockShared = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "children" | "onChange" | "defaultValue"
+> & {
   /**
    * `default` — optional head (label + hover fade-in copy).
    * `plain` — code only; copy floats and fades in on hover.
+   * `editable` — highlighted backdrop + transparent textarea (live re-highlight).
    */
   variant?: CodeBlockVariant;
   /**
@@ -38,12 +48,50 @@ export type CodeBlockProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & 
   copyAriaLabel?: string;
   /** Show the copy control. @default true */
   showCopy?: boolean;
-  /** Max height of the scrollable `<pre>` (CSS length). */
+  /** Max height of the scrollable code surface (CSS length). */
   maxHeight?: string | number;
 };
 
+export type CodeBlockReadonlyProps = CodeBlockShared & {
+  variant?: "default" | "plain";
+  /** Source text shown inside `<pre><code>`. */
+  code: string;
+  value?: never;
+  defaultValue?: never;
+  onChange?: never;
+};
+
+export type CodeBlockEditableProps = CodeBlockShared & {
+  variant: "editable";
+  /** Optional seed when using controlled `value` / uncontrolled `defaultValue`. */
+  code?: string;
+  /** Controlled source (editable). */
+  value?: string;
+  /** Uncontrolled initial source (editable). */
+  defaultValue?: string;
+  onChange?: (code: string) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
+  placeholder?: string;
+  rows?: number;
+  name?: string;
+  /** Accessible name when `label` is omitted. */
+  "aria-label"?: string;
+};
+
+export type CodeBlockProps = CodeBlockReadonlyProps | CodeBlockEditableProps;
+
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
+}
+
+function omitKnownKeys<T extends object>(
+  obj: T,
+  keys: readonly string[],
+): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...(obj as Record<string, unknown>) };
+  for (const key of keys) delete out[key];
+  return out;
 }
 
 function renderSegments(segments: CodeSegment[]): ReactNode {
@@ -59,39 +107,67 @@ function renderSegments(segments: CodeSegment[]): ReactNode {
   });
 }
 
+function highlightSource(
+  source: string,
+  language: string | undefined,
+  highlightProfile: SimpleHighlightProfile | undefined,
+): ReactNode {
+  return renderSegments(
+    highlightProfile != null
+      ? highlightWithProfile(source, highlightProfile)
+      : highlightCode(source, language),
+  );
+}
+
 /**
  * Monospace code sample with optional copy affordance (`IconButton` +
  * `Tooltip` + `ClipboardIcon`). Supported `language` values get zero-dep
  * syntax coloring via `--fynns-code-*` tokens. Pass `highlightProfile` for
- * app-owned line-command languages. The `<pre>` uses `fynns-scroll`.
+ * app-owned line-command languages. The scroll surface uses `fynns-scroll`.
  * Copy fades in on hover (keyboard: :focus-visible); `plain` has no head.
+ * `editable` stacks a highlighted `<pre>` under a transparent textarea.
  */
-export function CodeBlock({
-  code,
-  variant = "default",
-  language,
-  highlightProfile,
-  label,
-  copyAriaLabel = "Copy",
-  showCopy = true,
-  maxHeight,
-  className,
-  style,
-  ...rest
-}: CodeBlockProps) {
-  const plain = variant === "plain";
+export function CodeBlock(props: CodeBlockProps) {
+  const editable = props.variant === "editable";
+  const plain = props.variant === "plain";
+  const {
+    language,
+    highlightProfile,
+    label,
+    copyAriaLabel = "Copy",
+    showCopy = true,
+    maxHeight,
+    className,
+    style,
+  } = props;
+
   const highlighted =
     highlightProfile != null || isHighlightableLanguage(language);
-  const preStyle: CSSProperties | undefined =
+
+  const controlled =
+    editable && props.value !== undefined ? props.value : undefined;
+  const [uncontrolled, setUncontrolled] = useState(() => {
+    if (!editable) return "";
+    if (props.defaultValue != null) return props.defaultValue;
+    if (props.code != null) return props.code;
+    return "";
+  });
+  const source = editable
+    ? (controlled ?? uncontrolled)
+    : props.code;
+
+  const highlightRef = useRef<HTMLPreElement>(null);
+  const maxHeightCss =
     maxHeight == null
       ? undefined
-      : {
-          maxHeight: typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight,
-        };
+      : typeof maxHeight === "number"
+        ? `${maxHeight}px`
+        : maxHeight;
+  const surfaceStyle: CSSProperties | undefined =
+    maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
 
   const onCopy = (event: { currentTarget: HTMLElement }) => {
-    void navigator.clipboard.writeText(code);
-    /* Drop mouse click focus so copy does not stick visible after unhover. */
+    void navigator.clipboard.writeText(source);
     event.currentTarget.blur();
   };
 
@@ -110,20 +186,63 @@ export function CodeBlock({
     </div>
   ) : null;
 
+  const onInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const next = event.target.value;
+    if (controlled === undefined) setUncontrolled(next);
+    if (editable) props.onChange?.(next);
+  };
+
+  const onInputScroll = (event: UIEvent<HTMLTextAreaElement>) => {
+    const pre = highlightRef.current;
+    if (!pre) return;
+    pre.scrollTop = event.currentTarget.scrollTop;
+    pre.scrollLeft = event.currentTarget.scrollLeft;
+  };
+
+  /* Trailing newline on the highlight layer only — keeps last-line height
+     aligned with the textarea caret. */
+  const highlightText =
+    editable && !source.endsWith("\n") ? `${source}\n` : source;
   const codeBody = highlighted
-    ? renderSegments(
-        highlightProfile != null
-          ? highlightWithProfile(code, highlightProfile)
-          : highlightCode(code, language),
-      )
-    : code;
+    ? highlightSource(highlightText, language, highlightProfile)
+    : highlightText;
+
+  const disabled = editable ? props.disabled : undefined;
+  const readOnly = editable ? props.readOnly : undefined;
+  const placeholder = editable ? props.placeholder : undefined;
+  const rows = editable ? props.rows : undefined;
+  const name = editable ? props.name : undefined;
+  const ariaLabelProp = editable ? props["aria-label"] : undefined;
+
+  const rootProps = omitKnownKeys(props, [
+    "variant",
+    "language",
+    "highlightProfile",
+    "label",
+    "copyAriaLabel",
+    "showCopy",
+    "maxHeight",
+    "className",
+    "style",
+    "code",
+    "value",
+    "defaultValue",
+    "onChange",
+    "disabled",
+    "readOnly",
+    "placeholder",
+    "rows",
+    "name",
+    "aria-label",
+  ]);
 
   return (
     <div
-      {...rest}
+      {...rootProps}
       className={join(
         "fynns-code-block",
         plain && "fynns-code-block--plain",
+        editable && "fynns-code-block--editable",
         highlighted && "fynns-code-block--highlighted",
         className,
       )}
@@ -142,9 +261,40 @@ export function CodeBlock({
           {copyControl}
         </div>
       ) : null}
-      <pre className="fynns-code-block-pre fynns-scroll" style={preStyle}>
-        <code className="fynns-code-block-code">{codeBody}</code>
-      </pre>
+      {editable ? (
+        <div className="fynns-code-block-editor">
+          <pre
+            ref={highlightRef}
+            className="fynns-code-block-highlight"
+            aria-hidden
+          >
+            <code className="fynns-code-block-code">{codeBody}</code>
+          </pre>
+          <textarea
+            className="fynns-code-block-input fynns-scroll"
+            style={surfaceStyle}
+            value={source}
+            onChange={onInputChange}
+            onScroll={onInputScroll}
+            spellCheck={false}
+            wrap="off"
+            disabled={disabled}
+            readOnly={readOnly}
+            placeholder={placeholder}
+            rows={rows ?? 6}
+            name={name}
+            aria-label={ariaLabelProp ?? label}
+          />
+        </div>
+      ) : (
+        <pre className="fynns-code-block-pre fynns-scroll" style={surfaceStyle}>
+          <code className="fynns-code-block-code">
+            {highlighted
+              ? highlightSource(source, language, highlightProfile)
+              : source}
+          </code>
+        </pre>
+      )}
     </div>
   );
 }

@@ -8037,6 +8037,86 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
+/* Editable: highlighted <pre> under a transparent textarea; scroll on input. */
+.fynns-code-block-editor {
+  position: relative;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-code-block-highlight,
+.fynns-code-block-input {
+  box-sizing: border-box;
+  margin: 0;
+  padding-block-start: var(--fynns-space-md);
+  padding-block-end: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-body);
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.fynns-code-block-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--fynns-code-fg);
+}
+
+.fynns-code-block-highlight code {
+  font: inherit;
+  color: inherit;
+}
+
+.fynns-code-block-input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--fynns-code-fg);
+  resize: none;
+  outline: none;
+  overflow: auto;
+  /* Match highlight ink metrics so caret tracks glyphs. */
+  -webkit-text-fill-color: transparent;
+}
+
+.fynns-code-block-input::placeholder {
+  color: var(--fynns-color-text-muted);
+  -webkit-text-fill-color: var(--fynns-color-text-muted);
+  opacity: 1;
+}
+
+.fynns-code-block-input::selection {
+  background: color-mix(in srgb, var(--fynns-color-accent) 35%, transparent);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.fynns-code-block-input:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-code-block--editable:focus-within {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
 /* ---------- Snackbar (M3) ---------- */
 .fynns-snackbar-host {
   position: fixed;

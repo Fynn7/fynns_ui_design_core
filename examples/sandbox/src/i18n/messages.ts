@@ -391,7 +391,10 @@ const en = {
   "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: `default` optional head; `plain` headless. Supported languages (`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`) get zero-dep spans colored with `--fynns-code-*`. Copy fades in on hover (keyboard: focus-visible; always visible on touch); clipboard stays the raw source string.",
+    "CodeBlock: `default` optional head; `plain` headless; `editable` live highlight (pre backdrop + transparent textarea; `value`/`onChange`). Supported languages (`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`) get zero-dep spans colored with `--fynns-code-*`. Copy fades in on hover (keyboard: focus-visible; always visible on touch); clipboard stays the raw source string.",
+  "globals.codeBlockEditableLabel": "editable.ts",
+  "globals.codeBlockEditableHelp":
+    "`variant=\"editable\"` — type to re-highlight; same `--fynns-code-*` tokenizer as read-only samples.",
   "globals.codeTokensAria": "Code highlight tokens",
   "globals.codeTokensHelp":
     "`--fynns-code-*` roles distilled from the cpptools VS dark/light themes (last-wins TextMate colors). Light theme overrides via `data-fynns-theme=\"light\"`.",
@@ -1249,7 +1252,10 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：`default` 可选标题头；`plain` 无头。支持语言（`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`）用零依赖分词 + `--fynns-code-*` 着色。悬停渐显复制（键盘 focus-visible；触控常显）；剪贴板仍是原始源码。",
+    "CodeBlock：`default` 可选标题头；`plain` 无头；`editable` 边写边高亮（高亮 pre 衬底 + 透明 textarea；`value`/`onChange`）。支持语言（`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`）用零依赖分词 + `--fynns-code-*` 着色。悬停渐显复制（键盘 focus-visible；触控常显）；剪贴板仍是原始源码。",
+  "globals.codeBlockEditableLabel": "editable.ts",
+  "globals.codeBlockEditableHelp":
+    "`variant=\"editable\"` — 输入即重新分词高亮；与只读样例共用 `--fynns-code-*` 分词器。",
   "globals.codeTokensAria": "代码高亮 token",
   "globals.codeTokensHelp":
     "`--fynns-code-*` 角色色来自 cpptools VS 深/浅主题（TextMate last-wins）。浅色经 `data-fynns-theme=\"light\"` 覆盖。",

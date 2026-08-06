@@ -304,6 +304,8 @@ export { CodeBlock } from "./primitives/CodeBlock";
 export type {
   CodeBlockProps,
   CodeBlockVariant,
+  CodeBlockReadonlyProps,
+  CodeBlockEditableProps,
 } from "./primitives/CodeBlock";
 export {
   highlightCode,

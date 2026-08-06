@@ -108,7 +108,8 @@
         "getRegisteredHighlightLanguage",
         "highlightCode",
         "isHighlightableLanguage",
-        "CodeBlock.highlightProfile"
+        "CodeBlock.highlightProfile",
+        "CodeBlock.variant=editable"
       ],
       "roleMap": {
         "keyword": "keyword",

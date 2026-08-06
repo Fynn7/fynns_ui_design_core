@@ -89,6 +89,7 @@ registerHighlightLanguage("gsc", gscProfile);
 - `highlightWithProfile(code, profile)` → `CodeSegment[]` for custom rendering.
 - `unregisterHighlightLanguage(id)` / `getRegisteredHighlightLanguage(id)`.
 - `highlightCode` / `isHighlightableLanguage` consult built-ins first, then the registry.
-- `CodeBlock` `highlightProfile` wins over `language` lookup. Clipboard always uses the raw `code` string.
+- `CodeBlock` `highlightProfile` wins over `language` lookup. Clipboard always uses the raw source string (`code`, or current `value` when `variant="editable"`).
+- `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`).
 
 Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a language.
