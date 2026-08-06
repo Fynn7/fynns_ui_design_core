@@ -327,11 +327,19 @@ export function BarChartIcon(props: IconProps) {
   );
 }
 
-/** Compact stop glyph for ChatComposer primary (circle host + small square). */
+/** Stop glyph for ChatComposer primary (filled square in the 24 viewBox). */
 export function StopSquareIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>
-      <rect x="8" y="8" width="8" height="8" rx="1" />
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="2"
+        fill="currentColor"
+        stroke="none"
+      />
     </svg>
   );
 }

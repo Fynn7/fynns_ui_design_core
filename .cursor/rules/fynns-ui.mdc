@@ -39,7 +39,8 @@ ring can paint before heavy work).
   ChatMessage (dual placement: main 48rem host or EndAside /
   `.fynns-chat-host--fill` — bubble 70% of host, composer 100%; soft floor
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
-  generation footer under assistant turns; `citations` /
+  generation footer under assistant turns; `thinking` / `ChatThinking` =
+  single-block reasoning disclosure between name and bubble; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
   assistant body; inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM

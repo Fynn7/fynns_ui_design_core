@@ -302,7 +302,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   EmptyState,
   **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
   **ChatMessage** `{ role, children?, avatar?, name?, streaming?,
-  streamingLabel?, error?, onRetry?, retryLabel?, citations?,
+  streamingLabel?, error?, onRetry?, retryLabel?, thinking?, citations?,
   citationsLabel?, citationsVisibleCount?, onCitationOpen?, actions? }` (**dual
   placement** — same 70% / composer rules in main **or** left/right
   resizable asides; no density mode):
@@ -347,6 +347,22 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     live — no LLM; **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
+    **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
+    between `name` and the answer bubble (ChatGPT / Claude “Thinking… /
+    Thought for Ns”; `.fynns-expand` height morph — not Collapsible card chrome;
+    muted trigger; streaming label opacity pulse via
+    `--fynns-duration-presentation-hint`; force-open while streaming unless
+    user pinned closed; auto-collapse once when done; user expand sticks;
+    no body → static duration strip without chevron; caller owns thought
+    `children` — core does **not** parse markdown / CoT; do **not** pipe
+    thinking tokens into `aria-live` — see
+    [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
+    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
+    **Deferred (Wave 2):** multi-step chain / tool-call groups under a shared
+    “chain” chrome (assistant-ui `GroupedParts` style). Keep `ChatThinking` as
+    the single-block reasoning disclosure; do not overload it into a tool
+    timeline. Separate primitive or compound anatomy later when consumers need
+    tool-step grouping.
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
@@ -364,7 +380,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     regions for respond/complete (app-owned today — not token-live on the
     bubble; core ships `role="log"` on `ChatThread` + `aria-busy` on the
     row). Keep composer focus after send; Send/Stop/dictate labels — full
-    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md).
+    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md). Idle without
+    `onDictate`: Send stays visible and is **disabled** when the draft is empty
+    (not omitted). With `onDictate`, empty idle still shows Dictate.
   - **Composer keys (ChatGPT parity):** Enter sends; Shift+Enter newline;
     Esc stops while `busy`. **CJK IME:** Enter during composition (or the
     confirming Enter some browsers fire just after `compositionend`)
@@ -524,7 +542,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   36dp controls); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
-  failed-generation footer — see Feedback keep-set; `citations` /
+  failed-generation footer — see Feedback keep-set; `thinking` /
+  `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
+  — see Feedback keep-set; **Deferred (Wave 2):** multi-step / tool-call chain
+  chrome — see Feedback keep-set; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips — see
   Feedback keep-set; no built-in GFM /
   task-list checkboxes — see Feedback keep-set; CJK IME Enter while
@@ -583,7 +604,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |

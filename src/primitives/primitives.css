@@ -8463,9 +8463,14 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-message-cursor {
   display: inline-block;
   width: var(--fynns-chatmessage-cursor-width);
-  height: 1em;
+  /*
+   * Cap-height bar (not `1em`): the em square sits above x-height and looks
+   * like an oversized pipe next to lowercase streaming glyphs.
+   */
+  height: 0.8em;
+  height: 1cap;
   margin-inline-start: 0.1em;
-  vertical-align: text-bottom;
+  vertical-align: baseline;
   border-radius: var(--fynns-radius-2xs);
   background: var(--fynns-color-accent);
   animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
@@ -8491,6 +8496,129 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-message-error-retry {
   /* Sit flush under the danger copy — denser than a full md control. */
   min-height: var(--fynns-size-icon-target);
+}
+
+/* ---------- ChatThinking — single-block reasoning disclosure ---------- */
+.fynns-chat-thinking {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  max-width: 100%;
+  min-width: 0;
+  margin-block-end: var(--fynns-chatmessage-thinking-gap);
+}
+
+.fynns-chat-thinking-row,
+.fynns-chat-thinking-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-chatmessage-thinking-trigger-gap);
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  font-size: var(--fynns-chatmessage-name-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  text-align: start;
+}
+
+.fynns-chat-thinking-trigger {
+  cursor: pointer;
+  border-radius: var(--fynns-radius-22);
+}
+
+.fynns-chat-thinking-trigger:focus {
+  outline: none;
+}
+
+.fynns-chat-thinking-trigger:focus-visible {
+  outline: 2px solid var(--fynns-color-focus);
+  outline-offset: 2px;
+}
+
+.fynns-chat-thinking-trigger:hover {
+  color: var(--fynns-color-text);
+}
+
+.fynns-chat-thinking-leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.fynns-chat-thinking-icon {
+  display: block;
+}
+
+.fynns-chat-thinking-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-chat-thinking-label--streaming {
+  animation: fynns-chat-thinking-pulse var(--fynns-duration-presentation-hint)
+    var(--fynns-ease-in-out) infinite;
+}
+
+.fynns-chat-thinking-chevron {
+  flex-shrink: 0;
+  color: inherit;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-chat-thinking--open .fynns-chat-thinking-chevron,
+.fynns-chat-thinking[data-state="open"] .fynns-chat-thinking-chevron {
+  transform: rotate(90deg);
+}
+
+.fynns-chat-thinking-body {
+  padding-block: var(--fynns-chatmessage-thinking-body-pad-block);
+  padding-inline: var(--fynns-chatmessage-thinking-body-pad-inline);
+  font-size: var(--fynns-chatmessage-name-size);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  opacity: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-expand[data-state="open"] > .fynns-expand-inner > .fynns-chat-thinking-body {
+  opacity: 1;
+}
+
+@keyframes fynns-chat-thinking-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chat-thinking-label--streaming {
+    animation: none;
+  }
+
+  .fynns-chat-thinking-chevron {
+    transition: none;
+  }
+
+  .fynns-chat-thinking-body {
+    transition: none;
+  }
 }
 
 /* ---------- Chat citations / source chips ---------- */

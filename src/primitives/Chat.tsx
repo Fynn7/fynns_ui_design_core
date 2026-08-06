@@ -229,7 +229,7 @@ export type ChatComposerProps = Omit<
   trailing?: ReactNode;
   busy?: boolean;
   onStop?: () => void;
-  /** When set, empty idle shows a mic that calls this. */
+  /** When set, empty idle shows a mic in the primary slot (Send stays when text). */
   onDictate?: () => void;
   dictating?: boolean;
   onStopDictate?: () => void;
@@ -451,22 +451,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
           </IconButton>
         </Tooltip>
       );
-    } else if (value.trim().length > 0) {
-      primary = (
-        <Tooltip content={sendLabel}>
-          <IconButton
-            type="submit"
-            size="sm"
-            variant="primary"
-            aria-label={sendLabel}
-            disabled={!canSubmit}
-            className="fynns-chat-composer-primary"
-          >
-            <ArrowUpIcon />
-          </IconButton>
-        </Tooltip>
-      );
-    } else if (onDictate) {
+    } else if (onDictate && value.trim().length === 0) {
       primary = (
         <Tooltip content={dictateLabel}>
           <IconButton
@@ -479,6 +464,22 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
             className="fynns-chat-composer-primary"
           >
             <MicIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    } else {
+      /* Always show Send when idle (and no dictate-empty swap); empty → disabled. */
+      primary = (
+        <Tooltip content={sendLabel}>
+          <IconButton
+            type="submit"
+            size="sm"
+            variant="primary"
+            aria-label={sendLabel}
+            disabled={!canSubmit}
+            className="fynns-chat-composer-primary"
+          >
+            <ArrowUpIcon />
           </IconButton>
         </Tooltip>
       );

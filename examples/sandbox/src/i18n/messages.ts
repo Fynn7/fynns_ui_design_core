@@ -1,4 +1,4 @@
-﻿import type { Locale } from "./types";
+import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -876,9 +876,20 @@ const en = {
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline; **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatCitationsAnatomyHelp":
     "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
+  "globals.thinkingStreaming": "Thinking…",
+  "globals.thinkingLabel": "Thinking",
+  "globals.thinkingDuration": "Thought for {n}s",
+  "globals.thinkingBody":
+    "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
+  "globals.thinkingAnswer":
+    "Use ChatThinking via ChatMessage.thinking — summary only; the app owns any markdown.",
+  "globals.thinkingSimulate": "Simulate thinking",
+  "globals.thinkingReset": "Reset done",
+  "globals.thinkingHelp":
+    "**ChatThinking** — Wave 1 single-block reasoning disclosure (ChatGPT / Claude “Thinking… / Thought for Ns”). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + label pulse. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*` (no `THINKING_*` group). Wave 2 (deferred): multi-step / tool-call chain chrome.",
   "globals.chatAsideLabel": "Aside (~22rem) — same 70% / composer 100%",
   "globals.chatAsideUserBody":
     "Bubble max is 70% of this aside’s content width, not the main column.",
@@ -1974,9 +1985,20 @@ const zh: Record<MessageKey, string> = {
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
+  "globals.thinkingStreaming": "Thinking…",
+  "globals.thinkingLabel": "Thinking",
+  "globals.thinkingDuration": "Thought for {n}s",
+  "globals.thinkingBody":
+    "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
+  "globals.thinkingAnswer":
+    "通过 ChatMessage.thinking 挂载 ChatThinking — 只放摘要；markdown 由应用自管。",
+  "globals.thinkingSimulate": "模拟思维",
+  "globals.thinkingReset": "重置为完成",
+  "globals.thinkingHelp":
+    "**ChatThinking** — Wave 1 单块推理披露（ChatGPT / Claude「Thinking… / Thought for Ns」）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 标签呼吸。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`（无 `THINKING_*` 组）。Wave 2（延期）：多步骤 / tool 调用链 chrome。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 同 70% / composer 100%",
   "globals.chatAsideUserBody": "气泡上限是本侧栏内容宽的 70%，不是主栏宽。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",

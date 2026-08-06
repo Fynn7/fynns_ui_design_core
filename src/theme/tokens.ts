@@ -634,7 +634,10 @@ export const CHATMESSAGE_TOKENS = {
   "body-line": "1.5",
   "name-size": "0.75rem",
   "actions-gap": "0",
-  /** Streaming caret thickness (2dp). */
+  /**
+   * Streaming caret thickness (2dp). Height is CSS `1cap` (fallback `0.8em`)
+   * on `.fynns-chat-message-cursor` — not a token — so it tracks the body face.
+   */
   "cursor-width": "0.125rem",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
   "error-gap": "0.75rem",
@@ -671,6 +674,16 @@ export const CHATMESSAGE_TOKENS = {
   "citation-list-gap": "0.375rem",
   "citation-card-pad": "0.625rem",
   "citation-card-gap": "0.625rem",
+  /**
+   * Gap under `ChatThinking` (name ↔ thinking ↔ bubble). Label size reuses
+   * `name-size` — no separate THINKING_* token group.
+   */
+  "thinking-gap": "0.375rem",
+  /** Gap between optional icon / label / chevron in the thinking trigger row. */
+  "thinking-trigger-gap": "0.375rem",
+  /** Thought body inset under the trigger. */
+  "thinking-body-pad-block": "0.375rem",
+  "thinking-body-pad-inline": "0",
 } as const;
 
 /**

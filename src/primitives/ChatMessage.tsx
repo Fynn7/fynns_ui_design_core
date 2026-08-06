@@ -67,6 +67,12 @@ export type ChatMessageProps = Omit<
   citationsVisibleCount?: number;
   /** Override new-tab open for citation chips / cards. */
   onCitationOpen?: ChatCitationsProps["onOpen"];
+  /**
+   * Optional reasoning disclosure between `name` and the answer bubble
+   * (typically `<ChatThinking>…</ChatThinking>`). Core does not hide this on
+   * `error` — the app decides whether to pass it. Ignored for `system`.
+   */
+  thinking?: ReactNode;
 };
 
 const DEFAULT_ERROR = "There was an error generating a response.";
@@ -85,7 +91,8 @@ function join(...parts: Array<string | false | null | undefined>) {
  * always 70% of that host.
  *
  * Assistant `citations` render ChatGPT-style source chips under the body
- * (hover preview, click opens; +N expands footnote cards). `error` /
+ * (hover preview, click opens; +N expands footnote cards). `thinking` sits
+ * between `name` and the answer bubble (typically `ChatThinking`). `error` /
  * `onRetry` paint the failed-generation footer under the turn (partial body
  * may remain above).
  */
@@ -104,6 +111,7 @@ export function ChatMessage({
   citationsLabel,
   citationsVisibleCount,
   onCitationOpen,
+  thinking,
   className,
   ...rest
 }: ChatMessageProps) {
@@ -116,6 +124,7 @@ export function ChatMessage({
   const showActions = !isSystem && !hasError && actions != null && !isStreaming;
   const showAvatar = !isSystem && avatar != null;
   const showName = !isSystem && name != null;
+  const showThinking = !isSystem && thinking != null;
   const hasBody = children != null && children !== "";
   const showBubble = hasBody || isStreaming;
   const showCitations =
@@ -152,13 +161,16 @@ export function ChatMessage({
         {showName ? (
           <div className="fynns-chat-message-name">{name}</div>
         ) : null}
+        {showThinking ? thinking : null}
         {showBubble ? (
           <div className="fynns-chat-message-bubble">
-            {hasBody ? (
-              <div className="fynns-chat-message-body">{children}</div>
-            ) : null}
-            {isStreaming ? (
-              <span className="fynns-chat-message-cursor" aria-hidden />
+            {hasBody || isStreaming ? (
+              <div className="fynns-chat-message-body">
+                {children}
+                {isStreaming ? (
+                  <span className="fynns-chat-message-cursor" aria-hidden />
+                ) : null}
+              </div>
             ) : null}
           </div>
         ) : null}
