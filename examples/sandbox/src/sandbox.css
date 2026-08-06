@@ -825,6 +825,9 @@
 }
 
 .sandbox-globals-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
   scroll-margin-top: var(--fynns-space-3xl);
   border-radius: var(--fynns-radius-md);
   transition:
