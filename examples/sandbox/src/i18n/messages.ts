@@ -20,7 +20,7 @@ const en = {
   "nav.playgroundHint":
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
-    "M3 component catalog (collapsed sections) plus the shape / radius inspector.",
+    "M3 component catalog (collapsed sections) plus keyword search to jump to a demo; shape / radius inspector on the right.",
   "nav.expand": "Expand navigation",
   "nav.expandTip": "Show the navigation drawer",
   "nav.collapse": "Hide navigation",
@@ -40,6 +40,7 @@ const en = {
   "topbar.themeToDark": "Switch to dark theme",
   "topbar.hideAside": "Hide inspector",
   "topbar.showAside": "Show inspector",
+  "topbar.componentSearch": "Search components",
 
   "playground.targetCard": "Card",
   "playground.targetCollapsible": "Collapsible",
@@ -289,7 +290,11 @@ const en = {
     "Larger titles and chrome text (font-size-lg).",
 
   "globals.lead":
-    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+  "globals.searchAria": "Search components",
+  "globals.searchPlaceholder": "Search components…",
+  "globals.searchClear": "Clear search",
+  "globals.searchEmpty": "No matching components",
   "globals.catActions": "Actions",
   "globals.catTextInputs": "Text inputs",
   "globals.catSelection": "Selection",
@@ -955,7 +960,7 @@ const zh: Record<MessageKey, string> = {
   "nav.playgroundHint":
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
-    "按 M3 分类的组件样例（分区默认收起），右侧是圆角 / 形状检查器。",
+    "按 M3 分类的组件样例（分区默认收起），可用关键词搜索跳转到具体 demo；右侧是圆角 / 形状检查器。",
   "nav.expand": "展开导航",
   "nav.expandTip": "展开导航抽屉",
   "nav.collapse": "关闭导航",
@@ -975,6 +980,7 @@ const zh: Record<MessageKey, string> = {
   "topbar.themeToDark": "切换到深色主题",
   "topbar.hideAside": "隐藏检查器",
   "topbar.showAside": "显示检查器",
+  "topbar.componentSearch": "搜索组件",
 
   "playground.targetCard": "Card",
   "playground.targetCollapsible": "Collapsible",
@@ -1210,7 +1216,11 @@ const zh: Record<MessageKey, string> = {
   "inspector.fontLgHint": "较大标题与界面文字（font-size-lg）。",
 
   "globals.lead":
-    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+  "globals.searchAria": "搜索组件",
+  "globals.searchPlaceholder": "搜索组件…",
+  "globals.searchClear": "清除搜索",
+  "globals.searchEmpty": "没有匹配的组件",
   "globals.catActions": "操作",
   "globals.catTextInputs": "文本输入",
   "globals.catSelection": "选择",
