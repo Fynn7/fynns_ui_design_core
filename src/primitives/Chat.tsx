@@ -535,7 +535,11 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
               aria-label={ariaLabel}
               rows={1}
             />
-            <div className="fynns-chat-composer-toolbar" role="toolbar">
+            <div
+              className="fynns-chat-composer-toolbar"
+              role={expanded ? "toolbar" : undefined}
+              aria-label={expanded ? "Composer actions" : undefined}
+            >
               {showLeading ? (
                 <div className="fynns-chat-composer-leading">{leading}</div>
               ) : null}

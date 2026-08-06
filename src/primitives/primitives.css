@@ -9113,7 +9113,7 @@ a.fynns-breadcrumb-link:visited {
 
 /* Collapsed: trailing control owns the end inset — drop the Input end pad. */
 .fynns-chat-composer-shell:not([data-expanded])
-  .fynns-chat-composer-body:has(.fynns-chat-composer-primary-slot)
+  .fynns-chat-composer-body:has(.fynns-chat-composer-primary)
   .fynns-chat-composer-input {
   padding-inline-end: 0;
 }
