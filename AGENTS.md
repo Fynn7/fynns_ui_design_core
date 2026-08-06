@@ -81,11 +81,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
-   `.sr-only` class for screen-reader-only text, a visible `:focus-visible` ring
-   from `--fynns-focus-ring-width` + `--fynns-color-focus` (keep faint), or for
-   text fields / editable CodeBlock a quiet border tint via
-   `--fynns-focus-border-mix` into `--fynns-color-border` (not a full accent ring),
-   and keyboard affordances
+   `.sr-only` class for screen-reader-only text, a visible `:focus-visible` cue —
+   soft ring (`--fynns-focus-ring-width` + `--fynns-color-focus` / `accent-ring`),
+   quiet border tint (`--fynns-focus-border-mix` into `--fynns-color-border` for
+   fields / SearchBar / Select / Autocomplete / editable CodeBlock / Carousel /
+   TimePicker / Collapsible), or a state-layer wash on destination rows
+   (NavigationDrawer items), and keyboard affordances
    (Esc closes overlays, arrow-key paging, Ctrl+Enter to run, etc.).
 7. **Motion is tokenized and reduced-motion-safe.** Durations/eases come from the
    motion tokens (`--fynns-duration-*`, `--fynns-ease-*`); `theme.css` already

@@ -7293,6 +7293,20 @@ a.fynns-breadcrumb-link:visited {
   outline: none;
   z-index: 1;
   box-shadow: none;
+  /* Parent shell gets quiet border; button still needs a per-control cue. */
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-period-btn--selected:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
 }
 
 .fynns-timepicker-period-btn--selected {
