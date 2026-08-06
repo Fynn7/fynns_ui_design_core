@@ -16,6 +16,7 @@ import {
   PanelLeftIcon,
   PanelRightIcon,
   restoreFynnsThemeMode,
+  SearchIcon,
   SettingsIcon,
   SparklesIcon,
   SnackbarHost,
@@ -52,6 +53,7 @@ const NAV_OPEN_KEY = "fynns-sandbox-nav-open";
 export function SandboxShell() {
   const { t } = useLocale();
   const [page, setPage] = useState<SandboxPage>("playground");
+  const [globalsSearchFocusTick, setGlobalsSearchFocusTick] = useState(0);
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const [asideOpen, setAsideOpen] = useState(() => {
     if (typeof window === "undefined") return true;
@@ -268,6 +270,17 @@ export function SandboxShell() {
             trailing={
               <div className="sandbox-topbar-actions">
                 {page === "playground" ? <AgentInputBar /> : null}
+                <Tooltip content={t("topbar.componentSearch")}>
+                  <IconButton
+                    aria-label={t("topbar.componentSearch")}
+                    onClick={() => {
+                      setPage("globals");
+                      setGlobalsSearchFocusTick((n) => n + 1);
+                    }}
+                  >
+                    <SearchIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
                 {hasInspector ? (
                   <Tooltip content={asideOpen ? t("topbar.hideAside") : t("topbar.showAside")}>
                     <IconButton
@@ -312,7 +325,9 @@ export function SandboxShell() {
                 {target === "card" ? <CardPreviewCanvas /> : <CollapsiblePreviewCanvas />}
               </div>
             ) : null}
-            {page === "globals" ? <GlobalsPage /> : null}
+            {page === "globals" ? (
+              <GlobalsPage searchFocusTick={globalsSearchFocusTick} />
+            ) : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}
             {page === "templates" ? (

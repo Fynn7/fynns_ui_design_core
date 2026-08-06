@@ -125,6 +125,13 @@ import { useEffect, useRef, useState, Fragment, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { splitCaptionByBackticks } from "../utils/captionSegments";
+import {
+  GLOBALS_CATEGORY_TITLE_KEY,
+  demoElementId,
+  filterGlobalsDemos,
+  findDemoById,
+  type GlobalsCategoryId,
+} from "../catalog/globalsCatalog";
 
 /** Render sandbox chat copy with `` `code` `` → `<code>` (ChatGPT inline pill). */
 function chatCaption(text: string): ReactNode {
@@ -244,18 +251,41 @@ const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
   all: "globals.navRailPaneAll",
 };
 
+/** Anchor + flash target for catalog search jump. */
+function GlobalsDemo({ id, children }: { id: string; children: ReactNode }) {
+  return (
+    <section
+      id={demoElementId(id)}
+      data-sandbox-demo={id}
+      className="sandbox-globals-demo"
+    >
+      {children}
+    </section>
+  );
+}
+
 /** One M3 / sandbox category — Collapsible defaults to collapsed. */
 function GlobalsCategory({
   title,
   icon,
+  open,
+  onOpenChange,
   children,
 }: {
   title: string;
   icon: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   children: ReactNode;
 }) {
   return (
-    <Collapsible title={title} icon={icon} className="sandbox-globals-category">
+    <Collapsible
+      title={title}
+      icon={icon}
+      open={open}
+      onOpenChange={onOpenChange}
+      className="sandbox-globals-category"
+    >
       <div className="sandbox-globals-section-body">{children}</div>
     </Collapsible>
   );
@@ -297,8 +327,21 @@ function OverflowBoundsDemo() {
  * share the same token ladder (not Card-only). Samples are grouped by M3
  * component families; each family is a collapsed Collapsible.
  */
-export function GlobalsPage() {
+export type GlobalsPageProps = {
+  /** Increment from shell topbar Search to focus the catalog SearchBar. */
+  searchFocusTick?: number;
+};
+
+export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const { t } = useLocale();
+  const catalogSearchRef = useRef<HTMLInputElement>(null);
+  const [catalogQuery, setCatalogQuery] = useState("");
+  const [catalogExpanded, setCatalogExpanded] = useState(false);
+  const [catalogActive, setCatalogActive] = useState(0);
+  const [openCategories, setOpenCategories] = useState<
+    Partial<Record<GlobalsCategoryId, boolean>>
+  >({});
+  const [flashDemoId, setFlashDemoId] = useState<string | null>(null);
   const [switchOn, setSwitchOn] = useState(true);
   const [checkOn, setCheckOn] = useState(true);
   const [checkMixed, setCheckMixed] = useState(true);
@@ -321,8 +364,8 @@ export function GlobalsPage() {
   const [shellNavCompact, setShellNavCompact] = useState(false);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [navSearchQuery, setNavSearchQuery] = useState("");
+  const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
   const [pickedDate, setPickedDate] = useState<string | null>(null);
@@ -399,6 +442,56 @@ export function GlobalsPage() {
     return () => window.clearTimeout(timer);
   }, [chatStreaming, chatStreamText]);
 
+  useEffect(() => {
+    if (!searchFocusTick) return;
+    // Defer past the IconButton click focus so the catalog field wins.
+    const timer = window.setTimeout(() => {
+      catalogSearchRef.current?.focus();
+      setCatalogExpanded(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [searchFocusTick]);
+
+  useEffect(() => {
+    if (!flashDemoId) return;
+    const el = document.getElementById(demoElementId(flashDemoId));
+    el?.classList.add("sandbox-globals-demo--flash");
+    const timer = window.setTimeout(() => {
+      el?.classList.remove("sandbox-globals-demo--flash");
+      setFlashDemoId(null);
+    }, 1200);
+    return () => {
+      window.clearTimeout(timer);
+      el?.classList.remove("sandbox-globals-demo--flash");
+    };
+  }, [flashDemoId]);
+
+  const categoryLabel = (categoryId: GlobalsCategoryId) =>
+    t(GLOBALS_CATEGORY_TITLE_KEY[categoryId]);
+
+  const catalogMatches = filterGlobalsDemos(catalogQuery, categoryLabel);
+
+  useEffect(() => {
+    setCatalogActive(0);
+  }, [catalogQuery]);
+
+  const focusDemo = (demoId: string) => {
+    const entry = findDemoById(demoId);
+    if (!entry) return;
+    setOpenCategories((prev) => ({ ...prev, [entry.categoryId]: true }));
+    setCatalogExpanded(false);
+    setCatalogQuery(entry.label);
+    window.setTimeout(() => {
+      const el = document.getElementById(demoElementId(demoId));
+      el?.scrollIntoView({ block: "start", behavior: "smooth" });
+      setFlashDemoId(demoId);
+    }, 80);
+  };
+
+  const setCategoryOpen = (id: GlobalsCategoryId, open: boolean) => {
+    setOpenCategories((prev) => ({ ...prev, [id]: open }));
+  };
+
   const nestedPromptDefault =
     "You translate natural-language requests into structured camera commands.";
 
@@ -448,7 +541,71 @@ export function GlobalsPage() {
         <p className="sandbox-globals-lead">{t("globals.lead")}</p>
         <SandboxHelp text={t("globals.skipLinkHelp")} />
 
-        <GlobalsCategory title={t("globals.catActions")} icon={<PlusIcon aria-hidden />}>
+        <div className="sandbox-globals-search">
+          <SearchBar
+            ref={catalogSearchRef}
+            value={catalogQuery}
+            onChange={(value) => {
+              setCatalogQuery(value);
+              setCatalogExpanded(value.trim().length > 0);
+            }}
+            ariaLabel={t("globals.searchAria")}
+            placeholder={t("globals.searchPlaceholder")}
+            clearAriaLabel={t("globals.searchClear")}
+            expanded={catalogExpanded && catalogQuery.trim().length > 0}
+            onExpandedChange={setCatalogExpanded}
+            onSearch={() => {
+              const hit = catalogMatches[catalogActive] ?? catalogMatches[0];
+              if (hit) focusDemo(hit.id);
+            }}
+            onKeyDown={(event) => {
+              if (!catalogMatches.length) return;
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                setCatalogExpanded(true);
+                setCatalogActive((i) => (i + 1) % catalogMatches.length);
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                setCatalogExpanded(true);
+                setCatalogActive(
+                  (i) => (i - 1 + catalogMatches.length) % catalogMatches.length,
+                );
+              }
+            }}
+            onFocus={() => {
+              if (catalogQuery.trim()) setCatalogExpanded(true);
+            }}
+          >
+            {catalogMatches.length === 0 ? (
+              <p className="sandbox-globals-search-empty">
+                {t("globals.searchEmpty")}
+              </p>
+            ) : (
+              catalogMatches.map((entry, index) => (
+                <SearchBarResult
+                  key={entry.id}
+                  active={index === catalogActive}
+                  onClick={() => focusDemo(entry.id)}
+                >
+                  <span className="sandbox-globals-search-result-label">
+                    {entry.label}
+                  </span>
+                  <span className="sandbox-globals-search-result-cat">
+                    {categoryLabel(entry.categoryId)}
+                  </span>
+                </SearchBarResult>
+              ))
+            )}
+          </SearchBar>
+        </div>
+
+        <GlobalsCategory
+          title={t("globals.catActions")}
+          icon={<PlusIcon aria-hidden />}
+          open={openCategories.actions ?? false}
+          onOpenChange={(open) => setCategoryOpen("actions", open)}
+        >
+        <GlobalsDemo id="button">
         <div className="sandbox-globals-row">
           <Button size="sm">{t("globals.btnSmall")}</Button>
           <Button>{t("globals.btnDefault")}</Button>
@@ -464,6 +621,8 @@ export function GlobalsPage() {
             {t("globals.btnActive")}
           </Button>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="split-button">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <SplitButton
             label={t("globals.splitBtnLabel")}
@@ -560,6 +719,8 @@ export function GlobalsPage() {
             </DropdownMenuItem>
           </SplitButton>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="icon-button">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.iconBtnTip")}>
             <IconButton size="sm" aria-label={t("globals.iconBtnTip")}>
@@ -597,6 +758,8 @@ export function GlobalsPage() {
             </IconButton>
           </Tooltip>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="info-hint">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <InfoHint
             content={t("globals.infoHintIconBody")}
@@ -624,6 +787,8 @@ export function GlobalsPage() {
           </ControlStack>
         </div>
         <SandboxHelp text={t("globals.infoHintHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="fab">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Tooltip content={t("globals.fabTip")}>
             <Fab size="sm" aria-label={t("globals.fabTip")}>
@@ -676,6 +841,8 @@ export function GlobalsPage() {
           </FabMenu>
         </div>
         <SandboxHelp text={t("globals.fabHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="menu">
         <div className="sandbox-globals-row">
           <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
             <DropdownMenuGroup label={t("globals.menuGroupFile")}>
@@ -708,6 +875,8 @@ export function GlobalsPage() {
           </DropdownMenu>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="context-menu">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <ContextMenuTrigger
             onOpenChange={setCtxOpen}
@@ -739,19 +908,30 @@ export function GlobalsPage() {
               {t("globals.contextMenuDelete")}
             </DropdownMenuItem>
           </ContextMenu>
-          <SandboxHelp text={t("globals.contextMenuHelp")} />
         </div>
+        <SandboxHelp text={t("globals.contextMenuHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catTextInputs")} icon={<PencilIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catTextInputs")}
+        icon={<PencilIcon aria-hidden />}
+        open={openCategories.textInputs ?? false}
+        onOpenChange={(open) => setCategoryOpen("textInputs", open)}
+      >
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+        <GlobalsDemo id="input">
           <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="select">
           <Select
             ariaLabel={t("globals.selectAria")}
             value="one"
             options={["one", "two", "three"]}
             onChange={() => {}}
           />
+        </GlobalsDemo>
+        <GlobalsDemo id="autocomplete">
           <Autocomplete
             ariaLabel={t("globals.autocompleteAria")}
             placeholder={t("globals.autocompletePlaceholder")}
@@ -773,6 +953,8 @@ export function GlobalsPage() {
                 : t("globals.autocompleteHelp")
             }
           />
+        </GlobalsDemo>
+        <GlobalsDemo id="otp">
           <OtpInput
             value={otpValue}
             onChange={setOtpValue}
@@ -780,6 +962,8 @@ export function GlobalsPage() {
             supportingText={t("globals.otpSupporting")}
           />
           <SandboxHelp text={t("globals.otpHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="password">
           <Input
             type={passwordVisible ? "text" : "password"}
             value={password}
@@ -809,6 +993,8 @@ export function GlobalsPage() {
             }
           />
           <SandboxHelp text={t("globals.passwordHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="textarea">
           <Textarea
             value={textareaValue}
             onChange={(event) => setTextareaValue(event.target.value)}
@@ -818,10 +1004,17 @@ export function GlobalsPage() {
             rows={4}
           />
           <SandboxHelp text={t("globals.textareaHelp")} />
+        </GlobalsDemo>
         </div>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catTabs")} icon={<LayoutGridIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catTabs")}
+        icon={<LayoutGridIcon aria-hidden />}
+        open={openCategories.tabs ?? false}
+        onOpenChange={(open) => setCategoryOpen("tabs", open)}
+      >
+        <GlobalsDemo id="tabs">
         <Tabs
           ariaLabel={t("globals.tabsAria")}
           tabs={[
@@ -840,9 +1033,16 @@ export function GlobalsPage() {
           }
         />
         <SandboxHelp text={t("globals.tabsHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catSelection")} icon={<ClipboardIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catSelection")}
+        icon={<ClipboardIcon aria-hidden />}
+        open={openCategories.selection ?? false}
+        onOpenChange={(open) => setCategoryOpen("selection", open)}
+      >
+        <GlobalsDemo id="switch">
         <div className="sandbox-globals-row">
           <Switch
             size="sm"
@@ -852,6 +1052,8 @@ export function GlobalsPage() {
             onCheckedChange={setSwitchOn}
           />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="checkbox">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Checkbox
             label={t("globals.checkbox")}
@@ -870,6 +1072,9 @@ export function GlobalsPage() {
               setCheckMixed(false);
             }}
           />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="radio">
           <div className="sandbox-globals-row">
             <Radio
               name="sandbox-globals-radio"
@@ -886,6 +1091,8 @@ export function GlobalsPage() {
               onCheckedChange={() => setRadioValue("b")}
             />
           </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="chip">
           <ChipSet ariaLabel={t("globals.chipsAria")}>
             <Chip onClick={() => {}}>{t("globals.chipAssist")}</Chip>
             <Chip
@@ -913,7 +1120,8 @@ export function GlobalsPage() {
               </Chip>
             ))}
           </ChipSet>
-        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="toggle-group">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <ToggleGroup
             ariaLabel={t("globals.segmentedAria")}
@@ -938,6 +1146,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.segmentedMultiHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="slider">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <div style={{ width: "min(100%, 20rem)" }}>
             <Slider
@@ -948,6 +1158,8 @@ export function GlobalsPage() {
           </div>
           <SandboxHelp text={t("globals.sliderHelp", { value: String(sliderValue) })} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="date-picker">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <DatePicker
             value={pickedDate}
@@ -995,7 +1207,9 @@ export function GlobalsPage() {
             />
           </div>
           <SandboxHelp text={t("globals.dateHelp")} />
+        <GlobalsDemo id="overflow-bounds">
           <OverflowBoundsDemo />
+        </GlobalsDemo>
         </div>
         <DatePickerDialog
           open={dateDialogOpen}
@@ -1035,6 +1249,8 @@ export function GlobalsPage() {
             ],
           }}
         />
+        </GlobalsDemo>
+        <GlobalsDemo id="date-range-picker">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <DateRangePicker
             value={pickedRange}
@@ -1126,6 +1342,8 @@ export function GlobalsPage() {
             ],
           }}
         />
+        </GlobalsDemo>
+        <GlobalsDemo id="time-picker">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <ToggleGroup
             ariaLabel={t("globals.timeCycleAria")}
@@ -1181,9 +1399,16 @@ export function GlobalsPage() {
             periodAria: t("globals.timePeriodAria"),
           }}
         />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catCommunication")} icon={<InfoIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catCommunication")}
+        icon={<InfoIcon aria-hidden />}
+        open={openCategories.communication ?? false}
+        onOpenChange={(open) => setCategoryOpen("communication", open)}
+      >
+        <GlobalsDemo id="progress">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
@@ -1195,6 +1420,8 @@ export function GlobalsPage() {
             <CircularProgress value={0.2} label={t("globals.progressCircularAria")} size="lg" />
           </div>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="banner">
         {bannerVisible ? (
           <div className="sandbox-globals-banner">
             <Banner
@@ -1217,6 +1444,8 @@ export function GlobalsPage() {
           </Button>
         )}
         <SandboxHelp text={t("globals.bannerHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="inline-alert">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <InlineAlert severity="info" message={t("globals.inlineAlertInfo")} />
           <InlineAlert severity="success" message={t("globals.inlineAlertSuccess")} />
@@ -1225,6 +1454,8 @@ export function GlobalsPage() {
           <InlineAlert severity="success" message={t("globals.inlineAlertWrap")} />
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
           <Button
             size="sm"
@@ -1267,6 +1498,8 @@ export function GlobalsPage() {
           </Button>
         </div>
         <SandboxHelp text={t("globals.snackbarHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="chat">
         <div className="sandbox-globals-row sandbox-chat-dual">
           <div className="sandbox-chat-main">
             <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
@@ -1425,9 +1658,16 @@ export function GlobalsPage() {
           </div>
         </div>
         <SandboxHelp text={t("globals.chatHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catContainment")} icon={<FolderOpenIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catContainment")}
+        icon={<FolderOpenIcon aria-hidden />}
+        open={openCategories.containment ?? false}
+        onOpenChange={(open) => setCategoryOpen("containment", open)}
+      >
+        <GlobalsDemo id="carousel">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Carousel
             ariaLabel={t("globals.carouselAria")}
@@ -1452,6 +1692,8 @@ export function GlobalsPage() {
           </Carousel>
           <SandboxHelp text={t("globals.carouselHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="avatar">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Avatar size="sm" name="Ada" alt={t("globals.avatarAda")} />
           <Avatar name="Ada Lovelace" alt={t("globals.avatarAda")} />
@@ -1468,6 +1710,8 @@ export function GlobalsPage() {
             alt={t("globals.avatarBroken")}
           />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="badged-box">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <BadgedBox badge={3}>
             <Tooltip content={t("globals.badgedBoxIconTip")}>
@@ -1491,6 +1735,8 @@ export function GlobalsPage() {
         </div>
         <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="list">
         <div className="sandbox-globals-list">
           <List aria-label={t("globals.listAria")}>
             <ListItem
@@ -1529,6 +1775,8 @@ export function GlobalsPage() {
           </List>
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="divider">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.dividerFull")} />
           <Divider />
@@ -1543,6 +1791,8 @@ export function GlobalsPage() {
             <SandboxHelp as="span" text={t("globals.dividerVerticalB")} />
           </div>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="card">
         <div className="sandbox-globals-cards">
           <Card
             className="sandbox-globals-card"
@@ -1562,10 +1812,12 @@ export function GlobalsPage() {
             {t("globals.cardBody")}
           </Card>
         </div>
+        </GlobalsDemo>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           {renderNestedPromptSection("sandbox-nested-prompt")}
           <SandboxHelp text={t("globals.nestedSectionHelp")} />
         </div>
+        <GlobalsDemo id="surface">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Surface padded style={{ maxWidth: "24rem" }}>
             <div className="sandbox-stack">
@@ -1597,6 +1849,8 @@ export function GlobalsPage() {
           </Surface>
           <SandboxHelp text={t("globals.surfaceHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="collapsible">
         <Collapsible
           title={t("globals.collapsible")}
           icon={<FolderOpenIcon aria-hidden />}
@@ -1604,6 +1858,8 @@ export function GlobalsPage() {
         >
           <SandboxHelp text={t("globals.collapsibleHelp")} />
         </Collapsible>
+        </GlobalsDemo>
+        <GlobalsDemo id="overlays">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
           <Button size="sm" onClick={() => setSheetOpen(true)}>
             {t("globals.sheetOpen")}
@@ -1695,9 +1951,16 @@ export function GlobalsPage() {
           <p style={{ margin: 0 }}>{t("globals.fullscreenBody")}</p>
         </FullscreenDialog>
         <SandboxHelp text={t("globals.overlayHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catPatterns")} icon={<SparklesIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catPatterns")}
+        icon={<SparklesIcon aria-hidden />}
+        open={openCategories.patterns ?? false}
+        onOpenChange={(open) => setCategoryOpen("patterns", open)}
+      >
+        <GlobalsDemo id="empty-state">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <EmptyState
             icon={<FolderOpenIcon />}
@@ -1709,6 +1972,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.emptyHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="busy-region">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <BusyRegion
             busy={busyRegion}
@@ -1734,6 +1999,8 @@ export function GlobalsPage() {
           </div>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="busy-scrim">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Button onClick={() => setBusyScrimOpen(true)}>
             {t("globals.busyScrimOpen")}
@@ -1745,6 +2012,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="busy-paint">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <div className="sandbox-globals-row">
             <Button
@@ -1788,6 +2057,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.busyPaintHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="stepper">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Stepper
             ariaLabel={t("globals.stepperAria")}
@@ -1819,6 +2090,8 @@ export function GlobalsPage() {
           </Button>
           <SandboxHelp text={t("globals.stepperHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="dropzone">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Dropzone
             multiple
@@ -1838,6 +2111,8 @@ export function GlobalsPage() {
             }
           />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="table">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <div className="fynns-table-wrap fynns-scroll">
             <Table>
@@ -1872,6 +2147,8 @@ export function GlobalsPage() {
           </div>
           <SandboxHelp text={t("globals.tableHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="code-block">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <CodeBlock
             label={t("globals.codeBlockLabel")}
@@ -1985,9 +2262,16 @@ export function GlobalsPage() {
           </Grid>
           <SandboxHelp text={t("globals.codeTokensHelp")} />
         </div>
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.catNavigation")} icon={<MenuIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.catNavigation")}
+        icon={<MenuIcon aria-hidden />}
+        open={openCategories.navigation ?? false}
+        onOpenChange={(open) => setCategoryOpen("navigation", open)}
+      >
+        <GlobalsDemo id="breadcrumb">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Breadcrumb
             ariaLabel={t("globals.breadcrumbAria")}
@@ -2032,6 +2316,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.breadcrumbHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="pagination">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Pagination
             page={page}
@@ -2046,6 +2332,8 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="top-app-bar">
         <div className="sandbox-globals-appbar">
           <TopAppBar
             title={t("globals.appBarTitle")}
@@ -2081,6 +2369,8 @@ export function GlobalsPage() {
           onCheckedChange={setAppBarScrolled}
         />
         <SandboxHelp text={t("globals.appBarHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="navigation-rail">
         <div className="sandbox-globals-navrail">
           <NavigationRail aria-label={t("globals.navRailAria")}>
             <NavigationRailMenu>
@@ -2131,6 +2421,8 @@ export function GlobalsPage() {
           </div>
         </div>
         <SandboxHelp text={t("globals.navRailHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="navigation-bar">
         <div className="sandbox-globals-navbar">
           <NavigationBar aria-label={t("globals.navBarAria")}>
             <NavigationBarItem
@@ -2162,6 +2454,8 @@ export function GlobalsPage() {
           </NavigationBar>
         </div>
         <SandboxHelp text={t("globals.navBarHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="navigation-drawer">
         <div
           className="sandbox-globals-navdrawer"
           style={{
@@ -2252,6 +2546,8 @@ export function GlobalsPage() {
           />
         </NavigationDrawer>
         <SandboxHelp text={t("globals.navDrawerHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="shell">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Switch
             size="sm"
@@ -2383,7 +2679,7 @@ export function GlobalsPage() {
                     placeholder={t("globals.chatComposerPlaceholder")}
                     busy={shellChatBusy}
                     onStop={() => setShellChatBusy(false)}
-                    onSubmit={(v) => {
+                    onSubmit={(v: string) => {
                       setShellChatBusy(true);
                       setShellChatDraft("");
                       window.setTimeout(() => {
@@ -2429,6 +2725,8 @@ export function GlobalsPage() {
           </ClippedNavShell>
         </div>
         <SandboxHelp text={t("globals.shellHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="bottom-app-bar">
         <div className="sandbox-globals-bottom-app-bar">
           <BottomAppBar
             aria-label={t("globals.bottomAppBarAria")}
@@ -2461,6 +2759,8 @@ export function GlobalsPage() {
           />
         </div>
         <SandboxHelp text={t("globals.bottomAppBarHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="toolbar">
         <div className="sandbox-globals-toolbar">
           <Toolbar
             variant="docked"
@@ -2554,16 +2854,18 @@ export function GlobalsPage() {
           </div>
         </div>
         <SandboxHelp text={t("globals.toolbarHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="search-bar">
         <div className="sandbox-globals-search-bar">
           <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
+            value={navSearchQuery}
+            onChange={setNavSearchQuery}
             ariaLabel={t("globals.searchBarAria")}
             placeholder={t("globals.searchBarPlaceholder")}
             clearAriaLabel={t("globals.searchBarClear")}
-            expanded={searchExpanded}
-            onExpandedChange={setSearchExpanded}
-            onSearch={() => setSearchExpanded(false)}
+            expanded={navSearchExpanded}
+            onExpandedChange={setNavSearchExpanded}
+            onSearch={() => setNavSearchExpanded(false)}
           >
             {(
               [
@@ -2573,16 +2875,16 @@ export function GlobalsPage() {
               ] as const
             )
               .filter((label) =>
-                searchQuery.trim()
-                  ? label.toLowerCase().includes(searchQuery.trim().toLowerCase())
+                navSearchQuery.trim()
+                  ? label.toLowerCase().includes(navSearchQuery.trim().toLowerCase())
                   : true,
               )
               .map((label) => (
                 <SearchBarResult
                   key={label}
                   onClick={() => {
-                    setSearchQuery(label);
-                    setSearchExpanded(false);
+                    setNavSearchQuery(label);
+                    setNavSearchExpanded(false);
                   }}
                 >
                   {label}
@@ -2591,9 +2893,16 @@ export function GlobalsPage() {
           </SearchBar>
         </div>
         <SandboxHelp text={t("globals.searchBarHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.rhythm")} icon={<SettingsIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.rhythm")}
+        icon={<SettingsIcon aria-hidden />}
+        open={openCategories.rhythm ?? false}
+        onOpenChange={(open) => setCategoryOpen("rhythm", open)}
+      >
+        <GlobalsDemo id="rhythm">
         <SandboxHelp text={t("globals.rhythmLead")} />
         <div className="sandbox-globals-rhythm">
           <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
@@ -2665,9 +2974,16 @@ export function GlobalsPage() {
           </dl>
         </div>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
+        </GlobalsDemo>
       </GlobalsCategory>
 
-      <GlobalsCategory title={t("globals.swatches")} icon={<BarChartIcon aria-hidden />}>
+      <GlobalsCategory
+        title={t("globals.swatches")}
+        icon={<BarChartIcon aria-hidden />}
+        open={openCategories.swatches ?? false}
+        onOpenChange={(open) => setCategoryOpen("swatches", open)}
+      >
+        <GlobalsDemo id="swatches">
         <SandboxHelp text={t("globals.swatchesHelp")} />
         <div className="sandbox-globals-swatches">
           {SWATCH_KEYS.map(({ key, usesKey }) => (
@@ -2683,6 +2999,7 @@ export function GlobalsPage() {
           ))}
         </div>
         <SandboxHelp text={t("globals.swatchesSpecialHelp")} />
+        </GlobalsDemo>
       </GlobalsCategory>
       </div>
     </div>

@@ -125,8 +125,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
 separate design language. **Every new primitive must ship with a sandbox
 Globals or Preview sample** in the same change set. Pages: **Surfaces** (Card or
-Collapsible target), **Globals** (system shape / radius + control samples),
-Foundations, Motion, and **Templates**
+Collapsible target), **Globals / Components** (system shape / radius + control
+samples; keyword SearchBar jumps to a demo), Foundations, Motion, and
+**Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). On Surfaces / Globals, the topbar **inspector** toggle
 shows or hides the right aside; when hidden (and on pages
@@ -137,6 +138,7 @@ injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `tokens.m3-draft.ts` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
+A topbar search icon focuses the Components SearchBar from any page.
 
 ### Language (English / 中文)
 
