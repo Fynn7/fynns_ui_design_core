@@ -6361,8 +6361,7 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding-block: var(--fynns-list-inset-block);
-  padding-inline: var(--fynns-list-inset-inline);
+  padding: 0;
   list-style: none;
   width: 100%;
   background: transparent;
@@ -6386,16 +6385,12 @@ a.fynns-breadcrumb-link:visited {
   padding-block: var(--fynns-list-pad-block);
   padding-inline: var(--fynns-list-pad-inline);
   border: 0;
-  /* Long-strip row highlight (NavigationDrawerItem / Select / menu). */
-  border-radius: var(--fynns-radius-3xl);
+  border-radius: var(--fynns-radius-none);
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
   text-align: start;
   cursor: default;
-  transition:
-    background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-list-item--2 {
@@ -6410,9 +6405,7 @@ a.fynns-breadcrumb-link:visited {
   cursor: pointer;
 }
 
-.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -6420,9 +6413,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -6436,23 +6427,23 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item--selected {
-  background: var(--fynns-color-secondary-container);
-  color: var(--fynns-color-on-secondary-container);
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
 }
 
 .fynns-list-item--selected.fynns-list-item--interactive:hover:not(:disabled) {
   background: color-mix(
     in srgb,
-    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
-    var(--fynns-color-secondary-container)
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    var(--fynns-color-accent-container)
   );
 }
 
 .fynns-list-item--selected.fynns-list-item--interactive:active:not(:disabled) {
   background: color-mix(
     in srgb,
-    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
-    var(--fynns-color-secondary-container)
+    var(--fynns-color-on-accent-container) var(--fynns-state-pressed),
+    var(--fynns-color-accent-container)
   );
 }
 
@@ -8435,28 +8426,15 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Keep two tracks so width can interpolate (1-track `1fr` cannot morph from
- * `drawer|rail + main`). Permanent `.fynns-clipped-nav-shell-nav` slot holds
- * the first track even when empty so main never falls into the 0px column.
+ * `drawer|rail + main`). Clip the destination column; do not `display: none`
+ * mid-transition — presence unmounts after `--fynns-duration-flyout`.
  */
 .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
   grid-template-columns: 0px minmax(0, 1fr);
 }
 
-.fynns-clipped-nav-shell-nav {
-  min-width: 0;
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-.fynns-clipped-nav-shell[data-nav="hidden"]
-  > .fynns-clipped-nav-shell-body
-  > .fynns-clipped-nav-shell-nav
-  > .fynns-nav-drawer,
-.fynns-clipped-nav-shell[data-nav="hidden"]
-  > .fynns-clipped-nav-shell-body
-  > .fynns-clipped-nav-shell-nav
-  > .fynns-nav-rail {
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer,
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
   pointer-events: none;
   border-inline-end-color: transparent;
 }
@@ -8468,8 +8446,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* Permanent destinations clipped under the top bar. */
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-body > .fynns-nav-rail {
   height: 100%;
   min-height: 0;
   min-width: 0;
@@ -8482,32 +8460,32 @@ a.fynns-breadcrumb-link:visited {
  * Column width is owned by the body grid track. Fill the track — strip the
  * drawer/rail’s own width/min/max so they cannot fight resize or the close morph.
  */
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer {
   width: 100%;
   max-width: none;
   padding-block-start: 0;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
   display: block;
   width: 100%;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+.fynns-clipped-nav-shell-body > .fynns-nav-rail {
   width: 100%;
   max-width: none;
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-nav-rail-destinations {
+.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-nav-rail-destinations {
   flex: 1 1 auto;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-body > .fynns-nav-rail .fynns-tooltip-trigger {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -8529,9 +8507,7 @@ a.fynns-breadcrumb-link:visited {
  * claim more than the flex parent (`min(..., 100%)`) so a single pane cannot
  * force the shell wider than its track.
  */
-/* Only while EndAside is open — closing keeps content min-width briefly and
- * must not keep claiming the canvas floor (false ClippedNavShell crowding). */
-*:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
+*:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
   min-width: min(var(--fynns-layout-main-min-width), 100%);
 }
 
@@ -8648,35 +8624,29 @@ a.fynns-breadcrumb-link:visited {
   }
 
   /* Rail close: keep two columns and collapse the rail track. */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-rail) {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-nav-rail) {
     grid-template-columns: 0px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 
   /* Stacked drawer close: collapse max-height (auto row shrinks with it). */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-drawer) {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-nav-drawer) {
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .fynns-clipped-nav-shell[data-nav="hidden"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-drawer {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
     max-height: 0;
     border-block-end-color: transparent;
     pointer-events: none;
   }
 
-  .fynns-clipped-nav-shell[data-nav="hidden"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-rail {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body > .fynns-nav-rail {
     pointer-events: none;
     border-inline-end-color: transparent;
   }
 
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+  .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
     width: 100%;
     max-width: none;
     height: auto;
@@ -8697,12 +8667,12 @@ a.fynns-breadcrumb-link:visited {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+    .fynns-clipped-nav-shell-body > .fynns-nav-drawer {
       transition: none;
     }
   }
 
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
+  .fynns-clipped-nav-shell-body > .fynns-nav-drawer .fynns-nav-drawer-body {
     flex: 1 1 auto;
     min-height: 0;
     max-height: 100%;
@@ -8750,675 +8720,4 @@ a.fynns-breadcrumb-link:visited {
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 }
-
-/* ---------- ChatMessage ---------- */
-@keyframes fynns-chat-cursor-blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.fynns-chat-message {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--fynns-chatmessage-avatar-gap);
-  width: 100%;
-  /* Main-column rem ceiling; asides override to 100% (see dual placement). */
-  max-width: var(--fynns-chatmessage-max-width);
-  box-sizing: border-box;
-}
-
-/*
- * Dual placement — left/right resizable asides:
- * Host = aside **content** width (not viewport / full main). User bubble stays
- * `--fynns-chatmessage-bubble-max-width` (70%) of that host; composer = 100%.
- * Soft floors stay on the pane (`--fynns-layout-end-aside-min-width` /
- * `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
- * EndAside auto-fills; start-edge / custom asides wrap with `.fynns-chat-host--fill`.
- */
-.fynns-chat-host--fill {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-.fynns-end-aside .fynns-chat-message,
-.fynns-chat-host--fill .fynns-chat-message {
-  max-width: 100%;
-}
-
-.fynns-chat-message--user {
-  margin-inline-start: auto;
-  flex-direction: row-reverse;
-}
-
-.fynns-chat-message--assistant {
-  margin-inline-end: auto;
-}
-
-.fynns-chat-message--system {
-  margin-inline: auto;
-  justify-content: center;
-  max-width: var(--fynns-chatmessage-max-width);
-}
-
-.fynns-end-aside .fynns-chat-message--system,
-.fynns-chat-host--fill .fynns-chat-message--system {
-  max-width: 100%;
-}
-
-.fynns-chat-message-avatar {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-block-start: 0.125rem;
-}
-
-.fynns-chat-message-main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chatmessage-gap);
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.fynns-chat-message--user .fynns-chat-message-main {
-  align-items: flex-end;
-}
-
-.fynns-chat-message--assistant .fynns-chat-message-main {
-  align-items: flex-start;
-}
-
-.fynns-chat-message--system .fynns-chat-message-main {
-  align-items: center;
-  width: 100%;
-}
-
-.fynns-chat-message-name {
-  font-size: var(--fynns-chatmessage-name-size);
-  font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text-muted);
-  line-height: var(--fynns-line-height-snug);
-}
-
-.fynns-chat-message-bubble {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0;
-  max-width: 100%;
-  box-sizing: border-box;
-  font-size: var(--fynns-chatmessage-body-size);
-  line-height: var(--fynns-chatmessage-body-line);
-  color: var(--fynns-color-text);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.fynns-chat-message--user .fynns-chat-message-bubble {
-  /* Ceiling vs `.fynns-chat-message-main` (row); short copy still shrinks. */
-  max-width: var(--fynns-chatmessage-bubble-max-width);
-  width: fit-content;
-  padding-inline: var(--fynns-chatmessage-bubble-pad-inline);
-  padding-block: var(--fynns-chatmessage-bubble-pad-block);
-  border-radius: var(--fynns-radius-22);
-  background: var(--fynns-color-chat-user-bubble);
-  color: var(--fynns-color-text);
-}
-
-.fynns-chat-message--assistant .fynns-chat-message-bubble {
-  padding: 0;
-  background: transparent;
-}
-
-.fynns-chat-message--system .fynns-chat-message-bubble {
-  padding: 0;
-  background: transparent;
-  border-radius: 0;
-  color: var(--fynns-color-text-muted);
-  font-size: var(--fynns-chatmessage-name-size);
-  line-height: var(--fynns-line-height-snug);
-  text-align: center;
-  width: 100%;
-  justify-content: center;
-}
-
-.fynns-chat-message-body {
-  min-width: 0;
-}
-
-/*
- * Inline `code` — ChatGPT pad / size / weight; fill is a fynns text wash
- * (`--fynns-color-chat-inline-code-bg` → text × `code-user-bg-mix`), not
- * ChatGPT gray-700 (muddy on teal). Excludes `pre code` (fenced blocks).
- * User bubble: tighter pad only (same wash on the teal bubble).
- */
-.fynns-chat-message-body :where(code):not(:where(pre *)) {
-  font-family: var(--fynns-font-mono);
-  font-size: var(--fynns-chatmessage-code-size);
-  font-weight: var(--fynns-font-weight-medium);
-  line-height: inherit;
-  color: inherit;
-  background: var(--fynns-color-chat-inline-code-bg);
-  border-radius: var(--fynns-radius-xs);
-  padding-block: var(--fynns-chatmessage-code-pad-block);
-  padding-inline: var(--fynns-chatmessage-code-pad-inline);
-  overflow-wrap: anywhere;
-}
-
-.fynns-chat-message--user .fynns-chat-message-body :where(code):not(:where(pre *)) {
-  padding-block: var(--fynns-chatmessage-code-user-pad-block);
-  padding-inline: var(--fynns-chatmessage-code-user-pad-inline);
-}
-
-.fynns-chat-message-cursor {
-  display: inline-block;
-  width: var(--fynns-chatmessage-cursor-width);
-  height: 1em;
-  margin-inline-start: 0.1em;
-  vertical-align: text-bottom;
-  border-radius: var(--fynns-radius-2xs);
-  background: var(--fynns-color-accent);
-  animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
-    step-end infinite;
-}
-
-/* ChatGPT failed-generation footer under the assistant turn. */
-.fynns-chat-message-error {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--fynns-chatmessage-error-gap);
-  max-width: 100%;
-}
-
-.fynns-chat-message-error-text {
-  margin: 0;
-  font-size: var(--fynns-chatmessage-body-size);
-  line-height: var(--fynns-chatmessage-body-line);
-  color: var(--fynns-color-danger);
-}
-
-.fynns-chat-message-error-retry {
-  /* Sit flush under the danger copy — denser than a full md control. */
-  min-height: var(--fynns-size-icon-target);
-}
-
-/* ---------- Chat citations / source chips ---------- */
-.fynns-chat-citations {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--fynns-chatmessage-citation-gap);
-  max-width: 100%;
-  min-width: 0;
-}
-
-.fynns-chat-citations-chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fynns-chatmessage-citation-gap);
-  max-width: 100%;
-}
-
-.fynns-chat-citation-chip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--fynns-chatmessage-citation-chip-gap);
-  max-width: 100%;
-  margin: 0;
-  padding-inline: var(--fynns-chatmessage-citation-pad-inline);
-  padding-block: var(--fynns-chatmessage-citation-pad-block);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-pill);
-  background: var(--fynns-color-surface-1);
-  color: var(--fynns-color-text-muted);
-  font: inherit;
-  font-size: var(--fynns-chatmessage-name-size);
-  font-weight: var(--fynns-font-weight-medium);
-  line-height: var(--fynns-line-height-snug);
-  cursor: pointer;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.fynns-chat-citation-chip::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--fynns-color-text);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-chat-citation-chip:hover::before {
-  opacity: var(--fynns-state-hover);
-}
-
-.fynns-chat-citation-chip:active::before {
-  opacity: var(--fynns-state-pressed);
-}
-
-.fynns-chat-citation-chip:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
-}
-
-.fynns-chat-citation-favicon,
-.fynns-chat-citation-chip-label {
-  position: relative;
-  z-index: 1;
-}
-
-.fynns-chat-citation-favicon {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: var(--fynns-chatmessage-citation-favicon);
-  height: var(--fynns-chatmessage-citation-favicon);
-  color: var(--fynns-color-text-muted);
-}
-
-.fynns-chat-citation-favicon img,
-.fynns-chat-citation-favicon svg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: var(--fynns-radius-2xs);
-}
-
-.fynns-chat-citation-chip-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.fynns-chat-citation-chip--more {
-  color: var(--fynns-color-text);
-}
-
-.fynns-chat-citations-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chatmessage-citation-list-gap);
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.fynns-chat-citation-card {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: var(--fynns-chatmessage-citation-card-gap);
-  width: 100%;
-  box-sizing: border-box;
-  padding: var(--fynns-chatmessage-citation-card-pad);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  /* Chat container floor = user bubble (`radius-22`); never squarer. */
-  border-radius: var(--fynns-radius-22);
-  background: var(--fynns-color-surface-1);
-  color: inherit;
-  text-decoration: none;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.fynns-chat-citation-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--fynns-color-text);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-chat-citation-card:hover::before {
-  opacity: var(--fynns-state-hover);
-}
-
-.fynns-chat-citation-card:active::before {
-  opacity: var(--fynns-state-pressed);
-}
-
-.fynns-chat-citation-card:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
-}
-
-.fynns-chat-citation-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.fynns-chat-citation-card .fynns-chat-citation-favicon {
-  margin-block-start: 0.125rem;
-}
-
-.fynns-chat-citation-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-2xs);
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.fynns-chat-citation-card-publisher {
-  font-size: var(--fynns-chatmessage-name-size);
-  font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text-muted);
-  line-height: var(--fynns-line-height-snug);
-}
-
-.fynns-chat-citation-card-title {
-  font-size: var(--fynns-chatmessage-body-size);
-  font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text);
-  line-height: var(--fynns-chatmessage-body-line);
-}
-
-.fynns-chat-citation-card-snippet {
-  font-size: var(--fynns-chatmessage-name-size);
-  color: var(--fynns-color-text-muted);
-  line-height: var(--fynns-line-height-snug);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-
-.fynns-chat-citation-preview {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-2xs);
-  text-align: start;
-}
-
-.fynns-chat-citation-preview-publisher {
-  font-size: var(--fynns-font-size-xs);
-  font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text-muted);
-}
-
-.fynns-chat-citation-preview-title {
-  font-size: var(--fynns-font-size-sm);
-  font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text);
-}
-
-.fynns-chat-citation-preview-snippet {
-  font-size: var(--fynns-font-size-xs);
-  color: var(--fynns-color-text-muted);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
-
-.fynns-chat-message-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fynns-chatmessage-actions-gap);
-  margin-inline-start: calc(-1 * var(--fynns-space-sm));
-}
-
-.fynns-chat-message--user .fynns-chat-message-actions {
-  margin-inline-start: 0;
-  margin-block-start: calc(-1 * var(--fynns-chatmessage-gap) + 0.25rem);
-}
-
-/* User Copy/Edit: hover / focus-within; touch always. */
-.fynns-chat-message--user .fynns-chat-message-actions {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.fynns-chat-message--user:hover .fynns-chat-message-actions,
-.fynns-chat-message--user:focus-within .fynns-chat-message-actions {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-@media (hover: none) {
-  .fynns-chat-message--user .fynns-chat-message-actions {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fynns-chat-message-cursor {
-    animation: none;
-    opacity: 1;
-  }
-}
-
-/* ---------- Chat shell ---------- */
-.fynns-chat {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
-  min-width: min(var(--fynns-layout-chat-min-width), 100%);
-  min-height: 0;
-  height: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-.fynns-chat-thread {
-  flex: 1 1 auto;
-  min-height: 0;
-  min-width: 0;
-  overflow: auto;
-  padding-inline: var(--fynns-chat-thread-pad-inline);
-  padding-block: var(--fynns-chat-thread-pad-block);
-  padding-bottom: calc(
-    var(--fynns-chat-thread-pad-block) + var(--fynns-chat-composer-scroll-pad)
-  );
-  box-sizing: border-box;
-}
-
-.fynns-chat-thread-inner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chat-thread-gap);
-  width: 100%;
-  max-width: var(--fynns-layout-chat-max-width);
-  margin-inline: auto;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-.fynns-end-aside .fynns-chat-thread-inner,
-.fynns-chat-host--fill .fynns-chat-thread-inner,
-.fynns-end-aside .fynns-chat-composer,
-.fynns-chat-host--fill .fynns-chat-composer {
-  max-width: 100%;
-}
-
-.fynns-chat-scroll-fab {
-  position: absolute;
-  inset-inline: 0;
-  bottom: calc(
-    var(--fynns-chat-composer-inset-block) + var(--fynns-chat-composer-min-height) +
-      var(--fynns-chat-scroll-fab-inset)
-  );
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.fynns-chat-scroll-fab > * {
-  pointer-events: auto;
-}
-
-.fynns-chat-composer {
-  flex: 0 0 auto;
-  width: 100%;
-  max-width: var(--fynns-layout-chat-max-width);
-  margin-inline: auto;
-  padding-inline: var(--fynns-chat-composer-inset-inline);
-  padding-block: var(--fynns-chat-composer-inset-block);
-  padding-top: var(--fynns-chat-composer-offset);
-  box-sizing: border-box;
-}
-
-.fynns-chat-composer-shell {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chat-composer-gap);
-  /* Grow with content; floor is the single-line row (icon + 1lh field), not a tall well. */
-  min-height: 0;
-  padding-inline: var(--fynns-chat-composer-pad-inline);
-  padding-block: var(--fynns-chat-composer-pad-block);
-  border-radius: var(--fynns-radius-3xl);
-  background: var(--fynns-color-surface-2);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  box-sizing: border-box;
-  transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
-}
-
-.fynns-chat-composer-shell:has(:focus-visible) {
-  border-color: color-mix(
-    in srgb,
-    var(--fynns-color-accent) var(--fynns-focus-border-mix),
-    var(--fynns-color-border)
-  );
-}
-
-.fynns-chat-composer-attachments {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: var(--fynns-space-sm);
-  overflow-x: auto;
-  min-width: 0;
-}
-
-.fynns-chat-composer-row {
-  display: flex;
-  /* Match SearchBar / field-shell — center controls + single-line text. */
-  align-items: center;
-  gap: var(--fynns-chat-composer-gap);
-  min-width: 0;
-  /* Single-line ChatGPT collapsed row ≈ size-9 (36dp) control + pad. */
-  min-height: var(--fynns-chat-composer-min-height);
-}
-
-/*
- * ChatGPT prompt controls are size-9 (36dp), not the global 40dp IconButton.
- * Class sits on the IconButton itself and/or a wrapper.
- */
-.fynns-btn--icon.fynns-chat-composer-leading,
-.fynns-btn--icon.fynns-chat-composer-primary,
-.fynns-chat-composer-leading .fynns-btn--icon,
-.fynns-chat-composer-primary .fynns-btn--icon {
-  width: var(--fynns-chat-composer-control-size);
-  min-width: var(--fynns-chat-composer-control-size);
-  height: var(--fynns-chat-composer-control-size);
-  min-height: var(--fynns-chat-composer-control-size);
-}
-
-.fynns-chat-composer-input {
-  flex: 1 1 auto;
-  align-self: center;
-  min-width: 0;
-  /* One text line at rest — never stretch to fill the chat column. */
-  height: auto;
-  min-height: var(--fynns-chat-composer-line-height);
-  max-height: var(--fynns-chat-composer-max-height);
-  margin: 0;
-  /*
-   * End inset mirrors Input-in-shell when there is no trailing control.
-   * Start inset: see :has(.fynns-chat-composer-leading) rules below.
-   */
-  padding-block: 0;
-  padding-inline-start: 0;
-  padding-inline-end: calc(
-    var(--fynns-space-md) - var(--fynns-border-hairline)
-  );
-  border: none;
-  outline: none;
-  resize: none;
-  background: transparent;
-  color: var(--fynns-color-text);
-  font: inherit;
-  font-size: var(--fynns-font-size-md);
-  /* Match box height so single-line text/placeholder is vertically centered. */
-  line-height: var(--fynns-chat-composer-line-height);
-  overflow-x: hidden;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  field-sizing: fixed;
-}
-
-/*
- * No leading affix: same label inset as Input / Select / Autocomplete.
- * Shell already has composer-pad-inline (= searchbar-pad-inline); add
- * space-md − hairline so text start = pad-inline + space-md.
- */
-.fynns-chat-composer-row:not(:has(.fynns-chat-composer-leading))
-  .fynns-chat-composer-input {
-  padding-inline-start: calc(
-    var(--fynns-space-md) - var(--fynns-border-hairline)
-  );
-}
-
-/* Trailing IconButton owns the end inset — drop the Input end pad. */
-.fynns-chat-composer-row:has(.fynns-chat-composer-primary)
-  .fynns-chat-composer-input {
-  padding-inline-end: 0;
-}
-
-.fynns-chat-composer-input::placeholder {
-  color: var(--fynns-color-text-muted);
-  /* Narrow EndAside: ellipsis one line; JS keeps empty height at 1lh. */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.fynns-chat-composer-input:focus-visible {
-  outline: none;
-}
-
-.fynns-chat-composer-leading,
-.fynns-chat-composer-primary {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fynns-chat-composer-shell {
-    transition: none;
-  }
-}
-
 

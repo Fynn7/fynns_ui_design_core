@@ -1,6 +1,8 @@
 import {
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
@@ -38,9 +40,11 @@ export type ClippedNavShellProps = {
   children: ReactNode;
   className?: string;
   /**
-   * When `navMode` is `"drawer"` and the shell’s content width overflows
-   * (e.g. canvas + `EndAside` both at their min clamps), call this so the
-   * consumer can collapse destinations to rail / icon mode (not hidden).
+   * When `navMode` is `"drawer"` and a full labeled drawer would starve
+   * canvas + `EndAside` mins (or force EndAside overlay), call this so the
+   * consumer can densify to rail / icon mode (not hidden). Fired from
+   * `useLayoutEffect` using **target** drawer width (not mid-transition
+   * layout) so open does not paint full drawer then snap to rail.
    */
   onNavCrowded?: () => void;
   /**
@@ -83,6 +87,59 @@ function readVarPx(host: Element, varName: string): number {
   return w;
 }
 
+function readRemPx(host: Element, rem: number): number {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:absolute;visibility:hidden;pointer-events:none;height:0;width:" +
+    rem +
+    "rem";
+  host.appendChild(probe);
+  const w = probe.getBoundingClientRect().width;
+  probe.remove();
+  return w;
+}
+
+/**
+ * Whether a **target** labeled-drawer width would starve main / EndAside floors
+ * (or force EndAside overlay) in `host` — ignores CSS transition mid-frames.
+ * Use when opening destinations so apps can choose `rail` without painting a
+ * full drawer first; `ClippedNavShell` also calls this from `useLayoutEffect`.
+ *
+ * @param host `.fynns-clipped-nav-shell` root (or any ancestor that carries the
+ *   layout tokens and contains `.fynns-clipped-nav-shell-main`).
+ * @param drawerWidthPx Target drawer column width; defaults to
+ *   `--fynns-navdrawer-width` on `host`.
+ */
+export function wouldClippedNavDrawerCrowd(
+  host: Element,
+  drawerWidthPx?: number,
+): boolean {
+  const root =
+    host instanceof Element && host.classList.contains("fynns-clipped-nav-shell")
+      ? host
+      : (host.querySelector(".fynns-clipped-nav-shell") ?? host);
+  const drawerTarget =
+    drawerWidthPx ?? (readVarPx(root, "--fynns-navdrawer-width") || 280);
+  const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
+  const main = root.querySelector(".fynns-clipped-nav-shell-main");
+  const aside = main?.querySelector(
+    ".fynns-end-aside:not([data-state='closing'])",
+  );
+  const asideMin = aside
+    ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+    : 0;
+  const shellW = root.clientWidth;
+  if (shellW <= 0) return false;
+  if (drawerTarget + mainMin + asideMin > shellW + 1) return true;
+  if (!aside) return false;
+  const mainTrack = Math.max(0, shellW - drawerTarget);
+  /* Matches `@container fynns-shell-main (max-width: 32rem)` overlay path. */
+  const overlayAt = readRemPx(root, 32);
+  if (mainTrack <= overlayAt + 1) return true;
+  if (mainTrack > 0 && drawerTarget >= mainTrack) return true;
+  return false;
+}
+
 /**
  * M3 clipped app shell: full-bleed top bar, then `nav | main` below (no
  * topbar×sidebar crosshair). Pair with `EndAside` inside `children` for a
@@ -93,8 +150,10 @@ function readVarPx(host: Element, varName: string): number {
  * consumers may pass `null` when `navMode="hidden"`. In `drawer` mode the
  * nav|main seam is draggable (paints `--fynns-navdrawer-width` live via rAF,
  * commits on pointerup; clamped by navdrawer min/max and remaining room for
- * main / EndAside mins). `onNavCrowded` skips while resizing or while an
- * `EndAside` is closing so inspector collapse does not densify destinations.
+ * main / EndAside mins). `onNavCrowded` uses target drawer width (see
+ * `wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so opening never paints a
+ * full drawer then snaps to rail; also skips while resizing or while an
+ * `EndAside` is closing.
  *
  * @example
  * ```tsx
@@ -108,19 +167,24 @@ function readVarPx(host: Element, varName: string): number {
  * </ClippedNavShell>
  * ```
  */
-export function ClippedNavShell({
-  navMode,
-  topBar,
-  nav,
-  children,
-  className,
-  onNavCrowded,
-  drawerWidth: drawerWidthProp,
-  defaultDrawerWidth,
-  onDrawerWidthChange,
-  disableDrawerResize = false,
-}: ClippedNavShellProps) {
+export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
+  function ClippedNavShell(
+    {
+      navMode,
+      topBar,
+      nav,
+      children,
+      className,
+      onNavCrowded,
+      drawerWidth: drawerWidthProp,
+      defaultDrawerWidth,
+      onDrawerWidthChange,
+      disableDrawerResize = false,
+    },
+    forwardedRef,
+  ) {
   const rootRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(forwardedRef, () => rootRef.current as HTMLDivElement);
   const onNavCrowdedRef = useRef(onNavCrowded);
   onNavCrowdedRef.current = onNavCrowded;
   const onDrawerWidthChangeRef = useRef(onDrawerWidthChange);
@@ -189,6 +253,13 @@ export function ClippedNavShell({
     );
 
     const isCrowded = () => {
+      const drawerTarget =
+        drawerWidthPx ??
+        (readVarPx(root, "--fynns-navdrawer-width") || 280);
+      /* Prefer target width over mid-flyout interpolated columns — otherwise
+       * open expands to full drawer then densifies after settleTimer. */
+      if (wouldClippedNavDrawerCrowd(root, drawerTarget)) return true;
+
       if (root.scrollWidth > root.clientWidth + 1) return true;
       if (body && body.scrollWidth > body.clientWidth + 1) return true;
       /* EndAside + canvas mins can overflow inside the main track while the
@@ -462,4 +533,5 @@ export function ClippedNavShell({
       </div>
     </div>
   );
-}
+  },
+);

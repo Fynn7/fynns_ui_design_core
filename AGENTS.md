@@ -476,7 +476,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   watches **main-column** overflow (canvas + `EndAside` floors vs the main
   track), not only the outer shell scrollWidth — also when shrink-to-fit hides
   overflow (drawer track starves main below `main-min` + `end-aside-min`, or
-  nav column ≥ main while EndAside is open). It **must not** fire while the
+  nav column ≥ main while EndAside is open). On open, crowding is predicted from
+  **target** drawer width (`wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so
+  destinations densify to rail **before paint** — no full-drawer → icon snap.
+  It **must not** fire while the
   drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
   (closing morph would otherwise false-trip overflow and collapse labeled
   drawer → rail).
@@ -489,7 +492,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   for nested demos), EndAside **overlays** the end edge at its min/preferred
   width (out of flex flow) so both mins stay usable without horizontal overflow.
   Drawer still open + floors overflowing → `onNavCrowded` → rail. Viewport
-  ≤56.25rem → bottom sheet. If `navMode` stays `"drawer"` on a narrow viewport,
+  ≤56.25rem → bottom sheet (`max-height: min(52dvh, 22rem)` — usable sheet, not a
+  thin ribbon). If `navMode` stays `"drawer"` on a narrow viewport,
   CSS stacks that drawer above main (rem-capped); prefer `"rail"` so destinations
   stay a side column. Slot-only — destinations stay in `nav`, inspector
   content in `EndAside` children; toggle IconButtons live in the consumer
@@ -571,7 +575,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
   | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed with destination **width morph** (two grid tracks → `0px`; shell holds `nav` through flyout). Drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
-  | EndAside | adaptive | Inspector width morph; soft min + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet. Not Drawer. |
+  | EndAside | adaptive | Inspector width morph; soft min + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |

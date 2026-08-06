@@ -28,6 +28,7 @@ import {
   ChatScrollToBottom,
   ChatThread,
   ClippedNavShell,
+  wouldClippedNavDrawerCrowd,
   ClipboardIcon,
   Carousel,
   CarouselItem,
@@ -365,6 +366,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [shellNavCompact, setShellNavCompact] = useState(false);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
+  const shellDemoRef = useRef<HTMLDivElement>(null);
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
@@ -2577,7 +2579,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             checked={shellNavOpen}
             onCheckedChange={(open) => {
               setShellNavOpen(open);
-              if (open) setShellNavCompact(false);
+              if (open) {
+                const crowd = shellDemoRef.current
+                  ? wouldClippedNavDrawerCrowd(shellDemoRef.current)
+                  : false;
+                setShellNavCompact(crowd);
+              }
             }}
           />
           <Switch
@@ -2590,6 +2597,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <div className="sandbox-globals-clipped-shell">
           <ClippedNavShell
+            ref={shellDemoRef}
             navMode={
               !shellNavOpen ? "hidden" : shellNavCompact ? "rail" : "drawer"
             }
@@ -2606,7 +2614,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                         if (shellNavOpen) {
                           setShellNavOpen(false);
                         } else {
-                          setShellNavCompact(false);
+                          const crowd = shellDemoRef.current
+                            ? wouldClippedNavDrawerCrowd(shellDemoRef.current)
+                            : false;
+                          setShellNavCompact(crowd);
                           setShellNavOpen(true);
                         }
                       }}

@@ -1351,7 +1351,28 @@
 }
 
 @media (max-width: 900px) and (max-height: 640px) {
+  /* Short landscape: still a usable sheet, not a thinner ribbon than the default. */
   .sandbox-root .fynns-end-aside {
-    max-height: min(38dvh, 16rem);
+    max-height: min(48dvh, 18rem);
+  }
+}
+
+/*
+ * Bottom-sheet EndAside (viewport ≤56.25rem): sections stay full-bleed so
+ * Collapsible hairlines / action footers span the sheet. Only pack
+ * label|value clusters to the start — do not clamp section max-width
+ * (that left a dead column and chopped dividers into short stubs).
+ */
+@media (max-width: 56.25rem) {
+  .sandbox-root .fynns-end-aside .sandbox-field-row,
+  .sandbox-root .fynns-end-aside .sandbox-hue-meta {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    column-gap: var(--fynns-layout-control-cluster-gap);
+    row-gap: var(--fynns-layout-control-row-gap);
+  }
+
+  .sandbox-root .fynns-end-aside .sandbox-hue-fields {
+    margin-inline-start: 0;
   }
 }
