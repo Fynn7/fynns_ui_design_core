@@ -39,7 +39,8 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
  * 1. sandbox — demo-only `--sandbox-*` (not Apply)
  * 2. rhythm — gaps between units / ControlRows + toolbar label column
  * 3. panelInsets — content-inset / content-pad-block / dialog-inset /
- *    strip-pad-inline / capsule-chrome-pad-inline
+ *    strip-pad-inline / capsule-chrome-pad-inline / field-pad-inline /
+ *    field-pad-block
  * 4. sheetPads — BottomSheet M3 asymmetric pads (do not merge with panelInsets)
  * 5. shellSize — container width / chrome bar height (not padding)
  * 6. navDrawer — NavigationDrawer absolute rem width / min / max
@@ -67,6 +68,8 @@ export const EDITABLE_LAYOUT_KEYS = [
   "dialog-inset",
   "strip-pad-inline",
   "capsule-chrome-pad-inline",
+  "field-pad-inline",
+  "field-pad-block",
   // sheetPads
   "sheet-pad-inline",
   "sheet-pad-block",
@@ -139,6 +142,8 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "dialog-inset",
     "strip-pad-inline",
     "capsule-chrome-pad-inline",
+    "field-pad-inline",
+    "field-pad-block",
   ],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
@@ -247,6 +252,10 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer text start",
   "capsule-chrome-pad-inline":
     "Capsule chrome · SearchBar / ChatComposer shell (Send/mic flush, ~4dp)",
+  "field-pad-inline":
+    "Form field · Input / field-shell horizontal pad (12dp — not capsule 4dp)",
+  "field-pad-block":
+    "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",

@@ -33,7 +33,6 @@ export function CollapsiblePreviewCanvas() {
       <ControlStack className="sandbox-preview-toolbar" columns={2}>
         <ControlRow label={t("preview.states")}>
           <Switch
-            size="sm"
             labelSide="end"
             label={t("preview.collapsibleOpen")}
             checked={options.open}
@@ -42,14 +41,12 @@ export function CollapsiblePreviewCanvas() {
         </ControlRow>
         <ControlRow label={t("preview.anatomy")}>
           <Switch
-            size="sm"
             labelSide="end"
             label={t("preview.collapsibleIcon")}
             checked={options.showIcon}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, showIcon: checked }))}
           />
           <Switch
-            size="sm"
             labelSide="end"
             label={t("preview.collapsibleActions")}
             checked={options.showActions}

@@ -197,7 +197,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer text start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer text start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -244,6 +244,12 @@ const en = {
   "layoutChrome.capsuleChromePadInline": "Capsule chrome pad",
   "layoutChrome.capsuleChromePadInlineHint":
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer shell next to IconButtons (4dp; ChatGPT Send flush).",
+  "layoutChrome.fieldPadInline": "Form field pad",
+  "layoutChrome.fieldPadInlineHint":
+    "--fynns-layout-field-pad-inline — Input / field-shell horizontal pad (12dp). Do not reuse capsule chrome.",
+  "layoutChrome.fieldPadBlock": "Form field pad (block)",
+  "layoutChrome.fieldPadBlockHint":
+    "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -1052,7 +1058,8 @@ const en = {
   "globals.inputError": "This field is required.",
   "globals.inputFilledAria": "Filled small input with leading",
   "globals.inputFilledPlaceholder": "Filled sm + leading",
-  "globals.inputFilledSupporting": "Filled variant, size sm, Search leading.",
+  "globals.inputFilledSupporting":
+    "Filled variant, size sm, leading icon. Chrome search → `SearchBar` (not this).",
   "globals.inputInvalidAria": "Invalid input",
   "globals.inputInvalidPlaceholder": "Invalid sample",
   "globals.listDisabled": "Archived",
@@ -1083,7 +1090,7 @@ const en = {
   "globals.surfaceFillLabel": "fill — stretches parent height",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
-  "globals.switchMdStart": "Switch md · label start",
+  "globals.switchLabelStart": "Switch · label start",
   "globals.tabsSmA": "Alpha",
   "globals.tabsSmAria": "Small tabs with disabled tab",
   "globals.tabsSmB": "Beta",
@@ -1315,7 +1322,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1362,6 +1369,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.capsuleChromePadInline": "胶囊 chrome 边距",
   "layoutChrome.capsuleChromePadInlineHint":
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer 壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
+  "layoutChrome.fieldPadInline": "表单字段边距",
+  "layoutChrome.fieldPadInlineHint":
+    "--fynns-layout-field-pad-inline — Input / field-shell 水平内边距（默认 12dp）。不要复用 capsule chrome。",
+  "layoutChrome.fieldPadBlock": "表单字段边距（块向）",
+  "layoutChrome.fieldPadBlockHint":
+    "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -2000,9 +2013,9 @@ const zh: Record<MessageKey, string> = {
     "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
-  "globals.thinkingStreaming": "Thinking",
-  "globals.thinkingLabel": "Thinking",
-  "globals.thinkingDuration": "Thought for {n}s",
+  "globals.thinkingStreaming": "思考中",
+  "globals.thinkingLabel": "思考中",
+  "globals.thinkingDuration": "已思考 {n} 秒",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
@@ -2165,7 +2178,8 @@ const zh: Record<MessageKey, string> = {
   "globals.inputError": "此字段为必填。",
   "globals.inputFilledAria": "带前缀的 filled 小输入框",
   "globals.inputFilledPlaceholder": "Filled sm + 前缀",
-  "globals.inputFilledSupporting": "Filled 变体、sm 尺寸、Search 前缀。",
+  "globals.inputFilledSupporting":
+    "Filled 变体、sm 尺寸、leading 图标。顶栏搜索用 `SearchBar`，不要用本示例冒充搜索框。",
   "globals.inputInvalidAria": "无效输入框",
   "globals.inputInvalidPlaceholder": "无效示例",
   "globals.listDisabled": "已归档",
@@ -2194,7 +2208,7 @@ const zh: Record<MessageKey, string> = {
   "globals.surfaceFillLabel": "fill — 撑满父高度",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
-  "globals.switchMdStart": "Switch md · 标签在前",
+  "globals.switchLabelStart": "Switch · 标签在前",
   "globals.tabsSmA": "甲",
   "globals.tabsSmAria": "小号标签（含禁用项）",
   "globals.tabsSmB": "乙",

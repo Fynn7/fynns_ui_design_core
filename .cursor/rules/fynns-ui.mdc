@@ -28,7 +28,7 @@ ring can paint before heavy work).
   Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog, Drawer, FullscreenDialog,
-  BottomSheet, Switch, ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
+  BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
   Collapsible shell, static head),
   Surface,
   LinearProgress/CircularProgress, BusyScrim/BusyRegion,
@@ -80,7 +80,9 @@ ring can paint before heavy work).
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
   (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog)
   vs strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer text start) vs
-  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) — AGENTS.md
+  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) vs
+  field-pad-inline (Input / field-shell — not capsule) /
+  field-pad-block (Textarea — not Input sm zero block) — AGENTS.md
   **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
