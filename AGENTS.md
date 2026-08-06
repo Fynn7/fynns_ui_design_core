@@ -339,8 +339,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     bubble `--fynns-chatmessage-bubble-max-width` **70%** of that host row
     (short copy shrinks; `radius-22` / ChatGPT `rounded-[22px]`;
     `--fynns-color-chat-user-bubble`; body `1rem` / pad-inline `1rem`).
-    Composer = **100%** of the same host (`radius-3xl`, ~52px collapsed
-    shell with 32dp controls + `composer-gap` 4px; not viewport full-bleed).
+    Composer = **100%** of the same host (`radius-3xl`, ~40dp collapsed
+    shell with 32dp controls + `composer-gap` 4px; Input density, not
+    SearchBar 56dp; not viewport full-bleed).
   - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
     aside content (rem ceiling dropped). Bubble still **70%** of that host;
     composer **100%**. Pane soft mins + chat stage min on the shell root.
@@ -409,19 +410,20 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     CSS `::after`/`::before` placeholder instead. **fynns:**
     `ChatComposer` stays a controlled `<textarea>` (`rows={1}`,
     `field-sizing: fixed`, layout-effect auto-grow). Empty value forces
-    height to `--fynns-chat-composer-line-height` (~`min-h-9` / 36px) so
+    height to `--fynns-chat-composer-line-height` (32dp) so
     placeholder wrap cannot inflate a narrow EndAside; shell pad is
     `--fynns-chat-composer-pad-inline` (= layout `capsule-chrome-pad-inline`
     ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
     control, textarea start adds pad so text lands at
     `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
     Outer form inset uses `strip-pad-inline`. **Multiline layout** is model C
-    + compact morph (Cursor): collapsed ≈ one horizontal row (~52–54px,
-    toolbar `display: contents`); expanded = full-width textarea above a
+    + compact morph (Cursor): collapsed ≈ one horizontal row (~40dp = Input /
+    field-shell density, not SearchBar 56dp; toolbar `display: contents`);
+    expanded = full-width textarea above a
     bottom `role="toolbar"` (leading start, Send end) — never leave icons
     vertically centered beside tall text. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
-    Collapsed shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
+    Collapsed shell ≈ 40dp (ChatGPT `rounded-[28px]` /
     `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
     Plain-text prompts only, zero ProseMirror dependency. Do **not** swap
     to contenteditable for visual parity alone.

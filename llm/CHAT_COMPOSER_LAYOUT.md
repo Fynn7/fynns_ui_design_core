@@ -15,7 +15,7 @@ tokens: [`AGENTS.md`](../AGENTS.md) Chat keep-set.
 | **C** | **Full-width editor + bottom action toolbar** | **Cursor expanded**, Continue, VS Code Copilot Chat, Open WebUI, LibreChat, Slack / Linear / Raycast |
 
 **fynns uses model C** with a **compact morph** so the empty / single-line shell
-stays ~52–54px (ChatGPT capsule), not a permanently stacked text+footer tower.
+stays ~40dp (Input / field-shell density — not SearchBar 56dp chrome).
 
 ## DOM
 
@@ -48,10 +48,12 @@ collapsed (unless attachments force expand).
 Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
 - Shell pad: `composer-pad-inline` (= capsule chrome ~4dp), `composer-pad-block`
+  (3dp; with 32dp line + hairline → ~40dp shell = Input)
 - Gap: `composer-gap` (4px)
-- Controls: `composer-control-size` (32dp; text line stays 36dp)
-- Line / max: `composer-line-height` / `composer-max-height` (13rem)
-- Radius: `--fynns-radius-3xl` (not Cursor’s pill→12px compact switch)
+- Controls: `composer-control-size` (32dp; matches text line)
+- Line / max: `composer-line-height` (32dp) / `composer-max-height` (13rem)
+- Radius: `--fynns-radius-3xl` (not Cursor’s pill→12px compact switch; not
+  Input’s `radius-md`)
 
 **Pad rules**
 
