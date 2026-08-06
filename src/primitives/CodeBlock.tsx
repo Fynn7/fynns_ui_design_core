@@ -1,4 +1,7 @@
 import {
+  startTransition,
+  useDeferredValue,
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
@@ -27,7 +30,8 @@ type CodeBlockShared = Omit<
   /**
    * `default` — optional head (label + hover fade-in copy).
    * `plain` — code only; copy floats and fades in on hover.
-   * `editable` — highlighted backdrop + transparent textarea (live re-highlight).
+   * `editable` — highlighted backdrop + transparent textarea (caret stays
+   * snappy; highlight / parent `onChange` update via deferred work).
    */
   variant?: CodeBlockVariant;
   /**
@@ -119,6 +123,13 @@ function highlightSource(
   );
 }
 
+function initialEditableSource(props: CodeBlockEditableProps): string {
+  if (props.value != null) return props.value;
+  if (props.defaultValue != null) return props.defaultValue;
+  if (props.code != null) return props.code;
+  return "";
+}
+
 /**
  * Monospace code sample with optional copy affordance (`IconButton` +
  * `Tooltip` + `ClipboardIcon`). Supported `language` values get zero-dep
@@ -144,17 +155,37 @@ export function CodeBlock(props: CodeBlockProps) {
   const highlighted =
     highlightProfile != null || isHighlightableLanguage(language);
 
-  const controlled =
-    editable && props.value !== undefined ? props.value : undefined;
-  const [uncontrolled, setUncontrolled] = useState(() => {
-    if (!editable) return "";
-    if (props.defaultValue != null) return props.defaultValue;
-    if (props.code != null) return props.code;
-    return "";
-  });
-  const source = editable
-    ? (controlled ?? uncontrolled)
-    : props.code;
+  /* Editable keeps a local draft so the caret never waits on parent re-renders
+     (sandbox GlobalsPage is huge) or on re-tokenization. */
+  const [editableText, setEditableText] = useState(() =>
+    editable ? initialEditableSource(props) : "",
+  );
+  const emittedRef = useRef(editableText);
+  const lastNotifiedRef = useRef(editableText);
+  const focusedRef = useRef(false);
+  const notifyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onChangeProp = editable ? props.onChange : undefined;
+  const valueProp = editable ? props.value : undefined;
+
+  /* While focused, ignore stale controlled echoes (startTransition parents
+     often lag behind the draft). Apply external `value` only when blurred. */
+  useEffect(() => {
+    if (valueProp === undefined) return;
+    if (focusedRef.current) return;
+    if (valueProp === emittedRef.current) return;
+    emittedRef.current = valueProp;
+    lastNotifiedRef.current = valueProp;
+    setEditableText(valueProp);
+  }, [valueProp]);
+
+  useEffect(() => {
+    return () => {
+      if (notifyTimerRef.current != null) clearTimeout(notifyTimerRef.current);
+    };
+  }, []);
+
+  const source = editable ? editableText : props.code;
+  const deferredSource = useDeferredValue(source);
 
   const highlightRef = useRef<HTMLPreElement>(null);
   const maxHeightCss =
@@ -165,6 +196,16 @@ export function CodeBlock(props: CodeBlockProps) {
         : maxHeight;
   const surfaceStyle: CSSProperties | undefined =
     maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
+
+  const flushNotify = (next: string) => {
+    if (!onChangeProp) return;
+    if (next === lastNotifiedRef.current) return;
+    lastNotifiedRef.current = next;
+    const notify = onChangeProp;
+    startTransition(() => {
+      notify(next);
+    });
+  };
 
   const onCopy = (event: { currentTarget: HTMLElement }) => {
     void navigator.clipboard.writeText(source);
@@ -188,8 +229,29 @@ export function CodeBlock(props: CodeBlockProps) {
 
   const onInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const next = event.target.value;
-    if (controlled === undefined) setUncontrolled(next);
-    if (editable) props.onChange?.(next);
+    emittedRef.current = next;
+    setEditableText(next);
+    if (!onChangeProp) return;
+    /* Coalesce parent updates while typing — a controlled CodeBlock inside a
+       large tree must not re-render that tree on every key. */
+    if (notifyTimerRef.current != null) clearTimeout(notifyTimerRef.current);
+    notifyTimerRef.current = setTimeout(() => {
+      notifyTimerRef.current = null;
+      flushNotify(emittedRef.current);
+    }, 120);
+  };
+
+  const onInputFocus = () => {
+    focusedRef.current = true;
+  };
+
+  const onInputBlur = () => {
+    focusedRef.current = false;
+    if (notifyTimerRef.current != null) {
+      clearTimeout(notifyTimerRef.current);
+      notifyTimerRef.current = null;
+    }
+    flushNotify(emittedRef.current);
   };
 
   const onInputScroll = (event: UIEvent<HTMLTextAreaElement>) => {
@@ -200,9 +262,13 @@ export function CodeBlock(props: CodeBlockProps) {
   };
 
   /* Trailing newline on the highlight layer only — keeps last-line height
-     aligned with the textarea caret. */
+     aligned with the textarea caret. Defer tokenization so typing stays
+     responsive while spans catch up a frame or two behind. */
+  const highlightBase = editable ? deferredSource : source;
   const highlightText =
-    editable && !source.endsWith("\n") ? `${source}\n` : source;
+    editable && !highlightBase.endsWith("\n")
+      ? `${highlightBase}\n`
+      : highlightBase;
   const codeBody = highlighted
     ? highlightSource(highlightText, language, highlightProfile)
     : highlightText;
@@ -275,6 +341,8 @@ export function CodeBlock(props: CodeBlockProps) {
             style={surfaceStyle}
             value={source}
             onChange={onInputChange}
+            onFocus={onInputFocus}
+            onBlur={onInputBlur}
             onScroll={onInputScroll}
             spellCheck={false}
             wrap="off"

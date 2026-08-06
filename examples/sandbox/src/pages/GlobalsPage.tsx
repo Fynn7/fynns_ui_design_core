@@ -344,9 +344,6 @@ export function GlobalsPage() {
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
-  const [editableCode, setEditableCode] = useState(
-    `export const accent = "var(--fynns-color-accent)";\n`,
-  );
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
@@ -1715,8 +1712,7 @@ export function GlobalsPage() {
             label={t("globals.codeBlockEditableLabel")}
             language="ts"
             copyAriaLabel={t("globals.codeBlockCopy")}
-            value={editableCode}
-            onChange={setEditableCode}
+            defaultValue={`export const accent = "var(--fynns-color-accent)";\n`}
             maxHeight="8rem"
             rows={5}
           />

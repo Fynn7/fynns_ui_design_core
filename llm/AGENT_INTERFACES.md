@@ -90,6 +90,6 @@ registerHighlightLanguage("gsc", gscProfile);
 - `unregisterHighlightLanguage(id)` / `getRegisteredHighlightLanguage(id)`.
 - `highlightCode` / `isHighlightableLanguage` consult built-ins first, then the registry.
 - `CodeBlock` `highlightProfile` wins over `language` lookup. Clipboard always uses the raw source string (`code`, or current `value` when `variant="editable"`).
-- `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`).
+- `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`). Local draft + deferred highlight keep the caret snappy; `onChange` is coalesced (~120ms, flushed on blur) and parent updates run in `startTransition` so a large controlled tree does not re-render on every key.
 
 Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a language.
