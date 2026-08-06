@@ -1,6 +1,8 @@
 import {
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
@@ -38,9 +40,11 @@ export type ClippedNavShellProps = {
   children: ReactNode;
   className?: string;
   /**
-   * When `navMode` is `"drawer"` and the shell’s content width overflows
-   * (e.g. canvas + `EndAside` both at their min clamps), call this so the
-   * consumer can collapse destinations to rail / icon mode (not hidden).
+   * When `navMode` is `"drawer"` and a full labeled drawer would starve
+   * canvas + `EndAside` mins (or force EndAside overlay), call this so the
+   * consumer can densify to rail / icon mode (not hidden). Fired from
+   * `useLayoutEffect` using **target** drawer width (not mid-transition
+   * layout) so open does not paint full drawer then snap to rail.
    */
   onNavCrowded?: () => void;
   /**
@@ -83,6 +87,59 @@ function readVarPx(host: Element, varName: string): number {
   return w;
 }
 
+function readRemPx(host: Element, rem: number): number {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:absolute;visibility:hidden;pointer-events:none;height:0;width:" +
+    rem +
+    "rem";
+  host.appendChild(probe);
+  const w = probe.getBoundingClientRect().width;
+  probe.remove();
+  return w;
+}
+
+/**
+ * Whether a **target** labeled-drawer width would starve main / EndAside floors
+ * (or force EndAside overlay) in `host` — ignores CSS transition mid-frames.
+ * Use when opening destinations so apps can choose `rail` without painting a
+ * full drawer first; `ClippedNavShell` also calls this from `useLayoutEffect`.
+ *
+ * @param host `.fynns-clipped-nav-shell` root (or any ancestor that carries the
+ *   layout tokens and contains `.fynns-clipped-nav-shell-main`).
+ * @param drawerWidthPx Target drawer column width; defaults to
+ *   `--fynns-navdrawer-width` on `host`.
+ */
+export function wouldClippedNavDrawerCrowd(
+  host: Element,
+  drawerWidthPx?: number,
+): boolean {
+  const root =
+    host instanceof Element && host.classList.contains("fynns-clipped-nav-shell")
+      ? host
+      : (host.querySelector(".fynns-clipped-nav-shell") ?? host);
+  const drawerTarget =
+    drawerWidthPx ?? (readVarPx(root, "--fynns-navdrawer-width") || 280);
+  const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
+  const main = root.querySelector(".fynns-clipped-nav-shell-main");
+  const aside = main?.querySelector(
+    ".fynns-end-aside:not([data-state='closing'])",
+  );
+  const asideMin = aside
+    ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+    : 0;
+  const shellW = root.clientWidth;
+  if (shellW <= 0) return false;
+  if (drawerTarget + mainMin + asideMin > shellW + 1) return true;
+  if (!aside) return false;
+  const mainTrack = Math.max(0, shellW - drawerTarget);
+  /* Matches `@container fynns-shell-main (max-width: 32rem)` overlay path. */
+  const overlayAt = readRemPx(root, 32);
+  if (mainTrack <= overlayAt + 1) return true;
+  if (mainTrack > 0 && drawerTarget >= mainTrack) return true;
+  return false;
+}
+
 /**
  * M3 clipped app shell: full-bleed top bar, then `nav | main` below (no
  * topbar×sidebar crosshair). Pair with `EndAside` inside `children` for a
@@ -91,8 +148,12 @@ function readVarPx(host: Element, varName: string): number {
  * idea as `EndAside`): keep two grid columns and animate the nav track to
  * `0px`; the shell holds the last `nav` node until the flyout duration ends so
  * consumers may pass `null` when `navMode="hidden"`. In `drawer` mode the
- * nav|main seam is draggable (updates local `--fynns-navdrawer-width`, clamped
- * by navdrawer min/max and remaining room for main / EndAside mins).
+ * nav|main seam is draggable (paints `--fynns-navdrawer-width` live via rAF,
+ * commits on pointerup; clamped by navdrawer min/max and remaining room for
+ * main / EndAside mins). `onNavCrowded` uses target drawer width (see
+ * `wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so opening never paints a
+ * full drawer then snaps to rail; also skips while resizing or while an
+ * `EndAside` is closing.
  *
  * @example
  * ```tsx
@@ -106,19 +167,24 @@ function readVarPx(host: Element, varName: string): number {
  * </ClippedNavShell>
  * ```
  */
-export function ClippedNavShell({
-  navMode,
-  topBar,
-  nav,
-  children,
-  className,
-  onNavCrowded,
-  drawerWidth: drawerWidthProp,
-  defaultDrawerWidth,
-  onDrawerWidthChange,
-  disableDrawerResize = false,
-}: ClippedNavShellProps) {
+export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
+  function ClippedNavShell(
+    {
+      navMode,
+      topBar,
+      nav,
+      children,
+      className,
+      onNavCrowded,
+      drawerWidth: drawerWidthProp,
+      defaultDrawerWidth,
+      onDrawerWidthChange,
+      disableDrawerResize = false,
+    },
+    forwardedRef,
+  ) {
   const rootRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(forwardedRef, () => rootRef.current as HTMLDivElement);
   const onNavCrowdedRef = useRef(onNavCrowded);
   onNavCrowdedRef.current = onNavCrowded;
   const onDrawerWidthChangeRef = useRef(onDrawerWidthChange);
@@ -187,6 +253,14 @@ export function ClippedNavShell({
     );
 
     const isCrowded = () => {
+      /* Always read the live CSS var — this effect intentionally omits
+       * drawerWidthPx from deps (drag stutter); a closed-over state would
+       * go stale after pointerup / external width changes. */
+      const drawerTarget = readVarPx(root, "--fynns-navdrawer-width") || 280;
+      /* Prefer target width over mid-flyout interpolated columns — otherwise
+       * open expands to full drawer then densifies after settleTimer. */
+      if (wouldClippedNavDrawerCrowd(root, drawerTarget)) return true;
+
       if (root.scrollWidth > root.clientWidth + 1) return true;
       if (body && body.scrollWidth > body.clientWidth + 1) return true;
       /* EndAside + canvas mins can overflow inside the main track while the
@@ -233,6 +307,15 @@ export function ClippedNavShell({
     };
 
     const check = () => {
+      /* Dragging rewrites the drawer track every frame — never densify mid-drag.
+       * Closing EndAside keeps content min-width while the pane morphs to 0,
+       * which falsely trips scrollWidth/floor checks and collapsed labeled
+       * drawer → rail when the user only meant to hide the inspector. */
+      if (root.getAttribute("data-drawer-resizing") === "true") return;
+      const main = body?.querySelector(
+        ":scope > .fynns-clipped-nav-shell-main",
+      );
+      if (main?.querySelector(".fynns-end-aside[data-state='closing']")) return;
       if (isCrowded()) onNavCrowdedRef.current?.();
     };
 
@@ -260,7 +343,13 @@ export function ClippedNavShell({
     }
 
     const onTransitionEnd = (event: TransitionEvent) => {
-      if (event.target === body) check();
+      if (
+        event.target === body ||
+        (event.target instanceof Element &&
+          event.target.classList.contains("fynns-end-aside"))
+      ) {
+        check();
+      }
     };
     body?.addEventListener("transitionend", onTransitionEnd);
     window.addEventListener("resize", check);
@@ -287,7 +376,9 @@ export function ClippedNavShell({
       body?.removeEventListener("transitionend", onTransitionEnd);
       window.removeEventListener("resize", check);
     };
-  }, [navMode, drawerWidthPx]);
+    /* Width changes are observed via ResizeObserver — do not rebind this
+     * effect on every drag pixel (that was the stutter source). */
+  }, [navMode]);
 
   const clampDrawerWidth = useCallback((raw: number) => {
     const root = rootRef.current;
@@ -307,6 +398,15 @@ export function ClippedNavShell({
     return Math.min(max, Math.max(min, raw));
   }, []);
 
+  /** Paint drawer width without a React render (live drag feedback). */
+  const paintDrawerWidth = useCallback((widthPx: number, handle?: HTMLElement) => {
+    const root = rootRef.current;
+    if (!root) return;
+    const rounded = Math.round(widthPx);
+    root.style.setProperty("--fynns-navdrawer-width", `${rounded}px`);
+    if (handle) handle.setAttribute("aria-valuenow", String(rounded));
+  }, []);
+
   const onResizePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
     const root = rootRef.current;
@@ -318,13 +418,29 @@ export function ClippedNavShell({
     const originX = event.clientX;
     const startWidth =
       drawerWidthPx ?? (readVarPx(root, "--fynns-navdrawer-width") || 280);
+    let latest = startWidth;
+    let raf = 0;
 
     const onMove = (ev: PointerEvent) => {
       const rtl = getComputedStyle(root).direction === "rtl";
       const delta = rtl ? originX - ev.clientX : ev.clientX - originX;
-      setDrawerWidthPx(clampDrawerWidth(startWidth + delta));
+      latest = clampDrawerWidth(startWidth + delta);
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        paintDrawerWidth(latest, handle);
+        /* Controlled parents still need live updates; uncontrolled skips
+         * setState until pointerup so the shell does not re-reconcile. */
+        if (controlled) setDrawerWidthPx(latest);
+      });
     };
     const onUp = (ev: PointerEvent) => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      paintDrawerWidth(latest, handle);
+      setDrawerWidthPx(latest);
       handle.releasePointerCapture(ev.pointerId);
       handle.removeEventListener("pointermove", onMove);
       handle.removeEventListener("pointerup", onUp);
@@ -354,8 +470,10 @@ export function ClippedNavShell({
   };
 
   const showResize = navMode === "drawer" && !disableDrawerResize;
+  /* While dragging, `paintDrawerWidth` owns the inline CSS var — omit React
+   * `style` so a parent re-render cannot clobber live drag feedback. */
   const rootStyle: CSSProperties | undefined =
-    drawerWidthPx != null && navMode === "drawer"
+    !dragging && drawerWidthPx != null && navMode === "drawer"
       ? ({ ["--fynns-navdrawer-width" as string]: `${drawerWidthPx}px` } as CSSProperties)
       : undefined;
 
@@ -418,4 +536,5 @@ export function ClippedNavShell({
       </div>
     </div>
   );
-}
+  },
+);

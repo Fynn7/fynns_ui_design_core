@@ -1,6 +1,7 @@
 import {
   applyFynnsThemeMode,
   ClippedNavShell,
+  wouldClippedNavDrawerCrowd,
   EndAside,
   EyeIcon,
   FileIcon,
@@ -26,7 +27,7 @@ import {
   TopAppBar,
   type FynnsThemeMode,
 } from "@fynns/ui";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -66,6 +67,7 @@ export function SandboxShell() {
   });
   /** Automatic icon rail when open drawer + EndAside mins still overflow. */
   const [navCompact, setNavCompact] = useState(false);
+  const shellRef = useRef<HTMLDivElement>(null);
   const [narrow, setNarrow] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 900px)").matches;
@@ -236,6 +238,7 @@ export function SandboxShell() {
   return (
     <>
       <ClippedNavShell
+        ref={shellRef}
         className="sandbox-root"
         navMode={navMode}
         onNavCrowded={() => {
@@ -253,7 +256,12 @@ export function SandboxShell() {
                     if (preferNavOpen) {
                       setPreferNavOpen(false);
                     } else {
-                      setNavCompact(false);
+                      const crowd =
+                        narrow ||
+                        (shellRef.current
+                          ? wouldClippedNavDrawerCrowd(shellRef.current)
+                          : false);
+                      setNavCompact(crowd);
                       setPreferNavOpen(true);
                     }
                   }}

@@ -221,7 +221,7 @@ export { FabMenu, FabMenuItem } from "./primitives/FabMenu";
 export type { FabMenuItemProps, FabMenuProps } from "./primitives/FabMenu";
 export { TopAppBar } from "./primitives/TopAppBar";
 export type { TopAppBarProps } from "./primitives/TopAppBar";
-export { ClippedNavShell } from "./primitives/ClippedNavShell";
+export { ClippedNavShell, wouldClippedNavDrawerCrowd } from "./primitives/ClippedNavShell";
 export type {
   ClippedNavShellNavMode,
   ClippedNavShellProps,
