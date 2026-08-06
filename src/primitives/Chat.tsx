@@ -256,8 +256,9 @@ export type ChatComposerProps = Omit<
  * Shift+Enter newline, Esc stops while busy.
  *
  * Multiline layout (model C + compact morph): full-width textarea above a
- * bottom toolbar when expanded; collapsed keeps a single ~52–54px row via
- * toolbar `display: contents`. Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.
+ * bottom toolbar when expanded; collapsed keeps a single ~40dp row via
+ * toolbar `display: contents` (Input density — not SearchBar 56dp).
+ * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.
  *
  * ChatGPT’s live prompt is ProseMirror (`contenteditable`) with a
  * fallback textarea; height grows with the block + parent `max-height`

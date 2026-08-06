@@ -9002,7 +9002,7 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Compact morph (Cursor / ChatGPT capsule):
  * - Collapsed: horizontal row; toolbar `display: contents` so leading |
- *   textarea | primary share one ~52–54px line.
+ *   textarea | primary share one ~40dp line.
  * - Expanded (`data-expanded`): column; full-width text above bottom toolbar.
  * Spec: llm/CHAT_COMPOSER_LAYOUT.md.
  */

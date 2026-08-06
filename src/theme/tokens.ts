@@ -696,7 +696,8 @@ export const CHATMESSAGE_TOKENS = {
  *
  * Composer multiline: model C + compact morph (Cursor) — full-width text
  * above a bottom toolbar when `data-expanded`; collapsed toolbar uses
- * `display: contents` so leading | field | Send stay one ~52–54px row.
+ * `display: contents` so leading | field | Send stay one ~40dp row
+ * (Input / field-shell density — not SearchBar 56dp chrome).
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
@@ -710,11 +711,13 @@ export const CHAT_TOKENS = {
   /** Scroll/fade clearance above sticky composer (~28dp). */
   "composer-scroll-pad": "1.75rem",
   /**
-   * Soft floor for the collapsed single-line row (ChatGPT `size-9` / 36dp
-   * controls — not the global 40dp icon-target). Expanded shell grows with
-   * wrap; controls move to the bottom toolbar (not mid-text center).
+   * Soft floor for the collapsed single-line body (32dp text/control row).
+   * With `composer-pad-block` 3dp×2 + hairline → ~40dp shell (= Input /
+   * icon-target), not SearchBar `--fynns-layout-bar-height` (56dp). Expanded
+   * shell grows with wrap; controls move to the bottom toolbar (not
+   * mid-text center).
    */
-  "composer-min-height": "2.25rem",
+  "composer-min-height": "2rem",
   /**
    * Soft cap before textarea inner scroll. ChatGPT’s ProseMirror parent
    * uses ~`max-h-52` (13rem) + `max(30svh,5rem)`; rem token for the
@@ -730,13 +733,14 @@ export const CHAT_TOKENS = {
    * footer). Do **not** put `strip-pad-inline` on the shell end.
    */
   "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
-  "composer-pad-block": "0.5rem",
+  /** Block pad: 3dp×2 + 32dp line + hairline → ~40dp shell (= Input offset). */
+  "composer-pad-block": "0.1875rem",
   /** ChatGPT composer control cluster `gap-1` (4px). */
   "composer-gap": "0.25rem",
   /**
-   * Leading/trailing IconButton hit target inside the composer (32dp —
-   * denser than ChatGPT `size-9` / 36dp). Scoped via CSS — does not change
-   * global IconButton. Text line stays on `composer-line-height` (36dp).
+   * Leading/trailing IconButton hit target inside the composer (32dp).
+   * Scoped via CSS — does not change global IconButton. Matches
+   * `composer-line-height` so controls and text share one midline.
    */
   "composer-control-size": "2rem",
   /**
@@ -748,11 +752,11 @@ export const CHAT_TOKENS = {
   "composer-inset-block": "0.75rem",
   "composer-offset": "0.5rem",
   /**
-   * Collapsed textarea text line. ChatGPT clones use ~min-h-9 (36px) + py-1.5;
-   * keep one body line as the soft floor (grows with wrap / Shift+Enter →
-   * `data-expanded` bottom toolbar).
+   * Collapsed textarea text line (32dp). With pad-block → ~40dp shell
+   * (Input density). Grows with wrap / Shift+Enter → `data-expanded`
+   * bottom toolbar.
    */
-  "composer-line-height": "2.25rem",
+  "composer-line-height": "2rem",
   /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
   "scroll-fab-inset": "0.75rem",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
