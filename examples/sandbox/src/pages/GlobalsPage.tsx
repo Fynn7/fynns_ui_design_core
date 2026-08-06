@@ -1111,7 +1111,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <Input
               variant="filled"
               size="sm"
-              leading={<SearchIcon aria-hidden />}
+              leading={<SettingsIcon aria-hidden />}
               placeholder={t("globals.inputFilledPlaceholder")}
               aria-label={t("globals.inputFilledAria")}
               supportingText={t("globals.inputFilledSupporting")}
@@ -2022,7 +2022,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <ChatThinking durationMs={3800} streamingLabel={t("globals.thinkingStreaming")} />
+          <ChatThinking
+            durationMs={3800}
+            streamingLabel={t("globals.thinkingStreaming")}
+            durationLabel={(n) => t("globals.thinkingDuration").replace("{n}", String(n))}
+          />
           <ChatMessage
             role="assistant"
             thinking={

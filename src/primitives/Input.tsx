@@ -72,6 +72,7 @@ export const Input = forwardRef(function Input(
         <div
           className={join(
             "fynns-field-shell",
+            size === "sm" && "fynns-field-shell--sm",
             variant === "filled" && "fynns-field-shell--filled",
             isInvalid && "fynns-field-shell--invalid",
           )}

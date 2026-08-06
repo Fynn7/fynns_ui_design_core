@@ -612,6 +612,8 @@
  */
 .fynns-splitbtn[data-variant="default"] .fynns-splitbtn-menu-trigger.fynns-btn {
   border-color: var(--fynns-color-border);
+  /* Match leading outlined half ink — not standalone IconButton accent. */
+  color: var(--fynns-color-text);
 }
 
 .fynns-splitbtn[data-variant="default"]
@@ -651,15 +653,27 @@
 .fynns-field-shell {
   display: flex;
   align-items: center;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
+  box-sizing: border-box;
   /* Match densified Select / Input control height (40dp). */
   min-height: var(--fynns-size-icon-target);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
-  /* Match SearchBar / Select / Autocomplete field chrome pad. */
-  padding-inline: var(--fynns-searchbar-pad-inline);
+  /* Form field chrome — not SearchBar capsule IconButton flush (4dp). */
+  padding-inline: var(--fynns-layout-field-pad-inline);
+}
+
+.fynns-field-shell--sm {
+  min-height: 2rem;
+  height: 2rem;
+}
+
+.fynns-field-shell--sm .fynns-input.fynns-input--in-shell {
+  min-height: 0;
+  height: 100%;
+  align-self: stretch;
 }
 
 .fynns-field-shell--filled {
@@ -713,10 +727,10 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
   color: var(--fynns-color-text);
-  /* Match Select/Autocomplete label inset (field pad + space-md), minus hairline. */
+  /* Dense form label inset — layout field-pad, minus hairline. */
   padding-block: var(--fynns-space-25);
   padding-inline: calc(
-    var(--fynns-searchbar-pad-inline) + var(--fynns-space-md) - var(--fynns-border-hairline)
+    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
   );
   font: inherit;
   outline: none;
@@ -724,9 +738,13 @@
 
 .fynns-input--sm {
   min-height: 2rem;
-  padding-block: var(--fynns-space-2);
-  padding-inline: var(--fynns-space-md);
+  /* Fit 32dp: no block pad (md uses space-25 inside 40dp). */
+  padding-block: 0;
+  padding-inline: calc(
+    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
+  );
   font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-tight);
 }
 
 .fynns-input--filled {
@@ -748,15 +766,12 @@
 }
 
 /*
- * No leading affix: same label inset as standalone Input / Select / Autocomplete.
- * Shell already has hairline + searchbar-pad-inline; add space-md − hairline so
- * text start = searchbar-pad-inline + space-md (matches `.fynns-input` recipe).
+ * No leading affix: shell already applies field-pad-inline; keep nested input
+ * flush so text start matches standalone `.fynns-input` (field-pad − hairline).
  */
 .fynns-field-shell:not(:has(.fynns-field-affix--leading))
   .fynns-input.fynns-input--in-shell {
-  padding-inline-start: calc(
-    var(--fynns-space-md) - var(--fynns-border-hairline)
-  );
+  padding-inline-start: 0;
 }
 
 .fynns-input:focus,

@@ -122,8 +122,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   Long-strip / `radius-3xl` **text** (Banner, InlineAlert, Snackbar,
   ChatComposer text start) → `--fynns-layout-strip-pad-inline`. Capsule
   chrome next to IconButtons (SearchBar / ChatComposer shell — Send flush)
-  → `--fynns-layout-capsule-chrome-pad-inline`. See AGENTS.md **Inset
-  decision tree** / **Toolbar / unit rhythm**.
+  → `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
+  field-shell → `--fynns-layout-field-pad-inline` (not capsule). See
+  AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm**.
 - Focus rings: `--fynns-focus-ring-width` + `--fynns-color-focus` (there is no
   bare `--fynns-focus`).
 - Design language lives in the submodule’s `AGENTS.md` — the installer does not

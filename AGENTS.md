@@ -649,6 +649,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
   — do **not** put strip pad on the Send side. ChatComposer **outer** form
   inset also uses `strip-pad-inline`.
+  **Form fields** (`Input` / `.fynns-field-shell` with optional leading):
+  `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). Do **not**
+  reuse capsule chrome for form affix shells — that 4dp token is SearchBar /
+  Composer IconButton flush only. Affix → text gap uses
+  `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.

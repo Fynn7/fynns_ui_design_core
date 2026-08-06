@@ -550,8 +550,8 @@ export const SEARCHBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
   /**
    * Capsule edge chrome next to icons — layout `capsule-chrome-pad-inline`.
-   * Label inset without a leading icon still uses the field/Input recipe
-   * (`space-md`), not `strip-pad-inline` (that recipe is ChatComposer-only).
+   * Dense form `Input` / `.fynns-field-shell` use layout `field-pad-inline`
+   * (`space-md`) — do not share this key with form fields.
    */
   "pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "icon-slot": "3rem",
@@ -1032,9 +1032,16 @@ export const LAYOUT_TOKENS = {
   /**
    * Outer chrome pad when IconButtons sit at a `radius-3xl` capsule edge
    * (SearchBar, ChatComposer shell — ChatGPT Send/mic ~4dp). Not for
-   * text-only Banner strips — use `strip-pad-inline` there.
+   * text-only Banner strips — use `strip-pad-inline` there. Not for dense
+   * form `Input` shells — use `field-pad-inline`.
    */
   "capsule-chrome-pad-inline": "0.25rem",
+  /**
+   * Horizontal pad for dense form fields (`Input` / `.fynns-field-shell`).
+   * Default = `space-md` (12dp). Do **not** reuse `capsule-chrome-pad-inline`
+   * here — that 4dp token is for SearchBar / Composer IconButton flush.
+   */
+  "field-pad-inline": "var(--fynns-space-md)",
   /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than

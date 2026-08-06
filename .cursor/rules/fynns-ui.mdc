@@ -80,7 +80,8 @@ ring can paint before heavy work).
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
   (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog)
   vs strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer text start) vs
-  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) — AGENTS.md
+  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) vs
+  field-pad-inline (Input / field-shell — not capsule) — AGENTS.md
   **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
