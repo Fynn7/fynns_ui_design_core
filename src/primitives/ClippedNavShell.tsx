@@ -253,9 +253,10 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     );
 
     const isCrowded = () => {
-      const drawerTarget =
-        drawerWidthPx ??
-        (readVarPx(root, "--fynns-navdrawer-width") || 280);
+      /* Always read the live CSS var — this effect intentionally omits
+       * drawerWidthPx from deps (drag stutter); a closed-over state would
+       * go stale after pointerup / external width changes. */
+      const drawerTarget = readVarPx(root, "--fynns-navdrawer-width") || 280;
       /* Prefer target width over mid-flyout interpolated columns — otherwise
        * open expands to full drawer then densifies after settleTimer. */
       if (wouldClippedNavDrawerCrowd(root, drawerTarget)) return true;
@@ -469,8 +470,10 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   };
 
   const showResize = navMode === "drawer" && !disableDrawerResize;
+  /* While dragging, `paintDrawerWidth` owns the inline CSS var — omit React
+   * `style` so a parent re-render cannot clobber live drag feedback. */
   const rootStyle: CSSProperties | undefined =
-    drawerWidthPx != null && navMode === "drawer"
+    !dragging && drawerWidthPx != null && navMode === "drawer"
       ? ({ ["--fynns-navdrawer-width" as string]: `${drawerWidthPx}px` } as CSSProperties)
       : undefined;
 
