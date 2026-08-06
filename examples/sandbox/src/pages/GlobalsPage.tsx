@@ -140,12 +140,11 @@ import { SandboxHelp } from "../components/SandboxHelp";
 import { TokenList } from "../components/TokenList";
 import { splitCaptionByBackticks } from "../utils/captionSegments";
 import {
-  GLOBALS_CATEGORY_TITLE_KEY,
   demoElementId,
-  filterGlobalsDemos,
   findDemoById,
   type GlobalsCategoryId,
 } from "../catalog/globalsCatalog";
+import { GlobalsCatalogSearch } from "./GlobalsCatalogSearch";
 
 /** Render sandbox chat copy with `` `code` `` → `<code>` (ChatGPT inline pill). */
 function chatCaption(text: string): ReactNode {
@@ -378,10 +377,6 @@ export type GlobalsPageProps = {
 
 export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const { t } = useLocale();
-  const catalogSearchRef = useRef<HTMLInputElement>(null);
-  const [catalogQuery, setCatalogQuery] = useState("");
-  const [catalogExpanded, setCatalogExpanded] = useState(false);
-  const [catalogActive, setCatalogActive] = useState(0);
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
   >({});
@@ -463,6 +458,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const chatStreamFullRef = useRef("");
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
+  const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
+    "Rotate the view to the RIGHT\nside view of the head, using\northographic projection.",
+  );
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
@@ -535,16 +533,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   }, [thinkingStreaming]);
 
   useEffect(() => {
-    if (!searchFocusTick) return;
-    // Defer past the IconButton click focus so the catalog field wins.
-    const timer = window.setTimeout(() => {
-      catalogSearchRef.current?.focus();
-      setCatalogExpanded(true);
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, [searchFocusTick]);
-
-  useEffect(() => {
     if (!flashDemoId) return;
     const el = document.getElementById(demoElementId(flashDemoId));
     el?.classList.add("sandbox-globals-demo--flash");
@@ -558,21 +546,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     };
   }, [flashDemoId]);
 
-  const categoryLabel = (categoryId: GlobalsCategoryId) =>
-    t(GLOBALS_CATEGORY_TITLE_KEY[categoryId]);
-
-  const catalogMatches = filterGlobalsDemos(catalogQuery, categoryLabel);
-
-  useEffect(() => {
-    setCatalogActive(0);
-  }, [catalogQuery]);
-
   const focusDemo = (demoId: string) => {
     const entry = findDemoById(demoId);
     if (!entry) return;
     setOpenCategories((prev) => ({ ...prev, [entry.categoryId]: true }));
-    setCatalogExpanded(false);
-    setCatalogQuery(entry.label);
     // Wait for Collapsible expand (`--fynns-duration-base` = 240ms) before scroll.
     window.setTimeout(() => {
       const el = document.getElementById(demoElementId(demoId));
@@ -649,73 +626,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.skipLinkTeachHelp")} />
         </GlobalsDemo>
 
-        <div className="sandbox-globals-search">
-          <SearchBar
-            ref={catalogSearchRef}
-            value={catalogQuery}
-            onChange={(value) => {
-              setCatalogQuery(value);
-              setCatalogExpanded(value.trim().length > 0);
-            }}
-            ariaLabel={t("globals.searchAria")}
-            placeholder={t("globals.searchPlaceholder")}
-            clearAriaLabel={t("globals.searchClear")}
-            expanded={catalogExpanded && catalogQuery.trim().length > 0}
-            onExpandedChange={setCatalogExpanded}
-            aria-activedescendant={
-              catalogExpanded && catalogMatches[catalogActive]
-                ? `globals-search-result-${catalogMatches[catalogActive].id}`
-                : undefined
-            }
-            onSearch={() => {
-              const hit = catalogMatches[catalogActive] ?? catalogMatches[0];
-              if (hit) focusDemo(hit.id);
-            }}
-            onKeyDown={(event) => {
-              if (!catalogMatches.length) return;
-              if (event.key === "ArrowDown") {
-                event.preventDefault();
-                setCatalogExpanded(true);
-                setCatalogActive((i) => (i + 1) % catalogMatches.length);
-              } else if (event.key === "ArrowUp") {
-                event.preventDefault();
-                setCatalogExpanded(true);
-                setCatalogActive(
-                  (i) => (i - 1 + catalogMatches.length) % catalogMatches.length,
-                );
-              }
-            }}
-            onFocus={() => {
-              if (catalogQuery.trim()) setCatalogExpanded(true);
-            }}
-          >
-            {catalogMatches.length === 0 ? (
-              <p
-                className="sandbox-globals-search-empty"
-                role="status"
-              >
-                {t("globals.searchEmpty")}
-              </p>
-            ) : (
-              catalogMatches.map((entry, index) => (
-                <SearchBarResult
-                  key={entry.id}
-                  id={`globals-search-result-${entry.id}`}
-                  active={index === catalogActive}
-                  aria-selected={index === catalogActive}
-                  onClick={() => focusDemo(entry.id)}
-                >
-                  <span className="sandbox-globals-search-result-label">
-                    {entry.label}
-                  </span>
-                  <span className="sandbox-globals-search-result-cat">
-                    {categoryLabel(entry.categoryId)}
-                  </span>
-                </SearchBarResult>
-              ))
-            )}
-          </SearchBar>
-        </div>
+        <GlobalsCatalogSearch
+          searchFocusTick={searchFocusTick}
+          onFocusDemo={focusDemo}
+        />
 
         <GlobalsCategory
           title={t("globals.catActions")}
@@ -1956,7 +1870,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 }}
                 sendLabel={t("globals.chatSend")}
                 stopLabel={t("globals.chatStop")}
-                leading={null}
+                leading={
+                  <Tooltip content={t("globals.chatComposerLeadingTip")}>
+                    <IconButton
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.chatComposerLeadingTip")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
               />
             </Chat>
             <div className="sandbox-globals-row">
@@ -2014,6 +1939,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Chat>
           </div>
         </div>
+        <p className="sandbox-chat-aside-label">{t("globals.chatComposerMultiLabel")}</p>
+        <ChatComposer
+          value={chatComposerMultiDraft}
+          onChange={setChatComposerMultiDraft}
+          ariaLabel={t("globals.chatComposerMultiAria")}
+          placeholder={t("globals.chatComposerPlaceholder")}
+          onSubmit={() => setChatComposerMultiDraft("")}
+          sendLabel={t("globals.chatSend")}
+          leading={
+            <Tooltip content={t("globals.chatComposerLeadingTip")}>
+              <IconButton
+                type="button"
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.chatComposerLeadingTip")}
+              >
+                <LayoutGridIcon />
+              </IconButton>
+            </Tooltip>
+          }
+        />
+        <SandboxHelp text={t("globals.chatComposerMultiHelp")} />
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />

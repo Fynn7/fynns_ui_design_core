@@ -252,8 +252,13 @@ export type ChatComposerProps = Omit<
 };
 
 /**
- * Docked ChatGPT-style composer: radius-3xl shell, Enter to send,
+ * Docked ChatGPT/Cursor-style composer: radius-3xl shell, Enter to send,
  * Shift+Enter newline, Esc stops while busy.
+ *
+ * Multiline layout (model C + compact morph): full-width textarea above a
+ * bottom toolbar when expanded; collapsed keeps a single ~40dp row via
+ * toolbar `display: contents` (Input density — not SearchBar 56dp).
+ * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.
  *
  * ChatGPT’s live prompt is ProseMirror (`contenteditable`) with a
  * fallback textarea; height grows with the block + parent `max-height`
@@ -302,6 +307,8 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
      */
     const skipEnterAfterCompositionRef = useRef(false);
     const skipEnterClearRafRef = useRef<number | null>(null);
+    /** Compact row vs full-width text + bottom toolbar (Cursor morph). */
+    const [expanded, setExpanded] = useState(false);
     const setRefs = useCallback(
       (node: HTMLTextAreaElement | null) => {
         localRef.current = node;
@@ -312,6 +319,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     );
 
     const canSubmit = value.trim().length > 0 && !busy && !disabled;
+    const hasAttachments = attachments != null;
 
     useEffect(() => {
       return () => {
@@ -334,18 +342,25 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       // scrollHeight so a long hint cannot inflate the shell in a narrow pane.
       if (!el.value) {
         el.style.height = `${line}px`;
+        setExpanded(hasAttachments);
         return;
       }
       el.style.height = "0px";
+      const scrollH = el.scrollHeight;
       const max =
         Number.parseFloat(cs.getPropertyValue("max-height")) || line * 8;
-      const next = Math.min(Math.max(el.scrollHeight, line), max);
+      const next = Math.min(Math.max(scrollH, line), max);
       el.style.height = `${next}px`;
-    }, []);
+      // 2px tolerance avoids float/subpixel flicker at exactly 1lh.
+      const tallerThanOneLine = scrollH > line + 2;
+      setExpanded(
+        hasAttachments || el.value.includes("\n") || tallerThanOneLine,
+      );
+    }, [hasAttachments]);
 
     useLayoutEffect(() => {
       resize();
-    }, [value, resize]);
+    }, [value, hasAttachments, resize]);
 
     const handleSubmit = (e?: FormEvent) => {
       e?.preventDefault();
@@ -416,7 +431,6 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
     };
 
     const showLeading = leading != null;
-    const leadingNode = leading;
 
     let primary: ReactNode = null;
     if (trailing !== undefined) {
@@ -492,14 +506,16 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         onSubmit={handleSubmit}
         aria-busy={busy || undefined}
       >
-        <div className="fynns-chat-composer-shell">
-          {attachments != null ? (
+        <div
+          className="fynns-chat-composer-shell"
+          data-expanded={expanded ? "" : undefined}
+        >
+          {hasAttachments ? (
             <div className="fynns-chat-composer-attachments fynns-scroll">
               {attachments}
             </div>
           ) : null}
-          <div className="fynns-chat-composer-row">
-            {showLeading ? leadingNode : null}
+          <div className="fynns-chat-composer-body">
             <textarea
               {...textareaProps}
               ref={setRefs}
@@ -519,7 +535,16 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
               aria-label={ariaLabel}
               rows={1}
             />
-            {primary}
+            <div
+              className="fynns-chat-composer-toolbar"
+              role={expanded ? "toolbar" : undefined}
+              aria-label={expanded ? "Composer actions" : undefined}
+            >
+              {showLeading ? (
+                <div className="fynns-chat-composer-leading">{leading}</div>
+              ) : null}
+              <div className="fynns-chat-composer-primary-slot">{primary}</div>
+            </div>
           </div>
         </div>
       </form>

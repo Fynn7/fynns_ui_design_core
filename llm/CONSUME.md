@@ -126,6 +126,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm**.
+  ChatComposer multiline (full-width text + bottom toolbar when expanded):
+  [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
+  parallel multi-line shell in the consumer.
 - Focus rings: `--fynns-focus-ring-width` + `--fynns-color-focus` (there is no
   bare `--fynns-focus`).
 - Design language lives in the submodule’s `AGENTS.md` — the installer does not
