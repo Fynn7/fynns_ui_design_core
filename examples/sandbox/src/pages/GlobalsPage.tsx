@@ -1718,6 +1718,15 @@ export function GlobalsPage() {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
+          <CodeBlock
+            wrap={false}
+            label={t("globals.codeBlockNowrapLabel")}
+            language="ts"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`export const veryLongTokenName = "color-mix(in srgb, var(--fynns-color-accent) 12%, var(--fynns-color-border))";\n`}
+            maxHeight="6rem"
+          />
+          <SandboxHelp text={t("globals.codeBlockNowrapHelp")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
             <Button size="sm" variant="tonal" onClick={() => setCodeLangDialogOpen(true)}>
               {t("globals.codeLangDemoOpen")}
