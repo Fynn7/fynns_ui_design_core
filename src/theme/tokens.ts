@@ -739,7 +739,9 @@ export const CHAT_TOKENS = {
 
 /**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Sidebar destinations use
+ * One-line 56dp; two-line 72dp; three-line 88dp. Selected row uses the same
+ * `secondary-container` + `radius-3xl` long-strip highlight as
+ * NavigationDrawerItem / Select / menu items. Sidebar destinations still use
  * Navigation* chrome (not deleted ListRow / ListGroup).
  * `--fynns-list-<key>`.
  */
@@ -749,6 +751,12 @@ export const LIST_TOKENS = {
   "height-3": "5.5rem",
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
+  /**
+   * Outer inset on `.fynns-list` so `radius-3xl` row highlights breathe
+   * (matches `--fynns-navdrawer-pad-inline`).
+   */
+  "inset-inline": "0.5rem",
+  "inset-block": "0.5rem",
   gap: "1rem",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`

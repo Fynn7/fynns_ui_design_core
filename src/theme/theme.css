@@ -346,6 +346,8 @@
   --fynns-list-height-3: 5.5rem;
   --fynns-list-pad-inline: 1rem;
   --fynns-list-pad-block: 0.5rem;
+  --fynns-list-inset-inline: 0.5rem;
+  --fynns-list-inset-block: 0.5rem;
   --fynns-list-gap: 1rem;
   --fynns-list-icon-size: 1.25rem;
   --fynns-list-leading-width: 2.5rem;

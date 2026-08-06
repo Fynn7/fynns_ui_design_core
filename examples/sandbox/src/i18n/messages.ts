@@ -846,7 +846,7 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
+    "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow).",
   "globals.surfaces": "Cards & sections",
   "globals.surfacesAria": "Cards and sections",
   "globals.cardTitle": "Section with icon",
@@ -871,7 +871,7 @@ const en = {
 
   "globalsInspector.shapeLadder": "Levels",
   "globalsInspector.shapeLadderHelp":
-    "Each step maps to different components. Checkbox = `2xs`; cards / inputs = `md`; buttons = `xl`; Chat user bubble = `22`; long chrome strips (`SearchBar` shell + suggestion rows / `Select` options / `Banner` / `BottomAppBar` / `NavigationDrawer` items / sheet tops / Chat composer) = `3xl`; badges / chips = `sm`; switch capsule = `pill` (read-only below). Every `RADIUS_TOKENS` key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
+    "Each step maps to different components. Checkbox = `2xs`; cards / inputs = `md`; buttons = `xl`; Chat user bubble = `22`; long chrome strips (`SearchBar` shell + suggestion rows / `Select` options / `Banner` / `BottomAppBar` / `NavigationDrawer` items / `ListItem` / sheet tops / Chat composer) = `3xl`; badges / chips = `sm`; switch capsule = `pill` (read-only below). Every `RADIUS_TOKENS` key is listed here — no private radius vars. Save named bundles via Templates JSON export.",
   "globalsInspector.radius2xsUses": "Checkbox box",
   "globalsInspector.radiusXsUses": "Finest chips",
   "globalsInspector.radiusSmUses": "Badges, toggle chips",
@@ -880,7 +880,7 @@ const en = {
   "globalsInspector.radiusXlUses": "Buttons (default control), soft shells",
   "globalsInspector.radius22Uses": "Chat user message bubble",
   "globalsInspector.radius3xlUses":
-    "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, sheet tops, Chat composer shell",
+    "SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer items, ListItem rows, sheet tops, Chat composer shell",
   "globalsInspector.radius2xsHint":
     "≈2dp checkbox box corners. Finer than xs; keep below xs on the scale.",
   "globalsInspector.radiusXsHint":
@@ -896,7 +896,7 @@ const en = {
   "globalsInspector.radius22Hint":
     "≈22dp ChatGPT user-message bubble (`rounded-[22px]`). Between xl and 3xl; composer shell stays on 3xl.",
   "globalsInspector.radius3xlHint":
-    "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, BottomSheet top edge, Chat composer shell. Slide this to reshape that group.",
+    "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, ListItem rows, BottomSheet top edge, Chat composer shell. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
   "globalsInspector.radiusNoneUses": "Sharp corners when needed",
   "globalsInspector.radiusPillUses": "Switch track",
@@ -1764,7 +1764,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
+    "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。",
   "globals.surfaces": "卡片与分区",
   "globals.surfacesAria": "卡片与分区",
   "globals.cardTitle": "带图标的分区",
@@ -1789,7 +1789,7 @@ const zh: Record<MessageKey, string> = {
 
   "globalsInspector.shapeLadder": "等级",
   "globalsInspector.shapeLadderHelp":
-    "每一档对应不同组件。复选框 = `2xs`；卡片 / 输入 = `md`；按钮 = `xl`；Chat 用户气泡 = `22`；长条 chrome（`SearchBar` 外壳与建议行 / `Select` 选项 / `Banner` / `BottomAppBar` / 导航抽屉项 / 表单顶角 / Chat 输入壳）= `3xl`；徽章 / 芯片 = `sm`；开关胶囊 = `pill`（下方只读）。`RADIUS_TOKENS` 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
+    "每一档对应不同组件。复选框 = `2xs`；卡片 / 输入 = `md`；按钮 = `xl`；Chat 用户气泡 = `22`；长条 chrome（`SearchBar` 外壳与建议行 / `Select` 选项 / `Banner` / `BottomAppBar` / 导航抽屉项 / `ListItem` / 表单顶角 / Chat 输入壳）= `3xl`；徽章 / 芯片 = `sm`；开关胶囊 = `pill`（下方只读）。`RADIUS_TOKENS` 每一档都必须出现在这里 —— 禁止私有 radius 变量。命名配置请用模板 JSON 导出。",
   "globalsInspector.radius2xsUses": "复选框方框",
   "globalsInspector.radiusXsUses": "最细芯片",
   "globalsInspector.radiusSmUses": "徽章、切换芯片",
@@ -1798,7 +1798,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusXlUses": "按钮（默认控件）、柔和外壳",
   "globalsInspector.radius22Uses": "Chat 用户消息气泡",
   "globalsInspector.radius3xlUses":
-    "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、底部表单顶角、Chat 输入壳",
+    "SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、导航抽屉项、ListItem 行、底部表单顶角、Chat 输入壳",
   "globalsInspector.radius2xsHint":
     "≈2dp 复选框方框圆角。比 xs 更细；在尺度上应小于 xs。",
   "globalsInspector.radiusXsHint":

@@ -473,9 +473,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `TopAppBar`. Prefer for destination chrome apps. **Not** `Drawer` (modal
   content side sheet) and **not** a revived `Panel` / `ListGroup` shell. Demo:
   sandbox Globals → Navigation.
-- **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
-  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
-  `ListGroup` / `ListRow`), Card (`title` / optional `icon` / `actions` + body;
+- **Content:** List / ListItem (main-content M3 rows; selected =
+  `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
+  menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
+  `NavigationBar` — not deleted `ListGroup` / `ListRow`), Card (`title` /
+  optional `icon` / `actions` + body;
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;

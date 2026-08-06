@@ -49,7 +49,10 @@ export type ListItemProps = Omit<
    * else 1 (56 / 72 / 88dp).
    */
   lines?: ListItemLines;
-  /** Selected / active row (tonal container). */
+  /**
+   * Selected / active row — `secondary-container` + `radius-3xl` (same
+   * long-strip highlight as `NavigationDrawerItem` / Select / menu).
+   */
   selected?: boolean;
   /**
    * When false, renders a non-interactive surface (`div`) instead of a

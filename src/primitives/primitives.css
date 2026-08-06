@@ -6361,7 +6361,8 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 0;
+  padding-block: var(--fynns-list-inset-block);
+  padding-inline: var(--fynns-list-inset-inline);
   list-style: none;
   width: 100%;
   background: transparent;
@@ -6385,12 +6386,16 @@ a.fynns-breadcrumb-link:visited {
   padding-block: var(--fynns-list-pad-block);
   padding-inline: var(--fynns-list-pad-inline);
   border: 0;
-  border-radius: var(--fynns-radius-none);
+  /* Long-strip row highlight (NavigationDrawerItem / Select / menu). */
+  border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
   text-align: start;
   cursor: default;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
 .fynns-list-item--2 {
@@ -6405,7 +6410,9 @@ a.fynns-breadcrumb-link:visited {
   cursor: pointer;
 }
 
-.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled) {
+.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
+  .fynns-list-item--selected
+) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -6413,7 +6420,9 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled) {
+.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
+  .fynns-list-item--selected
+) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -6427,23 +6436,23 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item--selected {
-  background: var(--fynns-color-accent-container);
-  color: var(--fynns-color-on-accent-container);
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
 }
 
 .fynns-list-item--selected.fynns-list-item--interactive:hover:not(:disabled) {
   background: color-mix(
     in srgb,
-    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
-    var(--fynns-color-accent-container)
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
   );
 }
 
 .fynns-list-item--selected.fynns-list-item--interactive:active:not(:disabled) {
   background: color-mix(
     in srgb,
-    var(--fynns-color-on-accent-container) var(--fynns-state-pressed),
-    var(--fynns-color-accent-container)
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
   );
 }
 
