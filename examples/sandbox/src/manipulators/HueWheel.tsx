@@ -78,8 +78,8 @@ export function HueWheel() {
           "--fynns-color-accent-mid": `rgba(${r}, ${g}, ${b}, 0.5)`,
           "--fynns-color-accent-24": `rgba(${r}, ${g}, ${b}, 0.24)`,
           "--fynns-color-accent-42": `rgba(${r}, ${g}, ${b}, 0.42)`,
-          "--fynns-color-accent-ring": `rgba(${r}, ${g}, ${b}, 0.4)`,
-          "--fynns-color-focus": `rgba(${r}, ${g}, ${b}, 0.48)`,
+          "--fynns-color-accent-ring": `rgba(${r}, ${g}, ${b}, 0.18)`,
+          "--fynns-color-focus": `rgba(${r}, ${g}, ${b}, 0.22)`,
         },
         { source: "colorwheel", coalesce: true, group: "color" },
       );

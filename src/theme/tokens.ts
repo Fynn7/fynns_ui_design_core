@@ -51,7 +51,8 @@ export const COLOR_TOKENS = {
   "accent-mid": "rgba(45, 212, 191, 0.5)",
   "accent-24": "rgba(45, 212, 191, 0.24)",
   "accent-42": "rgba(45, 212, 191, 0.42)",
-  "accent-ring": "rgba(45, 212, 191, 0.4)",
+  /** Soft mark for small controls (checkbox/radio/switch/nav indicators). */
+  "accent-ring": "rgba(45, 212, 191, 0.18)",
   /** Content on solid accent (M3 onPrimary; e.g. primary Button label). */
   "on-accent": "#031417",
   /** Selected / tonal container fill (M3 primaryContainer analogue). */
@@ -79,7 +80,8 @@ export const COLOR_TOKENS = {
   danger: "#f87171",
   "danger-border": "rgba(248, 113, 113, 0.5)",
   info: "#60a5fa",
-  focus: "rgba(45, 212, 191, 0.48)",
+  /** Keyboard ring fill — keep faint (fields use quiet border-mix instead). */
+  focus: "rgba(45, 212, 191, 0.22)",
   overlay: "rgba(0, 0, 0, 0.48)",
   /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
@@ -793,11 +795,16 @@ export const NAVDRAWER_TOKENS = {
   "badge-dot": "0.375rem",
 } as const;
 
-/** Focus ring geometry. `--fynns-focus-<key>`. */
+/** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */
 export const FOCUS_TOKENS = {
   "ring-width": "2px",
   "ring-offset-control": "2px",
   "ring-offset-input": "1px",
+  /**
+   * Accent % mixed into `--fynns-color-border` for Input / field-shell /
+   * SearchBar / Collapsible / editable CodeBlock focus (not a full ring).
+   */
+  "border-mix": "12%",
 } as const;
 
 /** Generic layout sizes for modals/tooltips/command palette. `--fynns-layout-<key>`. */
@@ -1012,7 +1019,7 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "accent-mid": "rgba(13, 148, 136, 0.45)",
       "accent-24": "rgba(13, 148, 136, 0.18)",
       "accent-42": "rgba(13, 148, 136, 0.32)",
-      "accent-ring": "rgba(13, 148, 136, 0.38)",
+      "accent-ring": "rgba(13, 148, 136, 0.16)",
       "on-accent": "#ffffff",
       "accent-container": "rgba(13, 148, 136, 0.14)",
       "on-accent-container": "#0f766e",
@@ -1026,7 +1033,7 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       danger: "#dc2626",
       "danger-border": "rgba(220, 38, 38, 0.45)",
       info: "#2563eb",
-      focus: "rgba(13, 148, 136, 0.42)",
+      focus: "rgba(13, 148, 136, 0.2)",
       overlay: "rgba(0, 0, 0, 0.32)",
       "toast-surface": "#ffffff",
       "control-surface": "rgba(0, 0, 0, 0.02)",

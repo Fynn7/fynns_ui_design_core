@@ -674,7 +674,7 @@
   /* Quiet teal tint of the resting border — not full/mid accent. */
   border-color: color-mix(
     in srgb,
-    var(--fynns-color-accent) 28%,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
   box-shadow: none;
@@ -764,7 +764,7 @@
   /* Quiet teal tint of the resting border — not full/mid accent. */
   border-color: color-mix(
     in srgb,
-    var(--fynns-color-accent) 28%,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
   box-shadow: none;
@@ -1335,6 +1335,12 @@
   color: var(--fynns-color-text);
   box-shadow: var(--fynns-shadow-lg);
   overflow: hidden;
+}
+
+/* Panel is programmatically focused (tabIndex=-1) — suppress UA outline; children own rings. */
+.fynns-dialog-panel:focus,
+.fynns-dialog-panel:focus-visible {
+  outline: none;
 }
 
 .fynns-dialog-panel--centered,
@@ -2537,7 +2543,7 @@
 .fynns-collapsible:has(> .fynns-collapsible-head > .fynns-collapsible-trigger:focus-visible) {
   border-color: color-mix(
     in srgb,
-    var(--fynns-color-accent) 28%,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
   box-shadow: none;
@@ -3269,8 +3275,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-slider:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-accent);
-  outline-offset: 2px;
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 .fynns-slider::-webkit-slider-runnable-track {
@@ -5654,7 +5660,20 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-drawer-item:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+  /* Full-row ring is too loud; soft state-layer wash (active keeps container fill). */
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-item--active:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
 }
 
 .fynns-nav-drawer-icon {
@@ -5941,7 +5960,7 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-lg);
   border-color: color-mix(
     in srgb,
-    var(--fynns-color-accent) 28%,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
   outline: none;
@@ -5951,7 +5970,7 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: var(--fynns-shadow-md);
   border-color: color-mix(
     in srgb,
-    var(--fynns-color-accent) 28%,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
   outline: none;
@@ -6022,6 +6041,11 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: none;
 }
 
+/* Beat densify resting border (same 0,2,0, later in source). */
+.fynns-autocomplete--invalid.fynns-search-bar {
+  border-color: var(--fynns-color-danger-border);
+}
+
 .fynns-select .fynns-search-bar-field,
 .fynns-autocomplete .fynns-search-bar-field {
   min-height: var(--fynns-size-icon-target);
@@ -6040,11 +6064,25 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-select.fynns-search-bar--expanded,
-.fynns-autocomplete.fynns-search-bar--expanded,
-.fynns-select.fynns-search-bar--expanded:focus-within,
-.fynns-autocomplete.fynns-search-bar--expanded:focus-within {
+.fynns-autocomplete.fynns-search-bar--expanded {
   /* Docked results: light elevation only (still not the chrome 56dp field). */
   box-shadow: var(--fynns-shadow-md);
+}
+
+/* Beat `.fynns-autocomplete.fynns-search-bar { border-color }` (same 0,2,0, later). */
+.fynns-select.fynns-search-bar--expanded:focus-within,
+.fynns-autocomplete.fynns-search-bar--expanded:focus-within {
+  box-shadow: var(--fynns-shadow-md);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
+/* Reaffirm after denser Autocomplete rules (same 0,3,0 source order). */
+.fynns-autocomplete--invalid.fynns-search-bar:focus-within {
+  border-color: var(--fynns-color-danger-border);
 }
 
 .fynns-search-bar-input::placeholder {
@@ -7156,7 +7194,12 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-timepicker-field:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-timepicker-field--active {
@@ -7238,10 +7281,32 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
+.fynns-timepicker-period:has(.fynns-timepicker-period-btn:focus-visible) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
 .fynns-timepicker-period-btn:focus-visible {
   outline: none;
   z-index: 1;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  box-shadow: none;
+  /* Parent shell gets quiet border; button still needs a per-control cue. */
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-period-btn--selected:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
 }
 
 .fynns-timepicker-period-btn--selected {
@@ -7307,13 +7372,21 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   gap: var(--fynns-carousel-controls-gap);
   padding-block: var(--fynns-carousel-pad-block);
+  /* Transparent hairline so focus tint does not shift layout. */
+  border: var(--fynns-border-hairline) solid transparent;
+  border-radius: var(--fynns-radius-md);
   outline: none;
   color: var(--fynns-color-text);
 }
 
+/* Quiet Input-like border — not a full-block focus ring around the stage. */
 .fynns-carousel:focus-visible {
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
-  border-radius: var(--fynns-radius-md);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
 }
 
 .fynns-carousel-stage {
@@ -7421,7 +7494,8 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-carousel-indicator:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  /* Hairline soft ring — 2px focus halo dominated the 8dp dot. */
+  box-shadow: 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
 }
 
 .fynns-carousel-indicator--active {
@@ -7752,7 +7826,11 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-dropzone--active {
-  border-color: var(--fynns-color-accent);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border-strong)
+  );
   background: color-mix(
     in srgb,
     var(--fynns-color-accent) var(--fynns-state-hover),
@@ -8114,10 +8192,14 @@ a.fynns-breadcrumb-link:visited {
   cursor: not-allowed;
 }
 
-/* Ring only while the editor is focused — not when Copy in the head is focused. */
+/* Quiet Input-like border while the editor is focused — not when Copy is focused. */
 .fynns-code-block--editable:has(.fynns-code-block-input:focus-visible) {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  outline: none;
 }
 
 /* ---------- Snackbar (M3) ---------- */
