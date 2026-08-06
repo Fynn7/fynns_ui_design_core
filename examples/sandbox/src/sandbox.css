@@ -832,9 +832,13 @@
     outline-color var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
+.sandbox-globals-demo:focus {
+  outline: none;
+}
+
 .sandbox-globals-demo--flash {
-  outline: 2px solid var(--fynns-color-accent);
-  outline-offset: 4px;
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-accent);
+  outline-offset: var(--fynns-focus-ring-offset-control);
   box-shadow: var(--fynns-shadow-glow-accent);
 }
 

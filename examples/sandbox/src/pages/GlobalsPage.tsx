@@ -254,13 +254,14 @@ const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
 /** Anchor + flash target for catalog search jump. */
 function GlobalsDemo({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <section
+    <div
       id={demoElementId(id)}
       data-sandbox-demo={id}
       className="sandbox-globals-demo"
+      tabIndex={-1}
     >
       {children}
-    </section>
+    </div>
   );
 }
 
@@ -481,11 +482,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     setOpenCategories((prev) => ({ ...prev, [entry.categoryId]: true }));
     setCatalogExpanded(false);
     setCatalogQuery(entry.label);
+    // Wait for Collapsible expand (`--fynns-duration-base` = 240ms) before scroll.
     window.setTimeout(() => {
       const el = document.getElementById(demoElementId(demoId));
-      el?.scrollIntoView({ block: "start", behavior: "smooth" });
+      if (!el) return;
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      el.scrollIntoView({
+        block: "start",
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+      el.setAttribute("aria-label", entry.label);
+      el.focus({ preventScroll: true });
       setFlashDemoId(demoId);
-    }, 80);
+    }, 250);
   };
 
   const setCategoryOpen = (id: GlobalsCategoryId, open: boolean) => {
@@ -554,6 +565,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             clearAriaLabel={t("globals.searchClear")}
             expanded={catalogExpanded && catalogQuery.trim().length > 0}
             onExpandedChange={setCatalogExpanded}
+            aria-activedescendant={
+              catalogExpanded && catalogMatches[catalogActive]
+                ? `globals-search-result-${catalogMatches[catalogActive].id}`
+                : undefined
+            }
             onSearch={() => {
               const hit = catalogMatches[catalogActive] ?? catalogMatches[0];
               if (hit) focusDemo(hit.id);
@@ -577,14 +593,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }}
           >
             {catalogMatches.length === 0 ? (
-              <p className="sandbox-globals-search-empty">
+              <p
+                className="sandbox-globals-search-empty"
+                role="status"
+              >
                 {t("globals.searchEmpty")}
               </p>
             ) : (
               catalogMatches.map((entry, index) => (
                 <SearchBarResult
                   key={entry.id}
+                  id={`globals-search-result-${entry.id}`}
                   active={index === catalogActive}
+                  aria-selected={index === catalogActive}
                   onClick={() => focusDemo(entry.id)}
                 >
                   <span className="sandbox-globals-search-result-label">
@@ -1207,9 +1228,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </div>
           <SandboxHelp text={t("globals.dateHelp")} />
-        <GlobalsDemo id="overflow-bounds">
-          <OverflowBoundsDemo />
-        </GlobalsDemo>
         </div>
         <DatePickerDialog
           open={dateDialogOpen}
@@ -1249,6 +1267,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ],
           }}
         />
+        </GlobalsDemo>
+        <GlobalsDemo id="overflow-bounds">
+          <OverflowBoundsDemo />
         </GlobalsDemo>
         <GlobalsDemo id="date-range-picker">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
