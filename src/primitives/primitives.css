@@ -8529,7 +8529,9 @@ a.fynns-breadcrumb-link:visited {
  * claim more than the flex parent (`min(..., 100%)`) so a single pane cannot
  * force the shell wider than its track.
  */
-*:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+/* Only while EndAside is open — closing keeps content min-width briefly and
+ * must not keep claiming the canvas floor (false ClippedNavShell crowding). */
+*:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
   min-width: min(var(--fynns-layout-main-min-width), 100%);
 }
 

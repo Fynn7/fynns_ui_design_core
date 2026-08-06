@@ -470,11 +470,16 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   In `drawer` mode the nav|main seam is **resizable** (local
   `--fynns-navdrawer-width`; drawer fills the grid track; clamped by absolute
   `--fynns-navdrawer-min-width` / `max-width` rem tokens and remaining room for
-  main / EndAside mins — do not use `%` in those tokens). `onNavCrowded` also
+  main / EndAside mins — do not use `%` in those tokens). Live drag paints the
+  CSS variable directly (rAF) and commits React width on pointerup so the seam
+  tracks the pointer without per-pixel re-renders. `onNavCrowded` also
   watches **main-column** overflow (canvas + `EndAside` floors vs the main
   track), not only the outer shell scrollWidth — also when shrink-to-fit hides
   overflow (drawer track starves main below `main-min` + `end-aside-min`, or
-  nav column ≥ main while EndAside is open).
+  nav column ≥ main while EndAside is open). It **must not** fire while the
+  drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
+  (closing morph would otherwise false-trip overflow and collapse labeled
+  drawer → rail).
   and
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
   `--fynns-layout-end-aside-width` / `end-aside-max-width` /
