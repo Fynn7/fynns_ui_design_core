@@ -297,6 +297,12 @@ export type {
   ChatCitationChipProps,
   ChatCitationsProps,
 } from "./primitives/ChatCitation";
+export {
+  ChatThinking,
+} from "./primitives/ChatThinking";
+export type {
+  ChatThinkingProps,
+} from "./primitives/ChatThinking";
 export { SkipLink } from "./primitives/SkipLink";
 export type { SkipLinkProps } from "./primitives/SkipLink";
 export { Stepper } from "./primitives/Stepper";

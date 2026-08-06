@@ -548,11 +548,16 @@ export const TOOLBAR_TOKENS = {
  */
 export const SEARCHBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
-  "pad-inline": "0.25rem",
+  /**
+   * Capsule edge chrome next to icons — layout `capsule-chrome-pad-inline`.
+   * Label inset without a leading icon still uses the field/Input recipe
+   * (`space-md`), not `strip-pad-inline` (that recipe is ChatComposer-only).
+   */
+  "pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "icon-slot": "3rem",
   /** Matches `--fynns-size-icon` (16dp). */
   "icon-size": "1rem",
-  "input-pad-inline": "0.25rem",
+  "input-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "font-size": "1rem",
   "line-height": "1.5",
   "results-max-height": "20rem",
@@ -576,7 +581,11 @@ export const SEARCHBAR_TOKENS = {
  */
 export const BANNER_TOKENS = {
   "min-height": "3.25rem",
-  "pad-inline": "1rem",
+  /**
+   * Horizontal content pad — aliases layout strip pad (do not hardcode rem).
+   * Same token as InlineAlert / Snackbar long-strip text chrome.
+   */
+  "pad-inline": "var(--fynns-layout-strip-pad-inline)",
   "pad-block": "0.75rem",
   gap: "0.75rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -634,7 +643,10 @@ export const CHATMESSAGE_TOKENS = {
   "body-line": "1.5",
   "name-size": "0.75rem",
   "actions-gap": "0",
-  /** Streaming caret thickness (2dp). */
+  /**
+   * Streaming caret thickness (2dp). Height is CSS `1cap` (fallback `0.8em`)
+   * on `.fynns-chat-message-cursor` — not a token — so it tracks the body face.
+   */
   "cursor-width": "0.125rem",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
   "error-gap": "0.75rem",
@@ -671,6 +683,16 @@ export const CHATMESSAGE_TOKENS = {
   "citation-list-gap": "0.375rem",
   "citation-card-pad": "0.625rem",
   "citation-card-gap": "0.625rem",
+  /**
+   * Gap under `ChatThinking` (name ↔ thinking ↔ bubble). Label size reuses
+   * `name-size` — no separate THINKING_* token group.
+   */
+  "thinking-gap": "0.375rem",
+  /** Gap between optional icon / label / chevron in the thinking trigger row. */
+  "thinking-trigger-gap": "0.375rem",
+  /** Thought body inset under the trigger. */
+  "thinking-body-pad-block": "0.375rem",
+  "thinking-body-pad-inline": "0",
 } as const;
 
 /**
@@ -703,11 +725,13 @@ export const CHAT_TOKENS = {
    */
   "composer-max-height": "13rem",
   /**
-   * Shell chrome pad — same as `--fynns-searchbar-pad-inline` (capsule edge).
-   * Text start without a leading control adds `space-md − hairline` on the
-   * textarea (Input / field-shell recipe).
+   * Shell pad — start/end share one token for the capsule chrome next to
+   * IconButtons (`capsule-chrome-pad-inline`, ~4dp — ChatGPT Send/mic flush).
+   * When there is **no** leading control, CSS adds start pad on the textarea
+   * so text lands at `--fynns-layout-strip-pad-inline` (Banner breath).
+   * Do **not** put `strip-pad-inline` on the shell end — that over-insets Send.
    */
-  "composer-pad-inline": "0.25rem",
+  "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "composer-pad-block": "0.5rem",
   /** ChatGPT composer control cluster `gap-1` (4px). */
   "composer-gap": "0.25rem",
@@ -716,7 +740,12 @@ export const CHAT_TOKENS = {
    * `size-9` = 36dp). Scoped via CSS — does not change global IconButton.
    */
   "composer-control-size": "2.25rem",
-  "composer-inset-inline": "0.75rem",
+  /**
+   * Outer form inset inside the chat column — layout strip pad so the
+   * capsule clears the thread edges the same way Banner copy clears its
+   * curve (not a raw 12dp literal).
+   */
+  "composer-inset-inline": "var(--fynns-layout-strip-pad-inline)",
   "composer-inset-block": "0.75rem",
   "composer-offset": "0.5rem",
   /**
@@ -984,8 +1013,28 @@ export const LAYOUT_TOKENS = {
    * `dialog-inset` while staying symmetric. Between `space-lg` (16dp) and
    * Dialog `dialog-inset` (24dp). Do not force BottomSheet / Snackbar /
    * ListItem onto this. Section body **block** pad uses `content-pad-block`.
+   * Long-strip / `radius-3xl` **text** chrome (Banner, Snackbar, composer
+   * label start) uses `strip-pad-inline` — not this key alone.
    */
   "content-inset": "1.125rem",
+  /**
+   * Horizontal content pad for **long-strip** text surfaces that use
+   * `--fynns-radius-3xl` (Banner, InlineAlert, Snackbar, ChatComposer **text
+   * start** when no leading control). Default 20dp — slightly larger than
+   * `content-inset` so copy clears the large corner curve. Do **not** invent
+   * `--fynns-banner-pad-inline` literals or raw `--fynns-space-*` for these.
+   *
+   * ChatComposer / SearchBar **IconButton** edges use
+   * `capsule-chrome-pad-inline` (4dp, ChatGPT Send/mic flush) — never put
+   * strip pad on the Send side.
+   */
+  "strip-pad-inline": "1.25rem",
+  /**
+   * Outer chrome pad when IconButtons sit at a `radius-3xl` capsule edge
+   * (SearchBar, ChatComposer shell — ChatGPT Send/mic ~4dp). Not for
+   * text-only Banner strips — use `strip-pad-inline` there.
+   */
+  "capsule-chrome-pad-inline": "0.25rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than
@@ -1027,7 +1076,8 @@ export const LAYOUT_TOKENS = {
   "snackbar-max-width": "min(35rem, calc(100vw - 2rem))",
   /** Single-line bar target (~48dp). */
   "snackbar-min-height": "3rem",
-  "snackbar-pad-inline": "1rem",
+  /** Horizontal pad — layout strip pad (same long-strip text chrome as Banner). */
+  "snackbar-pad-inline": "var(--fynns-layout-strip-pad-inline)",
   /** Vertical pad so single-line + sm dismiss (32dp) stays ~48dp (M3). */
   "snackbar-pad-block": "0.5rem",
   "snackbar-gap": "0.5rem",

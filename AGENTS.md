@@ -302,7 +302,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   EmptyState,
   **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
   **ChatMessage** `{ role, children?, avatar?, name?, streaming?,
-  streamingLabel?, error?, onRetry?, retryLabel?, citations?,
+  streamingLabel?, error?, onRetry?, retryLabel?, thinking?, citations?,
   citationsLabel?, citationsVisibleCount?, onCitationOpen?, actions? }` (**dual
   placement** — same 70% / composer rules in main **or** left/right
   resizable asides; no density mode):
@@ -347,6 +347,22 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     live — no LLM; **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
+    **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
+    between `name` and the answer bubble (ChatGPT / Claude “Thinking /
+    Thought for Ns”; `.fynns-expand` height morph — not Collapsible card chrome;
+    muted trigger; streaming label opacity pulse via
+    `--fynns-duration-presentation-hint`; force-open while streaming unless
+    user pinned closed; auto-collapse once when done; user expand sticks;
+    no body → static duration strip without chevron; caller owns thought
+    `children` — core does **not** parse markdown / CoT; do **not** pipe
+    thinking tokens into `aria-live` — see
+    [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
+    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
+    **Deferred (Wave 2):** multi-step chain / tool-call groups under a shared
+    “chain” chrome (assistant-ui `GroupedParts` style). Keep `ChatThinking` as
+    the single-block reasoning disclosure; do not overload it into a tool
+    timeline. Separate primitive or compound anatomy later when consumers need
+    tool-step grouping.
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
@@ -364,7 +380,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     regions for respond/complete (app-owned today — not token-live on the
     bubble; core ships `role="log"` on `ChatThread` + `aria-busy` on the
     row). Keep composer focus after send; Send/Stop/dictate labels — full
-    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md).
+    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md). Idle without
+    `onDictate`: Send stays visible and is **disabled** when the draft is empty
+    (not omitted). With `onDictate`, empty idle still shows Dictate.
   - **Composer keys (ChatGPT parity):** Enter sends; Shift+Enter newline;
     Esc stops while `busy`. **CJK IME:** Enter during composition (or the
     confirming Enter some browsers fire just after `compositionend`)
@@ -390,10 +408,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `field-sizing: fixed`, layout-effect auto-grow). Empty value forces
     height to `--fynns-chat-composer-line-height` (~`min-h-9` / 36px) so
     placeholder wrap cannot inflate a narrow EndAside; shell pad is
-    `--fynns-chat-composer-pad-*` (= SearchBar capsule `pad-inline` 4px) +
-    Input-in-shell text inset (`space-md − hairline` when no leading /
-    trailing control) so placeholder start matches Input / Select /
-    Autocomplete (~15–16px from shell edge); row `align-items: center` +
+    `--fynns-chat-composer-pad-inline` (= layout `capsule-chrome-pad-inline`
+    ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
+    control, textarea start adds pad so text lands at
+    `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
+    Outer form inset uses `strip-pad-inline`; row `align-items: center` +
     `line-height` = composer line height for vertical centering. Collapsed
     shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
     `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
@@ -524,7 +543,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   36dp controls); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
-  failed-generation footer — see Feedback keep-set; `citations` /
+  failed-generation footer — see Feedback keep-set; `thinking` /
+  `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
+  — see Feedback keep-set; **Deferred (Wave 2):** multi-step / tool-call chain
+  chrome — see Feedback keep-set; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips — see
   Feedback keep-set; no built-in GFM /
   task-list checkboxes — see Feedback keep-set; CJK IME Enter while
@@ -583,7 +605,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
@@ -616,6 +638,17 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   (section label → `InlineAlert` → next block) with
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
   second custom status box (use `InlineAlert` for in-panel severity).
+  **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
+  and ChatComposer **text start** when there is no leading control):
+  `--fynns-layout-strip-pad-inline` (20dp default). Banner /
+  InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
+  `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
+  **Capsule chrome** (SearchBar field / ChatComposer **shell** next to
+  IconButtons — ChatGPT Send/mic flush):
+  `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer shell uses this
+  on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
+  — do **not** put strip pad on the Send side. ChatComposer **outer** form
+  inset also uses `strip-pad-inline`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
@@ -626,8 +659,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   panel `max-height`.
   FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
   asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
-  block≠inline). Do not force Snackbar / ListItem onto equal four-side padding.
-  Do not substitute raw `--fynns-space-*` for dialog/panel shell insets.
+  block≠inline). Do not force ListItem onto equal four-side padding.
+  Do not substitute raw `--fynns-space-*` for dialog/panel/strip shell insets.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).

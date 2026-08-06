@@ -38,7 +38,8 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
  *
  * 1. sandbox — demo-only `--sandbox-*` (not Apply)
  * 2. rhythm — gaps between units / ControlRows + toolbar label column
- * 3. panelInsets — content-inset (inline) / content-pad-block (body block) / dialog-inset
+ * 3. panelInsets — content-inset / content-pad-block / dialog-inset /
+ *    strip-pad-inline / capsule-chrome-pad-inline
  * 4. sheetPads — BottomSheet M3 asymmetric pads (do not merge with panelInsets)
  * 5. shellSize — container width / chrome bar height (not padding)
  * 6. navDrawer — NavigationDrawer absolute rem width / min / max
@@ -64,6 +65,8 @@ export const EDITABLE_LAYOUT_KEYS = [
   "content-inset",
   "content-pad-block",
   "dialog-inset",
+  "strip-pad-inline",
+  "capsule-chrome-pad-inline",
   // sheetPads
   "sheet-pad-inline",
   "sheet-pad-block",
@@ -130,7 +133,13 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "control-cluster-gap",
     "control-row-label",
   ],
-  panelInsets: ["content-inset", "content-pad-block", "dialog-inset"],
+  panelInsets: [
+    "content-inset",
+    "content-pad-block",
+    "dialog-inset",
+    "strip-pad-inline",
+    "capsule-chrome-pad-inline",
+  ],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
     "drawer-width",
@@ -234,6 +243,10 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "content-pad-block":
     "Panel inset · Collapsible / Card body / Surface padded / CodeBlock **block** (16dp)",
   "dialog-inset": "Panel inset · centered Dialog / ConfirmDialog equal outer pad",
+  "strip-pad-inline":
+    "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer text start",
+  "capsule-chrome-pad-inline":
+    "Capsule chrome · SearchBar / ChatComposer shell (Send/mic flush, ~4dp)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",

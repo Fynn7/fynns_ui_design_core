@@ -39,7 +39,8 @@ ring can paint before heavy work).
   ChatMessage (dual placement: main 48rem host or EndAside /
   `.fynns-chat-host--fill` — bubble 70% of host, composer 100%; soft floor
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
-  generation footer under assistant turns; `citations` /
+  generation footer under assistant turns; `thinking` / `ChatThinking` =
+  single-block reasoning disclosure between name and bubble; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
   assistant body; inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
@@ -77,8 +78,10 @@ ring can paint before heavy work).
   hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
-  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog
-  chrome) — AGENTS.md **Inset decision tree**; do not invent ad-hoc gaps.
+  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog)
+  vs strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer text start) vs
+  capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) — AGENTS.md
+  **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;

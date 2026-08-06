@@ -102,6 +102,16 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.dialogInsetHint",
     max: 48,
   },
+  "strip-pad-inline": {
+    labelKey: "layoutChrome.stripPadInline",
+    hintKey: "layoutChrome.stripPadInlineHint",
+    max: 48,
+  },
+  "capsule-chrome-pad-inline": {
+    labelKey: "layoutChrome.capsuleChromePadInline",
+    hintKey: "layoutChrome.capsuleChromePadInlineHint",
+    max: 24,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",

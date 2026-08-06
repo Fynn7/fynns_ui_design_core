@@ -140,6 +140,7 @@ ChatGPT avoids that by **separating** visual streaming from SR notifications.
 | --- | --- | --- |
 | Streaming article | `aria-busy` + `aria-label={streamingLabel}` | Keep `aria-busy`; label = short status (“Generating response”) |
 | Bubble | `aria-live="polite"` + `aria-relevant="additions text"` **while streaming** | **Remove / off while streaming**; announce start/complete via notify |
+| Thinking disclosure (`ChatThinking`) | `aria-busy` while `streaming`; trigger `aria-expanded` / `aria-controls`; closed body `inert` | **Never** pipe thought tokens into a live region; lifecycle polite notify stays app / Chat contract |
 | Notify hosts | none | Add dual sr-only `alert` + `status` (or one polite status + optional assertive for errors) owned by `Chat` or the app |
 | Announcement text | (bubble content) | Discrete strings only, e.g. “Generating response” → “Response complete” (localize in app) |
 | System rows | `role="status"` | Keep |
@@ -212,6 +213,10 @@ fynns:
 Four-state primary (assistant-ui ChatGPT clone = visual mirror):
 
 `Cancel/Stop (running)` → `Stop dictation` → `Send` → `Dictate` (+ optional voice)
+
+**fynns idle without `onDictate`:** always keep **Send** in the primary slot;
+empty draft → `disabled` (not hidden). With `onDictate`, empty idle still swaps
+to Dictate (ChatGPT empty-home).
 
 ### fynns defaults → parity
 

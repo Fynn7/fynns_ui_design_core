@@ -33,6 +33,7 @@ import {
   ChatComposer,
   ChatMessage,
   ChatScrollToBottom,
+  ChatThinking,
   ChatThread,
   ClippedNavShell,
   wouldClippedNavDrawerCrowd,
@@ -463,6 +464,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
   const [chatAsideDraft, setChatAsideDraft] = useState("");
+  const [thinkingStreaming, setThinkingStreaming] = useState(false);
+  const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
+  const thinkingStartedAtRef = useRef(0);
   const [shellChatDraft, setShellChatDraft] = useState("");
   const [shellChatBusy, setShellChatBusy] = useState(false);
   const [shellChatReply, setShellChatReply] = useState("");
@@ -520,6 +524,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     }, 28);
     return () => window.clearTimeout(timer);
   }, [chatStreaming, chatStreamText]);
+
+  useEffect(() => {
+    if (!thinkingStreaming) return;
+    const timer = window.setTimeout(() => {
+      setThinkingDoneMs(Date.now() - thinkingStartedAtRef.current);
+      setThinkingStreaming(false);
+    }, 2400);
+    return () => window.clearTimeout(timer);
+  }, [thinkingStreaming]);
 
   useEffect(() => {
     if (!searchFocusTick) return;
@@ -2006,6 +2019,54 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.chatHelp")} />
         <TokenList group="chat" title={t("globals.tokenListChat")} />
         <TokenList group="chatmessage" title={t("globals.tokenListChatMessage")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="thinking">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ChatThinking durationMs={3800} streamingLabel={t("globals.thinkingStreaming")} />
+          <ChatMessage
+            role="assistant"
+            thinking={
+              <ChatThinking
+                streaming={thinkingStreaming}
+                durationMs={thinkingStreaming ? undefined : thinkingDoneMs}
+                streamingLabel={t("globals.thinkingStreaming")}
+                label={t("globals.thinkingLabel")}
+                durationLabel={(n) => t("globals.thinkingDuration").replace("{n}", String(n))}
+              >
+                {t("globals.thinkingBody")}
+              </ChatThinking>
+            }
+          >
+            {thinkingStreaming
+              ? undefined
+              : t("globals.thinkingAnswer")}
+          </ChatMessage>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              disabled={thinkingStreaming}
+              onClick={() => {
+                thinkingStartedAtRef.current = Date.now();
+                setThinkingDoneMs(undefined);
+                setThinkingStreaming(true);
+              }}
+            >
+              {t("globals.thinkingSimulate")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              disabled={thinkingStreaming}
+              onClick={() => {
+                setThinkingStreaming(false);
+                setThinkingDoneMs(4200);
+              }}
+            >
+              {t("globals.thinkingReset")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.thinkingHelp")} />
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="chat-citations">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
