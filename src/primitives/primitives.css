@@ -8538,8 +8538,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-thinking-trigger:focus-visible {
-  outline: 2px solid var(--fynns-color-focus);
-  outline-offset: 2px;
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
 .fynns-chat-thinking-trigger:hover {
@@ -8552,10 +8552,6 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   justify-content: center;
   color: inherit;
-}
-
-.fynns-chat-thinking-icon {
-  display: block;
 }
 
 .fynns-chat-thinking-label {

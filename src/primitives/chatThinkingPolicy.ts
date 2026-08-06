@@ -50,8 +50,6 @@ export type ResolveThinkingOpenInput = {
   streaming: boolean;
   /** Controlled open — wins over policy when set. */
   open?: boolean;
-  /** Uncontrolled seed before policy kicks in. */
-  defaultOpen?: boolean;
   /** Current uncontrolled open (after user / policy). */
   internalOpen: boolean;
   /**
@@ -79,7 +77,7 @@ export type ResolveThinkingOpenResult = {
  * - controlled `open` always wins
  * - streaming → force open unless `userPinnedClosed`
  * - streaming→done → auto-collapse once unless `userPinnedOpen`
- * - otherwise keep internal / defaultOpen
+ * - otherwise keep `internalOpen`
  */
 export function resolveThinkingOpen(
   input: ResolveThinkingOpenInput,

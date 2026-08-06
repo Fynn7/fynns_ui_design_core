@@ -550,7 +550,8 @@ export const SEARCHBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
   /**
    * Capsule edge chrome next to icons — layout `capsule-chrome-pad-inline`.
-   * Label text without a leading icon lands at `strip-pad-inline` via CSS.
+   * Label inset without a leading icon still uses the field/Input recipe
+   * (`space-md`), not `strip-pad-inline` (that recipe is ChatComposer-only).
    */
   "pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "icon-slot": "3rem",

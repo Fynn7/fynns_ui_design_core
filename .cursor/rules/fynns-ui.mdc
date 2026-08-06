@@ -79,7 +79,7 @@ ring can paint before heavy work).
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
   (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog)
-  vs strip-pad-inline (Banner / Snackbar / ChatComposer text start) vs
+  vs strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer text start) vs
   capsule-chrome-pad-inline (SearchBar / ChatComposer Send flush) — AGENTS.md
   **Inset decision tree**; do not invent ad-hoc gaps.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
