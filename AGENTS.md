@@ -159,6 +159,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
   same change — never ship a radius token that the GUI cannot show.
+- **DON'T** ship a Chat-family **container** squarer than the user bubble
+  (`--fynns-radius-22` / ChatGPT `rounded-[22px]`). Floor applies to
+  `ChatMessage` bubble, citation footnote cards, composer shell, and any new
+  Chat* chrome panel — use `radius-22` **or rounder** (`3xl`, `pill`).
+  Micro marks stay smaller (`inline code` → `xs`, favicon → `2xs`). Override
+  only when the user **explicitly** asks for a squarer Chat container.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives instead. Do not resurrect purged Toast / Popover / Panel APIs
   (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
@@ -168,6 +174,16 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - Text in this package (docs, default primitive labels, comments) is **English or
  German**. Consumer apps / the sandbox may localize their chrome to Chinese via
  a locale switch — see [README.md](README.md#aesthetic-sandbox).
+
+**Consumer apps (agents in any repo that consumes `@fynns/ui`):** treat this
+package as a **function API** — import primitives and pass props / children /
+labels only. **Do not** wrap `@fynns/ui` components in local restyles, fork
+CSS, or invent parallel variants in the consumer. **Do not** edit submodule
+sources for app features (bump the pin). If the keep-set cannot meet the
+requirement after exploring `AGENTS.md` + sandbox Globals, **stop and tell the
+user explicitly** that the work must land in `fynns_ui_design_core` first, then
+the consumer only calls the new API. Install / pin rules:
+[`llm/CONSUME.md`](llm/CONSUME.md).
 
 ## Tokens
 
@@ -338,7 +354,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
     cover the turn text; click opens `href` or `onCitationOpen`;
-    +N expands footnote cards — no Sources sidebar); `data-message-author-role`
+    +N expands footnote cards at `--fynns-radius-22` — same floor as the
+    user bubble, never squarer — no Sources sidebar); `data-message-author-role`
     on each row. **Inline `code`** (caller-rendered, not markdown): ChatGPT
     prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
     (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT

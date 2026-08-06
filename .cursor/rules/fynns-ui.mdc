@@ -83,6 +83,13 @@ ring can paint before heavy work).
   `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
   Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
   new radius steps require a GUI row in the same change.
+  **Chat containers** (bubble, citation cards, composer shell, new Chat*
+  panels): never squarer than `--fynns-radius-22` unless the user
+  **explicitly** asks; use `22` or rounder (`3xl` / `pill`). Micro marks
+  (`code` / favicon) may stay smaller. See AGENTS.md Hard rules.
+- **Consumers:** `@fynns/ui` is props-only — no local restyle wrappers or
+  `.fynns-*` overrides. Missing capability → tell the user to land it in
+  `fynns_ui_design_core` first (`llm/CONSUME.md`).
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient
