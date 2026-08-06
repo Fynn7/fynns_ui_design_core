@@ -71,6 +71,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Inline truncated text in main content (table cells, detail fields) → default
      `side="top" align="start"`; never `side="right"` (it would cover the content
      to the right).
+   - Chat citation chips under a message body → `side="bottom" align="start"`
+     so the preview does not cover the turn text above (flip still moves to
+     `top` near the viewport bottom). Prefer this over the Tooltip default.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
@@ -156,6 +159,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
   same change — never ship a radius token that the GUI cannot show.
+- **DON'T** ship a Chat-family **container** squarer than the user bubble
+  (`--fynns-radius-22` / ChatGPT `rounded-[22px]`). Floor applies to
+  `ChatMessage` bubble, citation footnote cards, composer shell, and any new
+  Chat* chrome panel — use `radius-22` **or rounder** (`3xl`, `pill`).
+  Micro marks stay smaller (`inline code` → `xs`, favicon → `2xs`). Override
+  only when the user **explicitly** asks for a squarer Chat container.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives instead. Do not resurrect purged Toast / Popover / Panel APIs
   (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
@@ -165,6 +174,16 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - Text in this package (docs, default primitive labels, comments) is **English or
  German**. Consumer apps / the sandbox may localize their chrome to Chinese via
  a locale switch — see [README.md](README.md#aesthetic-sandbox).
+
+**Consumer apps (agents in any repo that consumes `@fynns/ui`):** treat this
+package as a **function API** — import primitives and pass props / children /
+labels only. **Do not** wrap `@fynns/ui` components in local restyles, fork
+CSS, or invent parallel variants in the consumer. **Do not** edit submodule
+sources for app features (bump the pin). If the keep-set cannot meet the
+requirement after exploring `AGENTS.md` + sandbox Globals, **stop and tell the
+user explicitly** that the work must land in `fynns_ui_design_core` first, then
+the consumer only calls the new API. Install / pin rules:
+[`llm/CONSUME.md`](llm/CONSUME.md).
 
 ## Tokens
 
@@ -182,7 +201,7 @@ scrollbar/`code` tokens. `restoreFynnsThemeMode()` reads `localStorage` key
 
 Groups: `color`, `space`, `size`, `radius`, `shadow`, `state`, `font`, `font-size`,
 `font-weight`, `line-height`, `letter-spacing`, `z`, `duration`, `ease`,
-`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `pagination`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, `code` (CodeBlock highlight roles — see below), plus `misc` (`--fynns-border-hairline`,
+`toggle`, `selection`, `chip`, `progress`, `avatar`, `fab`, `fabmenu`, `appbar`, `bottomappbar`, `toolbar`, `searchbar`, `banner`, `chatmessage`, `chat`, `list`, `datepicker`, `timepicker`, `carousel`, `breadcrumb`, `pagination`, `navrail`, `navbar`, `navdrawer`, `focus`, `layout`, `scrollbar`, `code` (CodeBlock highlight roles — see below), plus `misc` (`--fynns-border-hairline`,
 `--fynns-opacity-muted`).
 
 Color tokens (`--fynns-color-*`):
@@ -192,7 +211,8 @@ Color tokens (`--fynns-color-*`):
   filled card), `surface-5` (reserved). Legacy aliases kept: `surface`,
   `surface-head`, `toast-surface`. Also `surface-muted`, `surface-hover`,
   `control-surface`, `control-surface-hover`, `flyout-item`,
-  `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`.
+  `flyout-item-hover`, `input-fill`, `skeleton-base`, `skeleton-sheen`,
+  `chat-user-bubble` (quiet Chat user-bubble lift; light override).
   - Accent: `accent` `#2dd4bf`, `accent-dim` `#14b8a6`, `accent-hover`,
     `accent-active`, `accent-soft`, `accent-mid`, `accent-24`, `accent-42`,
     `accent-ring` (soft mark for small controls / nav indicators), `on-accent`, `accent-container`, `on-accent-container`,
@@ -282,7 +302,140 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   the ring smooth through long sync / WASM compile on the main thread (use a
   Worker or `yieldToMain` slices for that). Prefer over `setBusy(true)` then
   immediately blocking work.
-  EmptyState, **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
+  EmptyState,
+  **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
+  **ChatMessage** `{ role, children?, avatar?, name?, streaming?,
+  streamingLabel?, error?, onRetry?, retryLabel?, citations?,
+  citationsLabel?, citationsVisibleCount?, onCitationOpen?, actions? }` (**dual
+  placement** — same 70% / composer rules in main **or** left/right
+  resizable asides; no density mode):
+  - **Shell:** `Chat` full-height flex column; soft floor
+    `min(var(--fynns-layout-chat-min-width), 100%)` (**no** OS window lock).
+    Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`); composer docks
+    at root bottom; stick-to-bottom + scroll-to-bottom (32dp elevated
+    `IconButton`, not Fab; show after ~80dp leave-bottom /
+    `--fynns-chat-scroll-threshold`; sit ~12dp above composer via
+    `--fynns-chat-scroll-fab-inset`). `empty` prefers `EmptyState`;
+    optional starter prompts = `Chip` / `ChipSet` (`suggestion` /
+    `assist`, `radius-pill`) **inside** `empty`, centered wrap — they
+    sit in the thread **above** the docked composer (do **not** mirror
+    ChatGPT’s centered-composer “chips below input”; do not add
+    `ChatStarterChip`). Composer stays docked. No built-in markdown /
+    Voice Mode / quote-reply / Slack-style
+    emoji reactions / attachment upload (`attachments` slot + optional
+    dictation hook only). **Parity note (markdown / GFM):** ChatGPT
+    renders GFM in assistant turns, including **task-list checkboxes**
+    (`- [ ]` / `- [x]`). `@fynns/ui` does **not** — `ChatMessage`
+    `children` are opaque; the app owns markdown (and any interactive
+    task list, e.g. via `Checkbox`). Do not add a markdown/GFM renderer
+    to this primitive. **Parity note (reactions):** ChatGPT and
+    Claude.ai ship **thumbs up/down** as vendor quality feedback under
+    assistant turns — not multi-emoji reactions (those remain feature
+    requests on both). Pass thumbs via the `actions` slot if the app
+    needs them; do not add a reaction picker primitive.
+  - **Main** (`ClippedNavShell` main): column ceiling
+    `--fynns-layout-chat-max-width` / `--fynns-chatmessage-max-width`
+    (**48rem**, ChatGPT `max-w-3xl`) — **not** full main / viewport. User
+    bubble `--fynns-chatmessage-bubble-max-width` **70%** of that host row
+    (short copy shrinks; `radius-22` / ChatGPT `rounded-[22px]`;
+    `--fynns-color-chat-user-bubble`; body `1rem` / pad-inline `1rem`).
+    Composer = **100%** of the same host (`radius-3xl`, ~52px collapsed
+    shell with 36dp controls + `composer-gap` 4px; not viewport full-bleed).
+  - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
+    aside content (rem ceiling dropped). Bubble still **70%** of that host;
+    composer **100%**. Pane soft mins + chat stage min on the shell root.
+  - Unchanged under 640px; `assistant` plain; `system` centered muted
+    notice (no pill); **`avatar` default omit**; user actions hover /
+    focus-within (touch always); `streaming` = caret + `aria-busy` / polite
+    live — no LLM; **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
+    generation footer under the assistant turn (danger copy + optional
+    Regenerate; wins over streaming / citations / actions);
+    **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
+    browsing source chips under the assistant body (publisher + favicon;
+    hover title/snippet preview with Tooltip `side="bottom"` so it does not
+    cover the turn text; click opens `href` or `onCitationOpen`;
+    +N expands footnote cards at `--fynns-radius-22` — same floor as the
+    user bubble, never squarer — no Sources sidebar); `data-message-author-role`
+    on each row. **Inline `code`** (caller-rendered, not markdown): ChatGPT
+    prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
+    (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT
+    gray-700), pad `.15rem` / `.3rem`,
+    `--fynns-radius-xs` (4px), size `.875em`, weight medium; user bubble uses
+    the same wash + tighter pad.
+    `pre code` stays unstyled by these rules.
+    **ARIA (ChatGPT parity):** skip → `#main`; **prefer** dual sr-only notify
+    regions for respond/complete (app-owned today — not token-live on the
+    bubble; core ships `role="log"` on `ChatThread` + `aria-busy` on the
+    row). Keep composer focus after send; Send/Stop/dictate labels — full
+    contract: [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md).
+  - **Composer keys (ChatGPT parity):** Enter sends; Shift+Enter newline;
+    Esc stops while `busy`. **CJK IME:** Enter during composition (or the
+    confirming Enter some browsers fire just after `compositionend`)
+    commits the candidate only — it must **not** send; a later Enter
+    sends. Guarded via `compositionstart`/`end` + `isComposing` /
+    `keyCode === 229`.
+    **Parity note (composer input model — ProseMirror vs textarea):**
+    ChatGPT’s docked prompt is **not** a growing `<textarea>` as the
+    primary editor. Captured CSS/DOM (`scripts/_focus-verify/chatgpt-*`):
+    parent `.wcDTda_prosemirror-parent` hosts
+    `.ProseMirror[contenteditable]` (ProseMirror) after hydration, with a
+    `.wcDTda_fallbackTextarea` (`name="prompt-textarea"`, empty height
+    `1lh`) for the SSR / no-JS path. The scroll host caps growth with
+    `max-h-[max(30svh,5rem)]` + `max-h-52` (~13rem) and `overflow-auto`.
+    **Height growth:** a contenteditable block sizes to its paragraphs
+    (layout does the grow); the parent scrolls past the cap. A native
+    `<textarea>` does **not** — it needs either `field-sizing: content`
+    (uneven support) or the classic JS resize (`height: 0` →
+    `scrollHeight`, clamp to max). Placeholder wrap can inflate
+    `scrollHeight` on empty textareas (narrow panes); ProseMirror uses a
+    CSS `::after`/`::before` placeholder instead. **fynns:**
+    `ChatComposer` stays a controlled `<textarea>` (`rows={1}`,
+    `field-sizing: fixed`, layout-effect auto-grow). Empty value forces
+    height to `--fynns-chat-composer-line-height` (~`min-h-9` / 36px) so
+    placeholder wrap cannot inflate a narrow EndAside; shell pad is
+    `--fynns-chat-composer-pad-*` (= SearchBar capsule `pad-inline` 4px) +
+    Input-in-shell text inset (`space-md − hairline` when no leading /
+    trailing control) so placeholder start matches Input / Select /
+    Autocomplete (~15–16px from shell edge); row `align-items: center` +
+    `line-height` = composer line height for vertical centering. Collapsed
+    shell ≈ 52–54px (ChatGPT `rounded-[28px]` /
+    `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
+    Plain-text prompts only, zero ProseMirror dependency. Do **not** swap
+    to contenteditable for visual parity alone.
+    **Parity note (paste):** Upgraded ChatGPT ProseMirror keeps rich HTML
+    (bold/lists/headings per schema); pure `text/plain` that looks like
+    Markdown is parsed into rich nodes; code marks stay literal. Native
+    `<textarea>` strips HTML to plain and never Markdown-parses — that is
+    the intentional fynns composer model until a rich editor is adopted.
+    **User edit (ChatGPT parity — not built into core yet):** pencil under
+    the bubble → **inline** host-width Cancel/Send surface (does **not**
+    replace the docked composer); Send forks + `< N/M >` branch picker.
+    Full UX: [`llm/CHAT_USER_EDIT_UX.md`](llm/CHAT_USER_EDIT_UX.md).
+  - **Parity note (`prefers-reduced-motion`)** — ChatGPT (captured CSS in
+    `scripts/_focus-verify/chatgpt-{root,conversation}.css`) vs `@fynns/ui`:
+    - **Streaming caret:** ChatGPT’s default `.result-streaming` trailing
+      `●` is **static** (no animation). The optional `.pulse` / `pulseSize`
+      scale loop is **not** killed under `prefers-reduced-motion: reduce`
+      (hard-coded `animation: … pulseSize`). Related streaming motion that
+      **does** respect reduce: text color-decay, content-enter fade; working
+      wave dots / `.pulsing-dot` only run under `no-preference`. **fynns:**
+      `.fynns-chat-message-cursor` blink → `animation: none; opacity: 1`
+      under reduce (plus global `theme.css` instant durations).
+    - **Scroll-to-bottom:** ChatGPT CSS only positions the control
+      (`--thread-scroll-to-bottom-banner-offset`); no dedicated enter/exit
+      motion found. Smooth-scroll utilities are gated
+      (`not-motion-reduce:…scroll-smooth`); carousels set
+      `scroll-behavior: auto` under reduce. **fynns:** `Chat.scrollToBottom`
+      uses `behavior: "auto"` when reduce matches (else `"smooth"`); FAB
+      itself has no enter animation.
+    - **Shell transitions:** ChatGPT disables page↔page / sidebar **View
+      Transitions** under reduce (`::view-transition { display: none }`) and
+      zeros model-picker / chrome menu transitions. Orphaned
+      `float-sidebar-in/out` keyframes exist but are unused in the dump.
+      **fynns:** composer focus border transition → none; `EndAside` /
+      `ClippedNavShell` width-morph durations → `0` via `matchMedia`.
+    Evidence dumps only — re-check live ChatGPT if product CSS drifts.,
+  **Snackbar** (`snackbar(message, opts?)` / `snackbar.dismiss(id?)`
   + root `<SnackbarHost />`;
   one at a time, bottom-center; optional single action; `short` / `long` /
   `indefinite`; surface `--fynns-color-toast-surface`, z `--fynns-z-toast`),
@@ -338,9 +491,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `TopAppBar`. Prefer for destination chrome apps. **Not** `Drawer` (modal
   content side sheet) and **not** a revived `Panel` / `ListGroup` shell. Demo:
   sandbox Globals → Navigation.
-- **Content:** List / ListItem (main-content M3 rows; sidebar destinations use
-  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
-  `ListGroup` / `ListRow`), Card (`title` / optional `icon` / `actions` + body;
+- **Content:** List / ListItem (main-content M3 rows; selected =
+  `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
+  menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
+  `NavigationBar` — not deleted `ListGroup` / `ListRow`), Card (`title` /
+  optional `icon` / `actions` + body;
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;
@@ -351,6 +506,23 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
   type roles as Card),
   Carousel / CarouselItem,
+  **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
+  **ChatMessage** (`user` | `assistant` | `system`; dual placement main |
+  left/right resizable asides — see Feedback keep-set; user bubble
+  `--fynns-chatmessage-bubble-max-width` 70% of the message-row host /
+  `radius-22` / body `1rem` —
+  main: 48rem column; aside: 100% pane via `.fynns-end-aside` /
+  `.fynns-chat-host--fill`; composer 100% of same host (`radius-3xl`,
+  36dp controls); soft mins on the
+  pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
+  default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
+  failed-generation footer — see Feedback keep-set; `citations` /
+  `ChatCitations` / `ChatCitationChip` = browsing source chips — see
+  Feedback keep-set; no built-in GFM /
+  task-list checkboxes — see Feedback keep-set; CJK IME Enter while
+  composing does not send — see Feedback **Composer keys**; composer is
+  a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
+  **composer input model**),
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption), CodeBlock (`default` head, `plain` headless, or
   `editable` live highlight via pre backdrop + transparent textarea —
@@ -403,7 +575,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
@@ -451,10 +623,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
-- **Icons (public subset):** Archive, ArrowLeft, BarChart, Bot, ChevronRight,
-  Clipboard, Download, Eye, EyeOff, File, FolderOpen, Info, LayoutGrid, Menu,
-  Moon, PanelLeft, PanelRight, Pencil, Plus, Save, Search, Settings, Sparkles,
-  Sun, Trash, Undo, Upload — plus any glyph still imported by Globals/Preview.
+- **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
+  ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
+  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
+  Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
+  Undo, Upload — plus any glyph still imported by Globals/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.

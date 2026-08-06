@@ -73,6 +73,13 @@ const EDITABLE_RADIUS: ReadonlyArray<RadiusRow> = [
     hintKey: "globalsInspector.radiusXlHint",
   },
   {
+    key: "22",
+    label: "22",
+    max: 44,
+    usesKey: "globalsInspector.radius22Uses",
+    hintKey: "globalsInspector.radius22Hint",
+  },
+  {
     key: "3xl",
     label: "3xl",
     max: 56,

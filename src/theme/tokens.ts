@@ -97,6 +97,19 @@ export const COLOR_TOKENS = {
   "skeleton-base": "rgba(255, 255, 255, 0.06)",
   /** Skeleton shimmer highlight. */
   "skeleton-sheen": "rgba(255, 255, 255, 0.14)",
+  /**
+   * Quiet lift for Chat user bubbles (ChatGPT message-surface role; teal tint).
+   * Not accent / secondary-container — those read as selected chips.
+   */
+  "chat-user-bubble": "#0c3237",
+  /**
+   * Inline `code` pill fill in ChatMessage body (assistant / system on the
+   * bare thread). Same text wash as user-bubble code — **not** ChatGPT
+   * gray-700 `#424242` (reads muddy/warm on teal `app-bg`). Mix % lives on
+   * `--fynns-chatmessage-code-user-bg-mix` (light overrides that mix).
+   */
+  "chat-inline-code-bg":
+    "color-mix(in srgb, var(--fynns-color-text) var(--fynns-chatmessage-code-user-bg-mix), transparent)",
 } as const;
 
 /**
@@ -191,6 +204,11 @@ export const RADIUS_TOKENS = {
   lg: "10px",
   /** M3 extra-large band */
   xl: "16px",
+  /**
+   * ChatGPT user-message bubble (`rounded-[22px]`). Between xl and 3xl —
+   * not a long-strip chrome radius.
+   */
+  "22": "22px",
   /**
    * Long chrome strips ≈ 28dp: SearchBar, Banner, BottomAppBar,
    * NavigationDrawer items, BottomSheet top corners. (No `2xl` step — unused.)
@@ -576,8 +594,154 @@ export const BANNER_TOKENS = {
 } as const;
 
 /**
+ * ChatMessage geometry (assistant / user / system rows — not M3 catalog).
+ * Streaming cues use a caret blink (killed under `prefers-reduced-motion`;
+ * ChatGPT’s optional `.pulse` caret scale does **not** — see AGENTS.md
+ * Chat **Parity note (`prefers-reduced-motion`)**); no LLM / transport —
+ * callers append `children` and toggle `streaming`. Failed generation uses
+ * `error` + `onRetry` (ChatGPT-style footer under the assistant turn).
+ * `--fynns-chatmessage-<key>`.
+ */
+export const CHATMESSAGE_TOKENS = {
+  gap: "0.75rem",
+  /** Row gap when `avatar` is passed — default ChatMessage omits avatar. */
+  "avatar-gap": "0.75rem",
+  /** ChatGPT user bubble `px-4` (16dp). */
+  "bubble-pad-inline": "1rem",
+  /** ChatGPT `py-2.5` (10dp). */
+  "bubble-pad-block": "0.625rem",
+  /**
+   * User bubble ceiling — ChatGPT `max-w-[70%]`. Percentage containing block
+   * is the **message-row host** (same element as `max-width` below / ChatGPT
+   * `MessagePrimitive.Root` with `w-full max-w-3xl`), **not** full main /
+   * viewport after the sidebar. **Dual placement:** in `EndAside` / start-edge
+   * resizable panes the host is 100% of aside **content** width (CSS drops the
+   * rem ceiling via `.fynns-end-aside` / `.fynns-chat-host--fill`) — same 70%,
+   * no density mode. Composer stays 100% of that host. Soft mins live on the
+   * pane (`LAYOUT_TOKENS` `end-aside-min-width` / `NAVDRAWER_TOKENS` `min-width`),
+   * not here. Short copy still shrinks (`width: fit-content`, `border-box`).
+   * Screenshot figs of ~66–68% usually divide bubble by an *outer* padded shell
+   * (70% of content ≈ 65–68% of shell with ~1.5rem gutters) — still this lock.
+   * **Unchanged under 640px** (no responsive widen). See
+   * `scripts/_focus-verify/chatgpt-bubble-containing-block.html`,
+   * `chatgpt-bubble-width.html`, and `chatgpt-narrow-layout.html`.
+   * Corner radius: `--fynns-radius-22` (ChatGPT `rounded-[22px]`; composer
+   * shell stays `--fynns-radius-3xl`). Fill: `--fynns-color-chat-user-bubble`.
+   */
+  "bubble-max-width": "70%",
+  /**
+   * Chat row host ceiling for **main-column** placement (ChatGPT /
+   * `max-w-3xl` = 48rem). This host is the % CB for `bubble-max-width`.
+   * Aside placement ignores it (`max-width: 100%` of pane content).
+   * Keep in sync with `--fynns-layout-chat-max-width`.
+   */
+  "max-width": "48rem",
+  /** ChatGPT message body `text-base` / 16px. */
+  "body-size": "1rem",
+  "body-line": "1.5",
+  "name-size": "0.75rem",
+  "actions-gap": "0",
+  /** Streaming caret thickness (2dp). */
+  "cursor-width": "0.125rem",
+  /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
+  "error-gap": "0.75rem",
+  /**
+   * Inline `code` in message body (ChatGPT `.prose code` — not `pre code`).
+   * Radius: reuse `--fynns-radius-xs` (4px = ChatGPT `.25rem`).
+   * Font: `--fynns-font-mono` (Consolas-first; ChatGPT uses system mono stack).
+   * Fill: `--fynns-color-chat-inline-code-bg` (text wash via
+   * `code-user-bg-mix` — not ChatGPT gray-700).
+   * Weight: medium (ChatGPT `font-weight: 500`).
+   */
+  "code-pad-block": "0.15rem",
+  "code-pad-inline": "0.3rem",
+  /** Relative to bubble body size (ChatGPT `.875em`). */
+  "code-size": "0.875em",
+  /**
+   * User-bubble inline code (ChatGPT `.user-message-inline-code`).
+   * Pad = `--spacing` / half; wash = text at `code-user-bg-mix` (dark 15%;
+   * light override via theme.css).
+   */
+  "code-user-pad-block": "0.125rem",
+  "code-user-pad-inline": "0.25rem",
+  "code-user-bg-mix": "15%",
+  /** Gap between citation chips under an assistant turn. */
+  "citation-gap": "0.375rem",
+  /** Chip pad (ChatGPT publisher pill). */
+  "citation-pad-inline": "0.5rem",
+  "citation-pad-block": "0.25rem",
+  /** Favicon / leading mark in a citation chip. */
+  "citation-favicon": "0.875rem",
+  /** Gap between favicon and publisher label. */
+  "citation-chip-gap": "0.375rem",
+  /** Expanded footnote card stack gap. */
+  "citation-list-gap": "0.375rem",
+  "citation-card-pad": "0.625rem",
+  "citation-card-gap": "0.625rem",
+} as const;
+
+/**
+ * Chat shell geometry (thread / composer / scroll-to-bottom).
+ * Corner radius: reuse `--fynns-radius-3xl`. Column ceiling:
+ * `--fynns-layout-chat-max-width` (same as chatmessage max-width).
+ * Scroll-to-bottom uses instant `scrollTo` under `prefers-reduced-motion`
+ * (ChatGPT gates smooth-scroll utilities the same way — AGENTS.md Chat
+ * reduced-motion parity note). `--fynns-chat-<key>`.
+ */
+export const CHAT_TOKENS = {
+  /**
+   * Vertical gap between turns. ChatGPT clones use `gap-8` (2rem); live
+   * turn shells also use `pb-10` (2.5rem) — lock the denser clone gap.
+   */
+  "thread-gap": "2rem",
+  "thread-pad-inline": "1rem",
+  "thread-pad-block": "1rem",
+  /** Scroll/fade clearance above sticky composer (~28dp). */
+  "composer-scroll-pad": "1.75rem",
+  /**
+   * Soft floor for the collapsed single-line row (ChatGPT `size-9` / 36dp
+   * controls — not the global 40dp icon-target). Shell grows with wrap.
+   */
+  "composer-min-height": "2.25rem",
+  /**
+   * Soft cap before textarea inner scroll. ChatGPT’s ProseMirror parent
+   * uses ~`max-h-52` (13rem) + `max(30svh,5rem)`; rem token for the
+   * JS-resized textarea path.
+   */
+  "composer-max-height": "13rem",
+  /**
+   * Shell chrome pad — same as `--fynns-searchbar-pad-inline` (capsule edge).
+   * Text start without a leading control adds `space-md − hairline` on the
+   * textarea (Input / field-shell recipe).
+   */
+  "composer-pad-inline": "0.25rem",
+  "composer-pad-block": "0.5rem",
+  /** ChatGPT composer control cluster `gap-1` (4px). */
+  "composer-gap": "0.25rem",
+  /**
+   * Leading/trailing IconButton hit target inside the composer (ChatGPT
+   * `size-9` = 36dp). Scoped via CSS — does not change global IconButton.
+   */
+  "composer-control-size": "2.25rem",
+  "composer-inset-inline": "0.75rem",
+  "composer-inset-block": "0.75rem",
+  "composer-offset": "0.5rem",
+  /**
+   * Collapsed textarea text line. ChatGPT clones use ~min-h-9 (36px) + py-1.5;
+   * keep one body line as the soft floor (grows with wrap / Shift+Enter).
+   */
+  "composer-line-height": "2.25rem",
+  /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
+  "scroll-fab-inset": "0.75rem",
+  /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
+  "scroll-threshold": "5rem",
+} as const;
+
+/**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Sidebar destinations use
+ * One-line 56dp; two-line 72dp; three-line 88dp. Selected row uses the same
+ * `secondary-container` + `radius-3xl` long-strip highlight as
+ * NavigationDrawerItem / Select / menu items. Sidebar destinations still use
  * Navigation* chrome (not deleted ListRow / ListGroup).
  * `--fynns-list-<key>`.
  */
@@ -587,6 +751,12 @@ export const LIST_TOKENS = {
   "height-3": "5.5rem",
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
+  /**
+   * Outer inset on `.fynns-list` so `radius-3xl` row highlights breathe
+   * (matches `--fynns-navdrawer-pad-inline`).
+   */
+  "inset-inline": "0.5rem",
+  "inset-block": "0.5rem",
   gap: "1rem",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
@@ -935,6 +1105,18 @@ export const LAYOUT_TOKENS = {
    * `min(token, 100%)` in CSS; dropped while EndAside overlays (≤32rem main).
    */
   "main-min-width": "clamp(10rem, 36%, 20rem)",
+  /**
+   * Chat thread + composer column ceiling when Chat fills ClippedNavShell main
+   * (ChatGPT `max-w-3xl`). Keep in sync with `--fynns-chatmessage-max-width`.
+   * EndAside / `.fynns-chat-host--fill` children ignore this (100% of pane).
+   */
+  "chat-max-width": "48rem",
+  /**
+   * Soft floor for Chat stage root when flex-competing. Apply as
+   * `min(var(--fynns-layout-chat-min-width), 100%)` — never bare (no window lock).
+   * Message column stays `min-width: 0`.
+   */
+  "chat-min-width": "20rem",
 } as const;
 
 /**
@@ -1045,6 +1227,14 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       "toggle-track-hover": "rgba(0, 0, 0, 0.12)",
       "skeleton-base": "rgba(0, 0, 0, 0.06)",
       "skeleton-sheen": "rgba(0, 0, 0, 0.12)",
+      "chat-user-bubble": "#e8f0ee",
+    },
+  ],
+  [
+    "chatmessage",
+    {
+      /** ChatGPT `.user-message-inline-code` light wash (text at 10%). */
+      "code-user-bg-mix": "10%",
     },
   ],
   [
@@ -1131,6 +1321,8 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["toolbar", TOOLBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
+  ["chatmessage", CHATMESSAGE_TOKENS],
+  ["chat", CHAT_TOKENS],
   ["list", LIST_TOKENS],
   ["datepicker", DATEPICKER_TOKENS],
   ["timepicker", TIMEPICKER_TOKENS],

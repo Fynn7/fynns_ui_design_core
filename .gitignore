@@ -5,3 +5,10 @@ dist
 .vite
 examples/gallery/dist
 examples/sandbox/dist
+
+# Local research / measurement dumps (do not commit)
+scripts/_focus-verify/
+scripts/_scale-out/
+scripts/_tmp-*/
+scripts/_verify-*/
+scripts/_tmp-*.json

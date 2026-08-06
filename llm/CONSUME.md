@@ -22,8 +22,15 @@ Machine contract: [`consume.json`](consume.json).
    (restored; see BREAKING_PURGE “Restored after purge”).
 8. **Entry:** `main.tsx` (or equivalent) must `createRoot(...).render(<App />)` (or equivalent). Importing CSS alone produces an empty build that still “succeeds”.
 9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`.
-10. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
-11. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
+10. **API-only consumption:** treat `@fynns/ui` as a **function** — pass props /
+    children / localized labels only. **Never** wrap keep-set primitives in
+    consumer restyles, local CSS overrides of `.fynns-*`, or parallel “variants”.
+    Missing look/behavior → **explicitly tell the user** the change must be
+    implemented in `fynns_ui_design_core` first; then call the new API from the
+    consumer. Design language (including Chat container radius floor ≥
+    `--fynns-radius-22`): [`AGENTS.md`](../AGENTS.md) Hard rules.
+11. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
+12. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
 
 ## Agent checklist (greenfield / short prompt)
 
