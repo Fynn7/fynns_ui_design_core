@@ -28,10 +28,13 @@ const DEFAULT_OPTIONS: CollapsiblePreviewOptions = {
   chromePlain: false,
 };
 
-const PLAIN_NEST_CODE = `# nested surface sample — single chrome frame
-setdir output/demo
+const PLAIN_NEST_CODE_A = `setdir output/demo
 resize 512 512
 screenshot candidate.png
+`;
+
+const PLAIN_NEST_CODE_B = `# sibling CodeBlock — nest-gap between wells
+npm run sandbox
 `;
 
 export function CollapsiblePreviewCanvas() {
@@ -107,13 +110,32 @@ export function CollapsiblePreviewCanvas() {
               }
             >
               {options.chromePlain ? (
-                <CodeBlock
-                  variant="plain"
-                  language="bash"
-                  copyAriaLabel={t("globals.codeBlockCopy")}
-                  code={PLAIN_NEST_CODE}
-                  maxHeight="8rem"
-                />
+                <>
+                  <CodeBlock
+                    variant="plain"
+                    language="bash"
+                    copyAriaLabel={t("globals.codeBlockCopy")}
+                    code={PLAIN_NEST_CODE_A}
+                    maxHeight="6rem"
+                  />
+                  <CodeBlock
+                    variant="plain"
+                    language="bash"
+                    copyAriaLabel={t("globals.codeBlockCopy")}
+                    code={PLAIN_NEST_CODE_B}
+                    maxHeight="5rem"
+                  />
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "var(--fynns-color-text-muted)",
+                      fontSize: "var(--fynns-font-size-sm)",
+                      lineHeight: "var(--fynns-line-height-normal)",
+                    }}
+                  >
+                    {t("preview.collapsibleChromePlainNote")}
+                  </p>
+                </>
               ) : (
                 <SandboxHelp text={t("preview.collapsibleBody")} />
               )}

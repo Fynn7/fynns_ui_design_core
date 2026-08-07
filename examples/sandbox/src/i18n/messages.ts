@@ -98,16 +98,20 @@ const en = {
     "Sample card — same shell as Collapsible, but the header is static (no hover layer, no chevron). Use the switches for icon / actions.",
   "preview.cardChromePlain": "chrome=\"plain\" (structure host)",
   "preview.cardChromePlainBody": "Child Surface owns the well — one frame, no card-in-card.",
+  "preview.cardChromePlainNote":
+    "Plain text sibling under the Surface — same `--fynns-layout-nest-gap` as between wells.",
   "preview.cardChromePlainHelp":
-    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body uses `--fynns-layout-nest-gap` (not flush). Do not cancel with negative margins.",
+    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body uses `--fynns-layout-nest-gap` for outer pad and sibling gap (not flush). Do not cancel with negative margins.",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
   "preview.collapsiblePlain": "Title only",
   "preview.collapsibleTitleOnly": "Title only",
   "preview.collapsibleChromePlain": "chrome=\"plain\" (structure host)",
+  "preview.collapsibleChromePlainNote":
+    "Meta / prose sibling after two CodeBlocks — nest-gap is the same constant between every body child.",
   "preview.collapsibleChromePlainHelp":
-    "Plain nesting: one outer Collapsible shell; CodeBlock inset by `--fynns-layout-nest-gap`. No filename → `variant=\"plain\"` (titled default throws without label). Not flush; not two separate chips.",
+    "Plain nesting: outer Collapsible shell; body stacks siblings with `--fynns-layout-nest-gap` (two CodeBlocks + note). No filename → `variant=\"plain\"`. Not flush; not two separate chips.",
   "preview.collapsibleLabel": "Sample",
   "preview.collapsibleTitle": "Section title",
   "preview.collapsibleBody":
@@ -945,16 +949,20 @@ const en = {
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
   "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
-  "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
+  "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
   "globals.cardChromePlainBody": "Child Surface owns the well.",
+  "globals.cardChromePlainNote":
+    "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Use chrome=\"plain\" when nesting a surface-owning child: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` so the child insets as a secondary frame — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
-    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting a surface-owning child → `chrome=\"plain\"` + nest-gap (Preview toggle).",
-  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
+    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting body children → `chrome=\"plain\"` + nest-gap (Preview toggle).",
+  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
+  "globals.collapsibleChromePlainNote":
+    "Prose sibling after two CodeBlocks — `--fynns-layout-nest-gap` spaces every body child the same (wells or plain text).",
   "globals.collapsibleChromeHelp":
-    "chrome=\"plain\": Collapsible stays the main outer shell; body uses `--fynns-layout-nest-gap` (pad + gap) so nested CodeBlock insets as a secondary frame. No filename → CodeBlock `variant=\"plain\"` (titled default throws without label). plain ≠ flush — never cancel nest-gap with negative margins.",
+    "chrome=\"plain\": Collapsible stays the main outer shell; body uses `--fynns-layout-nest-gap` (outer pad + column gap between siblings — e.g. two CodeBlocks, or CodeBlock + `<p>`). No filename → CodeBlock `variant=\"plain\"`. plain ≠ flush — never cancel nest-gap with negative margins.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesHelp":
     "Each box is one token step. Cards / inputs = `md`; buttons = `xl`; badges / chips = `sm`.",
@@ -1259,16 +1267,20 @@ const zh: Record<MessageKey, string> = {
     "示例卡片 — 与 Collapsible 同壳，但标题栏是静态的（无悬停层、无 chevron）。用上方开关控制图标 / actions。",
   "preview.cardChromePlain": "chrome=\"plain\"（结构壳）",
   "preview.cardChromePlainBody": "子级 Surface 自带井面 — 单层框，无 card-in-card。",
+  "preview.cardChromePlainNote":
+    "Surface 下方的散文兄弟节点 — 与井面之间同用 `--fynns-layout-nest-gap`。",
   "preview.cardChromePlainHelp":
-    "子节点自带描边/填充（Surface、CodeBlock、canvas）时，Card/Collapsible 用 chrome=\"plain\"。正文使用 `--fynns-layout-nest-gap`（非贴边）。禁止用负 margin 冲掉 nest-gap。",
+    "子节点自带描边/填充（Surface、CodeBlock、canvas）时，Card/Collapsible 用 chrome=\"plain\"。正文用 `--fynns-layout-nest-gap` 做外边距与兄弟间距（非贴边）。禁止用负 margin 冲掉 nest-gap。",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
   "preview.collapsiblePlain": "仅标题",
   "preview.collapsibleTitleOnly": "仅标题",
   "preview.collapsibleChromePlain": "chrome=\"plain\"（结构壳）",
+  "preview.collapsibleChromePlainNote":
+    "两个 CodeBlock 后的说明文字 — 正文每个子节点之间都是同一个 nest-gap 常量。",
   "preview.collapsibleChromePlainHelp":
-    "嵌套结构壳：外层一个 Collapsible 主壳；CodeBlock 按 `--fynns-layout-nest-gap` 缩进。无文件名 → `variant=\"plain\"`（titled 无 label 会 throw）。非贴边；不是上下两个割裂芯片。",
+    "嵌套结构壳：外层 Collapsible；正文用 `--fynns-layout-nest-gap` 叠两个 CodeBlock + 说明。无文件名 → `variant=\"plain\"`。非贴边；不是上下两个割裂芯片。",
   "preview.collapsibleLabel": "示例",
   "preview.collapsibleTitle": "分区标题",
   "preview.collapsibleBody":
@@ -2090,16 +2102,20 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
   "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
-  "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
+  "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
   "globals.cardChromePlainBody": "子级 Surface 自带井面。",
+  "globals.cardChromePlainNote":
+    "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。嵌套自带表面的子件时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 让子件缩进成附框 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
-    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套自带表面的子件 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",
-  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
+    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套正文子节点 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",
+  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
+  "globals.collapsibleChromePlainNote":
+    "两个 CodeBlock 后的说明 — `--fynns-layout-nest-gap` 对每个正文子节点间距相同（井面或纯文本）。",
   "globals.collapsibleChromeHelp":
-    "chrome=\"plain\"：Collapsible 仍是外层主壳；正文用 `--fynns-layout-nest-gap`（pad + gap）让内嵌 CodeBlock 缩进成附框。无文件名 → CodeBlock `variant=\"plain\"`（titled default 无 label 会 throw）。plain ≠ 贴边 — 禁止负 margin 冲掉 nest-gap。",
+    "chrome=\"plain\"：Collapsible 仍是外层主壳；正文用 `--fynns-layout-nest-gap`（外边距 + 兄弟纵向 gap — 例如两个 CodeBlock，或 CodeBlock + `<p>`）。无文件名 → CodeBlock `variant=\"plain\"`。plain ≠ 贴边 — 禁止负 margin 冲掉 nest-gap。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesHelp":
     "每个色块是一档 token。卡片 / 输入 = `md`；按钮 = `xl`；徽章 / 芯片 = `sm`。",

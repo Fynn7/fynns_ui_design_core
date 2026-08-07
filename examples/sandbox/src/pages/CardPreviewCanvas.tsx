@@ -88,9 +88,21 @@ export function CardPreviewCanvas() {
               }
             >
               {options.chromePlain ? (
-                <Surface fill padded style={{ minHeight: "6rem" }}>
-                  <SandboxHelp as="span" text={t("preview.cardChromePlainBody")} />
-                </Surface>
+                <>
+                  <Surface fill padded style={{ minHeight: "4rem" }}>
+                    <SandboxHelp as="span" text={t("preview.cardChromePlainBody")} />
+                  </Surface>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: "var(--fynns-color-text-muted)",
+                      fontSize: "var(--fynns-font-size-sm)",
+                      lineHeight: "var(--fynns-line-height-normal)",
+                    }}
+                  >
+                    {t("preview.cardChromePlainNote")}
+                  </p>
+                </>
               ) : (
                 <SandboxHelp text={t("preview.cardBody")} />
               )}

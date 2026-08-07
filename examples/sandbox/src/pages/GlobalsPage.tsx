@@ -2314,9 +2314,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             title={t("globals.cardChromePlainTitle")}
             chrome="plain"
           >
-            <Surface fill padded style={{ minHeight: "4.5rem" }}>
+            <Surface fill padded style={{ minHeight: "3.5rem" }}>
               <SandboxHelp as="span" text={t("globals.cardChromePlainBody")} />
             </Surface>
+            <p
+              style={{
+                margin: 0,
+                color: "var(--fynns-color-text-muted)",
+                fontSize: "var(--fynns-font-size-sm)",
+                lineHeight: "var(--fynns-line-height-normal)",
+              }}
+            >
+              {t("globals.cardChromePlainNote")}
+            </p>
           </Card>
         </div>
         <SandboxHelp text={t("globals.cardChromeHelp")} />
@@ -2414,6 +2424,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               code={`setdir output/demo\nresize 512 512\nscreenshot out.png\n`}
               maxHeight="6rem"
             />
+            <CodeBlock
+              variant="plain"
+              language="bash"
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              code={`# sibling well — same nest-gap as above\nnpm run sandbox\n`}
+              maxHeight="5rem"
+            />
+            <p
+              style={{
+                margin: 0,
+                color: "var(--fynns-color-text-muted)",
+                fontSize: "var(--fynns-font-size-sm)",
+                lineHeight: "var(--fynns-line-height-normal)",
+              }}
+            >
+              {t("globals.collapsibleChromePlainNote")}
+            </p>
           </Collapsible>
           <SandboxHelp text={t("globals.collapsibleHelpPreview")} />
           <SandboxHelp text={t("globals.collapsibleChromeHelp")} />
