@@ -638,10 +638,11 @@ classes.
   a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
   **composer input model**),
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock (`default` head, `plain` headless, or
+  HeaderCell / Cell / Caption), CodeBlock (`default` head **with** `label`, `plain` headless, or
   `editable` live highlight via pre backdrop + transparent textarea —
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
-  `onChange` coalesced while typing / flushed on blur); `wrap` defaults
+  `onChange` coalesced while typing / flushed on blur); `showCopy` without
+  `label` floats the copy control (no empty title bar); `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); focus = quiet Input-like border (`--fynns-focus-border-mix`),
   not an inset ring;

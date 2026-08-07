@@ -50,7 +50,7 @@ type CodeBlockShared = Omit<
   label?: string;
   /** Copy button tooltip / aria-label. @default "Copy" */
   copyAriaLabel?: string;
-  /** Show the copy control. @default true */
+  /** Show the copy control. @default true. Omit `label` to float copy (no empty head). */
   showCopy?: boolean;
   /**
    * Soft-wrap long lines inside the block (no horizontal scrollbar).
@@ -310,6 +310,9 @@ export function CodeBlock(props: CodeBlockProps) {
     "aria-label",
   ]);
 
+  const headlessCopy = Boolean(showCopy && label == null);
+  const showHead = label != null;
+
   return (
     <div
       {...rootProps}
@@ -319,20 +322,17 @@ export function CodeBlock(props: CodeBlockProps) {
         editable && "fynns-code-block--editable",
         highlighted && "fynns-code-block--highlighted",
         !wrap && "fynns-code-block--nowrap",
+        headlessCopy && "fynns-code-block--copy-float",
         className,
       )}
       data-language={language}
       style={style}
     >
-      {plain ? (
+      {plain || headlessCopy ? (
         copyControl
-      ) : label != null || showCopy ? (
+      ) : showHead ? (
         <div className="fynns-code-block-head">
-          {label != null ? (
-            <span className="fynns-code-block-label">{label}</span>
-          ) : (
-            <span className="fynns-code-block-label" />
-          )}
+          <span className="fynns-code-block-label">{label}</span>
           {copyControl}
         </div>
       ) : null}
