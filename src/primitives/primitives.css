@@ -8178,6 +8178,11 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
 }
 
+/* Fill hosts track the (possibly flex-shrunk) pane, not the preferred width. */
+.fynns-end-aside > .fynns-chat-host--fill {
+  width: 100%;
+}
+
 .fynns-end-aside[data-state="closing"] > * {
   max-width: none;
   min-width: var(--fynns-layout-end-aside-min-width);
@@ -8389,11 +8394,21 @@ a.fynns-breadcrumb-link:visited {
  * / `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
  * EndAside auto-fills; start-edge / custom asides wrap with `.fynns-chat-host--fill`.
  */
+/*
+ * Fill host for Chat inside EndAside (or custom start-edge panes). Must be a
+ * column flex container so `.fynns-chat` can grow/shrink without overflowing
+ * the pane and clipping thread/composer `dialog-inset` on the end edge.
+ */
 .fynns-chat-host--fill {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .fynns-end-aside .fynns-chat-message,
@@ -8964,6 +8979,15 @@ a.fynns-breadcrumb-link:visited {
   overflow: hidden;
   box-sizing: border-box;
   background: transparent;
+}
+
+/* Narrow EndAside / fill hosts: allow shrink so inset pad is not clipped. */
+.fynns-end-aside .fynns-chat,
+.fynns-chat-host--fill > .fynns-chat {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .fynns-chat-thread {
