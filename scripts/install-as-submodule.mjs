@@ -475,9 +475,39 @@ function main() {
     );
   }
 
+  // Drop pasteable agent treaty when missing (never overwrite local edits).
+  const treatySrc = path.join(CORE_ROOT, "llm", "consumer-cursor-rule.mdc");
+  const treatyDest = path.join(gitRoot, ".cursor", "rules", "fynns-ui-consumer.mdc");
+  if (fs.existsSync(treatySrc)) {
+    if (fs.existsSync(treatyDest)) {
+      log.push({
+        step: "consumer-treaty",
+        status: "skip",
+        detail: "already present",
+        file: treatyDest,
+      });
+    } else if (opts.dryRun) {
+      log.push({
+        step: "consumer-treaty",
+        status: "dry-run",
+        detail: "would write .cursor/rules/fynns-ui-consumer.mdc",
+        file: treatyDest,
+      });
+    } else {
+      writeText(treatyDest, readText(treatySrc), false);
+      log.push({
+        step: "consumer-treaty",
+        status: "ok",
+        detail: "wrote agent treaty (navMode↔Drawer/Rail sync, API-only)",
+        file: treatyDest,
+      });
+    }
+  }
+
   result.nextSteps.push(
     `Import: import { Button, Collapsible } from "@fynns/ui";`,
     `Do not npm-install the design system. See llm/CONSUME.md in the core repo.`,
+    `Agent treaty: .cursor/rules/fynns-ui-consumer.mdc (see llm/CONSUMER_TREATY.md).`,
   );
 
   // Install succeeds only when wiring landed (or --skip-wire) and no forbidden npm deps.

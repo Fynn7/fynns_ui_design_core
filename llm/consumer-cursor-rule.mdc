@@ -1,0 +1,65 @@
+---
+description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
+alwaysApply: true
+---
+
+# @fynns/ui 消费仓硬性条约（复制即用）
+
+本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节在子模块
+`packages/fynns_ui_design_core/`（`AGENTS.md`、`llm/CONSUME.md`、`llm/PERF.md`）。
+短提示也必须遵守下列硬规则；不要等「写长文档」才读它们。
+
+## 安装与 API
+
+1. **Git submodule + 源码别名** `@fynns/ui` → `packages/fynns_ui_design_core/src/index.ts`。
+   **禁止**把 `@fynns/ui` / `@fynns/ui-design-core` 写进 `package.json` dependencies。
+2. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
+3. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
+   Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。
+4. 样式只用 `var(--fynns-*)`。禁止硬编码 hex / 随意 rem / 私有 `--app-*-radius`。
+5. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
+6. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
+
+## ClippedNavShell（必读 — 避免「挤扁抽屉」）
+
+`ClippedNavShell` **只改网格轨道宽度**，**不会**自动把 Drawer 换成 Rail。
+
+| `navMode` | 轨道宽 | `nav` 槽必须渲染 |
+| --- | --- | --- |
+| `"drawer"` | `--fynns-navdrawer-width`（~280px） | `NavigationDrawer` + `NavigationDrawerItem` |
+| `"rail"` | `--fynns-navrail-width`（~80px） | `NavigationRail` + `NavigationRailItem` |
+| `"hidden"` | `0` | 可 `null`（壳会保留上一帧做收合动画） |
+
+**禁止**：`navMode="rail"`（或 crowding 后变成 rail）却仍渲染 `NavigationDrawer` /
+横向标签。症状：左栏缩成 ~80px 细条、文字仍横向、出现异常滚动条 —— 这是
+**挤扁的 Drawer**，不是正常 icon rail。
+
+正确写法（与 sandbox `SandboxShell.tsx` 同构）：
+
+```tsx
+const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
+<ClippedNavShell
+  navMode={navMode}
+  onNavCrowded={() => setCompact(true)}
+  nav={
+    !open
+      ? null
+      : navMode === "rail"
+        ? <NavigationRail>…NavigationRailItem…</NavigationRail>
+        : <NavigationDrawer variant="standard">…NavigationDrawerItem…</NavigationDrawer>
+  }
+  topBar={…}
+>
+```
+
+- TopAppBar 开关只做 **open ↔ closed**（`drawer|rail` ↔ `hidden`），不要用开关在
+  drawer/rail 间来回拧。
+- 窄视口（约 ≤900px）与 `onNavCrowded`：**都走 `"rail"` + Rail 组件**，不要继续
+  `"drawer"`（CSS 会把 labeled drawer 叠到主舞台上方）。
+- Shell / 检查器 / live token GUI → 另读 `llm/PERF.md`（禁止 observer↔probe 环）。
+
+## 改 UI 前检查清单
+
+1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
+2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
+3. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

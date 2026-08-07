@@ -7,6 +7,12 @@ Machine contract: [`consume.json`](consume.json).
 
 **Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
 
+**Pasteable consumer treaty** (drop into any app’s `.cursor/rules/` so agents
+obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Especially
+`ClippedNavShell`: `navMode` must stay in sync with Drawer vs Rail children
+(never a rail-width track hosting a labeled drawer).
+
 ## Hard rules
 
 1. **Git submodule + source alias** — not an npm package for day-to-day use.
@@ -34,6 +40,11 @@ Machine contract: [`consume.json`](consume.json).
 13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style
     catalogs, and live draft GUIs → read [`PERF.md`](PERF.md) before coding
     (no observer↔probe loops, no tip forests, lazy-mount dense sections).
+14. **ClippedNavShell sync:** `navMode` and the `nav` subtree must match
+    (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`, `hidden`→null/omit).
+    Crowding / narrow viewports densify to **rail + Rail components** — never
+    leave a labeled drawer in an ~80px track (squashed drawer + bogus scrollbar).
+    Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Agent checklist (greenfield / short prompt)
 
@@ -85,7 +96,9 @@ npm run consume:install -- --target ../my-app --json
 3. Wires the nearest `vite.config.*` (`@fynns/ui` alias + React dedupe) when possible.
 4. Wires a nearby `tsconfig*.json` `compilerOptions.paths`.
 5. Warns if a forbidden npm dependency on `@fynns/*` is present.
-6. With `--json`, prints a structured result for agents.
+6. If missing, writes `.cursor/rules/fynns-ui-consumer.mdc` from
+   [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) (does not overwrite).
+7. With `--json`, prints a structured result for agents.
 
 Useful flags: `--check`, `--wire-only`, `--skip-wire`, `--dry-run`, `--vite <file>`, `--tsconfig <file>`, `--submodule-path <path>`, `--branch <name>`.
 

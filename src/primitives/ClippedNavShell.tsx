@@ -268,6 +268,27 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     return () => window.clearTimeout(timer);
   }, [phase]);
 
+  /**
+   * Dev-only: `navMode` only sizes the grid track — consumers must swap
+   * NavigationDrawer ↔ NavigationRail themselves. A rail track hosting a
+   * labeled drawer is the “squashed drawer” failure (narrow strip + scrollbar).
+   */
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    if (navMode !== "rail" || phase === "closed") return;
+    const root = rootRef.current;
+    if (!root) return;
+    const drawer = root.querySelector(
+      ".fynns-clipped-nav-shell-nav .fynns-nav-drawer",
+    );
+    if (!drawer) return;
+    console.warn(
+      '[ClippedNavShell] navMode="rail" but nav still renders NavigationDrawer. ' +
+        "Swap to NavigationRail / NavigationRailItem (see llm/CONSUMER_TREATY.md). " +
+        "Leaving a labeled drawer in the rail track produces a squashed column and unexpected scrollbars.",
+    );
+  }, [navMode, phase, nav]);
+
   const setDrawerWidthPx = useCallback(
     (next: number) => {
       const rounded = Math.round(next);
