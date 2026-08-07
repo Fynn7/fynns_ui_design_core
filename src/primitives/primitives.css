@@ -3091,54 +3091,6 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
-/* ---------- Badge ---------- */
-.fynns-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.05rem 0.45rem;
-  border-radius: var(--fynns-radius-pill);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  font-size: var(--fynns-font-size-caption);
-  color: var(--fynns-color-text);
-  white-space: nowrap;
-}
-
-.fynns-badge--sm {
-  padding: 0 0.35rem;
-  font-size: 0.65rem;
-  gap: 0.2rem;
-}
-
-.fynns-badge-icon {
-  display: inline-flex;
-}
-
-.fynns-badge--success {
-  color: var(--fynns-color-success);
-  border-color: color-mix(in srgb, var(--fynns-color-success) 50%, var(--fynns-color-border));
-}
-
-.fynns-badge--danger {
-  color: var(--fynns-color-danger);
-  border-color: color-mix(in srgb, var(--fynns-color-danger) 50%, var(--fynns-color-border));
-}
-
-.fynns-badge--warning {
-  color: var(--fynns-color-warning);
-  border-color: color-mix(in srgb, var(--fynns-color-warning) 50%, var(--fynns-color-border));
-}
-
-.fynns-badge--info {
-  color: var(--fynns-color-info);
-  border-color: color-mix(in srgb, var(--fynns-color-info) 50%, var(--fynns-color-border));
-}
-
-.fynns-badge--accent {
-  color: var(--fynns-color-accent);
-  border-color: color-mix(in srgb, var(--fynns-color-accent) 50%, var(--fynns-color-border));
-}
-
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
 .fynns-field-header {
   display: flex;

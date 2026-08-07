@@ -29,7 +29,8 @@ export type ChipProps = Omit<
 
 /**
  * M3 Chip — compact assist / filter / input / suggestion pill. Distinct from
- * segmented `ToggleGroup` and from non-interactive `Badge`.
+ * segmented `ToggleGroup`. Prefer Chip / InlineAlert / BadgedBox over the
+ * removed non-interactive pill `Badge`.
  */
 export function Chip({
   children,

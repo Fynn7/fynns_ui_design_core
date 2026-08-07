@@ -213,8 +213,6 @@ export {
   useBusyTask,
 } from "./scheduling/busyTask";
 export type { UseBusyTaskResult } from "./scheduling/busyTask";
-export { Badge } from "./primitives/Badge";
-export type { BadgeProps, BadgeSize, BadgeVariant } from "./primitives/Badge";
 export { BadgedBox } from "./primitives/BadgedBox";
 export type { BadgedBoxProps } from "./primitives/BadgedBox";
 export { Avatar } from "./primitives/Avatar";
