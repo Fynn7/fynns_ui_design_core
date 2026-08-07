@@ -968,13 +968,13 @@ const en = {
   "globalsInspector.radiusSmHint":
     "Badges, toggle groups, toast action chips — not SearchBar suggestion rows and not the default Button.",
   "globalsInspector.radiusMdHint":
-    "Default corners: inputs, selects, cards, panels, popovers, tooltips, tabs, fold sections, alerts/toasts. ListItem selected rows use `3xl`.",
+    "Form / card default (20px shipped): inputs, selects, cards, panels, tooltips, fold sections, alerts/snackbars. Role step — may sit above lg/xl. ListItem selected rows use `3xl`.",
   "globalsInspector.radiusLgHint":
-    "Larger chrome: dropdown menus, dialogs, scrollbar thumbs.",
+    "Dense chrome (e.g. Fab sm, scrollbar thumbs) — smaller than form `md` by role.",
   "globalsInspector.radiusXlHint":
-    "Button default radius (and soft / emphasis shells). Keep above lg on the scale.",
+    "Fab default / Drawer / menu panels. Between lg and Chat `22` — not above form `md`.",
   "globalsInspector.radius22Hint":
-    "≈22dp ChatGPT user-message bubble (`rounded-[22px]`) — Chat container floor (bubble + citation footnote cards). Between xl and 3xl; composer shell stays on 3xl (rounder).",
+    "≈22dp ChatGPT user-message bubble (`rounded-[22px]`) — Chat container floor (bubble + citation footnote cards). Between form `md` and long-strip `3xl`; composer shell stays on 3xl (rounder).",
   "globalsInspector.radius3xlHint":
     "≈28dp long chrome: SearchBar shell + suggestion rows, Select options, Banner, BottomAppBar, NavigationDrawer destination rows, ListItem rows, BottomSheet top edge, Chat composer shell. Slide this to reshape that group.",
   "globalsInspector.specialReadonly": "Special shapes (read-only)",
@@ -989,7 +989,7 @@ const en = {
     "Circle (50%): switch thumb and other round controls.",
   "globalsInspector.resetLadder": "Reset radius parameters",
   "globalsInspector.resetLadderTip":
-    "Restore radius 2xs–3xl to sandbox defaults (md = 20px); keep color and other overrides",
+    "Restore radius 2xs–3xl to shipped tokens (md = 20px); keep color and other overrides",
   "globalsInspector.toastReset": "Radius parameters reset to sandbox defaults",
 
   "hue.presetsAria": "Accent color presets",
@@ -2096,13 +2096,13 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.radiusSmHint":
     "徽章、切换组、toast 操作芯片 —— 不是 SearchBar 建议行，也不是默认 Button。",
   "globalsInspector.radiusMdHint":
-    "默认圆角：输入框、选择器、卡片、面板、气泡、提示、标签页、折叠分区、提示条。ListItem 选中行用 `3xl`。",
+    "表单/卡片默认圆角（正式 20px）：输入框、选择器、卡片、面板、提示、折叠分区、提示条/Snackbar。角色档，可大于 lg/xl。ListItem 选中行用 `3xl`。",
   "globalsInspector.radiusLgHint":
-    "较大界面：下拉菜单、对话框、滚动条滑块。",
+    "致密 chrome（如 Fab sm、滚动条滑块）— 按角色小于表单 `md`。",
   "globalsInspector.radiusXlHint":
-    "按钮默认圆角（以及柔和 / 强调外壳）。在尺度上应大于 lg。",
+    "默认 Fab / Drawer / 菜单面板。介于 lg 与 Chat `22` — 不必大于表单 `md`。",
   "globalsInspector.radius22Hint":
-    "≈22dp ChatGPT 用户消息气泡（`rounded-[22px]`）— Chat 容器圆角下限（气泡 + 引用脚注卡）。介于 xl 与 3xl；输入壳仍用更圆的 3xl。",
+    "≈22dp ChatGPT 用户消息气泡（`rounded-[22px]`）— Chat 容器圆角下限（气泡 + 引用脚注卡）。介于表单 `md` 与长条 `3xl`；输入壳仍用更圆的 3xl。",
   "globalsInspector.radius3xlHint":
     "≈28dp 长条 chrome：SearchBar 外壳与建议行、Select 选项、Banner、BottomAppBar、NavigationDrawer 目的地行、ListItem 行、BottomSheet 顶边、Chat 输入壳。调这一档即可改整组圆角。",
   "globalsInspector.specialReadonly": "特殊形（只读）",
@@ -2117,7 +2117,7 @@ const zh: Record<MessageKey, string> = {
     "圆形 (50%)：开关圆钮与其他圆形控件。",
   "globalsInspector.resetLadder": "重置圆角参数",
   "globalsInspector.resetLadderTip":
-    "将 radius 2xs–3xl 恢复为沙盒默认（md = 20px）；保留颜色与其他改动",
+    "将 radius 2xs–3xl 恢复为正式 token（md = 20px）；保留颜色与其他改动",
   "globalsInspector.toastReset": "圆角参数已重置为沙盒默认",
 
   "hue.presetsAria": "强调色预设",

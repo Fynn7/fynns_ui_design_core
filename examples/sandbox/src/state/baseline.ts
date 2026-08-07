@@ -209,12 +209,16 @@ export const BASELINE: Record<string, string> = {
 };
 
 /**
- * Sandbox aesthetic starting overrides (not written to `tokens.ts` until Apply).
- * Fresh draft / full Reset land here; shape-ladder Reset restores these too.
+ * Sandbox-only starting overrides on top of production `BASELINE`.
+ *
+ * **WYSIWYG hard rule:** keep this map **empty**. Anything you nod at in the
+ * sandbox must live in `src/theme/tokens.ts` (then `npm run gen:theme`) so
+ * consumers see the same resting look. A non-empty entry here is how Select
+ * used to look 20px in sandbox while shipped `--fynns-radius-md` stayed 8px.
+ * Fresh draft / full Reset / shape-ladder Reset still merge this object — it
+ * must not diverge from shipped tokens.
  */
-export const SANDBOX_DEFAULT_OVERRIDES: Record<string, string> = {
-  [fynnsVarName("radius", "md")]: "20px",
-};
+export const SANDBOX_DEFAULT_OVERRIDES: Record<string, string> = {};
 
 /** Resting values for sandbox knobs: production baseline + sandbox defaults. */
 export const SANDBOX_RESTING: Record<string, string> = {
