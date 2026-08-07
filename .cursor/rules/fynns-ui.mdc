@@ -103,6 +103,10 @@ ring can paint before heavy work).
 - **Consumers:** `@fynns/ui` is props-only — no local restyle wrappers or
   `.fynns-*` overrides. Missing capability → tell the user to land it in
   `fynns_ui_design_core` first (`llm/CONSUME.md`).
+- **WYSIWYG:** sandbox Globals/Preview resting look = consumer default. Keep
+  `SANDBOX_DEFAULT_OVERRIDES` empty; promote aesthetics via `tokens.ts` +
+  `npm run gen:theme` (`npm run check:wysiwyg`). Pasteable rule:
+  `llm/consumer-cursor-rule.mdc`.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient

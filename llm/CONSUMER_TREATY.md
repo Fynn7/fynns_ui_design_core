@@ -24,6 +24,18 @@ The consume installer may also drop this rule when wiring a consumer
 (`scripts/install-as-submodule.mjs`); if the file already exists it is left
 alone unless you re-copy by hand.
 
+## Failure mode this treaty targets: sandbox-only aesthetics
+
+Symptoms: Select / Input look rounder in the aesthetic sandbox than in a
+consumer (e.g. `--fynns-radius-md` was 20px in sandbox resting but 8px in
+shipped `theme.css`).
+
+**Cause:** non-empty `SANDBOX_DEFAULT_OVERRIDES` in
+`examples/sandbox/src/state/baseline.ts` — sandbox lies about the shipped
+default. **Fix in core:** promote the nodded value into
+`src/theme/tokens.ts` + `npm run gen:theme`, keep
+`SANDBOX_DEFAULT_OVERRIDES` empty (`npm run check:wysiwyg`).
+
 ## Failure mode this treaty targets: squashed drawer
 
 Symptoms (often on **first paint** after crowding / narrow init):

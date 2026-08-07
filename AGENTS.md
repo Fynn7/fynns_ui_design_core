@@ -169,6 +169,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   required, add it to `RADIUS_TOKENS` **and** to
   [`GlobalsInspector`](examples/sandbox/src/pages/GlobalsInspector.tsx) in the
   same change — never ship a radius token that the GUI cannot show.
+- **DON'T** park nodded aesthetics only in
+  `SANDBOX_DEFAULT_OVERRIDES` (`examples/sandbox/src/state/baseline.ts`). That
+  map must stay **empty** — promote into `tokens.ts` + `npm run gen:theme` so
+  consumers match sandbox (`npm run check:wysiwyg`).
 - **DON'T** ship a Chat-family **container** squarer than the user bubble
   (`--fynns-radius-22` / ChatGPT `rounded-[22px]`). Floor applies to
   `ChatMessage` bubble, citation footnote cards, composer shell, and any new
