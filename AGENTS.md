@@ -75,9 +75,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
-   (sectional dim + ring + message), `EmptyState`, `Banner` / `Badge`, and
+   (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /
+   `BadgedBox` (notification overlay), and
    imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
-   **not** use deleted Toast APIs (see `llm/BREAKING_PURGE.md`). Color status as
+   **not** use deleted Toast APIs or the removed pill `Badge` (see
+   `llm/BREAKING_PURGE.md`). Color status as
    `danger` / `warning` / `info` / `success`.
 6. **Accessibility is on by default.** `aria-label` on every icon-only control,
    `aria-busy` on regions that are loading, `aria-hidden` on decorative SVG, an
@@ -193,6 +195,14 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives instead. Do not resurrect purged Toast / Popover / Panel APIs
   (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
+- **DON'T** drop a sandbox Globals/catalog demo while the symbol stays exported
+  from `src/index.ts` (or the reverse: export without demo). Public surface is
+  **one allowlist** — sandbox ↔ barrel. Deleting a public component is
+  **atomic** in one change: unexport + delete TSX/CSS + remove demo/catalog/i18n
+  + update keep-set docs + add a Removed row in `llm/BREAKING_PURGE.md`.
+  `npm run check:wysiwyg` enforces export⇒demo, purge∩barrel=∅, and forbids
+  companion-parking `src/primitives/<Name>.tsx` components. Half-deletes that
+  only edit sandbox historically caused CI to *restore* demos — never do that.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
@@ -294,7 +304,10 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 **Breaking surface:** only symbols demoed in sandbox Globals + Preview are
 public. Removed APIs and migration table: [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
-Import from `@fynns/ui`. Components emit `.fynns-*` classes.
+**Surface sync:** `npm run check:wysiwyg` — every barrel value needs a demo (or
+companion); Removed-table names must not be exported; never companion-park
+`src/primitives/<Name>.tsx`. Import from `@fynns/ui`. Components emit `.fynns-*`
+classes.
 
 ### Keep set (summary)
 
@@ -318,7 +331,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
-  on-surface; long copy wraps — do not confuse with Banner), Badge / BadgedBox,
+  on-surface; long copy wraps — do not confuse with Banner), BadgedBox
+  (notification overlay via `NavigationRailBadge` — **not** the removed pill
+  label `Badge`),
   LinearProgress /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
   **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
@@ -674,7 +689,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / Badge* / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |

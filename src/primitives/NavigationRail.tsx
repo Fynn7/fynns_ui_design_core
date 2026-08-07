@@ -156,8 +156,8 @@ export type NavigationRailBadgeProps = {
 };
 
 /**
- * Badge on a rail destination — anchored to the icon’s top-end corner
- * (dot or short count/text). Distinct from the text `Badge` pill used in chrome.
+ * Notification badge on a rail destination — anchored to the icon’s top-end
+ * corner (dot or short count/text). Not the removed pill label `Badge`.
  */
 export function NavigationRailBadge({
   value,
