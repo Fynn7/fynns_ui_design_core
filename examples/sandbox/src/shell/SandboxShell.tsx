@@ -31,6 +31,12 @@ import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraftHistoryActions } from "../state/TokenDraftProvider";
+import {
+  freshSandboxUiSession,
+  loadSandboxUiSession,
+  patchSandboxUiSession,
+  type SandboxPage,
+} from "../state/sandboxUiSession";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
@@ -42,29 +48,30 @@ import { LayoutChromeInspector } from "../pages/LayoutChromeInspector";
 import { MotionPage } from "../pages/MotionPage";
 import { TemplatesPage } from "../pages/TemplatesPage";
 
-export type SandboxPage =
-  | "playground"
-  | "globals"
-  | "foundations"
-  | "motion"
-  | "templates";
+export type { SandboxPage };
 
-const NAV_OPEN_KEY = "fynns-sandbox-nav-open";
+function defaultAsideOpen(): boolean {
+  if (typeof window === "undefined") return true;
+  return !window.matchMedia("(max-width: 900px)").matches;
+}
 
 export function SandboxShell() {
   const { t } = useLocale();
-  const [page, setPage] = useState<SandboxPage>("playground");
+  /** Capture once — session may be written by effects before StrictMode remount. */
+  const initialSessionRef = useRef(loadSandboxUiSession());
+  const isFreshBootRef = useRef(initialSessionRef.current == null);
+  const [page, setPage] = useState<SandboxPage>(
+    () => initialSessionRef.current?.page ?? freshSandboxUiSession().page,
+  );
   const [globalsSearchFocusTick, setGlobalsSearchFocusTick] = useState(0);
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
-  const [asideOpen, setAsideOpen] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return !window.matchMedia("(max-width: 900px)").matches;
-  });
+  const [asideOpen, setAsideOpen] = useState(
+    () => initialSessionRef.current?.asideOpen ?? defaultAsideOpen(),
+  );
   /** User preference: destinations fully open vs fully closed. */
-  const [preferNavOpen, setPreferNavOpen] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.localStorage.getItem(NAV_OPEN_KEY) !== "0";
-  });
+  const [preferNavOpen, setPreferNavOpen] = useState(
+    () => initialSessionRef.current?.preferNavOpen ?? true,
+  );
   /** Automatic icon rail when open drawer + EndAside mins still overflow. */
   const [navCompact, setNavCompact] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
@@ -91,6 +98,14 @@ export function SandboxShell() {
     setTheme(restoreFynnsThemeMode());
   }, []);
 
+  /** New Vite process: land on Components with catalog search focused. */
+  useEffect(() => {
+    if (!isFreshBootRef.current) return;
+    isFreshBootRef.current = false;
+    setPage("globals");
+    setGlobalsSearchFocusTick((n) => n + 1);
+  }, []);
+
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 900px)");
     const sync = () => setNarrow(mq.matches);
@@ -100,8 +115,12 @@ export function SandboxShell() {
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(NAV_OPEN_KEY, preferNavOpen ? "1" : "0");
-  }, [preferNavOpen]);
+    patchSandboxUiSession({
+      page,
+      asideOpen,
+      preferNavOpen,
+    });
+  }, [page, asideOpen, preferNavOpen]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
