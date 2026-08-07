@@ -604,18 +604,20 @@ export const CHATMESSAGE_TOKENS = {
   /** ChatGPT `py-2.5` (10dp). */
   "bubble-pad-block": "0.625rem",
   /**
-   * User bubble ceiling — ChatGPT `max-w-[70%]`. Percentage containing block
-   * is the **message-row host** (same element as `max-width` below / ChatGPT
-   * `MessagePrimitive.Root` with `w-full max-w-3xl`), **not** full main /
-   * viewport after the sidebar. **Dual placement:** in `EndAside` / start-edge
-   * resizable panes the host is 100% of aside **content** width (CSS drops the
-   * rem ceiling via `.fynns-end-aside` / `.fynns-chat-host--fill`) — same 70%,
-   * no density mode. Composer stays 100% of that host. Soft mins live on the
-   * pane (`LAYOUT_TOKENS` `end-aside-min-width` / `NAVDRAWER_TOKENS` `min-width`),
-   * not here. Short copy still shrinks (`width: fit-content`, `border-box`).
-   * Screenshot figs of ~66–68% usually divide bubble by an *outer* padded shell
-   * (70% of content ≈ 65–68% of shell with ~1.5rem gutters) — still this lock.
-   * **Unchanged under 640px** (no responsive widen). See
+   * User bubble ceiling for **main-column** chat — ChatGPT `max-w-[70%]`.
+   * Percentage containing block is the **message-row host** (same element as
+   * `max-width` below / ChatGPT `MessagePrimitive.Root` with `w-full
+   * max-w-3xl`), **not** full main / viewport after the sidebar.
+   * **Dual placement:** `EndAside` / `.fynns-chat-host--fill` keep the host at
+   * 100% of aside content (CSS drops the rem ceiling) but **override** this
+   * ceiling to `100%` so a long user turn shares the composer shell start+end
+   * edges (narrow panes make 70% look short next to a full-width composer).
+   * Short copy still shrinks (`width: fit-content`, `border-box`, flex-end).
+   * Soft mins live on the pane (`LAYOUT_TOKENS` `end-aside-min-width` /
+   * `NAVDRAWER_TOKENS` `min-width`), not here. Screenshot figs of ~66–68%
+   * usually divide bubble by an *outer* padded shell (70% of content ≈ 65–68%
+   * of shell with ~1.5rem gutters) — still this lock on main.
+   * **Unchanged under 640px** on main (no responsive widen). See
    * `scripts/_focus-verify/chatgpt-bubble-containing-block.html`,
    * `chatgpt-bubble-width.html`, and `chatgpt-narrow-layout.html`.
    * Corner radius: `--fynns-radius-22` (ChatGPT `rounded-[22px]`; composer

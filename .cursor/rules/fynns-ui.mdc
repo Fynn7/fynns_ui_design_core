@@ -36,8 +36,9 @@ ring can paint before heavy work).
   FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
-  ChatMessage (dual placement: main 48rem host or EndAside /
-  `.fynns-chat-host--fill` — bubble 70% of host, composer 100%; soft floor
+  ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
+  `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
+  long turns, composer 100%; soft floor
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
   generation footer under assistant turns; `thinking` / `ChatThinking` =
   single-block reasoning disclosure between name and bubble; `citations` /

@@ -8367,10 +8367,12 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Dual placement — left/right resizable asides:
- * Host = aside **content** width (not viewport / full main). User bubble stays
- * `--fynns-chatmessage-bubble-max-width` (70%) of that host; composer = 100%.
- * Soft floors stay on the pane (`--fynns-layout-end-aside-min-width` /
- * `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
+ * Host = aside **content** width (not viewport / full main). Composer = 100%.
+ * User bubble: main column keeps `--fynns-chatmessage-bubble-max-width` (70%);
+ * aside / `.fynns-chat-host--fill` lifts the ceiling to 100% so a long turn
+ * shares the composer shell start+end edges (short copy still shrinks,
+ * flex-end). Soft floors stay on the pane (`--fynns-layout-end-aside-min-width`
+ * / `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
  * EndAside auto-fills; start-edge / custom asides wrap with `.fynns-chat-host--fill`.
  */
 .fynns-chat-host--fill {
@@ -8382,6 +8384,11 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-end-aside .fynns-chat-message,
 .fynns-chat-host--fill .fynns-chat-message {
+  max-width: 100%;
+}
+
+.fynns-end-aside .fynns-chat-message--user .fynns-chat-message-bubble,
+.fynns-chat-host--fill .fynns-chat-message--user .fynns-chat-message-bubble {
   max-width: 100%;
 }
 

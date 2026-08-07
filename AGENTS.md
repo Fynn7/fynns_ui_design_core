@@ -326,8 +326,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   **ChatMessage** `{ role, children?, avatar?, name?, streaming?,
   streamingLabel?, error?, onRetry?, retryLabel?, thinking?, citations?,
   citationsLabel?, citationsVisibleCount?, onCitationOpen?, actions? }` (**dual
-  placement** — same 70% / composer rules in main **or** left/right
-  resizable asides; no density mode):
+  placement** — main keeps ChatGPT 70% bubble; aside lifts bubble to 100% to
+  match composer shell on long turns; no density mode):
   - **Shell:** `Chat` full-height flex column; soft floor
     `min(var(--fynns-layout-chat-min-width), 100%)` (**no** OS window lock).
     Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`); composer docks
@@ -368,7 +368,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     Inner radius-3xl text breath stays `strip-pad-inline` — do not conflate
     column outer inset with shell text pad.
   - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
-    aside content (rem ceiling dropped). Bubble still **70%** of that host;
+    aside content (rem ceiling dropped). User bubble ceiling **100%** of that
+    host (long turns share composer shell start+end; short still shrinks);
     composer **100%**. Pane soft mins + chat stage min on the shell root.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; user actions hover /
@@ -579,10 +580,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
   **ChatMessage** (`user` | `assistant` | `system`; dual placement main |
   left/right resizable asides — see Feedback keep-set; user bubble
-  `--fynns-chatmessage-bubble-max-width` 70% of the message-row host /
-  `radius-22` / body `1rem` —
-  main: 48rem column; aside: 100% pane via `.fynns-end-aside` /
-  `.fynns-chat-host--fill`; composer 100% of same host (`radius-3xl`,
+  `--fynns-chatmessage-bubble-max-width` 70% of the message-row host on
+  **main** / `radius-22` / body `1rem` — main: 48rem column; **aside**
+  (`.fynns-end-aside` / `.fynns-chat-host--fill`): 100% pane + user bubble
+  ceiling **100%** so long turns share the composer shell edges; composer
+  100% of same host (`radius-3xl`,
   32dp controls); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
