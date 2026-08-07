@@ -668,8 +668,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
   second custom status box (use `InlineAlert` for in-panel severity).
   **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
-  and ChatComposer **text start** / expanded shell pad when there is no
-  leading control): `--fynns-layout-strip-pad-inline` (20dp default). Banner /
+  and ChatComposer **collapsed** text start when there is no leading control;
+  **expanded** shell pad always): `--fynns-layout-strip-pad-inline` (20dp
+  default). Banner /
   InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
   `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
   **Capsule chrome** (SearchBar field / ChatComposer **shell** next to

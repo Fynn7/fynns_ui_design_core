@@ -241,6 +241,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["角标", "badge", "badged"],
   },
   {
+    id: "badge",
+    categoryId: "containment",
+    label: "Badge",
+    keywords: ["徽章", "badge", "pill", "标签"],
+  },
+  {
     id: "list",
     categoryId: "containment",
     label: "List",

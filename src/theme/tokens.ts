@@ -749,11 +749,11 @@ export const CHAT_TOKENS = {
    * bottom toolbar so + / Send share one vertical edge with the text.
    */
   "composer-expanded-pad-inline": "var(--fynns-layout-strip-pad-inline)",
-  "composer-expanded-pad-block": "0.75rem",
+  "composer-expanded-pad-block": "var(--fynns-space-md)",
   /** Collapsed control cluster gap (4px). */
-  "composer-gap": "0.25rem",
+  "composer-gap": "var(--fynns-space-xs)",
   /** Expanded gap between full-width text and bottom toolbar (Cursor ~8–12dp). */
-  "composer-expanded-gap": "0.5rem",
+  "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
@@ -779,7 +779,7 @@ export const CHAT_TOKENS = {
    */
   "composer-text-line-height": "1.375rem",
   /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
-  "scroll-fab-inset": "0.75rem",
+  "scroll-fab-inset": "var(--fynns-space-md)",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
   "scroll-threshold": "5rem",
 } as const;
