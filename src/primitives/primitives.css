@@ -2485,11 +2485,25 @@
 /* ---------- Collapsible / Card (shared shell) ---------- */
 .fynns-collapsible,
 .fynns-card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  /* Flex/grid parents (EndAside open, nested demos): shrink below content min. */
+  min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-1);
   overflow: hidden;
 }
+
+/*
+ * `chrome="plain"`: nesting host for a surface-owning child (CodeBlock, Surface,
+ * canvas, …). Keeps the **same outer shell** as `card` (Collapsible = main
+ * container). Body keeps content inset/pad so the child sits as a secondary
+ * frame inset one step — not a second sibling chip, not edge-flush double borders.
+ * Prefer nested CodeBlock `variant="plain"` to avoid an empty code head.
+ * Class is a semantic marker for agents; no extra visual overrides required.
+ */
 
 .fynns-collapsible {
   transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
@@ -2501,6 +2515,7 @@
   display: flex;
   align-items: center;
   gap: var(--fynns-space-2);
+  min-width: 0;
   /*
    * One header height for every anatomy (title-only / icon / trailing IconButton).
    * Theme reset uses border-box everywhere, so include the open/Card hairline in
@@ -2704,7 +2719,11 @@
 
 .fynns-collapsible-body,
 .fynns-card-body {
-  /* Shared block pad — breathing room under the header. */
+  /* Shared block pad — breathing room under the header.
+   * Also insets nested surface-owning children (`chrome="plain"` nesting). */
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
   padding-block: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
@@ -2721,6 +2740,8 @@
 .fynns-expand {
   display: grid;
   grid-template-rows: 0fr;
+  min-width: 0;
+  max-width: 100%;
   transition: grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
@@ -2733,6 +2754,7 @@
 }
 
 .fynns-expand-inner {
+  min-width: 0;
   min-height: 0;
   overflow: hidden;
 }
@@ -8130,14 +8152,14 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Soft floors: honor `--fynns-layout-*-min-width` when space allows, but never
- * claim more than the flex parent (`min(..., 100%)`) so a single pane cannot
- * force the shell wider than its track.
+ * Soft floor for the main canvas beside an open EndAside. Use `min-width: 0`
+ * (not `min(token, 100%)`): percentage min-width resolves against the **full
+ * flex parent**, so `100%` claims the whole row and overflows once EndAside
+ * takes space. Preferred size stays on flex-basis / sandbox `flex: 1 1
+ * var(--fynns-layout-main-min-width)`. Extreme squeeze → overlay CQ below.
  */
-/* Only while EndAside is open — closing keeps content min-width briefly and
- * must not keep claiming the canvas floor (false ClippedNavShell crowding). */
 *:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
-  min-width: min(var(--fynns-layout-main-min-width), 100%);
+  min-width: 0;
 }
 
 /* ---------- EndAside (width-morph supporting pane) ---------- */
@@ -8146,7 +8168,8 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
-  min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
+  /* Same flex trap as main: do not use min(token, 100%) of the full row. */
+  min-width: 0;
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   min-height: 0;

@@ -162,8 +162,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
-  /* Soft floor — hard rem mins fight EndAside / narrow shell tracks. */
-  min-width: min(var(--fynns-layout-main-min-width), 100%);
+  /* Shrink beside EndAside — do not use min(token, 100%) of the flex row. */
+  min-width: 0;
 }
 
 .sandbox-playground {
@@ -775,6 +775,7 @@
   /* Reading column: cap width, center when canvas is wide (drawers collapsed). */
   width: 100%;
   max-width: 56rem;
+  min-width: 0;
   margin-inline: auto;
   box-sizing: border-box;
 }
@@ -1280,8 +1281,8 @@
 
 .sandbox-globals-shell-canvas {
   background: var(--fynns-color-app-bg);
-  /* Soft floor — hard rem floors fight EndAside in the nested demo frame. */
-  min-width: min(var(--fynns-layout-main-min-width), 100%);
+  /* Shrink beside nested EndAside — not min(token, 100%) of the flex row. */
+  min-width: 0;
   flex: 1 1 var(--fynns-layout-main-min-width);
 }
 

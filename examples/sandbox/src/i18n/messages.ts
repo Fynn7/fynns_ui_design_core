@@ -89,16 +89,25 @@ const en = {
   "preview.cardLabel": "Sample",
   "preview.cardTitle": "Aurora project",
   "preview.cardPlain": "Title only",
+  "preview.cardTitleOnly": "Title only",
   "preview.cardIcon": "Header icon",
   "preview.cardActions": "Header actions",
   "preview.cardActionTip": "Sample button in the header",
   "preview.cardActionAria": "Sample header button",
   "preview.cardBody":
     "Sample card — same shell as Collapsible, but the header is static (no hover layer, no chevron). Use the switches for icon / actions.",
+  "preview.cardChromePlain": "chrome=\"plain\" (structure host)",
+  "preview.cardChromePlainBody": "Child Surface owns the well — one frame, no card-in-card.",
+  "preview.cardChromePlainHelp":
+    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Do not cancel body pad with negative margins.",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
   "preview.collapsiblePlain": "Title only",
+  "preview.collapsibleTitleOnly": "Title only",
+  "preview.collapsibleChromePlain": "chrome=\"plain\" (structure host)",
+  "preview.collapsibleChromePlainHelp":
+    "Plain nesting: one outer Collapsible shell; CodeBlock sits inset inside (variant=\"plain\"). Not two separate chips.",
   "preview.collapsibleLabel": "Sample",
   "preview.collapsibleTitle": "Section title",
   "preview.collapsibleBody":
@@ -302,10 +311,10 @@ const en = {
     "--fynns-layout-end-aside-max-width — typically a viewport fraction; not rem-slider editable.",
   "layoutChrome.roEndAsideMin": "EndAside min (clamp)",
   "layoutChrome.roEndAsideMinHint":
-    "--fynns-layout-end-aside-min-width — clamp(…) soft floor.",
+    "--fynns-layout-end-aside-min-width — clamp(…) preferred / crowding floor (flex: min-width 0).",
   "layoutChrome.roMainMin": "Main min (clamp)",
   "layoutChrome.roMainMinHint":
-    "--fynns-layout-main-min-width — clamp(…) canvas floor beside EndAside.",
+    "--fynns-layout-main-min-width — clamp(…) canvas flex-basis beside EndAside (min-width: 0).",
   "layoutChrome.roSheetMaxH": "Sheet max height (vh)",
   "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — viewport height unit.",
   "layoutChrome.roSheetHalfH": "Sheet half height (vh)",
@@ -935,9 +944,16 @@ const en = {
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
   "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
+  "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
+  "globals.cardChromePlainBody": "Child Surface owns the well.",
+  "globals.cardChromeHelp":
+    "Default chrome=\"card\". Use chrome=\"plain\" when nesting a surface-owning child: outer Card stays the main shell; child insets as a secondary frame — no split chips, no negative-margin flush.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
-    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border.",
+    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting a surface-owning child → `chrome=\"plain\"` (Preview toggle).",
+  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
+  "globals.collapsibleChromeHelp":
+    "chrome=\"plain\": Collapsible stays the main outer shell; body pad insets the nested CodeBlock as a secondary frame. Use CodeBlock variant=\"plain\" (no empty code head). Never cancel body pad with negative margins.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesHelp":
     "Each box is one token step. Cards / inputs = `md`; buttons = `xl`; badges / chips = `sm`.",
@@ -1233,16 +1249,25 @@ const zh: Record<MessageKey, string> = {
   "preview.cardLabel": "示例",
   "preview.cardTitle": "Aurora 项目",
   "preview.cardPlain": "仅标题",
+  "preview.cardTitleOnly": "仅标题",
   "preview.cardIcon": "标题图标",
   "preview.cardActions": "标题旁操作",
   "preview.cardActionTip": "标题栏上的示例按钮",
   "preview.cardActionAria": "示例标题按钮",
   "preview.cardBody":
     "示例卡片 — 与 Collapsible 同壳，但标题栏是静态的（无悬停层、无 chevron）。用上方开关控制图标 / actions。",
+  "preview.cardChromePlain": "chrome=\"plain\"（结构壳）",
+  "preview.cardChromePlainBody": "子级 Surface 自带井面 — 单层框，无 card-in-card。",
+  "preview.cardChromePlainHelp":
+    "子节点自带描边/填充（Surface、CodeBlock、canvas）时，Card/Collapsible 用 chrome=\"plain\"。禁止用负 margin 冲掉 body pad。",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
   "preview.collapsiblePlain": "仅标题",
+  "preview.collapsibleTitleOnly": "仅标题",
+  "preview.collapsibleChromePlain": "chrome=\"plain\"（结构壳）",
+  "preview.collapsibleChromePlainHelp":
+    "嵌套结构壳：外层一个 Collapsible 主壳；CodeBlock（variant=\"plain\"）缩进在内。不是上下两个割裂芯片。",
   "preview.collapsibleLabel": "示例",
   "preview.collapsibleTitle": "分区标题",
   "preview.collapsibleBody":
@@ -1435,10 +1460,10 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-end-aside-max-width — 多为视口比例；不可用 rem 滑杆编辑。",
   "layoutChrome.roEndAsideMin": "EndAside 下限（clamp）",
   "layoutChrome.roEndAsideMinHint":
-    "--fynns-layout-end-aside-min-width — clamp(…) 软底。",
+    "--fynns-layout-end-aside-min-width — clamp(…) 首选 / 拥挤探测底（flex: min-width 0）。",
   "layoutChrome.roMainMin": "主栏下限（clamp）",
   "layoutChrome.roMainMinHint":
-    "--fynns-layout-main-min-width — clamp(…) 画布底限。",
+    "--fynns-layout-main-min-width — clamp(…) EndAside 旁画布 flex-basis（min-width: 0）。",
   "layoutChrome.roSheetMaxH": "Sheet 最大高度（vh）",
   "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — 视口高度单位。",
   "layoutChrome.roSheetHalfH": "Sheet 半高（vh）",
@@ -2063,9 +2088,16 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
   "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
+  "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
+  "globals.cardChromePlainBody": "子级 Surface 自带井面。",
+  "globals.cardChromeHelp":
+    "默认 chrome=\"card\"。嵌套自带表面的子件时用 chrome=\"plain\"：外层 Card 仍是主壳，子件缩进成附框 — 禁止拆成两个芯片，禁止负 margin 贴边。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
-    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。",
+    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套自带表面的子件 → `chrome=\"plain\"`（Preview 可切换）。",
+  "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
+  "globals.collapsibleChromeHelp":
+    "chrome=\"plain\"：Collapsible 仍是外层主壳；body pad 让内嵌 CodeBlock 缩进成附框。CodeBlock 用 variant=\"plain\"（避免空代码头）。禁止负 margin 冲掉 body pad。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesHelp":
     "每个色块是一档 token。卡片 / 输入 = `md`；按钮 = `xl`；徽章 / 芯片 = `sm`。",

@@ -117,16 +117,21 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **`Surface`** for a bordered / tonal well with **no** title/actions head
    (preview iframe, chart stage, arbitrary children; default unpadded + optional
    `fill`). Prefer `FieldBlock` for label-row
-   IconButtons above the control. Card inline pad uses
-   `--fynns-layout-content-inset`; Card body **block** pad
-   uses `--fynns-layout-content-pad-block` (same as Collapsible body).
-   Do not add a second page-level outer
-   pad. Consumers choose whether the
+   IconButtons above the control. Card / Collapsible default `chrome="card"`:
+   inline pad `--fynns-layout-content-inset`; body **block** pad
+   `--fynns-layout-content-pad-block`. When nesting a **surface-owning child**
+   (CodeBlock, Surface, canvas, BusyRegion, …), pass **`chrome="plain"`** —
+   Collapsible/Card stays the **main** outer shell; body pad insets the child as
+   a secondary frame (略小一圈). Prefer nested CodeBlock `variant="plain"` to
+   avoid an empty code head. **Do not** flush the child to the outer edge with
+   negative margins or restyle `.fynns-*`. No title needed → `Surface` alone.
+   Do not add a second page-level outer pad. Consumers choose whether the
    section lives inline or inside an overlay. Simple forms may put fields
    directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
-   only when the inner block is an independent interactive subject). Live
-   sample: sandbox Globals → Containment → nested section (+ optional Dialog
-   host). `Input` / `Textarea` fill the parent width by default (`width: 100%`).
+   only when the inner block is an independent interactive subject; otherwise
+   outer `chrome="plain"`). Live sample: sandbox Globals → Containment → Card /
+   Collapsible `chrome="plain"`, Preview → Collapsible / Card chrome toggle.
+   `Input` / `Textarea` fill the parent width by default (`width: 100%`).
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
    it is unsafe and say why in a tooltip (e.g. disabling a rescan while a
@@ -562,9 +567,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   and
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
   `--fynns-layout-end-aside-width` / `end-aside-max-width` /
-  `end-aside-min-width`; canvas floor `--fynns-layout-main-min-width`). Floors are
-  **soft** (`min(token, 100%)`) so one pane cannot force the shell past its
-  track. When `.fynns-clipped-nav-shell-main` is ≤32rem (container query — works
+  `end-aside-min-width`; canvas preferred size `--fynns-layout-main-min-width`).
+  Flex panes use **`min-width: 0`** (not `min(token, 100%)` of the full row —
+  that percentage resolves against the parent and overflows when both panes are
+  open). Preferred size stays on `width` / `flex-basis`. When
+  `.fynns-clipped-nav-shell-main` is ≤32rem (container query — works
   for nested demos), EndAside **overlays** the end edge at its min/preferred
   width (out of flex flow) so both mins stay usable without horizontal overflow.
   Drawer still open + floors overflowing → `onNavCrowded` → rail. Viewport
@@ -584,12 +591,15 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;
+  `chrome="card"` (default) | `chrome="plain"` nesting host (same outer shell;
+  child insets as secondary frame),
   old Media/Header/Content/Actions / variant APIs deleted),
   **Surface** (generic bordered / tonal well; any children; no Card head —
   use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
   open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
-  type roles as Card),
+  type roles as Card; same `chrome` prop — `plain` = nest surface children inset inside
+  the main shell),
   Carousel / CarouselItem,
   **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
   **ChatMessage** (`user` | `assistant` | `system`; dual placement main |
@@ -655,7 +665,7 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
   | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed with destination **width morph** (two grid tracks → `0px`; shell holds `nav` through flyout). Drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
-  | EndAside | adaptive | Inspector width morph; soft min + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
+  | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
@@ -686,10 +696,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `SANDBOX_LAYOUT_AGENT_CATALOG`.
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
-  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges.
-  Collapsible body and Card body use shared **block** pad
-  `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
-  under section chrome. Card / Collapsible **heads** share one
+  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges
+  (`chrome="card"` and `chrome="plain"` share this outer shell). Collapsible body
+  and Card body use shared **block** pad `--fynns-layout-content-pad-block`
+  (16dp) so the first control isn’t flush under section chrome — and so a nested
+  surface-owning child under **`chrome="plain"`** reads as a secondary inset
+  frame. Never flush that child to the outer edge with negative margins. Card /
+  Collapsible **heads** share one
   `min-height` (`icon-target` + `space-xs`×2 + hairline); lead/trigger use
   `padding-block: 0` (flex-centered). Trailing head actions keep
   `space-xs` block pad so IconButton hover disks clear the edge.

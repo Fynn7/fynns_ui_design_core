@@ -1,5 +1,7 @@
 import {
+  CodeBlock,
   Collapsible,
+  type CollapsibleChrome,
   ControlRow,
   ControlStack,
   FolderOpenIcon,
@@ -16,17 +18,26 @@ export type CollapsiblePreviewOptions = {
   open: boolean;
   showIcon: boolean;
   showActions: boolean;
+  chromePlain: boolean;
 };
 
 const DEFAULT_OPTIONS: CollapsiblePreviewOptions = {
   open: true,
   showIcon: true,
   showActions: true,
+  chromePlain: false,
 };
+
+const PLAIN_NEST_CODE = `# nested surface sample — single chrome frame
+setdir output/demo
+resize 512 512
+screenshot candidate.png
+`;
 
 export function CollapsiblePreviewCanvas() {
   const { t } = useLocale();
   const [options, setOptions] = useState<CollapsiblePreviewOptions>(DEFAULT_OPTIONS);
+  const chrome: CollapsibleChrome = options.chromePlain ? "plain" : "card";
 
   return (
     <div className="sandbox-preview">
@@ -37,6 +48,12 @@ export function CollapsiblePreviewCanvas() {
             label={t("preview.collapsibleOpen")}
             checked={options.open}
             onCheckedChange={(checked) => setOptions((o) => ({ ...o, open: checked }))}
+          />
+          <Switch
+            labelSide="end"
+            label={t("preview.collapsibleChromePlain")}
+            checked={options.chromePlain}
+            onCheckedChange={(checked) => setOptions((o) => ({ ...o, chromePlain: checked }))}
           />
         </ControlRow>
         <ControlRow label={t("preview.anatomy")}>
@@ -59,6 +76,7 @@ export function CollapsiblePreviewCanvas() {
         <div className="sandbox-preview-slot">
           <div className="sandbox-preview-label">
             {t("preview.collapsibleLabel")}
+            {` · chrome="${chrome}"`}
             {options.showIcon || options.showActions
               ? ` · ${[
                   options.showIcon ? t("preview.collapsibleIcon") : null,
@@ -66,11 +84,12 @@ export function CollapsiblePreviewCanvas() {
                 ]
                   .filter(Boolean)
                   .join(" + ")}`
-              : ` · ${t("preview.collapsiblePlain")}`}
+              : ` · ${t("preview.collapsibleTitleOnly")}`}
           </div>
           <div className="sandbox-preview-card-wrap">
             <Collapsible
               title={t("preview.collapsibleTitle")}
+              chrome={chrome}
               open={options.open}
               onOpenChange={(open) => setOptions((o) => ({ ...o, open }))}
               icon={options.showIcon ? <FolderOpenIcon aria-hidden /> : undefined}
@@ -87,9 +106,22 @@ export function CollapsiblePreviewCanvas() {
                 ) : undefined
               }
             >
-              <SandboxHelp text={t("preview.collapsibleBody")} />
+              {options.chromePlain ? (
+                <CodeBlock
+                  variant="plain"
+                  language="bash"
+                  copyAriaLabel={t("globals.codeBlockCopy")}
+                  code={PLAIN_NEST_CODE}
+                  maxHeight="8rem"
+                />
+              ) : (
+                <SandboxHelp text={t("preview.collapsibleBody")} />
+              )}
             </Collapsible>
           </div>
+          {options.chromePlain ? (
+            <SandboxHelp text={t("preview.collapsibleChromePlainHelp")} />
+          ) : null}
         </div>
       </div>
     </div>

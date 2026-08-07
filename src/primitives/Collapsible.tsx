@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { useId, useState } from "react";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
 
+/** Visible section shell (`card`) or structure-only host (`plain`). */
+export type CollapsibleChrome = "card" | "plain";
+
 export type CollapsibleProps = {
   /** Header content shown in the always-visible trigger row. */
   title: ReactNode;
@@ -16,6 +19,14 @@ export type CollapsibleProps = {
   icon?: ReactNode;
   /** Optional right-aligned content in the header (e.g. action buttons). Not part of the toggle button. */
   actions?: ReactNode;
+  /**
+   * Outer chrome. Default `card` — bordered shell for padded copy / forms.
+   * `plain` — same outer shell (Collapsible remains the main container); use when
+   * nesting a surface-owning child (CodeBlock, Surface, canvas, …) so the child
+   * sits inset as a secondary frame. Prefer CodeBlock `variant="plain"` to avoid
+   * an empty code head. Do not cancel body pad with negative margins.
+   */
+  chrome?: CollapsibleChrome;
   /** Controlled open state. Omit to use the uncontrolled `defaultOpen`. */
   open?: boolean;
   /** Initial open state when uncontrolled. Defaults to `false`. */
@@ -33,15 +44,17 @@ export type CollapsibleProps = {
  *
  * Body stays mounted so open and close both run the same CSS height + fade
  * transitions (M3-inspired container morph). When open, a full-bleed hairline
- * under the head meets the outer border. Focus uses the same quiet
- * accent-tinted border as Input — not an inset focus ring.
+ * under the head meets the outer border (`chrome="card"`). Focus uses the same
+ * quiet accent-tinted border as Input — not an inset focus ring.
  *
  * Optional `icon`: rests in the chevron slot; header hover / focus-visible
  * swaps to the expand chevron (`(hover: none)` keeps chevron only). No
  * separate leading column.
  *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
- * head, trigger, or body chrome.
+ * head, trigger, or body chrome. When nesting a surface-owning child, pass
+ * `chrome="plain"` (outer shell stays; child insets inside — do not cancel body
+ * pad with negative margins).
  *
  * @example
  * ```tsx
@@ -52,12 +65,17 @@ export type CollapsibleProps = {
  * <Collapsible title="Scripts" icon={<FolderOpenIcon aria-hidden />} actions={…}>
  *   {children}
  * </Collapsible>
+ *
+ * <Collapsible title="GSC" chrome="plain" defaultOpen>
+ *   <CodeBlock variant="plain" language="gsc" … />
+ * </Collapsible>
  * ```
  */
 export function Collapsible({
   title,
   icon,
   actions,
+  chrome = "card",
   open,
   defaultOpen = false,
   onOpenChange,
@@ -69,6 +87,7 @@ export function Collapsible({
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
   const hasIcon = icon != null;
+  const plain = chrome === "plain";
 
   const toggle = () => {
     const next = !isOpen;
@@ -82,6 +101,7 @@ export function Collapsible({
         "fynns-collapsible",
         isOpen ? "fynns-collapsible--open" : "",
         hasIcon ? "fynns-collapsible--has-icon" : "",
+        plain ? "fynns-collapsible--plain" : "",
         className ?? "",
       ]
         .filter(Boolean)

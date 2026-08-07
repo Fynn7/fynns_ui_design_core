@@ -29,7 +29,10 @@ function endAsideTransitionMs(): number {
  * `TopAppBar` trailing (IconButton) — not inside this component.
  *
  * Place beside the canvas inside `ClippedNavShell`’s main column (flex row).
- * Soft floor: `--fynns-layout-end-aside-min-width` (`min(token, 100%)`).
+ * Soft floor tokens (`--fynns-layout-end-aside-min-width` /
+ * `--fynns-layout-main-min-width`) inform preferred size and crowding probes;
+ * flex CSS uses `min-width: 0` (not `min(token, 100%)` of the full row).
+ * Extreme squeeze (main ≤32rem) → end-edge overlay.
  *
  * **Chat dual placement:** `ChatMessage` / composer may fill this pane —
  * host = 100% of aside content (rem ceiling dropped); user bubble ceiling

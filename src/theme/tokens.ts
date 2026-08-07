@@ -1201,17 +1201,17 @@ export const LAYOUT_TOKENS = {
   /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
   "end-aside-max-width": "36vw",
   /**
-   * Floor for `EndAside` when open. Applied as soft
-   * `min(token, 100%)` so a single pane cannot force the shell past its track.
-   * Pair with `main-min-width`. When the main track is ≤32rem (container query),
-   * EndAside leaves flex flow and overlays the end edge at this floor — mins are
-   * kept without horizontal overflow. Also: `onNavCrowded` → rail when drawer
-   * + floors still overflow; ≤56.25rem viewport → bottom sheet.
+   * Floor for `EndAside` when open. Preferred width stays on `end-aside-width`;
+   * flex uses `min-width: 0` (not `min(token, 100%)` of the full row — that
+   * overflows beside main). When the main track is ≤32rem (container query),
+   * EndAside leaves flex flow and overlays the end edge. Also: `onNavCrowded`
+   * → rail when drawer + floors still overflow; ≤56.25rem viewport → bottom sheet.
    */
   "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
   /**
-   * Floor for the main canvas beside `EndAside` (flex sibling). Soft
-   * `min(token, 100%)` in CSS; dropped while EndAside overlays (≤32rem main).
+   * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
+   * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.
+   * Dropped while EndAside overlays (≤32rem main).
    */
   "main-min-width": "clamp(10rem, 36%, 20rem)",
   /**

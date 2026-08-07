@@ -2324,7 +2324,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}
           </Card>
+          <Card
+            className="sandbox-globals-card"
+            title={t("globals.cardChromePlainTitle")}
+            chrome="plain"
+          >
+            <Surface fill padded={false} style={{ minHeight: "4.5rem" }}>
+              <SandboxHelp as="span" text={t("globals.cardChromePlainBody")} />
+            </Surface>
+          </Card>
         </div>
+        <SandboxHelp text={t("globals.cardChromeHelp")} />
         </GlobalsDemo>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           {renderNestedPromptSection("sandbox-nested-prompt")}
@@ -2406,7 +2416,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             <SandboxHelp text={t("globals.collapsibleBody")} />
           </Collapsible>
+          <Collapsible
+            title={t("globals.collapsibleChromePlainTitle")}
+            chrome="plain"
+            defaultOpen
+            icon={<FolderOpenIcon aria-hidden />}
+          >
+            <CodeBlock
+              variant="plain"
+              language="gsc"
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              code={`setdir output/demo\nresize 512 512\nscreenshot out.png\n`}
+              maxHeight="6rem"
+            />
+          </Collapsible>
           <SandboxHelp text={t("globals.collapsibleHelpPreview")} />
+          <SandboxHelp text={t("globals.collapsibleChromeHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="overlays">

@@ -69,8 +69,22 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
   `"drawer"`（CSS 会把 labeled drawer 叠到主舞台上方）。
 - Shell / 检查器 / live token GUI → 另读 `llm/PERF.md`（禁止 observer↔probe 环）。
 
+## Collapsible / Card `chrome`（嵌套必读）
+
+默认 `chrome="card"` = 可见分区壳（描边 / radius / surface-1 / body pad）。
+
+| 场景 | 选用 |
+| --- | --- |
+| 正文是表单 / 文案（壳自己提供表面） | `Collapsible` / `Card` 默认 |
+| 子节点**自带**表面（CodeBlock、Surface、canvas、BusyRegion…） | **`chrome="plain"`**（外层仍是 Collapsible/Card 主壳；body pad 让子件缩进成附框；嵌套 CodeBlock 用 `variant="plain"`） |
+| 不需要 title / actions | `Surface`（`padded` / `fill`） |
+
+**禁止**：用负 margin 冲掉 Collapsible/Card body pad；本地重写 `.fynns-*`；手搓平行 disclosure。
+Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containment。
+
 ## 改 UI 前检查清单
 
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
 2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
-3. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+3. 嵌套自带表面的子件：外层是否 `chrome="plain"`（而非负 margin）？
+4. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

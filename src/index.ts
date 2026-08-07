@@ -187,7 +187,7 @@ export type { GridProps } from "./primitives/Grid";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";
-export type { CollapsibleProps } from "./primitives/Collapsible";
+export type { CollapsibleProps, CollapsibleChrome } from "./primitives/Collapsible";
 export { Slider } from "./primitives/Slider";
 export type { SliderProps } from "./primitives/Slider";
 export { Card } from "./primitives/Card";
