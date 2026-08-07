@@ -373,8 +373,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
-    live — no LLM; caret height `--fynns-chatmessage-cursor-height` (**1em**
-    of body face — Cursor / native I-beam; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
+    live — no LLM; caret height `--fynns-chatmessage-cursor-height` (**`1lh`**
+    of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
     **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure

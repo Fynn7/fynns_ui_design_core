@@ -8513,12 +8513,16 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-chat-message-cursor {
   display: inline-block;
+  box-sizing: border-box;
   width: var(--fynns-chatmessage-cursor-width);
-  /* Full em of body face — Cursor / native I-beam (was 1cap, too short). */
+  /* Line-box tall I-beam (not a rounded 2×16 stub). */
   height: var(--fynns-chatmessage-cursor-height);
-  margin-inline-start: 0.1em;
-  vertical-align: baseline;
-  border-radius: var(--fynns-radius-2xs);
+  margin-inline-start: 0.12em;
+  /* Sit on the text box bottom — baseline alignment clipped the bar visually. */
+  vertical-align: text-bottom;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: 0;
   background: var(--fynns-color-accent);
   animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
     step-end infinite;
