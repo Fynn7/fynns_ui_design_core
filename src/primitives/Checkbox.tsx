@@ -74,7 +74,9 @@ export function Checkbox({
           <CheckIcon className="fynns-checkbox-icon" size={14} />
         )}
       </span>
-      <span className="fynns-checkbox-label">{label}</span>
+      {label != null && label !== "" ? (
+        <span className="fynns-checkbox-label">{label}</span>
+      ) : null}
     </label>
   );
 }
