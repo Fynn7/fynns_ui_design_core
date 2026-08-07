@@ -4,7 +4,6 @@ import {
   ArrowLeftIcon,
   Avatar,
   AvatarGroup,
-  Badge,
   BadgedBox,
   Banner,
   BarChartIcon,
@@ -2222,20 +2221,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.badgedBoxHelp")} />
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="badge">
-        <div className="sandbox-globals-row" style={{ alignItems: "center", flexWrap: "wrap" }}>
-          <Badge variant="neutral">neutral</Badge>
-          <Badge variant="accent">accent</Badge>
-          <Badge variant="success">success</Badge>
-          <Badge variant="warning">warning</Badge>
-          <Badge variant="danger">danger</Badge>
-          <Badge variant="info">info</Badge>
-          <Badge size="sm" variant="accent" icon={<InfoIcon aria-hidden />}>
-            sm
-          </Badge>
-        </div>
-        <SandboxHelp text={t("globals.badgeHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="list">
         <div className="sandbox-globals-list">
