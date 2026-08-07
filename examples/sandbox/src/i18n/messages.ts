@@ -197,7 +197,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea). Expanded ChatComposer uses `composer-expanded-pad-inline` + glyph-inset (= bubble pad), not strip-pad. Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -240,16 +240,19 @@ const en = {
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
   "layoutChrome.stripPadInline": "Long-strip pad (inline)",
   "layoutChrome.stripPadInlineHint":
-    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start (20dp; radius-3xl). Not Chat column outer (dialog-inset) and not expanded ChatComposer (bubble-pad + glyph-inset). Prefer over ad-hoc rem.",
+    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge (20dp; radius-3xl; shell pad = strip − glyph-inset). Not Chat column outer (dialog-inset). Prefer over ad-hoc rem.",
   "layoutChrome.capsuleChromePadInline": "Capsule chrome pad",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer shell next to IconButtons (4dp; ChatGPT Send flush).",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer **collapsed** shell next to IconButtons (4dp; ChatGPT Send flush).",
   "layoutChrome.fieldPadInline": "Form field pad",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell horizontal pad (12dp). Do not reuse capsule chrome.",
   "layoutChrome.fieldPadBlock": "Form field pad (block)",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
+  "layoutChrome.textareaMaxHeight": "Textarea max height",
+  "layoutChrome.textareaMaxHeightHint":
+    "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (13rem).",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -530,7 +533,7 @@ const en = {
   "globals.textareaSupporting":
     "Same border/focus/hint chrome as Input. filled/outlined are dense form variants — not M3 floating-label fields.",
   "globals.textareaHelp":
-    "Multiline form control (default UI font). Prefer CodeBlock for read-only code. Not a full M3 Text Field (no floating label).",
+    "Multiline form control (default UI font). Height auto-grows with text (`autoGrow`, default on). Prefer CodeBlock for read-only code. Not a full M3 Text Field (no floating label).",
   "globals.tabsAria": "History tabs",
   "globals.tabsSingle": "Single",
   "globals.tabsBatch": "Batch",
@@ -887,7 +890,7 @@ const en = {
   "globals.chatComposerMultiLabel": "Composer · multiline (expanded toolbar)",
   "globals.chatComposerMultiAria": "Multiline message",
   "globals.chatComposerMultiHelp":
-    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell inline pad + glyph-inset = user-bubble `bubble-pad-inline` (optical glyph align); text line ~22dp. Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
+    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell pad = strip − glyph-inset (~12dp), textarea glyph-inset so copy aligns with + / Send glyphs; height follows `scrollHeight` (remeasures after expand morph); text line ~22dp. Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
   "globals.chatSend": "Send",
   "globals.chatStop": "Stop generating",
   "globals.chatScrollBottom": "Scroll to bottom",
@@ -1327,7 +1330,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）。展开态 ChatComposer 用 `composer-expanded-pad-inline` + glyph-inset（= 气泡 pad），不用 strip-pad。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1370,16 +1373,19 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
   "layoutChrome.stripPadInline": "长条内边距（行向）",
   "layoutChrome.stripPadInlineHint":
-    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点（默认 20dp；radius-3xl）。非 Chat 列外边距（dialog-inset），亦非展开态 ChatComposer（气泡 pad + glyph-inset）。禁止自造 rem。",
+    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边（默认 20dp；radius-3xl；壳距 = strip − glyph-inset）。非 Chat 列外边距（dialog-inset）。禁止自造 rem。",
   "layoutChrome.capsuleChromePadInline": "胶囊 chrome 边距",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer 壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer **塌缩**壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
   "layoutChrome.fieldPadInline": "表单字段边距",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell 水平内边距（默认 12dp）。不要复用 capsule chrome。",
   "layoutChrome.fieldPadBlock": "表单字段边距（块向）",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",
+  "layoutChrome.textareaMaxHeight": "Textarea 最大高度",
+  "layoutChrome.textareaMaxHeightHint":
+    "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（默认 13rem）。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -1658,7 +1664,7 @@ const zh: Record<MessageKey, string> = {
   "globals.textareaSupporting":
     "与 Input 同边框/焦点/提示 chrome。filled/outlined 是密集表单变体，不是 M3 浮动标签字段。",
   "globals.textareaHelp":
-    "多行表单控件（默认 UI 字体）。只读代码请用 CodeBlock。不是完整 M3 Text Field（无浮动标签）。",
+    "多行表单控件（默认 UI 字体）。高度默认随文字自动伸缩（`autoGrow`）。只读代码请用 CodeBlock。不是完整 M3 Text Field（无浮动标签）。",
   "globals.tabsAria": "历史标签页",
   "globals.tabsSingle": "单次",
   "globals.tabsBatch": "批量",
@@ -2014,7 +2020,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerMultiLabel": "Composer · 多行（展开底栏）",
   "globals.chatComposerMultiAria": "多行消息",
   "globals.chatComposerMultiHelp":
-    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距 + glyph-inset = 用户气泡 `bubble-pad-inline`（字形光学对齐）、正文字行约 22dp。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
+    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距 = strip − glyph-inset（约 12dp），textarea glyph-inset 与 + / Send 字形光学对齐；高度跟 `scrollHeight`（展开 morph 后重测）；正文字行约 22dp。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
   "globals.chatSend": "发送",
   "globals.chatStop": "停止生成",
   "globals.chatScrollBottom": "滚到最新",

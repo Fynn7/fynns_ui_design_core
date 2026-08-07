@@ -130,15 +130,17 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
   content-inset. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
-  Snackbar, ChatComposer **collapsed** text-only start) →
-  `--fynns-layout-strip-pad-inline`. Expanded ChatComposer shell pad is
-  **not** strip-pad — `composer-expanded-pad-inline` + `glyph-inset` match
-  user-bubble `bubble-pad-inline` (see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
+  Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
+  text edge still lands at strip via glyph-inset math) →
+  `--fynns-layout-strip-pad-inline`. Expanded shell pad =
+  strip − glyph-inset; textarea pad = glyph-inset (optical + / Send glyphs —
+  see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
   Capsule chrome next to IconButtons
-  (SearchBar / ChatComposer shell — Send flush) →
+  (SearchBar / ChatComposer collapsed shell — Send flush) →
   `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
   field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
-  `--fynns-layout-field-pad-block` (not Input’s sm zero block pad). See
+  `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
+  auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm**.
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a

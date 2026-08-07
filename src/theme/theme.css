@@ -324,8 +324,8 @@
   --fynns-chat-composer-max-height: 13rem;
   --fynns-chat-composer-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-chat-composer-pad-block: 0.1875rem;
-  --fynns-chat-composer-expanded-pad-inline: calc(var(--fynns-chatmessage-bubble-pad-inline) - var(--fynns-chat-composer-glyph-inset));
-  --fynns-chat-composer-expanded-pad-block: var(--fynns-space-md);
+  --fynns-chat-composer-expanded-pad-inline: calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset));
+  --fynns-chat-composer-expanded-pad-block: calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset));
   --fynns-chat-composer-glyph-inset: calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2);
   --fynns-chat-composer-gap: var(--fynns-space-xs);
   --fynns-chat-composer-expanded-gap: var(--fynns-space-sm);
@@ -444,6 +444,7 @@
   --fynns-layout-capsule-chrome-pad-inline: 0.25rem;
   --fynns-layout-field-pad-inline: var(--fynns-space-md);
   --fynns-layout-field-pad-block: var(--fynns-space-md);
+  --fynns-layout-textarea-max-height: 13rem;
   --fynns-layout-content-pad-block: 1rem;
   --fynns-layout-dialog-inset: 1.5rem;
   --fynns-layout-sheet-max-width: 40rem;

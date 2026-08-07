@@ -84,8 +84,7 @@ ring can paint before heavy work).
   (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog
   **and** Chat column outer via `--fynns-chat-thread-pad-inline`) vs
   strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer collapsed
-  text-only start) vs expanded ChatComposer
-  (`composer-expanded-pad-inline` + `glyph-inset` = bubble-pad-inline; see
+  text-only start + expanded text edge; shell = strip − glyph-inset — see
   `llm/CHAT_COMPOSER_LAYOUT.md`) vs capsule-chrome-pad-inline (SearchBar /
   ChatComposer Send flush) vs
   field-pad-inline (Input / field-shell — not capsule) /

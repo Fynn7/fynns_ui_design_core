@@ -122,6 +122,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.fieldPadBlockHint",
     max: 32,
   },
+  "textarea-max-height": {
+    labelKey: "layoutChrome.textareaMaxHeight",
+    hintKey: "layoutChrome.textareaMaxHeightHint",
+    max: 480,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",

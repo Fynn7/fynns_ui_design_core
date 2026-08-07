@@ -333,21 +333,24 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       const el = localRef.current;
       if (!el) return;
       const cs = getComputedStyle(el);
-      // Collapsed control-row floor (32dp) — empty box height.
+      // Collapsed control-row floor (32dp) — empty / single-line box height.
       const controlLine =
         Number.parseFloat(
           cs.getPropertyValue("--fynns-chat-composer-line-height"),
         ) ||
         Number.parseFloat(cs.minHeight) ||
         32;
-      // Current CSS line-height (32 collapsed / ~22 expanded).
+      // Expanded typography line-height (~22dp) — content height must use this
+      // after morph, not the collapsed 32dp row (or the shell looks “fixed tall”).
       const textLine =
-        Number.parseFloat(cs.lineHeight) ||
         Number.parseFloat(
           cs.getPropertyValue("--fynns-chat-composer-text-line-height"),
         ) ||
         Number.parseFloat(cs.fontSize) * 1.375 ||
         22;
+      const max =
+        Number.parseFloat(cs.getPropertyValue("max-height")) || controlLine * 8;
+
       // Empty = one control row (ChatGPT collapsed). Ignore placeholder wrap
       // scrollHeight so a long hint cannot inflate the shell in a narrow pane.
       if (!el.value) {
@@ -355,22 +358,31 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
         setExpanded(hasAttachments);
         return;
       }
+
+      const forceExpand = hasAttachments || el.value.includes("\n");
+      // Probe full content height under *current* CSS line-height (collapsed or
+      // expanded). Height 0 → scrollHeight = intrinsic text block.
       el.style.height = "0px";
       const scrollH = el.scrollHeight;
-      const max =
-        Number.parseFloat(cs.getPropertyValue("max-height")) || controlLine * 8;
-      const next = Math.min(Math.max(scrollH, textLine), max);
+      const oneLine = expanded || forceExpand ? textLine : controlLine;
+      const tallerThanOneLine = scrollH > oneLine + 2;
+      const shouldExpand = forceExpand || tallerThanOneLine;
+
+      // Morph first when needed, then remasure on the next layout pass with the
+      // expanded line-height so height tracks real text — not a stale 32dp probe.
+      if (shouldExpand !== expanded) {
+        setExpanded(shouldExpand);
+        return;
+      }
+
+      const floor = shouldExpand ? textLine : controlLine;
+      const next = Math.min(Math.max(scrollH, floor), max);
       el.style.height = `${next}px`;
-      // 2px tolerance avoids float/subpixel flicker at exactly 1 line.
-      const tallerThanOneLine = scrollH > textLine + 2;
-      setExpanded(
-        hasAttachments || el.value.includes("\n") || tallerThanOneLine,
-      );
-    }, [hasAttachments]);
+    }, [hasAttachments, expanded]);
 
     useLayoutEffect(() => {
       resize();
-    }, [value, hasAttachments, resize]);
+    }, [value, hasAttachments, expanded, resize]);
 
     const handleSubmit = (e?: FormEvent) => {
       e?.preventDefault();
