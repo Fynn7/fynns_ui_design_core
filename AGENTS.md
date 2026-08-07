@@ -529,6 +529,11 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
   narrow viewports (apps should pass `rail` below ~900px — do not keep a
   labeled `drawer` mode that stacks above the canvas).
+  **Consumer sync:** `navMode` and the `nav` slot must match
+  (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`); the shell never
+  auto-swaps. A rail-width track still hosting a labeled drawer is a
+  **squashed drawer** (narrow strip + body scrollbar) — not a real rail.
+  Pasteable consumer rule: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md).
   In `drawer` mode the nav|main seam is **resizable** (local
   `--fynns-navdrawer-width`; drawer fills the grid track; clamped by absolute
   `--fynns-navdrawer-min-width` / `max-width` rem tokens and remaining room for
