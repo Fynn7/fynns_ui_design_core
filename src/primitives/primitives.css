@@ -8910,7 +8910,9 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
   min-width: 0;
   overflow: auto;
-  padding-inline: var(--fynns-chat-thread-pad-inline);
+  /* Inline pad lives on `.fynns-chat-thread-inner` so the max-width box
+   * matches `.fynns-chat-composer` (pad inside the capped column). */
+  padding-inline: 0;
   padding-block: var(--fynns-chat-thread-pad-block);
   padding-bottom: calc(
     var(--fynns-chat-thread-pad-block) + var(--fynns-chat-composer-scroll-pad)
@@ -8926,6 +8928,7 @@ a.fynns-breadcrumb-link:visited {
   max-width: var(--fynns-layout-chat-max-width);
   margin-inline: auto;
   min-width: 0;
+  padding-inline: var(--fynns-chat-thread-pad-inline);
   box-sizing: border-box;
 }
 
@@ -8980,7 +8983,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-composer-shell[data-expanded] {
-  /* Cursor multiline breath (~12dp) — owns inset for text + toolbar. */
+  /* Strip breath — same start edge as collapsed text / Banner copy. */
   padding-inline: var(--fynns-chat-composer-expanded-pad-inline);
   padding-block: var(--fynns-chat-composer-expanded-pad-block);
   gap: var(--fynns-chat-composer-expanded-gap);
@@ -9103,10 +9106,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * No leading affix (collapsed): text start = strip-pad from shell edge.
+ * No leading affix (collapsed only): text start = strip-pad from shell edge.
  * Shell end stays capsule-chrome (~4dp) so Send matches ChatGPT mic/send flush.
+ * Scoped to `:not([data-expanded])` so this never overrides expanded pad:0.
  */
-.fynns-chat-composer-body:not(:has(.fynns-chat-composer-leading))
+.fynns-chat-composer-shell:not([data-expanded])
+  .fynns-chat-composer-body:not(:has(.fynns-chat-composer-leading))
   .fynns-chat-composer-input {
   padding-inline-start: calc(
     var(--fynns-layout-strip-pad-inline) -

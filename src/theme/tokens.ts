@@ -708,8 +708,16 @@ export const CHAT_TOKENS = {
    * turn shells also use `pb-10` (2.5rem) — lock the denser clone gap.
    */
   "thread-gap": "2rem",
-  "thread-pad-inline": "1rem",
-  "thread-pad-block": "1rem",
+  /**
+   * Thread + composer share this inline inset so user-bubble end edge and
+   * composer shell end edge align (equal L/R on the chat column).
+   * Aliases `dialog-inset` (24dp reading-column breath) — **not**
+   * `strip-pad-inline` (20dp radius-3xl text-in-shell). Composer outer
+   * inset must alias **this** key (`composer-inset-inline`), never a
+   * second independent layout literal.
+   */
+  "thread-pad-inline": "var(--fynns-layout-dialog-inset)",
+  "thread-pad-block": "var(--fynns-layout-content-pad-block)",
   /** Scroll/fade clearance above sticky composer (~28dp). */
   "composer-scroll-pad": "1.75rem",
   /**
@@ -728,7 +736,7 @@ export const CHAT_TOKENS = {
   "composer-max-height": "13rem",
   /**
    * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
-   * Expanded uses `composer-expanded-pad-*` (Cursor ~12dp breath). When
+   * Expanded uses `composer-expanded-pad-*` (strip-pad inline). When
    * collapsed with **no** leading, CSS adds start pad on the textarea so
    * text lands at `--fynns-layout-strip-pad-inline`.
    */
@@ -736,15 +744,16 @@ export const CHAT_TOKENS = {
   /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
   "composer-pad-block": "0.1875rem",
   /**
-   * Expanded shell pad (Cursor multiline ~12–16dp). Owns the inset for both
-   * textarea and bottom toolbar so + / Send share one vertical edge.
+   * Expanded shell pad — same Banner/strip breath as collapsed text start
+   * (`--fynns-layout-strip-pad-inline`). Owns the inset for both textarea and
+   * bottom toolbar so + / Send share one vertical edge with the text.
    */
-  "composer-expanded-pad-inline": "0.75rem",
-  "composer-expanded-pad-block": "0.75rem",
+  "composer-expanded-pad-inline": "var(--fynns-layout-strip-pad-inline)",
+  "composer-expanded-pad-block": "var(--fynns-space-md)",
   /** Collapsed control cluster gap (4px). */
-  "composer-gap": "0.25rem",
+  "composer-gap": "var(--fynns-space-xs)",
   /** Expanded gap between full-width text and bottom toolbar (Cursor ~8–12dp). */
-  "composer-expanded-gap": "0.5rem",
+  "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
@@ -752,13 +761,13 @@ export const CHAT_TOKENS = {
    */
   "composer-control-size": "2rem",
   /**
-   * Outer form inset inside the chat column — layout strip pad so the
-   * capsule clears the thread edges the same way Banner copy clears its
-   * curve (not a raw 12dp literal).
+   * Outer form inset — aliases `--fynns-chat-thread-pad-inline` (→
+   * `dialog-inset`) so the composer shell and user-bubble end edges share
+   * one vertical line. Do **not** point this at a different layout key.
    */
-  "composer-inset-inline": "var(--fynns-layout-strip-pad-inline)",
-  "composer-inset-block": "0.75rem",
-  "composer-offset": "0.5rem",
+  "composer-inset-inline": "var(--fynns-chat-thread-pad-inline)",
+  "composer-inset-block": "var(--fynns-space-md)",
+  "composer-offset": "var(--fynns-space-sm)",
   /**
    * Collapsed control-row floor / min-height (32dp) — **not** multiline
    * typography. With pad-block → ~40dp shell (Input density).
@@ -770,7 +779,7 @@ export const CHAT_TOKENS = {
    */
   "composer-text-line-height": "1.375rem",
   /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
-  "scroll-fab-inset": "0.75rem",
+  "scroll-fab-inset": "var(--fynns-space-md)",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
   "scroll-threshold": "5rem",
 } as const;
@@ -1028,17 +1037,21 @@ export const LAYOUT_TOKENS = {
    * Also: centered Dialog body **block** padding (top = bottom) — denser than
    * `dialog-inset` while staying symmetric. Between `space-lg` (16dp) and
    * Dialog `dialog-inset` (24dp). Do not force BottomSheet / Snackbar /
-   * ListItem onto this. Section body **block** pad uses `content-pad-block`.
-   * Long-strip / `radius-3xl` **text** chrome (Banner, Snackbar, composer
-   * label start) uses `strip-pad-inline` — not this key alone.
+   * ListItem / Chat column onto this. Section body **block** pad uses
+   * `content-pad-block`. Long-strip / `radius-3xl` **text** chrome (Banner,
+   * Snackbar, composer label start) uses `strip-pad-inline` — not this key
+   * alone. Chat **conversation column** (thread + composer outer) uses
+   * `dialog-inset` via `--fynns-chat-thread-pad-inline`.
    */
   "content-inset": "1.125rem",
   /**
    * Horizontal content pad for **long-strip** text surfaces that use
    * `--fynns-radius-3xl` (Banner, InlineAlert, Snackbar, ChatComposer **text
-   * start** when no leading control). Default 20dp — slightly larger than
-   * `content-inset` so copy clears the large corner curve. Do **not** invent
-   * `--fynns-banner-pad-inline` literals or raw `--fynns-space-*` for these.
+   * start** / expanded shell pad when no leading control). Default 20dp —
+   * slightly larger than `content-inset` so copy clears the large corner
+   * curve. Do **not** invent `--fynns-banner-pad-inline` literals or raw
+   * `--fynns-space-*` for these. Do **not** use this as the Chat column
+   * outer inset — that is `dialog-inset` via `--fynns-chat-thread-pad-inline`.
    *
    * ChatComposer / SearchBar **IconButton** edges use
    * `capsule-chrome-pad-inline` (4dp, ChatGPT Send/mic flush) — never put
@@ -1072,9 +1085,12 @@ export const LAYOUT_TOKENS = {
    */
   "content-pad-block": "1rem",
   /**
-   * Dialog shell inset (24dp): head / foot / body **inline**. Distinct from
-   * `content-inset` (body block). Prefer these two over ad-hoc `--fynns-space-*`
-   * so nested Card sits symmetrically in the shell.
+   * Dialog shell inset (24dp): head / foot / body **inline**. Also the Chat
+   * **conversation column** outer pad (`--fynns-chat-thread-pad-inline` /
+   * `--fynns-chat-composer-inset-inline`). Distinct from `content-inset`
+   * (panel / dialog body block) and from `strip-pad-inline` (radius-3xl
+   * text-in-shell). Prefer these layout keys over ad-hoc `--fynns-space-*`
+   * or rem literals so nested Card / chat column stay symmetric.
    */
   "dialog-inset": "1.5rem",
   /** Bottom sheet — M3 max width 640dp. */

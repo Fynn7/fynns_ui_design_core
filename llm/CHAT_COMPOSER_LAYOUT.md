@@ -49,9 +49,10 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
 - **Collapsed** shell pad: `composer-pad-inline` (capsule ~4dp),
   `composer-pad-block` (3dp; + 32dp control row + hairline → ~40dp = Input)
-- **Expanded** shell pad: `composer-expanded-pad-inline` /
-  `composer-expanded-pad-block` (**12dp** — Cursor breath; owns inset for
-  text **and** toolbar so + / Send share one vertical edge)
+- **Expanded** shell pad: `composer-expanded-pad-inline` (= layout
+  `strip-pad-inline`, Banner text breath) /
+  `composer-expanded-pad-block` (**12dp**). Owns inset for text **and**
+  toolbar so + / Send share one vertical edge with the copy.
 - Gap: `composer-gap` (4px collapsed); `composer-expanded-gap` (8dp
   text↔toolbar)
 - Controls: `composer-control-size` (32dp)
@@ -68,6 +69,20 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
 - Expanded: shell `expanded-pad-*` only — textarea has no extra inline pad;
   toolbar sits inside the same inset.
+
+## Column alignment (thread ↔ composer)
+
+`--fynns-chat-thread-pad-inline` aliases `--fynns-layout-dialog-inset`
+(24dp reading-column breath). `--fynns-chat-composer-inset-inline`
+aliases **the thread token** (not a second layout key). Thread applies
+that pad on `.fynns-chat-thread-inner` (inside the `chat-max-width` box);
+composer applies it on the form — same box model — so the **user bubble
+end edge** and **composer shell end edge** share one vertical line, with
+equal L/R margins on the capped column.
+
+Inner radius-3xl text breath (`composer-expanded-pad-inline`, collapsed
+no-leading text start) stays `--fynns-layout-strip-pad-inline` — do not
+conflate column outer inset with shell text pad.
 
 ## Not this primitive
 

@@ -114,15 +114,22 @@ Do not import deleted APIs (`toast`, `Toaster`, `PanelCard`, …) — see
 
 Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 
-**Token / layout pointers (do not invent hex or rem):**
+**Token / layout pointers (do not invent hex, rem, or private inset vars):**
 - Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
+- **Hard gate:** never hardcode shell / column / chat margins in consumer CSS
+  (`padding: 16px`, `1.25rem`, ad-hoc `--app-chat-pad`, etc.). Reuse
+  `--fynns-layout-*` or the component alias that already points at one. Missing
+  value → land it in this submodule first, then consume.
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
-  `--fynns-layout-content-inset`; centered Dialog head/foot/inline →
-  `--fynns-layout-dialog-inset` (body block also uses content-inset).
-  Long-strip / `radius-3xl` **text** (Banner, InlineAlert, Snackbar,
-  ChatComposer text start) → `--fynns-layout-strip-pad-inline`. Capsule
-  chrome next to IconButtons (SearchBar / ChatComposer shell — Send flush)
-  → `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
+  `--fynns-layout-content-inset`; centered Dialog head/foot/inline **and**
+  Chat conversation column (thread + composer outer) →
+  `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
+  composer inset aliases the thread token). Dialog body block also uses
+  content-inset. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
+  Snackbar, ChatComposer text start / expanded shell pad) →
+  `--fynns-layout-strip-pad-inline`. Capsule chrome next to IconButtons
+  (SearchBar / ChatComposer shell — Send flush) →
+  `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
   field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm**.
