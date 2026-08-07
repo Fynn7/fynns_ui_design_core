@@ -76,15 +76,27 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
 | 场景 | 选用 |
 | --- | --- |
 | 正文是表单 / 文案（壳自己提供表面） | `Collapsible` / `Card` 默认 |
-| 子节点**自带**表面（CodeBlock、Surface、canvas、BusyRegion…） | **`chrome="plain"`**（外层仍是 Collapsible/Card 主壳；body pad 让子件缩进成附框；嵌套 CodeBlock 用 `variant="plain"`） |
+| 子节点**自带**表面（CodeBlock、Surface、canvas、BusyRegion…） | **`chrome="plain"`**（外层仍是主壳；正文用 `--fynns-layout-nest-gap` 缩进成附框；嵌套 CodeBlock **无文件名**时用 `variant="plain"`；**plain ≠ 贴边**） |
 | 不需要 title / actions | `Surface`（`padded` / `fill`） |
+| Card/Collapsible 外的嵌套井 | **`.fynns-nest`**（同 nest-gap） |
 
-**禁止**：用负 margin 冲掉 Collapsible/Card body pad；本地重写 `.fynns-*`；手搓平行 disclosure。
+**禁止**：用负 margin / 清零 body pad 冲掉 nest-gap；本地重写 `.fynns-*`；手搓平行 disclosure。
 Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containment。
+
+## CodeBlock 变体（严格）
+
+| 场景 | 选用 |
+| --- | --- |
+| 有真实文件名 / 标题 | `variant="default"`（可省略）+ **非空** `label` → 标题栏 + 分割线 + 复制 |
+| **没有**文件名 / 标题 | **`variant="plain"`** → 只有外框 + 悬停复制（无标题栏、无分割线） |
+| 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（浮层复制） |
+
+**禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”。空头分割线是消费仓 bug，不是设计。
 
 ## 改 UI 前检查清单
 
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
 2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
-3. 嵌套自带表面的子件：外层是否 `chrome="plain"`（而非负 margin）？
-4. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+3. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
+4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
+5. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

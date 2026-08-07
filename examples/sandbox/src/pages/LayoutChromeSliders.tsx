@@ -97,6 +97,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.contentPadBlockHint",
     max: 48,
   },
+  "nest-gap": {
+    labelKey: "layoutChrome.nestGap",
+    hintKey: "layoutChrome.nestGapHint",
+    max: 48,
+  },
   "dialog-inset": {
     labelKey: "layoutChrome.dialogInset",
     hintKey: "layoutChrome.dialogInsetHint",

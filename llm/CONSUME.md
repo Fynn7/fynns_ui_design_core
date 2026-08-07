@@ -27,7 +27,12 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
    Centered modals / side inspectors: `Dialog` / `ConfirmDialog` / `Drawer`
    (restored; see BREAKING_PURGE “Restored after purge”).
 8. **Entry:** `main.tsx` (or equivalent) must `createRoot(...).render(<App />)` (or equivalent). Importing CSS alone produces an empty build that still “succeeds”.
-9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`. When nesting a surface-owning child (CodeBlock / Surface / canvas / BusyRegion) inside Collapsible or Card, pass **`chrome="plain"`** — do not cancel body pad with negative margins or override `.fynns-*`.
+9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`. When nesting a surface-owning child (CodeBlock / Surface / canvas / BusyRegion) inside Collapsible or Card, pass **`chrome="plain"`** — body uses `--fynns-layout-nest-gap` (plain ≠ flush); do not cancel nest-gap with negative margins or override `.fynns-*`. Outside those shells use `.fynns-nest`.
+9a. **CodeBlock chrome (strict):** titled head (`variant="default"` / omit
+    variant) = filename + hairline + copy → **requires** non-empty `label`;
+    missing / `label=""` **throws** at runtime. No filename/title →
+    **`variant="plain"`** (frame + floating copy only). Never open a titled
+    head without a real title (empty title bar is a consumer bug).
 10. **API-only consumption:** treat `@fynns/ui` as a **function** — pass props /
     children / localized labels only. **Never** wrap keep-set primitives in
     consumer restyles, local CSS overrides of `.fynns-*`, or parallel “variants”.
@@ -149,8 +154,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   value → land it in this submodule first, then consume.
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
-  the outer shell; `plain` keeps body pad so nested surfaces inset).
-  Centered Dialog head/foot/inline **and**
+  the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
+  so nested surfaces inset; plain ≠ flush). Outside Card/Collapsible use
+  `.fynns-nest`. Centered Dialog head/foot/inline **and**
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
@@ -167,7 +173,7 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
-  containment (`chrome="plain"` = outer shell + inset child).
+  containment (`chrome="plain"` = outer shell + nest-gap child).
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
   parallel multi-line shell in the consumer.

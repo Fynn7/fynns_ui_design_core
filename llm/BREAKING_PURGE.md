@@ -118,6 +118,12 @@ as a hard fail.
 | `Card` | One-shot static section: `title` + optional `icon` / `actions` + always-visible `children`. Shares Collapsible shell; not a disclosure. Anatomy parts and elevated/filled/outlined variants deleted. |
 | `ClippedNavShell` / `EndAside` | Destination app chrome (full-bleed TopAppBar + drawer\|rail) and end-edge inspector width morph. Not `Drawer` (modal content). Demoed in Globals Navigation. |
 
+## Behavioral breaking (still exported)
+
+| Change | Consumer fix |
+| --- | --- |
+| `CodeBlock` titled chrome | `variant="default"` (or omit) **requires** non-empty `label`. Omitting `label`, `label=""`, or whitespace-only **throws** (no silent empty head). No filename → `variant="plain"`. Do not use empty `label` to “hide” the title bar. |
+
 ## Related docs
 
 - Catalog summary + **Platform targeting**: [`AGENTS.md`](../AGENTS.md)

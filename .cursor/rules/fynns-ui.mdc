@@ -55,9 +55,12 @@ ring can paint before heavy work).
   (`prefers-reduced-motion`)**; user-edit parity:
   `llm/CHAT_USER_EDIT_UX.md`),
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock
-  (zero-dep `--fynns-code-*` highlight for ts/js/py/cpp/css/json/bash;
-  consumer DSLs via `highlightProfile` / `registerHighlightLanguage` —
-  see `llm/AGENT_INTERFACES.md`; unknown language stays plain),
+  (**strict:** titled `default` needs non-empty `label` or throws; no
+  title → `variant="plain"`; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
+  Behavioral breaking; zero-dep `--fynns-code-*` highlight for
+  ts/js/py/cpp/css/json/bash; consumer DSLs via `highlightProfile` /
+  `registerHighlightLanguage` — see `llm/AGENT_INTERFACES.md`; unknown
+  language stays plain),
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
@@ -78,10 +81,13 @@ ring can paint before heavy work).
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists (inspector fields, Collapsible bodies): flex column +
   `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Form control →
-  hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Toolbar / labeled
+  hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Nested surface wells
+  (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠ flush).
+  Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
-  (Collapsible / Drawer / Card / Fullscreen) vs dialog-inset (centered Dialog
+  (Collapsible / Drawer / Card / Fullscreen) vs nest-gap (plain nest hosts) vs
+  dialog-inset (centered Dialog
   **and** Chat column outer via `--fynns-chat-thread-pad-inline`) vs
   strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer collapsed
   text-only start + expanded text edge; shell = strip − glyph-inset — see

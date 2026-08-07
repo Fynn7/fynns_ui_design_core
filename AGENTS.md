@@ -123,16 +123,20 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    inline pad `--fynns-layout-content-inset`; body **block** pad
    `--fynns-layout-content-pad-block`. When nesting a **surface-owning child**
    (CodeBlock, Surface, canvas, BusyRegion, …), pass **`chrome="plain"`** —
-   Collapsible/Card stays the **main** outer shell; body pad insets the child as
-   a secondary frame (slightly inset). Prefer nested CodeBlock `variant="plain"` to
-   avoid an empty code head. **Do not** flush the child to the outer edge with
-   negative margins or restyle `.fynns-*`. No title needed → `Surface` alone.
-   Do not add a second page-level outer pad. Consumers choose whether the
-   section lives inline or inside an overlay. Simple forms may put fields
-   directly on the host (no Card). Avoid semantic-free card-in-card (nest Card
-   only when the inner block is an independent interactive subject; otherwise
-   outer `chrome="plain"`). Live sample: sandbox Globals → Containment → Card /
-   Collapsible `chrome="plain"`, Preview → Collapsible / Card chrome toggle.
+   Collapsible/Card stays the **main** outer shell; body uses
+   **`--fynns-layout-nest-gap`** (four-side pad + column gap) so the child
+   insets as a secondary frame.    Nested CodeBlock with **no filename** → `variant="plain"` (titled
+   `default` **throws** without a non-empty `label`). **`chrome="plain"` ≠
+   flush** — never cancel nest-gap with negative margins, zero body pad, or
+   restyle `.fynns-*`.
+   Outside Card/Collapsible, wrap nested wells with **`.fynns-nest`** (same
+   nest-gap). No title needed → `Surface` alone. Do not add a second
+   page-level outer pad. Consumers choose whether the section lives inline or
+   inside an overlay. Simple forms may put fields directly on the host (no
+   Card). Avoid semantic-free card-in-card (nest Card only when the inner block
+   is an independent interactive subject; otherwise outer `chrome="plain"`).
+   Live sample: sandbox Globals → Containment → Card / Collapsible
+   `chrome="plain"`, Preview → Collapsible / Card chrome toggle.
    `Input` / `Textarea` fill the parent width by default (`width: 100%`).
    **progressive disclosure** (reveal results only once they exist); and
    **safety-first interactivity** — disable/refuse a destructive action while
@@ -607,13 +611,13 @@ classes.
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;
   `chrome="card"` (default) | `chrome="plain"` nesting host (same outer shell;
-  child insets as secondary frame),
+  body uses `--fynns-layout-nest-gap` — plain ≠ flush),
   old Media/Header/Content/Actions / variant APIs deleted),
   **Surface** (generic bordered / tonal well; any children; no Card head —
   use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
   open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
-  type roles as Card; same `chrome` prop — `plain` = nest surface children inset inside
+  type roles as Card; same `chrome` prop — `plain` = nest surface children with nest-gap
   the main shell),
   Carousel / CarouselItem,
   **Chat** / **ChatThread** / **ChatComposer** / **ChatScrollToBottom** /
@@ -638,11 +642,14 @@ classes.
   a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
   **composer input model**),
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock (`default` head **with** `label`, `plain` headless, or
-  `editable` live highlight via pre backdrop + transparent textarea —
+  HeaderCell / Cell / Caption), CodeBlock (**strict chrome** — titled
+  `default` **requires** non-empty `label` (filename) + head hairline + copy;
+  missing / empty / whitespace `label` **throws**; no title →
+  `variant="plain"` (frame + floating copy only — do not pass `label` or
+  `label=""`); `editable` same head rules when `label` is set, omit `label`
+  for float-copy; live highlight via pre backdrop + transparent textarea —
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
-  `onChange` coalesced while typing / flushed on blur); `showCopy` without
-  `label` floats the copy control (no empty title bar); `wrap` defaults
+  `onChange` coalesced while typing / flushed on blur); `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); focus = quiet Input-like border (`--fynns-focus-border-mix`),
   not an inset ring;
@@ -706,19 +713,23 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | Control → supporting / error hint (`.fynns-field` / Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (= `unit-stack-gap`) |
   | Vertical stacked units (inspector fields, Collapsible body, sibling demos) | `--fynns-layout-unit-stack-gap` |
+  | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |
 
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows). Values
   live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits them via
   `SANDBOX_LAYOUT_AGENT_CATALOG`.
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
-  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges
-  (`chrome="card"` and `chrome="plain"` share this outer shell). Collapsible body
-  and Card body use shared **block** pad `--fynns-layout-content-pad-block`
-  (16dp) so the first control isn’t flush under section chrome — and so a nested
-  surface-owning child under **`chrome="plain"`** reads as a secondary inset
-  frame. Never flush that child to the outer edge with negative margins. Card /
-  Collapsible **heads** share one
+  inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of
+  heads / `chrome="card"` bodies (`chrome="card"` and `chrome="plain"` share the
+  outer shell). Collapsible / Card **`chrome="card"`** body uses shared **block**
+  pad `--fynns-layout-content-pad-block` (16dp) so the first control isn’t flush
+  under section chrome. Nesting a surface-owning child → **`chrome="plain"`**:
+  body pad + column gap are **`--fynns-layout-nest-gap`** (16dp) so the child
+  reads as a secondary inset frame; sibling wells / meta in that body also use
+  the same gap. **plain ≠ flush** — never cancel nest-gap with negative margins
+  or by zeroing `.fynns-*-body` pad. Custom hosts outside Card/Collapsible use
+  **`.fynns-nest`**. Card / Collapsible **heads** share one
   `min-height` (`icon-target` + `space-xs`×2 + hairline); lead/trigger use
   `padding-block: 0` (flex-centered). Trailing head actions keep
   `space-xs` block pad so IconButton hover disks clear the edge.

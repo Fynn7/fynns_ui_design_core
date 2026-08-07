@@ -91,7 +91,8 @@ registerHighlightLanguage("gsc", gscProfile);
 - `unregisterHighlightLanguage(id)` / `getRegisteredHighlightLanguage(id)`.
 - `highlightCode` / `isHighlightableLanguage` consult built-ins first, then the registry.
 - `CodeBlock` `highlightProfile` wins over `language` lookup. Clipboard always uses the raw source string (`code`, or current `value` when `variant="editable"`).
-- `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`). Local draft + deferred highlight keep the caret snappy; `onChange` is coalesced (~120ms, flushed on blur) and parent updates run in `startTransition` so a large controlled tree does not re-render on every key.
+- **Chrome (strict):** titled head (`default`) needs a non-empty `label` (filename) or the component **throws**. No title → `variant="plain"` (frame + floating copy). Never `label=""` to fake a headless titled block. Nested under Collapsible/Card with no filename → plain CodeBlock + outer `chrome="plain"`.
+- `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`). Local draft + deferred highlight keep the caret snappy; `onChange` is coalesced (~120ms, flushed on blur) and parent updates run in `startTransition` so a large controlled tree does not re-render on every key. Pass non-empty `label` for a titled head; omit `label` for float-copy chrome.
 - `wrap` defaults to `true` (soft-wrap long lines; no horizontal scrollbar). Pass `wrap={false}` for classic horizontal `pre` scroll (textarea `wrap="off"`). Readonly and editable share the same class (`--nowrap` when scroll).
 
 Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a language.

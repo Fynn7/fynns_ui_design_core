@@ -22,9 +22,10 @@ export type CollapsibleProps = {
   /**
    * Outer chrome. Default `card` — bordered shell for padded copy / forms.
    * `plain` — same outer shell (Collapsible remains the main container); use when
-   * nesting a surface-owning child (CodeBlock, Surface, canvas, …) so the child
-   * sits inset as a secondary frame. Prefer CodeBlock `variant="plain"` to avoid
-   * an empty code head. Do not cancel body pad with negative margins.
+   * nesting a surface-owning child (CodeBlock, Surface, canvas, …). Body uses
+   * `--fynns-layout-nest-gap` (pad + column gap) so the child sits as a
+   * secondary frame. Prefer CodeBlock `variant="plain"` to avoid an empty code
+   * head. `chrome="plain"` ≠ flush — do not cancel nest-gap with negative margins.
    */
   chrome?: CollapsibleChrome;
   /** Controlled open state. Omit to use the uncontrolled `defaultOpen`. */
@@ -53,8 +54,8 @@ export type CollapsibleProps = {
  *
  * Agents: call this once as the whole section — do not hand-assemble chevron,
  * head, trigger, or body chrome. When nesting a surface-owning child, pass
- * `chrome="plain"` (outer shell stays; child insets inside — do not cancel body
- * pad with negative margins).
+ * `chrome="plain"` (outer shell stays; body uses `--fynns-layout-nest-gap` —
+ * not flush; do not cancel with negative margins).
  *
  * @example
  * ```tsx
@@ -67,7 +68,7 @@ export type CollapsibleProps = {
  * </Collapsible>
  *
  * <Collapsible title="GSC" chrome="plain" defaultOpen>
- *   <CodeBlock variant="plain" language="gsc" … />
+ *   <CodeBlock variant="plain" language="gsc" code={source} />
  * </Collapsible>
  * ```
  */

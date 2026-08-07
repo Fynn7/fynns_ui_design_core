@@ -99,7 +99,7 @@ const en = {
   "preview.cardChromePlain": "chrome=\"plain\" (structure host)",
   "preview.cardChromePlainBody": "Child Surface owns the well — one frame, no card-in-card.",
   "preview.cardChromePlainHelp":
-    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Do not cancel body pad with negative margins.",
+    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body uses `--fynns-layout-nest-gap` (not flush). Do not cancel with negative margins.",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
@@ -107,7 +107,7 @@ const en = {
   "preview.collapsibleTitleOnly": "Title only",
   "preview.collapsibleChromePlain": "chrome=\"plain\" (structure host)",
   "preview.collapsibleChromePlainHelp":
-    "Plain nesting: one outer Collapsible shell; CodeBlock sits inset inside (variant=\"plain\"). Not two separate chips.",
+    "Plain nesting: one outer Collapsible shell; CodeBlock inset by `--fynns-layout-nest-gap`. No filename → `variant=\"plain\"` (titled default throws without label). Not flush; not two separate chips.",
   "preview.collapsibleLabel": "Sample",
   "preview.collapsibleTitle": "Section title",
   "preview.collapsibleBody":
@@ -206,7 +206,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (chrome=card section body block), `nest-gap` (chrome=plain / .fynns-nest surface-well nesting), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -243,7 +243,10 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for Collapsible body / Card body / Surface padded / CodeBlock pre (16dp default).",
+    "--fynns-layout-content-pad-block — vertical pad for chrome=card Collapsible/Card body / Surface padded / CodeBlock pre (16dp default). Nesting wells use nest-gap.",
+  "layoutChrome.nestGap": "Nest gap (surface wells)",
+  "layoutChrome.nestGapHint":
+    "--fynns-layout-nest-gap — pad + column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (16dp). Nested surface frames; plain ≠ flush.",
   "layoutChrome.dialogInset": "Dialog / Chat column inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
@@ -460,7 +463,7 @@ const en = {
   "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: `default` optional head; `plain` headless; `editable` live highlight (pre backdrop + transparent textarea; `value`/`onChange`). `wrap` defaults true (soft-wrap; no horizontal scrollbar); `wrap={false}` keeps classic pre scroll. Supported languages (`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`) get zero-dep spans colored with `--fynns-code-*`. Copy fades in on hover (keyboard: focus-visible; always visible on touch); clipboard stays the raw source string.",
+    "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + float copy only — never `label=\"\"`); `editable` same head rules when `label` set. Soft-wrap default; `wrap={false}` for classic pre scroll. Supported languages get zero-dep `--fynns-code-*` spans. Copy fades in on hover.",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — type to re-highlight; same `--fynns-code-*` tokenizer as read-only samples. Soft-wrap is on by default (`wrap`).",
@@ -945,13 +948,13 @@ const en = {
   "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
   "globals.cardChromePlainBody": "Child Surface owns the well.",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Use chrome=\"plain\" when nesting a surface-owning child: outer Card stays the main shell; child insets as a secondary frame — no split chips, no negative-margin flush.",
+    "Default chrome=\"card\". Use chrome=\"plain\" when nesting a surface-owning child: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` so the child insets as a secondary frame — no split chips, no flush / negative-margin cancel.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
-    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting a surface-owning child → `chrome=\"plain\"` (Preview toggle).",
+    "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting a surface-owning child → `chrome=\"plain\"` + nest-gap (Preview toggle).",
   "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
   "globals.collapsibleChromeHelp":
-    "chrome=\"plain\": Collapsible stays the main outer shell; body pad insets the nested CodeBlock as a secondary frame. Use CodeBlock variant=\"plain\" (no empty code head). Never cancel body pad with negative margins.",
+    "chrome=\"plain\": Collapsible stays the main outer shell; body uses `--fynns-layout-nest-gap` (pad + gap) so nested CodeBlock insets as a secondary frame. No filename → CodeBlock `variant=\"plain\"` (titled default throws without label). plain ≠ flush — never cancel nest-gap with negative margins.",
   "globals.swatches": "Radius levels (who uses what)",
   "globals.swatchesHelp":
     "Each box is one token step. Cards / inputs = `md`; buttons = `xl`; badges / chips = `sm`.",
@@ -1257,7 +1260,7 @@ const zh: Record<MessageKey, string> = {
   "preview.cardChromePlain": "chrome=\"plain\"（结构壳）",
   "preview.cardChromePlainBody": "子级 Surface 自带井面 — 单层框，无 card-in-card。",
   "preview.cardChromePlainHelp":
-    "子节点自带描边/填充（Surface、CodeBlock、canvas）时，Card/Collapsible 用 chrome=\"plain\"。禁止用负 margin 冲掉 body pad。",
+    "子节点自带描边/填充（Surface、CodeBlock、canvas）时，Card/Collapsible 用 chrome=\"plain\"。正文使用 `--fynns-layout-nest-gap`（非贴边）。禁止用负 margin 冲掉 nest-gap。",
   "preview.collapsibleOpen": "展开",
   "preview.collapsibleIcon": "静止图标（悬停→箭头）",
   "preview.collapsibleActions": "标题旁按钮",
@@ -1265,7 +1268,7 @@ const zh: Record<MessageKey, string> = {
   "preview.collapsibleTitleOnly": "仅标题",
   "preview.collapsibleChromePlain": "chrome=\"plain\"（结构壳）",
   "preview.collapsibleChromePlainHelp":
-    "嵌套结构壳：外层一个 Collapsible 主壳；CodeBlock（variant=\"plain\"）缩进在内。不是上下两个割裂芯片。",
+    "嵌套结构壳：外层一个 Collapsible 主壳；CodeBlock 按 `--fynns-layout-nest-gap` 缩进。无文件名 → `variant=\"plain\"`（titled 无 label 会 throw）。非贴边；不是上下两个割裂芯片。",
   "preview.collapsibleLabel": "示例",
   "preview.collapsibleTitle": "分区标题",
   "preview.collapsibleBody":
@@ -1353,7 +1356,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限）。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（chrome=card 章节正文块向）、`nest-gap`（chrome=plain / .fynns-nest 表面井嵌套）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1390,7 +1393,10 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — Collapsible 正文 / Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。",
+    "--fynns-layout-content-pad-block — chrome=card 的 Collapsible/Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。嵌套井用 nest-gap。",
+  "layoutChrome.nestGap": "嵌套间距（表面井）",
+  "layoutChrome.nestGapHint":
+    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的 pad + 纵向 gap（默认 16dp）。嵌套表面井；plain ≠ 贴边。",
   "layoutChrome.dialogInset": "对话框 / Chat 列内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
@@ -1605,7 +1611,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockJsonLabel": "theme.json",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：`default` 可选标题头；`plain` 无头；`editable` 边写边高亮（高亮 pre 衬底 + 透明 textarea；`value`/`onChange`）。`wrap` 默认 true（软换行、无横向滚动条）；`wrap={false}` 保持经典横向滚动。支持语言（`ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`bash`/`sh`）用零依赖分词 + `--fynns-code-*` 着色。悬停渐显复制（键盘 focus-visible；触控常显）；剪贴板仍是原始源码。",
+    "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 浮层复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。默认软换行；`wrap={false}` 经典横向滚动。支持语言用零依赖 `--fynns-code-*` 着色。悬停渐显复制。",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — 输入即重新分词高亮；与只读样例共用 `--fynns-code-*` 分词器。默认软换行（`wrap`）。",
@@ -2087,13 +2093,13 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromePlainTitle": "chrome=\"plain\" + Surface",
   "globals.cardChromePlainBody": "子级 Surface 自带井面。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。嵌套自带表面的子件时用 chrome=\"plain\"：外层 Card 仍是主壳，子件缩进成附框 — 禁止拆成两个芯片，禁止负 margin 贴边。",
+    "默认 chrome=\"card\"。嵌套自带表面的子件时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 让子件缩进成附框 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
-    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套自带表面的子件 → `chrome=\"plain\"`（Preview 可切换）。",
+    "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套自带表面的子件 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",
   "globals.collapsibleChromePlainTitle": "chrome=\"plain\" + CodeBlock",
   "globals.collapsibleChromeHelp":
-    "chrome=\"plain\"：Collapsible 仍是外层主壳；body pad 让内嵌 CodeBlock 缩进成附框。CodeBlock 用 variant=\"plain\"（避免空代码头）。禁止负 margin 冲掉 body pad。",
+    "chrome=\"plain\"：Collapsible 仍是外层主壳；正文用 `--fynns-layout-nest-gap`（pad + gap）让内嵌 CodeBlock 缩进成附框。无文件名 → CodeBlock `variant=\"plain\"`（titled default 无 label 会 throw）。plain ≠ 贴边 — 禁止负 margin 冲掉 nest-gap。",
   "globals.swatches": "圆角等级（谁用哪档）",
   "globals.swatchesHelp":
     "每个色块是一档 token。卡片 / 输入 = `md`；按钮 = `xl`；徽章 / 芯片 = `sm`。",

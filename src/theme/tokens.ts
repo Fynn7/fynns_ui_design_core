@@ -1104,10 +1104,20 @@ export const LAYOUT_TOKENS = {
   "textarea-max-height": "13rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
-   * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than
-   * `--fynns-space-sm` so headers don’t sit on Inputs.
+   * Collapsible / Card `chrome="card"` body, Surface `padded`, CodeBlock pre.
+   * Larger than `--fynns-space-sm` so headers don’t sit on Inputs.
+   * Nesting surface wells (`chrome="plain"`, `.fynns-nest`) use `nest-gap`.
    */
   "content-pad-block": "1rem",
+  /**
+   * Space between **nested surface frames** (16dp): outer shell ↔ inner well
+   * (CodeBlock / Surface / canvas / BusyRegion), and sibling wells / meta
+   * inside a nest host. Used as four-side pad + column `gap` on
+   * `chrome="plain"` Card/Collapsible body and `.fynns-nest`. Same default as
+   * `unit-stack-gap`, but role is nest frames — not generic inspector stacks.
+   * `chrome="plain"` ≠ flush; never cancel with negative margins.
+   */
+  "nest-gap": "1rem",
   /**
    * Dialog shell inset (24dp): head / foot / body **inline**. Also the Chat
    * **conversation column** outer pad (`--fynns-chat-thread-pad-inline` /

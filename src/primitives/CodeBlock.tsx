@@ -28,13 +28,6 @@ type CodeBlockShared = Omit<
   "children" | "onChange" | "defaultValue"
 > & {
   /**
-   * `default` — optional head (label + hover fade-in copy).
-   * `plain` — code only; copy floats and fades in on hover.
-   * `editable` — highlighted backdrop + transparent textarea (caret stays
-   * snappy; highlight / parent `onChange` update via deferred work).
-   */
-  variant?: CodeBlockVariant;
-  /**
    * Language id for syntax highlighting (`ts` / `tsx` / `js` / `jsx` / `py` /
    * `cpp` / `css` / `json` / `bash` / `sh`, or a consumer-registered id).
    * Also sets `data-language` on the root. Unknown values render as plain mono
@@ -46,11 +39,9 @@ type CodeBlockShared = Omit<
    * `language` lookup. See `llm/AGENT_INTERFACES.md`.
    */
   highlightProfile?: SimpleHighlightProfile;
-  /** Visible label above the code (e.g. file name / language). Ignored for `plain`. */
-  label?: string;
   /** Copy button tooltip / aria-label. @default "Copy" */
   copyAriaLabel?: string;
-  /** Show the copy control. @default true. Omit `label` to float copy (no empty head). */
+  /** Show the copy control. @default true. */
   showCopy?: boolean;
   /**
    * Soft-wrap long lines inside the block (no horizontal scrollbar).
@@ -62,8 +53,17 @@ type CodeBlockShared = Omit<
   maxHeight?: string | number;
 };
 
-export type CodeBlockReadonlyProps = CodeBlockShared & {
-  variant?: "default" | "plain";
+/**
+ * Titled chrome: filename / title + hairline divider + copy in the head.
+ * **Requires** a non-empty `label`. No filename → use `variant="plain"`.
+ */
+export type CodeBlockLabeledProps = CodeBlockShared & {
+  variant?: "default";
+  /**
+   * Visible filename / title in the head (required, non-empty after trim).
+   * Empty / omitted → throws; do not pass `label=""` to “hide” the head.
+   */
+  label: string;
   /** Source text shown inside `<pre><code>`. */
   code: string;
   value?: never;
@@ -71,8 +71,31 @@ export type CodeBlockReadonlyProps = CodeBlockShared & {
   onChange?: never;
 };
 
+/**
+ * Headless chrome: bordered frame + floating copy only (no title bar, no
+ * divider). Do **not** pass `label`.
+ */
+export type CodeBlockPlainProps = CodeBlockShared & {
+  variant: "plain";
+  label?: never;
+  /** Source text shown inside `<pre><code>`. */
+  code: string;
+  value?: never;
+  defaultValue?: never;
+  onChange?: never;
+};
+
+export type CodeBlockReadonlyProps =
+  | CodeBlockLabeledProps
+  | CodeBlockPlainProps;
+
 export type CodeBlockEditableProps = CodeBlockShared & {
   variant: "editable";
+  /**
+   * When set (non-empty), shows the titled head. Omit for float-copy chrome
+   * (same visual contract as `plain`). Empty string throws.
+   */
+  label?: string;
   /** Optional seed when using controlled `value` / uncontrolled `defaultValue`. */
   code?: string;
   /** Controlled source (editable). */
@@ -90,6 +113,15 @@ export type CodeBlockEditableProps = CodeBlockShared & {
 };
 
 export type CodeBlockProps = CodeBlockReadonlyProps | CodeBlockEditableProps;
+
+const LABELED_WITHOUT_LABEL =
+  '[fynns] CodeBlock: the titled variant (head + hairline + copy) requires a non-empty `label` (e.g. a filename). Use `variant="plain"` when there is no title — do not pass `label=""` or omit `label` on `variant="default"`.';
+
+const PLAIN_WITH_LABEL =
+  '[fynns] CodeBlock: `variant="plain"` is headless (frame + floating copy only). Do not pass `label` — use `variant="default"` (or omit variant) with a non-empty `label` for the titled head.';
+
+const EMPTY_EDITABLE_LABEL =
+  '[fynns] CodeBlock: `variant="editable"` with `label` requires a non-empty string. Omit `label` for float-copy chrome, or pass a real filename/title.';
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -136,13 +168,49 @@ function initialEditableSource(props: CodeBlockEditableProps): string {
   return "";
 }
 
+function assertCodeBlockChrome(
+  variant: CodeBlockVariant | undefined,
+  label: string | undefined,
+): string | undefined {
+  const plain = variant === "plain";
+  const editable = variant === "editable";
+  const trimmed = label == null ? undefined : label.trim();
+
+  if (plain) {
+    if (label != null) {
+      throw new Error(PLAIN_WITH_LABEL);
+    }
+    return undefined;
+  }
+
+  if (editable) {
+    if (label != null && trimmed === "") {
+      throw new Error(EMPTY_EDITABLE_LABEL);
+    }
+    return trimmed || undefined;
+  }
+
+  /* default / omitted → titled head */
+  if (trimmed == null || trimmed === "") {
+    throw new Error(LABELED_WITHOUT_LABEL);
+  }
+  return trimmed;
+}
+
 /**
  * Monospace code sample with optional copy affordance (`IconButton` +
- * `Tooltip` + `ClipboardIcon`). Supported `language` values get zero-dep
- * syntax coloring via `--fynns-code-*` tokens. Pass `highlightProfile` for
- * app-owned line-command languages. The scroll surface uses `fynns-scroll`.
- * Copy fades in on hover (keyboard: :focus-visible); `plain` has no head.
- * `editable` stacks a highlighted `<pre>` under a transparent textarea.
+ * `Tooltip` + `ClipboardIcon`).
+ *
+ * **Chrome contract (strict):**
+ * - **Titled** (`variant="default"` / omit variant): non-empty `label`
+ *   (filename) + head hairline + copy. Missing / empty `label` **throws**.
+ * - **Headless** (`variant="plain"`): frame + floating copy only — no `label`.
+ * - **Editable** (`variant="editable"`): same head rules when `label` is set;
+ *   omit `label` for float-copy chrome.
+ *
+ * Supported `language` values get zero-dep syntax coloring via
+ * `--fynns-code-*` tokens. Pass `highlightProfile` for app-owned line-command
+ * languages. The scroll surface uses `fynns-scroll`.
  */
 export function CodeBlock(props: CodeBlockProps) {
   const editable = props.variant === "editable";
@@ -150,7 +218,7 @@ export function CodeBlock(props: CodeBlockProps) {
   const {
     language,
     highlightProfile,
-    label,
+    label: labelProp,
     copyAriaLabel = "Copy",
     showCopy = true,
     wrap = true,
@@ -158,6 +226,8 @@ export function CodeBlock(props: CodeBlockProps) {
     className,
     style,
   } = props;
+
+  const label = assertCodeBlockChrome(props.variant, labelProp);
 
   const highlighted =
     highlightProfile != null || isHighlightableLanguage(language);
@@ -310,8 +380,8 @@ export function CodeBlock(props: CodeBlockProps) {
     "aria-label",
   ]);
 
-  const headlessCopy = Boolean(showCopy && label == null);
   const showHead = label != null;
+  const headlessCopy = Boolean(showCopy && !showHead);
 
   return (
     <div
@@ -328,14 +398,14 @@ export function CodeBlock(props: CodeBlockProps) {
       data-language={language}
       style={style}
     >
-      {plain || headlessCopy ? (
-        copyControl
-      ) : showHead ? (
+      {showHead ? (
         <div className="fynns-code-block-head">
           <span className="fynns-code-block-label">{label}</span>
           {copyControl}
         </div>
-      ) : null}
+      ) : (
+        copyControl
+      )}
       {editable ? (
         <div className="fynns-code-block-editor">
           <pre

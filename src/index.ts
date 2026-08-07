@@ -345,6 +345,8 @@ export type {
   CodeBlockProps,
   CodeBlockVariant,
   CodeBlockReadonlyProps,
+  CodeBlockLabeledProps,
+  CodeBlockPlainProps,
   CodeBlockEditableProps,
 } from "./primitives/CodeBlock";
 export {

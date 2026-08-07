@@ -65,6 +65,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   // panelInsets
   "content-inset",
   "content-pad-block",
+  "nest-gap",
   "dialog-inset",
   "strip-pad-inline",
   "capsule-chrome-pad-inline",
@@ -140,6 +141,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
   panelInsets: [
     "content-inset",
     "content-pad-block",
+    "nest-gap",
     "dialog-inset",
     "strip-pad-inline",
     "capsule-chrome-pad-inline",
@@ -252,7 +254,9 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "content-inset":
     "Panel inset · Card / Collapsible / Drawer equal **inline** pad",
   "content-pad-block":
-    "Panel inset · Collapsible / Card body / Surface padded / CodeBlock **block** (16dp)",
+    "Panel inset · Collapsible / Card chrome=card body / Surface padded / CodeBlock **block** (16dp)",
+  "nest-gap":
+    "Nest frames · chrome=plain body pad+gap / .fynns-nest (surface well nesting; ≠ flush)",
   "dialog-inset":
     "Panel inset · Dialog / ConfirmDialog / Chat column (thread+composer outer)",
   "strip-pad-inline":

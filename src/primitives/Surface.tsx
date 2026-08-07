@@ -14,6 +14,8 @@ export type SurfaceProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Inner pad. Default `false` (canvas-safe: iframe / charts sit flush).
    * `true` → `--fynns-layout-content-inset` inline + `--fynns-layout-content-pad-block`.
+   * Inside a nest host (`chrome="plain"` / `.fynns-nest`), prefer `padded` for
+   * copy; leave `false` for canvas/iframe wells.
    */
   padded?: boolean;
   children: ReactNode;

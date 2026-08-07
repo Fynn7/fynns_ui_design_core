@@ -2499,10 +2499,10 @@
 /*
  * `chrome="plain"`: nesting host for a surface-owning child (CodeBlock, Surface,
  * canvas, …). Keeps the **same outer shell** as `card` (Collapsible = main
- * container). Body keeps content inset/pad so the child sits as a secondary
- * frame inset one step — not a second sibling chip, not edge-flush double borders.
+ * container). Body uses `--fynns-layout-nest-gap` (pad + column gap) so the
+ * child sits as a secondary frame — not flush, not a second sibling chip.
  * Prefer nested CodeBlock `variant="plain"` to avoid an empty code head.
- * Class is a semantic marker for agents; no extra visual overrides required.
+ * Never cancel nest-gap with negative margins or by zeroing `.fynns-*-body` pad.
  */
 
 .fynns-collapsible {
@@ -2719,8 +2719,8 @@
 
 .fynns-collapsible-body,
 .fynns-card-body {
-  /* Shared block pad — breathing room under the header.
-   * Also insets nested surface-owning children (`chrome="plain"` nesting). */
+  /* Shared block pad — breathing room under the header (`chrome="card"`).
+   * Nesting surface-owning children: use `chrome="plain"` (overrides below). */
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
@@ -2729,6 +2729,32 @@
   font-size: var(--fynns-font-size-sm);
   font-weight: var(--fynns-font-weight-regular);
   line-height: var(--fynns-line-height-body);
+}
+
+/*
+ * Nest frame: four-side inset + stack gap between child wells / meta.
+ * Overrides the card body content-* pad so nest-gap is not doubled.
+ */
+.fynns-collapsible--plain .fynns-collapsible-body,
+.fynns-card--plain .fynns-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-nest-gap);
+}
+
+/*
+ * Generic nest host for surface wells outside Card/Collapsible
+ * (e.g. page region wrapping Surface + CodeBlock). Same nest-gap contract.
+ */
+.fynns-nest {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-nest-gap);
+  min-width: 0;
+  min-height: 0;
 }
 
 .fynns-collapsible-body {

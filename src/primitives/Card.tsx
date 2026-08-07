@@ -14,8 +14,9 @@ export type CardProps = {
   actions?: ReactNode;
   /**
    * Outer chrome. Default `card` — bordered shell for padded copy / forms.
-   * `plain` — same outer shell; nest a surface-owning child so it sits inset as
-   * a secondary frame. Same values as Collapsible `chrome`.
+   * `plain` — same outer shell; nest a surface-owning child inset by
+   * `--fynns-layout-nest-gap` (pad + child gap). Not flush — do not cancel
+   * nest-gap with negative margins. Same values as Collapsible `chrome`.
    */
   chrome?: CollapsibleChrome;
   className?: string;
@@ -29,7 +30,8 @@ export type CardProps = {
  * chevron, no open/close. One-shot API — do not assemble head/body by hand.
  *
  * Pass `chrome="plain"` when nesting a surface-owning child (outer shell stays;
- * child insets inside). Do not cancel body pad with negative margins.
+ * body uses `--fynns-layout-nest-gap`). Do not cancel nest-gap with negative
+ * margins. `chrome="plain"` ≠ flush.
  *
  * @example
  * ```tsx
