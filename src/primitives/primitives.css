@@ -8529,7 +8529,7 @@ a.fynns-breadcrumb-link:visited {
   vertical-align: text-bottom;
   font-size: inherit;
   line-height: inherit;
-  border-radius: 0;
+  border-radius: var(--fynns-radius-none);
   background: var(--fynns-color-accent);
   animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
     step-end infinite;
