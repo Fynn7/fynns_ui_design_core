@@ -385,8 +385,6 @@ const en = {
     "SkipLink stays fully clipped until keyboard focus; then a fixed Button ghost at the viewport top-start jumps past chrome into `#globals-content`.",
   "globals.badgedBoxHelp":
     "BadgedBox positions a notification badge over IconButton / Avatar. Dot or count reuses NavigationRailBadge.",
-  "globals.badgeHelp":
-    "Standalone pill `Badge` — variants `neutral` / `accent` / `success` / `warning` / `danger` / `info`; sizes `md` (default) and `sm`; optional leading `icon`.",
   "globals.badgedBoxIconTip": "Notifications",
   "globals.avatarGroupHelp":
     "AvatarGroup stacks Avatars; `max` shows a +N overflow mark (here max=3 with 5 people).",
@@ -1513,8 +1511,6 @@ const zh: Record<MessageKey, string> = {
     "SkipLink 未聚焦时完全裁剪隐藏；键盘聚焦后以固定在视口左上的 Button ghost 出现，可跳到 `#globals-content`。",
   "globals.badgedBoxHelp":
     "BadgedBox 把通知角标叠在 IconButton / Avatar 上。圆点或数字复用 NavigationRailBadge。",
-  "globals.badgeHelp":
-    "独立药丸 `Badge` — 变体 `neutral` / `accent` / `success` / `warning` / `danger` / `info`；尺寸 `md`（默认）与 `sm`；可选 leading `icon`。",
   "globals.badgedBoxIconTip": "通知",
   "globals.avatarGroupHelp":
     "AvatarGroup 叠放 Avatar；超过 `max` 显示 +N（此处 max=3，共 5 人）。",
