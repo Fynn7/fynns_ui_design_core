@@ -277,7 +277,10 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
    */
   const squashedDrawerWarnedRef = useRef(false);
   useEffect(() => {
-    if (process.env.NODE_ENV === "production") return;
+    // Avoid bare `process` (consumer tsc may lack @types/node).
+    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
+      .process?.env?.NODE_ENV;
+    if (nodeEnv === "production") return;
     if (navMode !== "rail" || phase === "closed") {
       squashedDrawerWarnedRef.current = false;
       return;
