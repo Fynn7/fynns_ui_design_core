@@ -333,23 +333,44 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       const el = localRef.current;
       if (!el) return;
       const cs = getComputedStyle(el);
-      // Collapsed control-row floor (32dp) — empty / single-line box height.
-      const controlLine =
+      const rootFs =
         Number.parseFloat(
-          cs.getPropertyValue("--fynns-chat-composer-line-height"),
-        ) ||
-        Number.parseFloat(cs.minHeight) ||
-        32;
+          getComputedStyle(document.documentElement).fontSize,
+        ) || 16;
+      /**
+       * Custom props are authored in rem (`2rem`). `parseFloat("2rem")` is `2`
+       * and would treat the floor as 2px — every non-empty value then looks
+       * taller than one line and the shell sticks expanded.
+       */
+      const cssLenPx = (raw: string, fallback: number) => {
+        const t = raw.trim();
+        if (!t) return fallback;
+        const n = Number.parseFloat(t);
+        if (!Number.isFinite(n) || n <= 0) return fallback;
+        if (t.endsWith("rem")) return n * rootFs;
+        if (t.endsWith("em")) {
+          return n * (Number.parseFloat(cs.fontSize) || rootFs);
+        }
+        if (t.endsWith("px")) return n;
+        return fallback;
+      };
+      // Collapsed control-row floor (32dp) — empty / single-line box height.
+      const controlLine = cssLenPx(
+        cs.getPropertyValue("--fynns-chat-composer-line-height"),
+        Number.parseFloat(cs.minHeight) || 32,
+      );
       // Expanded typography line-height (~22dp) — content height must use this
       // after morph, not the collapsed 32dp row (or the shell looks “fixed tall”).
-      const textLine =
-        Number.parseFloat(
-          cs.getPropertyValue("--fynns-chat-composer-text-line-height"),
-        ) ||
-        Number.parseFloat(cs.fontSize) * 1.375 ||
-        22;
+      const textLine = cssLenPx(
+        cs.getPropertyValue("--fynns-chat-composer-text-line-height"),
+        Number.parseFloat(cs.lineHeight) ||
+          Number.parseFloat(cs.fontSize) * 1.375 ||
+          22,
+      );
       const max =
-        Number.parseFloat(cs.getPropertyValue("max-height")) || controlLine * 8;
+        Number.parseFloat(cs.maxHeight) ||
+        Number.parseFloat(cs.getPropertyValue("max-height")) ||
+        controlLine * 8;
 
       // Empty = one control row (ChatGPT collapsed). Ignore placeholder wrap
       // scrollHeight so a long hint cannot inflate the shell in a narrow pane.
