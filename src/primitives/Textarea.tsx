@@ -23,9 +23,9 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   supportingText?: ReactNode;
   errorText?: ReactNode;
   /**
-   * When true (default), height tracks content between `minRows` and
-   * `maxRows` / `--fynns-layout-textarea-max-height`. Pass `false` for a
-   * fixed well with native vertical resize.
+   * When true (default), height tracks content from `minRows` up to
+   * `--fynns-layout-textarea-max-height`. Pass `false` for a fixed well
+   * with native vertical resize.
    */
   autoGrow?: boolean;
   /**
@@ -33,7 +33,10 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
    * otherwise `1` so short copy does not sit in a tall well.
    */
   minRows?: number;
-  /** Auto-grow soft cap in row units when CSS max-height is unset. @default 12 */
+  /**
+   * Optional row-unit soft cap. When set, overrides the CSS
+   * `--fynns-layout-textarea-max-height` for this instance.
+   */
   maxRows?: number;
 };
 
@@ -69,7 +72,7 @@ export const Textarea = forwardRef(function Textarea(
     "aria-describedby": ariaDescribedBy,
     autoGrow = true,
     minRows: minRowsProp,
-    maxRows = 12,
+    maxRows,
     rows,
     value,
     defaultValue,
@@ -112,11 +115,18 @@ export const Textarea = forwardRef(function Textarea(
       (Number.parseFloat(cs.borderBottomWidth) || 0);
     // border-box: scrollHeight covers content + padding, not borders.
     const floor = minRows * lineHeight + padY + borderY;
+    const rowCap =
+      maxRows != null && maxRows > 0
+        ? maxRows * lineHeight + padY + borderY
+        : null;
+    // Explicit maxRows wins over the layout token soft cap.
+    el.style.maxHeight = rowCap != null ? `${rowCap}px` : "";
     const cssMax = Number.parseFloat(cs.maxHeight);
-    const cap =
+    const tokenCap =
       Number.isFinite(cssMax) && cssMax > 0
         ? cssMax
-        : maxRows * lineHeight + padY + borderY;
+        : 12 * lineHeight + padY + borderY;
+    const cap = rowCap ?? tokenCap;
 
     // Empty: minRows floor only — ignore placeholder wrap scrollHeight.
     if (!el.value) {
@@ -156,6 +166,7 @@ export const Textarea = forwardRef(function Textarea(
         "fynns-input",
         "fynns-textarea",
         autoGrow && "fynns-textarea--auto-grow",
+        autoGrow && "fynns-scroll",
         size === "sm" && "fynns-input--sm",
         variant === "filled" && "fynns-input--filled",
         isInvalid && "fynns-input--invalid",

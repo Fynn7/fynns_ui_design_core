@@ -254,7 +254,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "strip-pad-inline":
     "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer collapsed text + expanded text edge",
   "capsule-chrome-pad-inline":
-    "Capsule chrome · SearchBar / ChatComposer shell (Send/mic flush, ~4dp)",
+    "Capsule chrome · SearchBar / ChatComposer collapsed shell (Send/mic flush, ~4dp)",
   "field-pad-inline":
     "Form field · Input / field-shell horizontal pad (12dp — not capsule 4dp)",
   "field-pad-block":

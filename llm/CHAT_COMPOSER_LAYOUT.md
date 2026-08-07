@@ -87,8 +87,8 @@ end edge** and **composer shell end edge** share one vertical line, with
 equal L/R margins on the capped column.
 
 Do not conflate **column** outer inset (`dialog-inset`) with **shell**
-expanded strip-pad, or with Banner-only / collapsed text-start use of
-`strip-pad-inline`.
+expanded pad (strip − glyph-inset), or with Banner-only / collapsed
+text-start use of `strip-pad-inline`.
 
 ## Not this primitive
 

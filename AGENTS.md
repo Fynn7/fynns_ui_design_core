@@ -295,9 +295,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy; **autoGrow** height from
-  content by default — `minRows` / `maxRows` / `--fynns-layout-textarea-max-height`;
-  `autoGrow={false}` keeps a fixed well + vertical resize; block pad →
-  `--fynns-layout-field-pad-block`), **FieldHeader** /
+  content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
+  optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
+  + vertical resize; block pad → `--fynns-layout-field-pad-block`), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
@@ -690,12 +690,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   second custom status box (use `InlineAlert` for in-panel severity).
   **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
   ChatComposer **collapsed** text-only start, and **expanded** ChatComposer
-  shell pad): `--fynns-layout-strip-pad-inline` (20dp default). Banner /
+  **text edge**): `--fynns-layout-strip-pad-inline` (20dp default). Banner /
   InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
   `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
-  Expanded ChatComposer: `composer-expanded-pad-*` = strip − glyph-inset;
-  textarea uses `composer-glyph-inset` (optical glyphs; text edge = strip).
-  See `llm/CHAT_COMPOSER_LAYOUT.md`.
+  Expanded ChatComposer shell pad is derived: `composer-expanded-pad-*` =
+  strip − glyph-inset; textarea uses `composer-glyph-inset` (optical glyphs;
+  text edge still = strip). See `llm/CHAT_COMPOSER_LAYOUT.md`.
   **Capsule chrome** (SearchBar field / ChatComposer **collapsed** shell next to
   IconButtons — ChatGPT Send/mic flush):
   `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer collapsed shell uses this

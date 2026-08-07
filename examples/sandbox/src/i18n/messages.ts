@@ -243,7 +243,7 @@ const en = {
     "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge (20dp; radius-3xl; shell pad = strip − glyph-inset). Not Chat column outer (dialog-inset). Prefer over ad-hoc rem.",
   "layoutChrome.capsuleChromePadInline": "Capsule chrome pad",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer shell next to IconButtons (4dp; ChatGPT Send flush).",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer **collapsed** shell next to IconButtons (4dp; ChatGPT Send flush).",
   "layoutChrome.fieldPadInline": "Form field pad",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell horizontal pad (12dp). Do not reuse capsule chrome.",
@@ -1376,7 +1376,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边（默认 20dp；radius-3xl；壳距 = strip − glyph-inset）。非 Chat 列外边距（dialog-inset）。禁止自造 rem。",
   "layoutChrome.capsuleChromePadInline": "胶囊 chrome 边距",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer 壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer **塌缩**壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
   "layoutChrome.fieldPadInline": "表单字段边距",
   "layoutChrome.fieldPadInlineHint":
     "--fynns-layout-field-pad-inline — Input / field-shell 水平内边距（默认 12dp）。不要复用 capsule chrome。",
