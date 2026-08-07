@@ -86,9 +86,10 @@ function join(...parts: Array<string | false | null | undefined>) {
  * Chat row for user / assistant / system turns (ChatGPT-style).
  * `streaming` is a **UI prop only** — caret + incomplete semantics; no LLM.
  *
- * Dual placement: main uses rem-capped host (`--fynns-chatmessage-max-width`);
- * `EndAside` / `.fynns-chat-host--fill` use 100% pane content. User bubble is
- * always 70% of that host.
+ * Dual placement: main uses rem-capped host (`--fynns-chatmessage-max-width`)
+ * with user bubble at 70%; `EndAside` / `.fynns-chat-host--fill` use 100% pane
+ * content and lift the user bubble ceiling to 100% so long turns match the
+ * composer shell width (short copy still shrinks, end-aligned).
  *
  * Assistant `citations` render ChatGPT-style source chips under the body
  * (hover preview, click opens; +N expands footnote cards). `thinking` sits

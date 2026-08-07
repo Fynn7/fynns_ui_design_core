@@ -295,8 +295,8 @@
   --fynns-chatmessage-body-line: 1.5;
   --fynns-chatmessage-name-size: 0.75rem;
   --fynns-chatmessage-actions-gap: 0;
-  --fynns-chatmessage-cursor-width: 0.125rem;
-  --fynns-chatmessage-cursor-height: 1em;
+  --fynns-chatmessage-cursor-width: 0.0625rem;
+  --fynns-chatmessage-cursor-height: 1lh;
   --fynns-chatmessage-error-gap: 0.75rem;
   --fynns-chatmessage-code-pad-block: 0.15rem;
   --fynns-chatmessage-code-pad-inline: 0.3rem;
@@ -324,8 +324,9 @@
   --fynns-chat-composer-max-height: 13rem;
   --fynns-chat-composer-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-chat-composer-pad-block: 0.1875rem;
-  --fynns-chat-composer-expanded-pad-inline: var(--fynns-layout-strip-pad-inline);
+  --fynns-chat-composer-expanded-pad-inline: calc(var(--fynns-chatmessage-bubble-pad-inline) - var(--fynns-chat-composer-glyph-inset));
   --fynns-chat-composer-expanded-pad-block: var(--fynns-space-md);
+  --fynns-chat-composer-glyph-inset: calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2);
   --fynns-chat-composer-gap: var(--fynns-space-xs);
   --fynns-chat-composer-expanded-gap: var(--fynns-space-sm);
   --fynns-chat-composer-control-size: 2rem;
@@ -334,7 +335,7 @@
   --fynns-chat-composer-offset: var(--fynns-space-sm);
   --fynns-chat-composer-line-height: 2rem;
   --fynns-chat-composer-text-line-height: 1.375rem;
-  --fynns-chat-scroll-fab-inset: 0.75rem;
+  --fynns-chat-scroll-fab-inset: var(--fynns-space-md);
   --fynns-chat-scroll-threshold: 5rem;
   --fynns-list-height-1: 3.5rem;
   --fynns-list-height-2: 4.5rem;

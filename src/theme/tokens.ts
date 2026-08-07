@@ -604,18 +604,20 @@ export const CHATMESSAGE_TOKENS = {
   /** ChatGPT `py-2.5` (10dp). */
   "bubble-pad-block": "0.625rem",
   /**
-   * User bubble ceiling — ChatGPT `max-w-[70%]`. Percentage containing block
-   * is the **message-row host** (same element as `max-width` below / ChatGPT
-   * `MessagePrimitive.Root` with `w-full max-w-3xl`), **not** full main /
-   * viewport after the sidebar. **Dual placement:** in `EndAside` / start-edge
-   * resizable panes the host is 100% of aside **content** width (CSS drops the
-   * rem ceiling via `.fynns-end-aside` / `.fynns-chat-host--fill`) — same 70%,
-   * no density mode. Composer stays 100% of that host. Soft mins live on the
-   * pane (`LAYOUT_TOKENS` `end-aside-min-width` / `NAVDRAWER_TOKENS` `min-width`),
-   * not here. Short copy still shrinks (`width: fit-content`, `border-box`).
-   * Screenshot figs of ~66–68% usually divide bubble by an *outer* padded shell
-   * (70% of content ≈ 65–68% of shell with ~1.5rem gutters) — still this lock.
-   * **Unchanged under 640px** (no responsive widen). See
+   * User bubble ceiling for **main-column** chat — ChatGPT `max-w-[70%]`.
+   * Percentage containing block is the **message-row host** (same element as
+   * `max-width` below / ChatGPT `MessagePrimitive.Root` with `w-full
+   * max-w-3xl`), **not** full main / viewport after the sidebar.
+   * **Dual placement:** `EndAside` / `.fynns-chat-host--fill` keep the host at
+   * 100% of aside content (CSS drops the rem ceiling) but **override** this
+   * ceiling to `100%` so a long user turn shares the composer shell start+end
+   * edges (narrow panes make 70% look short next to a full-width composer).
+   * Short copy still shrinks (`width: fit-content`, `border-box`, flex-end).
+   * Soft mins live on the pane (`LAYOUT_TOKENS` `end-aside-min-width` /
+   * `NAVDRAWER_TOKENS` `min-width`), not here. Screenshot figs of ~66–68%
+   * usually divide bubble by an *outer* padded shell (70% of content ≈ 65–68%
+   * of shell with ~1.5rem gutters) — still this lock on main.
+   * **Unchanged under 640px** on main (no responsive widen). See
    * `scripts/_focus-verify/chatgpt-bubble-containing-block.html`,
    * `chatgpt-bubble-width.html`, and `chatgpt-narrow-layout.html`.
    * Corner radius: `--fynns-radius-22` (ChatGPT `rounded-[22px]`; composer
@@ -635,12 +637,16 @@ export const CHATMESSAGE_TOKENS = {
   "name-size": "0.75rem",
   "actions-gap": "0",
   /**
-   * Streaming caret thickness (2dp). Height: `cursor-height` (~1em body face —
-   * Cursor / native I-beam; was `1cap` and read too short).
+   * Streaming caret thickness (1dp). Keep hairline — 2dp + radius read as a
+   * stubby block next to body text.
    */
-  "cursor-width": "0.125rem",
-  /** Streaming caret length — full em square of `body-size` (not 1cap). */
-  "cursor-height": "1em",
+  "cursor-width": "0.0625rem",
+  /**
+   * Streaming caret length — one line-box (`1lh` of message body). Prefer
+   * `lh` over `1em`/`1cap` so the bar matches Chinese / Latin line height
+   * (body `line-height` 1.5), not a short em-square stub.
+   */
+  "cursor-height": "1lh",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
   "error-gap": "0.75rem",
   /**
@@ -736,20 +742,31 @@ export const CHAT_TOKENS = {
   "composer-max-height": "13rem",
   /**
    * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
-   * Expanded uses `composer-expanded-pad-*` (strip-pad inline). When
-   * collapsed with **no** leading, CSS adds start pad on the textarea so
-   * text lands at `--fynns-layout-strip-pad-inline`.
+   * Expanded uses `composer-expanded-pad-*` (bubble-matched text breath via
+   * pad + glyph-inset). When collapsed with **no** leading, CSS adds start
+   * pad on the textarea so text lands at `--fynns-layout-strip-pad-inline`.
    */
   "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
   "composer-pad-block": "0.1875rem",
   /**
-   * Expanded shell pad — same Banner/strip breath as collapsed text start
-   * (`--fynns-layout-strip-pad-inline`). Owns the inset for both textarea and
-   * bottom toolbar so + / Send share one vertical edge with the text.
+   * Expanded shell pad — not Banner `strip-pad-inline` (20dp felt too airy
+   * next to user bubbles). Equals
+   * `bubble-pad-inline − composer-glyph-inset` so **shell pad + glyph-inset =
+   * chatmessage bubble text breath (16dp)** while toolbar IconButtons still
+   * sit inset from the radius-3xl border. Textarea keeps `composer-glyph-inset`
+   * so copy aligns with the **16dp glyph** inside the 32dp control (optical),
+   * not the hit-target box.
    */
-  "composer-expanded-pad-inline": "var(--fynns-layout-strip-pad-inline)",
+  "composer-expanded-pad-inline":
+    "calc(var(--fynns-chatmessage-bubble-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
   "composer-expanded-pad-block": "var(--fynns-space-md)",
+  /**
+   * Optical inset: half of (`composer-control-size` − `--fynns-size-icon`).
+   * 32dp target − 16dp glyph → 8dp. Expanded textarea uses this on both
+   * inline sides so text start/end match leading / Send **glyphs**.
+   */
+  "composer-glyph-inset": "calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2)",
   /** Collapsed control cluster gap (4px). */
   "composer-gap": "var(--fynns-space-xs)",
   /** Expanded gap between full-width text and bottom toolbar (Cursor ~8–12dp). */

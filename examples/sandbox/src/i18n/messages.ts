@@ -197,7 +197,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer text-in-shell — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (section body block), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start — radius-3xl), `capsule-chrome-pad-inline` (SearchBar / ChatComposer Send flush), `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea). Expanded ChatComposer uses `composer-expanded-pad-inline` + glyph-inset (= bubble pad), not strip-pad. Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -240,7 +240,7 @@ const en = {
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
   "layoutChrome.stripPadInline": "Long-strip pad (inline)",
   "layoutChrome.stripPadInlineHint":
-    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer text-in-shell (20dp; radius-3xl). Not Chat column outer (that is dialog-inset). Prefer over ad-hoc rem.",
+    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start (20dp; radius-3xl). Not Chat column outer (dialog-inset) and not expanded ChatComposer (bubble-pad + glyph-inset). Prefer over ad-hoc rem.",
   "layoutChrome.capsuleChromePadInline": "Capsule chrome pad",
   "layoutChrome.capsuleChromePadInlineHint":
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer shell next to IconButtons (4dp; ChatGPT Send flush).",
@@ -802,7 +802,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). EndAside may host Chat (bubble 70% of aside content; composer 100% — same as main, no density mode). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` / `wouldClippedNavDrawerCrowd` densify to rail before paint (no full-drawer flash; skipped while dragging the drawer seam or while EndAside is closing). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
+    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). EndAside may host Chat (aside user bubble 100% of content track to match composer; main column keeps 70%; composer 100% — no density mode). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` / `wouldClippedNavDrawerCrowd` densify to rail before paint (no full-drawer flash; skipped while dragging the drawer seam or while EndAside is closing). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -887,13 +887,13 @@ const en = {
   "globals.chatComposerMultiLabel": "Composer · multiline (expanded toolbar)",
   "globals.chatComposerMultiAria": "Multiline message",
   "globals.chatComposerMultiHelp":
-    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell inline pad = `strip-pad-inline`, text line ~22dp. Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
+    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell inline pad + glyph-inset = user-bubble `bubble-pad-inline` (optical glyph align); text line ~22dp. Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
   "globals.chatSend": "Send",
   "globals.chatStop": "Stop generating",
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`); **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane. User bubble **70%** of host (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatCitationsAnatomyHelp":
     "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
   "globals.thinkingStreaming": "Thinking",
@@ -907,9 +907,9 @@ const en = {
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
     "**ChatThinking** — Wave 1 single-block reasoning disclosure (ChatGPT / Claude “Thinking / Thought for Ns”). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + label pulse. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*` (no `THINKING_*` group). Wave 2 (deferred): multi-step / tool-call chain chrome.",
-  "globals.chatAsideLabel": "Aside (~22rem) — same 70% / composer 100%",
+  "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
-    "Bubble max is 70% of this aside’s content width, not the main column.",
+    "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
   "globals.chatAsideAssistantBody":
     "Composer below fills 100% of the aside content track.",
   "globals.chatAsideComposerAria": "Chat composer (aside demo)",
@@ -1327,7 +1327,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 壳内文案，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（章节正文块向）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar / ChatComposer 发送钮贴边）、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）。展开态 ChatComposer 用 `composer-expanded-pad-inline` + glyph-inset（= 气泡 pad），不用 strip-pad。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -1370,7 +1370,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
   "layoutChrome.stripPadInline": "长条内边距（行向）",
   "layoutChrome.stripPadInlineHint":
-    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 壳内文案（默认 20dp；radius-3xl）。非 Chat 列外边距（列外缘用 dialog-inset）。禁止自造 rem。",
+    "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点（默认 20dp；radius-3xl）。非 Chat 列外边距（dialog-inset），亦非展开态 ChatComposer（气泡 pad + glyph-inset）。禁止自造 rem。",
   "layoutChrome.capsuleChromePadInline": "胶囊 chrome 边距",
   "layoutChrome.capsuleChromePadInlineHint":
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar / ChatComposer 壳贴 IconButton（默认 4dp；对齐 ChatGPT 发送贴边）。",
@@ -1930,7 +1930,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。EndAside 可承载 Chat（气泡为侧栏内容宽 70%；composer 100% — 与主栏同一套比例，无 density）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` / `wouldClippedNavDrawerCrowd` 在绘制前收成 rail（不先满宽再缩；拖抽屉缝或 EndAside 正在收合时不触发）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
+    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。EndAside 可承载 Chat（侧栏用户气泡 100% 内容轨对齐 composer；主栏仍 70%；composer 100% — 无 density）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` / `wouldClippedNavDrawerCrowd` 在绘制前收成 rail（不先满宽再缩；拖抽屉缝或 EndAside 正在收合时不触发）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -2014,13 +2014,13 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerMultiLabel": "Composer · 多行（展开底栏）",
   "globals.chatComposerMultiAria": "多行消息",
   "globals.chatComposerMultiHelp":
-    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；行向壳距 = `strip-pad-inline`、正文字行约 22dp。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
+    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距 + glyph-inset = 用户气泡 `bubble-pad-inline`（字形光学对齐）、正文字行约 22dp。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
   "globals.chatSend": "发送",
   "globals.chatStop": "停止生成",
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`）；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%。用户气泡为宿主 **70%**（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
   "globals.thinkingStreaming": "思考中",
@@ -2034,8 +2034,8 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
     "**ChatThinking** — Wave 1 单块推理披露（ChatGPT / Claude「Thinking / Thought for Ns」）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 标签呼吸。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`（无 `THINKING_*` 组）。Wave 2（延期）：多步骤 / tool 调用链 chrome。",
-  "globals.chatAsideLabel": "侧栏（~22rem）— 同 70% / composer 100%",
-  "globals.chatAsideUserBody": "气泡上限是本侧栏内容宽的 70%，不是主栏宽。",
+  "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
+  "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
   "globals.chatAsideComposerAria": "聊天输入（侧栏演示）",
   "globals.chatAsideComposerPlaceholder": "发消息…",

@@ -8367,10 +8367,12 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Dual placement — left/right resizable asides:
- * Host = aside **content** width (not viewport / full main). User bubble stays
- * `--fynns-chatmessage-bubble-max-width` (70%) of that host; composer = 100%.
- * Soft floors stay on the pane (`--fynns-layout-end-aside-min-width` /
- * `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
+ * Host = aside **content** width (not viewport / full main). Composer = 100%.
+ * User bubble: main column keeps `--fynns-chatmessage-bubble-max-width` (70%);
+ * aside / `.fynns-chat-host--fill` lifts the ceiling to 100% so a long turn
+ * shares the composer shell start+end edges (short copy still shrinks,
+ * flex-end). Soft floors stay on the pane (`--fynns-layout-end-aside-min-width`
+ * / `--fynns-navdrawer-min-width`) — no chat-specific min on the message row.
  * EndAside auto-fills; start-edge / custom asides wrap with `.fynns-chat-host--fill`.
  */
 .fynns-chat-host--fill {
@@ -8382,6 +8384,11 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-end-aside .fynns-chat-message,
 .fynns-chat-host--fill .fynns-chat-message {
+  max-width: 100%;
+}
+
+.fynns-end-aside .fynns-chat-message--user .fynns-chat-message-bubble,
+.fynns-chat-host--fill .fynns-chat-message--user .fynns-chat-message-bubble {
   max-width: 100%;
 }
 
@@ -8513,12 +8520,16 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-chat-message-cursor {
   display: inline-block;
+  box-sizing: border-box;
   width: var(--fynns-chatmessage-cursor-width);
-  /* Full em of body face — Cursor / native I-beam (was 1cap, too short). */
+  /* Line-box tall I-beam (not a rounded 2×16 stub). */
   height: var(--fynns-chatmessage-cursor-height);
-  margin-inline-start: 0.1em;
-  vertical-align: baseline;
-  border-radius: var(--fynns-radius-2xs);
+  margin-inline-start: 0.12em;
+  /* Sit on the text box bottom — baseline alignment clipped the bar visually. */
+  vertical-align: text-bottom;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: var(--fynns-radius-none);
   background: var(--fynns-color-accent);
   animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
     step-end infinite;
@@ -9019,7 +9030,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-composer-shell[data-expanded] {
-  /* Strip breath — same start edge as collapsed text / Banner copy. */
+  /* Bubble-matched text breath: pad + glyph-inset = bubble-pad-inline. */
   padding-inline: var(--fynns-chat-composer-expanded-pad-inline);
   padding-block: var(--fynns-chat-composer-expanded-pad-block);
   gap: var(--fynns-chat-composer-expanded-gap);
@@ -9134,9 +9145,13 @@ a.fynns-breadcrumb-link:visited {
   order: 0;
   width: 100%;
   align-self: stretch;
-  /* Shell expanded pad owns the inset — no extra strip−capsule on text. */
-  padding-inline-start: 0;
-  padding-inline-end: 0;
+  /*
+   * Optical align with 16dp glyphs inside 32dp IconButtons — not the hit
+   * box. Shell expanded-pad + this inset = bubble-pad-inline (16dp text
+   * breath); this half matches (control-size − size-icon) / 2.
+   */
+  padding-inline-start: var(--fynns-chat-composer-glyph-inset);
+  padding-inline-end: var(--fynns-chat-composer-glyph-inset);
   line-height: var(--fynns-chat-composer-text-line-height);
   min-height: var(--fynns-chat-composer-text-line-height);
 }
@@ -9196,6 +9211,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
   order: unset;
+  /* space-between owns placement — drop collapsed end-push. */
+  margin-inline-start: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
