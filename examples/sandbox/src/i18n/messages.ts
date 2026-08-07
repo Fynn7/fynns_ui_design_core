@@ -343,7 +343,7 @@ const en = {
   "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
-    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default; demo trees mount only while a section is open. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
   "globals.searchAria": "Search components",
   "globals.searchPlaceholder": "Search components…",
   "globals.searchClear": "Clear search",
@@ -1471,7 +1471,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
-    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起，仅展开时挂载样例树。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
   "globals.searchAria": "搜索组件",
   "globals.searchPlaceholder": "搜索组件…",
   "globals.searchClear": "清除搜索",
