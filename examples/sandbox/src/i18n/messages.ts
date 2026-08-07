@@ -990,7 +990,7 @@ const en = {
   "globalsInspector.resetLadder": "Reset radius parameters",
   "globalsInspector.resetLadderTip":
     "Restore radius 2xs–3xl to shipped tokens (md = 20px); keep color and other overrides",
-  "globalsInspector.toastReset": "Radius parameters reset to sandbox defaults",
+  "globalsInspector.toastReset": "Radius parameters reset to shipped tokens",
 
   "hue.presetsAria": "Accent color presets",
   "hue.openPalette": "Open hue wheel",
@@ -2118,7 +2118,7 @@ const zh: Record<MessageKey, string> = {
   "globalsInspector.resetLadder": "重置圆角参数",
   "globalsInspector.resetLadderTip":
     "将 radius 2xs–3xl 恢复为正式 token（md = 20px）；保留颜色与其他改动",
-  "globalsInspector.toastReset": "圆角参数已重置为沙盒默认",
+  "globalsInspector.toastReset": "圆角参数已重置为正式 token",
 
   "hue.presetsAria": "强调色预设",
   "hue.openPalette": "打开色相环",
