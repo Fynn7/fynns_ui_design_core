@@ -130,8 +130,11 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
   content-inset. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
-  Snackbar, ChatComposer text start / expanded shell pad) →
-  `--fynns-layout-strip-pad-inline`. Capsule chrome next to IconButtons
+  Snackbar, ChatComposer **collapsed** text-only start) →
+  `--fynns-layout-strip-pad-inline`. Expanded ChatComposer shell pad is
+  **not** strip-pad — `composer-expanded-pad-inline` + `glyph-inset` match
+  user-bubble `bubble-pad-inline` (see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
+  Capsule chrome next to IconButtons
   (SearchBar / ChatComposer shell — Send flush) →
   `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
   field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
