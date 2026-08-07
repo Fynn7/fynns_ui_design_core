@@ -88,7 +88,7 @@ export function CardPreviewCanvas() {
               }
             >
               {options.chromePlain ? (
-                <Surface fill padded={false} style={{ minHeight: "6rem" }}>
+                <Surface fill padded style={{ minHeight: "6rem" }}>
                   <SandboxHelp as="span" text={t("preview.cardChromePlainBody")} />
                 </Surface>
               ) : (

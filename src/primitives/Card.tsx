@@ -38,7 +38,7 @@ export type CardProps = {
  * </Card>
  *
  * <Card title="Preview" chrome="plain">
- *   <Surface fill>…</Surface>
+ *   <Surface fill padded>…</Surface>
  * </Card>
  * ```
  */

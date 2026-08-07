@@ -2314,7 +2314,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             title={t("globals.cardChromePlainTitle")}
             chrome="plain"
           >
-            <Surface fill padded={false} style={{ minHeight: "4.5rem" }}>
+            <Surface fill padded style={{ minHeight: "4.5rem" }}>
               <SandboxHelp as="span" text={t("globals.cardChromePlainBody")} />
             </Surface>
           </Card>
