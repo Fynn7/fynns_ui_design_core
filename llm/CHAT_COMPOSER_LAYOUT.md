@@ -70,6 +70,20 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Expanded: shell `expanded-pad-*` only — textarea has no extra inline pad;
   toolbar sits inside the same inset.
 
+## Column alignment (thread ↔ composer)
+
+`--fynns-chat-thread-pad-inline` aliases `--fynns-layout-dialog-inset`
+(24dp reading-column breath). `--fynns-chat-composer-inset-inline`
+aliases **the thread token** (not a second layout key). Thread applies
+that pad on `.fynns-chat-thread-inner` (inside the `chat-max-width` box);
+composer applies it on the form — same box model — so the **user bubble
+end edge** and **composer shell end edge** share one vertical line, with
+equal L/R margins on the capped column.
+
+Inner radius-3xl text breath (`composer-expanded-pad-inline`, collapsed
+no-leading text start) stays `--fynns-layout-strip-pad-inline` — do not
+conflate column outer inset with shell text pad.
+
 ## Not this primitive
 
 - SearchBar / field-shell single-line capsules (stay model A).

@@ -8910,7 +8910,9 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
   min-width: 0;
   overflow: auto;
-  padding-inline: var(--fynns-chat-thread-pad-inline);
+  /* Inline pad lives on `.fynns-chat-thread-inner` so the max-width box
+   * matches `.fynns-chat-composer` (pad inside the capped column). */
+  padding-inline: 0;
   padding-block: var(--fynns-chat-thread-pad-block);
   padding-bottom: calc(
     var(--fynns-chat-thread-pad-block) + var(--fynns-chat-composer-scroll-pad)
@@ -8926,6 +8928,7 @@ a.fynns-breadcrumb-link:visited {
   max-width: var(--fynns-layout-chat-max-width);
   margin-inline: auto;
   min-width: 0;
+  padding-inline: var(--fynns-chat-thread-pad-inline);
   box-sizing: border-box;
 }
 
