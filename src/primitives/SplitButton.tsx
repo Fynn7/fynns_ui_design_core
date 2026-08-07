@@ -3,7 +3,13 @@ import { Button, type ButtonSize } from "./Button";
 import { DropdownMenu } from "./DropdownMenu";
 import { ChevronDownIcon } from "./icons";
 
-export type SplitButtonVariant = "primary" | "tonal" | "default" | "elevated";
+export type SplitButtonVariant =
+  | "primary"
+  | "tonal"
+  | "default"
+  | "elevated"
+  | "danger"
+  | "ghost";
 export type SplitButtonSize = ButtonSize;
 
 export type SplitButtonProps = {
@@ -14,7 +20,7 @@ export type SplitButtonProps = {
   /** Leading label text (or node). */
   label: ReactNode;
   leadingIcon?: ReactNode;
-  /** M3 filled / tonal / outlined / elevated. Default `primary`. */
+  /** M3 filled / tonal / outlined / elevated / danger / ghost. Default `primary`. */
   variant?: SplitButtonVariant;
   size?: SplitButtonSize;
   disabled?: boolean;
@@ -33,6 +39,8 @@ const VARIANT_CLASS: Record<SplitButtonVariant, string> = {
   tonal: "fynns-btn--tonal",
   default: "fynns-btn--default",
   elevated: "fynns-btn--elevated",
+  danger: "fynns-btn--danger",
+  ghost: "fynns-btn--ghost",
 };
 
 const SIZE_CLASS: Record<SplitButtonSize, string> = {
