@@ -19,6 +19,7 @@
     "On any short prompt involving @fynns/ui / fynns UI / Collapsible (etc.), read llm/CONSUME.md before writing app code.",
     "Paste llm/consumer-cursor-rule.mdc into the consumer .cursor/rules/ (see llm/CONSUMER_TREATY.md) so agents obey without opening AGENTS.",
     "ClippedNavShell: navMode must match nav children (drawer→NavigationDrawer, rail→NavigationRail). Never leave a labeled drawer in a rail-width track.",
+    "WYSIWYG: sandbox Globals/Preview resting look is the consumer default; never restyle .fynns-* in the app. SANDBOX_DEFAULT_OVERRIDES must stay empty (check:wysiwyg).",
     "Consume as git submodule + Vite source alias @fynns/ui.",
     "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
     "NEVER publish-install from npm registry for day-to-day app work.",

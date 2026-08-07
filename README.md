@@ -152,6 +152,11 @@ injects CSS variable overrides at runtime (including light theme, so hue knobs
 are not masked by `:root[data-fynns-theme="light"]`) so Button, Input, Card, and
 sandbox chrome update together. See the plan layers: `llm/m3-draft-tokens.md` (M3
 reference) → `tokens.ts` (fynns base) → sandbox overrides (fynns-override).
+**WYSIWYG:** `SANDBOX_DEFAULT_OVERRIDES` in
+`examples/sandbox/src/state/baseline.ts` must stay **empty** — nodded looks go
+into `tokens.ts` + `npm run gen:theme` (enforced by `npm run check:wysiwyg`).
+Never leave an aesthetic only in the sandbox draft layer (that was how
+`--fynns-radius-md` looked 20px in Globals while consumers still got 8px).
 A topbar search icon focuses the Components SearchBar from any page.
 
 ### Language (English / 中文)

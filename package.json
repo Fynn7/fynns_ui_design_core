@@ -26,6 +26,7 @@
     "typecheck": "tsc --noEmit",
     "check:wysiwyg": "node scripts/check-wysiwyg.mjs",
     "check:perf-sandbox": "node scripts/check-perf-sandbox.mjs",
+    "check": "npm run typecheck && npm run check:wysiwyg && npm run check:perf-sandbox",
     "lint": "eslint .",
     "sandbox": "vite --config examples/sandbox/vite.config.ts",
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",

@@ -20,6 +20,17 @@ alwaysApply: true
 5. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
 6. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
+## 所见即所得（强制）
+
+7. **Sandbox Globals / Preview 里点头的外观 = 消费仓默认。** 裸用 `@fynns/ui`
+   原语即可（如 `<Select />`），**禁止**为「看起来更圆」去本地改 `.fynns-*` 或发明
+   私有 radius。若消费仓与 sandbox 不一致：先核对子模块 pin，再在 **core**
+   `tokens.ts` / 原语 CSS 修（`npm run gen:theme`），**不要**在消费仓打补丁。
+8. 变体（disabled / object options / invalid 等）按 sandbox 同名 demo 选用；
+   **默认参数**以 sandbox 静息外观为准（正式 `--fynns-*`，不是沙盒私货 override）。
+9. Select / Autocomplete / Input 圆角走 `--fynns-radius-md`（正式默认 20px）——
+   不是 SearchBar 的 `--fynns-radius-3xl` 大胶囊；也不该再出现 8px「尖角」漂移。
+
 ## ClippedNavShell（必读 — 避免「挤扁抽屉」）
 
 `ClippedNavShell` **只改网格轨道宽度**，**不会**自动把 Drawer 换成 Rail。

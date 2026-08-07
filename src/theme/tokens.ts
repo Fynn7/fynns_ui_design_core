@@ -195,14 +195,20 @@ export const RADIUS_TOKENS = {
   /** M3 extra-small ≈ 4dp */
   xs: "4px",
   sm: "6px",
-  /** Card default (M3 medium ≈ 12dp is a sandbox starting point, not forced here). */
-  md: "8px",
+  /**
+   * Default control / card corner (Input, Select, Autocomplete, field shells,
+   * Card / Collapsible / Surface). Role name — not a sorted step between `sm`
+   * and `lg`. Value (20px) matches long-standing sandbox resting; `lg`/`xl`
+   * stay smaller for Fab / Drawer / menu chrome.
+   */
+  md: "20px",
+  /** Dense chrome (e.g. Fab `sm`) — smaller than form `md` by role, not rank. */
   lg: "10px",
-  /** M3 extra-large band */
+  /** Fab default / Drawer / menu panels — between `lg` and Chat `22`. */
   xl: "16px",
   /**
-   * ChatGPT user-message bubble (`rounded-[22px]`). Between xl and 3xl —
-   * not a long-strip chrome radius.
+   * ChatGPT user-message bubble (`rounded-[22px]`). Between form `md` and
+   * long-strip `3xl` — not a long-strip chrome radius.
    */
   "22": "22px",
   /**
