@@ -32,7 +32,10 @@ import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraftHistoryActions } from "../state/TokenDraftProvider";
 import {
+  clearFreshBootFocusArm,
+  ensureFreshBootFocusArmed,
   freshSandboxUiSession,
+  isFreshBootFocusArmed,
   loadSandboxUiSession,
   patchSandboxUiSession,
   type SandboxPage,
@@ -57,13 +60,15 @@ function defaultAsideOpen(): boolean {
 
 export function SandboxShell() {
   const { t } = useLocale();
-  /** Capture once — session may be written by effects before StrictMode remount. */
+  // Arm before reading session snapshot so StrictMode remount still sees focus.
+  ensureFreshBootFocusArmed();
   const initialSessionRef = useRef(loadSandboxUiSession());
-  const isFreshBootRef = useRef(initialSessionRef.current == null);
   const [page, setPage] = useState<SandboxPage>(
     () => initialSessionRef.current?.page ?? freshSandboxUiSession().page,
   );
-  const [globalsSearchFocusTick, setGlobalsSearchFocusTick] = useState(0);
+  const [globalsSearchFocusTick, setGlobalsSearchFocusTick] = useState(() =>
+    isFreshBootFocusArmed() ? 1 : 0,
+  );
   const [theme, setTheme] = useState<FynnsThemeMode>("dark");
   const [asideOpen, setAsideOpen] = useState(
     () => initialSessionRef.current?.asideOpen ?? defaultAsideOpen(),
@@ -98,12 +103,13 @@ export function SandboxShell() {
     setTheme(restoreFynnsThemeMode());
   }, []);
 
-  /** New Vite process: land on Components with catalog search focused. */
+  /** New Vite process: Components + catalog search focus (dev convenience). */
   useEffect(() => {
-    if (!isFreshBootRef.current) return;
-    isFreshBootRef.current = false;
+    if (!isFreshBootFocusArmed()) return;
     setPage("globals");
-    setGlobalsSearchFocusTick((n) => n + 1);
+    setGlobalsSearchFocusTick((n) => Math.max(n, 1));
+    const clearId = window.setTimeout(() => clearFreshBootFocusArm(), 0);
+    return () => window.clearTimeout(clearId);
   }, []);
 
   useEffect(() => {
