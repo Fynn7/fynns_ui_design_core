@@ -37,6 +37,7 @@ if (!exists("examples/sandbox/src/components/LazyCollapsible.tsx")) {
 const inspectorFiles = [
   "examples/sandbox/src/pages/PropertyInspector.tsx",
   "examples/sandbox/src/pages/GlobalsInspector.tsx",
+  "examples/sandbox/src/pages/LayoutChromeInspector.tsx",
 ];
 
 for (const rel of inspectorFiles) {
