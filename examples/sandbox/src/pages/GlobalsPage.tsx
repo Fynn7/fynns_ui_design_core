@@ -513,7 +513,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
-    "Rotate the view to the RIGHT side view of the head, using orthographic projection so the silhouette stays true to the sculpt.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   );
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
@@ -2013,7 +2013,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 variant="ghost"
                 aria-label={t("globals.chatComposerLeadingTip")}
               >
-                <LayoutGridIcon />
+                <PlusIcon />
               </IconButton>
             </Tooltip>
           }

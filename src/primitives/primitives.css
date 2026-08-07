@@ -9030,7 +9030,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-composer-shell[data-expanded] {
-  /* Bubble-matched text breath: pad + glyph-inset = bubble-pad-inline. */
+  /* strip − glyph-inset; textarea adds glyph-inset → text at strip-pad. */
   padding-inline: var(--fynns-chat-composer-expanded-pad-inline);
   padding-block: var(--fynns-chat-composer-expanded-pad-block);
   gap: var(--fynns-chat-composer-expanded-gap);
@@ -9146,9 +9146,9 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   align-self: stretch;
   /*
-   * Optical align with 16dp glyphs inside 32dp IconButtons — not the hit
-   * box. Shell expanded-pad + this inset = bubble-pad-inline (16dp text
-   * breath); this half matches (control-size − size-icon) / 2.
+   * Height from JS auto-grow. Inline glyph-inset so copy start/end share the
+   * toolbar + / Send **glyph** edges (not the 32dp hit box). Shell
+   * expanded-pad is strip − glyph-inset → text still at strip-pad from edge.
    */
   padding-inline-start: var(--fynns-chat-composer-glyph-inset);
   padding-inline-end: var(--fynns-chat-composer-glyph-inset);

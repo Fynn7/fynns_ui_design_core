@@ -40,8 +40,13 @@ rename required for consumers.
 | **Collapsed** (default) | Empty draft, single visual line, no attachments | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / textarea / primary share one line (`order` 1 / 2 / 3). |
 | **Expanded** | Newline in value, measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
 
-Detection runs inside the existing JS auto-grow (`resize`): empty value forces
-collapsed (unless attachments force expand).
+Detection runs inside the JS auto-grow (`resize`). When the morph flips
+expanded on/off, `resize` **re-runs** after `data-expanded` CSS applies so
+height is measured under the expanded `text-line-height` (~22dp), not the
+collapsed 32dp control row (avoids a tall empty “fixed” shell). Empty value
+forces collapsed (unless attachments force expand). Textarea height =
+`min(max(scrollHeight, one-line), max-height)` — content-driven, not a
+hardcoded multi-line well.
 
 ## Geometry tokens
 
@@ -49,20 +54,18 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
 - **Collapsed** shell pad: `composer-pad-inline` (capsule ~4dp),
   `composer-pad-block` (3dp; + 32dp control row + hairline → ~40dp = Input)
-- **Expanded** shell pad: `composer-expanded-pad-inline` =
-  `bubble-pad-inline − glyph-inset` (8dp when bubble pad is 16dp) /
-  `composer-expanded-pad-block` (**12dp**)
-- **Expanded text optical inset:** `composer-glyph-inset` =
-  `(composer-control-size − --fynns-size-icon) / 2` (8dp). Applied as
-  textarea `padding-inline` so copy aligns with the **glyph**, not the 32dp
-  hit target. **Shell pad + glyph-inset = `--fynns-chatmessage-bubble-pad-inline`**
-  (same text↔border breath as the user bubble).
+- **Expanded** shell pad: `composer-expanded-pad-inline` /
+  `composer-expanded-pad-block` (= `strip-pad-inline − composer-glyph-inset`,
+  ~12dp). Textarea inline pad = `composer-glyph-inset` (~8dp) so copy
+  start/end share the toolbar + / Send **glyph** edges; text still sits at
+  strip-pad (~20dp) from the shell edge.
 - Gap: `composer-gap` (4px collapsed); `composer-expanded-gap` (8dp
   text↔toolbar)
 - Controls: `composer-control-size` (32dp)
 - Line: `composer-line-height` (32dp **control-row** / collapsed
   `line-height`); `composer-text-line-height` (22dp **typography** when
-  `data-expanded`); max `composer-max-height` (13rem)
+  `data-expanded`); max `composer-max-height` (13rem) — scroll inside the
+  field after that
 - Radius: `--fynns-radius-3xl` (not Cursor’s pill→12px compact switch; not
   Input’s `radius-md`)
 
@@ -71,9 +74,7 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Collapsed, no leading: textarea start = strip breath
   (`strip-pad-inline − capsule-chrome`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
-- Expanded: shell `expanded-pad-*` insets the toolbar; textarea adds
-  `glyph-inset` so text ↔ icon artwork share one vertical edge and the
-  combined inset matches user-bubble `bubble-pad-inline`.
+- Expanded: shell `expanded-pad-*` + textarea `glyph-inset` (optical glyphs).
 
 ## Column alignment (thread ↔ composer)
 
@@ -86,8 +87,8 @@ end edge** and **composer shell end edge** share one vertical line, with
 equal L/R margins on the capped column.
 
 Do not conflate **column** outer inset (`dialog-inset`) with **shell**
-expanded pad / **glyph** optical inset (together = bubble text breath), or
-with Banner `strip-pad-inline` (collapsed text-only start only).
+expanded strip-pad, or with Banner-only / collapsed text-start use of
+`strip-pad-inline`.
 
 ## Not this primitive
 

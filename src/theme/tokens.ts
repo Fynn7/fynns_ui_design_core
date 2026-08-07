@@ -742,34 +742,30 @@ export const CHAT_TOKENS = {
   "composer-max-height": "13rem",
   /**
    * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
-   * Expanded uses `composer-expanded-pad-*` (bubble-matched text breath via
-   * pad + glyph-inset). When collapsed with **no** leading, CSS adds start
-   * pad on the textarea so text lands at `--fynns-layout-strip-pad-inline`.
+   * Expanded uses `composer-expanded-pad-*` (strip-pad Cursor breath).
+   * When collapsed with **no** leading, CSS adds start pad on the textarea so
+   * text lands at `--fynns-layout-strip-pad-inline`.
    */
   "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
   "composer-pad-block": "0.1875rem",
   /**
-   * Expanded shell pad — not Banner `strip-pad-inline` (20dp felt too airy
-   * next to user bubbles). Equals
-   * `bubble-pad-inline − composer-glyph-inset` so **shell pad + glyph-inset =
-   * chatmessage bubble text breath (16dp)** while toolbar IconButtons still
-   * sit inset from the radius-3xl border. Textarea keeps `composer-glyph-inset`
-   * so copy aligns with the **16dp glyph** inside the 32dp control (optical),
-   * not the hit-target box.
+   * Expanded shell pad — strip breath minus glyph inset (~12dp) so toolbar
+   * IconButtons sit closer to the shell edge while copy still lands at
+   * `strip-pad-inline` via textarea `composer-glyph-inset` (optical align
+   * with + / Send **glyphs**, not the 32dp hit boxes).
    */
-  "composer-expanded-pad-inline":
-    "calc(var(--fynns-chatmessage-bubble-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
-  "composer-expanded-pad-block": "var(--fynns-space-md)",
+  "composer-expanded-pad-inline": "calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
+  "composer-expanded-pad-block": "calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
   /**
-   * Optical inset: half of (`composer-control-size` − `--fynns-size-icon`).
-   * 32dp target − 16dp glyph → 8dp. Expanded textarea uses this on both
-   * inline sides so text start/end match leading / Send **glyphs**.
+   * Half of (`composer-control-size` − `--fynns-size-icon`) — 8dp.
+   * Expanded textarea inline pad (optical glyph align); also used in
+   * `composer-expanded-pad-*` so text edge = strip-pad from the shell.
    */
   "composer-glyph-inset": "calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2)",
   /** Collapsed control cluster gap (4px). */
   "composer-gap": "var(--fynns-space-xs)",
-  /** Expanded gap between full-width text and bottom toolbar (Cursor ~8–12dp). */
+  /** Expanded gap between full-width text and bottom toolbar (~8dp). */
   "composer-expanded-gap": "var(--fynns-space-sm)",
   /**
    * Leading/trailing IconButton hit target inside the composer (32dp).

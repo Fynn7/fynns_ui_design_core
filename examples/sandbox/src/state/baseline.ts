@@ -250,7 +250,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "dialog-inset":
     "Panel inset · Dialog / ConfirmDialog / Chat column (thread+composer outer)",
   "strip-pad-inline":
-    "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start",
+    "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer collapsed text + expanded text edge",
   "capsule-chrome-pad-inline":
     "Capsule chrome · SearchBar / ChatComposer shell (Send/mic flush, ~4dp)",
   "field-pad-inline":
