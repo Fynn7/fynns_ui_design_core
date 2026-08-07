@@ -247,9 +247,10 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Panel inset · Card / Collapsible / Drawer equal **inline** pad",
   "content-pad-block":
     "Panel inset · Collapsible / Card body / Surface padded / CodeBlock **block** (16dp)",
-  "dialog-inset": "Panel inset · centered Dialog / ConfirmDialog equal outer pad",
+  "dialog-inset":
+    "Panel inset · Dialog / ConfirmDialog / Chat column (thread+composer outer)",
   "strip-pad-inline":
-    "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer text start",
+    "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer text-in-shell",
   "capsule-chrome-pad-inline":
     "Capsule chrome · SearchBar / ChatComposer shell (Send/mic flush, ~4dp)",
   "field-pad-inline":

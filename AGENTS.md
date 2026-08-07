@@ -147,6 +147,14 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
   `npm run gen:theme`.
+- **DON'T** invent shell / column / chat **insets or gaps** as raw `rem` / `px`
+  or a fresh private CSS variable. Reuse an existing `--fynns-layout-*` key
+  (or a component token that **aliases** one — e.g.
+  `--fynns-chat-thread-pad-inline` → `dialog-inset`). Missing step → add it to
+  `LAYOUT_TOKENS`, run `npm run gen:theme`, and expose it in the sandbox Layout
+  chrome inspector in the **same** change. Consumers must not redefine
+  margins in app CSS — see [`llm/CONSUME.md`](llm/CONSUME.md). Decision tree:
+  **Inset decision tree** below.
 - **DON'T** invent private radius CSS variables outside `--fynns-radius-*`
   (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
   `--fynns-<component>-*-radius`). Corner radius **must** use
@@ -341,7 +349,13 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     `--fynns-color-chat-user-bubble`; body `1rem` / pad-inline `1rem`).
     Composer = **100%** of the same host (`radius-3xl`, ~40dp collapsed
     shell with 32dp controls + `composer-gap` 4px; Input density, not
-    SearchBar 56dp; not viewport full-bleed).
+    SearchBar 56dp; not viewport full-bleed). Thread
+    `--fynns-chat-thread-pad-inline` (= `dialog-inset`, 24dp column breath)
+    and composer `--fynns-chat-composer-inset-inline` (**aliases the thread
+    token**) so the user bubble end edge and composer shell end edge align
+    (equal L/R on the capped column; see `llm/CHAT_COMPOSER_LAYOUT.md`).
+    Inner radius-3xl text breath stays `strip-pad-inline` — do not conflate
+    column outer inset with shell text pad.
   - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
     aside content (rem ceiling dropped). Bubble still **70%** of that host;
     composer **100%**. Pane soft mins + chat stage min on the shell root.
@@ -417,7 +431,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
     control, textarea start adds pad so text lands at
     `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
-    Outer form inset uses `strip-pad-inline`. **Multiline layout** is model C
+    Outer form inset aliases `--fynns-chat-thread-pad-inline` →
+    `dialog-inset` (column breath, not strip-pad). **Multiline layout** is model C
     + compact morph (Cursor): collapsed ≈ one horizontal row (~40dp = Input /
     field-shell density, not SearchBar 56dp; toolbar `display: contents`;
     `line-height` = 32dp control row); expanded = full-width textarea above a
@@ -653,16 +668,21 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
   second custom status box (use `InlineAlert` for in-panel severity).
   **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
-  and ChatComposer **text start** when there is no leading control):
-  `--fynns-layout-strip-pad-inline` (20dp default). Banner /
+  and ChatComposer **text start** / expanded shell pad when there is no
+  leading control): `--fynns-layout-strip-pad-inline` (20dp default). Banner /
   InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
   `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
   **Capsule chrome** (SearchBar field / ChatComposer **shell** next to
   IconButtons — ChatGPT Send/mic flush):
   `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer shell uses this
   on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
-  — do **not** put strip pad on the Send side. ChatComposer **outer** form
-  inset also uses `strip-pad-inline`.
+  — do **not** put strip pad on the Send side.
+  **Chat conversation column** (thread + composer **outer** form):
+  `--fynns-layout-dialog-inset` (24dp) via `--fynns-chat-thread-pad-inline`;
+  `--fynns-chat-composer-inset-inline` **must** alias the thread token so
+  bubble end and composer shell end stay one vertical line. Do **not** use
+  `strip-pad-inline` for the column outer inset (that key is text-in-shell
+  only).
   **Form fields:** `Input` / `.fynns-field-shell` →
   `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). `Textarea` →
   same inline recipe **plus** `--fynns-layout-field-pad-block` (12dp) so
@@ -682,7 +702,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
   asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
   block≠inline). Do not force ListItem onto equal four-side padding.
-  Do not substitute raw `--fynns-space-*` for dialog/panel/strip shell insets.
+  Do not substitute raw `--fynns-space-*` or rem literals for
+  dialog/panel/strip/chat-column shell insets.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
