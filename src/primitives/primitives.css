@@ -9030,7 +9030,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-chat-composer-shell[data-expanded] {
-  /* Strip breath — same start edge as collapsed text / Banner copy. */
+  /* Bubble-matched text breath: pad + glyph-inset = bubble-pad-inline. */
   padding-inline: var(--fynns-chat-composer-expanded-pad-inline);
   padding-block: var(--fynns-chat-composer-expanded-pad-block);
   gap: var(--fynns-chat-composer-expanded-gap);
@@ -9145,9 +9145,13 @@ a.fynns-breadcrumb-link:visited {
   order: 0;
   width: 100%;
   align-self: stretch;
-  /* Shell expanded pad owns the inset — no extra strip−capsule on text. */
-  padding-inline-start: 0;
-  padding-inline-end: 0;
+  /*
+   * Optical align with 16dp glyphs inside 32dp IconButtons — not the hit
+   * box. Shell expanded-pad + this inset = bubble-pad-inline (16dp text
+   * breath); this half matches (control-size − size-icon) / 2.
+   */
+  padding-inline-start: var(--fynns-chat-composer-glyph-inset);
+  padding-inline-end: var(--fynns-chat-composer-glyph-inset);
   line-height: var(--fynns-chat-composer-text-line-height);
   min-height: var(--fynns-chat-composer-text-line-height);
 }
@@ -9207,6 +9211,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
   order: unset;
+  /* space-between owns placement — drop collapsed end-push. */
+  margin-inline-start: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

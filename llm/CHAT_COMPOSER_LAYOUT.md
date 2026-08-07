@@ -49,10 +49,14 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
 - **Collapsed** shell pad: `composer-pad-inline` (capsule ~4dp),
   `composer-pad-block` (3dp; + 32dp control row + hairline → ~40dp = Input)
-- **Expanded** shell pad: `composer-expanded-pad-inline` (= layout
-  `strip-pad-inline`, Banner text breath) /
-  `composer-expanded-pad-block` (**12dp**). Owns inset for text **and**
-  toolbar so + / Send share one vertical edge with the copy.
+- **Expanded** shell pad: `composer-expanded-pad-inline` =
+  `bubble-pad-inline − glyph-inset` (8dp when bubble pad is 16dp) /
+  `composer-expanded-pad-block` (**12dp**)
+- **Expanded text optical inset:** `composer-glyph-inset` =
+  `(composer-control-size − --fynns-size-icon) / 2` (8dp). Applied as
+  textarea `padding-inline` so copy aligns with the **glyph**, not the 32dp
+  hit target. **Shell pad + glyph-inset = `--fynns-chatmessage-bubble-pad-inline`**
+  (same text↔border breath as the user bubble).
 - Gap: `composer-gap` (4px collapsed); `composer-expanded-gap` (8dp
   text↔toolbar)
 - Controls: `composer-control-size` (32dp)
@@ -67,8 +71,9 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Collapsed, no leading: textarea start = strip breath
   (`strip-pad-inline − capsule-chrome`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
-- Expanded: shell `expanded-pad-*` only — textarea has no extra inline pad;
-  toolbar sits inside the same inset.
+- Expanded: shell `expanded-pad-*` insets the toolbar; textarea adds
+  `glyph-inset` so text ↔ icon artwork share one vertical edge and the
+  combined inset matches user-bubble `bubble-pad-inline`.
 
 ## Column alignment (thread ↔ composer)
 
@@ -80,9 +85,9 @@ composer applies it on the form — same box model — so the **user bubble
 end edge** and **composer shell end edge** share one vertical line, with
 equal L/R margins on the capped column.
 
-Inner radius-3xl text breath (`composer-expanded-pad-inline`, collapsed
-no-leading text start) stays `--fynns-layout-strip-pad-inline` — do not
-conflate column outer inset with shell text pad.
+Do not conflate **column** outer inset (`dialog-inset`) with **shell**
+expanded pad / **glyph** optical inset (together = bubble text breath), or
+with Banner `strip-pad-inline` (collapsed text-only start only).
 
 ## Not this primitive
 

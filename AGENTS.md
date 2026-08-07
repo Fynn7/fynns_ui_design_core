@@ -365,8 +365,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     and composer `--fynns-chat-composer-inset-inline` (**aliases the thread
     token**) so the user bubble end edge and composer shell end edge align
     (equal L/R on the capped column; see `llm/CHAT_COMPOSER_LAYOUT.md`).
-    Inner radius-3xl text breath stays `strip-pad-inline` — do not conflate
-    column outer inset with shell text pad.
+    Inner radius-3xl text breath stays `bubble-pad-inline` via expanded pad +
+    glyph-inset — do not conflate column outer inset with shell text pad.
   - **Aside** (`EndAside` / `.fynns-chat-host--fill`): host = **100%** of
     aside content (rem ceiling dropped). User bubble ceiling **100%** of that
     host (long turns share composer shell start+end; short still shrinks);
@@ -449,9 +449,12 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     field-shell density, not SearchBar 56dp; toolbar `display: contents`;
     `line-height` = 32dp control row); expanded = full-width textarea above a
     bottom `role="toolbar"` (leading start, Send end) with shell pad
-    `composer-expanded-pad-inline` (= `--fynns-layout-strip-pad-inline`,
-    same Banner text breath), `composer-expanded-pad-block` (12dp),
-    **8dp** text↔toolbar gap, and
+    `composer-expanded-pad-inline` (= `bubble-pad-inline − glyph-inset`,
+    so pad + glyph-inset match user-bubble text breath — not Banner
+    `strip-pad-inline`),
+    `composer-expanded-pad-block` (12dp), textarea optical
+    `composer-glyph-inset` so copy aligns with the **16dp glyphs** inside
+    32dp IconButtons (not the hit boxes), **8dp** text↔toolbar gap, and
     `composer-text-line-height` (22dp) — never leave icons vertically centered
     beside tall text. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
@@ -684,11 +687,15 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `gap: var(--fynns-layout-unit-stack-gap)` — never ad-hoc rem margins or a
   second custom status box (use `InlineAlert` for in-panel severity).
   **Long-strip / `radius-3xl` text chrome** (Banner, InlineAlert, Snackbar,
-  and ChatComposer **collapsed** text start when there is no leading control;
-  **expanded** shell pad always): `--fynns-layout-strip-pad-inline` (20dp
+  and ChatComposer **collapsed** text start when there is no leading control):
+  `--fynns-layout-strip-pad-inline` (20dp
   default). Banner /
   InlineAlert / Snackbar pad-inline **alias** this key — never hardcode
   `--fynns-banner-pad-inline: 1rem` or raw `--fynns-space-*`.
+  **Expanded ChatComposer** shell inline pad is **not** strip-pad — it is
+  `composer-expanded-pad-inline` (= `bubble-pad-inline − glyph-inset`) so
+  textarea text breath matches the user bubble while glyphs stay optically
+  aligned.
   **Capsule chrome** (SearchBar field / ChatComposer **shell** next to
   IconButtons — ChatGPT Send/mic flush):
   `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer shell uses this
@@ -698,8 +705,8 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `--fynns-layout-dialog-inset` (24dp) via `--fynns-chat-thread-pad-inline`;
   `--fynns-chat-composer-inset-inline` **must** alias the thread token so
   bubble end and composer shell end stay one vertical line. Do **not** use
-  `strip-pad-inline` for the column outer inset (that key is text-in-shell
-  only).
+  `strip-pad-inline` for the column outer inset (that key is Banner /
+  collapsed text-in-shell only).
   **Form fields:** `Input` / `.fynns-field-shell` →
   `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). `Textarea` →
   same inline recipe **plus** `--fynns-layout-field-pad-block` (12dp) so
