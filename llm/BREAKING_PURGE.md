@@ -74,7 +74,7 @@ Anything else must be deleted or kept as a non-exported internal.
 
 | Removed | Consumer fix |
 | --- | --- |
-| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or `BadgedBox` + `NavigationRailBadge` (notification overlay). Do not revive pill `Badge`. |
+| `Badge` / `BadgeProps` / `BadgeSize` / `BadgeVariant` / `.fynns-badge` / `.fynns-badge--*` | Non-M3 outlined pill labels (clashed with InfoHint / inline chrome). Use `Chip` (interactive), `InlineAlert` / `Banner` (status), or `BadgedBox` + `NavigationRailBadge` (notification overlay). Do not revive pill `Badge`. |
 | `toast` / `Toaster` / `Toast` / `ToastProvider` / `useToast` | Use `snackbar` + `SnackbarHost`. Do not revive toast/sonner names. |
 | `Popover` | Build a local anchored panel, or use `DropdownMenu` / `Tooltip` where they fit. |
 | `SearchInput` | Use `SearchBar` (chrome) or `Input` (dense forms). |
