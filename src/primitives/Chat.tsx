@@ -333,26 +333,36 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       const el = localRef.current;
       if (!el) return;
       const cs = getComputedStyle(el);
-      const line =
+      // Collapsed control-row floor (32dp) — empty box height.
+      const controlLine =
+        Number.parseFloat(
+          cs.getPropertyValue("--fynns-chat-composer-line-height"),
+        ) ||
         Number.parseFloat(cs.minHeight) ||
+        32;
+      // Current CSS line-height (32 collapsed / ~22 expanded).
+      const textLine =
         Number.parseFloat(cs.lineHeight) ||
-        Number.parseFloat(cs.fontSize) * 1.5 ||
-        24;
-      // Empty = one text line (ChatGPT collapsed). Ignore placeholder wrap
+        Number.parseFloat(
+          cs.getPropertyValue("--fynns-chat-composer-text-line-height"),
+        ) ||
+        Number.parseFloat(cs.fontSize) * 1.375 ||
+        22;
+      // Empty = one control row (ChatGPT collapsed). Ignore placeholder wrap
       // scrollHeight so a long hint cannot inflate the shell in a narrow pane.
       if (!el.value) {
-        el.style.height = `${line}px`;
+        el.style.height = `${controlLine}px`;
         setExpanded(hasAttachments);
         return;
       }
       el.style.height = "0px";
       const scrollH = el.scrollHeight;
       const max =
-        Number.parseFloat(cs.getPropertyValue("max-height")) || line * 8;
-      const next = Math.min(Math.max(scrollH, line), max);
+        Number.parseFloat(cs.getPropertyValue("max-height")) || controlLine * 8;
+      const next = Math.min(Math.max(scrollH, textLine), max);
       el.style.height = `${next}px`;
-      // 2px tolerance avoids float/subpixel flicker at exactly 1lh.
-      const tallerThanOneLine = scrollH > line + 2;
+      // 2px tolerance avoids float/subpixel flicker at exactly 1 line.
+      const tallerThanOneLine = scrollH > textLine + 2;
       setExpanded(
         hasAttachments || el.value.includes("\n") || tallerThanOneLine,
       );

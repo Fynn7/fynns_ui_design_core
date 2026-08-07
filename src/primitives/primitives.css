@@ -8160,7 +8160,7 @@ a.fynns-breadcrumb-link:visited {
 
     *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
       min-width: 0;
-      flex: 1 1 auto;
+  flex: 1 1 auto;
       max-width: 100%;
     }
 
@@ -8178,8 +8178,8 @@ a.fynns-breadcrumb-link:visited {
     *:has(> .fynns-end-aside) > .fynns-end-aside > * {
       width: 100%;
       max-width: none;
-      min-width: 0;
-    }
+  min-width: 0;
+}
 
     *:has(> .fynns-end-aside) > .fynns-end-aside[data-state="closing"] {
       width: 0;
@@ -8311,7 +8311,7 @@ a.fynns-breadcrumb-link:visited {
 @keyframes fynns-chat-cursor-blink {
   0%,
   49% {
-    opacity: 1;
+  opacity: 1;
   }
   50%,
   100% {
@@ -8478,12 +8478,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-message-cursor {
   display: inline-block;
   width: var(--fynns-chatmessage-cursor-width);
-  /*
-   * Cap-height bar (not `1em`): the em square sits above x-height and looks
-   * like an oversized pipe next to lowercase streaming glyphs.
-   */
-  height: 0.8em;
-  height: 1cap;
+  /* Full em of body face — Cursor / native I-beam (was 1cap, too short). */
+  height: var(--fynns-chatmessage-cursor-height);
   margin-inline-start: 0.1em;
   vertical-align: baseline;
   border-radius: var(--fynns-radius-2xs);
@@ -8983,6 +8979,13 @@ a.fynns-breadcrumb-link:visited {
   transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
+.fynns-chat-composer-shell[data-expanded] {
+  /* Cursor multiline breath (~12dp) — owns inset for text + toolbar. */
+  padding-inline: var(--fynns-chat-composer-expanded-pad-inline);
+  padding-block: var(--fynns-chat-composer-expanded-pad-block);
+  gap: var(--fynns-chat-composer-expanded-gap);
+}
+
 .fynns-chat-composer-shell:has(:focus-visible) {
   border-color: color-mix(
     in srgb,
@@ -9022,6 +9025,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-body {
   flex-direction: column;
   align-items: stretch;
+  gap: var(--fynns-chat-composer-expanded-gap);
 }
 
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-toolbar {
@@ -9075,7 +9079,10 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text);
   font: inherit;
   font-size: var(--fynns-font-size-md);
-  /* Match box height so single-line text/placeholder is vertically centered. */
+  /*
+   * Collapsed: match control-row height so single-line text centers.
+   * Expanded overrides to `composer-text-line-height` (Cursor density).
+   */
   line-height: var(--fynns-chat-composer-line-height);
   overflow-x: hidden;
   overflow-y: auto;
@@ -9088,15 +9095,11 @@ a.fynns-breadcrumb-link:visited {
   order: 0;
   width: 100%;
   align-self: stretch;
-  /* Tools live in the footer — text uses strip breath on both sides. */
-  padding-inline-start: calc(
-    var(--fynns-layout-strip-pad-inline) -
-      var(--fynns-layout-capsule-chrome-pad-inline)
-  );
-  padding-inline-end: calc(
-    var(--fynns-layout-strip-pad-inline) -
-      var(--fynns-layout-capsule-chrome-pad-inline)
-  );
+  /* Shell expanded pad owns the inset — no extra strip−capsule on text. */
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  line-height: var(--fynns-chat-composer-text-line-height);
+  min-height: var(--fynns-chat-composer-text-line-height);
 }
 
 /*
@@ -9113,7 +9116,7 @@ a.fynns-breadcrumb-link:visited {
 
 /* Collapsed: trailing control owns the end inset — drop the Input end pad. */
 .fynns-chat-composer-shell:not([data-expanded])
-  .fynns-chat-composer-body:has(.fynns-chat-composer-primary)
+  .fynns-chat-composer-body:has(.fynns-chat-composer-primary-slot)
   .fynns-chat-composer-input {
   padding-inline-end: 0;
 }

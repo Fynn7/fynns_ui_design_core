@@ -343,7 +343,7 @@ const en = {
   "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
-    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
+    "Component catalog by Material 3 families (Actions, Text inputs, Selection, Communication, Containment, Navigation, Patterns), plus Toolbar rhythm and Shape. Each section is a Collapsible — collapsed by default; demo trees mount only while a section is open. Use the search bar to jump to a component demo. For the live Card / Collapsible stage and color knobs, open Preview in the left nav.",
   "globals.searchAria": "Search components",
   "globals.searchPlaceholder": "Search components…",
   "globals.searchClear": "Clear search",
@@ -887,7 +887,7 @@ const en = {
   "globals.chatComposerMultiLabel": "Composer · multiline (expanded toolbar)",
   "globals.chatComposerMultiAria": "Multiline message",
   "globals.chatComposerMultiHelp":
-    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send). Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
+    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell pad ~12dp, text line ~22dp (Cursor). Collapsed empty shells stay one ~40dp row (`display: contents`; Input density, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
   "globals.chatSend": "Send",
   "globals.chatStop": "Stop generating",
   "globals.chatScrollBottom": "Scroll to bottom",
@@ -1471,7 +1471,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tokenListNavdrawer": "Tokens · navdrawer",
 
   "globals.lead":
-    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
+    "按 Material 3 家族浏览组件样例（操作、文本输入、选择、沟通、容器、导航、模式），另有工具栏节奏与圆角；每个分区是 Collapsible，默认收起，仅展开时挂载样例树。可用搜索框跳转到具体组件。若要调 Card / Collapsible 的实时舞台和颜色旋钮，请用左侧「预览」。",
   "globals.searchAria": "搜索组件",
   "globals.searchPlaceholder": "搜索组件…",
   "globals.searchClear": "清除搜索",
@@ -2014,7 +2014,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerMultiLabel": "Composer · 多行（展开底栏）",
   "globals.chatComposerMultiAria": "多行消息",
   "globals.chatComposerMultiHelp":
-    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
+    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距约 12dp、正文字行约 22dp（Cursor）。空/单行塌缩为约 40dp 一行（toolbar `display: contents`；对齐 Input，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
   "globals.chatSend": "发送",
   "globals.chatStop": "停止生成",
   "globals.chatScrollBottom": "滚到最新",
