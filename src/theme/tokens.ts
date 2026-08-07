@@ -765,8 +765,8 @@ export const CHAT_TOKENS = {
    */
   "composer-line-height": "2rem",
   /**
-   * Textarea typography line-height (22dp). Always used for glyph metrics;
-   * collapsed centers this shorter line in the 32dp control row via pad.
+   * Expanded textarea typography line-height (22dp). Collapsed still uses
+   * `composer-line-height` (32dp) to align the control row.
    */
   "composer-text-line-height": "1.375rem",
   /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
