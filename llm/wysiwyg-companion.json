@@ -80,6 +80,14 @@
     "runBusyTask",
     "unregisterHighlightLanguage",
     "yieldToMain",
+    "AlertCircleIcon",
+    "AlertTriangleIcon",
+    "CheckCircleIcon",
+    "CheckIcon",
+    "CloseIcon",
+    "GlobeIcon",
+    "PlugIcon",
+    "RefreshIcon",
     "ArrowUpIcon",
     "BotIcon",
     "ChevronDownIcon",
@@ -94,10 +102,11 @@
     "formatDateValue/parseDateValue": "DatePicker companion helpers; live echo beside DatePicker when useful.",
     "formatTimeValue/parseTimeValue": "TimePicker companion helpers; demoed beside TimePicker in Globals.",
     "ICON_SIZE": "Default glyph size constant for IconButton / inline icons.",
-    "theme_*": "TOKEN_GROUPS + *TOKENS + themeMode + scrollbar + gen helpers — Foundations/inspector surface.",
+    "theme_*": "TOKEN_GROUPS + *TOKENS + themeMode + scrollbar + gen helpers \u2014 Foundations/inspector surface.",
     "highlight_*": "CodeBlock registry helpers; Wave 3 adds minimal live registerHighlightLanguage path.",
     "overflow_*": "OVERFLOW_EPSILON + free functions; useOverflowBounds is demoed in Globals.",
-    "busy_*": "afterNextPaint / yieldToMain / runBusyTask — Wave 3 live; useBusyTask already demoed.",
-    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome."
+    "busy_*": "afterNextPaint / yieldToMain / runBusyTask \u2014 Wave 3 live; useBusyTask already demoed.",
+    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome.",
+    "restored_icons": "AlertCircle/AlertTriangle/CheckCircle/Check/Close/Globe/Plug/Refresh restored to public barrel for consumer AppIcons migration (already in icons.tsx; used by InlineAlert/Chip/etc. internals)."
   }
 }
