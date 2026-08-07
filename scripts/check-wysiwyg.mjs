@@ -152,6 +152,67 @@ if (missing.length) {
   process.exit(1);
 }
 
+/**
+ * Sandbox resting aesthetics must equal shipped tokens. Non-empty
+ * `SANDBOX_DEFAULT_OVERRIDES` (e.g. former `--fynns-radius-md: 20px`) makes
+ * Globals look approved while consumers still get the old token values.
+ */
+function assertSandboxOverridesEmpty() {
+  const src = read("examples/sandbox/src/state/baseline.ts");
+  const m = src.match(
+    /export const SANDBOX_DEFAULT_OVERRIDES\s*:\s*Record<string,\s*string>\s*=\s*\{([^}]*)\}/,
+  );
+  if (!m) {
+    console.error(
+      "[check-wysiwyg] SANDBOX_DEFAULT_OVERRIDES not found in baseline.ts",
+    );
+    process.exit(1);
+  }
+  const body = m[1]
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/\/\/[^\n]*/g, "")
+    .trim();
+  if (body.length > 0) {
+    console.error(
+      "[check-wysiwyg] SANDBOX_DEFAULT_OVERRIDES must stay empty (WYSIWYG).\n" +
+        "  Promote any nodded sandbox look into src/theme/tokens.ts + npm run gen:theme.\n" +
+        `  Non-empty body:\n${body}`,
+    );
+    process.exit(1);
+  }
+}
+
+assertSandboxOverridesEmpty();
+
+/**
+ * Shipped theme.css must match tokens.ts for radius-md (WYSIWYG pin).
+ * Stale theme.css after editing tokens without gen:theme would re-open the
+ * Select/Input 8px-vs-20px consumer drift.
+ */
+function assertRadiusMdThemeSynced() {
+  const tokensSrc = read("src/theme/tokens.ts");
+  const themeSrc = read("src/theme/theme.css");
+  const tokenMd = tokensSrc.match(
+    /export const RADIUS_TOKENS[\s\S]*?\bmd:\s*"([^"]+)"/,
+  )?.[1];
+  const themeMd = themeSrc.match(/--fynns-radius-md:\s*([^;]+);/)?.[1]?.trim();
+  if (!tokenMd || !themeMd) {
+    console.error(
+      "[check-wysiwyg] could not parse RADIUS_TOKENS.md or --fynns-radius-md",
+    );
+    process.exit(1);
+  }
+  if (tokenMd !== themeMd) {
+    console.error(
+      `[check-wysiwyg] --fynns-radius-md drift: tokens.ts="${tokenMd}" theme.css="${themeMd}".\n` +
+        "  Run: npm run gen:theme",
+    );
+    process.exit(1);
+  }
+}
+
+assertRadiusMdThemeSynced();
+
 console.log(
-  `[check-wysiwyg] ok — ${values.size} barrel values; ${demos.size} demo imports; ${companionSet.size} companions`,
+  `[check-wysiwyg] ok — ${values.size} barrel values; ${demos.size} demo imports; ${companionSet.size} companions; sandbox overrides empty; radius-md=${read("src/theme/theme.css").match(/--fynns-radius-md:\s*([^;]+);/)?.[1]?.trim()}`,
 );
