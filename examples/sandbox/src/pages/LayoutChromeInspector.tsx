@@ -1,5 +1,5 @@
-import { Collapsible } from "@fynns/ui";
 import { useLocale } from "../i18n";
+import { LazyCollapsible } from "../components/LazyCollapsible";
 import { ApplyChangesControl } from "./ApplyChangesControl";
 import { LayoutChromeSliders } from "./LayoutChromeSliders";
 
@@ -12,9 +12,9 @@ export function LayoutChromeInspector() {
         <header className="sandbox-inspector-head">
           <h2>{t("layoutChrome.title")}</h2>
         </header>
-        <Collapsible title={t("layoutChrome.collapsible")} defaultOpen>
+        <LazyCollapsible title={t("layoutChrome.collapsible")}>
           <LayoutChromeSliders />
-        </Collapsible>
+        </LazyCollapsible>
       </div>
       <footer className="sandbox-inspector-actions">
         <ApplyChangesControl />

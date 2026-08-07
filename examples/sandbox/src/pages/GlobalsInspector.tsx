@@ -1,12 +1,12 @@
 import {
   Button,
-  Collapsible,
   InfoHint,
   Slider,
   Tooltip,
 } from "@fynns/ui";
 import { useMemo, useState } from "react";
 import { useLocale, type MessageKey } from "../i18n";
+import { LazyCollapsible } from "../components/LazyCollapsible";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { BASELINE, SANDBOX_RESTING } from "../state/baseline";
 import { useTokenDraft } from "../state/TokenDraftProvider";
@@ -155,7 +155,7 @@ export function GlobalsInspector() {
           </span>
         </header>
 
-        <Collapsible title={t("globalsInspector.shapeLadder")} defaultOpen>
+        <LazyCollapsible title={t("globalsInspector.shapeLadder")}>
           <div className="sandbox-stack">
             <SandboxHelp text={t("globalsInspector.shapeLadderHelp")} />
             {EDITABLE_RADIUS.map(({ key, label, max, usesKey, hintKey }) => {
@@ -221,11 +221,12 @@ export function GlobalsInspector() {
               </Tooltip>
             </div>
           </div>
-        </Collapsible>
+        </LazyCollapsible>
 
-        <Collapsible title={t("layoutChrome.collapsible")} defaultOpen>
+        {/* Closed by default — LayoutChromeSliders alone is ~30 range inputs + InfoHints. */}
+        <LazyCollapsible title={t("layoutChrome.collapsible")}>
           <LayoutChromeSliders />
-        </Collapsible>
+        </LazyCollapsible>
       </div>
 
       <footer className="sandbox-inspector-actions">

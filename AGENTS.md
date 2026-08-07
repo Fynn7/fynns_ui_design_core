@@ -136,6 +136,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
  an **English ↔ Chinese** UI locale switch for their own chrome strings; Chinese
  is allowed when the active locale is `zh`. Do not bake CJK into `@fynns/ui`
  default labels — pass localized strings from the app.
+11. **Performance discipline.** Dense inspectors, live token drafts, catalog
+ pages, and `ClippedNavShell` crowding checks must not thrash the main thread
+ (observer↔probe loops, tip forests, per-tick history). Authoritative rules:
+ [`llm/PERF.md`](llm/PERF.md). Agents building playgrounds / shells / token GUIs
+ **must** read that file before coding.
 
 ## Hard rules (Do / Don't)
 
@@ -170,6 +175,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Chat* chrome panel — use `radius-22` **or rounder** (`3xl`, `pill`).
   Micro marks stay smaller (`inline code` → `xs`, favicon → `2xs`). Override
   only when the user **explicitly** asks for a squarer Chat container.
+- **DON'T** reintroduce measure probes under `ClippedNavShell` (or any host
+  watched by a subtree `MutationObserver`) to resolve CSS lengths — see
+  [`llm/PERF.md`](llm/PERF.md).
+- **DON'T** default-open dense sandbox inspectors full of `InfoHint`/`Slider`
+  after hard refresh; unmount closed catalog/inspector bodies (lazy /
+  render-prop). Details: [`llm/PERF.md`](llm/PERF.md).
 - **DON'T** reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives instead. Do not resurrect purged Toast / Popover / Panel APIs
   (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
@@ -529,7 +540,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   destinations themselves. It **must not** fire while the
   drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
   (closing morph would otherwise false-trip overflow and collapse labeled
-  drawer → rail).
+  drawer → rail). Crowding length reads (`readVarPx` / `readRemPx`) resolve
+  `px`/`rem`/`%`/`clamp()` **without** inserting measure probes into the shell
+  root — probes under a `subtree` `MutationObserver` cause idle layout thrash
+  (see [`llm/PERF.md`](llm/PERF.md)).
   and
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
   `--fynns-layout-end-aside-width` / `end-aside-max-width` /
