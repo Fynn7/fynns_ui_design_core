@@ -1,12 +1,12 @@
 import {
   Button,
-  Collapsible,
   InfoHint,
   Slider,
   SPACE_TOKENS,
 } from "@fynns/ui";
 import { useMemo } from "react";
 import { useLocale, type MessageKey } from "../i18n";
+import { LazyCollapsible } from "../components/LazyCollapsible";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { HueWheel } from "../manipulators/HueWheel";
 import { BASELINE } from "../state/baseline";
@@ -118,7 +118,7 @@ export function PropertyInspector() {
 
         <SandboxHelp text={t("inspector.lightThemeHelp")} />
 
-        <Collapsible title={t("inspector.color")} defaultOpen>
+        <LazyCollapsible title={t("inspector.color")}>
           <div className="sandbox-stack">
             <HueWheel />
             <SandboxHelp text={t("inspector.colorHelp")} />
@@ -208,9 +208,9 @@ export function PropertyInspector() {
               <SandboxHelp text={t("inspector.outlineHelp")} />
             </div>
           </div>
-        </Collapsible>
+        </LazyCollapsible>
 
-        <Collapsible title={t("inspector.stateLayers")} defaultOpen>
+        <LazyCollapsible title={t("inspector.stateLayers")}>
           <div className="sandbox-stack">
             {STATE_LAYER_KEYS.map(({ key, hintKey }) => {
               const valueByKey = { hover, focus, pressed, dragged } as const;
@@ -246,9 +246,9 @@ export function PropertyInspector() {
               <SandboxHelp text={t("inspector.stateDemoBody")} />
             </div>
           </div>
-        </Collapsible>
+        </LazyCollapsible>
 
-        <Collapsible title={t("inspector.spacing")} defaultOpen>
+        <LazyCollapsible title={t("inspector.spacing")}>
           <div className="sandbox-stack">
             <SandboxHelp text={t("inspector.spacingHelp")} />
             {SPACE_TSHIRT.map(({ key, max }) => {
@@ -297,13 +297,13 @@ export function PropertyInspector() {
               </ul>
             </div>
           </div>
-        </Collapsible>
+        </LazyCollapsible>
 
-        <Collapsible title={t("layoutChrome.collapsible")}>
+        <LazyCollapsible title={t("layoutChrome.collapsible")}>
           <LayoutChromeSliders />
-        </Collapsible>
+        </LazyCollapsible>
 
-        <Collapsible title={t("inspector.typography")}>
+        <LazyCollapsible title={t("inspector.typography")}>
           <div className="sandbox-stack">
             {FONT_SIZE_ROWS.map(({ key, hintKey, max }) => {
               const raw = resolved(`--fynns-font-size-${key}`);
@@ -337,7 +337,7 @@ export function PropertyInspector() {
               );
             })}
           </div>
-        </Collapsible>
+        </LazyCollapsible>
       </div>
 
       <div className="sandbox-inspector-actions">

@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   type ReactNode,
 } from "react";
 import { BASE_TOKENS_HASH, BASELINE } from "./baseline";
@@ -139,11 +140,45 @@ function reducer(state: TokenDraft, action: DraftAction): TokenDraft {
       const baseline = BASELINE[action.cssVar] ?? "";
       const current = state.overrides[action.cssVar] ?? baseline;
       if (current === action.op.to) return state;
+      const overrides = applyOpToOverrides(
+        state.overrides,
+        action.cssVar,
+        action.op.to,
+        baseline,
+      );
+      /* Slider / continuous gestures: one undo step per key, not per tick. */
+      const tip = state.history[state.historyIndex];
+      const COALESCE_MS = 500;
+      const canCoalesce =
+        tip != null &&
+        tip.key === action.op.key &&
+        tip.group === action.op.group &&
+        tip.source === action.op.source &&
+        tip.scope === action.op.scope &&
+        state.historyIndex === state.history.length - 1 &&
+        Date.now() - tip.ts < COALESCE_MS;
+      if (canCoalesce) {
+        const coalesced: TokenOperation = {
+          ...tip,
+          to: action.op.to,
+          ts: Date.now(),
+        };
+        const history = [
+          ...state.history.slice(0, state.historyIndex),
+          coalesced,
+        ];
+        return {
+          ...state,
+          overrides,
+          history,
+          historyIndex: state.historyIndex,
+        };
+      }
       const trimmed = state.history.slice(0, state.historyIndex + 1);
       const history = [...trimmed, action.op];
       return {
         ...state,
-        overrides: applyOpToOverrides(state.overrides, action.cssVar, action.op.to, baseline),
+        overrides,
         history,
         historyIndex: history.length - 1,
       };
@@ -234,13 +269,37 @@ type DraftContextValue = {
   canRedo: boolean;
 };
 
+type DraftHistoryActions = {
+  undo: () => void;
+  redo: () => void;
+};
+
+/** Mutators that stay referentially stable across override changes. */
+type DraftMutators = {
+  apply: (args: ApplyArgs) => void;
+  mergeOverrides: DraftContextValue["mergeOverrides"];
+  reset: () => void;
+  loadPreset: (overrides: Record<string, string>) => void;
+};
+
 const DraftContext = createContext<DraftContextValue | null>(null);
+/** Stable undo/redo only — SandboxShell must not subscribe to full draft. */
+const DraftHistoryActionsContext = createContext<DraftHistoryActions | null>(
+  null,
+);
+/** Stable apply/merge — AgentInputBar must not subscribe to full draft. */
+const DraftMutatorsContext = createContext<DraftMutators | null>(null);
 
 export function TokenDraftProvider({ children }: { children: ReactNode }) {
   const [draft, dispatch] = useReducer(reducer, undefined, loadStoredDraft);
+  const overridesRef = useRef(draft.overrides);
+  overridesRef.current = draft.overrides;
 
   useEffect(() => {
-    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    const timer = window.setTimeout(() => {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    }, 300);
+    return () => window.clearTimeout(timer);
   }, [draft]);
 
   useEffect(() => {
@@ -251,30 +310,32 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
       el.id = id;
       document.head.appendChild(el);
     }
-    el.textContent = buildOverrideStyleBlock(draft.overrides);
+    /* Coalesce rapid slider ticks to one CSSOM write per frame. */
+    const overrides = draft.overrides;
+    const raf = window.requestAnimationFrame(() => {
+      el!.textContent = buildOverrideStyleBlock(overrides);
+    });
+    return () => window.cancelAnimationFrame(raf);
   }, [draft.overrides]);
 
-  const apply = useCallback(
-    (args: ApplyArgs) => {
-      const cssVar = cssVarForOp(args.group, args.key);
-      const from = draft.overrides[cssVar] ?? BASELINE[cssVar] ?? "";
-      dispatch({
-        type: "apply",
-        cssVar,
-        op: {
-          ts: Date.now(),
-          group: args.group,
-          key: args.key,
-          from,
-          to: args.value,
-          scope: args.scope ?? "global",
-          source: args.source ?? "slider",
-          reasoning: args.reasoning,
-        },
-      });
-    },
-    [draft.overrides],
-  );
+  const apply = useCallback((args: ApplyArgs) => {
+    const cssVar = cssVarForOp(args.group, args.key);
+    const from = overridesRef.current[cssVar] ?? BASELINE[cssVar] ?? "";
+    dispatch({
+      type: "apply",
+      cssVar,
+      op: {
+        ts: Date.now(),
+        group: args.group,
+        key: args.key,
+        from,
+        to: args.value,
+        scope: args.scope ?? "global",
+        source: args.source ?? "slider",
+        reasoning: args.reasoning,
+      },
+    });
+  }, []);
 
   const undo = useCallback(() => dispatch({ type: "undo" }), []);
   const redo = useCallback(() => dispatch({ type: "redo" }), []);
@@ -303,6 +364,16 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
     [draft.overrides],
   );
 
+  const historyActions = useMemo<DraftHistoryActions>(
+    () => ({ undo, redo }),
+    [undo, redo],
+  );
+
+  const mutators = useMemo<DraftMutators>(
+    () => ({ apply, mergeOverrides, reset, loadPreset }),
+    [apply, mergeOverrides, reset, loadPreset],
+  );
+
   const value = useMemo<DraftContextValue>(
     () => ({
       draft,
@@ -319,11 +390,39 @@ export function TokenDraftProvider({ children }: { children: ReactNode }) {
     [draft, apply, mergeOverrides, undo, redo, reset, loadPreset, resolved],
   );
 
-  return <DraftContext.Provider value={value}>{children}</DraftContext.Provider>;
+  return (
+    <DraftMutatorsContext.Provider value={mutators}>
+      <DraftHistoryActionsContext.Provider value={historyActions}>
+        <DraftContext.Provider value={value}>{children}</DraftContext.Provider>
+      </DraftHistoryActionsContext.Provider>
+    </DraftMutatorsContext.Provider>
+  );
 }
 
 export function useTokenDraft(): DraftContextValue {
   const ctx = useContext(DraftContext);
   if (!ctx) throw new Error("useTokenDraft must be used within TokenDraftProvider");
+  return ctx;
+}
+
+/** Undo/redo only — does not re-render when draft overrides change. */
+export function useTokenDraftHistoryActions(): DraftHistoryActions {
+  const ctx = useContext(DraftHistoryActionsContext);
+  if (!ctx) {
+    throw new Error(
+      "useTokenDraftHistoryActions must be used within TokenDraftProvider",
+    );
+  }
+  return ctx;
+}
+
+/** apply/merge/reset only — does not re-render when draft overrides change. */
+export function useTokenDraftMutators(): DraftMutators {
+  const ctx = useContext(DraftMutatorsContext);
+  if (!ctx) {
+    throw new Error(
+      "useTokenDraftMutators must be used within TokenDraftProvider",
+    );
+  }
   return ctx;
 }

@@ -35,10 +35,60 @@ const HUE_PRESETS: Array<{ labelKey: MessageKey; hue: number }> = [
  */
 const HUE_DEGREE_MAX = 359;
 
+const ACCENT_INLINE_KEYS = [
+  "--fynns-color-accent",
+  "--fynns-color-accent-dim",
+  "--fynns-color-accent-hover",
+  "--fynns-color-accent-active",
+  "--fynns-color-accent-soft",
+  "--fynns-color-accent-mid",
+  "--fynns-color-accent-24",
+  "--fynns-color-accent-42",
+  "--fynns-color-accent-ring",
+  "--fynns-color-focus",
+] as const;
+
+function buildAccentPatch(accent: string): Record<string, string> | null {
+  const rgb = hexToRgb(accent);
+  if (!rgb) return null;
+  const h = approxHueFromHex(accent) ?? 168;
+  const [r, g, b] = rgb;
+  return {
+    "--fynns-color-accent": accent,
+    "--fynns-color-accent-dim": hslToHex(h, 62, 40),
+    "--fynns-color-accent-hover": hslToHex(h, 64, 54),
+    "--fynns-color-accent-active": hslToHex(h, 60, 46),
+    "--fynns-color-accent-soft": `rgba(${r}, ${g}, ${b}, 0.18)`,
+    "--fynns-color-accent-mid": `rgba(${r}, ${g}, ${b}, 0.5)`,
+    "--fynns-color-accent-24": `rgba(${r}, ${g}, ${b}, 0.24)`,
+    "--fynns-color-accent-42": `rgba(${r}, ${g}, ${b}, 0.42)`,
+    "--fynns-color-accent-ring": `rgba(${r}, ${g}, ${b}, 0.18)`,
+    "--fynns-color-focus": `rgba(${r}, ${g}, ${b}, 0.22)`,
+  };
+}
+
+function paintAccentInline(patch: Record<string, string>) {
+  const root = document.documentElement;
+  for (const [key, value] of Object.entries(patch)) {
+    root.style.setProperty(key, value);
+  }
+}
+
+function clearAccentInline() {
+  const root = document.documentElement;
+  for (const key of ACCENT_INLINE_KEYS) {
+    root.style.removeProperty(key);
+  }
+}
+
 /**
  * Accent hue controls: preset chips stay on the inspector; the full hue ring
  * opens from a rainbow trigger chip (inline panel). Degree and hex fields edit
  * independently. One coalesced undo step per gesture.
+ *
+ * Continuous gestures (disk / slider) paint via `documentElement.style` so
+ * `#fynns-sandbox-overrides` is not rewritten every pointermove; draft commit
+ * happens on pointerup / after a short slider debounce.
  */
 export function HueWheel() {
   const { t } = useLocale();
@@ -46,54 +96,85 @@ export function HueWheel() {
   const diskRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const draggingRef = useRef(false);
+  const pendingAccentRef = useRef<string | null>(null);
+  const sliderCommitTimerRef = useRef<number | null>(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [hueDraft, setHueDraft] = useState<string | null>(null);
   const [hexDraft, setHexDraft] = useState<string | null>(null);
+  /** Local accent while a continuous gesture is in flight (inline CSS). */
+  const [gestureAccent, setGestureAccent] = useState<string | null>(null);
 
-  const accentHex = useMemo(() => {
+  const draftAccentHex = useMemo(() => {
     const raw = resolved("--fynns-color-accent");
     return normalizeHex(raw) ?? "#2dd4bf";
   }, [resolved]);
 
+  const accentHex = gestureAccent ?? draftAccentHex;
   const hue = useMemo(() => approxHueFromHex(accentHex) ?? 168, [accentHex]);
 
   useEffect(() => {
     setHueDraft(null);
     setHexDraft(null);
-  }, [accentHex]);
+  }, [draftAccentHex]);
 
-  const applyAccentHex = useCallback(
+  /** Clear inline paint once the stylesheet owns the committed accent. */
+  useEffect(() => {
+    if (!gestureAccent) return;
+    if (normalizeHex(draftAccentHex) !== normalizeHex(gestureAccent)) return;
+    clearAccentInline();
+    setGestureAccent(null);
+    pendingAccentRef.current = null;
+  }, [draftAccentHex, gestureAccent]);
+
+  useEffect(
+    () => () => {
+      if (sliderCommitTimerRef.current != null) {
+        window.clearTimeout(sliderCommitTimerRef.current);
+      }
+      clearAccentInline();
+    },
+    [],
+  );
+
+  const commitAccentHex = useCallback(
     (accent: string) => {
-      const rgb = hexToRgb(accent);
-      if (!rgb) return;
-      const h = approxHueFromHex(accent) ?? 168;
-      const [r, g, b] = rgb;
-      mergeOverrides(
-        {
-          "--fynns-color-accent": accent,
-          "--fynns-color-accent-dim": hslToHex(h, 62, 40),
-          "--fynns-color-accent-hover": hslToHex(h, 64, 54),
-          "--fynns-color-accent-active": hslToHex(h, 60, 46),
-          "--fynns-color-accent-soft": `rgba(${r}, ${g}, ${b}, 0.18)`,
-          "--fynns-color-accent-mid": `rgba(${r}, ${g}, ${b}, 0.5)`,
-          "--fynns-color-accent-24": `rgba(${r}, ${g}, ${b}, 0.24)`,
-          "--fynns-color-accent-42": `rgba(${r}, ${g}, ${b}, 0.42)`,
-          "--fynns-color-accent-ring": `rgba(${r}, ${g}, ${b}, 0.18)`,
-          "--fynns-color-focus": `rgba(${r}, ${g}, ${b}, 0.22)`,
-        },
-        { source: "colorwheel", coalesce: true, group: "color" },
-      );
+      const patch = buildAccentPatch(accent);
+      if (!patch) return;
+      mergeOverrides(patch, {
+        source: "colorwheel",
+        coalesce: true,
+        group: "color",
+      });
+      pendingAccentRef.current = accent;
+      setGestureAccent(accent);
+      // Inline stays until draftAccentHex catches up (avoids flash).
+      paintAccentInline(patch);
     },
     [mergeOverrides],
   );
 
+  const previewAccentHex = useCallback((accent: string) => {
+    const patch = buildAccentPatch(accent);
+    if (!patch) return;
+    paintAccentInline(patch);
+    pendingAccentRef.current = accent;
+    setGestureAccent(accent);
+  }, []);
+
+  const flushPendingCommit = useCallback(() => {
+    const accent = pendingAccentRef.current;
+    if (!accent) return;
+    commitAccentHex(accent);
+  }, [commitAccentHex]);
+
   const setHue = useCallback(
-    (nextHue: number) => {
-      // Hue is a circle: 360° ≡ 0°. Keep the stored angle in [0, 360).
+    (nextHue: number, mode: "preview" | "commit" = "commit") => {
       const h = ((nextHue % 360) + 360) % 360;
-      applyAccentHex(hslToHex(h, 62, 50));
+      const accent = hslToHex(h, 62, 50);
+      if (mode === "preview") previewAccentHex(accent);
+      else commitAccentHex(accent);
     },
-    [applyAccentHex],
+    [commitAccentHex, previewAccentHex],
   );
 
   const commitHueDraft = () => {
@@ -104,7 +185,7 @@ export function HueWheel() {
       setHueDraft(null);
       return;
     }
-    setHue(n);
+    setHue(n, "commit");
     setHueDraft(null);
   };
 
@@ -115,14 +196,17 @@ export function HueWheel() {
       setHexDraft(null);
       return;
     }
-    applyAccentHex(normalized);
+    commitAccentHex(normalized);
     setHexDraft(null);
   };
 
   const pickFromPointer = (event: PointerEvent<HTMLDivElement>) => {
     const el = diskRef.current;
     if (!el) return;
-    setHue(hueFromPointer(event.clientX, event.clientY, el.getBoundingClientRect()));
+    setHue(
+      hueFromPointer(event.clientX, event.clientY, el.getBoundingClientRect()),
+      "preview",
+    );
   };
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -142,23 +226,35 @@ export function HueWheel() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+    flushPendingCommit();
   };
 
   const onDiskKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const step = event.shiftKey ? 10 : 1;
     if (event.key === "ArrowRight" || event.key === "ArrowUp") {
       event.preventDefault();
-      setHue(hue + step);
+      setHue(hue + step, "commit");
     } else if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
       event.preventDefault();
-      setHue(hue - step);
+      setHue(hue - step, "commit");
     } else if (event.key === "Home") {
       event.preventDefault();
-      setHue(0);
+      setHue(0, "commit");
     } else if (event.key === "End") {
       event.preventDefault();
-      setHue(HUE_DEGREE_MAX);
+      setHue(HUE_DEGREE_MAX, "commit");
     }
+  };
+
+  const onSliderChange = (next: number) => {
+    setHue(next, "preview");
+    if (sliderCommitTimerRef.current != null) {
+      window.clearTimeout(sliderCommitTimerRef.current);
+    }
+    sliderCommitTimerRef.current = window.setTimeout(() => {
+      sliderCommitTimerRef.current = null;
+      flushPendingCommit();
+    }, 80);
   };
 
   return (
@@ -238,7 +334,7 @@ export function HueWheel() {
                 aria-label={`${label} (${preset.hue}°)`}
                 aria-pressed={active}
                 style={{ background: swatch }}
-                onClick={() => setHue(preset.hue)}
+                onClick={() => setHue(preset.hue, "commit")}
               />
             </Tooltip>
           );
@@ -268,36 +364,39 @@ export function HueWheel() {
           role="region"
           aria-label={t("hue.paletteAria")}
         >
-        <div
-          ref={diskRef}
-          className="sandbox-hue-disk"
-          role="slider"
-          tabIndex={0}
-          aria-label={t("hue.paletteAria")}
-          aria-valuemin={0}
-          aria-valuemax={HUE_DEGREE_MAX}
-          aria-valuenow={Math.min(HUE_DEGREE_MAX, Math.round(hue) % 360)}
-          aria-valuetext={t("hue.degrees", { n: Math.round(hue) })}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-          onKeyDown={onDiskKeyDown}
-        >
-          <div className="sandbox-hue-disk-ring" aria-hidden />
           <div
-            className="sandbox-hue-disk-center"
-            style={{ background: accentHex }}
-            aria-hidden
-          />
-          <div
-            className="sandbox-hue-disk-arm"
-            style={{ transform: `rotate(${hue}deg)` }}
-            aria-hidden
+            ref={diskRef}
+            className="sandbox-hue-disk"
+            role="slider"
+            tabIndex={0}
+            aria-label={t("hue.paletteAria")}
+            aria-valuemin={0}
+            aria-valuemax={HUE_DEGREE_MAX}
+            aria-valuenow={Math.min(HUE_DEGREE_MAX, Math.round(hue) % 360)}
+            aria-valuetext={t("hue.degrees", { n: Math.round(hue) })}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onKeyDown={onDiskKeyDown}
           >
-            <span className="sandbox-hue-disk-marker" style={{ background: accentHex }} />
+            <div className="sandbox-hue-disk-ring" aria-hidden />
+            <div
+              className="sandbox-hue-disk-center"
+              style={{ background: accentHex }}
+              aria-hidden
+            />
+            <div
+              className="sandbox-hue-disk-arm"
+              style={{ transform: `rotate(${hue}deg)` }}
+              aria-hidden
+            >
+              <span
+                className="sandbox-hue-disk-marker"
+                style={{ background: accentHex }}
+              />
+            </div>
           </div>
-        </div>
         </div>
       ) : null}
 
@@ -307,7 +406,7 @@ export function HueWheel() {
         max={HUE_DEGREE_MAX}
         step={1}
         ariaLabel={t("hue.slider")}
-        onChange={setHue}
+        onChange={onSliderChange}
       />
     </div>
   );

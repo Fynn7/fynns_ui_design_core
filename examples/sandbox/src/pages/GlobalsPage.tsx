@@ -134,7 +134,7 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useRef, useState, Fragment, type ReactNode } from "react";
+import { useEffect, useRef, useState, useCallback, Fragment, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { TokenList } from "../components/TokenList";
@@ -266,6 +266,56 @@ const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
   charts: "globals.navRailPaneCharts",
   all: "globals.navRailPaneAll",
 };
+
+/**
+ * Owns per-character stream text so ~28ms updates do not re-render the entire
+ * GlobalsPage (76+ useState) while Communication is open.
+ */
+function ChatStreamingAssistant({
+  streaming,
+  fullText,
+  idlePrompt,
+  streamingLabel,
+  onDone,
+}: {
+  streaming: boolean;
+  fullText: string;
+  idlePrompt: string;
+  streamingLabel: string;
+  onDone: () => void;
+}) {
+  const [text, setText] = useState("");
+  const fullRef = useRef(fullText);
+  fullRef.current = fullText;
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
+
+  useEffect(() => {
+    if (!streaming) return;
+    setText("");
+    let i = 0;
+    const full = fullRef.current;
+    const timer = window.setInterval(() => {
+      i += 1;
+      setText(full.slice(0, i));
+      if (i >= full.length) {
+        window.clearInterval(timer);
+        onDoneRef.current();
+      }
+    }, 28);
+    return () => window.clearInterval(timer);
+  }, [streaming]);
+
+  return (
+    <ChatMessage
+      role="assistant"
+      streaming={streaming}
+      streamingLabel={streamingLabel}
+    >
+      {text || (streaming ? undefined : idlePrompt)}
+    </ChatMessage>
+  );
+}
 
 /** Anchor + flash target for catalog search jump. */
 function GlobalsDemo({ id, children }: { id: string; children: ReactNode }) {
@@ -459,8 +509,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyYield, setBusyYield] = useState(false);
   const [busyRunDirect, setBusyRunDirect] = useState(false);
   const [chatStreaming, setChatStreaming] = useState(false);
-  const [chatStreamText, setChatStreamText] = useState("");
-  const chatStreamFullRef = useRef("");
+  const [chatStreamEpoch, setChatStreamEpoch] = useState(0);
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
@@ -473,6 +522,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [shellChatDraft, setShellChatDraft] = useState("");
   const [shellChatBusy, setShellChatBusy] = useState(false);
   const [shellChatReply, setShellChatReply] = useState("");
+  const stopChatStream = useCallback(() => setChatStreaming(false), []);
+  const startChatStream = useCallback(() => {
+    setChatStreamEpoch((n) => n + 1);
+    setChatStreaming(true);
+  }, []);
+  const resetChatStream = useCallback(() => {
+    setChatStreaming(false);
+    setChatStreamEpoch((n) => n + 1);
+  }, []);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
   const [dialogShellOpen, setDialogShellOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
@@ -514,19 +572,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     const timer = window.setTimeout(() => setBusyScrimDeterminateOpen(false), 2000);
     return () => window.clearTimeout(timer);
   }, [busyScrimDeterminateOpen]);
-
-  useEffect(() => {
-    if (!chatStreaming) return;
-    const full = chatStreamFullRef.current;
-    if (chatStreamText.length >= full.length) {
-      setChatStreaming(false);
-      return;
-    }
-    const timer = window.setTimeout(() => {
-      setChatStreamText(full.slice(0, chatStreamText.length + 1));
-    }, 28);
-    return () => window.clearTimeout(timer);
-  }, [chatStreaming, chatStreamText]);
 
   useEffect(() => {
     if (!thinkingStreaming) return;
@@ -1846,14 +1891,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   {chatCaption(t("globals.chatAssistantBody"))}
                 </ChatMessage>
-                <ChatMessage
-                  role="assistant"
+                <ChatStreamingAssistant
+                  key={chatStreamEpoch}
                   streaming={chatStreaming}
+                  fullText={t("globals.chatStreamFull")}
+                  idlePrompt={t("globals.chatStreamPrompt")}
                   streamingLabel={t("globals.chatStreamingLabel")}
-                >
-                  {chatStreamText ||
-                    (chatStreaming ? undefined : t("globals.chatStreamPrompt"))}
-                </ChatMessage>
+                  onDone={stopChatStream}
+                />
                 <ChatMessage
                   role="assistant"
                   error={chatFailed ? t("globals.chatError") : undefined}
@@ -1884,11 +1929,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ariaLabel={t("globals.chatComposerAria")}
                 placeholder={t("globals.chatComposerPlaceholder")}
                 busy={chatStreaming}
-                onStop={() => setChatStreaming(false)}
+                onStop={stopChatStream}
                 onSubmit={() => {
-                  chatStreamFullRef.current = t("globals.chatStreamFull");
-                  setChatStreamText("");
-                  setChatStreaming(true);
+                  startChatStream();
                   setChatDraft("");
                 }}
                 sendLabel={t("globals.chatSend")}
@@ -1911,22 +1954,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Button
                 size="sm"
                 disabled={chatStreaming}
-                onClick={() => {
-                  chatStreamFullRef.current = t("globals.chatStreamFull");
-                  setChatStreamText("");
-                  setChatStreaming(true);
-                }}
+                onClick={startChatStream}
               >
                 {t("globals.chatStreamStart")}
               </Button>
               <Button
                 size="sm"
                 variant="tonal"
-                disabled={!chatStreaming && !chatStreamText}
-                onClick={() => {
-                  setChatStreaming(false);
-                  setChatStreamText("");
-                }}
+                onClick={resetChatStream}
               >
                 {t("globals.chatStreamReset")}
               </Button>

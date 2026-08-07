@@ -30,7 +30,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
-import { useTokenDraft } from "../state/TokenDraftProvider";
+import { useTokenDraftHistoryActions } from "../state/TokenDraftProvider";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
@@ -72,7 +72,7 @@ export function SandboxShell() {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 900px)").matches;
   });
-  const { undo, redo } = useTokenDraft();
+  const { undo, redo } = useTokenDraftHistoryActions();
   const { target, setTarget } = usePlaygroundTarget();
 
   /** Prefer user choice on all widths — do not force destinations open on phone. */

@@ -9,7 +9,7 @@ import {
 import { proposeFromPrompt, type PendingAgentProposal } from "../agent/bridge";
 import { useLocale } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
-import { useTokenDraft } from "../state/TokenDraftProvider";
+import { useTokenDraftMutators } from "../state/TokenDraftProvider";
 
 /**
  * Phase 4 stub: natural-language proposals become TokenOperations after
@@ -18,7 +18,7 @@ import { useTokenDraft } from "../state/TokenDraftProvider";
  */
 export function AgentInputBar() {
   const { t } = useLocale();
-  const { apply } = useTokenDraft();
+  const { apply } = useTokenDraftMutators();
   const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [pending, setPending] = useState<PendingAgentProposal[]>([]);
