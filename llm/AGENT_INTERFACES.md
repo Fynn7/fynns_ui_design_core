@@ -21,6 +21,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Agent interfaces (this file) | [`llm/AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Need the dual-interface map or custom highlight recipe |
 | Agent interfaces (JSON) | [`llm/agent-interfaces.json`](agent-interfaces.json) | Machine catalog of docs + technical exports |
 | Design system | [`AGENTS.md`](../AGENTS.md) | Tokens, keep-set, UX rules |
+| Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts — avoid jank |
 | Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
 | Consume install | [`llm/CONSUME.md`](CONSUME.md) | Submodule + Vite alias install |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check contract |

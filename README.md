@@ -13,6 +13,7 @@ projects and are easy for humans and agents to reuse.
   Globals + Preview only (see [AGENTS.md](AGENTS.md) and
   [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
+  **Frontend performance (shells / inspectors / catalogs):** [`llm/PERF.md`](llm/PERF.md).
   **Agent wiki (nav + workflows):** [`openwiki/quickstart.md`](openwiki/quickstart.md)
   (seeded; refresh via Agents Hub → OpenWiki).
   **Breaking purge / consumer migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
@@ -105,6 +106,8 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run typecheck` — `tsc --noEmit`.
 - `npm run check:wysiwyg` — public barrel must appear in Globals/Preview/Shell
   or `llm/wysiwyg-companion.json` (see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
+- `npm run check:perf-sandbox` — inspector lazy-mount / no shell probe thrash
+  (see [`llm/PERF.md`](llm/PERF.md)).
 - `npm run lint` — ESLint.
 - `npm run consume:install -- --target <dir>` — add this repo as a consumer
   submodule and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).

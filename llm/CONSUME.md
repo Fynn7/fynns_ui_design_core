@@ -31,6 +31,9 @@ Machine contract: [`consume.json`](consume.json).
     `--fynns-radius-22`): [`AGENTS.md`](../AGENTS.md) Hard rules.
 11. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
 12. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
+13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style
+    catalogs, and live draft GUIs → read [`PERF.md`](PERF.md) before coding
+    (no observer↔probe loops, no tip forests, lazy-mount dense sections).
 
 ## Agent checklist (greenfield / short prompt)
 
@@ -39,7 +42,8 @@ Machine contract: [`consume.json`](consume.json).
 3. Run `--check` until exit 0.
 4. Scaffold React + Vite + TS only (no design-system npm dep); keep `lib`/`target` at ES2022+.
 5. Implement the page from sandbox Globals/Preview + AGENTS catalog (never deleted symbols — see `BREAKING_PURGE.md`).
-6. `npm install` → `npm run build` must exit 0.
+6. If the page is a playground / inspector / shell / live-token UI, read [`PERF.md`](PERF.md) and apply its DoD.
+7. `npm install` → `npm run build` must exit 0.
 
 ## One-shot install (any consumer repo)
 

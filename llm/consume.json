@@ -9,6 +9,7 @@
     "propagation": "docs/submodule-propagation.md",
     "opencodeRule": "llm/opencode-fynns-ui-consume.md",
     "breakingPurge": "llm/BREAKING_PURGE.md",
+    "performance": "llm/PERF.md",
     "agentInterfaces": "llm/AGENT_INTERFACES.md",
     "agentInterfacesMachine": "llm/agent-interfaces.json"
   },
@@ -25,7 +26,8 @@
     "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
     "API-only: pass props/children/labels to @fynns/ui; never wrap keep-set primitives in consumer restyles or local .fynns-* overrides. If the keep-set cannot meet the ask, tell the user explicitly to implement in fynns_ui_design_core first. Chat containers must stay ≥ --fynns-radius-22 unless the user explicitly asks squarer (see AGENTS.md Hard rules).",
     "If build uses tsc, add vite-env.d.ts with /// <reference types=\"vite/client\" /> so CSS imports from @fynns/ui typecheck.",
-    "For preview/playground pages, mirror examples/sandbox/src/pages/*PreviewCanvas.tsx and skim AGENTS.md."
+    "For preview/playground pages, mirror examples/sandbox/src/pages/*PreviewCanvas.tsx and skim AGENTS.md.",
+    "Shells (ClippedNavShell), token inspectors, Globals-style catalogs, and live draft GUIs: read llm/PERF.md before coding (no observer↔probe loops, no tip forests, lazy-mount dense sections)."
   ],
   "defaults": {
     "submodulePath": "packages/fynns_ui_design_core",

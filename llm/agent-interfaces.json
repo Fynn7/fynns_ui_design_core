@@ -21,6 +21,11 @@
       "summary": "Design language, tokens, keep-set catalog, UX rules (single source of truth)."
     },
     {
+      "path": "llm/PERF.md",
+      "role": "frontend-performance",
+      "summary": "Shell / inspector / catalog / live-draft jank rules for core and consumers."
+    },
+    {
       "path": "README.md",
       "role": "repo-entry",
       "summary": "Package overview, sandbox, consume pointers."

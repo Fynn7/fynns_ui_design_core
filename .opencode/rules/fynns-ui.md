@@ -19,6 +19,8 @@ sandbox Globals + Preview are public; do not import deleted APIs.
 - App/teaching-specific tokens stay app-side under `--afs-*` or `--dsa-*`.
 - If a token or component is missing, add it in the submodule and run
   `npm run gen:theme`.
+- **Performance:** shells / inspectors / catalogs / live token drafts → read
+  `packages/fynns_ui_design_core/llm/PERF.md` before coding.
 
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
 catalog. Text must be English or German only (no CJK).
