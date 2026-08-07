@@ -124,7 +124,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `--fynns-layout-content-pad-block`. When nesting a **surface-owning child**
    (CodeBlock, Surface, canvas, BusyRegion, …), pass **`chrome="plain"`** —
    Collapsible/Card stays the **main** outer shell; body pad insets the child as
-   a secondary frame (略小一圈). Prefer nested CodeBlock `variant="plain"` to
+   a secondary frame (slightly inset). Prefer nested CodeBlock `variant="plain"` to
    avoid an empty code head. **Do not** flush the child to the outer edge with
    negative margins or restyle `.fynns-*`. No title needed → `Surface` alone.
    Do not add a second page-level outer pad. Consumers choose whether the
