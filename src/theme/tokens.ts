@@ -1092,6 +1092,11 @@ export const LAYOUT_TOKENS = {
    */
   "field-pad-block": "var(--fynns-space-md)",
   /**
+   * Soft cap for auto-growing `Textarea` before inner scroll (13rem).
+   * Matches ChatComposer `composer-max-height` density — not a Chat token.
+   */
+  "textarea-max-height": "13rem",
+  /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible body, Card body, Surface `padded`, CodeBlock pre. Larger than
    * `--fynns-space-sm` so headers don’t sit on Inputs.

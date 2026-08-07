@@ -874,6 +874,20 @@
   min-height: 6rem;
 }
 
+/*
+ * Content-driven height (default). JS sets `height` from scrollHeight between
+ * minRows and max-height; no manual resize grip.
+ */
+.fynns-textarea--auto-grow,
+.fynns-textarea--auto-grow.fynns-input--sm {
+  resize: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  field-sizing: fixed;
+  min-height: 0;
+  max-height: var(--fynns-layout-textarea-max-height);
+}
+
 /* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
 .fynns-select {
   position: relative;

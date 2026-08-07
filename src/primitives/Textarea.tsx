@@ -1,5 +1,16 @@
-import type { ForwardedRef, ReactNode, TextareaHTMLAttributes } from "react";
-import { forwardRef, useId } from "react";
+import type {
+  ChangeEvent,
+  ForwardedRef,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from "react";
+import {
+  forwardRef,
+  useCallback,
+  useId,
+  useLayoutEffect,
+  useRef,
+} from "react";
 
 export type TextareaSize = "sm" | "md";
 export type TextareaVariant = "filled" | "outlined";
@@ -11,15 +22,41 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   variant?: TextareaVariant;
   supportingText?: ReactNode;
   errorText?: ReactNode;
+  /**
+   * When true (default), height tracks content between `minRows` and
+   * `maxRows` / `--fynns-layout-textarea-max-height`. Pass `false` for a
+   * fixed well with native vertical resize.
+   */
+  autoGrow?: boolean;
+  /**
+   * Auto-grow floor (also empty-state height). Defaults to `rows` when set,
+   * otherwise `1` so short copy does not sit in a tall well.
+   */
+  minRows?: number;
+  /** Auto-grow soft cap in row units when CSS max-height is unset. @default 12 */
+  maxRows?: number;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function resolveMinRows(
+  minRows: number | undefined,
+  rows: TextareaHTMLAttributes<HTMLTextAreaElement>["rows"],
+): number {
+  if (minRows != null && minRows > 0) return minRows;
+  if (typeof rows === "number" && rows > 0) return rows;
+  if (typeof rows === "string") {
+    const n = Number.parseInt(rows, 10);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return 1;
+}
+
 /** Multiline form control sharing Input chrome. Not a full M3 Text Field
  * (no floating label; `filled` is a dense fill, not M3 filled anatomy).
- * `.fynns-input .fynns-textarea`. */
+ * `.fynns-input .fynns-textarea`. Default `autoGrow` — height follows text. */
 export const Textarea = forwardRef(function Textarea(
   {
     className,
@@ -30,6 +67,14 @@ export const Textarea = forwardRef(function Textarea(
     errorText,
     id,
     "aria-describedby": ariaDescribedBy,
+    autoGrow = true,
+    minRows: minRowsProp,
+    maxRows = 12,
+    rows,
+    value,
+    defaultValue,
+    onChange,
+    style,
     ...rest
   }: TextareaProps,
   ref: ForwardedRef<HTMLTextAreaElement>,
@@ -39,17 +84,78 @@ export const Textarea = forwardRef(function Textarea(
   const hintId = `${fieldId}-hint`;
   const isInvalid = invalid || !!errorText;
   const hint = errorText ?? supportingText;
+  const minRows = resolveMinRows(minRowsProp, rows);
+  const localRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const setRefs = useCallback(
+    (node: HTMLTextAreaElement | null) => {
+      localRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
+
+  const resize = useCallback(() => {
+    const el = localRef.current;
+    if (!el || !autoGrow) return;
+    const cs = getComputedStyle(el);
+    const lineHeight =
+      Number.parseFloat(cs.lineHeight) ||
+      Number.parseFloat(cs.fontSize) * 1.5 ||
+      24;
+    const padY =
+      (Number.parseFloat(cs.paddingTop) || 0) +
+      (Number.parseFloat(cs.paddingBottom) || 0);
+    const borderY =
+      (Number.parseFloat(cs.borderTopWidth) || 0) +
+      (Number.parseFloat(cs.borderBottomWidth) || 0);
+    // border-box: scrollHeight covers content + padding, not borders.
+    const floor = minRows * lineHeight + padY + borderY;
+    const cssMax = Number.parseFloat(cs.maxHeight);
+    const cap =
+      Number.isFinite(cssMax) && cssMax > 0
+        ? cssMax
+        : maxRows * lineHeight + padY + borderY;
+
+    // Empty: minRows floor only — ignore placeholder wrap scrollHeight.
+    if (!el.value) {
+      el.style.height = `${floor}px`;
+      return;
+    }
+
+    el.style.height = "0px";
+    const contentBox = el.scrollHeight + borderY;
+    const next = Math.min(Math.max(contentBox, floor), cap);
+    el.style.height = `${next}px`;
+  }, [autoGrow, maxRows, minRows]);
+
+  useLayoutEffect(() => {
+    resize();
+  }, [resize, value, defaultValue]);
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    onChange?.(event);
+    // Uncontrolled: DOM already has the new value; measure now.
+    if (value === undefined) resize();
+  };
 
   const control = (
     <textarea
       {...rest}
       id={fieldId}
-      ref={ref}
+      ref={setRefs}
+      rows={rows ?? (autoGrow ? minRows : undefined)}
+      value={value}
+      defaultValue={defaultValue}
+      onChange={handleChange}
+      style={style}
       aria-invalid={isInvalid || undefined}
       aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
       className={join(
         "fynns-input",
         "fynns-textarea",
+        autoGrow && "fynns-textarea--auto-grow",
         size === "sm" && "fynns-input--sm",
         variant === "filled" && "fynns-input--filled",
         isInvalid && "fynns-input--invalid",

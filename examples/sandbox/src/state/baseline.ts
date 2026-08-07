@@ -40,7 +40,7 @@ export function sandboxChromeVar(key: SandboxChromeKey): string {
  * 2. rhythm — gaps between units / ControlRows + toolbar label column
  * 3. panelInsets — content-inset / content-pad-block / dialog-inset /
  *    strip-pad-inline / capsule-chrome-pad-inline / field-pad-inline /
- *    field-pad-block
+ *    field-pad-block / textarea-max-height
  * 4. sheetPads — BottomSheet M3 asymmetric pads (do not merge with panelInsets)
  * 5. shellSize — container width / chrome bar height (not padding)
  * 6. navDrawer — NavigationDrawer absolute rem width / min / max
@@ -70,6 +70,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "capsule-chrome-pad-inline",
   "field-pad-inline",
   "field-pad-block",
+  "textarea-max-height",
   // sheetPads
   "sheet-pad-inline",
   "sheet-pad-block",
@@ -144,6 +145,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "capsule-chrome-pad-inline",
     "field-pad-inline",
     "field-pad-block",
+    "textarea-max-height",
   ],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
@@ -257,6 +259,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Form field · Input / field-shell horizontal pad (12dp — not capsule 4dp)",
   "field-pad-block":
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
+  "textarea-max-height":
+    "Form field · Textarea autoGrow soft cap before inner scroll (13rem)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",

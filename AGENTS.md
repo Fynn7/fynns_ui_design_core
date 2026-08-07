@@ -294,7 +294,9 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   `elevated` / `danger` (filled like primary: danger surface + on-accent ink);
   sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
-  floating label — not full M3 Text Field anatomy; Textarea block pad →
+  floating label — not full M3 Text Field anatomy; **autoGrow** height from
+  content by default — `minRows` / `maxRows` / `--fynns-layout-textarea-max-height`;
+  `autoGrow={false}` keeps a fixed well + vertical resize; block pad →
   `--fynns-layout-field-pad-block`), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select,
   Autocomplete (same docked SearchBar expand shell as Select; open on
@@ -710,9 +712,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
   same inline recipe **plus** `--fynns-layout-field-pad-block` (12dp) so
   multiline copy is not flush to the top/bottom — do **not** let
   `.fynns-input--sm`’s zero block pad (32dp single-line Input) apply to
-  Textarea. Do **not** reuse capsule chrome for form affix shells — that 4dp
-  token is SearchBar / Composer IconButton flush only. Affix → text gap uses
-  `--fynns-layout-control-cluster-gap`.
+  Textarea. Default **autoGrow** (content height; soft cap
+  `--fynns-layout-textarea-max-height`). Do **not** reuse capsule chrome for
+  form affix shells — that 4dp token is SearchBar / Composer IconButton flush
+  only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
   inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
