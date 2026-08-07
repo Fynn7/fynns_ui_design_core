@@ -1,6 +1,18 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  loadSandboxUiSession,
+  patchSandboxUiSession,
+  type PlaygroundTarget,
+} from "./sandboxUiSession";
 
-export type PlaygroundTarget = "card" | "collapsible";
+export type { PlaygroundTarget };
 
 type PlaygroundTargetContextValue = {
   target: PlaygroundTarget;
@@ -10,7 +22,14 @@ type PlaygroundTargetContextValue = {
 const PlaygroundTargetContext = createContext<PlaygroundTargetContextValue | null>(null);
 
 export function PlaygroundTargetProvider({ children }: { children: ReactNode }) {
-  const [target, setTarget] = useState<PlaygroundTarget>("card");
+  const [target, setTarget] = useState<PlaygroundTarget>(
+    () => loadSandboxUiSession()?.playgroundTarget ?? "card",
+  );
+
+  useEffect(() => {
+    patchSandboxUiSession({ playgroundTarget: target });
+  }, [target]);
+
   const value = useMemo(() => ({ target, setTarget }), [target]);
   return (
     <PlaygroundTargetContext.Provider value={value}>{children}</PlaygroundTargetContext.Provider>

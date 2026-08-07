@@ -35,7 +35,10 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-xl);
+  width: 100%;
   max-width: 44rem;
+  margin-inline: auto;
+  box-sizing: border-box;
 }
 
 .sandbox-templates-hero {
@@ -769,7 +772,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-md);
+  /* Reading column: cap width, center when canvas is wide (drawers collapsed). */
+  width: 100%;
   max-width: 56rem;
+  margin-inline: auto;
+  box-sizing: border-box;
 }
 
 /* SkipLink target — same stack rhythm as `.sandbox-globals` (categories used to

@@ -144,6 +144,10 @@ import {
   findDemoById,
   type GlobalsCategoryId,
 } from "../catalog/globalsCatalog";
+import {
+  loadSandboxUiSession,
+  patchSandboxUiSession,
+} from "../state/sandboxUiSession";
 import { GlobalsCatalogSearch } from "./GlobalsCatalogSearch";
 
 /** Render sandbox chat copy with `` `code` `` → `<code>` (ChatGPT inline pill). */
@@ -434,7 +438,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const { t } = useLocale();
   const [openCategories, setOpenCategories] = useState<
     Partial<Record<GlobalsCategoryId, boolean>>
-  >({});
+  >(() => loadSandboxUiSession()?.openCategories ?? {});
   const [flashDemoId, setFlashDemoId] = useState<string | null>(null);
   const [switchOn, setSwitchOn] = useState(true);
   const [checkOn, setCheckOn] = useState(true);
@@ -620,6 +624,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const setCategoryOpen = (id: GlobalsCategoryId, open: boolean) => {
     setOpenCategories((prev) => ({ ...prev, [id]: open }));
   };
+
+  useEffect(() => {
+    patchSandboxUiSession({ openCategories });
+  }, [openCategories]);
 
   const nestedPromptDefault =
     "You translate natural-language requests into structured camera commands.";

@@ -118,7 +118,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
   token overrides, Apply changes). Drafts persist in `localStorage` until you
   click **Apply changes** (review per-file diffs, then confirm), which writes
   `src/theme/tokens.ts` and runs `npm run gen:theme` via the Vite dev middleware.
-  Collapsible sections animate open/close with a height slide; the inspector
+  Chrome UI session restore / fresh-boot search focus: see **Aesthetic sandbox**
+  below. Collapsible sections
+  animate open/close with a height slide; the inspector
   aside opens/closes by clipping its width on wide layouts (hard seam with the
   canvas — no translate slide that morphs the corner). Below 900px the shell
   stacks: nav densifies to an icon **rail** (not a chip strip), the inspector
@@ -137,7 +139,11 @@ set — enforce with `npm run check:wysiwyg`. Pages: **Surfaces** (preview targe
 `globalsCatalog` + SearchBar jump-to-demo; system radius + live control anatomy),
 **Foundations**, **Motion**, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
-and named templates). On Surfaces / Globals, the topbar **inspector** toggle
+and named templates). **Chrome UI session** (page, inspector, nav, playground
+  target, open Components categories) restores across browser refresh for the
+  current Vite process via `sessionStorage` + `__SANDBOX_BOOT_ID__`. A fresh
+  Vite process opens **Components** and focuses the catalog SearchBar (dev
+  convenience — skips SkipLink first-focus). On Surfaces / Globals, the topbar **inspector** toggle
 shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
