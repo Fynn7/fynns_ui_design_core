@@ -34,7 +34,9 @@ shipped `theme.css`).
 `examples/sandbox/src/state/baseline.ts` — sandbox lies about the shipped
 default. **Fix in core:** promote the nodded value into
 `src/theme/tokens.ts` + `npm run gen:theme`, keep
-`SANDBOX_DEFAULT_OVERRIDES` empty (`npm run check:wysiwyg`).
+`SANDBOX_DEFAULT_OVERRIDES` empty (`npm run check:wysiwyg`). Core maintainers:
+public API deletes are **atomic** (export + source + sandbox demo +
+`BREAKING_PURGE` Removed row) — see [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
 
 ## Failure mode this treaty targets: squashed drawer
 

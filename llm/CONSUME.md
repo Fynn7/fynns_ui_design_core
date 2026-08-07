@@ -45,10 +45,14 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
     Crowding / narrow viewports densify to **rail + Rail components** — never
     leave a labeled drawer in an ~80px track (squashed drawer + bogus scrollbar).
     Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-15. **WYSIWYG:** sandbox Globals/Preview resting look is the consumer default.
+15. **WYSIWYG / surface sync:** sandbox Globals/Preview resting look is the consumer default.
     Use bare `@fynns/ui` APIs; never restyle `.fynns-*` to “match” sandbox.
     Aesthetic drift belongs in `tokens.ts` / primitives (then `npm run gen:theme`).
     `SANDBOX_DEFAULT_OVERRIDES` must stay empty (`npm run check:wysiwyg` enforces).
+    Core maintainers: never drop a sandbox demo while a symbol stays exported —
+    delete public APIs **atomically** (see [`BREAKING_PURGE.md`](BREAKING_PURGE.md)
+    Policy §5). `check:wysiwyg` also fails if Removed-table names reappear in the
+    barrel or if a visual primitive is companion-parked.
     Pin bump note: `--fynns-radius-md` shipped at **20px** (was 8px) so consumers
     match the long-standing sandbox Select/Input look.
 
