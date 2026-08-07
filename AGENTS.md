@@ -421,8 +421,10 @@ Import from `@fynns/ui`. Components emit `.fynns-*` classes.
     + compact morph (Cursor): collapsed ≈ one horizontal row (~40dp = Input /
     field-shell density, not SearchBar 56dp; toolbar `display: contents`;
     `line-height` = 32dp control row); expanded = full-width textarea above a
-    bottom `role="toolbar"` (leading start, Send end) with **12dp** shell pad
-    (`composer-expanded-pad-*`), **8dp** text↔toolbar gap, and
+    bottom `role="toolbar"` (leading start, Send end) with shell pad
+    `composer-expanded-pad-inline` (= `--fynns-layout-strip-pad-inline`,
+    same Banner text breath), `composer-expanded-pad-block` (12dp),
+    **8dp** text↔toolbar gap, and
     `composer-text-line-height` (22dp) — never leave icons vertically centered
     beside tall text. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).

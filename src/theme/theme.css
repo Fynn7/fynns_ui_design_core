@@ -324,7 +324,7 @@
   --fynns-chat-composer-max-height: 13rem;
   --fynns-chat-composer-pad-inline: var(--fynns-layout-capsule-chrome-pad-inline);
   --fynns-chat-composer-pad-block: 0.1875rem;
-  --fynns-chat-composer-expanded-pad-inline: 0.75rem;
+  --fynns-chat-composer-expanded-pad-inline: var(--fynns-layout-strip-pad-inline);
   --fynns-chat-composer-expanded-pad-block: 0.75rem;
   --fynns-chat-composer-gap: 0.25rem;
   --fynns-chat-composer-expanded-gap: 0.5rem;

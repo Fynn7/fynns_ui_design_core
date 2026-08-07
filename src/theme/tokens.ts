@@ -728,7 +728,7 @@ export const CHAT_TOKENS = {
   "composer-max-height": "13rem",
   /**
    * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
-   * Expanded uses `composer-expanded-pad-*` (Cursor ~12dp breath). When
+   * Expanded uses `composer-expanded-pad-*` (strip-pad inline). When
    * collapsed with **no** leading, CSS adds start pad on the textarea so
    * text lands at `--fynns-layout-strip-pad-inline`.
    */
@@ -736,10 +736,11 @@ export const CHAT_TOKENS = {
   /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
   "composer-pad-block": "0.1875rem",
   /**
-   * Expanded shell pad (Cursor multiline ~12–16dp). Owns the inset for both
-   * textarea and bottom toolbar so + / Send share one vertical edge.
+   * Expanded shell pad — same Banner/strip breath as collapsed text start
+   * (`--fynns-layout-strip-pad-inline`). Owns the inset for both textarea and
+   * bottom toolbar so + / Send share one vertical edge with the text.
    */
-  "composer-expanded-pad-inline": "0.75rem",
+  "composer-expanded-pad-inline": "var(--fynns-layout-strip-pad-inline)",
   "composer-expanded-pad-block": "0.75rem",
   /** Collapsed control cluster gap (4px). */
   "composer-gap": "0.25rem",

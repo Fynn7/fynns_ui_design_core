@@ -463,7 +463,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatFailed, setChatFailed] = useState(true);
   const [chatDraft, setChatDraft] = useState("");
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
-    "Rotate the view to the RIGHT\nside view of the head, using\northographic projection.",
+    "Rotate the view to the RIGHT side view of the head, using orthographic projection so the silhouette stays true to the sculpt.",
   );
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
