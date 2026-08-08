@@ -15,7 +15,9 @@ sandbox Globals + Preview are public; do not import deleted APIs.
   Vertical units: flex + `--fynns-layout-unit-stack-gap`. Toolbars:
   `ControlStack` + `ControlRow`.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Do not resurrect purged Toast /
-  Dialog / Popover APIs. Transient feedback: `snackbar` + `SnackbarHost`.
+  Popover / Panel / BlockingLoadingOverlay APIs. Dialog / Drawer /
+  FullscreenDialog stay in the keep-set (see `AGENTS.md` / `llm/BREAKING_PURGE.md`).
+  Transient feedback: `snackbar` + `SnackbarHost`.
 - App/teaching-specific tokens stay app-side under `--afs-*` or `--dsa-*`.
 - If a token or component is missing, add it in the submodule and run
   `npm run gen:theme`.

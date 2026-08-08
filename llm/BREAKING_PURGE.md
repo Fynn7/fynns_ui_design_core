@@ -126,6 +126,8 @@ as a hard fail.
 | --- | --- |
 | `CodeBlock` titled chrome | `variant="default"` (or omit) **requires** non-empty `label`. Omitting `label`, `label=""`, or whitespace-only **throws** (no silent empty head). No filename → `variant="plain"`. Do not use empty `label` to “hide” the title bar. |
 | Centered `Dialog` ControlStack / Switch | Inside `.fynns-dialog-panel--centered`, stacks are **full width** with label `1fr` + end `max-content`, and the close control uses a glyph-inset negative margin so the **CloseIcon** end edge aligns with Switch tracks (not the 40dp hit box). Remove consumer padding that re-insets the body. |
+| `ControlRow` / chrome captions | No forced `text-transform: uppercase`. Pass the casing you want shown; do not rely on CSS to shout labels. |
+| `Avatar` initials from `name` | Initials keep the source string’s casing (no `.toUpperCase()`). Normalize in the app if you need all-caps marks. |
 
 ## Related docs
 

@@ -2502,21 +2502,24 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <ControlStack columns={1}>
             <ControlRow label={t("globals.dialogSettingsPreview")}>
               <Switch
-                label={<span className="fynns-sr-only">{t("globals.dialogSettingsPreview")}</span>}
+                label=""
+                ariaLabel={t("globals.dialogSettingsPreview")}
                 checked={settingsPreviewOn}
                 onCheckedChange={setSettingsPreviewOn}
               />
             </ControlRow>
             <ControlRow label={t("globals.dialogSettingsAutoRun")}>
               <Switch
-                label={<span className="fynns-sr-only">{t("globals.dialogSettingsAutoRun")}</span>}
+                label=""
+                ariaLabel={t("globals.dialogSettingsAutoRun")}
                 checked={settingsAutoRunOn}
                 onCheckedChange={setSettingsAutoRunOn}
               />
             </ControlRow>
             <ControlRow label={t("globals.dialogSettingsAsk")}>
               <Switch
-                label={<span className="fynns-sr-only">{t("globals.dialogSettingsAsk")}</span>}
+                label=""
+                ariaLabel={t("globals.dialogSettingsAsk")}
                 checked={settingsAskOn}
                 onCheckedChange={setSettingsAskOn}
               />
