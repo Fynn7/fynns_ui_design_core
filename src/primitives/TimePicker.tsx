@@ -371,7 +371,8 @@ function formatSupportingTime(
   if (!parts) return "";
   if (hourCycle === "h12") {
     const { hour12, period } = toDisplay12(parts.hours);
-    return `${pad2(hour12)}:${pad2(parts.minutes)} ${period.toUpperCase()}`;
+    const periodLabel = period === "am" ? "AM" : "PM";
+    return `${pad2(hour12)}:${pad2(parts.minutes)} ${periodLabel}`;
   }
   return value;
 }

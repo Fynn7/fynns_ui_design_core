@@ -65,13 +65,11 @@
 .sandbox-templates-section-title {
   margin: 0 0 var(--fynns-space-sm);
   font-size: var(--fynns-font-size-sm);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }
 
 :root[data-fynns-locale="zh"] .sandbox-templates-section-title {
-  text-transform: none;
   letter-spacing: normal;
 }
 
@@ -208,7 +206,6 @@
 .sandbox-inspector-head h2 {
   margin: 0;
   font-size: var(--fynns-font-size-sm);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }
@@ -490,7 +487,6 @@
 
 .sandbox-preview-label {
   font-size: var(--fynns-font-size-caption);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }
@@ -763,7 +759,6 @@
 .sandbox-section h3 {
   margin: 0;
   font-size: var(--fynns-font-size-settings-section);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }
@@ -872,7 +867,6 @@
 .sandbox-globals-heading {
   margin: 0;
   font-size: var(--fynns-font-size-settings-section);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }

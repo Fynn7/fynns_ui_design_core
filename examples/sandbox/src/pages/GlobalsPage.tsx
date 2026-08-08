@@ -482,6 +482,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     setChatStreamEpoch((n) => n + 1);
   }, []);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [settingsPreviewOn, setSettingsPreviewOn] = useState(true);
+  const [settingsAutoRunOn, setSettingsAutoRunOn] = useState(false);
+  const [settingsAskOn, setSettingsAskOn] = useState(true);
   const [dialogShellOpen, setDialogShellOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -2410,6 +2414,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
           </Button>
+          <Button size="sm" variant="tonal" onClick={() => setSettingsDialogOpen(true)}>
+            {t("globals.dialogSettingsOpen")}
+          </Button>
           <Button size="sm" variant="tonal" onClick={() => setNestedDialogOpen(true)}>
             {t("globals.nestedDialogOpen")}
           </Button>
@@ -2484,6 +2491,42 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         >
           <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
         </Dialog>
+        <Dialog
+          open={settingsDialogOpen}
+          onOpenChange={setSettingsDialogOpen}
+          title={t("globals.dialogSettingsTitle")}
+          size="sm"
+          showCloseButton
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.dialogSettingsPreview")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.dialogSettingsPreview")}
+                checked={settingsPreviewOn}
+                onCheckedChange={setSettingsPreviewOn}
+              />
+            </ControlRow>
+            <ControlRow label={t("globals.dialogSettingsAutoRun")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.dialogSettingsAutoRun")}
+                checked={settingsAutoRunOn}
+                onCheckedChange={setSettingsAutoRunOn}
+              />
+            </ControlRow>
+            <ControlRow label={t("globals.dialogSettingsAsk")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.dialogSettingsAsk")}
+                checked={settingsAskOn}
+                onCheckedChange={setSettingsAskOn}
+              />
+            </ControlRow>
+          </ControlStack>
+        </Dialog>
+        <SandboxHelp text={t("globals.dialogSettingsHelp")} />
         <Dialog
           open={nestedDialogOpen}
           onOpenChange={setNestedDialogOpen}

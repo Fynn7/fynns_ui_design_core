@@ -535,13 +535,22 @@ classes.
   consecutive toolbar hovers are instant; enter fades/slides via
   `--fynns-duration-tooltip` once placement is ready; bubble stays inside the
   viewport via flip/shift + inline `maxWidth` from the floating placer), InfoHint
-- **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog (M3 basic shape:
-  `radius-3xl`, no default close X on Dialog/Confirm; centered width is
-  content-fit by default — `size` only sets the `--fynns-layout-dialog-max-width-*`
-  ceiling), Drawer (content side
-  sheet ~400dp, open-edge `radius-xl`; always modal), FullscreenDialog, BottomSheet,
-  DropdownMenu (+ Item / CheckboxItem / Group / Separator), ContextMenu /
-  ContextMenuTrigger
+- **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog / FullscreenDialog
+  (**M3 variants** — official catalog is basic + full-screen only):
+  | Role | API | Close | Notes |
+  | --- | --- | --- | --- |
+  | Basic confirm | `ConfirmDialog` | none | Title + supporting text + foot actions; `dialog-inset`. |
+  | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible settings/forms — **not** a separate component. |
+  | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; mobile-first long tasks. |
+  **Settings recipe** (no `SettingsDialog`): `Dialog` + `showCloseButton` + full-width
+  `ControlStack` / `ControlRow` / `Switch`. Centered panel CSS stretches the stack
+  (`width: 100%`, label `1fr`, controls `max-content`) and optically shifts the
+  close IconButton so the **CloseIcon glyph** end edge (not the 40dp hover disk)
+  shares the Switch track end edge (`panel − dialog-inset`). Do not wrap body in
+  extra padding or keep toolbar `max-content` stacks inside Dialog.
+  Drawer (content side sheet ~400dp, open-edge `radius-xl`; always modal),
+  BottomSheet, DropdownMenu (+ Item / CheckboxItem / Group / Separator),
+  ContextMenu / ContextMenuTrigger
 - **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
   DateRangePickerDialog, TimePicker / TimePickerDialog
 - **Chrome:** TopAppBar (**edge-flush** — no outer radius / no card frame;
@@ -707,7 +716,7 @@ classes.
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; Settings = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |

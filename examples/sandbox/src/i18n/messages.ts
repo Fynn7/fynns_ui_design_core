@@ -514,8 +514,15 @@ const en = {
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
   "globals.overlayHelp":
-    "M3-shaped Dialog (28dp corners, no default X) + ConfirmDialog; Drawer as side sheet (25rem, open-edge radius); BottomSheet; FullscreenDialog for large editors. NavigationDrawer for destinations only. `DialogShell` is the low-level frame when you own head/body chrome.",
+    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Settings recipe = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
+  "globals.dialogSettingsOpen": "Open settings dialog",
+  "globals.dialogSettingsTitle": "Settings",
+  "globals.dialogSettingsHelp":
+    "Settings recipe: Dialog sm + close X + ControlStack columns={1}. Switch tracks share the CloseIcon glyph end edge (not the 40dp IconButton hover disk).",
+  "globals.dialogSettingsPreview": "Preview",
+  "globals.dialogSettingsAutoRun": "Auto-run",
+  "globals.dialogSettingsAsk": "AskQuestion",
   "globals.dialogShellOpen": "Open DialogShell",
   "globals.dialogShellTitle": "Custom shell",
   "globals.dialogShellBody":
@@ -1684,8 +1691,15 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
   "globals.overlayHelp":
-    "M3 形 Dialog（28dp 圆角、默认无 X）+ ConfirmDialog；Drawer 侧栏（25rem、开合边圆角）；BottomSheet；FullscreenDialog 用于大型编辑器。目的地请用 NavigationDrawer。自管头/身时用底层 `DialogShell`。",
+    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。设置配方 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
+  "globals.dialogSettingsOpen": "打开设置对话框",
+  "globals.dialogSettingsTitle": "设置",
+  "globals.dialogSettingsHelp":
+    "设置配方：Dialog sm + 关闭 X + ControlStack columns={1}。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp IconButton 热区外缘）。",
+  "globals.dialogSettingsPreview": "Preview",
+  "globals.dialogSettingsAutoRun": "Auto-run",
+  "globals.dialogSettingsAsk": "AskQuestion",
   "globals.dialogShellOpen": "打开 DialogShell",
   "globals.dialogShellTitle": "自定义壳",
   "globals.dialogShellBody":
