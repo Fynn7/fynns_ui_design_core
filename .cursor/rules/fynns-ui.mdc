@@ -27,8 +27,9 @@ ring can paint before heavy work).
   Textarea, Select,
   Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
-  ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton + full-width
-  ControlStack), Drawer, FullscreenDialog,
+  ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
+  full-width ControlStack + track-only Switch — not InfoHint demo as Preferences
+  shell; see AGENTS.md), Drawer, FullscreenDialog,
   BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
   Collapsible shell, static head),
   Surface,

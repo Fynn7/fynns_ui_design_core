@@ -76,3 +76,9 @@ Consumers import `@fynns/ui` from submodule source via a Vite alias, so local UI
 work can see new behavior immediately after pulling the submodule itself.
 
 The parent repository pointer is updated separately by CI through bump PRs.
+
+**Local mandatory pin check (agents / humans):** propagate bump PRs do **not**
+replace verifying the working tree. Before UI work, run
+`node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check` from a
+core checkout — it **fails** when the consumer submodule is behind remote
+`main`. Authority: [`llm/CONSUME.md`](../llm/CONSUME.md) Hard rule 5a.

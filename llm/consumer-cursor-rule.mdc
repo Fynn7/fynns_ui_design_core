@@ -13,37 +13,46 @@ alwaysApply: true
 
 1. **Git submodule + 源码别名** `@fynns/ui` → `packages/fynns_ui_design_core/src/index.ts`。
    **禁止**把 `@fynns/ui` / `@fynns/ui-design-core` 写进 `package.json` dependencies。
-2. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
-3. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
+2. **UI 工作前必须核 pin：** 在 core / 子模块内跑
+   `node scripts/install-as-submodule.mjs --target <消费仓根> --check`（或
+   `npm run consume:install -- --target <消费仓根> --check`）。pin 落后远程
+   `main` tip → **先 bump 子模块指针并再 check**，禁止在过期 pin 上改 UI 或
+   「发明标准壳」。故意钉旧 / 离线才用 `--skip-pin-check` 或
+   `FYNNS_UI_SKIP_PIN_CHECK=1`。自动 bump PR（propagate）**不能**代替本步。
+   权威：子模块 `llm/CONSUME.md` Hard rule 5a。
+3. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
+4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
    Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。
-4. 样式只用 `var(--fynns-*)`。禁止硬编码 hex / 随意 rem / 私有 `--app-*-radius`。
+5. 样式只用 `var(--fynns-*)`。禁止硬编码 hex / 随意 rem / 私有 `--app-*-radius`。
    **字族：** 正文与 chrome 继承 `--fynns-font-ui`（`body` 已设）；代码用
    `--fynns-font-mono`；**禁止**把主要正文 / 表单 / Chat / Dialog 设成
    `--fynns-font-serif`（serif 仅在用户明确要求的少量编辑向展示用）。详见
    子模块 `AGENTS.md` **Font families**。
-5. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
-6. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
+6. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
+7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
 ## 所见即所得（强制）
 
-7. **Sandbox Globals / Preview 里点头的外观 = 消费仓默认。** 裸用 `@fynns/ui`
+8. **Sandbox Globals / Preview 里点头的外观 = 消费仓默认。** 裸用 `@fynns/ui`
    原语即可（如 `<Select />`），**禁止**为「看起来更圆」去本地改 `.fynns-*` 或发明
-   私有 radius。若消费仓与 sandbox 不一致：先核对子模块 pin，再在 **core**
-   `tokens.ts` / 原语 CSS 修（`npm run gen:theme`），**不要**在消费仓打补丁。
-8. 变体（disabled / object options / invalid 等）按 sandbox 同名 demo 选用；
+   私有 radius。若消费仓与 sandbox 不一致：先跑 consume `--check` 核对子模块 pin，
+   再在 **core** `tokens.ts` / 原语 CSS 修（`npm run gen:theme`），**不要**在消费仓打补丁。
+9. 变体（disabled / object options / invalid 等）按 sandbox 同名 demo 选用；
    **默认参数**以 sandbox 静息外观为准（正式 `--fynns-*`，不是沙盒私货 override）。
-9. Select / Autocomplete / Input 圆角走 `--fynns-radius-md`（正式默认 20px）——
+10. Select / Autocomplete / Input 圆角走 `--fynns-radius-md`（正式默认 20px）——
    不是 SearchBar 的 `--fynns-radius-3xl` 大胶囊；也不该再出现 8px「尖角」漂移。
 
 ## Dialog 变式（M3 basic / full-screen）
 
 - **确认** → `ConfirmDialog`（无 X，脚按钮）。
-- **内容 / 可关闭标签行** → `Dialog`（默认无 X；需要关闭钮时传 `showCloseButton`）。
-  Body 用全宽 `ControlStack` / `ControlRow` / `Switch`，**禁止**再包一层与
-  `dialog-inset` 冲突的 padding，也禁止把 toolbar 的 `max-content` 短栈塞进
-  Dialog（尾控件须与关闭 **X 字形**右缘对齐，不是 IconButton 热区）。
+- **内容 / 可关闭标签行** → `Dialog` + `showCloseButton` + 全宽 `ControlStack` /
+  `ControlRow` + **仅轨道** `Switch`（`label=""` + `ariaLabel`）。对照 sandbox
+  「Open Dialog with close」，**禁止**把 Globals `#info-hint` demo 当 Preferences
+  壳（不要同行再叠 Switch 可见文案 + 尾随 InfoHint）。**禁止**再包一层与
+  `dialog-inset` 冲突的 padding / toolbar `max-content` 短栈（尾控件须与关闭
+  **X 字形**右缘对齐）。权威：子模块 `AGENTS.md` **Dismissible Dialog + ControlStack**。
 - **长任务全屏** → `FullscreenDialog`。
-- **不要**自造平行 Dialog 变体（例如自命名 `SettingsDialog`）/ 平行圆角卡片框。
+- **不要**自造平行 Dialog 变体（`SettingsDialog` / Preferences 专用壳）/ 平行圆角卡片框。
 
 ## DestinationAppShell（默认主界面 — 强制）
 

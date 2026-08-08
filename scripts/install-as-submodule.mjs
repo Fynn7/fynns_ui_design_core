@@ -37,7 +37,10 @@ Options:
   --vite-from <dir>        Directory that contains vite.config.* (alias relative to it)
   --skip-wire              Only add/init submodule; do not edit vite/tsconfig
   --wire-only              Skip git submodule; only wire configs
-  --check                  Validate existing install; exit 1 if incomplete
+  --check                  Validate existing install + pin freshness vs origin/main;
+                           exit 1 if incomplete or pin behind tip
+  --skip-pin-check         With --check: skip remote main pin freshness
+                           (also FYNNS_UI_SKIP_PIN_CHECK=1)
   --dry-run                Print actions without changing anything
   --json                   Machine-readable JSON summary on stdout
   -h, --help               Show help
@@ -56,6 +59,7 @@ function parseArgs(argv) {
     skipWire: false,
     wireOnly: false,
     check: false,
+    skipPinCheck: false,
     dryRun: false,
     json: false,
     help: false,
@@ -74,10 +78,12 @@ function parseArgs(argv) {
     else if (a === "--skip-wire") out.skipWire = true;
     else if (a === "--wire-only") out.wireOnly = true;
     else if (a === "--check") out.check = true;
+    else if (a === "--skip-pin-check") out.skipPinCheck = true;
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--json") out.json = true;
     else if (a.startsWith("-")) throw new Error(`Unknown flag: ${a}\n${usage()}`);
   }
+  if (process.env.FYNNS_UI_SKIP_PIN_CHECK === "1") out.skipPinCheck = true;
   return out;
 }
 
@@ -166,6 +172,146 @@ function submodulePresent(gitRoot, subPath) {
   const mentioned = gm.includes(subPath.replace(/\\/g, "/")) || gm.includes(toPosix(subPath));
   const hasIndex = fs.existsSync(path.join(abs, "src", "index.ts"));
   return { present: mentioned || hasIndex, abs, initialized: hasIndex };
+}
+
+/** Resolve submodule remote URL from .gitmodules, else fallback. */
+function submoduleRemoteUrl(gitRoot, subPath, fallbackUrl) {
+  const gitmodules = path.join(gitRoot, ".gitmodules");
+  if (!fs.existsSync(gitmodules)) return fallbackUrl;
+  const gm = readText(gitmodules);
+  const posix = toPosix(subPath);
+  // Match the [submodule "..."] block that lists this path, then its url=.
+  const blocks = gm.split(/^\[submodule\s+/m).slice(1);
+  for (const block of blocks) {
+    const pathMatch = block.match(/^\s*path\s*=\s*(.+)$/m);
+    const urlMatch = block.match(/^\s*url\s*=\s*(.+)$/m);
+    if (!pathMatch || !urlMatch) continue;
+    const p = pathMatch[1].trim().replace(/\\/g, "/");
+    if (p === posix || p.endsWith(`/${posix}`) || posix.endsWith(p)) {
+      return urlMatch[1].trim();
+    }
+  }
+  return fallbackUrl;
+}
+
+/**
+ * Compare consumer submodule HEAD to remote main tip.
+ * Hard-fail when behind; network errors fail (no silent "fresh").
+ */
+function checkPinFreshness({ gitRoot, subPath, url, skipPinCheck }) {
+  const short = (sha) => (sha && sha.length >= 7 ? sha.slice(0, 7) : sha || null);
+  const base = {
+    head: null,
+    tip: null,
+    tipRef: "refs/heads/main",
+    behind: null,
+    skipped: false,
+    url: url || DEFAULT_URL,
+  };
+
+  if (skipPinCheck) {
+    return {
+      ...base,
+      skipped: true,
+      ok: true,
+      issue: null,
+    };
+  }
+
+  const abs = path.join(gitRoot, subPath);
+  if (!fs.existsSync(path.join(abs, "src", "index.ts"))) {
+    return {
+      ...base,
+      ok: false,
+      issue: `submodule pin check skipped path (not initialized): ${subPath}`,
+    };
+  }
+
+  const headR = runGit(["rev-parse", "HEAD"], abs, { allowFail: true });
+  if (headR.status !== 0 || !headR.stdout) {
+    return {
+      ...base,
+      ok: false,
+      issue: `could not read submodule HEAD at ${subPath}`,
+    };
+  }
+  const head = headR.stdout.trim();
+  base.head = head;
+
+  const remoteUrl = submoduleRemoteUrl(gitRoot, subPath, url || DEFAULT_URL);
+  base.url = remoteUrl;
+
+  const ls = runGit(["ls-remote", remoteUrl, "refs/heads/main"], abs, {
+    allowFail: true,
+  });
+  if (ls.status !== 0 || !ls.stdout) {
+    return {
+      ...base,
+      ok: false,
+      issue: `pin check could not reach remote main (${remoteUrl}): ${(ls.stderr || ls.stdout || "ls-remote failed").slice(0, 200)}`,
+    };
+  }
+  const tipLine = ls.stdout.split("\n").find((l) => l.includes("refs/heads/main"));
+  const tip = tipLine ? tipLine.split(/\s+/)[0] : "";
+  if (!/^[0-9a-f]{7,40}$/i.test(tip)) {
+    return {
+      ...base,
+      ok: false,
+      issue: `pin check: unexpected ls-remote main output from ${remoteUrl}`,
+    };
+  }
+  base.tip = tip;
+
+  if (head === tip) {
+    return { ...base, behind: false, ok: true, issue: null };
+  }
+
+  // Ensure tip is resolvable locally, then count commits tip has that pin lacks.
+  const fetchR = runGit(["fetch", "--depth=1", remoteUrl, "refs/heads/main"], abs, {
+    allowFail: true,
+  });
+  if (fetchR.status !== 0) {
+    return {
+      ...base,
+      behind: true,
+      ok: false,
+      issue: `submodule pin behind origin/main (${short(head)} vs ${short(tip)}); fetch failed while verifying — bump ${subPath} to main tip then re-check`,
+    };
+  }
+
+  const countR = runGit(["rev-list", "--count", "HEAD..FETCH_HEAD"], abs, {
+    allowFail: true,
+  });
+  if (countR.status !== 0) {
+    // Tip may still be ahead even if rev-list fails on shallow history.
+    return {
+      ...base,
+      behind: true,
+      ok: false,
+      issue: `submodule pin behind origin/main (${short(head)} vs ${short(tip)}); bump ${subPath} to main tip then re-check`,
+    };
+  }
+  const behindCount = Number.parseInt(countR.stdout.trim(), 10);
+  if (!Number.isFinite(behindCount)) {
+    return {
+      ...base,
+      behind: true,
+      ok: false,
+      issue: `submodule pin behind origin/main (${short(head)} vs ${short(tip)}); bump ${subPath} to main tip then re-check`,
+    };
+  }
+  if (behindCount > 0) {
+    return {
+      ...base,
+      behind: true,
+      ok: false,
+      // Shallow fetch may under-count; SHA pair is the source of truth.
+      issue: `submodule pin behind origin/main (${short(head)} vs ${short(tip)}); bump ${subPath} to main tip then re-check`,
+    };
+  }
+
+  // Pin equals tip, or pin is ahead of main (fork/local commits) — not behind.
+  return { ...base, behind: false, ok: true, issue: null };
 }
 
 function packageJsonHasForbiddenDep(gitRoot) {
@@ -356,7 +502,7 @@ function pickTsconfig(opts, gitRoot, viteFile) {
   return hits.find((p) => path.basename(p) === "tsconfig.json") || hits[0] || null;
 }
 
-function checkMode(gitRoot, subPath, viteFile, tsconfigFile) {
+function checkMode(gitRoot, subPath, viteFile, tsconfigFile, { url, skipPinCheck } = {}) {
   const issues = [];
   const state = submodulePresent(gitRoot, subPath);
   if (!state.initialized) issues.push("submodule not initialized (missing src/index.ts)");
@@ -379,7 +525,29 @@ function checkMode(gitRoot, subPath, viteFile, tsconfigFile) {
         .join(", ")}`,
     );
   }
-  return { ok: issues.length === 0, issues, state };
+  let pin = {
+    head: null,
+    tip: null,
+    tipRef: "refs/heads/main",
+    behind: null,
+    skipped: !!skipPinCheck,
+    url: url || DEFAULT_URL,
+    ok: true,
+    issue: null,
+  };
+  if (state.initialized) {
+    pin = checkPinFreshness({
+      gitRoot,
+      subPath,
+      url: url || DEFAULT_URL,
+      skipPinCheck: !!skipPinCheck,
+    });
+    if (pin.issue) issues.push(pin.issue);
+  } else if (!skipPinCheck) {
+    pin.ok = false;
+    pin.skipped = false;
+  }
+  return { ok: issues.length === 0, issues, state, pin };
 }
 
 function main() {
@@ -418,9 +586,20 @@ function main() {
   result.tsconfigFile = tsconfigFile;
 
   if (opts.check) {
-    const c = checkMode(gitRoot, subPath, viteFile, tsconfigFile);
+    const c = checkMode(gitRoot, subPath, viteFile, tsconfigFile, {
+      url: opts.url,
+      skipPinCheck: opts.skipPinCheck,
+    });
     result.ok = c.ok;
     result.issues = c.issues;
+    result.pin = {
+      head: c.pin.head,
+      tip: c.pin.tip,
+      tipRef: c.pin.tipRef,
+      behind: c.pin.behind,
+      skipped: c.pin.skipped,
+      url: c.pin.url,
+    };
     result.forbiddenDeps = packageJsonHasForbiddenDep(gitRoot);
     emit(result, opts.json);
     process.exit(c.ok ? 0 : 1);
@@ -537,6 +716,16 @@ function emit(result, asJson) {
   lines.push(`submodule: ${result.submodulePath}`);
   if (result.viteFile) lines.push(`vite: ${result.viteFile}`);
   if (result.tsconfigFile) lines.push(`tsconfig: ${result.tsconfigFile}`);
+  if (result.pin) {
+    const p = result.pin;
+    if (p.skipped) {
+      lines.push(`pin: skipped (--skip-pin-check or FYNNS_UI_SKIP_PIN_CHECK=1)`);
+    } else {
+      lines.push(
+        `pin: head=${p.head ? p.head.slice(0, 7) : "?"} tip=${p.tip ? p.tip.slice(0, 7) : "?"} behind=${p.behind}`,
+      );
+    }
+  }
   for (const s of result.steps) {
     lines.push(`- [${s.status}] ${s.step}${s.detail ? `: ${s.detail}` : ""}${s.file ? ` (${s.file})` : ""}`);
     if (s.snippet) lines.push(s.snippet);

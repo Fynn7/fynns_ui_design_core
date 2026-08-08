@@ -11,6 +11,7 @@ param(
   [switch]$SkipWire,
   [switch]$WireOnly,
   [switch]$Check,
+  [switch]$SkipPinCheck,
   [switch]$DryRun,
   [switch]$Json
 )
@@ -26,6 +27,7 @@ if ($Tsconfig) { $argsList += @("--tsconfig", $Tsconfig) }
 if ($SkipWire) { $argsList += "--skip-wire" }
 if ($WireOnly) { $argsList += "--wire-only" }
 if ($Check) { $argsList += "--check" }
+if ($SkipPinCheck) { $argsList += "--skip-pin-check" }
 if ($DryRun) { $argsList += "--dry-run" }
 if ($Json) { $argsList += "--json" }
 
