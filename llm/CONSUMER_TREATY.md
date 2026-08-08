@@ -40,6 +40,9 @@ public API deletes are **atomic** (export + source + sandbox demo +
 
 ## Failure mode this treaty targets: squashed drawer
 
+**Prefer** `DestinationAppShell` for greenfield — it syncs Drawer↔Rail for you.
+Only hand-compose `ClippedNavShell` when you need a fully custom shell.
+
 Symptoms (often on **first paint** after crowding / narrow init):
 
 - Left column ~**80px** (`--fynns-navrail-width`)
@@ -57,10 +60,11 @@ Symptoms (often on **first paint** after crowding / narrow init):
 
 Reference implementation:
 [`examples/sandbox/src/shell/SandboxShell.tsx`](../examples/sandbox/src/shell/SandboxShell.tsx)
-(`navMode` and `nav` swap together). Catalog notes:
-[`AGENTS.md`](../AGENTS.md) (ClippedNavShell / destination ladder).
+(`navMode` and `nav` swap together). Declarative default:
+sandbox Layout templates `#layouts-demo-shell` (`DestinationAppShell`).
+Catalog notes: [`AGENTS.md`](../AGENTS.md) (destination ladder).
 
-Core does **not** auto-swap Drawer↔Rail (slot-only shell). Dev builds warn when
+Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
 
 ## Related docs

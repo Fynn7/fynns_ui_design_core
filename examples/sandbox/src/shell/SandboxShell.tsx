@@ -47,6 +47,7 @@ import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
 import { GlobalsPage } from "../pages/GlobalsPage";
+import { LayoutsPage } from "../pages/LayoutsPage";
 import { LayoutChromeInspector } from "../pages/LayoutChromeInspector";
 import { MotionPage } from "../pages/MotionPage";
 import { TemplatesPage } from "../pages/TemplatesPage";
@@ -153,6 +154,7 @@ export function SandboxShell() {
   const hasInspector =
     page === "playground" ||
     page === "globals" ||
+    page === "layouts" ||
     page === "foundations" ||
     page === "motion";
   const showAside = hasInspector && asideOpen;
@@ -173,6 +175,14 @@ export function SandboxShell() {
           label={t("nav.globals")}
           active={page === "globals"}
           onClick={() => setPage("globals")}
+        />
+      </Tooltip>
+      <Tooltip content={t("nav.layoutsHint")} side="right">
+        <NavigationDrawerItem
+          icon={<PanelLeftIcon />}
+          label={t("nav.layouts")}
+          active={page === "layouts"}
+          onClick={() => setPage("layouts")}
         />
       </Tooltip>
       <NavigationDrawerItem
@@ -207,7 +217,7 @@ export function SandboxShell() {
     <NavigationRail
       className="sandbox-nav-rail"
       aria-label={t("nav.aria")}
-      labelVisibility="selected"
+      labelVisibility="labeled"
     >
       <Tooltip content={t("nav.playgroundHint")} side="right">
         <NavigationRailItem
@@ -223,6 +233,14 @@ export function SandboxShell() {
           label={t("nav.globals")}
           active={page === "globals"}
           onClick={() => setPage("globals")}
+        />
+      </Tooltip>
+      <Tooltip content={t("nav.layoutsHint")} side="right">
+        <NavigationRailItem
+          icon={<PanelLeftIcon />}
+          label={t("nav.layouts")}
+          active={page === "layouts"}
+          onClick={() => setPage("layouts")}
         />
       </Tooltip>
       <NavigationRailItem
@@ -361,6 +379,7 @@ export function SandboxShell() {
             {page === "globals" ? (
               <GlobalsPage searchFocusTick={globalsSearchFocusTick} />
             ) : null}
+            {page === "layouts" ? <LayoutsPage /> : null}
             {page === "foundations" ? <FoundationsPage /> : null}
             {page === "motion" ? <MotionPage /> : null}
             {page === "templates" ? (
@@ -377,7 +396,7 @@ export function SandboxShell() {
               <GlobalsInspector />
             </EndAside>
           ) : null}
-          {page === "foundations" || page === "motion" ? (
+          {page === "foundations" || page === "motion" || page === "layouts" ? (
             <EndAside open={showAside}>
               <LayoutChromeInspector />
             </EndAside>

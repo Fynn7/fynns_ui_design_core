@@ -230,6 +230,11 @@ export type {
   ClippedNavShellNavMode,
   ClippedNavShellProps,
 } from "./primitives/ClippedNavShell";
+export { DestinationAppShell } from "./primitives/DestinationAppShell";
+export type {
+  DestinationAppShellDestination,
+  DestinationAppShellProps,
+} from "./primitives/DestinationAppShell";
 export { EndAside } from "./primitives/EndAside";
 export type { EndAsideProps } from "./primitives/EndAside";
 export { BottomAppBar } from "./primitives/BottomAppBar";

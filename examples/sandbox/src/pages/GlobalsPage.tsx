@@ -1,13 +1,11 @@
 import {
   Autocomplete,
   ArchiveIcon,
-  ArrowLeftIcon,
   Avatar,
   AvatarGroup,
   BadgedBox,
   Banner,
   BarChartIcon,
-  BottomAppBar,
   BottomSheet,
   Breadcrumb,
   BusyRegion,
@@ -34,14 +32,11 @@ import {
   ChatScrollToBottom,
   ChatThinking,
   ChatThread,
-  ClippedNavShell,
-  wouldClippedNavDrawerCrowd,
   ClipboardIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
   Collapsible,
-  EndAside,
   ContextMenu,
   ContextMenuTrigger,
   DatePicker,
@@ -85,25 +80,11 @@ import {
   List,
   ListItem,
   MenuIcon,
-  NavigationRail,
-  NavigationRailHeader,
-  NavigationRailItem,
-  NavigationRailMenu,
-  NavigationBar,
-  NavigationBarItem,
-  NavigationDrawer,
-  NavigationDrawerHeadline,
-  NavigationDrawerItem,
   OtpInput,
-  PanelLeftIcon,
-  PanelRightIcon,
   PlusIcon,
   PencilIcon,
   Radio,
   SaveIcon,
-  SearchIcon,
-  SearchBar,
-  SearchBarResult,
   Select,
   SettingsIcon,
   SkipLink,
@@ -119,8 +100,6 @@ import {
   TableHeaderCell,
   TableRow,
   ToggleGroup,
-  TopAppBar,
-  Toolbar,
   Tooltip,
   TrashIcon,
   UndoIcon,
@@ -260,15 +239,6 @@ const CODE_TOKEN_KEYS = [
   "escape",
   "invalid",
 ] as const;
-
-type RailId = "home" | "search" | "charts" | "all";
-
-const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
-  home: "globals.navRailPaneHome",
-  search: "globals.navRailPaneSearch",
-  charts: "globals.navRailPaneCharts",
-  all: "globals.navRailPaneAll",
-};
 
 /**
  * Owns per-character stream text so ~28ms updates do not re-render the entire
@@ -452,26 +422,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetHalfOpen, setSheetHalfOpen] = useState(false);
   const [sheetFullOpen, setSheetFullOpen] = useState(false);
-  const [appBarScrolled, setAppBarScrolled] = useState(false);
-  const [railId, setRailId] = useState<RailId>("home");
-  const [railLabelVisibility, setRailLabelVisibility] = useState<
-    "labeled" | "selected" | "unlabeled"
-  >("labeled");
-  const [barId, setBarId] = useState<"home" | "search" | "charts" | "all">("home");
-  const [barLabelVisibility, setBarLabelVisibility] = useState<
-    "labeled" | "selected" | "unlabeled"
-  >("labeled");
-  const [drawerId, setDrawerId] = useState<"inbox" | "sent" | "drafts" | "settings">(
-    "inbox",
-  );
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [shellNavOpen, setShellNavOpen] = useState(true);
-  const [shellNavCompact, setShellNavCompact] = useState(false);
-  const [shellAsideOpen, setShellAsideOpen] = useState(true);
-  const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
-  const shellDemoRef = useRef<HTMLDivElement>(null);
-  const [navSearchQuery, setNavSearchQuery] = useState("");
-  const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
@@ -522,9 +472,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
   const thinkingStartedAtRef = useRef(0);
-  const [shellChatDraft, setShellChatDraft] = useState("");
-  const [shellChatBusy, setShellChatBusy] = useState(false);
-  const [shellChatReply, setShellChatReply] = useState("");
   const stopChatStream = useCallback(() => setChatStreaming(false), []);
   const startChatStream = useCallback(() => {
     setChatStreamEpoch((n) => n + 1);
@@ -674,7 +621,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     <div className="sandbox-globals">
       <SkipLink href="#globals-content" label={t("globals.skipLink")} />
       <div id="globals-content" className="sandbox-globals-content" tabIndex={-1}>
-        <p className="sandbox-globals-lead">{t("globals.lead")}</p>
+      <p className="sandbox-globals-lead">{t("globals.lead")}</p>
         <SandboxHelp text={t("globals.skipLinkHelp")} />
         <GlobalsDemo id="skip-link">
           <div className="sandbox-skip-link-teach">
@@ -1082,8 +1029,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <>
         <div className="sandbox-globals-row sandbox-globals-row--stack">
         <GlobalsDemo id="input">
-          <div className="sandbox-globals-row sandbox-globals-row--stack">
-            <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
             <Input
               variant="filled"
               size="sm"
@@ -1102,12 +1049,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="select">
           <div className="sandbox-globals-row sandbox-globals-row--stack">
-            <Select
-              ariaLabel={t("globals.selectAria")}
-              value="one"
-              options={["one", "two", "three"]}
-              onChange={() => {}}
-            />
+          <Select
+            ariaLabel={t("globals.selectAria")}
+            value="one"
+            options={["one", "two", "three"]}
+            onChange={() => {}}
+          />
             <Select
               ariaLabel={t("globals.selectObjectAria")}
               value={selectObjValue}
@@ -1126,7 +1073,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onChange={() => {}}
             />
             <SandboxHelp text={t("globals.selectHelp")} />
-          </div>
+        </div>
         </GlobalsDemo>
         <GlobalsDemo id="autocomplete">
           <div className="sandbox-globals-row sandbox-globals-row--stack">
@@ -2305,7 +2252,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           >
             {t("globals.cardBody")}
-          </Card>
+            </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}
           </Card>
@@ -2410,7 +2357,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           >
             <SandboxHelp text={t("globals.collapsibleBody")} />
-          </Collapsible>
+        </Collapsible>
           <Collapsible
             title={t("globals.collapsibleChromePlainTitle")}
             chrome="plain"
@@ -3108,613 +3055,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
-        </GlobalsDemo>
-        <GlobalsDemo id="top-app-bar">
-        <div className="sandbox-globals-appbar">
-          <TopAppBar
-            title={t("globals.appBarTitle")}
-            scrolled={appBarScrolled}
-            leading={
-              <Tooltip content={t("globals.appBarBack")}>
-                <IconButton aria-label={t("globals.appBarBack")}>
-                  <ArrowLeftIcon />
-                </IconButton>
-              </Tooltip>
-            }
-            trailing={
-              <>
-                <Tooltip content={t("globals.appBarSearch")}>
-                  <IconButton aria-label={t("globals.appBarSearch")}>
-                    <SearchIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.appBarSettings")}>
-                  <IconButton aria-label={t("globals.appBarSettings")}>
-                    <SettingsIcon />
-                  </IconButton>
-                </Tooltip>
-              </>
-            }
-          />
-        </div>
-        <Switch
-          labelSide="end"
-          label={t("globals.appBarScrolled")}
-          checked={appBarScrolled}
-          onCheckedChange={setAppBarScrolled}
-        />
-        <div className="sandbox-globals-appbar">
-          <TopAppBar size="md" title={t("globals.appBarMdTitle")} scrolled={appBarScrolled} />
-        </div>
-        <div className="sandbox-globals-appbar">
-          <TopAppBar size="lg" title={t("globals.appBarLgTitle")} scrolled={appBarScrolled} />
-        </div>
-        <SandboxHelp text={t("globals.appBarHelp")} />
-        <SandboxHelp text={t("globals.appBarSizeHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="navigation-rail">
-        <ToggleGroup
-          size="compact"
-          showCheck={false}
-          ariaLabel={t("globals.navLabelVisibilityAria")}
-          value={railLabelVisibility}
-          onChange={setRailLabelVisibility}
-          options={[
-            { value: "labeled", label: t("globals.navLabelLabeled") },
-            { value: "selected", label: t("globals.navLabelSelected") },
-            { value: "unlabeled", label: t("globals.navLabelUnlabeled") },
-          ]}
-        />
-        <div className="sandbox-globals-navrail">
-          <NavigationRail
-            aria-label={t("globals.navRailAria")}
-            labelVisibility={railLabelVisibility}
-          >
-            <NavigationRailMenu>
-              <Tooltip content={t("globals.navRailMenu")} side="right">
-                <IconButton aria-label={t("globals.navRailMenu")}>
-                  <MenuIcon />
-                </IconButton>
-              </Tooltip>
-            </NavigationRailMenu>
-            <NavigationRailHeader>
-              <Tooltip content={t("globals.fabTip")} side="right">
-                <Fab size="sm" aria-label={t("globals.fabTip")}>
-                  <PlusIcon />
-                </Fab>
-              </Tooltip>
-            </NavigationRailHeader>
-            <NavigationRailItem
-              icon={<FolderOpenIcon />}
-              label={t("globals.navRailHome")}
-              active={railId === "home"}
-              onClick={() => setRailId("home")}
-            />
-            <NavigationRailItem
-              icon={<SearchIcon />}
-              label={t("globals.navRailSearch")}
-              active={railId === "search"}
-              badge={3}
-              onClick={() => setRailId("search")}
-            />
-            <NavigationRailItem
-              icon={<BarChartIcon />}
-              label={t("globals.navRailCharts")}
-              active={railId === "charts"}
-              badge
-              onClick={() => setRailId("charts")}
-            />
-            <NavigationRailItem
-              icon={<LayoutGridIcon />}
-              label={t("globals.navRailAll")}
-              active={railId === "all"}
-              onClick={() => setRailId("all")}
-            />
-          </NavigationRail>
-          <div className="sandbox-globals-navrail-pane">
-            <p className="sandbox-globals-navrail-pane-body">
-              {t(RAIL_PANE_BODY[railId])}
-            </p>
-          </div>
-        </div>
-        <SandboxHelp text={t("globals.navRailHelp")} />
-        <SandboxHelp text={t("globals.navRailLabelHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="navigation-bar">
-        <ToggleGroup
-          size="compact"
-          showCheck={false}
-          ariaLabel={t("globals.navLabelVisibilityAria")}
-          value={barLabelVisibility}
-          onChange={setBarLabelVisibility}
-          options={[
-            { value: "labeled", label: t("globals.navLabelLabeled") },
-            { value: "selected", label: t("globals.navLabelSelected") },
-            { value: "unlabeled", label: t("globals.navLabelUnlabeled") },
-          ]}
-        />
-        <div className="sandbox-globals-navbar">
-          <NavigationBar
-            aria-label={t("globals.navBarAria")}
-            labelVisibility={barLabelVisibility}
-          >
-            <NavigationBarItem
-              icon={<FolderOpenIcon />}
-              label={t("globals.navRailHome")}
-              active={barId === "home"}
-              onClick={() => setBarId("home")}
-            />
-            <NavigationBarItem
-              icon={<SearchIcon />}
-              label={t("globals.navRailSearch")}
-              active={barId === "search"}
-              badge={3}
-              onClick={() => setBarId("search")}
-            />
-            <NavigationBarItem
-              icon={<BarChartIcon />}
-              label={t("globals.navRailCharts")}
-              active={barId === "charts"}
-              badge
-              onClick={() => setBarId("charts")}
-            />
-            <NavigationBarItem
-              icon={<LayoutGridIcon />}
-              label={t("globals.navRailAll")}
-              active={barId === "all"}
-              onClick={() => setBarId("all")}
-            />
-          </NavigationBar>
-        </div>
-        <SandboxHelp text={t("globals.navBarHelp")} />
-        <SandboxHelp text={t("globals.navBarLabelHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="navigation-drawer">
-        <div
-          className="sandbox-globals-navdrawer"
-          style={{
-            display: "flex",
-            width: "fit-content",
-            maxWidth: "100%",
-            height: "14rem",
-            border: "1px solid var(--fynns-color-border)",
-            borderRadius: "var(--fynns-radius-md)",
-            overflow: "hidden",
-            background: "var(--fynns-color-app-bg)",
-          }}
-        >
-          <NavigationDrawer
-            variant="standard"
-            aria-label={t("globals.navDrawerAria")}
-            headline={t("globals.navDrawerHeadline")}
-          >
-            <NavigationDrawerItem
-              icon={<FolderOpenIcon />}
-              label={t("globals.navDrawerInbox")}
-              active={drawerId === "inbox"}
-              badge={24}
-              onClick={() => setDrawerId("inbox")}
-            />
-            <NavigationDrawerItem
-              icon={<UploadIcon />}
-              label={t("globals.navDrawerSent")}
-              active={drawerId === "sent"}
-              onClick={() => setDrawerId("sent")}
-            />
-            <NavigationDrawerHeadline>
-              {t("globals.navDrawerSection")}
-            </NavigationDrawerHeadline>
-            <NavigationDrawerItem
-              icon={<FileIcon />}
-              label={t("globals.navDrawerDrafts")}
-              active={drawerId === "drafts"}
-              badge
-              onClick={() => setDrawerId("drafts")}
-            />
-            <NavigationDrawerItem
-              icon={<SettingsIcon />}
-              label={t("globals.navDrawerSettings")}
-              active={drawerId === "settings"}
-              onClick={() => setDrawerId("settings")}
-            />
-          </NavigationDrawer>
-        </div>
-        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
-          <Button size="sm" onClick={() => setDrawerOpen(true)}>
-            {t("globals.navDrawerOpen")}
-          </Button>
-        </div>
-        <NavigationDrawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          aria-label={t("globals.navDrawerModalAria")}
-          headline={t("globals.navDrawerHeadline")}
-        >
-          <NavigationDrawerItem
-            icon={<FolderOpenIcon />}
-            label={t("globals.navDrawerInbox")}
-            active={drawerId === "inbox"}
-            badge={24}
-            onClick={() => {
-              setDrawerId("inbox");
-              setDrawerOpen(false);
-            }}
-          />
-          <NavigationDrawerItem
-            icon={<UploadIcon />}
-            label={t("globals.navDrawerSent")}
-            active={drawerId === "sent"}
-            onClick={() => {
-              setDrawerId("sent");
-              setDrawerOpen(false);
-            }}
-          />
-          <NavigationDrawerItem
-            icon={<SettingsIcon />}
-            label={t("globals.navDrawerSettings")}
-            active={drawerId === "settings"}
-            onClick={() => {
-              setDrawerId("settings");
-              setDrawerOpen(false);
-            }}
-          />
-        </NavigationDrawer>
-        <SandboxHelp text={t("globals.navDrawerHelp")} />
-        <TokenList group="navdrawer" title={t("globals.tokenListNavdrawer")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="shell">
-        <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <Switch
-            labelSide="end"
-            label={t("globals.shellNavMode")}
-            checked={shellNavOpen}
-            onCheckedChange={(open) => {
-              setShellNavOpen(open);
-              if (open) {
-                const crowd = shellDemoRef.current
-                  ? wouldClippedNavDrawerCrowd(shellDemoRef.current)
-                  : false;
-                setShellNavCompact(crowd);
-              }
-            }}
-          />
-          <Switch
-            labelSide="end"
-            label={t("globals.shellAsideOpen")}
-            checked={shellAsideOpen}
-            onCheckedChange={setShellAsideOpen}
-          />
-        </div>
-        <div className="sandbox-globals-clipped-shell">
-          <ClippedNavShell
-            ref={shellDemoRef}
-            navMode={
-              !shellNavOpen ? "hidden" : shellNavCompact ? "rail" : "drawer"
-            }
-            onNavCrowded={() => setShellNavCompact(true)}
-            topBar={
-              <TopAppBar
-                title={t("globals.shellTitle")}
-                leading={
-                  <Tooltip content={t("globals.shellToggleNav")}>
-                    <IconButton
-                      aria-label={t("globals.shellToggleNav")}
-                      aria-pressed={shellNavOpen}
-                      onClick={() => {
-                        if (shellNavOpen) {
-                          setShellNavOpen(false);
-                        } else {
-                          const crowd = shellDemoRef.current
-                            ? wouldClippedNavDrawerCrowd(shellDemoRef.current)
-                            : false;
-                          setShellNavCompact(crowd);
-                          setShellNavOpen(true);
-                        }
-                      }}
-                    >
-                      {shellNavOpen ? (
-                        <PanelLeftIcon size={16} aria-hidden />
-                      ) : (
-                        <MenuIcon aria-hidden />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                }
-                trailing={
-                  <Tooltip content={t("globals.shellToggleAside")}>
-                    <IconButton
-                      aria-label={t("globals.shellToggleAside")}
-                      aria-pressed={shellAsideOpen}
-                      onClick={() => setShellAsideOpen((open) => !open)}
-                    >
-                      <PanelRightIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                }
-              />
-            }
-            nav={
-              !shellNavOpen ? null : shellNavCompact ? (
-                <NavigationRail
-                  aria-label={t("globals.shellNavAria")}
-                  labelVisibility="selected"
-                >
-                  <NavigationRailItem
-                    icon={<FolderOpenIcon />}
-                    label={t("globals.navRailHome")}
-                    active={shellDest === "home"}
-                    onClick={() => setShellDest("home")}
-                  />
-                  <NavigationRailItem
-                    icon={<SearchIcon />}
-                    label={t("globals.navRailSearch")}
-                    active={shellDest === "search"}
-                    onClick={() => setShellDest("search")}
-                  />
-                </NavigationRail>
-              ) : (
-                <NavigationDrawer
-                  variant="standard"
-                  ariaLabel={t("globals.shellNavAria")}
-                >
-                  <NavigationDrawerItem
-                    icon={<FolderOpenIcon />}
-                    label={t("globals.navRailHome")}
-                    active={shellDest === "home"}
-                    onClick={() => setShellDest("home")}
-                  />
-                  <NavigationDrawerItem
-                    icon={<SearchIcon />}
-                    label={t("globals.navRailSearch")}
-                    active={shellDest === "search"}
-                    onClick={() => setShellDest("search")}
-                  />
-                  <NavigationDrawerItem
-                    icon={<ArchiveIcon />}
-                    label={t("globals.shellNavLongLabel")}
-                    active={shellDest === "long"}
-                    onClick={() => setShellDest("long")}
-                  />
-                </NavigationDrawer>
-              )
-            }
-          >
-            <div className="sandbox-globals-shell-body">
-              <div className="sandbox-globals-shell-canvas">
-                <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
-                  <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
-                    <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
-                    <ChatMessage role="user">
-                      {chatCaption(t("globals.chatUserBody"))}
-                    </ChatMessage>
-                    <ChatMessage role="assistant">
-                      {shellChatReply
-                        ? shellChatReply
-                        : chatCaption(t("globals.chatAssistantBody"))}
-                    </ChatMessage>
-                  </ChatThread>
-                  <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
-                  <ChatComposer
-                    value={shellChatDraft}
-                    onChange={setShellChatDraft}
-                    ariaLabel={t("globals.chatComposerAria")}
-                    placeholder={t("globals.chatComposerPlaceholder")}
-                    busy={shellChatBusy}
-                    onStop={() => setShellChatBusy(false)}
-                    onSubmit={(v: string) => {
-                      setShellChatBusy(true);
-                      setShellChatDraft("");
-                      window.setTimeout(() => {
-                        setShellChatReply(t("globals.shellChatEcho", { msg: v }));
-                        setShellChatBusy(false);
-                      }, 600);
-                    }}
-                    sendLabel={t("globals.chatSend")}
-                    stopLabel={t("globals.chatStop")}
-                    leading={null}
-                  />
-                </Chat>
-              </div>
-              <EndAside open={shellAsideOpen}>
-                <div className="fynns-chat-host--fill sandbox-globals-shell-aside">
-                  <p className="sandbox-chat-aside-label">
-                    {t("globals.shellAsideChatLabel")}
-                  </p>
-                  <Chat
-                    label={t("globals.shellAsideChatLabel")}
-                    className="sandbox-chat-frame sandbox-chat-frame--aside"
-                  >
-                    <ChatThread>
-                      <ChatMessage role="user">
-                        {t("globals.chatAsideUserBody")}
-                      </ChatMessage>
-                      <ChatMessage role="assistant">
-                        {t("globals.chatAsideAssistantBody")}
-                      </ChatMessage>
-                    </ChatThread>
-                    <ChatComposer
-                      value={chatAsideDraft}
-                      onChange={setChatAsideDraft}
-                      ariaLabel={t("globals.chatAsideComposerAria")}
-                      placeholder={t("globals.chatAsideComposerPlaceholder")}
-                      onSubmit={() => setChatAsideDraft("")}
-                      leading={null}
-                    />
-                  </Chat>
-                </div>
-              </EndAside>
-            </div>
-          </ClippedNavShell>
-        </div>
-        <SandboxHelp text={t("globals.shellHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="bottom-app-bar">
-        <div className="sandbox-globals-bottom-app-bar">
-          <BottomAppBar
-            aria-label={t("globals.bottomAppBarAria")}
-            actions={
-              <>
-                <Tooltip content={t("globals.bottomAppBarSearch")}>
-                  <IconButton aria-label={t("globals.bottomAppBarSearch")}>
-                    <SearchIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.bottomAppBarArchive")}>
-                  <IconButton aria-label={t("globals.bottomAppBarArchive")}>
-                    <ArchiveIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip content={t("globals.bottomAppBarDelete")}>
-                  <IconButton aria-label={t("globals.bottomAppBarDelete")}>
-                    <TrashIcon />
-                  </IconButton>
-                </Tooltip>
-              </>
-            }
-            floatingActionButton={
-              <Tooltip content={t("globals.fabTip")}>
-                <IconButton variant="primary" aria-label={t("globals.fabTip")}>
-                  <PlusIcon />
-                </IconButton>
-              </Tooltip>
-            }
-          />
-        </div>
-        <SandboxHelp text={t("globals.bottomAppBarHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="toolbar">
-        <div className="sandbox-globals-toolbar">
-          <Toolbar
-            variant="docked"
-            aria-label={t("globals.toolbarDockedAria")}
-            floatingActionButton={
-              <Tooltip content={t("globals.fabTip")}>
-                <Fab size="sm" aria-label={t("globals.fabTip")}>
-                  <PlusIcon />
-                </Fab>
-              </Tooltip>
-            }
-          >
-            <Tooltip content={t("globals.toolbarUndo")}>
-              <IconButton aria-label={t("globals.toolbarUndo")}>
-                <UndoIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.toolbarEdit")}>
-              <IconButton aria-label={t("globals.toolbarEdit")}>
-                <PencilIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.toolbarSave")}>
-              <IconButton aria-label={t("globals.toolbarSave")}>
-                <SaveIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.bottomAppBarDelete")}>
-              <IconButton aria-label={t("globals.bottomAppBarDelete")}>
-                <TrashIcon />
-              </IconButton>
-            </Tooltip>
-          </Toolbar>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "var(--fynns-space-md)",
-              alignItems: "flex-end",
-            }}
-          >
-            <Toolbar
-              variant="floating"
-              aria-label={t("globals.toolbarFloatingAria")}
-              floatingActionButton={
-                <Tooltip content={t("globals.fabTip")}>
-                  <Fab size="sm" aria-label={t("globals.fabTip")}>
-                    <PlusIcon />
-                  </Fab>
-                </Tooltip>
-              }
-            >
-              <Tooltip content={t("globals.toolbarUndo")}>
-                <IconButton aria-label={t("globals.toolbarUndo")}>
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.toolbarEdit")}>
-                <IconButton aria-label={t("globals.toolbarEdit")}>
-                  <PencilIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.toolbarSave")}>
-                <IconButton aria-label={t("globals.toolbarSave")}>
-                  <SaveIcon />
-                </IconButton>
-              </Tooltip>
-            </Toolbar>
-            <Toolbar
-              variant="floating"
-              color="vibrant"
-              orientation="vertical"
-              aria-label={t("globals.toolbarVibrantAria")}
-            >
-              <Tooltip content={t("globals.toolbarUndo")} side="right">
-                <IconButton aria-label={t("globals.toolbarUndo")}>
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.toolbarEdit")} side="right">
-                <IconButton aria-label={t("globals.toolbarEdit")}>
-                  <PencilIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.toolbarSave")} side="right">
-                <IconButton aria-label={t("globals.toolbarSave")}>
-                  <SaveIcon />
-                </IconButton>
-              </Tooltip>
-            </Toolbar>
-          </div>
-        </div>
-        <SandboxHelp text={t("globals.toolbarHelp")} />
-        </GlobalsDemo>
-        <GlobalsDemo id="search-bar">
-        <div className="sandbox-globals-search-bar">
-          <SearchBar
-            value={navSearchQuery}
-            onChange={setNavSearchQuery}
-            ariaLabel={t("globals.searchBarAria")}
-            placeholder={t("globals.searchBarPlaceholder")}
-            clearAriaLabel={t("globals.searchBarClear")}
-            expanded={navSearchExpanded}
-            onExpandedChange={setNavSearchExpanded}
-            onSearch={() => setNavSearchExpanded(false)}
-          >
-            {(
-              [
-                t("globals.searchBarResultLibs"),
-                t("globals.searchBarResultDocs"),
-                t("globals.searchBarResultSettings"),
-              ] as const
-            )
-              .filter((label) =>
-                navSearchQuery.trim()
-                  ? label.toLowerCase().includes(navSearchQuery.trim().toLowerCase())
-                  : true,
-              )
-              .map((label) => (
-                <SearchBarResult
-                  key={label}
-                  onClick={() => {
-                    setNavSearchQuery(label);
-                    setNavSearchExpanded(false);
-                  }}
-                >
-                  {label}
-                </SearchBarResult>
-              ))}
-          </SearchBar>
-        </div>
-        <SandboxHelp text={t("globals.searchBarHelp")} />
         </GlobalsDemo>
       </>
         )}

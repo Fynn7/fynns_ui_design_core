@@ -26,7 +26,7 @@ const NavigationRailContext = createContext<RailContextValue>({
 export type NavigationRailProps = HTMLAttributes<HTMLElement> & {
   /**
    * How destination labels render (M3 label visibility):
-   * - `labeled` — always show labels when provided (default).
+   * - `labeled` — always show labels when provided (**default** / agent densify).
    * - `selected` — label only on the active item (`alwaysShowLabel={false}`).
    * - `unlabeled` — icon-only; taller active indicators.
    */

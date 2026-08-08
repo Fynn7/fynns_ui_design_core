@@ -1,4 +1,4 @@
-# Breaking purge — public surface = Globals + Preview
+# Breaking purge — public surface = Globals + Layouts + Preview
 
 **Authoritative migration guide** for agents and humans after the destructive
 export cleanup. Do not reintroduce purged symbols into `src/index.ts` without a
@@ -8,6 +8,7 @@ sandbox Globals/Preview demo and review.
 
 1. **Legal public components** are only those imported by:
    - [`examples/sandbox/src/pages/GlobalsPage.tsx`](../examples/sandbox/src/pages/GlobalsPage.tsx)
+   - [`examples/sandbox/src/pages/LayoutsPage.tsx`](../examples/sandbox/src/pages/LayoutsPage.tsx)
    - [`examples/sandbox/src/pages/CardPreviewCanvas.tsx`](../examples/sandbox/src/pages/CardPreviewCanvas.tsx)
    - [`examples/sandbox/src/pages/CollapsiblePreviewCanvas.tsx`](../examples/sandbox/src/pages/CollapsiblePreviewCanvas.tsx)
    (plus their anatomy subcomponents and the icons those pages import).
@@ -19,7 +20,7 @@ sandbox Globals/Preview demo and review.
    exports.
 4. **Gallery** (`examples/gallery`) is removed. Foundations / Motion live under
    the sandbox pages.
-5. **Atomic delete (sandbox ↔ source).** Never drop a Globals/catalog demo while
+5. **Atomic delete (sandbox ↔ source).** Never drop a Globals/Layouts/catalog demo while
    the symbol stays in `src/index.ts`. That half-delete fails `check:wysiwyg`
    (export without demo) and historically led agents to *restore the demo*
    instead of removing the export. One change must include **all** of:
@@ -116,7 +117,8 @@ as a hard fail.
 | `SplitButton` | M3 Expressive split: leading `Button` + trailing menu (`DropdownMenu`); flush segments (no gap); variants `primary` / `tonal` / `default` / `elevated`. Demoed in Globals Actions. |
 | `Button` `danger` | Filled like `primary`: `--fynns-color-danger` surface + `--fynns-color-on-accent` ink (outlined red chrome retired). IconButton danger mirrors filled primary. |
 | `Card` | One-shot static section: `title` + optional `icon` / `actions` + always-visible `children`. Shares Collapsible shell; not a disclosure. Anatomy parts and elevated/filled/outlined variants deleted. |
-| `ClippedNavShell` / `EndAside` | Destination app chrome (full-bleed TopAppBar + drawer\|rail) and end-edge inspector width morph. Not `Drawer` (modal content). Demoed in Globals Navigation. |
+| `ClippedNavShell` / `EndAside` | Low-level destination chrome (full-bleed TopAppBar + drawer\|rail) and end-edge inspector width morph. Prefer **`DestinationAppShell`** for greenfield. Not `Drawer` (modal content). Demoed in Layout templates. |
+| `DestinationAppShell` | **Default** declarative app chrome (`destinations` / `title` / `trailing` / `children` / optional `aside`). Wraps ClippedNavShell + Drawer|Rail sync. Demoed in Layout templates `#layouts-demo-shell`. |
 
 ## Behavioral breaking (still exported)
 
