@@ -19,7 +19,7 @@ export type SwitchProps = {
   ariaLabel?: string;
   /**
    * Where the text sits relative to the track.
-   * - `start` (default): label then track — settings / form rows.
+   * - `start` (default): label then track — form / labeled rows.
    * - `end`: track then label — dense toolbars so tracks share a left edge with
    *   sibling controls (ToggleGroup, etc.) instead of drifting with label length.
    */

@@ -540,9 +540,9 @@ classes.
   | Role | API | Close | Notes |
   | --- | --- | --- | --- |
   | Basic confirm | `ConfirmDialog` | none | Title + supporting text + foot actions; `dialog-inset`. |
-  | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible settings/forms — **not** a separate component. |
+  | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible forms — **not** a separate component. |
   | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; mobile-first long tasks. |
-  **Settings recipe** (no `SettingsDialog`): `Dialog` + `showCloseButton` + full-width
+  **Dismissible Dialog + ControlStack** (do **not** invent a parallel `SettingsDialog`): `Dialog` + `showCloseButton` + full-width
   `ControlStack` / `ControlRow` / `Switch`. Centered panel CSS stretches the stack
   (`width: 100%`, label `1fr`, controls `max-content`) and optically shifts the
   close IconButton so the **CloseIcon glyph** end edge (not the 40dp hover disk)
@@ -716,7 +716,7 @@ classes.
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; Settings = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |

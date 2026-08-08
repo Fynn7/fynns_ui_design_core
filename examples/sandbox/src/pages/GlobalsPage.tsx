@@ -482,14 +482,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     setChatStreamEpoch((n) => n + 1);
   }, []);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
-  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const [settingsPreviewOn, setSettingsPreviewOn] = useState(true);
-  const [settingsAutoRunOn, setSettingsAutoRunOn] = useState(false);
-  const [settingsAskOn, setSettingsAskOn] = useState(true);
+  const [closeStackDialogOpen, setCloseStackDialogOpen] = useState(false);
+  const [closeStackOptA, setCloseStackOptA] = useState(true);
+  const [closeStackOptB, setCloseStackOptB] = useState(false);
+  const [closeStackOptC, setCloseStackOptC] = useState(true);
   const [dialogShellOpen, setDialogShellOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
-    "You translate natural-language requests into structured camera commands.",
+    "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -580,7 +580,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   }, [openCategories]);
 
   const nestedPromptDefault =
-    "You translate natural-language requests into structured camera commands.";
+    "Sample multiline body for the nested Card + FieldBlock recipe.";
 
   /** Host-agnostic section recipe — reuse inline or inside Dialog/Drawer. */
   const renderNestedPromptSection = (fieldId: string) => (
@@ -2414,8 +2414,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
           </Button>
-          <Button size="sm" variant="tonal" onClick={() => setSettingsDialogOpen(true)}>
-            {t("globals.dialogSettingsOpen")}
+          <Button size="sm" variant="tonal" onClick={() => setCloseStackDialogOpen(true)}>
+            {t("globals.dialogCloseStackOpen")}
           </Button>
           <Button size="sm" variant="tonal" onClick={() => setNestedDialogOpen(true)}>
             {t("globals.nestedDialogOpen")}
@@ -2492,41 +2492,41 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
         </Dialog>
         <Dialog
-          open={settingsDialogOpen}
-          onOpenChange={setSettingsDialogOpen}
-          title={t("globals.dialogSettingsTitle")}
+          open={closeStackDialogOpen}
+          onOpenChange={setCloseStackDialogOpen}
+          title={t("globals.dialogCloseStackTitle")}
           size="sm"
           showCloseButton
           closeAriaLabel={t("globals.dialogClose")}
         >
           <ControlStack columns={1}>
-            <ControlRow label={t("globals.dialogSettingsPreview")}>
+            <ControlRow label={t("globals.dialogCloseStackOptA")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogSettingsPreview")}
-                checked={settingsPreviewOn}
-                onCheckedChange={setSettingsPreviewOn}
+                ariaLabel={t("globals.dialogCloseStackOptA")}
+                checked={closeStackOptA}
+                onCheckedChange={setCloseStackOptA}
               />
             </ControlRow>
-            <ControlRow label={t("globals.dialogSettingsAutoRun")}>
+            <ControlRow label={t("globals.dialogCloseStackOptB")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogSettingsAutoRun")}
-                checked={settingsAutoRunOn}
-                onCheckedChange={setSettingsAutoRunOn}
+                ariaLabel={t("globals.dialogCloseStackOptB")}
+                checked={closeStackOptB}
+                onCheckedChange={setCloseStackOptB}
               />
             </ControlRow>
-            <ControlRow label={t("globals.dialogSettingsAsk")}>
+            <ControlRow label={t("globals.dialogCloseStackOptC")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogSettingsAsk")}
-                checked={settingsAskOn}
-                onCheckedChange={setSettingsAskOn}
+                ariaLabel={t("globals.dialogCloseStackOptC")}
+                checked={closeStackOptC}
+                onCheckedChange={setCloseStackOptC}
               />
             </ControlRow>
           </ControlStack>
         </Dialog>
-        <SandboxHelp text={t("globals.dialogSettingsHelp")} />
+        <SandboxHelp text={t("globals.dialogCloseStackHelp")} />
         <Dialog
           open={nestedDialogOpen}
           onOpenChange={setNestedDialogOpen}
