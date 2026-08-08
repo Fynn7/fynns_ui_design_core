@@ -1536,9 +1536,9 @@
   overflow-wrap: anywhere;
 }
 
-/* Basic / confirm: transparent head (no surface-head fill) + hairline under
- * the title row so head | body reads as one chrome join (Card / Drawer /
- * CodeBlock). Shell breath uses layout inset tokens only:
+/* Basic / confirm: transparent head (no surface-head fill) + border-strong
+ * hairline under the title row (visible on shared surface-1; Card / CodeBlock
+ * keep quieter outline-subtle). Shell breath uses layout inset tokens only:
  * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
  * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
  * Card sits a touch denser while staying symmetric. */
@@ -1845,7 +1845,7 @@
   gap: var(--fynns-layout-sheet-header-gap);
   flex: 0 0 auto;
   padding: var(--fynns-layout-sheet-header-gap) var(--fynns-layout-sheet-pad-inline);
-  /* Same head|body hairline as Dialog / Drawer / Card. */
+  /* Overlay title-head hairline (border-strong); not Card outline-subtle. */
   border: none;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
   background: transparent;
@@ -6994,7 +6994,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-timepicker-dialog .fynns-timepicker-dialog-head {
   border-bottom: var(--fynns-border-hairline) solid
-    var(--fynns-color-outline-subtle);
+    var(--fynns-color-border-strong);
 }
 
 .fynns-timepicker-dialog-titles {
