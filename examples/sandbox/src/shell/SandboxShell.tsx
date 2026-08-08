@@ -154,6 +154,7 @@ export function SandboxShell() {
   const hasInspector =
     page === "playground" ||
     page === "globals" ||
+    page === "layouts" ||
     page === "foundations" ||
     page === "motion";
   const showAside = hasInspector && asideOpen;
@@ -395,7 +396,7 @@ export function SandboxShell() {
               <GlobalsInspector />
             </EndAside>
           ) : null}
-          {page === "foundations" || page === "motion" ? (
+          {page === "foundations" || page === "motion" || page === "layouts" ? (
             <EndAside open={showAside}>
               <LayoutChromeInspector />
             </EndAside>

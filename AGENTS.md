@@ -548,8 +548,9 @@ classes.
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
-  declarative `destinations[]` / `title` / `trailing` / `children` / optional
-  `aside` (not assumed Chat). Internally wires `ClippedNavShell` + `TopAppBar` +
+  declarative `destinations[]` / `title` / optional `leadingExtra` /
+  `trailing` / `children` / optional `aside` (not assumed Chat). Internally
+  wires `ClippedNavShell` + `TopAppBar` +
   Drawer|Rail + optional `EndAside` and auto-densifies to rail on narrow (~900px)
   or crowding — agents **must** use this unless the user specifies another
   template. Demo: sandbox **Layout templates** `#layouts-demo-shell`.
@@ -721,6 +722,7 @@ classes.
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint (`.fynns-field` / Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (= `unit-stack-gap`) |
   | Vertical stacked units (inspector fields, Collapsible body, sibling demos) | `--fynns-layout-unit-stack-gap` |
   | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |

@@ -117,8 +117,8 @@ export function LayoutsPage() {
               <DestinationAppShell
                 title={t("globals.shellTitle")}
                 navAriaLabel={t("globals.shellNavAria")}
-                expandNavLabel={t("globals.shellToggleNav")}
-                collapseNavLabel={t("globals.shellToggleNav")}
+                expandNavLabel={t("nav.expand")}
+                collapseNavLabel={t("nav.collapse")}
                 asideToggleLabel={t("globals.shellToggleAside")}
                 navOpen={shellNavOpen}
                 onNavOpenChange={setShellNavOpen}
@@ -258,7 +258,7 @@ export function LayoutsPage() {
             >
               <NavigationDrawer
                 variant="standard"
-                aria-label={t("globals.navDrawerAria")}
+                ariaLabel={t("globals.navDrawerAria")}
                 headline={t("globals.navDrawerHeadline")}
               >
                 <NavigationDrawerItem
@@ -300,7 +300,7 @@ export function LayoutsPage() {
             <NavigationDrawer
               open={drawerOpen}
               onClose={() => setDrawerOpen(false)}
-              aria-label={t("globals.navDrawerModalAria")}
+              ariaLabel={t("globals.navDrawerModalAria")}
               headline={t("globals.navDrawerHeadline")}
             >
               <NavigationDrawerItem

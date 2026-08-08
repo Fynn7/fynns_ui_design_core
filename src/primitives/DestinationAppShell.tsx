@@ -22,6 +22,7 @@ import {
   NavigationRailItem,
 } from "./NavigationRail";
 import { TopAppBar } from "./TopAppBar";
+import { Tooltip } from "./Tooltip";
 
 export type DestinationAppShellDestination = {
   id: string;
@@ -249,13 +250,15 @@ export const DestinationAppShell = forwardRef<
 
   const asideToggle =
     aside != null && asideToggleLabel ? (
-      <IconButton
-        aria-label={asideToggleLabel}
-        aria-pressed={asideOpen}
-        onClick={() => setAsideOpen(!asideOpen)}
-      >
-        <PanelRightIcon size={16} aria-hidden />
-      </IconButton>
+      <Tooltip content={asideToggleLabel}>
+        <IconButton
+          aria-label={asideToggleLabel}
+          aria-pressed={asideOpen}
+          onClick={() => setAsideOpen(!asideOpen)}
+        >
+          <PanelRightIcon size={16} aria-hidden />
+        </IconButton>
+      </Tooltip>
     ) : null;
 
   const rootClass = ["fynns-destination-app-shell", className ?? ""]
@@ -277,17 +280,19 @@ export const DestinationAppShell = forwardRef<
           title={title}
           leading={
             <>
-              <IconButton
-                aria-label={navOpen ? collapseNavLabel : expandNavLabel}
-                aria-pressed={navOpen}
-                onClick={toggleNav}
-              >
-                {navOpen ? (
-                  <PanelLeftIcon size={16} aria-hidden />
-                ) : (
-                  <MenuIcon aria-hidden />
-                )}
-              </IconButton>
+              <Tooltip content={navOpen ? collapseNavLabel : expandNavLabel}>
+                <IconButton
+                  aria-label={navOpen ? collapseNavLabel : expandNavLabel}
+                  aria-pressed={navOpen}
+                  onClick={toggleNav}
+                >
+                  {navOpen ? (
+                    <PanelLeftIcon size={16} aria-hidden />
+                  ) : (
+                    <MenuIcon aria-hidden />
+                  )}
+                </IconButton>
+              </Tooltip>
               {leadingExtra}
             </>
           }
@@ -304,7 +309,7 @@ export const DestinationAppShell = forwardRef<
       nav={nav}
     >
       <div className="fynns-destination-app-shell-body">
-        <div className="fynns-destination-app-shell-canvas">{children}</div>
+        <div className="fynns-destination-app-shell-canvas fynns-scroll">{children}</div>
         {aside != null ? <EndAside open={asideOpen}>{aside}</EndAside> : null}
       </div>
     </ClippedNavShell>

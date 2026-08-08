@@ -35,9 +35,9 @@ alwaysApply: true
 
 未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是
 `DestinationAppShell`（与 sandbox **Layout templates** 首屏
-`#layouts-demo-shell` 同构）。传 `destinations` / `title` / `trailing` /
-`children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail` 做桌面根，
-禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
+`#layouts-demo-shell` 同构）。传 `destinations` / `title` / 可选 `leadingExtra` /
+`trailing` / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
+做桌面根，禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
 `labelVisibility="labeled"`（始终显示标签）——不要默认 `selected` / `unlabeled`。
 
 ```tsx
