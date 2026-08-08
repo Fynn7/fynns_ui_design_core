@@ -83,9 +83,9 @@ const SIZE_ICON_ROWS = [
 const SHADOW_KEYS = Object.keys(SHADOW_TOKENS) as Array<keyof typeof SHADOW_TOKENS>;
 
 const FONT_FAMILY_ROWS = [
-  { key: "ui", sample: "UI — The quick brown fox" },
-  { key: "mono", sample: "Mono — const x = 42;" },
-  { key: "serif", sample: "Serif — The quick brown fox" },
+  { key: "ui", sample: "default body & chrome (inherit)" },
+  { key: "mono", sample: "code / CodeBlock only — const x = 42;" },
+  { key: "serif", sample: "rare editorial display — never main prose" },
 ] as const;
 
 const FONT_WEIGHT_ROWS = [
@@ -109,6 +109,7 @@ export type FoundationsTitles = {
   size?: string;
   type?: string;
   fontFamily?: string;
+  fontFamilyHelp?: string;
   fontWeight?: string;
   radiusShadow?: string;
   lightTheme?: string;
@@ -288,6 +289,17 @@ export function Foundations({ titles }: { titles?: FoundationsTitles } = {}) {
       </Section>
 
       <Section title={titles?.fontFamily ?? "Font families"}>
+        <p
+          style={{
+            margin: "0 0 var(--fynns-layout-unit-stack-gap)",
+            fontSize: "var(--fynns-font-size-form-label)",
+            color: "var(--fynns-color-text-muted)",
+            maxWidth: "40rem",
+          }}
+        >
+          {titles?.fontFamilyHelp ??
+            "Body and chrome inherit `--fynns-font-ui`. Use `--fynns-font-mono` for code only. `--fynns-font-serif` is rare editorial display when the user explicitly asks — never main prose, forms, Chat, or Dialog. See AGENTS.md Font families."}
+        </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--fynns-space-xs)" }}>
           {FONT_FAMILY_ROWS.map(({ key, sample }) => (
             <p

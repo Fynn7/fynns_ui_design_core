@@ -17,6 +17,10 @@ alwaysApply: true
 3. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
    Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。
 4. 样式只用 `var(--fynns-*)`。禁止硬编码 hex / 随意 rem / 私有 `--app-*-radius`。
+   **字族：** 正文与 chrome 继承 `--fynns-font-ui`（`body` 已设）；代码用
+   `--fynns-font-mono`；**禁止**把主要正文 / 表单 / Chat / Dialog 设成
+   `--fynns-font-serif`（serif 仅在用户明确要求的少量编辑向展示用）。详见
+   子模块 `AGENTS.md` **Font families**。
 5. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
 6. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 

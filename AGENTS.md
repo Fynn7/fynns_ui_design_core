@@ -210,9 +210,14 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
+- **DON'T** set main app body / chrome / forms / Chat / Dialog / lists to
+  `--fynns-font-serif` (or any serif / “editorial” stack). Default text inherits
+  `body { font-family: var(--fynns-font-ui) }`. Serif is reserved — see Tokens
+  **Font families**. Do not invent parallel stacks (Inter, Georgia, …) outside
+  `--fynns-font-*`.
 - Text in this package (docs, default primitive labels, comments) is **English or
- German**. Consumer apps / the sandbox may localize their chrome to Chinese via
- a locale switch — see [README.md](README.md#aesthetic-sandbox).
+  German**. Consumer apps / the sandbox may localize their chrome to Chinese via
+  a locale switch — see [README.md](README.md#aesthetic-sandbox).
 
 **Consumer apps (agents in any repo that consumes `@fynns/ui`):** treat this
 package as a **function API** — import primitives and pass props / children /
@@ -285,12 +290,20 @@ legacy semantic keys (`caption`, `form-label`, …) remain.
 Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thumb`,
 `glow-accent`, `glow-danger`.
 
-Fonts: `--fynns-font-ui` (system), `--fynns-font-mono` (Consolas, then Cascadia/Fira).
-`theme.css` resets `code` / `kbd` / `samp` / `pre` onto the mono stack so bare
-`<code>` labels never fall back to the browser default monospace.
-`--fynns-font-serif` (CMU Serif). Motion: `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
+Fonts: three stacks only — see **Font families** below. Motion:
+`--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
 loading-spin,presentation-hint,reduced-motion-spin}`.
+
+**Font families (`--fynns-font-*`) — when to use (agents / consumers):**
+
+| Token | Stack | Use for | Do **not** use for |
+| --- | --- | --- | --- |
+| `ui` | system-ui / Segoe / Roboto | **Default everything:** page body, chrome, forms, Dialog, Chat, lists, buttons, captions. `theme.css` already sets `body { font-family: var(--fynns-font-ui) }` — prefer inheriting; only set explicitly when resetting a subtree. | — |
+| `mono` | Consolas-first | Code only: `CodeBlock`, bare `code` / `kbd` / `samp` / `pre` (already reset in `theme.css`), technical identifiers. | Running prose, UI labels, Chat bubbles |
+| `serif` | CMU Serif / Times-like | **Rare** academic / editorial *prose* when the user explicitly asks for formal serif (theorem / definition / proof statements, paper-like reading passages). CMU Serif matches TeX-adjacent teaching tone — **not** a substitute for a math renderer. | App chrome, main body copy, forms, Chat, Dialog, lists, buttons; live formula *rendering* (use KaTeX/MathJax or app math chrome — those bring their own Computer Modern); ASCII / code-like identifiers (`mono`) |
+
+Consumer rule of thumb: if you are about to write `font-family`, stop — inherit `ui` unless the content is literally code (`mono`) or the user demanded serif for a narrow display passage. Never pick serif to make body text “more serious”.
 
 **Code highlight (`--fynns-code-*`):** semantic roles for `CodeBlock` (fg, bg,
 comment, keyword, string, number, type, function, variable, property, parameter,
