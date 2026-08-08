@@ -87,6 +87,9 @@ ring can paint before heavy work).
   `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Form control →
   hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Nested surface wells
   (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠ flush).
+  **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
+  for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
+  Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).
   Toolbar / labeled
   strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
   (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset

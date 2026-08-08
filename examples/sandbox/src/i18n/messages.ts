@@ -1063,6 +1063,8 @@ const en = {
   "foundations.size": "Size (icons & targets)",
   "foundations.type": "Type scale",
   "foundations.fontFamily": "Font families",
+  "foundations.fontFamilyHelp":
+    "Body and chrome inherit `--fynns-font-ui`. Use `--fynns-font-mono` for code only. `--fynns-font-serif` is rare editorial display when the user explicitly asks — never main prose, forms, Chat, or Dialog. See AGENTS.md Font families.",
   "foundations.fontWeight": "Font weights",
   "foundations.radiusShadow": "Radius & shadow",
   "foundations.lightTheme": "Light theme (Apply guardrail)",
@@ -2237,6 +2239,8 @@ const zh: Record<MessageKey, string> = {
   "foundations.size": "尺寸（图标与触控靶）",
   "foundations.type": "字号尺度",
   "foundations.fontFamily": "字族",
+  "foundations.fontFamilyHelp":
+    "正文与 chrome 继承 `--fynns-font-ui`；代码用 `--fynns-font-mono`。`--fynns-font-serif` 仅在用户明确要求的少量编辑向展示用 — 禁止用于主要正文、表单、Chat、Dialog。见 AGENTS.md Font families。",
   "foundations.fontWeight": "字重",
   "foundations.radiusShadow": "圆角与阴影",
   "foundations.lightTheme": "浅色主题（Apply 护栏）",

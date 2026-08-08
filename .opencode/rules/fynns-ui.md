@@ -13,7 +13,8 @@ sandbox Globals + Preview are public; do not import deleted APIs.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical units: flex + `--fynns-layout-unit-stack-gap`. Toolbars:
-  `ControlStack` + `ControlRow`.
+  `ControlStack` + `ControlRow`. Font families: inherit `ui` for body/chrome;
+  `mono` for code; never `serif` for main prose (see `AGENTS.md` Font families).
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay APIs. Dialog / Drawer /
   FullscreenDialog stay in the keep-set (see `AGENTS.md` / `llm/BREAKING_PURGE.md`).

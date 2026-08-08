@@ -40,7 +40,9 @@ children (never a rail-width track hosting a labeled drawer).
     Missing look/behavior → **explicitly tell the user** the change must be
     implemented in `fynns_ui_design_core` first; then call the new API from the
     consumer. Design language (including Chat container radius floor ≥
-    `--fynns-radius-22`): [`AGENTS.md`](../AGENTS.md) Hard rules.
+    `--fynns-radius-22`, and **font families** — body/chrome = `ui`, code =
+    `mono`, never serif for main prose): [`AGENTS.md`](../AGENTS.md) Hard rules
+    + Tokens **Font families**.
 11. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
 12. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
 13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style

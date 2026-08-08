@@ -264,7 +264,15 @@ export const ELEVATION_TOKENS = {
 export type ElevationLevel = keyof typeof ELEVATION_TOKENS;
 export type StateLayerName = keyof typeof STATE_LAYER_TOKENS;
 
-/** Font stacks. `--fynns-font-<key>`. */
+/**
+ * Font stacks. `--fynns-font-<key>`.
+ *
+ * When to use (also AGENTS.md **Font families**):
+ * - `ui` — default body + chrome (inherit from `body`; do not override to serif).
+ * - `mono` — code / CodeBlock / `code`|`kbd`|`samp`|`pre` only.
+ * - `serif` — rare academic/editorial prose (theorem text) when the user
+ *   explicitly asks; never main UI body; not a KaTeX/math-font substitute.
+ */
 export const FONT_FAMILY_TOKENS = {
   ui: 'system-ui, "Segoe UI", Roboto, sans-serif',
   mono: 'Consolas, "Cascadia Code", "Fira Code", ui-monospace, monospace',

@@ -18,6 +18,7 @@ export function FoundationsPage() {
         size: t("foundations.size"),
         type: t("foundations.type"),
         fontFamily: t("foundations.fontFamily"),
+        fontFamilyHelp: t("foundations.fontFamilyHelp"),
         fontWeight: t("foundations.fontWeight"),
         radiusShadow: t("foundations.radiusShadow"),
         lightTheme: t("foundations.lightTheme"),
