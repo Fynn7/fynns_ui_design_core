@@ -803,10 +803,10 @@ classes.
   form affix shells — that 4dp token is SearchBar / Composer IconButton flush
   only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
-  ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
-  inline; head **block** pad is equal (`dialog-inset / 2` each side) so title +
-  close IconButton stay **vertically centered** in the head (do not use
-  inset/0 asymmetry); body block (top = bottom) uses `--fynns-layout-content-inset`.
+  ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head (equal four-side
+  so title + close center vertically) / foot / body inline; body block
+  (top = bottom) uses `--fynns-layout-content-inset`, except body directly
+  after head uses `padding-top: 0` so head’s bottom inset is not stacked.
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
   labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
