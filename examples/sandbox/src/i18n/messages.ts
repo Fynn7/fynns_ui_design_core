@@ -516,13 +516,13 @@ const en = {
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
-  "globals.dialogCloseStackOpen": "Open Dialog with close",
-  "globals.dialogCloseStackTitle": "Dialog with close",
-  "globals.dialogCloseStackHelp":
+  "globals.dialogLabeledOpen": "Open Dialog with close",
+  "globals.dialogLabeledTitle": "Dialog with close",
+  "globals.dialogLabeledHelp":
     "Dismissible Dialog + ControlStack: Dialog sm + close X + ControlStack columns={1}. Switch tracks share the CloseIcon glyph end edge (not the 40dp IconButton hover disk).",
-  "globals.dialogCloseStackOptA": "Option A",
-  "globals.dialogCloseStackOptB": "Option B",
-  "globals.dialogCloseStackOptC": "Option C",
+  "globals.dialogLabeledOptA": "Option A",
+  "globals.dialogLabeledOptB": "Option B",
+  "globals.dialogLabeledOptC": "Option C",
   "globals.dialogShellOpen": "Open DialogShell",
   "globals.dialogShellTitle": "Custom shell",
   "globals.dialogShellBody":
@@ -1693,13 +1693,13 @@ const zh: Record<MessageKey, string> = {
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
-  "globals.dialogCloseStackOpen": "打开 Dialog（关闭）",
-  "globals.dialogCloseStackTitle": "带关闭的 Dialog",
-  "globals.dialogCloseStackHelp":
+  "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
+  "globals.dialogLabeledTitle": "带关闭的 Dialog",
+  "globals.dialogLabeledHelp":
     "可关闭 Dialog + ControlStack：Dialog sm + 关闭 X + ControlStack columns={1}。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp IconButton 热区外缘）。",
-  "globals.dialogCloseStackOptA": "选项 A",
-  "globals.dialogCloseStackOptB": "选项 B",
-  "globals.dialogCloseStackOptC": "选项 C",
+  "globals.dialogLabeledOptA": "选项 A",
+  "globals.dialogLabeledOptB": "选项 B",
+  "globals.dialogLabeledOptC": "选项 C",
   "globals.dialogShellOpen": "打开 DialogShell",
   "globals.dialogShellTitle": "自定义壳",
   "globals.dialogShellBody":

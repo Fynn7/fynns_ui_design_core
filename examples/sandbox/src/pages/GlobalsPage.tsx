@@ -482,10 +482,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     setChatStreamEpoch((n) => n + 1);
   }, []);
   const [centeredDialogOpen, setCenteredDialogOpen] = useState(false);
-  const [closeStackDialogOpen, setCloseStackDialogOpen] = useState(false);
-  const [closeStackOptA, setCloseStackOptA] = useState(true);
-  const [closeStackOptB, setCloseStackOptB] = useState(false);
-  const [closeStackOptC, setCloseStackOptC] = useState(true);
+  const [labeledDialogOpen, setLabeledDialogOpen] = useState(false);
+  const [labeledOptA, setLabeledOptA] = useState(true);
+  const [labeledOptB, setLabeledOptB] = useState(false);
+  const [labeledOptC, setLabeledOptC] = useState(true);
   const [dialogShellOpen, setDialogShellOpen] = useState(false);
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false);
   const [nestedPrompt, setNestedPrompt] = useState(
@@ -2414,8 +2414,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" onClick={() => setCenteredDialogOpen(true)}>
             {t("globals.dialogOpen")}
           </Button>
-          <Button size="sm" variant="tonal" onClick={() => setCloseStackDialogOpen(true)}>
-            {t("globals.dialogCloseStackOpen")}
+          <Button size="sm" variant="tonal" onClick={() => setLabeledDialogOpen(true)}>
+            {t("globals.dialogLabeledOpen")}
           </Button>
           <Button size="sm" variant="tonal" onClick={() => setNestedDialogOpen(true)}>
             {t("globals.nestedDialogOpen")}
@@ -2492,41 +2492,41 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <p style={{ margin: 0 }}>{t("globals.dialogBody")}</p>
         </Dialog>
         <Dialog
-          open={closeStackDialogOpen}
-          onOpenChange={setCloseStackDialogOpen}
-          title={t("globals.dialogCloseStackTitle")}
+          open={labeledDialogOpen}
+          onOpenChange={setLabeledDialogOpen}
+          title={t("globals.dialogLabeledTitle")}
           size="sm"
           showCloseButton
           closeAriaLabel={t("globals.dialogClose")}
         >
           <ControlStack columns={1}>
-            <ControlRow label={t("globals.dialogCloseStackOptA")}>
+            <ControlRow label={t("globals.dialogLabeledOptA")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogCloseStackOptA")}
-                checked={closeStackOptA}
-                onCheckedChange={setCloseStackOptA}
+                ariaLabel={t("globals.dialogLabeledOptA")}
+                checked={labeledOptA}
+                onCheckedChange={setLabeledOptA}
               />
             </ControlRow>
-            <ControlRow label={t("globals.dialogCloseStackOptB")}>
+            <ControlRow label={t("globals.dialogLabeledOptB")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogCloseStackOptB")}
-                checked={closeStackOptB}
-                onCheckedChange={setCloseStackOptB}
+                ariaLabel={t("globals.dialogLabeledOptB")}
+                checked={labeledOptB}
+                onCheckedChange={setLabeledOptB}
               />
             </ControlRow>
-            <ControlRow label={t("globals.dialogCloseStackOptC")}>
+            <ControlRow label={t("globals.dialogLabeledOptC")}>
               <Switch
                 label=""
-                ariaLabel={t("globals.dialogCloseStackOptC")}
-                checked={closeStackOptC}
-                onCheckedChange={setCloseStackOptC}
+                ariaLabel={t("globals.dialogLabeledOptC")}
+                checked={labeledOptC}
+                onCheckedChange={setLabeledOptC}
               />
             </ControlRow>
           </ControlStack>
         </Dialog>
-        <SandboxHelp text={t("globals.dialogCloseStackHelp")} />
+        <SandboxHelp text={t("globals.dialogLabeledHelp")} />
         <Dialog
           open={nestedDialogOpen}
           onOpenChange={setNestedDialogOpen}

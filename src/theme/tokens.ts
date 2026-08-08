@@ -1178,7 +1178,7 @@ export const LAYOUT_TOKENS = {
   "snackbar-enter-offset": "0.5rem",
   /** Distance from the viewport bottom edge. */
   "snackbar-inset": "1rem",
-  /** Fixed label column for `ControlRow` (toolbars / settings strips). */
+  /** Fixed label column for `ControlRow` (toolbars / labeled strips). */
   "control-row-label": "7.5rem",
   /**
    * Toolbar / unit rhythm — prefer these over raw `--fynns-space-*`
