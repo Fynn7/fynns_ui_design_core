@@ -805,8 +805,8 @@ classes.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head (equal four-side
   so title + close center vertically) / foot / body inline; body block
-  (top = bottom) uses `--fynns-layout-content-inset`, except body directly
-  after head uses `padding-top: 0` so head’s bottom inset is not stacked.
+  (top = bottom) uses `--fynns-layout-content-inset` below the head hairline
+  (head pad-bottom is above the divider — do not zero body pad-top).
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
   labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
