@@ -1030,14 +1030,22 @@
   min-width: 0;
 }
 
+/*
+ * TopAppBar catalog host — edge-flush chrome, not a Card.
+ * Bottom hairline only (same seam as ClippedNavShell > TopAppBar); open top
+ * + no side frame so demos match the sandbox root / greenfield shape.
+ */
 .sandbox-globals-appbar {
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  border: 1px solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
+  border: none;
+  border-block-end: var(--fynns-border-hairline) solid
+    var(--fynns-color-outline-subtle);
+  border-radius: 0;
   overflow: hidden;
+  background: var(--fynns-color-app-bg);
 }
 
 .sandbox-globals-navbar,

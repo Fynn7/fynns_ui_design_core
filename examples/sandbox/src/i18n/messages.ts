@@ -797,7 +797,7 @@ const en = {
   "globals.appBarSettings": "Settings",
   "globals.appBarScrolled": "Scrolled surface",
   "globals.appBarHelp":
-    "[both] TopAppBar — page header on phone and desktop. Standalone sample below; not the sandbox shell bar. Prefer ClippedNavShell.topBar when composing an app.",
+    "[both] TopAppBar — edge-flush page header (no radius / no card border). Standalone sample below mirrors the sandbox shell bar shape; prefer DestinationAppShell / ClippedNavShell.topBar. Rounded floating strips → Toolbar.",
   "globals.navRailAria": "Sample navigation rail",
   "globals.navRailMenu": "Menu",
   "globals.navRailHome": "Home",
@@ -1967,7 +1967,7 @@ const zh: Record<MessageKey, string> = {
   "globals.appBarSettings": "设置",
   "globals.appBarScrolled": "滚动后表面",
   "globals.appBarHelp":
-    "[两端通用] TopAppBar — 手机与桌面页头。下方为独立样例，不是沙盒壳顶栏。组装应用时放进 ClippedNavShell.topBar。",
+    "[两端通用] TopAppBar — 顶天页头（无圆角、无卡片四边框）。下方独立样例与沙盒壳顶栏同形；优先 DestinationAppShell / ClippedNavShell.topBar。需要圆角浮动条用 Toolbar。",
   "globals.navRailAria": "示例导航栏",
   "globals.navRailMenu": "菜单",
   "globals.navRailHome": "首页",

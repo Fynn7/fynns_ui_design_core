@@ -544,7 +544,10 @@ classes.
   ContextMenuTrigger
 - **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
   DateRangePickerDialog, TimePicker / TimePickerDialog
-- **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
+- **Chrome:** TopAppBar (**edge-flush** — no outer radius / no card frame;
+  greenfield via DestinationAppShell / `ClippedNavShell.topBar`), BottomAppBar,
+  Toolbar (docked / floating — use floating when a rounded tool strip is needed),
+  NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
@@ -692,7 +695,7 @@ classes.
   | Symbol | Platform | Notes |
   | --- | --- | --- |
   | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside; auto Drawer↔Rail. Prefer over hand-composed ClippedNavShell. |
-  | TopAppBar | both | Page header; denser tool chrome. Slot into `ClippedNavShell.topBar` / DestinationAppShell. |
+  | TopAppBar | both | **Edge-flush** page header (`border-radius: 0`, no card frame). Slot into `ClippedNavShell.topBar` / DestinationAppShell — shell adds bottom hairline only. Floating rounded strips → `Toolbar`. |
   | BottomAppBar | mobile-first | Bottom **actions** + optional FAB — not destinations. |
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |

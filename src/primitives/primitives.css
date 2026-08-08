@@ -4335,6 +4335,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* ---------- TopAppBar (M3 top app bar) ---------- */
+/*
+ * Edge-flush page chrome — not a Card / floating Toolbar.
+ * Never round the outer shell or paint a four-side frame: greenfield hosts
+ * (`ClippedNavShell` / `DestinationAppShell`) pin this bar to the viewport
+ * top edge. Seam under the bar is owned by the shell (bottom hairline only).
+ */
 .fynns-top-app-bar {
   display: flex;
   flex-direction: column;
@@ -4343,6 +4349,8 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-appbar-height);
   margin: 0;
   padding: 0;
+  border: none;
+  border-radius: 0;
   background: var(--fynns-color-app-bg);
   color: var(--fynns-color-text);
   box-shadow: var(--fynns-shadow-none);
@@ -7986,10 +7994,13 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text);
 }
 
-/* Prefer clipped chrome: surface-1 + hairline under the bar (no crosshair). */
+/* Prefer clipped chrome: surface-1 + hairline under the bar (no crosshair).
+ * Keep radius 0 / no side borders — bar stays flush with the viewport top. */
 .fynns-clipped-nav-shell > .fynns-top-app-bar {
   background: var(--fynns-color-surface-1);
   box-shadow: var(--fynns-shadow-none);
+  border: none;
+  border-radius: 0;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   position: sticky;
   top: 0;

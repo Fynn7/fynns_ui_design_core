@@ -33,7 +33,8 @@ ring can paint before heavy work).
   Surface,
   LinearProgress/CircularProgress, BusyScrim/BusyRegion,
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
-  FabMenu/FabMenuItem, TopAppBar, BottomAppBar, Toolbar, SearchBar, Banner,
+  FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
+  bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
