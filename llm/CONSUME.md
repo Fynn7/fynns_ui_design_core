@@ -21,6 +21,22 @@ children (never a rail-width track hosting a labeled drawer).
 3. Alias name is **`@fynns/ui`** → `packages/fynns_ui_design_core/src/index.ts`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit submodule sources for consumer features; bump the pin instead.
+5a. **Pin freshness (mandatory before UI work):** from a checkout of this core
+    (or the submodule itself), run
+    `node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check`
+    (or `npm run consume:install -- --target <CONSUMER_ROOT> --check`). Check
+    **fails** when the consumer submodule SHA is behind remote `main` tip.
+    Bump the pin (`cd packages/fynns_ui_design_core && git fetch && git checkout origin/main`,
+    then commit the pointer in the consumer) and re-check before writing UI.
+    Escape hatch only when intentional: `--skip-pin-check` or
+    `FYNNS_UI_SKIP_PIN_CHECK=1`. Network failure during tip lookup also fails
+    (no silent “fresh”). Push-triggered bump PRs
+    ([`docs/submodule-propagation.md`](../docs/submodule-propagation.md)) do
+    **not** replace this local check — agents must still verify. Consumers not
+    listed in [`.github/ui-consumers.json`](../.github/ui-consumers.json) get no
+    auto bump PR and rely entirely on this check. Re-paste
+    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) into existing apps
+    after treaty updates (installer does not overwrite an existing rule file).
 6. **TypeScript:** set consumer `compilerOptions.target` and `lib` to **ES2022** (or later). `tsc` follows `@fynns/ui` into this repo’s `.ts` sources (e.g. `String.replaceAll`); `ES2020` alone will fail typecheck even when Vite builds fine.
 7. **Do not** import deleted symbols (`toast`, `Toaster`, `Popover`,
    `UnitStack`, …). Migration table: [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
@@ -70,7 +86,8 @@ children (never a rail-width track hosting a labeled drawer).
 
 1. Read this file + `consume.json`.
 2. Run the one-shot installer (below) against the **consumer** root (use `--url` to a local checkout when offline).
-3. Run `--check` until exit 0.
+3. Run `--check` until exit 0 (includes pin-vs-`main` freshness). If pin is
+   behind, bump the submodule pointer first — do not invent UI on a stale pin.
 4. Scaffold React + Vite + TS only (no design-system npm dep); keep `lib`/`target` at ES2022+.
 5. **Default main chrome:** `DestinationAppShell` (sandbox Layout templates
    `#layouts-demo-shell`) unless the user names another template. Do **not**
@@ -169,10 +186,14 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
-  content-inset. **Dialog ControlStack rows:** use `ControlStack` / `ControlRow` /
-  `Switch` full-width inside the body — do **not** add a second padding wrapper
-  or keep a toolbar `max-content` stack (trailing Switch tracks must share the
-  **CloseIcon glyph** end edge, not the 40dp hit box). Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
+  content-inset. **Dialog ControlStack rows:** full-width `ControlStack` /
+  `ControlRow` / track-only `Switch` (`label=""` + `ariaLabel`) — one visible
+  name per row. **Do not** copy Globals `#info-hint` (labeled Switch + trailing
+  `InfoHint`) as a Preferences/Settings Dialog shell; do **not** stack
+  `ControlRow` label + Switch visible label on the same row; do **not** add a
+  second padding wrapper or toolbar `max-content` stack (Switch tracks must
+  share the **CloseIcon glyph** end edge, not the 40dp hit box). Authority:
+  [`AGENTS.md`](../AGENTS.md) **Dismissible Dialog + ControlStack**. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
   Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
   text edge still lands at strip via glyph-inset math) →
   `--fynns-layout-strip-pad-inline`. Expanded shell pad =
@@ -198,6 +219,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 
 ```bash
 node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --json
+# intentional old pin / offline:
+node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --skip-pin-check --json
 ```
 
-Exit code `0` means submodule + alias look good and no forbidden npm deps were found.
+Exit code `0` means submodule + alias look good, no forbidden npm deps, and (unless
+`--skip-pin-check`) the submodule pin is not behind remote `main`.

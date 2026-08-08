@@ -555,12 +555,23 @@ classes.
   | Basic confirm | `ConfirmDialog` | none | Title + supporting text + foot actions; `dialog-inset`. |
   | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible forms — **not** a separate component. |
   | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; mobile-first long tasks. |
-  **Dismissible Dialog + ControlStack** (do **not** invent a parallel `SettingsDialog`): `Dialog` + `showCloseButton` + full-width
-  `ControlStack` / `ControlRow` / `Switch`. Centered panel CSS stretches the stack
-  (`width: 100%`, label `1fr`, controls `max-content`) and optically shifts the
-  close IconButton so the **CloseIcon glyph** end edge (not the 40dp hover disk)
-  shares the Switch track end edge (`panel − dialog-inset`). Do not wrap body in
-  extra padding or keep toolbar `max-content` stacks inside Dialog.
+  **Dismissible Dialog + ControlStack** (do **not** invent a parallel
+  `SettingsDialog` / Preferences shell): `Dialog` + `showCloseButton` +
+  full-width `ControlStack` / `ControlRow` / `Switch`. Live sample: sandbox
+  Globals → Containment overlays → Open Dialog with close (not the InfoHint
+  demo). **Row recipe (hard):** one visible name = `ControlRow` `label`;
+  `Switch` uses `label=""` + matching `ariaLabel` (track only at the end).
+  **Do not** put a second visible Switch `label` / `labelSide="end"` copy on
+  the same row, and **do not** treat Globals `#info-hint` (`ControlRow` +
+  labeled Switch + trailing `InfoHint`) as a Dialog / Preferences template —
+  that demo is InfoHint anatomy only. Add `InfoHint` only where help is
+  needed (dense rows prefer plain labels — see [`llm/PERF.md`](llm/PERF.md)).
+  No forced uppercase on `ControlRow` captions — pass the casing you show.
+  Centered panel CSS stretches the stack (`width: 100%`, label `1fr`,
+  controls `max-content`) and optically shifts the close IconButton so the
+  **CloseIcon glyph** end edge (not the 40dp hover disk) shares the Switch
+  track end edge (`panel − dialog-inset`). Do not wrap body in extra padding
+  or keep toolbar `max-content` stacks inside Dialog.
   Drawer (content side sheet ~400dp, open-edge `radius-xl`; always modal),
   BottomSheet, DropdownMenu (+ Item / CheckboxItem / Group / Separator),
   ContextMenu / ContextMenuTrigger

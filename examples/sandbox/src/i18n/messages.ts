@@ -519,7 +519,7 @@ const en = {
   "globals.dialogLabeledOpen": "Open Dialog with close",
   "globals.dialogLabeledTitle": "Dialog with close",
   "globals.dialogLabeledHelp":
-    "Dismissible Dialog + ControlStack: Dialog sm + close X + ControlStack columns={1}. Switch tracks share the CloseIcon glyph end edge (not the 40dp IconButton hover disk).",
+    "Dismissible Dialog + ControlStack (not a Settings/Preferences shell): Dialog sm + showCloseButton + ControlStack columns={1}. One name per row = ControlRow label; Switch is track-only (label=\"\" + ariaLabel). Do not copy the InfoHint demo (labeled Switch + trailing i) into Dialog rows. Switch tracks share the CloseIcon glyph end edge (not the 40dp hover disk).",
   "globals.dialogLabeledOptA": "Option A",
   "globals.dialogLabeledOptB": "Option B",
   "globals.dialogLabeledOptC": "Option C",
@@ -643,7 +643,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only when there is no visible name; pass `label` for a plain help trigger. Not a chrome `IconButton`.",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only when there is no visible name; pass `label` for a plain help trigger. Not a chrome `IconButton`. The ControlRow + Switch + trailing i sample below is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -1698,7 +1698,7 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
   "globals.dialogLabeledTitle": "带关闭的 Dialog",
   "globals.dialogLabeledHelp":
-    "可关闭 Dialog + ControlStack：Dialog sm + 关闭 X + ControlStack columns={1}。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp IconButton 热区外缘）。",
+    "可关闭 Dialog + ControlStack（不是 Settings/Preferences 专用壳）：Dialog sm + showCloseButton + ControlStack columns={1}。每行一个可见名 = ControlRow label；Switch 仅轨道（label=\"\" + ariaLabel）。禁止把 InfoHint demo（带文案的 Switch + 尾随 i）抄进 Dialog 行。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp 热区）。",
   "globals.dialogLabeledOptA": "选项 A",
   "globals.dialogLabeledOptB": "选项 B",
   "globals.dialogLabeledOptC": "选项 C",
@@ -1822,7 +1822,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（对应 M3：Tooltip 锚在帮助触发器上）。无可见名称时用图标 “i”；传 `label` 则为纯文字触发。不是界面用的 `IconButton`。",
+    "`InfoHint` — 信息型帮助（对应 M3：Tooltip 锚在帮助触发器上）。无可见名称时用图标 “i”；传 `label` 则为纯文字触发。不是界面用的 `IconButton`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",

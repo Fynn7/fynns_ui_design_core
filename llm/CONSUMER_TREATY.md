@@ -22,7 +22,10 @@ Install / design catalog remain elsewhere — this file only explains *why* and
 
 The consume installer may also drop this rule when wiring a consumer
 (`scripts/install-as-submodule.mjs`); if the file already exists it is left
-alone unless you re-copy by hand.
+alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
+freshness / Dialog row recipe). Local pin gate:
+`consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
+propagate bump PRs do not replace that check.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 

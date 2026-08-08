@@ -1484,10 +1484,11 @@
 }
 
 /*
- * Labeled ControlStack rows: label eats remaining space so trailing controls
- * share the close IconButton's end edge (panel − dialog-inset). Do not keep
- * the toolbar default `width: max-content` + fixed `control-row-label` here —
- * that packs the stack start-side and leaves a gap before the X.
+ * Dismissible labeled Dialog rows: label eats remaining space so trailing
+ * controls share the close IconButton's end edge (panel − dialog-inset).
+ * Do not keep the toolbar default `width: max-content` + fixed
+ * `control-row-label` here — that packs the stack start-side and leaves a
+ * gap before the X. Row recipe (AGENTS): ControlRow label + track-only Switch.
  */
 .fynns-dialog-panel--centered .fynns-control-stack {
   grid-template-columns:
