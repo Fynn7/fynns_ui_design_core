@@ -1541,21 +1541,17 @@
  * keep quieter outline-subtle). Shell breath uses layout inset tokens only:
  * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
  * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
- * Card sits a touch denser while staying symmetric. */
+ * Card sits a touch denser while staying symmetric.
+ * Head uses equal four-side dialog-inset so title + close IconButton share
+ * the head’s vertical center (asymmetric inset/0 sat the row under top-only
+ * pad). Head pad-bottom sits above the hairline; body keeps content-inset
+ * below it (do not zero body pad-top — that would glue content to the
+ * divider). Do not change the optical margin-inline-end on
+ * `.fynns-dialog-close` (Switch track glyph align). */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
-  /*
-   * Equal block pad so title + close IconButton are vertically centered in the
-   * head box. Asymmetric inset/0 dropped the row optically (more empty above).
-   * Keep total height ≈ icon-target + dialog-inset; do not change the optical
-   * margin-inline-end on `.fynns-dialog-close` (Switch track glyph align).
-   */
-  padding-inline: var(--fynns-layout-dialog-inset);
-  padding-block: calc(var(--fynns-layout-dialog-inset) / 2);
-  min-height: calc(
-    var(--fynns-size-icon-target) + var(--fynns-layout-dialog-inset)
-  );
+  padding: var(--fynns-layout-dialog-inset);
   align-items: center;
 }
 
