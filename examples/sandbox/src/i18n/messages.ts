@@ -514,15 +514,15 @@ const en = {
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
   "globals.overlayHelp":
-    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Settings recipe = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
+    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
-  "globals.dialogSettingsOpen": "Open settings dialog",
-  "globals.dialogSettingsTitle": "Settings",
-  "globals.dialogSettingsHelp":
-    "Settings recipe: Dialog sm + close X + ControlStack columns={1}. Switch tracks share the CloseIcon glyph end edge (not the 40dp IconButton hover disk).",
-  "globals.dialogSettingsPreview": "Preview",
-  "globals.dialogSettingsAutoRun": "Auto-run",
-  "globals.dialogSettingsAsk": "AskQuestion",
+  "globals.dialogLabeledOpen": "Open Dialog with close",
+  "globals.dialogLabeledTitle": "Dialog with close",
+  "globals.dialogLabeledHelp":
+    "Dismissible Dialog + ControlStack: Dialog sm + close X + ControlStack columns={1}. Switch tracks share the CloseIcon glyph end edge (not the 40dp IconButton hover disk).",
+  "globals.dialogLabeledOptA": "Option A",
+  "globals.dialogLabeledOptB": "Option B",
+  "globals.dialogLabeledOptC": "Option C",
   "globals.dialogShellOpen": "Open DialogShell",
   "globals.dialogShellTitle": "Custom shell",
   "globals.dialogShellBody":
@@ -530,13 +530,13 @@ const en = {
   "globals.dialogShellClose": "Close shell",
   "globals.dialogTitle": "Centered dialog",
   "globals.dialogDescription": "Floating modal with focus trap and scrim.",
-  "globals.dialogBody": "Use for settings and short forms that should not fill the viewport.",
+  "globals.dialogBody": "Use for short forms that should not fill the viewport.",
   "globals.dialogClose": "Close",
   "globals.nestedDialogOpen": "Open nested dialog",
-  "globals.nestedDialogTitle": "LLM-style form",
+  "globals.nestedDialogTitle": "Nested form",
   "globals.nestedDialogDescription":
     "Same outlined Card section as the page sample — Dialog is only one optional host.",
-  "globals.nestedDialogFieldLabel": "System prompt",
+  "globals.nestedDialogFieldLabel": "Long text",
   "globals.nestedDialogExpandTip": "Open in large editor",
   "globals.nestedDialogResetTip": "Restore default",
   "globals.nestedSectionHelp":
@@ -1691,15 +1691,15 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
   "globals.overlayHelp":
-    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。设置配方 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
+    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
-  "globals.dialogSettingsOpen": "打开设置对话框",
-  "globals.dialogSettingsTitle": "设置",
-  "globals.dialogSettingsHelp":
-    "设置配方：Dialog sm + 关闭 X + ControlStack columns={1}。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp IconButton 热区外缘）。",
-  "globals.dialogSettingsPreview": "Preview",
-  "globals.dialogSettingsAutoRun": "Auto-run",
-  "globals.dialogSettingsAsk": "AskQuestion",
+  "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
+  "globals.dialogLabeledTitle": "带关闭的 Dialog",
+  "globals.dialogLabeledHelp":
+    "可关闭 Dialog + ControlStack：Dialog sm + 关闭 X + ControlStack columns={1}。Switch 轨道与 CloseIcon 字形右缘对齐（不是 40dp IconButton 热区外缘）。",
+  "globals.dialogLabeledOptA": "选项 A",
+  "globals.dialogLabeledOptB": "选项 B",
+  "globals.dialogLabeledOptC": "选项 C",
   "globals.dialogShellOpen": "打开 DialogShell",
   "globals.dialogShellTitle": "自定义壳",
   "globals.dialogShellBody":
@@ -1707,13 +1707,13 @@ const zh: Record<MessageKey, string> = {
   "globals.dialogShellClose": "关闭壳",
   "globals.dialogTitle": "居中对话框",
   "globals.dialogDescription": "带焦点陷阱与遮罩的浮动模态。",
-  "globals.dialogBody": "适合设置与短表单，不必占满视口。",
+  "globals.dialogBody": "适合短表单，不必占满视口。",
   "globals.dialogClose": "关闭",
   "globals.nestedDialogOpen": "打开嵌套对话框",
-  "globals.nestedDialogTitle": "类 LLM 表单",
+  "globals.nestedDialogTitle": "嵌套表单",
   "globals.nestedDialogDescription":
     "与页内样例相同的 outlined Card 分区 — Dialog 只是可选宿主之一。",
-  "globals.nestedDialogFieldLabel": "系统提示词",
+  "globals.nestedDialogFieldLabel": "长文本",
   "globals.nestedDialogExpandTip": "在大编辑器中打开",
   "globals.nestedDialogResetTip": "恢复默认",
   "globals.nestedSectionHelp":

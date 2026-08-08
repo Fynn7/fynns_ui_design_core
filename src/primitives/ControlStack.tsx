@@ -30,7 +30,7 @@ export type ControlStackProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 /**
- * Shared X-column toolbar / settings stack.
+ * Shared X-column toolbar / labeled ControlStack.
  *
  * Parent defines `label | control₁ | … | controlₙ` tracks once; nested
  * `ControlRow`s span those tracks via subgrid (controls / `Grid` flatten with

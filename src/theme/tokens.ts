@@ -87,7 +87,7 @@ export const COLOR_TOKENS = {
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
   "control-surface-hover": "rgba(255, 255, 255, 0.05)",
-  /** Dense text/number fields (LLM settings, Counter). */
+  /** Dense text/number fields (forms, counters). */
   "input-fill": "rgba(0, 0, 0, 0.28)",
   "flyout-item": "rgba(255, 255, 255, 0.03)",
   "flyout-item-hover": "rgba(255, 255, 255, 0.08)",
@@ -1178,7 +1178,7 @@ export const LAYOUT_TOKENS = {
   "snackbar-enter-offset": "0.5rem",
   /** Distance from the viewport bottom edge. */
   "snackbar-inset": "1rem",
-  /** Fixed label column for `ControlRow` (toolbars / settings strips). */
+  /** Fixed label column for `ControlRow` (toolbars / labeled strips). */
   "control-row-label": "7.5rem",
   /**
    * Toolbar / unit rhythm — prefer these over raw `--fynns-space-*`

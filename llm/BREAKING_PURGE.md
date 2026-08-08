@@ -108,7 +108,7 @@ as a hard fail.
 
 | Symbol | Notes |
 | --- | --- |
-| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. Settings-like: `Dialog` + `showCloseButton` + full-width `ControlStack` (see Behavioral). |
+| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. Dismissible labeled rows: `Dialog` + `showCloseButton` + full-width `ControlStack` (see Behavioral). |
 | `Drawer` | Content side sheet (~25rem / open-edge `radius-xl`); not `NavigationDrawer`. Always modal (no `modal={false}`). Layout token `--fynns-layout-drawer-width` is now `25rem` (was `72vw`). |
 | `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |

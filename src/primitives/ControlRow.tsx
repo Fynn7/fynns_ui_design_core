@@ -8,7 +8,7 @@ export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 /**
- * Labeled control row for toolbars / settings strips.
+ * Labeled control row for toolbars / labeled strips.
  *
  * Uses a fixed label column (`--fynns-layout-control-row-label`) so every row's
  * controls share the same left edge — avoids the recurring consumer patch of
