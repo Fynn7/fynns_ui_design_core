@@ -167,7 +167,10 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
-  content-inset. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
+  content-inset. **Dialog settings rows:** use `ControlStack` / `ControlRow` /
+  `Switch` full-width inside the body — do **not** add a second padding wrapper
+  or keep a toolbar `max-content` stack (trailing Switch tracks must share the
+  **CloseIcon glyph** end edge, not the 40dp hit box). Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
   Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
   text edge still lands at strip via glyph-inset math) →
   `--fynns-layout-strip-pad-inline`. Expanded shell pad =

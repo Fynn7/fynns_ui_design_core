@@ -108,7 +108,7 @@ as a hard fail.
 
 | Symbol | Notes |
 | --- | --- |
-| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. |
+| `Dialog` / `DialogShell` / `ConfirmDialog` | Centered modals via `DialogFrame`. M3 shape: `radius-3xl`, no default close X on Dialog/Confirm. Settings-like: `Dialog` + `showCloseButton` + full-width `ControlStack` (see Behavioral). |
 | `Drawer` | Content side sheet (~25rem / open-edge `radius-xl`); not `NavigationDrawer`. Always modal (no `modal={false}`). Layout token `--fynns-layout-drawer-width` is now `25rem` (was `72vw`). |
 | `Textarea` | Multiline dense field aligned to Input chrome; **not** full M3 floating-label Text Field. |
 | `Tabs` | M3 primary underline tabs — **not** a `ToggleGroup` substitute. |
@@ -125,6 +125,7 @@ as a hard fail.
 | Change | Consumer fix |
 | --- | --- |
 | `CodeBlock` titled chrome | `variant="default"` (or omit) **requires** non-empty `label`. Omitting `label`, `label=""`, or whitespace-only **throws** (no silent empty head). No filename → `variant="plain"`. Do not use empty `label` to “hide” the title bar. |
+| Centered `Dialog` ControlStack / Switch | Inside `.fynns-dialog-panel--centered`, stacks are **full width** with label `1fr` + end `max-content`, and the close control uses a glyph-inset negative margin so the **CloseIcon** end edge aligns with Switch tracks (not the 40dp hit box). Remove consumer padding that re-insets the body. |
 
 ## Related docs
 

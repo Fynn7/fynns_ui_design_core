@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
 export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
-  /** Row caption (typically a short uppercase section name). */
+  /** Row caption (short section / field name — preserve caller casing). */
   label: ReactNode;
   /** Controls that share one aligned column (Switch, ToggleGroup, …). */
   children: ReactNode;

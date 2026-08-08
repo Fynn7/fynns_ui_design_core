@@ -1479,24 +1479,29 @@
 
 .fynns-dialog-panel--centered .fynns-control-stack,
 .fynns-dialog-panel--centered .fynns-control-row {
+  width: 100%;
   max-width: 100%;
 }
 
+/*
+ * Settings / labeled rows: label eats remaining space so trailing controls
+ * share the close IconButton's end edge (panel − dialog-inset). Do not keep
+ * the toolbar default `width: max-content` + fixed `control-row-label` here —
+ * that packs the stack start-side and leaves a gap before the X.
+ */
 .fynns-dialog-panel--centered .fynns-control-stack {
-  /* First control track shrinks/wraps; trailing tracks (InfoHint, …) stay content-sized. */
   grid-template-columns:
-    var(--fynns-layout-control-row-label)
-    minmax(0, max-content)
-    repeat(calc(var(--fynns-control-stack-cols, 2) - 1), max-content);
+    minmax(0, 1fr)
+    repeat(var(--fynns-control-stack-cols, 2), max-content);
 }
 
 .fynns-dialog-panel--centered .fynns-control-row {
-  grid-template-columns:
-    var(--fynns-layout-control-row-label) minmax(0, max-content);
+  grid-template-columns: minmax(0, 1fr) max-content;
 }
 
 .fynns-dialog-panel--centered .fynns-control-row__controls {
   min-width: 0;
+  justify-self: end;
 }
 
 .fynns-dialog-panel--centered
@@ -1509,7 +1514,17 @@
   max-width: 100%;
 }
 
-.fynns-dialog-panel--centered .fynns-switch {
+.fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Inside ControlRow, size to the track — the row grid (1fr | max-content)
+ * already pins the controls column to the panel end edge. */
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-switch,
+.fynns-dialog-panel--centered .fynns-control-row .fynns-switch {
+  width: auto;
   max-width: 100%;
   min-width: 0;
 }
@@ -1584,6 +1599,17 @@
 
 .fynns-dialog-close {
   line-height: var(--fynns-line-height-tight);
+}
+
+/*
+ * Optical end align: 40dp IconButton sits inside dialog-inset, but the 16dp
+ * CloseIcon ink must share the Switch track’s end edge (not the hover disk).
+ * Same glyph-inset math as ChatComposer: (target − icon) / 2.
+ */
+.fynns-dialog-panel--centered > .fynns-dialog-head .fynns-dialog-close {
+  margin-inline-end: calc(
+    (var(--fynns-size-icon-target) - var(--fynns-size-icon)) / -2
+  );
 }
 
 /* Confirm: start-aligned title (M3 centers only with dialog icon). */
@@ -2068,7 +2094,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: var(--fynns-font-size-caption);
-  text-transform: uppercase;
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
 }

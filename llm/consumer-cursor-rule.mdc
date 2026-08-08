@@ -31,6 +31,16 @@ alwaysApply: true
 9. Select / Autocomplete / Input 圆角走 `--fynns-radius-md`（正式默认 20px）——
    不是 SearchBar 的 `--fynns-radius-3xl` 大胶囊；也不该再出现 8px「尖角」漂移。
 
+## Dialog 变式（M3 basic / full-screen）
+
+- **确认** → `ConfirmDialog`（无 X，脚按钮）。
+- **内容 / 设置** → `Dialog`（默认无 X；设置弹层传 `showCloseButton`）。
+  Body 用全宽 `ControlStack` / `ControlRow` / `Switch`，**禁止**再包一层与
+  `dialog-inset` 冲突的 padding，也禁止把 toolbar 的 `max-content` 短栈塞进
+  Dialog（尾控件须与关闭 **X 字形**右缘对齐，不是 IconButton 热区）。
+- **长任务全屏** → `FullscreenDialog`。
+- **不要**自造 `SettingsDialog` / 平行圆角卡片框。
+
 ## DestinationAppShell（默认主界面 — 强制）
 
 未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是

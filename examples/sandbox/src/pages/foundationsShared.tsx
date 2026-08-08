@@ -18,7 +18,6 @@ export function Section({ title, children }: { title: string; children: ReactNod
         style={{
           margin: 0,
           fontSize: "var(--fynns-font-size-settings-section)",
-          textTransform: "uppercase",
           letterSpacing: "var(--fynns-letter-spacing-wide)",
           color: "var(--fynns-color-text-muted)",
         }}
