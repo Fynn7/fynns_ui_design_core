@@ -1030,14 +1030,22 @@
   min-width: 0;
 }
 
+/*
+ * TopAppBar catalog host — edge-flush chrome, not a Card.
+ * Open top edge + sharp corners so demos never teach radius / four-side
+ * frames on the bar (sandbox root TopAppBar is the real greenfield shape).
+ */
 .sandbox-globals-appbar {
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  border: 1px solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
+  border: none;
+  border-inline: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: 0;
   overflow: hidden;
+  background: var(--fynns-color-app-bg);
 }
 
 .sandbox-globals-navbar,

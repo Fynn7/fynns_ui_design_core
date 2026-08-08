@@ -22,10 +22,13 @@ export type TopAppBarProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
 };
 
 /**
- * Top app bar — page header with optional leading / trailing actions.
- * Dense heights (sm/row = `--fynns-layout-bar-height` 56dp; md 80 / lg 104).
- * Sticky positioning is left to the caller.
- * M3-informed layout, denser heights/type for desktop tool chrome.
+ * Top app bar — **edge-flush** page header (viewport / shell top), not a
+ * bordered card. Outer shell is always `border-radius: 0` with no four-side
+ * frame; greenfield apps slot it via `DestinationAppShell` /
+ * `ClippedNavShell.topBar` (shell paints a bottom hairline only). Do not wrap
+ * in Card / `radius-*` hosts — use floating `Toolbar` when you need a rounded
+ * tool strip. Dense heights (sm/row = `--fynns-layout-bar-height` 56dp;
+ * md 80 / lg 104). Sticky positioning is left to the caller outside a shell.
  * Prefer `NavigationDrawer` / `NavigationRail` for destination chrome.
  * @see https://m3.material.io/components/top-app-bar/overview
  */
