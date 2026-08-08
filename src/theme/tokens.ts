@@ -473,11 +473,11 @@ export const APPBAR_TOKENS = {
   /** Inline inset for the action row (leading / trailing icons). */
   "pad-inline": "0.5rem",
   /**
-   * Gap between adjacent action IconButtons. Keep small — hit targets are the
-   * full `--fynns-size-icon-target` (40dp); zero/near-zero avoids cramped glyphs
-   * without stacking hover discs.
+   * Gap between adjacent action IconButtons — aliases shared chrome icon
+   * rhythm (`--fynns-layout-chrome-icon-gap`) so TopAppBar matches
+   * NavigationRail destinations (icon-only).
    */
-  "actions-gap": "0",
+  "actions-gap": "var(--fynns-layout-chrome-icon-gap)",
   /**
    * Shared dense hover disc (DatePicker nav etc.). TopAppBar actions use the
    * standard 40dp IconButton target instead.
@@ -914,15 +914,21 @@ export const CAROUSEL_TOKENS = {
 /**
  * Navigation rail geometry (at 16px rem).
  * Container 80dp; destination highlight wraps icon (+ label when shown).
- * Icon-only highlight is 56×56; labeled uses width + padding (not an icon pill).
+ * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
+ * Labeled (icon + caption stacked) keeps a larger inset square — never
+ * crush into 40dp or it clips the label (sandbox / DestinationAppShell
+ * densify defaults to `labelVisibility="labeled"`).
  * `--fynns-navrail-<key>`.
  */
 export const NAVRAIL_TOKENS = {
   width: "5rem",
-  /** Icon-only destination highlight (56×56). */
-  "indicator-width": "3.5rem",
-  "indicator-height-icon": "3.5rem",
-  /** Labeled destination highlight — square, inset from the 80dp rail edge. */
+  /**
+   * Icon-only destination highlight — same 40dp chrome target as TopAppBar
+   * IconButton (`--fynns-size-icon-target`).
+   */
+  "indicator-width": "var(--fynns-size-icon-target)",
+  "indicator-height-icon": "var(--fynns-size-icon-target)",
+  /** Labeled destination highlight — square inset from the 80dp rail edge. */
   "indicator-size-labeled": "4rem",
   /** Padding inside the labeled square (symmetric; keep content off the edge). */
   "indicator-pad-block": "0.5rem",
@@ -931,20 +937,23 @@ export const NAVRAIL_TOKENS = {
   "icon-size": "1rem",
   /** Outer space around each destination button (keep tight — gap owns rhythm). */
   "item-pad-block": "0",
-  /** Space between destination buttons. */
-  "destinations-gap": "0.5rem",
+  /**
+   * Space between destination buttons — aliases `--fynns-layout-chrome-icon-gap`
+   * (same rhythm as TopAppBar trailing IconButtons).
+   */
+  "destinations-gap": "var(--fynns-layout-chrome-icon-gap)",
   /**
    * Inset before the first destination when a **menu** sits above with no
    * header (keeps hover/active indicators off the menu chrome). When a header
    * is present, `header-gap` alone matches `destinations-gap` — do not stack.
    */
-  "destinations-pad-block-start": "0.75rem",
+  "destinations-pad-block-start": "0.5rem",
   "pad-block-start": "2.75rem",
-  "menu-pad-block": "0.75rem",
-  /** Menu control min touch target (48dp). */
-  "menu-target": "3rem",
+  "menu-pad-block": "0.5rem",
+  /** Menu control min touch target — same 40dp chrome icon target. */
+  "menu-target": "var(--fynns-size-icon-target)",
   /** Space below header FAB — same as `destinations-gap` (item rhythm). */
-  "header-gap": "0.5rem",
+  "header-gap": "var(--fynns-layout-chrome-icon-gap)",
   "header-pad-block": "0.25rem",
   "label-size": "0.75rem",
   "label-line": "1.25",
@@ -964,14 +973,16 @@ export const NAVRAIL_TOKENS = {
 /**
  * Navigation bar geometry (at 16px rem).
  * Horizontal bottom destinations (3–5); container 80dp.
- * Destination highlight matches NavigationRail (square labeled / 56 icon-only).
+ * Labeled square matches NavigationRail; icon-only matches IconButton 40dp.
  * `--fynns-navbar-<key>`.
  */
 export const NAVBAR_TOKENS = {
   height: "5rem",
   "pad-inline": "0.5rem",
+  /** Labeled — same 64dp inset square as NavigationRail (icon + caption). */
   "indicator-size-labeled": "4rem",
-  "indicator-height-icon": "3.5rem",
+  /** Icon-only — TopAppBar / IconButton 40dp target. */
+  "indicator-height-icon": "var(--fynns-size-icon-target)",
   "indicator-pad-block": "0.5rem",
   "indicator-pad-inline": "0.5rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -1181,6 +1192,13 @@ export const LAYOUT_TOKENS = {
   "control-row-column-gap": "0.5rem",
   /** Sibling switches / chips / Grid cells inside one controls cluster. */
   "control-cluster-gap": "0.5rem",
+  /**
+   * Gap between adjacent chrome icon targets (2dp): TopAppBar leading/trailing
+   * IconButtons and NavigationRail destination indicators (icon-only).
+   * `--fynns-appbar-actions-gap` / `--fynns-navrail-destinations-gap` alias this.
+   * Labeled rail squares stay on `indicator-size-labeled` (64dp) — not this gap.
+   */
+  "chrome-icon-gap": "0.125rem",
   /**
    * Gap between a form control and its supporting / error hint (`.fynns-field`,
    * Otp, Autocomplete, …). Same rhythm as `unit-stack-gap` — control→hint

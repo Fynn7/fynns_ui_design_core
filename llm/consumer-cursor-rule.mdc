@@ -31,9 +31,33 @@ alwaysApply: true
 9. Select / Autocomplete / Input 圆角走 `--fynns-radius-md`（正式默认 20px）——
    不是 SearchBar 的 `--fynns-radius-3xl` 大胶囊；也不该再出现 8px「尖角」漂移。
 
-## ClippedNavShell（必读 — 避免「挤扁抽屉」）
+## DestinationAppShell（默认主界面 — 强制）
 
-`ClippedNavShell` **只改网格轨道宽度**，**不会**自动把 Drawer 换成 Rail。
+未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是
+`DestinationAppShell`（与 sandbox **Layout templates** 首屏
+`#layouts-demo-shell` 同构）。传 `destinations` / `title` / `trailing` /
+`children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail` 做桌面根，
+禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
+`labelVisibility="labeled"`（始终显示标签）——不要默认 `selected` / `unlabeled`。
+
+```tsx
+<DestinationAppShell
+  title="App"
+  navAriaLabel="…"
+  expandNavLabel="…"
+  collapseNavLabel="…"
+  destinations={[{ id: "home", icon: <HomeIcon />, label: "Home" }]}
+  activeId={id}
+  onActiveIdChange={setId}
+>
+  {main}
+</DestinationAppShell>
+```
+
+## ClippedNavShell（仅完全自定义时 — 避免「挤扁抽屉」）
+
+低层槽位壳。优先 `DestinationAppShell`。若手拼 `ClippedNavShell`：
+它 **只改网格轨道宽度**，**不会**自动把 Drawer 换成 Rail。
 
 | `navMode` | 轨道宽 | `nav` 槽必须渲染 |
 | --- | --- | --- |

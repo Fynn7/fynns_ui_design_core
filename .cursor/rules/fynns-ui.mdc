@@ -64,19 +64,21 @@ ring can paint before heavy work).
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer,
-  ClippedNavShell, EndAside,
+  DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/Grid,
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
-  Destination chrome apps: `ClippedNavShell` + `NavigationDrawer`/`NavigationRail`;
+  Destination chrome apps: **`DestinationAppShell`** (default) — or
+  `ClippedNavShell` + `NavigationDrawer`/`NavigationRail` when fully custom;
   end inspector: `EndAside` (not modal `Drawer`, not revived Panel/ListGroup).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
-  BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail /
-  Drawer / ContextMenu / Tooltip = desktop-first; ClippedNavShell / EndAside /
-  NavigationDrawer = adaptive; most controls = both. Globals demos are
-  standalone parts, not one composed phone+desktop shell.
+  BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
+  mobile-first densify only (never desktop greenfield root); Drawer /
+  ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
+  EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
+  demos are the composed default; Globals demos are standalone parts.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists (inspector fields, Collapsible bodies): flex column +

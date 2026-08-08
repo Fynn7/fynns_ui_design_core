@@ -9,9 +9,10 @@ Machine contract: [`consume.json`](consume.json).
 
 **Pasteable consumer treaty** (drop into any app’s `.cursor/rules/` so agents
 obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Especially
-`ClippedNavShell`: `navMode` must stay in sync with Drawer vs Rail children
-(never a rail-width track hosting a labeled drawer).
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). **Default app chrome:**
+`DestinationAppShell` (sandbox Layout templates). If composing
+`ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
+children (never a rail-width track hosting a labeled drawer).
 
 ## Hard rules
 
@@ -45,12 +46,14 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
 13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style
     catalogs, and live draft GUIs → read [`PERF.md`](PERF.md) before coding
     (no observer↔probe loops, no tip forests, lazy-mount dense sections).
-14. **ClippedNavShell sync:** `navMode` and the `nav` subtree must match
-    (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`, `hidden`→null/omit).
-    Crowding / narrow viewports densify to **rail + Rail components** — never
-    leave a labeled drawer in an ~80px track (squashed drawer + bogus scrollbar).
+14. **Default chrome:** use `DestinationAppShell` for greenfield destination
+    apps (Layout templates). **ClippedNavShell sync** (slot API only): `navMode`
+    and the `nav` subtree must match (`drawer`→`NavigationDrawer`,
+    `rail`→`NavigationRail`, `hidden`→null/omit). Crowding / narrow viewports
+    densify to **rail + Rail components** — never leave a labeled drawer in an
+    ~80px track (squashed drawer + bogus scrollbar).
     Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-15. **WYSIWYG / surface sync:** sandbox Globals/Preview resting look is the consumer default.
+15. **WYSIWYG / surface sync:** sandbox Globals/Layouts/Preview resting look is the consumer default.
     Use bare `@fynns/ui` APIs; never restyle `.fynns-*` to “match” sandbox.
     Aesthetic drift belongs in `tokens.ts` / primitives (then `npm run gen:theme`).
     `SANDBOX_DEFAULT_OVERRIDES` must stay empty (`npm run check:wysiwyg` enforces).
@@ -67,7 +70,11 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
 2. Run the one-shot installer (below) against the **consumer** root (use `--url` to a local checkout when offline).
 3. Run `--check` until exit 0.
 4. Scaffold React + Vite + TS only (no design-system npm dep); keep `lib`/`target` at ES2022+.
-5. Implement the page from sandbox Globals/Preview + AGENTS catalog (never deleted symbols — see `BREAKING_PURGE.md`).
+5. **Default main chrome:** `DestinationAppShell` (sandbox Layout templates
+   `#layouts-demo-shell`) unless the user names another template. Do **not**
+   greenfield from standalone `NavigationRail` / invent parallel topbar+sidebar.
+   Controls/parts: sandbox Components (Globals) + Preview + AGENTS catalog
+   (never deleted symbols — see `BREAKING_PURGE.md`).
 6. If the page is a playground / inspector / shell / live-token UI, read [`PERF.md`](PERF.md) and apply its DoD.
 7. `npm install` → `npm run build` must exit 0.
 

@@ -12,6 +12,7 @@ const en = {
   "nav.aria": "Sandbox pages",
   "nav.playground": "Preview",
   "nav.globals": "Components",
+  "nav.layouts": "Layout templates",
   "nav.foundations": "Foundations",
   "nav.motion": "Motion",
   "nav.templates": "Templates",
@@ -20,6 +21,16 @@ const en = {
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
     "M3 component catalog (collapsed sections) plus keyword search to jump to a demo; shape / radius inspector on the right.",
+  "nav.layoutsHint":
+    "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
+  "layouts.lead":
+    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. NavigationRail alone is mobile/narrow densify only — not a desktop app root. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+  "layouts.shellMainTitle": "Main canvas",
+  "layouts.shellMainBody":
+    "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
+  "layouts.shellAsideLabel": "EndAside (inspector sample)",
+  "layouts.shellAsideBody":
+    "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat.",
   "nav.expand": "Expand navigation",
   "nav.expandTip": "Show the navigation drawer",
   "nav.collapse": "Hide navigation",
@@ -239,6 +250,9 @@ const en = {
   "layoutChrome.clusterGap": "Control cluster",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — siblings inside one controls cluster (e.g. EasingBar track → Replay).",
+  "layoutChrome.chromeIconGap": "Chrome icon gap",
+  "layoutChrome.chromeIconGapHint":
+    "--fynns-layout-chrome-icon-gap — TopAppBar IconButtons + NavigationRail destinations (icon-only).",
   "layoutChrome.controlRowLabel": "Label column",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — fixed ControlRow label track width.",
@@ -796,9 +810,9 @@ const en = {
   "globals.navRailPaneAll": "Browse every control sample on this Components page.",
   "globals.navBarAria": "Sample navigation bar",
   "globals.navBarHelp":
-    "[mobile-first] NavigationBar — bottom destinations for compact / phone. Prefer NavigationRail on medium+. Standalone sample — not stacked with the Rail demo into one app.",
+    "[mobile-first] NavigationBar — bottom destinations for phone. Prefer ClippedNavShell + NavigationDrawer on desktop (Layout templates page). Standalone sample — not one composed phone+desktop shell.",
   "globals.navRailHelp":
-    "[desktop-first] NavigationRail — vertical destinations for medium+. Prefer NavigationBar on phone. Standalone sample beside a fake pane; not mobile chrome.",
+    "[mobile / narrow only] NavigationRail — vertical destinations for phone densify or DestinationAppShell / ClippedNavShell crowding. **Not** the default desktop app root; do not greenfield a desktop UI from this standalone sample. Prefer Layout templates → DestinationAppShell. Agent densify default: `labelVisibility=\"labeled\"` (always show labels).",
   "globals.navDrawerAria": "Sample navigation drawer",
   "globals.navDrawerModalAria": "Modal navigation drawer",
   "globals.navDrawerHeadline": "Mail",
@@ -819,7 +833,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive] App skeletons: ClippedNavShell (full-bleed TopAppBar + drawer|rail|hidden; TopAppBar toggle is open↔closed only; drawer trailing seam is resizable with `--fynns-navdrawer-min-width` / `max-width`; apps should pass `rail` on narrow viewports — stacking a labeled drawer above the canvas starves the main stage; CSS still stacks `drawer` if you keep that mode) + EndAside (soft min clamp; main track ≤32rem → end-edge overlay; viewport narrow → bottom overlay). EndAside may host Chat (aside user bubble 100% of content track to match composer; main column keeps 70%; composer 100% — no density mode). If canvas + EndAside mins still overflow while drawer is open, `onNavCrowded` / `wouldClippedNavDrawerCrowd` densify to rail before paint (no full-drawer flash; skipped while dragging the drawer seam or while EndAside is closing). Compose independently. The TopAppBar / Rail / Bar demos above are standalone catalog parts — not duplicates of this shell.",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons (multi-action chrome), and optional `aside` (not assumed Chat). Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1182,6 +1196,7 @@ const zh: Record<MessageKey, string> = {
   "nav.aria": "沙盒页面",
   "nav.playground": "预览",
   "nav.globals": "组件",
+  "nav.layouts": "布局模板",
   "nav.foundations": "基础",
   "nav.motion": "动效",
   "nav.templates": "模板",
@@ -1190,6 +1205,16 @@ const zh: Record<MessageKey, string> = {
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
     "按 M3 分类的组件样例（分区默认收起），可用关键词搜索跳转到具体 demo；右侧是圆角 / 形状检查器。",
+  "nav.layoutsHint":
+    "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
+  "layouts.lead":
+    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。单独的 NavigationRail 仅移动端/窄视口 densify — 禁止当桌面根壳。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+  "layouts.shellMainTitle": "主画布",
+  "layouts.shellMainBody":
+    "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
+  "layouts.shellAsideLabel": "EndAside（检查器示例）",
+  "layouts.shellAsideBody":
+    "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。",
   "nav.expand": "展开导航",
   "nav.expandTip": "展开导航抽屉",
   "nav.collapse": "关闭导航",
@@ -1397,6 +1422,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.clusterGap": "控件簇",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — 同一控件簇内兄弟（如缓动轨道 → 重放）。",
+  "layoutChrome.chromeIconGap": "Chrome 图标间距",
+  "layoutChrome.chromeIconGapHint":
+    "--fynns-layout-chrome-icon-gap — TopAppBar IconButton 与 NavigationRail 目的地（仅图标）共用。",
   "layoutChrome.controlRowLabel": "标签列宽",
   "layoutChrome.controlRowLabelHint":
     "--fynns-layout-control-row-label — ControlRow 固定标签列宽。",
@@ -1952,9 +1980,9 @@ const zh: Record<MessageKey, string> = {
   "globals.navRailPaneAll": "浏览本页「组件」中的全部控件样例。",
   "globals.navBarAria": "示例底部导航栏",
   "globals.navBarHelp":
-    "[偏移动端] NavigationBar — 紧凑/手机底栏目的地。中等及以上宽度优先 NavigationRail。独立样例 — 勿与上方 Rail 当成同一应用。",
+    "[偏移动端] NavigationBar — 手机底栏目的地。桌面请用「布局模板」裁切壳 + NavigationDrawer。独立样例 — 不是整站默认。",
   "globals.navRailHelp":
-    "[偏桌面端] NavigationRail — 中等及以上宽度的纵向目的地。手机优先 NavigationBar。旁侧假内容区仅为演示，不是移动端 chrome。",
+    "[仅移动端 / 窄视口] NavigationRail — 手机 densify 或 DestinationAppShell / 裁切壳挤拥时用。**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell。Agent densify 默认：`labelVisibility=\"labeled\"`（始终显示标签）。",
   "globals.navDrawerAria": "示例导航抽屉",
   "globals.navDrawerModalAria": "模态导航抽屉",
   "globals.navDrawerHeadline": "邮件",
@@ -1975,7 +2003,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应] 应用骨架：ClippedNavShell（全宽 TopAppBar + drawer|rail|hidden；顶栏按钮只在展开↔关闭间切换；drawer 右缘可拖调宽，受 `--fynns-navdrawer-min-width` / `max-width` 约束；窄屏应用应传 `rail`——上叠带标签的 drawer 会挤掉主舞台；若仍传 `drawer`，CSS 仍会上叠）+ EndAside（软 min clamp；主栏 ≤32rem 时末端叠层；视口更窄时底缘叠层）。EndAside 可承载 Chat（侧栏用户气泡 100% 内容轨对齐 composer；主栏仍 70%；composer 100% — 无 density）。展开 drawer 时画布与 EndAside 都触底仍溢出，`onNavCrowded` / `wouldClippedNavDrawerCrowd` 在绘制前收成 rail（不先满宽再缩；拖抽屉缝或 EndAside 正在收合时不触发）。可独立组合。上方 TopAppBar / Rail / Bar 是独立目录样例，不是本壳的重复件。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` 多枚 IconButton，以及可选 `aside`（不必是 Chat）。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

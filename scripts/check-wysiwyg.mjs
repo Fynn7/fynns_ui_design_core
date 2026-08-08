@@ -21,6 +21,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 const DEMO_FILES = [
   "examples/sandbox/src/pages/GlobalsPage.tsx",
+  "examples/sandbox/src/pages/LayoutsPage.tsx",
   "examples/sandbox/src/pages/CardPreviewCanvas.tsx",
   "examples/sandbox/src/pages/CollapsiblePreviewCanvas.tsx",
   "examples/sandbox/src/shell/SandboxShell.tsx",

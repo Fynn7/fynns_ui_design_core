@@ -15,6 +15,7 @@ import {
 export type SandboxPage =
   | "playground"
   | "globals"
+  | "layouts"
   | "foundations"
   | "motion"
   | "templates";
@@ -37,6 +38,7 @@ export type SandboxUiSession = {
 const PAGES: readonly SandboxPage[] = [
   "playground",
   "globals",
+  "layouts",
   "foundations",
   "motion",
   "templates",

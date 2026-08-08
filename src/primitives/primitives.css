@@ -4480,7 +4480,7 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text);
 }
 
-/* M3 menu icon: 24dp glyph inside a 48dp hover/press target. */
+/* Menu IconButton: 16dp glyph inside a 40dp hover/press target (--fynns-size-icon-target). */
 .fynns-nav-rail-menu .fynns-tooltip-trigger {
   display: inline-flex;
 }
@@ -8128,6 +8128,24 @@ a.fynns-breadcrumb-link:visited {
   /* Drive EndAside overlay when the main track is too narrow for both floors. */
   container-type: inline-size;
   container-name: fynns-shell-main;
+}
+
+/* ---------- DestinationAppShell (declarative chrome body) ---------- */
+.fynns-destination-app-shell-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.fynns-destination-app-shell-canvas {
+  display: flex;
+  flex: 1 1 var(--fynns-layout-main-min-width);
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }
 
 /*

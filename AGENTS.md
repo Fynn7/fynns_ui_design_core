@@ -306,7 +306,7 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 ## Component catalog
 
-**Breaking surface:** only symbols demoed in sandbox Globals + Preview are
+**Breaking surface:** only symbols demoed in sandbox Globals + Layouts + Preview are
 public. Removed APIs and migration table: [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 **Surface sync:** `npm run check:wysiwyg` — every barrel value needs a demo (or
 companion); Removed-table names must not be exported; never companion-park
@@ -547,7 +547,13 @@ classes.
 - **Chrome:** TopAppBar, BottomAppBar, Toolbar, NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
   Breadcrumb, Pagination
-- **App shells:** **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
+- **App shells:** **`DestinationAppShell` (default greenfield template)** —
+  declarative `destinations[]` / `title` / `trailing` / `children` / optional
+  `aside` (not assumed Chat). Internally wires `ClippedNavShell` + `TopAppBar` +
+  Drawer|Rail + optional `EndAside` and auto-densifies to rail on narrow (~900px)
+  or crowding — agents **must** use this unless the user specifies another
+  template. Demo: sandbox **Layout templates** `#layouts-demo-shell`.
+  Low-level **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
   under it — M3 clipped; no topbar×sidebar crosshair; `navMode`
   `drawer`|`rail`|`hidden` drives column width via `--fynns-navdrawer-width` /
   `--fynns-navrail-width` / `0`. Open↔closed **width-morphs** the destination
@@ -557,9 +563,10 @@ classes.
   only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
   narrow viewports (apps should pass `rail` below ~900px — do not keep a
   labeled `drawer` mode that stacks above the canvas).
-  **Consumer sync:** `navMode` and the `nav` slot must match
+  **Consumer sync (slot API only):** `navMode` and the `nav` slot must match
   (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`); the shell never
-  auto-swaps. A rail-width track still hosting a labeled drawer is a
+  auto-swaps. Prefer `DestinationAppShell` so agents never hand-sync this.
+  A rail-width track still hosting a labeled drawer is a
   **squashed drawer** (narrow strip + body scrollbar) — not a real rail.
   Pasteable consumer rule: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md).
   In `drawer` mode the nav|main seam is **resizable** (local
@@ -601,7 +608,7 @@ classes.
   content in `EndAside` children; toggle IconButtons live in the consumer
   `TopAppBar`. Prefer for destination chrome apps. **Not** `Drawer` (modal
   content side sheet) and **not** a revived `Panel` / `ListGroup` shell. Demo:
-  sandbox Globals → Navigation.
+  sandbox Layouts (`#layouts-demo-shell`).
 - **Content:** List / ListItem (main-content M3 rows; selected =
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
   menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
@@ -674,20 +681,23 @@ classes.
   **EndAside** implement a real viewport break (`max-width: 56.25rem`). Destination
   chrome does **not** auto-swap — the **app** chooses Rail vs Bar vs Drawer.
 
-  **Destination ladder (not duplicates):** phone → `NavigationBar`; medium →
-  `NavigationRail`; wide labeled → `NavigationDrawer` `standard`; overlay →
-  `modal`. Compose with `ClippedNavShell` + `TopAppBar`. Globals Navigation
-  stacks **standalone** demos of each part — they are not one composed app.
+  **Destination ladder (not duplicates):** phone → `NavigationBar` (bottom) or
+  densified `NavigationRail` inside ClippedNavShell / DestinationAppShell; wide labeled →
+  `NavigationDrawer` `standard` inside **DestinationAppShell** (desktop default);
+  overlay → `modal`. Live composed default: sandbox **Layout templates**
+  (`#layouts-demo-shell`). Standalone Rail/Bar demos on that page are parts —
+  not a desktop greenfield root.
 
   | Symbol | Platform | Notes |
   | --- | --- | --- |
-  | TopAppBar | both | Page header; denser tool chrome. Slot into `ClippedNavShell.topBar`. |
+  | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside; auto Drawer↔Rail. Prefer over hand-composed ClippedNavShell. |
+  | TopAppBar | both | Page header; denser tool chrome. Slot into `ClippedNavShell.topBar` / DestinationAppShell. |
   | BottomAppBar | mobile-first | Bottom **actions** + optional FAB — not destinations. |
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
-  | NavigationBar | mobile-first | Bottom **destinations** (phone). Prefer Rail on medium+. |
-  | NavigationRail | desktop-first | Vertical destinations (medium+). Prefer Bar on phone. |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. |
-  | ClippedNavShell | adaptive | Layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Toggle = open↔closed with destination **width morph** (two grid tracks → `0px`; shell holds `nav` through flyout). Drawer seam resizable (navdrawer min/max); `onNavCrowded` → rail. Prefer `rail` on narrow apps; CSS stacks `drawer` above main if that mode is kept; `rail` stays a side column. |
+  | NavigationBar | mobile-first | Bottom **destinations** (phone). |
+  | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. |
+  | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. |
   | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
@@ -785,7 +795,7 @@ classes.
   ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
   FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
   Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
-  Undo, Upload — plus any glyph still imported by Globals/Preview.
+  Undo, Upload — plus any glyph still imported by Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.

@@ -18,8 +18,9 @@
   "rules": [
     "On any short prompt involving @fynns/ui / fynns UI / Collapsible (etc.), read llm/CONSUME.md before writing app code.",
     "Paste llm/consumer-cursor-rule.mdc into the consumer .cursor/rules/ (see llm/CONSUMER_TREATY.md) so agents obey without opening AGENTS.",
-    "ClippedNavShell: navMode must match nav children (drawer→NavigationDrawer, rail→NavigationRail). Never leave a labeled drawer in a rail-width track.",
-    "WYSIWYG / surface sync: sandbox Globals/Preview resting look is the consumer default; never restyle .fynns-* in the app. SANDBOX_DEFAULT_OVERRIDES must stay empty. Core: never sandbox-only drop of an exported symbol — atomic delete (unexport+source+demo+BREAKING_PURGE). npm run check:wysiwyg.",
+    "Default destination app chrome: DestinationAppShell (sandbox Layout templates #layouts-demo-shell) unless the user specifies another template. Never greenfield from standalone NavigationRail. When densified to NavigationRail, default labelVisibility=\"labeled\" (always show labels).",
+    "ClippedNavShell (slot API): navMode must match nav children (drawer→NavigationDrawer, rail→NavigationRail). Never leave a labeled drawer in a rail-width track. Prefer DestinationAppShell so agents need not hand-sync.",
+    "WYSIWYG / surface sync: sandbox Globals/Preview/Layouts resting look is the consumer default; never restyle .fynns-* in the app. SANDBOX_DEFAULT_OVERRIDES must stay empty. Core: never sandbox-only drop of an exported symbol — atomic delete (unexport+source+demo+BREAKING_PURGE). npm run check:wysiwyg.",
     "Consume as git submodule + Vite source alias @fynns/ui.",
     "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
     "NEVER publish-install from npm registry for day-to-day app work.",
