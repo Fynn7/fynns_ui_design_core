@@ -729,7 +729,7 @@ classes.
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Head keeps a full-bleed `border-strong` hairline under the title row (same join as Drawer / BottomSheet / DatePicker dialog; stronger than Card `outline-subtle` so it stays visible on shared `surface-1`). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
@@ -804,7 +804,9 @@ classes.
   only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head / foot / body
-  inline; body block (top = bottom) uses `--fynns-layout-content-inset`.
+  inline; head **block** pad is equal (`dialog-inset / 2` each side) so title +
+  close IconButton stay **vertically centered** in the head (do not use
+  inset/0 asymmetry); body block (top = bottom) uses `--fynns-layout-content-inset`.
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
   labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not

@@ -1536,15 +1536,27 @@
   overflow-wrap: anywhere;
 }
 
-/* Basic / confirm: no chrome title bar (M3 has no surface-head strip).
- * Shell breath uses layout inset tokens only (no ad-hoc `--fynns-space-*`):
+/* Basic / confirm: transparent head (no surface-head fill) + hairline under
+ * the title row so head | body reads as one chrome join (Card / Drawer /
+ * CodeBlock). Shell breath uses layout inset tokens only:
  * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
  * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
  * Card sits a touch denser while staying symmetric. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
-  border-bottom: none;
-  padding: var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset) 0;
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  /*
+   * Equal block pad so title + close IconButton are vertically centered in the
+   * head box. Asymmetric inset/0 dropped the row optically (more empty above).
+   * Keep total height ≈ icon-target + dialog-inset; do not change the optical
+   * margin-inline-end on `.fynns-dialog-close` (Switch track glyph align).
+   */
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block: calc(var(--fynns-layout-dialog-inset) / 2);
+  min-height: calc(
+    var(--fynns-size-icon-target) + var(--fynns-layout-dialog-inset)
+  );
+  align-items: center;
 }
 
 .fynns-dialog-panel--centered > .fynns-dialog-description {
@@ -1578,7 +1590,7 @@
   gap: var(--fynns-space-md);
   /* Base for FullscreenDialog / non-centered shells; centered overrides below. */
   padding: var(--fynns-layout-content-inset);
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
   background: var(--fynns-color-surface-head);
 }
 
@@ -1738,7 +1750,7 @@
  * must not be 0 — that was clipping the state layer into the divider). */
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
   background: transparent;
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
   padding: var(--fynns-layout-content-inset);
   align-items: center;
 }
@@ -1828,13 +1840,14 @@
 
 .fynns-sheet-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--fynns-layout-sheet-header-gap);
   flex: 0 0 auto;
-  padding: 0 var(--fynns-layout-sheet-pad-inline);
-  /* No divider / no surface-head — not a dialog title bar. */
+  padding: var(--fynns-layout-sheet-header-gap) var(--fynns-layout-sheet-pad-inline);
+  /* Same head|body hairline as Dialog / Drawer / Card. */
   border: none;
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
   background: transparent;
 }
 
@@ -6742,10 +6755,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-datepicker-dialog .fynns-datepicker-dialog-head {
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
   background: transparent;
-  align-items: flex-start;
-  padding: var(--fynns-space-lg) var(--fynns-space-lg) var(--fynns-space-md);
+  /* Equal block pad + center: titles column + close share one vertical mid
+   * (was flex-start + lg/md asymmetry — optically low / X top-aligned). */
+  align-items: center;
+  padding: var(--fynns-space-lg);
 }
 
 .fynns-datepicker-dialog-titles {
