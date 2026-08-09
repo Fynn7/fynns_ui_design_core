@@ -1539,17 +1539,12 @@
 
 /* Basic / confirm: no chrome title-bar strip and **no** head|body divider
  * (M3 basic dialog is a single surface — do not paint a Card-like hairline).
- * Shell breath uses layout inset tokens only:
- * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
- * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
- * Card sits a touch denser while staying symmetric.
- * Head: top = dialog-inset/2 (clear panel radius); bottom = 0 — the close
- * IconButton (40dp) already owns the row height, so extra block-end pad was
- * invisible “margin” under the title. Gap to the first body control comes
- * from `head + body` pad-top (`space-md`), not a second head pad + full
- * content-inset. Never full four-side 24dp (~88dp). Title + close stay
- * flex-centered in the row. Do not change the optical margin-inline-end on
- * `.fynns-dialog-close` (Switch track glyph align). */
+ * Outer inline → `--fynns-layout-dialog-inset`. Non-confirm head: block-start
+ * dialog-inset/2, block-end 0 (40dp close owns row height when present).
+ * Confirm head overrides block-start to full dialog-inset. `head + body`
+ * pad-top space-md; foot block-end space-lg (optical under Buttons). Body
+ * block-end / no-head bodies keep content-inset. Never full four-side 24dp
+ * (~88dp). Do not change the optical margin-inline-end on `.fynns-dialog-close`. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
   border-bottom: none;
@@ -1638,11 +1633,9 @@
 }
 
 /* Confirm: start-aligned title (M3 centers only with dialog icon).
- * No close IconButton — restore full dialog-inset on block-start so the
- * title is not cramped under the panel radius (dismissible Dialog keeps
- * inset/2 because the 40dp close already lifts the row). */
+ * Full dialog-inset on block-start so the title clears the panel radius
+ * (non-confirm centered heads keep inset/2). */
 .fynns-dialog-panel--centered > .fynns-dialog-head--confirm {
-  justify-content: flex-start;
   padding-block-start: var(--fynns-layout-dialog-inset);
 }
 

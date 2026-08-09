@@ -740,7 +740,7 @@ classes.
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; dismissible pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-md`; **ConfirmDialog** title pad-block-start full `dialog-inset` (no close — do not use inset/2). DatePicker/TimePicker dialogs stay on the same rule — do not reintroduce a head hairline. |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-md`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
@@ -814,15 +814,13 @@ classes.
   form affix shells — that 4dp token is SearchBar / Composer IconButton flush
   only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
-  ConfirmDialog: head inline `--fynns-layout-dialog-inset` (24dp); dismissible
-  Dialog head **block-start** `dialog-inset / 2`, **block-end** `0`; confirm
-  head (no close) **block-start** full `dialog-inset` so the title clears the
-  panel radius; `head + body` pad-top `space-md` (denser than full
-  content-inset); body block-end / no-head bodies still use
-  `--fynns-layout-content-inset`; foot / body inline same dialog-inset;
-  foot **block-end** `space-lg` (between optical-flush `space-md` and full
-  `dialog-inset` under the 40dp Button hit box). (**no** head|body
-  hairline.)
+  ConfirmDialog: head/foot/body **inline** `--fynns-layout-dialog-inset`
+  (24dp); non-confirm centered head **block-start** `dialog-inset / 2`,
+  **block-end** `0`; confirm head **block-start** full `dialog-inset`;
+  body block-end / no-head bodies still use `--fynns-layout-content-inset`.
+  **Inter-section optical pads** (not outer column insets) may use space
+  tokens: `head + body` pad-top `space-md`; foot **block-end** `space-lg`
+  (under 40dp action Buttons). (**no** head|body hairline.)
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
   labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
@@ -835,7 +833,9 @@ classes.
   content-inset, no divider. Do not force ListItem onto equal four-side
   padding.
   Do not substitute raw `--fynns-space-*` or rem literals for
-  dialog/panel/strip/chat-column shell insets.
+  dialog/panel/strip/chat-column **outer** shell insets (inline / confirm
+  head-start stay on `--fynns-layout-*`). Inter-section optical pads above
+  are the documented exception.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
