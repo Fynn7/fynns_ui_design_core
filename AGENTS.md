@@ -737,10 +737,10 @@ classes.
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. |
   | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
-  | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. |
-  | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. |
-  | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Head keeps a full-bleed `border-strong` hairline under the title row (same join as Drawer / BottomSheet / DatePicker dialog; stronger than Card `outline-subtle` so it stays visible on shared `surface-1`). |
+  | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
+  | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
+  | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-md`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
@@ -814,20 +814,28 @@ classes.
   form affix shells — that 4dp token is SearchBar / Composer IconButton flush
   only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
-  ConfirmDialog: `--fynns-layout-dialog-inset` (24dp) on head (equal four-side
-  so title + close center vertically) / foot / body inline; body block
-  (top = bottom) uses `--fynns-layout-content-inset` below the head hairline
-  (head pad-bottom is above the divider — do not zero body pad-top).
+  ConfirmDialog: head/foot/body **inline** `--fynns-layout-dialog-inset`
+  (24dp); non-confirm centered head **block-start** `dialog-inset / 2`,
+  **block-end** `0`; confirm head **block-start** full `dialog-inset`;
+  body block-end / no-head bodies still use `--fynns-layout-content-inset`.
+  **Inter-section optical pads** (not outer column insets) may use space
+  tokens: `head + body` pad-top `space-md`; foot **block-end** `space-lg`
+  (under 40dp action Buttons). (**no** head|body hairline.)
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
   labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
   invent consumer width or wrap hacks. Vertical scroll only when body exceeds
   panel `max-height`.
-  FullscreenDialog inherits content-inset on head/body. BottomSheet keeps
-  asymmetric `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3
-  block≠inline). Do not force ListItem onto equal four-side padding.
+  FullscreenDialog inherits content-inset on head/body — **no** head|body
+  hairline / `surface-head`. BottomSheet keeps asymmetric
+  `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline) and
+  **no** header|body divider (handle is enough). Drawer content head same:
+  content-inset, no divider. Do not force ListItem onto equal four-side
+  padding.
   Do not substitute raw `--fynns-space-*` or rem literals for
-  dialog/panel/strip/chat-column shell insets.
+  dialog/panel/strip/chat-column **outer** shell insets (inline / confirm
+  head-start stay on `--fynns-layout-*`). Inter-section optical pads above
+  are the documented exception.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).

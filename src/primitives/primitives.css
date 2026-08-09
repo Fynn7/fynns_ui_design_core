@@ -1537,22 +1537,20 @@
   overflow-wrap: anywhere;
 }
 
-/* Basic / confirm: transparent head (no surface-head fill) + border-strong
- * hairline under the title row (visible on shared surface-1; Card / CodeBlock
- * keep quieter outline-subtle). Shell breath uses layout inset tokens only:
- * head/foot/inline → `--fynns-layout-dialog-inset` (24dp);
- * body block (top=bottom) → `--fynns-layout-content-inset` (18dp) so nested
- * Card sits a touch denser while staying symmetric.
- * Head uses equal four-side dialog-inset so title + close IconButton share
- * the head’s vertical center (asymmetric inset/0 sat the row under top-only
- * pad). Head pad-bottom sits above the hairline; body keeps content-inset
- * below it (do not zero body pad-top — that would glue content to the
- * divider). Do not change the optical margin-inline-end on
- * `.fynns-dialog-close` (Switch track glyph align). */
+/* Basic / confirm: no chrome title-bar strip and **no** head|body divider
+ * (M3 basic dialog is a single surface — do not paint a Card-like hairline).
+ * Outer inline → `--fynns-layout-dialog-inset`. Non-confirm head: block-start
+ * dialog-inset/2, block-end 0 (40dp close owns row height when present).
+ * Confirm head overrides block-start to full dialog-inset. `head + body`
+ * pad-top space-md; foot block-end space-lg (optical under Buttons). Body
+ * block-end / no-head bodies keep content-inset. Never full four-side 24dp
+ * (~88dp). Do not change the optical margin-inline-end on `.fynns-dialog-close`. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
   background: transparent;
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
-  padding: var(--fynns-layout-dialog-inset);
+  border-bottom: none;
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block-start: calc(var(--fynns-layout-dialog-inset) / 2);
+  padding-block-end: 0;
   align-items: center;
 }
 
@@ -1566,6 +1564,12 @@
   padding-inline: var(--fynns-layout-dialog-inset);
 }
 
+/* Head already sized by the close target — body start under title is denser
+ * than full content-inset, but not as tight as space-sm. */
+.fynns-dialog-panel--centered > .fynns-dialog-head + .fynns-dialog-body {
+  padding-top: var(--fynns-space-md);
+}
+
 /* Body/description before actions: drop bottom pad so foot owns the outer inset. */
 .fynns-dialog-panel--centered > .fynns-dialog-body:has(+ .fynns-dialog-foot),
 .fynns-dialog-panel--centered
@@ -1573,9 +1577,14 @@
   padding-bottom: 0;
 }
 
+/* Outer optical symmetry with confirm head: title ink sits ~dialog-inset
+ * below the panel top, but action labels sit inside a 40dp Button — equal
+ * `dialog-inset` under the hit box leaves ~12dp extra under the glyphs.
+ * block-end = space-lg (between space-md optical-flush and full dialog-inset). */
 .fynns-dialog-panel--centered > .fynns-dialog-foot {
-  padding: var(--fynns-space-lg) var(--fynns-layout-dialog-inset)
-    var(--fynns-layout-dialog-inset);
+  padding-block-start: var(--fynns-space-lg);
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block-end: var(--fynns-space-lg);
   gap: var(--fynns-space-sm);
 }
 
@@ -1585,10 +1594,12 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-md);
-  /* Base for FullscreenDialog / non-centered shells; centered overrides below. */
+  /* Base for FullscreenDialog / non-centered shells. Overlay heads are a
+   * single surface with the body — no Card-like hairline, no surface-head
+   * strip (PR #65 pollution). Centered Dialog overrides padding below. */
   padding: var(--fynns-layout-content-inset);
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
-  background: var(--fynns-color-surface-head);
+  border-bottom: none;
+  background: transparent;
 }
 
 .fynns-dialog-title {
@@ -1621,7 +1632,13 @@
   );
 }
 
-/* Confirm: start-aligned title (M3 centers only with dialog icon). */
+/* Confirm: start-aligned title (M3 centers only with dialog icon).
+ * Full dialog-inset on block-start so the title clears the panel radius
+ * (non-confirm centered heads keep inset/2). */
+.fynns-dialog-panel--centered > .fynns-dialog-head--confirm {
+  padding-block-start: var(--fynns-layout-dialog-inset);
+}
+
 .fynns-dialog-head--confirm {
   justify-content: flex-start;
 }
@@ -1742,12 +1759,12 @@
   transform: translateX(-100%);
 }
 
-/* Side sheet head: no IDE surface-head strip; equal content-inset on all
- * edges so the close IconButton hover disk clears the hairline (padding-bottom
- * must not be 0 — that was clipping the state layer into the divider). */
+/* Side sheet head: single surface with body — no hairline / surface-head.
+ * Equal content-inset on all edges so the close IconButton hover disk clears
+ * the panel edge (do not zero padding-bottom). */
 .fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
   background: transparent;
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  border-bottom: none;
   padding: var(--fynns-layout-content-inset);
   align-items: center;
 }
@@ -1842,9 +1859,9 @@
   gap: var(--fynns-layout-sheet-header-gap);
   flex: 0 0 auto;
   padding: var(--fynns-layout-sheet-header-gap) var(--fynns-layout-sheet-pad-inline);
-  /* Overlay title-head hairline (border-strong); not Card outline-subtle. */
+  /* M3 sheet = drag handle + one surface; no header|body hairline (PR #65). */
   border: none;
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  border-bottom: none;
   background: transparent;
 }
 
@@ -6752,7 +6769,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-datepicker-dialog .fynns-datepicker-dialog-head {
-  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  /* Centered Dialog head already has no divider; do not reintroduce one. */
+  border-bottom: none;
   background: transparent;
   /* Equal block pad + center: titles column + close share one vertical mid
    * (was flex-start + lg/md asymmetry — optically low / X top-aligned). */
@@ -6990,8 +7008,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-timepicker-dialog .fynns-timepicker-dialog-head {
-  border-bottom: var(--fynns-border-hairline) solid
-    var(--fynns-color-border-strong);
+  /* Centered Dialog head already has no divider; do not reintroduce one. */
+  border-bottom: none;
 }
 
 .fynns-timepicker-dialog-titles {
