@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useId,
+  useLayoutEffect,
   useRef,
   type ButtonHTMLAttributes,
   type ForwardedRef,
@@ -10,6 +11,12 @@ import {
 } from "react";
 import { CloseIcon, SearchIcon } from "./icons";
 import { IconButton } from "./IconButton";
+import { observeInputEllipsisRefresh } from "./inputEllipsis";
+
+function assignRef<T>(ref: ForwardedRef<T>, value: T | null) {
+  if (typeof ref === "function") ref(value);
+  else if (ref) ref.current = value;
+}
 
 export type SearchBarProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -76,8 +83,16 @@ export const SearchBar = forwardRef(function SearchBar(
   const fieldId = id ?? autoId;
   const resultsId = `${fieldId}-results`;
   const rootRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const isExpanded = Boolean(expanded);
   const showClear = value.length > 0 && !disabled;
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const input = inputRef.current;
+    if (!root || !input) return;
+    return observeInputEllipsisRefresh(root, input);
+  }, []);
 
   const setExpanded = (next: boolean) => {
     onExpandedChange?.(next);
@@ -119,10 +134,14 @@ export const SearchBar = forwardRef(function SearchBar(
         <input
           {...rest}
           id={fieldId}
-          ref={ref}
-          type="search"
+          ref={(node) => {
+            inputRef.current = node;
+            assignRef(ref, node);
+          }}
+          type="text"
           role="searchbox"
           className="fynns-search-bar-input"
+          enterKeyHint="search"
           value={value}
           disabled={disabled}
           placeholder={placeholder}

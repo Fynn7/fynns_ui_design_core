@@ -340,7 +340,9 @@ classes.
   **FieldBlock** (label | trailing IconButtons above a control), Select,
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
-  supporting/error text), OtpInput, SearchBar / SearchBarResult, Switch
+  supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
+  ellipsis the field value — not mid-glyph hard clip; same on Autocomplete
+  inputs; idle ellipsis / focused caret scroll), Switch
   (dense track only — no `size` / no former md 52×32; `labelSide`
   `start`|`end`),
   Checkbox, Radio,
