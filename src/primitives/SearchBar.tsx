@@ -11,18 +11,11 @@ import {
 } from "react";
 import { CloseIcon, SearchIcon } from "./icons";
 import { IconButton } from "./IconButton";
+import { observeInputEllipsisRefresh } from "./inputEllipsis";
 
 function assignRef<T>(ref: ForwardedRef<T>, value: T | null) {
   if (typeof ref === "function") ref(value);
   else if (ref) ref.current = value;
-}
-
-/** Chromium can keep a stale ellipsis after the flex host grows (drawer drag). */
-function refreshInputEllipsis(input: HTMLInputElement) {
-  const prev = input.style.textOverflow;
-  input.style.textOverflow = "clip";
-  void input.offsetWidth;
-  input.style.textOverflow = prev;
 }
 
 export type SearchBarProps = Omit<
@@ -97,12 +90,8 @@ export const SearchBar = forwardRef(function SearchBar(
   useLayoutEffect(() => {
     const root = rootRef.current;
     const input = inputRef.current;
-    if (!root || !input || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() => {
-      refreshInputEllipsis(input);
-    });
-    ro.observe(root);
-    return () => ro.disconnect();
+    if (!root || !input) return;
+    return observeInputEllipsisRefresh(root, input);
   }, []);
 
   const setExpanded = (next: boolean) => {

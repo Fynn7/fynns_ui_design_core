@@ -1,7 +1,16 @@
 import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ChevronDownIcon } from "./icons";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
+import { observeInputEllipsisRefresh } from "./inputEllipsis";
 
 export type AutocompleteOption = {
   value: string;
@@ -85,6 +94,13 @@ export function Autocomplete({
   useEffect(() => {
     if (!open) setQuery(selectedLabel);
   }, [selectedLabel, open]);
+
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const input = inputRef.current;
+    if (!root || !input) return;
+    return observeInputEllipsisRefresh(root, input);
+  }, []);
 
   useEffect(() => {
     setActiveIndex((i) =>

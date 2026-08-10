@@ -5687,22 +5687,32 @@ a.fynns-breadcrumb-link:visited {
   line-height: var(--fynns-searchbar-line-height);
   outline: none;
   appearance: none;
-  white-space: nowrap;
 }
 
 /*
+ * Text fields only (SearchBar / Autocomplete) — not Select's button trigger
+ * (that ellipsizes via `.fynns-select-trigger-text`).
  * Idle: ellipsis in narrow hosts (not mid-glyph hard clip from the shell).
- * Focused: allow horizontal scroll so caret editing is not clipped mid-glyph
- * (Chromium skips text-overflow ellipsis while the field is focused).
+ * Focused: caret horizontal scroll without painting a scrollbar (Chromium
+ * skips text-overflow ellipsis while focused).
  */
-.fynns-search-bar-input:not(:focus) {
+input.fynns-search-bar-input {
+  white-space: nowrap;
+}
+
+input.fynns-search-bar-input:not(:focus) {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
 
-.fynns-search-bar-input:focus {
+input.fynns-search-bar-input:focus {
   overflow-x: auto;
   text-overflow: clip;
+  scrollbar-width: none;
+}
+
+input.fynns-search-bar-input:focus::-webkit-scrollbar {
+  display: none;
 }
 
 /* No leading icon; SearchBar's tiny input pad would leave the label flush. */
@@ -5770,13 +5780,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-search-bar-input::placeholder {
   color: var(--fynns-color-text-muted);
-}
-
-.fynns-search-bar-input::-webkit-search-decoration,
-.fynns-search-bar-input::-webkit-search-cancel-button,
-.fynns-search-bar-input::-webkit-search-results-button,
-.fynns-search-bar-input::-webkit-search-results-decoration {
-  appearance: none;
 }
 
 /* Results share the expanded shell. Row highlight matches DropdownMenu items
