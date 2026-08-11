@@ -205,8 +205,10 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   strip − glyph-inset; textarea pad = glyph-inset (optical + / Send glyphs —
   see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
   Capsule chrome next to IconButtons
-  (SearchBar / ChatComposer collapsed shell — Send flush) →
-  `--fynns-layout-capsule-chrome-pad-inline`. Dense form `Input` /
+  (SearchBar only — not ChatComposer shell) →
+  `--fynns-layout-capsule-chrome-pad-inline`. ChatComposer collapsed shell →
+  `--fynns-chat-composer-pad-inline` / `pad-block` (see
+  [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)). Dense form `Input` /
   field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See

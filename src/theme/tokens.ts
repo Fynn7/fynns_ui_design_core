@@ -1104,22 +1104,23 @@ export const LAYOUT_TOKENS = {
    * `--fynns-space-*` for these. Do **not** use this as the Chat column
    * outer inset — that is `dialog-inset` via `--fynns-chat-thread-pad-inline`.
    *
-   * ChatComposer / SearchBar **IconButton** edges use
-   * `capsule-chrome-pad-inline` (4dp, ChatGPT Send/mic flush) — never put
-   * strip pad on the Send side.
+   * ChatComposer collapsed **shell** pad is `--fynns-chat-composer-pad-*`
+   * (6dp), not this strip key and not `capsule-chrome-pad-inline`. SearchBar
+   * IconButton edges stay on capsule-chrome (4dp).
    */
   "strip-pad-inline": "1.25rem",
   /**
    * Outer chrome pad when IconButtons sit at a `radius-3xl` capsule edge
-   * (SearchBar, ChatComposer shell — ChatGPT Send/mic ~4dp). Not for
-   * text-only Banner strips — use `strip-pad-inline` there. Not for dense
-   * form `Input` shells — use `field-pad-inline`.
+   * (SearchBar — ChatGPT-style flush ~4dp). Not for ChatComposer shell
+   * (use `--fynns-chat-composer-pad-*`). Not for text-only Banner strips —
+   * use `strip-pad-inline`. Not for dense form `Input` shells — use
+   * `field-pad-inline`.
    */
   "capsule-chrome-pad-inline": "0.25rem",
   /**
    * Horizontal pad for dense form fields (`Input` / `.fynns-field-shell`).
    * Default = `space-md` (12dp). Do **not** reuse `capsule-chrome-pad-inline`
-   * here — that 4dp token is for SearchBar / Composer IconButton flush.
+   * here — that 4dp token is for SearchBar IconButton flush.
    */
   "field-pad-inline": "var(--fynns-space-md)",
   /**

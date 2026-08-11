@@ -9555,7 +9555,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * No leading affix (collapsed only): text start = strip-pad from shell edge.
- * Shell end stays capsule-chrome (~4dp) so Send matches ChatGPT mic/send flush.
+ * Extra start pad = strip − composer-pad-inline (shell already has 6dp pad).
  * Scoped to `:not([data-expanded])` so this never overrides expanded pad:0.
  */
 .fynns-chat-composer-shell:not([data-expanded])
@@ -9566,7 +9566,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-chat-composer-placeholder {
   padding-inline-start: calc(
     var(--fynns-layout-strip-pad-inline) -
-      var(--fynns-layout-capsule-chrome-pad-inline)
+      var(--fynns-chat-composer-pad-inline)
   );
 }
 

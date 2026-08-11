@@ -83,7 +83,7 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 **Pad rules**
 
 - Collapsed, no leading: textarea start = strip breath
-  (`strip-pad-inline − capsule-chrome`).
+  (`strip-pad-inline − composer-pad-inline`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
 - Expanded: shell `expanded-pad-*` + textarea `glyph-inset` (optical glyphs).
 

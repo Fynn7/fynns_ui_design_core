@@ -829,11 +829,13 @@ classes.
   Expanded ChatComposer shell pad is derived: `composer-expanded-pad-*` =
   strip − glyph-inset; textarea uses `composer-glyph-inset` (optical glyphs;
   text edge still = strip). See `llm/CHAT_COMPOSER_LAYOUT.md`.
-  **Capsule chrome** (SearchBar field / ChatComposer **collapsed** shell next to
-  IconButtons — ChatGPT Send/mic flush):
-  `--fynns-layout-capsule-chrome-pad-inline` (4dp). Composer collapsed shell uses this
-  on **both** edges; text-only start gets extra pad up to `strip-pad-inline`
-  — do **not** put strip pad on the Send side.
+  **Collapsed ChatComposer shell** uses `--fynns-chat-composer-pad-inline` /
+  `pad-block` (~6dp equal inset around the 32dp Send/Stop circle — not
+  capsule-chrome). Text-only start (no leading) adds pad so copy lands at
+  `strip-pad-inline` (`strip − composer-pad-inline`).
+  **Capsule chrome** (SearchBar field next to IconButtons — ChatGPT-style
+  flush): `--fynns-layout-capsule-chrome-pad-inline` (4dp). Do **not** use
+  this for ChatComposer shell pad.
   **Chat conversation column** (thread + composer **outer** form):
   `--fynns-layout-dialog-inset` (24dp) via `--fynns-chat-thread-pad-inline`;
   `--fynns-chat-composer-inset-inline` **must** alias the thread token so
@@ -847,8 +849,8 @@ classes.
   `.fynns-input--sm`’s zero block pad (32dp single-line Input) apply to
   Textarea. Default **autoGrow** (content height; soft cap
   `--fynns-layout-textarea-max-height`). Do **not** reuse capsule chrome for
-  form affix shells — that 4dp token is SearchBar / Composer IconButton flush
-  only. Affix → text gap uses `--fynns-layout-control-cluster-gap`.
+  form affix shells — that 4dp token is SearchBar IconButton flush only.
+  Affix → text gap uses `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: head/foot/body **inline** `--fynns-layout-dialog-inset`
   (24dp); non-confirm centered head **block-start** `dialog-inset / 2`,
