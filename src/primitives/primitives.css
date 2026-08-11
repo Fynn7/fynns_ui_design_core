@@ -9426,9 +9426,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-composer-input {
+  /* Field wrapper owns flex order; input fills the field. */
   flex: 1 1 auto;
-  align-self: center;
-  order: 2;
+  width: 100%;
   min-width: 0;
   /* One text line at rest — never stretch to fill the chat column. */
   height: auto;
@@ -9468,14 +9468,34 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   field-sizing: fixed;
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * Collapsed flex item for leading | field | primary. Holds the ellipsis
+ * placeholder overlay (textarea cannot paint text-overflow ellipsis).
+ */
+.fynns-chat-composer-field {
+  position: relative;
+  flex: 1 1 auto;
+  align-self: center;
+  order: 2;
+  min-width: 0;
+  display: flex;
 }
 
 .fynns-chat-composer-input[data-scrollable] {
   overflow-y: auto;
 }
 
-.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-input {
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-field {
   order: 0;
+  width: 100%;
+  align-self: stretch;
+}
+
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-input {
   width: 100%;
   align-self: stretch;
   /*
@@ -9490,13 +9510,52 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Visual empty hint — real ellipsis (SearchBar quality). Native textarea
+ * placeholder cannot ellipsize in Chromium; keep HTML placeholder empty and
+ * expose the name via aria-label.
+ */
+.fynns-chat-composer-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding-block: 0;
+  padding-inline-start: 0;
+  padding-inline-end: calc(
+    var(--fynns-space-md) - var(--fynns-border-hairline)
+  );
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  font-size: var(--fynns-font-size-md);
+  line-height: var(--fynns-chat-composer-line-height);
+  pointer-events: none;
+  min-width: 0;
+}
+
+/* Ellipsis lives on the text node — not the flex host. */
+.fynns-chat-composer-placeholder-text {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/*
  * No leading affix (collapsed only): text start = strip-pad from shell edge.
  * Shell end stays capsule-chrome (~4dp) so Send matches ChatGPT mic/send flush.
  * Scoped to `:not([data-expanded])` so this never overrides expanded pad:0.
  */
 .fynns-chat-composer-shell:not([data-expanded])
   .fynns-chat-composer-body:not(:has(.fynns-chat-composer-leading))
-  .fynns-chat-composer-input {
+  .fynns-chat-composer-input,
+.fynns-chat-composer-shell:not([data-expanded])
+  .fynns-chat-composer-body:not(:has(.fynns-chat-composer-leading))
+  .fynns-chat-composer-placeholder {
   padding-inline-start: calc(
     var(--fynns-layout-strip-pad-inline) -
       var(--fynns-layout-capsule-chrome-pad-inline)
@@ -9506,16 +9565,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /* Collapsed: trailing control owns the end inset — drop the Input end pad. */
 .fynns-chat-composer-shell:not([data-expanded])
   .fynns-chat-composer-body:has(.fynns-chat-composer-primary-slot)
-  .fynns-chat-composer-input {
+  .fynns-chat-composer-input,
+.fynns-chat-composer-shell:not([data-expanded])
+  .fynns-chat-composer-body:has(.fynns-chat-composer-primary-slot)
+  .fynns-chat-composer-placeholder {
   padding-inline-end: 0;
-}
-
-.fynns-chat-composer-input::placeholder {
-  color: var(--fynns-color-text-muted);
-  /* Narrow EndAside: ellipsis one line; JS keeps empty height at 1lh. */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .fynns-chat-composer-input:focus-visible {

@@ -46,7 +46,12 @@ height is measured under the expanded `text-line-height` (~22dp), not the
 collapsed 32dp control row (avoids a tall empty “fixed” shell). Empty value
 forces collapsed (unless attachments force expand). Textarea height =
 `min(max(scrollHeight, one-line), max-height)` — content-driven, not a
-hardcoded multi-line well.
+hardcoded multi-line well. Collapsed **empty**: visible hint is
+`.fynns-chat-composer-placeholder` > `.fynns-chat-composer-placeholder-text`
+(flex host + nowrap/`text-overflow: ellipsis` on the inner text — ellipsis
+does not apply to a flex container itself). Native `<textarea>` placeholder
+cannot ellipsize in Chromium (mid-glyph hard clip into Send); HTML
+`placeholder` stays empty and `aria-label` carries the accessible name.
 
 ## Geometry tokens
 
