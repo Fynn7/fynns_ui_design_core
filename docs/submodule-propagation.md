@@ -66,9 +66,13 @@ The reusable workflow intentionally skips in these cases:
 - the target branch does not contain the submodule path yet
 - the target branch already points at the requested `target_sha`
 
-This is how `fynns_bachelor_thesis` can keep `main` as the registered target
-branch while the submodule still only exists on `dev`: the workflow records a
-skip until the branch alignment is finished.
+Skip still applies when a registered `base_branch` lacks the submodule path.
+`fynns_bachelor_thesis` now has the submodule on `main`; the reusable bump
+opens the PR, dispatches consumer typecheck, polls the Actions check named
+`typecheck`, then squash-merges immediately (with `--admin` fallback). Do not
+rely on GitHub `--auto` merge alone: third-party apps (Render / Vercel / Cursor)
+often leave empty `queued` check suites that block auto-merge even when only
+`typecheck` is required.
 
 ## Local development
 
