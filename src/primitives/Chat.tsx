@@ -376,6 +376,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       // scrollHeight so a long hint cannot inflate the shell in a narrow pane.
       if (!el.value) {
         el.style.height = `${controlLine}px`;
+        el.removeAttribute("data-scrollable");
         setExpanded(hasAttachments);
         return;
       }
@@ -391,7 +392,10 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
 
       // Morph first when needed, then remasure on the next layout pass with the
       // expanded line-height so height tracks real text — not a stale 32dp probe.
+      // Restore a floor height so we never leave `height: 0` + overflow paint.
       if (shouldExpand !== expanded) {
+        el.style.height = `${shouldExpand ? textLine : controlLine}px`;
+        el.removeAttribute("data-scrollable");
         setExpanded(shouldExpand);
         return;
       }
@@ -399,6 +403,12 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       const floor = shouldExpand ? textLine : controlLine;
       const next = Math.min(Math.max(scrollH, floor), max);
       el.style.height = `${next}px`;
+      // Scroll only when content is clipped by the max-height cap.
+      if (shouldExpand && scrollH > max + 0.5) {
+        el.setAttribute("data-scrollable", "");
+      } else {
+        el.removeAttribute("data-scrollable");
+      }
     }, [hasAttachments, expanded]);
 
     useLayoutEffect(() => {

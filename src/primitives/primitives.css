@@ -9457,10 +9457,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
    */
   line-height: var(--fynns-chat-composer-line-height);
   overflow-x: hidden;
-  overflow-y: auto;
+  /*
+   * Grow by height, not by scrolling. `auto` on a one-line / mid-grow box
+   * paints a native thumb whenever scrollHeight is 1px over clientHeight
+   * (narrow EndAside wrap, font metrics, or height=0 probe frames).
+   * Only the capped max-height state opts into `overflow-y: auto` via
+   * `[data-scrollable]` from the auto-grow effect.
+   */
+  overflow-y: hidden;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   field-sizing: fixed;
+}
+
+.fynns-chat-composer-input[data-scrollable] {
+  overflow-y: auto;
 }
 
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-input {

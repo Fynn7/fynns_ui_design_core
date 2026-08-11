@@ -65,7 +65,9 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Line: `composer-line-height` (32dp **control-row** / collapsed
   `line-height`); `composer-text-line-height` (22dp **typography** when
   `data-expanded`); max `composer-max-height` (13rem) — scroll inside the
-  field after that
+  field after that (`overflow-y` stays `hidden` until the auto-grow effect
+  sets `data-scrollable` at the cap; collapsed / mid-grow never paints a
+  thumb)
 - Radius: `--fynns-radius-3xl` (not Cursor’s pill→12px compact switch; not
   Input’s `radius-md`)
 
