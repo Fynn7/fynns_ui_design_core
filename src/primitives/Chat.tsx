@@ -569,25 +569,38 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
             </div>
           ) : null}
           <div className="fynns-chat-composer-body">
-            <textarea
-              {...textareaProps}
-              ref={setRefs}
-              id={textareaProps?.id ?? autoId}
-              className={join(
-                "fynns-chat-composer-input",
-                "fynns-scroll",
-                textareaProps?.className,
-              )}
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onCompositionStart={handleCompositionStart}
-              onCompositionEnd={handleCompositionEnd}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              disabled={disabled}
-              aria-label={ariaLabel}
-              rows={1}
-            />
+            <div className="fynns-chat-composer-field">
+              {!value ? (
+                <span
+                  className="fynns-chat-composer-placeholder"
+                  aria-hidden="true"
+                >
+                  <span className="fynns-chat-composer-placeholder-text">
+                    {placeholder}
+                  </span>
+                </span>
+              ) : null}
+              <textarea
+                {...textareaProps}
+                ref={setRefs}
+                id={textareaProps?.id ?? autoId}
+                className={join(
+                  "fynns-chat-composer-input",
+                  "fynns-scroll",
+                  textareaProps?.className,
+                )}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompositionEnd}
+                onKeyDown={handleKeyDown}
+                /* Visual hint is `.fynns-chat-composer-placeholder` (ellipsis). */
+                placeholder=""
+                disabled={disabled}
+                aria-label={ariaLabel || placeholder}
+                rows={1}
+              />
+            </div>
             <div
               className="fynns-chat-composer-toolbar"
               role={expanded ? "toolbar" : undefined}
