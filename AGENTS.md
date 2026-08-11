@@ -76,7 +76,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    carries the `fynns-scroll` class. Browser-default scrollbars are the most
    common source of visual drift — never ship them. Custom thumbs are
    **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
-   soft fade (`--fynns-duration-base` + `--fynns-ease-out`; WebKit thumb
+   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`; WebKit thumb
    `background-color`, Firefox `scrollbar-color` when supported; reduced-motion
    → instant). WebKit also tints thumb `:hover` / `:active` via tokens.
    `.fynns-scroll` sets `scrollbar-gutter: auto` — no permanent empty track
@@ -308,7 +308,7 @@ Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thum
 Fonts: three stacks only — see **Font families** below. Motion:
 `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
-loading-spin,presentation-hint,reduced-motion-spin}`.
+scrollbar,loading-spin,presentation-hint,reduced-motion-spin}`.
 
 **Font families (`--fynns-font-*`) — when to use (agents / consumers):**
 

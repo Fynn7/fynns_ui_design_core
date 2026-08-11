@@ -103,7 +103,7 @@ button {
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-scrollbar-thumb-border) solid transparent;
   background-clip: padding-box;
-  transition: background-color var(--fynns-duration-base) var(--fynns-ease-out);
+  transition: background-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
 }
 
 *:hover::-webkit-scrollbar-thumb,
@@ -129,7 +129,7 @@ button {
 .fynns-scroll {
   scrollbar-gutter: auto;
   /* Firefox: fade scrollbar-color when the engine supports it. */
-  transition: scrollbar-color var(--fynns-duration-base) var(--fynns-ease-out);
+  transition: scrollbar-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
 }
 
 .fynns-sr-only {

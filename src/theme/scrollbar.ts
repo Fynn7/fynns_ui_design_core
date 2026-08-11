@@ -8,7 +8,7 @@
  *   - DOM overflow surfaces inherit the thin-bar skin from `theme.css` (every
  *     `*`) and must carry `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}).
  *   - Thumb is idle-transparent; reveals on host `:hover` / `:focus-within`
- *     with `--fynns-duration-base` / `--fynns-ease-out` soft fade (WebKit thumb
+ *     with `--fynns-duration-scrollbar` / `--fynns-ease-out` soft fade (WebKit thumb
  *     `background-color`; Firefox `scrollbar-color` on `.fynns-scroll` when
  *     supported). WebKit also has thumb `:hover` / `:active` token ladder.
  *   - `.fynns-scroll` sets `scrollbar-gutter: auto` (no permanent empty track).
