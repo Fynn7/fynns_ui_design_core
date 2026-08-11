@@ -426,9 +426,10 @@ classes.
     bubble `--fynns-chatmessage-bubble-max-width` **70%** of that host row
     (short copy shrinks; `radius-22` / ChatGPT `rounded-[22px]`;
     `--fynns-color-chat-user-bubble`; body `1rem` / pad-inline `1rem`).
-    Composer = **100%** of the same host (`radius-3xl`, ~40dp collapsed
-    shell with 32dp controls + `composer-gap` 4px; Input density, not
-    SearchBar 56dp; not viewport full-bleed). Thread
+    Composer = **100%** of the same host (`radius-3xl`, ~44dp collapsed
+    shell with 32dp controls + 6dp pad — Cursor-dense circle, one step
+    below IconButton md 40dp; not SearchBar 56dp chrome; not viewport
+    full-bleed). Thread
     `--fynns-chat-thread-pad-inline` (= `dialog-inset`, 24dp column breath)
     and composer `--fynns-chat-composer-inset-inline` (**aliases the thread
     token**) so the user bubble end edge and composer shell end edge align
@@ -508,26 +509,27 @@ classes.
     `field-sizing: fixed`, layout-effect auto-grow). Empty value forces
     height to `--fynns-chat-composer-line-height` (32dp) so
     placeholder wrap cannot inflate a narrow EndAside; shell pad is
-    `--fynns-chat-composer-pad-inline` (= layout `capsule-chrome-pad-inline`
-    ~4dp — ChatGPT Send/mic flush on **both** edges). Without a leading
+    `--fynns-chat-composer-pad-inline` / `pad-block` (~6dp equal inset
+    around the Send/Stop circle). Without a leading
     control, textarea start adds pad so text lands at
     `--fynns-layout-strip-pad-inline` (Banner breath on the text side only).
     Outer form inset aliases `--fynns-chat-thread-pad-inline` →
     `dialog-inset` (column breath, not strip-pad). **Multiline layout** is model C
-    + compact morph (Cursor): collapsed ≈ one horizontal row (~40dp = Input /
-    field-shell density, not SearchBar 56dp; toolbar `display: contents`;
-    `line-height` = 32dp control row); expanded = full-width textarea above a
-    bottom `role="toolbar"` (leading start, Send end) with shell pad
-    `composer-expanded-pad-inline` / `composer-expanded-pad-block` (=
-    strip-pad − glyph-inset, ~12dp), textarea `composer-glyph-inset` so copy
-    shares + / Send **glyph** edges (text at strip-pad from shell), **8dp**
-    text↔toolbar gap (`composer-expanded-gap`), and
-    `composer-text-line-height` (22dp). Height auto-grows from `scrollHeight`
-    after the expanded morph (remeasures when `data-expanded` flips) — never
-    leave icons vertically centered beside tall text. Spec:
+    + compact morph (Cursor): collapsed ≈ one horizontal row (~44dp = 32dp
+    control + 6dp pad — Cursor-dense circle, not SearchBar 56dp; toolbar
+    `display: contents`; `line-height` = 32dp control row); expanded =
+    full-width textarea above a bottom `role="toolbar"` (leading start,
+    Send end) with shell pad `composer-expanded-pad-inline` /
+    `composer-expanded-pad-block` (= strip-pad − glyph-inset), textarea
+    `composer-glyph-inset` so copy shares + / Send **glyph** edges (text
+    at strip-pad from shell), **8dp** text↔toolbar gap
+    (`composer-expanded-gap`), and `composer-text-line-height` (22dp).
+    Height auto-grows from `scrollHeight` after the expanded morph
+    (remeasures when `data-expanded` flips) — never leave icons vertically
+    centered beside tall text. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
-    Collapsed shell ≈ 40dp (ChatGPT `rounded-[28px]` /
-    `--fynns-radius-3xl`). Cap: `--fynns-chat-composer-max-height` (13rem).
+    Collapsed shell ≈ 44dp (`--fynns-radius-3xl`). Cap:
+    `--fynns-chat-composer-max-height` (13rem).
     Plain-text prompts only, zero ProseMirror dependency. Do **not** swap
     to contenteditable for visual parity alone.
     **Parity note (paste):** Upgraded ChatGPT ProseMirror keeps rich HTML
@@ -699,7 +701,7 @@ classes.
   (`.fynns-end-aside` / `.fynns-chat-host--fill`): 100% pane + user bubble
   ceiling **100%** so long turns share the composer shell edges; composer
   100% of same host (`radius-3xl`,
-  32dp controls); soft mins on the
+  32dp controls + 6dp pad ≈ 44dp shell); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /

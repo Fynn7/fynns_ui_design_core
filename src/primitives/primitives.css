@@ -9377,7 +9377,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * Compact morph (Cursor / ChatGPT capsule):
  * - Collapsed: horizontal row; toolbar `display: contents` so leading |
- *   textarea | primary share one ~40dp line.
+ *   textarea | primary share one ~32dp control row (~44dp shell with pad).
  * - Expanded (`data-expanded`): column; full-width text above bottom toolbar.
  * Spec: llm/CHAT_COMPOSER_LAYOUT.md.
  */
@@ -9411,8 +9411,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Composer controls are 32dp (`composer-control-size`), not the global 40dp
- * IconButton. Class sits on the IconButton itself and/or a wrapper.
+ * Composer controls are 32dp (`composer-control-size`) — one step below
+ * IconButton md 40dp (Cursor-dense Send/Stop / leading).
+ * Class sits on the IconButton itself and/or a wrapper.
  */
 .fynns-btn--icon.fynns-chat-composer-leading,
 .fynns-btn--icon.fynns-chat-composer-primary,
