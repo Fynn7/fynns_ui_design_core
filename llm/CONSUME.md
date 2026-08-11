@@ -237,7 +237,9 @@ node scripts/sync-to-consumer.mjs --target <CONSUMER_ROOT> --dry-run
 `package.json` to `packages/fynns_ui_design_core` in the consumer, mirrors when
 different, and prints `already in sync` when equal. **Core is the source of
 truth** (overwrites conflicting dirty files in the submodule worktree). It does
-**not** commit the submodule pin or push — day-to-day local loop only.
+**not** commit the submodule pin or push — day-to-day local loop only. Unreadable
+source/dest files abort the sync (exit non-zero) instead of treating a read miss
+as “delete on dest” (e.g. Windows locks).
 
 Formal release / CI still **bump the pin** (checkout a published SHA + commit
 the pointer). See [`docs/submodule-propagation.md`](../docs/submodule-propagation.md).

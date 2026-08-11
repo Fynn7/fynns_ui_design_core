@@ -5308,7 +5308,7 @@ a.fynns-breadcrumb-link:visited {
     color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
-.fynns-nav-drawer-group-trigger:hover {
+.fynns-nav-drawer-group-trigger:hover:not(.fynns-nav-drawer-group-trigger--active) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -5317,7 +5317,7 @@ a.fynns-breadcrumb-link:visited {
   color: var(--fynns-color-text);
 }
 
-.fynns-nav-drawer-group-trigger:active {
+.fynns-nav-drawer-group-trigger:active:not(.fynns-nav-drawer-group-trigger--active) {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -5325,7 +5325,7 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-.fynns-nav-drawer-group-trigger:focus-visible {
+.fynns-nav-drawer-group-trigger:focus-visible:not(.fynns-nav-drawer-group-trigger--active) {
   outline: none;
   background: color-mix(
     in srgb,
@@ -5333,6 +5333,37 @@ a.fynns-breadcrumb-link:visited {
     transparent
   );
   color: var(--fynns-color-text);
+}
+
+/* Collapsed group with an active leaf — same pill as NavigationDrawerItem. */
+.fynns-nav-drawer-group-trigger--active {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-drawer-group-trigger--active:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:focus-visible {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
 }
 
 .fynns-nav-drawer-group-chevron {

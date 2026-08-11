@@ -74,11 +74,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
    carries the `fynns-scroll` class. Browser-default scrollbars are the most
-   common source of visual drift — never ship them. Custom thumbs are
+   common source of visual drift — never ship them. On fine pointer + hover
+   (`(hover: hover) and (pointer: fine)`), custom thumbs are
    **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
    soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`; WebKit thumb
    `background-color`, Firefox `scrollbar-color` when supported; reduced-motion
-   → instant). WebKit also tints thumb `:hover` / `:active` via tokens.
+   → instant). Touch / coarse pointer keeps thumbs always tinted (no hover gate).
+   WebKit also tints thumb `:hover` / `:active` via tokens.
    `.fynns-scroll` sets `scrollbar-gutter: auto` — no permanent empty track
    (Cursor-like); classic Windows may reflow slightly when overflow appears.
    Do **not** use `both-edges` (overlay ignores it; Chromium right-edge clips).
@@ -765,7 +767,7 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode) or static `NavigationDrawerHeadline`. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
