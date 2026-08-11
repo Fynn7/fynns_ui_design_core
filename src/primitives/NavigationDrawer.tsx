@@ -209,7 +209,6 @@ export function NavigationDrawerGroup({
       className={[
         "fynns-nav-drawer-group",
         isOpen ? "fynns-nav-drawer-group--open" : "",
-        showActiveOnTrigger ? "fynns-nav-drawer-group--active" : "",
         className ?? "",
       ]
         .filter(Boolean)
