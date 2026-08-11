@@ -4,10 +4,15 @@ import {
   BarChartIcon,
   BottomAppBar,
   Button,
+  Chat,
+  ChatComposer,
+  ChatThread,
+  Collapsible,
   DestinationAppShell,
   EmptyState,
   Fab,
   FileIcon,
+  FillColumn,
   FolderOpenIcon,
   IconButton,
   LayoutGridIcon,
@@ -19,6 +24,7 @@ import {
   NavigationBar,
   NavigationBarItem,
   NavigationDrawer,
+  NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
   PencilIcon,
@@ -28,6 +34,7 @@ import {
   SearchBar,
   SearchBarResult,
   SettingsIcon,
+  SparklesIcon,
   Surface,
   Switch,
   ToggleGroup,
@@ -82,15 +89,16 @@ export function LayoutsPage() {
   const [barLabelVisibility, setBarLabelVisibility] = useState<
     "labeled" | "selected" | "unlabeled"
   >("labeled");
-  const [drawerId, setDrawerId] = useState<"inbox" | "sent" | "drafts" | "settings">(
-    "inbox",
-  );
+  const [drawerId, setDrawerId] = useState<
+    "inbox" | "sent" | "drafts" | "settings" | "archive" | "assist"
+  >("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [shellNavOpen, setShellNavOpen] = useState(true);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
+  const [fillColumnDraft, setFillColumnDraft] = useState("");
 
   return (
     <div className="sandbox-globals">
@@ -190,6 +198,43 @@ export function LayoutsPage() {
             <SandboxHelp text={t("globals.shellHelp")} />
           </LayoutsDemo>
 
+          <LayoutsDemo id="fill-column">
+            <div className="sandbox-fill-column-stage">
+              <FillColumn
+                header={
+                  <Collapsible
+                    title={t("layouts.fillColumnPreviewTitle")}
+                    defaultOpen
+                  >
+                    <div className="sandbox-fill-column-preview">
+                      {t("layouts.fillColumnPreviewBody")}
+                    </div>
+                  </Collapsible>
+                }
+              >
+                <Chat label={t("layouts.fillColumnLabel")}>
+                  <ChatThread
+                    empty={
+                      <EmptyState
+                        title={t("layouts.fillColumnEmptyTitle")}
+                        description={t("layouts.fillColumnEmptyBody")}
+                      />
+                    }
+                  />
+                  <ChatComposer
+                    value={fillColumnDraft}
+                    onChange={setFillColumnDraft}
+                    ariaLabel={t("layouts.fillColumnComposerAria")}
+                    placeholder={t("layouts.fillColumnComposerPlaceholder")}
+                    sendLabel={t("layouts.fillColumnSend")}
+                    onSubmit={() => setFillColumnDraft("")}
+                  />
+                </Chat>
+              </FillColumn>
+            </div>
+            <SandboxHelp text={t("layouts.fillColumnHelp")} />
+          </LayoutsDemo>
+
           <LayoutsDemo id="top-app-bar">
             <div className="sandbox-globals-appbar">
               <TopAppBar
@@ -249,7 +294,7 @@ export function LayoutsPage() {
                 display: "flex",
                 width: "fit-content",
                 maxWidth: "100%",
-                height: "14rem",
+                height: "22rem",
                 border: "1px solid var(--fynns-color-border)",
                 borderRadius: "var(--fynns-radius-md)",
                 overflow: "hidden",
@@ -284,12 +329,37 @@ export function LayoutsPage() {
                   badge
                   onClick={() => setDrawerId("drafts")}
                 />
-                <NavigationDrawerItem
-                  icon={<SettingsIcon />}
-                  label={t("globals.navDrawerSettings")}
-                  active={drawerId === "settings"}
-                  onClick={() => setDrawerId("settings")}
-                />
+                <NavigationDrawerGroup
+                  label={t("globals.navDrawerGroupRepos")}
+                  icon={<FolderOpenIcon />}
+                  defaultOpen
+                >
+                  <NavigationDrawerItem
+                    icon={<ArchiveIcon />}
+                    label={t("globals.navDrawerGroupArchive")}
+                    active={drawerId === "archive"}
+                    badge={3}
+                    onClick={() => setDrawerId("archive")}
+                  />
+                  <NavigationDrawerItem
+                    icon={<SettingsIcon />}
+                    label={t("globals.navDrawerSettings")}
+                    active={drawerId === "settings"}
+                    onClick={() => setDrawerId("settings")}
+                  />
+                </NavigationDrawerGroup>
+                <NavigationDrawerGroup
+                  label={t("globals.navDrawerGroupAssist")}
+                  icon={<SparklesIcon />}
+                  defaultOpen={false}
+                >
+                  <NavigationDrawerItem
+                    icon={<SparklesIcon />}
+                    label={t("globals.navDrawerGroupAssistItem")}
+                    active={drawerId === "assist"}
+                    onClick={() => setDrawerId("assist")}
+                  />
+                </NavigationDrawerGroup>
               </NavigationDrawer>
             </div>
             <div className="sandbox-globals-row" style={{ alignItems: "center" }}>

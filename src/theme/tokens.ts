@@ -1032,9 +1032,14 @@ export const NAVDRAWER_TOKENS = {
    * row (same role as navrail destinations-pad-block-start).
    */
   "body-pad-block-start": "0.75rem",
+  /**
+   * Outer inset to destination pills (8dp). Do **not** stack scrollbar-size /
+   * both-edges on top — that inflated to ~18–30dp and looked oversized; do
+   * **not** crush below 8dp either (reads as flush / zeroed).
+   */
   "pad-inline": "0.5rem",
   "item-height": "2.5rem",
-  "item-pad-inline-start": "0.75rem",
+  "item-pad-inline-start": "1rem",
   "item-pad-inline-end": "1rem",
   "item-gap": "0.5rem",
   /** Matches `--fynns-size-icon` (16dp). */
@@ -1044,9 +1049,15 @@ export const NAVDRAWER_TOKENS = {
   "headline-size": "0.875rem",
   "headline-line": "1.25",
   "headline-pad-block": "0.5rem",
-  "headline-pad-inline": "0.75rem",
+  /** Section / sheet title inset past body pad (aligns with item icon column). */
+  "headline-pad-inline": "1rem",
   "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
+  /**
+   * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one
+   * level indent — ~icon column past top-level `item-pad-inline-start`).
+   */
+  "group-item-pad-inline-start": "2rem",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */

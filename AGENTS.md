@@ -72,7 +72,22 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
      so the preview does not cover the turn text above (flip still moves to
      `top` near the viewport bottom). Prefer this over the Tooltip default.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
-4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
+4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
+   carries the `fynns-scroll` class. Browser-default scrollbars are the most
+   common source of visual drift — never ship them. Custom thumbs are
+   **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
+   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`; WebKit thumb
+   `background-color`, Firefox `scrollbar-color` when supported; reduced-motion
+   → instant). WebKit also tints thumb `:hover` / `:active` via tokens.
+   `.fynns-scroll` sets `scrollbar-gutter: auto` — no permanent empty track
+   (Cursor-like); classic Windows may reflow slightly when overflow appears.
+   Do **not** use `both-edges` (overlay ignores it; Chromium right-edge clips).
+   NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (8dp) only — no
+   pad+scrollbar inflation; do not crush below 8dp. Carousel tracks and
+   SearchBar focused inputs may hide bars entirely (caret / snap navigation).
+   Vertical scroll hosts must pin `overflow-x: clip` (not bare
+   `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
+   reserve *block* gutters that clip the first/last pill radii.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
    (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /
@@ -293,7 +308,7 @@ Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thum
 Fonts: three stacks only — see **Font families** below. Motion:
 `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
-loading-spin,presentation-hint,reduced-motion-spin}`.
+scrollbar,loading-spin,presentation-hint,reduced-motion-spin}`.
 
 **Font families (`--fynns-font-*`) — when to use (agents / consumers):**
 
@@ -375,9 +390,15 @@ classes.
   match composer shell on long turns; no density mode):
   - **Shell:** `Chat` full-height flex column; soft floor
     `min(var(--fynns-layout-chat-min-width), 100%)` (**no** OS window lock).
-    Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`); composer docks
-    at root bottom; stick-to-bottom + scroll-to-bottom (32dp elevated
-    `IconButton`, not Fab; show after ~80dp leave-bottom /
+    Parent must resolve height — on DestinationAppShell canvas / shell main
+    with a Preview (or other) band above Chat, wrap with **`FillColumn`**
+    (`header` = Preview, `children` = `Chat`); do **not** stack Preview /
+    EmptyState / Composer as canvas siblings (dead band under content height;
+    canvas `overflow-y: auto` does not replace a fill column). Aside full-pane
+    Chat still uses `.fynns-chat-host--fill` / EndAside (bubble 100%) — not
+    FillColumn’s job. Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`);
+    composer docks at root bottom; stick-to-bottom + scroll-to-bottom (32dp
+    elevated `IconButton`, not Fab; show after ~80dp leave-bottom /
     `--fynns-chat-scroll-threshold`; sit ~12dp above composer via
     `--fynns-chat-scroll-fab-inset`). `empty` prefers `EmptyState`;
     optional starter prompts = `Chip` / `ChipSet` (`suggestion` /
@@ -583,7 +604,9 @@ classes.
   greenfield via DestinationAppShell / `ClippedNavShell.topBar`), BottomAppBar,
   Toolbar (docked / floating — use floating when a rounded tool strip is needed),
   NavigationRail (+ Menu / Header /
-  Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
+  Item), NavigationBar / Item, NavigationDrawer (+ Headline / Group / Item;
+  Headline = static section label; Group = collapsible Cursor-style folder row
+  with optional leading `icon` any ReactNode + indented items), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
@@ -706,6 +729,13 @@ classes.
   AvatarGroup
 - **Layout helpers:** ControlStack, ControlRow, Grid (`equalCells` makes every
   cell match the largest content width/height via measure),
+  **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
+  height-resolved parent — shell main / DestinationAppShell canvas / fixed
+  stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
+  put `<Chat>` in `children` so the thread absorbs leftover and composer docks
+  to the column bottom. **Do not** stack Preview / EmptyState / Composer as
+  canvas siblings — that leaves a dead band under content height. Does **not**
+  apply aside bubble 100% (`.fynns-chat-host--fill` / EndAside stay for that)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
@@ -735,8 +765,8 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. |
-  | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode) or static `NavigationDrawerHeadline`. |
+  | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
@@ -745,7 +775,7 @@ classes.
   | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-md`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
-  | Button → Grid (all form / selection / action keep-set) | both | No platform gate. |
+  | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |

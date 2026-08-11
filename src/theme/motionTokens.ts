@@ -44,6 +44,11 @@ export const DURATION_TOKENS = {
   flyout: "160ms",
   base: "240ms",
   slow: "360ms",
+  /**
+   * Soft hover/focus-within scrollbar thumb reveal / hide (theme.css).
+   * Slower than `slow` so the bar eases in without a flash.
+   */
+  scrollbar: "520ms",
   "loading-spin": "750ms",
   "presentation-hint": "1200ms",
   "reduced-motion-spin": "2200ms",

@@ -25,7 +25,7 @@ export function TokenList({ group, title, keys }: TokenListProps) {
 
   return (
     <Collapsible title={label} defaultOpen={false} className="sandbox-token-list-host">
-      <ul className="sandbox-token-list">
+      <ul className="sandbox-token-list fynns-scroll">
         {allKeys.map((key) => {
           const cssVar = `--fynns-${group}-${key}`;
           const value = resolved(cssVar) || table[key] || "—";

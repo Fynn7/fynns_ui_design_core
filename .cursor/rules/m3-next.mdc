@@ -24,8 +24,8 @@ When the user says **下一个** (or “next” in the same sense):
    DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
    Pagination → BadgedBox / AvatarGroup / OtpInput / EmptyState / SkipLink /
    Stepper / Dropzone / Table / CodeBlock / FullscreenDialog / ContextMenu /
-   ToggleGroup `multiple` / EyeOffIcon / BusyScrim / BusyRegion / ChatMessage →
-   (next gap).
+   ToggleGroup `multiple` / EyeOffIcon / BusyScrim / BusyRegion / ChatMessage /
+   NavigationDrawerGroup → (next gap).
    Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
    **TimePicker dial (表盘/时钟面)** / **BlockingLoadingOverlay** / **PanelSkeleton**
    — skipped forever (user asked twice on dial; digital TimePicker input is

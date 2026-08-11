@@ -25,7 +25,9 @@ The consume installer may also drop this rule when wiring a consumer
 alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
 freshness / Dialog row recipe). Local pin gate:
 `consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
-propagate bump PRs do not replace that check.
+propagate bump PRs do not replace that check. Day-to-day local core edits →
+consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
+mirror; not a pin commit). Formal release still bumps the pin.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 
@@ -58,7 +60,8 @@ Symptoms (often on **first paint** after crowding / narrow init):
 1. `ClippedNavShell` sets `data-nav` / grid track from `navMode` only.
 2. Crowding (`onNavCrowded` / `wouldClippedNavDrawerCrowd`) or app logic sets
    `navMode="rail"`.
-3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`.
+3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`
+   (optional `NavigationDrawerGroup` / `NavigationDrawerHeadline` for sections).
 4. Drawer fills the **rail-width** track → cramped horizontal chrome + scroll.
 
 Reference implementation:
@@ -66,6 +69,9 @@ Reference implementation:
 (`navMode` and `nav` swap together). Declarative default:
 sandbox Layout templates `#layouts-demo-shell` (`DestinationAppShell`).
 Catalog notes: [`AGENTS.md`](../AGENTS.md) (destination ladder).
+Main canvas Preview+Chat: [`AGENTS.md`](../AGENTS.md) **FillColumn** (Layout
+templates `#layouts-demo-fill-column`) — do not stack Preview / EmptyState /
+Composer as canvas siblings.
 
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.

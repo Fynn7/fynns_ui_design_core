@@ -80,6 +80,12 @@ button {
 
 * {
   scrollbar-width: thin;
+  /* Idle: invisible. Reveal on host hover / focus-within (Firefox has no thumb ladder). */
+  scrollbar-color: transparent transparent;
+}
+
+*:hover,
+*:focus-within {
   scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
 }
 
@@ -93,10 +99,16 @@ button {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--fynns-scrollbar-thumb);
+  background-color: transparent;
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-scrollbar-thumb-border) solid transparent;
   background-clip: padding-box;
+  transition: background-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
+}
+
+*:hover::-webkit-scrollbar-thumb,
+*:focus-within::-webkit-scrollbar-thumb {
+  background-color: var(--fynns-scrollbar-thumb);
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -105,6 +117,19 @@ button {
 
 *::-webkit-scrollbar-thumb:active {
   background-color: var(--fynns-scrollbar-thumb-active);
+}
+
+/*
+ * Scroll surfaces: every overflow:auto/scroll host must carry .fynns-scroll.
+ * Thumb is hover/focus-within only (see above). Gutter is auto — no permanent
+ * empty track (Cursor-like); classic Windows may reflow slightly when overflow
+ * appears. Do not use both-edges (overlay ignores it; Chromium right-edge clips).
+ * Carousel / SearchBar focused input hide bars entirely in primitives.css.
+ */
+.fynns-scroll {
+  scrollbar-gutter: auto;
+  /* Firefox: fade scrollbar-color when the engine supports it. */
+  transition: scrollbar-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
 }
 
 .fynns-sr-only {
@@ -127,6 +152,10 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: var(--fynns-duration-instant) !important;
     scroll-behavior: auto !important;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    transition-duration: var(--fynns-duration-instant) !important;
   }
 }
 `;

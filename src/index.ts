@@ -184,6 +184,8 @@ export { ControlStack } from "./primitives/ControlStack";
 export type { ControlStackProps } from "./primitives/ControlStack";
 export { Grid } from "./primitives/Grid";
 export type { GridProps } from "./primitives/Grid";
+export { FillColumn } from "./primitives/FillColumn";
+export type { FillColumnProps } from "./primitives/FillColumn";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";
@@ -260,10 +262,12 @@ export type {
 } from "./primitives/NavigationBar";
 export {
   NavigationDrawer,
+  NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
 } from "./primitives/NavigationDrawer";
 export type {
+  NavigationDrawerGroupProps,
   NavigationDrawerHeadlineProps,
   NavigationDrawerItemProps,
   NavigationDrawerProps,

@@ -31,6 +31,20 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     ],
   },
   {
+    id: "fill-column",
+    label: "FillColumn",
+    keywords: [
+      "填满",
+      "fill",
+      "fillcolumn",
+      "fill column",
+      "chat dock",
+      "preview chat",
+      "composer",
+      "纵向",
+    ],
+  },
+  {
     id: "top-app-bar",
     label: "TopAppBar",
     keywords: ["顶栏", "appbar", "topbar", "top app bar"],

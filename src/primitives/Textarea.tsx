@@ -165,8 +165,8 @@ export const Textarea = forwardRef(function Textarea(
       className={join(
         "fynns-input",
         "fynns-textarea",
+        "fynns-scroll",
         autoGrow && "fynns-textarea--auto-grow",
-        autoGrow && "fynns-scroll",
         size === "sm" && "fynns-input--sm",
         variant === "filled" && "fynns-input--filled",
         isInvalid && "fynns-input--invalid",

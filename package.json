@@ -31,7 +31,8 @@
     "sandbox": "vite --config examples/sandbox/vite.config.ts",
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",
     "consume:install": "node scripts/install-as-submodule.mjs",
-    "consume:check": "node scripts/install-as-submodule.mjs --check"
+    "consume:check": "node scripts/install-as-submodule.mjs --check",
+    "consume:sync": "node scripts/sync-to-consumer.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

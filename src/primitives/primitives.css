@@ -1902,6 +1902,7 @@
 .fynns-sheet-body {
   flex: 1 1 auto;
   min-height: 0;
+  overflow-x: clip;
   overflow-y: auto;
   padding: var(--fynns-layout-sheet-pad-block) var(--fynns-layout-sheet-pad-inline);
   color: var(--fynns-color-text);
@@ -5224,7 +5225,13 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   flex: 0 0 auto;
   padding-block: var(--fynns-navdrawer-headline-pad-block);
-  padding-inline: var(--fynns-navdrawer-headline-pad-inline);
+  /*
+   * Match section-headline start: body pad-inline + headline-pad-inline.
+   * No scrollbar-gutter here — sheet title is outside the scrollport.
+   */
+  padding-inline: calc(
+    var(--fynns-navdrawer-pad-inline) + var(--fynns-navdrawer-headline-pad-inline)
+  );
   font-size: var(--fynns-navdrawer-headline-size);
   font-weight: var(--fynns-font-weight-semibold);
   line-height: var(--fynns-navdrawer-headline-line);
@@ -5240,8 +5247,20 @@ a.fynns-breadcrumb-link:visited {
   align-items: stretch;
   min-height: 0;
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+  padding-block-end: var(--fynns-navdrawer-body-pad-block-start);
+  /*
+   * Outer inset = `--fynns-navdrawer-pad-inline` (8dp) only. No both-edges /
+   * scrollbar-size inflation (oversized); do not crush pad below 8dp (flush).
+   */
   padding-inline: var(--fynns-navdrawer-pad-inline);
-  overflow: auto;
+  /*
+   * Pin x: bare `overflow: auto` promotes both axes and can reserve *block*
+   * gutters that clip first/last pill radii. Vertical scroll only.
+   */
+  overflow-x: clip;
+  overflow-y: auto;
+  /* Matches global `.fynns-scroll` (auto). Explicit so pad contract stays clear. */
+  scrollbar-gutter: auto;
 }
 
 .fynns-nav-drawer-section-headline {
@@ -5252,6 +5271,103 @@ a.fynns-breadcrumb-link:visited {
   font-weight: var(--fynns-font-weight-semibold);
   line-height: var(--fynns-navdrawer-headline-line);
   color: var(--fynns-color-text-muted);
+}
+
+/* Collapsible Cursor-style group: trigger matches item geometry; leaf items nest. */
+.fynns-nav-drawer-group {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-trigger {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  width: 100%;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-group-trigger:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-group-trigger:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-group-trigger:focus-visible {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-group-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+  margin-inline-start: auto;
+  color: inherit;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-drawer-group-chevron > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Collapsed = `>`; open rotates to point down. */
+.fynns-nav-drawer-group--open > .fynns-nav-drawer-group-trigger .fynns-nav-drawer-group-chevron {
+  transform: rotate(90deg);
+}
+
+.fynns-nav-drawer-group-body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-section-gap);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-body .fynns-nav-drawer-item {
+  padding-inline-start: var(--fynns-navdrawer-group-item-pad-inline-start);
 }
 
 .fynns-nav-drawer-item {
@@ -5385,7 +5501,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-nav-drawer-item {
+  .fynns-nav-drawer-item,
+  .fynns-nav-drawer-group-trigger,
+  .fynns-nav-drawer-group-chevron {
     transition: none;
   }
 }
@@ -5796,7 +5914,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block: var(--fynns-searchbar-results-pad-block-start)
     var(--fynns-searchbar-results-pad-block-end);
   padding-inline: var(--fynns-searchbar-results-pad-inline);
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -7580,41 +7699,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: auto;
   width: 100%;
   max-width: 100%;
-  scrollbar-width: thin;
-  scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
+  /* Pair with `.fynns-scroll` for hover/focus-within thumb + gutter auto. */
 }
 
-.fynns-table-wrap::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-track {
-  background: var(--fynns-scrollbar-track);
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: var(--fynns-radius-pill);
-  background: var(--fynns-scrollbar-thumb);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb:hover {
-  background: var(--fynns-scrollbar-thumb-hover);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb:active {
-  background: var(--fynns-scrollbar-thumb-active);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-corner {
-  background: var(--fynns-scrollbar-track);
-}
-
-/* Prefer pairing with `.fynns-scroll` on the wrap (or use `ScrollArea`). */
+/* Prefer pairing with `.fynns-scroll` on the wrap. */
 
 .fynns-table {
   width: 100%;
@@ -7721,6 +7809,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-code-fg);
+  /* Keep stable gutter so highlight/textarea width stays locked (not global auto). */
   scrollbar-gutter: stable;
 }
 
@@ -8056,6 +8145,48 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: 0;
 }
 
+/*
+ * FillColumn — vertical fill host for a height-resolved parent (shell main /
+ * DestinationAppShell canvas / fixed stage). header/footer = content height;
+ * main absorbs leftover so nested Chat docks composer at the column bottom.
+ * Does **not** apply aside bubble 100% (`.fynns-chat-host--fill`).
+ */
+.fynns-fill-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.fynns-fill-column-header,
+.fynns-fill-column-footer {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.fynns-fill-column-main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-fill-column-main > .fynns-chat {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
 /* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */
 .fynns-clipped-nav-shell {
   display: grid;
@@ -8232,7 +8363,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 /*
@@ -8359,6 +8491,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
+  /*
+   * Hidden nav on narrow: always one main row. The base rule above would
+   * otherwise leave an empty second track when the nav slot is null (no
+   * drawer/rail `:has()` match) — visible as a dead band under main/EndAside.
+   */
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: 0px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
   .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
@@ -8437,6 +8579,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-end-aside {
     position: absolute;
     inset-inline: 0;
+    /* Keep sheet on the block-end edge when max-height caps size (ignore
+     * static-position top from the flex row). */
+    inset-block-start: auto;
     bottom: 0;
     z-index: 3;
     width: 100%;
@@ -9101,7 +9246,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
   min-height: 0;
   min-width: 0;
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   /* Inline pad lives on `.fynns-chat-thread-inner` so the max-width box
    * matches `.fynns-chat-composer` (pad inside the capped column). */
   padding-inline: 0;
