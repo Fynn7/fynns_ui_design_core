@@ -25,7 +25,7 @@
     "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
     "NEVER publish-install from npm registry for day-to-day app work.",
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
-    "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately).",
+    "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately). Day-to-day local core→consumer Vite: npm run consume:sync -- --target <CONSUMER_ROOT> (worktree mirror; does not commit pin).",
     "Before any @fynns/ui UI work: run consume --check (pin must not be behind remote main tip; behind → bump pin then re-check). Escape: --skip-pin-check or FYNNS_UI_SKIP_PIN_CHECK=1. Propagate bump PRs do not replace local check. Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
     "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
@@ -77,6 +77,17 @@
         "--check",
         "--json"
       ]
+    },
+    "sync": {
+      "description": "Instant local sync: mirror this core checkout's src/ (+ package.json), including uncommitted edits, into the consumer submodule worktree. Diffs first; no-op when already in sync. Does not commit the pin or push. Formal release still uses pin bump + propagate.",
+      "argv": [
+        "node",
+        "scripts/sync-to-consumer.mjs",
+        "--target",
+        "<CONSUMER_ROOT>",
+        "--json"
+      ],
+      "npm": "npm run consume:sync -- --target <CONSUMER_ROOT>"
     },
     "wireOnly": {
       "description": "Submodule already present; only patch Vite/tsconfig.",

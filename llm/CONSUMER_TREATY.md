@@ -25,7 +25,9 @@ The consume installer may also drop this rule when wiring a consumer
 alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
 freshness / Dialog row recipe). Local pin gate:
 `consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
-propagate bump PRs do not replace that check.
+propagate bump PRs do not replace that check. Day-to-day local core edits →
+consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
+mirror; not a pin commit). Formal release still bumps the pin.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 

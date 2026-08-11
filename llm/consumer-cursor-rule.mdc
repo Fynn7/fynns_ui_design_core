@@ -20,6 +20,9 @@ alwaysApply: true
    「发明标准壳」。故意钉旧 / 离线才用 `--skip-pin-check` 或
    `FYNNS_UI_SKIP_PIN_CHECK=1`。自动 bump PR（propagate）**不能**代替本步。
    权威：子模块 `llm/CONSUME.md` Hard rule 5a。
+   日常本机改 core、要立刻进消费仓 Vite：在 core 跑
+   `npm run consume:sync -- --target <消费仓根>`（镜像 `src/` 工作树，**不**
+   提交 pin）。正式发布仍 bump pin。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
    Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。

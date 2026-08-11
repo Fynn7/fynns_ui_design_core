@@ -72,10 +72,18 @@ skip until the branch alignment is finished.
 
 ## Local development
 
-Consumers import `@fynns/ui` from submodule source via a Vite alias, so local UI
-work can see new behavior immediately after pulling the submodule itself.
+Consumers import `@fynns/ui` from submodule source via a Vite alias.
 
-The parent repository pointer is updated separately by CI through bump PRs.
+**Instant local mirror (uncommitted / local commits):** from a core checkout,
+`npm run consume:sync -- --target <CONSUMER_ROOT>` diffs and mirrors `src/` (+
+`package.json`) into the consumer submodule **worktree** so Vite HMR can pick
+up changes without waiting for a pin bump. Does not commit the pointer. Full
+contract: [`llm/CONSUME.md`](../llm/CONSUME.md) **Local sync (instant)**.
+
+**Formal pin bump (release / CI):** pull or checkout a published SHA in the
+submodule, then commit the parent pointer — push-triggered bump PRs and
+Dependabot cover registered consumers (this document). Day-to-day
+`consume:sync` does **not** replace that.
 
 **Local mandatory pin check (agents / humans):** propagate bump PRs do **not**
 replace verifying the working tree. Before UI work, run

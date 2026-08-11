@@ -220,13 +220,39 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 - Design language lives in the submodule’s `AGENTS.md` — the installer does not
   copy it to the consumer root; open `packages/fynns_ui_design_core/AGENTS.md`.
 
+## Local sync (instant)
+
+When you edit this core checkout locally and need the **consumer Vite app** to
+pick up the same `src/` immediately (including **uncommitted** files), run from
+core:
+
+```bash
+npm run consume:sync -- --target <CONSUMER_ROOT>
+# or:
+node scripts/sync-to-consumer.mjs --target <CONSUMER_ROOT> --dry-run
+```
+
+`--target` may be the consumer git root or any path inside it (e.g.
+`tools/gsc-live-preview`). The script compares this core’s `src/` +
+`package.json` to `packages/fynns_ui_design_core` in the consumer, mirrors when
+different, and prints `already in sync` when equal. **Core is the source of
+truth** (overwrites conflicting dirty files in the submodule worktree). It does
+**not** commit the submodule pin or push — day-to-day local loop only.
+
+Formal release / CI still **bump the pin** (checkout a published SHA + commit
+the pointer). See [`docs/submodule-propagation.md`](../docs/submodule-propagation.md).
+Pin freshness `--check` (Hard rule 5a) is separate from this worktree mirror.
+
 ## Verify
 
 ```bash
 node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --json
 # intentional old pin / offline:
 node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --skip-pin-check --json
+# local worktree mirror (instant; not a pin bump):
+npm run consume:sync -- --target <CONSUMER_ROOT>
 ```
 
-Exit code `0` means submodule + alias look good, no forbidden npm deps, and (unless
-`--skip-pin-check`) the submodule pin is not behind remote `main`.
+Exit code `0` for `--check` means submodule + alias look good, no forbidden npm
+deps, and (unless `--skip-pin-check`) the submodule pin is not behind remote
+`main`.
