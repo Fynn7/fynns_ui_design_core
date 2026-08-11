@@ -72,7 +72,22 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
      so the preview does not cover the turn text above (flip still moves to
      `top` near the viewport bottom). Prefer this over the Tooltip default.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
-4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`) carries the `fynns-scroll` class. Browser-default scrollbars are the most common source of visual drift — never ship them.
+4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
+   carries the `fynns-scroll` class. Browser-default scrollbars are the most
+   common source of visual drift — never ship them. `.fynns-scroll` also sets
+   `scrollbar-gutter: stable` so classic bars (Windows) do not shrink content
+   width / reflow rows when overflow appears. Do **not** use `both-edges`:
+   overlay scrollbars (Electron/Cursor) ignore it and paint over the end edge,
+   and Chromium has clipped right-edge content under that mode. NavigationDrawer
+   stays on `--fynns-navdrawer-pad-inline` (8dp) only — no local both-edges and
+   no pad+scrollbar inflation (those read as oversized); do not crush below
+   8dp (reads as flush). The drawer body sets `scrollbar-gutter: auto`
+   (overrides `.fynns-scroll` stable) so classic end gutters do not leave a
+   fat empty track; overlay thumbs may sit in the end margin. Global
+   `.fynns-scroll` stays `stable` only. Vertical
+   scroll hosts must pin `overflow-x: clip` (not bare `overflow: auto`): CSS
+   overflow pairing otherwise promotes x→auto and can reserve *block* gutters
+   that clip the first/last pill radii.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
    (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /

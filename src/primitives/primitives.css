@@ -1902,6 +1902,7 @@
 .fynns-sheet-body {
   flex: 1 1 auto;
   min-height: 0;
+  overflow-x: clip;
   overflow-y: auto;
   padding: var(--fynns-layout-sheet-pad-block) var(--fynns-layout-sheet-pad-inline);
   color: var(--fynns-color-text);
@@ -5224,7 +5225,13 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   flex: 0 0 auto;
   padding-block: var(--fynns-navdrawer-headline-pad-block);
-  padding-inline: var(--fynns-navdrawer-headline-pad-inline);
+  /*
+   * Match section-headline start: body pad-inline + headline-pad-inline.
+   * No scrollbar-gutter here — sheet title is outside the scrollport.
+   */
+  padding-inline: calc(
+    var(--fynns-navdrawer-pad-inline) + var(--fynns-navdrawer-headline-pad-inline)
+  );
   font-size: var(--fynns-navdrawer-headline-size);
   font-weight: var(--fynns-font-weight-semibold);
   line-height: var(--fynns-navdrawer-headline-line);
@@ -5240,8 +5247,24 @@ a.fynns-breadcrumb-link:visited {
   align-items: stretch;
   min-height: 0;
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+  padding-block-end: var(--fynns-navdrawer-body-pad-block-start);
+  /*
+   * Outer inset = `--fynns-navdrawer-pad-inline` (8dp) only. No both-edges /
+   * scrollbar-size inflation (oversized); do not crush pad below 8dp (flush).
+   */
   padding-inline: var(--fynns-navdrawer-pad-inline);
-  overflow: auto;
+  /*
+   * Pin x: bare `overflow: auto` promotes both axes and can reserve *block*
+   * gutters that clip first/last pill radii. Vertical scroll only.
+   */
+  overflow-x: clip;
+  overflow-y: auto;
+  /*
+   * Override `.fynns-scroll` stable gutter — reserving a classic end track
+   * here left pillGapR ≈ pad + gutter while start stayed pad-only.
+   * Overlay thumbs may paint in the end margin (Cursor-like).
+   */
+  scrollbar-gutter: auto;
 }
 
 .fynns-nav-drawer-section-headline {
@@ -5895,7 +5918,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block: var(--fynns-searchbar-results-pad-block-start)
     var(--fynns-searchbar-results-pad-block-end);
   padding-inline: var(--fynns-searchbar-results-pad-inline);
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -7679,6 +7703,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: auto;
   width: 100%;
   max-width: 100%;
+  /* Same contract as `.fynns-scroll` — callers should still add that class. */
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
 }
@@ -8331,7 +8357,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 /*
@@ -9200,7 +9227,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
   min-height: 0;
   min-width: 0;
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   /* Inline pad lives on `.fynns-chat-thread-inner` so the max-width box
    * matches `.fynns-chat-composer` (pad inside the capped column). */
   padding-inline: 0;

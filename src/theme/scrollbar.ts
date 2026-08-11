@@ -5,8 +5,13 @@
  * CSS variables (see `./tokens.ts` SCROLLBAR_TOKENS); the hex form is required
  * by editors like Monaco whose theme colors do not accept `rgba()`.
  *
- *   - DOM overflow surfaces inherit the skin from `theme.css` (every `*`) or via
- *     the `.fynns-scroll` class ({@link SCROLL_SURFACE_CLASS}).
+ *   - DOM overflow surfaces inherit the thin-bar skin from `theme.css` (every
+ *     `*`) and must carry `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}) so
+ *     `scrollbar-gutter: stable` reserves classic bar width without reflow.
+ *   - NavigationDrawer uses `--fynns-navdrawer-pad-inline` (8dp) only (no
+ *     both-edges / no pad+scrollbar inflation) and sets
+ *     `scrollbar-gutter: auto` so classic end gutters do not fatten one edge.
+ *     Overlay thumbs may paint in the end margin.
  *   - Monaco reads the palette through {@link monacoScrollbarColors}.
  */
 
@@ -34,7 +39,7 @@ export const SCROLLBAR_CSS_VARS = {
   track: "--fynns-scrollbar-track",
 } as const;
 
-/** Class that paints any scrollable element with the custom skin. */
+/** Class for scrollable surfaces — gutter + AGENTS scrollbar discipline. */
 export const SCROLL_SURFACE_CLASS = "fynns-scroll";
 
 /** Append the scroll-surface skin class to caller-provided classes. */

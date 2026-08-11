@@ -107,6 +107,18 @@ button {
   background-color: var(--fynns-scrollbar-thumb-active);
 }
 
+/*
+ * Reserve classic vertical scrollbar width so overflow on/off does not reflow
+ * content (Windows / Chromium). Global rule stays stable-only (not both-edges):
+ * overlay scrollbars ignore both-edges, and Chromium has painted right-edge
+ * clips under that mode (crbug 40064879). NavigationDrawer uses pad-inline
+ * (8dp) only (no both-edges / no pad+scrollbar inflation).
+ * AGENTS: every overflow:auto/scroll host must carry .fynns-scroll.
+ */
+.fynns-scroll {
+  scrollbar-gutter: stable;
+}
+
 .fynns-sr-only {
   position: absolute;
   width: 1px;

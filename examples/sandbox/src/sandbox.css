@@ -156,7 +156,8 @@
 .sandbox-canvas {
   flex: 1 1 var(--fynns-layout-main-min-width);
   padding: var(--fynns-space-lg);
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-lg);
@@ -183,7 +184,8 @@
 .sandbox-inspector-scroll {
   flex: 1;
   min-height: 0;
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   padding: var(--fynns-space-md);
   display: flex;
   flex-direction: column;

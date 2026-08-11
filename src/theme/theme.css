@@ -418,7 +418,7 @@
   --fynns-navdrawer-body-pad-block-start: 0.75rem;
   --fynns-navdrawer-pad-inline: 0.5rem;
   --fynns-navdrawer-item-height: 2.5rem;
-  --fynns-navdrawer-item-pad-inline-start: 0.75rem;
+  --fynns-navdrawer-item-pad-inline-start: 1rem;
   --fynns-navdrawer-item-pad-inline-end: 1rem;
   --fynns-navdrawer-item-gap: 0.5rem;
   --fynns-navdrawer-icon-size: 1rem;
@@ -427,10 +427,10 @@
   --fynns-navdrawer-headline-size: 0.875rem;
   --fynns-navdrawer-headline-line: 1.25;
   --fynns-navdrawer-headline-pad-block: 0.5rem;
-  --fynns-navdrawer-headline-pad-inline: 0.75rem;
+  --fynns-navdrawer-headline-pad-inline: 1rem;
   --fynns-navdrawer-section-gap: 0.25rem;
   --fynns-navdrawer-badge-dot: 0.375rem;
-  --fynns-navdrawer-group-item-pad-inline-start: 1.75rem;
+  --fynns-navdrawer-group-item-pad-inline-start: 2rem;
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;
@@ -662,6 +662,18 @@ button {
 
 *::-webkit-scrollbar-thumb:active {
   background-color: var(--fynns-scrollbar-thumb-active);
+}
+
+/*
+ * Reserve classic vertical scrollbar width so overflow on/off does not reflow
+ * content (Windows / Chromium). Global rule stays stable-only (not both-edges):
+ * overlay scrollbars ignore both-edges, and Chromium has painted right-edge
+ * clips under that mode (crbug 40064879). NavigationDrawer uses pad-inline
+ * (8dp) only (no both-edges / no pad+scrollbar inflation).
+ * AGENTS: every overflow:auto/scroll host must carry .fynns-scroll.
+ */
+.fynns-scroll {
+  scrollbar-gutter: stable;
 }
 
 .fynns-sr-only {
