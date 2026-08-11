@@ -1,5 +1,7 @@
 import {
+  Children,
   forwardRef,
+  isValidElement,
   useId,
   useState,
   type ButtonHTMLAttributes,
@@ -9,6 +11,21 @@ import {
 } from "react";
 import { DialogFrame, type DrawerSide } from "./Dialog";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+
+/** True when any nested destination (or nested group) reports `active`. */
+function hasActiveDestination(node: ReactNode): boolean {
+  let found = false;
+  Children.forEach(node, (child) => {
+    if (found || !isValidElement(child)) return;
+    const props = child.props as { active?: boolean; children?: ReactNode };
+    if (props.active) {
+      found = true;
+      return;
+    }
+    if (props.children != null) found = hasActiveDestination(props.children);
+  });
+  return found;
+}
 
 export type NavigationDrawerVariant = "modal" | "standard";
 
@@ -159,7 +176,9 @@ export type NavigationDrawerGroupProps = {
 /**
  * Collapsible destination group (Cursor-style folder row + one-level indent).
  * Leading `icon` is caller-owned; trailing chevron discloses. Not a destination
- * itself — selection stays on nested `NavigationDrawerItem`s.
+ * itself — selection stays on nested `NavigationDrawerItem`s. When collapsed and
+ * a nested item is `active`, the trigger shows the same selected pill so the
+ * current leaf is not invisible.
  */
 export function NavigationDrawerGroup({
   label,
@@ -175,6 +194,9 @@ export function NavigationDrawerGroup({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
+  const containsActive = hasActiveDestination(children);
+  /** Collapsed folder hides the active leaf — surface selection on the trigger. */
+  const showActiveOnTrigger = containsActive && !isOpen;
 
   const toggle = () => {
     const next = !isOpen;
@@ -194,7 +216,12 @@ export function NavigationDrawerGroup({
     >
       <button
         type="button"
-        className="fynns-nav-drawer-group-trigger"
+        className={[
+          "fynns-nav-drawer-group-trigger",
+          showActiveOnTrigger ? "fynns-nav-drawer-group-trigger--active" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         aria-expanded={isOpen}
         aria-controls={bodyId}
         aria-labelledby={labelId}
@@ -222,6 +249,7 @@ export function NavigationDrawerGroup({
             id={bodyId}
             className="fynns-nav-drawer-group-body"
             role="group"
+            aria-labelledby={labelId}
             inert={isOpen ? undefined : true}
           >
             {children}

@@ -10,8 +10,10 @@ export function refreshInputEllipsis(input: HTMLInputElement) {
 }
 
 /**
- * Observe `host` size and refresh ellipsis on `input`, rAF-coalesced so
+ * Observe `host` and `input` size and refresh ellipsis, rAF-coalesced so
  * continuous gestures (drawer seam drag) do not thrash layout every frame.
+ * Observing the input catches trailing chrome (Clear / affixes) that change
+ * the field width without resizing the host border box.
  */
 export function observeInputEllipsisRefresh(
   host: Element,
@@ -27,6 +29,7 @@ export function observeInputEllipsisRefresh(
     });
   });
   ro.observe(host);
+  ro.observe(input);
   return () => {
     if (raf) cancelAnimationFrame(raf);
     ro.disconnect();

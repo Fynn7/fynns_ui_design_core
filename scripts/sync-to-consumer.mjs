@@ -120,8 +120,11 @@ function walkFiles(rootAbs, relPrefix = "") {
       else if (ent.isFile() || ent.isSymbolicLink()) {
         try {
           map.set(toPosix(rel), { abs, hash: fileHash(abs) });
-        } catch {
-          /* skip unreadable */
+        } catch (err) {
+          // Never skip: a silent miss drops the path from fromMap and can mark
+          // the dest twin as "removed" (false delete on Windows locks, etc.).
+          const why = err instanceof Error ? err.message : String(err);
+          throw new Error(`Unreadable during sync walk: ${abs} (${why})`);
         }
       }
     }
@@ -298,17 +301,25 @@ function main() {
   result.fromHead = runGit(["rev-parse", "HEAD"], fromRoot, { allowFail: true }).stdout || null;
   result.destHead = runGit(["rev-parse", "HEAD"], destRoot, { allowFail: true }).stdout || null;
 
-  const fromMap = collectMirrorMaps(fromRoot);
-  // Dest map only under the same relative roots (avoid scanning unrelated files).
-  const destMap = new Map();
-  for (const entry of MIRROR_ENTRIES) {
-    const abs = path.join(destRoot, entry);
-    if (!fs.existsSync(abs)) continue;
-    const st = fs.statSync(abs);
-    if (st.isFile()) destMap.set(toPosix(entry), { abs, hash: fileHash(abs) });
-    else {
-      for (const [k, v] of walkFiles(abs, entry)) destMap.set(k, v);
+  let fromMap;
+  let destMap;
+  try {
+    fromMap = collectMirrorMaps(fromRoot);
+    // Dest map only under the same relative roots (avoid scanning unrelated files).
+    destMap = new Map();
+    for (const entry of MIRROR_ENTRIES) {
+      const abs = path.join(destRoot, entry);
+      if (!fs.existsSync(abs)) continue;
+      const st = fs.statSync(abs);
+      if (st.isFile()) destMap.set(toPosix(entry), { abs, hash: fileHash(abs) });
+      else {
+        for (const [k, v] of walkFiles(abs, entry)) destMap.set(k, v);
+      }
     }
+  } catch (e) {
+    result.message = String(e.message || e);
+    emit(result, args.json, 1);
+    return;
   }
 
   const { added, changed, removed } = diffMaps(fromMap, destMap);
