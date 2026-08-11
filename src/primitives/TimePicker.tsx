@@ -443,7 +443,7 @@ export function TimePickerDialog({
           <CloseIcon />
         </Button>
       </div>
-      <div className="fynns-dialog-body fynns-timepicker-dialog-body">
+      <div className="fynns-dialog-body fynns-scroll fynns-timepicker-dialog-body">
         <TimePicker
           key={seed}
           value={draft}

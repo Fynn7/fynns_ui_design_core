@@ -74,20 +74,20 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
    carries the `fynns-scroll` class. Browser-default scrollbars are the most
-   common source of visual drift — never ship them. `.fynns-scroll` also sets
-   `scrollbar-gutter: stable` so classic bars (Windows) do not shrink content
-   width / reflow rows when overflow appears. Do **not** use `both-edges`:
-   overlay scrollbars (Electron/Cursor) ignore it and paint over the end edge,
-   and Chromium has clipped right-edge content under that mode. NavigationDrawer
-   stays on `--fynns-navdrawer-pad-inline` (8dp) only — no local both-edges and
-   no pad+scrollbar inflation (those read as oversized); do not crush below
-   8dp (reads as flush). The drawer body sets `scrollbar-gutter: auto`
-   (overrides `.fynns-scroll` stable) so classic end gutters do not leave a
-   fat empty track; overlay thumbs may sit in the end margin. Global
-   `.fynns-scroll` stays `stable` only. Vertical
-   scroll hosts must pin `overflow-x: clip` (not bare `overflow: auto`): CSS
-   overflow pairing otherwise promotes x→auto and can reserve *block* gutters
-   that clip the first/last pill radii.
+   common source of visual drift — never ship them. Custom thumbs are
+   **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
+   soft fade (`--fynns-duration-base` + `--fynns-ease-out`; WebKit thumb
+   `background-color`, Firefox `scrollbar-color` when supported; reduced-motion
+   → instant). WebKit also tints thumb `:hover` / `:active` via tokens.
+   `.fynns-scroll` sets `scrollbar-gutter: auto` — no permanent empty track
+   (Cursor-like); classic Windows may reflow slightly when overflow appears.
+   Do **not** use `both-edges` (overlay ignores it; Chromium right-edge clips).
+   NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (8dp) only — no
+   pad+scrollbar inflation; do not crush below 8dp. Carousel tracks and
+   SearchBar focused inputs may hide bars entirely (caret / snap navigation).
+   Vertical scroll hosts must pin `overflow-x: clip` (not bare
+   `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
+   reserve *block* gutters that clip the first/last pill radii.
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
    (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /

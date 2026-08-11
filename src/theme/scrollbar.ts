@@ -6,13 +6,15 @@
  * by editors like Monaco whose theme colors do not accept `rgba()`.
  *
  *   - DOM overflow surfaces inherit the thin-bar skin from `theme.css` (every
- *     `*`) and must carry `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}) so
- *     `scrollbar-gutter: stable` reserves classic bar width without reflow.
- *   - NavigationDrawer uses `--fynns-navdrawer-pad-inline` (8dp) only (no
- *     both-edges / no pad+scrollbar inflation) and sets
- *     `scrollbar-gutter: auto` so classic end gutters do not fatten one edge.
- *     Overlay thumbs may paint in the end margin.
- *   - Monaco reads the palette through {@link monacoScrollbarColors}.
+ *     `*`) and must carry `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}).
+ *   - Thumb is idle-transparent; reveals on host `:hover` / `:focus-within`
+ *     with `--fynns-duration-base` / `--fynns-ease-out` soft fade (WebKit thumb
+ *     `background-color`; Firefox `scrollbar-color` on `.fynns-scroll` when
+ *     supported). WebKit also has thumb `:hover` / `:active` token ladder.
+ *   - `.fynns-scroll` sets `scrollbar-gutter: auto` (no permanent empty track).
+ *   - Carousel / SearchBar focused input hide bars entirely in primitives.css.
+ *   - Monaco reads the palette through {@link monacoScrollbarColors} (editor
+ *     chrome stays always-visible — not DOM `.fynns-scroll`).
  */
 
 /** Authoritative scrollbar palette (hex; equals `--fynns-scrollbar-*` dark). */
@@ -39,7 +41,7 @@ export const SCROLLBAR_CSS_VARS = {
   track: "--fynns-scrollbar-track",
 } as const;
 
-/** Class for scrollable surfaces — gutter + AGENTS scrollbar discipline. */
+/** Class for scrollable surfaces — gutter auto + AGENTS scrollbar discipline. */
 export const SCROLL_SURFACE_CLASS = "fynns-scroll";
 
 /** Append the scroll-surface skin class to caller-provided classes. */

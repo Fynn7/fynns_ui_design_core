@@ -5259,11 +5259,7 @@ a.fynns-breadcrumb-link:visited {
    */
   overflow-x: clip;
   overflow-y: auto;
-  /*
-   * Override `.fynns-scroll` stable gutter — reserving a classic end track
-   * here left pillGapR ≈ pad + gutter while start stayed pad-only.
-   * Overlay thumbs may paint in the end margin (Cursor-like).
-   */
+  /* Matches global `.fynns-scroll` (auto). Explicit so pad contract stays clear. */
   scrollbar-gutter: auto;
 }
 
@@ -7703,43 +7699,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: auto;
   width: 100%;
   max-width: 100%;
-  /* Same contract as `.fynns-scroll` — callers should still add that class. */
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: var(--fynns-scrollbar-thumb) var(--fynns-scrollbar-track);
+  /* Pair with `.fynns-scroll` for hover/focus-within thumb + gutter auto. */
 }
 
-.fynns-table-wrap::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-track {
-  background: var(--fynns-scrollbar-track);
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb {
-  border: 2px solid transparent;
-  border-radius: var(--fynns-radius-pill);
-  background: var(--fynns-scrollbar-thumb);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb:hover {
-  background: var(--fynns-scrollbar-thumb-hover);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-thumb:active {
-  background: var(--fynns-scrollbar-thumb-active);
-  background-clip: padding-box;
-}
-
-.fynns-table-wrap::-webkit-scrollbar-corner {
-  background: var(--fynns-scrollbar-track);
-}
-
-/* Prefer pairing with `.fynns-scroll` on the wrap (or use `ScrollArea`). */
+/* Prefer pairing with `.fynns-scroll` on the wrap. */
 
 .fynns-table {
   width: 100%;
@@ -7846,7 +7809,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-code-fg);
-  scrollbar-gutter: stable;
+  /* Inherits `.fynns-scroll` gutter auto (hover/focus-within thumb). */
 }
 
 .fynns-code-block--nowrap .fynns-code-block-pre {
@@ -7975,8 +7938,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
-  /* Keep content-box width aligned when the textarea shows a scrollbar. */
-  scrollbar-gutter: stable;
+  /* Inherits `.fynns-scroll` gutter auto — keep highlight/textarea box aligned. */
 }
 
 .fynns-code-block--nowrap .fynns-code-block-highlight,
