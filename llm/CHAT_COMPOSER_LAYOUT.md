@@ -15,7 +15,8 @@ tokens: [`AGENTS.md`](../AGENTS.md) Chat keep-set.
 | **C** | **Full-width editor + bottom action toolbar** | **Cursor expanded**, Continue, VS Code Copilot Chat, Open WebUI, LibreChat, Slack / Linear / Raycast |
 
 **fynns uses model C** with a **compact morph** so the empty / single-line shell
-stays ~40dp (Input / field-shell density — not SearchBar 56dp chrome).
+stays ~44dp (32dp control + 6dp pad — Cursor-dense circle, one step below
+IconButton md 40dp; not SearchBar 56dp chrome).
 
 ## DOM
 
@@ -24,7 +25,9 @@ form.fynns-chat-composer
   .fynns-chat-composer-shell[data-expanded?]
     [?].fynns-chat-composer-attachments
     .fynns-chat-composer-body
-      textarea.fynns-chat-composer-input
+      .fynns-chat-composer-field
+        [?].fynns-chat-composer-placeholder > .fynns-chat-composer-placeholder-text
+        textarea.fynns-chat-composer-input
       .fynns-chat-composer-toolbar[role="toolbar"]
         [?].fynns-chat-composer-leading   ← wraps `leading` automatically
         .fynns-chat-composer-primary-slot ← Send / Stop / Dictate / `trailing`
@@ -37,7 +40,7 @@ rename required for consumers.
 
 | State | When | Layout |
 | --- | --- | --- |
-| **Collapsed** (default) | Empty draft, single visual line, no attachments | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / textarea / primary share one line (`order` 1 / 2 / 3). |
+| **Collapsed** (default) | Empty draft, single visual line, no attachments | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
 | **Expanded** | Newline in value, measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
 
 Detection runs inside the JS auto-grow (`resize`). When the morph flips
@@ -57,13 +60,14 @@ cannot ellipsize in Chromium (mid-glyph hard clip into Send); HTML
 
 Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 
-- **Collapsed** shell pad: `composer-pad-inline` (capsule ~4dp),
-  `composer-pad-block` (3dp; + 32dp control row + hairline → ~40dp = Input)
+- **Collapsed** shell pad: `composer-pad-inline` / `composer-pad-block`
+  (6dp equal inset around the control circle; + 32dp control row + hairline
+  → ~44dp shell).
 - **Expanded** shell pad: `composer-expanded-pad-inline` /
   `composer-expanded-pad-block` (= `strip-pad-inline − composer-glyph-inset`,
-  ~12dp). Textarea inline pad = `composer-glyph-inset` (~8dp) so copy
-  start/end share the toolbar + / Send **glyph** edges; text still sits at
-  strip-pad (~20dp) from the shell edge.
+  ~12dp with 32dp controls). Textarea inline pad = `composer-glyph-inset`
+  (~8dp) so copy start/end share the toolbar + / Send **glyph** edges; text
+  still sits at strip-pad (~20dp) from the shell edge.
 - Gap: `composer-gap` (4px collapsed); `composer-expanded-gap` (8dp
   text↔toolbar)
 - Controls: `composer-control-size` (32dp)
@@ -79,7 +83,7 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 **Pad rules**
 
 - Collapsed, no leading: textarea start = strip breath
-  (`strip-pad-inline − capsule-chrome`).
+  (`strip-pad-inline − composer-pad-inline`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
 - Expanded: shell `expanded-pad-*` + textarea `glyph-inset` (optical glyphs).
 

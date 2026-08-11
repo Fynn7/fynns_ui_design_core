@@ -102,8 +102,8 @@ ring can paint before heavy work).
   **and** Chat column outer via `--fynns-chat-thread-pad-inline`) vs
   strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer collapsed
   text-only start + expanded text edge; shell = strip − glyph-inset — see
-  `llm/CHAT_COMPOSER_LAYOUT.md`) vs capsule-chrome-pad-inline (SearchBar /
-  ChatComposer Send flush) vs
+  `llm/CHAT_COMPOSER_LAYOUT.md`) vs capsule-chrome-pad-inline (SearchBar
+  only — not ChatComposer; Composer uses `--fynns-chat-composer-pad-*`) vs
   field-pad-inline (Input / field-shell — not capsule) /
   field-pad-block (Textarea — not Input sm zero block) — AGENTS.md
   **Inset decision tree**. **Never** invent rem/px/private inset vars for

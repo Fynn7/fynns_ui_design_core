@@ -718,8 +718,8 @@ export const CHATMESSAGE_TOKENS = {
  *
  * Composer multiline: model C + compact morph (Cursor) — full-width text
  * above a bottom toolbar when `data-expanded`; collapsed toolbar uses
- * `display: contents` so leading | field | Send stay one ~40dp row
- * (Input / field-shell density — not SearchBar 56dp chrome).
+ * `display: contents` so leading | field | Send stay one ~44dp row
+ * (32dp control + 6dp pad — Cursor-dense circle; not SearchBar 56dp chrome).
  * Spec: `llm/CHAT_COMPOSER_LAYOUT.md`. `--fynns-chat-<key>`.
  */
 export const CHAT_TOKENS = {
@@ -741,11 +741,11 @@ export const CHAT_TOKENS = {
   /** Scroll/fade clearance above sticky composer (~28dp). */
   "composer-scroll-pad": "1.75rem",
   /**
-   * Soft floor for the collapsed single-line body (32dp text/control row).
-   * With `composer-pad-block` 3dp×2 + hairline → ~40dp shell (= Input /
-   * icon-target), not SearchBar `--fynns-layout-bar-height` (56dp). Expanded
-   * shell grows with wrap; controls move to the bottom toolbar (not
-   * mid-text center).
+   * Soft floor for the collapsed single-line body (32dp control row).
+   * With `composer-pad-block` 6dp×2 + hairline → ~44dp shell — Cursor-dense
+   * Send/Stop circle (one step below IconButton md 40dp), not SearchBar
+   * `--fynns-layout-bar-height` 56dp chrome. Expanded shell grows with wrap;
+   * controls move to the bottom toolbar (not mid-text center).
    */
   "composer-min-height": "2rem",
   /**
@@ -755,26 +755,27 @@ export const CHAT_TOKENS = {
    */
   "composer-max-height": "13rem",
   /**
-   * Collapsed shell pad — capsule chrome next to IconButtons (~4dp).
-   * Expanded uses `composer-expanded-pad-*` (strip-pad Cursor breath).
-   * When collapsed with **no** leading, CSS adds start pad on the textarea so
+   * Collapsed shell pad — equal inset around the control circle (~6dp).
+   * Expanded uses `composer-expanded-pad-*` (strip-pad Cursor breath). When
+   * collapsed with **no** leading, CSS adds start pad on the textarea so
    * text lands at `--fynns-layout-strip-pad-inline`.
    */
-  "composer-pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
-  /** Collapsed block pad: 3dp×2 + 32dp control row + hairline → ~40dp shell. */
-  "composer-pad-block": "0.1875rem",
+  "composer-pad-inline": "0.375rem",
+  /** Collapsed block pad: 6dp×2 + 32dp control row + hairline → ~44dp shell. */
+  "composer-pad-block": "0.375rem",
   /**
-   * Expanded shell pad — strip breath minus glyph inset (~12dp) so toolbar
-   * IconButtons sit closer to the shell edge while copy still lands at
-   * `strip-pad-inline` via textarea `composer-glyph-inset` (optical align
-   * with + / Send **glyphs**, not the 32dp hit boxes).
+   * Expanded shell pad — strip breath minus glyph inset (~12dp with 32dp
+   * controls) so toolbar IconButtons sit inset from the shell edge while
+   * copy still lands at `strip-pad-inline` via textarea
+   * `composer-glyph-inset` (optical align with + / Send **glyphs**, not
+   * the 32dp hit boxes).
    */
   "composer-expanded-pad-inline": "calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
   "composer-expanded-pad-block": "calc(var(--fynns-layout-strip-pad-inline) - var(--fynns-chat-composer-glyph-inset))",
   /**
-   * Half of (`composer-control-size` − `--fynns-size-icon`) — 8dp.
-   * Expanded textarea inline pad (optical glyph align); also used in
-   * `composer-expanded-pad-*` so text edge = strip-pad from the shell.
+   * Half of (`composer-control-size` − `--fynns-size-icon`) — 8dp at 32dp
+   * controls. Expanded textarea inline pad (optical glyph align); also used
+   * in `composer-expanded-pad-*` so text edge = strip-pad from the shell.
    */
   "composer-glyph-inset": "calc((var(--fynns-chat-composer-control-size) - var(--fynns-size-icon)) / 2)",
   /** Collapsed control cluster gap (4px). */
@@ -785,6 +786,7 @@ export const CHAT_TOKENS = {
    * Leading/trailing IconButton hit target inside the composer (32dp).
    * Scoped via CSS — does not change global IconButton. Matches
    * `composer-line-height` so controls and text share one midline.
+   * One step below chrome `icon-target` 40dp (Cursor-dense circle).
    */
   "composer-control-size": "2rem",
   /**
@@ -797,7 +799,7 @@ export const CHAT_TOKENS = {
   "composer-offset": "var(--fynns-space-sm)",
   /**
    * Collapsed control-row floor / min-height (32dp) — **not** multiline
-   * typography. With pad-block → ~40dp shell (Input density).
+   * typography. With pad-block → ~44dp shell (Cursor-dense capsule).
    */
   "composer-line-height": "2rem",
   /**
@@ -1102,22 +1104,23 @@ export const LAYOUT_TOKENS = {
    * `--fynns-space-*` for these. Do **not** use this as the Chat column
    * outer inset — that is `dialog-inset` via `--fynns-chat-thread-pad-inline`.
    *
-   * ChatComposer / SearchBar **IconButton** edges use
-   * `capsule-chrome-pad-inline` (4dp, ChatGPT Send/mic flush) — never put
-   * strip pad on the Send side.
+   * ChatComposer collapsed **shell** pad is `--fynns-chat-composer-pad-*`
+   * (6dp), not this strip key and not `capsule-chrome-pad-inline`. SearchBar
+   * IconButton edges stay on capsule-chrome (4dp).
    */
   "strip-pad-inline": "1.25rem",
   /**
    * Outer chrome pad when IconButtons sit at a `radius-3xl` capsule edge
-   * (SearchBar, ChatComposer shell — ChatGPT Send/mic ~4dp). Not for
-   * text-only Banner strips — use `strip-pad-inline` there. Not for dense
-   * form `Input` shells — use `field-pad-inline`.
+   * (SearchBar — ChatGPT-style flush ~4dp). Not for ChatComposer shell
+   * (use `--fynns-chat-composer-pad-*`). Not for text-only Banner strips —
+   * use `strip-pad-inline`. Not for dense form `Input` shells — use
+   * `field-pad-inline`.
    */
   "capsule-chrome-pad-inline": "0.25rem",
   /**
    * Horizontal pad for dense form fields (`Input` / `.fynns-field-shell`).
    * Default = `space-md` (12dp). Do **not** reuse `capsule-chrome-pad-inline`
-   * here — that 4dp token is for SearchBar / Composer IconButton flush.
+   * here — that 4dp token is for SearchBar IconButton flush.
    */
   "field-pad-inline": "var(--fynns-space-md)",
   /**
