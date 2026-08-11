@@ -260,10 +260,12 @@ export type {
 } from "./primitives/NavigationBar";
 export {
   NavigationDrawer,
+  NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
 } from "./primitives/NavigationDrawer";
 export type {
+  NavigationDrawerGroupProps,
   NavigationDrawerHeadlineProps,
   NavigationDrawerItemProps,
   NavigationDrawerProps,

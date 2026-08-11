@@ -1047,6 +1047,11 @@ export const NAVDRAWER_TOKENS = {
   "headline-pad-inline": "0.75rem",
   "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
+  /**
+   * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one
+   * level indent — ~icon column past top-level `item-pad-inline-start`).
+   */
+  "group-item-pad-inline-start": "1.75rem",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */

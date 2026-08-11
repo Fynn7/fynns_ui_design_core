@@ -66,7 +66,7 @@ ring can paint before heavy work).
   language stays plain),
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
-  NavigationRail, NavigationBar, NavigationDrawer,
+  NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/Grid,

@@ -583,7 +583,9 @@ classes.
   greenfield via DestinationAppShell / `ClippedNavShell.topBar`), BottomAppBar,
   Toolbar (docked / floating — use floating when a rounded tool strip is needed),
   NavigationRail (+ Menu / Header /
-  Item), NavigationBar / Item, NavigationDrawer (+ Headline / Item), SkipLink,
+  Item), NavigationBar / Item, NavigationDrawer (+ Headline / Group / Item;
+  Headline = static section label; Group = collapsible Cursor-style folder row
+  with optional leading `icon` any ReactNode + indented items), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
@@ -735,7 +737,7 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode) or static `NavigationDrawerHeadline`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. |
   | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |

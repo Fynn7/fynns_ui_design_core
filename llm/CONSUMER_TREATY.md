@@ -58,7 +58,8 @@ Symptoms (often on **first paint** after crowding / narrow init):
 1. `ClippedNavShell` sets `data-nav` / grid track from `navMode` only.
 2. Crowding (`onNavCrowded` / `wouldClippedNavDrawerCrowd`) or app logic sets
    `navMode="rail"`.
-3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`.
+3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`
+   (optional `NavigationDrawerGroup` / `NavigationDrawerHeadline` for sections).
 4. Drawer fills the **rail-width** track → cramped horizontal chrome + scroll.
 
 Reference implementation:
