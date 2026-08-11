@@ -9509,6 +9509,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: var(--fynns-chat-composer-text-line-height);
 }
 
+/* Expanded empty (e.g. attachments force expand): match input glyph-inset. */
+.fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-placeholder {
+  padding-inline-start: var(--fynns-chat-composer-glyph-inset);
+  padding-inline-end: var(--fynns-chat-composer-glyph-inset);
+  line-height: var(--fynns-chat-composer-text-line-height);
+}
+
 /*
  * Visual empty hint — real ellipsis (SearchBar quality). Native textarea
  * placeholder cannot ellipsize in Chromium; keep HTML placeholder empty and
