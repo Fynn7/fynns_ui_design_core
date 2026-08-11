@@ -71,6 +71,11 @@ children (never a rail-width track hosting a labeled drawer).
     densify to **rail + Rail components** — never leave a labeled drawer in an
     ~80px track (squashed drawer + bogus scrollbar).
     Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+    **Main canvas fill:** Preview (or other top band) above Chat → wrap with
+    **`FillColumn`** (`header` + `Chat` in `children`) so the composer docks;
+    do not stack Preview / EmptyState / Composer as canvas siblings (dead band
+    under content height). See [`AGENTS.md`](../AGENTS.md) Chat Shell /
+    Layout helpers. Canvas `overflow-y: auto` does not replace a fill column.
 15. **WYSIWYG / surface sync:** sandbox Globals/Layouts/Preview resting look is the consumer default.
     Use bare `@fynns/ui` APIs; never restyle `.fynns-*` to “match” sandbox.
     Aesthetic drift belongs in `tokens.ts` / primitives (then `npm run gen:theme`).

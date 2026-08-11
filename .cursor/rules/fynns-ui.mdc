@@ -69,13 +69,16 @@ ring can paint before heavy work).
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
-  ControlStack/ControlRow/Grid,
+  ControlStack/ControlRow/Grid/FillColumn,
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
   Destination chrome apps: **`DestinationAppShell`** (default) — or
   `ClippedNavShell` + `NavigationDrawer`/`NavigationRail` when fully custom;
   end inspector: `EndAside` (not modal `Drawer`, not revived Panel/ListGroup).
+  Main canvas with Preview above Chat: **`FillColumn`** (`header` + `Chat` in
+  children) so composer docks; never stack Preview/EmptyState/Composer as
+  siblings.
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
   mobile-first densify only (never desktop greenfield root); Drawer /

@@ -8143,6 +8143,48 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: 0;
 }
 
+/*
+ * FillColumn — vertical fill host for a height-resolved parent (shell main /
+ * DestinationAppShell canvas / fixed stage). header/footer = content height;
+ * main absorbs leftover so nested Chat docks composer at the column bottom.
+ * Does **not** apply aside bubble 100% (`.fynns-chat-host--fill`).
+ */
+.fynns-fill-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.fynns-fill-column-header,
+.fynns-fill-column-footer {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.fynns-fill-column-main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-fill-column-main > .fynns-chat {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
 /* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */
 .fynns-clipped-nav-shell {
   display: grid;
@@ -8447,6 +8489,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     grid-template-rows: auto minmax(0, 1fr);
   }
 
+  /*
+   * Hidden nav on narrow: always one main row. The base rule above would
+   * otherwise leave an empty second track when the nav slot is null (no
+   * drawer/rail `:has()` match) — visible as a dead band under main/EndAside.
+   */
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: 0px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
   .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
@@ -8525,6 +8577,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-end-aside {
     position: absolute;
     inset-inline: 0;
+    /* Keep sheet on the block-end edge when max-height caps size (ignore
+     * static-position top from the flex row). */
+    inset-block-start: auto;
     bottom: 0;
     z-index: 3;
     width: 100%;

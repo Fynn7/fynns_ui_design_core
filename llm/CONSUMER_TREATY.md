@@ -67,6 +67,9 @@ Reference implementation:
 (`navMode` and `nav` swap together). Declarative default:
 sandbox Layout templates `#layouts-demo-shell` (`DestinationAppShell`).
 Catalog notes: [`AGENTS.md`](../AGENTS.md) (destination ladder).
+Main canvas Preview+Chat: [`AGENTS.md`](../AGENTS.md) **FillColumn** (Layout
+templates `#layouts-demo-fill-column`) — do not stack Preview / EmptyState /
+Composer as canvas siblings.
 
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.

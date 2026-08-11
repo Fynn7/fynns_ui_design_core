@@ -1264,6 +1264,40 @@
   max-height: 100%;
 }
 
+/*
+ * Narrow × tall stage (~45% width of a typical laptop pane, full demo height)
+ * to prove FillColumn docks Chat composer without a dead band below.
+ */
+.sandbox-fill-column-stage {
+  box-sizing: border-box;
+  width: min(100%, 22rem);
+  height: 28rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-fill-column-stage > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.sandbox-fill-column-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
+  margin: var(--fynns-space-sm);
+  border-radius: var(--fynns-radius-md);
+  background: color-mix(in srgb, var(--fynns-color-accent) 18%, var(--fynns-color-surface-1));
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+}
+
 .sandbox-globals-shell-body {
   display: flex;
   flex: 1;

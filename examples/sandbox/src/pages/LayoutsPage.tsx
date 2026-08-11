@@ -4,10 +4,15 @@ import {
   BarChartIcon,
   BottomAppBar,
   Button,
+  Chat,
+  ChatComposer,
+  ChatThread,
+  Collapsible,
   DestinationAppShell,
   EmptyState,
   Fab,
   FileIcon,
+  FillColumn,
   FolderOpenIcon,
   IconButton,
   LayoutGridIcon,
@@ -93,6 +98,7 @@ export function LayoutsPage() {
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
+  const [fillColumnDraft, setFillColumnDraft] = useState("");
 
   return (
     <div className="sandbox-globals">
@@ -190,6 +196,43 @@ export function LayoutsPage() {
               </DestinationAppShell>
             </div>
             <SandboxHelp text={t("globals.shellHelp")} />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="fill-column">
+            <div className="sandbox-fill-column-stage">
+              <FillColumn
+                header={
+                  <Collapsible
+                    title={t("layouts.fillColumnPreviewTitle")}
+                    defaultOpen
+                  >
+                    <div className="sandbox-fill-column-preview">
+                      {t("layouts.fillColumnPreviewBody")}
+                    </div>
+                  </Collapsible>
+                }
+              >
+                <Chat label={t("layouts.fillColumnLabel")}>
+                  <ChatThread
+                    empty={
+                      <EmptyState
+                        title={t("layouts.fillColumnEmptyTitle")}
+                        description={t("layouts.fillColumnEmptyBody")}
+                      />
+                    }
+                  />
+                  <ChatComposer
+                    value={fillColumnDraft}
+                    onChange={setFillColumnDraft}
+                    ariaLabel={t("layouts.fillColumnComposerAria")}
+                    placeholder={t("layouts.fillColumnComposerPlaceholder")}
+                    sendLabel={t("layouts.fillColumnSend")}
+                    onSubmit={() => setFillColumnDraft("")}
+                  />
+                </Chat>
+              </FillColumn>
+            </div>
+            <SandboxHelp text={t("layouts.fillColumnHelp")} />
           </LayoutsDemo>
 
           <LayoutsDemo id="top-app-bar">

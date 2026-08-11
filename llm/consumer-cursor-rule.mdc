@@ -77,6 +77,13 @@ alwaysApply: true
 </DestinationAppShell>
 ```
 
+**主画布纵向填满：** 上方 Preview（或其它顶带）+ 下方 Chat 贴底时，用
+`FillColumn`（`header` = Preview，`children` = `Chat`，empty 放进
+`ChatThread.empty`）。**禁止**把 Preview / EmptyState / Composer 当 canvas
+兄弟堆叠（窄宽全高会出现下半空白）。aside 全宽气泡仍用
+`.fynns-chat-host--fill` / `EndAside`。权威：`AGENTS.md` Chat Shell /
+FillColumn。
+
 ## ClippedNavShell（仅完全自定义时 — 避免「挤扁抽屉」）
 
 低层槽位壳。优先 `DestinationAppShell`。若手拼 `ClippedNavShell`：
