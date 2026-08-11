@@ -7809,7 +7809,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-code-fg);
-  /* Inherits `.fynns-scroll` gutter auto (hover/focus-within thumb). */
+  /* Keep stable gutter so highlight/textarea width stays locked (not global auto). */
+  scrollbar-gutter: stable;
 }
 
 .fynns-code-block--nowrap .fynns-code-block-pre {
@@ -7938,7 +7939,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
-  /* Inherits `.fynns-scroll` gutter auto — keep highlight/textarea box aligned. */
+  /* Keep content-box width aligned when the textarea shows a scrollbar. */
+  scrollbar-gutter: stable;
 }
 
 .fynns-code-block--nowrap .fynns-code-block-highlight,

@@ -248,7 +248,23 @@ function main() {
   }
 
   const subPath = args.submodulePath.replace(/\\/g, "/");
-  const destRoot = path.join(consumerRoot, ...subPath.split("/"));
+  if (!subPath || subPath.split("/").some((seg) => seg === ".." || seg === "")) {
+    console.error(`Invalid --submodule-path (no empty or '..' segments): ${args.submodulePath}`);
+    process.exit(1);
+  }
+  const destRoot = path.resolve(path.join(consumerRoot, ...subPath.split("/")));
+  const consumerResolved = path.resolve(consumerRoot);
+  const relToConsumer = path.relative(consumerResolved, destRoot);
+  if (
+    !relToConsumer ||
+    relToConsumer.startsWith("..") ||
+    path.isAbsolute(relToConsumer)
+  ) {
+    console.error(
+      `Refusing sync: submodule path escapes consumer root (${destRoot} vs ${consumerResolved})`,
+    );
+    process.exit(1);
+  }
   const result = {
     ok: false,
     action: "sync",
