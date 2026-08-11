@@ -30,6 +30,8 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
+  checks: read
+  statuses: read
 
 concurrency:
   group: fynns-ui-bump-${{ github.repository }}-${{ inputs.base_branch }}
