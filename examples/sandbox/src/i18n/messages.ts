@@ -502,7 +502,7 @@ const en = {
   "globals.codeBlockXmlLabel": "prompt.xml",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + float copy only — never `label=\"\"`); `editable` same head rules when `label` set. Soft-wrap default; `wrap={false}` for classic pre scroll. Built-ins include `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash` (+ aliases) via zero-dep `--fynns-code-*` spans. Copy fades in on hover.",
+    "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + float copy only — never `label=\"\"`); `editable` same head rules when `label` set. **`label` ≠ `language`** — always pass matching `language` (e.g. `prompt.xml` + `language=\"xml\"`). Soft-wrap default; `wrap={false}` for classic pre scroll. Built-ins include `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash` (+ aliases) via zero-dep `--fynns-code-*` spans. Copy fades in on hover.",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
@@ -1741,7 +1741,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockXmlLabel": "prompt.xml",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 浮层复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。默认软换行；`wrap={false}` 经典横向滚动。内置 `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`（及别名）用零依赖 `--fynns-code-*` 着色。悬停渐显复制。",
+    "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 浮层复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。**`label` ≠ `language`** — 须另传匹配的 `language`（如 `prompt.xml` + `language=\"xml\"`）。默认软换行；`wrap={false}` 经典横向滚动。内置 `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`（及别名）用零依赖 `--fynns-code-*` 着色。悬停渐显复制。",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",

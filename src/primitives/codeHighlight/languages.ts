@@ -349,6 +349,14 @@ const JSON_PROFILE: LangProfile = {
   blockComment: null,
 };
 
+const MARKUP_PROFILE: LangProfile = {
+  keywords: setOf([]),
+  types: setOf([]),
+  constants: setOf([]),
+  lineComment: null,
+  blockComment: null,
+};
+
 const BASH_PROFILE: LangProfile = {
   keywords: setOf(BASH_KEYWORDS),
   types: setOf([]),
@@ -416,8 +424,8 @@ export function profileFor(language: CodeLanguageId): LangProfile {
       return JSON_PROFILE;
     case "xml":
     case "html":
-      /* Markup uses tokenizeMarkup — profile unused. */
-      return JSON_PROFILE;
+      /* Markup uses tokenizeMarkup in highlightCode — profile unused. */
+      return MARKUP_PROFILE;
     case "bash":
     case "sh":
     case "shell":

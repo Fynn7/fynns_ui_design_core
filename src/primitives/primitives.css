@@ -8190,9 +8190,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
    `flex: 1 1 auto` + `min-height: 0` so fill hosts (flex column with a definite
    height on the CodeBlock root) can grow the editor; do **not** set
    `height: 100%` here — percentage height with an indefinite parent collapses
-   the stack (rows / content sizing must win in Globals demos). Fill hosts that
-   need the caret layer to stretch set `textarea { height: 100% }` in host CSS
-   (see gsc-live-preview `.gsc-editor-code`). */
+   the stack (rows / content sizing / default autoGrow must win in Globals
+   demos). Fill hosts that need the caret layer to stretch: pass
+   `autoGrow={false}` and set `textarea { height: 100% }` in host CSS
+   (see gsc-live-preview `.gsc-editor-code` / `.gsc-llm-fullscreen-code`). */
 .fynns-code-block-editor {
   position: relative;
   box-sizing: border-box;

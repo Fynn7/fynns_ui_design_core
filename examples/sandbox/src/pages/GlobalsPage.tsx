@@ -2943,7 +2943,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={t("globals.codeBlockXmlLabel")}
             language="xml"
             copyAriaLabel={t("globals.codeBlockCopy")}
-            code={`<?xml version="1.0"?>\n<!-- prompt sections -->\n<role name="assistant">\n  Translate requests into commands.\n</role>\n`}
+            code={`<?xml version="1.0"?>\n<!-- sample sections -->\n<section name="intro">\n  Short supporting copy.\n</section>\n`}
             maxHeight="8rem"
           />
           <CodeBlock
