@@ -2279,6 +2279,62 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/*
+ * Vertical choice lists (Radio / Checkbox) inside FieldBlock.
+ * Do **not** put bare radios into form-host ControlStack — that grid is
+ * label | control tracks, so siblings auto-flow into multiple columns.
+ *
+ * Equal row rhythm: every direct child shares the dense control-row floor
+ * (2rem / 32dp — `Input` `sm`, one step below `--fynns-size-icon-target`).
+ * Plain Radio rows and Other+Input nowrap rows keep the same gap; taller
+ * content still grows.
+ */
+.fynns-control-cluster--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  /* Tighter than horizontal cluster gap (8dp) — choice rows read as one list. */
+  gap: var(--fynns-space-xs);
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox,
+.fynns-control-cluster--stack > .fynns-control-cluster--nowrap {
+  box-sizing: border-box;
+  min-height: 2rem;
+  align-items: center;
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Radio "Other" + free-text Input (or similar): stay on one row when narrow.
+ * Input drops width:100% so it can shrink; radio stays content-sized.
+ */
+.fynns-control-cluster--nowrap {
+  flex-wrap: nowrap;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.fynns-control-cluster--nowrap > .fynns-radio,
+.fynns-control-cluster--nowrap > .fynns-checkbox {
+  flex: 0 0 auto;
+}
+
+.fynns-control-cluster--nowrap > .fynns-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+}
+
 /* ---------- Grid ---------- */
 .fynns-grid {
   display: grid;
