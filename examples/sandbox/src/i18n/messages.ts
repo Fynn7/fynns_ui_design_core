@@ -652,9 +652,15 @@ const en = {
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: control + narrative = `ControlBlock`; sibling units = Card body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for settings cards. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
+    "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings Card: intro FieldHint → `FieldStack` of FieldBlocks → `FieldStack` of ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other Card siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of FieldBlocks → `FieldStack` of ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+  "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
+  "globals.formRecipeHostCollapsible":
+    "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
+  "globals.formRecipeHostDialog":
+    "Dialog host — `Dialog` + `showCloseButton` + the same FieldStack tree (md ceiling). Switch-only close-stack anatomy stays under Containment overlays.",
+  "globals.formRecipeDialogOpen": "Open Dialog form",
   "globals.formRecipeTitle": "Project preferences",
   "globals.formRecipeIntro":
     "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
@@ -678,7 +684,7 @@ const en = {
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe: `Card` → `FieldHint` intro → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -1893,9 +1899,15 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。设置类卡片直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
+    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
-    "检查器 / 设置 Card 权威样例：intro FieldHint → `FieldStack`（FieldBlock 簇）→ `FieldStack`（ControlBlock 簇）→ 可选 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它 Card 兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（FieldBlock 簇）→ `FieldStack`（ControlBlock 簇）→ 可选 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+  "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
+  "globals.formRecipeHostCollapsible":
+    "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
+  "globals.formRecipeHostDialog":
+    "Dialog 宿主 — `Dialog` + `showCloseButton` + 同一 FieldStack 树（md 上限）。纯 Switch 关栈解剖仍在 Containment overlays。",
+  "globals.formRecipeDialogOpen": "打开 Dialog 表单",
   "globals.formRecipeTitle": "项目偏好",
   "globals.formRecipeIntro":
     "这些偏好仅作用于当前沙盒项目，用来演示 FieldBlock / ControlBlock 节奏 — 不接真实后端。",
@@ -1918,7 +1930,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":
-    "配方：`Card` → `FieldHint` 引言 → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
+    "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",

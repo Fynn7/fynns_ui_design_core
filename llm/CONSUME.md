@@ -229,8 +229,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `field-stack-gap` 8dp inside; adjacent FieldStacks use `form-cluster-gap`
   (32dp); other Card / Collapsible siblings use `unit-stack-gap` (16dp). Do
   **not** flatten multi-topic forms as bare siblings or invent muted subtitle
-  classes. Live tree: sandbox `#form-recipe` / AGENTS.md **FieldStack semantic
-  clusters**. Outside Card use `.fynns-unit-stack`.
+  classes. Live tree: sandbox `#form-recipe` (Card / Collapsible / Dialog) /
+  AGENTS.md **FieldStack semantic clusters**. Outside Card use
+  `.fynns-unit-stack`.
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
   parallel multi-line shell in the consumer.

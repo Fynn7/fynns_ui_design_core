@@ -863,12 +863,15 @@ classes.
   - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields → preference
     switches. Between stacks: `form-cluster-gap` (**32dp**). That wider gap is
     the visual signal that the *topic* changed — spacing alone without
-    FieldStack is not enough (Card `unit-stack-gap` stays **16dp** for intro /
-    Checkbox / actions / other non-cluster siblings).
+    FieldStack is not enough (Card / Collapsible / Dialog body
+    `unit-stack-gap` stays **16dp** for intro / Checkbox / actions / other
+    non-cluster siblings).
   - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
     `errorText`). Never a loose muted `<p>` under `ControlStack`.
   - **Copy the tree** from sandbox Globals **Inspector form recipe**
-    (`#form-recipe`); supply consumer-owned strings only.
+    (`#form-recipe`) — same FieldStack body under **Card**, **Collapsible**,
+    and dismissible **Dialog** (`showCloseButton`); supply consumer-owned
+    strings only.
 
   **Recipe (hard):** a Switch (or other labeled row) **and** its narrative
   supporting text are **one unit** → wrap in `ControlBlock` (`description` /

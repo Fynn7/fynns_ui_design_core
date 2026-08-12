@@ -1187,9 +1187,19 @@
   min-width: 0;
 }
 
-.sandbox-globals-form-recipe {
+.sandbox-globals-form-recipe-hosts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
   max-width: 24rem;
   width: 100%;
+  min-width: 0;
+}
+
+.sandbox-globals-form-recipe {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .sandbox-globals-form-recipe-actions {
