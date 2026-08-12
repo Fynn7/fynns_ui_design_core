@@ -1565,7 +1565,11 @@ input.fynns-input:focus::-webkit-scrollbar {
  * `.fynns-collapsible-body .fynns-control-stack` — sandbox Globals wraps
  * every demo in a category Collapsible and would force toolbar stacks into
  * Preferences layout. Row recipe (AGENTS): ControlRow label + track-only
- * Switch. Toolbar / page chrome outside these hosts keep the fixed label track.
+ * Switch. Toolbar / page chrome outside these hosts keep the fixed label
+ * track and the tight `control-stack-gap` (8dp).
+ *
+ * Preference rows use `--fynns-space-md` (12dp) — between toolbar-tight
+ * `control-stack-gap` (8dp) and sibling-unit `unit-stack-gap` (16dp).
  */
 .fynns-dialog-panel--centered .fynns-control-stack,
 .fynns-card-body .fynns-control-stack,
@@ -1573,6 +1577,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-collapsible-body > .fynns-control-block .fynns-control-stack {
   width: 100%;
   max-width: 100%;
+  gap: var(--fynns-space-md);
   grid-template-columns:
     minmax(0, 1fr)
     repeat(var(--fynns-control-stack-cols, 2), max-content);
