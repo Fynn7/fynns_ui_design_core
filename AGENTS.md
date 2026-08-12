@@ -77,8 +77,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    common source of visual drift — never ship them. **Native classic bars on
    `.fynns-scroll` are hidden** so they never steal content width (NavigationDrawer
    badges / chevrons, Dialog Switch tracks, Chat actions, …). Overlay thumbs are
-   painted by `src/theme/overlayScrollbar.ts` (absolute rail; no layout impact).
-   On fine pointer + hover (`(hover: hover) and (pointer: fine)`), overlay thumbs
+   painted by `src/theme/overlayScrollbar.ts` (fixed portal rails; no layout /
+   scrollWidth impact). On fine pointer + hover (`(hover: hover) and (pointer: fine)`), overlay thumbs
    are **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
    soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
    pointer keeps thumbs tinted when overflowing. Textarea / input hosts hide the

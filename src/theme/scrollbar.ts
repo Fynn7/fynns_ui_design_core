@@ -7,7 +7,7 @@
  *
  *   - DOM overflow surfaces must carry `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}).
  *   - Native classic bars on `.fynns-scroll` are **hidden** — they must not steal
- *     content width. Overlay thumbs come from `./overlayScrollbar` (absolute rail).
+ *     content width. Overlay thumbs come from `./overlayScrollbar` (fixed portal).
  *   - Fine pointer: overlay thumb idle-transparent until host hover / focus-within.
  *   - Touch / coarse: overlay tinted whenever the host overflows.
  *   - Carousel / SearchBar focused input hide bars entirely in primitives.css.

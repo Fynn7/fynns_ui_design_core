@@ -3,8 +3,9 @@
  *
  * Classic Windows / forced-WebKit bars steal content width and squeeze trailing
  * badges / chevrons. Native bars on `.fynns-scroll` are hidden in `theme.css`;
- * this module paints a token-skinned thumb as an absolute overlay that does not
- * affect layout. Textarea / input hosts stay native-hidden only (no child rail).
+ * this module paints token-skinned thumbs as **fixed** overlays (not in-scroll
+ * abspos children — those inflate scrollWidth and falsely enable horizontal
+ * bars). Textarea / input: native bar hidden only (no overlay rail).
  *
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
@@ -28,11 +29,14 @@ type HostState = {
   onFocusOut: () => void;
   hover: boolean;
   focus: boolean;
+  allowX: boolean;
+  raf: number;
 };
 
 const states = new WeakMap<HTMLElement, HostState>();
 let started = false;
 let finePointer = false;
+let portal: HTMLDivElement | null = null;
 
 function readScrollbarSizePx(): number {
   if (typeof document === "undefined") return 10;
@@ -59,11 +63,19 @@ function canHostOverlay(el: Element): el is HTMLElement {
   );
 }
 
-function ensurePositioning(host: HTMLElement) {
-  const pos = getComputedStyle(host).position;
-  if (pos === "static") {
-    host.classList.add("fynns-scroll--overlay-host");
-  }
+/** Vertical-only hosts (`overflow-x: clip|hidden`) must never get an X thumb. */
+function allowsHorizontalOverlay(host: HTMLElement): boolean {
+  const { overflowX } = getComputedStyle(host);
+  return overflowX === "auto" || overflowX === "scroll" || overflowX === "overlay";
+}
+
+function ensurePortal(): HTMLDivElement {
+  if (portal && portal.isConnected) return portal;
+  portal = document.createElement("div");
+  portal.className = "fynns-scroll-overlay-portal";
+  portal.setAttribute("aria-hidden", "true");
+  document.body.appendChild(portal);
+  return portal;
 }
 
 function makeRail(axis: "y" | "x"): { rail: HTMLDivElement; thumb: HTMLDivElement } {
@@ -84,7 +96,21 @@ function syncThumbVisibility(state: HostState, host: HTMLElement) {
   state.railX.dataset.visible = show ? "true" : "false";
 }
 
+function scheduleUpdate(host: HTMLElement, state: HostState) {
+  if (state.raf) return;
+  state.raf = requestAnimationFrame(() => {
+    state.raf = 0;
+    updateHost(host, state);
+  });
+}
+
 function updateHost(host: HTMLElement, state: HostState) {
+  if (!host.isConnected) {
+    detach(host);
+    return;
+  }
+
+  const rect = host.getBoundingClientRect();
   const {
     scrollTop,
     scrollLeft,
@@ -95,57 +121,62 @@ function updateHost(host: HTMLElement, state: HostState) {
   } = host;
   const sb = readScrollbarSizePx();
   const yOverflow = scrollHeight - clientHeight > 1;
-  const xOverflow = scrollWidth - clientWidth > 1;
+  const xOverflow =
+    state.allowX && scrollWidth - clientWidth > 1;
 
   state.railY.hidden = !yOverflow;
   state.railX.hidden = !xOverflow;
 
   if (yOverflow) {
-    state.railY.style.height = `${scrollHeight}px`;
-    state.railY.style.width = `${sb}px`;
     const thumbH = Math.max(
       MIN_THUMB_PX,
       (clientHeight / scrollHeight) * clientHeight,
     );
     const maxTop = Math.max(0, clientHeight - thumbH);
     const range = Math.max(1, scrollHeight - clientHeight);
-    const thumbTop = scrollTop + (scrollTop / range) * maxTop;
-    state.thumbY.style.height = `${thumbH}px`;
+    const thumbTop = (scrollTop / range) * maxTop;
+    state.railY.style.top = `${rect.top}px`;
+    state.railY.style.left = `${rect.right - sb}px`;
+    state.railY.style.width = `${sb}px`;
+    state.railY.style.height = `${rect.height}px`;
     state.thumbY.style.width = `${sb}px`;
-    state.thumbY.style.top = `${thumbTop}px`;
-    state.thumbY.style.left = "0";
+    state.thumbY.style.height = `${thumbH}px`;
+    state.thumbY.style.transform = `translateY(${thumbTop}px)`;
   }
 
   if (xOverflow) {
-    state.railX.style.width = `${scrollWidth}px`;
-    state.railX.style.height = `${sb}px`;
     const thumbW = Math.max(
       MIN_THUMB_PX,
       (clientWidth / scrollWidth) * clientWidth,
     );
     const maxLeft = Math.max(0, clientWidth - thumbW);
     const range = Math.max(1, scrollWidth - clientWidth);
-    const thumbLeft = scrollLeft + (scrollLeft / range) * maxLeft;
-    state.thumbX.style.width = `${thumbW}px`;
+    const thumbLeft = (scrollLeft / range) * maxLeft;
+    state.railX.style.top = `${rect.bottom - sb}px`;
+    state.railX.style.left = `${rect.left}px`;
+    state.railX.style.width = `${rect.width}px`;
+    state.railX.style.height = `${sb}px`;
     state.thumbX.style.height = `${sb}px`;
-    state.thumbX.style.left = `${thumbLeft}px`;
-    state.thumbX.style.top = "0";
+    state.thumbX.style.width = `${thumbW}px`;
+    state.thumbX.style.transform = `translateX(${thumbLeft}px)`;
   }
 
   syncThumbVisibility(state, host);
 }
 
 function attach(host: HTMLElement) {
-  if (states.has(host) || host.hasAttribute(HOST_ATTR)) return;
+  if (states.has(host)) return;
   if (!canHostOverlay(host)) return;
 
-  ensurePositioning(host);
-  host.setAttribute(HOST_ATTR, "");
+  /* Drop in-host rails from the older abspos impl / HMR half-state. */
+  host.querySelectorAll(`.${RAIL_CLASS}`).forEach((el) => el.remove());
 
+  host.setAttribute(HOST_ATTR, "");
+  const root = ensurePortal();
   const y = makeRail("y");
   const x = makeRail("x");
-  host.appendChild(y.rail);
-  host.appendChild(x.rail);
+  root.appendChild(y.rail);
+  root.appendChild(x.rail);
 
   const state: HostState = {
     railY: y.rail,
@@ -156,7 +187,9 @@ function attach(host: HTMLElement) {
     mo: null,
     hover: false,
     focus: false,
-    onScroll: () => updateHost(host, state),
+    allowX: allowsHorizontalOverlay(host),
+    raf: 0,
+    onScroll: () => scheduleUpdate(host, state),
     onEnter: () => {
       state.hover = true;
       syncThumbVisibility(state, host);
@@ -182,37 +215,12 @@ function attach(host: HTMLElement) {
   host.addEventListener("focusout", state.onFocusOut);
 
   if (typeof ResizeObserver !== "undefined") {
-    state.ro = new ResizeObserver(() => updateHost(host, state));
+    state.ro = new ResizeObserver(() => scheduleUpdate(host, state));
     state.ro.observe(host);
   }
 
-  /* Content length changes (nav items, chat turns) without host box resize. */
   if (typeof MutationObserver !== "undefined") {
-    state.mo = new MutationObserver((records) => {
-      for (const record of records) {
-        if (
-          record.target === state.railY ||
-          record.target === state.railX ||
-          record.target === state.thumbY ||
-          record.target === state.thumbX
-        ) {
-          continue;
-        }
-        for (const node of record.addedNodes) {
-          if (
-            node === state.railY ||
-            node === state.railX ||
-            (node instanceof Element &&
-              (node.classList.contains(RAIL_CLASS) ||
-                node.classList.contains(THUMB_CLASS)))
-          ) {
-            return;
-          }
-        }
-        updateHost(host, state);
-        return;
-      }
-    });
+    state.mo = new MutationObserver(() => scheduleUpdate(host, state));
     state.mo.observe(host, { childList: true, subtree: true });
   }
 
@@ -223,6 +231,7 @@ function attach(host: HTMLElement) {
 function detach(host: HTMLElement) {
   const state = states.get(host);
   if (!state) return;
+  if (state.raf) cancelAnimationFrame(state.raf);
   host.removeEventListener("scroll", state.onScroll);
   host.removeEventListener("pointerenter", state.onEnter);
   host.removeEventListener("pointerleave", state.onLeave);
@@ -243,6 +252,13 @@ function scan(root: ParentNode) {
   }
   root.querySelectorAll?.(".fynns-scroll").forEach((el) => {
     if (canHostOverlay(el)) attach(el);
+  });
+}
+
+function onViewportChange() {
+  document.querySelectorAll<HTMLElement>(`[${HOST_ATTR}]`).forEach((host) => {
+    const state = states.get(host);
+    if (state) scheduleUpdate(host, state);
   });
 }
 
@@ -273,17 +289,21 @@ export function ensureOverlayScrollbars(): void {
   });
   mo.observe(document.documentElement, { childList: true, subtree: true });
 
-  if (typeof window !== "undefined") {
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const onMq = () => {
-      finePointer = mq.matches;
-      document.querySelectorAll<HTMLElement>(`[${HOST_ATTR}]`).forEach((host) => {
-        const state = states.get(host);
-        if (state) syncThumbVisibility(state, host);
-      });
-    };
-    mq.addEventListener?.("change", onMq);
-  }
+  window.addEventListener("resize", onViewportChange, { passive: true });
+  window.addEventListener("scroll", onViewportChange, {
+    passive: true,
+    capture: true,
+  });
+
+  const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const onMq = () => {
+    finePointer = mq.matches;
+    document.querySelectorAll<HTMLElement>(`[${HOST_ATTR}]`).forEach((host) => {
+      const state = states.get(host);
+      if (state) syncThumbVisibility(state, host);
+    });
+  };
+  mq.addEventListener?.("change", onMq);
 }
 
 if (typeof document !== "undefined") {

@@ -698,11 +698,13 @@ button {
  * Scroll surfaces: every overflow:auto/scroll host must carry .fynns-scroll.
  * Native classic bars are hidden — they must never steal content width (badges /
  * chevrons / Switch tracks). Overlay thumbs are painted by
- * src/theme/overlayScrollbar.ts (absolute rail; pointer-events none).
+ * src/theme/overlayScrollbar.ts (fixed portal rails; never inflate scrollWidth).
  * Fine pointer: overlay thumb idle-hidden until host hover / focus-within.
  * Touch: overlay always tinted when overflowing. Do not use scrollbar-gutter
  * stable/both-edges. Carousel / SearchBar focused input hide bars in primitives.
  * Textarea / input: native bar also hidden; no overlay rail (replaced elements).
+ * Horizontal overlay only when overflow-x is auto/scroll — clip/hidden hosts
+ * stay vertical-only (no fake X bar).
  */
 .fynns-scroll {
   scrollbar-width: none;
@@ -715,35 +717,37 @@ button {
   display: none;
 }
 
-/* Positioning context for absolute overlay rails (only when UA position is static). */
+/* Positioning context no longer required — rails live in a fixed portal. */
 .fynns-scroll--overlay-host {
   position: relative;
 }
 
+.fynns-scroll-overlay-portal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fynns-z-sticky);
+  pointer-events: none;
+  overflow: hidden;
+}
+
 .fynns-scroll-rail {
-  position: absolute;
-  inset-inline-end: 0;
-  inset-block-start: 0;
-  z-index: 2;
+  position: fixed;
+  z-index: 1;
   pointer-events: none;
   box-sizing: border-box;
 }
 
-.fynns-scroll-rail[data-axis="x"] {
-  inset-inline-end: auto;
-  inset-inline-start: 0;
-  inset-block-start: auto;
-  inset-block-end: 0;
-}
-
 .fynns-scroll-thumb {
   position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
   box-sizing: border-box;
   border-radius: var(--fynns-radius-lg);
   border: var(--fynns-scrollbar-thumb-border) solid transparent;
   background-clip: padding-box;
   background-color: var(--fynns-scrollbar-thumb);
   transition: background-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
+  will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {
