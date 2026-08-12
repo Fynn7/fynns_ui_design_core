@@ -86,7 +86,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    Do **not** use `both-edges` (overlay ignores it; Chromium right-edge clips).
    NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (8dp) only — no
    pad+scrollbar inflation; do not crush below 8dp. Carousel tracks and
-   SearchBar focused inputs may hide bars entirely (caret / snap navigation).
+   SearchBar / single-line `Input` focused fields may hide bars entirely
+   (caret scroll; SearchBar also snap navigation).
    Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
    reserve *block* gutters that clip the first/last pill radii.
