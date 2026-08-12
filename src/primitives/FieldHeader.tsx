@@ -19,7 +19,9 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Form field label row with optional trailing icon actions (expand / reset).
  * Place above the control — not overlaid on a Textarea corner. Label text is
- * flush with the control’s outer start edge. Dense Card nesting: when this is
+ * flush with the control’s outer start edge. Row min-height fits trailing
+ * `IconButton` sm (`2rem` + `space-2xs` pad) so label→control optical gap
+ * stays the same with or without `actions`. Dense Card nesting: when this is
  * the first child of `Card` body, top inset shrinks to `--fynns-space-xs`
  * (see `.fynns-card-body:has(> .fynns-field-header)`).
  * Prefer `FieldBlock` when wrapping label + control together.

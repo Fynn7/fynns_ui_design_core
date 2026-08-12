@@ -1484,23 +1484,40 @@
 }
 
 /*
- * Dismissible labeled Dialog rows: label eats remaining space so trailing
- * controls share the close IconButton's end edge (panel − dialog-inset).
- * Do not keep the toolbar default `width: max-content` + fixed
- * `control-row-label` here — that packs the stack start-side and leaves a
- * gap before the X. Row recipe (AGENTS): ControlRow label + track-only Switch.
+ * Form hosts (centered Dialog + Card body + Collapsible body *direct*
+ * ControlStack / ControlBlock): label eats remaining space so trailing
+ * Switch tracks share one end edge. Do **not** use a descendant
+ * `.fynns-collapsible-body .fynns-control-stack` — sandbox Globals wraps
+ * every demo in a category Collapsible and would force toolbar stacks into
+ * Preferences layout. Row recipe (AGENTS): ControlRow label + track-only
+ * Switch. Toolbar / page chrome outside these hosts keep the fixed label track.
  */
-.fynns-dialog-panel--centered .fynns-control-stack {
+.fynns-dialog-panel--centered .fynns-control-stack,
+.fynns-card-body .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-block .fynns-control-stack {
+  width: 100%;
+  max-width: 100%;
   grid-template-columns:
     minmax(0, 1fr)
     repeat(var(--fynns-control-stack-cols, 2), max-content);
 }
 
-.fynns-dialog-panel--centered .fynns-control-row {
+.fynns-dialog-panel--centered .fynns-control-row,
+.fynns-card-body .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
   grid-template-columns: minmax(0, 1fr) max-content;
 }
 
-.fynns-dialog-panel--centered .fynns-control-row__controls {
+.fynns-dialog-panel--centered .fynns-control-row__controls,
+.fynns-card-body .fynns-control-row__controls,
+.fynns-collapsible-body > .fynns-control-row > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row__controls {
   min-width: 0;
   justify-self: end;
 }
@@ -1510,9 +1527,35 @@
   > .fynns-control-row
   > .fynns-control-row__controls
   > :not(.fynns-grid),
-.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > * {
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > *,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-card-body .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body > .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  .fynns-grid
+  > * {
   min-width: 0;
   max-width: 100%;
+  /* Subgrid control tracks size to the widest sibling; pack shorter
+     switches / clusters to the shared end edge (Preferences). */
+  justify-self: end;
 }
 
 .fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
@@ -2067,10 +2110,12 @@
    (e.g. Anatomy with only Media). */
 .fynns-control-stack {
   display: grid;
-  /* Fill the host; control tracks share leftover so clusters / end-labels can
-     wrap or ellipsis instead of spilling past narrow Card / Collapsible bodies. */
+  /* Toolbar default: fixed label track (same as ControlRow) so sibling stacks
+     share one start edge; control tracks share leftover. Form hosts (Card /
+     Collapsible body / centered Dialog) override to label `1fr` + end-hug
+     controls — see rules near `.fynns-dialog-panel--centered`. */
   grid-template-columns:
-    minmax(0, var(--fynns-layout-control-row-label))
+    var(--fynns-layout-control-row-label)
     repeat(var(--fynns-control-stack-cols, 2), minmax(0, 1fr));
   gap: var(--fynns-layout-control-stack-gap);
   /* start — not stretch: a narrower ToggleGroup must not expand to the
@@ -3208,11 +3253,13 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* Breath around sm IconButton hover disks (avoid clipping the state layer). */
-  padding-block: var(--fynns-space-xs);
+  /* IconButton sm (2rem) + 2xs block pad — same row with or without actions so
+   * label→control optical gap stays even (~9–11dp with FieldBlock __main). */
+  box-sizing: border-box;
+  min-height: calc(2rem + 2 * var(--fynns-space-2xs));
+  padding-block: var(--fynns-space-2xs);
   min-width: 0;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .fynns-field-header__label {
@@ -3243,20 +3290,11 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-block__main {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  /* Header padding-block supplies the label→control breath; no extra stack gap. */
+  gap: 0;
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
-}
-
-/* Label row inside FieldBlock: rely on __main gap unless trailing actions need
-   IconButton hover clearance (standalone FieldHeader keeps global padding). */
-.fynns-field-block__main > .fynns-field-header {
-  padding-block: 0;
-}
-
-.fynns-field-block__main > .fynns-field-header:has(.fynns-field-header__actions) {
-  padding-block: var(--fynns-space-xs);
 }
 
 /* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` gap —

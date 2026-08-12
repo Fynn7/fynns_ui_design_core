@@ -819,7 +819,7 @@ classes.
 
   | Role | Token / host |
   | --- | --- |
-  | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` |
+  | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` (**8dp** — tighter than unit-stack) |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
@@ -835,7 +835,15 @@ classes.
   (intro copy, FieldBlock, ControlBlock, …) rely on Card / Collapsible body
   `unit-stack-gap` (built-in) or `.fynns-unit-stack` outside those shells.
   Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows) inside
-  the block. Values live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits
+  the block. **Form hosts** (Card body, centered Dialog, Collapsible body
+  **direct** `ControlStack` / `ControlBlock`): ControlStack is label-fill
+  (`1fr`) + end-hug controls (`max-content`) so Switch tracks share one trailing
+  edge across sibling rows / ControlBlocks — same Preferences recipe as
+  dismissible Dialog. Do not rely on a descendant `.fynns-collapsible-body
+  .fynns-control-stack` rule (sandbox category Collapsibles would steal toolbar
+  demos). Toolbar / page chrome outside those hosts keep the fixed
+  `--fynns-layout-control-row-label` track. Values
+  live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits
   them via `SANDBOX_LAYOUT_AGENT_CATALOG`. Live samples: Globals → Toolbar /
   unit rhythm (`#rhythm`) + **Inspector form recipe** (`#form-recipe`) — copy
   the Card **tree** into consumers and supply **consumer-owned** strings (core
