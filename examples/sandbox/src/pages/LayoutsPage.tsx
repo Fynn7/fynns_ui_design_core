@@ -6,8 +6,8 @@ import {
   Button,
   Chat,
   ChatComposer,
+  ChatMessage,
   ChatThread,
-  Collapsible,
   DestinationAppShell,
   EmptyState,
   Fab,
@@ -200,18 +200,7 @@ export function LayoutsPage() {
 
           <LayoutsDemo id="fill-column">
             <div className="sandbox-fill-column-stage">
-              <FillColumn
-                header={
-                  <Collapsible
-                    title={t("layouts.fillColumnPreviewTitle")}
-                    defaultOpen
-                  >
-                    <div className="sandbox-fill-column-preview">
-                      {t("layouts.fillColumnPreviewBody")}
-                    </div>
-                  </Collapsible>
-                }
-              >
+              <FillColumn>
                 <Chat label={t("layouts.fillColumnLabel")}>
                   <ChatThread
                     empty={
@@ -220,7 +209,20 @@ export function LayoutsPage() {
                         description={t("layouts.fillColumnEmptyBody")}
                       />
                     }
-                  />
+                  >
+                    <ChatMessage role="user">
+                      {t("layouts.fillColumnUser1")}
+                    </ChatMessage>
+                    <ChatMessage role="assistant">
+                      {t("layouts.fillColumnAssistant1")}
+                    </ChatMessage>
+                    <ChatMessage role="user">
+                      {t("layouts.fillColumnUser2")}
+                    </ChatMessage>
+                    <ChatMessage role="assistant">
+                      {t("layouts.fillColumnAssistant2")}
+                    </ChatMessage>
+                  </ChatThread>
                   <ChatComposer
                     value={fillColumnDraft}
                     onChange={setFillColumnDraft}

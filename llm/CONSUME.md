@@ -187,6 +187,12 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 
 **Token / layout pointers (do not invent hex, rem, or private inset vars):**
 - Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
+- **Scroll hosts:** every `overflow: auto/scroll` surface must use `.fynns-scroll`
+  (primitives already do). Importing `@fynns/ui` auto-starts overlay thumbs
+  (`ensureOverlayScrollbars` — fixed portal at `--fynns-z-toast`; native bars
+  hidden so they never steal width). Textarea / single-line inputs hide the
+  native bar only (no overlay rail). Do not reintroduce classic bars or
+  `scrollbar-gutter: stable`. Authority: AGENTS.md **Scrollbar discipline**.
 - **Hard gate:** never hardcode shell / column / chat margins in consumer CSS
   (`padding: 16px`, `1.25rem`, ad-hoc `--app-chat-pad`, etc.). Reuse
   `--fynns-layout-*` or the component alias that already points at one. Missing
@@ -229,8 +235,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `field-stack-gap` 8dp inside; adjacent FieldStacks use `form-cluster-gap`
   (32dp); other Card / Collapsible siblings use `unit-stack-gap` (16dp). Do
   **not** flatten multi-topic forms as bare siblings or invent muted subtitle
-  classes. Live tree: sandbox `#form-recipe` / AGENTS.md **FieldStack semantic
-  clusters**. Outside Card use `.fynns-unit-stack`.
+  classes. Live tree: sandbox `#form-recipe` (Card / Collapsible / Dialog) /
+  AGENTS.md **FieldStack semantic clusters**. Outside Card use
+  `.fynns-unit-stack`.
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
   parallel multi-line shell in the consumer.

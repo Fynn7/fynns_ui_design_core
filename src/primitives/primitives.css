@@ -1798,6 +1798,12 @@ input.fynns-input:focus::-webkit-scrollbar {
      and invent a horizontal scrollbar for wrapping text. */
   overflow-x: clip;
   overflow-y: auto;
+  /* Same sibling rhythm as Card / Collapsible body: FieldStack → Checkbox /
+     InlineAlert / actions use unit-stack-gap (16dp). Adjacent FieldStacks keep
+     form-cluster-gap via margin compensation below. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
   /* FullscreenDialog + other non-centered shells; centered overrides inset. */
   padding: var(--fynns-layout-content-inset);
 }
@@ -3380,9 +3386,9 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
  * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks target
- * form-cluster-gap (32dp). Default margin is the full cluster step (Dialog /
- * bare hosts). Card / Collapsible / `.fynns-unit-stack` already contribute
- * unit-stack-gap — those hosts only add the remainder.
+ * form-cluster-gap (32dp). Default margin is the full cluster step (bare
+ * hosts). Card / Collapsible / Dialog body / `.fynns-unit-stack` already
+ * contribute unit-stack-gap — those hosts only add the remainder.
  */
 .fynns-field-stack {
   display: flex;
@@ -3399,6 +3405,7 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-card-body > .fynns-field-stack + .fynns-field-stack,
 .fynns-collapsible-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-dialog-body > .fynns-field-stack + .fynns-field-stack,
 .fynns-unit-stack > .fynns-field-stack + .fynns-field-stack {
   margin-block-start: calc(
     var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
@@ -5467,8 +5474,8 @@ a.fynns-breadcrumb-link:visited {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
   padding-block-end: var(--fynns-navdrawer-body-pad-block-start);
   /*
-   * Outer inset = `--fynns-navdrawer-pad-inline` (8dp) only. No both-edges /
-   * scrollbar-size inflation (oversized); do not crush pad below 8dp (flush).
+   * Outer inset = `--fynns-navdrawer-pad-inline` (10dp) only. No both-edges /
+   * scrollbar-size inflation (oversized); do not crush pad below ~8dp (flush).
    */
   padding-inline: var(--fynns-navdrawer-pad-inline);
   /*
@@ -5477,8 +5484,8 @@ a.fynns-breadcrumb-link:visited {
    */
   overflow-x: clip;
   overflow-y: auto;
-  /* Matches global `.fynns-scroll` (auto). Explicit so pad contract stays clear. */
-  scrollbar-gutter: auto;
+  /* Native bar hidden; overlay thumb must not steal item width (see theme overlay). */
+  scrollbar-gutter: unset;
 }
 
 .fynns-nav-drawer-section-headline {
@@ -8065,10 +8072,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-code-fg);
-  /* Prefer `auto` (AGENTS.md) — stable reserved a permanent 10dp strip that
-     reads as an early scrollbar. When `data-scrollable`, JS syncs highlight
-     end pad to the textarea scrollbar width so caret/ink stay locked. */
-  scrollbar-gutter: auto;
+  /* Native bar hidden on .fynns-scroll; overlay does not steal width. When
+     data-scrollable, highlight pad sync stays (sb width is 0 under overlay). */
+  scrollbar-gutter: unset;
 }
 
 .fynns-code-block-pre[data-scrollable] {
@@ -8218,9 +8224,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
-  /* Match AGENTS.md `.fynns-scroll` — no permanent empty track. Highlight
-     end pad syncs to the textarea scrollbar when `data-scrollable`. */
-  scrollbar-gutter: auto;
+  /* Native bar hidden; overlay thumbs do not steal width. */
+  scrollbar-gutter: unset;
 }
 
 .fynns-code-block--nowrap .fynns-code-block-highlight,

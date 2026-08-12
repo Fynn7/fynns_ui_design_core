@@ -32,16 +32,19 @@ const en = {
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat.",
   "layouts.fillColumnHelp":
-    "FillColumn — vertical fill host for a height-resolved canvas. header = Preview (content height); children = Chat so the thread absorbs leftover and the composer docks. Do not stack Preview / EmptyState / Composer as siblings (dead band under content height on narrow full-height hosts). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
-  "layouts.fillColumnPreviewTitle": "Preview",
-  "layouts.fillColumnPreviewBody": "Surface / Collapsible preview band (flex: 0).",
-  "layouts.fillColumnEmptyTitle": "Describe the visualization",
+    "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Optional header/footer stay content-sized when needed. Do not stack EmptyState / Composer as siblings of Chat (dead band). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
+  "layouts.fillColumnEmptyTitle": "No messages yet",
   "layouts.fillColumnEmptyBody":
-    "EmptyState lives in ChatThread.empty — composer docks to the FillColumn bottom.",
-  "layouts.fillColumnComposerAria": "Prompt",
-  "layouts.fillColumnComposerPlaceholder": "Ask for a view change…",
+    "Send a note below. The composer stays docked while the thread fills this column.",
+  "layouts.fillColumnUser1": "Summarize the project notes in two sentences.",
+  "layouts.fillColumnAssistant1":
+    "Preferences stay compact. Digests run weekly for the sample region.",
+  "layouts.fillColumnUser2": "Keep the reply shorter.",
+  "layouts.fillColumnAssistant2": "Compact preferences; weekly digests.",
+  "layouts.fillColumnComposerAria": "Message",
+  "layouts.fillColumnComposerPlaceholder": "Write a message…",
   "layouts.fillColumnSend": "Send",
-  "layouts.fillColumnLabel": "Fill column chat",
+  "layouts.fillColumnLabel": "Sample chat",
   "nav.expand": "Expand navigation",
   "nav.expandTip": "Show the navigation drawer",
   "nav.collapse": "Hide navigation",
@@ -649,9 +652,15 @@ const en = {
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: control + narrative = `ControlBlock`; sibling units = Card body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for settings cards. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
+    "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings Card: intro FieldHint → `FieldStack` of FieldBlocks → `FieldStack` of ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other Card siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of FieldBlocks → `FieldStack` of ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+  "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
+  "globals.formRecipeHostCollapsible":
+    "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
+  "globals.formRecipeHostDialog":
+    "Dialog host — `Dialog` + `showCloseButton` + the same FieldStack tree (md ceiling). Switch-only close-stack anatomy stays under Containment overlays.",
+  "globals.formRecipeDialogOpen": "Open Dialog form",
   "globals.formRecipeTitle": "Project preferences",
   "globals.formRecipeIntro":
     "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
@@ -675,7 +684,7 @@ const en = {
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe: `Card` → `FieldHint` intro → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -1285,16 +1294,18 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。",
   "layouts.fillColumnHelp":
-    "FillColumn — 已定高画布上的纵向填满宿主。header = Preview（内容高）；children = Chat，thread 吃剩余高度、composer 贴底。禁止把 Preview / EmptyState / Composer 当兄弟堆叠（窄宽全高会出现下半空白）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
-  "layouts.fillColumnPreviewTitle": "Preview",
-  "layouts.fillColumnPreviewBody": "Surface / Collapsible 预览带（flex: 0）。",
-  "layouts.fillColumnEmptyTitle": "描述可视化",
+    "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。需要时再用可选 header/footer（内容定高）。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠（会留下空白带）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
+  "layouts.fillColumnEmptyTitle": "暂无消息",
   "layouts.fillColumnEmptyBody":
-    "EmptyState 放在 ChatThread.empty — composer 贴在 FillColumn 底缘。",
-  "layouts.fillColumnComposerAria": "提示词",
-  "layouts.fillColumnComposerPlaceholder": "请求切换视角…",
+    "在下方发送一条笔记。composer 贴底，thread 填满本列剩余高度。",
+  "layouts.fillColumnUser1": "用两句话概括项目备注。",
+  "layouts.fillColumnAssistant1": "偏好保持紧凑。示例区域每周生成摘要。",
+  "layouts.fillColumnUser2": "再短一点。",
+  "layouts.fillColumnAssistant2": "紧凑偏好；每周摘要。",
+  "layouts.fillColumnComposerAria": "消息",
+  "layouts.fillColumnComposerPlaceholder": "写一条消息…",
   "layouts.fillColumnSend": "发送",
-  "layouts.fillColumnLabel": "填满列对话",
+  "layouts.fillColumnLabel": "示例对话",
   "nav.expand": "展开导航",
   "nav.expandTip": "展开导航抽屉",
   "nav.collapse": "关闭导航",
@@ -1888,9 +1899,15 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。设置类卡片直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
+    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
-    "检查器 / 设置 Card 权威样例：intro FieldHint → `FieldStack`（FieldBlock 簇）→ `FieldStack`（ControlBlock 簇）→ 可选 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它 Card 兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（FieldBlock 簇）→ `FieldStack`（ControlBlock 簇）→ 可选 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+  "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
+  "globals.formRecipeHostCollapsible":
+    "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
+  "globals.formRecipeHostDialog":
+    "Dialog 宿主 — `Dialog` + `showCloseButton` + 同一 FieldStack 树（md 上限）。纯 Switch 关栈解剖仍在 Containment overlays。",
+  "globals.formRecipeDialogOpen": "打开 Dialog 表单",
   "globals.formRecipeTitle": "项目偏好",
   "globals.formRecipeIntro":
     "这些偏好仅作用于当前沙盒项目，用来演示 FieldBlock / ControlBlock 节奏 — 不接真实后端。",
@@ -1913,7 +1930,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":
-    "配方：`Card` → `FieldHint` 引言 → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
+    "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",

@@ -307,6 +307,191 @@ function GlobalsDemo({ id, children }: { id: string; children: ReactNode }) {
   );
 }
 
+/**
+ * Shared FieldStack tree for `#form-recipe` — same body under Card,
+ * Collapsible, and dismissible Dialog. `idPrefix` keeps htmlFor unique when
+ * multiple hosts mount at once.
+ */
+function FormRecipeFields({
+  idPrefix,
+  t,
+  region,
+  onRegionChange,
+  displayName,
+  onDisplayNameChange,
+  email,
+  onEmailChange,
+  revealEmail,
+  onRevealEmailToggle,
+  timezone,
+  onTimezoneChange,
+  notes,
+  onNotesChange,
+  compact,
+  onCompactChange,
+  digests,
+  onDigestsChange,
+  experimental,
+  onExperimentalChange,
+}: {
+  idPrefix: string;
+  t: (key: MessageKey) => string;
+  region: string;
+  onRegionChange: (value: string) => void;
+  displayName: string;
+  onDisplayNameChange: (value: string) => void;
+  email: string;
+  onEmailChange: (value: string) => void;
+  revealEmail: boolean;
+  onRevealEmailToggle: () => void;
+  timezone: string;
+  onTimezoneChange: (value: string) => void;
+  notes: string;
+  onNotesChange: (value: string) => void;
+  compact: boolean;
+  onCompactChange: (value: boolean) => void;
+  digests: boolean;
+  onDigestsChange: (value: boolean) => void;
+  experimental: boolean;
+  onExperimentalChange: (value: boolean) => void;
+}) {
+  const regionId = `${idPrefix}-region`;
+  const nameId = `${idPrefix}-display-name`;
+  const emailId = `${idPrefix}-email`;
+  const timezoneId = `${idPrefix}-timezone`;
+  const notesId = `${idPrefix}-notes`;
+  return (
+    <>
+      <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
+      <FieldStack>
+        <FieldBlock
+          label={t("globals.formRecipeRegion")}
+          htmlFor={regionId}
+          description={t("globals.formRecipeRegionHint")}
+        >
+          <Select
+            id={regionId}
+            ariaLabel={t("globals.formRecipeRegion")}
+            options={["Europe", "Americas", "Asia Pacific"]}
+            value={region}
+            onChange={onRegionChange}
+          />
+        </FieldBlock>
+        <FieldBlock label={t("globals.formRecipeDisplayName")} htmlFor={nameId}>
+          <Input
+            id={nameId}
+            aria-label={t("globals.formRecipeDisplayName")}
+            value={displayName}
+            onChange={(event) => onDisplayNameChange(event.target.value)}
+          />
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipeEmail")}
+          htmlFor={emailId}
+          actions={
+            <Tooltip content={t("globals.formRecipeRevealTip")}>
+              <IconButton
+                size="sm"
+                aria-label={t("globals.formRecipeRevealTip")}
+                onClick={onRevealEmailToggle}
+              >
+                {revealEmail ? (
+                  <EyeOffIcon aria-hidden />
+                ) : (
+                  <EyeIcon aria-hidden />
+                )}
+              </IconButton>
+            </Tooltip>
+          }
+        >
+          <Input
+            id={emailId}
+            aria-label={t("globals.formRecipeEmail")}
+            type={revealEmail ? "text" : "password"}
+            value={email}
+            onChange={(event) => onEmailChange(event.target.value)}
+            autoComplete="off"
+          />
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipeTimezone")}
+          htmlFor={timezoneId}
+          actions={
+            <Tooltip content={t("globals.formRecipeRefreshTip")}>
+              <IconButton
+                size="sm"
+                aria-label={t("globals.formRecipeRefreshTip")}
+                onClick={() => {}}
+              >
+                <UndoIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
+          }
+        >
+          <Select
+            id={timezoneId}
+            ariaLabel={t("globals.formRecipeTimezone")}
+            options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
+            value={timezone}
+            onChange={onTimezoneChange}
+          />
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipeNotes")}
+          htmlFor={notesId}
+          description={t("globals.formRecipeNotesHint")}
+        >
+          <Textarea
+            id={notesId}
+            aria-label={t("globals.formRecipeNotes")}
+            value={notes}
+            onChange={(event) => onNotesChange(event.target.value)}
+            minRows={2}
+          />
+        </FieldBlock>
+      </FieldStack>
+      <FieldStack>
+        <ControlBlock description={t("globals.formRecipeCompactHint")}>
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.formRecipeCompact")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.formRecipeCompact")}
+                checked={compact}
+                onCheckedChange={onCompactChange}
+              />
+            </ControlRow>
+          </ControlStack>
+        </ControlBlock>
+        <ControlBlock description={t("globals.formRecipeDigestsHint")}>
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.formRecipeDigests")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.formRecipeDigests")}
+                checked={digests}
+                onCheckedChange={onDigestsChange}
+              />
+            </ControlRow>
+          </ControlStack>
+        </ControlBlock>
+      </FieldStack>
+      <Checkbox
+        label={t("globals.formRecipeExperimental")}
+        checked={experimental}
+        onCheckedChange={onExperimentalChange}
+      />
+      <InlineAlert severity="info" message={t("globals.formRecipeAlert")} />
+      <div className="sandbox-globals-form-recipe-actions">
+        <Button variant="ghost" size="sm">
+          {t("globals.formRecipeReset")}
+        </Button>
+        <Button size="sm">{t("globals.formRecipeSave")}</Button>
+      </div>
+    </>
+  );
+}
+
 /** One M3 / sandbox category — Collapsible defaults to collapsed.
  * Body is a render prop and mounts only while `open`, so closed catalog
  * sections do not keep demo DOM / indeterminate progress animations alive.
@@ -526,6 +711,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formCompact, setFormCompact] = useState(false);
   const [formDigests, setFormDigests] = useState(true);
   const [formExperimental, setFormExperimental] = useState(true);
+  const [formRecipeCollapsibleOpen, setFormRecipeCollapsibleOpen] =
+    useState(true);
+  const [formRecipeDialogOpen, setFormRecipeDialogOpen] = useState(false);
+  const formRecipeFieldProps = {
+    t,
+    region: formRegion,
+    onRegionChange: setFormRegion,
+    displayName: formDisplayName,
+    onDisplayNameChange: setFormDisplayName,
+    email: formEmail,
+    onEmailChange: setFormEmail,
+    revealEmail: formRevealEmail,
+    onRevealEmailToggle: () => setFormRevealEmail((v) => !v),
+    timezone: formTimezone,
+    onTimezoneChange: setFormTimezone,
+    notes: formNotes,
+    onNotesChange: setFormNotes,
+    compact: formCompact,
+    onCompactChange: setFormCompact,
+    digests: formDigests,
+    onDigestsChange: setFormDigests,
+    experimental: formExperimental,
+    onExperimentalChange: setFormExperimental,
+  };
 
   useEffect(() => {
     if (!busyScrimOpen) return;
@@ -3252,143 +3461,48 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
         <GlobalsDemo id="form-recipe">
           <SandboxHelp text={t("globals.formRecipeLead")} />
-          <Card
-            className="sandbox-globals-form-recipe"
+          <div className="sandbox-globals-form-recipe-hosts">
+            <SandboxHelp text={t("globals.formRecipeHostCard")} />
+            <Card
+              className="sandbox-globals-form-recipe"
+              title={t("globals.formRecipeTitle")}
+            >
+              <FormRecipeFields idPrefix="sandbox-form-card" {...formRecipeFieldProps} />
+            </Card>
+            <SandboxHelp text={t("globals.formRecipeHostCollapsible")} />
+            <Collapsible
+              className="sandbox-globals-form-recipe"
+              title={t("globals.formRecipeTitle")}
+              open={formRecipeCollapsibleOpen}
+              onOpenChange={setFormRecipeCollapsibleOpen}
+            >
+              <FormRecipeFields
+                idPrefix="sandbox-form-collapsible"
+                {...formRecipeFieldProps}
+              />
+            </Collapsible>
+            <SandboxHelp text={t("globals.formRecipeHostDialog")} />
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setFormRecipeDialogOpen(true)}
+            >
+              {t("globals.formRecipeDialogOpen")}
+            </Button>
+          </div>
+          <Dialog
+            open={formRecipeDialogOpen}
+            onOpenChange={setFormRecipeDialogOpen}
             title={t("globals.formRecipeTitle")}
+            size="md"
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
           >
-            <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
-            <FieldStack>
-            <FieldBlock
-              label={t("globals.formRecipeRegion")}
-              htmlFor="sandbox-form-region"
-              description={t("globals.formRecipeRegionHint")}
-            >
-              <Select
-                id="sandbox-form-region"
-                ariaLabel={t("globals.formRecipeRegion")}
-                options={["Europe", "Americas", "Asia Pacific"]}
-                value={formRegion}
-                onChange={setFormRegion}
-              />
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.formRecipeDisplayName")}
-              htmlFor="sandbox-form-display-name"
-            >
-              <Input
-                id="sandbox-form-display-name"
-                aria-label={t("globals.formRecipeDisplayName")}
-                value={formDisplayName}
-                onChange={(event) => setFormDisplayName(event.target.value)}
-              />
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.formRecipeEmail")}
-              htmlFor="sandbox-form-email"
-              actions={
-                <Tooltip content={t("globals.formRecipeRevealTip")}>
-                  <IconButton
-                    size="sm"
-                    aria-label={t("globals.formRecipeRevealTip")}
-                    onClick={() => setFormRevealEmail((v) => !v)}
-                  >
-                    {formRevealEmail ? (
-                      <EyeOffIcon aria-hidden />
-                    ) : (
-                      <EyeIcon aria-hidden />
-                    )}
-                  </IconButton>
-                </Tooltip>
-              }
-            >
-              <Input
-                id="sandbox-form-email"
-                aria-label={t("globals.formRecipeEmail")}
-                type={formRevealEmail ? "text" : "password"}
-                value={formEmail}
-                onChange={(event) => setFormEmail(event.target.value)}
-                autoComplete="off"
-              />
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.formRecipeTimezone")}
-              htmlFor="sandbox-form-timezone"
-              actions={
-                <Tooltip content={t("globals.formRecipeRefreshTip")}>
-                  <IconButton
-                    size="sm"
-                    aria-label={t("globals.formRecipeRefreshTip")}
-                    onClick={() => {}}
-                  >
-                    <UndoIcon aria-hidden />
-                  </IconButton>
-                </Tooltip>
-              }
-            >
-              <Select
-                id="sandbox-form-timezone"
-                ariaLabel={t("globals.formRecipeTimezone")}
-                options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
-                value={formTimezone}
-                onChange={setFormTimezone}
-              />
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.formRecipeNotes")}
-              htmlFor="sandbox-form-notes"
-              description={t("globals.formRecipeNotesHint")}
-            >
-              <Textarea
-                id="sandbox-form-notes"
-                aria-label={t("globals.formRecipeNotes")}
-                value={formNotes}
-                onChange={(event) => setFormNotes(event.target.value)}
-                minRows={2}
-              />
-            </FieldBlock>
-            </FieldStack>
-            <FieldStack>
-            <ControlBlock description={t("globals.formRecipeCompactHint")}>
-              <ControlStack columns={1}>
-                <ControlRow label={t("globals.formRecipeCompact")}>
-                  <Switch
-                    label=""
-                    ariaLabel={t("globals.formRecipeCompact")}
-                    checked={formCompact}
-                    onCheckedChange={setFormCompact}
-                  />
-                </ControlRow>
-              </ControlStack>
-            </ControlBlock>
-            <ControlBlock description={t("globals.formRecipeDigestsHint")}>
-              <ControlStack columns={1}>
-                <ControlRow label={t("globals.formRecipeDigests")}>
-                  <Switch
-                    label=""
-                    ariaLabel={t("globals.formRecipeDigests")}
-                    checked={formDigests}
-                    onCheckedChange={setFormDigests}
-                  />
-                </ControlRow>
-              </ControlStack>
-            </ControlBlock>
-            </FieldStack>
-            <Checkbox
-              label={t("globals.formRecipeExperimental")}
-              checked={formExperimental}
-              onCheckedChange={setFormExperimental}
+            <FormRecipeFields
+              idPrefix="sandbox-form-dialog"
+              {...formRecipeFieldProps}
             />
-            <InlineAlert
-              severity="info"
-              message={t("globals.formRecipeAlert")}
-            />
-            <div className="sandbox-globals-form-recipe-actions">
-              <Button variant="ghost" size="sm">
-                {t("globals.formRecipeReset")}
-              </Button>
-              <Button size="sm">{t("globals.formRecipeSave")}</Button>
-            </div>
-          </Card>
+          </Dialog>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>
       </>

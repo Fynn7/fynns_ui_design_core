@@ -135,16 +135,70 @@ button {
 
 /*
  * Scroll surfaces: every overflow:auto/scroll host must carry .fynns-scroll.
- * Fine pointer: thumb is hover/focus-within only (see above). Touch: always tinted.
- * Gutter is auto — no permanent empty track (Cursor-like); classic Windows may
- * reflow slightly when overflow appears. Do not use both-edges (overlay ignores
- * it; Chromium right-edge clips). Carousel / SearchBar focused input hide bars
- * entirely in primitives.css.
+ * Native classic bars are hidden — they must never steal content width (badges /
+ * chevrons / Switch tracks). Overlay thumbs are painted by
+ * src/theme/overlayScrollbar.ts (fixed portal rails; never inflate scrollWidth).
+ * Fine pointer: overlay thumb idle-hidden until host hover / focus-within.
+ * Touch: overlay always tinted when overflowing. Do not use scrollbar-gutter
+ * stable/both-edges. Carousel / SearchBar focused input hide bars in primitives.
+ * Textarea / input: native bar also hidden; no overlay rail (replaced elements).
+ * Horizontal overlay only when overflow-x is auto/scroll — clip/hidden hosts
+ * stay vertical-only (no fake X bar).
  */
 .fynns-scroll {
-  scrollbar-gutter: auto;
-  /* Firefox: fade scrollbar-color when the engine supports it. */
-  transition: scrollbar-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
+  scrollbar-width: none;
+  scrollbar-gutter: unset;
+}
+
+.fynns-scroll::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none;
+}
+
+/* Positioning context no longer required — rails live in a fixed portal. */
+.fynns-scroll--overlay-host {
+  position: relative;
+}
+
+.fynns-scroll-overlay-portal {
+  position: fixed;
+  inset: 0;
+  /* Above modal (60) so Dialog / Drawer / Sheet scroll hosts keep visible thumbs;
+   * below tooltip (8000). pointer-events:none so rails never steal clicks. */
+  z-index: var(--fynns-z-toast);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fynns-scroll-rail {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.fynns-scroll-thumb {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  box-sizing: border-box;
+  border-radius: var(--fynns-radius-lg);
+  border: var(--fynns-scrollbar-thumb-border) solid transparent;
+  background-clip: padding-box;
+  background-color: var(--fynns-scrollbar-thumb);
+  transition: background-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fynns-scroll-rail[data-visible="false"] .fynns-scroll-thumb {
+    background-color: transparent;
+  }
+
+  .fynns-scroll-rail[data-visible="true"] .fynns-scroll-thumb {
+    background-color: var(--fynns-scrollbar-thumb);
+  }
 }
 
 .fynns-sr-only {
