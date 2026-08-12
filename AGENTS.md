@@ -526,7 +526,10 @@ classes.
     (`composer-expanded-gap`), and `composer-text-line-height` (22dp).
     Height auto-grows from `scrollHeight` after the expanded morph
     (remeasures when `data-expanded` flips) — never leave icons vertically
-    centered beside tall text. Spec:
+    centered beside tall text. **Do not auto-collapse a non-empty draft:**
+    EndAside / narrow hosts morph width when `data-expanded` flips, so
+    expand↔collapse can hit `Maximum update depth exceeded` and blank
+    `#root`. Collapse only when the value is cleared. Spec:
     [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
     Collapsed shell ≈ 44dp (`--fynns-radius-3xl`). Cap:
     `--fynns-chat-composer-max-height` (13rem).
@@ -724,8 +727,10 @@ classes.
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
   `onChange` coalesced while typing / flushed on blur); `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
-  `pre` scroll); focus = quiet Input-like border (`--fynns-focus-border-mix`),
-  not an inset ring;
+  `pre` scroll); vertical thumb only when content exceeds the host
+  (`data-scrollable`, same gate as ChatComposer — avoids early bars from
+  pad / trailing-newline noise); focus = quiet Input-like border
+  (`--fynns-focus-border-mix`), not an inset ring;
   supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
   `css`/`json`/`bash`/… or consumer `registerHighlightLanguage` /
   `highlightProfile`); unknown → plain mono;

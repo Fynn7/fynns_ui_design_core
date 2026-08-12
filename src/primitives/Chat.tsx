@@ -391,21 +391,24 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
       const tallerThanOneLine = scrollH > oneLine + 2;
       const shouldExpand = forceExpand || tallerThanOneLine;
 
-      // Morph first when needed, then remasure on the next layout pass with the
-      // expanded line-height so height tracks real text — not a stale 32dp probe.
-      // Restore a floor height so we never leave `height: 0` + overflow paint.
-      if (shouldExpand !== expanded) {
-        el.style.height = `${shouldExpand ? textLine : controlLine}px`;
+      // Expand freely when content needs it. Do **not** auto-collapse a
+      // non-empty draft: EndAside / narrow hosts morph width when
+      // `data-expanded` flips (toolbar row ↔ bottom bar), so scrollHeight can
+      // oscillate expand↔collapse and hit "Maximum update depth exceeded"
+      // (blank #root). Collapse only when the value is cleared (handled above).
+      // Do not restore auto-collapse of non-empty drafts on narrow EndAside.
+      if (shouldExpand && !expanded) {
+        el.style.height = `${textLine}px`;
         el.removeAttribute("data-scrollable");
-        setExpanded(shouldExpand);
+        setExpanded(true);
         return;
       }
 
-      const floor = shouldExpand ? textLine : controlLine;
+      const floor = expanded || shouldExpand ? textLine : controlLine;
       const next = Math.min(Math.max(scrollH, floor), max);
       el.style.height = `${next}px`;
       // Scroll only when content is clipped by the max-height cap.
-      if (shouldExpand && scrollH > max + 0.5) {
+      if ((expanded || shouldExpand) && scrollH > max + 0.5) {
         el.setAttribute("data-scrollable", "");
       } else {
         el.removeAttribute("data-scrollable");

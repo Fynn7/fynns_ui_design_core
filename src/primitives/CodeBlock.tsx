@@ -2,6 +2,7 @@ import {
   startTransition,
   useDeferredValue,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ChangeEvent,
@@ -210,7 +211,10 @@ function assertCodeBlockChrome(
  *
  * Supported `language` values get zero-dep syntax coloring via
  * `--fynns-code-*` tokens. Pass `highlightProfile` for app-owned line-command
- * languages. The scroll surface uses `fynns-scroll`.
+ * languages. The scroll surface uses `fynns-scroll`. Vertical overflow is
+ * gated with `data-scrollable` (same idea as `ChatComposer`) so a 1px
+ * scrollHeight/clientHeight mismatch from padding / trailing newlines does
+ * not paint an early thumb while copy still fits the host.
  */
 export function CodeBlock(props: CodeBlockProps) {
   const editable = props.variant === "editable";
@@ -265,6 +269,8 @@ export function CodeBlock(props: CodeBlockProps) {
   const deferredSource = useDeferredValue(source);
 
   const highlightRef = useRef<HTMLPreElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const preRef = useRef<HTMLPreElement>(null);
   const maxHeightCss =
     maxHeight == null
       ? undefined
@@ -273,6 +279,72 @@ export function CodeBlock(props: CodeBlockProps) {
         : maxHeight;
   const surfaceStyle: CSSProperties | undefined =
     maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
+
+  /* Opt into overflow auto only when content actually exceeds the host.
+     Default CSS keeps overflow hidden so sub-pixel / trailing-newline
+     noise cannot paint a nearly-full thumb over empty pad.
+     Soft-wrap: vertical gate only. `wrap={false}` also gates on width so
+     long lines still get classic pre scroll (x and/or y).
+     When a vertical thumb appears, pad the highlight layer by the
+     scrollbar width so transparent caret/ink stay column-locked. */
+  useLayoutEffect(() => {
+    const el = editable ? inputRef.current : preRef.current;
+    if (!el) return;
+
+    let padRaf = 0;
+
+    const syncHighlightPad = (scrollable: boolean) => {
+      const pre = highlightRef.current;
+      if (!pre || !editable) return;
+      if (!scrollable) {
+        pre.style.paddingInlineEnd = "";
+        return;
+      }
+      const sb = Math.max(0, el.offsetWidth - el.clientWidth);
+      pre.style.paddingInlineEnd =
+        sb > 0
+          ? `calc(var(--fynns-layout-content-inset) + ${sb}px)`
+          : "";
+    };
+
+    const update = () => {
+      const yOverflow = el.scrollHeight - el.clientHeight > 1;
+      const xOverflow = !wrap && el.scrollWidth - el.clientWidth > 1;
+      const scrollable = yOverflow || xOverflow;
+      if (scrollable) {
+        el.setAttribute("data-scrollable", "");
+        // Scrollbar width is only known after overflow:auto paints.
+        if (padRaf) cancelAnimationFrame(padRaf);
+        padRaf = requestAnimationFrame(() => {
+          padRaf = 0;
+          syncHighlightPad(true);
+        });
+      } else {
+        el.removeAttribute("data-scrollable");
+        if (el.scrollTop !== 0) el.scrollTop = 0;
+        if (el.scrollLeft !== 0) el.scrollLeft = 0;
+        if (editable && highlightRef.current) {
+          highlightRef.current.scrollTop = 0;
+          highlightRef.current.scrollLeft = 0;
+        }
+        syncHighlightPad(false);
+      }
+    };
+
+    update();
+    const ro =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(() => {
+            update();
+          })
+        : null;
+    ro?.observe(el);
+    return () => {
+      if (padRaf) cancelAnimationFrame(padRaf);
+      ro?.disconnect();
+      if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
+    };
+  }, [editable, source, wrap, maxHeightCss]);
 
   const flushNotify = (next: string) => {
     if (!onChangeProp) return;
@@ -416,6 +488,7 @@ export function CodeBlock(props: CodeBlockProps) {
             <code className="fynns-code-block-code">{codeBody}</code>
           </pre>
           <textarea
+            ref={inputRef}
             className="fynns-code-block-input fynns-scroll"
             style={surfaceStyle}
             value={source}
@@ -434,7 +507,11 @@ export function CodeBlock(props: CodeBlockProps) {
           />
         </div>
       ) : (
-        <pre className="fynns-code-block-pre fynns-scroll" style={surfaceStyle}>
+        <pre
+          ref={preRef}
+          className="fynns-code-block-pre fynns-scroll"
+          style={surfaceStyle}
+        >
           <code className="fynns-code-block-code">
             {highlighted
               ? highlightSource(source, language, highlightProfile)

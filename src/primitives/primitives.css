@@ -7831,22 +7831,33 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline: var(--fynns-layout-content-inset);
   min-width: 0;
   max-width: 100%;
-  /* Default `wrap` (no `--nowrap`): soft-wrap; vertical scroll only. */
+  /* Default `wrap` (no `--nowrap`): soft-wrap; vertical scroll only when
+   * `data-scrollable` (content exceeds host — avoids early thumbs). */
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   overflow-x: clip;
-  overflow-y: auto;
+  overflow-y: hidden;
   font-family: var(--fynns-font-mono);
   font-size: var(--fynns-font-size-xs);
   line-height: var(--fynns-line-height-body);
   color: var(--fynns-code-fg);
-  /* Keep stable gutter so highlight/textarea width stays locked (not global auto). */
-  scrollbar-gutter: stable;
+  /* Prefer `auto` (AGENTS.md) — stable reserved a permanent 10dp strip that
+     reads as an early scrollbar. When `data-scrollable`, JS syncs highlight
+     end pad to the textarea scrollbar width so caret/ink stay locked. */
+  scrollbar-gutter: auto;
+}
+
+.fynns-code-block-pre[data-scrollable] {
+  overflow-y: auto;
 }
 
 .fynns-code-block--nowrap .fynns-code-block-pre {
   white-space: pre;
   overflow-wrap: normal;
+  overflow: hidden;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-pre[data-scrollable] {
   overflow: auto;
 }
 
@@ -7970,8 +7981,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
-  /* Keep content-box width aligned when the textarea shows a scrollbar. */
-  scrollbar-gutter: stable;
+  /* Match AGENTS.md `.fynns-scroll` — no permanent empty track. Highlight
+     end pad syncs to the textarea scrollbar when `data-scrollable`. */
+  scrollbar-gutter: auto;
 }
 
 .fynns-code-block--nowrap .fynns-code-block-highlight,
@@ -8008,12 +8020,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   resize: none;
   outline: none;
   overflow-x: clip;
-  overflow-y: auto;
+  /* Scroll only when `data-scrollable` — same gate as ChatComposer. */
+  overflow-y: hidden;
   /* Match highlight ink metrics so caret tracks glyphs. */
   -webkit-text-fill-color: transparent;
 }
 
+.fynns-code-block-input[data-scrollable] {
+  overflow-y: auto;
+}
+
 .fynns-code-block--nowrap .fynns-code-block-input {
+  overflow: hidden;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-input[data-scrollable] {
   overflow: auto;
 }
 
