@@ -162,8 +162,10 @@ A topbar search icon focuses the Components SearchBar from any page.
 
 ### Language (English / 中文)
 
-- Open **Templates** via the gear control and use the **Language** toggle
-  (`English` / `中文`) at the top of the settings page.
+- TopAppBar **EN / 中** control opens a menu to switch the sandbox chrome
+  locale; Settings (**Templates** gear) still has the segmented **Language**
+  toggle (`English` / `中文`). Shared component:
+  [`examples/sandbox/src/components/LanguageSwitcher.tsx`](examples/sandbox/src/components/LanguageSwitcher.tsx).
 - Choice persists in `localStorage` (`fynns-sandbox-locale`) and sets
   `document.documentElement.lang` plus `data-fynns-locale`.
 - Catalog: [`examples/sandbox/src/i18n/`](examples/sandbox/src/i18n/).
@@ -173,7 +175,8 @@ A topbar search icon focuses the Components SearchBar from any page.
 
 - Open via the **gear** control at the bottom of the left nav (special page,
   no inspector aside).
-- **Language** switch (English / 中文) sits at the top of this settings page.
+- **Language** switch (English / 中文) also sits at the top of this settings
+  page (same `LanguageSwitcher` as the TopAppBar).
 - **Export JSON** / **Import JSON** move the full sandbox configuration:
   `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
 - **Save as template** stores the same bundle under a name in `localStorage`

@@ -40,6 +40,7 @@ import {
   patchSandboxUiSession,
   type SandboxPage,
 } from "../state/sandboxUiSession";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
@@ -407,6 +408,7 @@ export function SandboxShell() {
                     </IconButton>
                   </Tooltip>
                 ) : null}
+                <LanguageSwitcher variant="toolbar" />
                 <Tooltip content={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}>
                   <IconButton
                     aria-label={theme === "light" ? t("topbar.themeToDark") : t("topbar.themeToLight")}

@@ -1,6 +1,11 @@
 export type { Locale } from "./types";
 export type { MessageKey } from "./messages";
-export { LOCALES, LOCALE_LABELS, LOCALE_STORAGE_KEY } from "./types";
+export {
+  LOCALES,
+  LOCALE_LABELS,
+  LOCALE_SHORT,
+  LOCALE_STORAGE_KEY,
+} from "./types";
 export {
   messages,
   translate,
