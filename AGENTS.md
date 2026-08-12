@@ -516,7 +516,8 @@ classes.
     glyph and copy centers match). Same secondary-ink band as
     ChatThinking (header label inherits muted; active step / artifact
     hover use soft mixes — not full on-surface). While `streaming`, each
-    newly mounted step enters with fade + `translateY(0.25rem)` → 0 over
+    newly mounted steps — and any steps already in the tree when
+    `streaming` flips on — enter with fade + `translateY(0.25rem)` → 0 over
     `--fynns-duration-slow` / `--fynns-ease-emphasized` (`fill-mode: both`;
     assistant-ui Reasoning panel `duration-300` / `slide-in-from-bottom-1`
     parity) — flex gap pushes later rows / answer down; static completed

@@ -9604,12 +9604,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * New step enter while streaming (assistant-ui Reasoning panel):
+ * Step enter while streaming (assistant-ui Reasoning panel):
  * `fade-in slide-in-from-bottom-1 animate-in duration-300 fill-mode-both`.
  * slide-in-from-bottom-1 ≈ 0.25rem; 300ms → nearest `--fynns-duration-slow`.
  * Layout (flex gap) pushes later rows / answer down; we only soften the
- * newly mounted row — no FLIP / View Transition dependency.
- * Gated on `--streaming` so a static completed tree does not flash on load.
+ * animated rows — no FLIP / View Transition dependency.
+ * Gated on `--streaming`: when streaming turns on, every step currently in
+ * the tree (including ones already mounted) runs enter once; later mounts
+ * while streaming also enter. Static completed trees (not streaming) skip.
  */
 .fynns-chat-activity--streaming .fynns-chat-activity-step {
   animation: fynns-chat-activity-step-enter var(--fynns-duration-slow)
