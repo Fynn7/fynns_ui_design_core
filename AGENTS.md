@@ -189,9 +189,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
-  / ControlBlocks. FieldBlocks share `field-stack-gap` (8dp); sibling
-  ControlBlocks open to `unit-stack-gap` (16dp); adjacent FieldStacks get
-  `form-cluster-gap` (32dp). Live tree: sandbox `#form-recipe`.
+  / ControlBlocks. FieldBlocks share `field-stack-gap` (8dp); FieldBlocks with
+  a description/error hint and sibling ControlBlocks open to `unit-stack-gap`
+  (16dp); adjacent FieldStacks get `form-cluster-gap` (32dp). Live tree:
+  sandbox `#form-recipe`.
   See **Toolbar / unit rhythm** → **FieldStack semantic clusters**.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
@@ -859,7 +860,7 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
+  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap); **with** description/error → visual **16dp** (`unit-stack-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |
   | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
@@ -873,9 +874,10 @@ classes.
     Textarea / Otp `FieldBlock`s, **or** a same-kind choice cluster
     (`Radio` single-select, `Checkbox` multi-select, and/or `Slider` under
     `FieldBlock`s), **or** Preference `ControlBlock`s (Switch + note).
-    Inside: `field-stack-gap` (**8dp**) for FieldBlocks; sibling
-    **ControlBlock**s open to `unit-stack-gap` (**16dp**) so Switch+note
-    units breathe. Choice lists use
+    Inside: `field-stack-gap` (**8dp**) for plain FieldBlocks; FieldBlocks
+    with description/error and sibling **ControlBlock**s open to
+    `unit-stack-gap` (**16dp**) so choice+hint / Switch+note units breathe.
+    Choice lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
     `ControlStack` — that grid auto-flows into label|control columns).
     Stack rows share a dense 2rem **min-height** (option floor) and `space-xs`
