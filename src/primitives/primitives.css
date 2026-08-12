@@ -9519,26 +9519,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   opacity: 1;
 }
 
-/* Continuous vertical rail through node centers. */
-.fynns-chat-activity-steps::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: calc(
-    (var(--fynns-size-icon) / 2) - (var(--fynns-border-hairline) / 2)
-  );
-  inset-block-start: calc(
-    var(--fynns-chatmessage-thinking-body-pad-block) +
-      (var(--fynns-size-icon) / 2)
-  );
-  inset-block-end: calc(
-    var(--fynns-chatmessage-thinking-body-pad-block) +
-      (var(--fynns-size-icon) / 2)
-  );
-  width: var(--fynns-border-hairline);
-  background: var(--fynns-color-border-strong);
-  pointer-events: none;
-}
-
 .fynns-chat-activity-step {
   position: relative;
   display: grid;
@@ -9547,6 +9527,25 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   align-items: start;
   max-width: 100%;
   min-width: 0;
+}
+
+/*
+ * Rail segments between icons only — never a continuous line punched with a
+ * fixed surface (`app-bg` mismatched canvas / EndAside / bubble hosts).
+ * Runs from icon bottom through the step + gap to the next icon top.
+ */
+.fynns-chat-activity-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-inline-start: calc(
+    (var(--fynns-size-icon) / 2) - (var(--fynns-border-hairline) / 2)
+  );
+  top: var(--fynns-size-icon);
+  bottom: calc(-1 * var(--fynns-chatmessage-activity-step-gap));
+  width: var(--fynns-border-hairline);
+  background: var(--fynns-color-border-strong);
+  pointer-events: none;
 }
 
 .fynns-chat-activity-node {
@@ -9560,10 +9559,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: var(--fynns-size-icon);
   height: var(--fynns-size-icon);
   color: var(--fynns-color-text-muted);
-  /* Punch the rail behind the glyph. */
-  background: var(--fynns-color-app-bg);
-  box-shadow: 0 0 0 var(--fynns-chatmessage-activity-node-halo)
-    var(--fynns-color-app-bg);
+  background: transparent;
 }
 
 .fynns-chat-activity-mark {

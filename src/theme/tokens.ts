@@ -730,8 +730,6 @@ export const CHATMESSAGE_TOKENS = {
   /** Inline pad inside artifact capsule. */
   "activity-artifact-pad-inline": "0.375rem",
   "activity-artifact-pad-block": "0.125rem",
-  /** Soft gap punched around the node so the rail does not slice the glyph. */
-  "activity-node-halo": "0.125rem",
 } as const;
 
 /**
