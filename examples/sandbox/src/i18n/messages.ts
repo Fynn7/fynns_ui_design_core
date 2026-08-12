@@ -504,7 +504,7 @@ const en = {
     "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + float copy only — never `label=\"\"`); `editable` same head rules when `label` set. Soft-wrap default; `wrap={false}` for classic pre scroll. Supported languages get zero-dep `--fynns-code-*` spans. Copy fades in on hover.",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; same `--fynns-code-*` tokenizer as read-only samples. Soft-wrap is on by default (`wrap`).",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — long lines scroll horizontally instead of soft-wrapping.",
@@ -1742,7 +1742,7 @@ const zh: Record<MessageKey, string> = {
     "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 浮层复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。默认软换行；`wrap={false}` 经典横向滚动。支持语言用零依赖 `--fynns-code-*` 着色。悬停渐显复制。",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；与只读样例共用 `--fynns-code-*` 分词器。默认软换行（`wrap`）。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — 长行横向滚动，不软换行。",

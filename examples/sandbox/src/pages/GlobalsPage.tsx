@@ -2946,7 +2946,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             copyAriaLabel={t("globals.codeBlockCopy")}
             defaultValue={`export const accent = "var(--fynns-color-accent)";\n`}
             maxHeight="8rem"
-            rows={5}
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
