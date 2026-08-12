@@ -28,10 +28,12 @@ export type ChatMessageProps = Omit<
   /** Optional author label above the body. Ignored for `system`. */
   name?: ReactNode;
   /**
-   * Incomplete / streaming UI cues: trailing caret blink, `aria-busy`, and a
-   * polite live region. Does **not** generate tokens — set `true` while the
-   * app appends `children`, then `false` when the stream ends.
-   * Ignored for `system`. Suppressed when `error` is set.
+   * Incomplete / streaming UI cues: trailing caret blink (only when there is
+   * answer text), `aria-busy`, and a polite live region. Does **not** generate
+   * tokens — set `true` while the app appends `children`, then `false` when
+   * the stream ends. No empty bubble / lone caret while waiting on thinking
+   * with no answer tokens yet. Ignored for `system`. Suppressed when `error`
+   * is set.
    * @default false
    */
   streaming?: boolean;
@@ -126,8 +128,13 @@ export function ChatMessage({
   const showAvatar = !isSystem && avatar != null;
   const showName = !isSystem && name != null;
   const showThinking = !isSystem && thinking != null;
-  const hasBody = children != null && children !== "";
-  const showBubble = hasBody || isStreaming;
+  const hasBody =
+    children != null &&
+    children !== false &&
+    !(typeof children === "string" && children.trim() === "");
+  /** Caret only while tokens exist — never an empty bubble during thinking. */
+  const showCursor = isStreaming && hasBody;
+  const showBubble = hasBody;
   const showCitations =
     isAssistant &&
     !hasError &&
@@ -165,14 +172,12 @@ export function ChatMessage({
         {showThinking ? thinking : null}
         {showBubble ? (
           <div className="fynns-chat-message-bubble">
-            {hasBody || isStreaming ? (
-              <div className="fynns-chat-message-body">
-                {children}
-                {isStreaming ? (
-                  <span className="fynns-chat-message-cursor" aria-hidden />
-                ) : null}
-              </div>
-            ) : null}
+            <div className="fynns-chat-message-body">
+              {children}
+              {showCursor ? (
+                <span className="fynns-chat-message-cursor" aria-hidden />
+              ) : null}
+            </div>
           </div>
         ) : null}
         {showCitations ? (

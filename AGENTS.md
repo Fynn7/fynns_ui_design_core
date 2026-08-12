@@ -478,7 +478,9 @@ classes.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
-    live — no LLM; caret height `--fynns-chatmessage-cursor-height` (**`1lh`**
+    live — no LLM; caret only while answer `children` has text (no empty
+    bubble / lone caret during thinking-only wait); caret height
+    `--fynns-chatmessage-cursor-height` (**`1lh`**
     of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
@@ -745,7 +747,7 @@ classes.
   100% of same host (`radius-3xl`,
   32dp controls + 6dp pad ≈ 44dp shell); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
-  default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
+  default**; `streaming` caret only with answer text + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /
   `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
   — see Feedback keep-set; **`ChatActivity`** / Step / Artifact = Wave 2
