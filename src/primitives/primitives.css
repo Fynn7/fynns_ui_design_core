@@ -3353,9 +3353,10 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
 /*
  * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
- * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks use
- * form-cluster-gap (32dp) — Card body already supplies unit-stack-gap (16dp),
- * so the sibling rule adds the remainder: cluster − unit.
+ * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks target
+ * form-cluster-gap (32dp). Default margin is the full cluster step (Dialog /
+ * bare hosts). Card / Collapsible / `.fynns-unit-stack` already contribute
+ * unit-stack-gap — those hosts only add the remainder.
  */
 .fynns-field-stack {
   display: flex;
@@ -3367,6 +3368,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-field-stack + .fynns-field-stack {
+  margin-block-start: var(--fynns-layout-form-cluster-gap);
+}
+
+.fynns-card-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-collapsible-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-unit-stack > .fynns-field-stack + .fynns-field-stack {
   margin-block-start: calc(
     var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
   );

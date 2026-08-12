@@ -22,7 +22,9 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  *
  * Gap is `--fynns-layout-field-stack-gap` (8dp — same step as
  * `control-stack-gap`). Adjacent FieldStacks use
- * `--fynns-layout-form-cluster-gap` (32dp). Other Card siblings stay on
+ * `--fynns-layout-form-cluster-gap` (32dp) — full step on Dialog / bare hosts;
+ * Card / Collapsible / `.fynns-unit-stack` subtract the parent `unit-stack-gap`
+ * so the visual total stays 32dp. Other Card siblings stay on
  * `--fynns-layout-unit-stack-gap` (16dp).
  *
  * Live recipe: sandbox Globals `#form-recipe`. Authority: AGENTS.md
