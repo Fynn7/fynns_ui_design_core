@@ -476,22 +476,27 @@ classes.
     of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
-    **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
-    between `name` and the answer bubble (ChatGPT / Claude “Thinking /
-    Thought for Ns”; `.fynns-expand` height morph — not Collapsible card chrome;
-    muted trigger; streaming label opacity pulse via
-    `--fynns-duration-presentation-hint`; force-open while streaming unless
-    user pinned closed; auto-collapse once when done; user expand sticks;
-    no body → static duration strip without chevron; caller owns thought
-    `children` — core does **not** parse markdown / CoT; do **not** pipe
-    thinking tokens into `aria-live` — see
+    **`thinking`** / **`ChatThinking`** = single-block reasoning /
+    Agent activity disclosure between `name` and the answer bubble
+    (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool
+    status via `streamingLabel` — not only “Thinking”; `.fynns-expand`
+    height morph — not Collapsible card chrome; muted trigger; streaming
+    = soft accent status mark + label shimmer / swap enter via
+    `--fynns-duration-presentation-hint`; `icon={null}` hides the mark;
+    force-open while streaming unless user pinned closed; auto-collapse
+    once when done; user expand sticks; no body → static duration strip
+    without chevron; caller owns thought `children` — core does **not**
+    parse markdown / CoT; do **not** pipe thinking tokens into
+    `aria-live` — see
     [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
     `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
-    **Deferred (Wave 2):** multi-step chain / tool-call groups under a shared
-    “chain” chrome (assistant-ui `GroupedParts` style). Keep `ChatThinking` as
-    the single-block reasoning disclosure; do not overload it into a tool
-    timeline. Separate primitive or compound anatomy later when consumers need
-    tool-step grouping.
+    **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
+    = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
+    collapsible header + vertical rail + done wrench / active mark /
+    optional file capsule + description). Also slots via
+    `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
+    `ChatThinking` for single-block reasoning — do **not** overload it
+    into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
@@ -737,8 +742,8 @@ classes.
   default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /
   `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
-  — see Feedback keep-set; **Deferred (Wave 2):** multi-step / tool-call chain
-  chrome — see Feedback keep-set; `citations` /
+  — see Feedback keep-set; **`ChatActivity`** / Step / Artifact = Wave 2
+  multi-step status tree — see Feedback keep-set; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips — see
   Feedback keep-set; no built-in GFM /
   task-list checkboxes — see Feedback keep-set; CJK IME Enter while
@@ -834,7 +839,7 @@ classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
@@ -994,7 +999,7 @@ classes.
   ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
   FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
   Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
-  Undo, Upload — plus any glyph still imported by Globals/Layouts/Preview.
+  Undo, Upload, Wrench — plus any glyph still imported by Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.

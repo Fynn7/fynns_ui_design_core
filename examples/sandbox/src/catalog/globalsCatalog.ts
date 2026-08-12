@@ -217,6 +217,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["思维", "thinking", "reasoning", "thought", "披露"],
   },
   {
+    id: "activity",
+    categoryId: "communication",
+    label: "ChatActivity",
+    keywords: [
+      "活动",
+      "activity",
+      "chain",
+      "tool",
+      "agent",
+      "步骤",
+      "状态树",
+      "rail",
+    ],
+  },
+  {
     id: "chat-citations",
     categoryId: "communication",
     label: "ChatCitationChip / ChatCitations",

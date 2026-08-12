@@ -1024,14 +1024,46 @@ const en = {
   "globals.thinkingStreaming": "Thinking",
   "globals.thinkingLabel": "Thinking",
   "globals.thinkingDuration": "Thought for {n}s",
+  "globals.thinkingActionThink": "Thinking",
+  "globals.thinkingActionSearch": "Searching the catalog…",
+  "globals.thinkingActionRead": "Reading sample docs…",
+  "globals.thinkingActionCheck": "Checking layout tokens…",
+  "globals.thinkingActionDraft": "Drafting a reply…",
+  "globals.thinkingActionsHelp":
+    "Dummy agent / LLM activity labels (streaming). Soft status mark + label shimmer; swap `streamingLabel` to morph between activities. For multi-step tool trees see **ChatActivity**.",
   "globals.thinkingBody":
     "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
   "globals.thinkingAnswer":
     "Use ChatThinking via ChatMessage.thinking — summary only; the app owns any markdown.",
-  "globals.thinkingSimulate": "Simulate thinking",
+  "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning disclosure (ChatGPT / Claude “Thinking / Thought for Ns”). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + label pulse. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*` (no `THINKING_*` group). Wave 2 (deferred): multi-step / tool-call chain chrome.",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + status mark + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). Pass `icon={null}` to hide the default streaming mark. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+  "globals.activityHeaderStart": "Gathering context",
+  "globals.activityHeaderMemory": "Created memory file",
+  "globals.activityHeaderPlan": "Updated plan with details",
+  "globals.activityHeaderDone": "Updated plan with details",
+  "globals.activityStepGather": "Gathering context",
+  "globals.activityStepGatherDesc":
+    "Scanning the open catalog and layout tokens before drafting a plan.",
+  "globals.activityStepCreate": "Created memory file",
+  "globals.activityStepUpdate": "Updated memory file",
+  "globals.activityStepRead": "Reading the plan",
+  "globals.activityStepReadDesc":
+    "Checking the draft outline against the sandbox form recipe.",
+  "globals.activityStepPresent": "Presenting plan, asking questions",
+  "globals.activityStepPresentDone": "Presented plan",
+  "globals.activityStepPresentDescBefore":
+    "I’ve refined the outline and am preparing to ask clarifying questions via ",
+  "globals.activityStepPresentCode": "sandbox_askQuestions",
+  "globals.activityStepPresentDescAfter": ".",
+  "globals.activityArtifactPlan": "plan.md",
+  "globals.activityAnswer":
+    "Here is a short outline based on the activity tree above — dummy copy only.",
+  "globals.activitySimulate": "Simulate activity tree",
+  "globals.activityReset": "Reset done tree",
+  "globals.activityHelp":
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). Collapsible header + vertical rail + `ChatActivityStep` rows (`done` wrench / `active` status mark / optional `ChatActivityArtifact` capsule + description). Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -2287,14 +2319,45 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingStreaming": "思考中",
   "globals.thinkingLabel": "思考中",
   "globals.thinkingDuration": "已思考 {n} 秒",
+  "globals.thinkingActionThink": "思考中",
+  "globals.thinkingActionSearch": "正在搜索目录…",
+  "globals.thinkingActionRead": "正在阅读样例文档…",
+  "globals.thinkingActionCheck": "正在检查布局 token…",
+  "globals.thinkingActionDraft": "正在起草回复…",
+  "globals.thinkingActionsHelp":
+    "假数据 Agent / LLM 活动标签（流式）。柔和状态点 + 标签 shimmer；切换 `streamingLabel` 可变形活动文案。多步骤工具树见 **ChatActivity**。",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
     "通过 ChatMessage.thinking 挂载 ChatThinking — 只放摘要；markdown 由应用自管。",
-  "globals.thinkingSimulate": "模拟思维",
+  "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理披露（ChatGPT / Claude「Thinking / Thought for Ns」）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 标签呼吸。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`（无 `THINKING_*` 组）。Wave 2（延期）：多步骤 / tool 调用链 chrome。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 状态点 + 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。传 `icon={null}` 可隐藏默认流式状态点。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+  "globals.activityHeaderStart": "正在收集上下文",
+  "globals.activityHeaderMemory": "已创建记忆文件",
+  "globals.activityHeaderPlan": "已用细节更新计划",
+  "globals.activityHeaderDone": "已用细节更新计划",
+  "globals.activityStepGather": "正在收集上下文",
+  "globals.activityStepGatherDesc":
+    "先扫描打开的目录与布局 token，再起草计划。",
+  "globals.activityStepCreate": "已创建记忆文件",
+  "globals.activityStepUpdate": "已更新记忆文件",
+  "globals.activityStepRead": "正在阅读计划",
+  "globals.activityStepReadDesc": "对照沙盒表单配方检查草稿大纲。",
+  "globals.activityStepPresent": "正在展示计划并提问",
+  "globals.activityStepPresentDone": "已展示计划",
+  "globals.activityStepPresentDescBefore":
+    "我已细化大纲，准备通过 ",
+  "globals.activityStepPresentCode": "sandbox_askQuestions",
+  "globals.activityStepPresentDescAfter": " 询问澄清问题。",
+  "globals.activityArtifactPlan": "plan.md",
+  "globals.activityAnswer":
+    "根据上方活动树整理的一短段大纲 — 仅为假数据文案。",
+  "globals.activitySimulate": "模拟活动树",
+  "globals.activityReset": "重置为完成树",
+  "globals.activityHelp":
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行（`done` 扳手 / `active` 状态点 / 可选 `ChatActivityArtifact` 胶囊 + 说明）。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",

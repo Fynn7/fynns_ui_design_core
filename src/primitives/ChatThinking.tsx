@@ -15,7 +15,12 @@ import { ChevronRightIcon, ICON_SIZE } from "./icons";
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   /** Thought body (caller-owned summary — core does not parse markdown). */
   children?: ReactNode;
-  /** While true: "Thinking" label, force-open (unless user pinned closed), opacity pulse. */
+  /**
+   * While true: streaming label + force-open (unless user pinned closed) +
+   * status-mark / label motion. Label may be any agent/LLM activity
+   * (`"Thinking"`, `"Searching…"`, `"Reading file…"`, …) — swap
+   * `streamingLabel` to morph the row.
+   */
   streaming?: boolean;
   /** Label while `streaming`. @default "Thinking" */
   streamingLabel?: string;
@@ -30,8 +35,11 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   /** Initial open when uncontrolled. @default false (policy opens while streaming). */
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  /** Optional leading glyph. Omit for label + chevron only. */
-  icon?: ReactNode;
+  /**
+   * Optional leading glyph. While `streaming` and omitted, a soft status
+   * mark pulses (agent activity). Pass `icon={null}` to suppress the mark.
+   */
+  icon?: ReactNode | null;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -39,18 +47,24 @@ function join(...parts: Array<string | false | null | undefined>) {
 }
 
 /**
- * Single-block reasoning disclosure (ChatGPT / Claude “Thinking / Thought for Ns”).
+ * Single-block reasoning / agent-activity disclosure (ChatGPT / Claude
+ * “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`).
  * Compose via `ChatMessage.thinking`. UI chrome only — no LLM / markdown.
  *
  * Open policy (uncontrolled): force open while `streaming` unless the user
  * pinned closed; auto-collapse once when streaming ends; user expand sticks.
  *
  * Without `children`, renders a non-expandable duration / label strip (no chevron).
+ * Do **not** pipe labels or thought text into a live region.
  *
  * @example
  * ```tsx
  * <ChatMessage role="assistant" thinking={
- *   <ChatThinking streaming={busy} durationMs={busy ? undefined : 4200}>
+ *   <ChatThinking
+ *     streaming={busy}
+ *     streamingLabel={busy ? activity : undefined}
+ *     durationMs={busy ? undefined : 4200}
+ *   >
  *     Checked the docs for token naming…
  *   </ChatThinking>
  * }>
@@ -162,11 +176,23 @@ export function ChatThinking({
 
   const toggle = () => setOpen(!isOpen);
 
+  const showStatusMark = streaming && icon === undefined;
+  const leading =
+    icon != null ? (
+      <span className="fynns-chat-thinking-leading" aria-hidden>
+        {icon}
+      </span>
+    ) : showStatusMark ? (
+      <span className="fynns-chat-thinking-mark" aria-hidden />
+    ) : null;
+
   const labelNode = (
     <span
+      key={resolvedLabel}
       className={join(
         "fynns-chat-thinking-label",
         streaming && "fynns-chat-thinking-label--streaming",
+        "fynns-chat-thinking-label--swap",
       )}
     >
       {resolvedLabel}
@@ -187,11 +213,7 @@ export function ChatThinking({
         aria-busy={streaming || undefined}
       >
         <div className="fynns-chat-thinking-row">
-          {icon != null ? (
-            <span className="fynns-chat-thinking-leading" aria-hidden>
-              {icon}
-            </span>
-          ) : null}
+          {leading}
           {labelNode}
         </div>
       </div>
@@ -218,11 +240,7 @@ export function ChatThinking({
         aria-controls={bodyId}
         onClick={toggle}
       >
-        {icon != null ? (
-          <span className="fynns-chat-thinking-leading" aria-hidden>
-            {icon}
-          </span>
-        ) : null}
+        {leading}
         {labelNode}
         <ChevronRightIcon
           className="fynns-chat-thinking-chevron"

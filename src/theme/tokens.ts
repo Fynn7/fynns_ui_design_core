@@ -713,6 +713,25 @@ export const CHATMESSAGE_TOKENS = {
   /** Thought body inset under the trigger. */
   "thinking-body-pad-block": "0.375rem",
   "thinking-body-pad-inline": "0",
+  /**
+   * `ChatActivity` Wave 2 chain chrome (collapsible header + status tree).
+   * Separate from `thinking-*` — single-block vs multi-step rail.
+   */
+  "activity-gap": "0.375rem",
+  "activity-trigger-gap": "0.375rem",
+  /** Vertical gap between step rows. */
+  "activity-step-gap": "0.5rem",
+  /** Gap between step node and headline / description column. */
+  "activity-node-gap": "0.5rem",
+  /** Gap between step title and optional description. */
+  "activity-desc-gap": "0.25rem",
+  /** Gap between step title and artifact capsule. */
+  "activity-artifact-gap": "0.5rem",
+  /** Inline pad inside artifact capsule. */
+  "activity-artifact-pad-inline": "0.375rem",
+  "activity-artifact-pad-block": "0.125rem",
+  /** Soft gap punched around the node so the rail does not slice the glyph. */
+  "activity-node-halo": "0.125rem",
 } as const;
 
 /**
