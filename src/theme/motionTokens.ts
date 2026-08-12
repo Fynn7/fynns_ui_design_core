@@ -51,6 +51,12 @@ export const DURATION_TOKENS = {
   scrollbar: "520ms",
   "loading-spin": "750ms",
   "presentation-hint": "1200ms",
+  /**
+   * Thinking / streaming status label shimmer sweep (ChatThinking /
+   * ChatActivity). Industry modal ≈2s linear (VS Code Copilot, Nuxt
+   * ChatShimmer, AI Elements Shimmer) — slower than `presentation-hint`.
+   */
+  "thinking-shimmer": "2s",
   "reduced-motion-spin": "2200ms",
 } as const;
 

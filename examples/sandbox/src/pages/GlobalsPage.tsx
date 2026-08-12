@@ -2410,6 +2410,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 key={action}
                 streaming
                 streamingLabel={action}
+                icon={null}
               />
             ))}
           </div>
