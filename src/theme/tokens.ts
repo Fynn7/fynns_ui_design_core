@@ -1042,11 +1042,12 @@ export const NAVDRAWER_TOKENS = {
    */
   "body-pad-block-start": "0.75rem",
   /**
-   * Outer inset to destination pills (8dp). Do **not** stack scrollbar-size /
+   * Outer inset to destination pills (10dp). Do **not** stack scrollbar-size /
    * both-edges on top — that inflated to ~18–30dp and looked oversized; do
-   * **not** crush below 8dp either (reads as flush / zeroed).
+   * **not** crush below ~8dp either (reads as flush / zeroed). Overlay thumbs
+   * do not steal item width — this pad is optical edge breath only.
    */
-  "pad-inline": "0.5rem",
+  "pad-inline": "0.625rem",
   "item-height": "2.5rem",
   "item-pad-inline-start": "1rem",
   "item-pad-inline-end": "1rem",

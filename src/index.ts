@@ -6,12 +6,16 @@
  */
 import "./theme/theme.css";
 import "./primitives/primitives.css";
+import { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
+
+ensureOverlayScrollbars();
 
 /* Theme (tokens + helpers) */
 export * from "./theme/tokens";
 export * from "./theme/motionTokens";
 export * from "./theme/scrollbar";
 export * from "./theme/themeMode";
+export { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
 /* Icons (public subset) */
 export {

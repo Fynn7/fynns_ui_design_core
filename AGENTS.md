@@ -74,19 +74,19 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    - Never pair `align="center"` with `side="top/bottom"` on a full-width anchor.
 4. **Scrollbar discipline.** Every scroll container (`overflow:auto/scroll`)
    carries the `fynns-scroll` class. Browser-default scrollbars are the most
-   common source of visual drift — never ship them. On fine pointer + hover
-   (`(hover: hover) and (pointer: fine)`), custom thumbs are
-   **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
-   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`; WebKit thumb
-   `background-color`, Firefox `scrollbar-color` when supported; reduced-motion
-   → instant). Touch / coarse pointer keeps thumbs always tinted (no hover gate).
-   WebKit also tints thumb `:hover` / `:active` via tokens.
-   `.fynns-scroll` sets `scrollbar-gutter: auto` — no permanent empty track
-   (Cursor-like); classic Windows may reflow slightly when overflow appears.
-   Do **not** use `both-edges` (overlay ignores it; Chromium right-edge clips).
-   NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (8dp) only — no
-   pad+scrollbar inflation; do not crush below 8dp. Carousel tracks and
-   SearchBar / single-line `Input` focused fields may hide bars entirely
+   common source of visual drift — never ship them. **Native classic bars on
+   `.fynns-scroll` are hidden** so they never steal content width (NavigationDrawer
+   badges / chevrons, Dialog Switch tracks, Chat actions, …). Overlay thumbs are
+   painted by `src/theme/overlayScrollbar.ts` (absolute rail; no layout impact).
+   On fine pointer + hover (`(hover: hover) and (pointer: fine)`), overlay thumbs
+   are **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
+   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
+   pointer keeps thumbs tinted when overflowing. Textarea / input hosts hide the
+   native bar only (no overlay rail — replaced elements cannot host children).
+   Do **not** use `scrollbar-gutter: stable` / `both-edges` (would reserve a permanent
+   empty track or inflate pad). NavigationDrawer keeps `--fynns-navdrawer-pad-inline`
+   (10dp) only — no pad+scrollbar inflation; do not crush below ~8dp. Carousel tracks
+   and SearchBar / single-line `Input` focused fields may hide bars entirely
    (caret scroll; SearchBar also snap navigation).
    Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can

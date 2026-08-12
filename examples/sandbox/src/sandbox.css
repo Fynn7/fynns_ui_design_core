@@ -1301,18 +1301,6 @@
   min-height: 0;
 }
 
-.sandbox-fill-column-preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 5.5rem;
-  margin: var(--fynns-space-sm);
-  border-radius: var(--fynns-radius-md);
-  background: color-mix(in srgb, var(--fynns-color-accent) 18%, var(--fynns-color-surface-1));
-  color: var(--fynns-color-text-muted);
-  font-size: var(--fynns-font-size-sm);
-}
-
 .sandbox-globals-shell-body {
   display: flex;
   flex: 1;

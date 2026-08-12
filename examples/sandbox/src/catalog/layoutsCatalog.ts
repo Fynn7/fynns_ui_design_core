@@ -39,7 +39,6 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
       "fillcolumn",
       "fill column",
       "chat dock",
-      "preview chat",
       "composer",
       "纵向",
     ],
