@@ -1660,7 +1660,8 @@ input.fynns-input:focus::-webkit-scrollbar {
  * Outer inline → `--fynns-layout-dialog-inset`. Non-confirm head: block-start
  * dialog-inset/2, block-end 0 (40dp close owns row height when present).
  * Confirm head overrides block-start to full dialog-inset. `head + body`
- * pad-top space-md; foot block-end space-lg (optical under Buttons). Body
+ * pad-top space-sm (close row already leaves optical space under the title);
+ * foot block-end space-lg (optical under Buttons). Body
  * block-end / no-head bodies keep content-inset. Never full four-side 24dp
  * (~88dp). Do not change the optical margin-inline-end on `.fynns-dialog-close`. */
 .fynns-dialog-panel--centered > .fynns-dialog-head {
@@ -1682,10 +1683,10 @@ input.fynns-input:focus::-webkit-scrollbar {
   padding-inline: var(--fynns-layout-dialog-inset);
 }
 
-/* Head already sized by the close target — body start under title is denser
- * than full content-inset, but not as tight as space-sm. */
+/* Head height is owned by the 40dp close — title is vertically centered, so
+ * body start only needs a light step (matches description pad), not space-md. */
 .fynns-dialog-panel--centered > .fynns-dialog-head + .fynns-dialog-body {
-  padding-top: var(--fynns-space-md);
+  padding-top: var(--fynns-space-sm);
 }
 
 /* Body/description before actions: drop bottom pad so foot owns the outer inset. */
@@ -2295,8 +2296,9 @@ input.fynns-input:focus::-webkit-scrollbar {
  *
  * Equal row rhythm: every direct child shares the dense control-row floor
  * (2rem / 32dp — `Input` `sm`, one step below `--fynns-size-icon-target`).
- * Plain Radio rows and Other+Input nowrap rows keep the same gap; taller
- * content still grows.
+ * Radio "Other" + free-text uses `--choice-extra` (Google Forms-style:
+ * same-row short Input beside the option; keep mounted — disable when Other
+ * is not selected so draft text is preserved).
  */
 .fynns-control-cluster--stack {
   flex-direction: column;
@@ -2308,7 +2310,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-control-cluster--stack > .fynns-radio,
 .fynns-control-cluster--stack > .fynns-checkbox,
-.fynns-control-cluster--stack > .fynns-control-cluster--nowrap {
+.fynns-control-cluster--stack > .fynns-control-cluster--choice-extra {
   box-sizing: border-box;
   min-height: 2rem;
   align-items: center;
@@ -2321,27 +2323,35 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Radio "Other" + free-text Input (or similar): stay on one row when narrow.
- * Input drops width:100% so it can shrink; radio stays content-sized.
+ * Choice option + related free-text (Radio "Other"): Google Forms-style
+ * same-row — mark | label | short Input. Keep the Input mounted; disable it
+ * when Other is not selected (preserve draft text — do not unmount/clear).
  */
-.fynns-control-cluster--nowrap {
+.fynns-control-cluster--choice-extra {
+  display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
   width: 100%;
   max-width: 100%;
 }
 
-.fynns-control-cluster--nowrap > .fynns-radio,
-.fynns-control-cluster--nowrap > .fynns-checkbox {
+.fynns-control-cluster--choice-extra > .fynns-radio,
+.fynns-control-cluster--choice-extra > .fynns-checkbox {
   flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  min-height: 2rem;
 }
 
-.fynns-control-cluster--nowrap > .fynns-input {
+.fynns-control-cluster--choice-extra > .fynns-input {
   flex: 1 1 0;
   min-width: 0;
   width: auto;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ---------- Grid ---------- */

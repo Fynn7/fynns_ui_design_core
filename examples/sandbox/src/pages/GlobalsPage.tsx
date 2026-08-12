@@ -508,7 +508,7 @@ function FormRecipeFields({
               checked={access === "private"}
               onCheckedChange={() => onAccessChange("private")}
             />
-            <div className="fynns-control-cluster fynns-control-cluster--nowrap">
+            <div className="fynns-control-cluster fynns-control-cluster--choice-extra">
               <Radio
                 name={accessName}
                 value="other"
@@ -522,8 +522,8 @@ function FormRecipeFields({
                 aria-label={t("globals.formRecipeAccessOtherInput")}
                 placeholder={t("globals.formRecipeAccessOtherPlaceholder")}
                 value={accessOther}
-                disabled={access !== "other"}
                 onChange={(event) => onAccessOtherChange(event.target.value)}
+                disabled={access !== "other"}
                 autoComplete="off"
               />
             </div>
