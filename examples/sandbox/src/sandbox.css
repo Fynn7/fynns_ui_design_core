@@ -802,7 +802,9 @@
 .sandbox-globals-search {
   position: sticky;
   top: 0;
-  z-index: var(--fynns-z-dropdown);
+  /* Above page Select/Autocomplete (`--fynns-z-dropdown`) so scrolled
+   * dropdown chrome cannot paint through the sticky SearchBar field. */
+  z-index: var(--fynns-z-sticky);
   /* Transparent wrapper — only the SearchBar capsule occludes scroll content. */
   padding-block: var(--fynns-space-2xs);
   pointer-events: none;

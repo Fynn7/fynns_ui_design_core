@@ -161,6 +161,7 @@
   --fynns-letter-spacing-wide: 0.04em;
   --fynns-letter-spacing-subtle: 0.01em;
   --fynns-z-dropdown: 40;
+  --fynns-z-sticky: 45;
   --fynns-z-popover: 50;
   --fynns-z-modal: 60;
   --fynns-z-toast: 70;

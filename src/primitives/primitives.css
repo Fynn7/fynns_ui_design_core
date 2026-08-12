@@ -5913,7 +5913,6 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   align-items: stretch;
   width: 100%;
-  z-index: var(--fynns-z-dropdown);
   border-radius: var(--fynns-radius-3xl);
   border: var(--fynns-border-hairline) solid transparent;
   background: var(--fynns-color-surface-2);
@@ -5941,7 +5940,13 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: none;
 }
 
+/*
+ * Elevate only while open. Collapsed Select/Autocomplete share this shell and
+ * must stay at auto z so sticky catalog SearchBar can occlude them when they
+ * scroll underneath (equal `--fynns-z-dropdown` + later DOM painted through).
+ */
 .fynns-search-bar--expanded {
+  z-index: var(--fynns-z-dropdown);
   box-shadow: var(--fynns-shadow-lg);
 }
 

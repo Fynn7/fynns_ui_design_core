@@ -332,7 +332,14 @@ export const LETTER_SPACING_TOKENS = {
 
 /** Z-index layers. `--fynns-z-<key>`. */
 export const Z_TOKENS = {
+  /** Open menus / Select / Autocomplete / SearchBar results. */
   dropdown: "40",
+  /**
+   * Sticky chrome inside a scroll host (e.g. catalog SearchBar). Must sit
+   * above page dropdowns so scrolled Select/Autocomplete cannot paint through
+   * the sticky field (same `dropdown` layer + later DOM otherwise wins).
+   */
+  sticky: "45",
   popover: "50",
   modal: "60",
   toast: "70",
