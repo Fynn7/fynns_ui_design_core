@@ -280,14 +280,18 @@ export function CodeBlock(props: CodeBlockProps) {
   const surfaceStyle: CSSProperties | undefined =
     maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
 
-  /* Opt into overflow-y:auto only when content actually exceeds the host.
-     Default CSS keeps overflow-y:hidden so sub-pixel / trailing-newline
+  /* Opt into overflow auto only when content actually exceeds the host.
+     Default CSS keeps overflow hidden so sub-pixel / trailing-newline
      noise cannot paint a nearly-full thumb over empty pad.
-     When the thumb appears, pad the highlight layer by the scrollbar width
-     so transparent caret/ink stay column-locked with the textarea. */
+     Soft-wrap: vertical gate only. `wrap={false}` also gates on width so
+     long lines still get classic pre scroll (x and/or y).
+     When a vertical thumb appears, pad the highlight layer by the
+     scrollbar width so transparent caret/ink stay column-locked. */
   useLayoutEffect(() => {
     const el = editable ? inputRef.current : preRef.current;
     if (!el) return;
+
+    let padRaf = 0;
 
     const syncHighlightPad = (scrollable: boolean) => {
       const pre = highlightRef.current;
@@ -304,29 +308,40 @@ export function CodeBlock(props: CodeBlockProps) {
     };
 
     const update = () => {
-      const overflow = el.scrollHeight - el.clientHeight;
-      const scrollable = overflow > 1;
+      const yOverflow = el.scrollHeight - el.clientHeight > 1;
+      const xOverflow = !wrap && el.scrollWidth - el.clientWidth > 1;
+      const scrollable = yOverflow || xOverflow;
       if (scrollable) {
         el.setAttribute("data-scrollable", "");
         // Scrollbar width is only known after overflow:auto paints.
-        requestAnimationFrame(() => syncHighlightPad(true));
+        if (padRaf) cancelAnimationFrame(padRaf);
+        padRaf = requestAnimationFrame(() => {
+          padRaf = 0;
+          syncHighlightPad(true);
+        });
       } else {
         el.removeAttribute("data-scrollable");
         if (el.scrollTop !== 0) el.scrollTop = 0;
+        if (el.scrollLeft !== 0) el.scrollLeft = 0;
         if (editable && highlightRef.current) {
           highlightRef.current.scrollTop = 0;
+          highlightRef.current.scrollLeft = 0;
         }
         syncHighlightPad(false);
       }
     };
 
     update();
-    const ro = new ResizeObserver(() => {
-      update();
-    });
-    ro.observe(el);
+    const ro =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(() => {
+            update();
+          })
+        : null;
+    ro?.observe(el);
     return () => {
-      ro.disconnect();
+      if (padRaf) cancelAnimationFrame(padRaf);
+      ro?.disconnect();
       if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
     };
   }, [editable, source, wrap, maxHeightCss]);

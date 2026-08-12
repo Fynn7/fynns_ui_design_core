@@ -40,21 +40,25 @@ rename required for consumers.
 
 | State | When | Layout |
 | --- | --- | --- |
-| **Collapsed** (default) | Empty draft, single visual line, no attachments | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
-| **Expanded** | Newline in value, measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
+| **Collapsed** (default) | Empty draft and no attachments (clearing the value collapses) | Body is a horizontal flex row. Toolbar uses `display: contents` so leading / field / primary share one line (`order` 1 / 2 / 3). |
+| **Expanded** | Measured height &gt; one line (+tolerance), or `attachments` present | Body is a column. Textarea full width on top. Toolbar is a real flex row (`justify-content: space-between`) — tools start, Send end. |
 
-Detection runs inside the JS auto-grow (`resize`). When the morph flips
-expanded on/off, `resize` **re-runs** after `data-expanded` CSS applies so
-height is measured under the expanded `text-line-height` (~22dp), not the
-collapsed 32dp control row (avoids a tall empty “fixed” shell). Empty value
-forces collapsed (unless attachments force expand). Textarea height =
-`min(max(scrollHeight, one-line), max-height)` — content-driven, not a
-hardcoded multi-line well. Collapsed **empty**: visible hint is
-`.fynns-chat-composer-placeholder` > `.fynns-chat-composer-placeholder-text`
-(flex host + nowrap/`text-overflow: ellipsis` on the inner text — ellipsis
-does not apply to a flex container itself). Native `<textarea>` placeholder
-cannot ellipsize in Chromium (mid-glyph hard clip into Send); HTML
-`placeholder` stays empty and `aria-label` carries the accessible name.
+Detection runs inside the JS auto-grow (`resize`). Expand freely when content
+needs it. **Do not auto-collapse a non-empty draft** when height would fit one
+line again — EndAside / narrow hosts morph width when `data-expanded` flips
+(toolbar row ↔ bottom bar), so scrollHeight can oscillate and hit
+`Maximum update depth exceeded` (blank `#root`). Collapse only when the value
+is cleared (attachments may still force expand). When expand flips on,
+`resize` **re-runs** after `data-expanded` CSS applies so height is measured
+under the expanded `text-line-height` (~22dp), not the collapsed 32dp control
+row. Textarea height = `min(max(scrollHeight, one-line), max-height)` —
+content-driven, not a hardcoded multi-line well. Collapsed **empty**: visible
+hint is `.fynns-chat-composer-placeholder` >
+`.fynns-chat-composer-placeholder-text` (flex host + nowrap/`text-overflow:
+ellipsis` on the inner text — ellipsis does not apply to a flex container
+itself). Native `<textarea>` placeholder cannot ellipsize in Chromium
+(mid-glyph hard clip into Send); HTML `placeholder` stays empty and
+`aria-label` carries the accessible name.
 
 ## Geometry tokens
 
