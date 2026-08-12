@@ -900,6 +900,11 @@
   box-sizing: border-box;
 }
 
+/* ChatThinking activity gallery — denser than unit siblings. */
+.sandbox-globals-thinking-actions {
+  gap: var(--fynns-layout-field-hint-gap);
+}
+
 /* Chat dual placement — main rem-capped column + aside fill host. */
 .sandbox-chat-dual {
   align-items: stretch;

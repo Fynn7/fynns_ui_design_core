@@ -713,6 +713,23 @@ export const CHATMESSAGE_TOKENS = {
   /** Thought body inset under the trigger. */
   "thinking-body-pad-block": "0.375rem",
   "thinking-body-pad-inline": "0",
+  /**
+   * `ChatActivity` Wave 2 chain chrome (collapsible header + status tree).
+   * Separate from `thinking-*` — single-block vs multi-step rail.
+   */
+  "activity-gap": "0.375rem",
+  "activity-trigger-gap": "0.375rem",
+  /** Vertical gap between step rows. */
+  "activity-step-gap": "0.5rem",
+  /** Gap between step node and headline / description column. */
+  "activity-node-gap": "0.5rem",
+  /** Gap between step title and optional description. */
+  "activity-desc-gap": "0.25rem",
+  /** Gap between step title and artifact capsule. */
+  "activity-artifact-gap": "0.5rem",
+  /** Inline pad inside artifact capsule. */
+  "activity-artifact-pad-inline": "0.375rem",
+  "activity-artifact-pad-block": "0.125rem",
 } as const;
 
 /**
@@ -1230,18 +1247,22 @@ export const LAYOUT_TOKENS = {
    */
   "control-stack-form-gap": "var(--fynns-space-md)",
   /**
-   * Gap inside `FieldStack` / `.fynns-field-stack` (8dp): consecutive related
-   * FieldBlocks (or a same-kind ControlBlock cluster). Aliases
-   * `control-stack-gap` — related form chrome shares one tight step; Card body
-   * still uses `unit-stack-gap` between most siblings. Adjacent FieldStacks
-   * use the larger `form-cluster-gap` instead.
+   * Base gap inside `FieldStack` / `.fynns-field-stack` (**12dp** — aliases
+   * `control-stack-form-gap` / `space-md`). Plain FieldBlocks stay at this
+   * step (slightly roomier than toolbar `control-stack-gap` 8dp);
+   * FieldBlocks with description/error (no choice cluster) open the next
+   * sibling to `unit-stack-gap` (16dp); FieldBlocks hosting a
+   * `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
+   * ControlBlocks open to `unit-stack-gap` (16dp). Adjacent FieldStacks use
+   * `form-cluster-gap` and should insert a horizontal `Divider` on kind jumps.
    */
-  "field-stack-gap": "var(--fynns-layout-control-stack-gap)",
+  "field-stack-gap": "var(--fynns-layout-control-stack-form-gap)",
   /**
-   * Gap between adjacent `FieldStack` clusters (32dp — two unit steps):
-   * e.g. Input FieldBlocks → Preference ControlBlocks. Larger than
-   * `unit-stack-gap` (16dp) so the jump between form *kinds* reads clearly.
-   * Implemented as extra margin on `.fynns-field-stack + .fynns-field-stack`
+   * Gap between adjacent `FieldStack` clusters **and** after a FieldBlock
+   * that hosts a choice `.fynns-control-cluster` (32dp — two unit steps).
+   * Larger than `unit-stack-gap` (16dp). Between stacks, also place a
+   * `Divider` (strongly recommended). Adjacent-stack margin is implemented
+   * on `.fynns-field-stack + .fynns-field-stack` when no Divider sits between
    * (Card body gap still contributes `unit-stack-gap`).
    */
   "form-cluster-gap": "2rem",

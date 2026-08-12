@@ -44,7 +44,10 @@ ring can paint before heavy work).
   long turns, composer 100%; soft floor
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
   generation footer under assistant turns; `thinking` / `ChatThinking` =
-  single-block reasoning disclosure between name and bubble; `citations` /
+  single-block reasoning / agent-activity disclosure between name and
+  bubble (`streamingLabel` for tool status; soft mark + shimmer);
+  `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
+  multi-step status tree (collapsible + rail); `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
   assistant body; inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
@@ -71,7 +74,8 @@ ring can paint before heavy work).
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
-  FieldBlock/FieldHeader (optional description/errorText),
+  FieldBlock/FieldHeader (optional description/errorText; label→control =
+  `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
@@ -93,14 +97,17 @@ ring can paint before heavy work).
   `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
   (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
   (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. **Form
-  options by semantic kind → `FieldStack`** (strongly recommended): same-kind
-  FieldBlocks / ControlBlocks share `field-stack-gap` (8dp); adjacent stacks
-  (e.g. fields → switches) get `form-cluster-gap` (32dp). Do **not** flatten
-  multi-topic forms as bare Card siblings — copy `#form-recipe`
-  (`AGENTS.md` **FieldStack semantic clusters**). Form control → hint:
-  `--fynns-layout-field-hint-gap` / `FieldHint`. Nested surface
-  wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠
-  flush).
+  options by semantic kind → `FieldStack`** (strongly recommended): plain
+  FieldBlocks keep `field-stack-gap` (12dp); description/error (no choice
+  cluster) opens the next sibling to `unit-stack-gap` (16dp); FieldBlocks
+  with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
+  ControlBlocks to `unit-stack-gap` (16dp); adjacent stacks get
+  `form-cluster-gap` **plus a horizontal `Divider`** on kind jumps. Do
+  **not** flatten multi-topic forms as bare Card siblings — copy
+  `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
+  control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
+  surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
+  (plain ≠ flush).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).

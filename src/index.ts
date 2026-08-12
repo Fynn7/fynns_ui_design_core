@@ -51,6 +51,7 @@ export {
   TrashIcon,
   UndoIcon,
   UploadIcon,
+  WrenchIcon,
 } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
@@ -320,6 +321,17 @@ export {
 export type {
   ChatThinkingProps,
 } from "./primitives/ChatThinking";
+export {
+  ChatActivity,
+  ChatActivityArtifact,
+  ChatActivityStep,
+} from "./primitives/ChatActivity";
+export type {
+  ChatActivityArtifactProps,
+  ChatActivityProps,
+  ChatActivityStepProps,
+  ChatActivityStepStatus,
+} from "./primitives/ChatActivity";
 export { SkipLink } from "./primitives/SkipLink";
 export type { SkipLinkProps } from "./primitives/SkipLink";
 export { Stepper } from "./primitives/Stepper";

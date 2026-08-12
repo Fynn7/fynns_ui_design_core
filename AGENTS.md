@@ -51,9 +51,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
-   text is flush with the control’s outer start edge. Default `ghost`; dense
-   forms may use `size="sm"`. As the first child of `Card` body, top inset
-   shrinks to `--fynns-space-xs` (Card body block pad is
+   text is flush with the control’s outer start edge. Label→control gap is
+   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
+   wrapped prompts — do not rely on header min-height optical pad). Trailing
+   actions stay on the label line (IconButton sm does not inflate the row).
+   Default `ghost`; dense forms may use `size="sm"`. As the first child of
+   `Card` body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
    `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
    Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -186,9 +189,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
-  / ControlBlocks. FieldBlocks share `field-stack-gap` (8dp); sibling
-  ControlBlocks open to `unit-stack-gap` (16dp); adjacent FieldStacks get
-  `form-cluster-gap` (32dp). Live tree: sandbox `#form-recipe`.
+  / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (12dp);
+  FieldBlocks with description/error (no choice cluster) open the next
+  sibling to `unit-stack-gap` (16dp); FieldBlocks that host a
+  `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
+  ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
+  horizontal `Divider` between adjacent FieldStacks on kind jumps. Live tree:
+  sandbox `#form-recipe`.
   See **Toolbar / unit rhythm** → **FieldStack semantic clusters**.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
@@ -472,26 +479,35 @@ classes.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
-    live — no LLM; caret height `--fynns-chatmessage-cursor-height` (**`1lh`**
+    live — no LLM; caret only while answer `children` has text (no empty
+    bubble / lone caret during thinking-only wait); caret height
+    `--fynns-chatmessage-cursor-height` (**`1lh`**
     of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
-    **`thinking`** / **`ChatThinking`** = single-block reasoning disclosure
-    between `name` and the answer bubble (ChatGPT / Claude “Thinking /
-    Thought for Ns”; `.fynns-expand` height morph — not Collapsible card chrome;
-    muted trigger; streaming label opacity pulse via
-    `--fynns-duration-presentation-hint`; force-open while streaming unless
-    user pinned closed; auto-collapse once when done; user expand sticks;
-    no body → static duration strip without chevron; caller owns thought
-    `children` — core does **not** parse markdown / CoT; do **not** pipe
-    thinking tokens into `aria-live` — see
+    **`thinking`** / **`ChatThinking`** = single-block reasoning /
+    Agent activity disclosure between `name` and the answer bubble
+    (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool
+    status via `streamingLabel` — not only “Thinking”; `.fynns-expand`
+    height morph — not Collapsible card chrome; muted trigger; streaming
+    = soft accent status mark + label shimmer / swap enter via
+    `--fynns-duration-presentation-hint`; `icon={null}` hides the mark;
+    force-open while streaming unless user pinned closed; auto-collapse
+    once when done; user expand sticks; no body → static duration strip
+    without chevron; caller owns thought `children` — core does **not**
+    parse markdown / CoT; do **not** pipe thinking tokens into
+    `aria-live` — see
     [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
     `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
-    **Deferred (Wave 2):** multi-step chain / tool-call groups under a shared
-    “chain” chrome (assistant-ui `GroupedParts` style). Keep `ChatThinking` as
-    the single-block reasoning disclosure; do not overload it into a tool
-    timeline. Separate primitive or compound anatomy later when consumers need
-    tool-step grouping.
+    **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
+    = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
+    collapsible header + vertical rail + done wrench / active mark /
+    optional file capsule + description). Uncontrolled: force-open while
+    `streaming` and disable the header trigger so clicks cannot queue a
+    post-stream collapse. Also slots via
+    `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
+    `ChatThinking` for single-block reasoning — do **not** overload it
+    into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
@@ -734,11 +750,11 @@ classes.
   100% of same host (`radius-3xl`,
   32dp controls + 6dp pad ≈ 44dp shell); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
-  default**; `streaming` caret + busy — no LLM; `error` / `onRetry` =
+  default**; `streaming` caret only with answer text + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /
   `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
-  — see Feedback keep-set; **Deferred (Wave 2):** multi-step / tool-call chain
-  chrome — see Feedback keep-set; `citations` /
+  — see Feedback keep-set; **`ChatActivity`** / Step / Artifact = Wave 2
+  multi-step status tree — see Feedback keep-set; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips — see
   Feedback keep-set; no built-in GFM /
   task-list checkboxes — see Feedback keep-set; CJK IME Enter while
@@ -780,7 +796,7 @@ classes.
   (`description?` / `errorText?` under the control), **FieldStack** (**strongly
   recommended** invisible cluster: group consecutive form units by **semantic
   kind** — e.g. all identity FieldBlocks in one stack, all Preference
-  ControlBlocks in another — gap `--fynns-layout-field-stack-gap` / 8dp;
+  ControlBlocks in another — gap `--fynns-layout-field-stack-gap` / 12dp;
   adjacent stacks → `form-cluster-gap` / 32dp; live `#form-recipe`),
   `.fynns-unit-stack`
   (CSS host — purged `UnitStack` replacement; sibling **units** only — not a
@@ -834,7 +850,7 @@ classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
@@ -850,10 +866,10 @@ classes.
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
-  | Control → supporting / error hint (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
+  | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
+  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
-  | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |
+  | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
   | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
   | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |
 
@@ -865,7 +881,10 @@ classes.
     Textarea / Otp `FieldBlock`s, **or** a same-kind choice cluster
     (`Radio` single-select, `Checkbox` multi-select, and/or `Slider` under
     `FieldBlock`s), **or** Preference `ControlBlock`s (Switch + note).
-    Inside: `field-stack-gap` (**8dp**) for FieldBlocks; sibling
+    Inside: plain **FieldBlock**s keep `field-stack-gap` (**12dp**); FieldBlocks
+    with description/error (no choice cluster) open the next sibling to
+    `unit-stack-gap` (**16dp**); FieldBlocks that host a
+    `.fynns-control-cluster` open to `form-cluster-gap` (**32dp**); sibling
     **ControlBlock**s open to `unit-stack-gap` (**16dp**) so Switch+note
     units breathe. Choice lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
@@ -877,13 +896,14 @@ classes.
     short field beside the option; keep the Input mounted — **`disabled`
     when Other is not selected** (preserve draft text; enable when Other
     is selected).
-  - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields →
-    radio/checkbox choices → preference switches. Between stacks:
-    `form-cluster-gap` (**32dp**). That wider gap is
-    the visual signal that the *topic* changed — spacing alone without
-    FieldStack is not enough (Card / Collapsible / Dialog body
-    `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
-    other non-cluster siblings).
+  - **Kind jump → adjacent `FieldStack`s + `Divider` (strongly recommended):**
+    e.g. identity fields → radio/checkbox choices → preference switches.
+    Between stacks: `form-cluster-gap` (**32dp**) **and** a horizontal
+    `Divider` so the topic change reads as a hard partition (choice-cluster
+    FieldBlocks also use the cluster step between siblings — spacing alone
+    without FieldStack / Divider is not enough). Card / Collapsible / Dialog
+    body `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
+    other non-cluster siblings.
   - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
     `errorText`). Never a loose muted `<p>` under `ControlStack`.
   - **Copy the tree** from sandbox Globals **Inspector form recipe**
@@ -994,7 +1014,7 @@ classes.
   ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
   FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
   Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
-  Undo, Upload — plus any glyph still imported by Globals/Layouts/Preview.
+  Undo, Upload, Wrench — plus any glyph still imported by Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.

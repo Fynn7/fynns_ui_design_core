@@ -30,6 +30,9 @@ import {
   ChatComposer,
   ChatMessage,
   ChatScrollToBottom,
+  ChatActivity,
+  ChatActivityArtifact,
+  ChatActivityStep,
   ChatThinking,
   ChatThread,
   ClipboardIcon,
@@ -105,6 +108,7 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
+  WrenchIcon,
   ControlBlock,
   ControlRow,
   ControlStack,
@@ -115,7 +119,7 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useRef, useState, useCallback, Fragment, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback, Fragment, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { TokenList } from "../components/TokenList";
@@ -477,6 +481,7 @@ function FormRecipeFields({
           />
         </FieldBlock>
       </FieldStack>
+      <Divider />
       <FieldStack>
         <FieldBlock
           label={t("globals.formRecipeAccess")}
@@ -570,6 +575,7 @@ function FormRecipeFields({
           />
         </FieldBlock>
       </FieldStack>
+      <Divider />
       <FieldStack>
         <ControlBlock description={t("globals.formRecipeCompactHint")}>
           <ControlStack columns={1}>
@@ -779,7 +785,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatAsideDraft, setChatAsideDraft] = useState("");
   const [thinkingStreaming, setThinkingStreaming] = useState(false);
   const [thinkingDoneMs, setThinkingDoneMs] = useState<number | undefined>(4200);
+  const [thinkingActionIdx, setThinkingActionIdx] = useState(0);
   const thinkingStartedAtRef = useRef(0);
+  const [activityStreaming, setActivityStreaming] = useState(false);
+  const [activityPhase, setActivityPhase] = useState(2);
   const stopChatStream = useCallback(() => setChatStreaming(false), []);
   const startChatStream = useCallback(() => {
     setChatStreamEpoch((n) => n + 1);
@@ -890,12 +899,62 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
   useEffect(() => {
     if (!thinkingStreaming) return;
+    // Long enough to cycle several dummy agent activities.
     const timer = window.setTimeout(() => {
       setThinkingDoneMs(Date.now() - thinkingStartedAtRef.current);
       setThinkingStreaming(false);
-    }, 2400);
+    }, 7200);
     return () => window.clearTimeout(timer);
   }, [thinkingStreaming]);
+
+  const thinkingActions = useMemo(
+    () => [
+      t("globals.thinkingActionThink"),
+      t("globals.thinkingActionSearch"),
+      t("globals.thinkingActionRead"),
+      t("globals.thinkingActionCheck"),
+      t("globals.thinkingActionDraft"),
+    ],
+    [t],
+  );
+
+  useEffect(() => {
+    if (!thinkingStreaming) {
+      setThinkingActionIdx(0);
+      return;
+    }
+    // ~presentation-hint dwell between activity label swaps.
+    const timer = window.setInterval(() => {
+      setThinkingActionIdx((idx) => (idx + 1) % thinkingActions.length);
+    }, 1400);
+    return () => window.clearInterval(timer);
+  }, [thinkingStreaming, thinkingActions.length]);
+
+  const thinkingStreamingLabel =
+    thinkingActions[thinkingActionIdx] ?? t("globals.thinkingStreaming");
+
+  useEffect(() => {
+    if (!activityStreaming) return;
+    const timer = window.setInterval(() => {
+      setActivityPhase((phase) => {
+        if (phase >= 3) {
+          setActivityStreaming(false);
+          return 3;
+        }
+        return phase + 1;
+      });
+    }, 1600);
+    return () => window.clearInterval(timer);
+  }, [activityStreaming]);
+
+  const activityHeader =
+    activityPhase <= 0
+      ? t("globals.activityHeaderStart")
+      : activityPhase === 1
+        ? t("globals.activityHeaderMemory")
+        : activityPhase === 2
+          ? t("globals.activityHeaderPlan")
+          : t("globals.activityHeaderDone");
 
   useEffect(() => {
     if (!flashDemoId) return;
@@ -2344,6 +2403,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="thinking">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.thinkingActionsHelp")} />
+          <div className="sandbox-globals-row sandbox-globals-row--stack sandbox-globals-thinking-actions">
+            {thinkingActions.map((action) => (
+              <ChatThinking
+                key={action}
+                streaming
+                streamingLabel={action}
+              />
+            ))}
+          </div>
           <ChatThinking
             durationMs={3800}
             streamingLabel={t("globals.thinkingStreaming")}
@@ -2351,11 +2420,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <ChatMessage
             role="assistant"
+            streaming={thinkingStreaming}
             thinking={
               <ChatThinking
                 streaming={thinkingStreaming}
                 durationMs={thinkingStreaming ? undefined : thinkingDoneMs}
-                streamingLabel={t("globals.thinkingStreaming")}
+                streamingLabel={thinkingStreamingLabel}
                 label={t("globals.thinkingLabel")}
                 durationLabel={(n) => t("globals.thinkingDuration").replace("{n}", String(n))}
               >
@@ -2374,6 +2444,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => {
                 thinkingStartedAtRef.current = Date.now();
                 setThinkingDoneMs(undefined);
+                setThinkingActionIdx(0);
                 setThinkingStreaming(true);
               }}
             >
@@ -2386,12 +2457,109 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => {
                 setThinkingStreaming(false);
                 setThinkingDoneMs(4200);
+                setThinkingActionIdx(0);
               }}
             >
               {t("globals.thinkingReset")}
             </Button>
           </div>
           <SandboxHelp text={t("globals.thinkingHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="activity">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ChatMessage
+            role="assistant"
+            streaming={activityStreaming}
+            thinking={
+              <ChatActivity
+                label={activityHeader}
+                streaming={activityStreaming}
+                defaultOpen
+              >
+                {activityPhase >= 1 ? (
+                  <ChatActivityStep
+                    status="done"
+                    icon={<WrenchIcon />}
+                    label={t("globals.activityStepCreate")}
+                    artifact={
+                      <ChatActivityArtifact>
+                        {t("globals.activityArtifactPlan")}
+                      </ChatActivityArtifact>
+                    }
+                  />
+                ) : null}
+                {activityPhase >= 2 ? (
+                  <ChatActivityStep
+                    status="done"
+                    icon={<WrenchIcon />}
+                    label={t("globals.activityStepUpdate")}
+                    artifact={
+                      <ChatActivityArtifact>
+                        {t("globals.activityArtifactPlan")}
+                      </ChatActivityArtifact>
+                    }
+                  />
+                ) : null}
+                {activityPhase >= 3 ? (
+                  <ChatActivityStep
+                    status="done"
+                    label={t("globals.activityStepPresentDone")}
+                  />
+                ) : (
+                  <ChatActivityStep
+                    status="active"
+                    label={
+                      activityPhase <= 0
+                        ? t("globals.activityStepGather")
+                        : activityPhase === 1
+                          ? t("globals.activityStepRead")
+                          : t("globals.activityStepPresent")
+                    }
+                    description={
+                      activityPhase >= 2 ? (
+                        <>
+                          {t("globals.activityStepPresentDescBefore")}
+                          <code>{t("globals.activityStepPresentCode")}</code>
+                          {t("globals.activityStepPresentDescAfter")}
+                        </>
+                      ) : activityPhase === 1 ? (
+                        t("globals.activityStepReadDesc")
+                      ) : (
+                        t("globals.activityStepGatherDesc")
+                      )
+                    }
+                  />
+                )}
+              </ChatActivity>
+            }
+          >
+            {activityStreaming ? undefined : t("globals.activityAnswer")}
+          </ChatMessage>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              disabled={activityStreaming}
+              onClick={() => {
+                setActivityPhase(0);
+                setActivityStreaming(true);
+              }}
+            >
+              {t("globals.activitySimulate")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              disabled={activityStreaming}
+              onClick={() => {
+                setActivityStreaming(false);
+                setActivityPhase(3);
+              }}
+            >
+              {t("globals.activityReset")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.activityHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="chat-citations">

@@ -251,7 +251,7 @@ const en = {
     "--fynns-layout-unit-stack-gap (16dp) — between Card body siblings / .fynns-unit-stack (not control→hint).",
   "layoutChrome.fieldHintGap": "Field hint",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input).",
+    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input); also FieldBlock label→control on `.fynns-field-block__main`.",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -371,7 +371,7 @@ const en = {
     "--fynns-layout-snackbar-max-width — min(rem, viewport).",
   "layoutChrome.roFieldStack": "Field stack gap (alias)",
   "layoutChrome.roFieldStackHint":
-    "--fynns-layout-field-stack-gap — aliases control-stack-gap (8dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
+    "--fynns-layout-field-stack-gap — aliases control-stack-form-gap (12dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
   "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
     "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
@@ -657,7 +657,7 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
@@ -698,7 +698,7 @@ const en = {
   "globals.formRecipeDigestsHint": "Send a weekly summary of sample activity.",
   "globals.formRecipeExperimental": "Show experimental controls",
   "globals.formRecipeAlert":
-    "Related FieldBlocks share a FieldStack (8dp). Adjacent FieldStacks (fields → choices → switches) use form-cluster-gap (32dp).",
+    "Related FieldBlocks share a FieldStack (12 / 16 / 32dp by kind). Adjacent FieldStacks (fields → choices → switches) use form-cluster-gap (32dp) plus a horizontal Divider.",
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
@@ -1024,14 +1024,46 @@ const en = {
   "globals.thinkingStreaming": "Thinking",
   "globals.thinkingLabel": "Thinking",
   "globals.thinkingDuration": "Thought for {n}s",
+  "globals.thinkingActionThink": "Thinking",
+  "globals.thinkingActionSearch": "Searching the catalog…",
+  "globals.thinkingActionRead": "Reading sample docs…",
+  "globals.thinkingActionCheck": "Checking layout tokens…",
+  "globals.thinkingActionDraft": "Drafting a reply…",
+  "globals.thinkingActionsHelp":
+    "Dummy agent / LLM activity labels (streaming). Soft status mark + label shimmer; swap `streamingLabel` to morph between activities. For multi-step tool trees see **ChatActivity**.",
   "globals.thinkingBody":
     "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
   "globals.thinkingAnswer":
     "Use ChatThinking via ChatMessage.thinking — summary only; the app owns any markdown.",
-  "globals.thinkingSimulate": "Simulate thinking",
+  "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning disclosure (ChatGPT / Claude “Thinking / Thought for Ns”). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + label pulse. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*` (no `THINKING_*` group). Wave 2 (deferred): multi-step / tool-call chain chrome.",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + status mark + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). Pass `icon={null}` to hide the default streaming mark. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+  "globals.activityHeaderStart": "Gathering context",
+  "globals.activityHeaderMemory": "Created memory file",
+  "globals.activityHeaderPlan": "Updated plan with details",
+  "globals.activityHeaderDone": "Updated plan with details",
+  "globals.activityStepGather": "Gathering context",
+  "globals.activityStepGatherDesc":
+    "Scanning the open catalog and layout tokens before drafting a plan.",
+  "globals.activityStepCreate": "Created memory file",
+  "globals.activityStepUpdate": "Updated memory file",
+  "globals.activityStepRead": "Reading the plan",
+  "globals.activityStepReadDesc":
+    "Checking the draft outline against the sandbox form recipe.",
+  "globals.activityStepPresent": "Presenting plan, asking questions",
+  "globals.activityStepPresentDone": "Presented plan",
+  "globals.activityStepPresentDescBefore":
+    "I’ve refined the outline and am preparing to ask clarifying questions via ",
+  "globals.activityStepPresentCode": "sandbox_askQuestions",
+  "globals.activityStepPresentDescAfter": ".",
+  "globals.activityArtifactPlan": "plan.md",
+  "globals.activityAnswer":
+    "Here is a short outline based on the activity tree above — dummy copy only.",
+  "globals.activitySimulate": "Simulate activity tree",
+  "globals.activityReset": "Reset done tree",
+  "globals.activityHelp":
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). Collapsible header + vertical rail + `ChatActivityStep` rows (`done` wrench / `active` status mark / optional `ChatActivityArtifact` capsule + description). Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -1518,7 +1550,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-unit-stack-gap（16dp）— Card body 兄弟 / .fynns-unit-stack（不是控件→说明）。",
   "layoutChrome.fieldHintGap": "字段提示",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）。",
+    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）；FieldBlock 标签→控件亦用此 token（`.fynns-field-block__main`）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -1638,7 +1670,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-snackbar-max-width — min(rem, 视口)。",
   "layoutChrome.roFieldStack": "字段簇间距（别名）",
   "layoutChrome.roFieldStackHint":
-    "--fynns-layout-field-stack-gap — 别名 control-stack-gap（8dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
+    "--fynns-layout-field-stack-gap — 别名 control-stack-form-gap（12dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
   "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
     "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
@@ -1922,7 +1954,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmAgentHint":
     "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
-    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
@@ -1962,7 +1994,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeDigestsHint": "每周发送一次样例活动摘要。",
   "globals.formRecipeExperimental": "显示实验性控件",
   "globals.formRecipeAlert":
-    "相关 FieldBlock 包在 FieldStack（8dp）；相邻 FieldStack（字段簇 → 选择簇 → 开关簇）用 form-cluster-gap（32dp）。",
+    "相关 FieldBlock 包在 FieldStack（12 / 16 / 32dp 按种类）；相邻 FieldStack（字段簇 → 选择簇 → 开关簇）用 form-cluster-gap（32dp）并加水平 Divider。",
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":
@@ -2287,14 +2319,45 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingStreaming": "思考中",
   "globals.thinkingLabel": "思考中",
   "globals.thinkingDuration": "已思考 {n} 秒",
+  "globals.thinkingActionThink": "思考中",
+  "globals.thinkingActionSearch": "正在搜索目录…",
+  "globals.thinkingActionRead": "正在阅读样例文档…",
+  "globals.thinkingActionCheck": "正在检查布局 token…",
+  "globals.thinkingActionDraft": "正在起草回复…",
+  "globals.thinkingActionsHelp":
+    "假数据 Agent / LLM 活动标签（流式）。柔和状态点 + 标签 shimmer；切换 `streamingLabel` 可变形活动文案。多步骤工具树见 **ChatActivity**。",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
     "通过 ChatMessage.thinking 挂载 ChatThinking — 只放摘要；markdown 由应用自管。",
-  "globals.thinkingSimulate": "模拟思维",
+  "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理披露（ChatGPT / Claude「Thinking / Thought for Ns」）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 标签呼吸。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`（无 `THINKING_*` 组）。Wave 2（延期）：多步骤 / tool 调用链 chrome。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 状态点 + 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。传 `icon={null}` 可隐藏默认流式状态点。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+  "globals.activityHeaderStart": "正在收集上下文",
+  "globals.activityHeaderMemory": "已创建记忆文件",
+  "globals.activityHeaderPlan": "已用细节更新计划",
+  "globals.activityHeaderDone": "已用细节更新计划",
+  "globals.activityStepGather": "正在收集上下文",
+  "globals.activityStepGatherDesc":
+    "先扫描打开的目录与布局 token，再起草计划。",
+  "globals.activityStepCreate": "已创建记忆文件",
+  "globals.activityStepUpdate": "已更新记忆文件",
+  "globals.activityStepRead": "正在阅读计划",
+  "globals.activityStepReadDesc": "对照沙盒表单配方检查草稿大纲。",
+  "globals.activityStepPresent": "正在展示计划并提问",
+  "globals.activityStepPresentDone": "已展示计划",
+  "globals.activityStepPresentDescBefore":
+    "我已细化大纲，准备通过 ",
+  "globals.activityStepPresentCode": "sandbox_askQuestions",
+  "globals.activityStepPresentDescAfter": " 询问澄清问题。",
+  "globals.activityArtifactPlan": "plan.md",
+  "globals.activityAnswer":
+    "根据上方活动树整理的一短段大纲 — 仅为假数据文案。",
+  "globals.activitySimulate": "模拟活动树",
+  "globals.activityReset": "重置为完成树",
+  "globals.activityHelp":
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行（`done` 扳手 / `active` 状态点 / 可选 `ChatActivityArtifact` 胶囊 + 说明）。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
