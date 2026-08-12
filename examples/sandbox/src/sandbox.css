@@ -146,6 +146,20 @@
   flex: 0 0 auto;
 }
 
+/* Topbar language mark — IconButton-sized ghost trigger with locale short code. */
+.sandbox-language-switcher-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sandbox-language-switcher-mark {
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  color: var(--fynns-color-text);
+}
+
 .sandbox-body {
   display: flex;
   flex: 1;
@@ -1168,15 +1182,8 @@
 }
 
 .sandbox-globals-rhythm {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-layout-unit-stack-gap);
-  padding: var(--fynns-space-md);
-  border: 1px solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface-1);
-  max-width: 40rem;
-  box-sizing: border-box;
+  max-width: 24rem;
+  width: 100%;
 }
 
 .sandbox-globals-rhythm-stack,

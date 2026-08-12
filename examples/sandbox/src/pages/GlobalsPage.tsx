@@ -3124,25 +3124,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <>
         <GlobalsDemo id="rhythm">
         <SandboxHelp text={t("globals.rhythmLead")} />
-        <div className="sandbox-globals-rhythm">
+        <Card
+          className="sandbox-globals-rhythm"
+          title={t("globals.rhythmSampleTitle")}
+        >
           <ControlStack className="sandbox-globals-rhythm-stack" columns={1}>
-            <ControlRow label={t("globals.rhythmRowContent")}>
-              <div className="fynns-control-cluster">
-                <Switch
-                  labelSide="end"
-                  label={t("globals.rhythmShowIcon")}
-                  checked={rhythmShowIcon}
-                  onCheckedChange={setRhythmShowIcon}
-                  disabled={rhythmDisabled}
-                />
-                <Switch
-                  labelSide="end"
-                  label={t("globals.rhythmShowActions")}
-                  checked={rhythmShowActions}
-                  onCheckedChange={setRhythmShowActions}
-                  disabled={rhythmDisabled}
-                />
-              </div>
+            <ControlRow label={t("globals.rhythmShowIcon")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.rhythmShowIcon")}
+                checked={rhythmShowIcon}
+                onCheckedChange={setRhythmShowIcon}
+                disabled={rhythmDisabled}
+              />
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmShowActions")}>
+              <Switch
+                label=""
+                ariaLabel={t("globals.rhythmShowActions")}
+                checked={rhythmShowActions}
+                onCheckedChange={setRhythmShowActions}
+                disabled={rhythmDisabled}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmDisabled")}>
               <Switch
@@ -3170,6 +3173,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlStack>
           </ControlBlock>
           <FieldHint>{t("globals.rhythmFieldHintSample")}</FieldHint>
+          <SandboxHelp text={t("globals.rhythmClusterHelp")} />
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.rhythmRowContent")}>
+              <div className="fynns-control-cluster">
+                <Switch
+                  labelSide="end"
+                  label={t("globals.rhythmShowIcon")}
+                  checked={rhythmShowIcon}
+                  onCheckedChange={setRhythmShowIcon}
+                  disabled={rhythmDisabled}
+                />
+                <Switch
+                  labelSide="end"
+                  label={t("globals.rhythmShowActions")}
+                  checked={rhythmShowActions}
+                  onCheckedChange={setRhythmShowActions}
+                  disabled={rhythmDisabled}
+                />
+              </div>
+            </ControlRow>
+          </ControlStack>
           <dl className="sandbox-globals-rhythm-legend">
             <div>
               <dt>
@@ -3208,7 +3232,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <dd>{t("globals.rhythmTokenCluster")}</dd>
             </div>
           </dl>
-        </div>
+        </Card>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

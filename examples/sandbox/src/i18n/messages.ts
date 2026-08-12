@@ -254,7 +254,7 @@ const en = {
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
   "layoutChrome.stackGap": "Control stack",
   "layoutChrome.stackGapHint":
-    "--fynns-layout-control-stack-gap — between ControlRows.",
+    "--fynns-layout-control-stack-gap (8dp) — between ControlRows in one stack (tighter than unit-stack).",
   "layoutChrome.rowColGap": "Label | controls",
   "layoutChrome.rowColGapHint":
     "--fynns-layout-control-row-column-gap — horizontal label to controls.",
@@ -618,7 +618,10 @@ const en = {
   "globals.segmentedItalic": "Italic",
   "globals.rhythm": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
+    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). Inside Card / Dialog, ControlStack rows are label-fill + end-hug controls (same Preferences recipe). Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
+  "globals.rhythmSampleTitle": "Rhythm sample",
+  "globals.rhythmClusterHelp":
+    "Optional `.fynns-control-cluster` for side-by-side end-labeled switches (toolbar). Preferences / settings Cards should use one track-only Switch per ControlRow instead — see rows above.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
   "globals.rhythmShowIcon": "Option A",
@@ -630,10 +633,11 @@ const en = {
   "globals.rhythmFieldHintSample":
     "Standalone FieldHint for app-owned columns (same muted caption as Input supportingText).",
   "globals.rhythmTokenUnit":
-    "Between stacked units / Card body siblings / `.fynns-unit-stack` (20dp — larger than field-hint).",
+    "Between stacked units / Card body siblings / `.fynns-unit-stack` (16dp — larger than field-hint).",
   "globals.rhythmTokenFieldHint":
     "Control → supporting/error note (8dp): Input / ControlBlock / FieldBlock description — not the same as unit-stack.",
-  "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
+  "globals.rhythmTokenStack":
+    "Between ControlRows inside one ControlStack (8dp — tighter than unit-stack so a following ControlBlock reads as the next unit).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
@@ -1484,7 +1488,7 @@ const zh: Record<MessageKey, string> = {
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
   "layoutChrome.stackGap": "控件栈",
   "layoutChrome.stackGapHint":
-    "--fynns-layout-control-stack-gap — ControlRow 之间。",
+    "--fynns-layout-control-stack-gap（8dp）— 同一 stack 内 ControlRow（紧于 unit-stack）。",
   "layoutChrome.rowColGap": "标签 | 控件",
   "layoutChrome.rowColGapHint":
     "--fynns-layout-control-row-column-gap — 横向标签到控件。",
@@ -1846,7 +1850,10 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedItalic": "斜体",
   "globals.rhythm": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
+    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。Card / Dialog 内 ControlStack 为标签吃满 + 控件贴右（与 Preferences 行一致）。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
+  "globals.rhythmSampleTitle": "节奏样例",
+  "globals.rhythmClusterHelp":
+    "可选 `.fynns-control-cluster`：并排放尾标签 Switch（工具栏）。设置 / Preferences Card 应每行一个纯轨道 Switch（见上方行），不要混用 cluster。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
   "globals.rhythmShowIcon": "选项 A",
@@ -1858,10 +1865,11 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmFieldHintSample":
     "独立 FieldHint：应用自管列布局时用（与 Input supportingText 同款静音说明）。",
   "globals.rhythmTokenUnit":
-    "纵向堆叠单元 / Card body 兄弟 / `.fynns-unit-stack`（20dp，大于 field-hint）。",
+    "纵向堆叠单元 / Card body 兄弟 / `.fynns-unit-stack`（16dp，大于 field-hint）。",
   "globals.rhythmTokenFieldHint":
     "控件 → supporting/error 说明（8dp）：Input / ControlBlock / FieldBlock description — 不等于 unit-stack。",
-  "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
+  "globals.rhythmTokenStack":
+    "同一 ControlStack 内 ControlRow 间距（8dp — 紧于 unit-stack，这样后面的 ControlBlock 才读作下一单元）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
