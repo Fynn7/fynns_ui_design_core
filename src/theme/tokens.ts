@@ -1219,9 +1219,16 @@ export const LAYOUT_TOKENS = {
   /**
    * Gap between ControlRows in a ControlStack (8dp). Must read **tighter** than
    * `unit-stack-gap` (16dp) so a sibling `ControlBlock` / FieldBlock is clearly
-   * the next unit — not another row in the same switch cluster.
+   * the next unit — not another row in the same switch cluster. Toolbar /
+   * page chrome only — form hosts use `control-stack-form-gap`.
    */
   "control-stack-gap": "0.5rem",
+  /**
+   * Gap between ControlRows in a **form-host** ControlStack (12dp): centered
+   * Dialog / Card body / Collapsible body direct. Aliases `space-md` — between
+   * toolbar-tight `control-stack-gap` (8dp) and `unit-stack-gap` (16dp).
+   */
+  "control-stack-form-gap": "var(--fynns-space-md)",
   /**
    * Gap inside `FieldStack` / `.fynns-field-stack` (8dp): consecutive related
    * FieldBlocks (or a same-kind ControlBlock cluster). Aliases

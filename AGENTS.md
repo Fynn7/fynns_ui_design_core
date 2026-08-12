@@ -845,7 +845,7 @@ classes.
   | Role | Token / host |
   | --- | --- |
   | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` (**8dp** — toolbar / page chrome; tighter than unit-stack) |
-  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / Collapsible body direct) | `--fynns-space-md` (**12dp** — Preference Switch rows; between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
+  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
@@ -901,8 +901,9 @@ classes.
   (`1fr`) + end-hug controls (`max-content`) so Switch tracks share one trailing
   edge across sibling rows / ControlBlocks — same Preferences recipe as
   dismissible Dialog. Form-host stacks also open row gap to
-  `--fynns-space-md` (**12dp** — between `control-stack-gap` 8dp and
-  `unit-stack-gap` 16dp); toolbar stacks keep `control-stack-gap` (**8dp**).
+  `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` —
+  between `control-stack-gap` 8dp and `unit-stack-gap` 16dp); toolbar stacks
+  keep `control-stack-gap` (**8dp**).
   Do not rely on a descendant
   `.fynns-collapsible-body .fynns-control-stack` rule (sandbox category
   Collapsibles would steal toolbar demos). Toolbar / page chrome outside those
