@@ -140,10 +140,11 @@ set — enforce with `npm run check:wysiwyg`. Pages: **Surfaces** (preview targe
 **Foundations**, **Motion**, and **Templates**
 (gear icon in the nav footer — settings: language, config JSON export/import,
 and named templates). **Chrome UI session** (page, inspector, nav, playground
-  target, open Components categories) restores across browser refresh for the
-  current Vite process via `sessionStorage` + `__SANDBOX_BOOT_ID__`. A fresh
-  Vite process opens **Components** and focuses the catalog SearchBar (dev
-  convenience — skips SkipLink first-focus). On Surfaces / Globals, the topbar **inspector** toggle
+  target, open Components categories, main-canvas scroll per page) restores
+  across browser refresh for the current Vite process via `sessionStorage` +
+  `__SANDBOX_BOOT_ID__`. A fresh Vite process opens **Components** and focuses
+  the catalog SearchBar (dev convenience — skips SkipLink first-focus). On
+  Surfaces / Globals, the topbar **inspector** toggle
 shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
