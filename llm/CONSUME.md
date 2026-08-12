@@ -223,7 +223,8 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `--fynns-layout-capsule-chrome-pad-inline`. ChatComposer collapsed shell →
   `--fynns-chat-composer-pad-inline` / `pad-block` (see
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)). Dense form `Input` /
-  field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
+  field-shell → `capsule-chrome-pad-inline` + `field-pad-inline` (Select text
+  start parity); `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
@@ -231,13 +232,15 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   **Control + related note:** wrap in `ControlBlock` (`description` /
   `errorText`). **Semantic form clusters (strongly recommended):** partition
   inspector / settings / Dialog options with `FieldStack` by kind (identity
-  FieldBlocks together, Preference ControlBlocks together, …) —
-  `field-stack-gap` 8dp inside; adjacent FieldStacks use `form-cluster-gap`
-  (32dp); other Card / Collapsible siblings use `unit-stack-gap` (16dp). Do
-  **not** flatten multi-topic forms as bare siblings or invent muted subtitle
-  classes. Live tree: sandbox `#form-recipe` (Card / Collapsible / Dialog) /
-  AGENTS.md **FieldStack semantic clusters**. Outside Card use
-  `.fynns-unit-stack`.
+  FieldBlocks, Radio/Checkbox/Slider choice FieldBlocks, Preference
+  ControlBlocks, …) — FieldBlocks share `field-stack-gap` 8dp; sibling
+  ControlBlocks open to visual `unit-stack-gap` 16dp; adjacent FieldStacks
+  use `form-cluster-gap` (32dp); other Card / Collapsible siblings use
+  `unit-stack-gap` (16dp). Choice lists use `.fynns-control-cluster--stack`
+  (+ `--nowrap` for Other+Input). Do **not** flatten multi-topic forms as
+  bare siblings or invent muted subtitle classes. Live tree: sandbox
+  `#form-recipe` (Card / Collapsible / Dialog) / AGENTS.md **FieldStack
+  semantic clusters**. Outside Card use `.fynns-unit-stack`.
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
   parallel multi-line shell in the consumer.

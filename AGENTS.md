@@ -184,11 +184,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`, `var(--fynns-shadow-lg)`,
   `var(--fynns-duration-fast)`, etc.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
-  by **semantic kind** (identity fields together, preference switches together,
-  …) — not one flat list of FieldBlocks / ControlBlocks. Same-kind siblings
-  share `field-stack-gap` (8dp); adjacent FieldStacks get `form-cluster-gap`
-  (32dp). Live tree: sandbox `#form-recipe`. See **Toolbar / unit rhythm** →
-  **FieldStack semantic clusters**.
+  by **semantic kind** (identity fields together, radio/checkbox choices
+  together, preference switches together, …) — not one flat list of FieldBlocks
+  / ControlBlocks. FieldBlocks share `field-stack-gap` (8dp); sibling
+  ControlBlocks open to `unit-stack-gap` (16dp); adjacent FieldStacks get
+  `form-cluster-gap` (32dp). Live tree: sandbox `#form-recipe`.
+  See **Toolbar / unit rhythm** → **FieldStack semantic clusters**.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
   `npm run gen:theme`.
@@ -849,7 +850,8 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Consecutive related FieldBlocks (or ControlBlock cluster) inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
+  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
+  | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |
   | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
   | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |
@@ -859,14 +861,25 @@ classes.
   by meaning** with `FieldStack` — do **not** leave every FieldBlock /
   ControlBlock as a flat Card-body sibling.
   - **Same kind → one `FieldStack`:** consecutive related Input / Select /
-    Textarea / Otp `FieldBlock`s, **or** a same-kind group of Preference
-    `ControlBlock`s (Switch + note). Inside: `field-stack-gap` (**8dp**).
-  - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields → preference
-    switches. Between stacks: `form-cluster-gap` (**32dp**). That wider gap is
+    Textarea / Otp `FieldBlock`s, **or** a same-kind choice cluster
+    (`Radio` single-select, `Checkbox` multi-select, and/or `Slider` under
+    `FieldBlock`s), **or** Preference `ControlBlock`s (Switch + note).
+    Inside: `field-stack-gap` (**8dp**) for FieldBlocks; sibling
+    **ControlBlock**s open to `unit-stack-gap` (**16dp**) so Switch+note
+    units breathe. Choice lists use
+    `.fynns-control-cluster--stack` (not bare radios in form-host
+    `ControlStack` — that grid auto-flows into label|control columns).
+    Stack rows share a dense 2rem min-height and `space-xs` (4dp) gap so
+    Radio-only and Other+`Input` `sm` rows keep even, tight rhythm. Radio
+    **Other** + free-text `Input` `sm` stay one row via
+    `.fynns-control-cluster--nowrap` (Input shrinks; never wrap).
+  - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields →
+    radio/checkbox choices → preference switches. Between stacks:
+    `form-cluster-gap` (**32dp**). That wider gap is
     the visual signal that the *topic* changed — spacing alone without
     FieldStack is not enough (Card / Collapsible / Dialog body
-    `unit-stack-gap` stays **16dp** for intro / Checkbox / actions / other
-    non-cluster siblings).
+    `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
+    other non-cluster siblings).
   - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
     `errorText`). Never a loose muted `<p>` under `ControlStack`.
   - **Copy the tree** from sandbox Globals **Inspector form recipe**
@@ -931,15 +944,18 @@ classes.
   bubble end and composer shell end stay one vertical line. Do **not** use
   `strip-pad-inline` for the column outer inset (that key is text-in-shell /
   expanded composer shell pad only).
-  **Form fields:** `Input` / `.fynns-field-shell` →
-  `--fynns-layout-field-pad-inline` (aliases `space-md`, 12dp). `Textarea` →
+  **Form fields:** `Input` / `.fynns-field-shell` inline pad =
+  `--fynns-layout-capsule-chrome-pad-inline` + `--fynns-layout-field-pad-inline`
+  (4dp + 12dp) so text start matches densified **Select** / Autocomplete
+  (searchbar capsule pad + trigger `space-md`). `field-pad-inline` alone
+  stays the 12dp step (aliases `space-md`) — do **not** use capsule alone
+  for form fields. `Textarea` →
   same inline recipe **plus** `--fynns-layout-field-pad-block` (12dp) so
   multiline copy is not flush to the top/bottom — do **not** let
   `.fynns-input--sm`’s zero block pad (32dp single-line Input) apply to
   Textarea. Default **autoGrow** (content height; soft cap
-  `--fynns-layout-textarea-max-height`). Do **not** reuse capsule chrome for
-  form affix shells — that 4dp token is SearchBar IconButton flush only.
-  Affix → text gap uses `--fynns-layout-control-cluster-gap`.
+  `--fynns-layout-textarea-max-height`). Affix → text gap uses
+  `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: head/foot/body **inline** `--fynns-layout-dialog-inset`
   (24dp); non-confirm centered head **block-start** `dialog-inset / 2`,

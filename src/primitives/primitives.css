@@ -697,8 +697,11 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
-  /* Form field chrome — not SearchBar capsule IconButton flush (4dp). */
-  padding-inline: var(--fynns-layout-field-pad-inline);
+  /* Same text inset as standalone Input / densified Select (capsule + field-pad). */
+  padding-inline: calc(
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
 }
 
 .fynns-field-shell--sm {
@@ -765,10 +768,15 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
   color: var(--fynns-color-text);
-  /* Dense form label inset — layout field-pad, minus hairline. */
+  /*
+   * Text start matches densified Select: searchbar/capsule field pad (4dp) +
+   * trigger `space-md` / field-pad (12dp). Do **not** subtract hairline —
+   * that left Input optically tighter than Select in FieldStack forms.
+   */
   padding-block: var(--fynns-space-25);
   padding-inline: calc(
-    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
   );
   font: inherit;
   outline: none;
@@ -803,7 +811,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* Fit 32dp: no block pad (md uses space-25 inside 40dp). */
   padding-block: 0;
   padding-inline: calc(
-    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
   );
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-tight);
@@ -2279,6 +2288,62 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/*
+ * Vertical choice lists (Radio / Checkbox) inside FieldBlock.
+ * Do **not** put bare radios into form-host ControlStack — that grid is
+ * label | control tracks, so siblings auto-flow into multiple columns.
+ *
+ * Equal row rhythm: every direct child shares the dense control-row floor
+ * (2rem / 32dp — `Input` `sm`, one step below `--fynns-size-icon-target`).
+ * Plain Radio rows and Other+Input nowrap rows keep the same gap; taller
+ * content still grows.
+ */
+.fynns-control-cluster--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  /* Tighter than horizontal cluster gap (8dp) — choice rows read as one list. */
+  gap: var(--fynns-space-xs);
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox,
+.fynns-control-cluster--stack > .fynns-control-cluster--nowrap {
+  box-sizing: border-box;
+  min-height: 2rem;
+  align-items: center;
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Radio "Other" + free-text Input (or similar): stay on one row when narrow.
+ * Input drops width:100% so it can shrink; radio stays content-sized.
+ */
+.fynns-control-cluster--nowrap {
+  flex-wrap: nowrap;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.fynns-control-cluster--nowrap > .fynns-radio,
+.fynns-control-cluster--nowrap > .fynns-checkbox {
+  flex: 0 0 auto;
+}
+
+.fynns-control-cluster--nowrap > .fynns-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+}
+
 /* ---------- Grid ---------- */
 .fynns-grid {
   display: grid;
@@ -3409,6 +3474,17 @@ a.fynns-breadcrumb-link:visited {
 .fynns-unit-stack > .fynns-field-stack + .fynns-field-stack {
   margin-block-start: calc(
     var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
+  );
+}
+
+/*
+ * ControlBlock + supporting note is heavier than a tight FieldBlock pair —
+ * open sibling ControlBlocks to unit-stack (16dp) while FieldBlocks keep
+ * field-stack-gap (8dp) inside the same FieldStack.
+ */
+.fynns-field-stack > .fynns-control-block + .fynns-control-block {
+  margin-block-start: calc(
+    var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
   );
 }
 
