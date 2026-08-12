@@ -1206,8 +1206,12 @@ export const LAYOUT_TOKENS = {
    * Toolbar / unit rhythm — prefer these over raw `--fynns-space-*`
    * (see AGENTS.md “Toolbar / unit rhythm”).
    */
-  /** Gap between ControlRows in a ControlStack. */
-  "control-stack-gap": "0.75rem",
+  /**
+   * Gap between ControlRows in a ControlStack (8dp). Must read **tighter** than
+   * `unit-stack-gap` (16dp) so a sibling `ControlBlock` / FieldBlock is clearly
+   * the next unit — not another row in the same switch cluster.
+   */
+  "control-stack-gap": "0.5rem",
   /** Label → controls when the row stacks vertically (narrow). */
   "control-row-gap": "0.25rem",
   /** Label | controls when the row is horizontal. */
