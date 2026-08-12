@@ -51,9 +51,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
-   text is flush with the control’s outer start edge. Default `ghost`; dense
-   forms may use `size="sm"`. As the first child of `Card` body, top inset
-   shrinks to `--fynns-space-xs` (Card body block pad is
+   text is flush with the control’s outer start edge. Label→control gap is
+   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
+   wrapped prompts — do not rely on header min-height optical pad). With
+   trailing actions, the header row grows for `IconButton` sm. Default
+   `ghost`; dense forms may use `size="sm"`. As the first child of `Card`
+   body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
    `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
    Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -855,7 +858,7 @@ classes.
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
-  | Control → supporting / error hint (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
+  | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
   | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |

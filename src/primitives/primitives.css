@@ -3413,16 +3413,23 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
 .fynns-field-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* IconButton sm (2rem) + 2xs block pad — same row with or without actions so
-   * label→control optical gap stays even (~9–11dp with FieldBlock __main). */
+  /* Default: no optical empty shell — label→control gap lives on
+   * `.fynns-field-block__main` (`field-hint-gap`). With trailing actions,
+   * restore IconButton sm row geometry below. */
   box-sizing: border-box;
-  min-height: calc(2rem + 2 * var(--fynns-space-2xs));
-  padding-block: var(--fynns-space-2xs);
+  min-height: 0;
+  padding-block: 0;
   min-width: 0;
   width: 100%;
+}
+
+.fynns-field-header:has(> .fynns-field-header__actions) {
+  align-items: center;
+  min-height: calc(2rem + 2 * var(--fynns-space-2xs));
+  padding-block: var(--fynns-space-2xs);
 }
 
 .fynns-field-header__label {
@@ -3453,8 +3460,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-block__main {
   display: flex;
   flex-direction: column;
-  /* Header padding-block supplies the label→control breath; no extra stack gap. */
-  gap: 0;
+  /* Label row → control (single- or multi-line prompts). */
+  gap: var(--fynns-layout-field-hint-gap);
   min-width: 0;
   width: 100%;
   box-sizing: border-box;

@@ -74,7 +74,8 @@ ring can paint before heavy work).
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
-  FieldBlock/FieldHeader (optional description/errorText),
+  FieldBlock/FieldHeader (optional description/errorText; label→control =
+  `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
