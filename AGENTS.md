@@ -869,8 +869,9 @@ classes.
     units breathe. Choice lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
     `ControlStack` — that grid auto-flows into label|control columns).
-    Stack rows share a dense 2rem min-height and `space-xs` (4dp) gap.
-    Radio **Other** + free-text `Input` `sm` use
+    Stack rows share a dense 2rem **min-height** (option floor) and `space-xs`
+    (4dp) gap. Taller children win (`max(floor, content)` — never a fixed
+    row `height`). Radio **Other** + free-text `Input` `sm` use
     `.fynns-control-cluster--choice-extra`: Google Forms-style **same-row**
     short field beside the option; keep the Input mounted — **`disabled`
     when Other is not selected** (preserve draft text; enable when Other
