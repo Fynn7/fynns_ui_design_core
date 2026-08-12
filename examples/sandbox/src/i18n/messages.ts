@@ -255,6 +255,9 @@ const en = {
   "layoutChrome.stackGap": "Control stack",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap (8dp) — between ControlRows in one stack (tighter than unit-stack).",
+  "layoutChrome.formClusterGap": "Form cluster",
+  "layoutChrome.formClusterGapHint":
+    "--fynns-layout-form-cluster-gap (32dp) — between adjacent FieldStacks (e.g. fields → switches).",
   "layoutChrome.rowColGap": "Label | controls",
   "layoutChrome.rowColGapHint":
     "--fynns-layout-control-row-column-gap — horizontal label to controls.",
@@ -360,6 +363,9 @@ const en = {
   "layoutChrome.roSnackbarMax": "Snackbar max (min())",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, viewport).",
+  "layoutChrome.roFieldStack": "Field stack gap (alias)",
+  "layoutChrome.roFieldStackHint":
+    "--fynns-layout-field-stack-gap — aliases control-stack-gap (8dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
   "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
     "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
@@ -644,7 +650,7 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: control + narrative = `ControlBlock`; sibling units = Card body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for settings cards. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings Card: intro FieldHint → FieldBlocks (optional description / header actions) → ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Card body owns unit-stack-gap; ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings Card: intro FieldHint → `FieldStack` of FieldBlocks → `FieldStack` of ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (8dp); adjacent FieldStacks use form-cluster-gap (32dp); other Card siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeTitle": "Project preferences",
   "globals.formRecipeIntro":
     "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
@@ -664,11 +670,11 @@ const en = {
   "globals.formRecipeDigestsHint": "Send a weekly summary of sample activity.",
   "globals.formRecipeExperimental": "Show experimental controls",
   "globals.formRecipeAlert":
-    "Sibling units use unit-stack-gap; each FieldBlock / ControlBlock keeps its own tighter field-hint-gap under the control.",
+    "Related FieldBlocks share a FieldStack (8dp). Adjacent FieldStacks (fields → switches) use form-cluster-gap (32dp).",
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe: `Card` → `FieldHint` intro → `FieldBlock`(+`description`/`actions`) → `ControlBlock`(+`description`) → feedback / foot actions. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe: `Card` → `FieldHint` intro → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -1489,6 +1495,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.stackGap": "控件栈",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap（8dp）— 同一 stack 内 ControlRow（紧于 unit-stack）。",
+  "layoutChrome.formClusterGap": "表单簇",
+  "layoutChrome.formClusterGapHint":
+    "--fynns-layout-form-cluster-gap（32dp）— 相邻 FieldStack 之间（如字段簇 → 开关簇）。",
   "layoutChrome.rowColGap": "标签 | 控件",
   "layoutChrome.rowColGapHint":
     "--fynns-layout-control-row-column-gap — 横向标签到控件。",
@@ -1594,6 +1603,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roSnackbarMax": "Snackbar 上限（min()）",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, 视口)。",
+  "layoutChrome.roFieldStack": "字段簇间距（别名）",
+  "layoutChrome.roFieldStackHint":
+    "--fynns-layout-field-stack-gap — 别名 control-stack-gap（8dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
   "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
     "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
@@ -1876,7 +1888,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmAgentHint":
     "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。设置类卡片直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
-    "检查器 / 设置 Card 权威样例：intro FieldHint → FieldBlock（可选 description / 头行动作）→ ControlBlock（Switch + 说明）→ 可选 Checkbox / InlineAlert / 底栏。Card body 管 unit-stack-gap；ControlBlock / FieldBlock description 管更紧的 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+    "检查器 / 设置 Card 权威样例：intro FieldHint → `FieldStack`（FieldBlock 簇）→ `FieldStack`（ControlBlock 簇）→ 可选 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（8dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它 Card 兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formRecipeTitle": "项目偏好",
   "globals.formRecipeIntro":
     "这些偏好仅作用于当前沙盒项目，用来演示 FieldBlock / ControlBlock 节奏 — 不接真实后端。",
@@ -1895,11 +1907,11 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeDigestsHint": "每周发送一次样例活动摘要。",
   "globals.formRecipeExperimental": "显示实验性控件",
   "globals.formRecipeAlert":
-    "兄弟单元用 unit-stack-gap；每个 FieldBlock / ControlBlock 在控件下用更紧的 field-hint-gap。",
+    "相关 FieldBlock 包在 FieldStack（8dp）；相邻 FieldStack（字段簇 → 开关簇）用 form-cluster-gap（32dp）。",
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":
-    "配方：`Card` → `FieldHint` 引言 → `FieldBlock`(+`description`/`actions`) → `ControlBlock`(+`description`) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
+    "配方：`Card` → `FieldHint` 引言 → `FieldStack`(`FieldBlock`…) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",

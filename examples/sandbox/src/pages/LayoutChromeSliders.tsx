@@ -72,6 +72,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.stackGapHint",
     max: 32,
   },
+  "form-cluster-gap": {
+    labelKey: "layoutChrome.formClusterGap",
+    hintKey: "layoutChrome.formClusterGapHint",
+    max: 48,
+  },
   "control-row-column-gap": {
     labelKey: "layoutChrome.rowColGap",
     hintKey: "layoutChrome.rowColGapHint",
@@ -246,6 +251,10 @@ const READONLY_LAYOUT_META: Record<
   "snackbar-max-width": {
     labelKey: "layoutChrome.roSnackbarMax",
     hintKey: "layoutChrome.roSnackbarMaxHint",
+  },
+  "field-stack-gap": {
+    labelKey: "layoutChrome.roFieldStack",
+    hintKey: "layoutChrome.roFieldStackHint",
   },
 };
 

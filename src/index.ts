@@ -186,6 +186,8 @@ export { ControlBlock } from "./primitives/ControlBlock";
 export type { ControlBlockProps } from "./primitives/ControlBlock";
 export { FieldHint } from "./primitives/FieldHint";
 export type { FieldHintProps } from "./primitives/FieldHint";
+export { FieldStack } from "./primitives/FieldStack";
+export type { FieldStackProps } from "./primitives/FieldStack";
 export { Grid } from "./primitives/Grid";
 export type { GridProps } from "./primitives/Grid";
 export { FillColumn } from "./primitives/FillColumn";

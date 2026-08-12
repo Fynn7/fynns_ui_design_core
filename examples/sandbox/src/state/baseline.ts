@@ -59,6 +59,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "unit-stack-gap",
   "field-hint-gap",
   "control-stack-gap",
+  "form-cluster-gap",
   "control-row-gap",
   "control-row-column-gap",
   "control-cluster-gap",
@@ -115,6 +116,7 @@ export const READONLY_LAYOUT_KEYS = [
   "sheet-half-height",
   "tooltip-max-width",
   "snackbar-max-width",
+  "field-stack-gap",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type ReadonlyLayoutKey = (typeof READONLY_LAYOUT_KEYS)[number];
@@ -135,6 +137,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "unit-stack-gap",
     "field-hint-gap",
     "control-stack-gap",
+    "form-cluster-gap",
     "control-row-column-gap",
     "control-row-gap",
     "control-cluster-gap",
@@ -252,6 +255,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "field-hint-gap":
     "Field hint · control → supporting/error note (ControlBlock / FieldBlock / Input)",
   "control-stack-gap": "Toolbar rhythm · between ControlRows",
+  "form-cluster-gap":
+    "Form clusters · between adjacent FieldStacks (fields → switches; 32dp)",
   "control-row-gap": "Toolbar rhythm · stacked label above controls",
   "control-row-column-gap": "Toolbar rhythm · horizontal label | controls",
   "control-cluster-gap": "Toolbar rhythm · siblings in one controls cluster",

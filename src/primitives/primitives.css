@@ -3337,16 +3337,39 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
 }
 
-/* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` gap —
-   do not re-add margin here (doubles unit-stack-gap). */
+/* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` /
+   `.fynns-field-stack` gap — do not re-add margin here. */
 .fynns-field-block:not(:last-child) {
   margin-bottom: 0;
 }
 
-/* FieldHeader / FieldBlock as first child of Card body: keep dense top. */
+/* FieldHeader / FieldBlock / FieldStack as first child of Card body: dense top. */
 .fynns-card-body:has(> .fynns-field-header:first-child),
-.fynns-card-body:has(> .fynns-field-block:first-child) {
+.fynns-card-body:has(> .fynns-field-block:first-child),
+.fynns-card-body:has(> .fynns-field-stack:first-child) {
   padding-top: var(--fynns-space-xs);
+}
+
+/* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
+/*
+ * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
+ * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks use
+ * form-cluster-gap (32dp) — Card body already supplies unit-stack-gap (16dp),
+ * so the sibling rule adds the remainder: cluster − unit.
+ */
+.fynns-field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-stack-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-stack + .fynns-field-stack {
+  margin-block-start: calc(
+    var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
+  );
 }
 
 /* ---------- ControlBlock (control unit + supporting hint) ---------- */

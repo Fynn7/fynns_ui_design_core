@@ -475,6 +475,8 @@
   --fynns-layout-snackbar-inset: 1rem;
   --fynns-layout-control-row-label: 7.5rem;
   --fynns-layout-control-stack-gap: 0.5rem;
+  --fynns-layout-field-stack-gap: var(--fynns-layout-control-stack-gap);
+  --fynns-layout-form-cluster-gap: 2rem;
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;

@@ -1212,6 +1212,22 @@ export const LAYOUT_TOKENS = {
    * the next unit — not another row in the same switch cluster.
    */
   "control-stack-gap": "0.5rem",
+  /**
+   * Gap inside `FieldStack` / `.fynns-field-stack` (8dp): consecutive related
+   * FieldBlocks (or a same-kind ControlBlock cluster). Aliases
+   * `control-stack-gap` — related form chrome shares one tight step; Card body
+   * still uses `unit-stack-gap` between most siblings. Adjacent FieldStacks
+   * use the larger `form-cluster-gap` instead.
+   */
+  "field-stack-gap": "var(--fynns-layout-control-stack-gap)",
+  /**
+   * Gap between adjacent `FieldStack` clusters (32dp — two unit steps):
+   * e.g. Input FieldBlocks → Preference ControlBlocks. Larger than
+   * `unit-stack-gap` (16dp) so the jump between form *kinds* reads clearly.
+   * Implemented as extra margin on `.fynns-field-stack + .fynns-field-stack`
+   * (Card body gap still contributes `unit-stack-gap`).
+   */
+  "form-cluster-gap": "2rem",
   /** Label → controls when the row stacks vertically (narrow). */
   "control-row-gap": "0.25rem",
   /** Label | controls when the row is horizontal. */
@@ -1235,10 +1251,10 @@ export const LAYOUT_TOKENS = {
   /**
    * Vertical gap between stacked *units* (16dp): Card / Collapsible body
    * siblings, `.fynns-unit-stack`, inspector FieldBlock / ControlBlock /
-   * intro copy. Prefer flex + this token (sandbox `.sandbox-stack`) over
-   * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows)
-   * and from `field-hint-gap` (control → its own note). Matches `nest-gap`
-   * so form FieldBlocks do not read looser than nested wells.
+   * intro copy / Checkbox. Prefer flex + this token (sandbox `.sandbox-stack`)
+   * over ad-hoc margins. M3-aligned “between components” step on the 8dp
+   * grid — clearly larger than `field-hint-gap` / `control-stack-gap` (8dp),
+   * smaller than section gaps (24dp+).
    */
   "unit-stack-gap": "1rem",
   /**

@@ -28,8 +28,9 @@ export type ControlBlockProps = HTMLAttributes<HTMLDivElement> & {
  * the same rhythm as `.fynns-field`.
  *
  * Related switch + narrative must live here (one virtual container), not as
- * adjacent Card-body siblings. Sibling **units** (FieldBlock, ControlBlock,
- * intro copy) are spaced by Card / Collapsible body `unit-stack-gap` or
+ * adjacent Card-body siblings. Consecutive FieldBlocks (or a same-kind
+ * ControlBlock group) → wrap in `FieldStack`. Sibling **clusters** / intro /
+ * Checkbox are spaced by Card / Collapsible body `unit-stack-gap` or
  * `.fynns-unit-stack`.
  */
 export function ControlBlock({

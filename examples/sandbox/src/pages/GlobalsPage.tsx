@@ -61,6 +61,7 @@ import {
   FabMenu,
   FabMenuItem,
   FieldBlock,
+  FieldStack,
   FieldHeader,
   FileIcon,
   FolderOpenIcon,
@@ -3250,6 +3251,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             title={t("globals.formRecipeTitle")}
           >
             <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
+            <FieldStack>
             <FieldBlock
               label={t("globals.formRecipeRegion")}
               htmlFor="sandbox-form-region"
@@ -3338,6 +3340,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 minRows={2}
               />
             </FieldBlock>
+            </FieldStack>
+            <FieldStack>
             <ControlBlock description={t("globals.formRecipeCompactHint")}>
               <ControlStack columns={1}>
                 <ControlRow label={t("globals.formRecipeCompact")}>
@@ -3362,6 +3366,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </ControlRow>
               </ControlStack>
             </ControlBlock>
+            </FieldStack>
             <Checkbox
               label={t("globals.formRecipeExperimental")}
               checked={formExperimental}
