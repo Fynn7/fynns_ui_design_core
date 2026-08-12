@@ -69,7 +69,8 @@ ring can paint before heavy work).
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
-  ControlStack/ControlRow/Grid/FillColumn,
+  ControlStack/ControlRow/ControlBlock/FieldHint/Grid/FillColumn,
+  FieldBlock/FieldHeader (optional description/errorText),
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
   See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
@@ -87,10 +88,13 @@ ring can paint before heavy work).
   demos are the composed default; Globals demos are standalone parts.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
-  Vertical unit lists (inspector fields, Collapsible bodies): flex column +
-  `--fynns-layout-unit-stack-gap` (sandbox: `.sandbox-stack`). Form control →
-  hint: `--fynns-layout-field-hint-gap` on `.fynns-field`. Nested surface wells
-  (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠ flush).
+  Vertical unit lists: Card / Collapsible body already use
+  `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
+  (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
+  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. Form
+  control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested surface
+  wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠
+  flush).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).
@@ -127,6 +131,9 @@ ring can paint before heavy work).
   (unexport + TSX/CSS + demo/catalog/i18n + AGENTS + BREAKING_PURGE Removed
   row). `npm run check:wysiwyg` enforces this. Pasteable rule:
   `llm/consumer-cursor-rule.mdc`.
+- **No consumer content in core/sandbox:** never paste consumer product strings,
+  providers, routes, or domain jargon into Globals / Preview / defaults — generic
+  placeholders only (AGENTS Hard rules + `.cursor/rules/no-consumer-content.mdc`).
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient

@@ -1222,19 +1222,26 @@ export const LAYOUT_TOKENS = {
    */
   "chrome-icon-gap": "0.125rem",
   /**
-   * Gap between a form control and its supporting / error hint (`.fynns-field`,
-   * Otp, Autocomplete, …). Same rhythm as `unit-stack-gap` — control→hint
-   * matches stacked unit spacing (sandbox Autocomplete → help).
+   * Gap between a form control and its supporting / error hint (8dp):
+   * `.fynns-field`, Otp, Autocomplete, `ControlBlock`, `FieldBlock`
+   * description. **Tighter** than `unit-stack-gap` — within-unit copy must
+   * not match the gap between sibling FieldBlocks / ControlBlocks.
    */
-  "field-hint-gap": "var(--fynns-layout-unit-stack-gap)",
+  "field-hint-gap": "0.5rem",
   /**
-   * Vertical gap between stacked *units* (inspector fields, sibling demos,
-   * Collapsible body blocks, control → field hint). Prefer flex + this token
-   * (sandbox `.sandbox-stack` / `.sandbox-globals-row--stack`) over ad-hoc
-   * margins. Distinct from toolbar `control-stack-gap` (ControlRows).
+   * Vertical gap between stacked *units* (16dp): Card / Collapsible body
+   * siblings, `.fynns-unit-stack`, inspector FieldBlock / ControlBlock /
+   * intro copy. Prefer flex + this token (sandbox `.sandbox-stack`) over
+   * ad-hoc margins. Distinct from toolbar `control-stack-gap` (ControlRows)
+   * and from `field-hint-gap` (control → its own note). Matches `nest-gap`
+   * so form FieldBlocks do not read looser than nested wells.
    */
   "unit-stack-gap": "1rem",
-  /** Optional floor for dense `Switch labelSide="end"` layouts (prefer content). */
+  /**
+   * Max inline size for `Switch` `labelSide="end"` captions (7rem).
+   * Ellipsis when the ControlStack / Card host is narrower than the label —
+   * prefer truncation over overflowing the frame.
+   */
   "switch-label-end": "7rem",
   /**
    * Single-line chrome bar height (56dp): TopAppBar `sm` row, BottomAppBar,

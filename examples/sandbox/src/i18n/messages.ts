@@ -245,7 +245,10 @@ const en = {
     "--sandbox-section-gap — title to body inside Foundations Section.",
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — between stacked units / sibling demos; field-hint-gap aliases this.",
+    "--fynns-layout-unit-stack-gap (16dp) — between Card body siblings / .fynns-unit-stack (not control→hint).",
+  "layoutChrome.fieldHintGap": "Field hint",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -357,9 +360,9 @@ const en = {
   "layoutChrome.roSnackbarMax": "Snackbar max (min())",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, viewport).",
-  "layoutChrome.roFieldHint": "Field hint gap (alias)",
+  "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
-    "--fynns-layout-field-hint-gap — aliases unit-stack-gap; edit unit-stack-gap instead.",
+    "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
 
   "inspector.lightThemeHelp":
     "Apply writes dark source tokens only. Light overrides need a hand-edit of `LIGHT_THEME_OVERRIDES` + `npm run gen:theme`. Live draft can preview light via CSS injection.",
@@ -615,22 +618,53 @@ const en = {
   "globals.segmentedItalic": "Italic",
   "globals.rhythm": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Reusable unit-stack gap (`.sandbox-stack`) and `ControlStack` + `ControlRow` (labeled toolbar rows). Prefer these layout tokens over raw `--fynns-space-*`.",
+    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
   "globals.rhythmRowContent": "Content",
   "globals.rhythmRowBehavior": "Behavior",
   "globals.rhythmShowIcon": "Option A",
   "globals.rhythmShowActions": "Option B",
   "globals.rhythmDisabled": "Disable cluster",
+  "globals.rhythmCompactLabel": "Compact",
+  "globals.rhythmControlBlockHint":
+    "When on, chrome uses denser padding. Wrap the Switch and this note in ControlBlock — do not leave the paragraph as a Card sibling.",
+  "globals.rhythmFieldHintSample":
+    "Standalone FieldHint for app-owned columns (same muted caption as Input supportingText).",
   "globals.rhythmTokenUnit":
-    "Between stacked units / sibling demos (also drives control → field hint via field-hint-gap alias).",
+    "Between stacked units / Card body siblings / `.fynns-unit-stack` (20dp — larger than field-hint).",
   "globals.rhythmTokenFieldHint":
-    "Alias of unit-stack-gap — Input / Otp / Autocomplete control → supporting hint.",
+    "Control → supporting/error note (8dp): Input / ControlBlock / FieldBlock description — not the same as unit-stack.",
   "globals.rhythmTokenStack": "Between ControlRows (stack gap).",
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmAgentHint":
-    "Agents: use `.sandbox-stack` / `ControlStack` + `ControlRow` and the `--fynns-layout-*` tokens listed above (`SANDBOX_LAYOUT_AGENT_CATALOG`). Do not invent ad-hoc gaps. Full recipe: `AGENTS.md` → Toolbar / unit rhythm. See `llm/BREAKING_PURGE.md`.",
+    "Agents: control + narrative = `ControlBlock`; sibling units = Card body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for settings cards. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
+  "globals.formRecipeLead":
+    "Canonical inspector / settings Card: intro FieldHint → FieldBlocks (optional description / header actions) → ControlBlocks (Switch + note) → optional Checkbox / InlineAlert / actions. Card body owns unit-stack-gap; ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+  "globals.formRecipeTitle": "Project preferences",
+  "globals.formRecipeIntro":
+    "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
+  "globals.formRecipeRegion": "Region",
+  "globals.formRecipeRegionHint": "Chooses which regional defaults appear in the form below.",
+  "globals.formRecipeDisplayName": "Display name",
+  "globals.formRecipeEmail": "Email",
+  "globals.formRecipeRevealTip": "Show or hide email",
+  "globals.formRecipeTimezone": "Timezone",
+  "globals.formRecipeRefreshTip": "Reset timezone to default",
+  "globals.formRecipeNotes": "Notes",
+  "globals.formRecipeNotesHint": "Optional free-form notes for this sample — not persisted.",
+  "globals.formRecipeCompact": "Compact",
+  "globals.formRecipeCompactHint":
+    "When on, denser chrome padding is preferred for this sample panel.",
+  "globals.formRecipeDigests": "Digests",
+  "globals.formRecipeDigestsHint": "Send a weekly summary of sample activity.",
+  "globals.formRecipeExperimental": "Show experimental controls",
+  "globals.formRecipeAlert":
+    "Sibling units use unit-stack-gap; each FieldBlock / ControlBlock keeps its own tighter field-hint-gap under the control.",
+  "globals.formRecipeReset": "Reset",
+  "globals.formRecipeSave": "Save",
+  "globals.formRecipeHelp":
+    "Recipe: `Card` → `FieldHint` intro → `FieldBlock`(+`description`/`actions`) → `ControlBlock`(+`description`) → feedback / foot actions. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -1441,7 +1475,10 @@ const zh: Record<MessageKey, string> = {
     "--sandbox-section-gap — Foundations Section 标题到正文。",
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
-    "--fynns-layout-unit-stack-gap — 纵向堆叠单元 / 并列 demo；field-hint-gap 为其别名。",
+    "--fynns-layout-unit-stack-gap（16dp）— Card body 兄弟 / .fynns-unit-stack（不是控件→说明）。",
+  "layoutChrome.fieldHintGap": "字段提示",
+  "layoutChrome.fieldHintGapHint":
+    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -1553,9 +1590,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roSnackbarMax": "Snackbar 上限（min()）",
   "layoutChrome.roSnackbarMaxHint":
     "--fynns-layout-snackbar-max-width — min(rem, 视口)。",
-  "layoutChrome.roFieldHint": "字段提示间距（别名）",
+  "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
-    "--fynns-layout-field-hint-gap — 别名 unit-stack-gap；请改 unit-stack-gap。",
+    "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
 
   "inspector.lightThemeHelp":
     "Apply 只写入深色源 token。浅色覆盖需手改 `LIGHT_THEME_OVERRIDES` 并运行 `npm run gen:theme`。实时草稿可通过 CSS 注入预览浅色。",
@@ -1809,22 +1846,52 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedItalic": "斜体",
   "globals.rhythm": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "可复用的 unit-stack 间距（`.sandbox-stack`）与 `ControlStack` + `ControlRow`（带标签工具栏行）。做工具栏 / 检查器时优先用这些 layout token，不要手写 `--fynns-space-*`。",
+    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
   "globals.rhythmRowContent": "内容",
   "globals.rhythmRowBehavior": "行为",
   "globals.rhythmShowIcon": "选项 A",
   "globals.rhythmShowActions": "选项 B",
   "globals.rhythmDisabled": "禁用整组",
+  "globals.rhythmCompactLabel": "紧凑",
+  "globals.rhythmControlBlockHint":
+    "开启后，样例面板使用更密的内边距。开关与本说明必须包在 ControlBlock 内，不要把段落当成 Card 的松散兄弟。",
+  "globals.rhythmFieldHintSample":
+    "独立 FieldHint：应用自管列布局时用（与 Input supportingText 同款静音说明）。",
   "globals.rhythmTokenUnit":
-    "纵向堆叠单元 / 并列 demo 间距（控件→field hint 经 field-hint-gap 别名同源）。",
+    "纵向堆叠单元 / Card body 兄弟 / `.fynns-unit-stack`（20dp，大于 field-hint）。",
   "globals.rhythmTokenFieldHint":
-    "unit-stack-gap 别名 — Input / Otp / Autocomplete 控件到 supporting 提示。",
+    "控件 → supporting/error 说明（8dp）：Input / ControlBlock / FieldBlock description — 不等于 unit-stack。",
   "globals.rhythmTokenStack": "ControlRow 与 ControlRow 之间（stack gap）。",
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmAgentHint":
-    "Agent：使用 `.sandbox-stack` / `ControlStack` + `ControlRow`，以及上方列出的 `--fynns-layout-*`（`SANDBOX_LAYOUT_AGENT_CATALOG`）。禁止自创间距。见 `AGENTS.md` 与 `llm/BREAKING_PURGE.md`。",
+    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。设置类卡片直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
+  "globals.formRecipeLead":
+    "检查器 / 设置 Card 权威样例：intro FieldHint → FieldBlock（可选 description / 头行动作）→ ControlBlock（Switch + 说明）→ 可选 Checkbox / InlineAlert / 底栏。Card body 管 unit-stack-gap；ControlBlock / FieldBlock description 管更紧的 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+  "globals.formRecipeTitle": "项目偏好",
+  "globals.formRecipeIntro":
+    "这些偏好仅作用于当前沙盒项目，用来演示 FieldBlock / ControlBlock 节奏 — 不接真实后端。",
+  "globals.formRecipeRegion": "地区",
+  "globals.formRecipeRegionHint": "决定下方表单展示哪组地区默认值。",
+  "globals.formRecipeDisplayName": "显示名",
+  "globals.formRecipeEmail": "邮箱",
+  "globals.formRecipeRevealTip": "显示或隐藏邮箱",
+  "globals.formRecipeTimezone": "时区",
+  "globals.formRecipeRefreshTip": "重置为默认时区",
+  "globals.formRecipeNotes": "备注",
+  "globals.formRecipeNotesHint": "本样例的可选自由备注 — 不会持久化。",
+  "globals.formRecipeCompact": "紧凑",
+  "globals.formRecipeCompactHint": "开启后，本样例面板优先使用更密的 chrome 内边距。",
+  "globals.formRecipeDigests": "摘要邮件",
+  "globals.formRecipeDigestsHint": "每周发送一次样例活动摘要。",
+  "globals.formRecipeExperimental": "显示实验性控件",
+  "globals.formRecipeAlert":
+    "兄弟单元用 unit-stack-gap；每个 FieldBlock / ControlBlock 在控件下用更紧的 field-hint-gap。",
+  "globals.formRecipeReset": "重置",
+  "globals.formRecipeSave": "保存",
+  "globals.formRecipeHelp":
+    "配方：`Card` → `FieldHint` 引言 → `FieldBlock`(+`description`/`actions`) → `ControlBlock`(+`description`) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",

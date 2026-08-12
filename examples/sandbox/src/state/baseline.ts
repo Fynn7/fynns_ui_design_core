@@ -55,8 +55,9 @@ export type LayoutChromeSectionId =
 
 /** Apply-writable `--fynns-layout-*` keys exposed in the sandbox GUI. */
 export const EDITABLE_LAYOUT_KEYS = [
-  // rhythm — field-hint-gap aliases unit-stack-gap in CSS (not separately editable)
+  // rhythm — unit-stack (between units) ≠ field-hint (control → its note)
   "unit-stack-gap",
+  "field-hint-gap",
   "control-stack-gap",
   "control-row-gap",
   "control-row-column-gap",
@@ -114,7 +115,6 @@ export const READONLY_LAYOUT_KEYS = [
   "sheet-half-height",
   "tooltip-max-width",
   "snackbar-max-width",
-  "field-hint-gap",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type ReadonlyLayoutKey = (typeof READONLY_LAYOUT_KEYS)[number];
@@ -133,6 +133,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
 > = {
   rhythm: [
     "unit-stack-gap",
+    "field-hint-gap",
     "control-stack-gap",
     "control-row-column-gap",
     "control-row-gap",
@@ -247,7 +248,9 @@ export const BASE_TOKENS_HASH = hashBaseline();
 
 const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "unit-stack-gap":
-    "Unit stack · between siblings / demos; also control→hint via field-hint-gap alias",
+    "Unit stack · between Card/Collapsible body siblings / .fynns-unit-stack (not control→hint)",
+  "field-hint-gap":
+    "Field hint · control → supporting/error note (ControlBlock / FieldBlock / Input)",
   "control-stack-gap": "Toolbar rhythm · between ControlRows",
   "control-row-gap": "Toolbar rhythm · stacked label above controls",
   "control-row-column-gap": "Toolbar rhythm · horizontal label | controls",

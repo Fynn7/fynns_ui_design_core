@@ -104,8 +104,10 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
+  ControlBlock,
   ControlRow,
   ControlStack,
+  FieldHint,
   Grid,
   InfoHint,
   Slider,
@@ -514,6 +516,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [formRegion, setFormRegion] = useState("Europe");
+  const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
+  const [formEmail, setFormEmail] = useState("demo@example.com");
+  const [formRevealEmail, setFormRevealEmail] = useState(false);
+  const [formTimezone, setFormTimezone] = useState("UTC");
+  const [formNotes, setFormNotes] = useState("");
+  const [formCompact, setFormCompact] = useState(false);
+  const [formDigests, setFormDigests] = useState(true);
+  const [formExperimental, setFormExperimental] = useState(true);
 
   useEffect(() => {
     if (!busyScrimOpen) return;
@@ -3114,32 +3125,51 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="rhythm">
         <SandboxHelp text={t("globals.rhythmLead")} />
         <div className="sandbox-globals-rhythm">
-          <ControlStack className="sandbox-globals-rhythm-stack" columns={2}>
+          <ControlStack className="sandbox-globals-rhythm-stack" columns={1}>
             <ControlRow label={t("globals.rhythmRowContent")}>
-              <Switch
-                labelSide="end"
-                label={t("globals.rhythmShowIcon")}
-                checked={rhythmShowIcon}
-                onCheckedChange={setRhythmShowIcon}
-                disabled={rhythmDisabled}
-              />
-              <Switch
-                labelSide="end"
-                label={t("globals.rhythmShowActions")}
-                checked={rhythmShowActions}
-                onCheckedChange={setRhythmShowActions}
-                disabled={rhythmDisabled}
-              />
+              <div className="fynns-control-cluster">
+                <Switch
+                  labelSide="end"
+                  label={t("globals.rhythmShowIcon")}
+                  checked={rhythmShowIcon}
+                  onCheckedChange={setRhythmShowIcon}
+                  disabled={rhythmDisabled}
+                />
+                <Switch
+                  labelSide="end"
+                  label={t("globals.rhythmShowActions")}
+                  checked={rhythmShowActions}
+                  onCheckedChange={setRhythmShowActions}
+                  disabled={rhythmDisabled}
+                />
+              </div>
             </ControlRow>
-            <ControlRow label={t("globals.rhythmRowBehavior")}>
+            <ControlRow label={t("globals.rhythmDisabled")}>
               <Switch
-                labelSide="end"
-                label={t("globals.rhythmDisabled")}
+                label=""
+                ariaLabel={t("globals.rhythmDisabled")}
                 checked={rhythmDisabled}
                 onCheckedChange={setRhythmDisabled}
               />
             </ControlRow>
           </ControlStack>
+          <ControlBlock
+            className="sandbox-globals-rhythm-block"
+            description={t("globals.rhythmControlBlockHint")}
+          >
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.rhythmCompactLabel")}>
+                <Switch
+                  label=""
+                  ariaLabel={t("globals.rhythmCompactLabel")}
+                  checked={rhythmShowIcon}
+                  onCheckedChange={setRhythmShowIcon}
+                  disabled={rhythmDisabled}
+                />
+              </ControlRow>
+            </ControlStack>
+          </ControlBlock>
+          <FieldHint>{t("globals.rhythmFieldHintSample")}</FieldHint>
           <dl className="sandbox-globals-rhythm-legend">
             <div>
               <dt>
@@ -3187,6 +3217,144 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" variant="default">{t("globals.rhythmGridD")}</Button>
         </Grid>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
+        </GlobalsDemo>
+
+        <GlobalsDemo id="form-recipe">
+          <SandboxHelp text={t("globals.formRecipeLead")} />
+          <Card
+            className="sandbox-globals-form-recipe"
+            title={t("globals.formRecipeTitle")}
+          >
+            <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
+            <FieldBlock
+              label={t("globals.formRecipeRegion")}
+              htmlFor="sandbox-form-region"
+              description={t("globals.formRecipeRegionHint")}
+            >
+              <Select
+                id="sandbox-form-region"
+                ariaLabel={t("globals.formRecipeRegion")}
+                options={["Europe", "Americas", "Asia Pacific"]}
+                value={formRegion}
+                onChange={setFormRegion}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.formRecipeDisplayName")}
+              htmlFor="sandbox-form-display-name"
+            >
+              <Input
+                id="sandbox-form-display-name"
+                aria-label={t("globals.formRecipeDisplayName")}
+                value={formDisplayName}
+                onChange={(event) => setFormDisplayName(event.target.value)}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.formRecipeEmail")}
+              htmlFor="sandbox-form-email"
+              actions={
+                <Tooltip content={t("globals.formRecipeRevealTip")}>
+                  <IconButton
+                    size="sm"
+                    aria-label={t("globals.formRecipeRevealTip")}
+                    onClick={() => setFormRevealEmail((v) => !v)}
+                  >
+                    {formRevealEmail ? (
+                      <EyeOffIcon aria-hidden />
+                    ) : (
+                      <EyeIcon aria-hidden />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <Input
+                id="sandbox-form-email"
+                aria-label={t("globals.formRecipeEmail")}
+                type={formRevealEmail ? "text" : "password"}
+                value={formEmail}
+                onChange={(event) => setFormEmail(event.target.value)}
+                autoComplete="off"
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.formRecipeTimezone")}
+              htmlFor="sandbox-form-timezone"
+              actions={
+                <Tooltip content={t("globals.formRecipeRefreshTip")}>
+                  <IconButton
+                    size="sm"
+                    aria-label={t("globals.formRecipeRefreshTip")}
+                    onClick={() => {}}
+                  >
+                    <UndoIcon aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <Select
+                id="sandbox-form-timezone"
+                ariaLabel={t("globals.formRecipeTimezone")}
+                options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
+                value={formTimezone}
+                onChange={setFormTimezone}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.formRecipeNotes")}
+              htmlFor="sandbox-form-notes"
+              description={t("globals.formRecipeNotesHint")}
+            >
+              <Textarea
+                id="sandbox-form-notes"
+                aria-label={t("globals.formRecipeNotes")}
+                value={formNotes}
+                onChange={(event) => setFormNotes(event.target.value)}
+                minRows={2}
+              />
+            </FieldBlock>
+            <ControlBlock description={t("globals.formRecipeCompactHint")}>
+              <ControlStack columns={1}>
+                <ControlRow label={t("globals.formRecipeCompact")}>
+                  <Switch
+                    label=""
+                    ariaLabel={t("globals.formRecipeCompact")}
+                    checked={formCompact}
+                    onCheckedChange={setFormCompact}
+                  />
+                </ControlRow>
+              </ControlStack>
+            </ControlBlock>
+            <ControlBlock description={t("globals.formRecipeDigestsHint")}>
+              <ControlStack columns={1}>
+                <ControlRow label={t("globals.formRecipeDigests")}>
+                  <Switch
+                    label=""
+                    ariaLabel={t("globals.formRecipeDigests")}
+                    checked={formDigests}
+                    onCheckedChange={setFormDigests}
+                  />
+                </ControlRow>
+              </ControlStack>
+            </ControlBlock>
+            <Checkbox
+              label={t("globals.formRecipeExperimental")}
+              checked={formExperimental}
+              onCheckedChange={setFormExperimental}
+            />
+            <InlineAlert
+              severity="info"
+              message={t("globals.formRecipeAlert")}
+            />
+            <div className="sandbox-globals-form-recipe-actions">
+              <Button variant="ghost" size="sm">
+                {t("globals.formRecipeReset")}
+              </Button>
+              <Button size="sm">{t("globals.formRecipeSave")}</Button>
+            </div>
+          </Card>
+          <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>
       </>
         )}

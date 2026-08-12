@@ -214,6 +214,11 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
   containment (`chrome="plain"` = outer shell + nest-gap child).
+  **Control + related note:** wrap in `ControlBlock` (`description` /
+  `errorText`); Card / Collapsible body already gaps sibling units with
+  `unit-stack-gap` — do not invent muted subtitle classes for control notes
+  or leave the note as a loose Card sibling under `ControlStack`. Outside
+  Card use `.fynns-unit-stack`.
   ChatComposer multiline (full-width text + bottom toolbar when expanded):
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md) — do not invent a
   parallel multi-line shell in the consumer.

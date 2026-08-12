@@ -479,7 +479,7 @@
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-chrome-icon-gap: 0.125rem;
-  --fynns-layout-field-hint-gap: var(--fynns-layout-unit-stack-gap);
+  --fynns-layout-field-hint-gap: 0.5rem;
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;

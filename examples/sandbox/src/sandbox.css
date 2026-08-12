@@ -1170,7 +1170,7 @@
 .sandbox-globals-rhythm {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-md);
+  gap: var(--fynns-layout-unit-stack-gap);
   padding: var(--fynns-space-md);
   border: 1px solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
@@ -1179,9 +1179,23 @@
   box-sizing: border-box;
 }
 
-.sandbox-globals-rhythm-stack {
+.sandbox-globals-rhythm-stack,
+.sandbox-globals-rhythm-block {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-globals-form-recipe {
+  max-width: 24rem;
+  width: 100%;
+}
+
+.sandbox-globals-form-recipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--fynns-layout-control-cluster-gap);
 }
 
 .sandbox-globals-rhythm-legend {
