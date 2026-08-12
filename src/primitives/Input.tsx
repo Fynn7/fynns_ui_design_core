@@ -22,7 +22,12 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-/** Text input primitive. `.fynns-input` (+ optional field chrome). */
+/** Text input primitive. `.fynns-input` (+ optional field chrome).
+ *
+ * Narrow hosts: idle single-line value/placeholder uses ellipsis (not mid-glyph
+ * hard clip); focused allows caret scroll with a hidden scrollbar — same
+ * contract as SearchBar / Autocomplete text fields.
+ */
 export const Input = forwardRef(function Input(
   {
     className,

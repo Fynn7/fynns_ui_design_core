@@ -756,6 +756,8 @@
 .fynns-input {
   /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
   width: 100%;
+  /* Flex toolbars / TopAppBar agent row: shrink below intrinsic text width. */
+  min-width: 0;
   box-sizing: border-box;
   /* Same form control height as densified Select / Autocomplete (40dp). */
   min-height: var(--fynns-size-icon-target);
@@ -770,6 +772,30 @@
   );
   font: inherit;
   outline: none;
+}
+
+/*
+ * Single-line text fields only (`input`, not `textarea.fynns-input`).
+ * Idle: ellipsis in narrow hosts — never mid-glyph hard clip (SearchBar /
+ * Autocomplete parity). Focused: caret horizontal scroll, scrollbar hidden.
+ */
+input.fynns-input {
+  white-space: nowrap;
+}
+
+input.fynns-input:not(:focus) {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+input.fynns-input:focus {
+  overflow-x: auto;
+  text-overflow: clip;
+  scrollbar-width: none;
+}
+
+input.fynns-input:focus::-webkit-scrollbar {
+  display: none;
 }
 
 .fynns-input--sm {
@@ -6037,7 +6063,8 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Text fields only (SearchBar / Autocomplete) — not Select's button trigger
- * (that ellipsizes via `.fynns-select-trigger-text`).
+ * (that ellipsizes via `.fynns-select-trigger-text`). Single-line `.fynns-input`
+ * shares the same idle-ellipsis / focus-scroll contract.
  * Idle: ellipsis in narrow hosts (not mid-glyph hard clip from the shell).
  * Focused: caret horizontal scroll without painting a scrollbar (Chromium
  * skips text-overflow ellipsis while focused).
