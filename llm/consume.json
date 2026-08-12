@@ -33,6 +33,7 @@
     "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
     "Collapsible/Card chrome: default card; when nesting a surface-owning child (CodeBlock/Surface/canvas/BusyRegion) pass chrome=\"plain\" — body uses --fynns-layout-nest-gap (pad + gap); plain ≠ flush — never cancel nest-gap with negative margins. Outside those shells use .fynns-nest.",
     "CodeBlock chrome (strict): titled default requires non-empty label (filename); omit/empty label throws. No title → variant=\"plain\" (frame + float copy). Never label=\"\" to fake a headless titled block.",
+    "CodeBlock language (strict): label is chrome only — not a language detector. Always pass language (or highlightProfile / registered id) matching the source (e.g. label=\"system-prompt.xml\" + language=\"xml\"). Omitted/unknown language → plain mono. Built-ins: ts/js/py/cpp/css/json/xml/html/bash/…. Fill editable hosts → autoGrow={false}. Authority: llm/AGENT_INTERFACES.md.",
     "API-only: pass props/children/labels to @fynns/ui; never wrap keep-set primitives in consumer restyles or local .fynns-* overrides. If the keep-set cannot meet the ask, tell the user explicitly to implement in fynns_ui_design_core first. Chat containers must stay ≥ --fynns-radius-22 unless the user explicitly asks squarer (see AGENTS.md Hard rules).",
     "If build uses tsc, add vite-env.d.ts with /// <reference types=\"vite/client\" /> so CSS imports from @fynns/ui typecheck.",
     "For preview/playground pages, mirror examples/sandbox/src/pages/*PreviewCanvas.tsx and skim AGENTS.md.",

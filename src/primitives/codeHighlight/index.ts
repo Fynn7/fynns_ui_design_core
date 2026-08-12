@@ -6,6 +6,7 @@ export type {
 } from "./types";
 export type { SimpleHighlightProfile } from "./simple";
 export { normalizeLanguage, profileFor } from "./languages";
+export { tokenizeMarkup } from "./markup";
 export { highlightCode, isHighlightableLanguage } from "./tokenize";
 export {
   highlightWithProfile,

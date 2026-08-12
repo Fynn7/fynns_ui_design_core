@@ -42,7 +42,7 @@ Read by role; do not duplicate specs across files — follow the links.
 
 ## Technical interface: custom CodeBlock highlight
 
-Built-in languages (`ts` / `tsx` / `js` / `jsx` / `py` / `cpp` / `css` / `json` / `bash` / `sh`) use the C-like tokenizer.  
+Built-in languages (`ts` / `tsx` / `js` / `jsx` / `py` / `cpp` / `css` / `json` / `xml` / `html` / `bash` / `sh`) use the C-like tokenizer (**except** `xml` / `html`, which use a markup tokenizer: tags → `keyword`, attributes → `property`, strings / comments / entities → `string` / `comment` / `escape`).  
 **App-owned DSLs** (e.g. Raycaster `.gsc`) use a **simple line-command profile** — same idea as the thesis Monaco highlighter: line head = keyword / command / invalid; args = number / `$var` / operator / parameter; `#` comments.
 
 Colors are always `--fynns-code-*` (see `CODE_TOKENS` in `AGENTS.md`). Core does **not** ship `gsc` or Monaco/Shiki.
@@ -92,8 +92,22 @@ registerHighlightLanguage("gsc", gscProfile);
 - `highlightCode` / `isHighlightableLanguage` consult built-ins first, then the registry.
 - `CodeBlock` `highlightProfile` wins over `language` lookup. Clipboard always uses the raw source string (`code`, or current `value` when `variant="editable"`).
 - **Chrome (strict):** titled head (`default`) needs a non-empty `label` (filename) or the component **throws**. No title → `variant="plain"` (frame + floating copy). Never `label=""` to fake a headless titled block. Nested under Collapsible/Card with no filename → plain CodeBlock + outer `chrome="plain"`.
+- **`label` ≠ `language` (hard — consumer agents):** `label` is **chrome only** (filename in the head). It does **not** pick a highlighter. You **must** pass `language` (or `highlightProfile` / a registered id) that matches the source. Extension in the label (`.xml`, `.json`, `.ts`, …) is a hint for humans — **never** rely on it for coloring. Omitted / unknown `language` → single plain mono span (looks “unhighlighted”). Built-ins: `ts`/`tsx`/`js`/`jsx`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`/`sh` (+ aliases). App DSLs → `registerHighlightLanguage` / `highlightProfile` (this file). Checklist when shipping a CodeBlock: (1) non-empty `label` xor `plain`, (2) explicit `language` or profile, (3) smoke that `.fynns-code-block--highlighted` appears for known languages.
 - `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`). Local draft + deferred highlight keep the caret snappy; `onChange` is coalesced (~120ms, flushed on blur) and parent updates run in `startTransition` so a large controlled tree does not re-render on every key. Pass non-empty `label` for a titled head; omit `label` for float-copy chrome.
-- Editable overlay: keyword/module spans **must not** bold against the transparent textarea (soft-wrap drift → wrong-line selection). Highlight scroll re-locks after deferred tokenize; overflow observers stay mounted across keystrokes (content remounts do not reset `scrollTop` every paint). Editable height defaults to **autoGrow** (content-sized from `rows` floor `1` up to `maxHeight`). Fill columns: pass `autoGrow={false}`, stretch the CodeBlock root (`flex: 1` / definite height), and optionally set host `textarea { height: 100% }` — core does not put percentage height on the editor (collapses when parent height is indefinite).
-- `wrap` defaults to `true` (soft-wrap long lines; no horizontal scrollbar). Pass `wrap={false}` for classic horizontal `pre` scroll (textarea `wrap="off"`). Readonly and editable share the same class (`--nowrap` when scroll).
+- Editable overlay: keyword/module spans **must not** bold against the transparent textarea (soft-wrap drift → wrong-line selection). Highlight scroll re-locks after deferred tokenize; overflow observers stay mounted across keystrokes (content remounts do not reset `scrollTop` every paint). Editable height defaults to **autoGrow** (content-sized from `rows` floor `1` up to `maxHeight`). **Fill hosts** (FullscreenDialog body, flex column, host `textarea { height: 100% }`): pass **`autoGrow={false}`**, stretch the CodeBlock root (`flex: 1` / definite height) — core does not put percentage height on the editor (collapses when parent height is indefinite). Do not leave default autoGrow on a fill editor (inline content height fights `height: 100%`).
 
-Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a language.
+```tsx
+// Wrong — looks like XML but stays plain mono
+<CodeBlock variant="editable" label="system-prompt.xml" value={prompt} />
+
+// Right — language matches content; fill host disables autoGrow
+<CodeBlock
+  variant="editable"
+  label="system-prompt.xml"
+  language="xml"
+  autoGrow={false}
+  value={prompt}
+/>
+```
+
+Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a **DSL**; missing **general** languages (e.g. a new markup id) → land in `fynns_ui_design_core` first, then bump the pin.

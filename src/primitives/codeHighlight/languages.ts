@@ -384,6 +384,9 @@ const ALIASES: Record<string, CodeLanguageId> = {
   c: "cpp",
   css: "css",
   json: "json",
+  xml: "xml",
+  html: "html",
+  htm: "html",
   bash: "bash",
   sh: "sh",
   shell: "shell",
@@ -410,6 +413,10 @@ export function profileFor(language: CodeLanguageId): LangProfile {
     case "css":
       return CSS_PROFILE;
     case "json":
+      return JSON_PROFILE;
+    case "xml":
+    case "html":
+      /* Markup uses tokenizeMarkup — profile unused. */
       return JSON_PROFILE;
     case "bash":
     case "sh":

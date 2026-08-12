@@ -50,6 +50,14 @@ children (never a rail-width track hosting a labeled drawer).
     missing / `label=""` **throws** at runtime. No filename/title →
     **`variant="plain"`** (frame + floating copy only). Never open a titled
     head without a real title (empty title bar is a consumer bug).
+9b. **CodeBlock `language` (strict):** `label` is **not** a language detector.
+    Always pass `language` (or `highlightProfile` / registered id) that matches
+    the source — e.g. `label="system-prompt.xml"` **and** `language="xml"`.
+    Filename extensions in `label` alone leave the block **plain mono**.
+    Built-ins: `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`/…;
+    app DSLs → [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md). Editable fill
+    hosts (FullscreenDialog / `textarea { height: 100% }`) →
+    **`autoGrow={false}`** (default autoGrow is content-sized).
 10. **API-only consumption:** treat `@fynns/ui` as a **function** — pass props /
     children / localized labels only. **Never** wrap keep-set primitives in
     consumer restyles, local CSS overrides of `.fynns-*`, or parallel “variants”.

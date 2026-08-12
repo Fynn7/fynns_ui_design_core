@@ -30,9 +30,11 @@ type CodeBlockShared = Omit<
 > & {
   /**
    * Language id for syntax highlighting (`ts` / `tsx` / `js` / `jsx` / `py` /
-   * `cpp` / `css` / `json` / `bash` / `sh`, or a consumer-registered id).
-   * Also sets `data-language` on the root. Unknown values render as plain mono
-   * unless `highlightProfile` is set.
+   * `cpp` / `css` / `json` / `xml` / `html` / `bash` / `sh`, or a
+   * consumer-registered id). Also sets `data-language` on the root. Unknown
+   * values render as plain mono unless `highlightProfile` is set.
+   * **Not inferred from `label`** — a filename like `prompt.xml` still needs
+   * `language="xml"` (see `llm/AGENT_INTERFACES.md`).
    */
   language?: string;
   /**

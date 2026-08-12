@@ -2940,6 +2940,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             maxHeight="8rem"
           />
           <CodeBlock
+            label={t("globals.codeBlockXmlLabel")}
+            language="xml"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`<?xml version="1.0"?>\n<!-- prompt sections -->\n<role name="assistant">\n  Translate requests into commands.\n</role>\n`}
+            maxHeight="8rem"
+          />
+          <CodeBlock
             variant="editable"
             label={t("globals.codeBlockEditableLabel")}
             language="ts"
