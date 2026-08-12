@@ -481,6 +481,7 @@ function FormRecipeFields({
           />
         </FieldBlock>
       </FieldStack>
+      <Divider />
       <FieldStack>
         <FieldBlock
           label={t("globals.formRecipeAccess")}
@@ -574,6 +575,7 @@ function FormRecipeFields({
           />
         </FieldBlock>
       </FieldStack>
+      <Divider />
       <FieldStack>
         <ControlBlock description={t("globals.formRecipeCompactHint")}>
           <ControlStack columns={1}>

@@ -21,14 +21,17 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * Preference ControlBlocks; …). Do not leave a flat
  * Card-body list of FieldBlocks / ControlBlocks across topics.
  *
- * Gap is `--fynns-layout-field-stack-gap` (8dp — same step as
- * `control-stack-gap`). Sibling **ControlBlock**s, and **FieldBlock**s that
- * carry a description/error hint, open to `--fynns-layout-unit-stack-gap`
- * (16dp) via CSS so Switch+note / choice+hint units breathe. Plain FieldBlocks
- * (no hint) stay at 8dp. Adjacent FieldStacks use
- * `--fynns-layout-form-cluster-gap` (32dp) — full step on bare hosts; Card /
- * Collapsible / Dialog body / `.fynns-unit-stack` subtract the parent
- * `unit-stack-gap` so the visual total stays 32dp. Other host siblings stay on
+ * Gap base is `--fynns-layout-field-stack-gap` (8dp). Plain **FieldBlock**s
+ * (no description/error) stay at 8dp. **FieldBlock**s with a trailing hint
+ * open the following sibling to `--fynns-layout-form-cluster-gap` (**32dp** —
+ * same step as adjacent FieldStacks). Sibling **ControlBlock**s open to
+ * `--fynns-layout-unit-stack-gap` (16dp) so Switch+note units breathe.
+ *
+ * **Strongly recommended between FieldStacks:** insert a horizontal `Divider`
+ * on kind jumps (identity → choices → preferences). Card / Collapsible /
+ * Dialog body `unit-stack-gap` on both sides of the rule already ≈ the
+ * cluster step; keep the adjacent-stack margin rule when no Divider is used
+ * so the visual total stays 32dp. Other host siblings stay on
  * `--fynns-layout-unit-stack-gap` (16dp).
  *
  * Live recipe: sandbox Globals `#form-recipe` (Card / Collapsible / Dialog hosts).

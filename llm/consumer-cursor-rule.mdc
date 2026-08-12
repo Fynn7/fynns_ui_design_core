@@ -94,8 +94,8 @@ FillColumn。
 
 | 场景 | 做法 |
 | --- | --- |
-| 同一种控件簇（连续身份字段、连续 Preference 开关…） | 包进**一个** `FieldStack`（内距 `field-stack-gap` 8dp） |
-| 种类切换（字段簇 → 开关簇） | **相邻**两个 `FieldStack`（簇间 `form-cluster-gap` 32dp） |
+| 同一种控件簇（连续身份字段、连续 Preference 开关…） | 包进**一个** `FieldStack`；无 hint 的 FieldBlock 兄弟 **8dp**；带 description/error 的 FieldBlock 开到下一兄弟 **32dp**（`form-cluster-gap`）；ControlBlock 兄弟 **16dp** |
+| 种类切换（字段簇 → 选择簇 → 开关簇） | **相邻**两个 `FieldStack` + 中间放水平 **`Divider`**（强推荐；簇间仍按 `form-cluster-gap` 32dp） |
 | 控件 + 说明文案 | `ControlBlock` / `FieldBlock` 的 `description`（禁止自造 muted `<p>`） |
 | 其它兄弟（intro / Checkbox / 底栏） | Card body `unit-stack-gap`（16dp） |
 
@@ -194,5 +194,5 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 3. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
 4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
-5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇（对照 `#form-recipe`），而非平铺？
+5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
 6. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

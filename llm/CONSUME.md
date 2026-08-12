@@ -230,13 +230,16 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
   containment (`chrome="plain"` = outer shell + nest-gap child).
   **Control + related note:** wrap in `ControlBlock` (`description` /
-  `errorText`). **Semantic form clusters (strongly recommended):** partition
+  `errorText`).   **Semantic form clusters (strongly recommended):** partition
   inspector / settings / Dialog options with `FieldStack` by kind (identity
   FieldBlocks, Radio/Checkbox/Slider choice FieldBlocks, Preference
-  ControlBlocks, …) — FieldBlocks share `field-stack-gap` 8dp; sibling
-  ControlBlocks open to visual `unit-stack-gap` 16dp; adjacent FieldStacks
-  use `form-cluster-gap` (32dp); other Card / Collapsible siblings use
-  `unit-stack-gap` (16dp). Choice lists use `.fynns-control-cluster--stack`
+  ControlBlocks, …) — plain FieldBlocks share `field-stack-gap` 8dp;
+  FieldBlocks with description/error open the next sibling to visual
+  `form-cluster-gap` 32dp; sibling ControlBlocks to `unit-stack-gap` 16dp;
+  adjacent FieldStacks use `form-cluster-gap` (32dp) **and strongly prefer a
+  horizontal `Divider` between stacks** on kind jumps; other Card /
+  Collapsible siblings use `unit-stack-gap` (16dp). Choice lists use
+  `.fynns-control-cluster--stack`
   (`--choice-extra` = Google-style Other+Input same-row; keep Input mounted,
   `disabled` when Other is not selected — draft text preserved). Do **not**
   flatten multi-topic forms as

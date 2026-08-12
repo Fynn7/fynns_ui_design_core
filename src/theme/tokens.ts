@@ -1247,18 +1247,20 @@ export const LAYOUT_TOKENS = {
    */
   "control-stack-form-gap": "var(--fynns-space-md)",
   /**
-   * Gap inside `FieldStack` / `.fynns-field-stack` (8dp): consecutive related
-   * FieldBlocks (or a same-kind ControlBlock cluster). Aliases
-   * `control-stack-gap` — related form chrome shares one tight step; Card body
-   * still uses `unit-stack-gap` between most siblings. Adjacent FieldStacks
-   * use the larger `form-cluster-gap` instead.
+   * Base gap inside `FieldStack` / `.fynns-field-stack` (8dp — aliases
+   * `control-stack-gap`). Plain FieldBlocks stay at this step; FieldBlocks
+   * with a description/error open the next sibling to `form-cluster-gap`
+   * (32dp) via CSS; sibling ControlBlocks open to `unit-stack-gap` (16dp).
+   * Adjacent FieldStacks use `form-cluster-gap` and should insert a
+   * horizontal `Divider` on kind jumps.
    */
   "field-stack-gap": "var(--fynns-layout-control-stack-gap)",
   /**
-   * Gap between adjacent `FieldStack` clusters (32dp — two unit steps):
-   * e.g. Input FieldBlocks → Preference ControlBlocks. Larger than
-   * `unit-stack-gap` (16dp) so the jump between form *kinds* reads clearly.
-   * Implemented as extra margin on `.fynns-field-stack + .fynns-field-stack`
+   * Gap between adjacent `FieldStack` clusters **and** after a FieldBlock
+   * that has a description/error hint (32dp — two unit steps). Larger than
+   * `unit-stack-gap` (16dp). Between stacks, also place a `Divider`
+   * (strongly recommended). Adjacent-stack margin is implemented on
+   * `.fynns-field-stack + .fynns-field-stack` when no Divider sits between
    * (Card body gap still contributes `unit-stack-gap`).
    */
   "form-cluster-gap": "2rem",

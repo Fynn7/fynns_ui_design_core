@@ -3511,12 +3511,19 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * ControlBlock + note, and FieldBlock + description/error, are heavier than a
- * tight label|input pair — open those siblings to unit-stack (16dp). Plain
- * FieldBlocks (no hint) keep field-stack-gap (8dp) inside the same FieldStack.
+ * Plain FieldBlocks (no hint) keep field-stack-gap (8dp). FieldBlock +
+ * description/error opens to form-cluster-gap (32dp) — same step as adjacent
+ * FieldStacks — so choice+hint rows breathe. ControlBlock + note stays at
+ * unit-stack (16dp). Prefer a `Divider` between FieldStacks for kind jumps
+ * (see AGENTS.md FieldStack semantic clusters).
  */
-.fynns-field-stack > .fynns-control-block + .fynns-control-block,
 .fynns-field-stack > .fynns-field-block:has(> .fynns-field-hint) + .fynns-field-block {
+  margin-block-start: calc(
+    var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
+.fynns-field-stack > .fynns-control-block + .fynns-control-block {
   margin-block-start: calc(
     var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
   );

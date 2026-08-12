@@ -189,9 +189,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
-  / ControlBlocks. FieldBlocks share `field-stack-gap` (8dp); FieldBlocks with
-  a description/error hint and sibling ControlBlocks open to `unit-stack-gap`
-  (16dp); adjacent FieldStacks get `form-cluster-gap` (32dp). Live tree:
+  / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (8dp);
+  FieldBlocks with a description/error hint open the next sibling to
+  `form-cluster-gap` (32dp — same step as adjacent FieldStacks); sibling
+  ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
+  horizontal `Divider` between adjacent FieldStacks on kind jumps. Live tree:
   sandbox `#form-recipe`.
   See **Toolbar / unit rhythm** → **FieldStack semantic clusters**.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
@@ -860,9 +862,9 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap); **with** description/error → visual **16dp** (`unit-stack-gap`) |
+  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**); **with** description/error → next sibling visual **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
-  | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |
+  | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
   | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
   | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |
 
@@ -874,10 +876,11 @@ classes.
     Textarea / Otp `FieldBlock`s, **or** a same-kind choice cluster
     (`Radio` single-select, `Checkbox` multi-select, and/or `Slider` under
     `FieldBlock`s), **or** Preference `ControlBlock`s (Switch + note).
-    Inside: `field-stack-gap` (**8dp**) for plain FieldBlocks; FieldBlocks
-    with description/error and sibling **ControlBlock**s open to
-    `unit-stack-gap` (**16dp**) so choice+hint / Switch+note units breathe.
-    Choice lists use
+    Inside: plain **FieldBlock**s keep `field-stack-gap` (**8dp**); FieldBlocks
+    with description/error open the next sibling to `form-cluster-gap`
+    (**32dp** — same step as adjacent FieldStacks); sibling **ControlBlock**s
+    open to `unit-stack-gap` (**16dp**) so Switch+note units breathe. Choice
+    lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
     `ControlStack` — that grid auto-flows into label|control columns).
     Stack rows share a dense 2rem **min-height** (option floor) and `space-xs`
@@ -887,13 +890,14 @@ classes.
     short field beside the option; keep the Input mounted — **`disabled`
     when Other is not selected** (preserve draft text; enable when Other
     is selected).
-  - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields →
-    radio/checkbox choices → preference switches. Between stacks:
-    `form-cluster-gap` (**32dp**). That wider gap is
-    the visual signal that the *topic* changed — spacing alone without
-    FieldStack is not enough (Card / Collapsible / Dialog body
+  - **Kind jump → adjacent `FieldStack`s + `Divider` (strongly recommended):**
+    e.g. identity fields → radio/checkbox choices → preference switches.
+    Between stacks: `form-cluster-gap` (**32dp**) **and** a horizontal
+    `Divider` so the topic change reads as a hard partition (choice+hint
+    FieldBlocks also use the cluster step — spacing alone without FieldStack
+    / Divider is not enough). Card / Collapsible / Dialog body
     `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
-    other non-cluster siblings).
+    other non-cluster siblings.
   - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
     `errorText`). Never a loose muted `<p>` under `ControlStack`.
   - **Copy the tree** from sandbox Globals **Inspector form recipe**
