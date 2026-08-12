@@ -9,9 +9,3 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   en: "English",
   zh: "中文",
 };
-
-/** Compact chrome mark for the topbar language control. */
-export const LOCALE_SHORT: Record<Locale, string> = {
-  en: "EN",
-  zh: "中",
-};

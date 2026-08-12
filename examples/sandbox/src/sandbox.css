@@ -146,21 +146,7 @@
   flex: 0 0 auto;
 }
 
-/* Topbar language mark — IconButton-sized ghost trigger with locale short code. */
-.sandbox-language-switcher-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sandbox-language-switcher-mark {
-  font-size: var(--fynns-font-size-xs);
-  font-weight: var(--fynns-font-weight-medium);
-  line-height: 1;
-  color: var(--fynns-color-text);
-}
-
-/* Templates language field — form Select, not a segmented toggle. */
+/* Templates language field — form Select (content-sized host). */
 .sandbox-language-select {
   width: fit-content;
   max-width: 100%;

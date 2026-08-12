@@ -15,8 +15,8 @@ const en = {
   "nav.layouts": "Layout templates",
   "nav.foundations": "Foundations",
   "nav.motion": "Motion",
-  "nav.templates": "Templates",
-  "nav.templatesTip": "Templates & config export/import",
+  "nav.templates": "Settings",
+  "nav.templatesTip": "Language, templates & config export/import",
   "nav.playgroundHint":
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
@@ -1267,8 +1267,8 @@ const zh: Record<MessageKey, string> = {
   "nav.layouts": "布局模板",
   "nav.foundations": "基础",
   "nav.motion": "动效",
-  "nav.templates": "模板",
-  "nav.templatesTip": "模板与配置导入导出",
+  "nav.templates": "设置",
+  "nav.templatesTip": "语言、模板与配置导入导出",
   "nav.playgroundHint":
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
