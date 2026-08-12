@@ -1,4 +1,5 @@
 import type { HTMLAttributes, LabelHTMLAttributes, ReactNode } from "react";
+import { FieldHint } from "./FieldHint";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -18,7 +19,9 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Form field label row with optional trailing icon actions (expand / reset).
  * Place above the control — not overlaid on a Textarea corner. Label text is
- * flush with the control’s outer start edge. Dense Card nesting: when this is
+ * flush with the control’s outer start edge. Row min-height fits trailing
+ * `IconButton` sm (`2rem` + `space-2xs` pad) so label→control optical gap
+ * stays the same with or without `actions`. Dense Card nesting: when this is
  * the first child of `Card` body, top inset shrinks to `--fynns-space-xs`
  * (see `.fynns-card-body:has(> .fynns-field-header)`).
  * Prefer `FieldBlock` when wrapping label + control together.
@@ -56,11 +59,21 @@ export type FieldBlockProps = HTMLAttributes<HTMLDivElement> & {
   actions?: ReactNode;
   labelProps?: FieldHeaderProps["labelProps"];
   children: ReactNode;
+  /**
+   * Supporting copy under the control (not under the label row). Prefer this
+   * over a loose muted `<p>` sibling in the Card body.
+   */
+  description?: ReactNode;
+  /** Error copy under the control; wins over `description` when both set. */
+  errorText?: ReactNode;
 };
 
 /**
  * Encapsulates `FieldHeader` + control with compact vertical rhythm.
- * First child of `Card` body also triggers the denser top inset.
+ * Optional `description` / `errorText` use `--fynns-layout-field-hint-gap`
+ * (via `.fynns-field-hint`). First child of `Card` body also triggers the
+ * denser top inset. Sibling FieldBlocks rely on Card / Collapsible body
+ * `unit-stack-gap` (or `.fynns-unit-stack`) — do not add ad-hoc margins.
  */
 export function FieldBlock({
   label,
@@ -68,18 +81,26 @@ export function FieldBlock({
   actions,
   labelProps,
   children,
+  description,
+  errorText,
   className,
   ...rest
 }: FieldBlockProps) {
+  const hint = errorText ?? description;
   return (
     <div {...rest} className={join("fynns-field-block", className)}>
-      <FieldHeader
-        label={label}
-        htmlFor={htmlFor}
-        actions={actions}
-        labelProps={labelProps}
-      />
-      {children}
+      <div className="fynns-field-block__main">
+        <FieldHeader
+          label={label}
+          htmlFor={htmlFor}
+          actions={actions}
+          labelProps={labelProps}
+        />
+        {children}
+      </div>
+      {hint != null && hint !== false ? (
+        <FieldHint error={errorText != null}>{hint}</FieldHint>
+      ) : null}
     </div>
   );
 }

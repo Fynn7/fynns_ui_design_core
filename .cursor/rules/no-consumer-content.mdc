@@ -1,0 +1,31 @@
+---
+description: Core/sandbox must never paste consumer product copy, routes, or domain strings.
+alwaysApply: true
+---
+
+# No consumer content in this core
+
+`fynns_ui_design_core` is the design-system source of truth. **Never** import,
+mirror, or invent demo copy from any consumer app (GSC Live Preview, agents-hub,
+thesis tools, music studio, corrector, …).
+
+## Forbidden in this repo
+
+- Consumer product UI strings (feature names, LLM providers, volume mounts,
+  dataset cards, GSC script jargon, app-specific settings titles, …)
+- Consumer routes, env keys, API shapes, or screenshots used as “live” demo
+  truth inside sandbox / AGENTS / primitive defaults
+- Pasting consumer `i18n` / settings cards into Globals “as realism”
+
+## Required instead
+
+- Sandbox Globals / Preview / Layout demos use **generic** placeholders
+  (Project preferences, Compact, Digests, Region, sample@example.com, …)
+- Default primitive labels stay **English or German** (AGENTS.md Language)
+- Consumer-specific chrome lives **only** in the consumer; they copy the
+  **structure** from `#form-recipe` / AGENTS recipes and supply their own strings
+
+## Authority
+
+AGENTS.md → Hard rules (**DON'T** paste consumer content) + Language.
+If a demo looks like a real consumer screen, rewrite it before shipping.

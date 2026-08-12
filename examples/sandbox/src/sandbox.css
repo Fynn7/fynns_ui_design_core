@@ -146,6 +146,12 @@
   flex: 0 0 auto;
 }
 
+/* Templates language field — form Select (content-sized host). */
+.sandbox-language-select {
+  width: fit-content;
+  max-width: 100%;
+}
+
 .sandbox-body {
   display: flex;
   flex: 1;
@@ -796,7 +802,9 @@
 .sandbox-globals-search {
   position: sticky;
   top: 0;
-  z-index: var(--fynns-z-dropdown);
+  /* Above page Select/Autocomplete (`--fynns-z-dropdown`) so scrolled
+   * dropdown chrome cannot paint through the sticky SearchBar field. */
+  z-index: var(--fynns-z-sticky);
   /* Transparent wrapper — only the SearchBar capsule occludes scroll content. */
   padding-block: var(--fynns-space-2xs);
   pointer-events: none;
@@ -1168,20 +1176,27 @@
 }
 
 .sandbox-globals-rhythm {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-space-md);
-  padding: var(--fynns-space-md);
-  border: 1px solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface-1);
-  max-width: 40rem;
-  box-sizing: border-box;
+  max-width: 24rem;
+  width: 100%;
 }
 
-.sandbox-globals-rhythm-stack {
+.sandbox-globals-rhythm-stack,
+.sandbox-globals-rhythm-block {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-globals-form-recipe {
+  max-width: 24rem;
+  width: 100%;
+}
+
+.sandbox-globals-form-recipe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--fynns-layout-control-cluster-gap);
 }
 
 .sandbox-globals-rhythm-legend {

@@ -5,13 +5,13 @@ import {
   FullscreenDialog,
   Input,
   snackbar,
-  ToggleGroup,
   Tooltip,
   TrashIcon,
   UploadIcon,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useCallback, useRef, useState } from "react";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import {
   buildConfigBundle,
   downloadConfigJson,
@@ -19,7 +19,7 @@ import {
   type SandboxConfigBundle,
   type SandboxTemplate,
 } from "../config/sandboxConfig";
-import { useLocale, type Locale } from "../i18n";
+import { useLocale } from "../i18n";
 import {
   deleteTemplate,
   listTemplates,
@@ -49,7 +49,7 @@ export type TemplatesPageProps = {
  * (same JSON shape). Opened from the nav gear icon.
  */
 export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
-  const { t, plural, locale, setLocale } = useLocale();
+  const { t, plural, locale } = useLocale();
   const { draft, loadPreset } = useTokenDraft();
   const fileRef = useRef<HTMLInputElement>(null);
   const [templates, setTemplates] = useState(() => listTemplates());
@@ -146,16 +146,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
           {t("settings.languageTitle")}
         </h2>
         <p className="sandbox-templates-lead">{t("settings.languageLead")}</p>
-        <ToggleGroup
-          size="compact"
-          value={locale}
-          onChange={(id) => setLocale(id as Locale)}
-          ariaLabel={t("settings.languageAria")}
-          options={[
-            { value: "en", label: t("settings.languageEn") },
-            { value: "zh", label: t("settings.languageZh") },
-          ]}
-        />
+        <LanguageSwitcher />
       </section>
 
       <header className="sandbox-templates-hero">

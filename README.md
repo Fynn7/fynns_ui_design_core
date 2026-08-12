@@ -137,13 +137,14 @@ Globals or Surfaces Preview sample** (or an explicit companion entry in
 set — enforce with `npm run check:wysiwyg`. Pages: **Surfaces** (preview target
 **Card | Collapsible**), **Globals / Components** (full catalog via
 `globalsCatalog` + SearchBar jump-to-demo; system radius + live control anatomy),
-**Foundations**, **Motion**, and **Templates**
-(gear icon in the nav footer — settings: language, config JSON export/import,
+**Foundations**, **Motion**, and **Settings**
+(gear icon in the nav — language, config JSON export/import,
 and named templates). **Chrome UI session** (page, inspector, nav, playground
-  target, open Components categories) restores across browser refresh for the
-  current Vite process via `sessionStorage` + `__SANDBOX_BOOT_ID__`. A fresh
-  Vite process opens **Components** and focuses the catalog SearchBar (dev
-  convenience — skips SkipLink first-focus). On Surfaces / Globals, the topbar **inspector** toggle
+  target, open Components categories, main-canvas scroll per page) restores
+  across browser refresh for the current Vite process via `sessionStorage` +
+  `__SANDBOX_BOOT_ID__`. A fresh Vite process opens **Components** and focuses
+  the catalog SearchBar (dev convenience — skips SkipLink first-focus). On
+  Surfaces / Globals, the topbar **inspector** toggle
 shows or hides the right aside; when hidden (and on pages
 without an inspector), the canvas uses a single full-width column. On narrow
 viewports (≤900px) the aside is a bottom overlay instead of an in-flow panel.
@@ -161,18 +162,19 @@ A topbar search icon focuses the Components SearchBar from any page.
 
 ### Language (English / 中文)
 
-- Open **Templates** via the gear control and use the **Language** toggle
-  (`English` / `中文`) at the top of the settings page.
+- Open **Settings** (gear) and use the **Language** Select (`English` /
+  `中文`) at the top of the settings page:
+  [`examples/sandbox/src/components/LanguageSwitcher.tsx`](examples/sandbox/src/components/LanguageSwitcher.tsx).
 - Choice persists in `localStorage` (`fynns-sandbox-locale`) and sets
   `document.documentElement.lang` plus `data-fynns-locale`.
 - Catalog: [`examples/sandbox/src/i18n/`](examples/sandbox/src/i18n/).
   `@fynns/ui` default labels stay English; the sandbox passes localized chrome.
 
-### Templates & config JSON
+### Settings (language, templates & config JSON)
 
 - Open via the **gear** control at the bottom of the left nav (special page,
-  no inspector aside).
-- **Language** switch (English / 中文) sits at the top of this settings page.
+  no inspector aside). Label: **Settings** (`设置`).
+- **Language** Select (English / 中文) sits at the top of this settings page.
 - **Export JSON** / **Import JSON** move the full sandbox configuration:
   `{ kind, version, theme, overrides, baseTokensHash, exportedAt }`.
 - **Save as template** stores the same bundle under a name in `localStorage`
@@ -185,7 +187,7 @@ A topbar search icon focuses the Components SearchBar from any page.
 - Shape levels: every `RADIUS_TOKENS` key is listed in the Globals shape
   inspector — editable `--fynns-radius-{2xs,xs,sm,md,lg,xl,22,3xl}` (+ Reset)
 - Read-only: `none` / `pill` / `round`
-- Named configs: use **Templates** JSON export/import (no built-in radius preset dropdown)
+- Named configs: use **Settings** JSON export/import (no built-in radius preset dropdown)
 - Live Components catalog: Actions, Fields, Selection, Communication,
   Containment, Patterns, Navigation, Toolbar rhythm, Swatches — see
   [`examples/sandbox/src/catalog/globalsCatalog.ts`](examples/sandbox/src/catalog/globalsCatalog.ts)

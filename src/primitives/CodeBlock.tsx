@@ -9,7 +9,6 @@ import {
   type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
-  type UIEvent,
 } from "react";
 import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
@@ -107,6 +106,12 @@ export type CodeBlockEditableProps = CodeBlockShared & {
   disabled?: boolean;
   readOnly?: boolean;
   placeholder?: string;
+  /**
+   * Intrinsic textarea row floor. Default `1` so fill hosts are not inflated
+   * by a large `rows` intrinsic size — pass a larger value for non-fill demos.
+   * Stretching the caret layer in a definite-height column is host CSS
+   * (`textarea { height: 100% }`), not core percentage height on the editor.
+   */
   rows?: number;
   name?: string;
   /** Accessible name when `label` is omitted. */
@@ -271,6 +276,8 @@ export function CodeBlock(props: CodeBlockProps) {
   const highlightRef = useRef<HTMLPreElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
+  const updateScrollableRef = useRef<() => void>(() => {});
+  const scrollSyncRafRef = useRef(0);
   const maxHeightCss =
     maxHeight == null
       ? undefined
@@ -280,18 +287,29 @@ export function CodeBlock(props: CodeBlockProps) {
   const surfaceStyle: CSSProperties | undefined =
     maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
 
+  const syncHighlightScroll = () => {
+    const input = inputRef.current;
+    const pre = highlightRef.current;
+    if (!input || !pre) return;
+    pre.scrollTop = input.scrollTop;
+    pre.scrollLeft = input.scrollLeft;
+  };
+
   /* Opt into overflow auto only when content actually exceeds the host.
      Default CSS keeps overflow hidden so sub-pixel / trailing-newline
      noise cannot paint a nearly-full thumb over empty pad.
      Soft-wrap: vertical gate only. `wrap={false}` also gates on width so
      long lines still get classic pre scroll (x and/or y).
      When a vertical thumb appears, pad the highlight layer by the
-     scrollbar width so transparent caret/ink stay column-locked. */
+     scrollbar width so transparent caret/ink stay column-locked.
+     ResizeObserver stays mounted across keystrokes — content changes call
+     `updateScrollableRef` without reconnecting observers every paint. */
   useLayoutEffect(() => {
     const el = editable ? inputRef.current : preRef.current;
     if (!el) return;
 
     let padRaf = 0;
+    let wasScrollable = el.hasAttribute("data-scrollable");
 
     const syncHighlightPad = (scrollable: boolean) => {
       const pre = highlightRef.current;
@@ -313,6 +331,7 @@ export function CodeBlock(props: CodeBlockProps) {
       const scrollable = yOverflow || xOverflow;
       if (scrollable) {
         el.setAttribute("data-scrollable", "");
+        wasScrollable = true;
         // Scrollbar width is only known after overflow:auto paints.
         if (padRaf) cancelAnimationFrame(padRaf);
         padRaf = requestAnimationFrame(() => {
@@ -321,16 +340,22 @@ export function CodeBlock(props: CodeBlockProps) {
         });
       } else {
         el.removeAttribute("data-scrollable");
-        if (el.scrollTop !== 0) el.scrollTop = 0;
-        if (el.scrollLeft !== 0) el.scrollLeft = 0;
-        if (editable && highlightRef.current) {
-          highlightRef.current.scrollTop = 0;
-          highlightRef.current.scrollLeft = 0;
+        /* Only clear scroll when leaving the scrollable state — avoids
+           resetting mid-edit near the overflow threshold every key. */
+        if (wasScrollable) {
+          if (el.scrollTop !== 0) el.scrollTop = 0;
+          if (el.scrollLeft !== 0) el.scrollLeft = 0;
+          if (editable && highlightRef.current) {
+            highlightRef.current.scrollTop = 0;
+            highlightRef.current.scrollLeft = 0;
+          }
         }
+        wasScrollable = false;
         syncHighlightPad(false);
       }
     };
 
+    updateScrollableRef.current = update;
     update();
     const ro =
       typeof ResizeObserver !== "undefined"
@@ -342,9 +367,17 @@ export function CodeBlock(props: CodeBlockProps) {
     return () => {
       if (padRaf) cancelAnimationFrame(padRaf);
       ro?.disconnect();
+      updateScrollableRef.current = () => {};
       if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
     };
-  }, [editable, source, wrap, maxHeightCss]);
+  }, [editable, wrap, maxHeightCss]);
+
+  /* Remeasure overflow after content edits without tearing down the RO.
+     After deferred highlight catches up, re-copy scroll so ink stays locked. */
+  useLayoutEffect(() => {
+    updateScrollableRef.current();
+    if (editable) syncHighlightScroll();
+  }, [editable, source, deferredSource]);
 
   const flushNotify = (next: string) => {
     if (!onChangeProp) return;
@@ -403,12 +436,22 @@ export function CodeBlock(props: CodeBlockProps) {
     flushNotify(emittedRef.current);
   };
 
-  const onInputScroll = (event: UIEvent<HTMLTextAreaElement>) => {
-    const pre = highlightRef.current;
-    if (!pre) return;
-    pre.scrollTop = event.currentTarget.scrollTop;
-    pre.scrollLeft = event.currentTarget.scrollLeft;
+  const onInputScroll = () => {
+    /* Sync now + one trailing frame — trackpad inertia / scroll coalescing
+       can leave the highlight layer a paint behind the caret otherwise. */
+    syncHighlightScroll();
+    if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
+    scrollSyncRafRef.current = requestAnimationFrame(() => {
+      scrollSyncRafRef.current = 0;
+      syncHighlightScroll();
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
+    };
+  }, []);
 
   /* Trailing newline on the highlight layer only — keeps last-line height
      aligned with the textarea caret. Defer tokenization so typing stays
@@ -497,11 +540,20 @@ export function CodeBlock(props: CodeBlockProps) {
             onBlur={onInputBlur}
             onScroll={onInputScroll}
             spellCheck={false}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
             wrap={wrap ? "soft" : "off"}
             disabled={disabled}
             readOnly={readOnly}
             placeholder={placeholder}
-            rows={rows ?? 6}
+            /* Intrinsic row floor — fill hosts stretch via flex + optional
+               host `textarea { height: 100% }`; pass a larger `rows` when the
+               block is not in a definite-height column. */
+            rows={rows ?? 1}
             name={name}
             aria-label={ariaLabelProp ?? label}
           />

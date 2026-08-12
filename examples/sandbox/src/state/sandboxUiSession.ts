@@ -2,7 +2,7 @@
  * Sandbox chrome UI persistence for the current Vite process.
  *
  * - Same `__SANDBOX_BOOT_ID__` (browser refresh): restore page / aside / nav /
- *   playground target / open Components categories.
+ *   playground target / open Components categories / main-canvas scroll per page.
  * - New Vite boot id (server restart): treat as fresh — callers default to
  *   Components + catalog search focus. Does not use localStorage.
  */
@@ -33,6 +33,8 @@ export type SandboxUiSession = {
   preferNavOpen: boolean;
   playgroundTarget: PlaygroundTarget;
   openCategories: Partial<Record<GlobalsCategoryId, boolean>>;
+  /** `.sandbox-canvas` scrollTop keyed by page (refresh + in-session page switches). */
+  canvasScrollByPage: Partial<Record<SandboxPage, number>>;
 };
 
 const PAGES: readonly SandboxPage[] = [
@@ -64,6 +66,20 @@ function sanitizeOpenCategories(
   for (const id of CATEGORY_IDS) {
     if (typeof (value as Record<string, unknown>)[id] === "boolean") {
       out[id] = (value as Record<string, boolean>)[id];
+    }
+  }
+  return out;
+}
+
+function sanitizeCanvasScrollByPage(
+  value: unknown,
+): Partial<Record<SandboxPage, number>> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: Partial<Record<SandboxPage, number>> = {};
+  for (const page of PAGES) {
+    const n = (value as Record<string, unknown>)[page];
+    if (typeof n === "number" && Number.isFinite(n) && n >= 0) {
+      out[page] = Math.round(n);
     }
   }
   return out;
@@ -118,6 +134,7 @@ export function freshSandboxUiSession(
     preferNavOpen: true,
     playgroundTarget: "card",
     openCategories: {},
+    canvasScrollByPage: {},
   };
 }
 
@@ -139,6 +156,7 @@ export function loadSandboxUiSession(): SandboxUiSession | null {
       preferNavOpen: parsed.preferNavOpen,
       playgroundTarget: parsed.playgroundTarget,
       openCategories: sanitizeOpenCategories(parsed.openCategories),
+      canvasScrollByPage: sanitizeCanvasScrollByPage(parsed.canvasScrollByPage),
     };
   } catch {
     return null;
@@ -162,6 +180,11 @@ export function patchSandboxUiSession(
     bootId,
     openCategories: sanitizeOpenCategories(
       patch.openCategories ?? base.openCategories,
+    ),
+    canvasScrollByPage: sanitizeCanvasScrollByPage(
+      patch.canvasScrollByPage !== undefined
+        ? { ...base.canvasScrollByPage, ...patch.canvasScrollByPage }
+        : base.canvasScrollByPage,
     ),
   };
   try {

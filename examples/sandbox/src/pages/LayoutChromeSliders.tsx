@@ -62,10 +62,20 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.unitStackGapHint",
     max: 40,
   },
+  "field-hint-gap": {
+    labelKey: "layoutChrome.fieldHintGap",
+    hintKey: "layoutChrome.fieldHintGapHint",
+    max: 24,
+  },
   "control-stack-gap": {
     labelKey: "layoutChrome.stackGap",
     hintKey: "layoutChrome.stackGapHint",
     max: 32,
+  },
+  "form-cluster-gap": {
+    labelKey: "layoutChrome.formClusterGap",
+    hintKey: "layoutChrome.formClusterGapHint",
+    max: 48,
   },
   "control-row-column-gap": {
     labelKey: "layoutChrome.rowColGap",
@@ -242,9 +252,9 @@ const READONLY_LAYOUT_META: Record<
     labelKey: "layoutChrome.roSnackbarMax",
     hintKey: "layoutChrome.roSnackbarMaxHint",
   },
-  "field-hint-gap": {
-    labelKey: "layoutChrome.roFieldHint",
-    hintKey: "layoutChrome.roFieldHintHint",
+  "field-stack-gap": {
+    labelKey: "layoutChrome.roFieldStack",
+    hintKey: "layoutChrome.roFieldStackHint",
   },
 };
 

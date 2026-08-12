@@ -87,6 +87,21 @@ alwaysApply: true
 `.fynns-chat-host--fill` / `EndAside`。权威：`AGENTS.md` Chat Shell /
 FillColumn。
 
+## 表单语义分簇（FieldStack — 强推荐）
+
+检查器 / 设置 Card / Preferences Dialog / 多段表单：**按语义种类**用
+`FieldStack` 分组排布，不要把所有 FieldBlock / ControlBlock 平铺成 Card 兄弟。
+
+| 场景 | 做法 |
+| --- | --- |
+| 同一种控件簇（连续身份字段、连续 Preference 开关…） | 包进**一个** `FieldStack`（内距 `field-stack-gap` 8dp） |
+| 种类切换（字段簇 → 开关簇） | **相邻**两个 `FieldStack`（簇间 `form-cluster-gap` 32dp） |
+| 控件 + 说明文案 | `ControlBlock` / `FieldBlock` 的 `description`（禁止自造 muted `<p>`） |
+| 其它兄弟（intro / Checkbox / 底栏） | Card body `unit-stack-gap`（16dp） |
+
+对照 sandbox Globals `#form-recipe` 抄树；文案用消费仓自己的。权威：子模块
+`AGENTS.md` **FieldStack semantic clusters** / Hard rules DO。
+
 ## ClippedNavShell（仅完全自定义时 — 避免「挤扁抽屉」）
 
 低层槽位壳。优先 `DestinationAppShell`。若手拼 `ClippedNavShell`：
@@ -156,4 +171,5 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
 3. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
 4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
-5. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇（对照 `#form-recipe`），而非平铺？
+6. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

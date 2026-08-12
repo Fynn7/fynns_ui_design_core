@@ -27,7 +27,7 @@ import {
   TopAppBar,
   type FynnsThemeMode,
 } from "@fynns/ui";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocale } from "../i18n";
 import { usePlaygroundTarget } from "../state/PlaygroundTargetProvider";
 import { useTokenDraftHistoryActions } from "../state/TokenDraftProvider";
@@ -81,6 +81,11 @@ export function SandboxShell() {
   /** Automatic icon rail when open drawer + EndAside mins still overflow. */
   const [navCompact, setNavCompact] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLElement>(null);
+  const pageRef = useRef(page);
+  pageRef.current = page;
+  /** Ignore scroll events fired while restoring scrollTop after navigation / refresh. */
+  const canvasScrollRestoreLockRef = useRef(false);
   const [narrow, setNarrow] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 900px)").matches;
@@ -128,6 +133,65 @@ export function SandboxShell() {
       preferNavOpen,
     });
   }, [page, asideOpen, preferNavOpen]);
+
+  /** Persist / restore main canvas scroll for the current Vite session. */
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      if (canvasScrollRestoreLockRef.current) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (canvasScrollRestoreLockRef.current) return;
+        patchSandboxUiSession({
+          canvasScrollByPage: { [pageRef.current]: el.scrollTop },
+        });
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const el = canvasRef.current;
+    if (!el) return;
+    const top = loadSandboxUiSession()?.canvasScrollByPage?.[page] ?? 0;
+    canvasScrollRestoreLockRef.current = true;
+    const apply = () => {
+      const max = Math.max(0, el.scrollHeight - el.clientHeight);
+      el.scrollTop = Math.min(top, max);
+    };
+    apply();
+    let attempts = 0;
+    let raf = 0;
+    const settle = () => {
+      apply();
+      attempts += 1;
+      // Tall Globals content / open Collapsibles may grow after first paint.
+      if (top > 0 && el.scrollTop < top - 1 && attempts < 24) {
+        raf = requestAnimationFrame(settle);
+        return;
+      }
+      canvasScrollRestoreLockRef.current = false;
+    };
+    raf = requestAnimationFrame(settle);
+    const timeoutId = window.setTimeout(() => {
+      canvasScrollRestoreLockRef.current = true;
+      apply();
+      requestAnimationFrame(() => {
+        canvasScrollRestoreLockRef.current = false;
+      });
+    }, 280);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.clearTimeout(timeoutId);
+      canvasScrollRestoreLockRef.current = false;
+    };
+  }, [page]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -359,7 +423,7 @@ export function SandboxShell() {
         nav={nav}
       >
         <div className="sandbox-body">
-          <main className="sandbox-canvas fynns-scroll">
+          <main ref={canvasRef} className="sandbox-canvas fynns-scroll">
             {page === "playground" ? (
               <div className="sandbox-playground">
                 <div className="sandbox-playground-target">

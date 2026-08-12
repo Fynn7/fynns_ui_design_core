@@ -161,6 +161,7 @@
   --fynns-letter-spacing-wide: 0.04em;
   --fynns-letter-spacing-subtle: 0.01em;
   --fynns-z-dropdown: 40;
+  --fynns-z-sticky: 45;
   --fynns-z-popover: 50;
   --fynns-z-modal: 60;
   --fynns-z-toast: 70;
@@ -474,12 +475,14 @@
   --fynns-layout-snackbar-enter-offset: 0.5rem;
   --fynns-layout-snackbar-inset: 1rem;
   --fynns-layout-control-row-label: 7.5rem;
-  --fynns-layout-control-stack-gap: 0.75rem;
+  --fynns-layout-control-stack-gap: 0.5rem;
+  --fynns-layout-field-stack-gap: var(--fynns-layout-control-stack-gap);
+  --fynns-layout-form-cluster-gap: 2rem;
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-chrome-icon-gap: 0.125rem;
-  --fynns-layout-field-hint-gap: var(--fynns-layout-unit-stack-gap);
+  --fynns-layout-field-hint-gap: 0.5rem;
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;

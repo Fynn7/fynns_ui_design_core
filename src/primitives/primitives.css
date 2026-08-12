@@ -894,6 +894,46 @@
   width: 100%;
 }
 
+/*
+ * Hidden probe rows: reuse Select shell classes so pad / chevron / hairline
+ * match the closed trigger. `min-width: min(100%, …)` floors to the widest
+ * option without value flicker on content-sized hosts.
+ */
+.fynns-select-measure {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fynns-select-measure-row {
+  box-sizing: border-box;
+  display: flex;
+  width: max-content;
+  max-width: none;
+  border: var(--fynns-border-hairline) solid transparent;
+}
+
+.fynns-select-measure-row .fynns-select-shell {
+  width: max-content;
+}
+
+.fynns-select-measure-row .fynns-select-trigger {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.fynns-select-measure-row .fynns-select-trigger-text {
+  flex: 0 0 auto;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: auto;
+}
+
 .fynns-select-shell {
   width: 100%;
 }
@@ -1484,23 +1524,40 @@
 }
 
 /*
- * Dismissible labeled Dialog rows: label eats remaining space so trailing
- * controls share the close IconButton's end edge (panel − dialog-inset).
- * Do not keep the toolbar default `width: max-content` + fixed
- * `control-row-label` here — that packs the stack start-side and leaves a
- * gap before the X. Row recipe (AGENTS): ControlRow label + track-only Switch.
+ * Form hosts (centered Dialog + Card body + Collapsible body *direct*
+ * ControlStack / ControlBlock): label eats remaining space so trailing
+ * Switch tracks share one end edge. Do **not** use a descendant
+ * `.fynns-collapsible-body .fynns-control-stack` — sandbox Globals wraps
+ * every demo in a category Collapsible and would force toolbar stacks into
+ * Preferences layout. Row recipe (AGENTS): ControlRow label + track-only
+ * Switch. Toolbar / page chrome outside these hosts keep the fixed label track.
  */
-.fynns-dialog-panel--centered .fynns-control-stack {
+.fynns-dialog-panel--centered .fynns-control-stack,
+.fynns-card-body .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-block .fynns-control-stack {
+  width: 100%;
+  max-width: 100%;
   grid-template-columns:
     minmax(0, 1fr)
     repeat(var(--fynns-control-stack-cols, 2), max-content);
 }
 
-.fynns-dialog-panel--centered .fynns-control-row {
+.fynns-dialog-panel--centered .fynns-control-row,
+.fynns-card-body .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
   grid-template-columns: minmax(0, 1fr) max-content;
 }
 
-.fynns-dialog-panel--centered .fynns-control-row__controls {
+.fynns-dialog-panel--centered .fynns-control-row__controls,
+.fynns-card-body .fynns-control-row__controls,
+.fynns-collapsible-body > .fynns-control-row > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row__controls {
   min-width: 0;
   justify-self: end;
 }
@@ -1510,9 +1567,35 @@
   > .fynns-control-row
   > .fynns-control-row__controls
   > :not(.fynns-grid),
-.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > * {
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > *,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-card-body .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body > .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  .fynns-grid
+  > * {
   min-width: 0;
   max-width: 100%;
+  /* Subgrid control tracks size to the widest sibling; pack shorter
+     switches / clusters to the shared end edge (Preferences). */
+  justify-self: end;
 }
 
 .fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
@@ -1958,6 +2041,9 @@
   gap: var(--fynns-space-sm);
   color: var(--fynns-color-text);
   line-height: var(--fynns-line-height-tight);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .fynns-switch--label-end {
@@ -1969,6 +2055,15 @@
   font-size: var(--fynns-font-size-caption);
   color: var(--fynns-color-text-muted);
   white-space: nowrap;
+}
+
+/* Cap end-labels so narrow ControlStack / Card hosts do not spill past the
+   frame (token was unused — apply as max, not a floor). */
+.fynns-switch--label-end .fynns-switch-label {
+  max-width: var(--fynns-layout-switch-label-end);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .fynns-switch-track {
@@ -2055,19 +2150,23 @@
    (e.g. Anatomy with only Media). */
 .fynns-control-stack {
   display: grid;
+  /* Toolbar default: fixed label track (same as ControlRow) so sibling stacks
+     share one start edge; control tracks share leftover. Form hosts (Card /
+     Collapsible body / centered Dialog) override to label `1fr` + end-hug
+     controls — see rules near `.fynns-dialog-panel--centered`. */
   grid-template-columns:
     var(--fynns-layout-control-row-label)
-    repeat(var(--fynns-control-stack-cols, 2), max-content);
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, 1fr));
   gap: var(--fynns-layout-control-stack-gap);
   /* start — not stretch: a narrower ToggleGroup must not expand to the
      shared column track width of a wider Switch in the same column. */
   align-items: center;
   justify-items: start;
   justify-content: start;
-  width: max-content;
+  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: visible;
+  overflow-x: clip;
 }
 
 .fynns-control-stack > .fynns-control-row {
@@ -2097,9 +2196,9 @@
 .fynns-control-stack > .fynns-control-row > .fynns-control-row__label,
 .fynns-control-stack .fynns-grid > *,
 .fynns-control-stack > .fynns-control-row > .fynns-control-row__controls > :not(.fynns-grid) {
-  min-width: min-content;
-  max-width: none;
-  /* Do not force overflow here — ToggleGroup needs overflow:hidden to clip radius. */
+  min-width: 0;
+  max-width: 100%;
+  /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
 }
 
 /* ---------- ControlRow ---------- */
@@ -2133,6 +2232,19 @@
   gap: var(--fynns-layout-control-cluster-gap);
   min-width: min-content;
   overflow: visible;
+}
+
+/* Sibling switches / chips in one ControlRow when ControlStack would otherwise
+   place each child on its own shared column (narrow hosts overflow). */
+.fynns-control-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* ---------- Grid ---------- */
@@ -2773,10 +2885,15 @@
 .fynns-collapsible-body,
 .fynns-card-body {
   /* Shared block pad — breathing room under the header (`chrome="card"`).
-   * Nesting surface-owning children: use `chrome="plain"` (overrides below). */
+   * Nesting surface-owning children: use `chrome="plain"` (overrides below).
+   * Sibling units (FieldBlock, ControlBlock, intro copy) share unit-stack-gap
+   * so consumers do not invent ad-hoc margins between related sections. */
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
   padding-block: var(--fynns-layout-content-pad-block);
   padding-inline: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
@@ -3176,11 +3293,13 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* Breath around sm IconButton hover disks (avoid clipping the state layer). */
-  padding-block: var(--fynns-space-xs);
+  /* IconButton sm (2rem) + 2xs block pad — same row with or without actions so
+   * label→control optical gap stays even (~9–11dp with FieldBlock __main). */
+  box-sizing: border-box;
+  min-height: calc(2rem + 2 * var(--fynns-space-2xs));
+  padding-block: var(--fynns-space-2xs);
   min-width: 0;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .fynns-field-header__label {
@@ -3202,20 +3321,93 @@ a.fynns-breadcrumb-link:visited {
 .fynns-field-block {
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-space-xs);
+  gap: var(--fynns-layout-field-hint-gap);
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-.fynns-field-block:not(:last-child) {
-  margin-bottom: var(--fynns-space-md);
+.fynns-field-block__main {
+  display: flex;
+  flex-direction: column;
+  /* Header padding-block supplies the label→control breath; no extra stack gap. */
+  gap: 0;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* FieldHeader / FieldBlock as first child of Card body: keep dense top. */
+/* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` /
+   `.fynns-field-stack` gap — do not re-add margin here. */
+.fynns-field-block:not(:last-child) {
+  margin-bottom: 0;
+}
+
+/* FieldHeader / FieldBlock / FieldStack as first child of Card body: dense top. */
 .fynns-card-body:has(> .fynns-field-header:first-child),
-.fynns-card-body:has(> .fynns-field-block:first-child) {
+.fynns-card-body:has(> .fynns-field-block:first-child),
+.fynns-card-body:has(> .fynns-field-stack:first-child) {
   padding-top: var(--fynns-space-xs);
+}
+
+/* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
+/*
+ * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
+ * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks target
+ * form-cluster-gap (32dp). Default margin is the full cluster step (Dialog /
+ * bare hosts). Card / Collapsible / `.fynns-unit-stack` already contribute
+ * unit-stack-gap — those hosts only add the remainder.
+ */
+.fynns-field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-stack-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-stack + .fynns-field-stack {
+  margin-block-start: var(--fynns-layout-form-cluster-gap);
+}
+
+.fynns-card-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-collapsible-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-unit-stack > .fynns-field-stack + .fynns-field-stack {
+  margin-block-start: calc(
+    var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
+  );
+}
+
+/* ---------- ControlBlock (control unit + supporting hint) ---------- */
+.fynns-control-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-control-block > .fynns-control-stack,
+.fynns-control-block > .fynns-control-row {
+  /* Keep toolbar tracks content-sized; hint below still spans the block. */
+  max-width: 100%;
+}
+
+/* ---------- Unit stack (generic sibling units; not ControlBlock) ---------- */
+/*
+ * Named replacement for purged `UnitStack`: vertical siblings that are
+ * independent units (sections, FieldBlocks already inside Card use body gap).
+ * Control + its own note → `ControlBlock`, not another unit-stack child pair.
+ */
+.fynns-unit-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ---------- Divider (M3) ---------- */
@@ -5728,7 +5920,6 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   align-items: stretch;
   width: 100%;
-  z-index: var(--fynns-z-dropdown);
   border-radius: var(--fynns-radius-3xl);
   border: var(--fynns-border-hairline) solid transparent;
   background: var(--fynns-color-surface-2);
@@ -5756,7 +5947,13 @@ a.fynns-breadcrumb-link:visited {
   box-shadow: none;
 }
 
+/*
+ * Elevate only while open. Collapsed Select/Autocomplete share this shell and
+ * must stay at auto z so sticky catalog SearchBar can occlude them when they
+ * scroll underneath (equal `--fynns-z-dropdown` + later DOM painted through).
+ */
 .fynns-search-bar--expanded {
+  z-index: var(--fynns-z-dropdown);
   box-shadow: var(--fynns-shadow-lg);
 }
 
@@ -7874,6 +8071,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: var(--fynns-code-keyword);
   font-weight: var(--fynns-font-weight-bold);
 }
+/* Editable overlay: never change glyph metrics vs the transparent textarea
+   (bold advance / soft-wrap drift → selection wash on the wrong visual lines). */
+.fynns-code-block--editable .fynns-code-block-highlight .fynns-code-keyword,
+.fynns-code-block--editable .fynns-code-block-highlight .fynns-code-module {
+  font-weight: inherit;
+}
 .fynns-code-block-code .fynns-code-string {
   color: var(--fynns-code-string);
 }
@@ -7956,7 +8159,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   }
 }
 
-/* Editable: highlighted <pre> under a transparent textarea; scroll on input. */
+/* Editable: highlighted <pre> under a transparent textarea; scroll on input.
+   `flex: 1 1 auto` + `min-height: 0` so fill hosts (flex column with a definite
+   height on the CodeBlock root) can grow the editor; do **not** set
+   `height: 100%` here — percentage height with an indefinite parent collapses
+   the stack (rows / content sizing must win in Globals demos). Fill hosts that
+   need the caret layer to stretch set `textarea { height: 100% }` in host CSS
+   (see gsc-live-preview `.gsc-editor-code`). */
 .fynns-code-block-editor {
   position: relative;
   box-sizing: border-box;
