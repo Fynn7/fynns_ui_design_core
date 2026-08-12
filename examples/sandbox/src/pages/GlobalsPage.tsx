@@ -327,6 +327,18 @@ function FormRecipeFields({
   onTimezoneChange,
   notes,
   onNotesChange,
+  access,
+  onAccessChange,
+  accessOther,
+  onAccessOtherChange,
+  notifyEmail,
+  onNotifyEmailChange,
+  notifyInApp,
+  onNotifyInAppChange,
+  notifyDesktop,
+  onNotifyDesktopChange,
+  previewLength,
+  onPreviewLengthChange,
   compact,
   onCompactChange,
   digests,
@@ -348,6 +360,18 @@ function FormRecipeFields({
   onTimezoneChange: (value: string) => void;
   notes: string;
   onNotesChange: (value: string) => void;
+  access: "anyone" | "team" | "private" | "other";
+  onAccessChange: (value: "anyone" | "team" | "private" | "other") => void;
+  accessOther: string;
+  onAccessOtherChange: (value: string) => void;
+  notifyEmail: boolean;
+  onNotifyEmailChange: (value: boolean) => void;
+  notifyInApp: boolean;
+  onNotifyInAppChange: (value: boolean) => void;
+  notifyDesktop: boolean;
+  onNotifyDesktopChange: (value: boolean) => void;
+  previewLength: number;
+  onPreviewLengthChange: (value: number) => void;
   compact: boolean;
   onCompactChange: (value: boolean) => void;
   digests: boolean;
@@ -360,6 +384,9 @@ function FormRecipeFields({
   const emailId = `${idPrefix}-email`;
   const timezoneId = `${idPrefix}-timezone`;
   const notesId = `${idPrefix}-notes`;
+  const accessName = `${idPrefix}-access`;
+  const accessOtherId = `${idPrefix}-access-other`;
+  const previewId = `${idPrefix}-preview-length`;
   return (
     <>
       <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
@@ -447,6 +474,99 @@ function FormRecipeFields({
             value={notes}
             onChange={(event) => onNotesChange(event.target.value)}
             minRows={2}
+          />
+        </FieldBlock>
+      </FieldStack>
+      <FieldStack>
+        <FieldBlock
+          label={t("globals.formRecipeAccess")}
+          description={t("globals.formRecipeAccessHint")}
+        >
+          <div
+            className="fynns-control-cluster fynns-control-cluster--stack"
+            role="radiogroup"
+            aria-label={t("globals.formRecipeAccess")}
+          >
+            <Radio
+              name={accessName}
+              value="anyone"
+              label={t("globals.formRecipeAccessAnyone")}
+              checked={access === "anyone"}
+              onCheckedChange={() => onAccessChange("anyone")}
+            />
+            <Radio
+              name={accessName}
+              value="team"
+              label={t("globals.formRecipeAccessTeam")}
+              checked={access === "team"}
+              onCheckedChange={() => onAccessChange("team")}
+            />
+            <Radio
+              name={accessName}
+              value="private"
+              label={t("globals.formRecipeAccessPrivate")}
+              checked={access === "private"}
+              onCheckedChange={() => onAccessChange("private")}
+            />
+            <div className="fynns-control-cluster fynns-control-cluster--nowrap">
+              <Radio
+                name={accessName}
+                value="other"
+                label={t("globals.formRecipeAccessOther")}
+                checked={access === "other"}
+                onCheckedChange={() => onAccessChange("other")}
+              />
+              <Input
+                id={accessOtherId}
+                size="sm"
+                aria-label={t("globals.formRecipeAccessOtherInput")}
+                placeholder={t("globals.formRecipeAccessOtherPlaceholder")}
+                value={accessOther}
+                disabled={access !== "other"}
+                onChange={(event) => onAccessOtherChange(event.target.value)}
+                autoComplete="off"
+              />
+            </div>
+          </div>
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipeChannels")}
+          description={t("globals.formRecipeChannelsHint")}
+        >
+          <div
+            className="fynns-control-cluster fynns-control-cluster--stack"
+            role="group"
+            aria-label={t("globals.formRecipeChannels")}
+          >
+            <Checkbox
+              label={t("globals.formRecipeChannelEmail")}
+              checked={notifyEmail}
+              onCheckedChange={onNotifyEmailChange}
+            />
+            <Checkbox
+              label={t("globals.formRecipeChannelInApp")}
+              checked={notifyInApp}
+              onCheckedChange={onNotifyInAppChange}
+            />
+            <Checkbox
+              label={t("globals.formRecipeChannelDesktop")}
+              checked={notifyDesktop}
+              onCheckedChange={onNotifyDesktopChange}
+            />
+          </div>
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipePreviewLength")}
+          htmlFor={previewId}
+          description={t("globals.formRecipePreviewLengthHint")}
+        >
+          <Slider
+            id={previewId}
+            ariaLabel={t("globals.formRecipePreviewLength")}
+            value={previewLength}
+            onChange={onPreviewLengthChange}
+            min={0}
+            max={100}
           />
         </FieldBlock>
       </FieldStack>
@@ -708,6 +828,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRevealEmail, setFormRevealEmail] = useState(false);
   const [formTimezone, setFormTimezone] = useState("UTC");
   const [formNotes, setFormNotes] = useState("");
+  const [formAccess, setFormAccess] = useState<
+    "anyone" | "team" | "private" | "other"
+  >("team");
+  const [formAccessOther, setFormAccessOther] = useState("");
+  const [formNotifyEmail, setFormNotifyEmail] = useState(true);
+  const [formNotifyInApp, setFormNotifyInApp] = useState(true);
+  const [formNotifyDesktop, setFormNotifyDesktop] = useState(false);
+  const [formPreviewLength, setFormPreviewLength] = useState(40);
   const [formCompact, setFormCompact] = useState(false);
   const [formDigests, setFormDigests] = useState(true);
   const [formExperimental, setFormExperimental] = useState(true);
@@ -728,6 +856,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     onTimezoneChange: setFormTimezone,
     notes: formNotes,
     onNotesChange: setFormNotes,
+    access: formAccess,
+    onAccessChange: setFormAccess,
+    accessOther: formAccessOther,
+    onAccessOtherChange: setFormAccessOther,
+    notifyEmail: formNotifyEmail,
+    onNotifyEmailChange: setFormNotifyEmail,
+    notifyInApp: formNotifyInApp,
+    onNotifyInAppChange: setFormNotifyInApp,
+    notifyDesktop: formNotifyDesktop,
+    onNotifyDesktopChange: setFormNotifyDesktop,
+    previewLength: formPreviewLength,
+    onPreviewLengthChange: setFormPreviewLength,
     compact: formCompact,
     onCompactChange: setFormCompact,
     digests: formDigests,
