@@ -21,11 +21,12 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * Card-body list of FieldBlocks / ControlBlocks across topics.
  *
  * Gap is `--fynns-layout-field-stack-gap` (8dp — same step as
- * `control-stack-gap`). Adjacent FieldStacks use
- * `--fynns-layout-form-cluster-gap` (32dp) — full step on bare hosts;
- * Card / Collapsible / Dialog body / `.fynns-unit-stack` subtract the parent
- * `unit-stack-gap` so the visual total stays 32dp. Other host siblings stay on
- * `--fynns-layout-unit-stack-gap` (16dp).
+ * `control-stack-gap`). Sibling **ControlBlock**s inside one stack open to
+ * `--fynns-layout-unit-stack-gap` (16dp) via CSS so Switch+note units breathe.
+ * Adjacent FieldStacks use `--fynns-layout-form-cluster-gap` (32dp) — full
+ * step on bare hosts; Card / Collapsible / Dialog body / `.fynns-unit-stack`
+ * subtract the parent `unit-stack-gap` so the visual total stays 32dp. Other
+ * host siblings stay on `--fynns-layout-unit-stack-gap` (16dp).
  *
  * Live recipe: sandbox Globals `#form-recipe` (Card / Collapsible / Dialog hosts).
  * Authority: AGENTS.md **FieldStack semantic clusters**.

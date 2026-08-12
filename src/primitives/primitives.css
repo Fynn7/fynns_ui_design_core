@@ -3468,6 +3468,17 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
+/*
+ * ControlBlock + supporting note is heavier than a tight FieldBlock pair —
+ * open sibling ControlBlocks to unit-stack (16dp) while FieldBlocks keep
+ * field-stack-gap (8dp) inside the same FieldStack.
+ */
+.fynns-field-stack > .fynns-control-block + .fynns-control-block {
+  margin-block-start: calc(
+    var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
 /* ---------- ControlBlock (control unit + supporting hint) ---------- */
 .fynns-control-block {
   display: flex;
