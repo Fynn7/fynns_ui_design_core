@@ -894,6 +894,46 @@
   width: 100%;
 }
 
+/*
+ * Hidden probe rows: reuse Select shell classes so pad / chevron / hairline
+ * match the closed trigger. `min-width: min(100%, …)` floors to the widest
+ * option without value flicker on content-sized hosts.
+ */
+.fynns-select-measure {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fynns-select-measure-row {
+  box-sizing: border-box;
+  display: flex;
+  width: max-content;
+  max-width: none;
+  border: var(--fynns-border-hairline) solid transparent;
+}
+
+.fynns-select-measure-row .fynns-select-shell {
+  width: max-content;
+}
+
+.fynns-select-measure-row .fynns-select-trigger {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.fynns-select-measure-row .fynns-select-trigger-text {
+  flex: 0 0 auto;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: auto;
+}
+
 .fynns-select-shell {
   width: 100%;
 }

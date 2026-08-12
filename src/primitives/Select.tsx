@@ -1,5 +1,12 @@
 import type { KeyboardEvent, ReactNode } from "react";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { ChevronDownIcon } from "./icons";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
 
@@ -35,6 +42,9 @@ function normalize(option: string | SelectOption): SelectOption {
  * `--fynns-size-icon-target`, outlined surface) — not chrome SearchBar 56dp.
  * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
  * Replaces native `<select>`.
+ *
+ * Trigger width floors to the widest option (or placeholder) so switching
+ * values does not resize the control when the host is content-sized.
  * @see https://m3.material.io/components/menus/overview
  */
 export function Select({
@@ -53,8 +63,21 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(() => Math.max(0, selectedIndex));
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const [minWidthPx, setMinWidthPx] = useState<number | null>(null);
   const listId = useId();
   const isDisabled = disabled || normalized.length === 0;
+
+  /** Remeasure when options / placeholder change (not on every selected value). */
+  useLayoutEffect(() => {
+    const host = measureRef.current;
+    if (!host) return;
+    let max = 0;
+    for (const child of Array.from(host.children)) {
+      max = Math.max(max, (child as HTMLElement).offsetWidth);
+    }
+    if (max > 0) setMinWidthPx(max);
+  }, [options, placeholder]);
 
   const pick = useCallback(
     (nextValue: string) => {
@@ -120,6 +143,11 @@ export function Select({
     ? (selectedOption.label ?? selectedOption.value)
     : placeholder;
 
+  const measureLabels: ReactNode[] = [
+    placeholder,
+    ...normalized.map((o) => o.label ?? o.value),
+  ];
+
   return (
     <div
       ref={rootRef}
@@ -132,7 +160,35 @@ export function Select({
         className,
       )}
       data-expanded={open ? "true" : undefined}
+      style={
+        minWidthPx != null
+          ? { minWidth: `min(100%, ${minWidthPx}px)` }
+          : undefined
+      }
     >
+      {/*
+        Off-flow probe: one closed shell per option (+ placeholder) so the
+        floor matches real chrome (field pad + trigger pad + label + chevron
+        + hairline border).
+      */}
+      <div
+        ref={measureRef}
+        className="fynns-select-measure"
+        aria-hidden="true"
+      >
+        {measureLabels.map((label, i) => (
+          <div key={i} className="fynns-select-measure-row">
+            <div className="fynns-search-bar-field fynns-select-shell">
+              <span className="fynns-search-bar-input fynns-select-trigger">
+                <span className="fynns-select-trigger-text">{label}</span>
+              </span>
+              <span className="fynns-search-bar-trailing fynns-select-chevron">
+                <ChevronDownIcon className="fynns-select-trigger-chevron" />
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
       <div className="fynns-search-bar-field fynns-select-shell">
         <button
           ref={triggerRef}
