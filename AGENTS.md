@@ -181,9 +181,20 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DO** style with `--fynns-*` tokens only: `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`, `var(--fynns-shadow-lg)`,
   `var(--fynns-duration-fast)`, etc.
+- **DO** group inspector / settings / Dialog form options with **`FieldStack`**
+  by **semantic kind** (identity fields together, preference switches together,
+  …) — not one flat list of FieldBlocks / ControlBlocks. Same-kind siblings
+  share `field-stack-gap` (8dp); adjacent FieldStacks get `form-cluster-gap`
+  (32dp). Live tree: sandbox `#form-recipe`. See **Toolbar / unit rhythm** →
+  **FieldStack semantic clusters**.
 - **DON'T** hardcode raw colors / hex / rgba in component or app CSS. If a value
   is missing, add a token in [`src/theme/tokens.ts`](src/theme/tokens.ts) and run
   `npm run gen:theme`.
+- **DON'T** dump consecutive form units as bare Card / Dialog siblings when they
+  belong in different semantic groups (or leave related FieldBlocks ungrouped).
+  Flat stacks lose the tight-within / wide-between rhythm — use `FieldStack`.
+  Do not invent muted `<p>` / subtitle classes for control notes (`ControlBlock`
+  / `FieldBlock` `description` instead).
 - **DON'T** invent shell / column / chat **insets or gaps** as raw `rem` / `px`
   or a fresh private CSS variable. Reuse an existing `--fynns-layout-*` key
   (or a component token that **aliases** one — e.g.
@@ -365,7 +376,10 @@ classes.
   content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
   optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
   + vertical resize; block pad → `--fynns-layout-field-pad-block`), **FieldHeader** /
-  **FieldBlock** (label | trailing IconButtons above a control), Select,
+  **FieldBlock** (label | trailing IconButtons above a control), Select
+  (trigger `min-width` floors to the widest option / placeholder so
+  content-sized hosts do not resize when the value changes; still
+  `width: 100%` in form rows),
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
   supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
@@ -758,8 +772,14 @@ classes.
   `--fynns-layout-field-hint-gap`; related Switch + narrative **must** wrap
   here, not as loose Card siblings), **FieldHint** (muted/error caption;
   prefer via ControlBlock / FieldBlock / Input), FieldBlock / FieldHeader
-  (`description?` / `errorText?` under the control), `.fynns-unit-stack`
-  (CSS host — purged `UnitStack` replacement; sibling **units** only),
+  (`description?` / `errorText?` under the control), **FieldStack** (**strongly
+  recommended** invisible cluster: group consecutive form units by **semantic
+  kind** — e.g. all identity FieldBlocks in one stack, all Preference
+  ControlBlocks in another — gap `--fynns-layout-field-stack-gap` / 8dp;
+  adjacent stacks → `form-cluster-gap` / 32dp; live `#form-recipe`),
+  `.fynns-unit-stack`
+  (CSS host — purged `UnitStack` replacement; sibling **units** only — not a
+  substitute for FieldStack inside forms),
   Grid (`equalCells` makes every
   cell match the largest content width/height via measure),
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
@@ -825,17 +845,34 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Vertical stacked **units** (Card / Collapsible `chrome="card"` body, `.fynns-unit-stack`, inspector siblings) | `--fynns-layout-unit-stack-gap` (**16dp**) |
+  | Consecutive related FieldBlocks (or ControlBlock cluster) inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**, aliases control-stack-gap) |
+  | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) |
+  | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
   | Nested surface frames (`chrome="plain"` body, `.fynns-nest`) | `--fynns-layout-nest-gap` |
+
+  **FieldStack semantic clusters (hard — agents):** When building any inspector,
+  settings Card, Preferences Dialog, or multi-section form, **partition options
+  by meaning** with `FieldStack` — do **not** leave every FieldBlock /
+  ControlBlock as a flat Card-body sibling.
+  - **Same kind → one `FieldStack`:** consecutive related Input / Select /
+    Textarea / Otp `FieldBlock`s, **or** a same-kind group of Preference
+    `ControlBlock`s (Switch + note). Inside: `field-stack-gap` (**8dp**).
+  - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields → preference
+    switches. Between stacks: `form-cluster-gap` (**32dp**). That wider gap is
+    the visual signal that the *topic* changed — spacing alone without
+    FieldStack is not enough (Card `unit-stack-gap` stays **16dp** for intro /
+    Checkbox / actions / other non-cluster siblings).
+  - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
+    `errorText`). Never a loose muted `<p>` under `ControlStack`.
+  - **Copy the tree** from sandbox Globals **Inspector form recipe**
+    (`#form-recipe`); supply consumer-owned strings only.
 
   **Recipe (hard):** a Switch (or other labeled row) **and** its narrative
   supporting text are **one unit** → wrap in `ControlBlock` (`description` /
   `errorText`). Do **not** place the note as the next Card-body sibling under
-  a bare `ControlStack` (zero gap / invented subtitle classes). Sibling units
-  (intro copy, FieldBlock, ControlBlock, …) rely on Card / Collapsible body
-  `unit-stack-gap` (built-in) or `.fynns-unit-stack` outside those shells.
-  Prefer `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows) inside
-  the block. **Form hosts** (Card body, centered Dialog, Collapsible body
+  a bare `ControlStack` (zero gap / invented subtitle classes). Prefer
+  `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows) inside the
+  block. **Form hosts** (Card body, centered Dialog, Collapsible body
   **direct** `ControlStack` / `ControlBlock`): ControlStack is label-fill
   (`1fr`) + end-hug controls (`max-content`) so Switch tracks share one trailing
   edge across sibling rows / ControlBlocks — same Preferences recipe as
@@ -845,9 +882,7 @@ classes.
   `--fynns-layout-control-row-label` track. Values
   live in `LAYOUT_TOKENS`; sandbox Layout chrome GUI edits
   them via `SANDBOX_LAYOUT_AGENT_CATALOG`. Live samples: Globals → Toolbar /
-  unit rhythm (`#rhythm`) + **Inspector form recipe** (`#form-recipe`) — copy
-  the Card **tree** into consumers and supply **consumer-owned** strings (core
-  demos stay generic — no consumer product copy).
+  unit rhythm (`#rhythm`) + **Inspector form recipe** (`#form-recipe`).
 
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
   inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of

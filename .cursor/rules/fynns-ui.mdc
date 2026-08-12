@@ -69,7 +69,7 @@ ring can paint before heavy work).
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
-  ControlStack/ControlRow/ControlBlock/FieldHint/Grid/FillColumn,
+  ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
   FieldBlock/FieldHeader (optional description/errorText),
   measureOverflow/useOverflowBounds, Collapsible).
   Reach for an existing keep-set primitive before writing a new control.
@@ -91,8 +91,13 @@ ring can paint before heavy work).
   Vertical unit lists: Card / Collapsible body already use
   `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
   (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
-  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. Form
-  control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested surface
+  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. **Form
+  options by semantic kind → `FieldStack`** (strongly recommended): same-kind
+  FieldBlocks / ControlBlocks share `field-stack-gap` (8dp); adjacent stacks
+  (e.g. fields → switches) get `form-cluster-gap` (32dp). Do **not** flatten
+  multi-topic forms as bare Card siblings — copy `#form-recipe`
+  (`AGENTS.md` **FieldStack semantic clusters**). Form control → hint:
+  `--fynns-layout-field-hint-gap` / `FieldHint`. Nested surface
   wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠
   flush).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
