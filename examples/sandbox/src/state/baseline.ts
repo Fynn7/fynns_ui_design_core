@@ -276,7 +276,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "capsule-chrome-pad-inline":
     "Capsule chrome · SearchBar / ChatComposer collapsed shell (Send/mic flush, ~4dp)",
   "field-pad-inline":
-    "Form field · Input / field-shell horizontal pad (12dp — not capsule 4dp)",
+    "Form field · Input / field-shell pad step (12dp; CSS adds capsule 4dp for Select parity)",
   "field-pad-block":
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "textarea-max-height":

@@ -296,7 +296,7 @@ const en = {
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar next to IconButtons (4dp). ChatComposer shell uses `--fynns-chat-composer-pad-*` (6dp), not this key.",
   "layoutChrome.fieldPadInline": "Form field pad",
   "layoutChrome.fieldPadInlineHint":
-    "--fynns-layout-field-pad-inline — Input / field-shell horizontal pad (12dp). Do not reuse capsule chrome.",
+    "--fynns-layout-field-pad-inline — 12dp step; Input / field-shell compose capsule-chrome-pad-inline + this for Select text-start parity.",
   "layoutChrome.fieldPadBlock": "Form field pad (block)",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
@@ -1560,7 +1560,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-capsule-chrome-pad-inline — SearchBar 贴 IconButton（默认 4dp）。ChatComposer 壳距用 `--fynns-chat-composer-pad-*`（6dp），不用本 key。",
   "layoutChrome.fieldPadInline": "表单字段边距",
   "layoutChrome.fieldPadInlineHint":
-    "--fynns-layout-field-pad-inline — Input / field-shell 水平内边距（默认 12dp）。不要复用 capsule chrome。",
+    "--fynns-layout-field-pad-inline — 12dp 步进；Input / field-shell 与 capsule-chrome-pad-inline 相加以对齐 Select 文案起点。",
   "layoutChrome.fieldPadBlock": "表单字段边距（块向）",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",

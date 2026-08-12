@@ -17,7 +17,8 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * way to **semantically partition** inspector / settings / Dialog options.
  *
  * **Strongly recommended:** wrap same-kind siblings in one `FieldStack`
- * (identity FieldBlocks; Preference ControlBlocks; …). Do not leave a flat
+ * (identity FieldBlocks; Radio/Checkbox/Slider choice FieldBlocks;
+ * Preference ControlBlocks; …). Do not leave a flat
  * Card-body list of FieldBlocks / ControlBlocks across topics.
  *
  * Gap is `--fynns-layout-field-stack-gap` (8dp — same step as
