@@ -502,7 +502,9 @@ classes.
     **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
     = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
     collapsible header + vertical rail + done wrench / active mark /
-    optional file capsule + description). Also slots via
+    optional file capsule + description). Uncontrolled: force-open while
+    `streaming` and disable the header trigger so clicks cannot queue a
+    post-stream collapse. Also slots via
     `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
     `ChatThinking` for single-block reasoning — do **not** overload it
     into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.

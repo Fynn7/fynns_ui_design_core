@@ -18,6 +18,8 @@ export type ChatActivityProps = Omit<
   children?: ReactNode;
   /**
    * While true: force-open (unless controlled), header shimmer, `aria-busy`.
+   * Uncontrolled trigger is disabled while streaming so clicks cannot queue a
+   * surprise collapse when the stream ends.
    * Use while the agent is still appending / updating steps.
    */
   streaming?: boolean;
@@ -185,8 +187,10 @@ export function ChatActivity({
   const isControlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const isOpen = isControlled ? Boolean(open) : streaming ? true : internalOpen;
+  const streamLocksOpen = streaming && !isControlled;
 
   const setOpen = (next: boolean) => {
+    if (streamLocksOpen) return;
     if (!isControlled) setInternalOpen(next);
     onOpenChange?.(next);
   };
@@ -220,6 +224,7 @@ export function ChatActivity({
         className="fynns-chat-activity-trigger"
         aria-expanded={isOpen}
         aria-controls={bodyId}
+        disabled={streamLocksOpen || undefined}
         onClick={() => setOpen(!isOpen)}
       >
         {labelNode}

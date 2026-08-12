@@ -251,7 +251,7 @@ const en = {
     "--fynns-layout-unit-stack-gap (16dp) — between Card body siblings / .fynns-unit-stack (not control→hint).",
   "layoutChrome.fieldHintGap": "Field hint",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input).",
+    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input); also FieldBlock label→control on `.fynns-field-block__main`.",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -657,7 +657,7 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack use field-stack-gap (12dp); adjacent FieldStacks use form-cluster-gap (32dp); other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description own field-hint-gap. Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
@@ -698,7 +698,7 @@ const en = {
   "globals.formRecipeDigestsHint": "Send a weekly summary of sample activity.",
   "globals.formRecipeExperimental": "Show experimental controls",
   "globals.formRecipeAlert":
-    "Related FieldBlocks share a FieldStack (12dp). Adjacent FieldStacks (fields → choices → switches) use form-cluster-gap (32dp).",
+    "Related FieldBlocks share a FieldStack (12 / 16 / 32dp by kind). Adjacent FieldStacks (fields → choices → switches) use form-cluster-gap (32dp) plus a horizontal Divider.",
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
@@ -1550,7 +1550,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-unit-stack-gap（16dp）— Card body 兄弟 / .fynns-unit-stack（不是控件→说明）。",
   "layoutChrome.fieldHintGap": "字段提示",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）。",
+    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）；FieldBlock 标签→控件亦用此 token（`.fynns-field-block__main`）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -1954,7 +1954,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmAgentHint":
     "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
-    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内用 field-stack-gap（12dp）；相邻 FieldStack 用 form-cluster-gap（32dp）；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 管 field-hint-gap。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
+    "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
@@ -1994,7 +1994,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeDigestsHint": "每周发送一次样例活动摘要。",
   "globals.formRecipeExperimental": "显示实验性控件",
   "globals.formRecipeAlert":
-    "相关 FieldBlock 包在 FieldStack（12dp）；相邻 FieldStack（字段簇 → 选择簇 → 开关簇）用 form-cluster-gap（32dp）。",
+    "相关 FieldBlock 包在 FieldStack（12 / 16 / 32dp 按种类）；相邻 FieldStack（字段簇 → 选择簇 → 开关簇）用 form-cluster-gap（32dp）并加水平 Divider。",
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":

@@ -9601,7 +9601,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-chatmessage-activity-desc-gap);
   min-width: 0;
   padding-block: calc(
-    (var(--fynns-size-icon) - (var(--fynns-chatmessage-name-size) * 1.25)) / 2
+    (
+        var(--fynns-size-icon) -
+          (
+            var(--fynns-chatmessage-name-size) *
+              var(--fynns-line-height-snug)
+          )
+      ) / 2
   );
 }
 

@@ -2420,6 +2420,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <ChatMessage
             role="assistant"
+            streaming={thinkingStreaming}
             thinking={
               <ChatThinking
                 streaming={thinkingStreaming}
@@ -2469,6 +2470,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <ChatMessage
             role="assistant"
+            streaming={activityStreaming}
             thinking={
               <ChatActivity
                 label={activityHeader}
