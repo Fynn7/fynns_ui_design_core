@@ -55,10 +55,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
    wrapped prompts — do not rely on header min-height optical pad). Trailing
    actions stay on the label line (IconButton sm does not inflate the row).
-   Default `ghost`; dense forms may use `size="sm"`. As the first child of
-   `Card` body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
-   `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
-   Do not reinvent this with sandbox-only CSS.
+   Default `ghost`; dense forms may use `size="sm"`. Card / Collapsible
+   `chrome="card"` body keeps full `--fynns-layout-content-pad-block` (16dp)
+   even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
+   (do not crush to `space-xs` under the head hairline). Inline stays
+   `content-inset`. Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer). Tooltips also describe *dynamic* state (e.g. why a control is
    disabled).
@@ -480,7 +481,8 @@ classes.
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
     live — no LLM; caret only while answer `children` has text (no empty
-    bubble / lone caret during thinking-only wait); caret height
+    bubble / lone caret during thinking-only wait — conditional `null`
+    child slots also count as empty); caret height
     `--fynns-chatmessage-cursor-height` (**`1lh`**
     of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional

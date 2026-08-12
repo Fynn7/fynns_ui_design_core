@@ -3479,13 +3479,6 @@ a.fynns-breadcrumb-link:visited {
   margin-bottom: 0;
 }
 
-/* FieldHeader / FieldBlock / FieldStack as first child of Card body: dense top. */
-.fynns-card-body:has(> .fynns-field-header:first-child),
-.fynns-card-body:has(> .fynns-field-block:first-child),
-.fynns-card-body:has(> .fynns-field-stack:first-child) {
-  padding-top: var(--fynns-space-xs);
-}
-
 /* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
 /*
  * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
