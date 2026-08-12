@@ -164,7 +164,9 @@ button {
 .fynns-scroll-overlay-portal {
   position: fixed;
   inset: 0;
-  z-index: var(--fynns-z-sticky);
+  /* Above modal (60) so Dialog / Drawer / Sheet scroll hosts keep visible thumbs;
+   * below tooltip (8000). pointer-events:none so rails never steal clicks. */
+  z-index: var(--fynns-z-toast);
   pointer-events: none;
   overflow: hidden;
 }

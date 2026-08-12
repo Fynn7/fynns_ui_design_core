@@ -59,6 +59,7 @@
     "applyScrollbarCssVars",
     "buildLightThemeCssBlock",
     "buildRootCssVarsBlock",
+    "ensureOverlayScrollbars",
     "formatDateValue",
     "formatTimeValue",
     "fynnsVarName",
@@ -98,6 +99,7 @@
     "highlight_*": "CodeBlock registry helpers; Wave 3 adds minimal live registerHighlightLanguage path.",
     "overflow_*": "OVERFLOW_EPSILON + free functions; useOverflowBounds is demoed in Globals.",
     "busy_*": "afterNextPaint / yieldToMain / runBusyTask — Wave 3 live; useBusyTask already demoed.",
-    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome."
+    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome.",
+    "ensureOverlayScrollbars": "Auto-started from the barrel; token-skinned fixed portal thumbs for .fynns-scroll (native bars hidden)."
   }
 }
