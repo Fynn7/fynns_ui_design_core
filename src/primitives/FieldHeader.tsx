@@ -22,10 +22,9 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
  * flush with the control’s outer start edge. Inside `FieldBlock`, label→
  * control uses `--fynns-layout-field-hint-gap` (works for wrapped prompts).
  * Trailing `IconButton` sm centers on the label line without inflating the
- * row (same label→control breath as a plain header). Dense Card nesting:
- * when this is the first child of `Card` body, top inset shrinks to
- * `--fynns-space-xs` (see `.fynns-card-body:has(> .fynns-field-header)`).
- * Prefer `FieldBlock` when wrapping label + control together.
+ * row (same label→control breath as a plain header). Prefer `FieldBlock`
+ * when wrapping label + control together. Card body keeps full
+ * `--fynns-layout-content-pad-block` when this (or FieldStack) is first.
  */
 export function FieldHeader({
   label,

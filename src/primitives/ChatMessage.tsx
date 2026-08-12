@@ -1,4 +1,8 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import {
+  Children,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
 import { Button } from "./Button";
 import {
   ChatCitations,
@@ -32,8 +36,9 @@ export type ChatMessageProps = Omit<
    * answer text), `aria-busy`, and a polite live region. Does **not** generate
    * tokens — set `true` while the app appends `children`, then `false` when
    * the stream ends. No empty bubble / lone caret while waiting on thinking
-   * with no answer tokens yet. Ignored for `system`. Suppressed when `error`
-   * is set.
+   * with no answer tokens yet (including when children are only `null`
+   * slots from conditional JSX). Ignored for `system`. Suppressed when
+   * `error` is set.
    * @default false
    */
   streaming?: boolean;
@@ -85,6 +90,18 @@ function join(...parts: Array<string | false | null | undefined>) {
 }
 
 /**
+ * True when `children` has paint-worthy body content. Conditional JSX that
+ * resolves to only `null` / `false` / whitespace must not open the bubble or
+ * stream caret (`Children.toArray` drops nullish slots).
+ */
+function hasRenderableBody(children: ReactNode): boolean {
+  return Children.toArray(children).some((child) => {
+    if (typeof child === "string") return child.trim().length > 0;
+    return true;
+  });
+}
+
+/**
  * Chat row for user / assistant / system turns (ChatGPT-style).
  * `streaming` is a **UI prop only** — caret + incomplete semantics; no LLM.
  *
@@ -128,10 +145,7 @@ export function ChatMessage({
   const showAvatar = !isSystem && avatar != null;
   const showName = !isSystem && name != null;
   const showThinking = !isSystem && thinking != null;
-  const hasBody =
-    children != null &&
-    children !== false &&
-    !(typeof children === "string" && children.trim() === "");
+  const hasBody = hasRenderableBody(children);
   /** Caret only while tokens exist — never an empty bubble during thinking. */
   const showCursor = isStreaming && hasBody;
   const showBubble = hasBody;

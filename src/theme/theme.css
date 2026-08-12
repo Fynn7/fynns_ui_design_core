@@ -178,6 +178,7 @@
   --fynns-duration-scrollbar: 520ms;
   --fynns-duration-loading-spin: 750ms;
   --fynns-duration-presentation-hint: 1200ms;
+  --fynns-duration-thinking-shimmer: 2s;
   --fynns-duration-reduced-motion-spin: 2200ms;
   --fynns-ease-standard: ease;
   --fynns-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);

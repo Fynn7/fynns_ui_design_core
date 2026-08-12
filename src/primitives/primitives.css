@@ -3479,13 +3479,6 @@ a.fynns-breadcrumb-link:visited {
   margin-bottom: 0;
 }
 
-/* FieldHeader / FieldBlock / FieldStack as first child of Card body: dense top. */
-.fynns-card-body:has(> .fynns-field-header:first-child),
-.fynns-card-body:has(> .fynns-field-block:first-child),
-.fynns-card-body:has(> .fynns-field-stack:first-child) {
-  padding-top: var(--fynns-space-xs);
-}
-
 /* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
 /*
  * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
@@ -9262,6 +9255,27 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: var(--fynns-size-icon-target);
 }
 
+/*
+ * ChatThinking / ChatActivity — secondary ink band.
+ * Authentic: VS Code descriptionForeground + hover→foreground; Vercel
+ * muted→foreground; assistant-ui Reasoning panel ≈ foreground/55→/90.
+ * Full `--fynns-color-text` on our dark teal reads as a white flash — keep
+ * soft mixes for hover / active emphasis (no state-layer wash on triggers).
+ */
+.fynns-chat-thinking,
+.fynns-chat-activity {
+  --fynns-chat-secondary-hover: color-mix(
+    in srgb,
+    var(--fynns-color-text) 42%,
+    var(--fynns-color-text-muted)
+  );
+  --fynns-chat-secondary-emphasis: color-mix(
+    in srgb,
+    var(--fynns-color-text) 55%,
+    var(--fynns-color-text-muted)
+  );
+}
+
 /* ---------- ChatThinking — single-block reasoning disclosure ---------- */
 .fynns-chat-thinking {
   display: flex;
@@ -9290,6 +9304,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-weight: var(--fynns-font-weight-medium);
   line-height: var(--fynns-line-height-snug);
   text-align: start;
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-out);
 }
 
 .fynns-chat-thinking-trigger {
@@ -9306,8 +9321,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   outline-offset: var(--fynns-focus-ring-offset-control);
 }
 
+/* Hover = ink lift only (no state-layer / toolbar wash). */
 .fynns-chat-thinking-trigger:hover {
-  color: var(--fynns-color-text);
+  color: var(--fynns-chat-secondary-hover);
 }
 
 .fynns-chat-thinking-leading {
@@ -9346,22 +9362,32 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-thinking-label--streaming {
+  /* VS Code Copilot / Nuxt / AI Elements modal: muted rest + mid highlight.
+   * Peak is soft accent-into-muted — never full `--fynns-color-text` (reads as
+   * white flash on dark teal). Sweep ≈2s linear (`thinking-shimmer`). */
   background-image: linear-gradient(
     90deg,
     var(--fynns-color-text-muted) 0%,
-    var(--fynns-color-text) 45%,
-    var(--fynns-color-accent) 55%,
+    var(--fynns-color-text-muted) 30%,
+    color-mix(
+      in srgb,
+      var(--fynns-color-accent) 55%,
+      var(--fynns-color-text-muted)
+    )
+      50%,
+    var(--fynns-color-text-muted) 70%,
     var(--fynns-color-text-muted) 100%
   );
-  background-size: 220% 100%;
+  background-size: 400% 100%;
   background-clip: text;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
   animation:
     fynns-chat-thinking-label-swap var(--fynns-duration-base)
       var(--fynns-ease-emphasized) both,
-    fynns-chat-thinking-shimmer var(--fynns-duration-presentation-hint)
-      var(--fynns-ease-in-out) infinite;
+    fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear
+      infinite;
   animation-delay: 0s, var(--fynns-duration-base);
 }
 
@@ -9417,10 +9443,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 @keyframes fynns-chat-thinking-shimmer {
   0% {
-    background-position: 100% 50%;
+    background-position: 120% 0;
   }
   100% {
-    background-position: 0% 50%;
+    background-position: -120% 0;
   }
 }
 
@@ -9437,6 +9463,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     background-image: none;
     background-clip: border-box;
     -webkit-background-clip: border-box;
+    -webkit-text-fill-color: var(--fynns-color-text-muted);
     color: var(--fynns-color-text-muted);
   }
 
@@ -9474,6 +9501,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font: inherit;
   text-align: start;
   cursor: pointer;
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-out);
 }
 
 .fynns-chat-activity-trigger:focus {
@@ -9481,12 +9509,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
   border-radius: var(--fynns-radius-sm);
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
+/* Same soft secondary lift as ChatThinking — no wash, no full on-surface. */
 .fynns-chat-activity-trigger:hover {
-  color: var(--fynns-color-text);
+  color: var(--fynns-chat-secondary-hover);
 }
 
 .fynns-chat-activity-label {
@@ -9495,28 +9525,36 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: var(--fynns-font-weight-medium);
-  color: var(--fynns-color-text);
+  /* Inherit muted from `.fynns-chat-activity` — never full on-surface at rest. */
+  color: inherit;
 }
 
 .fynns-chat-activity-label--streaming {
   background-image: linear-gradient(
     90deg,
     var(--fynns-color-text-muted) 0%,
-    var(--fynns-color-text) 45%,
-    var(--fynns-color-accent) 55%,
+    var(--fynns-color-text-muted) 30%,
+    color-mix(
+      in srgb,
+      var(--fynns-color-accent) 55%,
+      var(--fynns-color-text-muted)
+    )
+      50%,
+    var(--fynns-color-text-muted) 70%,
     var(--fynns-color-text-muted) 100%
   );
-  background-size: 220% 100%;
+  background-size: 400% 100%;
   background-clip: text;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: transparent;
   animation: fynns-chat-thinking-shimmer
-    var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
+    var(--fynns-duration-thinking-shimmer) linear infinite;
 }
 
 .fynns-chat-activity-chevron {
   flex-shrink: 0;
-  color: var(--fynns-color-text-muted);
+  color: inherit;
   transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
@@ -9543,12 +9581,52 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 .fynns-chat-activity-step {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-chatmessage-activity-desc-gap);
+  max-width: 100%;
+  min-width: 0;
+}
+
+/*
+ * Icon | label(+artifact) band — one component shell per step row.
+ * Node pinned to the start edge so the rail still starts at icon bottom;
+ * label uses the same `--fynns-size-icon` line box so glyph ↔ copy centers
+ * match (no optical pad math).
+ */
+.fynns-chat-activity-step-row {
   display: grid;
   grid-template-columns: var(--fynns-size-icon) minmax(0, 1fr);
   column-gap: var(--fynns-chatmessage-activity-node-gap);
   align-items: start;
   max-width: 100%;
   min-width: 0;
+}
+
+/*
+ * Step enter while streaming (assistant-ui Reasoning panel):
+ * `fade-in slide-in-from-bottom-1 animate-in duration-300 fill-mode-both`.
+ * slide-in-from-bottom-1 ≈ 0.25rem; 300ms → nearest `--fynns-duration-slow`.
+ * Layout (flex gap) pushes later rows / answer down; we only soften the
+ * animated rows — no FLIP / View Transition dependency.
+ * Gated on `--streaming`: when streaming turns on, every step currently in
+ * the tree (including ones already mounted) runs enter once; later mounts
+ * while streaming also enter. Static completed trees (not streaming) skip.
+ */
+.fynns-chat-activity--streaming .fynns-chat-activity-step {
+  animation: fynns-chat-activity-step-enter var(--fynns-duration-slow)
+    var(--fynns-ease-emphasized) both;
+}
+
+@keyframes fynns-chat-activity-step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*
@@ -9582,6 +9660,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   height: var(--fynns-size-icon);
   color: var(--fynns-color-text-muted);
   background: transparent;
+  line-height: 0;
+}
+
+.fynns-chat-activity-node svg {
+  display: block;
+  flex-shrink: 0;
 }
 
 .fynns-chat-activity-mark {
@@ -9595,33 +9679,24 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
 }
 
-.fynns-chat-activity-main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chatmessage-activity-desc-gap);
-  min-width: 0;
-  padding-block: calc(
-    (
-        var(--fynns-size-icon) -
-          (
-            var(--fynns-chatmessage-name-size) *
-              var(--fynns-line-height-snug)
-          )
-      ) / 2
-  );
-}
-
 .fynns-chat-activity-headline {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  /* Start-align so a tall artifact cannot pull the label off the icon band. */
+  align-items: flex-start;
   gap: var(--fynns-chatmessage-activity-artifact-gap);
   min-width: 0;
+  min-height: var(--fynns-size-icon);
 }
 
 .fynns-chat-activity-step-label {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
   min-width: 0;
+  min-height: var(--fynns-size-icon);
   overflow-wrap: anywhere;
+  line-height: var(--fynns-line-height-snug);
 }
 
 .fynns-chat-activity-step--done .fynns-chat-activity-step-label,
@@ -9630,7 +9705,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-step--active .fynns-chat-activity-step-label {
-  color: var(--fynns-color-text);
+  /* Soft lift over muted siblings — not full `--fynns-color-text`. */
+  color: var(--fynns-chat-secondary-emphasis);
   font-weight: var(--fynns-font-weight-medium);
 }
 
@@ -9639,6 +9715,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-desc {
+  /* Indent under the label column (past icon + node gap). */
+  margin-inline-start: calc(
+    var(--fynns-size-icon) + var(--fynns-chatmessage-activity-node-gap)
+  );
   color: var(--fynns-color-text-muted);
   font-weight: var(--fynns-font-weight-regular);
   white-space: pre-wrap;
@@ -9659,6 +9739,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-artifact {
   display: inline-flex;
   align-items: center;
+  align-self: center;
   gap: var(--fynns-space-2xs);
   max-width: 100%;
   padding-inline: var(--fynns-chatmessage-activity-artifact-pad-inline);
@@ -9673,7 +9754,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 a.fynns-chat-activity-artifact:hover {
-  color: var(--fynns-color-text);
+  color: var(--fynns-chat-secondary-hover);
   border-color: var(--fynns-color-border-strong);
 }
 
@@ -9704,11 +9785,18 @@ a.fynns-chat-activity-artifact:hover {
     background: none;
     -webkit-background-clip: border-box;
     background-clip: border-box;
-    color: var(--fynns-color-text);
+    -webkit-text-fill-color: var(--fynns-color-text-muted);
+    color: var(--fynns-color-text-muted);
   }
 
   .fynns-chat-activity-mark {
     animation: none;
+  }
+
+  .fynns-chat-activity--streaming .fynns-chat-activity-step {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 
   .fynns-chat-activity-chevron {

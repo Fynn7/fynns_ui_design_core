@@ -100,6 +100,9 @@ export function ChatActivityArtifact({
 
 /**
  * One row in a `ChatActivity` tree — tool call, narrative beat, or pending.
+ * Icon | label(+artifact) share a dedicated `step-row` band so the glyph
+ * center matches the label line box (strict); description sits under the
+ * band, indented past the node column.
  */
 export function ChatActivityStep({
   status = "done",
@@ -129,18 +132,18 @@ export function ChatActivityStep({
       )}
       data-status={status}
     >
-      <span className="fynns-chat-activity-node" aria-hidden>
-        {leading}
-      </span>
-      <div className="fynns-chat-activity-main">
+      <div className="fynns-chat-activity-step-row">
+        <span className="fynns-chat-activity-node" aria-hidden>
+          {leading}
+        </span>
         <div className="fynns-chat-activity-headline">
           <span className="fynns-chat-activity-step-label">{label}</span>
           {artifact}
         </div>
-        {description != null && description !== "" ? (
-          <div className="fynns-chat-activity-desc">{description}</div>
-        ) : null}
       </div>
+      {description != null && description !== "" ? (
+        <div className="fynns-chat-activity-desc">{description}</div>
+      ) : null}
     </div>
   );
 }

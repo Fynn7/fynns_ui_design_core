@@ -55,10 +55,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
    wrapped prompts — do not rely on header min-height optical pad). Trailing
    actions stay on the label line (IconButton sm does not inflate the row).
-   Default `ghost`; dense forms may use `size="sm"`. As the first child of
-   `Card` body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
-   `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
-   Do not reinvent this with sandbox-only CSS.
+   Default `ghost`; dense forms may use `size="sm"`. Card / Collapsible
+   `chrome="card"` body keeps full `--fynns-layout-content-pad-block` (16dp)
+   even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
+   (do not crush to `space-xs` under the head hairline). Inline stays
+   `content-inset`. Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
    ancestors are real `Button` `ghost` `sm` (stadium + state-layer). Tooltips also describe *dynamic* state (e.g. why a control is
    disabled).
@@ -342,7 +343,7 @@ Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thum
 Fonts: three stacks only — see **Font families** below. Motion:
 `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
-scrollbar,loading-spin,presentation-hint,reduced-motion-spin}`.
+scrollbar,loading-spin,presentation-hint,thinking-shimmer,reduced-motion-spin}`.
 
 **Font families (`--fynns-font-*`) — when to use (agents / consumers):**
 
@@ -480,7 +481,8 @@ classes.
     notice (no pill); **`avatar` default omit**; user actions hover /
     focus-within (touch always); `streaming` = caret + `aria-busy` / polite
     live — no LLM; caret only while answer `children` has text (no empty
-    bubble / lone caret during thinking-only wait); caret height
+    bubble / lone caret during thinking-only wait — conditional `null`
+    child slots also count as empty); caret height
     `--fynns-chatmessage-cursor-height` (**`1lh`**
     of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
@@ -489,9 +491,15 @@ classes.
     Agent activity disclosure between `name` and the answer bubble
     (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool
     status via `streamingLabel` — not only “Thinking”; `.fynns-expand`
-    height morph — not Collapsible card chrome; muted trigger; streaming
-    = soft accent status mark + label shimmer / swap enter via
-    `--fynns-duration-presentation-hint`; `icon={null}` hides the mark;
+    height morph — not Collapsible card chrome; muted trigger).
+    **Secondary ink (dark teal):** rest = `text-muted`; hover / active
+    emphasis = soft `color-mix` into `text` (never full
+    `--fynns-color-text` — VS Code/Vercel jump muted→foreground, which
+    reads as a white flash here); no trigger state-layer wash. Streaming
+    = soft accent status mark (pulse `--fynns-duration-presentation-hint`)
+    + label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
+    muted base + accent-into-muted mid peak — never full `text`) + swap
+    enter (`--fynns-duration-base`); `icon={null}` hides the mark;
     force-open while streaming unless user pinned closed; auto-collapse
     once when done; user expand sticks; no body → static duration strip
     without chevron; caller owns thought `children` — core does **not**
@@ -502,9 +510,20 @@ classes.
     **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
     = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
     collapsible header + vertical rail + done wrench / active mark /
-    optional file capsule + description). Uncontrolled: force-open while
-    `streaming` and disable the header trigger so clicks cannot queue a
-    post-stream collapse. Also slots via
+    optional file capsule + description). Each step is its own
+    `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
+    (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
+    glyph and copy centers match). Same secondary-ink band as
+    ChatThinking (header label inherits muted; active step / artifact
+    hover use soft mixes — not full on-surface). While `streaming`, each
+    newly mounted steps — and any steps already in the tree when
+    `streaming` flips on — enter with fade + `translateY(0.25rem)` → 0 over
+    `--fynns-duration-slow` / `--fynns-ease-emphasized` (`fill-mode: both`;
+    assistant-ui Reasoning panel `duration-300` / `slide-in-from-bottom-1`
+    parity) — flex gap pushes later rows / answer down; static completed
+    trees (not streaming) skip the enter flash. Uncontrolled: force-open
+    while `streaming` and disable the header trigger so clicks cannot
+    queue a post-stream collapse. Also slots via
     `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
     `ChatThinking` for single-block reasoning — do **not** overload it
     into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
