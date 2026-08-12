@@ -697,8 +697,11 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
-  /* Form field chrome — not SearchBar capsule IconButton flush (4dp). */
-  padding-inline: var(--fynns-layout-field-pad-inline);
+  /* Same text inset as standalone Input / densified Select (capsule + field-pad). */
+  padding-inline: calc(
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
 }
 
 .fynns-field-shell--sm {
@@ -765,10 +768,15 @@
   border-radius: var(--fynns-radius-md);
   background: var(--fynns-color-surface-muted);
   color: var(--fynns-color-text);
-  /* Dense form label inset — layout field-pad, minus hairline. */
+  /*
+   * Text start matches densified Select: searchbar/capsule field pad (4dp) +
+   * trigger `space-md` / field-pad (12dp). Do **not** subtract hairline —
+   * that left Input optically tighter than Select in FieldStack forms.
+   */
   padding-block: var(--fynns-space-25);
   padding-inline: calc(
-    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
   );
   font: inherit;
   outline: none;
@@ -803,7 +811,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* Fit 32dp: no block pad (md uses space-25 inside 40dp). */
   padding-block: 0;
   padding-inline: calc(
-    var(--fynns-layout-field-pad-inline) - var(--fynns-border-hairline)
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
   );
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-tight);

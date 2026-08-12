@@ -1126,9 +1126,11 @@ export const LAYOUT_TOKENS = {
    */
   "capsule-chrome-pad-inline": "0.25rem",
   /**
-   * Horizontal pad for dense form fields (`Input` / `.fynns-field-shell`).
-   * Default = `space-md` (12dp). Do **not** reuse `capsule-chrome-pad-inline`
-   * here — that 4dp token is for SearchBar IconButton flush.
+   * Horizontal pad *step* for dense form fields (`Input` / `.fynns-field-shell`
+   * compose this with `capsule-chrome-pad-inline` for Select-matching text
+   * start — see primitives.css). Default = `space-md` (12dp). Do **not**
+   * reuse `capsule-chrome-pad-inline` alone here — that 4dp token is for
+   * SearchBar IconButton flush; Input CSS adds it on top of this step.
    */
   "field-pad-inline": "var(--fynns-space-md)",
   /**

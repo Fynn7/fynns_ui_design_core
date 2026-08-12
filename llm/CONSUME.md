@@ -223,7 +223,8 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   `--fynns-layout-capsule-chrome-pad-inline`. ChatComposer collapsed shell →
   `--fynns-chat-composer-pad-inline` / `pad-block` (see
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)). Dense form `Input` /
-  field-shell → `--fynns-layout-field-pad-inline`; `Textarea` also uses
+  field-shell → `capsule-chrome-pad-inline` + `field-pad-inline` (Select text
+  start parity); `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
