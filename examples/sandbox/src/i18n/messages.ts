@@ -258,6 +258,9 @@ const en = {
   "layoutChrome.stackGap": "Control stack",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap (8dp) — between ControlRows in one stack (tighter than unit-stack).",
+  "layoutChrome.stackFormGap": "Form-host control stack",
+  "layoutChrome.stackFormGapHint":
+    "--fynns-layout-control-stack-form-gap (12dp, aliases space-md) — Preference ControlRows in Dialog / Card / Collapsible body.",
   "layoutChrome.formClusterGap": "Form cluster",
   "layoutChrome.formClusterGapHint":
     "--fynns-layout-form-cluster-gap (32dp) — between adjacent FieldStacks (e.g. fields → switches).",
@@ -1522,6 +1525,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.stackGap": "控件栈",
   "layoutChrome.stackGapHint":
     "--fynns-layout-control-stack-gap（8dp）— 同一 stack 内 ControlRow（紧于 unit-stack）。",
+  "layoutChrome.stackFormGap": "表单宿主控件栈",
+  "layoutChrome.stackFormGapHint":
+    "--fynns-layout-control-stack-form-gap（12dp，别名 space-md）— Dialog / Card / Collapsible body 内 Preferences ControlRow。",
   "layoutChrome.formClusterGap": "表单簇",
   "layoutChrome.formClusterGapHint":
     "--fynns-layout-form-cluster-gap（32dp）— 相邻 FieldStack 之间（如字段簇 → 开关簇）。",

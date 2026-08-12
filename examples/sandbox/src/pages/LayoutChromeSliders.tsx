@@ -72,6 +72,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.stackGapHint",
     max: 32,
   },
+  "control-stack-form-gap": {
+    labelKey: "layoutChrome.stackFormGap",
+    hintKey: "layoutChrome.stackFormGapHint",
+    max: 32,
+  },
   "form-cluster-gap": {
     labelKey: "layoutChrome.formClusterGap",
     hintKey: "layoutChrome.formClusterGapHint",

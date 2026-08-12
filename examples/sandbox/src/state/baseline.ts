@@ -59,6 +59,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "unit-stack-gap",
   "field-hint-gap",
   "control-stack-gap",
+  "control-stack-form-gap",
   "form-cluster-gap",
   "control-row-gap",
   "control-row-column-gap",
@@ -137,6 +138,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "unit-stack-gap",
     "field-hint-gap",
     "control-stack-gap",
+    "control-stack-form-gap",
     "form-cluster-gap",
     "control-row-column-gap",
     "control-row-gap",
@@ -255,6 +257,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "field-hint-gap":
     "Field hint · control → supporting/error note (ControlBlock / FieldBlock / Input)",
   "control-stack-gap": "Toolbar rhythm · between ControlRows",
+  "control-stack-form-gap":
+    "Form-host ControlStack · Preference ControlRows (Dialog/Card; 12dp / space-md)",
   "form-cluster-gap":
     "Form clusters · between adjacent FieldStacks (fields → switches; 32dp)",
   "control-row-gap": "Toolbar rhythm · stacked label above controls",

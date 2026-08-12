@@ -207,7 +207,7 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   composer inset aliases the thread token). Dialog body block also uses
   content-inset. **Dialog ControlStack rows:** full-width `ControlStack` /
   `ControlRow` / track-only `Switch` (`label=""` + `ariaLabel`) — one visible
-  name per row. **Do not** copy Globals `#info-hint` (labeled Switch + trailing
+  name per row; form-host row gap is `--fynns-layout-control-stack-form-gap` (**12dp**). **Do not** copy Globals `#info-hint` (labeled Switch + trailing
   `InfoHint`) as a Preferences/Settings Dialog shell; do **not** stack
   `ControlRow` label + Switch visible label on the same row; do **not** add a
   second padding wrapper or toolbar `max-content` stack (Switch tracks must
