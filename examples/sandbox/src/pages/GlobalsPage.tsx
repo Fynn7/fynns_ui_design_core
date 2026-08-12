@@ -2940,13 +2940,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             maxHeight="8rem"
           />
           <CodeBlock
+            label={t("globals.codeBlockXmlLabel")}
+            language="xml"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={`<?xml version="1.0"?>\n<!-- sample sections -->\n<section name="intro">\n  Short supporting copy.\n</section>\n`}
+            maxHeight="8rem"
+          />
+          <CodeBlock
             variant="editable"
             label={t("globals.codeBlockEditableLabel")}
             language="ts"
             copyAriaLabel={t("globals.codeBlockCopy")}
             defaultValue={`export const accent = "var(--fynns-color-accent)";\n`}
             maxHeight="8rem"
-            rows={5}
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />

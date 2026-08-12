@@ -32,6 +32,8 @@ export type CodeLanguageId =
   | "cpp"
   | "css"
   | "json"
+  | "xml"
+  | "html"
   | "bash"
   | "sh"
   | "shell";

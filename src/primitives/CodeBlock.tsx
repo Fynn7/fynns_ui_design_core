@@ -1,5 +1,6 @@
 import {
   startTransition,
+  useCallback,
   useDeferredValue,
   useEffect,
   useLayoutEffect,
@@ -29,9 +30,11 @@ type CodeBlockShared = Omit<
 > & {
   /**
    * Language id for syntax highlighting (`ts` / `tsx` / `js` / `jsx` / `py` /
-   * `cpp` / `css` / `json` / `bash` / `sh`, or a consumer-registered id).
-   * Also sets `data-language` on the root. Unknown values render as plain mono
-   * unless `highlightProfile` is set.
+   * `cpp` / `css` / `json` / `xml` / `html` / `bash` / `sh`, or a
+   * consumer-registered id). Also sets `data-language` on the root. Unknown
+   * values render as plain mono unless `highlightProfile` is set.
+   * **Not inferred from `label`** — a filename like `prompt.xml` still needs
+   * `language="xml"` (see `llm/AGENT_INTERFACES.md`).
    */
   language?: string;
   /**
@@ -107,10 +110,15 @@ export type CodeBlockEditableProps = CodeBlockShared & {
   readOnly?: boolean;
   placeholder?: string;
   /**
-   * Intrinsic textarea row floor. Default `1` so fill hosts are not inflated
-   * by a large `rows` intrinsic size — pass a larger value for non-fill demos.
-   * Stretching the caret layer in a definite-height column is host CSS
-   * (`textarea { height: 100% }`), not core percentage height on the editor.
+   * When true (default), editable height tracks content from `rows` (min
+   * floor, default 1) up to `maxHeight`. Pass `false` for a fixed `rows`
+   * well, or when a fill host stretches the textarea with `height: 100%`.
+   */
+  autoGrow?: boolean;
+  /**
+   * Intrinsic textarea row floor (also empty-state height when `autoGrow`).
+   * Default `1` so short copy does not sit in a tall well. With
+   * `autoGrow={false}`, sets the fixed row count.
    */
   rows?: number;
   name?: string;
@@ -220,6 +228,10 @@ function assertCodeBlockChrome(
  * gated with `data-scrollable` (same idea as `ChatComposer`) so a 1px
  * scrollHeight/clientHeight mismatch from padding / trailing newlines does
  * not paint an early thumb while copy still fits the host.
+ *
+ * Editable height defaults to **autoGrow** (content-sized from `rows` floor
+ * up to `maxHeight`); pass `autoGrow={false}` for a fixed well or fill hosts
+ * that set `textarea { height: 100% }`.
  */
 export function CodeBlock(props: CodeBlockProps) {
   const editable = props.variant === "editable";
@@ -372,12 +384,55 @@ export function CodeBlock(props: CodeBlockProps) {
     };
   }, [editable, wrap, maxHeightCss]);
 
-  /* Remeasure overflow after content edits without tearing down the RO.
-     After deferred highlight catches up, re-copy scroll so ink stays locked. */
+  const disabled = editable ? props.disabled : undefined;
+  const readOnly = editable ? props.readOnly : undefined;
+  const placeholder = editable ? props.placeholder : undefined;
+  const rows = editable ? (props.rows ?? 1) : undefined;
+  const autoGrow = editable ? (props.autoGrow ?? true) : false;
+  const name = editable ? props.name : undefined;
+  const ariaLabelProp = editable ? props["aria-label"] : undefined;
+
+  const syncEditableHeight = useCallback(() => {
+    const el = inputRef.current;
+    if (!el || !editable) return;
+    if (!autoGrow) {
+      el.style.height = "";
+      return;
+    }
+    const cs = getComputedStyle(el);
+    const lineHeight =
+      Number.parseFloat(cs.lineHeight) ||
+      Number.parseFloat(cs.fontSize) * 1.5 ||
+      18;
+    const padY =
+      (Number.parseFloat(cs.paddingTop) || 0) +
+      (Number.parseFloat(cs.paddingBottom) || 0);
+    const borderY =
+      (Number.parseFloat(cs.borderTopWidth) || 0) +
+      (Number.parseFloat(cs.borderBottomWidth) || 0);
+    const minRows = typeof rows === "number" && rows > 0 ? rows : 1;
+    const floor = minRows * lineHeight + padY + borderY;
+    const cssMax = Number.parseFloat(cs.maxHeight);
+    const hasCssMax = Number.isFinite(cssMax) && cssMax > 0;
+    const cap = hasCssMax ? cssMax : Number.POSITIVE_INFINITY;
+
+    if (!el.value) {
+      el.style.height = `${floor}px`;
+      return;
+    }
+
+    el.style.height = "0px";
+    const contentBox = el.scrollHeight + borderY;
+    const next = Math.min(Math.max(contentBox, floor), cap);
+    el.style.height = `${next}px`;
+  }, [autoGrow, editable, rows]);
+
+  /* Content / autoGrow / deferred highlight: resize → overflow gate → scroll lock. */
   useLayoutEffect(() => {
+    syncEditableHeight();
     updateScrollableRef.current();
     if (editable) syncHighlightScroll();
-  }, [editable, source, deferredSource]);
+  }, [autoGrow, editable, source, deferredSource, maxHeightCss, syncEditableHeight]);
 
   const flushNotify = (next: string) => {
     if (!onChangeProp) return;
@@ -413,6 +468,9 @@ export function CodeBlock(props: CodeBlockProps) {
     const next = event.target.value;
     emittedRef.current = next;
     setEditableText(next);
+    /* DOM already has `next`; resize before paint (layout effect also re-runs). */
+    syncEditableHeight();
+    updateScrollableRef.current();
     if (!onChangeProp) return;
     /* Coalesce parent updates while typing — a controlled CodeBlock inside a
        large tree must not re-render that tree on every key. */
@@ -465,13 +523,6 @@ export function CodeBlock(props: CodeBlockProps) {
     ? highlightSource(highlightText, language, highlightProfile)
     : highlightText;
 
-  const disabled = editable ? props.disabled : undefined;
-  const readOnly = editable ? props.readOnly : undefined;
-  const placeholder = editable ? props.placeholder : undefined;
-  const rows = editable ? props.rows : undefined;
-  const name = editable ? props.name : undefined;
-  const ariaLabelProp = editable ? props["aria-label"] : undefined;
-
   const rootProps = omitKnownKeys(props, [
     "variant",
     "language",
@@ -491,6 +542,7 @@ export function CodeBlock(props: CodeBlockProps) {
     "readOnly",
     "placeholder",
     "rows",
+    "autoGrow",
     "name",
     "aria-label",
   ]);
@@ -550,9 +602,9 @@ export function CodeBlock(props: CodeBlockProps) {
             disabled={disabled}
             readOnly={readOnly}
             placeholder={placeholder}
-            /* Intrinsic row floor — fill hosts stretch via flex + optional
-               host `textarea { height: 100% }`; pass a larger `rows` when the
-               block is not in a definite-height column. */
+            /* Intrinsic row floor — with autoGrow (default) this is the min
+               height; pass autoGrow={false} for a fixed well or fill hosts
+               that stretch via flex + optional host `textarea { height: 100% }`. */
             rows={rows ?? 1}
             name={name}
             aria-label={ariaLabelProp ?? label}

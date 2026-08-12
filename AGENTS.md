@@ -751,20 +751,22 @@ classes.
   `label=""`); `editable` same head rules when `label` is set, omit `label`
   for float-copy; live highlight via pre backdrop + transparent textarea —
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
-  `onChange` coalesced while typing / flushed on blur); editable highlight
-  spans inherit textarea font-weight (no bold keyword/module metrics —
-  soft-wrap must match caret); fill hosts stretch the CodeBlock root in a
-  flex column and may set `textarea { height: 100% }` in host CSS (do not
-  put percentage height on the editor in core — collapses when the parent
-  height is indefinite); default `rows={1}` (pass a larger `rows` when not
-  height-resolved); `wrap` defaults
+  `onChange` coalesced while typing / flushed on blur); editable height
+  defaults to **autoGrow** (content-sized from `rows` floor, default `1`,
+  up to `maxHeight`; `autoGrow={false}` for a fixed well or fill hosts that
+  set `textarea { height: 100% }`); **`label` ≠ `language`** — filename chrome
+  does not select a highlighter; always pass matching `language` /
+  `highlightProfile` (see [`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md));
+  editable highlight spans inherit
+  textarea font-weight (no bold keyword/module metrics — soft-wrap must
+  match caret); `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); vertical thumb only when content exceeds the host
   (`data-scrollable`, same gate as ChatComposer — avoids early bars from
   pad / trailing-newline noise); focus = quiet Input-like border
   (`--fynns-focus-border-mix`), not an inset ring;
   supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
-  `css`/`json`/`bash`/… or consumer `registerHighlightLanguage` /
+  `css`/`json`/`xml`/`html`/`bash`/… or consumer `registerHighlightLanguage` /
   `highlightProfile`); unknown → plain mono;
   copy fades in on hover, keyboard via :focus-visible), Stepper, Dropzone, Avatar /
   AvatarGroup

@@ -162,8 +162,30 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 | 有真实文件名 / 标题 | `variant="default"`（可省略）+ **非空** `label` → 标题栏 + 分割线 + 复制 |
 | **没有**文件名 / 标题 | **`variant="plain"`** → 只有外框 + 悬停复制（无标题栏、无分割线） |
 | 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（浮层复制） |
+| 语法高亮 | **必须**另传 `language`（或 `highlightProfile` / 已 `registerHighlightLanguage`） |
+| 全屏 / flex 填满编辑器 | **`autoGrow={false}`** + 宿主把 CodeBlock / `textarea` 拉满（默认 autoGrow 跟内容长） |
 
-**禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”。空头分割线是消费仓 bug，不是设计。
+**`label` ≠ `language`（硬）：** `label` 只做标题栏文件名，**不会**根据 `.xml` / `.json` /
+`.ts` 后缀选分词器。漏传 / 未知 `language` → 整块纯 mono（看起来「没高亮」）。
+内置：`ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`/…；应用 DSL → 子模块
+`llm/AGENT_INTERFACES.md`。
+
+```tsx
+// 错 — 标题像 XML，实际无高亮
+<CodeBlock variant="editable" label="system-prompt.xml" value={prompt} />
+
+// 对
+<CodeBlock
+  variant="editable"
+  label="system-prompt.xml"
+  language="xml"
+  autoGrow={false}  // 仅填满宿主需要
+  value={prompt}
+/>
+```
+
+**禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”；
+只写 `label="*.xml"` 却省略 `language`。
 
 ## 改 UI 前检查清单
 
@@ -171,5 +193,6 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
 3. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
 4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
+   **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
 5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇（对照 `#form-recipe`），而非平铺？
 6. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

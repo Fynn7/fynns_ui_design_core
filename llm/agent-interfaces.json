@@ -103,7 +103,7 @@
   ],
   "technical": {
     "codeHighlight": {
-      "summary": "Zero-dep CodeBlock highlighting. Built-ins (ts/js/py/cpp/css/json/bash) plus consumer-registered SimpleHighlightProfile for line-command DSLs (Raycaster .gsc shape).",
+      "summary": "Zero-dep CodeBlock highlighting. Built-ins (ts/js/py/cpp/css/json/xml/html/bash) plus consumer-registered SimpleHighlightProfile for line-command DSLs (Raycaster .gsc shape). label is chrome only — agents must pass language (or profile) explicitly; omitted/unknown → plain mono.",
       "colors": "--fynns-code-* (CODE_TOKENS); no Shiki/Prism/Monaco in core",
       "exports": [
         "SimpleHighlightProfile",
@@ -114,7 +114,9 @@
         "highlightCode",
         "isHighlightableLanguage",
         "CodeBlock.highlightProfile",
-        "CodeBlock.variant=editable"
+        "CodeBlock.language",
+        "CodeBlock.variant=editable",
+        "CodeBlock.autoGrow"
       ],
       "roleMap": {
         "keyword": "keyword",
@@ -125,9 +127,14 @@
         "comment": "comment",
         "variable": "variable",
         "operator": "operator",
-        "unknownLineHead": "invalid"
+        "unknownLineHead": "invalid",
+        "xmlTagName": "keyword",
+        "xmlAttribute": "property",
+        "xmlString": "string",
+        "xmlComment": "comment",
+        "xmlEntity": "escape"
       },
-      "note": "Core does not ship a built-in gsc language. Consumers register their own command/keyword lists (e.g. from Raycaster signatures)."
+      "note": "Core does not ship a built-in gsc language. Consumers register their own command/keyword lists (e.g. from Raycaster signatures). Never treat CodeBlock label filename as a language detector — see AGENT_INTERFACES.md."
     }
   }
 }

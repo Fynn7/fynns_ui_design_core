@@ -349,6 +349,14 @@ const JSON_PROFILE: LangProfile = {
   blockComment: null,
 };
 
+const MARKUP_PROFILE: LangProfile = {
+  keywords: setOf([]),
+  types: setOf([]),
+  constants: setOf([]),
+  lineComment: null,
+  blockComment: null,
+};
+
 const BASH_PROFILE: LangProfile = {
   keywords: setOf(BASH_KEYWORDS),
   types: setOf([]),
@@ -384,6 +392,9 @@ const ALIASES: Record<string, CodeLanguageId> = {
   c: "cpp",
   css: "css",
   json: "json",
+  xml: "xml",
+  html: "html",
+  htm: "html",
   bash: "bash",
   sh: "sh",
   shell: "shell",
@@ -411,6 +422,10 @@ export function profileFor(language: CodeLanguageId): LangProfile {
       return CSS_PROFILE;
     case "json":
       return JSON_PROFILE;
+    case "xml":
+    case "html":
+      /* Markup uses tokenizeMarkup in highlightCode — profile unused. */
+      return MARKUP_PROFILE;
     case "bash":
     case "sh":
     case "shell":
