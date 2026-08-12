@@ -146,7 +146,7 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
           {t("settings.languageTitle")}
         </h2>
         <p className="sandbox-templates-lead">{t("settings.languageLead")}</p>
-        <LanguageSwitcher variant="segmented" />
+        <LanguageSwitcher variant="settings" />
       </section>
 
       <header className="sandbox-templates-hero">

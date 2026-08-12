@@ -160,6 +160,12 @@
   color: var(--fynns-color-text);
 }
 
+/* Templates language field — form Select, not a segmented toggle. */
+.sandbox-language-select {
+  width: fit-content;
+  max-width: 100%;
+}
+
 .sandbox-body {
   display: flex;
   flex: 1;
