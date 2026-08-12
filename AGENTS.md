@@ -53,10 +53,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `Tooltip` above the control — not overlaid on the textarea corner). Label
    text is flush with the control’s outer start edge. Label→control gap is
    `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
-   wrapped prompts — do not rely on header min-height optical pad). With
-   trailing actions, the header row grows for `IconButton` sm. Default
-   `ghost`; dense forms may use `size="sm"`. As the first child of `Card`
-   body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
+   wrapped prompts — do not rely on header min-height optical pad). Trailing
+   actions stay on the label line (IconButton sm does not inflate the row).
+   Default `ghost`; dense forms may use `size="sm"`. As the first child of
+   `Card` body, top inset shrinks to `--fynns-space-xs` (Card body block pad is
    `--fynns-layout-content-pad-block` at 16dp; inline stays `content-inset`).
    Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -189,9 +189,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
-  / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (8dp);
-  FieldBlocks with a description/error hint open the next sibling to
-  `form-cluster-gap` (32dp — same step as adjacent FieldStacks); sibling
+  / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (12dp);
+  FieldBlocks with description/error (no choice cluster) open the next
+  sibling to `unit-stack-gap` (16dp); FieldBlocks that host a
+  `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
   ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
   horizontal `Divider` between adjacent FieldStacks on kind jumps. Live tree:
   sandbox `#form-recipe`.
@@ -793,7 +794,7 @@ classes.
   (`description?` / `errorText?` under the control), **FieldStack** (**strongly
   recommended** invisible cluster: group consecutive form units by **semantic
   kind** — e.g. all identity FieldBlocks in one stack, all Preference
-  ControlBlocks in another — gap `--fynns-layout-field-stack-gap` / 8dp;
+  ControlBlocks in another — gap `--fynns-layout-field-stack-gap` / 12dp;
   adjacent stacks → `form-cluster-gap` / 32dp; live `#form-recipe`),
   `.fynns-unit-stack`
   (CSS host — purged `UnitStack` replacement; sibling **units** only — not a
@@ -864,7 +865,7 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**8dp**); **with** description/error → next sibling visual **32dp** (`form-cluster-gap`) |
+  | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
   | Vertical stacked **units** / other Card siblings (`.fynns-unit-stack`, intro, Checkbox, …) | `--fynns-layout-unit-stack-gap` (**16dp**) |
@@ -878,11 +879,12 @@ classes.
     Textarea / Otp `FieldBlock`s, **or** a same-kind choice cluster
     (`Radio` single-select, `Checkbox` multi-select, and/or `Slider` under
     `FieldBlock`s), **or** Preference `ControlBlock`s (Switch + note).
-    Inside: plain **FieldBlock**s keep `field-stack-gap` (**8dp**); FieldBlocks
-    with description/error open the next sibling to `form-cluster-gap`
-    (**32dp** — same step as adjacent FieldStacks); sibling **ControlBlock**s
-    open to `unit-stack-gap` (**16dp**) so Switch+note units breathe. Choice
-    lists use
+    Inside: plain **FieldBlock**s keep `field-stack-gap` (**12dp**); FieldBlocks
+    with description/error (no choice cluster) open the next sibling to
+    `unit-stack-gap` (**16dp**); FieldBlocks that host a
+    `.fynns-control-cluster` open to `form-cluster-gap` (**32dp**); sibling
+    **ControlBlock**s open to `unit-stack-gap` (**16dp**) so Switch+note
+    units breathe. Choice lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
     `ControlStack` — that grid auto-flows into label|control columns).
     Stack rows share a dense 2rem **min-height** (option floor) and `space-xs`
@@ -895,10 +897,10 @@ classes.
   - **Kind jump → adjacent `FieldStack`s + `Divider` (strongly recommended):**
     e.g. identity fields → radio/checkbox choices → preference switches.
     Between stacks: `form-cluster-gap` (**32dp**) **and** a horizontal
-    `Divider` so the topic change reads as a hard partition (choice+hint
-    FieldBlocks also use the cluster step — spacing alone without FieldStack
-    / Divider is not enough). Card / Collapsible / Dialog body
-    `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
+    `Divider` so the topic change reads as a hard partition (choice-cluster
+    FieldBlocks also use the cluster step between siblings — spacing alone
+    without FieldStack / Divider is not enough). Card / Collapsible / Dialog
+    body `unit-stack-gap` stays **16dp** for intro / lone Checkbox / actions /
     other non-cluster siblings.
   - **Control + its narrative** stay one unit → `ControlBlock` (`description` /
     `errorText`). Never a loose muted `<p>` under `ControlStack`.

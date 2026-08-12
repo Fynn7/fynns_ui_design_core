@@ -94,7 +94,7 @@ FillColumn。
 
 | 场景 | 做法 |
 | --- | --- |
-| 同一种控件簇（连续身份字段、连续 Preference 开关…） | 包进**一个** `FieldStack`；无 hint 的 FieldBlock 兄弟 **8dp**；带 description/error 的 FieldBlock 开到下一兄弟 **32dp**（`form-cluster-gap`）；ControlBlock 兄弟 **16dp** |
+| 同一种控件簇（连续身份字段、连续 Preference 开关…） | 包进**一个** `FieldStack`；普通 FieldBlock **12dp**；仅有 description/error → 下一兄弟 **16dp**；含 `.fynns-control-cluster` → 下一兄弟 **32dp**；ControlBlock 兄弟 **16dp** |
 | 种类切换（字段簇 → 选择簇 → 开关簇） | **相邻**两个 `FieldStack` + 中间放水平 **`Divider`**（强推荐；簇间仍按 `form-cluster-gap` 32dp） |
 | 控件 + 说明文案 | `ControlBlock` / `FieldBlock` 的 `description`（禁止自造 muted `<p>`） |
 | 其它兄弟（intro / Checkbox / 底栏） | Card body `unit-stack-gap`（16dp） |

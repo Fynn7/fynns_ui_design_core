@@ -98,15 +98,16 @@ ring can paint before heavy work).
   (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
   (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. **Form
   options by semantic kind → `FieldStack`** (strongly recommended): plain
-  FieldBlocks keep `field-stack-gap` (8dp); hinted FieldBlocks open the next
-  sibling to `form-cluster-gap` (32dp); ControlBlocks to `unit-stack-gap`
-  (16dp); adjacent stacks get `form-cluster-gap` **plus a horizontal
-  `Divider`** on kind jumps. Do **not** flatten multi-topic forms
-  as bare Card siblings — copy `#form-recipe`
-  (`AGENTS.md` **FieldStack semantic clusters**). Form control → hint:
-  `--fynns-layout-field-hint-gap` / `FieldHint`. Nested surface
-  wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap` (plain ≠
-  flush).
+  FieldBlocks keep `field-stack-gap` (12dp); description/error (no choice
+  cluster) opens the next sibling to `unit-stack-gap` (16dp); FieldBlocks
+  with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
+  ControlBlocks to `unit-stack-gap` (16dp); adjacent stacks get
+  `form-cluster-gap` **plus a horizontal `Divider`** on kind jumps. Do
+  **not** flatten multi-topic forms as bare Card siblings — copy
+  `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
+  control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
+  surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
+  (plain ≠ flush).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).

@@ -21,11 +21,12 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * Preference ControlBlocks; …). Do not leave a flat
  * Card-body list of FieldBlocks / ControlBlocks across topics.
  *
- * Gap base is `--fynns-layout-field-stack-gap` (8dp). Plain **FieldBlock**s
- * (no description/error) stay at 8dp. **FieldBlock**s with a trailing hint
- * open the following sibling to `--fynns-layout-form-cluster-gap` (**32dp** —
- * same step as adjacent FieldStacks). Sibling **ControlBlock**s open to
- * `--fynns-layout-unit-stack-gap` (16dp) so Switch+note units breathe.
+ * Gap base is `--fynns-layout-field-stack-gap` (**12dp**). Plain **FieldBlock**s
+ * stay at 12dp. **FieldBlock**s with a trailing description/error (and no
+ * choice cluster) open the next sibling to `--fynns-layout-unit-stack-gap`
+ * (**16dp**). **FieldBlock**s that host a `.fynns-control-cluster` open to
+ * `--fynns-layout-form-cluster-gap` (**32dp**). Sibling **ControlBlock**s
+ * open to unit-stack (16dp) so Switch+note units breathe.
  *
  * **Strongly recommended between FieldStacks:** insert a horizontal `Divider`
  * on kind jumps (identity → choices → preferences). Card / Collapsible /

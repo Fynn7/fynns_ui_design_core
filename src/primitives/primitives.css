@@ -3413,23 +3413,16 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
 .fynns-field-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* Default: no optical empty shell — label→control gap lives on
-   * `.fynns-field-block__main` (`field-hint-gap`). With trailing actions,
-   * restore IconButton sm row geometry below. */
+  /* Label→control gap lives on `.fynns-field-block__main` (`field-hint-gap`).
+   * Trailing IconButton sm must not inflate this row — see `__actions`. */
   box-sizing: border-box;
   min-height: 0;
   padding-block: 0;
   min-width: 0;
   width: 100%;
-}
-
-.fynns-field-header:has(> .fynns-field-header__actions) {
-  align-items: center;
-  min-height: calc(2rem + 2 * var(--fynns-space-2xs));
-  padding-block: var(--fynns-space-2xs);
 }
 
 .fynns-field-header__label {
@@ -3446,6 +3439,19 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   gap: var(--fynns-space-2xs);
   flex-shrink: 0;
+  /* Zero-height host: keep the label row as tall as plain text headers
+   * (Display name). IconButton sm centers on the label line box. */
+  height: 0;
+  overflow: visible;
+}
+
+.fynns-field-header__actions .fynns-icon-button {
+  margin-block: calc(
+    (
+        var(--fynns-font-size-sm) * var(--fynns-line-height-snug) - 2rem
+      ) /
+      2
+  );
 }
 
 .fynns-field-block {
@@ -3483,7 +3489,7 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
 /*
  * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
- * ControlBlocks) share field-stack-gap (8dp). Adjacent FieldStacks target
+ * ControlBlocks) share field-stack-gap (12dp). Adjacent FieldStacks target
  * form-cluster-gap (32dp). Default margin is the full cluster step (bare
  * hosts). Card / Collapsible / Dialog body / `.fynns-unit-stack` already
  * contribute unit-stack-gap — those hosts only add the remainder.
@@ -3511,13 +3517,21 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Plain FieldBlocks (no hint) keep field-stack-gap (8dp). FieldBlock +
- * description/error opens to form-cluster-gap (32dp) — same step as adjacent
- * FieldStacks — so choice+hint rows breathe. ControlBlock + note stays at
- * unit-stack (16dp). Prefer a `Divider` between FieldStacks for kind jumps
- * (see AGENTS.md FieldStack semantic clusters).
+ * Plain FieldBlocks keep field-stack-gap (12dp). FieldBlock + description/error
+ * (no choice cluster) opens the next sibling to unit-stack (16dp) so hint copy
+ * does not collide with the next label. FieldBlocks that host a
+ * `.fynns-control-cluster` open to form-cluster-gap (32dp). ControlBlock +
+ * note stays at unit-stack (16dp). Prefer a `Divider` between FieldStacks.
  */
-.fynns-field-stack > .fynns-field-block:has(> .fynns-field-hint) + .fynns-field-block {
+.fynns-field-stack
+  > .fynns-field-block:has(> .fynns-field-hint):not(:has(.fynns-control-cluster))
+  + .fynns-field-block {
+  margin-block-start: calc(
+    var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
+.fynns-field-stack > .fynns-field-block:has(.fynns-control-cluster) + .fynns-field-block {
   margin-block-start: calc(
     var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-field-stack-gap)
   );
