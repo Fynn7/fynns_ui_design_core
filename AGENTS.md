@@ -830,7 +830,7 @@ classes.
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
-  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-md`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
+  | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-sm`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
@@ -869,10 +869,12 @@ classes.
     units breathe. Choice lists use
     `.fynns-control-cluster--stack` (not bare radios in form-host
     `ControlStack` — that grid auto-flows into label|control columns).
-    Stack rows share a dense 2rem min-height and `space-xs` (4dp) gap so
-    Radio-only and Other+`Input` `sm` rows keep even, tight rhythm. Radio
-    **Other** + free-text `Input` `sm` stay one row via
-    `.fynns-control-cluster--nowrap` (Input shrinks; never wrap).
+    Stack rows share a dense 2rem min-height and `space-xs` (4dp) gap.
+    Radio **Other** + free-text `Input` `sm` use
+    `.fynns-control-cluster--choice-extra`: Google Forms-style **same-row**
+    short field beside the option; keep the Input mounted — **`disabled`
+    when Other is not selected** (preserve draft text; enable when Other
+    is selected).
   - **Kind jump → adjacent `FieldStack`s:** e.g. identity fields →
     radio/checkbox choices → preference switches. Between stacks:
     `form-cluster-gap` (**32dp**). That wider gap is
@@ -962,7 +964,7 @@ classes.
   **block-end** `0`; confirm head **block-start** full `dialog-inset`;
   body block-end / no-head bodies still use `--fynns-layout-content-inset`.
   **Inter-section optical pads** (not outer column insets) may use space
-  tokens: `head + body` pad-top `space-md`; foot **block-end** `space-lg`
+  tokens: `head + body` pad-top `space-sm`; foot **block-end** `space-lg`
   (under 40dp action Buttons). (**no** head|body hairline.)
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack

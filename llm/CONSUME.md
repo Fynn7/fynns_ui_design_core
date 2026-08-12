@@ -237,7 +237,9 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   ControlBlocks open to visual `unit-stack-gap` 16dp; adjacent FieldStacks
   use `form-cluster-gap` (32dp); other Card / Collapsible siblings use
   `unit-stack-gap` (16dp). Choice lists use `.fynns-control-cluster--stack`
-  (+ `--nowrap` for Other+Input). Do **not** flatten multi-topic forms as
+  (`--choice-extra` = Google-style Other+Input same-row; keep Input mounted,
+  `disabled` when Other is not selected — draft text preserved). Do **not**
+  flatten multi-topic forms as
   bare siblings or invent muted subtitle classes. Live tree: sandbox
   `#form-recipe` (Card / Collapsible / Dialog) / AGENTS.md **FieldStack
   semantic clusters**. Outside Card use `.fynns-unit-stack`.
