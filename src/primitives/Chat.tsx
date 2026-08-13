@@ -188,7 +188,7 @@ export type ChatScrollToBottomProps = {
   className?: string;
 };
 
-/** Circular ↓ control above the composer when the thread is scrolled up. */
+/** Circular ↓ control above the live composer when the thread is scrolled up. */
 export function ChatScrollToBottom({
   label = "Scroll to bottom",
   className,

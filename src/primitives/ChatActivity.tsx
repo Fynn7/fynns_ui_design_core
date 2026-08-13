@@ -5,9 +5,11 @@ import {
   type HTMLAttributes,
   type ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -76,33 +78,70 @@ type ChatActivityStreamValue = {
   streaming: boolean;
   /** Increments each time `streaming` goes false → true so done steps replay the min-busy hold. */
   cycle: number;
+  index: number;
+  isLast: boolean;
   /**
-   * Only the last step in the tree plays enter on mount. Earlier siblings
-   * that appear in the same commit (instant-done rows) skip the fade/slide
-   * so the whole tree does not re-animate as a block.
+   * True on the first paint where an earlier sibling is a newly mounted
+   * instant-done row (will hold then complete). Last step stays queued
+   * until that settle finishes so complete + enter never overlap.
    */
-  enterOnMount: boolean;
+  priorWillHold: boolean;
+  /**
+   * True on the first paint where an earlier sibling is flipping
+   * `active` → `done` (complete one-shot, no hold).
+   */
+  priorWillComplete: boolean;
+  /** True while any earlier sibling is still in the min-busy hold or complete. */
+  priorHolding: boolean;
+  reportHold: (index: number, holding: boolean) => void;
 };
 
 const ChatActivityStream = createContext<ChatActivityStreamValue>({
   streaming: false,
   cycle: 0,
-  enterOnMount: false,
+  index: 0,
+  isLast: false,
+  priorWillHold: false,
+  priorWillComplete: false,
+  priorHolding: false,
+  reportHold: () => {},
 });
 
-function readActivityMinBusyMs(el: Element | null): number {
-  if (!el || typeof window === "undefined") return 1200;
+function childKey(child: ReactNode, index: number): string {
+  return isValidElement(child) && child.key != null
+    ? String(child.key)
+    : String(index);
+}
+
+function childStepStatus(child: ReactNode): ChatActivityStepStatus | undefined {
+  if (!isValidElement(child)) return undefined;
+  return (child.props as ChatActivityStepProps).status ?? "done";
+}
+
+function readTokenMs(
+  el: Element | null,
+  prop: string,
+  fallback: number,
+): number {
+  if (!el || typeof window === "undefined") return fallback;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return 0;
   const style = getComputedStyle(el);
-  let raw = style
-    .getPropertyValue("--fynns-chatmessage-activity-step-min-busy")
-    .trim();
+  let raw = style.getPropertyValue(prop).trim();
   const nested = raw.match(/^var\((--[^),]+)/);
   if (nested) raw = style.getPropertyValue(nested[1]).trim();
-  if (!raw) return 1200;
-  if (raw.endsWith("ms")) return Math.max(0, Number.parseFloat(raw) || 1200);
-  if (raw.endsWith("s")) return Math.max(0, (Number.parseFloat(raw) || 1.2) * 1000);
-  return 1200;
+  if (!raw) return fallback;
+  if (raw.endsWith("ms")) return Math.max(0, Number.parseFloat(raw) || fallback);
+  if (raw.endsWith("s")) {
+    return Math.max(0, (Number.parseFloat(raw) || fallback / 1000) * 1000);
+  }
+  return fallback;
+}
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 /**
@@ -141,9 +180,16 @@ export function ChatActivityArtifact({
 
 /**
  * One row in a `ChatActivity` tree — tool call, narrative beat, or pending.
- * Icon | label(+artifact) share a dedicated `step-row` band so the glyph
- * center matches the label line box (strict); description sits under the
- * band, indented past the node column.
+ * Icon | copy share a dedicated `step-row` band so the glyph center
+ * matches the label line box. New streaming rows height-morph via
+ * `.fynns-expand` (`0fr`→`1fr`) with the **whole step faded** (opacity
+ * only — no translateY). Opaque clip-wipe inside `overflow: hidden`
+ * reads as a vertical bounce; fade hides that. Node + rail stay in the
+ * layout box.
+ * Description sits under the title in that column. Hold keeps the
+ * artifact in layout (`visibility: hidden`) so the row does not jump
+ * when the capsule appears. Hold → done (and active → done) plays a
+ * complete one-shot on the glyph + artifact.
  */
 export function ChatActivityStep({
   status = "done",
@@ -158,34 +204,159 @@ export function ChatActivityStep({
   const stream = useContext(ChatActivityStream);
   const rootRef = useRef<HTMLDivElement>(null);
   const seenActiveRef = useRef(status === "active");
+  const prevStatusRef = useRef(status);
   const cycleSeenRef = useRef(stream.cycle);
   const streamingRef = useRef(stream.streaming);
   streamingRef.current = stream.streaming;
+  const completeTimerRef = useRef<number | null>(null);
   const [holding, setHolding] = useState(
     () => stream.streaming && status === "done",
   );
-  const [entering, setEntering] = useState(() => {
-    if (!stream.streaming || !stream.enterOnMount) return false;
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return false;
-    }
-    return true;
+  const [completing, setCompleting] = useState(false);
+  const [queued, setQueued] = useState(
+    () =>
+      stream.streaming &&
+      stream.isLast &&
+      (stream.priorWillHold || stream.priorWillComplete),
+  );
+  const [entering, setEntering] = useState(false);
+  const initiallyQueued =
+    stream.streaming &&
+    stream.isLast &&
+    (stream.priorWillHold || stream.priorWillComplete);
+  const [expandOpen, setExpandOpen] = useState(() => {
+    if (initiallyQueued) return false;
+    if (prefersReducedMotion()) return true;
+    return !stream.streaming;
   });
+  const enterPlayedRef = useRef(false);
+  const enteringRef = useRef(false);
+  enteringRef.current = entering;
+  const pendingCompleteRef = useRef(false);
+
+  const busy =
+    holding || completing || (entering && status === "done");
+  const priorBusy =
+    stream.priorHolding || stream.priorWillHold || stream.priorWillComplete;
+
+  const clearCompleteTimer = () => {
+    if (completeTimerRef.current == null) return;
+    window.clearTimeout(completeTimerRef.current);
+    completeTimerRef.current = null;
+  };
+
+  const beginComplete = () => {
+    setHolding(false);
+    seenActiveRef.current = true;
+    const ms = readTokenMs(
+      rootRef.current,
+      "--fynns-chatmessage-activity-complete",
+      360,
+    );
+    if (ms <= 0) {
+      setCompleting(false);
+      return;
+    }
+    setCompleting(true);
+    clearCompleteTimer();
+    completeTimerRef.current = window.setTimeout(() => {
+      completeTimerRef.current = null;
+      setCompleting(false);
+    }, ms);
+  };
+
+  useEffect(() => {
+    stream.reportHold(stream.index, busy);
+    return () => stream.reportHold(stream.index, false);
+  }, [busy, stream.index, stream.reportHold]);
+
+  useEffect(() => () => clearCompleteTimer(), []);
+
+  useEffect(() => {
+    if (!queued) return;
+    if (!stream.streaming || !priorBusy) setQueued(false);
+  }, [queued, stream.streaming, priorBusy]);
+
+  useLayoutEffect(() => {
+    if (queued) {
+      setExpandOpen(false);
+      return;
+    }
+    if (expandOpen) {
+      if (!enterPlayedRef.current) enterPlayedRef.current = true;
+      return;
+    }
+    if (prefersReducedMotion()) {
+      setExpandOpen(true);
+      enterPlayedRef.current = true;
+      return;
+    }
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setExpandOpen(true);
+        if (enterPlayedRef.current) return;
+        enterPlayedRef.current = true;
+        if (stream.streaming) setEntering(true);
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [queued, expandOpen, stream.streaming]);
 
   useEffect(() => {
     if (stream.cycle !== cycleSeenRef.current) {
       cycleSeenRef.current = stream.cycle;
       seenActiveRef.current = status === "active";
+      prevStatusRef.current = status;
+      clearCompleteTimer();
+      setCompleting(false);
     }
+    const prevStatus = prevStatusRef.current;
+    prevStatusRef.current = status;
+
     if (status === "active") {
       seenActiveRef.current = true;
       setHolding(false);
+      setCompleting(false);
+      clearCompleteTimer();
       return;
     }
-    if (status !== "done" || seenActiveRef.current) {
+    if (status !== "done") {
+      setHolding(false);
+      setCompleting(false);
+      clearCompleteTimer();
+      return;
+    }
+    if (seenActiveRef.current) {
+      if (prevStatus === "active" && streamingRef.current) {
+        if (enteringRef.current) {
+          pendingCompleteRef.current = true;
+          const enterMs = readTokenMs(
+            rootRef.current,
+            "--fynns-chatmessage-activity-enter",
+            360,
+          );
+          if (enterMs <= 0) {
+            pendingCompleteRef.current = false;
+            setEntering(false);
+            beginComplete();
+            return () => clearCompleteTimer();
+          }
+          const id = window.setTimeout(() => {
+            if (!pendingCompleteRef.current) return;
+            pendingCompleteRef.current = false;
+            setEntering(false);
+            enteringRef.current = false;
+            beginComplete();
+          }, enterMs);
+          return () => window.clearTimeout(id);
+        }
+        beginComplete();
+        return () => clearCompleteTimer();
+      }
       setHolding(false);
       return;
     }
@@ -194,17 +365,22 @@ export function ChatActivityStep({
       return;
     }
     setHolding(true);
-    const ms = readActivityMinBusyMs(rootRef.current);
-    if (ms <= 0) {
-      setHolding(false);
-      seenActiveRef.current = true;
-      return;
+    const holdMs = readTokenMs(
+      rootRef.current,
+      "--fynns-chatmessage-activity-step-min-busy",
+      1200,
+    );
+    if (holdMs <= 0) {
+      beginComplete();
+      return () => clearCompleteTimer();
     }
     const id = window.setTimeout(() => {
-      setHolding(false);
-      seenActiveRef.current = true;
-    }, ms);
-    return () => window.clearTimeout(id);
+      beginComplete();
+    }, holdMs);
+    return () => {
+      window.clearTimeout(id);
+      clearCompleteTimer();
+    };
   }, [stream.cycle, status]);
 
   const visualStatus: ChatActivityStepStatus = holding ? "active" : status;
@@ -218,43 +394,67 @@ export function ChatActivityStep({
     ) : (
       <WrenchIcon size={ICON_SIZE} />
     );
-  const showArtifact = !holding && artifact != null;
 
-  const onEnterEnd = (event: AnimationEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) return;
-    setEntering(false);
+  const onStepAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      const name = event.animationName;
+      if (
+        name.includes("activity-step-enter") ||
+        name.includes("activity-copy-enter")
+      ) {
+        setEntering(false);
+        enteringRef.current = false;
+        if (pendingCompleteRef.current) {
+          pendingCompleteRef.current = false;
+          beginComplete();
+        }
+      }
+    }
+    onAnimationEnd?.(event);
   };
 
   return (
     <div
-      {...rest}
-      ref={rootRef}
-      className={join(
-        "fynns-chat-activity-step",
-        `fynns-chat-activity-step--${visualStatus}`,
-        holding && "fynns-chat-activity-step--hold",
-        entering && "fynns-chat-activity-step--enter",
-        className,
-      )}
-      data-status={visualStatus}
-      data-hold={holding ? "true" : undefined}
-      onAnimationEnd={(event) => {
-        onEnterEnd(event);
-        onAnimationEnd?.(event);
-      }}
+      className="fynns-expand fynns-chat-activity-step-shell"
+      data-state={expandOpen ? "open" : "closed"}
+      data-queued={queued ? "true" : undefined}
+      aria-hidden={expandOpen ? undefined : true}
     >
-      <div className="fynns-chat-activity-step-row">
-        <span className="fynns-chat-activity-node" aria-hidden>
-          {leading}
-        </span>
-        <div className="fynns-chat-activity-headline">
-          <span className="fynns-chat-activity-step-label">{label}</span>
-          {showArtifact ? artifact : null}
+      <div className="fynns-expand-inner">
+        <div
+          {...rest}
+          ref={rootRef}
+          className={join(
+            "fynns-chat-activity-step",
+            `fynns-chat-activity-step--${visualStatus}`,
+            holding && "fynns-chat-activity-step--hold",
+            completing && "fynns-chat-activity-step--complete",
+            queued && "fynns-chat-activity-step--queued",
+            entering && "fynns-chat-activity-step--enter",
+            className,
+          )}
+          data-status={visualStatus}
+          data-hold={holding ? "true" : undefined}
+          data-complete={completing ? "true" : undefined}
+          data-queued={queued ? "true" : undefined}
+          onAnimationEnd={onStepAnimationEnd}
+        >
+          <div className="fynns-chat-activity-step-row">
+            <span className="fynns-chat-activity-node" aria-hidden>
+              {leading}
+            </span>
+            <div className="fynns-chat-activity-copy">
+              <div className="fynns-chat-activity-headline">
+                <span className="fynns-chat-activity-step-label">{label}</span>
+                {artifact}
+              </div>
+              {description != null && description !== "" ? (
+                <div className="fynns-chat-activity-desc">{description}</div>
+              ) : null}
+            </div>
+          </div>
         </div>
       </div>
-      {description != null && description !== "" ? (
-        <div className="fynns-chat-activity-desc">{description}</div>
-      ) : null}
     </div>
   );
 }
@@ -271,13 +471,23 @@ export function ChatActivityStep({
  *
  * Instant-complete `done` steps still visualize while `streaming`: the
  * active mark holds for `--fynns-chatmessage-activity-step-min-busy`
- * (aliases `presentation-hint`) before the done glyph / artifact settle.
- * The hold finishes even if `streaming` flips off mid-pulse. Steps that
- * already painted as `active` skip the hold. Reduced-motion skips it.
- * Static (not streaming) trees show the final glyph immediately.
- * Only the newest (last) step plays a one-shot enter while streaming;
- * already-visible rows and same-commit older siblings do not. Callers
- * growing the tree must pass a stable `key` per logical step.
+ * (aliases `presentation-hint`) then the done glyph / artifact play a
+ * complete one-shot (`--fynns-chatmessage-activity-complete`, aliases
+ * `duration-slow`).
+ * `active` → `done` on the same row skips the hold and plays complete
+ * (waits if that row is still entering).
+ * Artifact stays in layout, `visibility: hidden` during hold.
+ * The hold + complete finish even if `streaming` flips off mid-pulse;
+ * steps that already painted as `active` skip the hold.
+ * `prefers-reduced-motion` skips hold / enter / complete. Static (not
+ * streaming) trees show the final glyph immediately.
+ * Complete then enter: a newly mounted last step stays queued (`0fr`)
+ * until earlier instant-done holds *and* complete one-shots finish, then
+ * height-morphs open (`.fynns-expand`) while the whole step fades over
+ * `--fynns-chatmessage-activity-enter` (aliases `duration-slow`). Node /
+ * rail / label do not translate. Already-visible rows stay still; every
+ * newly mounted streaming row fades (not only the last). Callers growing
+ * the tree must pass a stable `key` per logical step.
  *
  * Keep `ChatThinking` for single-block reasoning; do not overload it into a
  * timeline. This is the dedicated chain anatomy.
@@ -318,7 +528,48 @@ export function ChatActivity({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [userPinnedClosed, setUserPinnedClosed] = useState(false);
   const [streamCycle, setStreamCycle] = useState(0);
+  const [holds, setHolds] = useState<ReadonlySet<number>>(() => new Set());
   const wasStreamingRef = useRef(streaming);
+  const prevKeysRef = useRef<Set<string>>(new Set());
+  const prevStatusByKeyRef = useRef<Map<string, ChatActivityStepStatus>>(
+    new Map(),
+  );
+
+  const reportHold = useCallback((index: number, holding: boolean) => {
+    setHolds((prev) => {
+      const has = prev.has(index);
+      if (has === holding) return prev;
+      const next = new Set(prev);
+      if (holding) next.add(index);
+      else next.delete(index);
+      return next;
+    });
+  }, []);
+
+  const childList = Children.toArray(children);
+  const childKeys = childList.map((child, index) => childKey(child, index));
+  const predictedHold = new Set<number>();
+  const predictedComplete = new Set<number>();
+  if (streaming) {
+    childList.forEach((child, index) => {
+      const key = childKeys[index];
+      const st = childStepStatus(child) ?? "done";
+      const prev = prevStatusByKeyRef.current.get(key);
+      if (!prevKeysRef.current.has(key) && st === "done") {
+        predictedHold.add(index);
+      }
+      if (prev === "active" && st === "done") predictedComplete.add(index);
+    });
+  }
+
+  useLayoutEffect(() => {
+    prevKeysRef.current = new Set(childKeys);
+    const next = new Map<string, ChatActivityStepStatus>();
+    childList.forEach((child, index) => {
+      next.set(childKeys[index], childStepStatus(child) ?? "done");
+    });
+    prevStatusByKeyRef.current = next;
+  }, [childKeys.join("\u0001")]);
 
   useEffect(() => {
     if (streaming && !wasStreamingRef.current) {
@@ -345,11 +596,17 @@ export function ChatActivity({
     onOpenChange?.(next);
   };
 
+  const labelKey =
+    typeof label === "string" || typeof label === "number"
+      ? String(label)
+      : undefined;
   const labelNode = (
     <span
+      key={labelKey}
       className={join(
         "fynns-chat-activity-label",
         streaming && "fynns-chat-activity-label--streaming",
+        "fynns-chat-activity-label--swap",
       )}
     >
       {label}
@@ -394,22 +651,38 @@ export function ChatActivity({
             className="fynns-chat-activity-steps"
             inert={isOpen ? undefined : true}
           >
-            {Children.toArray(children).map((child, index, list) => (
-              <ChatActivityStream.Provider
-                key={
-                  isValidElement(child) && child.key != null
-                    ? String(child.key)
-                    : String(index)
-                }
-                value={{
-                  streaming,
-                  cycle: streamCycle,
-                  enterOnMount: streaming && index === list.length - 1,
-                }}
-              >
-                {child}
-              </ChatActivityStream.Provider>
-            ))}
+            {childList.map((child, index, list) => {
+              const last = index === list.length - 1;
+              let priorWillHold = false;
+              let priorWillComplete = false;
+              let priorHolding = false;
+              for (const i of predictedHold) {
+                if (i < index) priorWillHold = true;
+              }
+              for (const i of predictedComplete) {
+                if (i < index) priorWillComplete = true;
+              }
+              for (const i of holds) {
+                if (i < index) priorHolding = true;
+              }
+              return (
+                <ChatActivityStream.Provider
+                  key={childKeys[index]}
+                  value={{
+                    streaming,
+                    cycle: streamCycle,
+                    index,
+                    isLast: last,
+                    priorWillHold: streaming && last && priorWillHold,
+                    priorWillComplete: streaming && last && priorWillComplete,
+                    priorHolding,
+                    reportHold,
+                  }}
+                >
+                  {child}
+                </ChatActivityStream.Provider>
+              );
+            })}
           </div>
         </div>
       </div>

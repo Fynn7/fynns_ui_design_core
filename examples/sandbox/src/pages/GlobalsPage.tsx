@@ -936,6 +936,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
   useEffect(() => {
     if (!activityStreaming) return;
+    // Longer than min-busy (presentation-hint) + complete + enter (duration-slow)
+    // so the settle is visible before the next phase mounts.
     const timer = window.setInterval(() => {
       setActivityPhase((phase) => {
         if (phase >= 3) {
@@ -944,7 +946,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         }
         return phase + 1;
       });
-    }, 1600);
+    }, 2800);
     return () => window.clearInterval(timer);
   }, [activityStreaming]);
 
@@ -2365,6 +2367,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   {t("globals.chatAsideAssistantBody")}
                 </ChatMessage>
               </ChatThread>
+              <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
               <ChatComposer
                 value={chatAsideDraft}
                 onChange={setChatAsideDraft}
@@ -2504,52 +2507,41 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     }
                   />
                 ) : null}
-                {activityPhase >= 3 ? (
-                  <ChatActivityStep
-                    key="present"
-                    status="done"
-                    icon={<WrenchIcon />}
-                    label={t("globals.activityStepPresentDone")}
-                  />
-                ) : (
-                  <ChatActivityStep
-                    key={
-                      activityPhase <= 0
-                        ? "gather"
-                        : activityPhase === 1
-                          ? "read"
-                          : "present"
-                    }
-                    status="active"
-                    icon={
-                      activityPhase <= 0 ? (
-                        <SearchIcon />
-                      ) : activityPhase === 1 ? (
-                        <FolderOpenIcon />
-                      ) : undefined
-                    }
-                    label={
-                      activityPhase <= 0
+                <ChatActivityStep
+                  key="live"
+                  status={activityPhase >= 3 ? "done" : "active"}
+                  icon={
+                    activityPhase >= 3 ? (
+                      <WrenchIcon />
+                    ) : activityPhase <= 0 ? (
+                      <SearchIcon />
+                    ) : activityPhase === 1 ? (
+                      <FolderOpenIcon />
+                    ) : undefined
+                  }
+                  label={
+                    activityPhase >= 3
+                      ? t("globals.activityStepPresentDone")
+                      : activityPhase <= 0
                         ? t("globals.activityStepGather")
                         : activityPhase === 1
                           ? t("globals.activityStepRead")
                           : t("globals.activityStepPresent")
-                    }
-                    description={
-                      activityPhase >= 2 ? (
-                        <>
-                          {t("globals.activityStepPresentDescBefore")}
-                          <code>{t("globals.activityStepPresentCode")}</code>
-                          {t("globals.activityStepPresentDescAfter")}
-                        </>
-                      ) : activityPhase === 1 ? (
-                        t("globals.activityStepReadDesc")
-                      ) : (
-                        t("globals.activityStepGatherDesc")
-                      )
-                    }
-                  />
-                )}
+                  }
+                  description={
+                    activityPhase >= 3 ? undefined : activityPhase >= 2 ? (
+                      <>
+                        {t("globals.activityStepPresentDescBefore")}
+                        <code>{t("globals.activityStepPresentCode")}</code>
+                        {t("globals.activityStepPresentDescAfter")}
+                      </>
+                    ) : activityPhase === 1 ? (
+                      t("globals.activityStepReadDesc")
+                    ) : (
+                      t("globals.activityStepGatherDesc")
+                    )
+                  }
+                />
               </ChatActivity>
             }
           >

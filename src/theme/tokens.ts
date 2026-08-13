@@ -736,10 +736,21 @@ export const CHATMESSAGE_TOKENS = {
   /**
    * While `ChatActivity` is streaming, a step that arrives already `done`
    * (instant tool) still shows the active mark for at least this long
-   * before settling to the done glyph — one `presentation-hint` pulse.
+   * before the complete one-shot — one `presentation-hint` pulse.
    * `prefers-reduced-motion` skips the hold (JS reads this token).
    */
   "activity-step-min-busy": "var(--fynns-duration-presentation-hint)",
+  /**
+   * Newest-step copy fade (with row height morph via `.fynns-expand`).
+   * One step slower than disclosure `duration-base` so the grow is readable;
+   * not `presentation-hint` (that pulse is for min-busy).
+   */
+  "activity-enter": "var(--fynns-duration-slow)",
+  /**
+   * Hold → done (and active → done) glyph + artifact settle. Next step
+   * stays queued until this finishes. Glyph fades (no scale / spring).
+   */
+  "activity-complete": "var(--fynns-duration-slow)",
 } as const;
 
 /**
@@ -841,7 +852,7 @@ export const CHAT_TOKENS = {
    * `composer-line-height` (32dp) to align the control row.
    */
   "composer-text-line-height": "1.375rem",
-  /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
+  /** Gap above the live composer box for scroll-to-bottom (ChatGPT ≈12dp). */
   "scroll-fab-inset": "var(--fynns-space-md)",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
   "scroll-threshold": "5rem",

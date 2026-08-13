@@ -437,8 +437,9 @@ classes.
     FillColumn’s job. Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`);
     composer docks at root bottom; stick-to-bottom + scroll-to-bottom (32dp
     elevated `IconButton`, not Fab; show after ~80dp leave-bottom /
-    `--fynns-chat-scroll-threshold`; sit ~12dp above composer via
-    `--fynns-chat-scroll-fab-inset`). `empty` prefers `EmptyState`;
+    `--fynns-chat-scroll-threshold`; sit `--fynns-chat-scroll-fab-inset`
+    above the **live** composer box — not collapsed `composer-min-height`).
+    `empty` prefers `EmptyState`;
     optional starter prompts = `Chip` / `ChipSet` (`suggestion` /
     `assist`, `radius-pill`) **inside** `empty`, centered wrap — they
     sit in the thread **above** the docked composer (do **not** mirror
@@ -495,10 +496,10 @@ classes.
     **Secondary ink (dark teal):** rest = `text-muted`; hover / active
     emphasis = soft `color-mix` into `text` (never full
     `--fynns-color-text` — VS Code/Vercel jump muted→foreground, which
-    reads as a white flash here); no trigger state-layer wash. Streaming
+    reads as a white flash here);     no trigger state-layer wash. Streaming
     = label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
     muted base + accent-into-muted mid peak — never full `text`) + swap
-    enter (`--fynns-duration-base`); no default streaming orb (`icon` is
+    enter (`--fynns-duration-base`, opacity fade only — no translateY); no default streaming orb (`icon` is
     optional leading glyph only);
     force-open while streaming unless user pinned closed (trigger stays
     enabled so the disclosure can collapse mid-run; a new streaming cycle
@@ -523,22 +524,34 @@ classes.
     (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
     glyph and copy centers match). Same secondary-ink band as
     ChatThinking (header label inherits muted; active step / artifact
-    hover use soft mixes — not full on-surface). While `streaming`, only
-    the **newest** (last) newly mounted step enters with fade +
-    `translateY(0.25rem)` → 0 over `--fynns-duration-slow` /
-    `--fynns-ease-emphasized` (`--enter` class, cleared on `animationend`;
-    assistant-ui Reasoning panel `duration-300` / `slide-in-from-bottom-1`
-    parity). Same-commit older siblings (instant-done rows above the
-    tail) and already-visible rows do **not** play enter — the tree must
-    not re-animate as a block. Growing trees need a stable `key` per
-    logical step so rows do not morph identity. Static completed trees
-    skip the enter flash. Instant-complete `done`
+    hover use soft mixes — not full on-surface). Header `label` remounts
+    with the same fade-only swap as ChatThinking (no translateY). While
+    `streaming`, every newly mounted step fades the **whole row** over
+    `--fynns-chatmessage-activity-enter` (aliases `duration-slow`, same
+    beat as the per-step `.fynns-expand` height morph — not
+    `presentation-hint` / not `duration-base`) / `--fynns-ease-emphasized`
+    (`--enter` on the step, opacity only; closed shells stay `opacity: 0`
+    so clip-wipe never shows opaque type). Node + rail stay in the layout
+    box so the tree does not desync. New rows height-morph `0fr`→`1fr`
+    (DialogFrame-style closed frame then rAF open). Already-visible rows
+    stay still. Growing trees need a stable `key` per logical step so
+    rows do not morph identity. Static completed trees skip the enter
+    flash. Instant-complete `done`
     steps still visualize while streaming: the active mark holds for
     `--fynns-chatmessage-activity-step-min-busy` (aliases
-    `presentation-hint`, one pulse) before the done glyph / artifact
-    settle; the hold finishes even if `streaming` ends mid-pulse;
+    `presentation-hint`, one pulse) then glyph + artifact play a
+    complete one-shot (`--fynns-chatmessage-activity-complete`, aliases
+    `duration-slow`; glyph fade, no scale; artifact stays in layout,
+    `visibility: hidden` during hold).
+    `active` → `done` on the same row skips the hold and plays complete
+    (if that row is still entering, complete waits for enter to finish).
+    The hold + complete finish even if `streaming` ends mid-pulse;
     steps that already painted as `active` skip the hold;
-    `prefers-reduced-motion` skips it. Uncontrolled: force-open
+    `prefers-reduced-motion` skips hold / enter / complete.
+    A newly mounted last step stays
+    queued (`0fr`, not painted) until earlier holds **and** complete one-shots
+    finish, then height-morphs open + whole-step fade —
+    complete and enter never overlap. Uncontrolled: force-open
     while `streaming` unless the user pinned closed (trigger stays
     enabled so the tree can collapse mid-run; a new streaming cycle
     clears the pin). Completed trees stay at last open — no post-stream

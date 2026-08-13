@@ -50,7 +50,9 @@ ring can paint before heavy work).
   `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
   multi-step status tree (collapsible + rail; `icon` any ReactNode per step;
   stable `key` per logical step; streaming min-busy hold on instant-done
-  steps; enter only on the newest last step); `citations` /
+  steps then complete one-shot on glyph + artifact; every new streaming
+  row fades as a whole after prior hold **and** complete — no translateY /
+  no opaque clip-wipe; height-morph via `.fynns-expand`); `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
   assistant body; inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
