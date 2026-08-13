@@ -233,6 +233,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Chat* chrome panel — use `radius-22` **or rounder** (`3xl`, `pill`).
   Micro marks stay smaller (`inline code` → `xs`, favicon → `2xs`). Override
   only when the user **explicitly** asks for a squarer Chat container.
+- **DON'T** “fix” missing ChatMessage body spacing in the consumer with
+  local CSS or one-off wrappers as the **source of truth**. Sibling answer
+  units (prose + `CodeBlock`, two wells, …) must get
+  `--fynns-chatmessage-body-stack-gap` (**16dp**) from core — bare strings
+  are promoted to `.fynns-chat-message-prose` inside `ChatMessage`. Prefer
+  element children for markdown; never invent a parallel body-gap token in
+  the app. See **Body sibling stack**.
 - **DON'T** reintroduce measure probes under `ClippedNavShell` (or any host
   watched by a subtree `MutationObserver`) to resolve CSS lengths — see
   [`llm/PERF.md`](llm/PERF.md).
@@ -578,13 +585,23 @@ classes.
     cover the turn text; click opens `href` or `onCitationOpen`;
     +N expands footnote cards at `--fynns-radius-22` — same floor as the
     user bubble, never squarer — no Sources sidebar); `data-message-author-role`
-    on each row. **Body sibling stack:** adjacent direct children of
-    `.fynns-chat-message-body` use `--fynns-chatmessage-body-stack-gap`
-    (aliases `--fynns-layout-unit-stack-gap` / same as `.fynns-unit-stack`) —
-    CodeBlock + prose, two wells, etc.; not CodeBlock-specific. Streaming
-    caret is excluded so text + cursor stay one line. Nested markdown roots
-    still use `.fynns-unit-stack` (or the same layout token) inside the
-    wrapper. **Inline `code`** (caller-rendered, not markdown): ChatGPT
+    on each row. **Body sibling stack (hard — 16dp):** adjacent **element**
+    children of `.fynns-chat-message-body` use
+    `--fynns-chatmessage-body-stack-gap` (aliases
+    `--fynns-layout-unit-stack-gap` / same as `.fynns-unit-stack`) — CodeBlock
+    + prose, two wells, etc.; not CodeBlock-specific. **Core guarantee:**
+    bare string / number `children` are promoted to
+    `.fynns-chat-message-prose` so `{text}<CodeBlock/>` still gets the gap —
+    consumers must **not** patch this with app CSS or ad-hoc wrappers as the
+    primary fix. Consecutive **non-block** children (string + inline `code`,
+    …) coalesce into **one** prose unit so caption-style mixes stay inline;
+    block wells (`CodeBlock`, `div`/`p`/`pre`, …) stay siblings. Prefer
+    element siblings for markdown roots (app `<div>` /
+    `.fynns-unit-stack`); nested markdown still stacks inside the wrapper
+    with the same layout token. Streaming caret nests inside the last prose
+    when that is the trailing unit (same line as text); a caret that remains
+    a direct body child after an element is excluded from the gap rule.
+    **Inline `code`** (caller-rendered, not markdown): ChatGPT
     prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
     (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT
     gray-700), pad `.15rem` / `.3rem`,

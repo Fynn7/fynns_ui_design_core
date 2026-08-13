@@ -976,9 +976,9 @@ const en = {
   "globals.chatUserBody":
     "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
   "globals.chatAssistantBody":
-    "`streaming` only paints incomplete cues (caret + aria-busy); the app appends tokens itself.",
+    "streaming only paints incomplete cues (caret + aria-busy); the app appends tokens itself.",
   "globals.chatAssistantStackNote":
-    "Sibling blocks in the bubble use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap` — same as `.fynns-unit-stack`).",
+    "Bare string + CodeBlock siblings get `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap) — ChatMessage wraps bare text as `.fynns-chat-message-prose`; do not patch this gap in the consumer.",
   "globals.chatAssistantStackCode": "npm run sandbox",
   "globals.chatCopyTip": "Copy message",
   "globals.chatCopyDemo": "Copied (sandbox demo).",
@@ -2283,9 +2283,9 @@ const zh: Record<MessageKey, string> = {
   "globals.chatUserBody":
     "用一句话概括 ChatMessage 的 `streaming` 属性，并说明用户气泡最大为行宽的 70%，短回复仍会收缩贴合内容。",
   "globals.chatAssistantBody":
-    "`streaming` 只负责未完成态 UI（光标 + aria-busy）；由应用自行追加 token。",
+    "streaming 只负责未完成态 UI（光标 + aria-busy）；由应用自行追加 token。",
   "globals.chatAssistantStackNote":
-    "气泡内同级块用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`，与 `.fynns-unit-stack` 相同）。",
+    "裸字符串与 CodeBlock 兄弟会吃到 `--fynns-chatmessage-body-stack-gap`（16dp / unit-stack-gap）— ChatMessage 会把裸文本包成 `.fynns-chat-message-prose`；不要在消费仓用本地 CSS 补这个间距。",
   "globals.chatAssistantStackCode": "npm run sandbox",
   "globals.chatCopyTip": "复制消息",
   "globals.chatCopyDemo": "已复制（沙盒演示）。",

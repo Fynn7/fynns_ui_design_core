@@ -9195,12 +9195,25 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Sibling block units in the bubble (CodeBlock + prose, two wells, …).
- * Adjacent-sibling margin — not flex gap — so a bare text node + streaming
- * caret stay on one line. Cursor is excluded. Value aliases layout
+ * Adjacent-sibling margin — not flex gap. Value aliases layout
  * unit-stack-gap (same as `.fynns-unit-stack`).
+ *
+ * ChatMessage promotes bare string/number children to
+ * `.fynns-chat-message-prose` and nests the streaming caret inside the
+ * last prose when that is the trailing unit — so `{text}<CodeBlock/>`
+ * gets body-stack-gap without consumers wrapping text, and the caret
+ * stays on the same line as streaming prose. A caret that is still a
+ * direct body child (after an element sibling) is excluded here.
  */
 .fynns-chat-message-body > * + *:not(.fynns-chat-message-cursor) {
   margin-block-start: var(--fynns-chatmessage-body-stack-gap);
+}
+
+/* Bare answer text promoted by ChatMessage — block so it stacks with wells. */
+.fynns-chat-message-prose {
+  min-width: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /*
