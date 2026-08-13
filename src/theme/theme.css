@@ -296,6 +296,7 @@
   --fynns-chatmessage-max-width: 48rem;
   --fynns-chatmessage-body-size: 1rem;
   --fynns-chatmessage-body-line: 1.5;
+  --fynns-chatmessage-body-stack-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-chatmessage-name-size: 0.75rem;
   --fynns-chatmessage-actions-gap: 0;
   --fynns-chatmessage-cursor-width: 0.0625rem;
@@ -327,6 +328,7 @@
   --fynns-chatmessage-activity-artifact-gap: 0.5rem;
   --fynns-chatmessage-activity-artifact-pad-inline: 0.375rem;
   --fynns-chatmessage-activity-artifact-pad-block: 0.125rem;
+  --fynns-chatmessage-activity-step-min-height: max(var(--fynns-size-icon), calc((var(--fynns-font-size-xs) * var(--fynns-line-height-snug)) + (2 * var(--fynns-chatmessage-activity-artifact-pad-block)) + (2 * var(--fynns-border-hairline))));
   --fynns-chatmessage-activity-step-min-busy: var(--fynns-duration-presentation-hint);
   --fynns-chatmessage-activity-enter: var(--fynns-duration-slow);
   --fynns-chatmessage-activity-complete: var(--fynns-duration-slow);

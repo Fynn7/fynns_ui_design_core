@@ -2270,7 +2270,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </Tooltip>
                   }
                 >
-                  {chatCaption(t("globals.chatAssistantBody"))}
+                  <CodeBlock
+                    variant="plain"
+                    language="bash"
+                    code={t("globals.chatAssistantStackCode")}
+                  />
+                  <p>{chatCaption(t("globals.chatAssistantBody"))}</p>
+                  <p>{t("globals.chatAssistantStackNote")}</p>
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}

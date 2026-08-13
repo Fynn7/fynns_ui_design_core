@@ -180,16 +180,17 @@ export function ChatActivityArtifact({
 
 /**
  * One row in a `ChatActivity` tree — tool call, narrative beat, or pending.
- * Icon | copy share a dedicated `step-row` band so the glyph center
- * matches the label line box. New streaming rows snap `.fynns-expand`
- * `0fr`/`1fr` (no height transition) and fade the **whole step**
- * (opacity only — no translateY). Animating `0fr`→`1fr` inside
- * `overflow: hidden` clip-wipes the tree top-to-bottom and reads as a
- * bounce. Node + rail stay in the layout box.
- * Description sits under the title in that column. Hold keeps the
- * artifact in layout (`visibility: hidden`) so the row does not jump
- * when the capsule appears. Hold → done (and active → done) plays a
- * complete one-shot on the glyph + artifact.
+ * Icon | headline share a dedicated `step-row` band (form-style floor +
+ * measured max height across open steps) so glyph, label, and artifact
+ * vertically center together. Description sits under that band, indented
+ * to the copy column. New streaming rows snap `.fynns-expand` `0fr`/`1fr`
+ * (no height transition) and fade the **whole step** (opacity only —
+ * no translateY). Animating `0fr`→`1fr` inside `overflow: hidden`
+ * clip-wipes the tree top-to-bottom and reads as a bounce. Node + rail
+ * stay in the layout box. Hold keeps the artifact in layout
+ * (`visibility: hidden`) so the row does not jump when the capsule
+ * appears. Hold → done (and active → done) plays a complete one-shot on
+ * the glyph + artifact.
  */
 export function ChatActivityStep({
   status = "done",
@@ -450,16 +451,14 @@ export function ChatActivityStep({
             <span className="fynns-chat-activity-node" aria-hidden>
               {leading}
             </span>
-            <div className="fynns-chat-activity-copy">
-              <div className="fynns-chat-activity-headline">
-                <span className="fynns-chat-activity-step-label">{label}</span>
-                {artifact}
-              </div>
-              {description != null && description !== "" ? (
-                <div className="fynns-chat-activity-desc">{description}</div>
-              ) : null}
+            <div className="fynns-chat-activity-headline">
+              <span className="fynns-chat-activity-step-label">{label}</span>
+              {artifact}
             </div>
           </div>
+          {description != null && description !== "" ? (
+            <div className="fynns-chat-activity-desc">{description}</div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -532,6 +531,7 @@ export function ChatActivity({
   ...rest
 }: ChatActivityProps) {
   const bodyId = useId();
+  const stepsRef = useRef<HTMLDivElement>(null);
   const isControlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const [userPinnedClosed, setUserPinnedClosed] = useState(false);
@@ -596,6 +596,54 @@ export function ChatActivity({
       ? true
       : internalOpen;
 
+  /*
+   * Form-like list rhythm: natural height per open step-row → take max →
+   * apply as min-height on every open row (Grid `equalCells` / choice-stack
+   * floor). Attribute-only paint on our steps root — ClippedNavShell MO is
+   * childList-only, so no observer thrash. Clear the var while measuring.
+   */
+  useLayoutEffect(() => {
+    const root = stepsRef.current;
+    if (!root || !isOpen) return;
+
+    const measure = () => {
+      root.style.removeProperty("--fynns-chat-activity-step-row-height");
+      root.dataset.equalMeasuring = "true";
+      let maxH = 0;
+      for (const shell of root.querySelectorAll(
+        ":scope > .fynns-chat-activity-step-shell",
+      )) {
+        if ((shell as HTMLElement).dataset.state !== "open") continue;
+        const row = shell.querySelector(
+          ":scope .fynns-chat-activity-step-row",
+        ) as HTMLElement | null;
+        if (!row) continue;
+        maxH = Math.max(maxH, Math.ceil(row.getBoundingClientRect().height));
+      }
+      delete root.dataset.equalMeasuring;
+      if (maxH > 0) {
+        root.style.setProperty(
+          "--fynns-chat-activity-step-row-height",
+          `${maxH}px`,
+        );
+      }
+    };
+
+    measure();
+    const ro = new ResizeObserver(() => {
+      measure();
+    });
+    ro.observe(root);
+    for (const row of root.querySelectorAll(".fynns-chat-activity-step-row")) {
+      ro.observe(row);
+    }
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty("--fynns-chat-activity-step-row-height");
+      delete root.dataset.equalMeasuring;
+    };
+  }, [isOpen, childKeys.join("\u0001"), streaming]);
+
   const setOpen = (next: boolean) => {
     if (!isControlled) {
       setInternalOpen(next);
@@ -655,6 +703,7 @@ export function ChatActivity({
       >
         <div className="fynns-expand-inner">
           <div
+            ref={stepsRef}
             id={bodyId}
             className="fynns-chat-activity-steps"
             inert={isOpen ? undefined : true}

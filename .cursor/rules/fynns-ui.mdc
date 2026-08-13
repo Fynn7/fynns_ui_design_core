@@ -49,12 +49,16 @@ ring can paint before heavy work).
   collapsible while streaming unless user pinned closed);
   `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
   multi-step status tree (collapsible + rail; `icon` any ReactNode per step;
-  stable `key` per logical step; streaming min-busy hold on instant-done
-  steps then complete one-shot on glyph + artifact; later steps stay
-  queued until prior hold **and** complete, then fade as a whole — no
-  translateY / no height morph / no clip-wipe); `citations` /
+  stable `key` per logical step; step-row floor
+  `--fynns-chatmessage-activity-step-min-height` then measured max across
+  open steps — icon/label/artifact vertically centered; streaming min-busy
+  hold on instant-done steps then complete one-shot on glyph + artifact;
+  later steps stay queued until prior hold **and** complete, then fade as
+  a whole — no translateY / no height morph / no clip-wipe); `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
-  assistant body; inline `code` = ChatGPT pill
+  assistant body; body direct siblings stack with
+  `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap` — same as
+  `.fynns-unit-stack`; caret excluded); inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
   task-list checkboxes — caller owns `children`; CJK IME Enter while
   composing does not send — AGENTS.md Composer keys; composer =

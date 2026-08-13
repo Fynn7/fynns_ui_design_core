@@ -655,6 +655,13 @@ export const CHATMESSAGE_TOKENS = {
   /** ChatGPT message body `text-base` / 16px. */
   "body-size": "1rem",
   "body-line": "1.5",
+  /**
+   * Gap between adjacent **direct** children of `.fynns-chat-message-body`
+   * (16dp — aliases `--fynns-layout-unit-stack-gap`). Same constant as
+   * `.fynns-unit-stack` / Card body siblings — CodeBlock + prose, two
+   * surfaces, etc. Not CodeBlock-specific. Streaming caret is excluded.
+   */
+  "body-stack-gap": "var(--fynns-layout-unit-stack-gap)",
   "name-size": "0.75rem",
   "actions-gap": "0",
   /**
@@ -733,6 +740,15 @@ export const CHATMESSAGE_TOKENS = {
   /** Inline pad inside artifact capsule. */
   "activity-artifact-pad-inline": "0.375rem",
   "activity-artifact-pad-block": "0.125rem",
+  /**
+   * Step icon|headline band floor — form-cluster style `max(floor, content)`.
+   * Sized for the artifact capsule (xs + snug + pad + hairline borders) so
+   * rows without a chip still match chip rows; never a fixed `height`.
+   * `ChatActivity` may raise `--fynns-chat-activity-step-row-height` to the
+   * measured max across open steps (wrap / multi-line).
+   */
+  "activity-step-min-height":
+    "max(var(--fynns-size-icon), calc((var(--fynns-font-size-xs) * var(--fynns-line-height-snug)) + (2 * var(--fynns-chatmessage-activity-artifact-pad-block)) + (2 * var(--fynns-border-hairline))))",
   /**
    * While `ChatActivity` is streaming, a step that arrives already `done`
    * (instant tool) still shows the active mark for at least this long

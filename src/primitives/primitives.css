@@ -9194,6 +9194,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Sibling block units in the bubble (CodeBlock + prose, two wells, …).
+ * Adjacent-sibling margin — not flex gap — so a bare text node + streaming
+ * caret stay on one line. Cursor is excluded. Value aliases layout
+ * unit-stack-gap (same as `.fynns-unit-stack`).
+ */
+.fynns-chat-message-body > * + *:not(.fynns-chat-message-cursor) {
+  margin-block-start: var(--fynns-chatmessage-body-stack-gap);
+}
+
+/*
  * Inline `code` — ChatGPT pad / size / weight; fill is a fynns text wash
  * (`--fynns-color-chat-inline-code-bg` → text × `code-user-bg-mix`), not
  * ChatGPT gray-700 (muddy on teal). Excludes `pre code` (fenced blocks).
@@ -9591,25 +9601,30 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Icon | copy band — one component shell per step row.
- * Node pinned to the start edge so the rail still starts at icon bottom;
- * label uses the same `--fynns-size-icon` line box so glyph ↔ copy centers
- * match (no optical pad math).
+ * Icon | headline band — form-style floor + optional measured max across
+ * open steps (`--fynns-chat-activity-step-row-height` on the steps root).
+ * Glyph, label, and artifact vertically center in the band. Description is
+ * a sibling under the band (indented to the copy column) so it does not
+ * pull the icon mid-description. Rail starts at the centered icon bottom.
  */
 .fynns-chat-activity-step-row {
   display: grid;
   grid-template-columns: var(--fynns-size-icon) minmax(0, 1fr);
   column-gap: var(--fynns-chatmessage-activity-node-gap);
-  align-items: start;
+  align-items: center;
+  box-sizing: border-box;
   max-width: 100%;
   min-width: 0;
+  min-height: var(--fynns-chatmessage-activity-step-min-height);
 }
 
-.fynns-chat-activity-copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fynns-chatmessage-activity-desc-gap);
-  min-width: 0;
+/* While equalizing, drop the measured min so natural heights win. */
+.fynns-chat-activity-steps:not([data-equal-measuring])
+  .fynns-chat-activity-step-row {
+  min-height: max(
+    var(--fynns-chatmessage-activity-step-min-height),
+    var(--fynns-chat-activity-step-row-height, 0px)
+  );
 }
 
 /*
@@ -9692,7 +9707,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   inset-inline-start: calc(
     (var(--fynns-size-icon) / 2) - (var(--fynns-border-hairline) / 2)
   );
-  top: var(--fynns-size-icon);
+  /* Centered icon in the equalized / floor band → bottom of the node. */
+  top: calc(
+    (
+        max(
+          var(--fynns-chatmessage-activity-step-min-height),
+          var(--fynns-chat-activity-step-row-height, 0px)
+        ) + var(--fynns-size-icon)
+      ) / 2
+  );
   bottom: 0;
   width: var(--fynns-border-hairline);
   background: var(--fynns-color-border-strong);
@@ -9740,8 +9763,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-headline {
   display: flex;
   flex-wrap: wrap;
-  /* Start-align so a tall artifact cannot pull the label off the icon band. */
-  align-items: flex-start;
+  align-items: center;
   gap: var(--fynns-chatmessage-activity-artifact-gap);
   min-width: 0;
   min-height: var(--fynns-size-icon);
@@ -9750,7 +9772,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-step-label {
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
   min-width: 0;
   min-height: var(--fynns-size-icon);
   overflow-wrap: anywhere;
@@ -9773,6 +9794,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-desc {
+  margin-block-start: var(--fynns-chatmessage-activity-desc-gap);
+  margin-inline-start: calc(
+    var(--fynns-size-icon) + var(--fynns-chatmessage-activity-node-gap)
+  );
   color: var(--fynns-color-text-muted);
   font-weight: var(--fynns-font-weight-regular);
   white-space: pre-wrap;
@@ -9799,7 +9824,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-artifact {
   display: inline-flex;
   align-items: center;
-  align-self: center;
   gap: var(--fynns-chatmessage-citation-chip-gap);
   max-width: 100%;
   padding-inline: var(--fynns-chatmessage-activity-artifact-pad-inline);

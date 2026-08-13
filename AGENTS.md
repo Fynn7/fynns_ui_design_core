@@ -521,8 +521,11 @@ classes.
     `--fynns-size-icon`. Optional file capsule + description (icon ↔
     filename gap aliases `--fynns-chatmessage-citation-chip-gap`). Each step
     is its own `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
-    (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
-    glyph and copy centers match). Same secondary-ink band as
+    (icon | headline label(+artifact); description indented under the band —
+    form-style `--fynns-chatmessage-activity-step-min-height` floor, then
+    measured max across open steps applied as shared min-height so glyph /
+    label / artifact vertically center; rail starts at centered icon bottom).
+    Same secondary-ink band as
     ChatThinking (header label inherits muted; active step / artifact
     hover use soft mixes — not full on-surface). Header `label` remounts
     with the same fade-only swap as ChatThinking (no translateY). While
@@ -565,7 +568,13 @@ classes.
     cover the turn text; click opens `href` or `onCitationOpen`;
     +N expands footnote cards at `--fynns-radius-22` — same floor as the
     user bubble, never squarer — no Sources sidebar); `data-message-author-role`
-    on each row. **Inline `code`** (caller-rendered, not markdown): ChatGPT
+    on each row. **Body sibling stack:** adjacent direct children of
+    `.fynns-chat-message-body` use `--fynns-chatmessage-body-stack-gap`
+    (aliases `--fynns-layout-unit-stack-gap` / same as `.fynns-unit-stack`) —
+    CodeBlock + prose, two wells, etc.; not CodeBlock-specific. Streaming
+    caret is excluded so text + cursor stay one line. Nested markdown roots
+    still use `.fynns-unit-stack` (or the same layout token) inside the
+    wrapper. **Inline `code`** (caller-rendered, not markdown): ChatGPT
     prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
     (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT
     gray-700), pad `.15rem` / `.3rem`,
