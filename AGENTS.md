@@ -457,6 +457,13 @@ classes.
     assistant turns — not multi-emoji reactions (those remain feature
     requests on both). Pass thumbs via the `actions` slot if the app
     needs them; do not add a reaction picker primitive.
+    **`actions` recipe (assistant):** `IconButton` + `Tooltip` for **Copy**
+    and **Regenerate** (`RefreshIcon`), plus a **More** (`MoreHorizontalIcon`)
+    `DropdownMenu` for overflow — hover / focus-within reveal (touch always;
+    opacity fade). Core paints chrome only; **consumer agents must
+    implement LLM rerun** on Regenerate (same ownership as streaming tokens).
+    Failed-turn footer stays `error` + `onRetry` (labeled Regenerate button) —
+    do not confuse with idle-turn `actions` regenerate.
   - **Main** (`ClippedNavShell` main): column ceiling
     `--fynns-layout-chat-max-width` / `--fynns-chatmessage-max-width`
     (**48rem**, ChatGPT `max-w-3xl`) — **not** full main / viewport. User
@@ -479,8 +486,10 @@ classes.
     host (long turns share composer shell start+end; short still shrinks);
     composer **100%**. Pane soft mins + chat stage min on the shell root.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
-    notice (no pill); **`avatar` default omit**; user actions hover /
-    focus-within (touch always); `streaming` = caret + `aria-busy` / polite
+    notice (no pill); **`avatar` default omit**; `actions` hover /
+    focus-within on the message (opacity fade via `--fynns-duration-fast` /
+    `--fynns-ease-out` both ways; touch always; reduced-motion snaps);
+    `streaming` = caret + `aria-busy` / polite
     live — no LLM; caret only while answer `children` has text (no empty
     bubble / lone caret during thinking-only wait — conditional `null`
     child slots also count as empty); caret height
@@ -1072,9 +1081,10 @@ classes.
   `examples/sandbox/src/state/baseline.ts`).
 - **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
   ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
-  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, PanelLeft, PanelRight,
-  Pencil, Plus, Save, Search, Settings, Sparkles, StopSquare, Sun, Trash,
-  Undo, Upload, Wrench — plus any glyph still imported by Globals/Layouts/Preview.
+  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal, PanelLeft, PanelRight,
+  Pencil, Plus, Refresh, Save, Search, Settings, Sparkles, StopSquare, Sun,
+  Trash, Undo, Upload, Wrench — plus any glyph still imported by
+  Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.

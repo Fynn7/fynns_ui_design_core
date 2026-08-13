@@ -200,6 +200,17 @@ export function RefreshIcon(props: IconProps) {
   );
 }
 
+/** Horizontal ellipsis — message “More” menus. */
+export function MoreHorizontalIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export function ArchiveIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

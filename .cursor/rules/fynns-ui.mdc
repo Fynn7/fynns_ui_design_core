@@ -43,7 +43,9 @@ ring can paint before heavy work).
   `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
   long turns, composer 100%; soft floor
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
-  generation footer under assistant turns; `thinking` / `ChatThinking` =
+  generation footer under assistant turns; `actions` = Copy + Regenerate + More
+  chrome (hover reveal; consumer wires LLM rerun — not core);
+  `thinking` / `ChatThinking` =
   single-block reasoning / agent-activity disclosure between name and
   bubble (`streamingLabel` for tool status; label shimmer;
   collapsible while streaming unless user pinned closed);
