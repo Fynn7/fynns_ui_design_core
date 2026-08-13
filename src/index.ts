@@ -25,6 +25,7 @@ export {
   BotIcon,
   ChevronRightIcon,
   ClipboardIcon,
+  CheckCircleIcon,
   DownloadIcon,
   EyeIcon,
   EyeOffIcon,

@@ -76,6 +76,7 @@ import {
   IconButton,
   InfoIcon,
   HelpCircleIcon,
+  CheckCircleIcon,
   InlineAlert,
   Input,
   Textarea,
@@ -2613,7 +2614,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   status={activityPhase >= 3 ? "done" : "active"}
                   icon={
                     activityPhase >= 3 ? (
-                      <HelpCircleIcon />
+                      <CheckCircleIcon />
                     ) : activityPhase <= 0 ? (
                       <SearchIcon />
                     ) : activityPhase === 1 ? (
@@ -2670,6 +2671,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               {t("globals.activityReset")}
             </Button>
+            <Tooltip content="HelpCircle — ask / clarify glyph">
+              <IconButton
+                type="button"
+                size="sm"
+                variant="ghost"
+                aria-label="HelpCircle — ask / clarify glyph"
+              >
+                <HelpCircleIcon />
+              </IconButton>
+            </Tooltip>
           </div>
           <SandboxHelp text={t("globals.activityHelp")} />
         </div>

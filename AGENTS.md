@@ -1098,11 +1098,11 @@ classes.
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
 - **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
-  ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
-  FolderOpen, HelpCircle, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal,
-  PanelLeft, PanelRight, Pencil, Plus, Refresh, Save, Search, Settings,
-  Sparkles, StopSquare, Sun, Trash, Undo, Upload, Wrench — plus any glyph
-  still imported by Globals/Layouts/Preview.
+  CheckCircle, ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff,
+  File, FolderOpen, HelpCircle, Info, LayoutGrid, Menu, Mic, Moon,
+  MoreHorizontal, PanelLeft, PanelRight, Pencil, Plus, Refresh, Save, Search,
+  Settings, Sparkles, StopSquare, Sun, Trash, Undo, Upload, Wrench — plus any
+  glyph still imported by Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
   `HelpCircle` = ask / clarify (“?”); `Info` = informational (“i”) — do not
   swap them.
