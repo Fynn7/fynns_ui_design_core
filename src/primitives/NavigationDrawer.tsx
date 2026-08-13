@@ -1,12 +1,31 @@
-import {
+﻿import {
+  Children,
   forwardRef,
+  isValidElement,
   useId,
+  useState,
   type ButtonHTMLAttributes,
   type ForwardedRef,
   type HTMLAttributes,
   type ReactNode,
 } from "react";
 import { DialogFrame, type DrawerSide } from "./Dialog";
+import { ChevronRightIcon, ICON_SIZE } from "./icons";
+
+/** True when any nested destination (or nested group) reports `active`. */
+function hasActiveDestination(node: ReactNode): boolean {
+  let found = false;
+  Children.forEach(node, (child) => {
+    if (found || !isValidElement(child)) return;
+    const props = child.props as { active?: boolean; children?: ReactNode };
+    if (props.active) {
+      found = true;
+      return;
+    }
+    if (props.children != null) found = hasActiveDestination(props.children);
+  });
+  return found;
+}
 
 export type NavigationDrawerVariant = "modal" | "standard";
 
@@ -33,7 +52,7 @@ export type NavigationDrawerProps = {
   className?: string;
   /**
    * Destinations: `NavigationDrawerItem`, `NavigationDrawerHeadline`,
-   * `Divider`, etc.
+   * `NavigationDrawerGroup`, `Divider`, etc.
    */
   children?: ReactNode;
 };
@@ -115,7 +134,10 @@ export function NavigationDrawer({
 
 export type NavigationDrawerHeadlineProps = HTMLAttributes<HTMLDivElement>;
 
-/** Section label inside a navigation drawer (M3 headline). */
+/**
+ * Static section label inside a navigation drawer (M3 headline).
+ * For collapsible Cursor-style folders use `NavigationDrawerGroup`.
+ */
 export function NavigationDrawerHeadline({
   className,
   children,
@@ -129,6 +151,111 @@ export function NavigationDrawerHeadline({
         .join(" ")}
     >
       {children}
+    </div>
+  );
+}
+
+export type NavigationDrawerGroupProps = {
+  /** Group title (visible + accessible name for the disclose control). */
+  label: string;
+  /**
+   * Optional leading glyph — any node (folder, globe, sparkles, …).
+   * Does **not** own the disclose chevron (trailing, always present).
+   */
+  icon?: ReactNode;
+  /** Controlled open state. Omit for uncontrolled `defaultOpen`. */
+  open?: boolean;
+  /** Initial open when uncontrolled. Default `true` (match always-visible lists). */
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  className?: string;
+  /** Nested destinations — usually `NavigationDrawerItem` children. */
+  children: ReactNode;
+};
+
+/**
+ * Collapsible destination group (Cursor-style folder row + one-level indent).
+ * Leading `icon` is caller-owned; trailing chevron discloses. Not a destination
+ * itself — selection stays on nested `NavigationDrawerItem`s. When collapsed and
+ * a nested item is `active`, the trigger shows the same selected pill so the
+ * current leaf is not invisible.
+ */
+export function NavigationDrawerGroup({
+  label,
+  icon,
+  open,
+  defaultOpen = true,
+  onOpenChange,
+  className,
+  children,
+}: NavigationDrawerGroupProps) {
+  const bodyId = useId();
+  const labelId = useId();
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isControlled = open !== undefined;
+  const isOpen = isControlled ? open : internalOpen;
+  const containsActive = hasActiveDestination(children);
+  /** Collapsed folder hides the active leaf — surface selection on the trigger. */
+  const showActiveOnTrigger = containsActive && !isOpen;
+
+  const toggle = () => {
+    const next = !isOpen;
+    if (!isControlled) setInternalOpen(next);
+    onOpenChange?.(next);
+  };
+
+  return (
+    <div
+      className={[
+        "fynns-nav-drawer-group",
+        isOpen ? "fynns-nav-drawer-group--open" : "",
+        className ?? "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <button
+        type="button"
+        className={[
+          "fynns-nav-drawer-group-trigger",
+          showActiveOnTrigger ? "fynns-nav-drawer-group-trigger--active" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        aria-expanded={isOpen}
+        aria-controls={bodyId}
+        aria-labelledby={labelId}
+        onClick={toggle}
+      >
+        {icon != null ? (
+          <span className="fynns-nav-drawer-icon" aria-hidden>
+            {icon}
+          </span>
+        ) : null}
+        <span className="fynns-nav-drawer-label" id={labelId}>
+          {label}
+        </span>
+        <span className="fynns-nav-drawer-group-chevron" aria-hidden>
+          <ChevronRightIcon size={ICON_SIZE} />
+        </span>
+      </button>
+      <div
+        className="fynns-expand"
+        data-state={isOpen ? "open" : "closed"}
+        aria-hidden={!isOpen}
+      >
+        <div className="fynns-expand-inner">
+          <div
+            id={bodyId}
+            className="fynns-nav-drawer-group-body"
+            role="group"
+            aria-labelledby={labelId}
+            inert={isOpen ? undefined : true}
+          >
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

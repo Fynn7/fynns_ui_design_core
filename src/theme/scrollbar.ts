@@ -5,8 +5,9 @@
  * CSS variables (see `./tokens.ts` SCROLLBAR_TOKENS); the hex form is required
  * by editors like Monaco whose theme colors do not accept `rgba()`.
  *
- *   - DOM overflow surfaces inherit the skin from `theme.css` (every `*`) or via
- *     the `.fynns-scroll` class ({@link SCROLL_SURFACE_CLASS}).
+ *   - DOM overflow surfaces: every `overflow:auto/scroll` host carries
+ *     `.fynns-scroll` ({@link SCROLL_SURFACE_CLASS}). Native bars are hidden;
+ *     {@link ensureOverlayScrollbars} paints token-skinned overlay thumbs.
  *   - Monaco reads the palette through {@link monacoScrollbarColors}.
  */
 

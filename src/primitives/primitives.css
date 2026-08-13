@@ -676,6 +676,43 @@
   }
 }
 
+.fynns-diff-view {
+  margin: 0;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-caption);
+  line-height: var(--fynns-line-height-compact);
+  background: var(--fynns-color-surface-muted);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  padding: var(--fynns-space-3);
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-diff-view-line {
+  white-space: inherit;
+  word-break: inherit;
+  overflow-wrap: inherit;
+}
+
+.fynns-diff-view-line--add {
+  color: var(--fynns-color-success);
+}
+
+.fynns-diff-view-line--del {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-diff-view-line--meta {
+  color: var(--fynns-color-text-muted);
+}
+
 /* ---------- Input ---------- */
 .fynns-field {
   display: flex;
@@ -5192,6 +5229,134 @@ a.fynns-breadcrumb-link:visited {
   font-weight: var(--fynns-font-weight-semibold);
   line-height: var(--fynns-navdrawer-headline-line);
   color: var(--fynns-color-text-muted);
+}
+
+/* Collapsible Cursor-style group: trigger matches item geometry; leaf items nest. */
+.fynns-nav-drawer-group {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-trigger {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  width: 100%;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-group-trigger:hover:not(.fynns-nav-drawer-group-trigger--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-group-trigger:active:not(.fynns-nav-drawer-group-trigger--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-group-trigger:focus-visible:not(.fynns-nav-drawer-group-trigger--active) {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+/* Collapsed group with an active leaf — same pill as NavigationDrawerItem. */
+.fynns-nav-drawer-group-trigger--active {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-drawer-group-trigger--active:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:focus-visible {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+  margin-inline-start: auto;
+  color: inherit;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-drawer-group-chevron > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Collapsed = `>`; open rotates to point down. */
+.fynns-nav-drawer-group--open > .fynns-nav-drawer-group-trigger .fynns-nav-drawer-group-chevron {
+  transform: rotate(90deg);
+}
+
+.fynns-nav-drawer-group-body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-section-gap);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-body .fynns-nav-drawer-item {
+  padding-inline-start: var(--fynns-navdrawer-group-item-pad-inline-start);
 }
 
 .fynns-nav-drawer-item {

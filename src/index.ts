@@ -6,43 +6,55 @@
  */
 import "./theme/theme.css";
 import "./primitives/primitives.css";
+import { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
+
+ensureOverlayScrollbars();
 
 /* Theme (tokens + helpers) */
 export * from "./theme/tokens";
 export * from "./theme/motionTokens";
 export * from "./theme/scrollbar";
 export * from "./theme/themeMode";
+export { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
 /* Icons (public subset) */
 export {
+  AlertCircleIcon,
+  AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
+  ArrowUpIcon,
   BarChartIcon,
   BotIcon,
+  CheckCircleIcon,
+  CheckIcon,
+  ChevronDownIcon,
   ChevronRightIcon,
   ClipboardIcon,
+  CloseIcon,
   DownloadIcon,
   EyeIcon,
   EyeOffIcon,
   FileIcon,
   FolderOpenIcon,
+  GlobeIcon,
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,
   MenuIcon,
+  MicIcon,
   MoonIcon,
   PanelLeftIcon,
   PanelRightIcon,
   PencilIcon,
+  PlugIcon,
   PlusIcon,
+  RefreshIcon,
   SaveIcon,
   SearchIcon,
   SettingsIcon,
   SparklesIcon,
-  ArrowUpIcon,
-  MicIcon,
   StopSquareIcon,
-  ChevronDownIcon,
   SunIcon,
   TrashIcon,
   UndoIcon,
@@ -257,10 +269,12 @@ export type {
 } from "./primitives/NavigationBar";
 export {
   NavigationDrawer,
+  NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
 } from "./primitives/NavigationDrawer";
 export type {
+  NavigationDrawerGroupProps,
   NavigationDrawerHeadlineProps,
   NavigationDrawerItemProps,
   NavigationDrawerProps,
@@ -349,6 +363,8 @@ export type {
   CodeBlockReadonlyProps,
   CodeBlockEditableProps,
 } from "./primitives/CodeBlock";
+export { DiffView } from "./primitives/DiffView";
+export type { DiffLineKind, DiffViewLine, DiffViewProps } from "./primitives/DiffView";
 export {
   highlightCode,
   highlightWithProfile,
