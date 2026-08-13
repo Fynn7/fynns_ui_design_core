@@ -2352,7 +2352,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     code={t("globals.chatAssistantStackCode")}
                   />
                   <p>{chatCaption(t("globals.chatAssistantBody"))}</p>
-                  <p>{t("globals.chatAssistantStackNote")}</p>
+                  <p>{chatCaption(t("globals.chatAssistantStackNote"))}</p>
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}

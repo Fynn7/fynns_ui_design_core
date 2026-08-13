@@ -487,8 +487,9 @@ classes.
     composer **100%**. Pane soft mins + chat stage min on the shell root.
   - Unchanged under 640px; `assistant` plain; `system` centered muted
     notice (no pill); **`avatar` default omit**; `actions` hover /
-    focus-within on the message (opacity fade via `--fynns-duration-fast` /
-    `--fynns-ease-out` both ways; touch always; reduced-motion snaps);
+    focus-within on the message (opacity fade via
+    `--fynns-chatmessage-actions-reveal` → `duration-slow` / `--fynns-ease-out`
+    both ways; touch always; reduced-motion snaps);
     `streaming` = caret + `aria-busy` / polite
     live — no LLM; caret only while answer `children` has text (no empty
     bubble / lone caret during thinking-only wait — conditional `null`

@@ -10138,7 +10138,7 @@ a.fynns-chat-activity-artifact:hover {
   /* Copy / thumbs / etc.: hover / focus-within the message; touch always. */
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+  transition: opacity var(--fynns-chatmessage-actions-reveal) var(--fynns-ease-out);
 }
 
 .fynns-chat-message--user .fynns-chat-message-actions {
