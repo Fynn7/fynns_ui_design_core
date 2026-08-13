@@ -111,33 +111,89 @@ function hasRenderableBody(children: ReactNode): boolean {
 }
 
 /**
- * Promote bare string / number children to `.fynns-chat-message-prose` so
- * `--fynns-chatmessage-body-stack-gap` applies against sibling CodeBlock /
- * wells. Streaming caret stays **inside** the last prose unit (same line as
- * text); when the last child is already an element, caret is a trailing
- * body sibling (excluded from the stack gap).
+ * Block answer units that must stack with body-stack-gap against prose.
+ * Inline marks (`code`, `span`, `a`, …) stay inside a single prose run.
+ */
+function isBlockBodyChild(child: ReactNode): boolean {
+  if (!isValidElement(child)) return false;
+  const type = child.type;
+  if (typeof type === "string") {
+    return /^(div|p|pre|ul|ol|li|table|thead|tbody|tr|td|th|section|article|aside|header|footer|blockquote|hr|h[1-6]|figure|figcaption)$/i.test(
+      type,
+    );
+  }
+  const name =
+    (typeof type === "function" || (typeof type === "object" && type != null)
+      ? String(
+          ("displayName" in type && type.displayName) ||
+            ("name" in type && type.name) ||
+            "",
+        )
+      : "") || "";
+  if (
+    /^(CodeBlock|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
+      name,
+    )
+  ) {
+    return true;
+  }
+  const className = (child.props as { className?: unknown }).className;
+  if (typeof className === "string") {
+    return /\bfynns-(code-block|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
+      className,
+    );
+  }
+  return false;
+}
+
+/**
+ * Promote bare text / inline runs to `.fynns-chat-message-prose` so they stack
+ * against sibling CodeBlock / wells with `--fynns-chatmessage-body-stack-gap`.
+ * Consecutive non-block children (string + inline `code`, …) coalesce into
+ * **one** prose unit so chatCaption-style mixes stay inline. Streaming caret
+ * nests inside the last prose when that unit is trailing.
  */
 function renderBodyChildren(
   children: ReactNode,
   showCursor: boolean,
 ): ReactNode {
-  const items = Children.toArray(children);
+  const items = Children.toArray(children).filter((child) => {
+    if (typeof child === "string") return child.trim().length > 0;
+    return true;
+  });
+
   const out: ReactNode[] = [];
   let lastProseIndex = -1;
+  let inlineBuf: ReactNode[] = [];
+  let proseKey = 0;
 
-  items.forEach((child, i) => {
+  const flushInline = () => {
+    if (inlineBuf.length === 0) return;
+    lastProseIndex = out.length;
+    out.push(
+      <div
+        key={`fynns-chat-prose-${proseKey++}`}
+        className="fynns-chat-message-prose"
+      >
+        {inlineBuf}
+      </div>,
+    );
+    inlineBuf = [];
+  };
+
+  items.forEach((child) => {
     if (typeof child === "string" || typeof child === "number") {
-      if (typeof child === "string" && child.trim().length === 0) return;
-      lastProseIndex = out.length;
-      out.push(
-        <div key={`fynns-chat-prose-${i}`} className="fynns-chat-message-prose">
-          {child}
-        </div>,
-      );
+      inlineBuf.push(child);
       return;
     }
-    out.push(child);
+    if (isBlockBodyChild(child)) {
+      flushInline();
+      out.push(child);
+      return;
+    }
+    inlineBuf.push(child);
   });
+  flushInline();
 
   if (!showCursor) return out;
 

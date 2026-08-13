@@ -593,7 +593,10 @@ classes.
     bare string / number `children` are promoted to
     `.fynns-chat-message-prose` so `{text}<CodeBlock/>` still gets the gap —
     consumers must **not** patch this with app CSS or ad-hoc wrappers as the
-    primary fix. Prefer element siblings for markdown roots (app `<div>` /
+    primary fix. Consecutive **non-block** children (string + inline `code`,
+    …) coalesce into **one** prose unit so caption-style mixes stay inline;
+    block wells (`CodeBlock`, `div`/`p`/`pre`, …) stay siblings. Prefer
+    element siblings for markdown roots (app `<div>` /
     `.fynns-unit-stack`); nested markdown still stacks inside the wrapper
     with the same layout token. Streaming caret nests inside the last prose
     when that is the trailing unit (same line as text); a caret that remains
