@@ -1099,11 +1099,13 @@ classes.
   `examples/sandbox/src/state/baseline.ts`).
 - **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
   ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
-  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal, PanelLeft, PanelRight,
-  Pencil, Plus, Refresh, Save, Search, Settings, Sparkles, StopSquare, Sun,
-  Trash, Undo, Upload, Wrench — plus any glyph still imported by
-  Globals/Layouts/Preview.
+  FolderOpen, HelpCircle, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal,
+  PanelLeft, PanelRight, Pencil, Plus, Refresh, Save, Search, Settings,
+  Sparkles, StopSquare, Sun, Trash, Undo, Upload, Wrench — plus any glyph
+  still imported by Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
+  `HelpCircle` = ask / clarify (“?”); `Info` = informational (“i”) — do not
+  swap them.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
 `DialogFrame`, `Spinner`, and floating-box helpers are **internal**.

@@ -30,6 +30,7 @@ export {
   EyeOffIcon,
   FileIcon,
   FolderOpenIcon,
+  HelpCircleIcon,
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,

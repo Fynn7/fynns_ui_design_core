@@ -75,6 +75,7 @@ import {
   Drawer,
   IconButton,
   InfoIcon,
+  HelpCircleIcon,
   InlineAlert,
   Input,
   Textarea,
@@ -2612,7 +2613,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   status={activityPhase >= 3 ? "done" : "active"}
                   icon={
                     activityPhase >= 3 ? (
-                      <WrenchIcon />
+                      <HelpCircleIcon />
                     ) : activityPhase <= 0 ? (
                       <SearchIcon />
                     ) : activityPhase === 1 ? (
