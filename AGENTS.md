@@ -527,14 +527,14 @@ classes.
     hover use soft mixes — not full on-surface). Header `label` remounts
     with the same fade-only swap as ChatThinking (no translateY). While
     `streaming`, every newly mounted step fades the **whole row** over
-    `--fynns-chatmessage-activity-enter` (aliases `duration-slow`, same
-    beat as the per-step `.fynns-expand` height morph — not
+    `--fynns-chatmessage-activity-enter` (aliases `duration-slow` — not
     `presentation-hint` / not `duration-base`) / `--fynns-ease-emphasized`
-    (`--enter` on the step, opacity only; closed shells stay `opacity: 0`
-    so clip-wipe never shows opaque type). Node + rail stay in the layout
-    box so the tree does not desync. New rows height-morph `0fr`→`1fr`
-    (DialogFrame-style closed frame then rAF open). Already-visible rows
-    stay still. Growing trees need a stable `key` per logical step so
+    (`--enter` on the step, opacity only). Step shells snap `.fynns-expand`
+    `0fr`/`1fr` with **no** height transition — morphing the row clips the
+    tree top-to-bottom (`overflow: hidden`) and reads as a bounce. Closed
+    shells stay `opacity: 0`. Node + rail stay in the layout box so the
+    tree does not desync. Already-visible rows stay still. Growing trees
+    need a stable `key` per logical step so
     rows do not morph identity. Static completed trees skip the enter
     flash. Instant-complete `done`
     steps still visualize while streaming: the active mark holds for
@@ -550,7 +550,7 @@ classes.
     `prefers-reduced-motion` skips hold / enter / complete.
     A newly mounted last step stays
     queued (`0fr`, not painted) until earlier holds **and** complete one-shots
-    finish, then height-morphs open + whole-step fade —
+    finish, then snaps open + whole-step fade —
     complete and enter never overlap. Uncontrolled: force-open
     while `streaming` unless the user pinned closed (trigger stays
     enabled so the tree can collapse mid-run; a new streaming cycle

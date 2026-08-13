@@ -82,7 +82,7 @@ type ChatActivityStreamValue = {
   isLast: boolean;
   /**
    * True on the first paint where an earlier sibling is a newly mounted
-   * instant-done row (will hold then complete). Last step stays queued
+   * instant-done row (will hold then complete). Later steps stay queued
    * until that settle finishes so complete + enter never overlap.
    */
   priorWillHold: boolean;
@@ -181,11 +181,11 @@ export function ChatActivityArtifact({
 /**
  * One row in a `ChatActivity` tree — tool call, narrative beat, or pending.
  * Icon | copy share a dedicated `step-row` band so the glyph center
- * matches the label line box. New streaming rows height-morph via
- * `.fynns-expand` (`0fr`→`1fr`) with the **whole step faded** (opacity
- * only — no translateY). Opaque clip-wipe inside `overflow: hidden`
- * reads as a vertical bounce; fade hides that. Node + rail stay in the
- * layout box.
+ * matches the label line box. New streaming rows snap `.fynns-expand`
+ * `0fr`/`1fr` (no height transition) and fade the **whole step**
+ * (opacity only — no translateY). Animating `0fr`→`1fr` inside
+ * `overflow: hidden` clip-wipes the tree top-to-bottom and reads as a
+ * bounce. Node + rail stay in the layout box.
  * Description sits under the title in that column. Hold keeps the
  * artifact in layout (`visibility: hidden`) so the row does not jump
  * when the capsule appears. Hold → done (and active → done) plays a
@@ -210,34 +210,34 @@ export function ChatActivityStep({
   streamingRef.current = stream.streaming;
   const completeTimerRef = useRef<number | null>(null);
   const [holding, setHolding] = useState(
-    () => stream.streaming && status === "done",
+    () =>
+      stream.streaming &&
+      status === "done" &&
+      !(stream.priorWillHold || stream.priorWillComplete),
   );
   const [completing, setCompleting] = useState(false);
   const [queued, setQueued] = useState(
     () =>
-      stream.streaming &&
-      stream.isLast &&
-      (stream.priorWillHold || stream.priorWillComplete),
+      stream.streaming && (stream.priorWillHold || stream.priorWillComplete),
   );
-  const [entering, setEntering] = useState(false);
   const initiallyQueued =
     stream.streaming &&
-    stream.isLast &&
     (stream.priorWillHold || stream.priorWillComplete);
-  const [expandOpen, setExpandOpen] = useState(() => {
-    if (initiallyQueued) return false;
-    if (prefersReducedMotion()) return true;
-    return !stream.streaming;
-  });
+  const [entering, setEntering] = useState(
+    () => stream.streaming && !initiallyQueued && !prefersReducedMotion(),
+  );
+  const [expandOpen, setExpandOpen] = useState(() => !initiallyQueued);
   const enterPlayedRef = useRef(false);
   const enteringRef = useRef(false);
   enteringRef.current = entering;
   const pendingCompleteRef = useRef(false);
 
   const busy =
-    holding || completing || (entering && status === "done");
+    !queued &&
+    (holding || completing || (entering && status === "done"));
   const priorBusy =
     stream.priorHolding || stream.priorWillHold || stream.priorWillComplete;
+  const waitForPrior = stream.streaming && priorBusy;
 
   const clearCompleteTimer = () => {
     if (completeTimerRef.current == null) return;
@@ -272,39 +272,43 @@ export function ChatActivityStep({
 
   useEffect(() => () => clearCompleteTimer(), []);
 
-  useEffect(() => {
-    if (!queued) return;
-    if (!stream.streaming || !priorBusy) setQueued(false);
-  }, [queued, stream.streaming, priorBusy]);
-
   useLayoutEffect(() => {
-    if (queued) {
+    if (waitForPrior) {
+      enterPlayedRef.current = false;
+      setEntering(false);
       setExpandOpen(false);
+      if (!queued) setQueued(true);
       return;
     }
-    if (expandOpen) {
-      if (!enterPlayedRef.current) enterPlayedRef.current = true;
-      return;
-    }
-    if (prefersReducedMotion()) {
+    if (queued) {
+      setQueued(false);
       setExpandOpen(true);
-      enterPlayedRef.current = true;
+      if (
+        !enterPlayedRef.current &&
+        stream.streaming &&
+        !prefersReducedMotion()
+      ) {
+        enterPlayedRef.current = true;
+        setEntering(true);
+      } else {
+        enterPlayedRef.current = true;
+      }
       return;
     }
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        setExpandOpen(true);
-        if (enterPlayedRef.current) return;
+    if (!expandOpen) {
+      setExpandOpen(true);
+      if (
+        stream.streaming &&
+        !enterPlayedRef.current &&
+        !prefersReducedMotion()
+      ) {
         enterPlayedRef.current = true;
-        if (stream.streaming) setEntering(true);
-      });
-    });
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [queued, expandOpen, stream.streaming]);
+        setEntering(true);
+        return;
+      }
+    }
+    if (!enterPlayedRef.current) enterPlayedRef.current = true;
+  }, [queued, expandOpen, stream.streaming, waitForPrior]);
 
   useEffect(() => {
     if (stream.cycle !== cycleSeenRef.current) {
@@ -317,6 +321,9 @@ export function ChatActivityStep({
     const prevStatus = prevStatusRef.current;
     prevStatusRef.current = status;
 
+    if (queued) {
+      return;
+    }
     if (status === "active") {
       seenActiveRef.current = true;
       setHolding(false);
@@ -381,7 +388,7 @@ export function ChatActivityStep({
       window.clearTimeout(id);
       clearCompleteTimer();
     };
-  }, [stream.cycle, status]);
+  }, [stream.cycle, status, queued]);
 
   const visualStatus: ChatActivityStepStatus = holding ? "active" : status;
   const leading =
@@ -481,13 +488,14 @@ export function ChatActivityStep({
  * steps that already painted as `active` skip the hold.
  * `prefers-reduced-motion` skips hold / enter / complete. Static (not
  * streaming) trees show the final glyph immediately.
- * Complete then enter: a newly mounted last step stays queued (`0fr`)
- * until earlier instant-done holds *and* complete one-shots finish, then
- * height-morphs open (`.fynns-expand`) while the whole step fades over
+ * Complete then enter: a later step (including a stable-key tail) stays
+ * queued (`0fr`) until earlier instant-done holds *and* complete
+ * one-shots finish, then snaps open (`.fynns-expand`, no height
+ * transition) while the whole step fades over
  * `--fynns-chatmessage-activity-enter` (aliases `duration-slow`). Node /
- * rail / label do not translate. Already-visible rows stay still; every
- * newly mounted streaming row fades (not only the last). Callers growing
- * the tree must pass a stable `key` per logical step.
+ * rail / label do not translate. Already-visible rows stay still unless
+ * a prior sibling starts playing — then they snap closed and wait.
+ * Callers growing the tree must pass a stable `key` per logical step.
  *
  * Keep `ChatThinking` for single-block reasoning; do not overload it into a
  * timeline. This is the dedicated chain anatomy.
@@ -673,8 +681,8 @@ export function ChatActivity({
                     cycle: streamCycle,
                     index,
                     isLast: last,
-                    priorWillHold: streaming && last && priorWillHold,
-                    priorWillComplete: streaming && last && priorWillComplete,
+                    priorWillHold: streaming && priorWillHold,
+                    priorWillComplete: streaming && priorWillComplete,
                     priorHolding,
                     reportHold,
                   }}

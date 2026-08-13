@@ -9566,10 +9566,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   opacity: 1;
 }
 
+/* Snap 0fr/1fr — never morph height. Grid-row easing + overflow clip
+ * wipes the whole tree top-to-bottom (reads as a bounce). Enter is
+ * opacity-only on the step. Queued / re-queued tails stay 0fr. */
 .fynns-chat-activity-step-shell {
   width: 100%;
-  transition: grid-template-rows var(--fynns-chatmessage-activity-enter)
-    var(--fynns-ease-emphasized);
+  transition: none;
 }
 
 .fynns-chat-activity-step-shell:not(:last-child) .fynns-chat-activity-step {
@@ -9611,17 +9613,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Enter while streaming: row height morphs via `.fynns-expand` (`0fr`→`1fr`,
- * `--fynns-chatmessage-activity-enter`). The **whole step** fades over the
- * same token (aliases `duration-slow`). Closed shells stay opacity 0 so
- * `overflow: hidden` never clip-wipes opaque type (that reads as a vertical
- * bounce). No translateY. Every newly mounted streaming row fades — not
- * only the last. Instant-complete `done` steps hold the active mark for
+ * Enter while streaming: shell snaps `0fr`→`1fr` (no grid transition) and
+ * the **whole step** fades over `--fynns-chatmessage-activity-enter`
+ * (aliases `duration-slow`). Height morph + `overflow: hidden` clip-wipes
+ * the tree top-to-bottom. Closed / queued shells stay opacity 0. No
+ * translateY. Later steps stay queued (`0fr`) until earlier holds *and*
+ * complete finish, then fade in — including a stable-key tail that was
+ * already visible (it snaps closed while the prior row plays).
+ * Instant-complete `done` steps hold the active mark for
  * `--fynns-chatmessage-activity-step-min-busy` then play `--complete`
  * (glyph fade + artifact fade — no scale) over `--complete`.
- * A newly mounted last step stays queued (`0fr`) until those earlier holds
- * *and* complete one-shots finish, then opens — complete and enter never
- * overlap. Static completed trees skip.
+ * Static completed trees skip.
  */
 .fynns-chat-activity-step--enter {
   animation: fynns-chat-activity-step-enter

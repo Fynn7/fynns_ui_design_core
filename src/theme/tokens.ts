@@ -741,8 +741,8 @@ export const CHATMESSAGE_TOKENS = {
    */
   "activity-step-min-busy": "var(--fynns-duration-presentation-hint)",
   /**
-   * Newest-step copy fade (with row height morph via `.fynns-expand`).
-   * One step slower than disclosure `duration-base` so the grow is readable;
+   * Newest-step copy fade (opacity only — step shells snap `0fr`/`1fr`,
+   * no height morph). One step slower than disclosure `duration-base`;
    * not `presentation-hint` (that pulse is for min-busy).
    */
   "activity-enter": "var(--fynns-duration-slow)",
