@@ -57,9 +57,11 @@ export type ChatMessageProps = Omit<
   /** Regenerate button label. @default "Regenerate" */
   retryLabel?: string;
   /**
-   * Trailing action cluster (copy / regenerate). Hidden while `streaming`
-   * or when `error` is set. User actions are hover / focus-within (touch:
-   * always). Assistant: always. Ignored for `system`.
+   * Trailing action cluster under the turn (typically Copy + Regenerate +
+   * More). Hidden while `streaming` or when `error` is set. Revealed
+   * on message hover / focus-within (touch: always). Core does **not** run an
+   * LLM — consumer apps wire Regenerate to their own rerun. Distinct from the
+   * failed-generation footer (`error` + `onRetry`). Ignored for `system`.
    */
   actions?: ReactNode;
   /**

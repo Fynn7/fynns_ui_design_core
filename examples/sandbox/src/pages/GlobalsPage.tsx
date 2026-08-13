@@ -88,6 +88,8 @@ import {
   PlusIcon,
   PencilIcon,
   Radio,
+  RefreshIcon,
+  MoreHorizontalIcon,
   SaveIcon,
   SearchIcon,
   Select,
@@ -140,6 +142,57 @@ import { GlobalsCatalogSearch } from "./GlobalsCatalogSearch";
 function chatCaption(text: string): ReactNode {
   return splitCaptionByBackticks(text).map((seg, i) =>
     seg.code ? <code key={i}>{seg.text}</code> : <Fragment key={i}>{seg.text}</Fragment>,
+  );
+}
+
+/** Demo turn chrome — Copy + Regenerate + More; consumer apps own LLM rerun. */
+function ChatDemoActions({
+  copyLabel,
+  retryLabel,
+  moreLabel,
+  moreShareLabel,
+  moreExportLabel,
+  onCopy,
+  onRetry,
+  onMoreShare,
+  onMoreExport,
+}: {
+  copyLabel: string;
+  retryLabel: string;
+  moreLabel: string;
+  moreShareLabel: string;
+  moreExportLabel: string;
+  onCopy?: () => void;
+  onRetry?: () => void;
+  onMoreShare?: () => void;
+  onMoreExport?: () => void;
+}) {
+  return (
+    <>
+      <Tooltip content={copyLabel}>
+        <IconButton size="sm" aria-label={copyLabel} onClick={onCopy}>
+          <ClipboardIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip content={retryLabel}>
+        <IconButton size="sm" aria-label={retryLabel} onClick={onRetry}>
+          <RefreshIcon />
+        </IconButton>
+      </Tooltip>
+      <DropdownMenu
+        trigger={<MoreHorizontalIcon />}
+        ariaLabel={moreLabel}
+        align="start"
+        triggerClassName="fynns-btn--ghost fynns-btn--sm fynns-btn--icon"
+      >
+        <DropdownMenuItem onClick={onMoreShare}>
+          {moreShareLabel}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={onMoreExport}>
+          {moreExportLabel}
+        </DropdownMenuItem>
+      </DropdownMenu>
+    </>
   );
 }
 
@@ -251,17 +304,16 @@ const CODE_TOKEN_KEYS = [
 /**
  * Owns per-character stream text so ~28ms updates do not re-render the entire
  * GlobalsPage (76+ useState) while Communication is open.
+ * Idle / reset → no row (avoid a fake assistant turn above the fail demo).
  */
 function ChatStreamingAssistant({
   streaming,
   fullText,
-  idlePrompt,
   streamingLabel,
   onDone,
 }: {
   streaming: boolean;
   fullText: string;
-  idlePrompt: string;
   streamingLabel: string;
   onDone: () => void;
 }) {
@@ -287,13 +339,15 @@ function ChatStreamingAssistant({
     return () => window.clearInterval(timer);
   }, [streaming]);
 
+  if (!streaming && !text) return null;
+
   return (
     <ChatMessage
       role="assistant"
       streaming={streaming}
       streamingLabel={streamingLabel}
     >
-      {text || (streaming ? undefined : idlePrompt)}
+      {text || undefined}
     </ChatMessage>
   );
 }
@@ -2263,11 +2317,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   citationsLabel={t("globals.chatCitationsLabel")}
                   citationsVisibleCount={3}
                   actions={
-                    <Tooltip content={t("globals.chatCopyTip")}>
-                      <IconButton size="sm" aria-label={t("globals.chatCopyTip")}>
-                        <ClipboardIcon />
-                      </IconButton>
-                    </Tooltip>
+                    <ChatDemoActions
+                      copyLabel={t("globals.chatCopyTip")}
+                      retryLabel={t("globals.chatRetryTip")}
+                      moreLabel={t("globals.chatMoreTip")}
+                      moreShareLabel={t("globals.chatMoreShare")}
+                      moreExportLabel={t("globals.chatMoreExport")}
+                      onCopy={() =>
+                        snackbar(t("globals.chatCopyDemo"), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        })
+                      }
+                      onRetry={() =>
+                        snackbar(t("globals.chatRetryDemo"), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        })
+                      }
+                      onMoreShare={() =>
+                        snackbar(t("globals.chatMoreShareDemo"), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        })
+                      }
+                      onMoreExport={() =>
+                        snackbar(t("globals.chatMoreExportDemo"), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        })
+                      }
+                    />
                   }
                 >
                   <CodeBlock
@@ -2276,13 +2352,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     code={t("globals.chatAssistantStackCode")}
                   />
                   <p>{chatCaption(t("globals.chatAssistantBody"))}</p>
-                  <p>{t("globals.chatAssistantStackNote")}</p>
+                  <p>{chatCaption(t("globals.chatAssistantStackNote"))}</p>
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}
                   streaming={chatStreaming}
                   fullText={t("globals.chatStreamFull")}
-                  idlePrompt={t("globals.chatStreamPrompt")}
                   streamingLabel={t("globals.chatStreamingLabel")}
                   onDone={stopChatStream}
                 />
@@ -2295,14 +2370,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   retryLabel={t("globals.chatRetry")}
                   actions={
                     chatFailed ? undefined : (
-                      <Tooltip content={t("globals.chatCopyTip")}>
-                        <IconButton
-                          size="sm"
-                          aria-label={t("globals.chatCopyTip")}
-                        >
-                          <ClipboardIcon />
-                        </IconButton>
-                      </Tooltip>
+                      <ChatDemoActions
+                        copyLabel={t("globals.chatCopyTip")}
+                        retryLabel={t("globals.chatRetryTip")}
+                        moreLabel={t("globals.chatMoreTip")}
+                        moreShareLabel={t("globals.chatMoreShare")}
+                        moreExportLabel={t("globals.chatMoreExport")}
+                        onCopy={() =>
+                          snackbar(t("globals.chatCopyDemo"), {
+                            dismissAriaLabel: t("globals.snackbarDismiss"),
+                          })
+                        }
+                        onRetry={() =>
+                          snackbar(t("globals.chatRetryDemo"), {
+                            dismissAriaLabel: t("globals.snackbarDismiss"),
+                          })
+                        }
+                        onMoreShare={() =>
+                          snackbar(t("globals.chatMoreShareDemo"), {
+                            dismissAriaLabel: t("globals.snackbarDismiss"),
+                          })
+                        }
+                        onMoreExport={() =>
+                          snackbar(t("globals.chatMoreExportDemo"), {
+                            dismissAriaLabel: t("globals.snackbarDismiss"),
+                          })
+                        }
+                      />
                     )
                   }
                 >

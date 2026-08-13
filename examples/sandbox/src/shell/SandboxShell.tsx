@@ -54,9 +54,9 @@ import { TemplatesPage } from "../pages/TemplatesPage";
 
 export type { SandboxPage };
 
+/** Fresh / no-session default: EndAside closed (user opens via top bar). */
 function defaultAsideOpen(): boolean {
-  if (typeof window === "undefined") return true;
-  return !window.matchMedia("(max-width: 900px)").matches;
+  return false;
 }
 
 export function SandboxShell() {

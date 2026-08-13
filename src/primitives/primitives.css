@@ -10135,6 +10135,10 @@ a.fynns-chat-activity-artifact:hover {
   align-items: center;
   gap: var(--fynns-chatmessage-actions-gap);
   margin-inline-start: calc(-1 * var(--fynns-space-sm));
+  /* Copy / thumbs / etc.: hover / focus-within the message; touch always. */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-chatmessage-actions-reveal) var(--fynns-ease-out);
 }
 
 .fynns-chat-message--user .fynns-chat-message-actions {
@@ -10142,26 +10146,25 @@ a.fynns-chat-activity-artifact:hover {
   margin-block-start: calc(-1 * var(--fynns-chatmessage-gap) + 0.25rem);
 }
 
-/* User Copy/Edit: hover / focus-within; touch always. */
-.fynns-chat-message--user .fynns-chat-message-actions {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.fynns-chat-message--user:hover .fynns-chat-message-actions,
-.fynns-chat-message--user:focus-within .fynns-chat-message-actions {
+.fynns-chat-message:hover .fynns-chat-message-actions,
+.fynns-chat-message:focus-within .fynns-chat-message-actions {
   opacity: 1;
   pointer-events: auto;
 }
 
 @media (hover: none) {
-  .fynns-chat-message--user .fynns-chat-message-actions {
+  .fynns-chat-message-actions {
     opacity: 1;
     pointer-events: auto;
+    transition: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .fynns-chat-message-actions {
+    transition: none;
+  }
+
   .fynns-chat-message-cursor {
     animation: none;
     opacity: 1;

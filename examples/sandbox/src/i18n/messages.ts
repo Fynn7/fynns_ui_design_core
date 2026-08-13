@@ -981,10 +981,18 @@ const en = {
     "Sibling blocks in the bubble use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap` — same as `.fynns-unit-stack`).",
   "globals.chatAssistantStackCode": "npm run sandbox",
   "globals.chatCopyTip": "Copy message",
+  "globals.chatCopyDemo": "Copied (sandbox demo).",
+  "globals.chatRetryTip": "Regenerate",
+  "globals.chatRetryDemo":
+    "Sandbox demo only — in a consumer app, wire this IconButton to your own LLM rerun (core does not call a model).",
+  "globals.chatMoreTip": "More",
+  "globals.chatMoreShare": "Share",
+  "globals.chatMoreExport": "Export",
+  "globals.chatMoreShareDemo": "Share (sandbox demo).",
+  "globals.chatMoreExportDemo": "Export (sandbox demo).",
   "globals.chatStreamingLabel": "Generating response",
   "globals.chatStreamFull":
     "Streaming is a UI flag: show the caret while incomplete, then clear it when the reply finishes.",
-  "globals.chatStreamPrompt": "Press “Simulate stream” to see the incomplete caret.",
   "globals.chatStreamStart": "Simulate stream",
   "globals.chatStreamReset": "Reset",
   "globals.chatError": "There was an error generating a response.",
@@ -1021,7 +1029,7 @@ const en = {
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. Direct body siblings (CodeBlock + prose, …) use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. No built-in markdown / GFM task-list checkboxes / Voice Mode — caller owns `children`. Direct body siblings (CodeBlock + prose, …) use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `actions` = Copy + Regenerate + More `IconButton`/`DropdownMenu` (hover reveal; **consumer wires LLM rerun** — sandbox snackbar is demo only). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatCitationsAnatomyHelp":
     "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
   "globals.thinkingStreaming": "Thinking",
@@ -2280,10 +2288,18 @@ const zh: Record<MessageKey, string> = {
     "气泡内同级块用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`，与 `.fynns-unit-stack` 相同）。",
   "globals.chatAssistantStackCode": "npm run sandbox",
   "globals.chatCopyTip": "复制消息",
+  "globals.chatCopyDemo": "已复制（沙盒演示）。",
+  "globals.chatRetryTip": "重新生成",
+  "globals.chatRetryDemo":
+    "仅沙盒演示 — 消费仓请自行把此 IconButton 接到 LLM 重跑（core 不调用模型）。",
+  "globals.chatMoreTip": "更多",
+  "globals.chatMoreShare": "分享",
+  "globals.chatMoreExport": "导出",
+  "globals.chatMoreShareDemo": "分享（沙盒演示）。",
+  "globals.chatMoreExportDemo": "导出（沙盒演示）。",
   "globals.chatStreamingLabel": "正在生成回复",
   "globals.chatStreamFull":
     "streaming 是 UI 标志：未完成时显示光标，回复结束后关闭即可。",
-  "globals.chatStreamPrompt": "点击「模拟流式输出」查看未完成光标。",
   "globals.chatStreamStart": "模拟流式输出",
   "globals.chatStreamReset": "重置",
   "globals.chatError": "生成回复时出错。",
@@ -2319,7 +2335,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。正文直接子节点（CodeBlock + 散文等）用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。无内置 markdown / GFM 任务列表勾选框 / Voice Mode — 调用方自管 `children`。正文直接子节点（CodeBlock + 散文等）用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`actions` = 复制 + 重新生成 + 更多 `IconButton`/`DropdownMenu`（悬停显现；**消费仓自行接 LLM 重跑** — 沙盒 snackbar 仅演示）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
   "globals.thinkingStreaming": "思考中",

@@ -126,7 +126,7 @@ export function clearFreshBootFocusArm(): void {
 
 /** Defaults for a brand-new Vite session (Components + search focus elsewhere). */
 export function freshSandboxUiSession(
-  asideOpen = true,
+  asideOpen = false,
 ): Omit<SandboxUiSession, "bootId"> {
   return {
     page: "globals",
@@ -169,11 +169,7 @@ export function patchSandboxUiSession(
   if (typeof sessionStorage === "undefined") return;
   const bootId = getSandboxBootId();
   const prev = loadSandboxUiSession();
-  const asideDefault =
-    typeof window !== "undefined"
-      ? !window.matchMedia("(max-width: 900px)").matches
-      : true;
-  const base = prev ?? { bootId, ...freshSandboxUiSession(asideDefault) };
+  const base = prev ?? { bootId, ...freshSandboxUiSession() };
   const next: SandboxUiSession = {
     ...base,
     ...patch,

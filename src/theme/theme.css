@@ -300,6 +300,7 @@
   --fynns-chatmessage-body-stack-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-chatmessage-name-size: 0.75rem;
   --fynns-chatmessage-actions-gap: 0;
+  --fynns-chatmessage-actions-reveal: var(--fynns-duration-slow);
   --fynns-chatmessage-cursor-width: 0.0625rem;
   --fynns-chatmessage-cursor-height: 1lh;
   --fynns-chatmessage-error-gap: 0.75rem;

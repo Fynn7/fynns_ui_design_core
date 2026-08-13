@@ -665,6 +665,11 @@ export const CHATMESSAGE_TOKENS = {
   "name-size": "0.75rem",
   "actions-gap": "0",
   /**
+   * Copy / Regenerate / More cluster fade on message hover / focus-within
+   * (and leave). Slower than chrome `fast` so the icons ease in without a snap.
+   */
+  "actions-reveal": "var(--fynns-duration-slow)",
+  /**
    * Streaming caret thickness (1dp). Keep hairline — 2dp + radius read as a
    * stubby block next to body text.
    */
