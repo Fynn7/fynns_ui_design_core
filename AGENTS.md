@@ -343,7 +343,7 @@ Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thum
 Fonts: three stacks only — see **Font families** below. Motion:
 `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
-scrollbar,loading-spin,presentation-hint,thinking-shimmer,reduced-motion-spin}`.
+scrollbar,loading-spin,activity,presentation-hint,thinking-shimmer,reduced-motion-spin}`.
 
 **Font families (`--fynns-font-*`) — when to use (agents / consumers):**
 
@@ -530,8 +530,8 @@ classes.
     hover use soft mixes — not full on-surface). Header `label` remounts
     with the same fade-only swap as ChatThinking (no translateY). While
     `streaming`, every newly mounted step fades the **whole row** over
-    `--fynns-chatmessage-activity-enter` (aliases `duration-slow` — not
-    `presentation-hint` / not `duration-base`) / `--fynns-ease-emphasized`
+    `--fynns-chatmessage-activity-enter` (aliases `duration-activity` — not
+    `presentation-hint` / not chrome `duration-slow`) / `--fynns-ease-emphasized`
     (`--enter` on the step, opacity only). Step shells snap `.fynns-expand`
     `0fr`/`1fr` with **no** height transition — morphing the row clips the
     tree top-to-bottom (`overflow: hidden`) and reads as a bounce. Closed
@@ -544,7 +544,7 @@ classes.
     `--fynns-chatmessage-activity-step-min-busy` (aliases
     `presentation-hint`, one pulse) then glyph + artifact play a
     complete one-shot (`--fynns-chatmessage-activity-complete`, aliases
-    `duration-slow`; glyph fade, no scale; artifact stays in layout,
+    `duration-activity`; glyph fade, no scale; artifact stays in layout,
     `visibility: hidden` during hold).
     `active` → `done` on the same row skips the hold and plays complete
     (if that row is still entering, complete waits for enter to finish).

@@ -936,7 +936,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
   useEffect(() => {
     if (!activityStreaming) return;
-    // Longer than min-busy (presentation-hint) + complete + enter (duration-slow)
+    // Longer than min-busy (presentation-hint) + complete + enter (duration-activity)
     // so the settle is visible before the next phase mounts.
     const timer = window.setInterval(() => {
       setActivityPhase((phase) => {

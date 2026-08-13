@@ -758,15 +758,16 @@ export const CHATMESSAGE_TOKENS = {
   "activity-step-min-busy": "var(--fynns-duration-presentation-hint)",
   /**
    * Newest-step copy fade (opacity only — step shells snap `0fr`/`1fr`,
-   * no height morph). One step slower than disclosure `duration-base`;
-   * not `presentation-hint` (that pulse is for min-busy).
+   * no height morph). Aliases `--fynns-duration-activity` (slower than
+   * chrome `slow`); not `presentation-hint` (that pulse is for min-busy).
    */
-  "activity-enter": "var(--fynns-duration-slow)",
+  "activity-enter": "var(--fynns-duration-activity)",
   /**
    * Hold → done (and active → done) glyph + artifact settle. Next step
    * stays queued until this finishes. Glyph fades (no scale / spring).
+   * Same duration band as enter.
    */
-  "activity-complete": "var(--fynns-duration-slow)",
+  "activity-complete": "var(--fynns-duration-activity)",
 } as const;
 
 /**

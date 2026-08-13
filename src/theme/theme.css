@@ -177,6 +177,7 @@
   --fynns-duration-slow: 360ms;
   --fynns-duration-scrollbar: 520ms;
   --fynns-duration-loading-spin: 750ms;
+  --fynns-duration-activity: 720ms;
   --fynns-duration-presentation-hint: 1200ms;
   --fynns-duration-thinking-shimmer: 2s;
   --fynns-duration-reduced-motion-spin: 2200ms;
@@ -330,8 +331,8 @@
   --fynns-chatmessage-activity-artifact-pad-block: 0.125rem;
   --fynns-chatmessage-activity-step-min-height: max(var(--fynns-size-icon), calc((var(--fynns-font-size-xs) * var(--fynns-line-height-snug)) + (2 * var(--fynns-chatmessage-activity-artifact-pad-block)) + (2 * var(--fynns-border-hairline))));
   --fynns-chatmessage-activity-step-min-busy: var(--fynns-duration-presentation-hint);
-  --fynns-chatmessage-activity-enter: var(--fynns-duration-slow);
-  --fynns-chatmessage-activity-complete: var(--fynns-duration-slow);
+  --fynns-chatmessage-activity-enter: var(--fynns-duration-activity);
+  --fynns-chatmessage-activity-complete: var(--fynns-duration-activity);
   --fynns-chat-thread-gap: 2rem;
   --fynns-chat-thread-pad-inline: var(--fynns-layout-dialog-inset);
   --fynns-chat-thread-pad-block: var(--fynns-layout-content-pad-block);

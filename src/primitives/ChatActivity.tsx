@@ -479,7 +479,7 @@ export function ChatActivityStep({
  * active mark holds for `--fynns-chatmessage-activity-step-min-busy`
  * (aliases `presentation-hint`) then the done glyph / artifact play a
  * complete one-shot (`--fynns-chatmessage-activity-complete`, aliases
- * `duration-slow`).
+ * `duration-activity`).
  * `active` → `done` on the same row skips the hold and plays complete
  * (waits if that row is still entering).
  * Artifact stays in layout, `visibility: hidden` during hold.
@@ -491,7 +491,7 @@ export function ChatActivityStep({
  * queued (`0fr`) until earlier instant-done holds *and* complete
  * one-shots finish, then snaps open (`.fynns-expand`, no height
  * transition) while the whole step fades over
- * `--fynns-chatmessage-activity-enter` (aliases `duration-slow`). Node /
+ * `--fynns-chatmessage-activity-enter` (aliases `duration-activity`). Node /
  * rail / label do not translate. Already-visible rows stay still unless
  * a prior sibling starts playing — then they snap closed and wait.
  * Callers growing the tree must pass a stable `key` per logical step.
