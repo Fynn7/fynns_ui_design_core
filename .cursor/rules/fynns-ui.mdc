@@ -45,9 +45,12 @@ ring can paint before heavy work).
   `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
   generation footer under assistant turns; `thinking` / `ChatThinking` =
   single-block reasoning / agent-activity disclosure between name and
-  bubble (`streamingLabel` for tool status; soft mark + shimmer);
+  bubble (`streamingLabel` for tool status; soft mark + shimmer;
+  collapsible while streaming unless user pinned closed);
   `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
-  multi-step status tree (collapsible + rail); `citations` /
+  multi-step status tree (collapsible + rail; `icon` any ReactNode per step;
+  stable `key` per logical step; streaming min-busy hold on instant-done
+  steps; enter only on the newest last step); `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
   assistant body; inline `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM

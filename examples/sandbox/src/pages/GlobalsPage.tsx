@@ -89,6 +89,7 @@ import {
   PencilIcon,
   Radio,
   SaveIcon,
+  SearchIcon,
   Select,
   SettingsIcon,
   SkipLink,
@@ -2480,8 +2481,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               >
                 {activityPhase >= 1 ? (
                   <ChatActivityStep
+                    key="create"
                     status="done"
-                    icon={<WrenchIcon />}
+                    icon={<FileIcon />}
                     label={t("globals.activityStepCreate")}
                     artifact={
                       <ChatActivityArtifact>
@@ -2492,8 +2494,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ) : null}
                 {activityPhase >= 2 ? (
                   <ChatActivityStep
+                    key="update"
                     status="done"
-                    icon={<WrenchIcon />}
+                    icon={<PencilIcon />}
                     label={t("globals.activityStepUpdate")}
                     artifact={
                       <ChatActivityArtifact>
@@ -2504,12 +2507,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ) : null}
                 {activityPhase >= 3 ? (
                   <ChatActivityStep
+                    key="present"
                     status="done"
+                    icon={<WrenchIcon />}
                     label={t("globals.activityStepPresentDone")}
                   />
                 ) : (
                   <ChatActivityStep
+                    key={
+                      activityPhase <= 0
+                        ? "gather"
+                        : activityPhase === 1
+                          ? "read"
+                          : "present"
+                    }
                     status="active"
+                    icon={
+                      activityPhase <= 0 ? (
+                        <SearchIcon />
+                      ) : activityPhase === 1 ? (
+                        <FolderOpenIcon />
+                      ) : undefined
+                    }
                     label={
                       activityPhase <= 0
                         ? t("globals.activityStepGather")

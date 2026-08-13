@@ -1038,7 +1038,7 @@ const en = {
   "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open + status mark + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). Pass `icon={null}` to hide the default streaming mark. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + status mark + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). Pass `icon={null}` to hide the default streaming mark. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
   "globals.activityHeaderStart": "Gathering context",
   "globals.activityHeaderMemory": "Created memory file",
   "globals.activityHeaderPlan": "Updated plan with details",
@@ -1063,7 +1063,7 @@ const en = {
   "globals.activitySimulate": "Simulate activity tree",
   "globals.activityReset": "Reset done tree",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). Collapsible header + vertical rail + `ChatActivityStep` rows (`done` wrench / `active` status mark / optional `ChatActivityArtifact` capsule + description). Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.",
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy` before the done glyph. Optional `ChatActivityArtifact` capsule + description. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -2333,7 +2333,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：强制展开 + 状态点 + 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。传 `icon={null}` 可隐藏默认流式状态点。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 状态点 + 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。传 `icon={null}` 可隐藏默认流式状态点。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
   "globals.activityHeaderStart": "正在收集上下文",
   "globals.activityHeaderMemory": "已创建记忆文件",
   "globals.activityHeaderPlan": "已用细节更新计划",
@@ -2357,7 +2357,7 @@ const zh: Record<MessageKey, string> = {
   "globals.activitySimulate": "模拟活动树",
   "globals.activityReset": "重置为完成树",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行（`done` 扳手 / `active` 状态点 / 可选 `ChatActivityArtifact` 胶囊 + 说明）。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。",
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy` 再换成完成图标。可选 `ChatActivityArtifact` 胶囊 + 说明。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",

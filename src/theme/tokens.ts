@@ -730,6 +730,13 @@ export const CHATMESSAGE_TOKENS = {
   /** Inline pad inside artifact capsule. */
   "activity-artifact-pad-inline": "0.375rem",
   "activity-artifact-pad-block": "0.125rem",
+  /**
+   * While `ChatActivity` is streaming, a step that arrives already `done`
+   * (instant tool) still shows the active mark for at least this long
+   * before settling to the done glyph — one `presentation-hint` pulse.
+   * `prefers-reduced-motion` skips the hold (JS reads this token).
+   */
+  "activity-step-min-busy": "var(--fynns-duration-presentation-hint)",
 } as const;
 
 /**

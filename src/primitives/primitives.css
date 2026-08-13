@@ -9609,11 +9609,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * slide-in-from-bottom-1 ≈ 0.25rem; 300ms → nearest `--fynns-duration-slow`.
  * Layout (flex gap) pushes later rows / answer down; we only soften the
  * animated rows — no FLIP / View Transition dependency.
- * Gated on `--streaming`: when streaming turns on, every step currently in
- * the tree (including ones already mounted) runs enter once; later mounts
- * while streaming also enter. Static completed trees (not streaming) skip.
+ * Mount-only on the newest (last) step while streaming: `--enter` fade +
+ * slide. Same-commit older siblings and already-visible rows stay still
+ * so the tree does not re-animate as a block. Instant-complete `done`
+ * steps also hold the active mark for
+ * `--fynns-chatmessage-activity-step-min-busy` (JS) before the done glyph.
+ * Static completed trees (not streaming) skip.
  */
-.fynns-chat-activity--streaming .fynns-chat-activity-step {
+.fynns-chat-activity-step--enter {
   animation: fynns-chat-activity-step-enter var(--fynns-duration-slow)
     var(--fynns-ease-emphasized) both;
 }
@@ -9663,9 +9666,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   line-height: 0;
 }
 
+.fynns-chat-activity-node > * {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .fynns-chat-activity-node svg {
   display: block;
   flex-shrink: 0;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 .fynns-chat-activity-mark {
@@ -9793,7 +9803,7 @@ a.fynns-chat-activity-artifact:hover {
     animation: none;
   }
 
-  .fynns-chat-activity--streaming .fynns-chat-activity-step {
+  .fynns-chat-activity-step--enter {
     animation: none;
     opacity: 1;
     transform: none;

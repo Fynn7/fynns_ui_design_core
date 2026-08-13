@@ -500,30 +500,46 @@ classes.
     + label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
     muted base + accent-into-muted mid peak — never full `text`) + swap
     enter (`--fynns-duration-base`); `icon={null}` hides the mark;
-    force-open while streaming unless user pinned closed; auto-collapse
-    once when done; user expand sticks; no body → static duration strip
-    without chevron; caller owns thought `children` — core does **not**
+    force-open while streaming unless user pinned closed (trigger stays
+    enabled so the disclosure can collapse mid-run; a new streaming cycle
+    clears the pin); auto-collapse once when done; user expand sticks;
+    no body → static duration strip without chevron; caller owns thought `children` — core does **not**
     parse markdown / CoT; do **not** pipe thinking tokens into
     `aria-live` — see
     [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
     `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
     **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
     = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
-    collapsible header + vertical rail + done wrench / active mark /
-    optional file capsule + description). Each step is its own
-    `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
+    collapsible header + vertical rail + `ChatActivityStep` rows).
+    **`icon`** is any ReactNode — consumers swap per tool / situation
+    (`FileIcon` / `PencilIcon` / `SearchIcon` / …). Omit → `WrenchIcon`
+    (`done` / `pending`) or the soft status mark (`active`); `null` →
+    empty node (rail still connects). Node box + SVG descendants use
+    `--fynns-size-icon`. Optional file capsule + description. Each step
+    is its own `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
     (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
     glyph and copy centers match). Same secondary-ink band as
     ChatThinking (header label inherits muted; active step / artifact
-    hover use soft mixes — not full on-surface). While `streaming`, each
-    newly mounted steps — and any steps already in the tree when
-    `streaming` flips on — enter with fade + `translateY(0.25rem)` → 0 over
-    `--fynns-duration-slow` / `--fynns-ease-emphasized` (`fill-mode: both`;
+    hover use soft mixes — not full on-surface). While `streaming`, only
+    the **newest** (last) newly mounted step enters with fade +
+    `translateY(0.25rem)` → 0 over `--fynns-duration-slow` /
+    `--fynns-ease-emphasized` (`--enter` class, cleared on `animationend`;
     assistant-ui Reasoning panel `duration-300` / `slide-in-from-bottom-1`
-    parity) — flex gap pushes later rows / answer down; static completed
-    trees (not streaming) skip the enter flash. Uncontrolled: force-open
-    while `streaming` and disable the header trigger so clicks cannot
-    queue a post-stream collapse. Also slots via
+    parity). Same-commit older siblings (instant-done rows above the
+    tail) and already-visible rows do **not** play enter — the tree must
+    not re-animate as a block. Growing trees need a stable `key` per
+    logical step so rows do not morph identity. Static completed trees
+    skip the enter flash. Instant-complete `done`
+    steps still visualize while streaming: the active mark holds for
+    `--fynns-chatmessage-activity-step-min-busy` (aliases
+    `presentation-hint`, one pulse) before the done glyph / artifact
+    settle; the hold finishes even if `streaming` ends mid-pulse;
+    steps that already painted as `active` skip the hold;
+    `prefers-reduced-motion` skips it. Uncontrolled: force-open
+    while `streaming` unless the user pinned closed (trigger stays
+    enabled so the tree can collapse mid-run; a new streaming cycle
+    clears the pin). Completed trees stay at last open — no post-stream
+    auto-collapse. Also slots via
     `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
     `ChatThinking` for single-block reasoning — do **not** overload it
     into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
