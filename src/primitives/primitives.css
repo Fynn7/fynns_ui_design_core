@@ -9334,20 +9334,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: inherit;
 }
 
-/* Soft accent orb while streaming when no custom `icon` is passed. */
-.fynns-chat-thinking-mark {
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: var(--fynns-space-sm);
-  height: var(--fynns-space-sm);
-  border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-accent);
-  box-shadow: 0 0 0 var(--fynns-border-hairline)
-    color-mix(in srgb, var(--fynns-color-accent) 42%, transparent);
-  animation: fynns-chat-thinking-mark-pulse
-    var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
-}
-
 .fynns-chat-thinking-label {
   min-width: 0;
   overflow: hidden;
@@ -9451,12 +9437,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-chat-thinking-mark {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
   .fynns-chat-thinking-label--swap,
   .fynns-chat-thinking-label--streaming {
     animation: none;

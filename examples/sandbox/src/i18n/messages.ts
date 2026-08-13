@@ -1030,7 +1030,7 @@ const en = {
   "globals.thinkingActionCheck": "Checking layout tokens…",
   "globals.thinkingActionDraft": "Drafting a reply…",
   "globals.thinkingActionsHelp":
-    "Dummy agent / LLM activity labels (streaming). Soft status mark + label shimmer; swap `streamingLabel` to morph between activities. For multi-step tool trees see **ChatActivity**.",
+    "Dummy agent / LLM activity labels (streaming). Label shimmer; swap `streamingLabel` to morph between activities. For multi-step tool trees see **ChatActivity**.",
   "globals.thinkingBody":
     "Checked naming against CHATMESSAGE_TOKENS and kept the disclosure off the Collapsible card shell.",
   "globals.thinkingAnswer":
@@ -1038,7 +1038,7 @@ const en = {
   "globals.thinkingSimulate": "Simulate agent run",
   "globals.thinkingReset": "Reset done",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + status mark + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). Pass `icon={null}` to hide the default streaming mark. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
+    "**ChatThinking** — Wave 1 single-block reasoning / agent-activity disclosure (ChatGPT / Claude “Thinking / Thought for Ns”; Cursor-style tool status via `streamingLabel`). Slot via `ChatMessage.thinking` between name and bubble. Streaming: force-open unless the user pinned closed (trigger stays enabled so it can collapse mid-run; a new run clears the pin) + label shimmer; remount on label change for swap enter. Done: auto-collapse once; user expand sticks. No children → static duration strip (no chevron). No default streaming orb — pass `icon` only for a custom leading glyph. No markdown / LLM in core; do not live-region thought tokens. Geometry: `CHATMESSAGE_TOKENS` `thinking-*`. Multi-step tool / status tree → **ChatActivity** (Wave 2).",
   "globals.activityHeaderStart": "Gathering context",
   "globals.activityHeaderMemory": "Created memory file",
   "globals.activityHeaderPlan": "Updated plan with details",
@@ -2325,7 +2325,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingActionCheck": "正在检查布局 token…",
   "globals.thinkingActionDraft": "正在起草回复…",
   "globals.thinkingActionsHelp":
-    "假数据 Agent / LLM 活动标签（流式）。柔和状态点 + 标签 shimmer；切换 `streamingLabel` 可变形活动文案。多步骤工具树见 **ChatActivity**。",
+    "假数据 Agent / LLM 活动标签（流式）。标签 shimmer；切换 `streamingLabel` 可变形活动文案。多步骤工具树见 **ChatActivity**。",
   "globals.thinkingBody":
     "对照 CHATMESSAGE_TOKENS 核对命名，并避免套用 Collapsible 的卡片壳。",
   "globals.thinkingAnswer":
@@ -2333,7 +2333,7 @@ const zh: Record<MessageKey, string> = {
   "globals.thinkingSimulate": "模拟 Agent 运行",
   "globals.thinkingReset": "重置为完成",
   "globals.thinkingHelp":
-    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 状态点 + 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。传 `icon={null}` 可隐藏默认流式状态点。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
+    "**ChatThinking** — Wave 1 单块推理 / Agent 活动披露（ChatGPT / Claude「Thinking / Thought for Ns」；Cursor 式工具状态经 `streamingLabel`）。经 `ChatMessage.thinking` 插在 name 与 bubble 之间。流式：默认展开，用户可收起（trigger 保持可点；新一轮 streaming 清 pin）+ 标签 shimmer；标签变更 remount 进入动画。完成：自动收拢一次；用户展开后粘住。无 children → 不可展开时长条（无 chevron）。默认无流式光点 — 仅在需要时传 `icon`。core 不解析 markdown / 不接 LLM；思维 token 禁止进 live region。几何：`CHATMESSAGE_TOKENS` `thinking-*`。多步骤工具 / 状态树 → **ChatActivity**（Wave 2）。",
   "globals.activityHeaderStart": "正在收集上下文",
   "globals.activityHeaderMemory": "已创建记忆文件",
   "globals.activityHeaderPlan": "已用细节更新计划",

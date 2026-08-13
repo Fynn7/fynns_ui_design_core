@@ -710,8 +710,11 @@ export const CHATMESSAGE_TOKENS = {
   "thinking-gap": "0.375rem",
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
-  /** Thought body inset under the trigger. */
-  "thinking-body-pad-block": "0.375rem",
+  /**
+   * Thought body inset under the trigger (and ChatActivity steps under
+   * the header). Aliases field-stack-gap so label ↔ body is not flush.
+   */
+  "thinking-body-pad-block": "var(--fynns-layout-field-stack-gap)",
   "thinking-body-pad-inline": "0",
   /**
    * `ChatActivity` Wave 2 chain chrome (collapsible header + status tree).

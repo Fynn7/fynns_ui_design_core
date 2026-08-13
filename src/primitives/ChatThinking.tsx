@@ -17,7 +17,7 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   children?: ReactNode;
   /**
    * While true: streaming label + force-open (unless user pinned closed) +
-   * status-mark / label motion. Trigger stays enabled so the disclosure can
+   * label motion. Trigger stays enabled so the disclosure can
    * collapse mid-run. Label may be any agent/LLM activity (`"Thinking"`,
    * `"Searching…"`, `"Reading file…"`, …) — swap `streamingLabel` to morph
    * the row.
@@ -37,8 +37,8 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   /**
-   * Optional leading glyph. While `streaming` and omitted, a soft status
-   * mark pulses (agent activity). Pass `icon={null}` to suppress the mark.
+   * Optional leading glyph. Omit or pass `null` for label-only (no
+   * default streaming orb).
    */
   icon?: ReactNode | null;
 };
@@ -183,14 +183,11 @@ export function ChatThinking({
 
   const toggle = () => setOpen(!isOpen);
 
-  const showStatusMark = streaming && icon === undefined;
   const leading =
     icon != null ? (
       <span className="fynns-chat-thinking-leading" aria-hidden>
         {icon}
       </span>
-    ) : showStatusMark ? (
-      <span className="fynns-chat-thinking-mark" aria-hidden />
     ) : null;
 
   const labelNode = (

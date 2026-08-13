@@ -496,10 +496,10 @@ classes.
     emphasis = soft `color-mix` into `text` (never full
     `--fynns-color-text` — VS Code/Vercel jump muted→foreground, which
     reads as a white flash here); no trigger state-layer wash. Streaming
-    = soft accent status mark (pulse `--fynns-duration-presentation-hint`)
-    + label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
+    = label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
     muted base + accent-into-muted mid peak — never full `text`) + swap
-    enter (`--fynns-duration-base`); `icon={null}` hides the mark;
+    enter (`--fynns-duration-base`); no default streaming orb (`icon` is
+    optional leading glyph only);
     force-open while streaming unless user pinned closed (trigger stays
     enabled so the disclosure can collapse mid-run; a new streaming cycle
     clears the pin); auto-collapse once when done; user expand sticks;
@@ -507,7 +507,9 @@ classes.
     parse markdown / CoT; do **not** pipe thinking tokens into
     `aria-live` — see
     [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
-    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
+    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group;
+    `thinking-body-pad-block` aliases `field-stack-gap` so trigger ↔ body
+    is not flush).
     **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
     = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
     collapsible header + vertical rail + `ChatActivityStep` rows).
