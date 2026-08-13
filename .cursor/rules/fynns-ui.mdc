@@ -58,9 +58,12 @@ ring can paint before heavy work).
   later steps stay queued until prior hold **and** complete, then fade as
   a whole — no translateY / no height morph / no clip-wipe); `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips under
-  assistant body; body direct siblings stack with
-  `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap` — same as
-  `.fynns-unit-stack`; caret excluded); inline `code` = ChatGPT pill
+  assistant body; body **element** siblings stack with
+  `--fynns-chatmessage-body-stack-gap` (**16dp**, aliases `unit-stack-gap` —
+  same as `.fynns-unit-stack`; core wraps bare string/number children as
+  `.fynns-chat-message-prose` so `{text}<CodeBlock/>` gets the gap — do not
+  patch in the consumer; caret nests in last prose when trailing); inline
+  `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
   task-list checkboxes — caller owns `children`; CJK IME Enter while
   composing does not send — AGENTS.md Composer keys; composer =

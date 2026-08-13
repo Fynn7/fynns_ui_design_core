@@ -2346,13 +2346,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     />
                   }
                 >
+                  {t("globals.chatAssistantBody")}
                   <CodeBlock
                     variant="plain"
                     language="bash"
                     code={t("globals.chatAssistantStackCode")}
                   />
-                  <p>{chatCaption(t("globals.chatAssistantBody"))}</p>
-                  <p>{chatCaption(t("globals.chatAssistantStackNote"))}</p>
+                  {t("globals.chatAssistantStackNote")}
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}

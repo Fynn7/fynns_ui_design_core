@@ -187,6 +187,14 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 **禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”；
 只写 `label="*.xml"` 却省略 `language`。
 
+## ChatMessage 正文间距（硬 — 16dp）
+
+气泡内**元素**兄弟用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap` /
+16dp）。`ChatMessage` 会把裸 `string` / `number` children 包成
+`.fynns-chat-message-prose`，因此 `{text}<CodeBlock/>` 在消费仓**不必**再包一层
+`<div>`，也**禁止**用本地 CSS 另造间距。Markdown 根仍用元素 /
+`.fynns-unit-stack`。权威：子模块 `AGENTS.md` **Body sibling stack**。
+
 ## 改 UI 前检查清单
 
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
@@ -195,4 +203,5 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
 5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
-6. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+6. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
+7. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

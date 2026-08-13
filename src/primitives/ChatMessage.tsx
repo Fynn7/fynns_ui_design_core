@@ -1,6 +1,9 @@
 import {
   Children,
+  cloneElement,
+  isValidElement,
   type HTMLAttributes,
+  type ReactElement,
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
@@ -21,7 +24,10 @@ export type ChatMessageProps = Omit<
   role: ChatMessageRole;
   /**
    * Message body. The caller owns markdown rendering and token append while
-   * streaming — this primitive only paints incomplete cues.
+   * streaming — this primitive only paints incomplete cues. Bare string /
+   * number children are wrapped as `.fynns-chat-message-prose` so sibling
+   * `CodeBlock` / wells get `--fynns-chatmessage-body-stack-gap` without a
+   * consumer wrapper.
    */
   children?: ReactNode;
   /**
@@ -99,8 +105,64 @@ function join(...parts: Array<string | false | null | undefined>) {
 function hasRenderableBody(children: ReactNode): boolean {
   return Children.toArray(children).some((child) => {
     if (typeof child === "string") return child.trim().length > 0;
+    if (typeof child === "number") return true;
     return true;
   });
+}
+
+/**
+ * Promote bare string / number children to `.fynns-chat-message-prose` so
+ * `--fynns-chatmessage-body-stack-gap` applies against sibling CodeBlock /
+ * wells. Streaming caret stays **inside** the last prose unit (same line as
+ * text); when the last child is already an element, caret is a trailing
+ * body sibling (excluded from the stack gap).
+ */
+function renderBodyChildren(
+  children: ReactNode,
+  showCursor: boolean,
+): ReactNode {
+  const items = Children.toArray(children);
+  const out: ReactNode[] = [];
+  let lastProseIndex = -1;
+
+  items.forEach((child, i) => {
+    if (typeof child === "string" || typeof child === "number") {
+      if (typeof child === "string" && child.trim().length === 0) return;
+      lastProseIndex = out.length;
+      out.push(
+        <div key={`fynns-chat-prose-${i}`} className="fynns-chat-message-prose">
+          {child}
+        </div>,
+      );
+      return;
+    }
+    out.push(child);
+  });
+
+  if (!showCursor) return out;
+
+  const caret = (
+    <span key="fynns-chat-cursor" className="fynns-chat-message-cursor" aria-hidden />
+  );
+
+  const lastIsProse =
+    lastProseIndex >= 0 && lastProseIndex === out.length - 1;
+
+  if (lastIsProse && isValidElement(out[lastProseIndex])) {
+    const prose = out[lastProseIndex] as ReactElement<{ children?: ReactNode }>;
+    out[lastProseIndex] = cloneElement(prose, {
+      children: (
+        <>
+          {prose.props.children}
+          {caret}
+        </>
+      ),
+    });
+    return out;
+  }
+
+  out.push(caret);
+  return out;
 }
 
 /**
@@ -189,10 +251,7 @@ export function ChatMessage({
         {showBubble ? (
           <div className="fynns-chat-message-bubble">
             <div className="fynns-chat-message-body">
-              {children}
-              {showCursor ? (
-                <span className="fynns-chat-message-cursor" aria-hidden />
-              ) : null}
+              {renderBodyChildren(children, showCursor)}
             </div>
           </div>
         ) : null}
