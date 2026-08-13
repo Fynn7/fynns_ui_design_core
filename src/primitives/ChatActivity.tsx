@@ -14,6 +14,10 @@ import {
   useState,
 } from "react";
 import { ChevronRightIcon, FileIcon, ICON_SIZE, WrenchIcon } from "./icons";
+import { DURATION_TOKENS } from "../theme/motionTokens";
+
+/** Fallback when `--fynns-chatmessage-activity-enter|complete` cannot resolve. */
+const ACTIVITY_MOTION_FALLBACK_MS = Number.parseFloat(DURATION_TOKENS.activity);
 
 export type ChatActivityStepStatus = "pending" | "active" | "done";
 
@@ -252,7 +256,7 @@ export function ChatActivityStep({
     const ms = readTokenMs(
       rootRef.current,
       "--fynns-chatmessage-activity-complete",
-      360,
+      ACTIVITY_MOTION_FALLBACK_MS,
     );
     if (ms <= 0) {
       setCompleting(false);
@@ -345,7 +349,7 @@ export function ChatActivityStep({
           const enterMs = readTokenMs(
             rootRef.current,
             "--fynns-chatmessage-activity-enter",
-            360,
+            ACTIVITY_MOTION_FALLBACK_MS,
           );
           if (enterMs <= 0) {
             pendingCompleteRef.current = false;
@@ -407,8 +411,7 @@ export function ChatActivityStep({
     if (event.target === event.currentTarget) {
       const name = event.animationName;
       if (
-        name.includes("activity-step-enter") ||
-        name.includes("activity-copy-enter")
+        name.includes("activity-step-enter")
       ) {
         setEntering(false);
         enteringRef.current = false;
@@ -600,14 +603,25 @@ export function ChatActivity({
    * Form-like list rhythm: natural height per open step-row → take max →
    * apply as min-height on every open row (Grid `equalCells` / choice-stack
    * floor). Attribute-only paint on our steps root — ClippedNavShell MO is
-   * childList-only, so no observer thrash. Clear the var while measuring.
+   * childList-only, so no observer thrash. `data-equal-measuring` drops the
+   * measured min so natural heights win (same as Grid equalCells).
    */
   useLayoutEffect(() => {
     const root = stepsRef.current;
     if (!root || !isOpen) return;
 
+    let measuring = false;
+    let lastH = 0;
+    const applied = root.style
+      .getPropertyValue("--fynns-chat-activity-step-row-height")
+      .trim();
+    if (applied.endsWith("px")) {
+      lastH = Number.parseInt(applied, 10) || 0;
+    }
+
     const measure = () => {
-      root.style.removeProperty("--fynns-chat-activity-step-row-height");
+      if (measuring) return;
+      measuring = true;
       root.dataset.equalMeasuring = "true";
       let maxH = 0;
       for (const shell of root.querySelectorAll(
@@ -621,12 +635,13 @@ export function ChatActivity({
         maxH = Math.max(maxH, Math.ceil(row.getBoundingClientRect().height));
       }
       delete root.dataset.equalMeasuring;
-      if (maxH > 0) {
-        root.style.setProperty(
-          "--fynns-chat-activity-step-row-height",
-          `${maxH}px`,
-        );
-      }
+      measuring = false;
+      if (maxH <= 0 || maxH === lastH) return;
+      lastH = maxH;
+      root.style.setProperty(
+        "--fynns-chat-activity-step-row-height",
+        `${maxH}px`,
+      );
     };
 
     measure();

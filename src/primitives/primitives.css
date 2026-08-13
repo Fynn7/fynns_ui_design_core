@@ -9630,7 +9630,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * Enter while streaming: shell snaps `0fr`→`1fr` (no grid transition) and
  * the **whole step** fades over `--fynns-chatmessage-activity-enter`
- * (aliases `duration-slow`). Height morph + `overflow: hidden` clip-wipes
+ * (aliases `duration-activity`). Height morph + `overflow: hidden` clip-wipes
  * the tree top-to-bottom. Closed / queued shells stay opacity 0. No
  * translateY. Later steps stay queued (`0fr`) until earlier holds *and*
  * complete finish, then fade in — including a stable-key tail that was
