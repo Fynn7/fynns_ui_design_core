@@ -517,7 +517,8 @@ classes.
     (`FileIcon` / `PencilIcon` / `SearchIcon` / …). Omit → `WrenchIcon`
     (`done` / `pending`) or the soft status mark (`active`); `null` →
     empty node (rail still connects). Node box + SVG descendants use
-    `--fynns-size-icon`. Optional file capsule + description. Each step
+    `--fynns-size-icon`. Optional file capsule + description (icon ↔
+    filename gap aliases `--fynns-chatmessage-citation-chip-gap`). Each step
     is its own `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
     (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
     glyph and copy centers match). Same secondary-ink band as

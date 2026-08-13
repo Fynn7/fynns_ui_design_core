@@ -697,7 +697,7 @@ export const CHATMESSAGE_TOKENS = {
   "citation-pad-block": "0.25rem",
   /** Favicon / leading mark in a citation chip. */
   "citation-favicon": "0.875rem",
-  /** Gap between favicon and publisher label. */
+  /** Favicon ↔ publisher (also artifact icon ↔ filename). */
   "citation-chip-gap": "0.375rem",
   /** Expanded footnote card stack gap. */
   "citation-list-gap": "0.375rem",

@@ -9730,7 +9730,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   display: inline-flex;
   align-items: center;
   align-self: center;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-chatmessage-citation-chip-gap);
   max-width: 100%;
   padding-inline: var(--fynns-chatmessage-activity-artifact-pad-inline);
   padding-block: var(--fynns-chatmessage-activity-artifact-pad-block);
