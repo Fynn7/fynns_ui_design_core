@@ -655,6 +655,13 @@ export const CHATMESSAGE_TOKENS = {
   /** ChatGPT message body `text-base` / 16px. */
   "body-size": "1rem",
   "body-line": "1.5",
+  /**
+   * Gap between adjacent **direct** children of `.fynns-chat-message-body`
+   * (16dp — aliases `--fynns-layout-unit-stack-gap`). Same constant as
+   * `.fynns-unit-stack` / Card body siblings — CodeBlock + prose, two
+   * surfaces, etc. Not CodeBlock-specific. Streaming caret is excluded.
+   */
+  "body-stack-gap": "var(--fynns-layout-unit-stack-gap)",
   "name-size": "0.75rem",
   "actions-gap": "0",
   /**
@@ -697,7 +704,7 @@ export const CHATMESSAGE_TOKENS = {
   "citation-pad-block": "0.25rem",
   /** Favicon / leading mark in a citation chip. */
   "citation-favicon": "0.875rem",
-  /** Gap between favicon and publisher label. */
+  /** Favicon ↔ publisher (also artifact icon ↔ filename). */
   "citation-chip-gap": "0.375rem",
   /** Expanded footnote card stack gap. */
   "citation-list-gap": "0.375rem",
@@ -710,8 +717,11 @@ export const CHATMESSAGE_TOKENS = {
   "thinking-gap": "0.375rem",
   /** Gap between optional icon / label / chevron in the thinking trigger row. */
   "thinking-trigger-gap": "0.375rem",
-  /** Thought body inset under the trigger. */
-  "thinking-body-pad-block": "0.375rem",
+  /**
+   * Thought body inset under the trigger (and ChatActivity steps under
+   * the header). Aliases field-stack-gap so label ↔ body is not flush.
+   */
+  "thinking-body-pad-block": "var(--fynns-layout-field-stack-gap)",
   "thinking-body-pad-inline": "0",
   /**
    * `ChatActivity` Wave 2 chain chrome (collapsible header + status tree).
@@ -730,6 +740,34 @@ export const CHATMESSAGE_TOKENS = {
   /** Inline pad inside artifact capsule. */
   "activity-artifact-pad-inline": "0.375rem",
   "activity-artifact-pad-block": "0.125rem",
+  /**
+   * Step icon|headline band floor — form-cluster style `max(floor, content)`.
+   * Sized for the artifact capsule (xs + snug + pad + hairline borders) so
+   * rows without a chip still match chip rows; never a fixed `height`.
+   * `ChatActivity` may raise `--fynns-chat-activity-step-row-height` to the
+   * measured max across open steps (wrap / multi-line).
+   */
+  "activity-step-min-height":
+    "max(var(--fynns-size-icon), calc((var(--fynns-font-size-xs) * var(--fynns-line-height-snug)) + (2 * var(--fynns-chatmessage-activity-artifact-pad-block)) + (2 * var(--fynns-border-hairline))))",
+  /**
+   * While `ChatActivity` is streaming, a step that arrives already `done`
+   * (instant tool) still shows the active mark for at least this long
+   * before the complete one-shot — one `presentation-hint` pulse.
+   * `prefers-reduced-motion` skips the hold (JS reads this token).
+   */
+  "activity-step-min-busy": "var(--fynns-duration-presentation-hint)",
+  /**
+   * Newest-step copy fade (opacity only — step shells snap `0fr`/`1fr`,
+   * no height morph). Aliases `--fynns-duration-activity` (slower than
+   * chrome `slow`); not `presentation-hint` (that pulse is for min-busy).
+   */
+  "activity-enter": "var(--fynns-duration-activity)",
+  /**
+   * Hold → done (and active → done) glyph + artifact settle. Next step
+   * stays queued until this finishes. Glyph fades (no scale / spring).
+   * Same duration band as enter.
+   */
+  "activity-complete": "var(--fynns-duration-activity)",
 } as const;
 
 /**
@@ -831,7 +869,7 @@ export const CHAT_TOKENS = {
    * `composer-line-height` (32dp) to align the control row.
    */
   "composer-text-line-height": "1.375rem",
-  /** Gap above composer top for scroll-to-bottom (ChatGPT default ≈12dp). */
+  /** Gap above the live composer box for scroll-to-bottom (ChatGPT ≈12dp). */
   "scroll-fab-inset": "var(--fynns-space-md)",
   /** Leave-bottom threshold before showing scroll FAB (ChatGPT sidebar IO ≈80dp). */
   "scroll-threshold": "5rem",

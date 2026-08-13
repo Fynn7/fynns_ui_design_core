@@ -89,6 +89,7 @@ import {
   PencilIcon,
   Radio,
   SaveIcon,
+  SearchIcon,
   Select,
   SettingsIcon,
   SkipLink,
@@ -935,6 +936,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
   useEffect(() => {
     if (!activityStreaming) return;
+    // Longer than min-busy (presentation-hint) + complete + enter (duration-activity)
+    // so the settle is visible before the next phase mounts.
     const timer = window.setInterval(() => {
       setActivityPhase((phase) => {
         if (phase >= 3) {
@@ -943,7 +946,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         }
         return phase + 1;
       });
-    }, 1600);
+    }, 2800);
     return () => window.clearInterval(timer);
   }, [activityStreaming]);
 
@@ -2267,7 +2270,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </Tooltip>
                   }
                 >
-                  {chatCaption(t("globals.chatAssistantBody"))}
+                  <CodeBlock
+                    variant="plain"
+                    language="bash"
+                    code={t("globals.chatAssistantStackCode")}
+                  />
+                  <p>{chatCaption(t("globals.chatAssistantBody"))}</p>
+                  <p>{t("globals.chatAssistantStackNote")}</p>
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}
@@ -2364,6 +2373,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   {t("globals.chatAsideAssistantBody")}
                 </ChatMessage>
               </ChatThread>
+              <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
               <ChatComposer
                 value={chatAsideDraft}
                 onChange={setChatAsideDraft}
@@ -2410,7 +2420,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 key={action}
                 streaming
                 streamingLabel={action}
-                icon={null}
               />
             ))}
           </div>
@@ -2480,8 +2489,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               >
                 {activityPhase >= 1 ? (
                   <ChatActivityStep
+                    key="create"
                     status="done"
-                    icon={<WrenchIcon />}
+                    icon={<FileIcon />}
                     label={t("globals.activityStepCreate")}
                     artifact={
                       <ChatActivityArtifact>
@@ -2492,8 +2502,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ) : null}
                 {activityPhase >= 2 ? (
                   <ChatActivityStep
+                    key="update"
                     status="done"
-                    icon={<WrenchIcon />}
+                    icon={<PencilIcon />}
                     label={t("globals.activityStepUpdate")}
                     artifact={
                       <ChatActivityArtifact>
@@ -2502,36 +2513,41 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     }
                   />
                 ) : null}
-                {activityPhase >= 3 ? (
-                  <ChatActivityStep
-                    status="done"
-                    label={t("globals.activityStepPresentDone")}
-                  />
-                ) : (
-                  <ChatActivityStep
-                    status="active"
-                    label={
-                      activityPhase <= 0
+                <ChatActivityStep
+                  key="live"
+                  status={activityPhase >= 3 ? "done" : "active"}
+                  icon={
+                    activityPhase >= 3 ? (
+                      <WrenchIcon />
+                    ) : activityPhase <= 0 ? (
+                      <SearchIcon />
+                    ) : activityPhase === 1 ? (
+                      <FolderOpenIcon />
+                    ) : undefined
+                  }
+                  label={
+                    activityPhase >= 3
+                      ? t("globals.activityStepPresentDone")
+                      : activityPhase <= 0
                         ? t("globals.activityStepGather")
                         : activityPhase === 1
                           ? t("globals.activityStepRead")
                           : t("globals.activityStepPresent")
-                    }
-                    description={
-                      activityPhase >= 2 ? (
-                        <>
-                          {t("globals.activityStepPresentDescBefore")}
-                          <code>{t("globals.activityStepPresentCode")}</code>
-                          {t("globals.activityStepPresentDescAfter")}
-                        </>
-                      ) : activityPhase === 1 ? (
-                        t("globals.activityStepReadDesc")
-                      ) : (
-                        t("globals.activityStepGatherDesc")
-                      )
-                    }
-                  />
-                )}
+                  }
+                  description={
+                    activityPhase >= 3 ? undefined : activityPhase >= 2 ? (
+                      <>
+                        {t("globals.activityStepPresentDescBefore")}
+                        <code>{t("globals.activityStepPresentCode")}</code>
+                        {t("globals.activityStepPresentDescAfter")}
+                      </>
+                    ) : activityPhase === 1 ? (
+                      t("globals.activityStepReadDesc")
+                    ) : (
+                      t("globals.activityStepGatherDesc")
+                    )
+                  }
+                />
               </ChatActivity>
             }
           >

@@ -17,9 +17,10 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   children?: ReactNode;
   /**
    * While true: streaming label + force-open (unless user pinned closed) +
-   * status-mark / label motion. Label may be any agent/LLM activity
-   * (`"Thinking"`, `"Searching…"`, `"Reading file…"`, …) — swap
-   * `streamingLabel` to morph the row.
+   * label motion. Trigger stays enabled so the disclosure can
+   * collapse mid-run. Label may be any agent/LLM activity (`"Thinking"`,
+   * `"Searching…"`, `"Reading file…"`, …) — swap `streamingLabel` to morph
+   * the row.
    */
   streaming?: boolean;
   /** Label while `streaming`. @default "Thinking" */
@@ -36,8 +37,8 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   /**
-   * Optional leading glyph. While `streaming` and omitted, a soft status
-   * mark pulses (agent activity). Pass `icon={null}` to suppress the mark.
+   * Optional leading glyph. Omit or pass `null` for label-only (no
+   * default streaming orb).
    */
   icon?: ReactNode | null;
 };
@@ -52,7 +53,9 @@ function join(...parts: Array<string | false | null | undefined>) {
  * Compose via `ChatMessage.thinking`. UI chrome only — no LLM / markdown.
  *
  * Open policy (uncontrolled): force open while `streaming` unless the user
- * pinned closed; auto-collapse once when streaming ends; user expand sticks.
+ * pinned closed (trigger stays enabled so the disclosure can collapse
+ * mid-run; a new streaming cycle clears the pin). Auto-collapse once when
+ * streaming ends; user expand after done sticks.
  *
  * Without `children`, renders a non-expandable duration / label strip (no chevron).
  * Do **not** pipe labels or thought text into a live region.
@@ -157,7 +160,11 @@ export function ChatThinking({
     }
   }, [streaming, isControlled]);
 
-  const isOpen = isControlled ? Boolean(open) : internalOpen;
+  const isOpen = isControlled
+    ? Boolean(open)
+    : streaming && !userPinnedClosed
+      ? true
+      : internalOpen;
 
   const setOpen = (next: boolean) => {
     if (!isControlled) {
@@ -176,14 +183,11 @@ export function ChatThinking({
 
   const toggle = () => setOpen(!isOpen);
 
-  const showStatusMark = streaming && icon === undefined;
   const leading =
     icon != null ? (
       <span className="fynns-chat-thinking-leading" aria-hidden>
         {icon}
       </span>
-    ) : showStatusMark ? (
-      <span className="fynns-chat-thinking-mark" aria-hidden />
     ) : null;
 
   const labelNode = (

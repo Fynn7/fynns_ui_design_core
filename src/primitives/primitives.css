@@ -9194,6 +9194,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Sibling block units in the bubble (CodeBlock + prose, two wells, …).
+ * Adjacent-sibling margin — not flex gap — so a bare text node + streaming
+ * caret stay on one line. Cursor is excluded. Value aliases layout
+ * unit-stack-gap (same as `.fynns-unit-stack`).
+ */
+.fynns-chat-message-body > * + *:not(.fynns-chat-message-cursor) {
+  margin-block-start: var(--fynns-chatmessage-body-stack-gap);
+}
+
+/*
  * Inline `code` — ChatGPT pad / size / weight; fill is a fynns text wash
  * (`--fynns-color-chat-inline-code-bg` → text × `code-user-bg-mix`), not
  * ChatGPT gray-700 (muddy on teal). Excludes `pre code` (fenced blocks).
@@ -9334,20 +9344,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: inherit;
 }
 
-/* Soft accent orb while streaming when no custom `icon` is passed. */
-.fynns-chat-thinking-mark {
-  box-sizing: border-box;
-  flex-shrink: 0;
-  width: var(--fynns-space-sm);
-  height: var(--fynns-space-sm);
-  border-radius: var(--fynns-radius-round);
-  background: var(--fynns-color-accent);
-  box-shadow: 0 0 0 var(--fynns-border-hairline)
-    color-mix(in srgb, var(--fynns-color-accent) 42%, transparent);
-  animation: fynns-chat-thinking-mark-pulse
-    var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
-}
-
 .fynns-chat-thinking-label {
   min-width: 0;
   overflow: hidden;
@@ -9433,11 +9429,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 @keyframes fynns-chat-thinking-label-swap {
   from {
     opacity: 0;
-    transform: translateY(0.2em);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -9451,12 +9445,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-chat-thinking-mark {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
   .fynns-chat-thinking-label--swap,
   .fynns-chat-thinking-label--streaming {
     animation: none;
@@ -9529,6 +9517,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: inherit;
 }
 
+.fynns-chat-activity-label--swap {
+  animation: fynns-chat-thinking-label-swap var(--fynns-duration-base)
+    var(--fynns-ease-emphasized) both;
+}
+
 .fynns-chat-activity-label--streaming {
   background-image: linear-gradient(
     90deg,
@@ -9548,8 +9541,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: fynns-chat-thinking-shimmer
-    var(--fynns-duration-thinking-shimmer) linear infinite;
+  animation:
+    fynns-chat-thinking-label-swap var(--fynns-duration-base)
+      var(--fynns-ease-emphasized) both,
+    fynns-chat-thinking-shimmer var(--fynns-duration-thinking-shimmer) linear
+      infinite;
+  animation-delay: 0s, var(--fynns-duration-base);
 }
 
 .fynns-chat-activity-chevron {
@@ -9567,7 +9564,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-chatmessage-activity-step-gap);
+  gap: 0;
   padding-block: var(--fynns-chatmessage-thinking-body-pad-block);
   opacity: 0;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
@@ -9579,70 +9576,147 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   opacity: 1;
 }
 
+/* Snap 0fr/1fr — never morph height. Grid-row easing + overflow clip
+ * wipes the whole tree top-to-bottom (reads as a bounce). Enter is
+ * opacity-only on the step. Queued / re-queued tails stay 0fr. */
+.fynns-chat-activity-step-shell {
+  width: 100%;
+  transition: none;
+}
+
+.fynns-chat-activity-step-shell:not(:last-child) .fynns-chat-activity-step {
+  padding-block-end: var(--fynns-chatmessage-activity-step-gap);
+}
+
+.fynns-chat-activity-step-shell[data-state="closed"] .fynns-chat-activity-step {
+  opacity: 0;
+}
+
 .fynns-chat-activity-step {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--fynns-chatmessage-activity-desc-gap);
   max-width: 100%;
   min-width: 0;
 }
 
 /*
- * Icon | label(+artifact) band — one component shell per step row.
- * Node pinned to the start edge so the rail still starts at icon bottom;
- * label uses the same `--fynns-size-icon` line box so glyph ↔ copy centers
- * match (no optical pad math).
+ * Icon | headline band — form-style floor + optional measured max across
+ * open steps (`--fynns-chat-activity-step-row-height` on the steps root).
+ * Glyph, label, and artifact vertically center in the band. Description is
+ * a sibling under the band (indented to the copy column) so it does not
+ * pull the icon mid-description. Rail starts at the centered icon bottom.
  */
 .fynns-chat-activity-step-row {
   display: grid;
   grid-template-columns: var(--fynns-size-icon) minmax(0, 1fr);
   column-gap: var(--fynns-chatmessage-activity-node-gap);
-  align-items: start;
+  align-items: center;
+  box-sizing: border-box;
   max-width: 100%;
   min-width: 0;
+  min-height: var(--fynns-chatmessage-activity-step-min-height);
+}
+
+/* While equalizing, drop the measured min so natural heights win. */
+.fynns-chat-activity-steps:not([data-equal-measuring])
+  .fynns-chat-activity-step-row {
+  min-height: max(
+    var(--fynns-chatmessage-activity-step-min-height),
+    var(--fynns-chat-activity-step-row-height, 0px)
+  );
 }
 
 /*
- * Step enter while streaming (assistant-ui Reasoning panel):
- * `fade-in slide-in-from-bottom-1 animate-in duration-300 fill-mode-both`.
- * slide-in-from-bottom-1 ≈ 0.25rem; 300ms → nearest `--fynns-duration-slow`.
- * Layout (flex gap) pushes later rows / answer down; we only soften the
- * animated rows — no FLIP / View Transition dependency.
- * Gated on `--streaming`: when streaming turns on, every step currently in
- * the tree (including ones already mounted) runs enter once; later mounts
- * while streaming also enter. Static completed trees (not streaming) skip.
+ * Enter while streaming: shell snaps `0fr`→`1fr` (no grid transition) and
+ * the **whole step** fades over `--fynns-chatmessage-activity-enter`
+ * (aliases `duration-activity`). Height morph + `overflow: hidden` clip-wipes
+ * the tree top-to-bottom. Closed / queued shells stay opacity 0. No
+ * translateY. Later steps stay queued (`0fr`) until earlier holds *and*
+ * complete finish, then fade in — including a stable-key tail that was
+ * already visible (it snaps closed while the prior row plays).
+ * Instant-complete `done` steps hold the active mark for
+ * `--fynns-chatmessage-activity-step-min-busy` then play `--complete`
+ * (glyph fade + artifact fade — no scale) over `--complete`.
+ * Static completed trees skip.
  */
-.fynns-chat-activity--streaming .fynns-chat-activity-step {
-  animation: fynns-chat-activity-step-enter var(--fynns-duration-slow)
-    var(--fynns-ease-emphasized) both;
+.fynns-chat-activity-step--enter {
+  animation: fynns-chat-activity-step-enter
+    var(--fynns-chatmessage-activity-enter) var(--fynns-ease-emphasized) both;
 }
 
 @keyframes fynns-chat-activity-step-enter {
   from {
     opacity: 0;
-    transform: translateY(0.25rem);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+/*
+ * Complete one-shot: inner glyph fade only (node box stays put so the
+ * rail does not drift). No scale / spring — hold → done on an already-
+ * open row must not re-bounce. Artifact fades in from the hold-hidden pose.
+ */
+.fynns-chat-activity-step--complete .fynns-chat-activity-node > * {
+  animation: fynns-chat-activity-node-complete
+    var(--fynns-chatmessage-activity-complete) var(--fynns-ease-emphasized)
+    both;
+}
+
+@keyframes fynns-chat-activity-node-complete {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fynns-chat-activity-step--complete .fynns-chat-activity-artifact {
+  visibility: visible;
+  animation: fynns-chat-activity-artifact-complete
+    var(--fynns-chatmessage-activity-complete) var(--fynns-ease-emphasized)
+    both;
+}
+
+@keyframes fynns-chat-activity-artifact-complete {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
 /*
  * Rail segments between icons only — never a continuous line punched with a
  * fixed surface (`app-bg` mismatched canvas / EndAside / bubble hosts).
- * Runs from icon bottom through the step + gap to the next icon top.
+ * Runs from icon bottom through the step padding (former flex gap) to the
+ * next open shell. Queued last shells stay `0fr` / `data-state="closed"`
+ * and must not extend the rail.
  */
-.fynns-chat-activity-step:not(:last-child)::before {
+.fynns-chat-activity-step-shell:has(
+    + .fynns-chat-activity-step-shell[data-state="open"]
+  )
+  .fynns-chat-activity-step::before {
   content: "";
   position: absolute;
   z-index: 0;
   inset-inline-start: calc(
     (var(--fynns-size-icon) / 2) - (var(--fynns-border-hairline) / 2)
   );
-  top: var(--fynns-size-icon);
-  bottom: calc(-1 * var(--fynns-chatmessage-activity-step-gap));
+  /* Centered icon in the equalized / floor band → bottom of the node. */
+  top: calc(
+    (
+        max(
+          var(--fynns-chatmessage-activity-step-min-height),
+          var(--fynns-chat-activity-step-row-height, 0px)
+        ) + var(--fynns-size-icon)
+      ) / 2
+  );
+  bottom: 0;
   width: var(--fynns-border-hairline);
   background: var(--fynns-color-border-strong);
   pointer-events: none;
@@ -9663,9 +9737,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   line-height: 0;
 }
 
+.fynns-chat-activity-node > * {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .fynns-chat-activity-node svg {
   display: block;
   flex-shrink: 0;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 .fynns-chat-activity-mark {
@@ -9682,8 +9763,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-headline {
   display: flex;
   flex-wrap: wrap;
-  /* Start-align so a tall artifact cannot pull the label off the icon band. */
-  align-items: flex-start;
+  align-items: center;
   gap: var(--fynns-chatmessage-activity-artifact-gap);
   min-width: 0;
   min-height: var(--fynns-size-icon);
@@ -9692,7 +9772,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-step-label {
   display: inline-flex;
   align-items: center;
-  align-self: flex-start;
   min-width: 0;
   min-height: var(--fynns-size-icon);
   overflow-wrap: anywhere;
@@ -9715,7 +9794,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-desc {
-  /* Indent under the label column (past icon + node gap). */
+  margin-block-start: var(--fynns-chatmessage-activity-desc-gap);
   margin-inline-start: calc(
     var(--fynns-size-icon) + var(--fynns-chatmessage-activity-node-gap)
   );
@@ -9723,6 +9802,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-weight: var(--fynns-font-weight-regular);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+/* Hold: keep capsule in flow so the row does not jump when it appears. */
+.fynns-chat-activity-step--hold .fynns-chat-activity-artifact {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .fynns-chat-activity-desc code {
@@ -9739,8 +9824,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity-artifact {
   display: inline-flex;
   align-items: center;
-  align-self: center;
-  gap: var(--fynns-space-2xs);
+  gap: var(--fynns-chatmessage-citation-chip-gap);
   max-width: 100%;
   padding-inline: var(--fynns-chatmessage-activity-artifact-pad-inline);
   padding-block: var(--fynns-chatmessage-activity-artifact-pad-block);
@@ -9780,6 +9864,7 @@ a.fynns-chat-activity-artifact:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .fynns-chat-activity-label--swap,
   .fynns-chat-activity-label--streaming {
     animation: none;
     background: none;
@@ -9793,10 +9878,22 @@ a.fynns-chat-activity-artifact:hover {
     animation: none;
   }
 
-  .fynns-chat-activity--streaming .fynns-chat-activity-step {
+  .fynns-chat-activity-step-shell {
+    transition: none;
+  }
+
+  .fynns-chat-activity-step-shell[data-state="closed"] .fynns-chat-activity-step,
+  .fynns-chat-activity-step--enter {
+    animation: none;
+    opacity: 1;
+  }
+
+  .fynns-chat-activity-step--complete .fynns-chat-activity-node > *,
+  .fynns-chat-activity-step--complete .fynns-chat-activity-artifact {
     animation: none;
     opacity: 1;
     transform: none;
+    visibility: visible;
   }
 
   .fynns-chat-activity-chevron {
@@ -10074,8 +10171,12 @@ a.fynns-chat-activity-artifact:hover {
 /* ---------- Chat shell ---------- */
 .fynns-chat {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "thread"
+    "composer";
   flex: 1 0 auto;
   min-width: min(var(--fynns-layout-chat-min-width), 100%);
   min-height: 0;
@@ -10095,7 +10196,7 @@ a.fynns-chat-activity-artifact:hover {
 }
 
 .fynns-chat-thread {
-  flex: 1 1 auto;
+  grid-area: thread;
   min-height: 0;
   min-width: 0;
   overflow-x: clip;
@@ -10130,12 +10231,14 @@ a.fynns-chat-activity-artifact:hover {
 }
 
 .fynns-chat-scroll-fab {
+  /* Same grid area as the composer so `bottom: 100%` tracks the live
+   * shell (expanded / attachments). Collapsed `composer-min-height` would
+   * park the control inside a tall input. */
+  grid-area: composer;
   position: absolute;
   inset-inline: 0;
-  bottom: calc(
-    var(--fynns-chat-composer-inset-block) + var(--fynns-chat-composer-min-height) +
-      var(--fynns-chat-scroll-fab-inset)
-  );
+  top: auto;
+  bottom: calc(100% + var(--fynns-chat-scroll-fab-inset));
   display: flex;
   justify-content: center;
   pointer-events: none;
@@ -10146,8 +10249,11 @@ a.fynns-chat-activity-artifact:hover {
   pointer-events: auto;
 }
 
+.fynns-chat > .fynns-chat-composer {
+  grid-area: composer;
+}
+
 .fynns-chat-composer {
-  flex: 0 0 auto;
   width: 100%;
   max-width: var(--fynns-layout-chat-max-width);
   margin-inline: auto;

@@ -75,7 +75,8 @@ export type ResolveThinkingOpenResult = {
 /**
  * Open policy:
  * - controlled `open` always wins
- * - streaming → force open unless `userPinnedClosed`
+ * - streaming → force open unless `userPinnedClosed` (trigger stays
+ *   enabled; pin is cleared when a new streaming cycle starts)
  * - streaming→done → auto-collapse once unless `userPinnedOpen`
  * - otherwise keep `internalOpen`
  */

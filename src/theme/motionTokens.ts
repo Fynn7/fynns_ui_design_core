@@ -50,6 +50,12 @@ export const DURATION_TOKENS = {
    */
   scrollbar: "520ms",
   "loading-spin": "750ms",
+  /**
+   * ChatActivity step enter / complete settle (opacity-only). Slower than
+   * chrome `slow` so successive tool rows read as deliberate beats — not a
+   * flash. Still under `presentation-hint` (hold pulse) and `thinking-shimmer`.
+   */
+  activity: "720ms",
   "presentation-hint": "1200ms",
   /**
    * Thinking / streaming status label shimmer sweep (ChatThinking /

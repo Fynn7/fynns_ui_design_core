@@ -343,7 +343,7 @@ Shadows: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `flyout`, `tooltip`, `toggle-thum
 Fonts: three stacks only — see **Font families** below. Motion:
 `--fynns-ease-{standard,emphasized,out,in-out,spring}`,
 `--fynns-duration-{instant,tooltip,tooltip-show-delay,tooltip-skip-delay,toggle,fast,flyout,base,slow,
-scrollbar,loading-spin,presentation-hint,thinking-shimmer,reduced-motion-spin}`.
+scrollbar,loading-spin,activity,presentation-hint,thinking-shimmer,reduced-motion-spin}`.
 
 **Font families (`--fynns-font-*`) — when to use (agents / consumers):**
 
@@ -437,8 +437,9 @@ classes.
     FillColumn’s job. Only `ChatThread` scrolls (`role="log"` + `fynns-scroll`);
     composer docks at root bottom; stick-to-bottom + scroll-to-bottom (32dp
     elevated `IconButton`, not Fab; show after ~80dp leave-bottom /
-    `--fynns-chat-scroll-threshold`; sit ~12dp above composer via
-    `--fynns-chat-scroll-fab-inset`). `empty` prefers `EmptyState`;
+    `--fynns-chat-scroll-threshold`; sit `--fynns-chat-scroll-fab-inset`
+    above the **live** composer box — not collapsed `composer-min-height`).
+    `empty` prefers `EmptyState`;
     optional starter prompts = `Chip` / `ChipSet` (`suggestion` /
     `assist`, `radius-pill`) **inside** `empty`, centered wrap — they
     sit in the thread **above** the docked composer (do **not** mirror
@@ -495,35 +496,69 @@ classes.
     **Secondary ink (dark teal):** rest = `text-muted`; hover / active
     emphasis = soft `color-mix` into `text` (never full
     `--fynns-color-text` — VS Code/Vercel jump muted→foreground, which
-    reads as a white flash here); no trigger state-layer wash. Streaming
-    = soft accent status mark (pulse `--fynns-duration-presentation-hint`)
-    + label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
+    reads as a white flash here);     no trigger state-layer wash. Streaming
+    = label shimmer (`--fynns-duration-thinking-shimmer` 2s linear,
     muted base + accent-into-muted mid peak — never full `text`) + swap
-    enter (`--fynns-duration-base`); `icon={null}` hides the mark;
-    force-open while streaming unless user pinned closed; auto-collapse
-    once when done; user expand sticks; no body → static duration strip
-    without chevron; caller owns thought `children` — core does **not**
+    enter (`--fynns-duration-base`, opacity fade only — no translateY); no default streaming orb (`icon` is
+    optional leading glyph only);
+    force-open while streaming unless user pinned closed (trigger stays
+    enabled so the disclosure can collapse mid-run; a new streaming cycle
+    clears the pin); auto-collapse once when done; user expand sticks;
+    no body → static duration strip without chevron; caller owns thought `children` — core does **not**
     parse markdown / CoT; do **not** pipe thinking tokens into
     `aria-live` — see
     [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md); geometry under
-    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group).
+    `CHATMESSAGE_TOKENS` `thinking-*`, no `THINKING_*` group;
+    `thinking-body-pad-block` aliases `field-stack-gap` so trigger ↔ body
+    is not flush).
     **`ChatActivity`** / **`ChatActivityStep`** / **`ChatActivityArtifact`**
     = Wave 2 multi-step agent / tool-call **status tree** (Cursor-style
-    collapsible header + vertical rail + done wrench / active mark /
-    optional file capsule + description). Each step is its own
-    `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
-    (icon | label(+artifact) — label `min-height` = `--fynns-size-icon` so
-    glyph and copy centers match). Same secondary-ink band as
+    collapsible header + vertical rail + `ChatActivityStep` rows).
+    **`icon`** is any ReactNode — consumers swap per tool / situation
+    (`FileIcon` / `PencilIcon` / `SearchIcon` / …). Omit → `WrenchIcon`
+    (`done` / `pending`) or the soft status mark (`active`); `null` →
+    empty node (rail still connects). Node box + SVG descendants use
+    `--fynns-size-icon`. Optional file capsule + description (icon ↔
+    filename gap aliases `--fynns-chatmessage-citation-chip-gap`). Each step
+    is its own `ChatActivityStep` with a dedicated `.fynns-chat-activity-step-row`
+    (icon | headline label(+artifact); description indented under the band —
+    form-style `--fynns-chatmessage-activity-step-min-height` floor, then
+    measured max across open steps applied as shared min-height so glyph /
+    label / artifact vertically center; rail starts at centered icon bottom).
+    Same secondary-ink band as
     ChatThinking (header label inherits muted; active step / artifact
-    hover use soft mixes — not full on-surface). While `streaming`, each
-    newly mounted steps — and any steps already in the tree when
-    `streaming` flips on — enter with fade + `translateY(0.25rem)` → 0 over
-    `--fynns-duration-slow` / `--fynns-ease-emphasized` (`fill-mode: both`;
-    assistant-ui Reasoning panel `duration-300` / `slide-in-from-bottom-1`
-    parity) — flex gap pushes later rows / answer down; static completed
-    trees (not streaming) skip the enter flash. Uncontrolled: force-open
-    while `streaming` and disable the header trigger so clicks cannot
-    queue a post-stream collapse. Also slots via
+    hover use soft mixes — not full on-surface). Header `label` remounts
+    with the same fade-only swap as ChatThinking (no translateY). While
+    `streaming`, every newly mounted step fades the **whole row** over
+    `--fynns-chatmessage-activity-enter` (aliases `duration-activity` — not
+    `presentation-hint` / not chrome `duration-slow`) / `--fynns-ease-emphasized`
+    (`--enter` on the step, opacity only). Step shells snap `.fynns-expand`
+    `0fr`/`1fr` with **no** height transition — morphing the row clips the
+    tree top-to-bottom (`overflow: hidden`) and reads as a bounce. Closed
+    shells stay `opacity: 0`. Node + rail stay in the layout box so the
+    tree does not desync. Already-visible rows stay still. Growing trees
+    need a stable `key` per logical step so
+    rows do not morph identity. Static completed trees skip the enter
+    flash. Instant-complete `done`
+    steps still visualize while streaming: the active mark holds for
+    `--fynns-chatmessage-activity-step-min-busy` (aliases
+    `presentation-hint`, one pulse) then glyph + artifact play a
+    complete one-shot (`--fynns-chatmessage-activity-complete`, aliases
+    `duration-activity`; glyph fade, no scale; artifact stays in layout,
+    `visibility: hidden` during hold).
+    `active` → `done` on the same row skips the hold and plays complete
+    (if that row is still entering, complete waits for enter to finish).
+    The hold + complete finish even if `streaming` ends mid-pulse;
+    steps that already painted as `active` skip the hold;
+    `prefers-reduced-motion` skips hold / enter / complete.
+    A newly mounted last step stays
+    queued (`0fr`, not painted) until earlier holds **and** complete one-shots
+    finish, then snaps open + whole-step fade —
+    complete and enter never overlap. Uncontrolled: force-open
+    while `streaming` unless the user pinned closed (trigger stays
+    enabled so the tree can collapse mid-run; a new streaming cycle
+    clears the pin). Completed trees stay at last open — no post-stream
+    auto-collapse. Also slots via
     `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
     `ChatThinking` for single-block reasoning — do **not** overload it
     into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
@@ -533,7 +568,13 @@ classes.
     cover the turn text; click opens `href` or `onCitationOpen`;
     +N expands footnote cards at `--fynns-radius-22` — same floor as the
     user bubble, never squarer — no Sources sidebar); `data-message-author-role`
-    on each row. **Inline `code`** (caller-rendered, not markdown): ChatGPT
+    on each row. **Body sibling stack:** adjacent direct children of
+    `.fynns-chat-message-body` use `--fynns-chatmessage-body-stack-gap`
+    (aliases `--fynns-layout-unit-stack-gap` / same as `.fynns-unit-stack`) —
+    CodeBlock + prose, two wells, etc.; not CodeBlock-specific. Streaming
+    caret is excluded so text + cursor stay one line. Nested markdown roots
+    still use `.fynns-unit-stack` (or the same layout token) inside the
+    wrapper. **Inline `code`** (caller-rendered, not markdown): ChatGPT
     prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
     (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT
     gray-700), pad `.15rem` / `.3rem`,
