@@ -843,7 +843,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [thinkingActionIdx, setThinkingActionIdx] = useState(0);
   const thinkingStartedAtRef = useRef(0);
   const [activityStreaming, setActivityStreaming] = useState(false);
-  const [activityPhase, setActivityPhase] = useState(2);
+  const [activityPhase, setActivityPhase] = useState(3);
   const stopChatStream = useCallback(() => setChatStreaming(false), []);
   const startChatStream = useCallback(() => {
     setChatStreamEpoch((n) => n + 1);

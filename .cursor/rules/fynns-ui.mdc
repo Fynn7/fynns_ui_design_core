@@ -51,6 +51,9 @@ ring can paint before heavy work).
   collapsible while streaming unless user pinned closed);
   `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
   multi-step status tree (collapsible + rail; `icon` any ReactNode per step;
+  consumer labels: **step active = progressive *-ing*** /
+  **step done = past**; header may past-summarize while streaming —
+  `Calling…` / `Ran the script`; AGENTS.md Label tense;
   stable `key` per logical step; step-row floor
   `--fynns-chatmessage-activity-step-min-height` then measured max across
   open steps — icon/label/artifact vertically centered; streaming min-busy

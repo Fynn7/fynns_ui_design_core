@@ -18,16 +18,22 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   /**
    * While true: streaming label + force-open (unless user pinned closed) +
    * label motion. Trigger stays enabled so the disclosure can
-   * collapse mid-run. Label may be any agent/LLM activity (`"Thinking"`,
-   * `"Searching…"`, `"Reading file…"`, …) — swap `streamingLabel` to morph
-   * the row.
+   * collapse mid-run. Label is consumer-owned progressive copy
+   * (`"Thinking"`, `"Calling the function…"`, `"Searching…"`, …) —
+   * swap `streamingLabel` to morph the row (AGENTS.md **Label tense**).
    */
   streaming?: boolean;
-  /** Label while `streaming`. @default "Thinking" */
+  /** Label while `streaming` (progressive). @default "Thinking" */
   streamingLabel?: string;
-  /** Done label when `durationMs` is omitted. @default "Thinking" */
+  /**
+   * Done label when `durationMs` is omitted. Prefer past tense when the
+   * run finished without a duration strip (e.g. `"Thought"`). The default
+   * `"Thinking"` is a compatibility placeholder — pass an explicit past
+   * string (or `durationMs` → `"Thought for Ns"`) for done chrome.
+   * @default "Thinking"
+   */
   label?: string;
-  /** Done wall-clock ms → `"Thought for Ns"` (app-derived). */
+  /** Done wall-clock ms → `"Thought for Ns"` past-tense strip (app-derived). */
   durationMs?: number;
   /** Override done duration copy. Receives whole seconds. */
   durationLabel?: (seconds: number) => string;

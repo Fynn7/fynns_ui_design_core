@@ -195,6 +195,22 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 `<div>`，也**禁止**用本地 CSS 另造间距。Markdown 根仍用元素 /
 `.fynns-unit-stack`。权威：子模块 `AGENTS.md` **Body sibling stack**。
 
+## ChatActivity / ChatThinking 标签时态（强推荐）
+
+进度树与思考披露的文案由**消费仓**提供；core **不会**改写时态。按**步骤**状态选
+英文体（或 locale 等价）：
+
+| 状态 | 体 | 例句 |
+| --- | --- | --- |
+| `active` / 进行中步 | 进行时 (*-ing*) | `Calling the function…`, `Presenting the plan…`, `Gathering context…`, `Thinking` |
+| `done` / 已完成步 | 过去时 | `Ran the script`, `Presented plan`, `Created memory file`, `Thought for 4s` |
+
+`status` 从 `active` → `done`（或 Thinking 结束流式）时**立刻换字符串**；不要让完成步
+留在 *-ing* 标题上。`ChatActivity` **header** 可在仍 `streaming` 时用过去时总结最近
+完成的里程碑（Cursor 式）；仅当前 `active` 行必须保持进行时。中文对照：`正在…` /
+`已…`。权威：子模块 `AGENTS.md` **Label tense**；样例：sandbox `#activity` /
+`#thinking`。
+
 ## 改 UI 前检查清单
 
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
@@ -204,4 +220,5 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
 5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
 6. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
-7. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+7. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
+8. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
