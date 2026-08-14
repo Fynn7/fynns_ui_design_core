@@ -25,7 +25,12 @@ export type ChatActivityProps = Omit<
   HTMLAttributes<HTMLDivElement>,
   "children" | "title"
 > & {
-  /** Collapsible header — current stage summary (e.g. “Updated plan with details”). */
+  /**
+   * Collapsible header — current stage summary. Consumer-owned copy:
+   * progressive while `streaming` (e.g. “Gathering context…”), past when
+   * the tree is idle/done (e.g. “Updated plan with details”, “Ran the
+   * script”). See AGENTS.md **Label tense**.
+   */
   label: ReactNode;
   /** Step rows (`ChatActivityStep`). */
   children?: ReactNode;
@@ -55,7 +60,12 @@ export type ChatActivityStepProps = Omit<
    * box is `--fynns-size-icon`; SVG descendants are sized to that token.
    */
   icon?: ReactNode | null;
-  /** Short step title (one line preferred). */
+  /**
+   * Short step title (one line preferred). Consumer-owned: `active` →
+   * progressive (*Calling the function…*, *Executing …*); `done` → past
+   * (*Ran the script*, *Loaded the dataset*). Swap the string when
+   * `status` flips — AGENTS.md **Label tense**.
+   */
   label: ReactNode;
   /** Optional supporting copy under the title (active / narrative steps). */
   description?: ReactNode;

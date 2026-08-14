@@ -579,6 +579,23 @@ classes.
     `ChatMessage.thinking` (alone or above `ChatThinking`). Keep
     `ChatThinking` for single-block reasoning — do **not** overload it
     into a tool timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`.
+    **Label tense (consumer-owned — strongly recommended):** core does
+    **not** rewrite copy. Apps own every `ChatActivity` / `ChatActivityStep`
+    `label`, header `label`, and `ChatThinking` `streamingLabel` / done
+    `label`. Match status with English aspect (or locale equivalent):
+    - **`active` / streaming** → progressive / continuous (*-ing*):
+      `Calling the function…`, `Executing sample script…`,
+      `Gathering context…`, `Reading the plan…`, `Thinking`,
+      `Searching the catalog…`.
+    - **`done` / completed** → simple past (or locale perfect):
+      `Ran the script`, `Loaded the dataset`, `Created memory file`,
+      `Updated plan with details`, `Thought for 4s`, `Presented plan`.
+    Do **not** leave a finished step on an *-ing* title, or an in-flight
+    step on a past-tense title. Swap the string when `status` flips
+    (`active` → `done`) and when `ChatThinking` leaves streaming. Live
+    samples: sandbox `#activity` / `#thinking`. Same rule applies to
+    consumer zh/de chrome (`正在…` / `已…`, German Partizip II, …) —
+    default primitive docs stay English or German (Language hard rule).
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =
     browsing source chips under the assistant body (publisher + favicon;
     hover title/snippet preview with Tooltip `side="bottom"` so it does not
