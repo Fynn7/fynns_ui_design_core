@@ -47,7 +47,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
    Pure informational help uses **`InfoHint`**: standalone "i" when there is no
    visible name; for form/inspector rows pass `label` (plain text trigger,
-   `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   `cursor: help`, no underline / trailing icon). Optional `onClick` on the same
+   trigger (e.g. open a Dialog after the hover tooltip). Not a chrome `IconButton`.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label

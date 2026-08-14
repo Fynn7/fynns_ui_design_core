@@ -13,6 +13,8 @@ export type InfoHintProps = {
   ariaLabel?: string;
   iconSize?: number;
   className?: string;
+  /** Optional click on the same trigger (e.g. open a Dialog after the tooltip). */
+  onClick?: () => void;
 };
 
 /** Informational affordance: icon-only, or plain labeled help trigger. */
@@ -22,6 +24,7 @@ export function InfoHint({
   ariaLabel = "More information",
   iconSize = 14,
   className,
+  onClick,
 }: InfoHintProps) {
   const labeled = label != null;
   return (
@@ -36,6 +39,7 @@ export function InfoHint({
           .filter(Boolean)
           .join(" ")}
         aria-label={ariaLabel}
+        onClick={onClick}
       >
         {labeled ? <span className="fynns-info-hint-label">{label}</span> : null}
         {labeled ? null : <InfoIcon size={iconSize} />}
