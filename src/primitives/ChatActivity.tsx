@@ -26,10 +26,12 @@ export type ChatActivityProps = Omit<
   "children" | "title"
 > & {
   /**
-   * Collapsible header — current stage summary. Consumer-owned copy:
-   * progressive while `streaming` (e.g. “Gathering context…”), past when
-   * the tree is idle/done (e.g. “Updated plan with details”, “Ran the
-   * script”). See AGENTS.md **Label tense**.
+   * Collapsible header — current stage summary. Consumer-owned copy.
+   * Often past tense for the latest **completed** milestone even while
+   * `streaming` (e.g. “Updated plan with details”); keep progressive for
+   * the first in-flight stage if preferred (e.g. “Gathering context…”).
+   * Step rows still follow AGENTS.md **Label tense** (`active` = *-ing*,
+   * `done` = past).
    */
   label: ReactNode;
   /** Step rows (`ChatActivityStep`). */

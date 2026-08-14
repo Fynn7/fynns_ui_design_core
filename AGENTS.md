@@ -582,18 +582,22 @@ classes.
     **Label tense (consumer-owned — strongly recommended):** core does
     **not** rewrite copy. Apps own every `ChatActivity` / `ChatActivityStep`
     `label`, header `label`, and `ChatThinking` `streamingLabel` / done
-    `label`. Match status with English aspect (or locale equivalent):
-    - **`active` / streaming** → progressive / continuous (*-ing*):
+    `label`. Match **step** status with English aspect (or locale
+    equivalent):
+    - **`active` / in-flight step** → progressive / continuous (*-ing*):
       `Calling the function…`, `Executing sample script…`,
-      `Gathering context…`, `Reading the plan…`, `Thinking`,
-      `Searching the catalog…`.
-    - **`done` / completed** → simple past (or locale perfect):
+      `Gathering context…`, `Reading the plan…`, `Presenting the plan…`.
+    - **`done` / completed step** → simple past (or locale perfect):
       `Ran the script`, `Loaded the dataset`, `Created memory file`,
-      `Updated plan with details`, `Thought for 4s`, `Presented plan`.
+      `Presented plan`, `Thought for 4s`.
     Do **not** leave a finished step on an *-ing* title, or an in-flight
     step on a past-tense title. Swap the string when `status` flips
-    (`active` → `done`) and when `ChatThinking` leaves streaming. Live
-    samples: sandbox `#activity` / `#thinking`. Same rule applies to
+    (`active` → `done`) and when `ChatThinking` leaves streaming.
+    **`ChatActivity` header** may summarize the latest **completed**
+    milestone in past tense even while `streaming` (Cursor-style stage
+    strip: e.g. `Updated plan with details` while a later step is still
+    `Executing…`); only the open/`active` step row must stay progressive.
+    Live samples: sandbox `#activity` / `#thinking`. Same rule applies to
     consumer zh/de chrome (`正在…` / `已…`, German Partizip II, …) —
     default primitive docs stay English or German (Language hard rule).
     **`citations`** / **`ChatCitations`** / **`ChatCitationChip`** =

@@ -27,8 +27,9 @@ export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children">
   streamingLabel?: string;
   /**
    * Done label when `durationMs` is omitted. Prefer past tense when the
-   * run finished without a duration strip (e.g. `"Thought"`); with
-   * `durationMs`, default copy is `"Thought for Ns"`.
+   * run finished without a duration strip (e.g. `"Thought"`). The default
+   * `"Thinking"` is a compatibility placeholder — pass an explicit past
+   * string (or `durationMs` → `"Thought for Ns"`) for done chrome.
    * @default "Thinking"
    */
   label?: string;

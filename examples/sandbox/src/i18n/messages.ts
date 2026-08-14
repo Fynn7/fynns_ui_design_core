@@ -1062,7 +1062,7 @@ const en = {
   "globals.activityStepRead": "Reading the plan…",
   "globals.activityStepReadDesc":
     "Checking the draft outline against the sandbox form recipe.",
-  "globals.activityStepPresent": "Executing plan walkthrough…",
+  "globals.activityStepPresent": "Presenting the plan…",
   "globals.activityStepPresentDone": "Presented plan",
   "globals.activityStepPresentDescBefore":
     "I’ve refined the outline and am preparing to ask clarifying questions via ",
@@ -1074,7 +1074,7 @@ const en = {
   "globals.activitySimulate": "Simulate activity tree",
   "globals.activityReset": "Reset done tree",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). **Label tense (consumer-owned):** `active` / streaming header = progressive (*Calling the function…*, *Gathering context…*, *Executing …*); `done` steps / idle header = past (*Ran the script*, *Created memory file*, *Loaded the dataset*, *Updated plan with details*). Swap the string when `status` flips — core does not rewrite tense. Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then glyph + artifact complete over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter` (opacity only; shells snap open, no height morph). Optional `ChatActivityArtifact` capsule + description. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). **Label tense (consumer-owned):** each **step** `active` = progressive (*Calling the function…*, *Gathering context…*, *Presenting the plan…*); `done` = past (*Ran the script*, *Created memory file*, *Presented plan*). Swap the string when `status` flips — core does not rewrite tense. The **header** may stay past for the latest completed milestone even while streaming (e.g. *Updated plan with details* above an *Executing…* / *Presenting…* row). Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then glyph + artifact complete over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter` (opacity only; shells snap open, no height morph). Optional `ChatActivityArtifact` capsule + description. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -2367,7 +2367,7 @@ const zh: Record<MessageKey, string> = {
   "globals.activityStepUpdate": "已更新记忆文件",
   "globals.activityStepRead": "正在阅读计划…",
   "globals.activityStepReadDesc": "对照沙盒表单配方检查草稿大纲。",
-  "globals.activityStepPresent": "正在执行计划讲解…",
+  "globals.activityStepPresent": "正在展示计划…",
   "globals.activityStepPresentDone": "已展示计划",
   "globals.activityStepPresentDescBefore":
     "我已细化大纲，准备通过 ",
@@ -2379,7 +2379,7 @@ const zh: Record<MessageKey, string> = {
   "globals.activitySimulate": "模拟活动树",
   "globals.activityReset": "重置为完成树",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。**标签时态（消费仓）：** `active` / 流式标题 = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在执行…*）；`done` 步 / 空闲标题 = 完成时（*已运行脚本*、*已创建记忆文件*、*已加载数据集*、*已用细节更新计划*）。`status` 翻转时立刻换文案 — core 不改写时态。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 播完成图标与胶囊。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入（仅透明度；行高瞬间到位，无高度形变）。可选 `ChatActivityArtifact` 胶囊 + 说明。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。**标签时态（消费仓）：** 每步 `active` = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在展示计划…*）；`done` = 完成时（*已运行脚本*、*已创建记忆文件*、*已展示计划*）。`status` 翻转时立刻换文案 — core 不改写时态。**header** 可在仍 streaming 时用过去时总结最近完成的里程碑（例如上方 *已用细节更新计划*，下方仍有 *正在展示…* 行）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 播完成图标与胶囊。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入（仅透明度；行高瞬间到位，无高度形变）。可选 `ChatActivityArtifact` 胶囊 + 说明。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
