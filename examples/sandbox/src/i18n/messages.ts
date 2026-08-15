@@ -1,4 +1,4 @@
-﻿import type { Locale } from "./types";
+import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.

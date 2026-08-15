@@ -301,7 +301,11 @@ export function ChatMessage({
   const showName = !isSystem && name != null;
   const showThinking = !isSystem && thinking != null;
   const bodyChildren =
-    markdown != null ? <ChatMarkdown source={markdown} /> : children;
+    markdown == null
+      ? children
+      : markdown.trim().length === 0
+        ? null
+        : <ChatMarkdown source={markdown} />;
   const hasBody = hasRenderableBody(bodyChildren);
   /** Caret only while tokens exist — never an empty bubble during thinking. */
   const showCursor = isStreaming && hasBody;

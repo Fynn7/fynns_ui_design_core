@@ -30,6 +30,15 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+/** Allow http(s), mailto, hash, and relative paths; drop javascript:/data:/…. */
+function safeHref(href: string): string | undefined {
+  const t = href.trim();
+  if (!t) return undefined;
+  if (/^(https?:|mailto:|#|\/|\.\/|\.\.\/)/i.test(t)) return t;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(t)) return undefined;
+  return t;
+}
+
 function renderInlines(nodes: MdInline[]): ReactNode {
   return nodes.map((node, i) => {
     switch (node.type) {
@@ -43,11 +52,15 @@ function renderInlines(nodes: MdInline[]): ReactNode {
         return <em key={i}>{renderInlines(node.children)}</em>;
       case "del":
         return <del key={i}>{renderInlines(node.children)}</del>;
-      case "link":
+      case "link": {
+        const href = safeHref(node.href);
+        if (!href) {
+          return <span key={i}>{renderInlines(node.children)}</span>;
+        }
         return (
           <a
             key={i}
-            href={node.href}
+            href={href}
             title={node.title}
             target="_blank"
             rel="noopener noreferrer"
@@ -55,6 +68,7 @@ function renderInlines(nodes: MdInline[]): ReactNode {
             {renderInlines(node.children)}
           </a>
         );
+      }
       case "br":
         return <br key={i} />;
       default:
