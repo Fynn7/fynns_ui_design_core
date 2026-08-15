@@ -808,7 +808,8 @@ classes.
   width would crowd, densify to `"rail"` first so destinations never flash as a
   full labeled drawer then snap. Export is also available for apps that open
   destinations themselves. It **must not** fire while the
-  drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
+  drawer seam is being dragged, while `EndAside` is in `data-state="closing"`,
+  or while `EndAside` is mid-drag (`data-resizing`)
   (closing morph would otherwise false-trip overflow and collapse labeled
   drawer → rail). Crowding length reads (`readVarPx` / `readRemPx`) resolve
   `px`/`rem`/`%`/`clamp()` **without** inserting measure probes into the shell
@@ -818,21 +819,28 @@ classes.
   **EndAside** (end-edge supporting pane with **width** open/close; tokens
   `--fynns-layout-end-aside-width` / `end-aside-max-width` /
   `end-aside-min-width`; canvas preferred size `--fynns-layout-main-min-width`).
-  Flex panes use **`min-width: 0`** (not `min(token, 100%)` of the full row —
-  that percentage resolves against the parent and overflows when both panes are
-  open). Preferred size stays on `width` / `flex-basis`. When
-  `.fynns-clipped-nav-shell-main` is ≤32rem (container query — works
-  for nested demos), EndAside **overlays** the end edge at its min/preferred
-  width (out of flex flow) so both mins stay usable without horizontal overflow.
-  Drawer still open + floors overflowing → `onNavCrowded` → rail. Viewport
-  ≤56.25rem → bottom sheet (`max-height: min(52dvh, 22rem)` — usable sheet, not a
-  thin ribbon). If `navMode` stays `"drawer"` on a narrow viewport,
-  CSS stacks that drawer above main (rem-capped); prefer `"rail"` so destinations
-  stay a side column. Slot-only — destinations stay in `nav`, inspector
-  content in `EndAside` children; toggle IconButtons live in the consumer
-  `TopAppBar`. Prefer for destination chrome apps. **Not** `Drawer` (modal
-  content side sheet) and **not** a revived `Panel` / `ListGroup` shell. Demo:
-  sandbox Layouts (`#layouts-demo-shell`).
+  Desktop leading-edge **drag resize** (parity with drawer trailing seam —
+  live `--fynns-layout-end-aside-width` via rAF; clamp by
+  `end-aside-min-width` / `end-aside-max-width` and remaining room for
+  `main-min-width`; `width` / `defaultWidth` / `onWidthChange` /
+  `disableResize`; DestinationAppShell mirrors as `asideWidth` / …). Hidden on
+  the ≤56.25rem bottom-sheet path. Mid-drag sets `data-resizing` so
+  `onNavCrowded` does not densify. Flex panes use **`min-width: 0`** (not
+  `min(token, 100%)` of the full row — that percentage resolves against the
+  parent and overflows when both panes are open). Preferred size stays on
+  `width` / `flex-basis`. When `.fynns-clipped-nav-shell-main` is ≤32rem
+  (container query — works for nested demos), EndAside **overlays** the end
+  edge at its min/preferred width (out of flex flow) so both mins stay usable
+  without horizontal overflow. Drawer still open + floors overflowing →
+  `onNavCrowded` → rail. Viewport ≤56.25rem → bottom sheet
+  (`max-height: min(52dvh, 22rem)` — usable sheet, not a thin ribbon). If
+  `navMode` stays `"drawer"` on a narrow viewport, CSS stacks that drawer
+  above main (rem-capped); prefer `"rail"` so destinations stay a side column.
+  Slot-only — destinations stay in `nav`, inspector content in `EndAside`
+  children; toggle IconButtons live in the consumer `TopAppBar`. Prefer for
+  destination chrome apps. **Not** `Drawer` (modal content side sheet) and
+  **not** a revived `Panel` / `ListGroup` shell. Demo: sandbox Layouts
+  (`#layouts-demo-shell`).
 - **Content:** List / ListItem (main-content M3 rows; selected =
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
   menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
@@ -952,7 +960,7 @@ classes.
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
-  | EndAside | adaptive | Inspector width morph; flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
+  | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
