@@ -23,7 +23,8 @@ Install / design catalog remain elsewhere — this file only explains *why* and
 The consume installer may also drop this rule when wiring a consumer
 (`scripts/install-as-submodule.mjs`); if the file already exists it is left
 alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
-freshness / Dialog row recipe / **CodeBlock `label` ≠ `language`**). Local pin gate:
+freshness / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
+**ChatMessage Markdown ownership**). Local pin gate:
 `consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
 propagate bump PRs do not replace that check. Day-to-day local core edits →
 consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
@@ -88,6 +89,17 @@ fill editors also `autoGrow={false}`. Authority:
 [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) (`label` ≠ `language`) +
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: literal backticks in Chat bubbles
+
+Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /
+GFM lists inside `.fynns-chat-message-prose`.
+
+**Cause:** the app passed the LLM Markdown **string** as bare `ChatMessage`
+`children`. Prefer **`markdown={md}`** or **`<ChatMarkdown source={md} />`**
+(core L2 subset). Raw children stay plain prose. Authority:
+[`AGENTS.md`](../AGENTS.md) **Parity note (markdown / GFM)** + pasteable
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **ChatMessage Markdown**.
 
 ## Related docs
 

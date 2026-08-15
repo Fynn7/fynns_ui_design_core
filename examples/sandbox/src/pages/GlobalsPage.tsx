@@ -28,6 +28,7 @@ import {
   ChatCitationChip,
   ChatCitations,
   ChatComposer,
+  ChatMarkdown,
   ChatMessage,
   ChatScrollToBottom,
   ChatActivity,
@@ -122,11 +123,10 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useMemo, useRef, useState, useCallback, Fragment, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { TokenList } from "../components/TokenList";
-import { splitCaptionByBackticks } from "../utils/captionSegments";
 import {
   demoElementId,
   findDemoById,
@@ -137,13 +137,6 @@ import {
   patchSandboxUiSession,
 } from "../state/sandboxUiSession";
 import { GlobalsCatalogSearch } from "./GlobalsCatalogSearch";
-
-/** Render sandbox chat copy with `` `code` `` → `<code>` (ChatGPT inline pill). */
-function chatCaption(text: string): ReactNode {
-  return splitCaptionByBackticks(text).map((seg, i) =>
-    seg.code ? <code key={i}>{seg.text}</code> : <Fragment key={i}>{seg.text}</Fragment>,
-  );
-}
 
 /** Demo turn chrome — Copy + Regenerate + More; consumer apps own LLM rerun. */
 function ChatDemoActions({
@@ -346,9 +339,8 @@ function ChatStreamingAssistant({
       role="assistant"
       streaming={streaming}
       streamingLabel={streamingLabel}
-    >
-      {text || undefined}
-    </ChatMessage>
+      markdown={text || undefined}
+    />
   );
 }
 
@@ -2279,9 +2271,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
               <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
                 <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
-                <ChatMessage role="user">
-                  {chatCaption(t("globals.chatUserBody"))}
-                </ChatMessage>
+                <ChatMessage
+                  role="user"
+                  markdown={t("globals.chatUserBody")}
+                />
                 <ChatMessage
                   role="assistant"
                   citations={[
@@ -2346,13 +2339,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     />
                   }
                 >
-                  {t("globals.chatAssistantBody")}
-                  <CodeBlock
-                    variant="plain"
-                    language="bash"
-                    code={t("globals.chatAssistantStackCode")}
-                  />
-                  {t("globals.chatAssistantStackNote")}
+                  <ChatMarkdown source={t("globals.chatAssistantMarkdown")} />
                 </ChatMessage>
                 <ChatStreamingAssistant
                   key={chatStreamEpoch}

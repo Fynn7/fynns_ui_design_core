@@ -187,6 +187,23 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 **禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”；
 只写 `label="*.xml"` 却省略 `language`。
 
+## ChatMessage Markdown（硬 — 优先本仓渲染）
+
+LLM 助手/用户正文按约定是 Markdown。**优先**用本仓 API，不要把原始字符串当裸
+`children`（反引号会原样露出）：
+
+| API | 用法 |
+| --- | --- |
+| `ChatMessage markdown={md}` | 气泡正文走 `ChatMarkdown`（`markdown` 优先于 `children`） |
+| `<ChatMarkdown source={md} />` | 显式子树；可与其它 wells 组合 |
+
+**L2 子集**（零依赖）：段落、标题、围栏 → `CodeBlock`、引用、hr、ul/ol（GFM
+`- [ ]` / `- [x]` → 普通列表项，仅标签文案 — **无**气泡内交互 `Checkbox`）、
+行内 `code` / **粗体** / *斜体* / ~~删除~~ / 链接。不是完整
+CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `markdown`；未闭合围栏
+保留到 EOF。自定义富树仍可用 `children`。权威：子模块 `AGENTS.md` **Parity note
+(markdown / GFM)**。
+
 ## ChatMessage 正文间距（硬 — 16dp）
 
 气泡内**元素**兄弟用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap` /
@@ -219,6 +236,7 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
 5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
-6. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
-7. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
-8. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+6. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
+7. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
+8. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
+9. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。

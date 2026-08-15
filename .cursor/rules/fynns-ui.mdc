@@ -67,8 +67,8 @@ ring can paint before heavy work).
   `.fynns-chat-message-prose` so `{text}<CodeBlock/>` gets the gap — do not
   patch in the consumer; caret nests in last prose when trailing); inline
   `code` = ChatGPT pill
-  (`--fynns-color-chat-inline-code-bg`, radius-xs); no built-in markdown / GFM
-  task-list checkboxes — caller owns `children`; CJK IME Enter while
+  (`--fynns-color-chat-inline-code-bg`, radius-xs); prefer `ChatMessage markdown` /
+  `ChatMarkdown` (L2 GFM subset); CJK IME Enter while
   composing does not send — AGENTS.md Composer keys; composer =
   growing `<textarea>` not ChatGPT ProseMirror — AGENTS.md Chat
   **composer input model** + `llm/CHAT_COMPOSER_LAYOUT.md` (multiline =
