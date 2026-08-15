@@ -86,6 +86,11 @@ export type DestinationAppShellProps = {
   defaultDrawerWidth?: number;
   onDrawerWidthChange?: (widthPx: number) => void;
   disableDrawerResize?: boolean;
+  /** Controlled `EndAside` width (px). */
+  asideWidth?: number;
+  defaultAsideWidth?: number;
+  onAsideWidthChange?: (widthPx: number) => void;
+  disableAsideResize?: boolean;
 };
 
 const DEFAULT_NARROW_BREAKPOINT = 900;
@@ -131,6 +136,10 @@ export const DestinationAppShell = forwardRef<
     defaultDrawerWidth,
     onDrawerWidthChange,
     disableDrawerResize,
+    asideWidth,
+    defaultAsideWidth,
+    onAsideWidthChange,
+    disableAsideResize,
   },
   ref,
 ) {
@@ -310,7 +319,17 @@ export const DestinationAppShell = forwardRef<
     >
       <div className="fynns-destination-app-shell-body">
         <div className="fynns-destination-app-shell-canvas fynns-scroll">{children}</div>
-        {aside != null ? <EndAside open={asideOpen}>{aside}</EndAside> : null}
+        {aside != null ? (
+          <EndAside
+            open={asideOpen}
+            width={asideWidth}
+            defaultWidth={defaultAsideWidth}
+            onWidthChange={onAsideWidthChange}
+            disableResize={disableAsideResize}
+          >
+            {aside}
+          </EndAside>
+        ) : null}
       </div>
     </ClippedNavShell>
   );

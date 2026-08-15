@@ -1356,14 +1356,18 @@ export const LAYOUT_TOKENS = {
    * width while the pane morphs so the canvas seam does not reflow.
    */
   "end-aside-width": "22rem",
-  /** Cap for `EndAside` on wide viewports (pairs with `end-aside-width`). */
+  /**
+   * Cap for `EndAside` on wide viewports (pairs with `end-aside-width`).
+   * Also clamps live drag resize.
+   */
   "end-aside-max-width": "36vw",
   /**
-   * Floor for `EndAside` when open. Preferred width stays on `end-aside-width`;
-   * flex uses `min-width: 0` (not `min(token, 100%)` of the full row — that
-   * overflows beside main). When the main track is ≤32rem (container query),
-   * EndAside leaves flex flow and overlays the end edge. Also: `onNavCrowded`
-   * → rail when drawer + floors still overflow; ≤56.25rem viewport → bottom sheet.
+   * Floor for `EndAside` when open (and drag-resize min). Preferred width stays
+   * on `end-aside-width`; flex uses `min-width: 0` (not `min(token, 100%)` of
+   * the full row — that overflows beside main). When the main track is ≤32rem
+   * (container query), EndAside leaves flex flow and overlays the end edge.
+   * Also: `onNavCrowded` → rail when drawer + floors still overflow; ≤56.25rem
+   * viewport → bottom sheet (resize handle hidden).
    */
   "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
   /**

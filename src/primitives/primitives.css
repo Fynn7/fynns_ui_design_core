@@ -8650,6 +8650,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   z-index: 4;
   inset-block: 0;
   inset-inline-start: calc(var(--fynns-navdrawer-width) - 0.1875rem);
+  /* Wide hit target; visible cue is a Cursor-like 2dp muted seam ::before. */
   width: 0.375rem;
   margin: 0;
   padding: 0;
@@ -8659,16 +8660,32 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   touch-action: none;
 }
 
+.fynns-clipped-nav-shell-resize::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  /* Seam sits at the hit-target center (drawer track | main). */
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+  background: transparent;
+  pointer-events: none;
+}
+
 .fynns-clipped-nav-shell-resize:focus-visible {
   outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
   outline-offset: calc(-1 * var(--fynns-focus-ring-width));
 }
 
-.fynns-clipped-nav-shell-resize:hover,
+/*
+ * Cursor panel-seam hover: ~3px, low-luma teal (not full accent).
+ * Sampled ~rgb(14 36 40) → `--fynns-color-border` (not accent / border-strong).
+ */
+.fynns-clipped-nav-shell-resize:hover::before,
 .fynns-clipped-nav-shell[data-drawer-resizing="true"]
   > .fynns-clipped-nav-shell-body
-  > .fynns-clipped-nav-shell-resize {
-  background: var(--fynns-color-accent-42);
+  > .fynns-clipped-nav-shell-resize::before {
+  background: var(--fynns-color-border);
 }
 
 .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
@@ -8798,6 +8815,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /* ---------- EndAside (width-morph supporting pane) ---------- */
 .fynns-end-aside {
+  position: relative;
   flex: 0 1 auto;
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
@@ -8809,30 +8827,86 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* Visible so the resize hit can straddle the start border; clip children. */
+  overflow: visible;
   transition:
     width var(--fynns-duration-base) var(--fynns-ease-emphasized),
     max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
     min-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
 }
 
+.fynns-end-aside[data-resizing="true"] {
+  transition: none;
+}
+
+/* Leading-edge seam — hit + cue centered on the start border (Cursor). */
+.fynns-end-aside-resize {
+  position: absolute;
+  z-index: 4;
+  inset-block: 0;
+  /*
+   * Absolute insets are vs the padding edge; the 1dp border sits just outside.
+   * Shift the 6dp hit left by half-hit + half-border so its center = border mid.
+   */
+  inset-inline-start: calc(-0.1875rem - (var(--fynns-border-hairline) * 0.5));
+  width: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-end-aside-resize::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-end-aside-resize:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+/*
+ * Hover / drag: ~3px muted teal cue centered on the border mid-line.
+ * Hide the resting hairline so only one seam paints.
+ */
+.fynns-end-aside-resize:hover::before,
+.fynns-end-aside[data-resizing="true"] > .fynns-end-aside-resize::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-end-aside:has(> .fynns-end-aside-resize:hover),
+.fynns-end-aside[data-resizing="true"] {
+  border-inline-start-color: transparent;
+}
+
 .fynns-end-aside[data-state="closing"] {
   width: 0;
   max-width: 0;
   min-width: 0;
+  overflow: hidden;
 }
 
 /*
  * Preferred child width while open; cap at 100% so a flex-shrunk aside cannot
  * spill its layout box past ClippedNavShell / demo frames.
  */
-.fynns-end-aside > * {
+.fynns-end-aside > *:not(.fynns-end-aside-resize) {
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: 100%;
   min-width: 0;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
 }
 
 /* Fill hosts track the (possibly flex-shrunk) pane, not the preferred width. */
@@ -8840,7 +8914,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
 }
 
-.fynns-end-aside[data-state="closing"] > * {
+.fynns-end-aside[data-state="closing"] > *:not(.fynns-end-aside-resize) {
   max-width: none;
   min-width: var(--fynns-layout-end-aside-min-width);
 }
@@ -8887,7 +8961,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
       box-shadow: var(--fynns-shadow-md);
     }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside > * {
+    *:has(> .fynns-end-aside) > .fynns-end-aside > *:not(.fynns-end-aside-resize) {
       width: 100%;
       max-width: none;
   min-width: 0;
@@ -9015,10 +9089,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
-  .fynns-end-aside > * {
+  .fynns-end-aside > *:not(.fynns-end-aside-resize) {
     width: 100%;
     max-width: none;
     min-width: 0;
+  }
+
+  .fynns-end-aside-resize {
+    display: none;
   }
 
   .fynns-end-aside[data-state="closing"] {
