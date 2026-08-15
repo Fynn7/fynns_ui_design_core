@@ -976,9 +976,9 @@ const en = {
   "globals.chatUserBody":
     "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
   "globals.chatAssistantMarkdown":
-    "streaming only paints incomplete cues (caret + `aria-busy`); the app appends tokens itself.\n\n```bash\nnpm run sandbox\n```\n\nFenced blocks become `CodeBlock`; sibling units use `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap).\n\n### Checklist\n\n- Inline `code` pills\n- Plain ul/ol lists (GFM task markers become ordinary bullets — no interactive Checkbox)\n- *Italic* and **bold** work\n\n> Prefer `ChatMessage markdown` or `<ChatMarkdown>` — do not dump raw Markdown strings as bare children.",
+    "streaming only paints incomplete cues (last-glyph color pulse + `aria-busy`); the app appends tokens itself.\n\n```bash\nnpm run sandbox\n```\n\nFenced blocks become `CodeBlock`; sibling units use `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap).\n\n### Checklist\n\n- Inline `code` pills\n- Plain ul/ol lists (GFM task markers become ordinary bullets — no interactive Checkbox)\n- *Italic* and **bold** work\n\n> Prefer `ChatMessage markdown` or `<ChatMarkdown>` — do not dump raw Markdown strings as bare children.",
   "globals.chatAssistantBody":
-    "streaming only paints incomplete cues (caret + aria-busy); the app appends tokens itself.",
+    "streaming only paints incomplete cues (last-glyph color pulse + aria-busy); the app appends tokens itself.",
   "globals.chatAssistantStackNote":
     "Bare string + CodeBlock siblings get `--fynns-chatmessage-body-stack-gap` (16dp / unit-stack-gap) — ChatMessage wraps bare text as `.fynns-chat-message-prose`; do not patch this gap in the consumer.",
   "globals.chatAssistantStackCode": "npm run sandbox",
@@ -994,7 +994,7 @@ const en = {
   "globals.chatMoreExportDemo": "Export (sandbox demo).",
   "globals.chatStreamingLabel": "Generating response",
   "globals.chatStreamFull":
-    "Streaming is a UI flag: show the caret while incomplete, then clear it when the reply finishes.",
+    "Streaming is a UI flag: last-glyph color pulse while incomplete, then clear it when the reply finishes.",
   "globals.chatStreamStart": "Simulate stream",
   "globals.chatStreamReset": "Reset",
   "globals.chatError": "There was an error generating a response.",
@@ -2285,9 +2285,9 @@ const zh: Record<MessageKey, string> = {
   "globals.chatUserBody":
     "用一句话概括 ChatMessage 的 `streaming` 属性，并说明用户气泡最大为行宽的 70%，短回复仍会收缩贴合内容。",
   "globals.chatAssistantMarkdown":
-    "streaming 只负责未完成态 UI（光标 + `aria-busy`）；由应用自行追加 token。\n\n```bash\nnpm run sandbox\n```\n\n围栏代码会变成 `CodeBlock`；兄弟单元使用 `--fynns-chatmessage-body-stack-gap`（16dp / unit-stack-gap）。\n\n### 清单\n\n- 行内 `code` 药丸\n- 普通 ul/ol 列表（GFM 任务标记只当普通圆点，无交互 Checkbox）\n- *斜体* 与 **粗体**\n\n> 优先 `ChatMessage markdown` 或 `<ChatMarkdown>` — 不要把原始 Markdown 字符串当裸 children。",
+    "streaming 只负责未完成态 UI（末字换色 + `aria-busy`）；由应用自行追加 token。\n\n```bash\nnpm run sandbox\n```\n\n围栏代码会变成 `CodeBlock`；兄弟单元使用 `--fynns-chatmessage-body-stack-gap`（16dp / unit-stack-gap）。\n\n### 清单\n\n- 行内 `code` 药丸\n- 普通 ul/ol 列表（GFM 任务标记只当普通圆点，无交互 Checkbox）\n- *斜体* 与 **粗体**\n\n> 优先 `ChatMessage markdown` 或 `<ChatMarkdown>` — 不要把原始 Markdown 字符串当裸 children。",
   "globals.chatAssistantBody":
-    "streaming 只负责未完成态 UI（光标 + aria-busy）；由应用自行追加 token。",
+    "streaming 只负责未完成态 UI（末字换色 + aria-busy）；由应用自行追加 token。",
   "globals.chatAssistantStackNote":
     "裸字符串与 CodeBlock 兄弟会吃到 `--fynns-chatmessage-body-stack-gap`（16dp / unit-stack-gap）— ChatMessage 会把裸文本包成 `.fynns-chat-message-prose`；不要在消费仓用本地 CSS 补这个间距。",
   "globals.chatAssistantStackCode": "npm run sandbox",
@@ -2303,7 +2303,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatMoreExportDemo": "导出（沙盒演示）。",
   "globals.chatStreamingLabel": "正在生成回复",
   "globals.chatStreamFull":
-    "streaming 是 UI 标志：未完成时显示光标，回复结束后关闭即可。",
+    "streaming 是 UI 标志：未完成时末字换色脉冲，回复结束后关闭即可。",
   "globals.chatStreamStart": "模拟流式输出",
   "globals.chatStreamReset": "重置",
   "globals.chatError": "生成回复时出错。",

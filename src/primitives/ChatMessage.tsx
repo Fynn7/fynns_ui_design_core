@@ -13,6 +13,7 @@ import {
   type ChatCitationsProps,
 } from "./ChatCitation";
 import { ChatMarkdown } from "./ChatMarkdown";
+import { applyStreamingTail } from "./chatStreamingTail";
 import { RefreshIcon } from "./icons";
 
 export type ChatMessageRole = "user" | "assistant" | "system";
@@ -47,13 +48,13 @@ export type ChatMessageProps = Omit<
   /** Optional author label above the body. Ignored for `system`. */
   name?: ReactNode;
   /**
-   * Incomplete / streaming UI cues: trailing caret blink (only when there is
-   * answer text), `aria-busy`, and a polite live region. Does **not** generate
-   * tokens — set `true` while the app appends `children`, then `false` when
-   * the stream ends. No empty bubble / lone caret while waiting on thinking
-   * with no answer tokens yet (including when children are only `null`
-   * slots from conditional JSX). Ignored for `system`. Suppressed when
-   * `error` is set.
+   * Incomplete / streaming UI cues: last-glyph color pulse (R05 — only when
+   * there is answer text), `aria-busy`, and a polite live region. Does **not**
+   * generate tokens — set `true` while the app appends `children` / `markdown`,
+   * then `false` when the stream ends. No empty bubble / lone cue while
+   * waiting on thinking with no answer tokens yet (including when children
+   * are only `null` slots from conditional JSX). Ignored for `system`.
+   * Suppressed when `error` is set.
    * @default false
    */
   streaming?: boolean;
@@ -159,8 +160,8 @@ function isBlockBodyChild(child: ReactNode): boolean {
  * Promote bare text / inline runs to `.fynns-chat-message-prose` so they stack
  * against sibling CodeBlock / wells with `--fynns-chatmessage-body-stack-gap`.
  * Consecutive non-block children (string + inline `code`, …) coalesce into
- * **one** prose unit so chatCaption-style mixes stay inline. Streaming caret
- * nests inside the last prose when that unit is trailing.
+ * **one** prose unit so chatCaption-style mixes stay inline. Streaming R05
+ * cue wraps the last glyph inside the trailing prose / markdown host.
  */
 function renderBodyChildren(
   children: ReactNode,
@@ -206,24 +207,16 @@ function renderBodyChildren(
 
   if (!showCursor) return out;
 
-  const caret = (
-    <span key="fynns-chat-cursor" className="fynns-chat-message-cursor" aria-hidden />
-  );
-
   const lastIsProse =
     lastProseIndex >= 0 && lastProseIndex === out.length - 1;
 
   if (lastIsProse && isValidElement(out[lastProseIndex])) {
     const prose = out[lastProseIndex] as ReactElement<{ children?: ReactNode }>;
-    out[lastProseIndex] = cloneElement(prose, {
-      children: (
-        <>
-          {prose.props.children}
-          {caret}
-        </>
-      ),
-    });
-    return out;
+    const wrapped = applyStreamingTail(prose.props.children);
+    if (wrapped != null) {
+      out[lastProseIndex] = cloneElement(prose, { children: wrapped });
+      return out;
+    }
   }
 
   const last = out[out.length - 1];
@@ -249,15 +242,22 @@ function renderBodyChildren(
       );
       return out;
     }
+
+    const wrappedLast = applyStreamingTail(last);
+    if (wrappedLast != null) {
+      out[out.length - 1] = wrappedLast;
+      return out;
+    }
   }
 
-  out.push(caret);
-  return out;
+  const wrappedAll = applyStreamingTail(out);
+  return wrappedAll == null ? out : Children.toArray(wrappedAll);
 }
 
 /**
  * Chat row for user / assistant / system turns (ChatGPT-style).
- * `streaming` is a **UI prop only** — caret + incomplete semantics; no LLM.
+ * `streaming` is a **UI prop only** — last-glyph color pulse + incomplete
+ * semantics; no LLM.
  *
  * Dual placement: main uses rem-capped host (`--fynns-chatmessage-max-width`)
  * with user bubble at 70%; `EndAside` / `.fynns-chat-host--fill` use 100% pane
@@ -307,7 +307,7 @@ export function ChatMessage({
         ? null
         : <ChatMarkdown source={markdown} />;
   const hasBody = hasRenderableBody(bodyChildren);
-  /** Caret only while tokens exist — never an empty bubble during thinking. */
+  /** Caret → R05 last-glyph pulse only while tokens exist. */
   const showCursor = isStreaming && hasBody;
   const showBubble = hasBody;
   const showCitations =

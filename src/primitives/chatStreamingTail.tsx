@@ -1,0 +1,125 @@
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+
+/** Class on the last streamed glyph (R05 color pulse). */
+export const CHAT_STREAM_TAIL_CLASS = "fynns-chat-message-stream-tail";
+
+function join(...parts: Array<string | false | null | undefined>) {
+  return parts.filter(Boolean).join(" ");
+}
+
+/**
+ * Split the last non-whitespace Unicode glyph (emoji-safe via `Array.from`).
+ * Trailing whitespace stays after the wrapped glyph.
+ */
+export function splitLastGlyph(
+  text: string,
+): { head: string; tail: string; trailing: string } | null {
+  const chars = Array.from(text);
+  if (chars.length === 0) return null;
+  let idx = chars.length - 1;
+  while (idx >= 0 && chars[idx]!.trim().length === 0) idx -= 1;
+  if (idx < 0) return null;
+  return {
+    head: chars.slice(0, idx).join(""),
+    tail: chars[idx]!,
+    trailing: chars.slice(idx + 1).join(""),
+  };
+}
+
+function isOpaqueBlockHost(el: ReactElement): boolean {
+  const type = el.type;
+  const name =
+    (typeof type === "function" || (typeof type === "object" && type != null)
+      ? String(
+          ("displayName" in type && type.displayName) ||
+            ("name" in type && type.name) ||
+            "",
+        )
+      : "") || "";
+  if (
+    /^(CodeBlock|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
+      name,
+    )
+  ) {
+    return true;
+  }
+  const className = (el.props as { className?: unknown }).className;
+  if (typeof className === "string") {
+    return /\bfynns-(code-block|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
+      className,
+    );
+  }
+  if (typeof type === "string") {
+    return /^(pre|table|hr|img|video|iframe|svg)$/i.test(type);
+  }
+  return false;
+}
+
+/**
+ * Walk children from the end and wrap the last text glyph in
+ * `.fynns-chat-message-stream-tail`. Skips opaque block hosts (CodeBlock, …)
+ * so earlier prose can still receive the cue. Returns `null` when nothing
+ * was wrapable (caller may omit the streaming glyph cue).
+ */
+export function applyStreamingTail(children: ReactNode): ReactNode | null {
+  const items = Children.toArray(children);
+  if (items.length === 0) return null;
+
+  for (let i = items.length - 1; i >= 0; i--) {
+    const child = items[i];
+
+    if (typeof child === "string" || typeof child === "number") {
+      const split = splitLastGlyph(String(child));
+      if (!split) continue;
+      const next = items.slice();
+      next[i] = (
+        <>
+          {split.head}
+          <span className={CHAT_STREAM_TAIL_CLASS}>{split.tail}</span>
+          {split.trailing}
+        </>
+      );
+      return next.length === 1 ? next[0] : next;
+    }
+
+    if (!isValidElement(child)) continue;
+    if (isOpaqueBlockHost(child)) continue;
+
+    const nested = (child.props as { children?: ReactNode }).children;
+    if (nested == null || nested === false) continue;
+
+    const wrapped = applyStreamingTail(nested);
+    if (wrapped == null) continue;
+
+    const next = items.slice();
+    const prevClass = (child.props as { className?: string }).className;
+    next[i] = cloneElement(child as ReactElement<{ children?: ReactNode; className?: string }>, {
+      children: wrapped,
+      // Keep host classes; tail lives inside.
+      className: prevClass,
+    });
+    return next.length === 1 ? next[0] : next;
+  }
+
+  return null;
+}
+
+/** Convenience: apply tail or return children unchanged. */
+export function withStreamingTail(
+  children: ReactNode,
+  enabled: boolean,
+): ReactNode {
+  if (!enabled) return children;
+  const wrapped = applyStreamingTail(children);
+  return wrapped == null ? children : wrapped;
+}
+
+export function streamTailClass(...extra: Array<string | false | null | undefined>) {
+  return join(CHAT_STREAM_TAIL_CLASS, ...extra);
+}

@@ -9111,17 +9111,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- ChatMessage ---------- */
-@keyframes fynns-chat-cursor-blink {
-  0%,
-  49% {
-  opacity: 1;
-  }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
 .fynns-chat-message {
   display: flex;
   align-items: flex-start;
@@ -9277,14 +9266,28 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * unit-stack-gap (same as `.fynns-unit-stack`).
  *
  * ChatMessage promotes bare string/number children to
- * `.fynns-chat-message-prose` and nests the streaming caret inside the
- * last prose when that is the trailing unit — so `{text}<CodeBlock/>`
- * gets body-stack-gap without consumers wrapping text, and the caret
- * stays on the same line as streaming prose. A caret that is still a
- * direct body child (after an element sibling) is excluded here.
+ * `.fynns-chat-message-prose` and wraps the last glyph with
+ * `.fynns-chat-message-stream-tail` while streaming — so
+ * `{text}<CodeBlock/>` gets body-stack-gap without consumers wrapping text.
  */
-.fynns-chat-message-body > * + *:not(.fynns-chat-message-cursor) {
+.fynns-chat-message-body > * + * {
   margin-block-start: var(--fynns-chatmessage-body-stack-gap);
+}
+
+@keyframes fynns-chat-stream-tail {
+  0%,
+  100% {
+    color: var(--fynns-color-text);
+  }
+  50% {
+    /* Same mid as ChatThinking shimmer — accent into muted (not into
+     * on-surface, which washed white; not full accent, which reads neon). */
+    color: color-mix(
+      in srgb,
+      var(--fynns-color-accent) 55%,
+      var(--fynns-color-text-muted)
+    );
+  }
 }
 
 /* Bare answer text promoted by ChatMessage — block so it stacks with wells. */
@@ -9427,21 +9430,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline: var(--fynns-chatmessage-code-user-pad-inline);
 }
 
-.fynns-chat-message-cursor {
-  display: inline-block;
-  box-sizing: border-box;
-  width: var(--fynns-chatmessage-cursor-width);
-  /* Line-box tall I-beam (not a rounded 2×16 stub). */
-  height: var(--fynns-chatmessage-cursor-height);
-  margin-inline-start: 0.12em;
-  /* Sit on the text box bottom — baseline alignment clipped the bar visually. */
-  vertical-align: text-bottom;
+.fynns-chat-message-stream-tail {
+  display: inline;
+  font: inherit;
   font-size: inherit;
+  font-weight: inherit;
   line-height: inherit;
-  border-radius: var(--fynns-radius-none);
-  background: var(--fynns-color-accent);
-  animation: fynns-chat-cursor-blink var(--fynns-duration-presentation-hint)
-    step-end infinite;
+  letter-spacing: inherit;
+  /* R05 — last glyph color pulse; no extra caret box. */
+  animation: fynns-chat-stream-tail var(--fynns-chatmessage-stream-tail)
+    ease-in-out infinite;
+}
+
+.fynns-chat-message--user .fynns-chat-message-stream-tail {
+  /* User bubble inherits on-surface text; same accent peak. */
+  animation-name: fynns-chat-stream-tail;
 }
 
 /* ChatGPT failed-generation footer under the assistant turn. */
@@ -10365,9 +10368,13 @@ a.fynns-chat-activity-artifact:hover {
     transition: none;
   }
 
-  .fynns-chat-message-cursor {
+  .fynns-chat-message-stream-tail {
     animation: none;
-    opacity: 1;
+    color: color-mix(
+      in srgb,
+      var(--fynns-color-accent) 55%,
+      var(--fynns-color-text-muted)
+    );
   }
 }
 
