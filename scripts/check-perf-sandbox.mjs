@@ -59,6 +59,7 @@ for (const rel of inspectorFiles) {
 }
 
 const shellRel = "src/primitives/ClippedNavShell.tsx";
+const measureRel = "src/primitives/layoutMeasure.ts";
 if (!exists(shellRel)) {
   errors.push(`missing ${shellRel}`);
 } else {
@@ -69,9 +70,25 @@ if (!exists(shellRel)) {
       `${shellRel}: must not append measure probes to the shell host (observer feedback loop — llm/PERF.md)`,
     );
   }
-  if (!/function resolveLengthPx/.test(shell)) {
+  if (!/from ["']\.\/layoutMeasure["']/.test(shell)) {
     errors.push(
-      `${shellRel}: expected resolveLengthPx (DOM-free length resolution)`,
+      `${shellRel}: expected import from ./layoutMeasure (DOM-free length resolution)`,
+    );
+  }
+}
+if (!exists(measureRel)) {
+  errors.push(`missing ${measureRel}`);
+} else {
+  const measure = read(measureRel);
+  if (!/export function resolveLengthPx/.test(measure)) {
+    errors.push(
+      `${measureRel}: expected resolveLengthPx (DOM-free length resolution)`,
+    );
+  }
+  /* Probes must stay under document.body — never an observed shell host. */
+  if (/host\.appendChild\s*\(/.test(measure)) {
+    errors.push(
+      `${measureRel}: must not append measure probes to the layout host (llm/PERF.md)`,
     );
   }
 }
