@@ -451,15 +451,18 @@ classes.
     `assist`, `radius-pill`) **inside** `empty`, centered wrap — they
     sit in the thread **above** the docked composer (do **not** mirror
     ChatGPT’s centered-composer “chips below input”; do not add
-    `ChatStarterChip`). Composer stays docked. No built-in markdown /
-    Voice Mode / quote-reply / Slack-style
-    emoji reactions / attachment upload (`attachments` slot + optional
-    dictation hook only). **Parity note (markdown / GFM):** ChatGPT
-    renders GFM in assistant turns, including **task-list checkboxes**
-    (`- [ ]` / `- [x]`). `@fynns/ui` does **not** — `ChatMessage`
-    `children` are opaque; the app owns markdown (and any interactive
-    task list, e.g. via `Checkbox`). Do not add a markdown/GFM renderer
-    to this primitive. **Parity note (reactions):** ChatGPT and
+    `ChatStarterChip`). Composer stays docked. Prefer **`ChatMessage`
+    `markdown`** or **`ChatMarkdown`** for LLM turns (L2 GFM subset — see
+    below). No Voice Mode / quote-reply / Slack-style emoji reactions /
+    attachment upload (`attachments` slot + optional dictation hook only).
+    **Parity note (markdown / GFM):** ChatGPT renders GFM in assistant turns,
+    including **task-list checkboxes** (`- [ ]` / `- [x]`). `@fynns/ui` ships
+    a **zero-dep L2 subset** via `ChatMarkdown` / `ChatMessage markdown`:
+    paragraphs, AT1–6, fenced → `CodeBlock`, blockquotes, hr, ul/ol,
+    GFM `- [ ]` / `- [x]` → ordinary list items (label only — no interactive `Checkbox`), inline `code` / **strong** / *em* / ~~del~~ /
+    links. Not full CommonMark/GFM (no tables / raw HTML). Streaming: append
+    into `markdown`; incomplete fences stay open through EOF. Custom trees
+    still use opaque `children`. **Parity note (reactions):** ChatGPT and
     Claude.ai ship **thumbs up/down** as vendor quality feedback under
     assistant turns — not multi-emoji reactions (those remain feature
     requests on both). Pass thumbs via the `actions` slot if the app
@@ -864,8 +867,8 @@ classes.
   — see Feedback keep-set; **`ChatActivity`** / Step / Artifact = Wave 2
   multi-step status tree — see Feedback keep-set; `citations` /
   `ChatCitations` / `ChatCitationChip` = browsing source chips — see
-  Feedback keep-set; no built-in GFM /
-  task-list checkboxes — see Feedback keep-set; CJK IME Enter while
+  Feedback keep-set; prefer `ChatMessage markdown` / `ChatMarkdown` (L2 GFM
+  subset) — see Feedback keep-set; CJK IME Enter while
   composing does not send — see Feedback **Composer keys**; composer is
   a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
   **composer input model**),

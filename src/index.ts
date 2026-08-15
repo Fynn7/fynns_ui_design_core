@@ -308,6 +308,8 @@ export type {
   ChatMessageProps,
   ChatMessageRole,
 } from "./primitives/ChatMessage";
+export { ChatMarkdown } from "./primitives/ChatMarkdown";
+export type { ChatMarkdownProps } from "./primitives/ChatMarkdown";
 export {
   ChatCitationChip,
   ChatCitations,

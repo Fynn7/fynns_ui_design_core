@@ -12,6 +12,7 @@ import {
   type ChatCitation,
   type ChatCitationsProps,
 } from "./ChatCitation";
+import { ChatMarkdown } from "./ChatMarkdown";
 import { RefreshIcon } from "./icons";
 
 export type ChatMessageRole = "user" | "assistant" | "system";
@@ -23,13 +24,21 @@ export type ChatMessageProps = Omit<
   /** Speaker role — drives alignment and bubble chrome. */
   role: ChatMessageRole;
   /**
-   * Message body. The caller owns markdown rendering and token append while
-   * streaming — this primitive only paints incomplete cues. Bare string /
-   * number children are wrapped as `.fynns-chat-message-prose` so sibling
-   * `CodeBlock` / wells get `--fynns-chatmessage-body-stack-gap` without a
-   * consumer wrapper.
+   * Message body. Prefer `markdown` for LLM turns (L2 GFM subset via
+   * `ChatMarkdown`). When `markdown` is set it becomes the bubble body;
+   * `children` is ignored for the body in that case. Without `markdown`,
+   * bare string / number children are wrapped as `.fynns-chat-message-prose`
+   * so sibling `CodeBlock` / wells get `--fynns-chatmessage-body-stack-gap`.
+   * Token append while streaming is still the caller's job — this primitive
+   * only paints incomplete cues.
    */
   children?: ReactNode;
+  /**
+   * Markdown / GFM-subset source for the bubble (`ChatMarkdown`). When set,
+   * takes precedence over `children` for the answer body. Streaming: append
+   * tokens into this string; incomplete fences stay open through EOF.
+   */
+  markdown?: string;
   /**
    * Optional leading avatar. Default omit (ChatGPT main thread has none);
    * pass only for multi-agent / branded rows. Ignored for `system`.
@@ -131,7 +140,7 @@ function isBlockBodyChild(child: ReactNode): boolean {
         )
       : "") || "";
   if (
-    /^(CodeBlock|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
+    /^(CodeBlock|ChatMarkdown|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
       name,
     )
   ) {
@@ -139,7 +148,7 @@ function isBlockBodyChild(child: ReactNode): boolean {
   }
   const className = (child.props as { className?: unknown }).className;
   if (typeof className === "string") {
-    return /\bfynns-(code-block|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
+    return /\bfynns-(code-block|chat-markdown|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
       className,
     );
   }
@@ -217,6 +226,31 @@ function renderBodyChildren(
     return out;
   }
 
+  const last = out[out.length - 1];
+  if (isValidElement(last)) {
+    const type = last.type;
+    const name =
+      (typeof type === "function" || (typeof type === "object" && type != null)
+        ? String(
+            ("displayName" in type && type.displayName) ||
+              ("name" in type && type.name) ||
+              "",
+          )
+        : "") || "";
+    const className = (last.props as { className?: unknown }).className;
+    const isMarkdown =
+      /^ChatMarkdown$/i.test(name) ||
+      (typeof className === "string" &&
+        /\bfynns-chat-markdown\b/.test(className));
+    if (isMarkdown) {
+      out[out.length - 1] = cloneElement(
+        last as ReactElement<{ showCursor?: boolean }>,
+        { showCursor: true },
+      );
+      return out;
+    }
+  }
+
   out.push(caret);
   return out;
 }
@@ -239,6 +273,7 @@ function renderBodyChildren(
 export function ChatMessage({
   role,
   children,
+  markdown,
   avatar,
   name,
   streaming = false,
@@ -265,7 +300,9 @@ export function ChatMessage({
   const showAvatar = !isSystem && avatar != null;
   const showName = !isSystem && name != null;
   const showThinking = !isSystem && thinking != null;
-  const hasBody = hasRenderableBody(children);
+  const bodyChildren =
+    markdown != null ? <ChatMarkdown source={markdown} /> : children;
+  const hasBody = hasRenderableBody(bodyChildren);
   /** Caret only while tokens exist — never an empty bubble during thinking. */
   const showCursor = isStreaming && hasBody;
   const showBubble = hasBody;
@@ -307,7 +344,7 @@ export function ChatMessage({
         {showBubble ? (
           <div className="fynns-chat-message-bubble">
             <div className="fynns-chat-message-body">
-              {renderBodyChildren(children, showCursor)}
+              {renderBodyChildren(bodyChildren, showCursor)}
             </div>
           </div>
         ) : null}

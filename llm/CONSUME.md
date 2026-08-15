@@ -67,6 +67,16 @@ children (never a rail-width track hosting a labeled drawer).
     `--fynns-radius-22`, and **font families** — body/chrome = `ui`, code =
     `mono`, never serif for main prose): [`AGENTS.md`](../AGENTS.md) Hard rules
     + Tokens **Font families**.
+10a. **ChatMessage Markdown (prefer core):** LLM turns are Markdown by
+    convention. Prefer `ChatMessage markdown={md}` or
+    `<ChatMarkdown source={md} />` (zero-dep L2 GFM subset → `CodeBlock`,
+    plain ul/ol, inline pills; GFM `- [ ]` / `- [x]` are ordinary bullets —
+    not interactive `Checkbox`). When `markdown` is set it wins over `children`
+    for the bubble body. Do **not** dump raw Markdown strings as bare
+    `children` (backticks stay literal). Full CommonMark/tables/HTML remain
+    out of scope — extend core or pass custom `children`. Pasteable rule:
+    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc); catalog:
+    [`AGENTS.md`](../AGENTS.md) **Parity note (markdown / GFM)**.
 11. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
 12. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
 13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style
