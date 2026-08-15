@@ -808,7 +808,8 @@ classes.
   width would crowd, densify to `"rail"` first so destinations never flash as a
   full labeled drawer then snap. Export is also available for apps that open
   destinations themselves. It **must not** fire while the
-  drawer seam is being dragged or while `EndAside` is in `data-state="closing"`
+  drawer seam is being dragged, while `EndAside` is in `data-state="closing"`,
+  or while `EndAside` is mid-drag (`data-resizing`)
   (closing morph would otherwise false-trip overflow and collapse labeled
   drawer → rail). Crowding length reads (`readVarPx` / `readRemPx`) resolve
   `px`/`rem`/`%`/`clamp()` **without** inserting measure probes into the shell
