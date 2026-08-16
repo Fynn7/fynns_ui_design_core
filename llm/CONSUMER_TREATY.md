@@ -25,7 +25,8 @@ The consume installer may also drop this rule when wiring a consumer
 alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
 freshness / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
-**Clipped ≠ text-clip** / **ControlRow toolbar rhythm**). Local pin gate:
+**Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
+**NavigationDrawer destination gap ≠ unit-stack**). Local pin gate:
 `consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
 propagate bump PRs do not replace that check. Day-to-day local core edits →
 consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
@@ -112,6 +113,10 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    widen with local `.fynns-*` overrides.
 4. Do not confuse `NavigationDrawer` (destinations) with modal `Drawer`
    (content) or the shell itself (layout only).
+5. Destination row gap ≠ form unit gap: put Item / Group / Headline as
+   **direct** drawer-body children (`--fynns-navdrawer-section-gap` / **4dp**,
+   same as Group leaves). Do **not** wrap the list in `.fynns-unit-stack`
+   (16dp) — that makes top-level rows look sparse vs folded sections.
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 

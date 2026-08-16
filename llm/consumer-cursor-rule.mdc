@@ -219,6 +219,12 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
    `ClippedNavShell`（布局壳）。
 5. **禁止**用本地 CSS / 私有 width「修好」看起来像坏边栏的挤扁或错槽；
    修同步或槽位。dev 下 rail+Drawer 会 `console.warn` squashed drawer。
+6. **目的地行间距：** `NavigationDrawerItem` / `NavigationDrawerGroup` /
+   `NavigationDrawerHeadline` / `Divider` 必须是 drawer body 的**直接**子节点。
+   兄弟间距 = `--fynns-navdrawer-section-gap`（**4dp**，与 Group 内叶子行相同）。
+   **禁止**用 `.fynns-unit-stack`（16dp 表单/单元节奏）包一层目的地列表 — 那会让
+   顶层「快捷链接 / 聊天记录」比折叠组内行疏一大截。core 会对 body 内误用的
+   `unit-stack` 重映射到 `section-gap`，但仍应以直接子节点为准。
 
 ## Collapsible / Card `chrome`（嵌套必读）
 

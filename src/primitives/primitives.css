@@ -5598,6 +5598,17 @@ a.fynns-breadcrumb-link:visited {
   scrollbar-gutter: unset;
 }
 
+/*
+ * Destination rhythm: Item / Group / Headline siblings share
+ * `--fynns-navdrawer-section-gap` (4dp) — same as `.fynns-nav-drawer-group-body`.
+ * Do **not** wrap destinations in `.fynns-unit-stack` (that token is 16dp for
+ * Card / form units). If a consumer still wraps, remap so top-level rows match
+ * Group leaf rows — never invent a third nav gap.
+ */
+.fynns-nav-drawer-body .fynns-unit-stack {
+  gap: var(--fynns-navdrawer-section-gap);
+}
+
 .fynns-nav-drawer-section-headline {
   box-sizing: border-box;
   padding-block: var(--fynns-navdrawer-headline-pad-block);

@@ -51,8 +51,10 @@ export type NavigationDrawerProps = {
   ariaLabel?: string;
   className?: string;
   /**
-   * Destinations: `NavigationDrawerItem`, `NavigationDrawerHeadline`,
-   * `NavigationDrawerGroup`, `Divider`, etc.
+   * Destinations as **direct** body children: `NavigationDrawerItem`,
+   * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
+   * Body gap = `--fynns-navdrawer-section-gap` (same as Group leaf rows).
+   * Do **not** wrap in `.fynns-unit-stack` (16dp form/unit rhythm).
    */
   children?: ReactNode;
 };
@@ -79,9 +81,11 @@ function DrawerSheet({
 }
 
 /**
- * M3 Navigation drawer — destination list in a 360dp side sheet.
+ * M3 Navigation drawer — destination list in a dense side sheet.
  * Modal overlays content; `standard` sits in the layout permanently.
  * Prefer `Drawer` for generic side panels (forms, inspectors).
+ * Sibling Item / Group / Headline spacing uses `--fynns-navdrawer-section-gap`
+ * — never `.fynns-unit-stack` for destination lists.
  * @see https://m3.material.io/components/navigation-drawer/overview
  */
 export function NavigationDrawer({
