@@ -40,6 +40,14 @@ export type SearchBarProps = Omit<
    */
   expanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
+  /**
+   * - `chrome` (default) — elevated 56dp capsule (TopAppBar / page search).
+   * - `destination` — same height / type / icon gap as `NavigationDrawerItem`
+   *   (40dp); keeps chrome SearchBar surface / shadow / focus. Use in
+   *   destination drawers (e.g. GlobalSearch). Also auto-applied to plain
+   *   SearchBars inside `.fynns-nav-drawer-body`.
+   */
+  density?: "chrome" | "destination";
   /** Accessible name for the search field (required when no visible label). */
   ariaLabel: string;
   /** Clear-button `aria-label`. Default `"Clear"`. */
@@ -51,9 +59,11 @@ export type SearchBarProps = Omit<
 
 /**
  * M3 Search bar — elevated 56dp capsule for chrome search (not form fields).
- * Optional docked results via `expanded` + `children` merge into one shell
- * (Google-style). Expand/collapse animates via `.fynns-expand` (including
- * blur/Esc). Prefer `Input` inside dense forms / toolbars (SearchInput removed).
+ * Optional `density="destination"` matches `NavigationDrawerItem` geometry
+ * (40dp / label type / icon gap) for drawer GlobalSearch. Optional docked
+ * results via `expanded` + `children` merge into one shell (Google-style).
+ * Expand/collapse animates via `.fynns-expand` (including blur/Esc). Prefer
+ * `Input` inside dense forms / toolbars (SearchInput removed).
  * @see https://m3.material.io/components/search/overview
  */
 export const SearchBar = forwardRef(function SearchBar(
@@ -65,6 +75,7 @@ export const SearchBar = forwardRef(function SearchBar(
     trailing,
     expanded,
     onExpandedChange,
+    density = "chrome",
     ariaLabel,
     clearAriaLabel = "Clear",
     children,
@@ -86,6 +97,7 @@ export const SearchBar = forwardRef(function SearchBar(
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isExpanded = Boolean(expanded);
   const showClear = value.length > 0 && !disabled;
+  const isDestination = density === "destination";
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -114,6 +126,7 @@ export const SearchBar = forwardRef(function SearchBar(
 
   const rootClass = [
     "fynns-search-bar",
+    isDestination ? "fynns-search-bar--destination" : "",
     isExpanded ? "fynns-search-bar--expanded" : "",
     disabled ? "fynns-search-bar--disabled" : "",
     className ?? "",
@@ -126,6 +139,7 @@ export const SearchBar = forwardRef(function SearchBar(
       ref={rootRef}
       className={rootClass}
       data-expanded={isExpanded ? "true" : undefined}
+      data-density={density}
     >
       <div className="fynns-search-bar-field">
         <span className="fynns-search-bar-leading">
@@ -177,6 +191,7 @@ export const SearchBar = forwardRef(function SearchBar(
           {showClear ? (
             <IconButton
               type="button"
+              size={isDestination ? "sm" : "md"}
               aria-label={clearAriaLabel}
               disabled={disabled}
               onMouseDown={(event) => {

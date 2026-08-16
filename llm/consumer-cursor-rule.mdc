@@ -102,14 +102,120 @@ FillColumn。
 对照 sandbox Globals `#form-recipe` 抄树；文案用消费仓自己的。权威：子模块
 `AGENTS.md` **FieldStack semantic clusters** / Hard rules DO。
 
-## ClippedNavShell（仅完全自定义时 — 避免「挤扁抽屉」）
+## 内容密度（data → 组件 — 硬）
+
+按**数据形态**选 keep-set，不要默认「每条都是一张 Card」。
+
+| 数据 | 用 | **禁止** |
+| --- | --- | --- |
+| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** `List` 多行 `ListItem`：`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` 里 `IconButton` `ghost` `sm` + `Tooltip`；删除走 `ConfirmDialog` | 每条外包加垫 `Surface`/`Card`；操作堆在文案下方；单条 List 再套 unit-stack；行内实心危险圆钮 |
+| 应用目的地（导航） | `NavigationDrawer` / Rail / Bar（或 `DestinationAppShell`） | 用 `List`/`Card` 当根导航 |
+| 多列表格 | `Table` + `.fynns-table-wrap` | 同数据的 Card 网格（表能装下时） |
+| 表单 / 偏好 | `FieldStack`（`#form-recipe`） | 每字段一张肥 Card |
+| 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
+| 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
+| 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
+
+交互 `ListItem` 的 `trailing`（IconButton）在行 `<button>` **外侧**（合法嵌套）—
+不要为了「不能嵌套按钮」再包一层 Surface。对照 sandbox `#list`。权威：子模块
+`AGENTS.md` **Content density**；失败模式：`llm/CONSUMER_TREATY.md` **fat Surface**。
+
+```tsx
+// 对 — 一条目录，一行 ListItem；操作在 trailing
+<List aria-label={catalogLabel}>
+  <ListItem
+    headline={name}
+    supportingText={path}
+    leading={<FolderOpenIcon />}
+    trailing={
+      <div className="fynns-control-cluster">
+        <Tooltip content={editLabel}>
+          <IconButton size="sm" variant="ghost" aria-label={editLabel}>
+            <PencilIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content={removeLabel}>
+          <IconButton size="sm" variant="ghost" aria-label={removeLabel}>
+            <TrashIcon />
+          </IconButton>
+        </Tooltip>
+      </div>
+    }
+    onClick={onOpen}
+  />
+</List>
+```
+
+**禁止：** `<Surface padded><List><ListItem/><!-- 下面再一排 IconButton --></List></Surface>` 循环每条。
+
+## 标签行 / 工具条节奏（硬 — 禁止手搓乱排）
+
+`Surface` / `Card` / 检查器条里出现 **名称 + ToggleGroup/Switch + 按钮 +
+说明时间戳** 时，**必须**用 keep-set 节奏，禁止自造 flex/grid 把文案竖堆在
+左、控件飘在中右（症状：标签与轨道不对齐、时间戳独占第二行大片空白、
+名称顶对齐而 ToggleGroup/按钮垂直居中）。
+
+| 角色 | 选用 |
+| --- | --- |
+| 可见名称 \| 控件（同行） | `ControlStack` + `ControlRow` `label={名称}`；控件在 row 子树 |
+| 同行多个控件（ToggleGroup + 刷新按钮） | row 内 `.fynns-control-cluster`（或 `Grid`） |
+| 控件下的说明 / 「截至 …」时间戳 | `ControlBlock` `description` **或** `FieldHint` — **禁止**裸 `<p>` / 与 label 绑成左列竖栈 |
+| 表单语义分簇（多段选项） | 上节 `FieldStack`（不要把一切塞进一个乱 flex） |
+
+**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / FieldHint）与
+`#form-recipe`。Preferences / Dialog 标签行：Switch 用 `label=""` + `ariaLabel`
+（仅轨道），名称只在 `ControlRow`。
+
+```tsx
+// 对 — 名称与控件同一 ControlRow；时间戳是 supporting，不是左列第二行
+<Surface variant="outlined" padded>
+  <ControlBlock description={asOfLabel}>
+    <ControlStack columns={1}>
+      <ControlRow label={priceSourceLabel}>
+        <div className="fynns-control-cluster">
+          <ToggleGroup … />
+          <Button …>{refreshLabel}</Button>
+        </div>
+      </ControlRow>
+    </ControlStack>
+  </ControlBlock>
+</Surface>
+```
+
+**禁止：**
+
+- `Surface` 里手写 `display:flex` / 双列把 label+hint 捆左边、控件捆右边
+- 把说明文案与 `ControlRow` `label` 拆成两个不等高兄弟却指望基线对齐
+- 为「排齐」本地改 `.fynns-*` 或发明 `--app-*-gap`
+
+## ClippedNavShell（仅完全自定义时 — 槽位 + 挤扁抽屉）
 
 低层槽位壳。优先 `DestinationAppShell`。若手拼 `ClippedNavShell`：
 它 **只改网格轨道宽度**，**不会**自动把 Drawer 换成 Rail。
 
-| `navMode` | 轨道宽 | `nav` 槽必须渲染 |
+**「Clipped」≠ 裁切文字：** 名称指 M3 **clipped** 拓扑（顶栏全宽贴边，
+destination 列在顶栏**下方**），**不是**把侧栏标签裁成竖条、也不是
+`overflow: hidden` 切字。侧栏字被挤换行 / 竖条散文 → 先查槽位与
+`navMode`，**禁止**用本地 `.fynns-*` 补丁「加宽」。
+
+### 槽位归属（硬 — 目的地 / 主栏 / 检查器）
+
+| 槽 / 子树 | 只放 | **禁止**放 |
 | --- | --- | --- |
-| `"drawer"` | `--fynns-navdrawer-width`（~280px） | `NavigationDrawer` + `NavigationDrawerItem` |
+| `nav` | 目的地：`NavigationDrawer` **或** `NavigationRail`（与 `navMode` 同步） | 页面正文、OpenWiki / 文档、表单、Chat、Preview、任意非 destination |
+| `children`（main） | 主画布 / 路由出口 | destination 列表（应在 `nav`） |
+| `aside` / `EndAside` | 检查器 / 辅助 pane | 整页主内容、平行「第二主栏」冒充侧栏 |
+| 模态 `Drawer` | 内容侧板（临时） | destination 导航（≠ `NavigationDrawer`） |
+
+`DestinationAppShell` 同构：`destinations[]` → 内部 `nav`；`children` → main；
+可选 `aside` → `EndAside`。**禁止**把 wiki / 设置页 / Chat 塞进 `nav` 或
+自造「侧栏里再套一整页」。
+
+### `navMode` ↔ `nav` 同步
+
+| `navMode` | 健康轨宽（约） | `nav` 槽必须渲染 |
+| --- | --- | --- |
+| `"drawer"` | `--fynns-navdrawer-width`（默认 ~280px；可拖，夹在 min/max） | `NavigationDrawer` + `NavigationDrawerItem` |
 | `"rail"` | `--fynns-navrail-width`（~80px） | `NavigationRail` + `NavigationRailItem` |
 | `"hidden"` | `0` | 可 `null`（壳会保留上一帧做收合动画） |
 
@@ -133,6 +239,8 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
   }
   topBar={…}
 >
+  {mainCanvasOnly}
+</ClippedNavShell>
 ```
 
 - TopAppBar 开关只做 **open ↔ closed**（`drawer|rail` ↔ `hidden`），不要用开关在
@@ -140,6 +248,31 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
 - 窄视口（约 ≤900px）与 `onNavCrowded`：**都走 `"rail"` + Rail 组件**，不要继续
   `"drawer"`（CSS 会把 labeled drawer 叠到主舞台上方）。
 - Shell / 检查器 / live token GUI → 另读 `llm/PERF.md`（禁止 observer↔probe 环）。
+
+### 侧栏「坏了」时先诊断（禁止先改 CSS）
+
+出现竖条换行、字被切、文档碎片出现在窄列时，**按序**查：
+
+1. 根节点是否 `.fynns-clipped-nav-shell`？`data-nav` 是 `drawer` / `rail` /
+   `hidden` 哪一个？
+2. **量宽：** ~280px（或 min–max 之间）→ 抽屉轨；~80px → rail 轨。rail 轨里
+   仍是 `.fynns-nav-drawer` → 挤扁抽屉（换 Rail，勿本地加宽）。
+3. **看 DOM：** 怪文案在 `.fynns-clipped-nav-shell-nav` 还是
+   `.fynns-clipped-nav-shell-main`？散文 / wiki 在 `nav` → **槽位放错**，移回
+   `children`；main 被压成竖条 → 查消费仓是否压死 `minmax(0,1fr)` / 误嵌套，
+   **不是**「裁切壳在切字」。
+4. 分清三套 API：`NavigationDrawer`（destination）≠ 模态 `Drawer`（内容板）≠
+   `ClippedNavShell`（布局壳）。
+5. **禁止**用本地 CSS / 私有 width「修好」看起来像坏边栏的挤扁或错槽；
+   修同步或槽位。dev 下 rail+Drawer 会 `console.warn` squashed drawer。
+6. **目的地行间距：** `NavigationDrawerItem` / `NavigationDrawerGroup` /
+   `NavigationDrawerHeadline` / `Divider` 必须是 drawer body 的**直接**子节点。
+   兄弟间距 = `--fynns-navdrawer-section-gap`（**4dp**，与 Group 内叶子行相同）。
+   **禁止**用 `.fynns-unit-stack`（16dp 表单/单元节奏）包一层目的地列表 — 那会让
+   顶层「快捷链接 / 聊天记录」比折叠组内行疏一大截。core 会对 body 内误用的
+   `unit-stack` 重映射到 `section-gap`，但仍应以直接子节点为准。
+   **SearchBar / 工具条**（destination density）作为 body 兄弟时，与目的地行共用
+   同一 **4dp** 步距 — 不要再开 16dp kind-jump。
 
 ## Collapsible / Card `chrome`（嵌套必读）
 
@@ -231,12 +364,18 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 ## 改 UI 前检查清单
 
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
-2. 涉及 `ClippedNavShell`：`navMode` 与 `nav` 子树是否**同一时刻**一致？
-3. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
-4. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
+2. 主 chrome：默认是否 `DestinationAppShell`？手拼壳时 `navMode` 与 `nav`
+   是否**同一时刻**一致？`nav` 是否**只有** destination（无 wiki / 表单 / Chat）？
+3. 侧栏异常：是否已按上文「先诊断」查 `data-nav` / 轨宽 / 怪文案所在槽？
+   **禁止**先本地改 `.fynns-*` 加宽。
+4. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
+5. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
-5. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
-6. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
-7. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
-8. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
-9. `npm run build` / typecheck 绿；不要用本地 CSS「修好」看起来像 rail 的挤扁抽屉。
+6. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
+7. Surface/Card 标签行：是否 `ControlRow` + cluster + `ControlBlock`/`FieldHint`
+   （对照 `#rhythm`），而非手搓 flex 乱排？
+8. 路径 / 链接 / 书签目录：是否 **一个** `List` + `ListItem`（对照 `#list`），而非每条肥 `Surface`/`Card`？行操作是否 trailing `ghost` `sm`？
+9. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
+10. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
+11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
+12. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。

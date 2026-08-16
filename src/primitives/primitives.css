@@ -175,6 +175,23 @@
     opacity var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
+/* Label wrapper: enables text-overflow when a host caps the button
+ * (`max-width` / flex shrink). Idle buttons stay content-sized.
+ * `inline-flex` on `.fynns-btn` alone cannot ellipsis; this block can. */
+.fynns-btn-label {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-btn-label > svg {
+  display: inline-block;
+  vertical-align: -0.125em;
+  margin-inline-end: var(--fynns-space-2);
+}
+
 /* M3 state layer (no scale-on-press). Fade via opacity — do not interpolate
  * `color-mix` backgrounds (expensive paint on every button hover). */
 .fynns-btn::before {
@@ -2249,6 +2266,41 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
 }
 
+/*
+ * Value Buttons in a ControlStack track: hug label width (pill follows text)
+ * until the track edge, then shrink + ellipsis via `.fynns-btn-label`.
+ * Trigger is width:100% of the grid area so `max-width` on the button is
+ * definite — not circular with intrinsic sizing (which hard-clipped without …).
+ * Full copy stays on aria-label / Tooltip.
+ */
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger
+  > .fynns-btn,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-btn {
+  flex: 0 1 auto;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
 /* ---------- ControlRow ---------- */
 .fynns-control-row {
   display: grid;
@@ -4106,7 +4158,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-linear-progress-active,
 .fynns-linear-progress-track,
-.fynns-linear-progress-stop,
 .fynns-linear-progress-indeterminate-bar {
   box-sizing: border-box;
   height: 100%;
@@ -4121,23 +4172,10 @@ a.fynns-breadcrumb-link:visited {
   transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
-.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
-  width: calc(
-    var(--fynns-progress-value) *
-      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
-  );
-}
-
 .fynns-linear-progress-track {
   flex: 1 1 auto;
   min-width: 0;
   background: var(--fynns-color-accent-24);
-}
-
-.fynns-linear-progress-stop {
-  flex: 0 0 var(--fynns-progress-stop-size);
-  width: var(--fynns-progress-stop-size);
-  background: var(--fynns-color-accent);
 }
 
 .fynns-linear-progress--indeterminate {
@@ -5592,7 +5630,12 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--fynns-navdrawer-section-gap);
+  /*
+   * No flex gap: destination rhythm is adjacent-sibling
+   * `--fynns-navdrawer-section-gap` (4dp) — SearchBar / tools wrappers
+   * share the same step as Item ↔ Item (destination-density SearchBar).
+   */
+  gap: 0;
   align-items: stretch;
   min-height: 0;
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
@@ -5610,6 +5653,38 @@ a.fynns-breadcrumb-link:visited {
   overflow-y: auto;
   /* Native bar hidden; overlay thumb must not steal item width (see theme overlay). */
   scrollbar-gutter: unset;
+}
+
+/*
+ * Destination rhythm: every direct body sibling opens
+ * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
+ * Group / Headline / Divider / Tooltip-wrapped items / SearchBar, and
+ * tools wrappers ahead of those rows. Same step as
+ * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
+ * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
+ * `.fynns-nav-drawer-item { margin: 0 }`.
+ */
+.fynns-nav-drawer-body
+  > *
+  + :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger,
+    .fynns-search-bar
+  ) {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+/* Tools wrappers (e.g. app SearchBar host) ↔ next sibling when the next
+ * node is not in the :is() list above — still use section-gap. */
+.fynns-nav-drawer-body > * + * {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+.fynns-nav-drawer-body .fynns-unit-stack {
+  gap: var(--fynns-navdrawer-section-gap);
 }
 
 .fynns-nav-drawer-section-headline {
@@ -6286,6 +6361,55 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: var(--fynns-color-text-muted);
 }
 
+/*
+ * Destination density — match NavigationDrawerItem row geometry only (40dp
+ * height, label type, icon gap / size, item pads). Keep chrome SearchBar
+ * surface / elevation / focus border (do not restyle as a destination pill).
+ * Auto-applied to plain SearchBars in drawer body so GlobalSearch densifies
+ * without consumer restyles.
+ */
+.fynns-search-bar--destination .fynns-search-bar-field,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-field {
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  gap: var(--fynns-navdrawer-item-gap);
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading,
+.fynns-search-bar--destination .fynns-search-bar-trailing,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-trailing {
+  min-width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-item-height);
+  gap: 0;
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading svg,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading
+  svg {
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-input,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-input {
+  padding-inline: 0;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+}
+
 /* Results share the expanded shell. Row highlight matches DropdownMenu items
    (`radius-3xl` long-strip) — one hover language for all dropdown lists.
    Inset from the shell edge so hover does not kiss the outer curve.
@@ -6560,9 +6684,20 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-list-item-host {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
   margin: 0;
   padding: 0;
+}
+
+.fynns-list-item-host > .fynns-list-item {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 
 .fynns-list-item {
@@ -6768,6 +6903,38 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-list-item-trailing-icon svg {
   width: var(--fynns-list-icon-size);
   height: var(--fynns-list-icon-size);
+}
+
+/*
+ * Interactive row actions (IconButton / cluster) — sibling of the row button.
+ * Do not crush to list-icon 16dp; keep ghost sm targets.
+ */
+.fynns-list-item-trailing--end {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-self: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin-inline-start: 0;
+  padding-inline-end: var(--fynns-list-pad-inline);
+  color: var(--fynns-color-text-muted);
+}
+
+/* Decorative chevron / glyph only — IconButton / cluster keep their own size. */
+.fynns-list-item-trailing--end > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex-shrink: 0;
+}
+
+.fynns-list-item-trailing--end .fynns-control-cluster {
+  flex-wrap: nowrap;
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item {
+  /* End pad lives on the actions column so IconButtons clear the list edge. */
+  padding-inline-end: var(--fynns-space-xs);
 }
 
 .fynns-list-item--selected .fynns-list-item-trailing {
@@ -8081,17 +8248,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- Table ---------- */
+/*
+ * Two-axis scroll host (AGENTS: narrow = horizontal scroll, not reflow).
+ * Do **not** pin overflow-x: clip here — that rule is for vertical-only
+ * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs.
+ */
 .fynns-table-wrap {
   overflow: auto;
   width: 100%;
   max-width: 100%;
-  /* Pair with `.fynns-scroll` for hover/focus-within thumb + gutter auto. */
+  min-width: 0;
 }
 
-/* Prefer pairing with `.fynns-scroll` on the wrap. */
-
 .fynns-table {
-  width: 100%;
+  /* Fill when short; grow past the wrap when columns need width → H-scroll. */
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text);
@@ -8110,6 +8282,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding: var(--fynns-space-sm) var(--fynns-space-md);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   vertical-align: middle;
+  /* Prevent CJK character-stack / Chip+label shatter when the host is narrow. */
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .fynns-table-header-cell {
@@ -9663,9 +9838,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity {
   display: flex;
   flex-direction: column;
+  /* Fill the message column under align-items:flex-start so desc ControlRows
+   * resolve % / 1fr against the host, not max-content button widths. */
+  align-self: stretch;
+  width: 100%;
   gap: var(--fynns-chatmessage-activity-gap);
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-chatmessage-name-size);
   line-height: var(--fynns-line-height-snug);
@@ -9989,6 +10169,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-desc {
+  /* Flex item under `.fynns-chat-activity-step`: default min-width:auto would
+   * lock to nowrap Button min-content and shove the tree past EndAside. */
+  box-sizing: border-box;
+  min-width: 0;
   margin-block-start: var(--fynns-chatmessage-activity-desc-gap);
   margin-inline-start: calc(
     var(--fynns-size-icon) + var(--fynns-chatmessage-activity-node-gap)
@@ -9997,6 +10181,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-weight: var(--fynns-font-weight-regular);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  overflow-x: clip;
+}
+
+/* Desc ControlStacks: hug short labels; value track eats the leftover. */
+.fynns-chat-activity-desc .fynns-control-stack {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns:
+    max-content
+    minmax(0, 1fr);
+}
+
+.fynns-chat-activity-desc .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Hold: keep capsule in flow so the row does not jump when it appears. */

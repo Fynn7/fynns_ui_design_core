@@ -79,15 +79,17 @@ often leave empty `queued` check suites that block auto-merge even when only
 Consumers import `@fynns/ui` from submodule source via a Vite alias.
 
 **Instant local mirror (uncommitted / local commits):** from a core checkout,
-`npm run consume:sync -- --target <CONSUMER_ROOT>` diffs and mirrors `src/` (+
-`package.json`) into the consumer submodule **worktree** so Vite HMR can pick
-up changes without waiting for a pin bump. Does not commit the pointer. Full
-contract: [`llm/CONSUME.md`](../llm/CONSUME.md) **Local sync (instant)**.
+prefer `npm run consume:watch` (or `npm run consume:sync -- --all`) so every
+sibling in [`llm/local-consumers.json`](../llm/local-consumers.json) gets an
+**upsert** of `src/` (+ `package.json`) into its submodule **worktree** for Vite
+HMR — no pin bump. Default does **not** prune consumer-only files (`--prune`
+for strict delete). Single consumer: `--target <CONSUMER_ROOT>`. Full contract:
+[`llm/CONSUME.md`](../llm/CONSUME.md) **Local sync (instant)**.
 
 **Formal pin bump (release / CI):** pull or checkout a published SHA in the
 submodule, then commit the parent pointer — push-triggered bump PRs and
 Dependabot cover registered consumers (this document). Day-to-day
-`consume:sync` does **not** replace that.
+`consume:sync` / `consume:watch` do **not** replace that.
 
 **Local mandatory pin check (agents / humans):** propagate bump PRs do **not**
 replace verifying the working tree. Before UI work, run

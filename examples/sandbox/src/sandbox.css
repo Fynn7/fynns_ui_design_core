@@ -939,6 +939,16 @@
   background: var(--fynns-color-surface-1);
 }
 
+/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow).
+ * Match a typical EndAside content width so long values ellipsis at the pane
+ * edge — not an artificially crushed column that looks “early-truncated”. */
+.sandbox-activity-narrow {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(100%, var(--fynns-layout-end-aside-width));
+  min-width: 0;
+}
+
 .sandbox-chat-aside-label {
   margin: 0;
   color: var(--fynns-color-text-muted);
@@ -1019,6 +1029,8 @@
 
 .sandbox-table-sticky {
   max-height: 10rem;
+  /* Narrow host so the dense demo proves horizontal scroll (not column crush). */
+  max-width: 22rem;
 }
 
 .sandbox-globals-list {

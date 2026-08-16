@@ -18,6 +18,10 @@ export type TableProps = HTMLAttributes<HTMLTableElement> & {
 /**
  * Native `<table>` with `fynns-table` chrome. Compose with `TableHead` /
  * `TableBody` / `TableRow` / `TableHeaderCell` / `TableCell` / `TableCaption`.
+ *
+ * Host inside `.fynns-table-wrap.fynns-scroll`: cells stay `nowrap` and the
+ * table grows past the wrap (`width: max-content; min-width: 100%`) so dense
+ * columns scroll horizontally instead of crushing / CJK-shattering.
  */
 export function Table({
   stickyHeader = false,

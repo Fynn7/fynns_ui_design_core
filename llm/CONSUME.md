@@ -12,7 +12,10 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). **Default app chrome:**
 `DestinationAppShell` (sandbox Layout templates). If composing
 `ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
-children (never a rail-width track hosting a labeled drawer).
+children (never a rail-width track hosting a labeled drawer); `nav` =
+destinations only (never wiki / page body / Chat). “Clipped” = M3 chrome
+topology, not text clipping — see [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
+failure modes **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
@@ -87,7 +90,12 @@ children (never a rail-width track hosting a labeled drawer).
     and the `nav` subtree must match (`drawer`→`NavigationDrawer`,
     `rail`→`NavigationRail`, `hidden`→null/omit). Crowding / narrow viewports
     densify to **rail + Rail components** — never leave a labeled drawer in an
-    ~80px track (squashed drawer + bogus scrollbar).
+    ~80px track (squashed drawer + bogus scrollbar). **`nav` = destinations
+    only** — never wiki / page body / forms / Chat / Preview in the nav track;
+    those belong in `children` (main) or `aside` / `EndAside`. “Clipped” names
+    the M3 chrome topology — **not** text clipping; diagnose `data-nav` /
+    track width / which slot holds the odd copy **before** restyling
+    `.fynns-*`. Failure modes: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
     Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
     **Main canvas fill:** Preview (or other top band) above Chat → wrap with
     **`FillColumn`** (`header` + `Chat` in `children`) so the composer docks;
@@ -267,24 +275,36 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 
 ## Local sync (instant)
 
-When you edit this core checkout locally and need the **consumer Vite app** to
+When you edit this core checkout locally and need **consumer Vite app(s)** to
 pick up the same `src/` immediately (including **uncommitted** files), run from
 core:
 
 ```bash
+# Recommended while developing core — watches src/ + package.json, syncs all
+# local consumers listed in llm/local-consumers.json (debounce ~150ms).
+npm run consume:watch
+
+# One-shot: every registered local consumer
+npm run consume:sync -- --all
+
+# One-shot: a single consumer
 npm run consume:sync -- --target <CONSUMER_ROOT>
 # or:
 node scripts/sync-to-consumer.mjs --target <CONSUMER_ROOT> --dry-run
 ```
 
 `--target` may be the consumer git root or any path inside it (e.g.
-`tools/gsc-live-preview`). The script compares this core’s `src/` +
-`package.json` to `packages/fynns_ui_design_core` in the consumer, mirrors when
-different, and prints `already in sync` when equal. **Core is the source of
-truth** (overwrites conflicting dirty files in the submodule worktree). It does
-**not** commit the submodule pin or push — day-to-day local loop only. Unreadable
-source/dest files abort the sync (exit non-zero) instead of treating a read miss
-as “delete on dest” (e.g. Windows locks).
+`tools/gsc-live-preview`). `--all` / `consume:watch` read
+[`local-consumers.json`](local-consumers.json) (sibling `root` +
+`submodulePath`; missing roots are skipped with a warning). The script
+compares this core’s `src/` + `package.json` to the consumer submodule
+worktree, **upserts** when different (add/overwrite only), and prints
+`already in sync` when equal. Consumer-only files under `src/` (e.g. hub-pin
+`DiffView`) are **kept** unless you pass **`--prune`** (strict mirror delete —
+use carefully). **Core overwrites conflicting dirty twins** in the submodule
+worktree. It does **not** commit the submodule pin or push — day-to-day local
+loop only. Unreadable source/dest files abort the sync (exit non-zero) instead
+of treating a read miss as “delete on dest” (e.g. Windows locks).
 
 Formal release / CI still **bump the pin** (checkout a published SHA + commit
 the pointer). See [`docs/submodule-propagation.md`](../docs/submodule-propagation.md).
@@ -297,6 +317,8 @@ node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --json
 # intentional old pin / offline:
 node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --skip-pin-check --json
 # local worktree mirror (instant; not a pin bump):
+npm run consume:sync -- --all
+npm run consume:watch
 npm run consume:sync -- --target <CONSUMER_ROOT>
 ```
 

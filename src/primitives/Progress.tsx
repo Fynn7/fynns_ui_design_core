@@ -12,34 +12,26 @@ export type LinearProgressProps = Omit<HTMLAttributes<HTMLDivElement>, "children
   value?: number;
   /** Accessible name (`aria-label`). */
   label: string;
-  /**
-   * Determinate only: small stop mark at the track end (M3). Default `true`.
-   * Hidden when `value` is `1` or indeterminate.
-   */
-  stopIndicator?: boolean;
 };
 
 /**
- * M3 linear progress — determinate bar with track gap + optional stop, or
- * indeterminate sliding segments. Prefer over `Spinner` for known % / long tasks.
+ * Linear progress — determinate bar with track gap, or indeterminate sliding
+ * segments. Prefer over `Spinner` for known % / long tasks.
  */
 export function LinearProgress({
   value,
   label,
-  stopIndicator = true,
   className,
   style,
   ...rest
 }: LinearProgressProps) {
   const indeterminate = value == null;
   const ratio = indeterminate ? 0 : clamp01(value);
-  const showStop = stopIndicator && !indeterminate && ratio < 1;
   const showGap = !indeterminate && ratio > 0 && ratio < 1;
   const rootClass = [
     "fynns-linear-progress",
     indeterminate ? "fynns-linear-progress--indeterminate" : "",
     showGap ? "fynns-linear-progress--active" : "",
-    showStop ? "fynns-linear-progress--stop" : "",
     className ?? "",
   ]
     .filter(Boolean)
@@ -72,7 +64,6 @@ export function LinearProgress({
         <>
           {ratio > 0 ? <div className="fynns-linear-progress-active" aria-hidden /> : null}
           {ratio < 1 ? <div className="fynns-linear-progress-track" aria-hidden /> : null}
-          {showStop ? <div className="fynns-linear-progress-stop" aria-hidden /> : null}
         </>
       )}
     </div>

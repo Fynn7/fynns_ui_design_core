@@ -138,6 +138,7 @@ button {
  * Native classic bars are hidden — they must never steal content width (badges /
  * chevrons / Switch tracks). Overlay thumbs are painted by
  * src/theme/overlayScrollbar.ts (fixed portal rails; never inflate scrollWidth).
+ * Portal is pointer-events:none; rails opt in so thumbs can drag / track-click.
  * Fine pointer: overlay thumb idle-hidden until host hover / focus-within.
  * Touch: overlay always tinted when overflowing. Do not use scrollbar-gutter
  * stable/both-edges. Carousel / SearchBar focused input hide bars in primitives.
@@ -165,7 +166,7 @@ button {
   position: fixed;
   inset: 0;
   /* Above modal (60) so Dialog / Drawer / Sheet scroll hosts keep visible thumbs;
-   * below tooltip (8000). pointer-events:none so rails never steal clicks. */
+   * below tooltip (8000). Portal ignores hits; rails re-enable for drag. */
   z-index: var(--fynns-z-toast);
   pointer-events: none;
   overflow: hidden;
@@ -174,8 +175,15 @@ button {
 .fynns-scroll-rail {
   position: fixed;
   z-index: 1;
+  /* Idle-transparent rails must not steal edge clicks; enable when shown. */
   pointer-events: none;
+  touch-action: none;
   box-sizing: border-box;
+}
+
+.fynns-scroll-rail[data-visible="true"]:not([hidden]),
+.fynns-scroll-rail[data-dragging]:not([hidden]) {
+  pointer-events: auto;
 }
 
 .fynns-scroll-thumb {
@@ -189,6 +197,15 @@ button {
   background-color: var(--fynns-scrollbar-thumb);
   transition: background-color var(--fynns-duration-scrollbar) var(--fynns-ease-out);
   will-change: transform;
+  cursor: default;
+}
+
+.fynns-scroll-rail:hover .fynns-scroll-thumb {
+  background-color: var(--fynns-scrollbar-thumb-hover);
+}
+
+.fynns-scroll-rail[data-dragging] .fynns-scroll-thumb {
+  background-color: var(--fynns-scrollbar-thumb-active);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -198,6 +215,14 @@ button {
 
   .fynns-scroll-rail[data-visible="true"] .fynns-scroll-thumb {
     background-color: var(--fynns-scrollbar-thumb);
+  }
+
+  .fynns-scroll-rail[data-visible="true"]:hover .fynns-scroll-thumb {
+    background-color: var(--fynns-scrollbar-thumb-hover);
+  }
+
+  .fynns-scroll-rail[data-visible="true"][data-dragging] .fynns-scroll-thumb {
+    background-color: var(--fynns-scrollbar-thumb-active);
   }
 }
 

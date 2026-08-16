@@ -83,9 +83,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    badges / chevrons, Dialog Switch tracks, Chat actions, …). Overlay thumbs are
    painted by `src/theme/overlayScrollbar.ts` (fixed portal rails at
    `--fynns-z-toast` so Dialog / Drawer / Sheet hosts stay above `--fynns-z-modal`;
-   `pointer-events: none`; no layout / scrollWidth impact). On fine pointer + hover (`(hover: hover) and (pointer: fine)`), overlay thumbs
-   are **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
-   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
+   portal `pointer-events: none`, rails re-enable so thumbs can be **dragged** /
+   track-clicked; no layout / scrollWidth impact). On fine pointer + hover
+   (`(hover: hover) and (pointer: fine)`), overlay thumbs are **idle-transparent**
+   and reveal on host `:hover` or `:focus-within` with a soft fade
+   (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
    pointer keeps thumbs tinted when overflowing. Textarea / input hosts hide the
    native bar only (no overlay rail — replaced elements cannot host children).
    Do **not** use `scrollbar-gutter: stable` / `both-edges` (would reserve a permanent
@@ -206,6 +208,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Flat stacks lose the tight-within / wide-between rhythm — use `FieldStack`.
   Do not invent muted `<p>` / subtitle classes for control notes (`ControlBlock`
   / `FieldBlock` `description` instead).
+- **DON'T** wrap each path / link / bookmark entry in its own padded
+  `Surface` or `Card` (tall sparse “fat cards”). Use one `List` of
+  `ListItem`s — see **Content density (data → component)**. Row actions belong
+  in `ListItem` `trailing` (`ghost` `sm`), not under the text and not as a
+  filled danger disk.
 - **DON'T** invent shell / column / chat **insets or gaps** as raw `rem` / `px`
   or a fresh private CSS variable. Reuse an existing `--fynns-layout-*` key
   (or a component token that **aliases** one — e.g.
@@ -402,7 +409,10 @@ classes.
   click/type/ArrowDown, not focus alone; hint wrap only when
   supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
   ellipsis the field value — not mid-glyph hard clip; same on Autocomplete
-  **and** single-line `Input`; idle ellipsis / focused caret scroll), Switch
+  **and** single-line `Input`; idle ellipsis / focused caret scroll; chrome
+  default 56dp; `density="destination"` / SearchBar in NavigationDrawer body
+  matches NavigationDrawerItem 40dp height + label type + icon gap — keeps
+  SearchBar surface / focus), Switch
   (dense track only — no `size` / no former md 52×32; `labelSide`
   `start`|`end`),
   Checkbox, Radio,
@@ -413,7 +423,7 @@ classes.
   on-surface; long copy wraps — do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
-  LinearProgress /
+  LinearProgress (`value` in `[0,1]` or omit indeterminate) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
   **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
   fullscreen non-dismissible scrim or sectional dim + ring + visible message;
@@ -771,7 +781,10 @@ classes.
   NavigationRail (+ Menu / Header /
   Item), NavigationBar / Item, NavigationDrawer (+ Headline / Group / Item;
   Headline = static section label; Group = collapsible Cursor-style folder row
-  with optional leading `icon` any ReactNode + indented items), SkipLink,
+  with optional leading `icon` any ReactNode + indented items; sibling Item /
+  Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
+  wrap destinations in `.fynns-unit-stack`; SearchBar / tools as a body sibling
+  share `--fynns-navdrawer-section-gap` with destinations), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
@@ -795,7 +808,13 @@ classes.
   auto-swaps. Prefer `DestinationAppShell` so agents never hand-sync this.
   A rail-width track still hosting a labeled drawer is a
   **squashed drawer** (narrow strip + body scrollbar) — not a real rail.
-  Pasteable consumer rule: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md).
+  **`nav` = destinations only** — never wiki / page body / forms / Chat /
+  Preview in the nav track (`children` = main; `aside` / `EndAside` =
+  inspector). “Clipped” = M3 chrome topology (full-bleed TopAppBar + nav
+  under it) — **not** text clipping; diagnose `data-nav` / track width /
+  which slot holds odd copy before restyling `.fynns-*`. Pasteable consumer
+  rule + failure modes: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) /
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc).
   In `drawer` mode the nav|main seam is **resizable** (local
   `--fynns-navdrawer-width`; drawer fills the grid track; clamped by absolute
   `--fynns-navdrawer-min-width` / `max-width` rem tokens and remaining room for
@@ -846,8 +865,12 @@ classes.
   (`#layouts-demo-shell`).
 - **Content:** List / ListItem (main-content M3 rows; selected =
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
-  menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
-  `NavigationBar` — not deleted `ListGroup` / `ListRow`), Card (`title` /
+  menu; **path / link / bookmark catalogs** = one `List` of `ListItem`s —
+  headline + path `supportingText` + trailing ghost `sm` `IconButton`s
+  (interactive trailing is a **sibling** of the row button — valid nesting);
+  **never** one padded `Surface`/`Card` per entry; sidebar destinations use
+  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
+  `ListGroup` / `ListRow`; see **Content density**), Card (`title` /
   optional `icon` / `actions` + body;
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
@@ -884,7 +907,9 @@ classes.
   a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
   **composer input model**),
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock (**strict chrome** — titled
+  HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
+  nowrap cells + max-content width → horizontal scroll when narrow, never
+  column crush / CJK header shatter), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
   `variant="plain"` (frame + floating copy only — do not pass `label` or
@@ -961,7 +986,7 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline / destination-density SearchBar / tools gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group) — **never** wrap destinations in `.fynns-unit-stack` (16dp). |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
@@ -974,11 +999,37 @@ classes.
   | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
-  | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
+  | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
   | Stepper | both | `orientation` is caller-chosen — no auto breakpoint. |
 
+  **Content density (data → component — hard for agents):** Pick the keep-set
+  host by **data shape**, not by “everything is a Card.” Fat padded
+  `Surface`/`Card` per catalog row is a consumer failure mode (see
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)). Live: sandbox `#list`
+  (anatomy + path catalog).
+
+  | Data shape | Use | Do **not** |
+  | --- | --- | --- |
+  | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
+  | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
+  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap` | Card grid of the same rows when a table fits |
+  | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
+  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` — `#rhythm` | Hand-rolled flex with name+hint left, controls floating mid/right |
+  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
+  | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
+  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card |
+
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
+
+  Inside a padded `Surface` / `Card` strip that is **name + ToggleGroup/Switch
+  + action + supporting timestamp**, use `ControlStack` + `ControlRow` +
+  `.fynns-control-cluster` + `ControlBlock`/`FieldHint` — do **not** hand-roll
+  flex that stacks name+hint on the left while controls float mid/right
+  (consumer failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
+  **ad-hoc Surface / inspector row chaos**; pasteable recipe:
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)). Live:
+  Globals `#rhythm`.
 
   | Role | Token / host |
   | --- | --- |

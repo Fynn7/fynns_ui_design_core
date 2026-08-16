@@ -5,7 +5,9 @@
  * badges / chevrons. Native bars on `.fynns-scroll` are hidden in `theme.css`;
  * this module paints token-skinned thumbs as **fixed** overlays (not in-scroll
  * abspos children — those inflate scrollWidth and falsely enable horizontal
- * bars). Textarea / input: native bar hidden only (no overlay rail).
+ * bars). Portal stays `pointer-events: none`; rails opt in so thumbs can be
+ * dragged / track-clicked without covering the page. Textarea / input: native
+ * bar hidden only (no overlay rail).
  *
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
@@ -14,6 +16,8 @@ const HOST_ATTR = "data-fynns-overlay-scroll";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
 const MIN_THUMB_PX = 24;
+
+type Axis = "y" | "x";
 
 type HostState = {
   railY: HTMLDivElement;
@@ -24,11 +28,18 @@ type HostState = {
   mo: MutationObserver | null;
   onScroll: () => void;
   onEnter: () => void;
-  onLeave: () => void;
+  onLeave: (e: PointerEvent) => void;
   onFocusIn: () => void;
   onFocusOut: () => void;
+  onRailYEnter: () => void;
+  onRailYLeave: (e: PointerEvent) => void;
+  onRailXEnter: () => void;
+  onRailXLeave: (e: PointerEvent) => void;
+  onRailYDown: (e: PointerEvent) => void;
+  onRailXDown: (e: PointerEvent) => void;
   hover: boolean;
   focus: boolean;
+  dragging: boolean;
   allowX: boolean;
   raf: number;
 };
@@ -78,7 +89,7 @@ function ensurePortal(): HTMLDivElement {
   return portal;
 }
 
-function makeRail(axis: "y" | "x"): { rail: HTMLDivElement; thumb: HTMLDivElement } {
+function makeRail(axis: Axis): { rail: HTMLDivElement; thumb: HTMLDivElement } {
   const rail = document.createElement("div");
   rail.className = RAIL_CLASS;
   rail.dataset.axis = axis;
@@ -89,9 +100,20 @@ function makeRail(axis: "y" | "x"): { rail: HTMLDivElement; thumb: HTMLDivElemen
   return { rail, thumb };
 }
 
+function isRailNode(state: HostState, node: EventTarget | null): boolean {
+  return (
+    node instanceof Node &&
+    (state.railY.contains(node) || state.railX.contains(node))
+  );
+}
+
 function syncThumbVisibility(state: HostState, host: HTMLElement) {
   const show =
-    !finePointer || state.hover || state.focus || host.matches(":focus-within");
+    !finePointer ||
+    state.hover ||
+    state.focus ||
+    state.dragging ||
+    host.matches(":focus-within");
   state.railY.dataset.visible = show ? "true" : "false";
   state.railX.dataset.visible = show ? "true" : "false";
 }
@@ -102,6 +124,109 @@ function scheduleUpdate(host: HTMLElement, state: HostState) {
     state.raf = 0;
     updateHost(host, state);
   });
+}
+
+function axisMetrics(host: HTMLElement, axis: Axis) {
+  if (axis === "y") {
+    const { scrollHeight, clientHeight, scrollTop } = host;
+    const thumbSize = Math.max(
+      MIN_THUMB_PX,
+      (clientHeight / Math.max(1, scrollHeight)) * clientHeight,
+    );
+    const thumbTravel = Math.max(0, clientHeight - thumbSize);
+    const scrollRange = Math.max(1, scrollHeight - clientHeight);
+    return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollTop };
+  }
+  const { scrollWidth, clientWidth, scrollLeft } = host;
+  const thumbSize = Math.max(
+    MIN_THUMB_PX,
+    (clientWidth / Math.max(1, scrollWidth)) * clientWidth,
+  );
+  const thumbTravel = Math.max(0, clientWidth - thumbSize);
+  const scrollRange = Math.max(1, scrollWidth - clientWidth);
+  return { thumbSize, thumbTravel, scrollRange, scrollPos: scrollLeft };
+}
+
+function setScrollPos(host: HTMLElement, axis: Axis, value: number) {
+  if (axis === "y") host.scrollTop = value;
+  else host.scrollLeft = value;
+}
+
+function beginDrag(
+  host: HTMLElement,
+  state: HostState,
+  axis: Axis,
+  rail: HTMLDivElement,
+  thumb: HTMLDivElement,
+  e: PointerEvent,
+) {
+  if (e.button !== 0 && e.pointerType === "mouse") return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  const onThumb = e.target === thumb || thumb.contains(e.target as Node);
+  let metrics = axisMetrics(host, axis);
+
+  if (!onThumb) {
+    const railRect = rail.getBoundingClientRect();
+    const pointer = axis === "y" ? e.clientY : e.clientX;
+    const railStart = axis === "y" ? railRect.top : railRect.left;
+    const offset = pointer - railStart - metrics.thumbSize / 2;
+    const ratio =
+      metrics.thumbTravel > 0
+        ? Math.min(1, Math.max(0, offset / metrics.thumbTravel))
+        : 0;
+    setScrollPos(host, axis, ratio * metrics.scrollRange);
+    metrics = axisMetrics(host, axis);
+    updateHost(host, state);
+  }
+
+  const startClient = axis === "y" ? e.clientY : e.clientX;
+  const startScroll = metrics.scrollPos;
+  const { thumbTravel, scrollRange } = metrics;
+
+  state.dragging = true;
+  state.hover = true;
+  rail.dataset.dragging = "true";
+  syncThumbVisibility(state, host);
+
+  const pointerId = e.pointerId;
+  /* Capture can throw for synthetic / inactive pointers — keep window listeners. */
+  try {
+    rail.setPointerCapture(pointerId);
+  } catch {
+    /* ignore */
+  }
+
+  const onMove = (ev: PointerEvent) => {
+    if (ev.pointerId !== pointerId) return;
+    const client = axis === "y" ? ev.clientY : ev.clientX;
+    const delta = client - startClient;
+    const scrollDelta =
+      thumbTravel > 0 ? (delta / thumbTravel) * scrollRange : 0;
+    setScrollPos(host, axis, startScroll + scrollDelta);
+  };
+
+  const onUp = (ev: PointerEvent) => {
+    if (ev.pointerId !== pointerId) return;
+    state.dragging = false;
+    delete rail.dataset.dragging;
+    try {
+      if (rail.hasPointerCapture(pointerId)) {
+        rail.releasePointerCapture(pointerId);
+      }
+    } catch {
+      /* ignore */
+    }
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("pointerup", onUp);
+    window.removeEventListener("pointercancel", onUp);
+    syncThumbVisibility(state, host);
+  };
+
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("pointerup", onUp);
+  window.addEventListener("pointercancel", onUp);
 }
 
 function updateHost(host: HTMLElement, state: HostState) {
@@ -121,8 +246,7 @@ function updateHost(host: HTMLElement, state: HostState) {
   } = host;
   const sb = readScrollbarSizePx();
   const yOverflow = scrollHeight - clientHeight > 1;
-  const xOverflow =
-    state.allowX && scrollWidth - clientWidth > 1;
+  const xOverflow = state.allowX && scrollWidth - clientWidth > 1;
 
   state.railY.hidden = !yOverflow;
   state.railX.hidden = !xOverflow;
@@ -187,6 +311,7 @@ function attach(host: HTMLElement) {
     mo: null,
     hover: false,
     focus: false,
+    dragging: false,
     allowX: allowsHorizontalOverlay(host),
     raf: 0,
     onScroll: () => scheduleUpdate(host, state),
@@ -194,7 +319,8 @@ function attach(host: HTMLElement) {
       state.hover = true;
       syncThumbVisibility(state, host);
     },
-    onLeave: () => {
+    onLeave: (e) => {
+      if (state.dragging || isRailNode(state, e.relatedTarget)) return;
       state.hover = false;
       syncThumbVisibility(state, host);
     },
@@ -206,6 +332,34 @@ function attach(host: HTMLElement) {
       state.focus = host.matches(":focus-within");
       syncThumbVisibility(state, host);
     },
+    onRailYEnter: () => {
+      state.hover = true;
+      syncThumbVisibility(state, host);
+    },
+    onRailYLeave: (e) => {
+      if (state.dragging) return;
+      if (e.relatedTarget instanceof Node && host.contains(e.relatedTarget)) {
+        return;
+      }
+      if (isRailNode(state, e.relatedTarget)) return;
+      state.hover = false;
+      syncThumbVisibility(state, host);
+    },
+    onRailXEnter: () => {
+      state.hover = true;
+      syncThumbVisibility(state, host);
+    },
+    onRailXLeave: (e) => {
+      if (state.dragging) return;
+      if (e.relatedTarget instanceof Node && host.contains(e.relatedTarget)) {
+        return;
+      }
+      if (isRailNode(state, e.relatedTarget)) return;
+      state.hover = false;
+      syncThumbVisibility(state, host);
+    },
+    onRailYDown: (e) => beginDrag(host, state, "y", y.rail, y.thumb, e),
+    onRailXDown: (e) => beginDrag(host, state, "x", x.rail, x.thumb, e),
   };
 
   host.addEventListener("scroll", state.onScroll, { passive: true });
@@ -213,6 +367,13 @@ function attach(host: HTMLElement) {
   host.addEventListener("pointerleave", state.onLeave);
   host.addEventListener("focusin", state.onFocusIn);
   host.addEventListener("focusout", state.onFocusOut);
+
+  y.rail.addEventListener("pointerenter", state.onRailYEnter);
+  y.rail.addEventListener("pointerleave", state.onRailYLeave);
+  y.rail.addEventListener("pointerdown", state.onRailYDown);
+  x.rail.addEventListener("pointerenter", state.onRailXEnter);
+  x.rail.addEventListener("pointerleave", state.onRailXLeave);
+  x.rail.addEventListener("pointerdown", state.onRailXDown);
 
   if (typeof ResizeObserver !== "undefined") {
     state.ro = new ResizeObserver(() => scheduleUpdate(host, state));
@@ -237,6 +398,12 @@ function detach(host: HTMLElement) {
   host.removeEventListener("pointerleave", state.onLeave);
   host.removeEventListener("focusin", state.onFocusIn);
   host.removeEventListener("focusout", state.onFocusOut);
+  state.railY.removeEventListener("pointerenter", state.onRailYEnter);
+  state.railY.removeEventListener("pointerleave", state.onRailYLeave);
+  state.railY.removeEventListener("pointerdown", state.onRailYDown);
+  state.railX.removeEventListener("pointerenter", state.onRailXEnter);
+  state.railX.removeEventListener("pointerleave", state.onRailXLeave);
+  state.railX.removeEventListener("pointerdown", state.onRailXDown);
   state.ro?.disconnect();
   state.mo?.disconnect();
   state.railY.remove();

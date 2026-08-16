@@ -77,7 +77,8 @@ ring can paint before heavy work).
   stream-tail / scroll / shell — AGENTS.md Chat **Parity note
   (`prefers-reduced-motion`)**; user-edit parity:
   `llm/CHAT_USER_EDIT_UX.md`),
-  Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock
+  Table (+ Head/Body/Row/HeaderCell/Cell/Caption; `.fynns-table-wrap` +
+  nowrap / max-content → H-scroll when narrow), CodeBlock
   (**strict:** titled `default` needs non-empty `label` or throws; no
   title → `variant="plain"`; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
   Behavioral breaking; zero-dep `--fynns-code-*` highlight for
@@ -87,7 +88,10 @@ ring can paint before heavy work).
   `registerHighlightLanguage`; unknown language stays plain),
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
-  NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item),
+  NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
+  destination siblings use `--fynns-navdrawer-section-gap` — never
+  `.fynns-unit-stack`; SearchBar/tools as a body sibling share
+  `--fynns-navdrawer-section-gap` with destinations),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
@@ -124,7 +128,10 @@ ring can paint before heavy work).
   `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
-  (plain ≠ flush).
+  (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
+  `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
+  padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
+  sandbox `#list`).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).

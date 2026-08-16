@@ -413,14 +413,13 @@ export const SEGMENTED_TOKENS = {
 } as const;
 
 /**
- * Progress indicator geometry (M3 linear / circular at 16px rem).
- * Track + active indicator 4dp; circular default 48dp; gap + stop 4dp.
+ * Progress indicator geometry (linear / circular at 16px rem).
+ * Track + active indicator 4dp; circular default 48dp; active↔track gap 4dp.
  * `--fynns-progress-<key>`.
  */
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
-  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",
@@ -1116,6 +1115,13 @@ export const NAVDRAWER_TOKENS = {
   "headline-pad-block": "0.5rem",
   /** Section / sheet title inset past body pad (aligns with item icon column). */
   "headline-pad-inline": "1rem",
+  /**
+   * Vertical gap between consecutive body siblings (Item / Group / Headline /
+   * Divider / destination-density SearchBar / tools wrappers) in
+   * `.fynns-nav-drawer-body` **and** between leaf items inside
+   * `.fynns-nav-drawer-group-body` (4dp). Never wrap destinations in
+   * `.fynns-unit-stack` for spacing.
+   */
   "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
   /**

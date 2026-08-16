@@ -84,8 +84,10 @@ export const Button = forwardRef(function Button(
           <Spinner size="sm" label="Loading" />
           <span className="fynns-btn-loading-label">{children}</span>
         </span>
-      ) : (
+      ) : iconOnly ? (
         children
+      ) : (
+        <span className="fynns-btn-label">{children}</span>
       )}
     </button>
   );

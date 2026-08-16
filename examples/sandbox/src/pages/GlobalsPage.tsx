@@ -2157,12 +2157,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
-          <SandboxHelp as="span" text={t("globals.progressLinearNoStop")} />
-          <LinearProgress
-            value={0.42}
-            stopIndicator={false}
-            label={t("globals.progressLinearNoStopAria")}
-          />
           <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
           <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
@@ -2559,6 +2553,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="activity">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-activity-narrow">
           <ChatMessage
             role="assistant"
             streaming={activityStreaming}
@@ -2629,11 +2624,58 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     )
                   }
                 />
+                {activityPhase >= 3 ? (
+                  <ChatActivityStep
+                    key="slots"
+                    status="done"
+                    label={t("globals.activityStepSlots")}
+                    description={
+                      <div className="fynns-unit-stack">
+                        <ControlStack columns={1}>
+                          <ControlRow label={t("globals.activitySlotRegion")}>
+                            <Tooltip content={t("globals.activitySlotRegionTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotRegionTip")}
+                              >
+                                {t("globals.activitySlotRegionValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
+                          <ControlRow label={t("globals.activitySlotMode")}>
+                            <Tooltip content={t("globals.activitySlotModeTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotModeTip")}
+                              >
+                                {t("globals.activitySlotModeValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
+                          <ControlRow label={t("globals.activitySlotStatus")}>
+                            <Tooltip content={t("globals.activitySlotStatusTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotStatusTip")}
+                              >
+                                {t("globals.activitySlotStatusValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
+                        </ControlStack>
+                      </div>
+                    }
+                  />
+                ) : null}
               </ChatActivity>
             }
           >
             {activityStreaming ? undefined : t("globals.activityAnswer")}
           </ChatMessage>
+          </div>
           <div className="sandbox-globals-row">
             <Button
               size="sm"
@@ -2801,7 +2843,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="list">
-        <div className="sandbox-globals-list">
+        <div className="sandbox-globals-list sandbox-stack">
           <List aria-label={t("globals.listAria")}>
             <ListItem
               headline={t("globals.listOneLine")}
@@ -2843,6 +2885,95 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               leading={<ArchiveIcon />}
               disabled
               onClick={() => {}}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listCatalogHelp")} />
+          <List aria-label={t("globals.listCatalogAria")}>
+            <ListItem
+              headline={t("globals.listCatalogProject")}
+              supportingText={t("globals.listCatalogProjectPath")}
+              leading={<FolderOpenIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listCatalogConfig")}
+              supportingText={t("globals.listCatalogConfigPath")}
+              leading={<FileIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listCatalogRules")}
+              supportingText={t("globals.listCatalogRulesPath")}
+              leading={<FileIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
         </div>
@@ -3500,23 +3631,50 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableHeaderCell align="end">
                     {t("globals.tableColQty")}
                   </TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColCache")}
+                  </TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColTotal")}
+                  </TableHeaderCell>
+                  <TableHeaderCell>{t("globals.tableColMapping")}</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>Teal ink</TableCell>
+                  <TableCell>sample/ink-bench-16k</TableCell>
                   <TableCell>Ready</TableCell>
                   <TableCell align="end">12</TableCell>
+                  <TableCell align="end">31M</TableCell>
+                  <TableCell align="end">31M</TableCell>
+                  <TableCell>
+                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
+                    sample/ink-35b
+                  </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Surface kit</TableCell>
+                  <TableCell>sample/surface-kit-agent</TableCell>
                   <TableCell>Draft</TableCell>
                   <TableCell align="end">4</TableCell>
+                  <TableCell align="end">—</TableCell>
+                  <TableCell align="end">4</TableCell>
+                  <TableCell>
+                    <Chip variant="filter" selected>
+                      {t("globals.tableMapAuto")}
+                    </Chip>{" "}
+                    catalog
+                  </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Focus ring</TableCell>
+                  <TableCell>sample/focus-ring</TableCell>
                   <TableCell>Ready</TableCell>
                   <TableCell align="end">28</TableCell>
+                  <TableCell align="end">717k</TableCell>
+                  <TableCell align="end">28</TableCell>
+                  <TableCell>
+                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
+                    sample/focus-35b
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
