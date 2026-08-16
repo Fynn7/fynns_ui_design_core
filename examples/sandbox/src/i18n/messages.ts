@@ -518,6 +518,8 @@ const en = {
   "globals.codeTokensAria": "Code highlight tokens",
   "globals.codeTokensHelp":
     "`--fynns-code-*` roles distilled from the cpptools VS dark/light themes (last-wins TextMate colors). Light theme overrides via `data-fynns-theme=\"light\"`.",
+  "globals.diffViewHelp":
+    "Unified-diff panel: add / del / meta / same line kinds. Callers own `+` / `-` markers in `text`.",
   "globals.codeLangDemoOpen": "Language showcase",
   "globals.codeLangDemoHelp":
     "Opens a dialog with ToggleGroup → Python / TypeScript / C++ CodeBlock samples (same `--fynns-code-*` highlighter).",
@@ -1828,6 +1830,8 @@ const zh: Record<MessageKey, string> = {
   "globals.codeTokensAria": "代码高亮 token",
   "globals.codeTokensHelp":
     "`--fynns-code-*` 角色色来自 cpptools VS 深/浅主题（TextMate last-wins）。浅色经 `data-fynns-theme=\"light\"` 覆盖。",
+  "globals.diffViewHelp":
+    "统一 diff 面板：add / del / meta / same。行首 `+` / `-` 由调用方写在 `text` 里。",
   "globals.codeLangDemoOpen": "语言展示",
   "globals.codeLangDemoHelp":
     "打开对话框，用 ToggleGroup 切换 Python / TypeScript / C++ 的 CodeBlock 样例（同一套 `--fynns-code-*` 高亮）。",

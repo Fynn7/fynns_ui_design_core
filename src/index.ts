@@ -19,17 +19,22 @@ export { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
 /* Icons (public subset) */
 export {
+  AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
   BarChartIcon,
   BotIcon,
+  CheckCircleIcon,
+  CheckIcon,
   ChevronRightIcon,
   ClipboardIcon,
+  CloseIcon,
   DownloadIcon,
   EyeIcon,
   EyeOffIcon,
   FileIcon,
   FolderOpenIcon,
+  GlobeIcon,
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,
@@ -41,6 +46,7 @@ export {
   PanelRightIcon,
   PencilIcon,
   PlusIcon,
+  PlugIcon,
   RefreshIcon,
   SaveIcon,
   SearchIcon,
@@ -384,6 +390,12 @@ export type {
   CodeBlockPlainProps,
   CodeBlockEditableProps,
 } from "./primitives/CodeBlock";
+export { DiffView } from "./primitives/DiffView";
+export type {
+  DiffLineKind,
+  DiffViewLine,
+  DiffViewProps,
+} from "./primitives/DiffView";
 export {
   highlightCode,
   highlightWithProfile,

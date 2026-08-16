@@ -676,6 +676,43 @@
   }
 }
 
+/* ---------- DiffView ---------- */
+.fynns-diff-view {
+  margin: 0;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-caption);
+  line-height: var(--fynns-line-height-compact);
+  background: var(--fynns-color-surface-muted);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  padding: var(--fynns-space-3);
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.fynns-diff-view-line {
+  white-space: inherit;
+  word-break: inherit;
+  overflow-wrap: inherit;
+}
+
+.fynns-diff-view-line--add {
+  color: var(--fynns-color-success);
+}
+
+.fynns-diff-view-line--del {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-diff-view-line--meta {
+  color: var(--fynns-color-text-muted);
+}
+
 /* ---------- Input ---------- */
 .fynns-field {
   display: flex;

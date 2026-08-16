@@ -81,12 +81,18 @@
     "runBusyTask",
     "unregisterHighlightLanguage",
     "yieldToMain",
+    "AlertTriangleIcon",
     "ArrowUpIcon",
     "BotIcon",
+    "CheckCircleIcon",
+    "CheckIcon",
     "ChevronDownIcon",
+    "CloseIcon",
     "DownloadIcon",
+    "GlobeIcon",
     "MicIcon",
     "MoonIcon",
+    "PlugIcon",
     "StopSquareIcon",
     "SunIcon"
   ],
@@ -99,7 +105,7 @@
     "highlight_*": "CodeBlock registry helpers; Wave 3 adds minimal live registerHighlightLanguage path.",
     "overflow_*": "OVERFLOW_EPSILON + free functions; useOverflowBounds is demoed in Globals.",
     "busy_*": "afterNextPaint / yieldToMain / runBusyTask — Wave 3 live; useBusyTask already demoed.",
-    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome.",
+    "shell_icons": "Sun/Moon/Bot/Download/Mic/ArrowUp/StopSquare/ChevronDown used by SandboxShell chrome. Hub-pin icons (AlertTriangle/Check/CheckCircle/Close/Globe/Plug) are app chrome, not Globals demos.",
     "ensureOverlayScrollbars": "Auto-started from the barrel; token-skinned fixed portal thumbs for .fynns-scroll (native bars hidden)."
   }
 }

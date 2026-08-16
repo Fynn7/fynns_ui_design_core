@@ -363,6 +363,12 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["代码", "code", "syntax", "高亮"],
   },
   {
+    id: "diff-view",
+    categoryId: "patterns",
+    label: "DiffView",
+    keywords: ["diff", "差异", "unified"],
+  },
+  {
     id: "breadcrumb",
     categoryId: "navigation",
     label: "Breadcrumb",

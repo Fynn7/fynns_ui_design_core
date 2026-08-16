@@ -47,6 +47,7 @@ import {
   DatePickerDialog,
   DateRangePicker,
   DateRangePickerDialog,
+  DiffView,
   TimePicker,
   TimePickerDialog,
   formatTimeValue,
@@ -3643,6 +3644,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ))}
           </Grid>
           <SandboxHelp text={t("globals.codeTokensHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="diff-view">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DiffView
+            maxHeight={160}
+            lines={[
+              { type: "meta", text: "@@ -1,3 +1,3 @@" },
+              { type: "same", text: " export const accent =" },
+              { type: "del", text: '-  "purple";' },
+              { type: "add", text: '+  "teal";' },
+            ]}
+          />
+          <SandboxHelp text={t("globals.diffViewHelp")} />
         </div>
         </GlobalsDemo>
       </>
