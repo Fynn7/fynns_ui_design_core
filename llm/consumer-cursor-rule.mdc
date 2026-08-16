@@ -102,6 +102,46 @@ FillColumn。
 对照 sandbox Globals `#form-recipe` 抄树；文案用消费仓自己的。权威：子模块
 `AGENTS.md` **FieldStack semantic clusters** / Hard rules DO。
 
+## 标签行 / 工具条节奏（硬 — 禁止手搓乱排）
+
+`Surface` / `Card` / 检查器条里出现 **名称 + ToggleGroup/Switch + 按钮 +
+说明时间戳** 时，**必须**用 keep-set 节奏，禁止自造 flex/grid 把文案竖堆在
+左、控件飘在中右（症状：标签与轨道不对齐、时间戳独占第二行大片空白、
+名称顶对齐而 ToggleGroup/按钮垂直居中）。
+
+| 角色 | 选用 |
+| --- | --- |
+| 可见名称 \| 控件（同行） | `ControlStack` + `ControlRow` `label={名称}`；控件在 row 子树 |
+| 同行多个控件（ToggleGroup + 刷新按钮） | row 内 `.fynns-control-cluster`（或 `Grid`） |
+| 控件下的说明 / 「截至 …」时间戳 | `ControlBlock` `description` **或** `FieldHint` — **禁止**裸 `<p>` / 与 label 绑成左列竖栈 |
+| 表单语义分簇（多段选项） | 上节 `FieldStack`（不要把一切塞进一个乱 flex） |
+
+**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / FieldHint）与
+`#form-recipe`。Preferences / Dialog 标签行：Switch 用 `label=""` + `ariaLabel`
+（仅轨道），名称只在 `ControlRow`。
+
+```tsx
+// 对 — 名称与控件同一 ControlRow；时间戳是 supporting，不是左列第二行
+<Surface variant="outlined" padded>
+  <ControlBlock description={asOfLabel}>
+    <ControlStack columns={1}>
+      <ControlRow label={priceSourceLabel}>
+        <div className="fynns-control-cluster">
+          <ToggleGroup … />
+          <Button …>{refreshLabel}</Button>
+        </div>
+      </ControlRow>
+    </ControlStack>
+  </ControlBlock>
+</Surface>
+```
+
+**禁止：**
+
+- `Surface` 里手写 `display:flex` / 双列把 label+hint 捆左边、控件捆右边
+- 把说明文案与 `ControlRow` `label` 拆成两个不等高兄弟却指望基线对齐
+- 为「排齐」本地改 `.fynns-*` 或发明 `--app-*-gap`
+
 ## ClippedNavShell（仅完全自定义时 — 槽位 + 挤扁抽屉）
 
 低层槽位壳。优先 `DestinationAppShell`。若手拼 `ClippedNavShell`：
@@ -278,7 +318,9 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 5. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
 6. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
-7. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
-8. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
-9. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
-10. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉或错槽窄列。
+7. Surface/Card 标签行：是否 `ControlRow` + cluster + `ControlBlock`/`FieldHint`
+   （对照 `#rhythm`），而非手搓 flex 乱排？
+8. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
+9. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
+10. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
+11. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。

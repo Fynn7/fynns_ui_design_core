@@ -986,6 +986,15 @@ classes.
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 
+  Inside a padded `Surface` / `Card` strip that is **name + ToggleGroup/Switch
+  + action + supporting timestamp**, use `ControlStack` + `ControlRow` +
+  `.fynns-control-cluster` + `ControlBlock`/`FieldHint` — do **not** hand-roll
+  flex that stacks name+hint on the left while controls float mid/right
+  (consumer failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
+  **ad-hoc Surface / inspector row chaos**; pasteable recipe:
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)). Live:
+  Globals `#rhythm`.
+
   | Role | Token / host |
   | --- | --- |
   | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` (**8dp** — toolbar / page chrome; tighter than unit-stack) |
