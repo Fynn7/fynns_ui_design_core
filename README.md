@@ -131,7 +131,13 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 ## Aesthetic sandbox
 
 The sandbox is a consumer of `@fynns/ui` (same primitives + tokens), not a
-separate design language. **Every new public symbol must ship with a sandbox
+separate design language. Dev server defaults to port **5174** (same default as
+GSC Live Preview). On Windows, `localhost` and `127.0.0.1` can bind different
+processes on that port; sandbox Vite **refuses `/wasm/*`** and sets
+`frame-ancestors 'self'` so a GSC twin-host iframe cannot paint the sandbox UI
+under “Loading Raycaster…”. Top-level tabs / Cursor Simple Browser are
+unchanged — still stop one app if you need a single owner of 5174.
+**Every new public symbol must ship with a sandbox
 Globals or Surfaces Preview sample** (or an explicit companion entry in
 [`llm/wysiwyg-companion.json`](llm/wysiwyg-companion.json)) in the same change
 set — enforce with `npm run check:wysiwyg`. Pages: **Surfaces** (preview target
