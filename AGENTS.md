@@ -500,12 +500,14 @@ classes.
     focus-within on the message (opacity fade via
     `--fynns-chatmessage-actions-reveal` → `duration-slow` / `--fynns-ease-out`
     both ways; touch always; reduced-motion snaps);
-    `streaming` = caret + `aria-busy` / polite
-    live — no LLM; caret only while answer `children` has text (no empty
-    bubble / lone caret during thinking-only wait — conditional `null`
-    child slots also count as empty); caret height
-    `--fynns-chatmessage-cursor-height` (**`1lh`**
-    of body line box — thin I-beam, not a rounded stub; width 1dp; color accent); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
+    `streaming` = last-glyph color pulse + `aria-busy` / polite
+    live — no LLM; pulse only while answer `children` / `markdown` has
+    text (no empty bubble / lone cue during thinking-only wait —
+    conditional `null` child slots also count as empty); cue =
+    `.fynns-chat-message-stream-tail` on the last glyph (text ↔
+    ChatThinking-shimmer mid — accent→muted mix, never full neon accent;
+    duration `--fynns-chatmessage-stream-tail` → thinking-shimmer; no
+    I-beam / extra caret box); **`error` / `onRetry` / `retryLabel`** = ChatGPT failed-
     generation footer under the assistant turn (danger copy + optional
     Regenerate; wins over streaming / citations / actions);
     **`thinking`** / **`ChatThinking`** = single-block reasoning /
@@ -622,9 +624,9 @@ classes.
     block wells (`CodeBlock`, `div`/`p`/`pre`, …) stay siblings. Prefer
     element siblings for markdown roots (app `<div>` /
     `.fynns-unit-stack`); nested markdown still stacks inside the wrapper
-    with the same layout token. Streaming caret nests inside the last prose
-    when that is the trailing unit (same line as text); a caret that remains
-    a direct body child after an element is excluded from the gap rule.
+    with the same layout token. While `streaming`, the last glyph in the
+    trailing prose / markdown host gets `.fynns-chat-message-stream-tail`
+    (color pulse — no extra caret box; excluded from body-stack-gap).
     **Inline `code`** (caller-rendered, not markdown): ChatGPT
     prose parity — `--fynns-font-mono`, `--fynns-color-chat-inline-code-bg`
     (text wash via `code-user-bg-mix` 15% dark / 10% light — not ChatGPT
@@ -701,14 +703,15 @@ classes.
     Full UX: [`llm/CHAT_USER_EDIT_UX.md`](llm/CHAT_USER_EDIT_UX.md).
   - **Parity note (`prefers-reduced-motion`)** — ChatGPT (captured CSS in
     `scripts/_focus-verify/chatgpt-{root,conversation}.css`) vs `@fynns/ui`:
-    - **Streaming caret:** ChatGPT’s default `.result-streaming` trailing
+    - **Streaming cue:** ChatGPT’s default `.result-streaming` trailing
       `●` is **static** (no animation). The optional `.pulse` / `pulseSize`
       scale loop is **not** killed under `prefers-reduced-motion: reduce`
       (hard-coded `animation: … pulseSize`). Related streaming motion that
       **does** respect reduce: text color-decay, content-enter fade; working
       wave dots / `.pulsing-dot` only run under `no-preference`. **fynns:**
-      `.fynns-chat-message-cursor` blink → `animation: none; opacity: 1`
-      under reduce (plus global `theme.css` instant durations).
+      `.fynns-chat-message-stream-tail` color pulse → `animation: none` +
+      accent→muted mid under reduce (plus global `theme.css` instant
+      durations).
     - **Scroll-to-bottom:** ChatGPT CSS only positions the control
       (`--thread-scroll-to-bottom-banner-offset`); no dedicated enter/exit
       motion found. Smooth-scroll utilities are gated
@@ -869,7 +872,7 @@ classes.
   100% of same host (`radius-3xl`,
   32dp controls + 6dp pad ≈ 44dp shell); soft mins on the
   pane + `--fynns-layout-chat-min-width` on the shell; **avatar omitted by
-  default**; `streaming` caret only with answer text + busy — no LLM; `error` / `onRetry` =
+  default**; `streaming` last-glyph color pulse only with answer text + busy — no LLM; `error` / `onRetry` =
   failed-generation footer — see Feedback keep-set; `thinking` /
   `ChatThinking` = single-block reasoning disclosure (name ↔ bubble; Wave 1)
   — see Feedback keep-set; **`ChatActivity`** / Step / Artifact = Wave 2

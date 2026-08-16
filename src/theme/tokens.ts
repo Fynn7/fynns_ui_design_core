@@ -670,16 +670,11 @@ export const CHATMESSAGE_TOKENS = {
    */
   "actions-reveal": "var(--fynns-duration-slow)",
   /**
-   * Streaming caret thickness (1dp). Keep hairline — 2dp + radius read as a
-   * stubby block next to body text.
+   * Streaming incomplete cue — last glyph color pulse between on-surface text
+   * and ChatThinking-shimmer mid (accent→muted mix; R05). No extra caret
+   * glyph. Duration aliases thinking shimmer.
    */
-  "cursor-width": "0.0625rem",
-  /**
-   * Streaming caret length — one line-box (`1lh` of message body). Prefer
-   * `lh` over `1em`/`1cap` so the bar matches Chinese / Latin line height
-   * (body `line-height` 1.5), not a short em-square stub.
-   */
-  "cursor-height": "1lh",
+  "stream-tail": "var(--fynns-duration-thinking-shimmer)",
   /** Gap between error copy and Regenerate (ChatGPT failed-turn footer). */
   "error-gap": "0.75rem",
   /**

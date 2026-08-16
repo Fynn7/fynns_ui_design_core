@@ -65,7 +65,7 @@ ring can paint before heavy work).
   `--fynns-chatmessage-body-stack-gap` (**16dp**, aliases `unit-stack-gap` —
   same as `.fynns-unit-stack`; core wraps bare string/number children as
   `.fynns-chat-message-prose` so `{text}<CodeBlock/>` gets the gap — do not
-  patch in the consumer; caret nests in last prose when trailing); inline
+  patch in the consumer; streaming wraps last glyph in trailing prose); inline
   `code` = ChatGPT pill
   (`--fynns-color-chat-inline-code-bg`, radius-xs); prefer `ChatMessage markdown` /
   `ChatMarkdown` (L2 GFM subset); CJK IME Enter while
@@ -74,7 +74,7 @@ ring can paint before heavy work).
   **composer input model** + `llm/CHAT_COMPOSER_LAYOUT.md` (multiline =
   bottom toolbar when expanded, compact single row when collapsed);
   reduced-motion
-  caret / scroll / shell — AGENTS.md Chat **Parity note
+  stream-tail / scroll / shell — AGENTS.md Chat **Parity note
   (`prefers-reduced-motion`)**; user-edit parity:
   `llm/CHAT_USER_EDIT_UX.md`),
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption), CodeBlock

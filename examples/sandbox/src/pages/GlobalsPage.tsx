@@ -328,7 +328,7 @@ function ChatStreamingAssistant({
         window.clearInterval(timer);
         onDoneRef.current();
       }
-    }, 28);
+    }, 90);
     return () => window.clearInterval(timer);
   }, [streaming]);
 

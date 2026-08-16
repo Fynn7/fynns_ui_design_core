@@ -1,11 +1,9 @@
 import {
-  cloneElement,
-  isValidElement,
   useMemo,
-  type ReactElement,
   type ReactNode,
 } from "react";
 import { CodeBlock } from "./CodeBlock";
+import { applyStreamingTail } from "./chatStreamingTail";
 import {
   parseChatMarkdown,
   type MdBlock,
@@ -20,8 +18,8 @@ export type ChatMarkdownProps = {
   /** Copy control on fenced `CodeBlock`s. @default "Copy" */
   copyAriaLabel?: string;
   /**
-   * Trailing streaming caret (ChatMessage injects this when the markdown host
-   * is the last body unit).
+   * Streaming R05 cue — wrap the last glyph (ChatMessage injects this when
+   * the markdown host is the last body unit).
    */
   showCursor?: boolean;
 };
@@ -174,40 +172,12 @@ export function ChatMarkdown({
 
   const nodes = renderBlocks(blocks, "b").filter(Boolean) as ReactNode[];
   if (showCursor && nodes.length > 0) {
-    const lastIdx = nodes.length - 1;
-    const last = nodes[lastIdx];
-    const caret = (
-      <span
-        key="fynns-chat-cursor"
-        className="fynns-chat-message-cursor"
-        aria-hidden
-      />
-    );
-    if (isValidElement(last)) {
-      const lastClass =
-        (last.props as { className?: string }).className ?? "";
-      if (/\bfynns-chat-markdown-(p|h\d)\b/.test(lastClass)) {
-        const el = last as ReactElement<{ children?: ReactNode }>;
-        nodes[lastIdx] = cloneElement(el, {
-          children: (
-            <>
-              {el.props.children}
-              {caret}
-            </>
-          ),
-        });
-      } else {
-        nodes.push(
-          <p key="fynns-chat-md-cursor" className="fynns-chat-markdown-p">
-            {caret}
-          </p>,
-        );
-      }
-    } else {
-      nodes.push(
-        <p key="fynns-chat-md-cursor" className="fynns-chat-markdown-p">
-          {caret}
-        </p>,
+    const wrapped = applyStreamingTail(nodes);
+    if (wrapped != null) {
+      return (
+        <div className={join("fynns-chat-markdown", className)}>
+          {wrapped}
+        </div>
       );
     }
   }
