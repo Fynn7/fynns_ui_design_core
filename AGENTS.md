@@ -83,9 +83,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    badges / chevrons, Dialog Switch tracks, Chat actions, …). Overlay thumbs are
    painted by `src/theme/overlayScrollbar.ts` (fixed portal rails at
    `--fynns-z-toast` so Dialog / Drawer / Sheet hosts stay above `--fynns-z-modal`;
-   `pointer-events: none`; no layout / scrollWidth impact). On fine pointer + hover (`(hover: hover) and (pointer: fine)`), overlay thumbs
-   are **idle-transparent** and reveal on host `:hover` or `:focus-within` with a
-   soft fade (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
+   portal `pointer-events: none`, rails re-enable so thumbs can be **dragged** /
+   track-clicked; no layout / scrollWidth impact). On fine pointer + hover
+   (`(hover: hover) and (pointer: fine)`), overlay thumbs are **idle-transparent**
+   and reveal on host `:hover` or `:focus-within` with a soft fade
+   (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
    pointer keeps thumbs tinted when overflowing. Textarea / input hosts hide the
    native bar only (no overlay rail — replaced elements cannot host children).
    Do **not** use `scrollbar-gutter: stable` / `both-edges` (would reserve a permanent
