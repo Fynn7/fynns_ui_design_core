@@ -676,43 +676,6 @@
   }
 }
 
-/* ---------- DiffView ---------- */
-.fynns-diff-view {
-  margin: 0;
-  font-family: var(--fynns-font-mono);
-  font-size: var(--fynns-font-size-caption);
-  line-height: var(--fynns-line-height-compact);
-  background: var(--fynns-color-surface-muted);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
-  padding: var(--fynns-space-3);
-  overflow-x: hidden;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.fynns-diff-view-line {
-  white-space: inherit;
-  word-break: inherit;
-  overflow-wrap: inherit;
-}
-
-.fynns-diff-view-line--add {
-  color: var(--fynns-color-success);
-}
-
-.fynns-diff-view-line--del {
-  color: var(--fynns-color-danger);
-}
-
-.fynns-diff-view-line--meta {
-  color: var(--fynns-color-text-muted);
-}
-
 /* ---------- Input ---------- */
 .fynns-field {
   display: flex;
@@ -4143,7 +4106,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-linear-progress-active,
 .fynns-linear-progress-track,
-.fynns-linear-progress-stop,
 .fynns-linear-progress-indeterminate-bar {
   box-sizing: border-box;
   height: 100%;
@@ -4158,23 +4120,10 @@ a.fynns-breadcrumb-link:visited {
   transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
-.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
-  width: calc(
-    var(--fynns-progress-value) *
-      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
-  );
-}
-
 .fynns-linear-progress-track {
   flex: 1 1 auto;
   min-width: 0;
   background: var(--fynns-color-accent-24);
-}
-
-.fynns-linear-progress-stop {
-  flex: 0 0 var(--fynns-progress-stop-size);
-  width: var(--fynns-progress-stop-size);
-  background: var(--fynns-color-accent);
 }
 
 .fynns-linear-progress--indeterminate {
@@ -5629,7 +5578,12 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--fynns-navdrawer-section-gap);
+  /*
+   * No flex gap: destination rhythm is adjacent-sibling
+   * `--fynns-navdrawer-section-gap` (4dp) — SearchBar / tools wrappers
+   * share the same step as Item ↔ Item (destination-density SearchBar).
+   */
+  gap: 0;
   align-items: stretch;
   min-height: 0;
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
@@ -5647,6 +5601,38 @@ a.fynns-breadcrumb-link:visited {
   overflow-y: auto;
   /* Native bar hidden; overlay thumb must not steal item width (see theme overlay). */
   scrollbar-gutter: unset;
+}
+
+/*
+ * Destination rhythm: every direct body sibling opens
+ * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
+ * Group / Headline / Divider / Tooltip-wrapped items / SearchBar, and
+ * tools wrappers ahead of those rows. Same step as
+ * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
+ * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
+ * `.fynns-nav-drawer-item { margin: 0 }`.
+ */
+.fynns-nav-drawer-body
+  > *
+  + :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger,
+    .fynns-search-bar
+  ) {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+/* Tools wrappers (e.g. app SearchBar host) ↔ next sibling when the next
+ * node is not in the :is() list above — still use section-gap. */
+.fynns-nav-drawer-body > * + * {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+.fynns-nav-drawer-body .fynns-unit-stack {
+  gap: var(--fynns-navdrawer-section-gap);
 }
 
 .fynns-nav-drawer-section-headline {
@@ -8210,17 +8196,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- Table ---------- */
+/*
+ * Two-axis scroll host (AGENTS: narrow = horizontal scroll, not reflow).
+ * Do **not** pin overflow-x: clip here — that rule is for vertical-only
+ * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs.
+ */
 .fynns-table-wrap {
   overflow: auto;
   width: 100%;
   max-width: 100%;
-  /* Pair with `.fynns-scroll` for hover/focus-within thumb + gutter auto. */
+  min-width: 0;
 }
 
-/* Prefer pairing with `.fynns-scroll` on the wrap. */
-
 .fynns-table {
-  width: 100%;
+  /* Fill when short; grow past the wrap when columns need width → H-scroll. */
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text);
@@ -8239,6 +8230,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding: var(--fynns-space-sm) var(--fynns-space-md);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   vertical-align: middle;
+  /* Prevent CJK character-stack / Chip+label shatter when the host is narrow. */
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .fynns-table-header-cell {

@@ -413,14 +413,13 @@ export const SEGMENTED_TOKENS = {
 } as const;
 
 /**
- * Progress indicator geometry (M3 linear / circular at 16px rem).
- * Track + active indicator 4dp; circular default 48dp; gap + stop 4dp.
+ * Progress indicator geometry (linear / circular at 16px rem).
+ * Track + active indicator 4dp; circular default 48dp; active↔track gap 4dp.
  * `--fynns-progress-<key>`.
  */
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
-  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",
@@ -1116,6 +1115,13 @@ export const NAVDRAWER_TOKENS = {
   "headline-pad-block": "0.5rem",
   /** Section / sheet title inset past body pad (aligns with item icon column). */
   "headline-pad-inline": "1rem",
+  /**
+   * Vertical gap between consecutive body siblings (Item / Group / Headline /
+   * Divider / destination-density SearchBar / tools wrappers) in
+   * `.fynns-nav-drawer-body` **and** between leaf items inside
+   * `.fynns-nav-drawer-group-body` (4dp). Never wrap destinations in
+   * `.fynns-unit-stack` for spacing.
+   */
   "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
   /**
@@ -1249,7 +1255,7 @@ export const LAYOUT_TOKENS = {
   "sheet-actions-pad-top": "1rem",
   "sheet-actions-pad-bottom": "1.5rem",
   /** Cap to token width and viewport inset (2×8px margin — matches Popover VIEWPORT_MARGIN). */
-  "tooltip-max-width": "min(14rem, calc(100vw - 1rem))",
+  "tooltip-max-width": "min(14rem, calc(100vw - 16px))",
   /** M3 Snackbar — max width (~560dp) capped to viewport. */
   "snackbar-max-width": "min(35rem, calc(100vw - 2rem))",
   /** Single-line bar target (~48dp). */
@@ -1383,38 +1389,6 @@ export const LAYOUT_TOKENS = {
    * Message column stays `min-width: 0`.
    */
   "chat-min-width": "20rem",
-  /**
-   * Hub master-detail list pane track width.
-   * Must leave room for CatalogGroup title + count + IconButton cluster
-   * (project rules/skills); 18rem crushed titles to a few glyphs.
-   */
-  "list-pane-width": "22rem",
-  /** Destination / mode NavigationDrawer pane width. */
-  "nav-pane-width": "17.5rem",
-  /** Main content column ceiling (`.content` / hub max width). */
-  "content-max-width": "73.75rem",
-  /** Catalog list well scroll max height (full shell). */
-  "list-well-max-height": "calc(100vh - 13.75rem)",
-  /** Catalog list well scroll max height (narrow / stacked split). */
-  "list-well-max-height-sm": "20rem",
-  /** StatCard / hub-grid--stats auto-fill min column. */
-  "stats-min-col": "11.25rem",
-  /** StatCard min column on narrow viewports. */
-  "stats-min-col-sm": "9.375rem",
-  /** Card grid auto-fill min column. */
-  "card-min-col": "17.5rem",
-  /** Dense card grid min column (Quicklinks etc.). */
-  "dense-card-min-col": "15rem",
-  /** Wide data tables (usage model subtotals) min width before horizontal scroll. */
-  "table-min-width-lg": "47.5rem",
-  /** Chart tooltip / tip panel soft min width. */
-  "chart-tip-min-width": "12.5rem",
-  /** Legend color swatch size. */
-  "legend-swatch": "0.625rem",
-  /** Numeric count column soft min (tables / catalogs). */
-  "count-col-min": "2.25rem",
-  /** SectionLoading / hub-busy-block minimum height. */
-  "busy-min-height": "10rem",
 } as const;
 
 /**
