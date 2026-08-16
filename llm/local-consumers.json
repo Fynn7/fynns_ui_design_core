@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "description": "Local sibling checkouts for consume:sync --all / consume:watch. Paths are relative to the fynns_ui_design_core repo root. Missing roots are skipped with a warning.",
+  "consumers": [
+    {
+      "root": "../agents-hub",
+      "submodulePath": "gui/packages/fynns_ui_design_core"
+    },
+    {
+      "root": "../fynns_bachelor_thesis",
+      "submodulePath": "packages/fynns_ui_design_core"
+    },
+    {
+      "root": "../fynns_cv_generator",
+      "submodulePath": "packages/fynns_ui_design_core"
+    }
+  ]
+}

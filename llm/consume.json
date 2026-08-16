@@ -7,6 +7,7 @@
     "human": "llm/CONSUME.md",
     "designSystem": "AGENTS.md",
     "propagation": "docs/submodule-propagation.md",
+    "localConsumers": "llm/local-consumers.json",
     "opencodeRule": "llm/opencode-fynns-ui-consume.md",
     "consumerTreaty": "llm/CONSUMER_TREATY.md",
     "consumerCursorRule": "llm/consumer-cursor-rule.mdc",
@@ -27,7 +28,7 @@
     "NEVER add @fynns/ui or @fynns/ui-design-core to package.json dependencies/devDependencies.",
     "NEVER publish-install from npm registry for day-to-day app work.",
     "Keep resolve.dedupe [react, react-dom] so submodule source shares the app React instance.",
-    "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately). Day-to-day local core→consumer Vite: npm run consume:sync -- --target <CONSUMER_ROOT> (worktree mirror; does not commit pin).",
+    "Do not modify files inside packages/fynns_ui_design_core from consumer feature work (bump pin separately). Day-to-day local core→consumer Vite: prefer npm run consume:watch (or consume:sync -- --all) using llm/local-consumers.json; single target still works. Upsert only by default (no prune of hub-only files); --prune for strict mirror. Does not commit pin.",
     "Before any @fynns/ui UI work: run consume --check (pin must not be behind remote main tip; behind → bump pin then re-check). Escape: --skip-pin-check or FYNNS_UI_SKIP_PIN_CHECK=1. Propagate bump PRs do not replace local check. Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
     "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
@@ -83,15 +84,24 @@
       ]
     },
     "sync": {
-      "description": "Instant local sync: mirror this core checkout's src/ (+ package.json), including uncommitted edits, into the consumer submodule worktree. Diffs first; no-op when already in sync. Does not commit the pin or push. Formal release still uses pin bump + propagate.",
+      "description": "Instant local sync: upsert this core checkout's src/ (+ package.json), including uncommitted edits, into consumer submodule worktree(s). --all uses llm/local-consumers.json; default keeps consumer-only files (pass --prune to delete). Diffs first; no-op when already in sync. Does not commit the pin or push. Formal release still uses pin bump + propagate.",
       "argv": [
         "node",
         "scripts/sync-to-consumer.mjs",
-        "--target",
-        "<CONSUMER_ROOT>",
+        "--all",
         "--json"
       ],
-      "npm": "npm run consume:sync -- --target <CONSUMER_ROOT>"
+      "npm": "npm run consume:sync -- --all"
+    },
+    "watch": {
+      "description": "Watch core src/ + package.json; debounce then upsert to every local consumer in llm/local-consumers.json. Same as consume:sync --all --watch. Does not commit the pin.",
+      "argv": [
+        "node",
+        "scripts/sync-to-consumer.mjs",
+        "--all",
+        "--watch"
+      ],
+      "npm": "npm run consume:watch"
     },
     "wireOnly": {
       "description": "Submodule already present; only patch Vite/tsconfig.",
