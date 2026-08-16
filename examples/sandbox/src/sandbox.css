@@ -939,11 +939,13 @@
   background: var(--fynns-color-surface-1);
 }
 
-/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow). */
+/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow).
+ * Match a typical EndAside content width so long values ellipsis at the pane
+ * edge — not an artificially crushed column that looks “early-truncated”. */
 .sandbox-activity-narrow {
   box-sizing: border-box;
   width: 100%;
-  max-width: var(--fynns-layout-end-aside-min-width);
+  max-width: min(100%, var(--fynns-layout-end-aside-width));
   min-width: 0;
 }
 

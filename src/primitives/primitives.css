@@ -175,6 +175,23 @@
     opacity var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
+/* Label wrapper: enables text-overflow when a host caps the button
+ * (`max-width` / flex shrink). Idle buttons stay content-sized.
+ * `inline-flex` on `.fynns-btn` alone cannot ellipsis; this block can. */
+.fynns-btn-label {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-btn-label > svg {
+  display: inline-block;
+  vertical-align: -0.125em;
+  margin-inline-end: var(--fynns-space-2);
+}
+
 /* M3 state layer (no scale-on-press). Fade via opacity — do not interpolate
  * `color-mix` backgrounds (expensive paint on every button hover). */
 .fynns-btn::before {
@@ -2250,20 +2267,22 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Long labeled Buttons (often wrapped in Tooltip) must shrink inside the
- * control track — default `.fynns-btn` is nowrap + intrinsic width, which
- * otherwise blows past narrow hosts (EndAside ChatActivity ControlRows).
+ * Value Buttons in a ControlStack track: hug label width (pill follows text)
+ * until the track edge, then shrink + ellipsis via `.fynns-btn-label`.
+ * Trigger is width:100% of the grid area so `max-width` on the button is
+ * definite — not circular with intrinsic sizing (which hard-clipped without …).
  * Full copy stays on aria-label / Tooltip.
  */
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger,
-.fynns-control-stack
-  > .fynns-control-row
-  > .fynns-control-row__controls
-  > .fynns-btn {
-  overflow: hidden;
+  > .fynns-tooltip-trigger {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .fynns-control-stack
@@ -2275,11 +2294,11 @@ input.fynns-input:focus::-webkit-scrollbar {
   > .fynns-control-row
   > .fynns-control-row__controls
   > .fynns-btn {
-  min-width: 0;
+  flex: 0 1 auto;
+  width: max-content;
   max-width: 100%;
+  min-width: 0;
   justify-content: flex-start;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* ---------- ControlRow ---------- */
@@ -10165,13 +10184,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow-x: clip;
 }
 
-/* Desc ControlStacks: hug short labels, give the value track the leftover. */
+/* Desc ControlStacks: hug short labels; value track eats the leftover. */
 .fynns-chat-activity-desc .fynns-control-stack {
   width: 100%;
   max-width: 100%;
   grid-template-columns:
-    minmax(0, max-content)
-    repeat(var(--fynns-control-stack-cols, 2), minmax(0, 1fr));
+    max-content
+    minmax(0, 1fr);
 }
 
 .fynns-chat-activity-desc .fynns-control-row {

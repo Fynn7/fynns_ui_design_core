@@ -1088,6 +1088,10 @@ const en = {
     "mentioned, but not unique yet — ask before applying",
   "globals.activitySlotModeTip":
     "Why Mode was filled. Click for details (demo — no dialog).",
+  "globals.activitySlotStatus": "Status",
+  "globals.activitySlotStatusValue": "Ready",
+  "globals.activitySlotStatusTip":
+    "Short value — pill hugs the label; no ellipsis until the track edge.",
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "Here is a short outline based on the activity tree above — dummy copy only.",
@@ -2424,6 +2428,10 @@ const zh: Record<MessageKey, string> = {
     "已提及但尚不唯一 — 应用前需确认",
   "globals.activitySlotModeTip":
     "模式为何被填入。点击查看详情（演示 — 无对话框）。",
+  "globals.activitySlotStatus": "状态",
+  "globals.activitySlotStatusValue": "就绪",
+  "globals.activitySlotStatusTip":
+    "短文案 — pill 随文字宽度；未触边不出现省略号。",
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "根据上方活动树整理的一短段大纲 — 仅为假数据文案。",

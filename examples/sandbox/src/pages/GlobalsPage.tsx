@@ -2654,6 +2654,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                               </Button>
                             </Tooltip>
                           </ControlRow>
+                          <ControlRow label={t("globals.activitySlotStatus")}>
+                            <Tooltip content={t("globals.activitySlotStatusTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotStatusTip")}
+                              >
+                                {t("globals.activitySlotStatusValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
                         </ControlStack>
                       </div>
                     }
