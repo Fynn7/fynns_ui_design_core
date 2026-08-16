@@ -1077,13 +1077,24 @@ const en = {
     "I’ve refined the outline and am preparing to ask clarifying questions via ",
   "globals.activityStepPresentCode": "sandbox_askQuestions",
   "globals.activityStepPresentDescAfter": ".",
+  "globals.activityStepSlots": "Filled fields",
+  "globals.activitySlotRegion": "Region",
+  "globals.activitySlotRegionValue":
+    "Europe Central (already selected in preferences)",
+  "globals.activitySlotRegionTip":
+    "Why Region was filled. Full label truncates in a narrow EndAside — hover for the complete string.",
+  "globals.activitySlotMode": "Mode",
+  "globals.activitySlotModeValue":
+    "mentioned, but not unique yet — ask before applying",
+  "globals.activitySlotModeTip":
+    "Why Mode was filled. Click for details (demo — no dialog).",
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "Here is a short outline based on the activity tree above — dummy copy only.",
   "globals.activitySimulate": "Simulate activity tree",
   "globals.activityReset": "Reset done tree",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). **Label tense (consumer-owned):** each **step** `active` = progressive (*Calling the function…*, *Gathering context…*, *Presenting the plan…*); `done` = past (*Ran the script*, *Created memory file*, *Presented plan*). Swap the string when `status` flips — core does not rewrite tense. The **header** may stay past for the latest completed milestone even while streaming (e.g. *Updated plan with details* above an *Executing…* / *Presenting…* row). Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then glyph + artifact complete over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter` (opacity only; shells snap open, no height morph). Optional `ChatActivityArtifact` capsule + description. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). **Label tense (consumer-owned):** each **step** `active` = progressive (*Calling the function…*, *Gathering context…*, *Presenting the plan…*); `done` = past (*Ran the script*, *Created memory file*, *Presented plan*). Swap the string when `status` flips — core does not rewrite tense. The **header** may stay past for the latest completed milestone even while streaming (e.g. *Updated plan with details* above an *Executing…* / *Presenting…* row). Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then glyph + artifact complete over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter` (opacity only; shells snap open, no height morph). Optional `ChatActivityArtifact` capsule + description. Description may host `ControlStack` / `ControlRow` + long ghost Buttons — core truncates with ellipsis in narrow hosts (EndAside); keep the full string on Tooltip / `aria-label`. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -2402,13 +2413,24 @@ const zh: Record<MessageKey, string> = {
     "我已细化大纲，准备通过 ",
   "globals.activityStepPresentCode": "sandbox_askQuestions",
   "globals.activityStepPresentDescAfter": " 询问澄清问题。",
+  "globals.activityStepSlots": "已填字段",
+  "globals.activitySlotRegion": "地区",
+  "globals.activitySlotRegionValue":
+    "Europe Central（偏好中已选）",
+  "globals.activitySlotRegionTip":
+    "地区为何被填入。窄 EndAside 内长文案会截断 — 悬停看完整字符串。",
+  "globals.activitySlotMode": "模式",
+  "globals.activitySlotModeValue":
+    "已提及但尚不唯一 — 应用前需确认",
+  "globals.activitySlotModeTip":
+    "模式为何被填入。点击查看详情（演示 — 无对话框）。",
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "根据上方活动树整理的一短段大纲 — 仅为假数据文案。",
   "globals.activitySimulate": "模拟活动树",
   "globals.activityReset": "重置为完成树",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。**标签时态（消费仓）：** 每步 `active` = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在展示计划…*）；`done` = 完成时（*已运行脚本*、*已创建记忆文件*、*已展示计划*）。`status` 翻转时立刻换文案 — core 不改写时态。**header** 可在仍 streaming 时用过去时总结最近完成的里程碑（例如上方 *已用细节更新计划*，下方仍有 *正在展示…* 行）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 播完成图标与胶囊。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入（仅透明度；行高瞬间到位，无高度形变）。可选 `ChatActivityArtifact` 胶囊 + 说明。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。**标签时态（消费仓）：** 每步 `active` = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在展示计划…*）；`done` = 完成时（*已运行脚本*、*已创建记忆文件*、*已展示计划*）。`status` 翻转时立刻换文案 — core 不改写时态。**header** 可在仍 streaming 时用过去时总结最近完成的里程碑（例如上方 *已用细节更新计划*，下方仍有 *正在展示…* 行）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 播完成图标与胶囊。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入（仅透明度；行高瞬间到位，无高度形变）。可选 `ChatActivityArtifact` 胶囊 + 说明。说明区可挂 `ControlStack` / `ControlRow` + 长文案 ghost Button — 窄宿主（EndAside）内 core 会 ellipsis 截断；完整文案放 Tooltip / `aria-label`。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",

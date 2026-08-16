@@ -2553,6 +2553,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="activity">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-activity-narrow">
           <ChatMessage
             role="assistant"
             streaming={activityStreaming}
@@ -2623,11 +2624,47 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     )
                   }
                 />
+                {activityPhase >= 3 ? (
+                  <ChatActivityStep
+                    key="slots"
+                    status="done"
+                    label={t("globals.activityStepSlots")}
+                    description={
+                      <div className="fynns-unit-stack">
+                        <ControlStack columns={1}>
+                          <ControlRow label={t("globals.activitySlotRegion")}>
+                            <Tooltip content={t("globals.activitySlotRegionTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotRegionTip")}
+                              >
+                                {t("globals.activitySlotRegionValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
+                          <ControlRow label={t("globals.activitySlotMode")}>
+                            <Tooltip content={t("globals.activitySlotModeTip")}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                aria-label={t("globals.activitySlotModeTip")}
+                              >
+                                {t("globals.activitySlotModeValue")}
+                              </Button>
+                            </Tooltip>
+                          </ControlRow>
+                        </ControlStack>
+                      </div>
+                    }
+                  />
+                ) : null}
               </ChatActivity>
             }
           >
             {activityStreaming ? undefined : t("globals.activityAnswer")}
           </ChatMessage>
+          </div>
           <div className="sandbox-globals-row">
             <Button
               size="sm"

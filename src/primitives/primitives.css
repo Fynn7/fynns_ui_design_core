@@ -2249,6 +2249,39 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
 }
 
+/*
+ * Long labeled Buttons (often wrapped in Tooltip) must shrink inside the
+ * control track — default `.fynns-btn` is nowrap + intrinsic width, which
+ * otherwise blows past narrow hosts (EndAside ChatActivity ControlRows).
+ * Full copy stays on aria-label / Tooltip.
+ */
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-btn {
+  overflow: hidden;
+}
+
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger
+  > .fynns-btn,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-btn {
+  min-width: 0;
+  max-width: 100%;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ---------- ControlRow ---------- */
 .fynns-control-row {
   display: grid;
@@ -9786,9 +9819,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-chat-activity {
   display: flex;
   flex-direction: column;
+  /* Fill the message column under align-items:flex-start so desc ControlRows
+   * resolve % / 1fr against the host, not max-content button widths. */
+  align-self: stretch;
+  width: 100%;
   gap: var(--fynns-chatmessage-activity-gap);
   max-width: 100%;
   min-width: 0;
+  box-sizing: border-box;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-chatmessage-name-size);
   line-height: var(--fynns-line-height-snug);
@@ -10112,6 +10150,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-chat-activity-desc {
+  /* Flex item under `.fynns-chat-activity-step`: default min-width:auto would
+   * lock to nowrap Button min-content and shove the tree past EndAside. */
+  box-sizing: border-box;
+  min-width: 0;
   margin-block-start: var(--fynns-chatmessage-activity-desc-gap);
   margin-inline-start: calc(
     var(--fynns-size-icon) + var(--fynns-chatmessage-activity-node-gap)
@@ -10120,6 +10162,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   font-weight: var(--fynns-font-weight-regular);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  overflow-x: clip;
+}
+
+/* Desc ControlStacks: hug short labels, give the value track the leftover. */
+.fynns-chat-activity-desc .fynns-control-stack {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns:
+    minmax(0, max-content)
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, 1fr));
+}
+
+.fynns-chat-activity-desc .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Hold: keep capsule in flow so the row does not jump when it appears. */

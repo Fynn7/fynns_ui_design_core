@@ -939,6 +939,14 @@
   background: var(--fynns-color-surface-1);
 }
 
+/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow). */
+.sandbox-activity-narrow {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--fynns-layout-end-aside-min-width);
+  min-width: 0;
+}
+
 .sandbox-chat-aside-label {
   margin: 0;
   color: var(--fynns-color-text-muted);
