@@ -4,6 +4,7 @@ dist
 .DS_Store
 .vite
 examples/sandbox/dist
+*.tgz
 
 # Local research / measurement dumps (do not commit)
 scripts/_focus-verify/

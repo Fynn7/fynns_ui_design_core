@@ -100,6 +100,16 @@ function findGitRoot(start) {
   return path.resolve(r.stdout);
 }
 
+function findPackageRoot(start) {
+  let dir = path.resolve(start);
+  for (;;) {
+    if (fs.existsSync(path.join(dir, "package.json"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
 function readText(p) {
   return fs.readFileSync(p, "utf8");
 }
@@ -381,9 +391,9 @@ function pickTsconfig(opts, gitRoot, viteFile) {
   return hits.find((p) => path.basename(p) === "tsconfig.json") || hits[0] || null;
 }
 
-function checkMode(gitRoot, viteFile, tsconfigFile) {
+function checkMode(pkgRoot, viteFile, tsconfigFile) {
   const issues = [];
-  const pkg = readConsumerPkg(gitRoot);
+  const pkg = readConsumerPkg(pkgRoot);
   const deps = pkg
     ? { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) }
     : {};
@@ -391,11 +401,11 @@ function checkMode(gitRoot, viteFile, tsconfigFile) {
   if (deps["@fynns/ui"] || deps["@fynns/ui-design-core"]) {
     issues.push("remove obsolete @fynns/ui / @fynns/ui-design-core package names; use @fynn7/ui-design-core");
   }
-  const entry = path.join(gitRoot, ENTRY_FROM_PKG);
+  const entry = path.join(pkgRoot, ENTRY_FROM_PKG);
   if (deps[PKG_NAME] && !fs.existsSync(entry)) {
     issues.push(`package not installed on disk (expected ${ENTRY_FROM_PKG}); run npm install`);
   }
-  const npmrc = path.join(gitRoot, ".npmrc");
+  const npmrc = path.join(pkgRoot, ".npmrc");
   if (!fs.existsSync(npmrc) || !readText(npmrc).includes("@fynn7:registry=")) {
     issues.push(`.npmrc missing @fynn7 → ${REGISTRY}`);
   }
@@ -421,11 +431,10 @@ function checkMode(gitRoot, viteFile, tsconfigFile) {
     }
   }
   // Warn if submodule still present (migration leftover)
-  const sub = path.join(gitRoot, "packages", "fynns_ui_design_core", "src", "index.ts");
-  const subHub = path.join(gitRoot, "gui", "packages", "fynns_ui_design_core", "src", "index.ts");
-  if (fs.existsSync(sub) || fs.existsSync(subHub)) {
+  const sub = path.join(pkgRoot, "packages", "fynns_ui_design_core", "src", "index.ts");
+  if (fs.existsSync(sub)) {
     issues.push(
-      "legacy git submodule packages/fynns_ui_design_core (or gui/…) still present — remove after switching aliases to node_modules",
+      "legacy git submodule packages/fynns_ui_design_core still present — remove after switching aliases to node_modules",
     );
   }
   return { ok: issues.length === 0, issues };
@@ -445,21 +454,34 @@ function main() {
   }
 
   const log = [];
+  const targetAbs = path.resolve(opts.target);
   let gitRoot;
   try {
-    gitRoot = findGitRoot(path.resolve(opts.target));
+    gitRoot = findGitRoot(targetAbs);
   } catch (e) {
     console.error(String(e.message || e));
     process.exit(1);
   }
+  const pkgRoot = findPackageRoot(targetAbs);
+  if (!pkgRoot) {
+    console.error(`No package.json found walking up from ${targetAbs}`);
+    process.exit(1);
+  }
 
   const version = opts.version || `^${coreVersion()}`;
-  const viteFile = pickVite(opts, gitRoot);
-  const tsconfigFile = pickTsconfig(opts, gitRoot, viteFile);
+  const viteFile = pickVite(opts, pkgRoot);
+  const tsconfigFile = pickTsconfig(opts, pkgRoot, viteFile);
 
   if (opts.check) {
-    const result = checkMode(gitRoot, viteFile, tsconfigFile);
-    const out = { ok: result.ok, action: "check", consumerRoot: gitRoot, issues: result.issues, log };
+    const result = checkMode(pkgRoot, viteFile, tsconfigFile);
+    const out = {
+      ok: result.ok,
+      action: "check",
+      consumerRoot: pkgRoot,
+      gitRoot,
+      issues: result.issues,
+      log,
+    };
     if (opts.json) console.log(JSON.stringify(out, null, 2));
     else {
       console.log(result.ok ? "check ok" : "check failed");
@@ -468,9 +490,9 @@ function main() {
     process.exit(result.ok ? 0 : 1);
   }
 
-  ensureNpmrc(gitRoot, opts.dryRun, log);
+  ensureNpmrc(pkgRoot, opts.dryRun, log);
   if (!opts.skipInstall && !opts.wireOnly) {
-    const ok = ensureDependency(gitRoot, version, opts.dryRun, log);
+    const ok = ensureDependency(pkgRoot, version, opts.dryRun, log);
     if (!ok) {
       if (opts.json) console.log(JSON.stringify({ ok: false, log }, null, 2));
       process.exit(1);
@@ -478,14 +500,14 @@ function main() {
   }
 
   if (viteFile) {
-    const entryRel = entryRelFromVite(viteFile, gitRoot);
+    const entryRel = entryRelFromVite(viteFile, pkgRoot);
     wireVite(viteFile, entryRel, opts.dryRun, log);
   } else {
     log.push({ step: "vite_alias", status: "manual", detail: "no vite.config found" });
   }
   if (tsconfigFile) {
     const tsDir = path.dirname(tsconfigFile);
-    let rel = path.relative(tsDir, path.join(gitRoot, ENTRY_FROM_PKG)).split(path.sep).join("/");
+    let rel = path.relative(tsDir, path.join(pkgRoot, ENTRY_FROM_PKG)).split(path.sep).join("/");
     if (!rel.startsWith(".")) rel = `./${rel}`;
     wireTsconfig(tsconfigFile, rel, opts.dryRun, log);
   }
@@ -496,7 +518,8 @@ function main() {
     action: "install",
     package: PKG_NAME,
     version,
-    consumerRoot: gitRoot,
+    consumerRoot: pkgRoot,
+    gitRoot,
     alias: ALIAS,
     entry: ENTRY_FROM_PKG,
     dryRun: opts.dryRun,
@@ -505,7 +528,7 @@ function main() {
   if (opts.json) console.log(JSON.stringify(summary, null, 2));
   else {
     console.log(opts.dryRun ? "[dry-run] npm consume install planned" : "npm consume install done");
-    console.log(`  consumer: ${gitRoot}`);
+    console.log(`  consumer: ${pkgRoot}`);
     console.log(`  package: ${PKG_NAME}@${version}`);
     console.log(`  alias: ${ALIAS} → ${ENTRY_FROM_PKG}`);
     for (const step of log) {

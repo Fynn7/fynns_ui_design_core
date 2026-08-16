@@ -420,6 +420,7 @@ export const SEGMENTED_TOKENS = {
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
+  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",
