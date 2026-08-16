@@ -954,7 +954,9 @@ const en = {
   "globals.searchBarResultDocs": "Documentation",
   "globals.searchBarResultSettings": "Settings",
   "globals.searchBarHelp":
-    "Elevated 56dp search pill for chrome. Docked results when expanded. Prefer `Input` in dense forms (SearchInput removed).",
+    "Elevated 56dp search pill for chrome (`density=\"chrome\"`). In NavigationDrawer use `density=\"destination\"` (or place a plain SearchBar in the drawer body) so height / type / icon gap match NavigationDrawerItem (40dp) while keeping SearchBar surface / focus. Prefer `Input` in dense forms (SearchInput removed).",
+  "globals.navDrawerSearchAria": "Search destinations",
+  "globals.navDrawerSearchPlaceholder": "Search…",
   "globals.bannerText": "A new version is available",
   "globals.bannerSupporting": "Restart to apply updates when you are ready.",
   "globals.bannerAction": "Learn more",
@@ -2279,7 +2281,9 @@ const zh: Record<MessageKey, string> = {
   "globals.searchBarResultDocs": "文档",
   "globals.searchBarResultSettings": "设置",
   "globals.searchBarHelp":
-    "56dp 抬升搜索胶囊，用于界面顶栏。展开时可挂靠结果。密集表单请优先用 `Input`（SearchInput 已删除）。",
+    "56dp 抬升搜索胶囊，用于界面顶栏（`density=\"chrome\"`）。在 NavigationDrawer 里用 `density=\"destination\"`（或把普通 SearchBar 放进 drawer body）使高度 / 字号 / 图标间距与 NavigationDrawerItem 一致（40dp），表面色与 focus 仍用 SearchBar 原样。密集表单请优先用 `Input`（SearchInput 已删除）。",
+  "globals.navDrawerSearchAria": "搜索目的地",
+  "globals.navDrawerSearchPlaceholder": "搜索…",
   "globals.bannerText": "有新版本可用",
   "globals.bannerSupporting": "准备好后重启即可应用更新。",
   "globals.bannerAction": "了解更多",

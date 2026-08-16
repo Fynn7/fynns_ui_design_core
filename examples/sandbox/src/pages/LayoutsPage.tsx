@@ -93,6 +93,7 @@ export function LayoutsPage() {
     "inbox" | "sent" | "drafts" | "settings" | "archive" | "assist"
   >("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerSearchQuery, setDrawerSearchQuery] = useState("");
   const [shellNavOpen, setShellNavOpen] = useState(true);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
@@ -308,6 +309,14 @@ export function LayoutsPage() {
                 ariaLabel={t("globals.navDrawerAria")}
                 headline={t("globals.navDrawerHeadline")}
               >
+                <SearchBar
+                  density="destination"
+                  value={drawerSearchQuery}
+                  onChange={setDrawerSearchQuery}
+                  ariaLabel={t("globals.navDrawerSearchAria")}
+                  placeholder={t("globals.navDrawerSearchPlaceholder")}
+                  clearAriaLabel={t("globals.searchBarClear")}
+                />
                 <NavigationDrawerItem
                   icon={<FolderOpenIcon />}
                   label={t("globals.navDrawerInbox")}
