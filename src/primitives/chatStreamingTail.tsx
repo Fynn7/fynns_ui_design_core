@@ -9,10 +9,6 @@ import {
 /** Class on the last streamed glyph (R05 color pulse). */
 export const CHAT_STREAM_TAIL_CLASS = "fynns-chat-message-stream-tail";
 
-function join(...parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(" ");
-}
-
 /**
  * Split the last non-whitespace Unicode glyph (emoji-safe via `Array.from`).
  * Trailing whitespace stays after the wrapped glyph.
@@ -108,18 +104,4 @@ export function applyStreamingTail(children: ReactNode): ReactNode | null {
   }
 
   return null;
-}
-
-/** Convenience: apply tail or return children unchanged. */
-export function withStreamingTail(
-  children: ReactNode,
-  enabled: boolean,
-): ReactNode {
-  if (!enabled) return children;
-  const wrapped = applyStreamingTail(children);
-  return wrapped == null ? children : wrapped;
-}
-
-export function streamTailClass(...extra: Array<string | false | null | undefined>) {
-  return join(CHAT_STREAM_TAIL_CLASS, ...extra);
 }

@@ -9275,10 +9275,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 @keyframes fynns-chat-stream-tail {
-  0%,
-  100% {
-    color: var(--fynns-color-text);
-  }
+  /* Rest keeps inherited ink (links / del / …); only the mid peak tints. */
   50% {
     /* Same mid as ChatThinking shimmer — accent into muted (not into
      * on-surface, which washed white; not full accent, which reads neon). */
@@ -9439,12 +9436,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   letter-spacing: inherit;
   /* R05 — last glyph color pulse; no extra caret box. */
   animation: fynns-chat-stream-tail var(--fynns-chatmessage-stream-tail)
-    ease-in-out infinite;
-}
-
-.fynns-chat-message--user .fynns-chat-message-stream-tail {
-  /* User bubble inherits on-surface text; same accent peak. */
-  animation-name: fynns-chat-stream-tail;
+    var(--fynns-ease-in-out) infinite;
 }
 
 /* ChatGPT failed-generation footer under the assistant turn. */
