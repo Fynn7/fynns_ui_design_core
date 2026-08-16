@@ -6,12 +6,13 @@ alwaysApply: true
 
 # fynns UI design system
 
-This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
-`packages/fynns_ui_design_core`). It is the single source of truth for UI.
-To install into a **new** consumer: follow `llm/CONSUME.md` and run
-`scripts/install-as-submodule.mjs` (never npm-install `@fynns/ui-design-core`).
-Short prompts still require reading `llm/CONSUME.md` first (see
-`llm/opencode-fynns-ui-consume.md`).
+This repo consumes `@fynns/ui` via **`@fynn7/ui-design-core`** (GitHub Packages)
+with a Vite/tsconfig alias to
+`node_modules/@fynn7/ui-design-core/src/index.ts`. It is the single source of
+truth for UI. To install into a **new** consumer: follow `llm/CONSUME.md` and run
+`scripts/install-as-npm.mjs` (`npm run consume:install`). Do **not** use a git
+submodule for day-to-day consume. Short prompts still require reading
+`llm/CONSUME.md` first (see `llm/opencode-fynns-ui-consume.md`).
 
 **Public API purge / migration:** `llm/BREAKING_PURGE.md` — only symbols demoed in
 sandbox Globals + Preview are public; do not import deleted APIs (Toast, Popover,
@@ -179,8 +180,8 @@ ring can paint before heavy work).
   `BusyScrim` / `BusyRegion`.
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
-- If a token or component is missing, add it in the submodule
-  (`packages/fynns_ui_design_core`) and run its `npm run gen:theme`.
+- If a token or component is missing, add it in the core package
+  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then publish / bump.
 - Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.

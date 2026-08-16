@@ -25,7 +25,7 @@ flowchart TB
 | Primitives | `src/primitives/` | Self-developed React controls (`.fynns-*` classes), including `ControlStack` / `ControlRow` |
 | Layout helpers | `src/layout/` | `measureOverflow` / `useOverflowBounds` (toolbar rhythm tokens: see AGENTS.md **Toolbar / unit rhythm**) |
 | Public barrel | `src/index.ts` | Only keep-set exports (sandbox-demoed) |
-| Consume tooling | `scripts/install-as-submodule.mjs`, `llm/` | Submodule + Vite/tsconfig wiring |
+| Consume tooling | `scripts/install-as-npm.mjs`, `llm/` | GitHub Packages + Vite/tsconfig wiring |
 | Sandbox | `examples/sandbox/` | Globals inspector + Preview canvases |
 
 ## Elevation & theming
@@ -49,5 +49,5 @@ Full text: [`AGENTS.md`](../../AGENTS.md). Agents must:
 - `src/primitives/` (components + `primitives.css`)
 - `src/layout/overflowBounds.ts`, `src/layout/useOverflowBounds.ts`
 - `src/index.ts`
-- `scripts/gen-theme.mjs`, `scripts/install-as-submodule.mjs`
+- `scripts/gen-theme.mjs`, `scripts/install-as-npm.mjs`
 - `examples/sandbox/src/pages/`

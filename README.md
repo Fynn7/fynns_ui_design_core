@@ -17,14 +17,16 @@ projects and are easy for humans and agents to reuse.
   **Agent wiki (nav + workflows):** [`openwiki/quickstart.md`](openwiki/quickstart.md)
   (seeded; refresh via Agents Hub → OpenWiki).
   **Breaking purge / consumer migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
-- **Submodule propagation:** push-triggered + Dependabot fallback workflow is
-  documented in [`docs/submodule-propagation.md`](docs/submodule-propagation.md).
+- **Package propagation:** publish `@fynn7/ui-design-core` to GitHub Packages —
+  [`docs/package-propagation.md`](docs/package-propagation.md)
+  (legacy submodule bumps: [`docs/submodule-propagation.md`](docs/submodule-propagation.md)).
 
-## Consume it (git submodule + source alias)
+## Consume it (GitHub Packages + source alias)
 
-This package is consumed **as source** through a Vite path alias `@fynns/ui`. No
-build step or npm publish is required. **Do not** add `@fynns/ui-design-core` to
-`package.json` dependencies.
+Install **`@fynn7/ui-design-core`** from `https://npm.pkg.github.com`, then point
+Vite/tsconfig **`@fynns/ui`** at
+`node_modules/@fynn7/ui-design-core/src/index.ts`. App imports stay
+`from "@fynns/ui"`. Do **not** use a git submodule for day-to-day consume.
 
 ### One-shot (humans & LLM agents)
 
@@ -33,60 +35,62 @@ Authoritative install contract + script:
 - Agent guide: [`llm/CONSUME.md`](llm/CONSUME.md)
 - Machine JSON: [`llm/consume.json`](llm/consume.json)
 - Installer: `npm run consume:install -- --target <consumer-root>`
-  (`scripts/install-as-submodule.mjs` / `.ps1`)
+  (`scripts/install-as-npm.mjs`)
 
 ```bash
-# from a checkout of this repo
+# from a checkout of this repo (needs NODE_AUTH_TOKEN / GITHUB_TOKEN read:packages)
 npm run consume:install -- --target ../my-app --json
-
-# or bootstrap: clone this repo to a temp dir, then point --target at the app
+npm run consume:check -- --target ../my-app --json
 ```
 
-The script adds the submodule (default `packages/fynns_ui_design_core`) and wires
-Vite/tsconfig aliases when it can. Verify with
-`npm run consume:check -- --target ../my-app --json`.
+The script writes `.npmrc`, installs the package, and wires Vite/tsconfig when it
+can.
 
 ### Manual steps (same outcome)
 
-1. Add the submodule (path `packages/fynns_ui_design_core` by convention):
+1. Consumer `.npmrc`:
 
-```bash
-git submodule add https://github.com/Fynn7/fynns_ui_design_core.git packages/fynns_ui_design_core
-git submodule update --init --recursive
+```
+@fynn7:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-2. Add the alias in `vite.config.ts` (point at the barrel; keep React deduped so
-   the submodule source shares the app's single React instance):
+2. `npm install @fynn7/ui-design-core@^0.3.0 --save`
+
+3. Alias in `vite.config.ts`:
 
 ```ts
 resolve: {
   alias: {
-    "@fynns/ui": path.resolve(__dirname, "packages/fynns_ui_design_core/src/index.ts"),
+    "@fynns/ui": path.resolve(
+      __dirname,
+      "node_modules/@fynn7/ui-design-core/src/index.ts",
+    ),
   },
   dedupe: ["react", "react-dom"],
 }
 ```
 
-For an app nested in a subfolder (e.g. the thesis `tools/gsc-live-preview`),
-point the alias up to the repo-root submodule:
-`path.resolve(__dirname, "../../packages/fynns_ui_design_core/src/index.ts")`.
-
-3. Add a `tsconfig` path so the editor resolves types:
+4. `tsconfig` paths:
 
 ```json
-{ "compilerOptions": { "paths": { "@fynns/ui": ["./packages/fynns_ui_design_core/src/index.ts"] } } }
+{
+  "compilerOptions": {
+    "paths": {
+      "@fynns/ui": ["./node_modules/@fynn7/ui-design-core/src/index.ts"]
+    }
+  }
+}
 ```
 
-4. Use it (the barrel imports the theme + component CSS for you):
+5. Use it:
 
 ```tsx
 import { Button, Collapsible, FullscreenDialog } from "@fynns/ui";
 ```
 
-Do not import purged symbols (`toast`, `Dialog`, `PanelCard`, …) — see
-[`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
-If you prefer to load only the stylesheet (no JS), import
-`@fynns/ui-design-core/theme.css` or `@fynns/ui-design-core/styles.css`.
+Do not import purged symbols — see [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
+Stylesheets: `@fynn7/ui-design-core/theme.css` / `styles.css`.
 
 ## Theme
 
@@ -109,9 +113,9 @@ from `@fynns/ui` (sets `data-fynns-theme="light"` on `<html>`). Use
 - `npm run check:perf-sandbox` — inspector lazy-mount / no shell probe thrash
   (see [`llm/PERF.md`](llm/PERF.md)).
 - `npm run lint` — ESLint.
-- `npm run consume:install -- --target <dir>` — add this repo as a consumer
-  submodule and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).
-- `npm run consume:check -- --target <dir>` — validate submodule + alias.
+- `npm run consume:install -- --target <dir>` — install `@fynn7/ui-design-core`
+  from GitHub Packages and wire `@fynns/ui` (see [`llm/CONSUME.md`](llm/CONSUME.md)).
+- `npm run consume:check -- --target <dir>` — validate dependency + alias + `.npmrc`.
 - `npm run sandbox` — run the aesthetic sandbox in
   [`examples/sandbox`](examples/sandbox) (Globals shape levels, **Toolbar / unit rhythm**
   sample for `ControlStack` / unit-stack gap tokens, live Card
@@ -242,8 +246,9 @@ the draft and runs `npm run gen:theme` (Vite dev middleware). That updates the
 design-system source consumed by every `@fynns/ui` client. Until then, overrides
 stay in the draft / `localStorage` and only affect the sandbox preview.
 
-## Optional package distribution
+## Package distribution
 
-`package.json` is preconfigured (`exports`, `publishConfig`) so the library can
-later be published to GitHub Packages (`@fynns/ui-design-core`). The submodule +
-source-alias flow above is the primary, recommended path.
+Publish **`@fynn7/ui-design-core`** to GitHub Packages via
+[`.github/workflows/publish-package.yml`](.github/workflows/publish-package.yml)
+(Release or `workflow_dispatch`). Consumers install that package and keep the
+`@fynns/ui` alias — see [`docs/package-propagation.md`](docs/package-propagation.md).

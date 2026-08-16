@@ -1,7 +1,7 @@
 {
-  "name": "@fynns/ui-design-core",
-  "version": "0.2.0",
-  "description": "Fynn's shared dark-teal UI design system: canonical --fynns-* design tokens plus self-developed React primitives (no radix, no sonner). Consumed as source via git submodule + path alias @fynns/ui.",
+  "name": "@fynn7/ui-design-core",
+  "version": "0.3.0",
+  "description": "Fynn's shared dark-teal UI design system: canonical --fynns-* design tokens plus self-developed React primitives (no radix, no sonner). Consumed via GitHub Packages (@fynn7/ui-design-core) + Vite alias @fynns/ui.",
   "license": "UNLICENSED",
   "private": false,
   "type": "module",
@@ -30,10 +30,9 @@
     "lint": "eslint .",
     "sandbox": "vite --config examples/sandbox/vite.config.ts",
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",
-    "consume:install": "node scripts/install-as-submodule.mjs",
-    "consume:check": "node scripts/install-as-submodule.mjs --check",
-    "consume:sync": "node scripts/sync-to-consumer.mjs",
-    "consume:watch": "node scripts/sync-to-consumer.mjs --all --watch"
+    "consume:install": "node scripts/install-as-npm.mjs",
+    "consume:check": "node scripts/install-as-npm.mjs --check",
+    "prepublishOnly": "npm run typecheck"
   },
   "peerDependencies": {
     "react": "^19.0.0",
