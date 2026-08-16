@@ -1,7 +1,9 @@
 # fynns UI design system
 
-This repo consumes `@fynns/ui` (the `fynns_ui_design_core` submodule at
-`packages/fynns_ui_design_core`). It is the single source of truth for UI.
+This repo consumes `@fynns/ui` via **`@fynn7/ui-design-core`** (GitHub Packages)
+with a Vite/tsconfig alias to
+`node_modules/@fynn7/ui-design-core/src/index.ts`. It is the single source of
+truth for UI. Install: `llm/CONSUME.md` / `scripts/install-as-npm.mjs`.
 
 **Public API purge / migration:** `llm/BREAKING_PURGE.md` — only symbols demoed in
 sandbox Globals + Preview are public; do not import deleted APIs.
@@ -18,12 +20,7 @@ sandbox Globals + Preview are public; do not import deleted APIs.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay APIs. Dialog / Drawer /
   FullscreenDialog stay in the keep-set (see `AGENTS.md` / `llm/BREAKING_PURGE.md`).
-  Transient feedback: `snackbar` + `SnackbarHost`.
-- App/teaching-specific tokens stay app-side under `--afs-*` or `--dsa-*`.
-- If a token or component is missing, add it in the submodule and run
-  `npm run gen:theme`.
-- **Performance:** shells / inspectors / catalogs / live token drafts → read
-  `packages/fynns_ui_design_core/llm/PERF.md` before coding.
-
-See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
-catalog. Text must be English or German only (no CJK).
+- Do not use a git submodule for day-to-day consume; depend on
+  `@fynn7/ui-design-core` from GitHub Packages.
+- Missing capability → implement in `fynns_ui_design_core` first, then bump the
+  consumer package version.

@@ -7,7 +7,7 @@ tags: [fynns-ui, quickstart, design-system]
 
 # @fynns/ui-design-core quickstart
 
-Dark-teal design system: canonical `--fynns-*` tokens + self-developed React primitives. Consumed as **source** via git submodule + Vite alias `@fynns/ui` (never npm-install this package into consumers).
+Dark-teal design system: canonical `--fynns-*` tokens + self-developed React primitives. Consumed as **source** via GitHub Packages (`@fynn7/ui-design-core`) + Vite alias `@fynns/ui`.
 
 ## Start here (authority — do not restate)
 
@@ -16,7 +16,7 @@ Dark-teal design system: canonical `--fynns-*` tokens + self-developed React pri
 | Design language, hard rules, keep-set catalog | [`AGENTS.md`](../AGENTS.md) |
 | Install into a consumer app | [`llm/CONSUME.md`](../llm/CONSUME.md) + [`llm/consume.json`](../llm/consume.json) |
 | Deleted APIs → replacements | [`llm/BREAKING_PURGE.md`](../llm/BREAKING_PURGE.md) |
-| Submodule pin propagation | [`docs/submodule-propagation.md`](../docs/submodule-propagation.md) |
+| Package publish / version bumps | [`docs/package-propagation.md`](../docs/package-propagation.md) |
 | Live public surface | `examples/sandbox/` Globals + Preview |
 
 ## Local package scripts

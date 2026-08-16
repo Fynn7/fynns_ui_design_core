@@ -19,7 +19,10 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "src"
+    "src",
+    "AGENTS.md",
+    "llm",
+    "README.md"
   ],
   "scripts": {
     "gen:theme": "node scripts/gen-theme.mjs",
@@ -32,7 +35,7 @@
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",
     "consume:install": "node scripts/install-as-npm.mjs",
     "consume:check": "node scripts/install-as-npm.mjs --check",
-    "prepublishOnly": "npm run typecheck"
+    "prepublishOnly": "npm run check"
   },
   "peerDependencies": {
     "react": "^19.0.0",

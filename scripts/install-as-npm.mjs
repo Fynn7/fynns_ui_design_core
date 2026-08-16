@@ -167,21 +167,49 @@ function entryRelFromVite(viteFile, gitRoot) {
   return rel;
 }
 
+function aliasPointsAtPkg(text) {
+  return (
+    text.includes("@fynn7/ui-design-core/src/index.ts") ||
+    text.includes("@fynn7/ui-design-core\\src\\index.ts")
+  );
+}
+
+function rewriteViteAliasTarget(src, entryRel) {
+  const aliasLine = `"${ALIAS}": path.resolve(__dirname, "${entryRel}")`;
+  // Replace existing "@fynns/ui": <anything> (string or path.resolve(...))
+  const re = /["']@fynns\/ui["']\s*:\s*(?:path\.resolve\([^)]*\)|"[^"]*"|'[^']*')/;
+  if (re.test(src)) return src.replace(re, aliasLine);
+  return src;
+}
+
 function wireVite(viteFile, entryRel, dryRun, log) {
   const before = readText(viteFile);
   const aliasLine = `"${ALIAS}": path.resolve(__dirname, "${entryRel}")`;
   if (hasFynnsAlias(before)) {
     let next = before;
     let changed = false;
-    if (!hasDedupe(before) && /resolve\s*:\s*\{/.test(before)) {
-      next = next.replace(/resolve\s*:\s*\{/, (m) => `${m}\n    dedupe: ["react", "react-dom"],`);
+    if (!aliasPointsAtPkg(before)) {
+      next = rewriteViteAliasTarget(next, entryRel);
       changed = next !== before;
     }
+    if (!hasDedupe(next) && /resolve\s*:\s*\{/.test(next)) {
+      const withDedupe = next.replace(/resolve\s*:\s*\{/, (m) => `${m}\n    dedupe: ["react", "react-dom"],`);
+      if (withDedupe !== next) {
+        next = withDedupe;
+        changed = true;
+      }
+    }
     if (changed) {
+      next = ensureViteHelpers(next);
       writeText(viteFile, next, dryRun);
-      log.push({ step: "vite_dedupe", status: dryRun ? "dry-run" : "patched", file: viteFile });
+      log.push({
+        step: "vite_alias",
+        status: dryRun ? "dry-run" : "rewritten",
+        detail: `→ ${entryRel}`,
+        file: viteFile,
+      });
     } else {
-      log.push({ step: "vite_alias", status: "ok", detail: "alias already present", file: viteFile });
+      log.push({ step: "vite_alias", status: "ok", detail: "alias already points at package", file: viteFile });
     }
     return;
   }
@@ -224,14 +252,24 @@ function wireTsconfig(tsconfigFile, entryRel, dryRun, log) {
   }
   data.compilerOptions = data.compilerOptions || {};
   data.compilerOptions.paths = data.compilerOptions.paths || {};
-  if (data.compilerOptions.paths[ALIAS]) {
+  const existing = data.compilerOptions.paths[ALIAS];
+  const want = [entryRel];
+  const same =
+    Array.isArray(existing) &&
+    existing.length === 1 &&
+    String(existing[0]).replace(/\\/g, "/").includes("@fynn7/ui-design-core/src/index.ts");
+  if (same) {
     log.push({ step: "tsconfig", status: "ok", detail: "paths already set", file: tsconfigFile });
     return;
   }
-  data.compilerOptions.paths[ALIAS] = [entryRel];
+  data.compilerOptions.paths[ALIAS] = want;
   if (data.compilerOptions.baseUrl == null) data.compilerOptions.baseUrl = ".";
   writeText(tsconfigFile, `${JSON.stringify(data, null, 2)}\n`, dryRun);
-  log.push({ step: "tsconfig", status: dryRun ? "dry-run" : "patched", file: tsconfigFile });
+  log.push({
+    step: "tsconfig",
+    status: dryRun ? "dry-run" : existing ? "rewritten" : "patched",
+    file: tsconfigFile,
+  });
 }
 
 function ensureNpmrc(gitRoot, dryRun, log) {
@@ -364,6 +402,11 @@ function checkMode(gitRoot, viteFile, tsconfigFile) {
   if (viteFile) {
     const t = readText(viteFile);
     if (!hasFynnsAlias(t)) issues.push(`vite missing ${ALIAS} alias: ${viteFile}`);
+    else if (!aliasPointsAtPkg(t)) {
+      issues.push(
+        `vite ${ALIAS} alias must point at ${ENTRY_FROM_PKG} (still looks like a submodule path): ${viteFile}`,
+      );
+    }
     if (!hasDedupe(t)) issues.push(`vite missing react dedupe: ${viteFile}`);
   } else {
     issues.push("no vite.config.* found to validate");
@@ -371,6 +414,11 @@ function checkMode(gitRoot, viteFile, tsconfigFile) {
   if (tsconfigFile) {
     const t = readText(tsconfigFile);
     if (!hasFynnsAlias(t)) issues.push(`tsconfig missing ${ALIAS} paths: ${tsconfigFile}`);
+    else if (!aliasPointsAtPkg(t)) {
+      issues.push(
+        `tsconfig ${ALIAS} paths must include ${ENTRY_FROM_PKG}: ${tsconfigFile}`,
+      );
+    }
   }
   // Warn if submodule still present (migration leftover)
   const sub = path.join(gitRoot, "packages", "fynns_ui_design_core", "src", "index.ts");

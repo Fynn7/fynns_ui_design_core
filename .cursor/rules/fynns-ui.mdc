@@ -79,7 +79,8 @@ ring can paint before heavy work).
   (`prefers-reduced-motion`)**; user-edit parity:
   `llm/CHAT_USER_EDIT_UX.md`),
   Table (+ Head/Body/Row/HeaderCell/Cell/Caption; `.fynns-table-wrap` +
-  nowrap / max-content → H-scroll when narrow), CodeBlock
+  nowrap / max-content → H-scroll when narrow), DiffView (unified-diff panel),
+  CodeBlock
   (**strict:** titled `default` needs non-empty `label` or throws; no
   title → `variant="plain"`; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
   Behavioral breaking; zero-dep `--fynns-code-*` highlight for

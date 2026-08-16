@@ -33,7 +33,7 @@
     {
       "path": "llm/CONSUME.md",
       "role": "consume-install",
-      "summary": "Install @fynns/ui via git submodule + Vite alias (human contract)."
+      "summary": "Install @fynns/ui via GitHub Packages (@fynn7/ui-design-core) + Vite alias (human contract)."
     },
     {
       "path": "llm/consume.json",
@@ -51,9 +51,14 @@
       "summary": "Reminder: always read CONSUME on short @fynns/ui prompts."
     },
     {
+      "path": "docs/package-propagation.md",
+      "role": "package-propagation",
+      "summary": "How @fynn7/ui-design-core publishes and bumps on GitHub Packages."
+    },
+    {
       "path": "docs/submodule-propagation.md",
-      "role": "submodule-propagation",
-      "summary": "How submodule pins propagate to consumer repos."
+      "role": "submodule-propagation-legacy",
+      "summary": "Legacy submodule pin propagation (deprecated)."
     },
     {
       "path": "openwiki/index.md",

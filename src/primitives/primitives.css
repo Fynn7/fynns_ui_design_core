@@ -703,7 +703,7 @@
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
   padding: var(--fynns-space-3);
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-word;
