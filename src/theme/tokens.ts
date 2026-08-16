@@ -413,14 +413,13 @@ export const SEGMENTED_TOKENS = {
 } as const;
 
 /**
- * Progress indicator geometry (M3 linear / circular at 16px rem).
- * Track + active indicator 4dp; circular default 48dp; gap + stop 4dp.
+ * Progress indicator geometry (linear / circular at 16px rem).
+ * Track + active indicator 4dp; circular default 48dp; active↔track gap 4dp.
  * `--fynns-progress-<key>`.
  */
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
-  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",

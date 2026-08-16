@@ -2157,12 +2157,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
-          <SandboxHelp as="span" text={t("globals.progressLinearNoStop")} />
-          <LinearProgress
-            value={0.42}
-            stopIndicator={false}
-            label={t("globals.progressLinearNoStopAria")}
-          />
           <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
           <LinearProgress label={t("globals.progressLinearIndeterminateAria")} />
           <div className="sandbox-globals-row" style={{ alignItems: "center" }}>

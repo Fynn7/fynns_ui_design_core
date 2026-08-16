@@ -4106,7 +4106,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-linear-progress-active,
 .fynns-linear-progress-track,
-.fynns-linear-progress-stop,
 .fynns-linear-progress-indeterminate-bar {
   box-sizing: border-box;
   height: 100%;
@@ -4121,23 +4120,10 @@ a.fynns-breadcrumb-link:visited {
   transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
-.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
-  width: calc(
-    var(--fynns-progress-value) *
-      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
-  );
-}
-
 .fynns-linear-progress-track {
   flex: 1 1 auto;
   min-width: 0;
   background: var(--fynns-color-accent-24);
-}
-
-.fynns-linear-progress-stop {
-  flex: 0 0 var(--fynns-progress-stop-size);
-  width: var(--fynns-progress-stop-size);
-  background: var(--fynns-color-accent);
 }
 
 .fynns-linear-progress--indeterminate {

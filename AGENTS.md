@@ -413,7 +413,7 @@ classes.
   on-surface; long copy wraps — do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
-  LinearProgress /
+  LinearProgress (`value` in `[0,1]` or omit indeterminate) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
   **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
   fullscreen non-dismissible scrim or sectional dim + ring + visible message;
