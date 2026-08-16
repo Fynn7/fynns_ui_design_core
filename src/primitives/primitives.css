@@ -5578,7 +5578,12 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--fynns-navdrawer-section-gap);
+  /*
+   * No uniform gap: chrome (SearchBar / tools) ↔ destinations uses
+   * unit-stack (16dp); consecutive destinations tighten to section-gap
+   * (4dp) via adjacent-sibling rules below.
+   */
+  gap: 0;
   align-items: stretch;
   min-height: 0;
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
@@ -5599,12 +5604,48 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Destination rhythm: Item / Group / Headline siblings share
- * `--fynns-navdrawer-section-gap` (4dp) — same as `.fynns-nav-drawer-group-body`.
- * Do **not** wrap destinations in `.fynns-unit-stack` (that token is 16dp for
- * Card / form units). If a consumer still wraps, remap so top-level rows match
- * Group leaf rows — never invent a third nav gap.
+ * Kind jump: non-destination chrome (app SearchBar tools, etc.) ↔ first
+ * destination — `--fynns-layout-unit-stack-gap` (16dp).
+ * Specificity must beat `.fynns-nav-drawer-item { margin: 0 }` (same-origin
+ * later shorthand would otherwise wipe a bare `> * + *` margin).
  */
+.fynns-nav-drawer-body
+  > *
+  + :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger
+  ) {
+  margin-block-start: var(--fynns-layout-unit-stack-gap);
+}
+
+/*
+ * Destination rhythm: consecutive Item / Group / Headline / Divider /
+ * Tooltip-wrapped items share `--fynns-navdrawer-section-gap` (4dp) — same
+ * as `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
+ * `.fynns-unit-stack` (16dp form/unit rhythm). If a consumer still wraps
+ * destinations only, remap so top-level rows match Group leaf rows.
+ */
+.fynns-nav-drawer-body
+  > :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger
+  )
+  + :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger
+  ) {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
 .fynns-nav-drawer-body .fynns-unit-stack {
   gap: var(--fynns-navdrawer-section-gap);
 }

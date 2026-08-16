@@ -53,8 +53,10 @@ export type NavigationDrawerProps = {
   /**
    * Destinations as **direct** body children: `NavigationDrawerItem`,
    * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
-   * Body gap = `--fynns-navdrawer-section-gap` (same as Group leaf rows).
-   * Do **not** wrap in `.fynns-unit-stack` (16dp form/unit rhythm).
+   * Consecutive destinations use `--fynns-navdrawer-section-gap` (4dp).
+   * Non-destination chrome (e.g. SearchBar tools) as a sibling opens
+   * `--fynns-layout-unit-stack-gap` (16dp) to the first destination.
+   * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;
 };
@@ -85,7 +87,9 @@ function DrawerSheet({
  * Modal overlays content; `standard` sits in the layout permanently.
  * Prefer `Drawer` for generic side panels (forms, inspectors).
  * Sibling Item / Group / Headline spacing uses `--fynns-navdrawer-section-gap`
- * — never `.fynns-unit-stack` for destination lists.
+ * (4dp). Chrome tools as a body sibling open `--fynns-layout-unit-stack-gap`
+ * (16dp) before the first destination — never `.fynns-unit-stack` for the
+ * destination list itself.
  * @see https://m3.material.io/components/navigation-drawer/overview
  */
 export function NavigationDrawer({

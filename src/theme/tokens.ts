@@ -1116,10 +1116,12 @@ export const NAVDRAWER_TOKENS = {
   /** Section / sheet title inset past body pad (aligns with item icon column). */
   "headline-pad-inline": "1rem",
   /**
-   * Vertical gap between destination siblings (Item / Group / Headline /
-   * Divider) in `.fynns-nav-drawer-body` **and** between leaf items inside
-   * `.fynns-nav-drawer-group-body` (4dp). Not `--fynns-layout-unit-stack-gap`
-   * (16dp) — never wrap destinations in `.fynns-unit-stack` for spacing.
+   * Vertical gap between consecutive destination siblings (Item / Group /
+   * Headline / Divider) in `.fynns-nav-drawer-body` **and** between leaf items
+   * inside `.fynns-nav-drawer-group-body` (4dp). Non-destination chrome
+   * (SearchBar tools, etc.) as a body sibling uses
+   * `--fynns-layout-unit-stack-gap` (16dp) to the first destination — not this
+   * token. Never wrap destinations in `.fynns-unit-stack` for spacing.
    */
   "section-gap": "0.25rem",
   "badge-dot": "0.375rem",
