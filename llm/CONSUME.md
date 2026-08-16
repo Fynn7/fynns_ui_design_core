@@ -98,7 +98,9 @@ Consumer `.npmrc`:
 
 ## What the script does
 
-1. Resolves consumer git root.
+1. Resolves the nearest `package.json` above `--target` (so monorepo apps
+   like `agents-hub/gui` or `tools/gsc-live-preview` work) and the git root
+   (for the Cursor consumer rule).
 2. Ensures `.npmrc` for `@fynn7` → GitHub Packages.
 3. `npm install @fynn7/ui-design-core@^<core version>` (unless `--skip-install`).
 4. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.

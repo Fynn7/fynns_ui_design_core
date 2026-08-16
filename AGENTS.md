@@ -1189,10 +1189,10 @@ classes.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
-- **Icons (public subset):** Archive, ArrowLeft, ArrowUp, BarChart, Bot,
-  ChevronDown, ChevronRight, Clipboard, Download, Eye, EyeOff, File,
-  FolderOpen, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal, PanelLeft, PanelRight,
-  Pencil, Plus, Refresh, Save, Search, Settings, Sparkles, StopSquare, Sun,
+- **Icons (public subset):** AlertTriangle, Archive, ArrowLeft, ArrowUp, BarChart, Bot,
+  Check, CheckCircle, ChevronDown, ChevronRight, Clipboard, Close, Download, Eye, EyeOff, File,
+  FolderOpen, Globe, Info, LayoutGrid, Menu, Mic, Moon, MoreHorizontal, PanelLeft, PanelRight,
+  Pencil, Plug, Plus, Refresh, Save, Search, Settings, Sparkles, StopSquare, Sun,
   Trash, Undo, Upload, Wrench — plus any glyph still imported by
   Globals/Layouts/Preview.
   Prefer `IconButton` + `Tooltip` over `title=`.
