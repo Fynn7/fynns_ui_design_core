@@ -517,6 +517,8 @@ const en = {
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
+  "globals.diffViewHelp":
+    "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — long lines scroll horizontally instead of soft-wrapping.",
@@ -1860,6 +1862,8 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",
+  "globals.diffViewHelp":
+    "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
   "globals.codeBlockNowrapHelp":
     "`wrap={false}` — 长行横向滚动，不软换行。",

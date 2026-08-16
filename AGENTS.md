@@ -914,7 +914,8 @@ classes.
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
   nowrap cells + max-content width → horizontal scroll when narrow, never
-  column crush / CJK header shatter), CodeBlock (**strict chrome** — titled
+  column crush / CJK header shatter), DiffView (scrollable unified-diff
+  panel — add/del/same/meta lines; caller owns `+`/`-` in text), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
   `variant="plain"` (frame + floating copy only — do not pass `label` or

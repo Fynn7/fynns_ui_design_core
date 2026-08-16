@@ -384,6 +384,12 @@ export type {
   CodeBlockPlainProps,
   CodeBlockEditableProps,
 } from "./primitives/CodeBlock";
+export { DiffView } from "./primitives/DiffView";
+export type {
+  DiffLineKind,
+  DiffViewLine,
+  DiffViewProps,
+} from "./primitives/DiffView";
 export {
   highlightCode,
   highlightWithProfile,
