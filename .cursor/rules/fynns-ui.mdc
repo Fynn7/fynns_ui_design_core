@@ -90,8 +90,8 @@ ring can paint before heavy work).
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
   destination siblings use `--fynns-navdrawer-section-gap` — never
-  `.fynns-unit-stack`; SearchBar/tools as a body sibling keep
-  `--fynns-layout-unit-stack-gap` to the first destination),
+  `.fynns-unit-stack`; SearchBar/tools as a body sibling share
+  `--fynns-navdrawer-section-gap` with destinations),
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,

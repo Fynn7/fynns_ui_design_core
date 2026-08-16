@@ -5579,9 +5579,9 @@ a.fynns-breadcrumb-link:visited {
   flex: 1 1 auto;
   flex-direction: column;
   /*
-   * No uniform gap: chrome (SearchBar / tools) ↔ destinations uses
-   * unit-stack (16dp); consecutive destinations tighten to section-gap
-   * (4dp) via adjacent-sibling rules below.
+   * No flex gap: destination rhythm is adjacent-sibling
+   * `--fynns-navdrawer-section-gap` (4dp) — SearchBar / tools wrappers
+   * share the same step as Item ↔ Item (destination-density SearchBar).
    */
   gap: 0;
   align-items: stretch;
@@ -5604,10 +5604,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Kind jump: non-destination chrome (app SearchBar tools, etc.) ↔ first
- * destination — `--fynns-layout-unit-stack-gap` (16dp).
- * Specificity must beat `.fynns-nav-drawer-item { margin: 0 }` (same-origin
- * later shorthand would otherwise wipe a bare `> * + *` margin).
+ * Destination rhythm: every direct body sibling opens
+ * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
+ * Group / Headline / Divider / Tooltip-wrapped items / SearchBar, and
+ * tools wrappers ahead of those rows. Same step as
+ * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
+ * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
+ * `.fynns-nav-drawer-item { margin: 0 }`.
  */
 .fynns-nav-drawer-body
   > *
@@ -5616,33 +5619,15 @@ a.fynns-breadcrumb-link:visited {
     .fynns-nav-drawer-group,
     .fynns-nav-drawer-section-headline,
     .fynns-divider,
-    .fynns-tooltip-trigger
+    .fynns-tooltip-trigger,
+    .fynns-search-bar
   ) {
-  margin-block-start: var(--fynns-layout-unit-stack-gap);
+  margin-block-start: var(--fynns-navdrawer-section-gap);
 }
 
-/*
- * Destination rhythm: consecutive Item / Group / Headline / Divider /
- * Tooltip-wrapped items share `--fynns-navdrawer-section-gap` (4dp) — same
- * as `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
- * `.fynns-unit-stack` (16dp form/unit rhythm). If a consumer still wraps
- * destinations only, remap so top-level rows match Group leaf rows.
- */
-.fynns-nav-drawer-body
-  > :is(
-    .fynns-nav-drawer-item,
-    .fynns-nav-drawer-group,
-    .fynns-nav-drawer-section-headline,
-    .fynns-divider,
-    .fynns-tooltip-trigger
-  )
-  + :is(
-    .fynns-nav-drawer-item,
-    .fynns-nav-drawer-group,
-    .fynns-nav-drawer-section-headline,
-    .fynns-divider,
-    .fynns-tooltip-trigger
-  ) {
+/* Tools wrappers (e.g. app SearchBar host) ↔ next sibling when the next
+ * node is not in the :is() list above — still use section-gap. */
+.fynns-nav-drawer-body > * + * {
   margin-block-start: var(--fynns-navdrawer-section-gap);
 }
 
