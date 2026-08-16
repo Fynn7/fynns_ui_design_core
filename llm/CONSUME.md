@@ -12,7 +12,10 @@ obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). **Default app chrome:**
 `DestinationAppShell` (sandbox Layout templates). If composing
 `ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
-children (never a rail-width track hosting a labeled drawer).
+children (never a rail-width track hosting a labeled drawer); `nav` =
+destinations only (never wiki / page body / Chat). “Clipped” = M3 chrome
+topology, not text clipping — see [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
+failure modes **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
@@ -87,7 +90,12 @@ children (never a rail-width track hosting a labeled drawer).
     and the `nav` subtree must match (`drawer`→`NavigationDrawer`,
     `rail`→`NavigationRail`, `hidden`→null/omit). Crowding / narrow viewports
     densify to **rail + Rail components** — never leave a labeled drawer in an
-    ~80px track (squashed drawer + bogus scrollbar).
+    ~80px track (squashed drawer + bogus scrollbar). **`nav` = destinations
+    only** — never wiki / page body / forms / Chat / Preview in the nav track;
+    those belong in `children` (main) or `aside` / `EndAside`. “Clipped” names
+    the M3 chrome topology — **not** text clipping; diagnose `data-nav` /
+    track width / which slot holds the odd copy **before** restyling
+    `.fynns-*`. Failure modes: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
     Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
     **Main canvas fill:** Preview (or other top band) above Chat → wrap with
     **`FillColumn`** (`header` + `Chat` in `children`) so the composer docks;

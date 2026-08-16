@@ -24,7 +24,8 @@ The consume installer may also drop this rule when wiring a consumer
 (`scripts/install-as-submodule.mjs`); if the file already exists it is left
 alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
 freshness / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
-**ChatMessage Markdown ownership**). Local pin gate:
+**ChatMessage Markdown ownership** / **shell slot ownership** /
+**Clipped ≠ text-clip**). Local pin gate:
 `consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
 propagate bump PRs do not replace that check. Day-to-day local core edits →
 consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
@@ -76,6 +77,41 @@ Composer as canvas siblings.
 
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
+
+## Failure mode this treaty targets: wrong shell slot / “Clipped” misread
+
+**Naming:** `ClippedNavShell` = Material 3 **clipped** chrome (full-bleed
+TopAppBar; destination column under it). It does **not** mean “clip sidebar
+labels” or crop prose into a vertical strip.
+
+**Slot ownership (hard):**
+
+| Slot | Owns | Must not own |
+| --- | --- | --- |
+| `nav` | Destinations only (`NavigationDrawer` **or** `NavigationRail`) | Page body, wiki/docs, forms, Chat, Preview |
+| `children` (main) | Primary canvas / route outlet | Destination lists |
+| `aside` / `EndAside` | Inspector / supporting pane | The whole primary page |
+| Modal `Drawer` | Temporary **content** sheet | Destination navigation |
+
+Symptoms agents mis-attribute to “broken clipped shell”:
+
+- Narrow vertical strip of **documentation / wiki / FAIL prose** (not
+  destination labels)
+- “Agents Hub”-style title visible while the strip is actually **main**
+  content or a mis-nested tree under `.fynns-clipped-nav-shell-nav`
+- Healthy drawer width (~192–280px+) but the **visible** bug is elsewhere
+
+**Diagnose before CSS** (pasteable checklist lives in
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc)):
+
+1. Read `data-nav` on `.fynns-clipped-nav-shell`.
+2. Measure the nav track: ~280px → drawer; ~80px → rail (rail + still
+   `.fynns-nav-drawer` → squashed drawer above).
+3. Find the odd copy in the DOM: under `…-nav` → move it to `children`;
+   under `…-main` crushed → fix consumer layout / nesting — **do not**
+   widen with local `.fynns-*` overrides.
+4. Do not confuse `NavigationDrawer` (destinations) with modal `Drawer`
+   (content) or the shell itself (layout only).
 
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 

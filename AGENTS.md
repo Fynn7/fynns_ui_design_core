@@ -795,7 +795,13 @@ classes.
   auto-swaps. Prefer `DestinationAppShell` so agents never hand-sync this.
   A rail-width track still hosting a labeled drawer is a
   **squashed drawer** (narrow strip + body scrollbar) — not a real rail.
-  Pasteable consumer rule: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md).
+  **`nav` = destinations only** — never wiki / page body / forms / Chat /
+  Preview in the nav track (`children` = main; `aside` / `EndAside` =
+  inspector). “Clipped” = M3 chrome topology (full-bleed TopAppBar + nav
+  under it) — **not** text clipping; diagnose `data-nav` / track width /
+  which slot holds odd copy before restyling `.fynns-*`. Pasteable consumer
+  rule + failure modes: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) /
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc).
   In `drawer` mode the nav|main seam is **resizable** (local
   `--fynns-navdrawer-width`; drawer fills the grid track; clamped by absolute
   `--fynns-navdrawer-min-width` / `max-width` rem tokens and remaining room for
