@@ -8067,17 +8067,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- Table ---------- */
+/*
+ * Two-axis scroll host (AGENTS: narrow = horizontal scroll, not reflow).
+ * Do **not** pin overflow-x: clip here — that rule is for vertical-only
+ * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs.
+ */
 .fynns-table-wrap {
   overflow: auto;
   width: 100%;
   max-width: 100%;
-  /* Pair with `.fynns-scroll` for hover/focus-within thumb + gutter auto. */
+  min-width: 0;
 }
 
-/* Prefer pairing with `.fynns-scroll` on the wrap. */
-
 .fynns-table {
-  width: 100%;
+  /* Fill when short; grow past the wrap when columns need width → H-scroll. */
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: var(--fynns-font-size-sm);
   color: var(--fynns-color-text);
@@ -8096,6 +8101,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding: var(--fynns-space-sm) var(--fynns-space-md);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   vertical-align: middle;
+  /* Prevent CJK character-stack / Chip+label shatter when the host is narrow. */
+  white-space: nowrap;
+  word-break: keep-all;
 }
 
 .fynns-table-header-cell {

@@ -3494,23 +3494,50 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableHeaderCell align="end">
                     {t("globals.tableColQty")}
                   </TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColCache")}
+                  </TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColTotal")}
+                  </TableHeaderCell>
+                  <TableHeaderCell>{t("globals.tableColMapping")}</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell>Teal ink</TableCell>
+                  <TableCell>sample/ink-bench-16k</TableCell>
                   <TableCell>Ready</TableCell>
                   <TableCell align="end">12</TableCell>
+                  <TableCell align="end">31M</TableCell>
+                  <TableCell align="end">31M</TableCell>
+                  <TableCell>
+                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
+                    sample/ink-35b
+                  </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Surface kit</TableCell>
+                  <TableCell>sample/surface-kit-agent</TableCell>
                   <TableCell>Draft</TableCell>
                   <TableCell align="end">4</TableCell>
+                  <TableCell align="end">—</TableCell>
+                  <TableCell align="end">4</TableCell>
+                  <TableCell>
+                    <Chip variant="filter" selected>
+                      {t("globals.tableMapAuto")}
+                    </Chip>{" "}
+                    catalog
+                  </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Focus ring</TableCell>
+                  <TableCell>sample/focus-ring</TableCell>
                   <TableCell>Ready</TableCell>
                   <TableCell align="end">28</TableCell>
+                  <TableCell align="end">717k</TableCell>
+                  <TableCell align="end">28</TableCell>
+                  <TableCell>
+                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
+                    sample/focus-35b
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

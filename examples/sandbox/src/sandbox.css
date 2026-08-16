@@ -1019,6 +1019,8 @@
 
 .sandbox-table-sticky {
   max-height: 10rem;
+  /* Narrow host so the dense demo proves horizontal scroll (not column crush). */
+  max-width: 22rem;
 }
 
 .sandbox-globals-list {

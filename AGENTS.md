@@ -892,7 +892,9 @@ classes.
   a growing `<textarea>` (not ChatGPT ProseMirror; paste stays plain) — see Feedback
   **composer input model**),
   Divider, Table (+ Head / Body / Row /
-  HeaderCell / Cell / Caption), CodeBlock (**strict chrome** — titled
+  HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
+  nowrap cells + max-content width → horizontal scroll when narrow, never
+  column crush / CJK header shatter), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
   `variant="plain"` (frame + floating copy only — do not pass `label` or
@@ -982,7 +984,7 @@ classes.
   | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
-  | Table* | desktop-first | Wide tables; narrow = horizontal scroll, not reflow. |
+  | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
   | Stepper | both | `orientation` is caller-chosen — no auto breakpoint. |
 

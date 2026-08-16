@@ -139,6 +139,7 @@ as a hard fail.
 | `ChatThinking` default streaming orb | Omitting `icon` no longer paints the soft pulsing mark. Pass an explicit `icon` when you want a leading glyph; `icon={null}` stays empty. Rely on label shimmer + `aria-busy` for streaming cues. |
 | `LinearProgress` stop indicator removed | Prop `stopIndicator` and `.fynns-linear-progress-stop` / `--fynns-progress-stop-size` deleted. Determinate bars are active fill + remaining track only (optional gap). Drop any `stopIndicator` props in the consumer. |
 | `ChatActivity` mid-stream collapse | While `streaming`, the header trigger stays **enabled** (no longer force-disabled). Uncontrolled trees force-open unless the user pinned closed; a new streaming cycle clears the pin. Completed trees keep last open — **no** post-stream auto-collapse. |
+| `Table` dense / narrow hosts | `.fynns-table` is `width: max-content; min-width: 100%`; header/body cells are `white-space: nowrap` (+ `word-break: keep-all`). Narrow hosts **scroll** via `.fynns-table-wrap` instead of crushing columns (CJK headers no longer character-stack). Do not force `width: 100%` / wrap on `.fynns-table*` in the consumer to “fit” a Surface. |
 
 ## Related docs
 
