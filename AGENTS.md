@@ -208,6 +208,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Flat stacks lose the tight-within / wide-between rhythm — use `FieldStack`.
   Do not invent muted `<p>` / subtitle classes for control notes (`ControlBlock`
   / `FieldBlock` `description` instead).
+- **DON'T** wrap each path / link / bookmark entry in its own padded
+  `Surface` or `Card` (tall sparse “fat cards”). Use one `List` of
+  `ListItem`s — see **Content density (data → component)**. Row actions belong
+  in `ListItem` `trailing` (`ghost` `sm`), not under the text and not as a
+  filled danger disk.
 - **DON'T** invent shell / column / chat **insets or gaps** as raw `rem` / `px`
   or a fresh private CSS variable. Reuse an existing `--fynns-layout-*` key
   (or a component token that **aliases** one — e.g.
@@ -856,8 +861,12 @@ classes.
   (`#layouts-demo-shell`).
 - **Content:** List / ListItem (main-content M3 rows; selected =
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
-  menu; sidebar destinations use `NavigationDrawer` / `NavigationRail` /
-  `NavigationBar` — not deleted `ListGroup` / `ListRow`), Card (`title` /
+  menu; **path / link / bookmark catalogs** = one `List` of `ListItem`s —
+  headline + path `supportingText` + trailing ghost `sm` `IconButton`s
+  (interactive trailing is a **sibling** of the row button — valid nesting);
+  **never** one padded `Surface`/`Card` per entry; sidebar destinations use
+  `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
+  `ListGroup` / `ListRow`; see **Content density**), Card (`title` /
   optional `icon` / `actions` + body;
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
@@ -989,6 +998,23 @@ classes.
   | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
   | Stepper | both | `orientation` is caller-chosen — no auto breakpoint. |
+
+  **Content density (data → component — hard for agents):** Pick the keep-set
+  host by **data shape**, not by “everything is a Card.” Fat padded
+  `Surface`/`Card` per catalog row is a consumer failure mode (see
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)). Live: sandbox `#list`
+  (anatomy + path catalog).
+
+  | Data shape | Use | Do **not** |
+  | --- | --- | --- |
+  | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
+  | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
+  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap` | Card grid of the same rows when a table fits |
+  | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
+  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` — `#rhythm` | Hand-rolled flex with name+hint left, controls floating mid/right |
+  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
+  | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
+  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

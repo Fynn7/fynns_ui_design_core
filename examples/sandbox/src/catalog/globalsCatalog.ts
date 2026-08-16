@@ -259,7 +259,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "list",
     categoryId: "containment",
     label: "List",
-    keywords: ["列表", "list", "listitem"],
+    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度"],
   },
   {
     id: "divider",

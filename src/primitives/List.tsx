@@ -17,6 +17,9 @@ export type ListProps = HTMLAttributes<HTMLUListElement>;
  * search results, settings, etc. Sidebar destinations: prefer
  * `NavigationDrawer` / `NavigationRail` / `NavigationBar` (not deleted
  * `ListGroup` / `ListRow` — see `llm/BREAKING_PURGE.md`).
+ *
+ * **Catalog / path / link rows:** one `List` of `ListItem`s — never wrap each
+ * entry in `Surface` / `Card` (fat cards). See AGENTS.md **Content density**.
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(
@@ -40,7 +43,13 @@ export type ListItemProps = Omit<
   overline?: ReactNode;
   /** Leading icon, avatar, or image. */
   leading?: ReactNode;
-  /** Trailing icon or control (decorative when non-interactive). */
+  /**
+   * Trailing slot: decorative chevron **or** row actions (`IconButton` /
+   * `.fynns-control-cluster`). On **interactive** rows the slot is a **sibling**
+   * of the row `<button>` (valid nesting — never put buttons inside the row
+   * button). Prefer `ghost` `sm` IconButtons; open/confirm destructive work in
+   * `ConfirmDialog`, not a filled danger disk in the row.
+   */
   trailing?: ReactNode;
   /** Compact meta at the trailing edge (time, count, …). */
   trailingSupportingText?: ReactNode;
@@ -75,6 +84,10 @@ function resolveLines(
 /**
  * M3 ListItem — one-, two-, or three-line content row with optional
  * leading / trailing slots. Use inside `List`.
+ *
+ * Interactive rows keep trailing actions **outside** the main `<button>` so
+ * `IconButton` / menus are valid HTML. Path / link catalogs: headline +
+ * supporting path + trailing ghost actions — not a padded `Surface` per row.
  */
 export const ListItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,
@@ -108,42 +121,62 @@ export const ListItem = forwardRef<
     className,
   );
 
-  const body = (
-    <>
-      {leading != null ? (
-        <span className="fynns-list-item-leading" aria-hidden>
-          {leading}
-        </span>
-      ) : null}
-      <span className="fynns-list-item-content">
-        {overline != null ? (
-          <span className="fynns-list-item-overline">{overline}</span>
-        ) : null}
-        <span className="fynns-list-item-headline">{headline}</span>
-        {supportingText != null ? (
-          <span className="fynns-list-item-supporting">{supportingText}</span>
-        ) : null}
+  const leadingNode =
+    leading != null ? (
+      <span className="fynns-list-item-leading" aria-hidden>
+        {leading}
       </span>
-      {trailingSupportingText != null || trailing != null ? (
-        <span className="fynns-list-item-trailing">
-          {trailingSupportingText != null ? (
-            <span className="fynns-list-item-trailing-text">
-              {trailingSupportingText}
-            </span>
-          ) : null}
-          {trailing != null ? (
-            <span className="fynns-list-item-trailing-icon" aria-hidden>
-              {trailing}
-            </span>
-          ) : null}
-        </span>
+    ) : null;
+
+  const contentNode = (
+    <span className="fynns-list-item-content">
+      {overline != null ? (
+        <span className="fynns-list-item-overline">{overline}</span>
       ) : null}
-    </>
+      <span className="fynns-list-item-headline">{headline}</span>
+      {supportingText != null ? (
+        <span className="fynns-list-item-supporting">{supportingText}</span>
+      ) : null}
+    </span>
   );
 
-  return (
-    <li className="fynns-list-item-host">
-      {interactive ? (
+  const metaTrailing =
+    trailingSupportingText != null ? (
+      <span className="fynns-list-item-trailing-text">{trailingSupportingText}</span>
+    ) : null;
+
+  /** Decorative / meta trailing kept inside the row control. */
+  const innerTrailing =
+    metaTrailing != null || (!interactive && trailing != null) ? (
+      <span className="fynns-list-item-trailing">
+        {metaTrailing}
+        {!interactive && trailing != null ? (
+          <span className="fynns-list-item-trailing-icon" aria-hidden>
+            {trailing}
+          </span>
+        ) : null}
+      </span>
+    ) : null;
+
+  /**
+   * Interactive trailing (IconButtons, menus) must sit outside the `<button>`
+   * — nested buttons are invalid HTML and force fat Surface workarounds.
+   */
+  const endTrailing =
+    interactive && trailing != null ? (
+      <span className="fynns-list-item-trailing fynns-list-item-trailing--end">
+        {trailing}
+      </span>
+    ) : null;
+
+  if (interactive) {
+    return (
+      <li
+        className={join(
+          "fynns-list-item-host",
+          endTrailing != null && "fynns-list-item-host--with-end",
+        )}
+      >
         <button
           {...rest}
           ref={ref as Ref<HTMLButtonElement>}
@@ -153,18 +186,27 @@ export const ListItem = forwardRef<
           aria-current={selected ? "true" : undefined}
           onClick={onClick}
         >
-          {body}
+          {leadingNode}
+          {contentNode}
+          {innerTrailing}
         </button>
-      ) : (
-        <div
-          {...(rest as HTMLAttributes<HTMLDivElement>)}
-          ref={ref as Ref<HTMLDivElement>}
-          className={itemClass}
-          aria-disabled={disabled || undefined}
-        >
-          {body}
-        </div>
-      )}
+        {endTrailing}
+      </li>
+    );
+  }
+
+  return (
+    <li className="fynns-list-item-host">
+      <div
+        {...(rest as HTMLAttributes<HTMLDivElement>)}
+        ref={ref as Ref<HTMLDivElement>}
+        className={itemClass}
+        aria-disabled={disabled || undefined}
+      >
+        {leadingNode}
+        {contentNode}
+        {innerTrailing}
+      </div>
     </li>
   );
 });

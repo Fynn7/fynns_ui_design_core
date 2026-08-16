@@ -2795,7 +2795,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.avatarGroupHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="list">
-        <div className="sandbox-globals-list">
+        <div className="sandbox-globals-list sandbox-stack">
           <List aria-label={t("globals.listAria")}>
             <ListItem
               headline={t("globals.listOneLine")}
@@ -2837,6 +2837,95 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               leading={<ArchiveIcon />}
               disabled
               onClick={() => {}}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listCatalogHelp")} />
+          <List aria-label={t("globals.listCatalogAria")}>
+            <ListItem
+              headline={t("globals.listCatalogProject")}
+              supportingText={t("globals.listCatalogProjectPath")}
+              leading={<FolderOpenIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listCatalogConfig")}
+              supportingText={t("globals.listCatalogConfigPath")}
+              leading={<FileIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listCatalogRules")}
+              supportingText={t("globals.listCatalogRulesPath")}
+              leading={<FileIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
         </div>

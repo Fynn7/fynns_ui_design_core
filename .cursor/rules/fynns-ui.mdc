@@ -127,7 +127,10 @@ ring can paint before heavy work).
   `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
-  (plain ≠ flush).
+  (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
+  `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
+  padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
+  sandbox `#list`).
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).

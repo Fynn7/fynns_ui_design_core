@@ -134,6 +134,22 @@ controls in `.fynns-control-cluster`; put “as of …” / supporting copy on
 label column. Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
+## Failure mode this treaty targets: fat Surface / Card per catalog row
+
+Symptoms: bookmarks / custom links / path shortcuts each sit in a tall padded
+`Surface` or `Card`; edit/delete icons under the text (or a filled danger disk);
+huge empty bands; wrong type / gap rhythm.
+
+**Cause:** treating every datum as a section shell instead of a list row.
+Nested `IconButton` inside interactive `ListItem` used to be invalid HTML, so
+apps invented Surface wrappers — core now keeps interactive `trailing` **outside**
+the row button. **Fix in the consumer:** one `List` of `ListItem`s —
+`headline` + path `supportingText` + `trailing` = ghost `sm` `IconButton`s
+(`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
+Section chrome stays **one** outer `Card` if needed. Live: sandbox `#list`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 
 Symptoms: titled head shows `system-prompt.xml` / `theme.json` / `tokens.ts`, but

@@ -141,6 +141,7 @@ as a hard fail.
 | `ChatActivity` mid-stream collapse | While `streaming`, the header trigger stays **enabled** (no longer force-disabled). Uncontrolled trees force-open unless the user pinned closed; a new streaming cycle clears the pin. Completed trees keep last open — **no** post-stream auto-collapse. |
 | `Table` dense / narrow hosts | `.fynns-table` is `width: max-content; min-width: 100%`; header/body cells are `white-space: nowrap` (+ `word-break: keep-all`). Narrow hosts **scroll** via `.fynns-table-wrap` instead of crushing columns (CJK headers no longer character-stack). Do not force `width: 100%` / wrap on `.fynns-table*` in the consumer to “fit” a Surface. |
 | `NavigationDrawer` destination gap | Body + Group leaf rows share `--fynns-navdrawer-section-gap` (**4dp**). Do **not** wrap Item / Group / Headline lists in `.fynns-unit-stack` (16dp form rhythm). Core remaps `.fynns-nav-drawer-body .fynns-unit-stack` to `section-gap` so mistaken wraps still match Group rows — prefer direct children. Re-paste `consumer-cursor-rule.mdc`. |
+| `ListItem` interactive trailing | On interactive rows, `trailing` (IconButtons / menus / chevron) is a **sibling** of the row `<button>` (valid nesting). Meta `trailingSupportingText` stays inside the button. Path / link catalogs: one `List` — never `Surface`/`Card` per entry. Re-paste `consumer-cursor-rule.mdc`. |
 
 ## Related docs
 
