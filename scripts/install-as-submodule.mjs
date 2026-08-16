@@ -1,18 +1,28 @@
 #!/usr/bin/env node
 /**
+ * LEGACY — git submodule consume is deprecated.
+ *
+ * Use scripts/install-as-npm.mjs (npm run consume:install) instead:
+ * GitHub Packages @fynn7/ui-design-core + Vite alias @fynns/ui.
+ *
+ * Escape hatch only: FYNNS_UI_LEGACY_SUBMODULE=1
+ */
+if (process.env.FYNNS_UI_LEGACY_SUBMODULE !== "1") {
+  console.error(
+    "Deprecated: submodule consume removed. Use:\n" +
+      "  npm run consume:install -- --target <CONSUMER_ROOT>\n" +
+      "  (scripts/install-as-npm.mjs — GitHub Packages @fynn7/ui-design-core)\n" +
+      "Set FYNNS_UI_LEGACY_SUBMODULE=1 only for emergency legacy installs.",
+  );
+  process.exit(1);
+}
+
+/**
  * Install fynns_ui_design_core into a consumer repo as a git submodule and
  * optionally wire Vite + tsconfig `@fynns/ui` aliases.
  *
- * Canonical consume model: submodule + source alias. NEVER add this package
- * to package.json dependencies / devDependencies.
- *
- * Usage:
- *   node scripts/install-as-submodule.mjs --target <consumer-root> [options]
- *   npm run consume:install -- --target ../my-app
- *
- * Bootstrap when this repo is not yet a submodule of the target:
- *   git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git %TEMP%\fynns_ui_design_core
- *   node %TEMP%\fynns_ui_design_core\scripts\install-as-submodule.mjs --target .
+ * Usage (legacy escape hatch only):
+ *   FYNNS_UI_LEGACY_SUBMODULE=1 node scripts/install-as-submodule.mjs --target <consumer-root>
  */
 import fs from "node:fs";
 import path from "node:path";

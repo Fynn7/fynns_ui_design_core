@@ -5,24 +5,25 @@ alwaysApply: true
 
 # @fynns/ui 消费仓硬性条约（复制即用）
 
-本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节在子模块
-`packages/fynns_ui_design_core/`（`AGENTS.md`、`llm/CONSUME.md`、`llm/PERF.md`）。
+本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节在
+`@fynn7/ui-design-core`（`AGENTS.md`、`llm/CONSUME.md`、`llm/PERF.md`；本机也可
+打开 core 仓 checkout）。
 短提示也必须遵守下列硬规则；不要等「写长文档」才读它们。
 
 ## 安装与 API
 
-1. **Git submodule + 源码别名** `@fynns/ui` → `packages/fynns_ui_design_core/src/index.ts`。
-   **禁止**把 `@fynns/ui` / `@fynns/ui-design-core` 写进 `package.json` dependencies。
-2. **UI 工作前必须核 pin：** 在 core / 子模块内跑
-   `node scripts/install-as-submodule.mjs --target <消费仓根> --check`（或
-   `npm run consume:install -- --target <消费仓根> --check`）。pin 落后远程
-   `main` tip → **先 bump 子模块指针并再 check**，禁止在过期 pin 上改 UI 或
-   「发明标准壳」。故意钉旧 / 离线才用 `--skip-pin-check` 或
-   `FYNNS_UI_SKIP_PIN_CHECK=1`。自动 bump PR（propagate）**不能**代替本步。
-   权威：子模块 `llm/CONSUME.md` Hard rule 5a。
-   日常本机改 core、要立刻进消费仓 Vite：在 core 跑
-   `npm run consume:sync -- --target <消费仓根>`（镜像 `src/` 工作树，**不**
-   提交 pin）。正式发布仍 bump pin。
+1. **GitHub Packages + 源码别名**：`package.json` 依赖 **`@fynn7/ui-design-core`**；
+   Vite/tsconfig 别名 **`@fynns/ui`** →
+   `node_modules/@fynn7/ui-design-core/src/index.ts`。`.npmrc` 映射
+   `@fynn7` → `https://npm.pkg.github.com`。**禁止**再用 git submodule 做日常消费；
+   **禁止**依赖已废弃的 registry 名 `@fynns/ui` / `@fynns/ui-design-core`。
+2. **UI 工作前必须核安装：** 在 core 仓跑
+   `node scripts/install-as-npm.mjs --target <消费仓根> --check`（或
+   `npm run consume:check -- --target <消费仓根>`）。缺依赖 / `.npmrc` / 别名，或
+   仍残留 `packages/fynns_ui_design_core` 子模块 → 先修好再改 UI。认证：
+   `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`（`read:packages`）。权威：`llm/CONSUME.md`
+   Hard rule 5a。**没有** `consume:sync` / `consume:watch`；未发布本地联调用
+   `file:` / `npm link` / 发版后 bump。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
    Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。
@@ -30,7 +31,7 @@ alwaysApply: true
    **字族：** 正文与 chrome 继承 `--fynns-font-ui`（`body` 已设）；代码用
    `--fynns-font-mono`；**禁止**把主要正文 / 表单 / Chat / Dialog 设成
    `--fynns-font-serif`（serif 仅在用户明确要求的少量编辑向展示用）。详见
-   子模块 `AGENTS.md` **Font families**。
+   包内 `AGENTS.md` **Font families**。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
 7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 

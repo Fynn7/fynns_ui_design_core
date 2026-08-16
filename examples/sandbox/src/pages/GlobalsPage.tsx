@@ -40,6 +40,7 @@ import {
   Carousel,
   CarouselItem,
   CodeBlock,
+  DiffView,
   Collapsible,
   ContextMenu,
   ContextMenuTrigger,
@@ -3801,6 +3802,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ))}
           </Grid>
           <SandboxHelp text={t("globals.codeTokensHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="diff-view">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <DiffView
+            maxHeight={12 * 16}
+            lines={[
+              { type: "meta", text: "@@ sample @@" },
+              { type: "same", text: " keep this line" },
+              { type: "del", text: "- remove the old value" },
+              { type: "add", text: "+ add the new value" },
+            ]}
+          />
+          <SandboxHelp text={t("globals.diffViewHelp")} />
         </div>
         </GlobalsDemo>
       </>

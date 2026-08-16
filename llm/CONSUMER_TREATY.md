@@ -17,20 +17,20 @@ Install / design catalog remain elsewhere — this file only explains *why* and
    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 3. Optional: one line in the consumer `AGENTS.md` / README:
 
-   > UI: follow `.cursor/rules/fynns-ui-consumer.mdc` and the submodule
-   > `packages/fynns_ui_design_core/llm/CONSUME.md`.
+   > UI: follow `.cursor/rules/fynns-ui-consumer.mdc` and
+   > `node_modules/@fynn7/ui-design-core/llm/CONSUME.md` (or the core checkout).
 
 The consume installer may also drop this rule when wiring a consumer
-(`scripts/install-as-submodule.mjs`); if the file already exists it is left
-alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. pin
-freshness / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
+(`scripts/install-as-npm.mjs`); if the file already exists it is left
+alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. npm
+consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
-**NavigationDrawer destination gap ≠ unit-stack**). Local pin gate:
-`consume --check` vs remote `main` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a;
-propagate bump PRs do not replace that check. Day-to-day local core edits →
-consumer Vite: `npm run consume:sync -- --target <CONSUMER_ROOT>` (worktree
-mirror; not a pin commit). Formal release still bumps the pin.
+**NavigationDrawer destination gap ≠ unit-stack**). Local install gate:
+`consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
+`consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
+/ publish. Formal delivery: GitHub Packages version bump
+([`docs/package-propagation.md`](../docs/package-propagation.md)).
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 
@@ -180,7 +180,7 @@ GFM lists inside `.fynns-chat-message-prose`.
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) | Install submodule + hard consume rules |
+| [`CONSUME.md`](CONSUME.md) | Install GitHub Packages + hard consume rules |
 | [`consume.json`](consume.json) | Machine contract |
 | [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Custom highlight + CodeBlock language hard rules |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |

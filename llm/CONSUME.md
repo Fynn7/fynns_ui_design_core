@@ -1,9 +1,10 @@
-# LLM / agent: consume `@fynns/ui` via submodule
+# LLM / agent: consume `@fynns/ui` via GitHub Packages
 
 **Single source of truth for *installing* this design system into any app repo.**  
 Design language & component catalog remain in [`AGENTS.md`](../AGENTS.md).  
 Machine contract: [`consume.json`](consume.json).  
-**Consumer-agent doc + custom-highlight map:** [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) / [`agent-interfaces.json`](agent-interfaces.json).
+**Consumer-agent doc + custom-highlight map:** [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) / [`agent-interfaces.json`](agent-interfaces.json).  
+**Publish / version bumps:** [`docs/package-propagation.md`](../docs/package-propagation.md).
 
 **Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
 
@@ -19,176 +20,107 @@ failure modes **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
-1. **Git submodule + source alias** — not an npm package for day-to-day use.
-2. **Never** add `@fynns/ui` or `@fynns/ui-design-core` to `package.json` `dependencies` / `devDependencies`.
-3. Alias name is **`@fynns/ui`** → `packages/fynns_ui_design_core/src/index.ts`.
+1. **npm package + Vite/tsconfig source alias** — install
+   **`@fynn7/ui-design-core`** from **GitHub Packages**
+   (`https://npm.pkg.github.com`). Do **not** add this design system as a git
+   submodule for day-to-day use.
+2. **Do** add `@fynn7/ui-design-core` to consumer `package.json` `dependencies`.
+   Do **not** depend on obsolete registry names `@fynns/ui` /
+   `@fynns/ui-design-core` (not the published package id).
+3. Alias name is **`@fynns/ui`** →
+   `node_modules/@fynn7/ui-design-core/src/index.ts` (Vite `resolve.alias` +
+   tsconfig `paths`). App code keeps `import { … } from "@fynns/ui"`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
-5. Do not edit submodule sources for consumer features; bump the pin instead.
-5a. **Pin freshness (mandatory before UI work):** from a checkout of this core
-    (or the submodule itself), run
-    `node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check`
-    (or `npm run consume:install -- --target <CONSUMER_ROOT> --check`). Check
-    **fails** when the consumer submodule SHA is behind remote `main` tip.
-    Bump the pin (`cd packages/fynns_ui_design_core && git fetch && git checkout origin/main`,
-    then commit the pointer in the consumer) and re-check before writing UI.
-    Escape hatch only when intentional: `--skip-pin-check` or
-    `FYNNS_UI_SKIP_PIN_CHECK=1`. Network failure during tip lookup also fails
-    (no silent “fresh”). Push-triggered bump PRs
-    ([`docs/submodule-propagation.md`](../docs/submodule-propagation.md)) do
-    **not** replace this local check — agents must still verify. Consumers not
-    listed in [`.github/ui-consumers.json`](../.github/ui-consumers.json) get no
-    auto bump PR and rely entirely on this check. Re-paste
-    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) into existing apps
-    after treaty updates (installer does not overwrite an existing rule file).
-6. **TypeScript:** set consumer `compilerOptions.target` and `lib` to **ES2022** (or later). `tsc` follows `@fynns/ui` into this repo’s `.ts` sources (e.g. `String.replaceAll`); `ES2020` alone will fail typecheck even when Vite builds fine.
-7. **Do not** import deleted symbols (`toast`, `Toaster`, `Popover`,
-   `UnitStack`, …). Migration table: [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
-   Transient feedback: `snackbar(...)` + root `<SnackbarHost />` (not toast).
-   Centered modals / side inspectors: `Dialog` / `ConfirmDialog` / `Drawer`
-   (restored; see BREAKING_PURGE “Restored after purge”).
-8. **Entry:** `main.tsx` (or equivalent) must `createRoot(...).render(<App />)` (or equivalent). Importing CSS alone produces an empty build that still “succeeds”.
-9. **No fakes:** never hand-roll a disclosure/collapsible chrome; never define a local `Collapsible` that replaces `@fynns/ui`; never use `@radix-ui/*` / `sonner`. When nesting a surface-owning child (CodeBlock / Surface / canvas / BusyRegion) inside Collapsible or Card, pass **`chrome="plain"`** — body uses `--fynns-layout-nest-gap` (plain ≠ flush); do not cancel nest-gap with negative margins or override `.fynns-*`. Outside those shells use `.fynns-nest`.
-9a. **CodeBlock chrome (strict):** titled head (`variant="default"` / omit
-    variant) = filename + hairline + copy → **requires** non-empty `label`;
-    missing / `label=""` **throws** at runtime. No filename/title →
-    **`variant="plain"`** (frame + floating copy only). Never open a titled
-    head without a real title (empty title bar is a consumer bug).
-9b. **CodeBlock `language` (strict):** `label` is **not** a language detector.
-    Always pass `language` (or `highlightProfile` / registered id) that matches
-    the source — e.g. `label="system-prompt.xml"` **and** `language="xml"`.
-    Filename extensions in `label` alone leave the block **plain mono**.
-    Built-ins: `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`/…;
-    app DSLs → [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md). Editable fill
-    hosts (FullscreenDialog / `textarea { height: 100% }`) →
-    **`autoGrow={false}`** (default autoGrow is content-sized).
-10. **API-only consumption:** treat `@fynns/ui` as a **function** — pass props /
-    children / localized labels only. **Never** wrap keep-set primitives in
-    consumer restyles, local CSS overrides of `.fynns-*`, or parallel “variants”.
-    Missing look/behavior → **explicitly tell the user** the change must be
-    implemented in `fynns_ui_design_core` first; then call the new API from the
-    consumer. Design language (including Chat container radius floor ≥
-    `--fynns-radius-22`, and **font families** — body/chrome = `ui`, code =
-    `mono`, never serif for main prose): [`AGENTS.md`](../AGENTS.md) Hard rules
-    + Tokens **Font families**.
-10a. **ChatMessage Markdown (prefer core):** LLM turns are Markdown by
-    convention. Prefer `ChatMessage markdown={md}` or
-    `<ChatMarkdown source={md} />` (zero-dep L2 GFM subset → `CodeBlock`,
-    plain ul/ol, inline pills; GFM `- [ ]` / `- [x]` are ordinary bullets —
-    not interactive `Checkbox`). When `markdown` is set it wins over `children`
-    for the bubble body. Do **not** dump raw Markdown strings as bare
-    `children` (backticks stay literal). Full CommonMark/tables/HTML remain
-    out of scope — extend core or pass custom `children`. Pasteable rule:
-    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc); catalog:
-    [`AGENTS.md`](../AGENTS.md) **Parity note (markdown / GFM)**.
-11. **CSS modules for `tsc`:** if `package.json` build runs `tsc` (not Vite-only), add `src/vite-env.d.ts` with `/// <reference types="vite/client" />` (or equivalent `declare module "*.css"`). Otherwise `tsc` fails on this package’s `import "./theme/theme.css"` from the `@fynns/ui` barrel.
-12. **Preview pages:** for a component playground/preview, mirror the matching sandbox `*PreviewCanvas` under `examples/sandbox/src/pages/` (anatomy + controlled props). Copy/strings may differ; chrome must come from `@fynns/ui`. Then skim the primitive in `src/primitives/` and [`AGENTS.md`](../AGENTS.md).
-13. **Performance:** shells (`ClippedNavShell`), token inspectors, Globals-style
-    catalogs, and live draft GUIs → read [`PERF.md`](PERF.md) before coding
-    (no observer↔probe loops, no tip forests, lazy-mount dense sections).
-14. **Default chrome:** use `DestinationAppShell` for greenfield destination
-    apps (Layout templates). **ClippedNavShell sync** (slot API only): `navMode`
-    and the `nav` subtree must match (`drawer`→`NavigationDrawer`,
-    `rail`→`NavigationRail`, `hidden`→null/omit). Crowding / narrow viewports
-    densify to **rail + Rail components** — never leave a labeled drawer in an
-    ~80px track (squashed drawer + bogus scrollbar). **`nav` = destinations
-    only** — never wiki / page body / forms / Chat / Preview in the nav track;
-    those belong in `children` (main) or `aside` / `EndAside`. “Clipped” names
-    the M3 chrome topology — **not** text clipping; diagnose `data-nav` /
-    track width / which slot holds the odd copy **before** restyling
-    `.fynns-*`. Failure modes: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
-    Pasteable rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-    **Main canvas fill:** Preview (or other top band) above Chat → wrap with
-    **`FillColumn`** (`header` + `Chat` in `children`) so the composer docks;
-    do not stack Preview / EmptyState / Composer as canvas siblings (dead band
-    under content height). See [`AGENTS.md`](../AGENTS.md) Chat Shell /
-    Layout helpers. Canvas `overflow-y: auto` does not replace a fill column.
-15. **WYSIWYG / surface sync:** sandbox Globals/Layouts/Preview resting look is the consumer default.
-    Use bare `@fynns/ui` APIs; never restyle `.fynns-*` to “match” sandbox.
-    Aesthetic drift belongs in `tokens.ts` / primitives (then `npm run gen:theme`).
-    `SANDBOX_DEFAULT_OVERRIDES` must stay empty (`npm run check:wysiwyg` enforces).
-    Core maintainers: never drop a sandbox demo while a symbol stays exported —
-    delete public APIs **atomically** (see [`BREAKING_PURGE.md`](BREAKING_PURGE.md)
-    Policy §5). `check:wysiwyg` also fails if Removed-table names reappear in the
-    barrel or if a visual primitive is companion-parked.
-    Pin bump note: `--fynns-radius-md` shipped at **20px** (was 8px) so consumers
-    match the long-standing sandbox Select/Input look.
+5. Do not edit `node_modules/@fynn7/ui-design-core` for consumer features —
+   change this core repo, publish a new version, bump the consumer dependency.
+   Local iteration may use `file:../fynns_ui_design_core` or `npm link`
+   temporarily.
+5a. **Install freshness (mandatory before UI work):** run
+    `node scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --check`
+    (or `npm run consume:check -- --target <CONSUMER_ROOT>`). Fails when the
+    dependency / `.npmrc` / `@fynns/ui` alias is missing, or a legacy
+    submodule tree is still present. Auth: `NODE_AUTH_TOKEN` or
+    `GITHUB_TOKEN` with `read:packages`. Re-paste
+    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) after treaty updates
+    (installer does not overwrite an existing rule file).
+6. **TypeScript:** consumer `compilerOptions.target` and `lib` must be **ES2022** (or later).
+7. **Do not** import deleted symbols — [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
+   Transient feedback: `snackbar` + `SnackbarHost`. Modals: `Dialog` /
+   `ConfirmDialog` / `Drawer`.
+8. **Entry:** `createRoot(...).render(<App />)` — CSS-only main is a fail.
+9. **No fakes:** no hand-rolled Collapsible; no `@radix-ui/*` / `sonner`. Nest
+   surface children with `chrome="plain"` / `.fynns-nest`.
+9a. **CodeBlock** titled `default` requires non-empty `label`; else `variant="plain"`.
+9b. **CodeBlock `language`:** always pass matching `language` / profile — `label` is not a detector.
+10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
+    capability → implement in this core first. Chat radius floor ≥ `--fynns-radius-22`;
+    fonts: body `ui`, code `mono`, never serif for main prose.
+10a. Prefer `ChatMessage markdown` / `ChatMarkdown` for LLM turns.
+11. **CSS for tsc:** `vite-env.d.ts` with `vite/client` when needed.
+12. **Preview pages:** mirror sandbox `*PreviewCanvas`.
+13. **Performance:** read [`PERF.md`](PERF.md) for shells / inspectors / catalogs.
+14. **Default chrome:** `DestinationAppShell`. ClippedNavShell slot sync — see
+    [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). Main Preview+Chat → `FillColumn`.
+15. **WYSIWYG:** sandbox resting look = consumer default; `check:wysiwyg`.
 
 ## Agent checklist (greenfield / short prompt)
 
 1. Read this file + `consume.json`.
-2. Run the one-shot installer (below) against the **consumer** root (use `--url` to a local checkout when offline).
-3. Run `--check` until exit 0 (includes pin-vs-`main` freshness). If pin is
-   behind, bump the submodule pointer first — do not invent UI on a stale pin.
-4. Scaffold React + Vite + TS only (no design-system npm dep); keep `lib`/`target` at ES2022+.
-5. **Default main chrome:** `DestinationAppShell` (sandbox Layout templates
-   `#layouts-demo-shell`) unless the user names another template. Do **not**
-   greenfield from standalone `NavigationRail` / invent parallel topbar+sidebar.
-   Controls/parts: sandbox Components (Globals) + Preview + AGENTS catalog
-   (never deleted symbols — see `BREAKING_PURGE.md`).
-6. If the page is a playground / inspector / shell / live-token UI, read [`PERF.md`](PERF.md) and apply its DoD.
-7. `npm install` → `npm run build` must exit 0.
+2. Ensure GitHub Packages auth (`.npmrc` + `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`).
+3. `npm run consume:install -- --target <CONSUMER_ROOT>`.
+4. `npm run consume:check -- --target <CONSUMER_ROOT>` until exit 0; remove leftover submodule trees.
+5. Scaffold React + Vite + TS; `lib`/`target` ES2022+.
+6. Default chrome: `DestinationAppShell` unless the user names another template.
+7. Playground / inspector / shell → [`PERF.md`](PERF.md).
+8. `npm install` → `npm run build` exit 0.
 
-## One-shot install (any consumer repo)
-
-If this core repo is not yet available on disk, clone it to a temp folder first, then run the installer against the **consumer** root:
-
-### Windows (PowerShell)
-
-```powershell
-$core = Join-Path $env:TEMP "fynns_ui_design_core"
-if (-not (Test-Path "$core\scripts\install-as-submodule.mjs")) {
-  git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git $core
-}
-node "$core\scripts\install-as-submodule.mjs" --target "<CONSUMER_ROOT>" --json
-```
-
-Or from a local checkout:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File D:\path\to\fynns_ui_design_core\scripts\install-as-submodule.ps1 -Target <CONSUMER_ROOT>
-```
-
-### POSIX
-
-```bash
-git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git /tmp/fynns_ui_design_core
-node /tmp/fynns_ui_design_core/scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --json
-```
-
-### From this repo
+## One-shot install
 
 ```bash
 npm run consume:install -- --target ../my-app --json
+npm run consume:check -- --target ../my-app --json
+```
+
+Bootstrap without a local core checkout:
+
+```bash
+git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git /tmp/fynns_ui_design_core
+export NODE_AUTH_TOKEN=...   # PAT with read:packages
+node /tmp/fynns_ui_design_core/scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --json
+```
+
+Consumer `.npmrc`:
+
+```
+@fynn7:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
 ## What the script does
 
-1. Resolves the consumer **git root**.
-2. `git submodule add` (default path `packages/fynns_ui_design_core`) or `submodule update --init` if already registered.
-3. Wires the nearest `vite.config.*` (`@fynns/ui` alias + React dedupe) when possible.
-4. Wires a nearby `tsconfig*.json` `compilerOptions.paths`.
-5. Warns if a forbidden npm dependency on `@fynns/*` is present.
-6. If missing, writes `.cursor/rules/fynns-ui-consumer.mdc` from
-   [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) (does not overwrite).
-7. With `--json`, prints a structured result for agents.
+1. Resolves consumer git root.
+2. Ensures `.npmrc` for `@fynn7` → GitHub Packages.
+3. `npm install @fynn7/ui-design-core@^<core version>` (unless `--skip-install`).
+4. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.
+5. Wires tsconfig `paths`.
+6. Writes `.cursor/rules/fynns-ui-consumer.mdc` if missing (from `consumer-cursor-rule.mdc`).
+7. `--json` structured result for agents.
 
-Useful flags: `--check`, `--wire-only`, `--skip-wire`, `--dry-run`, `--vite <file>`, `--tsconfig <file>`, `--submodule-path <path>`, `--branch <name>`.
+Flags: `--check`, `--wire-only` / `--skip-install`, `--dry-run`, `--vite`, `--tsconfig`, `--version`.
 
 ## After install
-
-Ensure the consumer `tsconfig` (example):
 
 ```json
 {
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "paths": { "@fynns/ui": ["./packages/fynns_ui_design_core/src/index.ts"] }
+    "paths": {
+      "@fynns/ui": ["./node_modules/@fynn7/ui-design-core/src/index.ts"]
+    }
   }
 }
 ```
-
-And `src/vite-env.d.ts` (when `tsc` is part of build):
 
 ```ts
 /// <reference types="vite/client" />
@@ -198,10 +130,7 @@ And `src/vite-env.d.ts` (when `tsc` is part of build):
 import { Button, Collapsible, FullscreenDialog } from "@fynns/ui";
 ```
 
-Do not import deleted APIs (`toast`, `Toaster`, `PanelCard`, …) — see
-[`BREAKING_PURGE.md`](BREAKING_PURGE.md).
-
-Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
+See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
 
 **Token / layout pointers (do not invent hex, rem, or private inset vars):**
 - Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
@@ -214,7 +143,7 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
 - **Hard gate:** never hardcode shell / column / chat margins in consumer CSS
   (`padding: 16px`, `1.25rem`, ad-hoc `--app-chat-pad`, etc.). Reuse
   `--fynns-layout-*` or the component alias that already points at one. Missing
-  value → land it in this submodule first, then consume.
+  value → land it in this core package first, then consume.
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
   the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
@@ -270,58 +199,26 @@ Then follow [`AGENTS.md`](../AGENTS.md) (tokens, primitives, a11y).
   parallel multi-line shell in the consumer.
 - Focus rings: `--fynns-focus-ring-width` + `--fynns-color-focus` (there is no
   bare `--fynns-focus`).
-- Design language lives in the submodule’s `AGENTS.md` — the installer does not
-  copy it to the consumer root; open `packages/fynns_ui_design_core/AGENTS.md`.
+- Design language lives in the package `AGENTS.md` (also in this git repo) — open
+  `node_modules/@fynn7/ui-design-core/AGENTS.md` or the core checkout.
 
-## Local sync (instant)
+## Local development (no worktree sync)
 
-When you edit this core checkout locally and need **consumer Vite app(s)** to
-pick up the same `src/` immediately (including **uncommitted** files), run from
-core:
+There is **no** `consume:sync` / `consume:watch`. To try unreleased core changes
+in an app:
 
-```bash
-# Recommended while developing core — watches src/ + package.json, syncs all
-# local consumers listed in llm/local-consumers.json (debounce ~150ms).
-npm run consume:watch
+- temporary `"@fynn7/ui-design-core": "file:../fynns_ui_design_core"`, or
+- `npm link`, or
+- publish a prerelease / bump the semver after Release.
 
-# One-shot: every registered local consumer
-npm run consume:sync -- --all
-
-# One-shot: a single consumer
-npm run consume:sync -- --target <CONSUMER_ROOT>
-# or:
-node scripts/sync-to-consumer.mjs --target <CONSUMER_ROOT> --dry-run
-```
-
-`--target` may be the consumer git root or any path inside it (e.g.
-`tools/gsc-live-preview`). `--all` / `consume:watch` read
-[`local-consumers.json`](local-consumers.json) (sibling `root` +
-`submodulePath`; missing roots are skipped with a warning). The script
-compares this core’s `src/` + `package.json` to the consumer submodule
-worktree, **upserts** when different (add/overwrite only), and prints
-`already in sync` when equal. Consumer-only files under `src/` (e.g. hub-pin
-`DiffView`) are **kept** unless you pass **`--prune`** (strict mirror delete —
-use carefully). **Core overwrites conflicting dirty twins** in the submodule
-worktree. It does **not** commit the submodule pin or push — day-to-day local
-loop only. Unreadable source/dest files abort the sync (exit non-zero) instead
-of treating a read miss as “delete on dest” (e.g. Windows locks).
-
-Formal release / CI still **bump the pin** (checkout a published SHA + commit
-the pointer). See [`docs/submodule-propagation.md`](../docs/submodule-propagation.md).
-Pin freshness `--check` (Hard rule 5a) is separate from this worktree mirror.
+Formal delivery: publish to GitHub Packages then bump the consumer dependency.
+See [`docs/package-propagation.md`](../docs/package-propagation.md).
 
 ## Verify
 
 ```bash
-node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --json
-# intentional old pin / offline:
-node scripts/install-as-submodule.mjs --target <CONSUMER_ROOT> --check --skip-pin-check --json
-# local worktree mirror (instant; not a pin bump):
-npm run consume:sync -- --all
-npm run consume:watch
-npm run consume:sync -- --target <CONSUMER_ROOT>
+npm run consume:check -- --target <CONSUMER_ROOT> --json
 ```
 
-Exit code `0` for `--check` means submodule + alias look good, no forbidden npm
-deps, and (unless `--skip-pin-check`) the submodule pin is not behind remote
-`main`.
+Exit `0` means `@fynn7/ui-design-core` is declared, `.npmrc` scopes `@fynn7`,
+`@fynns/ui` alias + React dedupe look good, and no legacy submodule tree remains.

@@ -7,13 +7,17 @@ repos should link here, not duplicate it.
 ## What this is
 
 A dark-teal design system: canonical `--fynns-*` CSS tokens + self-developed,
-dependency-free React primitives. Consumed as source via the `@fynns/ui` alias.
+dependency-free React primitives. Consumed as source via the `@fynns/ui` alias
+into **`@fynn7/ui-design-core`** (GitHub Packages).
 
-**Installing into a consumer repo (submodule + Vite alias):** follow
+**Installing into a consumer repo (npm + Vite alias):** follow
 [`llm/CONSUME.md`](llm/CONSUME.md) and run
 `npm run consume:install -- --target <consumer-root>`
-(`scripts/install-as-submodule.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
-Never add this package to a consumer's `package.json` dependencies.
+(`scripts/install-as-npm.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
+Add `@fynn7/ui-design-core` to the consumer’s `package.json` dependencies
+(registry: `https://npm.pkg.github.com`). Do **not** use a git submodule for
+day-to-day consume. Publish / bumps:
+[`docs/package-propagation.md`](docs/package-propagation.md).
 **Public API purge / migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 **Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
 [`llm/opencode-fynns-ui-consume.md`](llm/opencode-fynns-ui-consume.md)) — do not expect a long task brief.
@@ -286,12 +290,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 **Consumer apps (agents in any repo that consumes `@fynns/ui`):** treat this
 package as a **function API** — import primitives and pass props / children /
 labels only. **Do not** wrap `@fynns/ui` components in local restyles, fork
-CSS, or invent parallel variants in the consumer. **Do not** edit submodule
-sources for app features (bump the pin). If the keep-set cannot meet the
-requirement after exploring `AGENTS.md` + sandbox Globals, **stop and tell the
-user explicitly** that the work must land in `fynns_ui_design_core` first, then
-the consumer only calls the new API. Install / pin rules:
-[`llm/CONSUME.md`](llm/CONSUME.md).
+CSS, or invent parallel variants in the consumer. **Do not** edit
+  `node_modules/@fynn7/ui-design-core` for app features (bump the package
+  version or use a temporary `file:` / `npm link`). If the keep-set cannot meet the
+  requirement after exploring `AGENTS.md` + sandbox Globals, **stop and tell the
+  user explicitly** that the work must land in `fynns_ui_design_core` first, then
+  the consumer only calls the new API. Install / pin rules:
+  [`llm/CONSUME.md`](llm/CONSUME.md).
 
 ## Tokens
 
@@ -909,7 +914,8 @@ classes.
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
   nowrap cells + max-content width → horizontal scroll when narrow, never
-  column crush / CJK header shatter), CodeBlock (**strict chrome** — titled
+  column crush / CJK header shatter), DiffView (scrollable unified-diff
+  panel — add/del/same/meta lines; caller owns `+`/`-` in text), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
   `variant="plain"` (frame + floating copy only — do not pass `label` or
