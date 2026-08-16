@@ -6323,6 +6323,55 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   color: var(--fynns-color-text-muted);
 }
 
+/*
+ * Destination density — match NavigationDrawerItem row geometry only (40dp
+ * height, label type, icon gap / size, item pads). Keep chrome SearchBar
+ * surface / elevation / focus border (do not restyle as a destination pill).
+ * Auto-applied to plain SearchBars in drawer body so GlobalSearch densifies
+ * without consumer restyles.
+ */
+.fynns-search-bar--destination .fynns-search-bar-field,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-field {
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  gap: var(--fynns-navdrawer-item-gap);
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading,
+.fynns-search-bar--destination .fynns-search-bar-trailing,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-trailing {
+  min-width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-item-height);
+  gap: 0;
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading svg,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading
+  svg {
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-input,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-input {
+  padding-inline: 0;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+}
+
 /* Results share the expanded shell. Row highlight matches DropdownMenu items
    (`radius-3xl` long-strip) — one hover language for all dropdown lists.
    Inset from the shell edge so hover does not kiss the outer curve.

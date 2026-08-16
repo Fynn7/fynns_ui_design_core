@@ -402,7 +402,10 @@ classes.
   click/type/ArrowDown, not focus alone; hint wrap only when
   supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
   ellipsis the field value — not mid-glyph hard clip; same on Autocomplete
-  **and** single-line `Input`; idle ellipsis / focused caret scroll), Switch
+  **and** single-line `Input`; idle ellipsis / focused caret scroll; chrome
+  default 56dp; `density="destination"` / SearchBar in NavigationDrawer body
+  matches NavigationDrawerItem 40dp height + label type + icon gap — keeps
+  SearchBar surface / focus), Switch
   (dense track only — no `size` / no former md 52×32; `labelSide`
   `start`|`end`),
   Checkbox, Radio,
