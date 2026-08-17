@@ -119,6 +119,7 @@ import {
   ControlStack,
   FieldHint,
   Grid,
+  FillColumn,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -817,6 +818,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
+  const [busyRegionFill, setBusyRegionFill] = useState(true);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
@@ -3422,6 +3424,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Card>
           </BusyRegion>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
+          <div className="sandbox-fill-column-stage">
+            <FillColumn>
+              <BusyRegion
+                fill
+                busy={busyRegionFill}
+                label={t("globals.busyRegionFillLabel")}
+                message={t("globals.busyRegionFillMessage")}
+              />
+            </FillColumn>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setBusyRegionFill(true)}
+              disabled={busyRegionFill}
+            >
+              {t("globals.busyRegionFillStart")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegionFill(false)}
+              disabled={!busyRegionFill}
+            >
+              {t("globals.busyRegionFillStop")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.busyRegionFillHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">

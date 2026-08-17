@@ -3483,6 +3483,23 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
 }
 
+/* Stretch to a height-resolved flex parent so the overlay can center. */
+.fynns-busy-region--fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-busy-region--fill > .fynns-busy-region-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
 .fynns-busy-region-overlay {
   position: absolute;
   inset: 0;
@@ -8823,7 +8840,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: hidden;
 }
 
-.fynns-fill-column-main > .fynns-chat {
+.fynns-fill-column-main > .fynns-chat,
+.fynns-fill-column-main > .fynns-busy-region--fill {
   flex: 1 1 auto;
   width: 100%;
   max-width: 100%;
@@ -9007,6 +9025,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   /* Drive EndAside overlay when the main track is too narrow for both floors. */
   container-type: inline-size;
   container-name: fynns-shell-main;
+}
+
+.fynns-clipped-nav-shell-main > .fynns-busy-region--fill,
+.fynns-destination-app-shell-canvas > .fynns-busy-region--fill {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
 }
 
 /* ---------- DestinationAppShell (declarative chrome body) ---------- */

@@ -158,12 +158,21 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
   value?: number;
   /** @default "md" */
   size?: CircularProgressSize;
-  children: ReactNode;
+  /**
+   * Stretch to a height-resolved parent (`FillColumn` children, shell main /
+   * canvas) so the overlay centers in the **visible pane**. Required for
+   * cold-start (no content yet). Do not pair with `EmptyState`.
+   */
+  fill?: boolean;
+  /** Omit / `null` on cold-start when `fill` is set. */
+  children?: ReactNode;
 };
 
 /**
  * Sectional busy wrapper: children stay mounted under a dim layer with
  * circular progress + message. Sets `aria-busy` on the region while active.
+ * Overlay uses `place-items: center` — the ring sits in the region's box,
+ * so a content-sized host leaves it stuck at the top of a tall pane.
  */
 export function BusyRegion({
   busy,
@@ -171,6 +180,7 @@ export function BusyRegion({
   message,
   value,
   size = "md",
+  fill = false,
   children,
   className,
   ...rest
@@ -181,7 +191,12 @@ export function BusyRegion({
   return (
     <div
       {...rest}
-      className={join("fynns-busy-region", busy && "fynns-busy-region--busy", className)}
+      className={join(
+        "fynns-busy-region",
+        busy && "fynns-busy-region--busy",
+        fill && "fynns-busy-region--fill",
+        className,
+      )}
       aria-busy={busy || undefined}
     >
       <div

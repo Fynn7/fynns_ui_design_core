@@ -102,9 +102,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
    reserve *block* gutters that clip the first/last pill radii.
-5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
-   `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
-   (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /
+5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
+   `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
+   blocking) / `BusyRegion` (sectional dim + ring + message — **pane cold-start
+   uses `fill`**, never `EmptyState` + a ring), `EmptyState` (**zero-result
+   catalogs only**), `Banner` / `InlineAlert` /
    `BadgedBox` (notification overlay), and
    imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
    **not** use deleted Toast APIs or the removed pill `Badge` (see
@@ -430,11 +432,22 @@ classes.
   label `Badge`),
   LinearProgress (`value` in `[0,1]` or omit indeterminate) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
-  **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
-  fullscreen non-dismissible scrim or sectional dim + ring + visible message;
-  `label` is the progress accessible name and the default visible copy when
-  `message` is omitted; `value` in `[0, 1]` for determinate, omit for
-  indeterminate; `size` defaults `md`),
+  **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill? }`
+  (M3-style fullscreen non-dismissible scrim or sectional dim + ring + visible
+  message; `label` is the progress accessible name and the default visible copy
+  when `message` is omitted; `value` in `[0, 1]` for determinate, omit for
+  indeterminate; `size` defaults `md`; **`fill`** stretches in a height-resolved
+  parent so the overlay centers in the visible pane — required for cold-start
+  with no children). Overlay is `place-items: center` in the region's box;
+  a content-sized host parks the ring at the top of leftover canvas.
+  **Loading placement (hard):**
+  | Scene | Use | Do **not** |
+  | --- | --- | --- |
+  | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children | `EmptyState` as a loading shell; bare `CircularProgress` in a `unit-stack`; private `SectionLoading` |
+  | Refresh over existing surface | `BusyRegion` wrapping the real children (fill optional if the surface already has height) | Unmount the section and swap in EmptyState |
+  | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level layout |
+  | Zero-result catalog | `EmptyState` | Using it for loading |
   **paint-before-work:** `afterNextPaint` / `yieldToMain` / `runBusyTask(setBusy,
   task)` / `useBusyTask()` — `flushSync` busy on → wait one paint → then run
   the async task so `CircularProgress` can start spinning. Does **not** keep
@@ -452,7 +465,8 @@ classes.
     `min(var(--fynns-layout-chat-min-width), 100%)` (**no** OS window lock).
     Parent must resolve height — on DestinationAppShell canvas / shell main
     with a Preview (or other) band above Chat, wrap with **`FillColumn`**
-    (`header` = Preview, `children` = `Chat`); do **not** stack Preview /
+    (`header` = Preview, `children` = `Chat` **or** `BusyRegion` `fill` while
+    the thread is booting); do **not** stack Preview /
     EmptyState / Composer as canvas siblings (dead band under content height;
     canvas `overflow-y: auto` does not replace a fill column). Aside full-pane
     Chat still uses `.fynns-chat-host--fill` / EndAside (bubble 100%) — not
@@ -959,8 +973,8 @@ classes.
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
   height-resolved parent — shell main / DestinationAppShell canvas / fixed
   stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
-  put `<Chat>` in `children` so the thread absorbs leftover and composer docks
-  to the column bottom. **Do not** stack Preview / EmptyState / Composer as
+  put `<Chat>` **or** pane-boot `BusyRegion` `fill` in `children` so the band
+  absorbs leftover (Chat composer docks; loading ring centers). **Do not** stack Preview / EmptyState / Composer as
   canvas siblings — that leaves a dead band under content height. Does **not**
   apply aside bubble 100% (`.fynns-chat-host--fill` / EndAside stay for that)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
@@ -1024,7 +1038,7 @@ classes.
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` — `#rhythm` | Hand-rolled flex with name+hint left, controls floating mid/right |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
-  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card |
+  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

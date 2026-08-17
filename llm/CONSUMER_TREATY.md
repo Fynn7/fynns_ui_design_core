@@ -26,7 +26,8 @@ alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. npm
 consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
-**NavigationDrawer destination gap ≠ unit-stack**). Local install gate:
+**NavigationDrawer destination gap ≠ unit-stack** /
+**BusyRegion fill / loading placement**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump

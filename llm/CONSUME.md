@@ -62,6 +62,11 @@ failure modes **squashed drawer** + **wrong shell slot**.
 14. **Default chrome:** `DestinationAppShell`. ClippedNavShell slot sync — see
     [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). Main Preview+Chat → `FillColumn`.
 15. **WYSIWYG:** sandbox resting look = consumer default; `check:wysiwyg`.
+16. **Loading placement:** pane cold-start → `BusyRegion` `fill` in a
+    height-resolved host (`FillColumn` children / shell main). Do **not** use
+    `EmptyState` + `CircularProgress` (content-sized → ring stuck at the top).
+    Full-app block → `BusyScrim`. Inline widget busy → `CircularProgress` `sm`.
+    Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
 
 ## Agent checklist (greenfield / short prompt)
 

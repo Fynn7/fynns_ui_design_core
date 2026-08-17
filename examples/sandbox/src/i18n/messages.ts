@@ -469,7 +469,13 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root.",
+    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the ring at the top of leftover canvas.",
+  "globals.busyRegionFillLabel": "Loading pane",
+  "globals.busyRegionFillMessage": "Cold-start — no content yet.",
+  "globals.busyRegionFillStart": "Show fill busy",
+  "globals.busyRegionFillStop": "Clear fill busy",
+  "globals.busyRegionFillHelp":
+    "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane. Do not use EmptyState + CircularProgress as a loading shell.",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -1814,7 +1820,13 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。",
+    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把圈留在剩余主栏顶部。",
+  "globals.busyRegionFillLabel": "栏加载中",
+  "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
+  "globals.busyRegionFillStart": "显示 fill busy",
+  "globals.busyRegionFillStop": "清除 fill busy",
+  "globals.busyRegionFillHelp":
+    "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏居中。禁止用 EmptyState + CircularProgress 当 loading 壳。",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",

@@ -33,6 +33,11 @@ alwaysApply: true
    `--fynns-font-serif`（serif 仅在用户明确要求的少量编辑向展示用）。详见
    包内 `AGENTS.md` **Font families**。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
+   **加载几何（硬）：** 栏目冷启动（尚无内容）用 `BusyRegion` `fill` 放进已定高宿主
+   （`FillColumn` `children` / shell main），圈在可见主栏居中。**禁止**用
+   `EmptyState` + `CircularProgress` 当 loading 壳（内容定高 → 圈贴在主栏顶）。
+   全屏挡住 → `BusyScrim`；按钮/图标槽 → `CircularProgress` `sm`；零结果目录才用
+   `EmptyState`。权威：包内 `AGENTS.md` Feedback **Loading placement**。
 7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
 ## 所见即所得（强制）
