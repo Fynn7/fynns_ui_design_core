@@ -1394,6 +1394,17 @@ export const LAYOUT_TOKENS = {
    * Message column stays `min-width: 0`.
    */
   "chat-min-width": "20rem",
+  /**
+   * Min track for KPI / stat `auto-fill` grids
+   * (`repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))`).
+   * ~280dp → two columns near 640px host width; more columns on wide canvases.
+   * **Must exist** — an undefined var invalidates `grid-template-columns` and
+   * stacks tiles full-width in one column. Pair with `stats-min-col-sm` on
+   * narrow breakpoints.
+   */
+  "stats-min-col": "17.5rem",
+  /** Narrow panels: one stat tile per row (`minmax(100%, 1fr)`). */
+  "stats-min-col-sm": "100%",
 } as const;
 
 /**

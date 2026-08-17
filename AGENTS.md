@@ -1051,6 +1051,7 @@ classes.
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
   | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (content-width nowrap strip). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |
+  | KPI / metric tiles (dashboard stats) | `repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))` grid with `--fynns-layout-unit-stack-gap`; narrow → `--fynns-layout-stats-min-col-sm` | Invented undefined `--fynns-layout-*` min column (invalidates grid → one full-width column) |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

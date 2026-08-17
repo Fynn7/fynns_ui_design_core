@@ -181,6 +181,23 @@ nowrap** strip — shrinking it beside a sibling is what wraps the pages.
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
 
+## Failure mode: KPI stat grid stacks full-width (undefined layout token)
+
+Symptoms in a dashboard / overview:
+
+- Four `StatCard` / `Surface` KPI tiles stack in **one column**, each stretching
+  the full host width with empty space on the right
+- `grid-template-columns: repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))`
+  silently falls back when `--fynns-layout-stats-min-col` is **undefined**
+
+**Cause:** consumer invented a `--fynns-layout-*` name that core never shipped, or
+typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
+**Fix in the consumer:** use shipped tokens only —
+`--fynns-layout-stats-min-col` (default `17.5rem`) and
+`--fynns-layout-stats-min-col-sm` (`100%` under narrow breakpoints). Do not
+hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 
 Symptoms: titled head shows `system-prompt.xml` / `theme.json` / `tokens.ts`, but

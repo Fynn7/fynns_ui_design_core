@@ -336,6 +336,12 @@ const en = {
   "layoutChrome.chatMinWidth": "Chat min width",
   "layoutChrome.chatMinWidthHint":
     "--fynns-layout-chat-min-width — soft floor; CSS uses min(token, 100%).",
+  "layoutChrome.statsMinCol": "Stat grid min column",
+  "layoutChrome.statsMinColHint":
+    "--fynns-layout-stats-min-col — KPI auto-fill min track (~280dp; two columns near 640px).",
+  "layoutChrome.roStatsMinColSm": "Stat grid min column (narrow)",
+  "layoutChrome.roStatsMinColSmHint":
+    "Read-only --fynns-layout-stats-min-col-sm (100%) — one KPI tile per row on narrow panels.",
   "layoutChrome.navDrawerHelp":
     "NavigationDrawer width track — absolute rem only (no %). Apply writes `NAVDRAWER_TOKENS`.",
   "layoutChrome.navdrawerWidth": "Nav drawer width",
@@ -1702,6 +1708,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.chatMinWidth": "Chat 最小宽度",
   "layoutChrome.chatMinWidthHint":
     "--fynns-layout-chat-min-width — 软底；CSS 使用 min(token, 100%)。",
+  "layoutChrome.statsMinCol": "指标卡网格最小列宽",
+  "layoutChrome.statsMinColHint":
+    "--fynns-layout-stats-min-col — KPI auto-fill 最小轨道（约 280dp；640px 附近两列）。",
+  "layoutChrome.roStatsMinColSm": "指标卡网格最小列宽（窄屏）",
+  "layoutChrome.roStatsMinColSmHint":
+    "只读 --fynns-layout-stats-min-col-sm（100%）— 窄面板单列堆叠。",
   "layoutChrome.navDrawerHelp":
     "NavigationDrawer 宽度轨道 — 仅绝对 rem（禁止 %）。Apply 写入 `NAVDRAWER_TOKENS`。",
   "layoutChrome.navdrawerWidth": "导航抽屉宽度",
