@@ -19,7 +19,9 @@ When the user says **下一个** (or “next” in the same sense):
    trails). Skip polish-only work unless the user asks for it.
 4. Follow the usual ship shape: tokens + `gen:theme` when needed, primitive +
    CSS, export, AGENTS / Cursor rules, sandbox Globals sample (+ gallery when
-   cheap), `typecheck`.
+   cheap), `typecheck`, then **semver bump + GitHub Packages publish** in the
+   same task (`docs/package-propagation.md`). Never leave the fix only on a
+   sibling Vite alias.
 5. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
    DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
    Pagination → BadgedBox / AvatarGroup / OtpInput / EmptyState / SkipLink /

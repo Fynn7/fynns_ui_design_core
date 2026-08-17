@@ -1243,6 +1243,10 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
    stack every combo in Components. Do not expand the public barrel
    without that demo (see `llm/BREAKING_PURGE.md`).
 3. Keep `npm run typecheck` and `npm run lint` green.
+4. **Bump + publish (hard):** every landed change consumers should see is a
+   new GitHub Packages version in the **same task**. Authority:
+   [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
+   ship via a consumer Vite alias to this checkout.
 
 <!-- OPENWIKI:START -->
 

@@ -186,7 +186,10 @@ ring can paint before heavy work).
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the core package
-  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then publish / bump.
+  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then **bump
+  semver + publish GitHub Packages in the same task**
+  (`docs/package-propagation.md`). Never deliver by aliasing a consumer at
+  this checkout.
 - Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.

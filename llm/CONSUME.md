@@ -32,9 +32,11 @@ failure modes **squashed drawer** + **wrong shell slot**.
    tsconfig `paths`). App code keeps `import { … } from "@fynns/ui"`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit `node_modules/@fynn7/ui-design-core` for consumer features —
-   change this core repo, publish a new version, bump the consumer dependency.
-   Local iteration may use `file:../fynns_ui_design_core` or `npm link`
-   temporarily.
+   change this core repo, **bump + publish in the same task**, then bump the
+   consumer dependency. Authority:
+   [`docs/package-propagation.md`](../docs/package-propagation.md).
+   Do **not** point the consumer Vite alias at a sibling core checkout as
+   delivery. Local `file:` / `npm link` is iteration-only.
 5a. **Install freshness (mandatory before UI work):** run
     `node scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --check`
     (or `npm run consume:check -- --target <CONSUMER_ROOT>`). Fails when the

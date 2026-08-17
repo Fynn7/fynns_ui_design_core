@@ -86,7 +86,7 @@
       ]
     },
     "publish": {
-      "description": "Publish @fynn7/ui-design-core to GitHub Packages (CI: release or workflow_dispatch).",
+      "description": "After every landed consumer-visible change: bump package.json semver in the same task, then publish @fynn7/ui-design-core to GitHub Packages. Never deliver via sibling Vite alias. See docs/package-propagation.md.",
       "npm": "npm publish",
       "workflow": ".github/workflows/publish-package.yml"
     }
