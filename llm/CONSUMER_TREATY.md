@@ -1,4 +1,4 @@
-# Consumer treaty — pasteable `@fynns/ui` contract
+﻿# Consumer treaty — pasteable `@fynns/ui` contract
 
 **Purpose:** give any consumer repo a short, always-on agent rule so it obeys
 `@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
@@ -173,7 +173,7 @@ Symptoms in a table / list Card footer:
   pager, broken disc row) instead of the whole pager dropping below
 
 **Cause:** a horizontal space-between flex (`justify-content: space-between`)
-wrapping Select + Pagination as columns. Core Pagination is a **full-width
+wrapping Select + Pagination as columns. Core Pagination is a **content-width
 nowrap** strip — shrinking it beside a sibling is what wraps the pages.
 **Fix in the consumer:** make page-size / range copy and `Pagination`
 **adjacent Card-body siblings** (unit-stack-gap). Do not restyle

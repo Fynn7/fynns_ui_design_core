@@ -3255,14 +3255,12 @@ a.fynns-breadcrumb-link:visited {
 .fynns-pagination {
   box-sizing: border-box;
   /*
-   * Own a full flex line. Page-size Select / range copy stack *above* this
-   * strip (Card body unit-stack). Never shrink beside a space-between
-   * sibling until page numbers wrap onto a second row.
+   * Content-sized nowrap strip. Card-body column stacks place this on its own
+   * row below page-size Select / range copy (unit-stack-gap). Never park it
+   * beside a sibling in space-between flex — that squeezes the list.
    */
   display: block;
-  flex: 1 1 100%;
-  align-self: stretch;
-  width: 100%;
+  width: max-content;
   max-width: 100%;
   min-width: 0;
 }

@@ -435,7 +435,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). The strip is a full-width nowrap row — put page-size Select / range copy in the previous Card-body sibling, never in a horizontal space-between with Pagination.",
+    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). The strip is content-width and nowrap — put page-size Select / range copy in the previous Card-body sibling, never in a horizontal space-between with Pagination.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",

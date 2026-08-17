@@ -804,7 +804,7 @@ classes.
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
   wrap destinations in `.fynns-unit-stack`; SearchBar / tools as a body sibling
   use `--fynns-navdrawer-search-gap` (aliases `unit-stack-gap`) to destinations), SkipLink,
-  Breadcrumb, Pagination (list/table pager is a **full-width nowrap** row;
+  Breadcrumb, Pagination (list/table pager: **content-width nowrap** strip;
   page-size Select / “Showing…” copy = previous Card-body sibling via
   unit-stack-gap — never a horizontal space-between that shrinks the pages)
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
@@ -1020,7 +1020,7 @@ classes.
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`). **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
-  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = full-width nowrap page strip; stack page-size Select above it (Card body siblings). |
+  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = content-width nowrap strip; stack page-size Select above it (Card body siblings). |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
@@ -1050,7 +1050,7 @@ classes.
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
-  | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (full-width nowrap row). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |
+  | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (content-width nowrap strip). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 
