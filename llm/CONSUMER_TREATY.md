@@ -198,6 +198,28 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: List / FieldHeader nested inside InlineAlert
+
+Symptoms in a settings / dashboard panel:
+
+- Warning `InlineAlert` is **tall** with empty bands between title, hint, and rows
+- Model names and trailing actions sit inside the alert tonal box; «映射» hugs the
+  far edge under the icon column inset
+- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` were passed as
+  `children` of `InlineAlert`
+
+**Cause:** `InlineAlert` body is a **phrasing-only** text slot (icon + copy strip).
+Block hosts (`List`, form labels, unit stacks) belong **outside** the alert as
+`.fynns-unit-stack` siblings — same rhythm as «section label → InlineAlert → next
+block» in [`AGENTS.md`](../AGENTS.md) **Inset decision tree**.
+
+**Fix in the consumer:** keep `InlineAlert` to title + supporting sentence
+(`message` or short `children` with `<strong>` / `<br />`); stack the catalog
+**below** with `List` / `ListItem` (`headline` + `trailing` actions). Do not
+restyle `.fynns-inline-alert*`. Live: sandbox Globals severity samples; hub usage
+unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md) **Content density** +
+Feedback **InlineAlert**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 
 Symptoms: titled head shows `system-prompt.xml` / `theme.json` / `tokens.ts`, but
