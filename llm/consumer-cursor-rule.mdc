@@ -37,7 +37,10 @@ alwaysApply: true
    （`FillColumn` `children` / shell main），圈在可见主栏居中。**禁止**用
    `EmptyState` + `CircularProgress` 当 loading 壳（内容定高 → 圈贴在主栏顶）。
    全屏挡住 → `BusyScrim`；按钮/图标槽 → `CircularProgress` `sm`；零结果目录才用
-   `EmptyState`。权威：包内 `AGENTS.md` Feedback **Loading placement**。
+   `EmptyState`。`FillColumn` 里的**目录**用带 `fynns-scroll` 的 `.fynns-unit-stack`；
+   `Surface` 默认按内容增高（只有 `fill` 才 `min-height: 0`）。压成 ~36px 药丸、
+   ToggleGroup 被裁切 = 井在 flex 里被 shrink，修 core 不要改 `.fynns-*`。
+   权威：包内 `AGENTS.md` Feedback **Loading placement** + **FillColumn**。
 7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
 ## 所见即所得（强制）
@@ -157,23 +160,23 @@ FillColumn。
 ## 标签行 / 工具条节奏（硬 — 禁止手搓乱排）
 
 `Surface` / `Card` / 检查器条里出现 **名称 + ToggleGroup/Switch + 按钮 +
-说明时间戳** 时，**必须**用 keep-set 节奏，禁止自造 flex/grid 把文案竖堆在
-左、控件飘在中右（症状：标签与轨道不对齐、时间戳独占第二行大片空白、
-名称顶对齐而 ToggleGroup/按钮垂直居中）。
+说明时间戳** 时，**必须**用 keep-set 节奏，禁止自造 flex/grid。窄窗症状：
+时间戳铺成通栏第二行、右侧空旷、ToggleGroup 贴名称顶而对不齐名称+说明的
+纵向中心。
 
 | 角色 | 选用 |
 | --- | --- |
 | 可见名称 \| 控件（同行） | `ControlStack` + `ControlRow` `label={名称}`；控件在 row 子树 |
 | 同行多个控件（ToggleGroup + 刷新按钮） | row 内 `.fynns-control-cluster`（或 `Grid`） |
-| 控件下的说明 / 「截至 …」时间戳 | `ControlBlock` `description` **或** `FieldHint` — **禁止**裸 `<p>` / 与 label 绑成左列竖栈 |
+| 控件下的说明 / 「截至 …」时间戳 | `ControlBlock` `description`。Core 把说明停在 **名称列**（可在该列内换行）；ToggleGroup / 簇对名称+说明 **纵向居中**。**禁止**塞进 `ControlRow` `label`、禁止写成 Surface 下的通栏兄弟、禁止裸 `<p>` |
 | 表单语义分簇（多段选项） | 上节 `FieldStack`（不要把一切塞进一个乱 flex） |
 
-**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / FieldHint）与
+**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / padded Surface）与
 `#form-recipe`。Preferences / Dialog 标签行：Switch 用 `label=""` + `ariaLabel`
-（仅轨道），名称只在 `ControlRow`。
+（仅轨道），名称只在 `ControlRow`。Padded `Surface` 与 Card body 同属 form host。
 
 ```tsx
-// 对 — 名称与控件同一 ControlRow；时间戳是 supporting，不是左列第二行
+// 对 — 保持这棵树；窄窗下说明留在名称列，不要铺成通栏空行
 <Surface variant="outlined" padded>
   <ControlBlock description={asOfLabel}>
     <ControlStack columns={1}>
@@ -191,8 +194,8 @@ FillColumn。
 **禁止：**
 
 - `Surface` 里手写 `display:flex` / 双列把 label+hint 捆左边、控件捆右边
-- 把说明文案与 `ControlRow` `label` 拆成两个不等高兄弟却指望基线对齐
-- 为「排齐」本地改 `.fynns-*` 或发明 `--app-*-gap`
+- 把 `FieldHint` 写成 `ControlRow` 的兄弟（通栏第二行）或塞进 `label`
+- 为「排齐」本地改 `.fynns-*` 或发明 `--app-*-gap`（几何在 core；消费仓 bump / `file:` 链到本仓）
 
 ## ClippedNavShell（仅完全自定义时 — 槽位 + 挤扁抽屉）
 

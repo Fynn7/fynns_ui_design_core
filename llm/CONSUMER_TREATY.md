@@ -75,7 +75,11 @@ sandbox Layout templates `#layouts-demo-shell` (`DestinationAppShell`).
 Catalog notes: [`AGENTS.md`](../AGENTS.md) (destination ladder).
 Main canvas Preview+Chat: [`AGENTS.md`](../AGENTS.md) **FillColumn** (Layout
 templates `#layouts-demo-fill-column`) — do not stack Preview / EmptyState /
-Composer as canvas siblings.
+Composer as canvas siblings. A catalog in that band is a scrolling
+`.fynns-unit-stack` (content-sized `Surface` wells — not `fill`); crushed
+~36px outlined pills with clipped ToggleGroup means the wells shrank inside
+the flex column (core: default Surface is not `min-height: 0`; unit-stack
+children do not shrink).
 
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
@@ -127,14 +131,20 @@ Symptoms inside a `Surface` / `Card` strip:
 
 - A field **name** and a **timestamp / hint** stacked in a left column while
   `ToggleGroup` / `Switch` / action `Button` float mid/right
-- Label top-aligned, controls vertically centered — jagged baseline
-- Hint alone on a second row with a wide empty band
+- Label top-aligned, controls sitting high — ToggleGroup not centered on
+  name + hint
+- Hint alone on a **full-bleed** second row with a wide empty band to its
+  right (common on a **narrow** window)
 
-**Cause:** hand-rolled flex/grid instead of keep-set rhythm. **Fix in the
-consumer:** `ControlStack` + `ControlRow` `label` for the name; put sibling
-controls in `.fynns-control-cluster`; put “as of …” / supporting copy on
-`ControlBlock` `description` or `FieldHint` — never a bare `<p>` tied into the
-label column. Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
+**Cause:** hand-rolled flex/grid, **or** a `FieldHint` / `ControlBlock`
+`description` that still paints as a full-width next row (stale core, or the
+hint is a Surface sibling instead of `ControlBlock` `description`). **Fix:**
+keep `ControlStack` + `ControlRow` `label` + `.fynns-control-cluster` +
+`ControlBlock` `description` (do **not** put the timestamp in `ControlRow`
+`label`, do **not** restyle `.fynns-*`). Core docks the hint in the **label
+column** and vertically centers the cluster on name + hint. Bump / `file:`
+link `@fynn7/ui-design-core` if the consumer still shows the empty band.
+Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row

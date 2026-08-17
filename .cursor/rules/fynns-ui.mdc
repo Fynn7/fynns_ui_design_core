@@ -108,7 +108,8 @@ ring can paint before heavy work).
   end inspector: `EndAside` (not modal `Drawer`, not revived Panel/ListGroup).
   Main canvas with Preview above Chat: **`FillColumn`** (`header` + `Chat` in
   children) so composer docks; never stack Preview/EmptyState/Composer as
-  siblings.
+  siblings. A catalog in that band = `.fynns-unit-stack` + `fynns-scroll`
+  (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
   mobile-first densify only (never desktop greenfield root); Drawer /
@@ -120,7 +121,9 @@ ring can paint before heavy work).
   Vertical unit lists: Card / Collapsible body already use
   `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
   (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
-  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. **Form
+  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. Single-row
+  `description` docks in the **label column**; ToggleGroup centers on name+hint
+  (not a full-bleed next row). Padded `Surface` is a form host. **Form
   options by semantic kind → `FieldStack`** (strongly recommended): plain
   FieldBlocks keep `field-stack-gap` (12dp); description/error (no choice
   cluster) opens the next sibling to `unit-stack-gap` (16dp); FieldBlocks

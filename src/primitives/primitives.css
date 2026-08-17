@@ -1613,9 +1613,9 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Form hosts (centered Dialog + Card body + Collapsible body *direct*
- * ControlStack / ControlBlock): label eats remaining space so trailing
- * Switch tracks share one end edge. Do **not** use a descendant
+ * Form hosts (centered Dialog + Card body + padded Surface + Collapsible
+ * body *direct* ControlStack / ControlBlock): label eats remaining space so
+ * trailing Switch tracks share one end edge. Do **not** use a descendant
  * `.fynns-collapsible-body .fynns-control-stack` — sandbox Globals wraps
  * every demo in a category Collapsible and would force toolbar stacks into
  * Preferences layout. Row recipe (AGENTS): ControlRow label + track-only
@@ -1628,6 +1628,7 @@ input.fynns-input:focus::-webkit-scrollbar {
  */
 .fynns-dialog-panel--centered .fynns-control-stack,
 .fynns-card-body .fynns-control-stack,
+.fynns-surface--padded .fynns-control-stack,
 .fynns-collapsible-body > .fynns-control-stack,
 .fynns-collapsible-body > .fynns-control-block .fynns-control-stack {
   width: 100%;
@@ -1640,6 +1641,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-dialog-panel--centered .fynns-control-row,
 .fynns-card-body .fynns-control-row,
+.fynns-surface--padded .fynns-control-row,
 .fynns-collapsible-body > .fynns-control-row,
 .fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
   width: 100%;
@@ -1649,6 +1651,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-dialog-panel--centered .fynns-control-row__controls,
 .fynns-card-body .fynns-control-row__controls,
+.fynns-surface--padded .fynns-control-row__controls,
 .fynns-collapsible-body > .fynns-control-row > .fynns-control-row__controls,
 .fynns-collapsible-body
   > .fynns-control-block
@@ -1669,6 +1672,12 @@ input.fynns-input:focus::-webkit-scrollbar {
   > .fynns-control-row__controls
   > :not(.fynns-grid),
 .fynns-card-body .fynns-control-stack .fynns-grid > *,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-surface--padded .fynns-control-stack .fynns-grid > *,
 .fynns-collapsible-body
   > .fynns-control-stack
   > .fynns-control-row
@@ -3654,8 +3663,106 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-control-block > .fynns-control-stack,
 .fynns-control-block > .fynns-control-row {
-  /* Keep toolbar tracks content-sized; hint below still spans the block. */
+  /* Toolbar tracks stay content-sized; single-row + hint uses the grid below. */
   max-width: 100%;
+}
+
+/*
+ * Single-row ControlBlock + description: keep the note in the **label column**
+ * of the same row unit. ToggleGroup / cluster vertically centers against
+ * name + hint. Do **not** let FieldHint become a full-bleed next row (empty
+ * band to the right of the timestamp, controls look top-heavy).
+ */
+.fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-row
+  ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+.fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-stack > .fynns-control-row:only-child
+  ) {
+  display: grid;
+  grid-template-columns:
+    minmax(0, var(--fynns-layout-control-row-label))
+    minmax(0, 1fr);
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  row-gap: var(--fynns-layout-field-hint-gap);
+  align-items: start;
+  justify-content: stretch;
+}
+
+.fynns-control-block:has(> .fynns-field-hint):not(
+    :has(> .fynns-control-row ~ .fynns-control-row)
+  )
+  > .fynns-control-row,
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child),
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child)
+  > .fynns-control-row {
+  display: contents;
+}
+
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child)
+  > .fynns-control-row
+  > .fynns-control-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  overflow: visible;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__label {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__controls {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) > .fynns-field-hint {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-row
+  ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-stack > .fynns-control-row:only-child
+  ) {
+  width: 100%;
+}
+
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint)
+  .fynns-control-row__controls {
+  justify-self: end;
 }
 
 /* ---------- Unit stack (generic sibling units; not ControlBlock) ---------- */
@@ -3671,6 +3778,13 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
+}
+
+.fynns-unit-stack > * {
+  /* Sibling units are content-sized. A height-capped host (FillColumn-main)
+     must scroll the stack — never shrink wells. Surface `overflow: hidden`
+     plus a flex `min-height: 0` otherwise clips ToggleGroup into a 36px pill. */
+  flex-shrink: 0;
 }
 
 /* ---------- Divider (M3) ---------- */
@@ -8767,7 +8881,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 0;
   border-radius: var(--fynns-radius-md);
   overflow: hidden;
   color: var(--fynns-color-text);
@@ -8794,6 +8907,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-surface--fill {
   height: 100%;
   flex: 1 1 auto;
+  min-height: 0;
 }
 
 .fynns-surface--padded {

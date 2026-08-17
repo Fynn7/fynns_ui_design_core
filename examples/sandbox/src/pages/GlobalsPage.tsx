@@ -881,6 +881,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
   const [formEmail, setFormEmail] = useState("demo@example.com");
@@ -4058,6 +4059,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </dl>
         </Card>
+        <SandboxHelp text={t("globals.rhythmSurfaceHelp")} />
+        <Surface
+          variant="outlined"
+          padded
+          className="sandbox-globals-rhythm-surface"
+        >
+          <ControlBlock description={t("globals.rhythmAsOfHint")}>
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.rhythmSourceLabel")}>
+                <div className="fynns-control-cluster">
+                  <ToggleGroup
+                    size="compact"
+                    ariaLabel={t("globals.rhythmSourceLabel")}
+                    value={rhythmSource}
+                    onChange={setRhythmSource}
+                    options={[
+                      {
+                        value: "catalog",
+                        label: t("globals.rhythmSourceAlpha"),
+                      },
+                      {
+                        value: "mirror",
+                        label: t("globals.rhythmSourceBeta"),
+                      },
+                    ]}
+                  />
+                  <Button size="sm" variant="ghost">
+                    {t("globals.rhythmRefresh")}
+                  </Button>
+                </div>
+              </ControlRow>
+            </ControlStack>
+          </ControlBlock>
+        </Surface>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

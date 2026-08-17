@@ -644,7 +644,7 @@ const en = {
   "globals.segmentedItalic": "Italic",
   "globals.rhythm": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). Inside Card / Dialog, ControlStack rows are label-fill + end-hug controls (same Preferences recipe). Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
+    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). On a single ControlRow the hint docks in the label column; ToggleGroup centers on name + hint (not a full-bleed next row). Padded Surface is a form host like Card body. Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
   "globals.rhythmSampleTitle": "Rhythm sample",
   "globals.rhythmClusterHelp":
     "Optional `.fynns-control-cluster` for side-by-side end-labeled switches (toolbar). Preferences / settings Cards should use one track-only Switch per ControlRow instead — see rows above.",
@@ -667,8 +667,15 @@ const en = {
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
+  "globals.rhythmSurfaceHelp":
+    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
+  "globals.rhythmSourceLabel": "Catalog source",
+  "globals.rhythmSourceAlpha": "Catalog",
+  "globals.rhythmSourceBeta": "Mirror",
+  "globals.rhythmAsOfHint": "As of 15 Aug 2026 01:11",
+  "globals.rhythmRefresh": "Refresh catalog",
   "globals.rhythmAgentHint":
-    "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
+    "Agents: control + narrative = `ControlBlock`; single-row hint stays in the label column (ToggleGroup centers on name+hint — not a full-bleed next row). Sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog / padded Surface hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
     "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
@@ -1995,7 +2002,7 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedItalic": "斜体",
   "globals.rhythm": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。Card / Dialog 内 ControlStack 为标签吃满 + 控件贴右（与 Preferences 行一致）。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
+    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。单行 ControlRow 的说明停在名称列；ToggleGroup 对名称+说明纵向居中（不要铺成通栏下一行）。带 pad 的 Surface 与 Card body 同属 form host。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
   "globals.rhythmSampleTitle": "节奏样例",
   "globals.rhythmClusterHelp":
     "可选 `.fynns-control-cluster`：并排放尾标签 Switch（工具栏）。设置 / Preferences Card 应每行一个纯轨道 Switch（见上方行），不要混用 cluster。",
@@ -2018,8 +2025,15 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
+  "globals.rhythmSurfaceHelp":
+    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
+  "globals.rhythmSourceLabel": "目录来源",
+  "globals.rhythmSourceAlpha": "目录",
+  "globals.rhythmSourceBeta": "镜像",
+  "globals.rhythmAsOfHint": "截至 2026 年 8 月 15 日 01:11",
+  "globals.rhythmRefresh": "刷新目录",
   "globals.rhythmAgentHint":
-    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
+    "Agent：控件+叙述 = `ControlBlock`；单行说明停在名称列（ToggleGroup 对名称+说明居中 — 不要铺成通栏下一行）。兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog / 带 pad 的 Surface 直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
     "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",

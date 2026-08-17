@@ -1197,6 +1197,12 @@
   width: 100%;
 }
 
+.sandbox-globals-rhythm-surface {
+  max-width: 32rem;
+  width: 100%;
+  min-width: 0;
+}
+
 .sandbox-globals-rhythm-stack,
 .sandbox-globals-rhythm-block {
   width: 100%;

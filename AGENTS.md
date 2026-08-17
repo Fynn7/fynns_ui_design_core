@@ -898,7 +898,11 @@ classes.
   body uses `--fynns-layout-nest-gap` — plain ≠ flush),
   old Media/Header/Content/Actions / variant APIs deleted),
   **Surface** (generic bordered / tonal well; any children; no Card head —
-  use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
+  use for preview wells / stages; default is **content-sized** — `fill` is the
+  only path that sets `min-height: 0` for a height-resolved parent; a
+  `.fynns-unit-stack` of padded wells inside `FillColumn` must scroll, not
+  shrink — crushed ~36px pills with clipped ToggleGroup are this bug, not a
+  theme failure), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
   open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
   type roles as Card; same `chrome` prop — `plain` = nest surface children with nest-gap
@@ -958,7 +962,8 @@ classes.
 - **Layout helpers:** ControlStack, ControlRow, **ControlBlock** `{ children,
   description?, errorText? }` (control chrome + supporting/error note —
   `--fynns-layout-field-hint-gap`; related Switch + narrative **must** wrap
-  here, not as loose Card siblings), **FieldHint** (muted/error caption;
+  here; **single-row** `description` docks in the **label column**, controls
+  vertically center on name + hint — not a full-bleed next row), **FieldHint** (muted/error caption;
   prefer via ControlBlock / FieldBlock / Input), FieldBlock / FieldHeader
   (`description?` / `errorText?` under the control), **FieldStack** (**strongly
   recommended** invisible cluster: group consecutive form units by **semantic
@@ -967,14 +972,18 @@ classes.
   adjacent stacks → `form-cluster-gap` / 32dp; live `#form-recipe`),
   `.fynns-unit-stack`
   (CSS host — purged `UnitStack` replacement; sibling **units** only — not a
-  substitute for FieldStack inside forms),
+  substitute for FieldStack inside forms; children `flex-shrink: 0` so a
+  height-capped `FillColumn` / `fynns-scroll` host scrolls instead of crushing
+  `Surface` / `Card` wells),
   Grid (`equalCells` makes every
   cell match the largest content width/height via measure),
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
   height-resolved parent — shell main / DestinationAppShell canvas / fixed
   stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
   put `<Chat>` **or** pane-boot `BusyRegion` `fill` in `children` so the band
-  absorbs leftover (Chat composer docks; loading ring centers). **Do not** stack Preview / EmptyState / Composer as
+  absorbs leftover (Chat composer docks; loading ring centers). A **catalog**
+  in that band is a `.fynns-unit-stack` + `fynns-scroll` scrollport — wells
+  stay content-sized. **Do not** stack Preview / EmptyState / Composer as
   canvas siblings — that leaves a dead band under content height. Does **not**
   apply aside bubble 100% (`.fynns-chat-host--fill` / EndAside stay for that)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
@@ -1035,7 +1044,7 @@ classes.
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap` | Card grid of the same rows when a table fits |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
-  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` — `#rhythm` | Hand-rolled flex with name+hint left, controls floating mid/right |
+  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
@@ -1044,17 +1053,23 @@ classes.
 
   Inside a padded `Surface` / `Card` strip that is **name + ToggleGroup/Switch
   + action + supporting timestamp**, use `ControlStack` + `ControlRow` +
-  `.fynns-control-cluster` + `ControlBlock`/`FieldHint` — do **not** hand-roll
+  `.fynns-control-cluster` + `ControlBlock` `description` — do **not** hand-roll
   flex that stacks name+hint on the left while controls float mid/right
   (consumer failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
   **ad-hoc Surface / inspector row chaos**; pasteable recipe:
-  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)). Live:
-  Globals `#rhythm`.
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)).
+  **Single-row `ControlBlock`:** the hint docks in the **label column** of the
+  same row unit (may wrap **inside that column** on a narrow window); the
+  ToggleGroup / cluster is **vertically centered** on name + hint. Do **not**
+  let FieldHint become a full-bleed next row (empty band to the right of the
+  timestamp, controls look top-heavy). Do **not** stuff the timestamp into
+  `ControlRow` `label`. Padded `Surface` is a **form host** (same label-fill +
+  end-hug as Card body). Live: Globals `#rhythm`.
 
   | Role | Token / host |
   | --- | --- |
   | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` (**8dp** — toolbar / page chrome; tighter than unit-stack) |
-  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
+  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / **padded Surface** / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
@@ -1109,7 +1124,9 @@ classes.
   `errorText`). Do **not** place the note as the next Card-body sibling under
   a bare `ControlStack` (zero gap / invented subtitle classes). Prefer
   `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows) inside the
-  block. **Form hosts** (Card body, centered Dialog, Collapsible body
+  block. On a **single** ControlRow, `description` stays in the **label
+  column**; controls vertically center on name + hint (not a full-bleed next
+  row). **Form hosts** (Card body, padded Surface, centered Dialog, Collapsible body
   **direct** `ControlStack` / `ControlBlock`): ControlStack is label-fill
   (`1fr`) + end-hug controls (`max-content`) so Switch tracks share one trailing
   edge across sibling rows / ControlBlocks — same Preferences recipe as
