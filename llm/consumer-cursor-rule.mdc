@@ -119,7 +119,7 @@ FillColumn。
 | --- | --- | --- |
 | 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** `List` 多行 `ListItem`：`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` 里 `IconButton` `ghost` `sm` + `Tooltip`；删除走 `ConfirmDialog` | 每条外包加垫 `Surface`/`Card`；操作堆在文案下方；单条 List 再套 unit-stack；行内实心危险圆钮 |
 | 应用目的地（导航） | `NavigationDrawer` / Rail / Bar（或 `DestinationAppShell`） | 用 `List`/`Card` 当根导航 |
-| 多列表格 | `Table` + `.fynns-table-wrap` | 同数据的 Card 网格（表能装下时） |
+| 多列表格 | `Table` + `.fynns-table-wrap.fynns-scroll` | 同数据的 Card 网格（表能装下时）；`Surface` + `FieldHeader` 冒充分区标题 |
 | 表单 / 偏好 | `FieldStack`（`#form-recipe`） | 每字段一张肥 Card |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |

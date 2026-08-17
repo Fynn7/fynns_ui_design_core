@@ -1047,7 +1047,7 @@ classes.
   | --- | --- | --- |
   | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
-  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap` | Card grid of the same rows when a table fits |
+  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |

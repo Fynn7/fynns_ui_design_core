@@ -198,6 +198,23 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Surface + FieldHeader as titled table shell
+
+Symptoms in a dashboard / inspector:
+
+- A wide `Table` sits in `Surface variant="outlined" padded` with `FieldHeader` as the
+  section title (double pad, form-label rhythm on a data grid)
+- Columns crush or clip; consumer used inline `width: 100%` / ad-hoc `overflow-x` on a
+  bare `div` instead of `.fynns-table-wrap.fynns-scroll`
+
+**Cause:** `FieldHeader` is for **form label rows** above a control; titled data tables
+belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells / stages.
+
+**Fix in the consumer:** `Card title="…"` body → `.fynns-table-wrap.fynns-scroll` →
+`Table*` (no forced `width: 100%` on `.fynns-table`). Live: sandbox `#table`; hub
+usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: List / FieldHeader nested inside InlineAlert
 
 Symptoms in a settings / dashboard panel:
