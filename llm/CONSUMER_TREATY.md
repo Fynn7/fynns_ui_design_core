@@ -27,7 +27,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **NavigationDrawer destination gap ≠ unit-stack** /
-**BusyRegion fill / loading placement**). Local install gate:
+**BusyRegion fill / loading placement** / **Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump
@@ -162,6 +162,23 @@ the row button. **Fix in the consumer:** one `List` of `ListItem`s —
 (`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
 Section chrome stays **one** outer `Card` if needed. Live: sandbox `#list`.
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+
+## Failure mode this treaty targets: Pagination squeezed beside page-size
+
+Symptoms in a table / list Card footer:
+
+- Page-size `Select` (“Rows: 10”) sits **left**, `Pagination` sits **right**
+- When the Card is narrow, page numbers **wrap onto a second row** (tall
+  pager, broken disc row) instead of the whole pager dropping below
+
+**Cause:** a horizontal space-between flex (`justify-content: space-between`)
+wrapping Select + Pagination as columns. Core Pagination is a **full-width
+nowrap** strip — shrinking it beside a sibling is what wraps the pages.
+**Fix in the consumer:** make page-size / range copy and `Pagination`
+**adjacent Card-body siblings** (unit-stack-gap). Do not restyle
+`.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
 
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label

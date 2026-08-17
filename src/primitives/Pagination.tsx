@@ -95,6 +95,9 @@ export function getPaginationItems(
  * Page navigator for lists and tables (Previous / numbered pages / Next).
  * High-frequency app chrome — not an M3 catalog component. Prev/next reuse
  * `IconButton`; page numbers reuse `Button` `ghost` (current = `tonal`).
+ * The list is a **single nowrap row** that owns the full host width — put
+ * page-size Select / range copy in the **previous** Card-body sibling
+ * (unit-stack), never in a horizontal space-between with this nav.
  */
 export function Pagination({
   page,

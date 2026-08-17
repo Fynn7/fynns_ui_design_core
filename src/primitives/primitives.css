@@ -3254,17 +3254,25 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- Pagination ---------- */
 .fynns-pagination {
   box-sizing: border-box;
-  width: fit-content;
+  /*
+   * Own a full flex line. Page-size Select / range copy stack *above* this
+   * strip (Card body unit-stack). Never shrink beside a space-between
+   * sibling until page numbers wrap onto a second row.
+   */
+  display: block;
+  flex: 1 1 100%;
+  align-self: stretch;
+  width: 100%;
   max-width: 100%;
   min-width: 0;
 }
 
 .fynns-pagination-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--fynns-pagination-gap);
-  width: fit-content;
+  width: max-content;
   max-width: 100%;
   margin: 0;
   padding: 0;

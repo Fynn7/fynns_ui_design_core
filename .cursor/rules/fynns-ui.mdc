@@ -39,7 +39,9 @@ ring can paint before heavy work).
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
   bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
-  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
+  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
+  (full-width nowrap page strip; page-size Select stacks above as a Card-body
+  sibling — never horizontal space-between), SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
   `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on

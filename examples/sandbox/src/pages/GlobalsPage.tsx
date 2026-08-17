@@ -782,6 +782,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     "page",
   );
   const [page, setPage] = useState(3);
+  const [pageSize, setPageSize] = useState("10");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetHalfOpen, setSheetHalfOpen] = useState(false);
   const [sheetFullOpen, setSheetFullOpen] = useState(false);
@@ -3933,6 +3934,43 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               t("globals.paginationPage").replace("{n}", String(n))
             }
           />
+          <Card title={t("globals.paginationCardTitle")}>
+            <div className="fynns-control-cluster">
+              <Select
+                ariaLabel={t("globals.paginationPageSizeAria")}
+                value={pageSize}
+                options={[
+                  { value: "10", label: t("globals.paginationPageSize10") },
+                  { value: "50", label: t("globals.paginationPageSize50") },
+                  { value: "100", label: t("globals.paginationPageSize100") },
+                ]}
+                onChange={setPageSize}
+              />
+              <FieldHint>
+                {t("globals.paginationRange")
+                  .replace(
+                    "{from}",
+                    String((page - 1) * Number(pageSize) + 1),
+                  )
+                  .replace(
+                    "{to}",
+                    String(Math.min(page * Number(pageSize), 120)),
+                  )
+                  .replace("{total}", "120")}
+              </FieldHint>
+            </div>
+            <Pagination
+              page={page}
+              pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
+              onPageChange={setPage}
+              ariaLabel={t("globals.paginationAria")}
+              previousAriaLabel={t("globals.paginationPrev")}
+              nextAriaLabel={t("globals.paginationNext")}
+              getPageAriaLabel={(n) =>
+                t("globals.paginationPage").replace("{n}", String(n))
+              }
+            />
+          </Card>
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
         </GlobalsDemo>
