@@ -194,7 +194,7 @@ Symptoms in a dashboard / overview:
 typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 **Fix in the consumer:** use shipped tokens only —
 `--fynns-layout-stats-min-col` (default `17.5rem`) and
-`--fynns-layout-stats-min-col-sm` (`100%` under narrow breakpoints). Do not
+`--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

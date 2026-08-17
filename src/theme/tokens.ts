@@ -1403,8 +1403,8 @@ export const LAYOUT_TOKENS = {
    * narrow breakpoints.
    */
   "stats-min-col": "17.5rem",
-  /** Narrow panels: one stat tile per row (`minmax(100%, 1fr)`). */
-  "stats-min-col-sm": "100%",
+  /** Narrow panels: one column only when the host is narrower than min-col. */
+  "stats-min-col-sm": "min(100%, var(--fynns-layout-stats-min-col))",
 } as const;
 
 /**

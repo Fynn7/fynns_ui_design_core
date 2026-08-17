@@ -510,7 +510,7 @@
   --fynns-layout-chat-max-width: 48rem;
   --fynns-layout-chat-min-width: 20rem;
   --fynns-layout-stats-min-col: 17.5rem;
-  --fynns-layout-stats-min-col-sm: 100%;
+  --fynns-layout-stats-min-col-sm: min(100%, var(--fynns-layout-stats-min-col));
   --fynns-scrollbar-size: 10px;
   --fynns-scrollbar-thumb: rgba(106, 144, 149, 0.357);
   --fynns-scrollbar-thumb-hover: rgba(22, 159, 177, 0.384);
