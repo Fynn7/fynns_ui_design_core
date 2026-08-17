@@ -5814,8 +5814,9 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   /*
    * No flex gap: destination rhythm is adjacent-sibling
-   * `--fynns-navdrawer-section-gap` (4dp) — SearchBar / tools wrappers
-   * share the same step as Item ↔ Item (destination-density SearchBar).
+   * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools use
+   * `--fynns-navdrawer-search-gap` (aliases unit-stack-gap) to the next
+   * destination — not the 4dp row step.
    */
   gap: 0;
   align-items: stretch;
@@ -5840,11 +5841,10 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Destination rhythm: every direct body sibling opens
  * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
- * Group / Headline / Divider / Tooltip-wrapped items / SearchBar, and
- * tools wrappers ahead of those rows. Same step as
+ * Group / Headline / Divider / Tooltip-wrapped items. Same step as
  * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
  * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
- * `.fynns-nav-drawer-item { margin: 0 }`.
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar kind-jump is below.
  */
 .fynns-nav-drawer-body
   > *
@@ -5863,6 +5863,19 @@ a.fynns-breadcrumb-link:visited {
  * node is not in the :is() list above — still use section-gap. */
 .fynns-nav-drawer-body > * + * {
   margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+/*
+ * SearchBar / tools is chrome, not a destination row. Open
+ * `--fynns-navdrawer-search-gap` (16dp) to the adjacent ordinary element.
+ * Must follow the section-gap rules. Covers a bare SearchBar or a tools
+ * wrapper that contains SearchBar (consumer GlobalSearch host).
+ */
+.fynns-nav-drawer-body > .fynns-search-bar + *,
+.fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
+.fynns-nav-drawer-body > * + .fynns-search-bar,
+.fynns-nav-drawer-body > * + *:has(.fynns-search-bar) {
+  margin-block-start: var(--fynns-navdrawer-search-gap);
 }
 
 .fynns-nav-drawer-body .fynns-unit-stack {

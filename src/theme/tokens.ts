@@ -1118,12 +1118,16 @@ export const NAVDRAWER_TOKENS = {
   "headline-pad-inline": "1rem",
   /**
    * Vertical gap between consecutive body siblings (Item / Group / Headline /
-   * Divider / destination-density SearchBar / tools wrappers) in
-   * `.fynns-nav-drawer-body` **and** between leaf items inside
+   * Divider) in `.fynns-nav-drawer-body` **and** between leaf items inside
    * `.fynns-nav-drawer-group-body` (4dp). Never wrap destinations in
    * `.fynns-unit-stack` for spacing.
    */
   "section-gap": "0.25rem",
+  /**
+   * SearchBar / tools (chrome) ↔ destination rows. Kind jump — aliases
+   * `--fynns-layout-unit-stack-gap` (16dp). Item ↔ Item stays `section-gap`.
+   */
+  "search-gap": "var(--fynns-layout-unit-stack-gap)",
   "badge-dot": "0.375rem",
   /**
    * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one

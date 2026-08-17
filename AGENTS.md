@@ -803,7 +803,7 @@ classes.
   with optional leading `icon` any ReactNode + indented items; sibling Item /
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
   wrap destinations in `.fynns-unit-stack`; SearchBar / tools as a body sibling
-  share `--fynns-navdrawer-section-gap` with destinations), SkipLink,
+  use `--fynns-navdrawer-search-gap` (aliases `unit-stack-gap`) to destinations), SkipLink,
   Breadcrumb, Pagination
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
@@ -1015,7 +1015,7 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline / destination-density SearchBar / tools gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group) — **never** wrap destinations in `.fynns-unit-stack` (16dp). |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`). **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |

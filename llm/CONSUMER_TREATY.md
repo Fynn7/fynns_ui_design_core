@@ -122,8 +122,9 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    **direct** drawer-body children (`--fynns-navdrawer-section-gap` / **4dp**,
    same as Group leaves). Do **not** wrap the list in `.fynns-unit-stack`
    (16dp) — that makes top-level rows look sparse vs folded sections.
-   Destination-density SearchBar / tools as a body sibling share the same
-   **4dp** step as Item ↔ Item.
+   Destination-density SearchBar / tools as a body sibling use
+   `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`) to
+   the next destination — not the 4dp row step.
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 

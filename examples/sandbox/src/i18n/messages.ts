@@ -937,7 +937,7 @@ const en = {
   "globals.navDrawerGroupAssistItem": "Suggest",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. `NavigationDrawerHeadline` = static section label; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline / destination-density SearchBar / tools gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group) — put them as **direct** body children; never wrap destinations in `.fynns-unit-stack` (16dp). Prefer Drawer for generic inspector panels.",
+    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. `NavigationDrawerHeadline` = static section label; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (16dp). Put them as **direct** body children; never wrap destinations in `.fynns-unit-stack`. Prefer Drawer for generic inspector panels.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -2294,7 +2294,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerGroupAssistItem": "建议",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。`NavigationDrawerHeadline` = 静态分组文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline / destination-density SearchBar / 工具条间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）— 必须是 body **直接**子节点；禁止用 `.fynns-unit-stack`（16dp）包目的地列表。通用检查器请用 Drawer。",
+    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。`NavigationDrawerHeadline` = 静态分组文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline 间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）。SearchBar / 工具条与目的地行 = `--fynns-navdrawer-search-gap`（16dp）。必须是 body **直接**子节点；禁止用 `.fynns-unit-stack` 包目的地列表。通用检查器请用 Drawer。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
