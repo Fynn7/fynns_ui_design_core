@@ -427,7 +427,10 @@ classes.
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
-  on-surface; long copy wraps — do not confuse with Banner), BadgedBox
+  on-surface; long copy wraps — **phrasing copy only** (`message` or short
+  `children`); never nest `List`, `FieldHeader`, `FieldStack`, or
+  `.fynns-unit-stack` block hosts inside the alert — stack catalogs **below** as
+  unit-stack siblings; do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
   LinearProgress (`value` in `[0,1]` or omit indeterminate) /
