@@ -119,6 +119,7 @@ import {
   ControlStack,
   FieldHint,
   Grid,
+  FillColumn,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -781,6 +782,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     "page",
   );
   const [page, setPage] = useState(3);
+  const [pageSize, setPageSize] = useState("10");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetHalfOpen, setSheetHalfOpen] = useState(false);
   const [sheetFullOpen, setSheetFullOpen] = useState(false);
@@ -817,6 +819,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
+  const [busyRegionFill, setBusyRegionFill] = useState(true);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
@@ -879,6 +882,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
   const [formEmail, setFormEmail] = useState("demo@example.com");
@@ -3422,6 +3426,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Card>
           </BusyRegion>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
+          <div className="sandbox-fill-column-stage">
+            <FillColumn>
+              <BusyRegion
+                fill
+                busy={busyRegionFill}
+                label={t("globals.busyRegionFillLabel")}
+                message={t("globals.busyRegionFillMessage")}
+              />
+            </FillColumn>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setBusyRegionFill(true)}
+              disabled={busyRegionFill}
+            >
+              {t("globals.busyRegionFillStart")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegionFill(false)}
+              disabled={!busyRegionFill}
+            >
+              {t("globals.busyRegionFillStop")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.busyRegionFillHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
@@ -3622,6 +3654,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="table">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Card title={t("globals.tableCaption")} chrome="plain">
           <div className="fynns-table-wrap fynns-scroll sandbox-table-sticky">
             <Table stickyHeader>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
@@ -3649,8 +3682,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">31M</TableCell>
                   <TableCell align="end">31M</TableCell>
                   <TableCell>
-                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
-                    sample/ink-35b
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapManual")}</span>
+                      <span
+                        className="fynns-control-cluster__grow"
+                        style={{ fontFamily: "var(--fynns-font-mono)" }}
+                      >
+                        sample/ink-35b
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -3660,10 +3703,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">—</TableCell>
                   <TableCell align="end">4</TableCell>
                   <TableCell>
-                    <Chip variant="filter" selected>
-                      {t("globals.tableMapAuto")}
-                    </Chip>{" "}
-                    catalog
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapAuto")}</span>
+                      <span
+                        className="fynns-control-cluster__grow"
+                        style={{ fontFamily: "var(--fynns-font-mono)" }}
+                      >
+                        catalog
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -3673,13 +3724,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">717k</TableCell>
                   <TableCell align="end">28</TableCell>
                   <TableCell>
-                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
-                    sample/focus-35b
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapUnpriced")}</span>
+                      <span className="fynns-control-cluster__grow" aria-hidden="true" />
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </div>
+          </Card>
           <SandboxHelp text={t("globals.tableHelp")} />
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
@@ -3902,6 +3959,43 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               t("globals.paginationPage").replace("{n}", String(n))
             }
           />
+          <Card title={t("globals.paginationCardTitle")}>
+            <div className="fynns-control-cluster">
+              <Select
+                ariaLabel={t("globals.paginationPageSizeAria")}
+                value={pageSize}
+                options={[
+                  { value: "10", label: t("globals.paginationPageSize10") },
+                  { value: "50", label: t("globals.paginationPageSize50") },
+                  { value: "100", label: t("globals.paginationPageSize100") },
+                ]}
+                onChange={setPageSize}
+              />
+              <FieldHint>
+                {t("globals.paginationRange")
+                  .replace(
+                    "{from}",
+                    String((page - 1) * Number(pageSize) + 1),
+                  )
+                  .replace(
+                    "{to}",
+                    String(Math.min(page * Number(pageSize), 120)),
+                  )
+                  .replace("{total}", "120")}
+              </FieldHint>
+            </div>
+            <Pagination
+              page={page}
+              pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
+              onPageChange={setPage}
+              ariaLabel={t("globals.paginationAria")}
+              previousAriaLabel={t("globals.paginationPrev")}
+              nextAriaLabel={t("globals.paginationNext")}
+              getPageAriaLabel={(n) =>
+                t("globals.paginationPage").replace("{n}", String(n))
+              }
+            />
+          </Card>
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
         </GlobalsDemo>
@@ -4028,6 +4122,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </dl>
         </Card>
+        <SandboxHelp text={t("globals.rhythmSurfaceHelp")} />
+        <Surface
+          variant="outlined"
+          padded
+          className="sandbox-globals-rhythm-surface"
+        >
+          <ControlBlock description={t("globals.rhythmAsOfHint")}>
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.rhythmSourceLabel")}>
+                <div className="fynns-control-cluster">
+                  <ToggleGroup
+                    size="compact"
+                    ariaLabel={t("globals.rhythmSourceLabel")}
+                    value={rhythmSource}
+                    onChange={setRhythmSource}
+                    options={[
+                      {
+                        value: "catalog",
+                        label: t("globals.rhythmSourceAlpha"),
+                      },
+                      {
+                        value: "mirror",
+                        label: t("globals.rhythmSourceBeta"),
+                      },
+                    ]}
+                  />
+                  <Button size="sm" variant="ghost">
+                    {t("globals.rhythmRefresh")}
+                  </Button>
+                </div>
+              </ControlRow>
+            </ControlStack>
+          </ControlBlock>
+        </Surface>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

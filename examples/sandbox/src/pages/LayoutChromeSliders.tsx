@@ -202,6 +202,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.chatMinWidthHint",
     max: 480,
   },
+  "stats-min-col": {
+    labelKey: "layoutChrome.statsMinCol",
+    hintKey: "layoutChrome.statsMinColHint",
+    max: 480,
+  },
 };
 
 const NAVDRAWER_ROW_META: Record<
@@ -260,6 +265,10 @@ const READONLY_LAYOUT_META: Record<
   "field-stack-gap": {
     labelKey: "layoutChrome.roFieldStack",
     hintKey: "layoutChrome.roFieldStackHint",
+  },
+  "stats-min-col-sm": {
+    labelKey: "layoutChrome.roStatsMinColSm",
+    hintKey: "layoutChrome.roStatsMinColSmHint",
   },
 };
 

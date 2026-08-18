@@ -32,9 +32,11 @@ failure modes **squashed drawer** + **wrong shell slot**.
    tsconfig `paths`). App code keeps `import { … } from "@fynns/ui"`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit `node_modules/@fynn7/ui-design-core` for consumer features —
-   change this core repo, publish a new version, bump the consumer dependency.
-   Local iteration may use `file:../fynns_ui_design_core` or `npm link`
-   temporarily.
+   change this core repo, **bump + publish in the same task**, then bump the
+   consumer dependency. Authority:
+   [`docs/package-propagation.md`](../docs/package-propagation.md).
+   Do **not** point the consumer Vite alias at a sibling core checkout as
+   delivery. Local `file:` / `npm link` is iteration-only.
 5a. **Install freshness (mandatory before UI work):** run
     `node scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --check`
     (or `npm run consume:check -- --target <CONSUMER_ROOT>`). Fails when the
@@ -61,7 +63,14 @@ failure modes **squashed drawer** + **wrong shell slot**.
 13. **Performance:** read [`PERF.md`](PERF.md) for shells / inspectors / catalogs.
 14. **Default chrome:** `DestinationAppShell`. ClippedNavShell slot sync — see
     [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). Main Preview+Chat → `FillColumn`.
+    Catalog in that band → `.fynns-unit-stack` + `fynns-scroll`; default
+    `Surface` is content-sized (`fill` only for stretching wells).
 15. **WYSIWYG:** sandbox resting look = consumer default; `check:wysiwyg`.
+16. **Loading placement:** pane cold-start → `BusyRegion` `fill` in a
+    height-resolved host (`FillColumn` children / shell main). Do **not** use
+    `EmptyState` + `CircularProgress` (content-sized → ring stuck at the top).
+    Full-app block → `BusyScrim`. Inline widget busy → `CircularProgress` `sm`.
+    Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
 
 ## Agent checklist (greenfield / short prompt)
 
@@ -179,7 +188,10 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
   containment (`chrome="plain"` = outer shell + nest-gap child).
   **Control + related note:** wrap in `ControlBlock` (`description` /
-  `errorText`).   **Semantic form clusters (strongly recommended):** partition
+  `errorText`). On a single ControlRow the hint docks in the **label column**;
+  ToggleGroup / cluster vertically centers on name + hint — not a full-bleed
+  next row. Padded `Surface` is a form host (same as Card body).
+  **Semantic form clusters (strongly recommended):** partition
   inspector / settings / Dialog options with `FieldStack` by kind (identity
   FieldBlocks, Radio/Checkbox/Slider choice FieldBlocks, Preference
   ControlBlocks, …) — plain FieldBlocks share `field-stack-gap` 12dp;

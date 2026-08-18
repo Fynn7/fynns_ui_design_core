@@ -21,12 +21,27 @@ reaches consumer apps after the **npm consume model** (GitHub Packages).
 
 ## Local core development
 
-Edit this checkout, then either:
+Edit this checkout, then **ship on the registry** — not via a sibling Vite alias.
 
-- **`npm version` + Release** (or `workflow_dispatch` publish) and bump the
-  consumer dependency, or
-- Temporary **`file:../fynns_ui_design_core`** (or `npm link`) while iterating —
-  still no submodule pin.
+**Agent ship rule (hard):** after every landed change consumers should see
+(primitive, CSS, token, keep-set docs):
+
+1. Bump `package.json` semver in the **same task** (`patch` for fixes /
+   geometry; `minor` for new public API).
+2. Commit, then publish `@fynn7/ui-design-core` to GitHub Packages
+   (`npm publish --access restricted`, or GitHub Release /
+   `workflow_dispatch` on
+   [`.github/workflows/publish-package.yml`](../.github/workflows/publish-package.yml)).
+3. Consumers stay on
+   `node_modules/@fynn7/ui-design-core/src/index.ts`. Bump their dependency
+   (`npm install @fynn7/ui-design-core@x.y.z`) when they should pick it up.
+
+Do **not** deliver by pointing a consumer Vite alias at
+`../../fynns_ui_design_core`. Committing that path is machine-specific; restoring
+the npm alias on commit reloads the **last published** tarball and looks like a
+visual rollback (unpublished CSS disappears). Temporary `file:` / `npm link`
+is iteration-only — never the ship path. There is **no** `consume:sync` /
+`consume:watch`.
 
 ## Legacy submodule bump workflows
 

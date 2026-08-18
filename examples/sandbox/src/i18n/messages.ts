@@ -336,6 +336,12 @@ const en = {
   "layoutChrome.chatMinWidth": "Chat min width",
   "layoutChrome.chatMinWidthHint":
     "--fynns-layout-chat-min-width — soft floor; CSS uses min(token, 100%).",
+  "layoutChrome.statsMinCol": "Stat grid min column",
+  "layoutChrome.statsMinColHint":
+    "--fynns-layout-stats-min-col — KPI auto-fill min track (~280dp; two columns near 640px).",
+  "layoutChrome.roStatsMinColSm": "Stat grid min column (narrow)",
+  "layoutChrome.roStatsMinColSmHint":
+    "Read-only --fynns-layout-stats-min-col-sm (100%) — one KPI tile per row on narrow panels.",
   "layoutChrome.navDrawerHelp":
     "NavigationDrawer width track — absolute rem only (no %). Apply writes `NAVDRAWER_TOKENS`.",
   "layoutChrome.navdrawerWidth": "Nav drawer width",
@@ -435,10 +441,16 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). Prefer over hand-rolled page chips.",
+    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). The strip is content-width and nowrap — put page-size Select / range copy in the previous Card-body sibling, never in a horizontal space-between with Pagination.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
+  "globals.paginationCardTitle": "Catalog",
+  "globals.paginationPageSizeAria": "Rows per page",
+  "globals.paginationPageSize10": "Rows: 10",
+  "globals.paginationPageSize50": "Rows: 50",
+  "globals.paginationPageSize100": "Rows: 100",
+  "globals.paginationRange": "Showing {from}–{to} of {total} items",
   "globals.skipLink": "Skip to content",
   "globals.skipLinkHelp":
     "SkipLink stays fully clipped until keyboard focus; then a fixed Button ghost at the viewport top-start jumps past chrome into `#globals-content`.",
@@ -469,7 +481,13 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root.",
+    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the ring at the top of leftover canvas.",
+  "globals.busyRegionFillLabel": "Loading pane",
+  "globals.busyRegionFillMessage": "Cold-start — no content yet.",
+  "globals.busyRegionFillStart": "Show fill busy",
+  "globals.busyRegionFillStop": "Clear fill busy",
+  "globals.busyRegionFillHelp":
+    "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane. Do not use EmptyState + CircularProgress as a loading shell.",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -505,8 +523,10 @@ const en = {
   "globals.tableColMapping": "Pricing map",
   "globals.tableMapManual": "Manual",
   "globals.tableMapAuto": "Auto",
+  "globals.tableMapUnpriced": "Unpriced",
+  "globals.tableMapAction": "Map",
   "globals.tableHelp":
-    "Table + Head / Body / Row / HeaderCell / Cell / Caption — host in `.fynns-table-wrap.fynns-scroll`. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers).",
+    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align`; missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",
@@ -638,7 +658,7 @@ const en = {
   "globals.segmentedItalic": "Italic",
   "globals.rhythm": "Toolbar / unit rhythm",
   "globals.rhythmLead":
-    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). Inside Card / Dialog, ControlStack rows are label-fill + end-hug controls (same Preferences recipe). Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
+    "Card / Collapsible body stacks sibling units with `unit-stack-gap` (16dp). Related control + note → `ControlBlock` (`field-hint-gap` 8dp — tighter). On a single ControlRow the hint docks in the label column; ToggleGroup centers on name + hint (not a full-bleed next row). Padded Surface is a form host like Card body. Prefer `ControlStack` + `ControlRow`, `.fynns-unit-stack`, and these tokens over raw `--fynns-space-*`.",
   "globals.rhythmSampleTitle": "Rhythm sample",
   "globals.rhythmClusterHelp":
     "Optional `.fynns-control-cluster` for side-by-side end-labeled switches (toolbar). Preferences / settings Cards should use one track-only Switch per ControlRow instead — see rows above.",
@@ -661,8 +681,15 @@ const en = {
   "globals.rhythmTokenRowCol": "Label | controls when the row is horizontal.",
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
+  "globals.rhythmSurfaceHelp":
+    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
+  "globals.rhythmSourceLabel": "Catalog source",
+  "globals.rhythmSourceAlpha": "Catalog",
+  "globals.rhythmSourceBeta": "Mirror",
+  "globals.rhythmAsOfHint": "As of 15 Aug 2026 01:11",
+  "globals.rhythmRefresh": "Refresh catalog",
   "globals.rhythmAgentHint":
-    "Agents: control + narrative = `ControlBlock`; sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
+    "Agents: control + narrative = `ControlBlock`; single-row hint stays in the label column (ToggleGroup centers on name+hint — not a full-bleed next row). Sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog / padded Surface hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
     "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
@@ -733,7 +760,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only when there is no visible name; pass `label` for a plain help trigger. Not a chrome `IconButton`. The ControlRow + Switch + trailing i sample below is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -924,7 +951,7 @@ const en = {
   "globals.navDrawerGroupAssistItem": "Suggest",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. `NavigationDrawerHeadline` = static section label; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline / destination-density SearchBar / tools gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group) — put them as **direct** body children; never wrap destinations in `.fynns-unit-stack` (16dp). Prefer Drawer for generic inspector panels.",
+    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. `NavigationDrawerHeadline` = static section label; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (16dp). Put them as **direct** body children; never wrap destinations in `.fynns-unit-stack`. Prefer Drawer for generic inspector panels.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -1683,6 +1710,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.chatMinWidth": "Chat 最小宽度",
   "layoutChrome.chatMinWidthHint":
     "--fynns-layout-chat-min-width — 软底；CSS 使用 min(token, 100%)。",
+  "layoutChrome.statsMinCol": "指标卡网格最小列宽",
+  "layoutChrome.statsMinColHint":
+    "--fynns-layout-stats-min-col — KPI auto-fill 最小轨道（约 280dp；640px 附近两列）。",
+  "layoutChrome.roStatsMinColSm": "指标卡网格最小列宽（窄屏）",
+  "layoutChrome.roStatsMinColSmHint":
+    "只读 --fynns-layout-stats-min-col-sm（100%）— 窄面板单列堆叠。",
   "layoutChrome.navDrawerHelp":
     "NavigationDrawer 宽度轨道 — 仅绝对 rem（禁止 %）。Apply 写入 `NAVDRAWER_TOKENS`。",
   "layoutChrome.navdrawerWidth": "导航抽屉宽度",
@@ -1780,10 +1813,16 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页。上一页/下一页为 IconButton + Tooltip；页码复用 Button ghost（当前页 = tonal）。请优先用它，不要手写页码芯片。",
+    "列表/表格分页。上一页/下一页为 IconButton + Tooltip；页码复用 Button ghost（当前页 = tonal）。页码条独占整行且不换行 — 每页条数 Select / 范围文案放在上一个 Card body 兄弟节点，禁止与 Pagination 左右 space-between。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
+  "globals.paginationCardTitle": "目录",
+  "globals.paginationPageSizeAria": "每页行数",
+  "globals.paginationPageSize10": "每页 10 行",
+  "globals.paginationPageSize50": "每页 50 行",
+  "globals.paginationPageSize100": "每页 100 行",
+  "globals.paginationRange": "第 {from}–{to} 项，共 {total} 项",
   "globals.skipLink": "跳到正文",
   "globals.skipLinkHelp":
     "SkipLink 未聚焦时完全裁剪隐藏；键盘聚焦后以固定在视口左上的 Button ghost 出现，可跳到 `#globals-content`。",
@@ -1814,7 +1853,13 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。",
+    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把圈留在剩余主栏顶部。",
+  "globals.busyRegionFillLabel": "栏加载中",
+  "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
+  "globals.busyRegionFillStart": "显示 fill busy",
+  "globals.busyRegionFillStop": "清除 fill busy",
+  "globals.busyRegionFillHelp":
+    "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏居中。禁止用 EmptyState + CircularProgress 当 loading 壳。",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
@@ -1850,8 +1895,10 @@ const zh: Record<MessageKey, string> = {
   "globals.tableColMapping": "定价映射",
   "globals.tableMapManual": "手动",
   "globals.tableMapAuto": "自动",
+  "globals.tableMapUnpriced": "未定价",
+  "globals.tableMapAction": "映射",
   "globals.tableHelp":
-    "Table + Head / Body / Row / HeaderCell / Cell / Caption — 放在 `.fynns-table-wrap.fynns-scroll` 内。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。",
+    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",
@@ -1983,7 +2030,7 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedItalic": "斜体",
   "globals.rhythm": "工具栏 / 单元节奏",
   "globals.rhythmLead":
-    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。Card / Dialog 内 ControlStack 为标签吃满 + 控件贴右（与 Preferences 行一致）。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
+    "Card / Collapsible body 用 `unit-stack-gap`（16dp）堆叠兄弟单元。控件 + 说明 → `ControlBlock`（`field-hint-gap` 8dp，更紧）。单行 ControlRow 的说明停在名称列；ToggleGroup 对名称+说明纵向居中（不要铺成通栏下一行）。带 pad 的 Surface 与 Card body 同属 form host。优先 `ControlStack` + `ControlRow`、`.fynns-unit-stack` 与这些 token，不要手写 `--fynns-space-*`。",
   "globals.rhythmSampleTitle": "节奏样例",
   "globals.rhythmClusterHelp":
     "可选 `.fynns-control-cluster`：并排放尾标签 Switch（工具栏）。设置 / Preferences Card 应每行一个纯轨道 Switch（见上方行），不要混用 cluster。",
@@ -2006,8 +2053,15 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRowCol": "横排时：标签 | 控件。",
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
+  "globals.rhythmSurfaceHelp":
+    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
+  "globals.rhythmSourceLabel": "目录来源",
+  "globals.rhythmSourceAlpha": "目录",
+  "globals.rhythmSourceBeta": "镜像",
+  "globals.rhythmAsOfHint": "截至 2026 年 8 月 15 日 01:11",
+  "globals.rhythmRefresh": "刷新目录",
   "globals.rhythmAgentHint":
-    "Agent：控件+叙述 = `ControlBlock`；兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog 宿主直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
+    "Agent：控件+叙述 = `ControlBlock`；单行说明停在名称列（ToggleGroup 对名称+说明居中 — 不要铺成通栏下一行）。兄弟单元 = Card / Collapsible body gap 或 `.fynns-unit-stack`；行 = `ControlStack` + `ControlRow`。Card / Collapsible / Dialog / 带 pad 的 Surface 直接套 Inspector form recipe（`#form-recipe`）。禁止自创间距。样例文案保持通用 — 禁止把消费仓产品文案贴进本 core。",
   "globals.formRecipeLead":
     "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
@@ -2077,7 +2131,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（对应 M3：Tooltip 锚在帮助触发器上）。无可见名称时用图标 “i”；传 `label` 则为纯文字触发。不是界面用的 `IconButton`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
+    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
@@ -2268,7 +2322,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerGroupAssistItem": "建议",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。`NavigationDrawerHeadline` = 静态分组文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline / destination-density SearchBar / 工具条间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）— 必须是 body **直接**子节点；禁止用 `.fynns-unit-stack`（16dp）包目的地列表。通用检查器请用 Drawer。",
+    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。`NavigationDrawerHeadline` = 静态分组文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline 间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）。SearchBar / 工具条与目的地行 = `--fynns-navdrawer-search-gap`（16dp）。必须是 body **直接**子节点；禁止用 `.fynns-unit-stack` 包目的地列表。通用检查器请用 Drawer。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",

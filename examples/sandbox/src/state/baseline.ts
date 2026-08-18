@@ -89,6 +89,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "bar-height",
   "chat-max-width",
   "chat-min-width",
+  "stats-min-col",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type EditableLayoutKey = (typeof EDITABLE_LAYOUT_KEYS)[number];
@@ -118,6 +119,7 @@ export const READONLY_LAYOUT_KEYS = [
   "tooltip-max-width",
   "snackbar-max-width",
   "field-stack-gap",
+  "stats-min-col-sm",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type ReadonlyLayoutKey = (typeof READONLY_LAYOUT_KEYS)[number];
@@ -167,6 +169,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "bar-height",
     "chat-max-width",
     "chat-min-width",
+    "stats-min-col",
   ],
 };
 
@@ -298,6 +301,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Shell size · Chat main column ceiling (sync chatmessage-max-width)",
   "chat-min-width":
     "Shell size · Chat soft floor (apply as min(token, 100%))",
+  "stats-min-col":
+    "Content grid · KPI stat auto-fill min column (~280dp; 2 cols near 640px)",
 };
 
 const NAVDRAWER_KEY_ROLES: Record<EditableNavdrawerKey, string> = {

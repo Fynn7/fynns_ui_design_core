@@ -49,9 +49,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Skip Tooltip** on chrome dismiss/clear whose glyph already means the action
    (Dialog / FullscreenDialog / Drawer / BottomSheet close X, Banner / Snackbar
    dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
-   Pure informational help uses **`InfoHint`**: standalone "i" when there is no
-   visible name; for form/inspector rows pass `label` (plain text trigger,
-   `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   Pure informational help uses **`InfoHint`**: standalone icon when there is no
+   visible name (`cursor: help` — **same 40dp circular target and 16dp glyph as
+   `IconButton` `ghost` `md`**, not a separate 14px muted dot); dense rows may
+   use `size="sm"`. For form/inspector rows pass `label` (plain text trigger,
+   `cursor: help`, no underline / trailing icon). Not an action `IconButton`.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
@@ -102,9 +104,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
    reserve *block* gutters that clip the first/last pill radii.
-5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
-   `CircularProgress`, `BusyScrim` (fullscreen blocking) / `BusyRegion`
-   (sectional dim + ring + message), `EmptyState`, `Banner` / `InlineAlert` /
+5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
+   `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
+   blocking) / `BusyRegion` (sectional dim + ring + message — **pane cold-start
+   uses `fill`**, never `EmptyState` + a ring), `EmptyState` (**zero-result
+   catalogs only**), `Banner` / `InlineAlert` /
    `BadgedBox` (notification overlay), and
    imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
    **not** use deleted Toast APIs or the removed pill `Badge` (see
@@ -421,20 +425,36 @@ classes.
   (dense track only — no `size` / no former md 52×32; `labelSide`
   `start`|`end`),
   Checkbox, Radio,
-  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
+  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion` — interactive /
+  decorative **outside** data tables: filters, legends, empty starters,
+  catalog tips. **Never** a table-cell status / mapping-kind pill), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
-  on-surface; long copy wraps — do not confuse with Banner), BadgedBox
+  on-surface; long copy wraps — **phrasing copy only** (`message` or short
+  `children`); never nest `List`, `FieldHeader`, `FieldStack`, or
+  `.fynns-unit-stack` block hosts inside the alert — stack catalogs **below** as
+  unit-stack siblings; do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
   LinearProgress (`value` in `[0,1]` or omit indeterminate) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size? }` /
-  **BusyRegion** `{ busy, label, children, message?, value?, size? }` (M3-style
-  fullscreen non-dismissible scrim or sectional dim + ring + visible message;
-  `label` is the progress accessible name and the default visible copy when
-  `message` is omitted; `value` in `[0, 1]` for determinate, omit for
-  indeterminate; `size` defaults `md`),
+  **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill? }`
+  (M3-style fullscreen non-dismissible scrim or sectional dim + ring + visible
+  message; `label` is the progress accessible name and the default visible copy
+  when `message` is omitted; `value` in `[0, 1]` for determinate, omit for
+  indeterminate; `size` defaults `md`; **`fill`** stretches in a height-resolved
+  parent so the overlay centers in the visible pane — required for cold-start
+  with no children). Overlay is `place-items: center` in the region's box;
+  a content-sized host parks the ring at the top of leftover canvas.
+  **Loading placement (hard):**
+  | Scene | Use | Do **not** |
+  | --- | --- | --- |
+  | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children | `EmptyState` as a loading shell; bare `CircularProgress` in a `unit-stack`; private `SectionLoading` |
+  | Refresh over existing surface | `BusyRegion` wrapping the real children (fill optional if the surface already has height) | Unmount the section and swap in EmptyState |
+  | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level layout |
+  | Zero-result catalog | `EmptyState` | Using it for loading |
   **paint-before-work:** `afterNextPaint` / `yieldToMain` / `runBusyTask(setBusy,
   task)` / `useBusyTask()` — `flushSync` busy on → wait one paint → then run
   the async task so `CircularProgress` can start spinning. Does **not** keep
@@ -452,7 +472,8 @@ classes.
     `min(var(--fynns-layout-chat-min-width), 100%)` (**no** OS window lock).
     Parent must resolve height — on DestinationAppShell canvas / shell main
     with a Preview (or other) band above Chat, wrap with **`FillColumn`**
-    (`header` = Preview, `children` = `Chat`); do **not** stack Preview /
+    (`header` = Preview, `children` = `Chat` **or** `BusyRegion` `fill` while
+    the thread is booting); do **not** stack Preview /
     EmptyState / Composer as canvas siblings (dead band under content height;
     canvas `overflow-y: auto` does not replace a fill column). Aside full-pane
     Chat still uses `.fynns-chat-host--fill` / EndAside (bubble 100%) — not
@@ -789,8 +810,10 @@ classes.
   with optional leading `icon` any ReactNode + indented items; sibling Item /
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
   wrap destinations in `.fynns-unit-stack`; SearchBar / tools as a body sibling
-  share `--fynns-navdrawer-section-gap` with destinations), SkipLink,
-  Breadcrumb, Pagination
+  use `--fynns-navdrawer-search-gap` (aliases `unit-stack-gap`) to destinations), SkipLink,
+  Breadcrumb, Pagination (list/table pager: **content-width nowrap** strip;
+  page-size Select / “Showing…” copy = previous Card-body sibling via
+  unit-stack-gap — never a horizontal space-between that shrinks the pages)
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
   `trailing` / `children` / optional `aside` (not assumed Chat). Internally
@@ -884,7 +907,11 @@ classes.
   body uses `--fynns-layout-nest-gap` — plain ≠ flush),
   old Media/Header/Content/Actions / variant APIs deleted),
   **Surface** (generic bordered / tonal well; any children; no Card head —
-  use for preview wells / stages), Collapsible (optional `icon` in the chevron slot — header hover /
+  use for preview wells / stages; default is **content-sized** — `fill` is the
+  only path that sets `min-height: 0` for a height-resolved parent; a
+  `.fynns-unit-stack` of padded wells inside `FillColumn` must scroll, not
+  shrink — crushed ~36px pills with clipped ToggleGroup are this bug, not a
+  theme failure), Collapsible (optional `icon` in the chevron slot — header hover /
   keyboard focus-visible swaps to expand chevron; on `(hover: none)` the slot stays chevron-only;
   open: full-bleed hairline under head; focus = quiet Input-like border; same title/body
   type roles as Card; same `chrome` prop — `plain` = nest surface children with nest-gap
@@ -914,7 +941,8 @@ classes.
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
   nowrap cells + max-content width → horizontal scroll when narrow, never
-  column crush / CJK header shatter), DiffView (scrollable unified-diff
+  column crush / CJK header shatter; cell mapping kind / status =
+  `.fynns-table-meta`, never `Chip` — see **Content density**), DiffView (scrollable unified-diff
   panel — add/del/same/meta lines; caller owns `+`/`-` in text), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
@@ -944,7 +972,8 @@ classes.
 - **Layout helpers:** ControlStack, ControlRow, **ControlBlock** `{ children,
   description?, errorText? }` (control chrome + supporting/error note —
   `--fynns-layout-field-hint-gap`; related Switch + narrative **must** wrap
-  here, not as loose Card siblings), **FieldHint** (muted/error caption;
+  here; **single-row** `description` docks in the **label column**, controls
+  vertically center on name + hint — not a full-bleed next row), **FieldHint** (muted/error caption;
   prefer via ControlBlock / FieldBlock / Input), FieldBlock / FieldHeader
   (`description?` / `errorText?` under the control), **FieldStack** (**strongly
   recommended** invisible cluster: group consecutive form units by **semantic
@@ -953,14 +982,18 @@ classes.
   adjacent stacks → `form-cluster-gap` / 32dp; live `#form-recipe`),
   `.fynns-unit-stack`
   (CSS host — purged `UnitStack` replacement; sibling **units** only — not a
-  substitute for FieldStack inside forms),
+  substitute for FieldStack inside forms; children `flex-shrink: 0` so a
+  height-capped `FillColumn` / `fynns-scroll` host scrolls instead of crushing
+  `Surface` / `Card` wells),
   Grid (`equalCells` makes every
   cell match the largest content width/height via measure),
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
   height-resolved parent — shell main / DestinationAppShell canvas / fixed
   stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
-  put `<Chat>` in `children` so the thread absorbs leftover and composer docks
-  to the column bottom. **Do not** stack Preview / EmptyState / Composer as
+  put `<Chat>` **or** pane-boot `BusyRegion` `fill` in `children` so the band
+  absorbs leftover (Chat composer docks; loading ring centers). A **catalog**
+  in that band is a `.fynns-unit-stack` + `fynns-scroll` scrollport — wells
+  stay content-sized. **Do not** stack Preview / EmptyState / Composer as
   canvas siblings — that leaves a dead band under content height. Does **not**
   apply aside bubble 100% (`.fynns-chat-host--fill` / EndAside stay for that)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
@@ -992,10 +1025,10 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline / destination-density SearchBar / tools gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group) — **never** wrap destinations in `.fynns-unit-stack` (16dp). |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`). **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
-  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. |
+  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = content-width nowrap strip; stack page-size Select above it (Card body siblings). |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
@@ -1019,28 +1052,37 @@ classes.
   | --- | --- | --- |
   | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
-  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap` | Card grid of the same rows when a table fits |
+  | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
+  | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
-  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` — `#rhythm` | Hand-rolled flex with name+hint left, controls floating mid/right |
+  | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
-  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card |
+  | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
+  | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (content-width nowrap strip). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |
+  | KPI / metric tiles (dashboard stats) | `repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))` grid with `--fynns-layout-unit-stack-gap`; narrow → `--fynns-layout-stats-min-col-sm` | Invented undefined `--fynns-layout-*` min column (invalidates grid → one full-width column) |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 
   Inside a padded `Surface` / `Card` strip that is **name + ToggleGroup/Switch
   + action + supporting timestamp**, use `ControlStack` + `ControlRow` +
-  `.fynns-control-cluster` + `ControlBlock`/`FieldHint` — do **not** hand-roll
+  `.fynns-control-cluster` + `ControlBlock` `description` — do **not** hand-roll
   flex that stacks name+hint on the left while controls float mid/right
   (consumer failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
   **ad-hoc Surface / inspector row chaos**; pasteable recipe:
-  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)). Live:
-  Globals `#rhythm`.
+  [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc)).
+  **Single-row `ControlBlock`:** the hint docks in the **label column** of the
+  same row unit (may wrap **inside that column** on a narrow window); the
+  ToggleGroup / cluster is **vertically centered** on name + hint. Do **not**
+  let FieldHint become a full-bleed next row (empty band to the right of the
+  timestamp, controls look top-heavy). Do **not** stuff the timestamp into
+  `ControlRow` `label`. Padded `Surface` is a **form host** (same label-fill +
+  end-hug as Card body). Live: Globals `#rhythm`.
 
   | Role | Token / host |
   | --- | --- |
   | Between `ControlRow`s in a `ControlStack` | `--fynns-layout-control-stack-gap` (**8dp** — toolbar / page chrome; tighter than unit-stack) |
-  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
+  | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / **padded Surface** / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
@@ -1095,7 +1137,9 @@ classes.
   `errorText`). Do **not** place the note as the next Card-body sibling under
   a bare `ControlStack` (zero gap / invented subtitle classes). Prefer
   `ControlStack` + `ControlRow` (+ `Grid` for multi-control rows) inside the
-  block. **Form hosts** (Card body, centered Dialog, Collapsible body
+  block. On a **single** ControlRow, `description` stays in the **label
+  column**; controls vertically center on name + hint (not a full-bleed next
+  row). **Form hosts** (Card body, padded Surface, centered Dialog, Collapsible body
   **direct** `ControlStack` / `ControlBlock`): ControlStack is label-fill
   (`1fr`) + end-hug controls (`max-content`) so Switch tracks share one trailing
   edge across sibling rows / ControlBlocks — same Preferences recipe as
@@ -1212,6 +1256,13 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
    stack every combo in Components. Do not expand the public barrel
    without that demo (see `llm/BREAKING_PURGE.md`).
 3. Keep `npm run typecheck` and `npm run lint` green.
+4. **Bump + publish (hard):** every landed change consumers should see is a
+   new GitHub Packages version in the **same task**. Authority:
+   [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
+   ship via a consumer Vite alias to this checkout.
+5. **Consumer pattern bugs (hard):** constrain in this core first (this file +
+   treaty + pasteable rule + sandbox sample), **then** fix the app. Never a
+   consumer-only patch. Cursor: [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
 
 <!-- OPENWIKI:START -->
 

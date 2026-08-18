@@ -1,4 +1,4 @@
-# Consumer treaty — pasteable `@fynns/ui` contract
+﻿# Consumer treaty — pasteable `@fynns/ui` contract
 
 **Purpose:** give any consumer repo a short, always-on agent rule so it obeys
 `@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
@@ -26,7 +26,8 @@ alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. npm
 consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
-**NavigationDrawer destination gap ≠ unit-stack**). Local install gate:
+**NavigationDrawer destination gap ≠ unit-stack** /
+**BusyRegion fill / loading placement** / **Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump
@@ -74,7 +75,11 @@ sandbox Layout templates `#layouts-demo-shell` (`DestinationAppShell`).
 Catalog notes: [`AGENTS.md`](../AGENTS.md) (destination ladder).
 Main canvas Preview+Chat: [`AGENTS.md`](../AGENTS.md) **FillColumn** (Layout
 templates `#layouts-demo-fill-column`) — do not stack Preview / EmptyState /
-Composer as canvas siblings.
+Composer as canvas siblings. A catalog in that band is a scrolling
+`.fynns-unit-stack` (content-sized `Surface` wells — not `fill`); crushed
+~36px outlined pills with clipped ToggleGroup means the wells shrank inside
+the flex column (core: default Surface is not `min-height: 0`; unit-stack
+children do not shrink).
 
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
@@ -117,8 +122,9 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    **direct** drawer-body children (`--fynns-navdrawer-section-gap` / **4dp**,
    same as Group leaves). Do **not** wrap the list in `.fynns-unit-stack`
    (16dp) — that makes top-level rows look sparse vs folded sections.
-   Destination-density SearchBar / tools as a body sibling share the same
-   **4dp** step as Item ↔ Item.
+   Destination-density SearchBar / tools as a body sibling use
+   `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`) to
+   the next destination — not the 4dp row step.
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 
@@ -126,14 +132,20 @@ Symptoms inside a `Surface` / `Card` strip:
 
 - A field **name** and a **timestamp / hint** stacked in a left column while
   `ToggleGroup` / `Switch` / action `Button` float mid/right
-- Label top-aligned, controls vertically centered — jagged baseline
-- Hint alone on a second row with a wide empty band
+- Label top-aligned, controls sitting high — ToggleGroup not centered on
+  name + hint
+- Hint alone on a **full-bleed** second row with a wide empty band to its
+  right (common on a **narrow** window)
 
-**Cause:** hand-rolled flex/grid instead of keep-set rhythm. **Fix in the
-consumer:** `ControlStack` + `ControlRow` `label` for the name; put sibling
-controls in `.fynns-control-cluster`; put “as of …” / supporting copy on
-`ControlBlock` `description` or `FieldHint` — never a bare `<p>` tied into the
-label column. Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
+**Cause:** hand-rolled flex/grid, **or** a `FieldHint` / `ControlBlock`
+`description` that still paints as a full-width next row (stale core, or the
+hint is a Surface sibling instead of `ControlBlock` `description`). **Fix:**
+keep `ControlStack` + `ControlRow` `label` + `.fynns-control-cluster` +
+`ControlBlock` `description` (do **not** put the timestamp in `ControlRow`
+`label`, do **not** restyle `.fynns-*`). Core docks the hint in the **label
+column** and vertically centers the cluster on name + hint. Bump / `file:`
+link `@fynn7/ui-design-core` if the consumer still shows the empty band.
+Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
@@ -151,6 +163,151 @@ the row button. **Fix in the consumer:** one `List` of `ListItem`s —
 Section chrome stays **one** outer `Card` if needed. Live: sandbox `#list`.
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+
+## Failure mode this treaty targets: Pagination squeezed beside page-size
+
+Symptoms in a table / list Card footer:
+
+- Page-size `Select` (“Rows: 10”) sits **left**, `Pagination` sits **right**
+- When the Card is narrow, page numbers **wrap onto a second row** (tall
+  pager, broken disc row) instead of the whole pager dropping below
+
+**Cause:** a horizontal space-between flex (`justify-content: space-between`)
+wrapping Select + Pagination as columns. Core Pagination is a **content-width
+nowrap** strip — shrinking it beside a sibling is what wraps the pages.
+**Fix in the consumer:** make page-size / range copy and `Pagination`
+**adjacent Card-body siblings** (unit-stack-gap). Do not restyle
+`.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+
+## Failure mode: KPI stat grid stacks full-width (undefined layout token)
+
+Symptoms in a dashboard / overview:
+
+- Four `StatCard` / `Surface` KPI tiles stack in **one column**, each stretching
+  the full host width with empty space on the right
+- `grid-template-columns: repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))`
+  silently falls back when `--fynns-layout-stats-min-col` is **undefined**
+
+**Cause:** consumer invented a `--fynns-layout-*` name that core never shipped, or
+typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
+**Fix in the consumer:** use shipped tokens only —
+`--fynns-layout-stats-min-col` (default `17.5rem`) and
+`--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
+narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: tiny InfoHint in TopAppBar / toolbar chrome
+
+Symptoms beside Import / Settings `IconButton`s:
+
+- Standalone page-help `InfoHint` renders a **14px** muted “i” on a bare `<button>`
+- Glyph reads smaller / dimmer than neighboring chrome icons; no 40dp hover disk
+
+**Cause:** consumer passed `iconSize={14}`, restyled `.fynns-info-hint-trigger`, or
+invented `IconButton` + `Tooltip` for pure help. Icon-only **`InfoHint`** in core
+now reuses **`IconButton` `ghost` `md`** geometry (`--fynns-size-icon-target` /
+`--fynns-size-icon`) with `cursor: help` — not a separate micro glyph.
+
+**Fix in the consumer:** drop custom sizes; use default `InfoHint` in
+`TopAppBar` `trailing` / `Toolbar`. Dense form rows may use `size="sm"`. Do not
+restyle `.fynns-info-hint*`. Authority: [`AGENTS.md`](../AGENTS.md) principle 3
+(**InfoHint**). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Surface + FieldHeader as titled table shell
+
+Symptoms in a dashboard / inspector:
+
+- A wide `Table` sits in `Surface variant="outlined" padded` with `FieldHeader` as the
+  section title (double pad, form-label rhythm on a data grid)
+- Columns crush or clip; consumer used inline `width: 100%` / ad-hoc `overflow-x` on a
+  bare `div` instead of `.fynns-table-wrap.fynns-scroll`
+
+**Cause:** `FieldHeader` is for **form label rows** above a control; titled data tables
+belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells / stages.
+
+**Fix in the consumer:** `Card title="…"` body → `.fynns-table-wrap.fynns-scroll` →
+`Table*` (no forced `width: 100%` on `.fynns-table`). Live: sandbox `#table`; hub
+usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Chip as table-cell status / mapping kind
+
+Symptoms in a wide usage / catalog table:
+
+- A column of **Manual / Auto / Unpriced** (or similar metadata) renders as
+  `Chip variant="suggestion"` (or `filter`) pills — 32dp stadium buttons next to
+  muted numbers and mono ids
+- The pill looks clickable even when it is not a filter; density fights the
+  table caption / cell type
+
+**Cause:** sandbox historically showed Chip in `#table`, and `Chip suggestion`
+was the leftover after pill `Badge` was purged. Chip is **interactive chrome**
+(filters, legends, empty starters, catalog tips) — **not** table metadata.
+
+**Fix in the consumer:** mapping kind / row status in a `TableCell` is
+`.fynns-table-meta` (muted, `font-size-xs`). Optional id stays mono + ellipsis.
+Do not restyle `.fynns-chip*` to look like caption. Live: sandbox `#table`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: table row action not sharing one trailing edge
+
+Symptoms in a mapping / actions column:
+
+- Rows with an id + «Map» look end-aligned; rows with only «Map» (unmapped /
+  free) sit **flush-start**, so the buttons do not share a vertical line
+
+**Cause:** `.fynns-control-cluster` is start-packed. When the middle (id /
+tooltip) is omitted, the trailing `Button` collapses to the kind caption.
+
+**Fix in the consumer:** wrap the cell in `.fynns-control-cluster--end-align`
+(nowrap). Keep a `.fynns-control-cluster__grow` flex spacer when the middle is
+missing (or put `__grow` on the id / `Tooltip` trigger when it is present) so
+every row’s action shares one trailing edge. Do not invent a second
+`justify-content: space-between` layout. Live: sandbox `#table`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
+
+Symptoms in a dashboard panel:
+
+- A warning `InlineAlert` repeats the same topic as a `List` of rows directly below
+  (duplicate title + explanation + actions feel like two bands)
+- Or `List` / `FieldHeader` were nested **inside** `InlineAlert` (invalid / tall strip)
+
+**Cause:** a **titled actionable catalog** (unmapped models, path fixes, …) was split
+into a page-level severity strip plus a sibling list, instead of one section shell.
+
+**Fix in the consumer:** **`Card` `title`** + `FieldHint` (one supporting paragraph) +
+`List` / `ListItem` rows in the Card body; optional warning `icon` on the Card head.
+Reserve standalone `InlineAlert` for **single-line** in-panel notices with no row
+catalog. Live: hub usage unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List / FieldHeader nested inside InlineAlert
+
+Symptoms in a settings / dashboard panel:
+
+- Warning `InlineAlert` is **tall** with empty bands between title, hint, and rows
+- Model names and trailing actions sit inside the alert tonal box; «映射» hugs the
+  far edge under the icon column inset
+- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` were passed as
+  `children` of `InlineAlert`
+
+**Cause:** `InlineAlert` body is a **phrasing-only** text slot (icon + copy strip).
+Block hosts (`List`, form labels, unit stacks) belong **outside** the alert as
+`.fynns-unit-stack` siblings — same rhythm as «section label → InlineAlert → next
+block» in [`AGENTS.md`](../AGENTS.md) **Inset decision tree**.
+
+**Fix in the consumer:** keep `InlineAlert` to title + supporting sentence
+(`message` or short `children` with `<strong>` / `<br />`); stack the catalog
+**below** with `List` / `ListItem` (`headline` + `trailing` actions). Do not
+restyle `.fynns-inline-alert*`. Live: sandbox Globals severity samples; hub usage
+unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md) **Content density** +
+Feedback **InlineAlert**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 

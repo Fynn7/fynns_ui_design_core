@@ -53,8 +53,9 @@ export type NavigationDrawerProps = {
   /**
    * Destinations as **direct** body children: `NavigationDrawerItem`,
    * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
-   * Body siblings (including destination-density SearchBar / tools) share
-   * `--fynns-navdrawer-section-gap` (4dp) — same as Item ↔ Item.
+   * Item ↔ Item uses `--fynns-navdrawer-section-gap` (4dp). SearchBar /
+   * tools as a body sibling uses `--fynns-navdrawer-search-gap` (16dp,
+   * aliases unit-stack-gap) to the next destination.
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;
@@ -85,8 +86,9 @@ function DrawerSheet({
  * M3 Navigation drawer — destination list in a dense side sheet.
  * Modal overlays content; `standard` sits in the layout permanently.
  * Prefer `Drawer` for generic side panels (forms, inspectors).
- * Sibling Item / Group / Headline / SearchBar / tools spacing uses
- * `--fynns-navdrawer-section-gap` (4dp) — never `.fynns-unit-stack` for the
+ * Sibling Item / Group / Headline spacing uses
+ * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools ↔ destinations
+ * uses `--fynns-navdrawer-search-gap`. Never `.fynns-unit-stack` for the
  * destination list itself.
  * @see https://m3.material.io/components/navigation-drawer/overview
  */

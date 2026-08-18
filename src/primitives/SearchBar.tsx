@@ -45,7 +45,8 @@ export type SearchBarProps = Omit<
    * - `destination` — same height / type / icon gap as `NavigationDrawerItem`
    *   (40dp); keeps chrome SearchBar surface / shadow / focus. Use in
    *   destination drawers (e.g. GlobalSearch). Also auto-applied to plain
-   *   SearchBars inside `.fynns-nav-drawer-body`.
+   *   SearchBars inside `.fynns-nav-drawer-body`. Body sibling gap to
+   *   destinations is `--fynns-navdrawer-search-gap`, not `section-gap`.
    */
   density?: "chrome" | "destination";
   /** Accessible name for the search field (required when no visible label). */

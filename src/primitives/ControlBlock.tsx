@@ -13,9 +13,10 @@ export type ControlBlockProps = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
   /**
    * Supporting copy under the control(s). Same muted role as Input
-   * `supportingText` / `.fynns-field-hint`. Do **not** leave this as a loose
-   * Card sibling — wrap control + copy in `ControlBlock` so
-   * `--fynns-layout-field-hint-gap` applies.
+   * `supportingText` / `.fynns-field-hint`. On a **single** ControlRow the
+   * note docks in the label column; controls stay vertically centered on
+   * name + hint (not a full-bleed next row). Do **not** leave this as a
+   * loose Card / Surface sibling.
    */
   description?: ReactNode;
   /** Error copy under the control(s); wins over `description` when both set. */

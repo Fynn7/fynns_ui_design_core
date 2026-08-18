@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { ButtonSize } from "./Button";
+import { IconButton } from "./IconButton";
 import { InfoIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
 
@@ -11,35 +13,55 @@ export type InfoHintProps = {
    */
   label?: ReactNode;
   ariaLabel?: string;
+  /** Icon-only: matches IconButton target (`md` = 40dp chrome default). */
+  size?: ButtonSize;
+  /** Rare override — default follows `--fynns-size-icon` (16dp). */
   iconSize?: number;
   className?: string;
 };
 
-/** Informational affordance: icon-only, or plain labeled help trigger. */
+/** Informational affordance: icon-only (IconButton-sized help), or labeled text trigger. */
 export function InfoHint({
   content,
   label,
   ariaLabel = "More information",
-  iconSize = 14,
+  size = "md",
+  iconSize,
   className,
 }: InfoHintProps) {
   const labeled = label != null;
+  if (labeled) {
+    return (
+      <Tooltip content={<span className="fynns-info-hint">{content}</span>}>
+        <button
+          type="button"
+          className={[
+            "fynns-info-hint-trigger",
+            "fynns-info-hint-trigger--labeled",
+            className ?? "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          aria-label={ariaLabel}
+        >
+          <span className="fynns-info-hint-label">{label}</span>
+        </button>
+      </Tooltip>
+    );
+  }
+
   return (
     <Tooltip content={<span className="fynns-info-hint">{content}</span>}>
-      <button
-        type="button"
-        className={[
-          "fynns-info-hint-trigger",
-          labeled ? "fynns-info-hint-trigger--labeled" : "",
-          className ?? "",
-        ]
+      <IconButton
+        variant="ghost"
+        size={size}
+        aria-label={ariaLabel}
+        className={["fynns-info-hint-trigger", "fynns-info-hint-trigger--icon", className ?? ""]
           .filter(Boolean)
           .join(" ")}
-        aria-label={ariaLabel}
       >
-        {labeled ? <span className="fynns-info-hint-label">{label}</span> : null}
-        {labeled ? null : <InfoIcon size={iconSize} />}
-      </button>
+        <InfoIcon {...(iconSize != null ? { size: iconSize } : {})} />
+      </IconButton>
     </Tooltip>
   );
 }

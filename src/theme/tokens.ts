@@ -1118,12 +1118,16 @@ export const NAVDRAWER_TOKENS = {
   "headline-pad-inline": "1rem",
   /**
    * Vertical gap between consecutive body siblings (Item / Group / Headline /
-   * Divider / destination-density SearchBar / tools wrappers) in
-   * `.fynns-nav-drawer-body` **and** between leaf items inside
+   * Divider) in `.fynns-nav-drawer-body` **and** between leaf items inside
    * `.fynns-nav-drawer-group-body` (4dp). Never wrap destinations in
    * `.fynns-unit-stack` for spacing.
    */
   "section-gap": "0.25rem",
+  /**
+   * SearchBar / tools (chrome) ↔ destination rows. Kind jump — aliases
+   * `--fynns-layout-unit-stack-gap` (16dp). Item ↔ Item stays `section-gap`.
+   */
+  "search-gap": "var(--fynns-layout-unit-stack-gap)",
   "badge-dot": "0.375rem",
   /**
    * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one
@@ -1390,6 +1394,17 @@ export const LAYOUT_TOKENS = {
    * Message column stays `min-width: 0`.
    */
   "chat-min-width": "20rem",
+  /**
+   * Min track for KPI / stat `auto-fill` grids
+   * (`repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))`).
+   * ~280dp → two columns near 640px host width; more columns on wide canvases.
+   * **Must exist** — an undefined var invalidates `grid-template-columns` and
+   * stacks tiles full-width in one column. Pair with `stats-min-col-sm` on
+   * narrow breakpoints.
+   */
+  "stats-min-col": "17.5rem",
+  /** Narrow panels: one column only when the host is narrower than min-col. */
+  "stats-min-col-sm": "min(100%, var(--fynns-layout-stats-min-col))",
 } as const;
 
 /**

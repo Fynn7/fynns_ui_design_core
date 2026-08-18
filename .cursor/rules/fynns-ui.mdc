@@ -34,11 +34,14 @@ ring can paint before heavy work).
   BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
   Collapsible shell, static head),
   Surface,
-  LinearProgress/CircularProgress, BusyScrim/BusyRegion,
+  LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
+  never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
   bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
-  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination, SkipLink, Stepper,
+  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
+  (content-width nowrap strip; page-size Select stacks above as a Card-body
+  sibling — never horizontal space-between), SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
   `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
@@ -92,10 +95,10 @@ ring can paint before heavy work).
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
   destination siblings use `--fynns-navdrawer-section-gap` — never
-  `.fynns-unit-stack`; SearchBar/tools as a body sibling share
-  `--fynns-navdrawer-section-gap` with destinations),
+  `.fynns-unit-stack`; SearchBar/tools as a body sibling use
+  `--fynns-navdrawer-search-gap` to destinations),
   DestinationAppShell, ClippedNavShell, EndAside,
-  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
+  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
@@ -107,7 +110,8 @@ ring can paint before heavy work).
   end inspector: `EndAside` (not modal `Drawer`, not revived Panel/ListGroup).
   Main canvas with Preview above Chat: **`FillColumn`** (`header` + `Chat` in
   children) so composer docks; never stack Preview/EmptyState/Composer as
-  siblings.
+  siblings. A catalog in that band = `.fynns-unit-stack` + `fynns-scroll`
+  (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
   mobile-first densify only (never desktop greenfield root); Drawer /
@@ -119,7 +123,9 @@ ring can paint before heavy work).
   Vertical unit lists: Card / Collapsible body already use
   `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
   (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
-  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. **Form
+  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. Single-row
+  `description` docks in the **label column**; ToggleGroup centers on name+hint
+  (not a full-bleed next row). Padded `Surface` is a form host. **Form
   options by semantic kind → `FieldStack`** (strongly recommended): plain
   FieldBlocks keep `field-stack-gap` (12dp); description/error (no choice
   cluster) opens the next sibling to `unit-stack-gap` (16dp); FieldBlocks
@@ -182,7 +188,10 @@ ring can paint before heavy work).
 - App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
   or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
 - If a token or component is missing, add it in the core package
-  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then publish / bump.
+  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then **bump
+  semver + publish GitHub Packages in the same task**
+  (`docs/package-propagation.md`). Never deliver by aliasing a consumer at
+  this checkout.
 - Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
   `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
   `restoreFynnsThemeMode()` from `@fynns/ui`.
