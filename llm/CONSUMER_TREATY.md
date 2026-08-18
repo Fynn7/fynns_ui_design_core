@@ -198,6 +198,23 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: tiny InfoHint in TopAppBar / toolbar chrome
+
+Symptoms beside Import / Settings `IconButton`s:
+
+- Standalone page-help `InfoHint` renders a **14px** muted “i” on a bare `<button>`
+- Glyph reads smaller / dimmer than neighboring chrome icons; no 40dp hover disk
+
+**Cause:** consumer passed `iconSize={14}`, restyled `.fynns-info-hint-trigger`, or
+invented `IconButton` + `Tooltip` for pure help. Icon-only **`InfoHint`** in core
+now reuses **`IconButton` `ghost` `md`** geometry (`--fynns-size-icon-target` /
+`--fynns-size-icon`) with `cursor: help` — not a separate micro glyph.
+
+**Fix in the consumer:** drop custom sizes; use default `InfoHint` in
+`TopAppBar` `trailing` / `Toolbar`. Dense form rows may use `size="sm"`. Do not
+restyle `.fynns-info-hint*`. Authority: [`AGENTS.md`](../AGENTS.md) principle 3
+(**InfoHint**). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Surface + FieldHeader as titled table shell
 
 Symptoms in a dashboard / inspector:
@@ -214,6 +231,23 @@ belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells 
 `Table*` (no forced `width: 100%` on `.fynns-table`). Live: sandbox `#table`; hub
 usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
+
+Symptoms in a dashboard panel:
+
+- A warning `InlineAlert` repeats the same topic as a `List` of rows directly below
+  (duplicate title + explanation + actions feel like two bands)
+- Or `List` / `FieldHeader` were nested **inside** `InlineAlert` (invalid / tall strip)
+
+**Cause:** a **titled actionable catalog** (unmapped models, path fixes, …) was split
+into a page-level severity strip plus a sibling list, instead of one section shell.
+
+**Fix in the consumer:** **`Card` `title`** + `FieldHint` (one supporting paragraph) +
+`List` / `ListItem` rows in the Card body; optional warning `icon` on the Card head.
+Reserve standalone `InlineAlert` for **single-line** in-panel notices with no row
+catalog. Live: hub usage unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: List / FieldHeader nested inside InlineAlert
 

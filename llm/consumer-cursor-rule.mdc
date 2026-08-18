@@ -126,7 +126,8 @@ FillColumn。
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
 | 表格/列表分页（每页条数 + `Pagination`） | Card body **上下**堆：每页 `Select` / 范围文案，再 `Pagination`（内容宽度 nowrap） | 左右 space-between，把页码挤到 Select 旁边直到数字换行 |
 | KPI / 指标卡（dashboard stats） | `auto-fill` + `--fynns-layout-stats-min-col`（窄屏 `--fynns-layout-stats-min-col-sm`） | 自造未发布的 `--fynns-layout-*` 导致 grid 失效、单列撑满 |
-| 板内警告 + 待办行（未映射模型、路径列表） | `InlineAlert`（标题+一句说明）与 `List` **上下**堆在 `.fynns-unit-stack` | 把 `FieldHeader` / `List` / `.fynns-unit-stack` 塞进 `InlineAlert` children |
+| 板内警告 + 待办行（未映射模型、路径列表） | **一个** `Card` `title` + `FieldHint` + `List`（警告语义用 head `icon` 或一句说明）；单行瞬态说明才用独立 `InlineAlert` | 页面级 `InlineAlert` 与 orphan `List` 重复同一主题；把 `List` 塞进 `InlineAlert` |
+| TopAppBar / 工具条帮助 | icon-only `InfoHint`（默认 = `IconButton ghost md` 40dp + 16dp 字标；`cursor: help`） | 14px 灰点、裸 `<button>` 或手写 `IconButton`+`Tooltip` 冒充帮助 |
 
 交互 `ListItem` 的 `trailing`（IconButton）在行 `<button>` **外侧**（合法嵌套）—
 不要为了「不能嵌套按钮」再包一层 Surface。对照 sandbox `#list`。权威：子模块

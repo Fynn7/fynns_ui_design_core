@@ -49,9 +49,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **Skip Tooltip** on chrome dismiss/clear whose glyph already means the action
    (Dialog / FullscreenDialog / Drawer / BottomSheet close X, Banner / Snackbar
    dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
-   Pure informational help uses **`InfoHint`**: standalone "i" when there is no
-   visible name; for form/inspector rows pass `label` (plain text trigger,
-   `cursor: help`, no underline / trailing icon). Not a chrome `IconButton`.
+   Pure informational help uses **`InfoHint`**: standalone icon when there is no
+   visible name (`cursor: help` — **same 40dp circular target and 16dp glyph as
+   `IconButton` `ghost` `md`**, not a separate 14px muted dot); dense rows may
+   use `size="sm"`. For form/inspector rows pass `label` (plain text trigger,
+   `cursor: help`, no underline / trailing icon). Not an action `IconButton`.
    **Field header actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label

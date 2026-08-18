@@ -1398,9 +1398,17 @@ input.fynns-input:focus::-webkit-scrollbar {
   border: 0;
   border-radius: var(--fynns-radius-round);
   background: transparent;
-  color: var(--fynns-color-text-muted);
   line-height: 0;
   cursor: help;
+}
+
+.fynns-info-hint-trigger--icon.fynns-btn {
+  cursor: help;
+}
+
+.fynns-info-hint-trigger--icon.fynns-btn > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 .fynns-info-hint-trigger--labeled {
@@ -1414,11 +1422,6 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-info-hint-label {
   min-width: 0;
-}
-
-.fynns-info-hint-trigger:hover {
-  color: var(--fynns-color-text);
-  background: transparent;
 }
 
 .fynns-info-hint-trigger--labeled:hover {

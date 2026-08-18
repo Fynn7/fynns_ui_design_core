@@ -758,7 +758,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only when there is no visible name; pass `label` for a plain help trigger. Not a chrome `IconButton`. The ControlRow + Switch + trailing i sample below is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -2127,7 +2127,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（对应 M3：Tooltip 锚在帮助触发器上）。无可见名称时用图标 “i”；传 `label` 则为纯文字触发。不是界面用的 `IconButton`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
+    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
