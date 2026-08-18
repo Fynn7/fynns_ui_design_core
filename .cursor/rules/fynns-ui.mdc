@@ -34,7 +34,8 @@ ring can paint before heavy work).
   BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
   Collapsible shell, static head),
   Surface,
-  LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
+   LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
+  `indicator="linear"` for known % — never nest a second progress in `message`;
   never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell

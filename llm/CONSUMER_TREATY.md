@@ -28,7 +28,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **NavigationDrawer destination gap ≠ unit-stack** /
-**BusyRegion fill / loading placement** / **Pagination full-row stack**). Local install gate:
+**BusyRegion fill / loading placement** / **one progress chrome per busy host** /
+**Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump
@@ -376,6 +377,23 @@ extension. **Fix in the consumer:** pass matching `language` / profile; for
 fill editors also `autoGrow={false}`. Authority:
 [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) (`label` ≠ `language`) +
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: stacked progress chromes in BusyRegion
+
+Symptoms: overlay shows **CircularProgress + LinearProgress** (or a consumer
+`TaskProgressBar` inside `BusyRegion` `message`); the same counts appear twice
+on one caption row (`扫描会话 10440/14179` and `10440 / 14179`).
+
+**Cause:** `BusyStack` used to always paint a ring, so a known-progress bar
+in `message` doubled the chrome. **Fix in core:** `indicator="circular"` |
+`"linear"` — one widget. **Fix in the consumer:** known % / counts →
+`BusyRegion` / `BusyScrim` `indicator="linear"` + `value`; `message` is status
+copy (+ optional `FieldHint`) only — never nest `LinearProgress` /
+`CircularProgress` / a task-progress bar. Standalone `LinearProgress` beside
+content (not inside the overlay `message`) is fine. Authority:
+[`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Live:
+sandbox Globals `#busy-region` (determinate sample is linear). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

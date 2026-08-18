@@ -69,7 +69,9 @@ failure modes **squashed drawer** + **wrong shell slot**.
 16. **Loading placement:** pane cold-start → `BusyRegion` `fill` in a
     height-resolved host (`FillColumn` children / shell main). Do **not** use
     `EmptyState` + `CircularProgress` (content-sized → ring stuck at the top).
-    Full-app block → `BusyScrim`. Inline widget busy → `CircularProgress` `sm`.
+    Known % / counts → `indicator="linear"` + `value`; `message` is copy only
+    (never nest a bar or ring). Full-app block → `BusyScrim`. Inline widget busy
+    → `CircularProgress` `sm`.
     Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
 
 ## Agent checklist (greenfield / short prompt)
