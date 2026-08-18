@@ -3,6 +3,7 @@ import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   CircularProgress,
+  LinearProgress,
   type CircularProgressSize,
 } from "./Progress";
 
@@ -17,22 +18,35 @@ function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
 }
 
+export type BusyIndicator = "circular" | "linear";
+
 function BusyStack({
   label,
   message,
   value,
   size,
+  indicator,
   messageId,
 }: {
   label: string;
   message: ReactNode;
   value?: number;
   size: CircularProgressSize;
+  indicator: BusyIndicator;
   messageId?: string;
 }) {
   return (
-    <div className="fynns-busy-stack">
-      <CircularProgress label={label} value={value} size={size} />
+    <div
+      className={join(
+        "fynns-busy-stack",
+        indicator === "linear" && "fynns-busy-stack--linear",
+      )}
+    >
+      {indicator === "linear" ? (
+        <LinearProgress label={label} value={value} />
+      ) : (
+        <CircularProgress label={label} value={value} size={size} />
+      )}
       <div className="fynns-busy-message" id={messageId}>
         {message}
       </div>
@@ -44,16 +58,24 @@ export type BusyScrimProps = {
   open: boolean;
   /** Progress accessible name; also used as visible text when `message` is omitted. */
   label: string;
-  /** Visible copy under the ring. Defaults to `label`. */
+  /**
+   * Visible copy under the single progress chrome. Defaults to `label`.
+   * Phrasing only — never nest `LinearProgress` / `CircularProgress`.
+   */
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** @default "md" */
+  /** Ring size. Ignored when `indicator` is `linear`. @default "md" */
   size?: CircularProgressSize;
+  /**
+   * One progress chrome per host. Known % / counts → `linear`;
+   * unknown wait → `circular` (default).
+   */
+  indicator?: BusyIndicator;
 };
 
 /**
- * Full-viewport blocking busy layer (M3 scrim + circular progress + message).
+ * Full-viewport blocking busy layer (M3 scrim + one progress chrome + message).
  * Non-dismissible: no Esc / scrim click. Prefer `BusyRegion` for sectional waits.
  * For heavy boots, open via `runBusyTask` / `useBusyTask` so the ring can paint
  * before the main thread blocks (see AGENTS.md Feedback).
@@ -64,6 +86,7 @@ export function BusyScrim({
   message,
   value,
   size = "md",
+  indicator = "circular",
 }: BusyScrimProps) {
   const messageId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -141,6 +164,7 @@ export function BusyScrim({
         message={visibleMessage}
         value={value}
         size={size}
+        indicator={indicator}
         messageId={messageId}
       />
     </div>,
@@ -152,12 +176,20 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
   busy: boolean;
   /** Progress accessible name; also used as visible text when `message` is omitted. */
   label: string;
-  /** Visible copy under the ring. Defaults to `label`. */
+  /**
+   * Visible copy under the single progress chrome. Defaults to `label`.
+   * Phrasing only — never nest `LinearProgress` / `CircularProgress`.
+   */
   message?: ReactNode;
   /** Determinate progress in `[0, 1]`. Omit for indeterminate. */
   value?: number;
-  /** @default "md" */
+  /** Ring size. Ignored when `indicator` is `linear`. @default "md" */
   size?: CircularProgressSize;
+  /**
+   * One progress chrome per host. Known % / counts → `linear`;
+   * unknown wait → `circular` (default).
+   */
+  indicator?: BusyIndicator;
   /**
    * Stretch to a height-resolved parent (`FillColumn` children, shell main /
    * canvas) so the overlay centers in the **visible pane**. Required for
@@ -170,9 +202,10 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
 
 /**
  * Sectional busy wrapper: children stay mounted under a dim layer with
- * circular progress + message. Sets `aria-busy` on the region while active.
- * Overlay uses `place-items: center` — the ring sits in the region's box,
- * so a content-sized host leaves it stuck at the top of a tall pane.
+ * **one** progress chrome + message. Sets `aria-busy` on the region while
+ * active. Overlay uses `place-items: center` — the chrome sits in the
+ * region's box, so a content-sized host leaves it stuck at the top of a
+ * tall pane.
  */
 export function BusyRegion({
   busy,
@@ -180,6 +213,7 @@ export function BusyRegion({
   message,
   value,
   size = "md",
+  indicator = "circular",
   fill = false,
   children,
   className,
@@ -216,6 +250,7 @@ export function BusyRegion({
             message={visibleMessage}
             value={value}
             size={size}
+            indicator={indicator}
             messageId={messageId}
           />
         </div>

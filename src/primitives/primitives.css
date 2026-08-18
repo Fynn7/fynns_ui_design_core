@@ -3482,11 +3482,25 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
 }
 
+.fynns-busy-stack--linear {
+  width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
+  max-width: 100%;
+  align-items: stretch;
+  text-align: start;
+}
+
 .fynns-busy-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
   margin: 0;
   color: var(--fynns-color-text);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
+}
+
+.fynns-busy-stack--linear .fynns-busy-message {
+  text-align: start;
 }
 
 .fynns-busy-scrim {
