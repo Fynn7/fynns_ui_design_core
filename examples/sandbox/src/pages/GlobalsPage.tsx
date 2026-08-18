@@ -3502,10 +3502,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
           <BusyRegion
             busy={busyRegionDeterminate}
+            indicator="linear"
             label={t("globals.busyRegionLabel")}
             message={t("globals.busyRegionMessage")}
             value={0.55}
-            size="sm"
           >
             <Card title={t("globals.busyRegionTitle")}>
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
@@ -3557,10 +3557,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <BusyScrim
             open={busyScrimDeterminateOpen}
+            indicator="linear"
             label={t("globals.busyScrimLabel")}
             message={t("globals.busyScrimMessage")}
             value={0.7}
-            size="lg"
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>

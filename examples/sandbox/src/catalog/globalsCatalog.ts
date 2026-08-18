@@ -318,7 +318,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "busy-region",
     categoryId: "patterns",
     label: "BusyRegion",
-    keywords: ["忙碌", "busy", "loading region"],
+    keywords: ["忙碌", "busy", "loading region", "linear"],
   },
   {
     id: "busy-scrim",
