@@ -118,6 +118,7 @@ FillColumn。
 | 数据 | 用 | **禁止** |
 | --- | --- | --- |
 | 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** `List` 多行 `ListItem`：`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` 里 `IconButton` `ghost` `sm` + `Tooltip`；删除走 `ConfirmDialog` | 每条外包加垫 `Surface`/`Card`；操作堆在文案下方；单条 List 再套 unit-stack；行内实心危险圆钮 |
+| 可展开目录（会话树 + 嵌套明细表） | 同一个 `List`：**直接** `ul > li`。时间/种类 → `overline`；名称 → `headline`；路径 → `supportingText`；时长/次数 → `trailingSupportingText`。展开 = 行 `onClick` + leading 装饰 chevron + `aria-expanded`。嵌套 `List` 或 `.fynns-table-wrap.fynns-scroll` 放 `ListItem` **`detail`**。打开记录 → trailing `IconButton`（与行同一条 radius-3xl 高亮，不是行外浮岛）。长文案 `Tooltip` 包 headline，省略号由 core 画。对照 `#list` | `ul > div` 包住 ListItem；List 外的孤儿 ListItem；`leading` 里裸 `<button>` / 应用 `HubTreeDisclosure`；trailing 用 `ControlRow`；headline 里再塞 `Button`；嵌套表 `width:100%` + `fixed` + 藏横向滚动；单元格或 headline 用 `Chip` 当状态；headline 上 `tip-grow` / `max-content` 撑破 `…` |
 | 应用目的地（导航） | `NavigationDrawer` / Rail / Bar（或 `DestinationAppShell`） | 用 `List`/`Card` 当根导航 |
 | 多列表格 | **`Card` `title`** + `Table` + `.fynns-table-wrap.fynns-scroll`。对照 `#table` | 同数据的 Card 网格（表能装下时）；`Surface` + `FieldHeader` 冒充分区标题 |
 | 表格单元格：映射来源/状态 + 可选 id + 行尾操作 | `.fynns-table-meta`（muted 文案）+ 可选 mono id，包在 `.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让「映射」等按钮跨行右对齐。对照 `#table` | 单元格里用 `Chip suggestion/filter` 当状态 pill；未映射行把操作顶在列首 |
@@ -161,6 +162,38 @@ FillColumn。
 ```
 
 **禁止：** `<Surface padded><List><ListItem/><!-- 下面再一排 IconButton --></List></Surface>` 循环每条。
+
+可展开树（会话 / 往返 + 嵌套表）— `detail` 留在**同一个** `<li>`（嵌套 `List` 仍用同一套 inset / item pad，禁止把子行 chevron 贴边；父行 `--with-end` 不得压掉子行 pad-end）：
+
+```tsx
+<List aria-label={catalogLabel}>
+  <ListItem
+    leading={open ? <ChevronDownIcon /> : <ChevronRightIcon />}
+    overline={timestamp}
+    headline={name}
+    supportingText={path}
+    trailingSupportingText={duration}
+    trailing={
+      <Tooltip content={openLabel}>
+        <IconButton size="sm" variant="ghost" aria-label={openLabel}>
+          <BotIcon />
+        </IconButton>
+      </Tooltip>
+    }
+    aria-expanded={open}
+    onClick={() => setOpen(!open)}
+    detail={
+      open ? (
+        <div className="fynns-table-wrap fynns-scroll">
+          <Table>{/* nowrap cells; no width:100% / table-layout:fixed */}</Table>
+        </div>
+      ) : null
+    }
+  />
+</List>
+```
+
+**禁止：** `List` 里用 `div` 包 `ListItem`；把披露按钮放进 `leading`；`ControlRow` 当尾栏；headline 里再嵌 `Button`。
 
 ## 标签行 / 工具条节奏（硬 — 禁止手搓乱排）
 
@@ -390,7 +423,7 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 6. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
 7. Surface/Card 标签行：是否 `ControlRow` + cluster + `ControlBlock`/`FieldHint`
    （对照 `#rhythm`），而非手搓 flex 乱排？
-8. 路径 / 链接 / 书签目录：是否 **一个** `List` + `ListItem`（对照 `#list`），而非每条肥 `Surface`/`Card`？行操作是否 trailing `ghost` `sm`？
+8. 路径 / 链接 / 书签目录：是否 **一个** `List` + `ListItem`（对照 `#list`），而非每条肥 `Surface`/`Card`？行操作是否 trailing `ghost` `sm` 且与行同一条高亮？可展开树是否 `ul > li` + `detail` 嵌套（而非 `ul > div` / leading 按钮）？长 headline 是否靠 core 省略号（禁止 `tip-grow` / max-content）？
 9. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
 10. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
 11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？

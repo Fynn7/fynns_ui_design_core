@@ -895,8 +895,22 @@ classes.
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
   menu; **path / link / bookmark catalogs** = one `List` of `ListItem`s —
   headline + path `supportingText` + trailing ghost `sm` `IconButton`s
-  (interactive trailing is a **sibling** of the row button — valid nesting);
-  **never** one padded `Surface`/`Card` per entry; sidebar destinations use
+  (interactive trailing is a **sibling** of the row button — valid nesting —
+  the **host / row** still paints one `radius-3xl` state-layer so the
+  IconButton is not a floating island); headline / supporting ellipsize
+  through `Tooltip` wrappers; leading **hugs** the glyph (not a 40dp empty
+  column); overline / headline / supporting stack with `--fynns-list-content-gap`;
+  timestamp / kind label → `overline`; duration / count →
+  `trailingSupportingText` (optional `.fynns-control-cluster` — **not**
+  `ControlRow`); **expandable trees** = row `onClick` + decorative leading
+  chevron + `aria-expanded`; nested `List` / `.fynns-table-wrap` = `ListItem`
+  **`detail`** (JSX `children` alias; same `<li>` — `ul > li` only); nested `List`
+  under `detail` keeps the same inset / item pad as a top-level List (child
+  chevron is not flush; `--with-end` chrome is child-only so a parent trailing
+  IconButton does not crush nested pad-end); **never** wrap a `ListItem` in
+  a `div`, never put a button in `leading` (slot is `aria-hidden`), never a
+  `Button` in `headline`; **never** one padded `Surface`/`Card` per entry;
+  sidebar destinations use
   `NavigationDrawer` / `NavigationRail` / `NavigationBar` — not deleted
   `ListGroup` / `ListRow`; see **Content density**), Card (`title` /
   optional `icon` / `actions` + body;
@@ -1051,6 +1065,7 @@ classes.
   | Data shape | Use | Do **not** |
   | --- | --- | --- |
   | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
+  | Expandable catalog (session / turn tree + nested records) | Same `List`: **direct** `ul > li`. Timestamp / kind → `overline`; name → `headline`; path → `supportingText`; duration / count → `trailingSupportingText`. Expand = row `onClick` + decorative leading chevron + `aria-expanded` (do **not** `selected` for open). Nested `List` or `.fynns-table-wrap.fynns-scroll` → `ListItem` **`detail`**. Open-record → trailing `IconButton` (same row chrome as the button). Long copy → `Tooltip` on headline; core ellipsizes. Live: sandbox `#list` | `ul > div` around items; orphan `ListItem` outside `List`; raw `<button>` / `HubTreeDisclosure` in `leading`; `ControlRow` in trailing; `Button` in headline; nested table `width:100%` + `table-layout:fixed` + `overflow-x:hidden`; cell or headline `Chip` as status; consumer `width: max-content` / `tip-grow` on headline (breaks `…`); trailing IconButton as a second highlight island |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |

@@ -139,7 +139,11 @@ ring can paint before heavy work).
   (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
-  sandbox `#list`).
+  sandbox `#list`). Expandable trees: `ListItem` **`detail`** in the same
+  `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
+  leading chevron — never a button in `leading`, never `ul > div`. Long
+  headline (optional `Tooltip`) ellipsizes in core — do not `tip-grow` /
+  `max-content` the trigger. Trailing `IconButton` shares the row highlight.
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).

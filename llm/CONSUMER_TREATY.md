@@ -26,6 +26,7 @@ alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. npm
 consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
+**List tree = ul>li + children** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
@@ -231,6 +232,61 @@ belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells 
 `Table*` (no forced `width: 100%` on `.fynns-table`). Live: sandbox `#table`; hub
 usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List tree wrapped in divs / buttons in leading
+
+Symptoms in a usage / session catalog:
+
+- `List` (`<ul>`) children are `div.fynns-unit-stack` wrapping each `ListItem`,
+  and expanded turns are more `ListItem`s **not** inside a `List` (orphan `<li>`)
+- Expand control is a raw 16dp `<button>` (or app `HubTreeDisclosure`) in
+  `leading` — that slot is `aria-hidden`, so the only toggle is invisible to AT
+- Timestamp + title (+ a `Button`) are stuffed into `headline` (nowrap); stats
+  use `ControlRow` in `trailing`; nested `Table` is `width:100%` /
+  `table-layout:fixed` / `overflow-x:hidden` with a `Chip` “est.” pill
+
+**Cause:** `ListItem` is the `<li>`. Wrapping it to attach “detail below the
+row” breaks `ul > li`. `leading` is decorative. `ControlRow` is form/toolbar
+name|control, not list meta.
+
+**Fix in the consumer:** `ListItem`s are **direct** `List` children. Expand =
+row `onClick` + decorative chevron in `leading` + `aria-expanded`. Nested
+`List` / `.fynns-table-wrap.fynns-scroll` go in `ListItem` **`detail`** (same
+`<li>`). Slots: `overline` (time / kind), `headline` (name), `supportingText`
+(path), `trailingSupportingText` (duration / count cluster), trailing
+`IconButton` for open-record. No `Chip` in table cells (`.fynns-table-meta`).
+Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
+
+Symptoms in a usage / session catalog (or any `ListItem` with `Tooltip` copy):
+
+- Decorative chevron sits in a **40dp** empty leading column (Avatar-sized slot)
+  so overline / headline start far to the right
+- Overline, headline, and supporting are **flush** (`gap: 0`) and read cramped
+- Long turn / title copy **spills** horizontally — `text-overflow: ellipsis` on
+  `.fynns-list-item-headline` never paints because `Tooltip` wraps the string in
+  `.fynns-tooltip-trigger` (`inline-flex` min-content = full string). Consumer
+  `tip-grow` / `width: max-content` makes it worse
+- `trailing` `IconButton` sits **outside** the row’s `radius-3xl` wash (valid
+  sibling for nested buttons) and reads as a second floating control
+
+**Cause:** leading was locked to Avatar `md`; content stack had no gap;
+ellipsis was only on the headline box, not the Tooltip trigger; state-layer
+lived only on the inner `<button>`.
+
+**Fix in core (do not patch with app CSS):** leading hugs the glyph;
+`--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
+`--with-end` paints hover/selected on the **row / host**. Nested `List` under
+`detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
+as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
+the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
+(`>`): a parent session with a trailing `IconButton` must not crush nested turn
+rows that have no end actions. Consumer: pass `Tooltip` for the full string — do **not**
+`tip-grow` / max-content the trigger. Live: sandbox `#list`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 
