@@ -526,7 +526,7 @@ const en = {
   "globals.tableMapUnpriced": "Unpriced",
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
-    "Table + Head / Body / Row / HeaderCell / Cell / Caption — host in `.fynns-table-wrap.fynns-scroll`. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align`; missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+    "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align`; missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",
@@ -1898,7 +1898,7 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapUnpriced": "未定价",
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
-    "Table + Head / Body / Row / HeaderCell / Cell / Caption — 放在 `.fynns-table-wrap.fynns-scroll` 内。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+    "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",

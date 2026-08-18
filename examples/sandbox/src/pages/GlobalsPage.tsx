@@ -3654,6 +3654,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="table">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Card title={t("globals.tableCaption")} chrome="plain">
           <div className="fynns-table-wrap fynns-scroll sandbox-table-sticky">
             <Table stickyHeader>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
@@ -3735,6 +3736,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </TableBody>
             </Table>
           </div>
+          </Card>
           <SandboxHelp text={t("globals.tableHelp")} />
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
