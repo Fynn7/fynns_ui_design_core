@@ -11,6 +11,7 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
+  BotIcon,
   useBusyTask,
   afterNextPaint,
   yieldToMain,
@@ -20,6 +21,7 @@ import {
   Card,
   Surface,
   Checkbox,
+  ChevronDownIcon,
   ChevronRightIcon,
   Chip,
   ChipSet,
@@ -789,6 +791,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
+  const [listTreeOpen, setListTreeOpen] = useState(true);
+  const [listTurnOpen, setListTurnOpen] = useState(true);
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [pickedRange, setPickedRange] = useState<{
@@ -2979,6 +2983,88 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </div>
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listTreeHelp")} />
+          <List aria-label={t("globals.listTreeAria")}>
+            <ListItem
+              leading={listTreeOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              overline={t("globals.listTreeOverline")}
+              headline={t("globals.listTreeHeadline")}
+              supportingText={t("globals.listTreePath")}
+              trailingSupportingText={
+                <span className="fynns-control-cluster">
+                  <span>{t("globals.listTreeDuration")}</span>
+                  <span className="fynns-table-meta">{t("globals.listTreeCalls")}</span>
+                </span>
+              }
+              trailing={
+                <Tooltip content={t("globals.listTreeOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listTreeOpen")}
+                  >
+                    <BotIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+              aria-expanded={listTreeOpen}
+              onClick={() => setListTreeOpen((open) => !open)}
+              detail={
+                listTreeOpen ? (
+                  <List aria-label={t("globals.listTreeTurnsAria")}>
+                    <ListItem
+                      lines={2}
+                      leading={listTurnOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                      overline={t("globals.listTreeTurnOverline")}
+                      headline={
+                        <Tooltip
+                          content={t("globals.listTreeTurnHeadline")}
+                          side="top"
+                          align="start"
+                        >
+                          <span>{t("globals.listTreeTurnHeadline")}</span>
+                        </Tooltip>
+                      }
+                      trailingSupportingText={t("globals.listTreeDuration")}
+                      aria-expanded={listTurnOpen}
+                      onClick={() => setListTurnOpen((open) => !open)}
+                      detail={
+                        listTurnOpen ? (
+                          <div className="fynns-table-wrap fynns-scroll">
+                            <Table>
+                              <TableHead>
+                                <TableRow>
+                                  <TableHeaderCell>{t("globals.listTreeColWhen")}</TableHeaderCell>
+                                  <TableHeaderCell>{t("globals.listTreeColModel")}</TableHeaderCell>
+                                  <TableHeaderCell align="end">
+                                    {t("globals.listTreeColTokens")}
+                                  </TableHeaderCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell>{t("globals.listTreeOverline")}</TableCell>
+                                  <TableCell>sample-model</TableCell>
+                                  <TableCell align="end">
+                                    <span className="fynns-control-cluster">
+                                      <span>12.4k</span>
+                                      <span className="fynns-table-meta">
+                                        {t("globals.listTreeEstimated")}
+                                      </span>
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+                        ) : null
+                      }
+                    />
+                  </List>
+                ) : null
+              }
             />
           </List>
         </div>
