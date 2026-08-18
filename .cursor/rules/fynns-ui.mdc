@@ -98,7 +98,7 @@ ring can paint before heavy work).
   `.fynns-unit-stack`; SearchBar/tools as a body sibling use
   `--fynns-navdrawer-search-gap` to destinations),
   DestinationAppShell, ClippedNavShell, EndAside,
-  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion`),
+  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),

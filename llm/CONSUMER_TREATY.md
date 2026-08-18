@@ -232,6 +232,44 @@ belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells 
 usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Chip as table-cell status / mapping kind
+
+Symptoms in a wide usage / catalog table:
+
+- A column of **Manual / Auto / Unpriced** (or similar metadata) renders as
+  `Chip variant="suggestion"` (or `filter`) pills — 32dp stadium buttons next to
+  muted numbers and mono ids
+- The pill looks clickable even when it is not a filter; density fights the
+  table caption / cell type
+
+**Cause:** sandbox historically showed Chip in `#table`, and `Chip suggestion`
+was the leftover after pill `Badge` was purged. Chip is **interactive chrome**
+(filters, legends, empty starters, catalog tips) — **not** table metadata.
+
+**Fix in the consumer:** mapping kind / row status in a `TableCell` is
+`.fynns-table-meta` (muted, `font-size-xs`). Optional id stays mono + ellipsis.
+Do not restyle `.fynns-chip*` to look like caption. Live: sandbox `#table`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: table row action not sharing one trailing edge
+
+Symptoms in a mapping / actions column:
+
+- Rows with an id + «Map» look end-aligned; rows with only «Map» (unmapped /
+  free) sit **flush-start**, so the buttons do not share a vertical line
+
+**Cause:** `.fynns-control-cluster` is start-packed. When the middle (id /
+tooltip) is omitted, the trailing `Button` collapses to the kind caption.
+
+**Fix in the consumer:** wrap the cell in `.fynns-control-cluster--end-align`
+(nowrap). Keep a `.fynns-control-cluster__grow` flex spacer when the middle is
+missing (or put `__grow` on the id / `Tooltip` trigger when it is present) so
+every row’s action shares one trailing edge. Do not invent a second
+`justify-content: space-between` layout. Live: sandbox `#table`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:

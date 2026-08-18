@@ -2396,6 +2396,17 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/* Table / toolbar row: metadata + optional grow + trailing action on one line.
+   Missing middle content still needs `__grow` so the action shares one end edge. */
+.fynns-control-cluster--end-align {
+  flex-wrap: nowrap;
+}
+
+.fynns-control-cluster__grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /*
  * Vertical choice lists (Radio / Checkbox) inside FieldBlock.
  * Do **not** put bare radios into form-host ControlStack — that grid is
@@ -8486,9 +8497,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding: var(--fynns-space-sm) var(--fynns-space-md);
   border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   vertical-align: middle;
-  /* Prevent CJK character-stack / Chip+label shatter when the host is narrow. */
+  /* Prevent CJK character-stack when the host is narrow. */
   white-space: nowrap;
   word-break: keep-all;
+}
+
+/* Table-cell status / mapping kind — muted caption, not Chip. */
+.fynns-table-meta {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  white-space: nowrap;
 }
 
 .fynns-table-header-cell {

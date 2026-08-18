@@ -425,7 +425,9 @@ classes.
   (dense track only — no `size` / no former md 52×32; `labelSide`
   `start`|`end`),
   Checkbox, Radio,
-  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion`), Slider,
+  Chip / ChipSet (`assist` | `filter` | `input` | `suggestion` — interactive /
+  decorative **outside** data tables: filters, legends, empty starters,
+  catalog tips. **Never** a table-cell status / mapping-kind pill), Slider,
   ToggleGroup, Tabs (M3 Primary underline — not a ToggleGroup substitute)
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
@@ -939,7 +941,8 @@ classes.
   Divider, Table (+ Head / Body / Row /
   HeaderCell / Cell / Caption; host `.fynns-table-wrap.fynns-scroll` —
   nowrap cells + max-content width → horizontal scroll when narrow, never
-  column crush / CJK header shatter), DiffView (scrollable unified-diff
+  column crush / CJK header shatter; cell mapping kind / status =
+  `.fynns-table-meta`, never `Chip` — see **Content density**), DiffView (scrollable unified-diff
   panel — add/del/same/meta lines; caller owns `+`/`-` in text), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
@@ -1050,6 +1053,7 @@ classes.
   | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
+  | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
@@ -1256,6 +1260,9 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
    new GitHub Packages version in the **same task**. Authority:
    [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
    ship via a consumer Vite alias to this checkout.
+5. **Consumer pattern bugs (hard):** constrain in this core first (this file +
+   treaty + pasteable rule + sandbox sample), **then** fix the app. Never a
+   consumer-only patch. Cursor: [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
 
 <!-- OPENWIKI:START -->
 

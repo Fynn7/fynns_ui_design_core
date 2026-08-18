@@ -120,6 +120,7 @@ FillColumn。
 | 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** `List` 多行 `ListItem`：`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` 里 `IconButton` `ghost` `sm` + `Tooltip`；删除走 `ConfirmDialog` | 每条外包加垫 `Surface`/`Card`；操作堆在文案下方；单条 List 再套 unit-stack；行内实心危险圆钮 |
 | 应用目的地（导航） | `NavigationDrawer` / Rail / Bar（或 `DestinationAppShell`） | 用 `List`/`Card` 当根导航 |
 | 多列表格 | `Table` + `.fynns-table-wrap.fynns-scroll` | 同数据的 Card 网格（表能装下时）；`Surface` + `FieldHeader` 冒充分区标题 |
+| 表格单元格：映射来源/状态 + 可选 id + 行尾操作 | `.fynns-table-meta`（muted 文案）+ 可选 mono id，包在 `.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让「映射」等按钮跨行右对齐。对照 `#table` | 单元格里用 `Chip suggestion/filter` 当状态 pill；未映射行把操作顶在列首 |
 | 表单 / 偏好 | `FieldStack`（`#form-recipe`） | 每字段一张肥 Card |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
@@ -377,6 +378,7 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 
 ## 改 UI 前检查清单
 
+0. 发现 keep-set **用法错了**（错 primitive、错密度、错对齐）：**先**在 `fynns_ui_design_core` 写约束 + sandbox 活样例，**再**改本仓。禁止只改消费仓。
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
 2. 主 chrome：默认是否 `DestinationAppShell`？手拼壳时 `navMode` 与 `nav`
    是否**同一时刻**一致？`nav` 是否**只有** destination（无 wiki / 表单 / Chat）？
@@ -392,4 +394,5 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 9. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
 10. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
 11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
-12. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。
+12. 宽表映射/状态列：是否 muted `.fynns-table-meta` + `--end-align` cluster（缺中间则 `__grow`），而非单元格 `Chip`？行尾操作是否跨行右对齐？
+13. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。

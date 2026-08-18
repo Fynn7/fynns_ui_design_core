@@ -3681,8 +3681,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">31M</TableCell>
                   <TableCell align="end">31M</TableCell>
                   <TableCell>
-                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
-                    sample/ink-35b
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapManual")}</span>
+                      <span
+                        className="fynns-control-cluster__grow"
+                        style={{ fontFamily: "var(--fynns-font-mono)" }}
+                      >
+                        sample/ink-35b
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -3692,10 +3702,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">—</TableCell>
                   <TableCell align="end">4</TableCell>
                   <TableCell>
-                    <Chip variant="filter" selected>
-                      {t("globals.tableMapAuto")}
-                    </Chip>{" "}
-                    catalog
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapAuto")}</span>
+                      <span
+                        className="fynns-control-cluster__grow"
+                        style={{ fontFamily: "var(--fynns-font-mono)" }}
+                      >
+                        catalog
+                      </span>
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -3705,8 +3723,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <TableCell align="end">717k</TableCell>
                   <TableCell align="end">28</TableCell>
                   <TableCell>
-                    <Chip variant="suggestion">{t("globals.tableMapManual")}</Chip>{" "}
-                    sample/focus-35b
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <span className="fynns-table-meta">{t("globals.tableMapUnpriced")}</span>
+                      <span className="fynns-control-cluster__grow" aria-hidden="true" />
+                      <Button variant="ghost" size="sm" onClick={() => {}}>
+                        {t("globals.tableMapAction")}
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               </TableBody>
