@@ -20,6 +20,11 @@ export type ListProps = HTMLAttributes<HTMLUListElement>;
  *
  * **Catalog / path / link rows:** one `List` of `ListItem`s — never wrap each
  * entry in `Surface` / `Card` (fat cards). See AGENTS.md **Content density**.
+ *
+ * **Expandable trees:** `ListItem`s must be **direct** `ul` children. Nested
+ * `List` / `.fynns-table-wrap` belong in `ListItem` `detail` (same `<li>`;
+ * JSX `children` is an alias), not a wrapper `div` around the item. Expand
+ * via the row `onClick`; keep the leading chevron decorative (`aria-hidden`).
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(
@@ -41,7 +46,11 @@ export type ListItemProps = Omit<
   supportingText?: ReactNode;
   /** Small label above the headline (forces three-line height when present). */
   overline?: ReactNode;
-  /** Leading icon, avatar, or image. */
+  /**
+   * Leading icon, avatar, or image. Always `aria-hidden` — do **not** put
+   * buttons here (expand chevrons are decorative; the row `onClick` +
+   * `aria-expanded` owns disclosure).
+   */
   leading?: ReactNode;
   /**
    * Trailing slot: decorative chevron **or** row actions (`IconButton` /
@@ -51,8 +60,20 @@ export type ListItemProps = Omit<
    * `ConfirmDialog`, not a filled danger disk in the row.
    */
   trailing?: ReactNode;
-  /** Compact meta at the trailing edge (time, count, …). */
+  /**
+   * Compact meta at the trailing edge (duration, count, …). Optional
+   * `.fynns-control-cluster` of muted spans — not `ControlRow`.
+   */
   trailingSupportingText?: ReactNode;
+  /**
+   * Nested catalog / table under this row. Renders **inside the same `<li>`**
+   * so the parent `List` stays `ul > li`. Use a nested `List` or
+   * `.fynns-table-wrap.fynns-scroll` — never wrap this `ListItem` in a `div`.
+   * Prefer `detail` over JSX `children` (same slot; `detail` wins).
+   */
+  detail?: ReactNode;
+  /** Alias of `detail` — nested tree / table in this `<li>`. */
+  children?: ReactNode;
   /**
    * Row height band. Default inferred: overline → 3; supportingText → 2;
    * else 1 (56 / 72 / 88dp).
@@ -86,8 +107,12 @@ function resolveLines(
  * leading / trailing slots. Use inside `List`.
  *
  * Interactive rows keep trailing actions **outside** the main `<button>` so
- * `IconButton` / menus are valid HTML. Path / link catalogs: headline +
- * supporting path + trailing ghost actions — not a padded `Surface` per row.
+ * `IconButton` / menus are valid HTML — the **host / row** still paints one
+ * `radius-3xl` highlight so actions are not a floating island. Path / link
+ * catalogs: headline + supporting path + trailing ghost actions — not a
+ * padded `Surface` per row. Expandable trees: `detail` stays in this `<li>`;
+ * set `aria-expanded` on the row. Long `headline` / `supportingText` ellipsize
+ * (including copy wrapped in `Tooltip`).
  */
 export const ListItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,
@@ -100,6 +125,8 @@ export const ListItem = forwardRef<
     leading,
     trailing,
     trailingSupportingText,
+    detail,
+    children,
     lines: linesProp,
     selected = false,
     interactive: interactiveProp,
@@ -169,44 +196,54 @@ export const ListItem = forwardRef<
       </span>
     ) : null;
 
-  if (interactive) {
-    return (
-      <li
-        className={join(
-          "fynns-list-item-host",
-          endTrailing != null && "fynns-list-item-host--with-end",
-        )}
-      >
-        <button
-          {...rest}
-          ref={ref as Ref<HTMLButtonElement>}
-          type="button"
-          className={itemClass}
-          disabled={disabled}
-          aria-current={selected ? "true" : undefined}
-          onClick={onClick}
-        >
-          {leadingNode}
-          {contentNode}
-          {innerTrailing}
-        </button>
-        {endTrailing}
-      </li>
-    );
-  }
+  const nested = detail ?? children;
+  const hasDetail = nested != null && nested !== false;
+  const rowClass = itemClass;
+
+  const rowControl = interactive ? (
+    <button
+      {...rest}
+      ref={ref as Ref<HTMLButtonElement>}
+      type="button"
+      className={rowClass}
+      disabled={disabled}
+      aria-current={selected ? "true" : undefined}
+      onClick={onClick}
+    >
+      {leadingNode}
+      {contentNode}
+      {innerTrailing}
+    </button>
+  ) : (
+    <div
+      {...(rest as HTMLAttributes<HTMLDivElement>)}
+      ref={ref as Ref<HTMLDivElement>}
+      className={rowClass}
+      aria-disabled={disabled || undefined}
+    >
+      {leadingNode}
+      {contentNode}
+      {innerTrailing}
+    </div>
+  );
+
+  const row = (
+    <>
+      {rowControl}
+      {endTrailing}
+    </>
+  );
 
   return (
-    <li className="fynns-list-item-host">
-      <div
-        {...(rest as HTMLAttributes<HTMLDivElement>)}
-        ref={ref as Ref<HTMLDivElement>}
-        className={itemClass}
-        aria-disabled={disabled || undefined}
-      >
-        {leadingNode}
-        {contentNode}
-        {innerTrailing}
-      </div>
+    <li
+      className={join(
+        "fynns-list-item-host",
+        endTrailing != null && "fynns-list-item-host--with-end",
+        hasDetail && "fynns-list-item-host--with-detail",
+      )}
+    >
+      {hasDetail ? <div className="fynns-list-item-row">{row}</div> : row}
+      {hasDetail ? <div className="fynns-list-item-detail">{nested}</div> : null}
     </li>
   );
 });

@@ -6895,6 +6895,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline: var(--fynns-list-inset-inline);
   list-style: none;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
   background: transparent;
 }
 
@@ -6905,6 +6908,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-layout-control-cluster-gap);
   width: 100%;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
   margin: 0;
   padding: 0;
 }
@@ -7018,11 +7023,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-list-item-leading {
   box-sizing: border-box;
   display: inline-flex;
-  flex: 0 0 var(--fynns-list-leading-width);
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   align-self: center;
-  width: var(--fynns-list-leading-width);
+  width: auto;
   min-width: var(--fynns-list-leading-width);
   min-height: var(--fynns-list-icon-size);
   color: var(--fynns-color-text-muted);
@@ -7043,11 +7048,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
   flex-direction: column;
   justify-content: center;
-  gap: 0;
+  gap: var(--fynns-list-content-gap);
   min-width: 0;
+  max-width: 100%;
 }
 
 .fynns-list-item-overline {
+  min-width: 0;
+  max-width: 100%;
   font-size: var(--fynns-font-size-xs);
   font-weight: var(--fynns-font-weight-medium);
   line-height: var(--fynns-line-height-snug);
@@ -7055,6 +7063,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-list-item-headline {
+  min-width: 0;
+  max-width: 100%;
   font-size: var(--fynns-font-size-md);
   font-weight: var(--fynns-font-weight-regular);
   line-height: var(--fynns-line-height-snug);
@@ -7064,13 +7074,47 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: nowrap;
 }
 
+/*
+ * Ellipsis is on the headline box; Tooltip wraps copy in `.fynns-tooltip-trigger`
+ * (`inline-flex` → min-content = full string). Constrain the trigger and its
+ * child so `…` still paints (do not restyle this in the consumer).
+ */
+.fynns-list-item-headline .fynns-tooltip-trigger,
+.fynns-list-item-headline .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fynns-list-item-supporting {
+  min-width: 0;
+  max-width: 100%;
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
   color: var(--fynns-color-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.fynns-list-item:not(.fynns-list-item--3) .fynns-list-item-supporting .fynns-tooltip-trigger,
+.fynns-list-item:not(.fynns-list-item--3) .fynns-list-item-supporting .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item--3 .fynns-list-item-supporting .fynns-tooltip-trigger,
+.fynns-list-item--3 .fynns-list-item-supporting .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fynns-list-item--3 .fynns-list-item-supporting {
@@ -7150,6 +7194,141 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-list-item-host--with-end > .fynns-list-item {
   /* End pad lives on the actions column so IconButtons clear the list edge. */
   padding-inline-end: var(--fynns-space-xs);
+}
+
+/*
+ * Interactive trailing is a sibling of the row `<button>` (valid HTML). The
+ * **row** (or host, when there is no `detail`) owns radius-3xl + state-layer
+ * so the IconButton is not a floating island outside the highlight.
+ */
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) {
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item-row {
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+  background: transparent;
+  border-radius: 0;
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
+    > .fynns-list-item--interactive
+  ):hover,
+.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
+    > .fynns-list-item--interactive
+  ):active,
+.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
+    > .fynns-list-item--selected
+  ),
+.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--selected) {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
+    > .fynns-list-item--selected.fynns-list-item--interactive
+  ):hover,
+.fynns-list-item-host--with-end
+  > .fynns-list-item-row:has(> .fynns-list-item--selected.fynns-list-item--interactive):hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
+  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
+    .fynns-list-item--selected
+  ),
+.fynns-list-item-host--with-end
+  > .fynns-list-item-row
+  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
+    .fynns-list-item--selected
+  ),
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
+  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
+    .fynns-list-item--selected
+  ),
+.fynns-list-item-host--with-end
+  > .fynns-list-item-row
+  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
+    .fynns-list-item--selected
+  ),
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item--selected,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item--selected {
+  background: transparent;
+}
+
+.fynns-list-item-host.fynns-list-item-host--with-detail {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.fynns-list-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-list-item-row > .fynns-list-item {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+  padding-inline-end: var(--fynns-space-xs);
+}
+
+.fynns-list-item-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  /* One leading column of indent. Nested ListItems keep the same pad-inline
+     as a top-level row — do not flush the nested chevron to this edge. */
+  padding-inline-start: calc(var(--fynns-list-icon-size) + var(--fynns-list-gap));
+  padding-inline-end: 0;
+  padding-block-end: var(--fynns-layout-nest-gap);
+}
+
+.fynns-list-item-detail > .fynns-list {
+  padding-inline: var(--fynns-list-inset-inline);
+  padding-block: 0;
+  max-width: 100%;
+}
+
+.fynns-list-item-trailing-text .fynns-control-cluster {
+  flex-wrap: nowrap;
 }
 
 .fynns-list-item--selected .fynns-list-item-trailing {

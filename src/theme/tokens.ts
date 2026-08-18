@@ -895,17 +895,21 @@ export const LIST_TOKENS = {
    */
   "inset-inline": "0.5rem",
   "inset-block": "0.5rem",
-  gap: "1rem",
+  /** Leading glyph → copy (aliases `--fynns-space-sm`). Not a 40dp icon-button column. */
+  gap: "0.5rem",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
    */
   "icon-size": "1.25rem",
   /**
-   * Fixed leading column (matches `--fynns-avatar-size` / 40dp) so icon and
-   * avatar rows share one vertical grid; glyphs center inside the slot.
+   * Minimum leading slot (same as `icon-size`). The slot **hugs** the glyph —
+   * do not reserve Avatar `md` / 40dp empty space for a 16–20dp chevron.
+   * An `Avatar` in `leading` still sizes the slot to the avatar.
    */
-  "leading-width": "2.5rem",
+  "leading-width": "1.25rem",
+  /** Overline → headline → supporting (aliases `--fynns-space-sm`). */
+  "content-gap": "0.5rem",
 } as const;
 
 /**
