@@ -75,8 +75,8 @@ export type CodeBlockLabeledProps = CodeBlockShared & {
 };
 
 /**
- * Headless chrome: bordered frame + floating copy only (no title bar, no
- * divider). Do **not** pass `label`.
+ * Headless chrome: bordered frame + copy in a reserved end column (no title
+ * bar, no divider). Do **not** pass `label`.
  */
 export type CodeBlockPlainProps = CodeBlockShared & {
   variant: "plain";
@@ -95,8 +95,8 @@ export type CodeBlockReadonlyProps =
 export type CodeBlockEditableProps = CodeBlockShared & {
   variant: "editable";
   /**
-   * When set (non-empty), shows the titled head. Omit for float-copy chrome
-   * (same visual contract as `plain`). Empty string throws.
+   * When set (non-empty), shows the titled head. Omit for reserved-column copy
+   * chrome (same visual contract as `plain`). Empty string throws.
    */
   label?: string;
   /** Optional seed when using controlled `value` / uncontrolled `defaultValue`. */
@@ -132,10 +132,10 @@ const LABELED_WITHOUT_LABEL =
   '[fynns] CodeBlock: the titled variant (head + hairline + copy) requires a non-empty `label` (e.g. a filename). Use `variant="plain"` when there is no title — do not pass `label=""` or omit `label` on `variant="default"`.';
 
 const PLAIN_WITH_LABEL =
-  '[fynns] CodeBlock: `variant="plain"` is headless (frame + floating copy only). Do not pass `label` — use `variant="default"` (or omit variant) with a non-empty `label` for the titled head.';
+  '[fynns] CodeBlock: `variant="plain"` is headless (frame + copy in a reserved end column). Do not pass `label` — use `variant="default"` (or omit variant) with a non-empty `label` for the titled head.';
 
 const EMPTY_EDITABLE_LABEL =
-  '[fynns] CodeBlock: `variant="editable"` with `label` requires a non-empty string. Omit `label` for float-copy chrome, or pass a real filename/title.';
+  '[fynns] CodeBlock: `variant="editable"` with `label` requires a non-empty string. Omit `label` for reserved-column copy chrome, or pass a real filename/title.';
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -218,9 +218,10 @@ function assertCodeBlockChrome(
  * **Chrome contract (strict):**
  * - **Titled** (`variant="default"` / omit variant): non-empty `label`
  *   (filename) + head hairline + copy. Missing / empty `label` **throws**.
- * - **Headless** (`variant="plain"`): frame + floating copy only — no `label`.
+ * - **Headless** (`variant="plain"`): frame + copy in a reserved end column —
+ *   no `label`. Glyphs must never sit under the copy `IconButton`.
  * - **Editable** (`variant="editable"`): same head rules when `label` is set;
- *   omit `label` for float-copy chrome.
+ *   omit `label` for the same reserved-column copy chrome.
  *
  * Supported `language` values get zero-dep syntax coloring via
  * `--fynns-code-*` tokens. Pass `highlightProfile` for app-owned line-command

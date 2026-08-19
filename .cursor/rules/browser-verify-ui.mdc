@@ -11,15 +11,32 @@ After any change that affects rendered UI (primitives, CSS tokens, sandbox sampl
 ## Required loop
 
 1. Ensure the relevant dev server is running (sandbox / consumer app).
-2. Use **cursor-ide-browser** (preferred) and/or Playwright when available:
-   navigate → lock → snapshot → interact (click/type) → **screenshot** → unlock.
-3. For visual bugs (gaps, alignment, continuous strips, hover/focus), take an
+2. If the UI issue or regression was reproduced in a specific consumer app/repo
+   (rather than only in sandbox), **verify there after publish** — bump that
+   consumer's `@fynn7/ui-design-core` dependency, start its dev server, and
+   run the browser loop below in that checkout (dispatch a subagent when the
+   consumer lives in a sibling repo).
+3. Use **cursor-ide-browser** (preferred) and/or Playwright when available:
+   navigate → lock → snapshot → interact (click/type/hover) → **screenshot** → unlock.
+4. For visual bugs (gaps, alignment, continuous strips, hover/focus), take an
    element or viewport screenshot and inspect it — do not rely on CSS reasoning alone.
-4. When geometry matters, also use CDP `Runtime.evaluate` / bounding boxes to
+5. When geometry matters, also use CDP `Runtime.evaluate` / bounding boxes to
    confirm continuity (e.g. adjacent range bars abut with no gap).
-5. If verification fails, fix and re-verify in the same turn.
+6. If verification fails, fix and re-verify in the same turn.
 
 ## Scope
 
-Applies to UI work in this repo. Skip only for pure non-visual tasks (types-only,
-docs-only with no visual claim, git/PR plumbing).
+Applies to UI work in this repo **and** to consumer fixes landed after a core
+constraint change. Skip only for pure non-visual tasks (types-only, docs-only
+with no visual claim, git/PR plumbing).
+
+## Consumer-reported pattern bugs (hard)
+
+When fixing wrong primitive / density / alignment / host reported from a consumer:
+
+1. **Sandbox first** — navigate to the updated Globals / Preview demo that
+   teaches the fix; screenshot + measure if geometry mattered.
+2. **Consumer second** — subagent (or same agent in consumer checkout) verifies
+   the reported screen after `npm install` the published core version.
+
+Both are required in the same task. See `.cursor/rules/constrain-then-consumer.mdc`.

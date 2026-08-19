@@ -378,6 +378,9 @@ const en = {
   "layoutChrome.roFieldStack": "Field stack gap (alias)",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — aliases control-stack-form-gap (12dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
+  "layoutChrome.roFieldHeaderActionRowMin": "Field header action row min",
+  "layoutChrome.roFieldHeaderActionRowMinHint":
+    "--fynns-layout-field-header-action-row-min-height (32dp) — label band when FieldHeader has trailing sm IconButtons; FieldStack max when any sibling has actions. Prefer Input/Select trailing for in-field icons (M3).",
   "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
     "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
@@ -481,7 +484,7 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative dim + CircularProgress + visible message. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the ring at the top of leftover canvas.",
+    "BusyRegion wraps a section: relative dim + one progress chrome + visible copy. Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas.",
   "globals.busyRegionFillLabel": "Loading pane",
   "globals.busyRegionFillMessage": "Cold-start — no content yet.",
   "globals.busyRegionFillStart": "Show fill busy",
@@ -492,7 +495,7 @@ const en = {
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
   "globals.busyScrimHelp":
-    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + ring + message. Auto-closes here after 2s.",
+    "BusyScrim is a non-dismissible full-viewport scrim (same overlay token as Dialog) + one progress chrome + message. Determinate sample uses indicator=linear. Auto-closes here after 2s.",
   "globals.busyPaintBad": "Anti-pattern: busy then stall",
   "globals.busyPaintGood": "runBusyTask then stall",
   "globals.busyPaintLabel": "Heavy work",
@@ -533,7 +536,9 @@ const en = {
   "globals.codeBlockXmlLabel": "prompt.xml",
   "globals.codeBlockCopy": "Copy",
   "globals.codeBlockHelp":
-    "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + float copy only — never `label=\"\"`); `editable` same head rules when `label` set. **`label` ≠ `language`** — always pass matching `language` (e.g. `prompt.xml` + `language=\"xml\"`). Soft-wrap default; `wrap={false}` for classic pre scroll. Built-ins include `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash` (+ aliases) via zero-dep `--fynns-code-*` spans. Copy fades in on hover.",
+    "CodeBlock: **strict chrome** — `default` requires non-empty `label` (filename + hairline + copy) or throws; no title → `variant=\"plain\"` (frame + copy in a reserved end column — never `label=\"\"`); `editable` same head rules when `label` set. **`label` ≠ `language`** — always pass matching `language` (e.g. `prompt.xml` + `language=\"xml\"`). Soft-wrap default; `wrap={false}` for classic pre scroll. Built-ins include `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash` (+ aliases) via zero-dep `--fynns-code-*` spans. Copy fades in on hover and must not cover glyphs.",
+  "globals.codeBlockLongLine":
+    "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
@@ -567,8 +572,13 @@ const en = {
     "Full-viewport panel: close IconButton + title + optional actions, scrollable body.",
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
+  "globals.fullscreenFlushOpen": "Open fullscreen with CodeBlock",
+  "globals.fullscreenFlushTitle": "Project notes",
+  "globals.fullscreenFlushFile": "notes.xml",
+  "globals.fullscreenFlushHelp":
+    "Flush-start: when the first FullscreenDialog body child is a keep-set bordered well (CodeBlock / Surface / table wrap), core drops padding-block-start so the well frame sits under the title — not an 18dp vacant band. Head chrome stays content-inset. One unpadded fill wrapper is allowed. Not Card chrome=\"plain\" flush. Authority: AGENTS.md Flush-start overlay body.",
   "globals.overlayHelp":
-    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
+    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
   "globals.dialogLabeledOpen": "Open Dialog with close",
   "globals.dialogLabeledTitle": "Dialog with close",
@@ -597,11 +607,20 @@ const en = {
     "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
     "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need a static title / icon / actions head.",
+  "globals.fieldHeaderProviderLabel": "Region",
+  "globals.fieldHeaderRegionAlpha": "Alpha",
+  "globals.fieldHeaderRegionBeta": "Beta",
+  "globals.fieldHeaderBaseUrlLabel": "Endpoint",
+  "globals.fieldHeaderApiKeyLabel": "Credential",
+  "globals.fieldHeaderRevealTip": "Show plaintext",
   "globals.fieldHeaderLabel": "Bare FieldHeader",
+  "globals.fieldHeaderBlockLabel": "Sample field",
+  "globals.fieldHeaderNotesLabel": "Notes",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
+  "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` is the label + trailing actions row alone. Prefer `FieldBlock` when wrapping label + control together (see nested Dialog demo).",
+    "M3: **Input** reveal → `trailing` inside the field. **Select + refresh** → `FieldBlock` + `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton`) — not `Select.trailing`. Textarea expand stays on label-row `actions`; FieldStack shares 32dp header band when needed.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -1147,7 +1166,7 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
+    "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Expandable trees: children stay in the same li; overline / trailingSupportingText slots; decorative leading chevron. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
   "globals.listCatalogHelp":
     "Path / link catalog recipe — one List; row actions in trailing (ghost sm). Do not wrap each entry in Surface/Card.",
   "globals.listCatalogAria": "Sample path catalog",
@@ -1160,6 +1179,23 @@ const en = {
   "globals.listCatalogEdit": "Edit",
   "globals.listCatalogRemove": "Remove",
   "globals.listCatalogOpenSnack": "Opened sample entry",
+  "globals.listTreeHelp":
+    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText; expand = row click + decorative chevron. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight.",
+  "globals.listTreeAria": "Sample expandable catalog",
+  "globals.listTreeOverline": "2026.08.17 15:42",
+  "globals.listTreeHeadline": "Sample session",
+  "globals.listTreePath": "~/Documents/sample-project",
+  "globals.listTreeDuration": "1m47s",
+  "globals.listTreeCalls": "4 calls",
+  "globals.listTreeOpen": "Open record",
+  "globals.listTreeTurnsAria": "Sample turns",
+  "globals.listTreeTurnOverline": "2026.08.17 15:41",
+  "globals.listTreeTurnHeadline":
+    "A long sample turn title that must ellipsize inside the row instead of stretching the list — keep the full string in the Tooltip.",
+  "globals.listTreeColWhen": "When",
+  "globals.listTreeColModel": "Model",
+  "globals.listTreeColTokens": "Tokens",
+  "globals.listTreeEstimated": "Est.",
   "globals.cardTitle": "Section with icon",
   "globals.cardTitlePlain": "Title only",
   "globals.cardActionTip": "Sample header action",
@@ -1358,8 +1394,8 @@ const en = {
   "globals.busyPaintYield": "yieldToMain slices",
   "globals.busyPaintRunDirect": "runBusyTask(setBusy, …)",
   "globals.busyPaintYieldHelp": "Third path: show busy → afterNextPaint → yieldToMain slices while working.",
-  "globals.busyRegionDeterminate": "BusyRegion value + size sm",
-  "globals.busyScrimDeterminate": "BusyScrim value + size lg (2s)",
+  "globals.busyRegionDeterminate": "BusyRegion linear (value)",
+  "globals.busyScrimDeterminate": "BusyScrim linear (2s)",
   "globals.emptySmTitle": "Nothing here",
   "globals.emptySmDescription": "EmptyState size=\"sm\".",
   "globals.stepperVerticalAria": "Vertical setup",
@@ -1752,6 +1788,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roFieldStack": "字段簇间距（别名）",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — 别名 control-stack-form-gap（12dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
+  "layoutChrome.roFieldHeaderActionRowMin": "字段头操作行最小高度",
+  "layoutChrome.roFieldHeaderActionRowMinHint":
+    "--fynns-layout-field-header-action-row-min-height（32dp）— FieldHeader 带 trailing sm IconButton 时的标签行高度；FieldStack 内任一兄弟有 actions 则整簇对齐。字段内 icon 优先用 Input/Select trailing（M3）。",
   "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
     "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
@@ -1853,7 +1892,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位半透明层 + CircularProgress + 可见文案；根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把圈留在剩余主栏顶部。",
+    "BusyRegion 包裹区块：相对定位半透明层 + 一个进度件 + 可见文案。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。",
   "globals.busyRegionFillLabel": "栏加载中",
   "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
   "globals.busyRegionFillStart": "显示 fill busy",
@@ -1864,7 +1903,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
   "globals.busyScrimHelp":
-    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 圆环 + 文案。此处 2 秒后自动关闭。",
+    "BusyScrim 为不可关闭的全屏 scrim（与 Dialog 同 overlay token）+ 一个进度件 + 文案。确定进度样例用 indicator=linear。此处 2 秒后自动关闭。",
   "globals.busyPaintBad": "反例：busy 后立刻卡主线程",
   "globals.busyPaintGood": "runBusyTask 后再卡主线程",
   "globals.busyPaintLabel": "繁重工作",
@@ -1905,7 +1944,9 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockXmlLabel": "prompt.xml",
   "globals.codeBlockCopy": "复制",
   "globals.codeBlockHelp":
-    "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 浮层复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。**`label` ≠ `language`** — 须另传匹配的 `language`（如 `prompt.xml` + `language=\"xml\"`）。默认软换行；`wrap={false}` 经典横向滚动。内置 `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`（及别名）用零依赖 `--fynns-code-*` 着色。悬停渐显复制。",
+    "CodeBlock：**严格 chrome** — `default` 必须非空 `label`（文件名 + 分割线 + 复制），否则 throw；无标题 → `variant=\"plain\"`（仅外框 + 结束列复制，禁止 `label=\"\"`）；`editable` 有标题才传 `label`。**`label` ≠ `language`** — 须另传匹配的 `language`（如 `prompt.xml` + `language=\"xml\"`）。默认软换行；`wrap={false}` 经典横向滚动。内置 `ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`（及别名）用零依赖 `--fynns-code-*` 着色。悬停渐显复制，且不得挡住正文。",
+  "globals.codeBlockLongLine":
+    "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",
@@ -1939,8 +1980,13 @@ const zh: Record<MessageKey, string> = {
     "全视口面板：关闭 IconButton + 标题 + 可选操作，正文可滚动。",
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
+  "globals.fullscreenFlushOpen": "打开全屏（CodeBlock 顶天）",
+  "globals.fullscreenFlushTitle": "项目笔记",
+  "globals.fullscreenFlushFile": "notes.xml",
+  "globals.fullscreenFlushHelp":
+    "Flush-start：FullscreenDialog 正文第一个子项是 keep-set 带边框井（CodeBlock / Surface / 表包装）时，core 去掉 padding-block-start，井框贴在标题下——不要 18dp 空带。标题 chrome 仍 content-inset。允许一层无垫 fill 宿主。不是 Card chrome=\"plain\" 贴边。权威：AGENTS.md Flush-start overlay body。",
   "globals.overlayHelp":
-    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
+    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
   "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
   "globals.dialogLabeledTitle": "带关闭的 Dialog",
@@ -1969,11 +2015,20 @@ const zh: Record<MessageKey, string> = {
     "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
     "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要静态 title / icon / actions 头时用 Card。",
+  "globals.fieldHeaderProviderLabel": "地区",
+  "globals.fieldHeaderRegionAlpha": "甲",
+  "globals.fieldHeaderRegionBeta": "乙",
+  "globals.fieldHeaderBaseUrlLabel": "端点",
+  "globals.fieldHeaderApiKeyLabel": "凭据",
+  "globals.fieldHeaderRevealTip": "显示明文",
   "globals.fieldHeaderLabel": "裸 FieldHeader",
+  "globals.fieldHeaderBlockLabel": "示例字段",
+  "globals.fieldHeaderNotesLabel": "备注",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
+  "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` 仅是标签 + 尾部操作行。标签 + 控件一起包时优先用 `FieldBlock`（见嵌套 Dialog 演示）。",
+    "M3：**Input** reveal 用字段内 `trailing`。**Select + 刷新** 用 `FieldBlock` + `.fynns-control-cluster--end-align`（Select 加 `fynns-control-cluster__grow` + 兄弟 `IconButton`）— 不要用 `Select.trailing`。Textarea 展开仍放标签行 `actions`；需要时 FieldStack 共享 32dp 标签行高度。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -2514,7 +2569,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
+    "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。可展开树：children 留在同一个 li；overline / trailingSupportingText；leading 装饰 chevron。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
   "globals.listCatalogHelp":
     "路径 / 链接目录配方 — 一个 List；行操作放 trailing（ghost sm）。禁止每条外包 Surface/Card。",
   "globals.listCatalogAria": "路径目录示例",
@@ -2527,6 +2582,23 @@ const zh: Record<MessageKey, string> = {
   "globals.listCatalogEdit": "编辑",
   "globals.listCatalogRemove": "移除",
   "globals.listCatalogOpenSnack": "已打开示例条目",
+  "globals.listTreeHelp":
+    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText；展开 = 行点击 + 装饰 chevron。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。",
+  "globals.listTreeAria": "可展开目录示例",
+  "globals.listTreeOverline": "2026.08.17 15:42",
+  "globals.listTreeHeadline": "示例会话",
+  "globals.listTreePath": "~/Documents/sample-project",
+  "globals.listTreeDuration": "1m47s",
+  "globals.listTreeCalls": "4 次",
+  "globals.listTreeOpen": "打开记录",
+  "globals.listTreeTurnsAria": "示例往返",
+  "globals.listTreeTurnOverline": "2026.08.17 15:41",
+  "globals.listTreeTurnHeadline":
+    "这是一条必须在行内省略的示例往返标题，完整句子放在 Tooltip 里，禁止把列表撑出横向滚动。",
+  "globals.listTreeColWhen": "时间",
+  "globals.listTreeColModel": "模型",
+  "globals.listTreeColTokens": "Tokens",
+  "globals.listTreeEstimated": "估",
   "globals.cardTitle": "带图标的分区",
   "globals.cardTitlePlain": "仅标题",
   "globals.cardActionTip": "示例标题操作",
@@ -2723,8 +2795,8 @@ const zh: Record<MessageKey, string> = {
   "globals.busyPaintYield": "yieldToMain 切片",
   "globals.busyPaintRunDirect": "runBusyTask(setBusy, …)",
   "globals.busyPaintYieldHelp": "第三路径：显示 busy → afterNextPaint → 工作中用 yieldToMain 切片。",
-  "globals.busyRegionDeterminate": "BusyRegion value + size sm",
-  "globals.busyScrimDeterminate": "BusyScrim value + size lg（2 秒）",
+  "globals.busyRegionDeterminate": "BusyRegion linear（value）",
+  "globals.busyScrimDeterminate": "BusyScrim linear（2 秒）",
   "globals.emptySmTitle": "这里空空",
   "globals.emptySmDescription": "EmptyState size=\"sm\"。",
   "globals.stepperVerticalAria": "竖向步骤",

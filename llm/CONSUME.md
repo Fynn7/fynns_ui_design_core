@@ -54,6 +54,8 @@ failure modes **squashed drawer** + **wrong shell slot**.
    surface children with `chrome="plain"` / `.fynns-nest`.
 9a. **CodeBlock** titled `default` requires non-empty `label`; else `variant="plain"`.
 9b. **CodeBlock `language`:** always pass matching `language` / profile — `label` is not a detector.
+9c. **CodeBlock headless copy:** core reserves an end column (`--copy-float`) so
+    glyphs never sit under Copy. Do **not** pad `.fynns-code-block-pre` in the app.
 10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
     capability → implement in this core first. Chat radius floor ≥ `--fynns-radius-22`;
     fonts: body `ui`, code `mono`, never serif for main prose.
@@ -69,7 +71,9 @@ failure modes **squashed drawer** + **wrong shell slot**.
 16. **Loading placement:** pane cold-start → `BusyRegion` `fill` in a
     height-resolved host (`FillColumn` children / shell main). Do **not** use
     `EmptyState` + `CircularProgress` (content-sized → ring stuck at the top).
-    Full-app block → `BusyScrim`. Inline widget busy → `CircularProgress` `sm`.
+    Known % / counts → `indicator="linear"` + `value`; `message` is copy only
+    (never nest a bar or ring). Full-app block → `BusyScrim`. Inline widget busy
+    → `CircularProgress` `sm`.
     Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
 
 ## Agent checklist (greenfield / short prompt)
@@ -158,7 +162,11 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
   the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
-  so nested surfaces inset; plain ≠ flush). Outside Card/Collapsible use
+  so nested surfaces inset; plain ≠ flush). **FullscreenDialog flush-start:**
+  first body child a bordered well (`CodeBlock` / `Surface` / table wrap) →
+  core drops `padding-block-start` (one unpadded fill wrapper allowed). Do not
+  add consumer pad-top. See AGENTS.md **Flush-start overlay body** /
+  `#fullscreen-flush`. Outside Card/Collapsible use
   `.fynns-nest`. Centered Dialog head/foot/inline **and**
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;

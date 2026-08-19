@@ -20,9 +20,13 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
  * Form field label row with optional trailing icon actions (expand / reset).
  * Place above the control — not overlaid on a Textarea corner. Label text is
  * flush with the control’s outer start edge. Inside `FieldBlock`, label→
- * control uses `--fynns-layout-field-hint-gap` (works for wrapped prompts).
- * Trailing `IconButton` sm centers on the label line without inflating the
- * row (same label→control breath as a plain header). Prefer `FieldBlock`
+ * control uses `--fynns-layout-field-hint-gap` only. Reserve label-row
+ * actions for controls without an in-field slot (Textarea expand / reset).
+ * **M3:** reveal / refresh / clear on `Input` / `Select` → `trailing` inside
+ * the field shell — not `FieldBlock` `actions`. When label-row actions exist,
+ * the header uses `--fynns-layout-field-header-action-row-min-height` (32dp);
+ * inside a `FieldStack`, any sibling with actions lifts every header to that
+ * band so plain labels align. Prefer `FieldBlock`
  * when wrapping label + control together. Card body keeps full
  * `--fynns-layout-content-pad-block` when this (or FieldStack) is first.
  */

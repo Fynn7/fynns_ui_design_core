@@ -58,6 +58,58 @@ function readScrollbarSizePx(): number {
   return Number.isFinite(px) && px > 0 ? px : 10;
 }
 
+function readRootTokenPx(token: string, fallback: number): number {
+  if (typeof document === "undefined") return fallback;
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue(token)
+    .trim();
+  if (!raw) return fallback;
+  const n = Number.parseFloat(raw);
+  if (!Number.isFinite(n)) return fallback;
+  if (raw.endsWith("rem")) {
+    const rootFs =
+      Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+      16;
+    return n * rootFs;
+  }
+  return n;
+}
+
+/** Plain / headless CodeBlock: rail lives in the copy reserve column, not over glyphs. */
+function codeBlockCopyFloatRoot(host: HTMLElement): HTMLElement | null {
+  if (
+    !host.classList.contains("fynns-code-block-pre") &&
+    !host.classList.contains("fynns-code-block-input")
+  ) {
+    return null;
+  }
+  const root = host.closest(".fynns-code-block--copy-float");
+  return root instanceof HTMLElement ? root : null;
+}
+
+function copyFloatVerticalRailGeometry(
+  root: HTMLElement,
+  hostRect: DOMRect,
+  sb: number,
+): { top: number; height: number; left: number } {
+  const rootRect = root.getBoundingClientRect();
+  const edgeInset = readRootTokenPx("--fynns-space-sm", 8);
+  const left = rootRect.right - sb - edgeInset;
+
+  const copy = root.querySelector(".fynns-code-block-copy");
+  if (copy instanceof HTMLElement) {
+    const copyRect = copy.getBoundingClientRect();
+    const gap = readRootTokenPx("--fynns-space-xs", 4);
+    const top = Math.min(
+      hostRect.bottom,
+      Math.max(hostRect.top, copyRect.bottom + gap),
+    );
+    return { top, height: Math.max(0, hostRect.bottom - top), left };
+  }
+
+  return { top: hostRect.top, height: hostRect.height, left };
+}
+
 function prefersFineHover(): boolean {
   return (
     typeof window !== "undefined" &&
@@ -252,17 +304,28 @@ function updateHost(host: HTMLElement, state: HostState) {
   state.railX.hidden = !xOverflow;
 
   if (yOverflow) {
+    const copyRoot = codeBlockCopyFloatRoot(host);
+    let railTop = rect.top;
+    let railHeight = rect.height;
+    let railLeft = rect.right - sb;
+    if (copyRoot) {
+      const rail = copyFloatVerticalRailGeometry(copyRoot, rect, sb);
+      railTop = rail.top;
+      railHeight = rail.height;
+      railLeft = rail.left;
+    }
+
     const thumbH = Math.max(
       MIN_THUMB_PX,
       (clientHeight / scrollHeight) * clientHeight,
     );
-    const maxTop = Math.max(0, clientHeight - thumbH);
+    const maxTop = Math.max(0, railHeight - thumbH);
     const range = Math.max(1, scrollHeight - clientHeight);
     const thumbTop = (scrollTop / range) * maxTop;
-    state.railY.style.top = `${rect.top}px`;
-    state.railY.style.left = `${rect.right - sb}px`;
+    state.railY.style.top = `${railTop}px`;
+    state.railY.style.left = `${railLeft}px`;
     state.railY.style.width = `${sb}px`;
-    state.railY.style.height = `${rect.height}px`;
+    state.railY.style.height = `${railHeight}px`;
     state.thumbY.style.width = `${sb}px`;
     state.thumbY.style.height = `${thumbH}px`;
     state.thumbY.style.transform = `translateY(${thumbTop}px)`;

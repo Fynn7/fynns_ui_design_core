@@ -259,7 +259,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "list",
     categoryId: "containment",
     label: "List",
-    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度"],
+    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline"],
   },
   {
     id: "divider",
@@ -304,8 +304,23 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "sheet",
       "confirm",
       "fullscreen",
+      "flush-start",
+      "顶天",
       "弹窗",
       "抽屉",
+    ],
+  },
+  {
+    id: "fullscreen-flush",
+    categoryId: "containment",
+    label: "FullscreenDialog flush-start",
+    keywords: [
+      "fullscreen",
+      "flush-start",
+      "codeblock",
+      "顶天",
+      "带边框",
+      "上边距",
     ],
   },
   {
@@ -318,7 +333,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "busy-region",
     categoryId: "patterns",
     label: "BusyRegion",
-    keywords: ["忙碌", "busy", "loading region"],
+    keywords: ["忙碌", "busy", "loading region", "linear"],
   },
   {
     id: "busy-scrim",

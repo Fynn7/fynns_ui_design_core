@@ -361,9 +361,10 @@
   --fynns-list-pad-block: 0.5rem;
   --fynns-list-inset-inline: 0.5rem;
   --fynns-list-inset-block: 0.5rem;
-  --fynns-list-gap: 1rem;
+  --fynns-list-gap: 0.5rem;
   --fynns-list-icon-size: 1.25rem;
-  --fynns-list-leading-width: 2.5rem;
+  --fynns-list-leading-width: 1.25rem;
+  --fynns-list-content-gap: 0.5rem;
   --fynns-datepicker-day-size: 2.5rem;
   --fynns-datepicker-pad-inline: 0.75rem;
   --fynns-datepicker-pad-block: 0.75rem;
@@ -500,6 +501,7 @@
   --fynns-layout-control-cluster-gap: 0.5rem;
   --fynns-layout-chrome-icon-gap: 0.125rem;
   --fynns-layout-field-hint-gap: 0.5rem;
+  --fynns-layout-field-header-action-row-min-height: 2rem;
   --fynns-layout-unit-stack-gap: 1rem;
   --fynns-layout-switch-label-end: 7rem;
   --fynns-layout-bar-height: 3.5rem;

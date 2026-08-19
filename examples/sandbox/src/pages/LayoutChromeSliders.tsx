@@ -266,6 +266,10 @@ const READONLY_LAYOUT_META: Record<
     labelKey: "layoutChrome.roFieldStack",
     hintKey: "layoutChrome.roFieldStackHint",
   },
+  "field-header-action-row-min-height": {
+    labelKey: "layoutChrome.roFieldHeaderActionRowMin",
+    hintKey: "layoutChrome.roFieldHeaderActionRowMinHint",
+  },
   "stats-min-col-sm": {
     labelKey: "layoutChrome.roStatsMinColSm",
     hintKey: "layoutChrome.roStatsMinColSmHint",

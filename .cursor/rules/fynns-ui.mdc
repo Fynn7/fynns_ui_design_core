@@ -34,7 +34,8 @@ ring can paint before heavy work).
   BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
   Collapsible shell, static head),
   Surface,
-  LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
+   LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
+  `indicator="linear"` for known % — never nest a second progress in `message`;
   never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
@@ -85,7 +86,8 @@ ring can paint before heavy work).
   nowrap / max-content → H-scroll when narrow), DiffView (unified-diff panel),
   CodeBlock
   (**strict:** titled `default` needs non-empty `label` or throws; no
-  title → `variant="plain"`; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
+  title → `variant="plain"` with copy in a reserved end column — do not pad
+  `.fynns-code-block-pre` in the app; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
   Behavioral breaking; zero-dep `--fynns-code-*` highlight for
   ts/js/py/cpp/css/json/xml/html/bash; **`label` ≠ `language`** — always pass
   matching `language` / profile (`llm/AGENT_INTERFACES.md`); fill editable →
@@ -127,9 +129,13 @@ ring can paint before heavy work).
   `description` docks in the **label column**; ToggleGroup centers on name+hint
   (not a full-bleed next row). Padded `Surface` is a form host. **Form
   options by semantic kind → `FieldStack`** (strongly recommended): plain
-  FieldBlocks keep `field-stack-gap` (12dp); description/error (no choice
-  cluster) opens the next sibling to `unit-stack-gap` (16dp); FieldBlocks
-  with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
+  FieldBlocks keep `field-stack-gap` (12dp); label-row **FieldHeader** actions
+  lift headers to `field-header-action-row-min-height` (32dp); when **any**
+  sibling in the same **`FieldStack`** has those actions, **every** header
+  shares the band — label→control stays `field-hint-gap` (8dp); **Input**
+  `trailing` for reveal; **Select + row action** → `.fynns-control-cluster--end-align`
+  (not `Select.trailing`); FieldBlocks with description/error (no choice cluster) open the next
+  sibling to `unit-stack-gap` (16dp); FieldBlocks with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
   ControlBlocks to `unit-stack-gap` (16dp); adjacent stacks get
   `form-cluster-gap` **plus a horizontal `Divider`** on kind jumps. Do
   **not** flatten multi-topic forms as bare Card siblings — copy
@@ -139,7 +145,11 @@ ring can paint before heavy work).
   (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
-  sandbox `#list`).
+  sandbox `#list`). Expandable trees: `ListItem` **`detail`** in the same
+  `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
+  leading chevron — never a button in `leading`, never `ul > div`. Long
+  headline (optional `Tooltip`) ellipsizes in core — do not `tip-grow` /
+  `max-content` the trigger. Trailing `IconButton` shares the row highlight.
   **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
   for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
   Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).
@@ -156,7 +166,9 @@ ring can paint before heavy work).
   field-pad-inline (Input / field-shell compose capsule + field-pad for
   Select text-start parity) /
   field-pad-block (Textarea — not Input sm zero block) — AGENTS.md
-  **Inset decision tree**. **Never** invent rem/px/private inset vars for
+  **Inset decision tree**. **FullscreenDialog flush-start:** first body child
+  a bordered well (`CodeBlock` / `Surface` / table wrap) → no pad-block-start
+  (not `chrome="plain"` flush). **Never** invent rem/px/private inset vars for
   shell / column / chat margins — alias an existing `--fynns-layout-*` (or
   component token that already aliases one); consumers follow `llm/CONSUME.md`.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private
@@ -209,6 +221,9 @@ ring can paint before heavy work).
   `packages/fynns_ui_design_core/llm/PERF.md` (or this repo’s `llm/PERF.md`)
   before coding — no observer↔probe loops, no tip forests, lazy-mount dense
   sections.
+- **Consumer-reported UI bugs:** core constraint + **sandbox Globals/Preview demo**
+  + publish + **subagent consumer verify** in one task — never consumer-only.
+  [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
 
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
 catalog. Text in this package (docs / default labels) is English or German;

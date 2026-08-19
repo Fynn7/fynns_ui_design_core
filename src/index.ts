@@ -226,7 +226,11 @@ export type {
   LinearProgressProps,
 } from "./primitives/Progress";
 export { BusyScrim, BusyRegion } from "./primitives/Busy";
-export type { BusyScrimProps, BusyRegionProps } from "./primitives/Busy";
+export type {
+  BusyScrimProps,
+  BusyRegionProps,
+  BusyIndicator,
+} from "./primitives/Busy";
 export {
   afterNextPaint,
   yieldToMain,

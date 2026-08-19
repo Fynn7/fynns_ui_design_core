@@ -26,6 +26,8 @@ export type SelectProps = {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  /** Optional trailing control inside the field shell (before chevron) — M3 in-field icon slot. */
+  trailing?: ReactNode;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -41,6 +43,10 @@ function normalize(option: string | SelectOption): SelectOption {
  * `.fynns-search-bar-results`), but **form density** matches Input (40dp /
  * `--fynns-size-icon-target`, outlined surface) — not chrome SearchBar 56dp.
  * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
+ * Auxiliary row actions (refresh / reload) belong in a sibling
+ * `.fynns-control-cluster--end-align` band — not `trailing` beside chevron
+ * (see AGENTS.md / sandbox `#field-header`). Core pins the sibling action to
+ * the 40dp trigger row when the docked list expands — not the list midpoint.
  * Replaces native `<select>`.
  *
  * Trigger width floors to the widest option (or placeholder) so switching
@@ -56,6 +62,7 @@ export function Select({
   disabled = false,
   placeholder = "Select",
   className,
+  trailing,
 }: SelectProps) {
   const normalized = options.map(normalize);
   const [open, setOpen] = useState(false);
@@ -67,9 +74,17 @@ export function Select({
   const [minWidthPx, setMinWidthPx] = useState<number | null>(null);
   const listId = useId();
   const isDisabled = disabled || normalized.length === 0;
+  /** In a FieldBlock control band the cluster is one flex row — no content min-width floor. */
+  const shrinkInCluster =
+    typeof className === "string" &&
+    className.split(/\s+/).includes("fynns-control-cluster__grow");
 
   /** Remeasure when options / placeholder change (not on every selected value). */
   useLayoutEffect(() => {
+    if (shrinkInCluster) {
+      setMinWidthPx(null);
+      return;
+    }
     const host = measureRef.current;
     if (!host) return;
     let max = 0;
@@ -77,7 +92,7 @@ export function Select({
       max = Math.max(max, (child as HTMLElement).offsetWidth);
     }
     if (max > 0) setMinWidthPx(max);
-  }, [options, placeholder]);
+  }, [options, placeholder, shrinkInCluster]);
 
   const pick = useCallback(
     (nextValue: string) => {
@@ -161,9 +176,11 @@ export function Select({
       )}
       data-expanded={open ? "true" : undefined}
       style={
-        minWidthPx != null
-          ? { minWidth: `min(100%, ${minWidthPx}px)` }
-          : undefined
+        shrinkInCluster
+          ? undefined
+          : minWidthPx != null
+            ? { minWidth: `min(100%, ${minWidthPx}px)` }
+            : undefined
       }
     >
       {/*
@@ -210,16 +227,26 @@ export function Select({
           <span className="fynns-select-trigger-text">{displayValue}</span>
         </button>
         <span
-          className="fynns-search-bar-trailing fynns-select-chevron"
-          aria-hidden="true"
-          onMouseDown={(event) => {
-            event.preventDefault();
-            if (isDisabled) return;
-            triggerRef.current?.focus();
-            toggleOpen();
-          }}
+          className={join(
+            "fynns-search-bar-trailing",
+            trailing != null && "fynns-select-trailing-cluster",
+          )}
         >
-          <ChevronDownIcon className="fynns-select-trigger-chevron" />
+          {trailing != null ? (
+            <span className="fynns-select-trailing-action">{trailing}</span>
+          ) : null}
+          <span
+            className="fynns-select-chevron"
+            aria-hidden="true"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              if (isDisabled) return;
+              triggerRef.current?.focus();
+              toggleOpen();
+            }}
+          >
+            <ChevronDownIcon className="fynns-select-trigger-chevron" />
+          </span>
         </span>
       </div>
       {normalized.length > 0 ? (

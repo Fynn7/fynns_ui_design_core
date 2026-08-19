@@ -1,4 +1,4 @@
-﻿# Consumer treaty — pasteable `@fynns/ui` contract
+# Consumer treaty — pasteable `@fynns/ui` contract
 
 **Purpose:** give any consumer repo a short, always-on agent rule so it obeys
 `@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
@@ -26,12 +26,27 @@ alone unless you re-copy by hand — **re-paste after treaty updates** (e.g. npm
 consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
+**List tree = ul>li + children** /
 **NavigationDrawer destination gap ≠ unit-stack** /
-**BusyRegion fill / loading placement** / **Pagination full-row stack**). Local install gate:
+**BusyRegion fill / loading placement** / **one progress chrome per busy host** /
+**Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump
 ([`docs/package-propagation.md`](../docs/package-propagation.md)).
+
+## Core-first loop (when a consumer screen is wrong)
+
+Same task — **all three**, not pick-one:
+
+1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.
+2. **Sandbox demo** — update Globals / Preview / Layout sample that teaches the
+   fix; browser-verify in sandbox (`#field-header`, `#form-recipe`, …).
+3. **Consumer** — dispatch subagent (or continue in consumer checkout): bump core,
+   props-only fix, browser-verify on the reported screen.
+
+Authority: [`.cursor/rules/constrain-then-consumer.mdc`](../.cursor/rules/constrain-then-consumer.mdc).
+Never consumer-only; never core-only without a living sandbox sample.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 
@@ -136,16 +151,26 @@ Symptoms inside a `Surface` / `Card` strip:
   name + hint
 - Hint alone on a **full-bleed** second row with a wide empty band to its
   right (common on a **narrow** window)
+- Long `ControlBlock` `description` wrapping in a **~7.5rem** left band while
+  the `Switch` / cluster sits end-aligned — the block grows very tall in
+  Drawer / narrow `Card` (stale core grid on form hosts)
 
 **Cause:** hand-rolled flex/grid, **or** a `FieldHint` / `ControlBlock`
 `description` that still paints as a full-width next row (stale core, or the
-hint is a Surface sibling instead of `ControlBlock` `description`). **Fix:**
+hint is a Surface sibling instead of `ControlBlock` `description`). Stale
+core may also leave the ControlBlock hint grid on fixed
+`--fynns-layout-control-row-label` inside Card / Dialog / padded Surface.
+**Fix:**
 keep `ControlStack` + `ControlRow` `label` + `.fynns-control-cluster` +
-`ControlBlock` `description` (do **not** put the timestamp in `ControlRow`
+`ControlBlock` `description` for **one short phrasing line** (timestamp,
+single-sentence toggle note — do **not** put the timestamp in `ControlRow`
 `label`, do **not** restyle `.fynns-*`). Core docks the hint in the **label
-column** and vertically centers the cluster on name + hint. Bump / `file:`
-link `@fynn7/ui-design-core` if the consumer still shows the empty band.
-Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
+column** and vertically centers the cluster on name + hint. **Multi-sentence /
+policy paragraphs** in a narrow Drawer or Card → **`InfoHint`** on the **same
+label line** as `ControlRow` (`label={<><span className="fynns-control-row__label-text">…</span><InfoHint size="sm" … /></>}` — dense rows) — **not** trailing the Switch / action cluster and **not**
+`ControlBlock` `description` (see `#info-hint`). Bump / `file:` link
+`@fynn7/ui-design-core` if the consumer still shows the empty band or the
+7.5rem wrap. Live: sandbox `#rhythm` + `#form-recipe` + `#info-hint`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
@@ -232,6 +257,61 @@ belong in **`Card` `title`** + table wrap host. `Surface` is for untitled wells 
 usage model subtotals. Authority: [`AGENTS.md`](../AGENTS.md) **Content density**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: List tree wrapped in divs / buttons in leading
+
+Symptoms in a usage / session catalog:
+
+- `List` (`<ul>`) children are `div.fynns-unit-stack` wrapping each `ListItem`,
+  and expanded turns are more `ListItem`s **not** inside a `List` (orphan `<li>`)
+- Expand control is a raw 16dp `<button>` (or app `HubTreeDisclosure`) in
+  `leading` — that slot is `aria-hidden`, so the only toggle is invisible to AT
+- Timestamp + title (+ a `Button`) are stuffed into `headline` (nowrap); stats
+  use `ControlRow` in `trailing`; nested `Table` is `width:100%` /
+  `table-layout:fixed` / `overflow-x:hidden` with a `Chip` “est.” pill
+
+**Cause:** `ListItem` is the `<li>`. Wrapping it to attach “detail below the
+row” breaks `ul > li`. `leading` is decorative. `ControlRow` is form/toolbar
+name|control, not list meta.
+
+**Fix in the consumer:** `ListItem`s are **direct** `List` children. Expand =
+row `onClick` + decorative chevron in `leading` + `aria-expanded`. Nested
+`List` / `.fynns-table-wrap.fynns-scroll` go in `ListItem` **`detail`** (same
+`<li>`). Slots: `overline` (time / kind), `headline` (name), `supportingText`
+(path), `trailingSupportingText` (duration / count cluster), trailing
+`IconButton` for open-record. No `Chip` in table cells (`.fynns-table-meta`).
+Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
+
+Symptoms in a usage / session catalog (or any `ListItem` with `Tooltip` copy):
+
+- Decorative chevron sits in a **40dp** empty leading column (Avatar-sized slot)
+  so overline / headline start far to the right
+- Overline, headline, and supporting are **flush** (`gap: 0`) and read cramped
+- Long turn / title copy **spills** horizontally — `text-overflow: ellipsis` on
+  `.fynns-list-item-headline` never paints because `Tooltip` wraps the string in
+  `.fynns-tooltip-trigger` (`inline-flex` min-content = full string). Consumer
+  `tip-grow` / `width: max-content` makes it worse
+- `trailing` `IconButton` sits **outside** the row’s `radius-3xl` wash (valid
+  sibling for nested buttons) and reads as a second floating control
+
+**Cause:** leading was locked to Avatar `md`; content stack had no gap;
+ellipsis was only on the headline box, not the Tooltip trigger; state-layer
+lived only on the inner `<button>`.
+
+**Fix in core (do not patch with app CSS):** leading hugs the glyph;
+`--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
+`--with-end` paints hover/selected on the **row / host**. Nested `List` under
+`detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
+as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
+the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
+(`>`): a parent session with a trailing `IconButton` must not crush nested turn
+rows that have no end actions. Consumer: pass `Tooltip` for the full string — do **not**
+`tip-grow` / max-content the trigger. Live: sandbox `#list`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 
 Symptoms in a wide usage / catalog table:
@@ -250,6 +330,34 @@ was the leftover after pill `Badge` was purged. Chip is **interactive chrome**
 `.fynns-table-meta` (muted, `font-size-xs`). Optional id stays mono + ellipsis.
 Do not restyle `.fynns-chip*` to look like caption. Live: sandbox `#table`.
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Select refresh crammed beside chevron
+
+Symptoms in a settings drawer / inspector `FieldStack`:
+
+- `Select` uses `trailing` for refresh / reload while the dropdown chevron
+  shares the same trailing cluster (~50×40px)
+- Hover discs overlap; refresh feels misaligned; disabled Select still shows
+  two icons in one tight slot
+- Or refresh `IconButton` **overflows** the drawer — Select kept a content
+  `min-width` floor and did not shrink with the cluster
+
+**Cause:** `Select` always reserves a chevron for the menu anchor. Auxiliary
+actions (refresh model list, reload options) are not in-field trailing icons
+when a dropdown indicator is present — they need a separate hit target. In a
+control band, Select must use `fynns-control-cluster__grow` so the cluster is
+**one** nowrap row (Select ellipsizes; action `flex-shrink: 0`) — not a full-
+width Select plus an extra button.
+
+**Fix in the consumer:** **`FieldBlock` + control-cluster band** — label on
+`FieldHeader`; control =
+`.fynns-control-cluster.fynns-control-cluster--end-align` with `Select`
+`className="fynns-control-cluster__grow"` (no `trailing`) + sibling
+`IconButton` + `Tooltip`. Keep **Input** reveal on `Input` `trailing`. Do not
+use `FieldBlock` `actions` on the label row for Select refresh. Live: sandbox
+`#field-header`, `#form-recipe`; consumer settings Model row. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: table row action not sharing one trailing edge
@@ -294,20 +402,36 @@ Symptoms in a settings / dashboard panel:
 - Warning `InlineAlert` is **tall** with empty bands between title, hint, and rows
 - Model names and trailing actions sit inside the alert tonal box; «映射» hugs the
   far edge under the icon column inset
-- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` were passed as
-  `children` of `InlineAlert`
+- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` / `CodeBlock` were
+  passed as `children` of `InlineAlert`
 
 **Cause:** `InlineAlert` body is a **phrasing-only** text slot (icon + copy strip).
-Block hosts (`List`, form labels, unit stacks) belong **outside** the alert as
-`.fynns-unit-stack` siblings — same rhythm as «section label → InlineAlert → next
-block» in [`AGENTS.md`](../AGENTS.md) **Inset decision tree**.
+Block hosts (`List`, form labels, unit stacks, `CodeBlock` wells) belong
+**outside** the alert as `.fynns-unit-stack` siblings — same rhythm as
+«section label → InlineAlert → next block» in [`AGENTS.md`](../AGENTS.md)
+**Inset decision tree**.
 
 **Fix in the consumer:** keep `InlineAlert` to title + supporting sentence
 (`message` or short `children` with `<strong>` / `<br />`); stack the catalog
-**below** with `List` / `ListItem` (`headline` + `trailing` actions). Do not
+**below** with `Card` / `List` / `ListItem` (formula snippets → `CodeBlock`
+`variant="plain"` in the Card, not inside the alert). Do not
 restyle `.fynns-inline-alert*`. Live: sandbox Globals severity samples; hub usage
 unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md) **Content density** +
 Feedback **InlineAlert**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: CodeBlock copy covering the last glyphs
+
+Symptoms: `variant="plain"` (or headless `editable`) one-liners hide the last
+word under the hover Copy `IconButton` (e.g. a formula ending in `Output`).
+
+**Cause:** headless copy used to `position: absolute` over the code surface with
+no reserved end column. **Fix in core:** `--copy-float` pads the root by
+`--fynns-space-sm` + `--fynns-size-icon-target` so wrap and nowrap stay clear.
+**Fix in the consumer:** do **not** add private `padding` / `padding-right` on
+`.fynns-code-block-pre`. Formula / snippet catalogs belong in `Card`
+`chrome="plain"`, not nested in `InlineAlert`. Live: sandbox Globals `#code-block`
+(long plain line). Authority: [`AGENTS.md`](../AGENTS.md) CodeBlock chrome.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 
@@ -320,6 +444,40 @@ extension. **Fix in the consumer:** pass matching `language` / profile; for
 fill editors also `autoGrow={false}`. Authority:
 [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) (`label` ≠ `language`) +
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: vacant band under FullscreenDialog title
+
+Symptoms: `FullscreenDialog` title looks fine, but the first body child is a
+bordered well (`CodeBlock` / `Surface` / table wrap) sitting ~18dp below the
+head — an empty strip between title and the well’s top border.
+
+**Cause:** overlay body used to always apply `--fynns-layout-content-inset` on
+all four sides. A framed well already paints its own edge, so the extra
+block-start pad reads as a desert — not as title chrome. **Fix in core:**
+flush-start (`padding-block-start: 0`) when that well is the first body child,
+or the first child of one unpadded fill wrapper. **Fix in the consumer:** put
+the well first; a height-only host must not add `padding-top`. Do not restyle
+`.fynns-dialog-body`. Not Card `chrome="plain"` flush (`plain ≠ flush`). Live:
+sandbox `#fullscreen-flush`. Authority: [`AGENTS.md`](../AGENTS.md)
+**Flush-start overlay body**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: stacked progress chromes in BusyRegion
+
+Symptoms: overlay shows **CircularProgress + LinearProgress** (or a consumer
+`TaskProgressBar` inside `BusyRegion` `message`); the same counts appear twice
+on one caption row (`扫描会话 10440/14179` and `10440 / 14179`).
+
+**Cause:** `BusyStack` used to always paint a ring, so a known-progress bar
+in `message` doubled the chrome. **Fix in core:** `indicator="circular"` |
+`"linear"` — one widget. **Fix in the consumer:** known % / counts →
+`BusyRegion` / `BusyScrim` `indicator="linear"` + `value`; `message` is status
+copy (+ optional `FieldHint`) only — never nest `LinearProgress` /
+`CircularProgress` / a task-progress bar. Standalone `LinearProgress` beside
+content (not inside the overlay `message`) is fine. Authority:
+[`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Live:
+sandbox Globals `#busy-region` (determinate sample is linear). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

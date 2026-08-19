@@ -11,6 +11,7 @@ import {
   BusyRegion,
   BusyScrim,
   Button,
+  BotIcon,
   useBusyTask,
   afterNextPaint,
   yieldToMain,
@@ -20,6 +21,7 @@ import {
   Card,
   Surface,
   Checkbox,
+  ChevronDownIcon,
   ChevronRightIcon,
   Chip,
   ChipSet,
@@ -272,6 +274,18 @@ const GSC_DEMO_CODE = [
   "unknownCmd 1 2",
 ].join("\n");
 
+/** Generic FullscreenDialog flush-start sample — not consumer product copy. */
+const FULLSCREEN_FLUSH_XML = [
+  "<?xml version=\"1.0\"?>",
+  "<notes>",
+  "  <title>Project preferences</title>",
+  "  <layout>Compact</layout>",
+  "  <digests>Daily</digests>",
+  "  <region>EU</region>",
+  "  <contact>sample@example.com</contact>",
+  "</notes>",
+].join("\n");
+
 /** Wave 3: live registry path — CodeBlock resolves language="gsc" via this. */
 registerHighlightLanguage("gsc", GSC_DEMO_PROFILE);
 
@@ -465,25 +479,7 @@ function FormRecipeFields({
             onChange={(event) => onDisplayNameChange(event.target.value)}
           />
         </FieldBlock>
-        <FieldBlock
-          label={t("globals.formRecipeEmail")}
-          htmlFor={emailId}
-          actions={
-            <Tooltip content={t("globals.formRecipeRevealTip")}>
-              <IconButton
-                size="sm"
-                aria-label={t("globals.formRecipeRevealTip")}
-                onClick={onRevealEmailToggle}
-              >
-                {revealEmail ? (
-                  <EyeOffIcon aria-hidden />
-                ) : (
-                  <EyeIcon aria-hidden />
-                )}
-              </IconButton>
-            </Tooltip>
-          }
-        >
+        <FieldBlock label={t("globals.formRecipeEmail")} htmlFor={emailId}>
           <Input
             id={emailId}
             aria-label={t("globals.formRecipeEmail")}
@@ -491,12 +487,33 @@ function FormRecipeFields({
             value={email}
             onChange={(event) => onEmailChange(event.target.value)}
             autoComplete="off"
+            trailing={
+              <Tooltip content={t("globals.formRecipeRevealTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.formRecipeRevealTip")}
+                  onClick={onRevealEmailToggle}
+                >
+                  {revealEmail ? (
+                    <EyeOffIcon aria-hidden />
+                  ) : (
+                    <EyeIcon aria-hidden />
+                  )}
+                </IconButton>
+              </Tooltip>
+            }
           />
         </FieldBlock>
-        <FieldBlock
-          label={t("globals.formRecipeTimezone")}
-          htmlFor={timezoneId}
-          actions={
+        <FieldBlock label={t("globals.formRecipeTimezone")} htmlFor={timezoneId}>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Select
+              id={timezoneId}
+              className="fynns-control-cluster__grow"
+              ariaLabel={t("globals.formRecipeTimezone")}
+              options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
+              value={timezone}
+              onChange={onTimezoneChange}
+            />
             <Tooltip content={t("globals.formRecipeRefreshTip")}>
               <IconButton
                 size="sm"
@@ -506,15 +523,7 @@ function FormRecipeFields({
                 <UndoIcon aria-hidden />
               </IconButton>
             </Tooltip>
-          }
-        >
-          <Select
-            id={timezoneId}
-            ariaLabel={t("globals.formRecipeTimezone")}
-            options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
-            value={timezone}
-            onChange={onTimezoneChange}
-          />
+          </div>
         </FieldBlock>
         <FieldBlock
           label={t("globals.formRecipeNotes")}
@@ -789,6 +798,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
   const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
+  const [listTreeOpen, setListTreeOpen] = useState(true);
+  const [listTurnOpen, setListTurnOpen] = useState(true);
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [pickedRange, setPickedRange] = useState<{
@@ -817,6 +828,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [dropBusy, setDropBusy] = useState(false);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
+  const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
@@ -859,6 +872,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [nestedPrompt, setNestedPrompt] = useState(
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
+  const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
+  const [fieldHeaderRegion, setFieldHeaderRegion] = useState("alpha");
+  const [fieldHeaderEndpoint, setFieldHeaderEndpoint] = useState(
+    "https://api.example.com",
+  );
+  const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
+  const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
@@ -2981,6 +3001,88 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
+          <SandboxHelp text={t("globals.listTreeHelp")} />
+          <List aria-label={t("globals.listTreeAria")}>
+            <ListItem
+              leading={listTreeOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              overline={t("globals.listTreeOverline")}
+              headline={t("globals.listTreeHeadline")}
+              supportingText={t("globals.listTreePath")}
+              trailingSupportingText={
+                <span className="fynns-control-cluster">
+                  <span>{t("globals.listTreeDuration")}</span>
+                  <span className="fynns-table-meta">{t("globals.listTreeCalls")}</span>
+                </span>
+              }
+              trailing={
+                <Tooltip content={t("globals.listTreeOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listTreeOpen")}
+                  >
+                    <BotIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+              aria-expanded={listTreeOpen}
+              onClick={() => setListTreeOpen((open) => !open)}
+              detail={
+                listTreeOpen ? (
+                  <List aria-label={t("globals.listTreeTurnsAria")}>
+                    <ListItem
+                      lines={2}
+                      leading={listTurnOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                      overline={t("globals.listTreeTurnOverline")}
+                      headline={
+                        <Tooltip
+                          content={t("globals.listTreeTurnHeadline")}
+                          side="top"
+                          align="start"
+                        >
+                          <span>{t("globals.listTreeTurnHeadline")}</span>
+                        </Tooltip>
+                      }
+                      trailingSupportingText={t("globals.listTreeDuration")}
+                      aria-expanded={listTurnOpen}
+                      onClick={() => setListTurnOpen((open) => !open)}
+                      detail={
+                        listTurnOpen ? (
+                          <div className="fynns-table-wrap fynns-scroll">
+                            <Table>
+                              <TableHead>
+                                <TableRow>
+                                  <TableHeaderCell>{t("globals.listTreeColWhen")}</TableHeaderCell>
+                                  <TableHeaderCell>{t("globals.listTreeColModel")}</TableHeaderCell>
+                                  <TableHeaderCell align="end">
+                                    {t("globals.listTreeColTokens")}
+                                  </TableHeaderCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell>{t("globals.listTreeOverline")}</TableCell>
+                                  <TableCell>sample-model</TableCell>
+                                  <TableCell align="end">
+                                    <span className="fynns-control-cluster">
+                                      <span>12.4k</span>
+                                      <span className="fynns-table-meta">
+                                        {t("globals.listTreeEstimated")}
+                                      </span>
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+                        ) : null
+                      }
+                    />
+                  </List>
+                ) : null
+              }
+            />
+          </List>
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
         </GlobalsDemo>
@@ -3089,19 +3191,103 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="field-header">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <FieldStack>
+            <FieldBlock
+              label={t("globals.fieldHeaderProviderLabel")}
+              htmlFor="sandbox-field-header-provider"
+            >
+              <Select
+                id="sandbox-field-header-provider"
+                ariaLabel={t("globals.fieldHeaderProviderLabel")}
+                options={[
+                  { value: "alpha", label: t("globals.fieldHeaderRegionAlpha") },
+                  { value: "beta", label: t("globals.fieldHeaderRegionBeta") },
+                ]}
+                value={fieldHeaderRegion}
+                onChange={setFieldHeaderRegion}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderBaseUrlLabel")}
+              htmlFor="sandbox-field-header-base-url"
+            >
+              <Input
+                id="sandbox-field-header-base-url"
+                value={fieldHeaderEndpoint}
+                onChange={(event) => setFieldHeaderEndpoint(event.target.value)}
+                aria-label={t("globals.fieldHeaderBaseUrlLabel")}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.fieldHeaderApiKeyLabel")} htmlFor="sandbox-field-header-api-key">
+              <Input
+                id="sandbox-field-header-api-key"
+                type={fieldHeaderReveal ? "text" : "password"}
+                value={fieldHeaderApiKey}
+                onChange={(event) => setFieldHeaderApiKey(event.target.value)}
+                aria-label={t("globals.fieldHeaderApiKeyLabel")}
+                autoComplete="off"
+                trailing={
+                  <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                    <IconButton
+                      size="sm"
+                      aria-label={t("globals.fieldHeaderRevealTip")}
+                      onClick={() => setFieldHeaderReveal((v) => !v)}
+                    >
+                      {fieldHeaderReveal ? (
+                        <EyeOffIcon aria-hidden />
+                      ) : (
+                        <EyeIcon aria-hidden />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                }
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.fieldHeaderBlockLabel")} htmlFor="sandbox-field-header-select">
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Select
+                  id="sandbox-field-header-select"
+                  className="fynns-control-cluster__grow"
+                  ariaLabel={t("globals.fieldHeaderBlockLabel")}
+                  placeholder={t("globals.fieldHeaderSelectPlaceholder")}
+                  value={fieldHeaderSelect}
+                  onChange={setFieldHeaderSelect}
+                  options={[
+                    { value: "a", label: "Option A" },
+                    { value: "b", label: "Option B" },
+                  ]}
+                />
+                <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderNotesLabel")}
+              htmlFor="sandbox-field-header-notes"
+              actions={
+                <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                    <UndoIcon aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <Textarea
+                id="sandbox-field-header-notes"
+                aria-label={t("globals.fieldHeaderNotesLabel")}
+                minRows={2}
+              />
+            </FieldBlock>
+          </FieldStack>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
-            htmlFor="sandbox-field-header-demo"
-            actions={
-              <Tooltip content={t("globals.fieldHeaderActionTip")}>
-                <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-            }
+            htmlFor="sandbox-field-header-bare"
           />
           <Input
-            id="sandbox-field-header-demo"
+            id="sandbox-field-header-bare"
             placeholder={t("globals.fieldHeaderPlaceholder")}
             aria-label={t("globals.fieldHeaderLabel")}
           />
@@ -3353,6 +3539,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </FullscreenDialog>
         <SandboxHelp text={t("globals.overlayHelp")} />
         </GlobalsDemo>
+        <GlobalsDemo id="fullscreen-flush">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setFullscreenFlushOpen(true)}>
+            {t("globals.fullscreenFlushOpen")}
+          </Button>
+        </div>
+        <FullscreenDialog
+          open={fullscreenFlushOpen}
+          onOpenChange={setFullscreenFlushOpen}
+          title={t("globals.fullscreenFlushTitle")}
+          closeAriaLabel={t("globals.fullscreenClose")}
+          actions={
+            <Button size="sm" onClick={() => setFullscreenFlushOpen(false)}>
+              {t("globals.fullscreenDone")}
+            </Button>
+          }
+        >
+          <CodeBlock
+            variant="editable"
+            label={t("globals.fullscreenFlushFile")}
+            language="xml"
+            wrap
+            autoGrow
+            value={fullscreenFlushXml}
+            onChange={setFullscreenFlushXml}
+          />
+        </FullscreenDialog>
+        <SandboxHelp text={t("globals.fullscreenFlushHelp")} />
+        </GlobalsDemo>
       </>
         )}
       </GlobalsCategory>
@@ -3416,10 +3631,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
           <BusyRegion
             busy={busyRegionDeterminate}
+            indicator="linear"
             label={t("globals.busyRegionLabel")}
             message={t("globals.busyRegionMessage")}
             value={0.55}
-            size="sm"
           >
             <Card title={t("globals.busyRegionTitle")}>
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
@@ -3471,10 +3686,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <BusyScrim
             open={busyScrimDeterminateOpen}
+            indicator="linear"
             label={t("globals.busyScrimLabel")}
             message={t("globals.busyScrimMessage")}
             value={0.7}
-            size="lg"
           />
           <SandboxHelp text={t("globals.busyScrimHelp")} />
         </div>
@@ -3754,7 +3969,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             variant="plain"
             language="py"
             copyAriaLabel={t("globals.codeBlockCopy")}
-            code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))`}
+            code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))\n    print(greet("sandbox"))\n`}
+            maxHeight="8rem"
+          />
+          <CodeBlock
+            variant="plain"
+            language="text"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={t("globals.codeBlockLongLine")}
           />
           <CodeBlock
             label={t("globals.codeBlockCssLabel")}
