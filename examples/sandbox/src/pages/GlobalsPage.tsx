@@ -3843,6 +3843,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))`}
           />
           <CodeBlock
+            variant="plain"
+            language="text"
+            copyAriaLabel={t("globals.codeBlockCopy")}
+            code={t("globals.codeBlockLongLine")}
+          />
+          <CodeBlock
             label={t("globals.codeBlockCssLabel")}
             language="css"
             copyAriaLabel={t("globals.codeBlockCopy")}
