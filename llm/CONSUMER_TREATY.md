@@ -356,7 +356,7 @@ width Select plus an extra button.
 `className="fynns-control-cluster__grow"` (no `trailing`) + sibling
 `IconButton` + `Tooltip`. Keep **Input** reveal on `Input` `trailing`. Do not
 use `FieldBlock` `actions` on the label row for Select refresh. Live: sandbox
-`#field-header`, `#form-recipe`; gsc LLM Model row. Authority:
+`#field-header`, `#form-recipe`; consumer settings Model row. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

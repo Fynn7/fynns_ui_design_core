@@ -873,9 +873,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
   const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
-  const [fieldHeaderProvider, setFieldHeaderProvider] = useState("ollama");
-  const [fieldHeaderBaseUrl, setFieldHeaderBaseUrl] = useState(
-    "http://localhost:11434/v1",
+  const [fieldHeaderRegion, setFieldHeaderRegion] = useState("alpha");
+  const [fieldHeaderEndpoint, setFieldHeaderEndpoint] = useState(
+    "https://api.example.com",
   );
   const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
   const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
@@ -3200,11 +3200,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 id="sandbox-field-header-provider"
                 ariaLabel={t("globals.fieldHeaderProviderLabel")}
                 options={[
-                  { value: "ollama", label: "Ollama" },
-                  { value: "gemini", label: "Gemini" },
+                  { value: "alpha", label: t("globals.fieldHeaderRegionAlpha") },
+                  { value: "beta", label: t("globals.fieldHeaderRegionBeta") },
                 ]}
-                value={fieldHeaderProvider}
-                onChange={setFieldHeaderProvider}
+                value={fieldHeaderRegion}
+                onChange={setFieldHeaderRegion}
               />
             </FieldBlock>
             <FieldBlock
@@ -3213,8 +3213,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               <Input
                 id="sandbox-field-header-base-url"
-                value={fieldHeaderBaseUrl}
-                onChange={(event) => setFieldHeaderBaseUrl(event.target.value)}
+                value={fieldHeaderEndpoint}
+                onChange={(event) => setFieldHeaderEndpoint(event.target.value)}
                 aria-label={t("globals.fieldHeaderBaseUrlLabel")}
               />
             </FieldBlock>
