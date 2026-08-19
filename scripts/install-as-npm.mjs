@@ -310,6 +310,25 @@ function readConsumerPkg(gitRoot) {
   return { path: p, data: JSON.parse(readText(p)) };
 }
 
+function isLocalDependencySpec(spec) {
+  return typeof spec === "string" && /^(file:|link:|workspace:)/.test(spec.trim());
+}
+
+/** Strip range prefix so `^0.4.17` compares equal to `0.4.17`. */
+function normalizeVersionTarget(version) {
+  return String(version || "").replace(/^[\^~]/, "");
+}
+
+function dependencyNeedsInstall(current, version) {
+  if (!current) return true;
+  if (isLocalDependencySpec(current)) return true;
+  if (!version) return false;
+  const target = normalizeVersionTarget(version);
+  const currentNorm = normalizeVersionTarget(current);
+  if (/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(target) && currentNorm !== target) return true;
+  return false;
+}
+
 function ensureDependency(gitRoot, version, dryRun, log) {
   const pkg = readConsumerPkg(gitRoot);
   if (!pkg) {
@@ -317,9 +336,25 @@ function ensureDependency(gitRoot, version, dryRun, log) {
     return false;
   }
   const deps = { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) };
-  if (deps[PKG_NAME]) {
-    log.push({ step: "dependency", status: "ok", detail: `${PKG_NAME}@${deps[PKG_NAME]}` });
+  const current = deps[PKG_NAME];
+  if (current && !dependencyNeedsInstall(current, version)) {
+    log.push({ step: "dependency", status: "ok", detail: `${PKG_NAME}@${current}` });
     return true;
+  }
+  if (current && dryRun) {
+    log.push({
+      step: "dependency",
+      status: "dry-run",
+      detail: `would upgrade ${PKG_NAME} from ${current} to ${version}`,
+    });
+    return true;
+  }
+  if (current) {
+    log.push({
+      step: "dependency",
+      status: "upgrade",
+      detail: `${PKG_NAME} ${current} → ${version}`,
+    });
   }
   if (dryRun) {
     log.push({
@@ -398,6 +433,11 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
     ? { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) }
     : {};
   if (!deps[PKG_NAME]) issues.push(`missing dependency ${PKG_NAME}`);
+  if (deps[PKG_NAME] && isLocalDependencySpec(deps[PKG_NAME])) {
+    issues.push(
+      `${PKG_NAME} uses local ${deps[PKG_NAME]} — run npm run consume:install -- --target <app> --version x.y.z for registry pin`,
+    );
+  }
   if (deps["@fynns/ui"] || deps["@fynns/ui-design-core"]) {
     issues.push("remove obsolete @fynns/ui / @fynns/ui-design-core package names; use @fynn7/ui-design-core");
   }
