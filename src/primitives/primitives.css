@@ -8880,13 +8880,27 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   pointer-events: auto;
 }
 
-/* Headless / no-label: code only; copy floats over the surface (plain + editable). */
+/* Headless / no-label: copy sits in a reserved end column (not over glyphs).
+   Root padding-end = copy inset + IconButton target so wrap *and* nowrap
+   stay clear of the overlay; pre/editor keep a short text↔disk gap. */
+.fynns-code-block--copy-float {
+  padding-inline-end: calc(
+    var(--fynns-space-sm) + var(--fynns-size-icon-target)
+  );
+}
+
 .fynns-code-block--plain .fynns-code-block-copy,
 .fynns-code-block--copy-float > .fynns-code-block-copy {
   position: absolute;
   top: var(--fynns-space-sm);
   inset-inline-end: var(--fynns-space-sm);
   z-index: 2;
+}
+
+.fynns-code-block--copy-float > .fynns-code-block-pre,
+.fynns-code-block--copy-float .fynns-code-block-highlight,
+.fynns-code-block--copy-float .fynns-code-block-input {
+  padding-inline-end: var(--fynns-space-sm);
 }
 
 .fynns-code-block--plain .fynns-code-block-pre {
