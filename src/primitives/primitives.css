@@ -2475,6 +2475,9 @@ input.fynns-input:focus::-webkit-scrollbar {
    Missing middle content still needs `__grow` so the action shares one end edge. */
 .fynns-control-cluster--end-align {
   flex-wrap: nowrap;
+  /* Docked Select lists grow the grow flex item — pin row actions to the
+     trigger band (40dp), not the vertical center of trigger + results. */
+  align-items: flex-start;
 }
 
 .fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow {
@@ -2486,6 +2489,13 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-control-cluster--end-align > :not(.fynns-control-cluster__grow) {
   flex-shrink: 0;
+}
+
+/* sm IconButton (32dp) optical center on the 40dp form control row. */
+.fynns-control-cluster--end-align
+  > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-control-cluster--end-align > .fynns-btn--sm.fynns-btn--icon {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 
 .fynns-control-cluster__grow {

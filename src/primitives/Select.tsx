@@ -45,7 +45,8 @@ function normalize(option: string | SelectOption): SelectOption {
  * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
  * Auxiliary row actions (refresh / reload) belong in a sibling
  * `.fynns-control-cluster--end-align` band — not `trailing` beside chevron
- * (see AGENTS.md / sandbox `#field-header`).
+ * (see AGENTS.md / sandbox `#field-header`). Core pins the sibling action to
+ * the 40dp trigger row when the docked list expands — not the list midpoint.
  * Replaces native `<select>`.
  *
  * Trigger width floors to the widest option (or placeholder) so switching
