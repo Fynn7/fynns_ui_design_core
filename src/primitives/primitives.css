@@ -1890,6 +1890,35 @@ input.fynns-input:focus::-webkit-scrollbar {
   padding: var(--fynns-layout-content-inset);
 }
 
+/*
+ * Flush-start (FullscreenDialog — hard): do not pad above the first
+ * ceiling-flush bordered well. Title chrome stays content-inset; the well
+ * frame sits under the head — not an 18dp vacant band. Keep inline /
+ * block-end inset. One unpadded fill wrapper is allowed (the well is still
+ * that host’s first child). Not Card/Collapsible Field* crush; not
+ * chrome="plain" flush (plain ≠ flush still holds inside Card).
+ * Wells: CodeBlock, Surface, .fynns-table-wrap.
+ */
+.fynns-dialog--fullscreen > .fynns-dialog-body:has(
+    > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child
+  ),
+.fynns-dialog--fullscreen > .fynns-dialog-body:has(
+    > :first-child
+      > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child
+  ) {
+  padding-block-start: 0;
+}
+
+.fynns-dialog--fullscreen
+  > .fynns-dialog-body
+  > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child,
+.fynns-dialog--fullscreen
+  > .fynns-dialog-body
+  > :first-child
+  > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child {
+  margin-block-start: 0;
+}
+
 /* ---------- Side drawer (content inspector, not NavigationDrawer) ---------- */
 .fynns-dialog-overlay--drawer {
   display: flex;
@@ -8928,7 +8957,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
    the stack (rows / content sizing / default autoGrow must win in Globals
    demos). Fill hosts that need the caret layer to stretch: pass
    `autoGrow={false}` and set `textarea { height: 100% }` in host CSS
-   (see gsc-live-preview `.gsc-editor-code` / `.gsc-llm-fullscreen-code`). */
+   (see gsc-live-preview `.gsc-editor-code` / `.gsc-llm-fullscreen-code`).
+   FullscreenDialog flush-start (no pad above a first-child CodeBlock) is
+   independent — AGENTS.md **Flush-start overlay body**. */
 .fynns-code-block-editor {
   position: relative;
   box-sizing: border-box;

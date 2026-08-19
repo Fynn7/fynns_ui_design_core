@@ -569,8 +569,13 @@ const en = {
     "Full-viewport panel: close IconButton + title + optional actions, scrollable body.",
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
+  "globals.fullscreenFlushOpen": "Open fullscreen with CodeBlock",
+  "globals.fullscreenFlushTitle": "Project notes",
+  "globals.fullscreenFlushFile": "notes.xml",
+  "globals.fullscreenFlushHelp":
+    "Flush-start: when the first FullscreenDialog body child is a keep-set bordered well (CodeBlock / Surface / table wrap), core drops padding-block-start so the well frame sits under the title — not an 18dp vacant band. Head chrome stays content-inset. One unpadded fill wrapper is allowed. Not Card chrome=\"plain\" flush. Authority: AGENTS.md Flush-start overlay body.",
   "globals.overlayHelp":
-    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
+    "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
   "globals.dialogLabeledOpen": "Open Dialog with close",
   "globals.dialogLabeledTitle": "Dialog with close",
@@ -1960,8 +1965,13 @@ const zh: Record<MessageKey, string> = {
     "全视口面板：关闭 IconButton + 标题 + 可选操作，正文可滚动。",
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
+  "globals.fullscreenFlushOpen": "打开全屏（CodeBlock 顶天）",
+  "globals.fullscreenFlushTitle": "项目笔记",
+  "globals.fullscreenFlushFile": "notes.xml",
+  "globals.fullscreenFlushHelp":
+    "Flush-start：FullscreenDialog 正文第一个子项是 keep-set 带边框井（CodeBlock / Surface / 表包装）时，core 去掉 padding-block-start，井框贴在标题下——不要 18dp 空带。标题 chrome 仍 content-inset。允许一层无垫 fill 宿主。不是 Card chrome=\"plain\" 贴边。权威：AGENTS.md Flush-start overlay body。",
   "globals.overlayHelp":
-    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
+    "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
   "globals.dialogLabeledOpen": "打开 Dialog（关闭）",
   "globals.dialogLabeledTitle": "带关闭的 Dialog",

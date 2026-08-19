@@ -230,6 +230,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   chrome inspector in the **same** change. Consumers must not redefine
   margins in app CSS — see [`llm/CONSUME.md`](llm/CONSUME.md). Decision tree:
   **Inset decision tree** below.
+- **DON'T** pad above the first ceiling-flush **bordered well** in
+  `FullscreenDialog` (`CodeBlock` / `Surface` / `.fynns-table-wrap` as the
+  first body child, or first child of one unpadded fill host). Core already
+  flush-starts; do not wrap with extra `padding-top`. See **Flush-start overlay
+  body**.
 - **DON'T** invent private radius CSS variables outside `--fynns-radius-*`
   (e.g. `--fynns-searchbar-container-radius`, `--fynns-selection-box-radius`,
   `--fynns-<component>-*-radius`). Corner radius **must** use
@@ -785,7 +790,7 @@ classes.
   | --- | --- | --- | --- |
   | Basic confirm | `ConfirmDialog` | none | Title + supporting text + foot actions; `dialog-inset`. |
   | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible forms — **not** a separate component. |
-  | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; mobile-first long tasks. |
+  | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; **flush-start** when the first body child is a bordered well — see **Flush-start overlay body**. Mobile-first long tasks. |
   **Dismissible Dialog + ControlStack** (do **not** invent a parallel
   `SettingsDialog` / Preferences shell): `Dialog` + `showCloseButton` +
   full-width `ControlStack` / `ControlRow` / `Switch`. Live sample: sandbox
@@ -1053,7 +1058,7 @@ classes.
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = content-width nowrap strip; stack page-size Select above it (Card body siblings). |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
-  | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). |
+  | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). Body: **flush-start** when the first child is a keep-set bordered well — see **Flush-start overlay body**. |
   | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-sm`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
@@ -1244,7 +1249,18 @@ classes.
   invent consumer width or wrap hacks. Vertical scroll only when body exceeds
   panel `max-height`.
   FullscreenDialog inherits content-inset on head/body — **no** head|body
-  hairline / `surface-head`. BottomSheet keeps asymmetric
+  hairline / `surface-head`. **Flush-start overlay body (hard):** when the
+  first child of `.fynns-dialog-body` (or that child’s first child — one
+  unpadded fill wrapper) is a keep-set **bordered well** (`CodeBlock`,
+  `Surface`, `.fynns-table-wrap`), core sets `padding-block-start: 0` so the
+  well frame sits under the title — do **not** leave an 18dp vacant band, and
+  do **not** add consumer `padding-top` / negative margin on a private host
+  to fake it. Head chrome stays `content-inset`. Inline and block-end inset
+  stay. This is **not** the removed Card/Collapsible Field* crush, and **not**
+  `chrome="plain"` flush (`plain ≠ flush` still holds inside Card /
+  Collapsible). Put the well as the first body child; a height-only wrapper
+  must not add pad-block-start. Live: sandbox `#fullscreen-flush`.
+  BottomSheet keeps asymmetric
   `--fynns-layout-sheet-pad-inline` / `sheet-pad-block` (M3 block≠inline) and
   **no** header|body divider (handle is enough). Drawer content head same:
   content-inset, no divider. Do not force ListItem onto equal four-side

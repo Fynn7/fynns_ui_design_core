@@ -162,7 +162,11 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
   the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
-  so nested surfaces inset; plain ≠ flush). Outside Card/Collapsible use
+  so nested surfaces inset; plain ≠ flush). **FullscreenDialog flush-start:**
+  first body child a bordered well (`CodeBlock` / `Surface` / table wrap) →
+  core drops `padding-block-start` (one unpadded fill wrapper allowed). Do not
+  add consumer pad-top. See AGENTS.md **Flush-start overlay body** /
+  `#fullscreen-flush`. Outside Card/Collapsible use
   `.fynns-nest`. Centered Dialog head/foot/inline **and**
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;

@@ -162,7 +162,9 @@ ring can paint before heavy work).
   field-pad-inline (Input / field-shell compose capsule + field-pad for
   Select text-start parity) /
   field-pad-block (Textarea — not Input sm zero block) — AGENTS.md
-  **Inset decision tree**. **Never** invent rem/px/private inset vars for
+  **Inset decision tree**. **FullscreenDialog flush-start:** first body child
+  a bordered well (`CodeBlock` / `Surface` / table wrap) → no pad-block-start
+  (not `chrome="plain"` flush). **Never** invent rem/px/private inset vars for
   shell / column / chat margins — alias an existing `--fynns-layout-*` (or
   component token that already aliases one); consumers follow `llm/CONSUME.md`.
 - Corner radius: only `var(--fynns-radius-*)`. Never add a private

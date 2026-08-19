@@ -395,6 +395,23 @@ fill editors also `autoGrow={false}`. Authority:
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: vacant band under FullscreenDialog title
+
+Symptoms: `FullscreenDialog` title looks fine, but the first body child is a
+bordered well (`CodeBlock` / `Surface` / table wrap) sitting ~18dp below the
+head — an empty strip between title and the well’s top border.
+
+**Cause:** overlay body used to always apply `--fynns-layout-content-inset` on
+all four sides. A framed well already paints its own edge, so the extra
+block-start pad reads as a desert — not as title chrome. **Fix in core:**
+flush-start (`padding-block-start: 0`) when that well is the first body child,
+or the first child of one unpadded fill wrapper. **Fix in the consumer:** put
+the well first; a height-only host must not add `padding-top`. Do not restyle
+`.fynns-dialog-body`. Not Card `chrome="plain"` flush (`plain ≠ flush`). Live:
+sandbox `#fullscreen-flush`. Authority: [`AGENTS.md`](../AGENTS.md)
+**Flush-start overlay body**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: stacked progress chromes in BusyRegion
 
 Symptoms: overlay shows **CircularProgress + LinearProgress** (or a consumer

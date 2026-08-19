@@ -67,6 +67,11 @@ alwaysApply: true
   `dialog-inset` 冲突的 padding / toolbar `max-content` 短栈（尾控件须与关闭
   **X 字形**右缘对齐）。权威：子模块 `AGENTS.md` **Dismissible Dialog + ControlStack**。
 - **长任务全屏** → `FullscreenDialog`。
+  **Flush-start（硬）：** 正文第一个（或一层无垫 fill 宿主里的第一个）keep-set
+  **带边框井**（`CodeBlock` / `Surface` / `.fynns-table-wrap`）时，core 去掉 body
+  的 `padding-block-start`。标题 chrome 仍 `content-inset`。禁止再给该宿主加
+  `padding-top` / 负 margin 去「贴标题」。这不是 Card `chrome="plain"` 贴边
+  （plain ≠ flush）。对照 sandbox `#fullscreen-flush`。
 - **不要**自造平行 Dialog 变体（`SettingsDialog` / Preferences 专用壳）/ 平行圆角卡片框。
 
 ## DestinationAppShell（默认主界面 — 强制）
@@ -347,7 +352,7 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 | **没有**文件名 / 标题 | **`variant="plain"`** → 只有外框 + 结束列复制（无标题栏、无分割线；正文不钻到 Copy 底下） |
 | 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（结束列复制） |
 | 语法高亮 | **必须**另传 `language`（或 `highlightProfile` / 已 `registerHighlightLanguage`） |
-| 全屏 / flex 填满编辑器 | **`autoGrow={false}`** + 宿主把 CodeBlock / `textarea` 拉满（默认 autoGrow 跟内容长） |
+| 全屏 / flex 填满编辑器 | **`autoGrow={false}`** + 宿主把 CodeBlock / `textarea` 拉满（默认 autoGrow 跟内容长）。`FullscreenDialog` 里若 CodeBlock 是正文第一个带边框井 → core **flush-start**（不要再垫一层 pad-top）；对照 `#fullscreen-flush` |
 
 **`label` ≠ `language`（硬）：** `label` 只做标题栏文件名，**不会**根据 `.xml` / `.json` /
 `.ts` 后缀选分词器。漏传 / 未知 `language` → 整块纯 mono（看起来「没高亮」）。
@@ -424,6 +429,7 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 4. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
 5. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
+   `FullscreenDialog` 里带边框井是否顶天（禁止标题下再垫 18dp）？
 6. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
 7. Surface/Card 标签行：是否 `ControlRow` + cluster + `ControlBlock`/`FieldHint`
    （对照 `#rhythm`），而非手搓 flex 乱排？

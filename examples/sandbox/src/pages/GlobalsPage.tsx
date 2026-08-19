@@ -274,6 +274,18 @@ const GSC_DEMO_CODE = [
   "unknownCmd 1 2",
 ].join("\n");
 
+/** Generic FullscreenDialog flush-start sample — not consumer product copy. */
+const FULLSCREEN_FLUSH_XML = [
+  "<?xml version=\"1.0\"?>",
+  "<notes>",
+  "  <title>Project preferences</title>",
+  "  <layout>Compact</layout>",
+  "  <digests>Daily</digests>",
+  "  <region>EU</region>",
+  "  <contact>sample@example.com</contact>",
+  "</notes>",
+].join("\n");
+
 /** Wave 3: live registry path — CodeBlock resolves language="gsc" via this. */
 registerHighlightLanguage("gsc", GSC_DEMO_PROFILE);
 
@@ -821,6 +833,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [dropNames, setDropNames] = useState<string[]>([]);
   const [dropBusy, setDropBusy] = useState(false);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
+  const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
+  const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
@@ -3438,6 +3452,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <p style={{ margin: 0 }}>{t("globals.fullscreenBody")}</p>
         </FullscreenDialog>
         <SandboxHelp text={t("globals.overlayHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="fullscreen-flush">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setFullscreenFlushOpen(true)}>
+            {t("globals.fullscreenFlushOpen")}
+          </Button>
+        </div>
+        <FullscreenDialog
+          open={fullscreenFlushOpen}
+          onOpenChange={setFullscreenFlushOpen}
+          title={t("globals.fullscreenFlushTitle")}
+          closeAriaLabel={t("globals.fullscreenClose")}
+          actions={
+            <Button size="sm" onClick={() => setFullscreenFlushOpen(false)}>
+              {t("globals.fullscreenDone")}
+            </Button>
+          }
+        >
+          <CodeBlock
+            variant="editable"
+            label={t("globals.fullscreenFlushFile")}
+            language="xml"
+            wrap
+            autoGrow
+            value={fullscreenFlushXml}
+            onChange={setFullscreenFlushXml}
+          />
+        </FullscreenDialog>
+        <SandboxHelp text={t("globals.fullscreenFlushHelp")} />
         </GlobalsDemo>
       </>
         )}

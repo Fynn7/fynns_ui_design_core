@@ -304,8 +304,23 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "sheet",
       "confirm",
       "fullscreen",
+      "flush-start",
+      "顶天",
       "弹窗",
       "抽屉",
+    ],
+  },
+  {
+    id: "fullscreen-flush",
+    categoryId: "containment",
+    label: "FullscreenDialog flush-start",
+    keywords: [
+      "fullscreen",
+      "flush-start",
+      "codeblock",
+      "顶天",
+      "带边框",
+      "上边距",
     ],
   },
   {
