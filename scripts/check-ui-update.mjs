@@ -131,7 +131,11 @@ function readCache(pkgRoot) {
 }
 
 function writeCache(pkgRoot, data) {
-  fs.writeFileSync(path.join(pkgRoot, CACHE_BASENAME), `${JSON.stringify(data, null, 2)}\n`);
+  try {
+    fs.writeFileSync(path.join(pkgRoot, CACHE_BASENAME), `${JSON.stringify(data, null, 2)}\n`);
+  } catch {
+    /* cache is best-effort — never block dev/install */
+  }
 }
 
 function fetchLatestRegistryVersion() {
@@ -161,11 +165,8 @@ function fetchLatestRegistryVersion() {
   return latest ? { latest, reason: null } : { latest: null, reason: "empty_registry" };
 }
 
-function printNotice({ installed, latest, declared, localLink }) {
-  const pin = declared && !isLocalDependencySpec(declared) ? declared : latest;
-  const installCmd = pin && pin === latest
-    ? `npm install ${PKG_NAME}@${latest}`
-    : `npm install ${PKG_NAME}@${latest}`;
+function printNotice({ installed, latest, localLink }) {
+  const installCmd = `npm install ${PKG_NAME}@${latest}`;
 
   const lines = [
     "",
@@ -183,6 +184,17 @@ function printNotice({ installed, latest, declared, localLink }) {
 }
 
 function main() {
+  try {
+    runMainBody();
+  } catch (err) {
+    if (process.argv.includes("--json")) {
+      console.log(JSON.stringify({ skipped: true, reason: "error", detail: String(err) }, null, 2));
+    }
+    process.exit(0);
+  }
+}
+
+function runMainBody() {
   let opts;
   try {
     opts = parseArgs(process.argv.slice(2));
@@ -258,7 +270,7 @@ function main() {
   }
 
   if (updateAvailable) {
-    printNotice({ installed, latest, declared, localLink });
+    printNotice({ installed, latest, localLink });
   }
 
   process.exit(0);

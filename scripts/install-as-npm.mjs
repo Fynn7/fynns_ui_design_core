@@ -24,7 +24,7 @@ const ALIAS = "@fynns/ui";
 const ENTRY_FROM_PKG = "node_modules/@fynn7/ui-design-core/src/index.ts";
 const UPDATE_SCRIPT = "fynns-ui:check-update";
 const UPDATE_SCRIPT_CMD =
-  "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs";
+  "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
 const UPDATE_CACHE_FILE = ".fynns-ui-update-check.json";
 
 function usage() {
