@@ -1653,6 +1653,17 @@ input.fynns-input:focus::-webkit-scrollbar {
   grid-template-columns: minmax(0, 1fr) max-content;
 }
 
+/* Form-host preference rows share FieldHeader label type (not toolbar caption). */
+.fynns-dialog-panel--centered .fynns-control-row__label,
+.fynns-card-body .fynns-control-row__label,
+.fynns-surface--padded .fynns-control-row__label,
+.fynns-collapsible-body > .fynns-control-row__label,
+.fynns-collapsible-body > .fynns-control-block .fynns-control-row__label {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  letter-spacing: normal;
+}
+
 .fynns-dialog-panel--centered .fynns-control-row__controls,
 .fynns-card-body .fynns-control-row__controls,
 .fynns-surface--padded .fynns-control-row__controls,
