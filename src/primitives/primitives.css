@@ -3825,8 +3825,16 @@ a.fynns-breadcrumb-link:visited {
   )
   .fynns-control-block:has(> .fynns-field-hint):has(
     > .fynns-control-stack > .fynns-control-row:only-child
-  ) {
+  ),
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint):has(
+  > .fynns-control-row
+):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint):has(
+  > .fynns-control-stack > .fynns-control-row:only-child
+) {
   width: 100%;
+  /* Match form-host ControlRow: label + hint eat 1fr; controls end-hug. */
+  grid-template-columns: minmax(0, 1fr) max-content;
 }
 
 :is(
@@ -3835,6 +3843,8 @@ a.fynns-breadcrumb-link:visited {
     .fynns-surface--padded
   )
   .fynns-control-block:has(> .fynns-field-hint)
+  .fynns-control-row__controls,
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint)
   .fynns-control-row__controls {
   justify-self: end;
 }
