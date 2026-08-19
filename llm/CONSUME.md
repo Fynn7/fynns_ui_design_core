@@ -119,7 +119,14 @@ Consumer `.npmrc`:
 4. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.
 5. Wires tsconfig `paths`.
 6. Writes `.cursor/rules/fynns-ui-consumer.mdc` if missing (from `consumer-cursor-rule.mdc`).
-7. `--json` structured result for agents.
+7. Wires **`fynns-ui:check-update`** into consumer
+   `predev` / `prebuild` / `prepreview` / `postinstall` so `npm run dev` (and
+   install/build) prints a notice when GitHub Packages has a newer
+   `@fynn7/ui-design-core`. Registry lookup needs `NODE_AUTH_TOKEN` /
+   `GITHUB_TOKEN` (`read:packages`); without auth the check is skipped
+   quietly. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`. Cache:
+   `.fynns-ui-update-check.json` (gitignored by the installer).
+8. `--json` structured result for agents.
 
 Flags: `--check`, `--wire-only` / `--skip-install`, `--dry-run`, `--vite`, `--tsconfig`, `--version`.
 

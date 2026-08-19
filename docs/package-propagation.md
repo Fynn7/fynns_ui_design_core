@@ -19,6 +19,16 @@ reaches consumer apps after the **npm consume model** (GitHub Packages).
    `npm install @fynn7/ui-design-core@x.y.z`. There is **no** local
    `consume:sync` / `consume:watch` worktree mirror.
 
+## Update notices (consumer dev/build)
+
+`npm run consume:install` wires **`fynns-ui:check-update`** into consumer
+`predev` / `prebuild` / `prepreview` / `postinstall`. When GitHub Packages has
+a newer semver than the installed tarball, `npm run dev` (and build/preview)
+prints a one-line upgrade hint — that is the intended reminder loop after each
+core publish. Registry lookup requires `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`
+(`read:packages`); set `FYNNS_UI_SKIP_UPDATE_CHECK=1` in CI to silence. Manual:
+`npm run fynns-ui:check-update` in the consumer app.
+
 ## Local core development
 
 Edit this checkout, then **ship on the registry** — not via a sibling Vite alias.

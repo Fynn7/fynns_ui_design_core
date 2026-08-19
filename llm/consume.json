@@ -32,6 +32,7 @@
     "Do not modify files inside node_modules/@fynn7/ui-design-core for consumer features (bump package version / file: link instead). There is no consume:sync / consume:watch worktree mirror.",
     "Before any @fynns/ui UI work: run consume --check (dependency + .npmrc + alias; fails if legacy submodule tree remains). Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
+    "Update notices: consume:install wires fynns-ui:check-update into predev/prebuild/prepreview/postinstall so npm run dev/build reminds when GitHub Packages has a newer @fynn7/ui-design-core. Silence with FYNNS_UI_SKIP_UPDATE_CHECK=1.",
     "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
     "App entry must createRoot and render App (CSS-only main.tsx is a fail).",
     "Never hand-roll Collapsible chrome or use @radix-ui/* / sonner.",
@@ -75,7 +76,7 @@
       "npm": "npm run consume:check -- --target <CONSUMER_ROOT> --json"
     },
     "wireOnly": {
-      "description": "Dependency already present; only patch .npmrc / Vite / tsconfig.",
+      "description": "Dependency already present; only patch .npmrc / Vite / tsconfig / update-check hooks.",
       "argv": [
         "node",
         "scripts/install-as-npm.mjs",
@@ -84,6 +85,13 @@
         "--wire-only",
         "--json"
       ]
+    },
+    "checkUpdate": {
+      "description": "Non-blocking notice when a newer @fynn7/ui-design-core is on GitHub Packages. Wired into consumer predev/prebuild/prepreview/postinstall.",
+      "npm": "npm run fynns-ui:check-update",
+      "env": {
+        "FYNNS_UI_SKIP_UPDATE_CHECK": "Set to 1 to silence registry notices (CI)."
+      }
     },
     "publish": {
       "description": "After every landed consumer-visible change: bump package.json semver in the same task, then publish @fynn7/ui-design-core to GitHub Packages. Never deliver via sibling Vite alias. See docs/package-propagation.md.",
