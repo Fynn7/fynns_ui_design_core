@@ -28,11 +28,11 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * `--fynns-layout-form-cluster-gap` (**32dp**). Sibling **ControlBlock**s
  * open to unit-stack (16dp) so Switch+note units breathe.
  *
- * **Label→control max (hard):** when **any** sibling `FieldBlock` in this
- * stack carries trailing `FieldHeader` sm IconButtons, **every** block's
- * `.fynns-field-block__main` uses `field-hint-gap` +
- * `field-stack-header-action-extra` (12dp total today) — not only the rows
- * with icons. Lone `FieldBlock`s outside a stack keep the per-block rule.
+ * **Header band max (hard):** when **any** sibling `FieldBlock` hosts label-row
+ * `FieldHeader` actions (Textarea expand / reset), **every** header in the
+ * stack uses `field-header-action-row-min-height` (32dp); label→control
+ * stays on `field-hint-gap` (8dp). In-field icons → `Input` / `Select`
+ * `trailing`, not label-row actions.
  *
  * **Strongly recommended between FieldStacks:** insert a horizontal `Divider`
  * on kind jumps (identity → choices → preferences). Card / Collapsible /

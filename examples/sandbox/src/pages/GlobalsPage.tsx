@@ -479,25 +479,7 @@ function FormRecipeFields({
             onChange={(event) => onDisplayNameChange(event.target.value)}
           />
         </FieldBlock>
-        <FieldBlock
-          label={t("globals.formRecipeEmail")}
-          htmlFor={emailId}
-          actions={
-            <Tooltip content={t("globals.formRecipeRevealTip")}>
-              <IconButton
-                size="sm"
-                aria-label={t("globals.formRecipeRevealTip")}
-                onClick={onRevealEmailToggle}
-              >
-                {revealEmail ? (
-                  <EyeOffIcon aria-hidden />
-                ) : (
-                  <EyeIcon aria-hidden />
-                )}
-              </IconButton>
-            </Tooltip>
-          }
-        >
+        <FieldBlock label={t("globals.formRecipeEmail")} htmlFor={emailId}>
           <Input
             id={emailId}
             aria-label={t("globals.formRecipeEmail")}
@@ -505,12 +487,33 @@ function FormRecipeFields({
             value={email}
             onChange={(event) => onEmailChange(event.target.value)}
             autoComplete="off"
+            trailing={
+              <Tooltip content={t("globals.formRecipeRevealTip")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.formRecipeRevealTip")}
+                  onClick={onRevealEmailToggle}
+                >
+                  {revealEmail ? (
+                    <EyeOffIcon aria-hidden />
+                  ) : (
+                    <EyeIcon aria-hidden />
+                  )}
+                </IconButton>
+              </Tooltip>
+            }
           />
         </FieldBlock>
-        <FieldBlock
-          label={t("globals.formRecipeTimezone")}
-          htmlFor={timezoneId}
-          actions={
+        <FieldBlock label={t("globals.formRecipeTimezone")} htmlFor={timezoneId}>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Select
+              id={timezoneId}
+              className="fynns-control-cluster__grow"
+              ariaLabel={t("globals.formRecipeTimezone")}
+              options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
+              value={timezone}
+              onChange={onTimezoneChange}
+            />
             <Tooltip content={t("globals.formRecipeRefreshTip")}>
               <IconButton
                 size="sm"
@@ -520,15 +523,7 @@ function FormRecipeFields({
                 <UndoIcon aria-hidden />
               </IconButton>
             </Tooltip>
-          }
-        >
-          <Select
-            id={timezoneId}
-            ariaLabel={t("globals.formRecipeTimezone")}
-            options={["UTC", "Europe/Berlin", "Asia/Shanghai"]}
-            value={timezone}
-            onChange={onTimezoneChange}
-          />
+          </div>
         </FieldBlock>
         <FieldBlock
           label={t("globals.formRecipeNotes")}
@@ -3223,25 +3218,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 aria-label={t("globals.fieldHeaderBaseUrlLabel")}
               />
             </FieldBlock>
-            <FieldBlock
-              label={t("globals.fieldHeaderApiKeyLabel")}
-              htmlFor="sandbox-field-header-api-key"
-              actions={
-                <Tooltip content={t("globals.fieldHeaderRevealTip")}>
-                  <IconButton
-                    size="sm"
-                    aria-label={t("globals.fieldHeaderRevealTip")}
-                    onClick={() => setFieldHeaderReveal((v) => !v)}
-                  >
-                    {fieldHeaderReveal ? (
-                      <EyeOffIcon aria-hidden />
-                    ) : (
-                      <EyeIcon aria-hidden />
-                    )}
-                  </IconButton>
-                </Tooltip>
-              }
-            >
+            <FieldBlock label={t("globals.fieldHeaderApiKeyLabel")} htmlFor="sandbox-field-header-api-key">
               <Input
                 id="sandbox-field-header-api-key"
                 type={fieldHeaderReveal ? "text" : "password"}
@@ -3249,45 +3226,68 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 onChange={(event) => setFieldHeaderApiKey(event.target.value)}
                 aria-label={t("globals.fieldHeaderApiKeyLabel")}
                 autoComplete="off"
+                trailing={
+                  <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                    <IconButton
+                      size="sm"
+                      aria-label={t("globals.fieldHeaderRevealTip")}
+                      onClick={() => setFieldHeaderReveal((v) => !v)}
+                    >
+                      {fieldHeaderReveal ? (
+                        <EyeOffIcon aria-hidden />
+                      ) : (
+                        <EyeIcon aria-hidden />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                }
               />
             </FieldBlock>
-            <FieldBlock
-              label={t("globals.fieldHeaderBlockLabel")}
-              htmlFor="sandbox-field-header-select"
-              actions={
+            <FieldBlock label={t("globals.fieldHeaderBlockLabel")} htmlFor="sandbox-field-header-select">
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Select
+                  id="sandbox-field-header-select"
+                  className="fynns-control-cluster__grow"
+                  ariaLabel={t("globals.fieldHeaderBlockLabel")}
+                  placeholder={t("globals.fieldHeaderSelectPlaceholder")}
+                  value={fieldHeaderSelect}
+                  onChange={setFieldHeaderSelect}
+                  options={[
+                    { value: "a", label: "Option A" },
+                    { value: "b", label: "Option B" },
+                  ]}
+                />
                 <Tooltip content={t("globals.fieldHeaderActionTip")}>
                   <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
                     <RefreshIcon />
                   </IconButton>
                 </Tooltip>
+              </div>
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderNotesLabel")}
+              htmlFor="sandbox-field-header-notes"
+              actions={
+                <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                    <UndoIcon aria-hidden />
+                  </IconButton>
+                </Tooltip>
               }
             >
-              <Select
-                id="sandbox-field-header-select"
-                ariaLabel={t("globals.fieldHeaderBlockLabel")}
-                placeholder={t("globals.fieldHeaderSelectPlaceholder")}
-                value={fieldHeaderSelect}
-                onChange={setFieldHeaderSelect}
-                options={[
-                  { value: "a", label: "Option A" },
-                  { value: "b", label: "Option B" },
-                ]}
+              <Textarea
+                id="sandbox-field-header-notes"
+                aria-label={t("globals.fieldHeaderNotesLabel")}
+                minRows={2}
               />
             </FieldBlock>
           </FieldStack>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
-            htmlFor="sandbox-field-header-demo"
-            actions={
-              <Tooltip content={t("globals.fieldHeaderActionTip")}>
-                <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-            }
+            htmlFor="sandbox-field-header-bare"
           />
           <Input
-            id="sandbox-field-header-demo"
+            id="sandbox-field-header-bare"
             placeholder={t("globals.fieldHeaderPlaceholder")}
             aria-label={t("globals.fieldHeaderLabel")}
           />

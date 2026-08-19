@@ -322,6 +322,34 @@ Do not restyle `.fynns-chip*` to look like caption. Live: sandbox `#table`.
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Select refresh crammed beside chevron
+
+Symptoms in a settings drawer / inspector `FieldStack`:
+
+- `Select` uses `trailing` for refresh / reload while the dropdown chevron
+  shares the same trailing cluster (~50×40px)
+- Hover discs overlap; refresh feels misaligned; disabled Select still shows
+  two icons in one tight slot
+- Or refresh `IconButton` **overflows** the drawer — Select kept a content
+  `min-width` floor and did not shrink with the cluster
+
+**Cause:** `Select` always reserves a chevron for the menu anchor. Auxiliary
+actions (refresh model list, reload options) are not in-field trailing icons
+when a dropdown indicator is present — they need a separate hit target. In a
+control band, Select must use `fynns-control-cluster__grow` so the cluster is
+**one** nowrap row (Select ellipsizes; action `flex-shrink: 0`) — not a full-
+width Select plus an extra button.
+
+**Fix in the consumer:** **`FieldBlock` + control-cluster band** — label on
+`FieldHeader`; control =
+`.fynns-control-cluster.fynns-control-cluster--end-align` with `Select`
+`className="fynns-control-cluster__grow"` (no `trailing`) + sibling
+`IconButton` + `Tooltip`. Keep **Input** reveal on `Input` `trailing`. Do not
+use `FieldBlock` `actions` on the label row for Select refresh. Live: sandbox
+`#field-header`, `#form-recipe`; gsc LLM Model row. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: table row action not sharing one trailing edge
 
 Symptoms in a mapping / actions column:

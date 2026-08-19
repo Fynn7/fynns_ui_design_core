@@ -129,11 +129,12 @@ ring can paint before heavy work).
   `description` docks in the **label column**; ToggleGroup centers on name+hint
   (not a full-bleed next row). Padded `Surface` is a form host. **Form
   options by semantic kind → `FieldStack`** (strongly recommended): plain
-  FieldBlocks keep `field-stack-gap` (12dp); **FieldBlock**s with trailing
-  **FieldHeader** sm IconButtons add `field-stack-header-action-extra` (4dp)
-  on label→control; when **any** sibling in the same **`FieldStack`** has
-  those actions, **every** block in that stack uses the widened step (max
-  rhythm); FieldBlocks with description/error (no choice cluster) open the next
+  FieldBlocks keep `field-stack-gap` (12dp); label-row **FieldHeader** actions
+  lift headers to `field-header-action-row-min-height` (32dp); when **any**
+  sibling in the same **`FieldStack`** has those actions, **every** header
+  shares the band — label→control stays `field-hint-gap` (8dp); **Input**
+  `trailing` for reveal; **Select + row action** → `.fynns-control-cluster--end-align`
+  (not `Select.trailing`); FieldBlocks with description/error (no choice cluster) open the next
   sibling to `unit-stack-gap` (16dp); FieldBlocks with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
   ControlBlocks to `unit-stack-gap` (16dp); adjacent stacks get
   `form-cluster-gap` **plus a horizontal `Divider`** on kind jumps. Do

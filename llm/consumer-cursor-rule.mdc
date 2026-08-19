@@ -131,6 +131,8 @@ FillColumn。
 | 多列表格 | **`Card` `title`** + `Table` + `.fynns-table-wrap.fynns-scroll`。对照 `#table` | 同数据的 Card 网格（表能装下时）；`Surface` + `FieldHeader` 冒充分区标题 |
 | 表格单元格：映射来源/状态 + 可选 id + 行尾操作 | `.fynns-table-meta`（muted 文案）+ 可选 mono id，包在 `.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让「映射」等按钮跨行右对齐。对照 `#table` | 单元格里用 `Chip suggestion/filter` 当状态 pill；未映射行把操作顶在列首 |
 | 表单 / 偏好 | `FieldStack`（`#form-recipe`） | 每字段一张肥 Card |
+| Select + 刷新/重载（与 chevron 并存） | `FieldBlock` + `.fynns-control-cluster--end-align` + `Select` `className="fynns-control-cluster__grow"` + 兄弟 `IconButton`（**不要** `Select.trailing`）。对照 `#field-header` | `Select.trailing` 与 chevron 挤同一槽；标签行 `FieldBlock` `actions` |
+| Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |

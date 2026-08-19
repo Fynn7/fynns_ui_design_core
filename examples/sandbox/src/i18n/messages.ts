@@ -378,9 +378,9 @@ const en = {
   "layoutChrome.roFieldStack": "Field stack gap (alias)",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — aliases control-stack-form-gap (12dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
-  "layoutChrome.roFieldStackHeaderActionExtra": "Field header action extra",
-  "layoutChrome.roFieldStackHeaderActionExtraHint":
-    "--fynns-layout-field-stack-header-action-extra (4dp) — added on FieldBlock label→control when FieldHeader has trailing sm IconButtons (hover disc clearance).",
+  "layoutChrome.roFieldHeaderActionRowMin": "Field header action row min",
+  "layoutChrome.roFieldHeaderActionRowMinHint":
+    "--fynns-layout-field-header-action-row-min-height (32dp) — label band when FieldHeader has trailing sm IconButtons; FieldStack max when any sibling has actions. Prefer Input/Select trailing for in-field icons (M3).",
   "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
     "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
@@ -613,11 +613,12 @@ const en = {
   "globals.fieldHeaderRevealTip": "Show plaintext",
   "globals.fieldHeaderLabel": "Bare FieldHeader",
   "globals.fieldHeaderBlockLabel": "Sample field",
+  "globals.fieldHeaderNotesLabel": "Notes",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "`FieldStack` label→control uses a **max** step: when **any** sibling has trailing sm `IconButton`s, **every** block in the stack gets `field-hint-gap` + `field-stack-header-action-extra` (12dp today) — Provider / Base URL match API Key / Model. Bare `FieldHeader` below is for custom stacks only.",
+    "M3: **Input** reveal → `trailing` inside the field. **Select + refresh** → `FieldBlock` + `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton`) — not `Select.trailing`. Textarea expand stays on label-row `actions`; FieldStack shares 32dp header band when needed.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -1785,9 +1786,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roFieldStack": "字段簇间距（别名）",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — 别名 control-stack-form-gap（12dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
-  "layoutChrome.roFieldStackHeaderActionExtra": "字段头操作额外间距",
-  "layoutChrome.roFieldStackHeaderActionExtraHint":
-    "--fynns-layout-field-stack-header-action-extra（4dp）— FieldHeader 带 trailing sm IconButton 时加在 FieldBlock 标签→控件上（hover 圈留白）。",
+  "layoutChrome.roFieldHeaderActionRowMin": "字段头操作行最小高度",
+  "layoutChrome.roFieldHeaderActionRowMinHint":
+    "--fynns-layout-field-header-action-row-min-height（32dp）— FieldHeader 带 trailing sm IconButton 时的标签行高度；FieldStack 内任一兄弟有 actions 则整簇对齐。字段内 icon 优先用 Input/Select trailing（M3）。",
   "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
     "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
@@ -2018,11 +2019,12 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderRevealTip": "显示明文",
   "globals.fieldHeaderLabel": "裸 FieldHeader",
   "globals.fieldHeaderBlockLabel": "示例字段",
+  "globals.fieldHeaderNotesLabel": "备注",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "`FieldStack` 标签→控件取 **max**：**任一**兄弟带 trailing sm `IconButton` 时，**整簇** FieldBlock 都用 `field-hint-gap` + `field-stack-header-action-extra`（当前 12dp）— Provider / Base URL 与 API Key / Model 对齐。下方裸 `FieldHeader` 仅用于自定义堆叠。",
+    "M3：**Input** reveal 用字段内 `trailing`。**Select + 刷新** 用 `FieldBlock` + `.fynns-control-cluster--end-align`（Select 加 `fynns-control-cluster__grow` + 兄弟 `IconButton`）— 不要用 `Select.trailing`。Textarea 展开仍放标签行 `actions`；需要时 FieldStack 共享 32dp 标签行高度。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",

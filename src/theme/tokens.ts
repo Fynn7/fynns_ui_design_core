@@ -1340,11 +1340,14 @@ export const LAYOUT_TOKENS = {
    */
   "field-hint-gap": "0.5rem",
   /**
-   * Extra label→control breath when `FieldHeader` carries trailing sm
-   * `IconButton`s (4dp). On a lone `FieldBlock`, or on **every** sibling
-   * inside a `FieldStack` when any block has those actions (max rhythm).
+   * Min-height for a `FieldHeader` label row that carries trailing sm
+   * `IconButton`s (32dp — sm icon-only target). When any sibling in a
+   * `FieldStack` has those actions, **every** header in that stack uses this
+   * band so plain labels align; label→control stays on `field-hint-gap` alone.
+   * **M3 note:** in-field actions (reveal, refresh) belong in `Input` /
+   * `Select` `trailing` inside the container — not on the label row.
    */
-  "field-stack-header-action-extra": "0.25rem",
+  "field-header-action-row-min-height": "2rem",
   /**
    * Vertical gap between stacked *units* (16dp): Card / Collapsible body
    * siblings, `.fynns-unit-stack`, inspector FieldBlock / ControlBlock /

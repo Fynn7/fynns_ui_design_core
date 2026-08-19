@@ -1072,6 +1072,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
+.fynns-select-trigger--open ~ .fynns-search-bar-trailing .fynns-select-trigger-chevron,
 .fynns-select-trigger--open ~ .fynns-select-chevron .fynns-select-trigger-chevron,
 .fynns-search-bar--expanded .fynns-select-trigger-chevron {
   transform: rotate(180deg);
@@ -2431,6 +2432,17 @@ input.fynns-input:focus::-webkit-scrollbar {
   flex-wrap: nowrap;
 }
 
+.fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+}
+
+.fynns-control-cluster--end-align > :not(.fynns-control-cluster__grow) {
+  flex-shrink: 0;
+}
+
 .fynns-control-cluster__grow {
   flex: 1 1 auto;
   min-width: 0;
@@ -3594,13 +3606,15 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* Label→control gap lives on `.fynns-field-block__main` (`field-hint-gap`).
-   * Trailing IconButton sm must not inflate this row — see `__actions`. */
+  /* Label→control gap lives on `.fynns-field-block__main` (`field-hint-gap`). */
   box-sizing: border-box;
   min-height: 0;
-  padding-block: 0;
   min-width: 0;
   width: 100%;
+}
+
+.fynns-field-header:has(.fynns-field-header__actions) {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
 }
 
 .fynns-field-header__label {
@@ -3617,19 +3631,6 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   gap: var(--fynns-space-2xs);
   flex-shrink: 0;
-  /* Zero-height host: keep the label row as tall as plain text headers
-   * (Display name). IconButton sm centers on the label line box. */
-  height: 0;
-  overflow: visible;
-}
-
-.fynns-field-header__actions .fynns-icon-button {
-  margin-block: calc(
-    (
-        var(--fynns-font-size-sm) * var(--fynns-line-height-snug) - 2rem
-      ) /
-      2
-  );
 }
 
 .fynns-field-block {
@@ -3651,13 +3652,6 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
 }
 
-.fynns-field-block__main:has(.fynns-field-header__actions) {
-  gap: calc(
-    var(--fynns-layout-field-hint-gap) +
-      var(--fynns-layout-field-stack-header-action-extra)
-  );
-}
-
 /* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` /
    `.fynns-field-stack` gap — do not re-add margin here. */
 .fynns-field-block:not(:last-child) {
@@ -3672,10 +3666,10 @@ a.fynns-breadcrumb-link:visited {
  * hosts). Card / Collapsible / Dialog body / `.fynns-unit-stack` already
  * contribute unit-stack-gap — those hosts only add the remainder.
  *
- * Label→control inside the stack uses a **max** step: when any sibling
- * FieldBlock hosts trailing FieldHeader IconButtons, every block's
- * `.fynns-field-block__main` opens to field-hint-gap + header-action-extra
- * so plain labels align with action rows (live: sandbox `#field-header`).
+ * Label→control inside the stack uses a **max header band**: when any sibling
+ * FieldBlock hosts trailing FieldHeader IconButtons, every header in the
+ * stack shares `field-header-action-row-min-height` — label→control stays on
+ * `field-hint-gap` alone (live: sandbox `#field-header`, `#form-recipe`).
  */
 .fynns-field-stack {
   display: flex;
@@ -3687,12 +3681,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-field-stack:has(> .fynns-field-block .fynns-field-header__actions)
-  > .fynns-field-block
-  > .fynns-field-block__main {
-  gap: calc(
-    var(--fynns-layout-field-hint-gap) +
-      var(--fynns-layout-field-stack-header-action-extra)
-  );
+  .fynns-field-header {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
 }
 
 .fynns-field-stack + .fynns-field-stack {
@@ -6607,6 +6597,20 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-autocomplete .fynns-search-bar-trailing {
   min-width: var(--fynns-size-icon-target);
   height: var(--fynns-size-icon-target);
+}
+
+.fynns-select-trailing-cluster {
+  gap: var(--fynns-space-2xs);
+}
+
+.fynns-select-trailing-action {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.fynns-select-trailing-cluster:has(.fynns-select-trailing-action) {
+  min-width: auto;
 }
 
 .fynns-select.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within,

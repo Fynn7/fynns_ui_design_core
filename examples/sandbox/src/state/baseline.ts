@@ -119,7 +119,7 @@ export const READONLY_LAYOUT_KEYS = [
   "tooltip-max-width",
   "snackbar-max-width",
   "field-stack-gap",
-  "field-stack-header-action-extra",
+  "field-header-action-row-min-height",
   "stats-min-col-sm",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 

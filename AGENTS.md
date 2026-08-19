@@ -54,14 +54,23 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `IconButton` `ghost` `md`**, not a separate 14px muted dot); dense rows may
    use `size="sm"`. For form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not an action `IconButton`.
-   **Field header actions** (e.g. expand / reset next to a Textarea label): use
+   **Field header actions:** **M3 in-field icons** (reveal password, refresh
+   list, clear) belong in `Input` **`trailing`** inside the field shell. **Select
+   + chevron** also ships a dropdown indicator — do **not** stack refresh / list
+   reload on `Select.trailing` (icons fight for one slot). Use **`FieldBlock` +
+   `.fynns-control-cluster--end-align`**: Select with
+   `className="fynns-control-cluster__grow"` + trailing `IconButton` as a
+   sibling — live `#field-header` / `#form-recipe`. **Label-row
+   actions** (e.g. expand / reset next to a Textarea label): use
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
    text is flush with the control’s outer start edge. Label→control gap is
-   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main` (stable for
-   wrapped prompts — do not rely on header min-height optical pad). Trailing
-   actions stay on the label line (IconButton sm does not inflate the row).
-   Default `ghost`; dense forms may use `size="sm"`. Card / Collapsible
+   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main`. Label-row
+   headers use `--fynns-layout-field-header-action-row-min-height` (32dp); inside
+   a `FieldStack`, if **any** sibling has those actions, **every** header in
+   that stack shares the band so plain labels align. Trailing
+   actions stay on the label line (`IconButton` sm). Default `ghost`; dense
+   forms may use `size="sm"`. Card / Collapsible
    `chrome="card"` body keeps full `--fynns-layout-content-pad-block` (16dp)
    even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
    (do not crush to `space-xs` under the head hairline). Inline stays
@@ -202,10 +211,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
   / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (12dp);
-  FieldBlocks with trailing **FieldHeader** IconButtons add
-  `field-stack-header-action-extra` (4dp) on label→control; inside one
-  **`FieldStack`**, if **any** sibling has those actions, **every** block in
-  that stack uses the same widened step (max rhythm); FieldBlocks with description/error (no choice cluster) open the next
+  label-row **FieldHeader** actions lift the header band to
+  `field-header-action-row-min-height` (32dp); inside one **`FieldStack`**, if
+  **any** sibling has those actions, **every** header in that stack shares the
+  band — label→control stays `field-hint-gap` (8dp); **Input** `trailing` for
+  in-field reveal; **Select + row action** → control-cluster band (not
+  `Select.trailing`). FieldBlocks with description/error (no choice cluster) open the next
   sibling to `unit-stack-gap` (16dp); FieldBlocks that host a
   `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
   ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
@@ -422,7 +433,10 @@ classes.
   **FieldBlock** (label | trailing IconButtons above a control), Select
   (trigger `min-width` floors to the widest option / placeholder so
   content-sized hosts do not resize when the value changes; still
-  `width: 100%` in form rows),
+  `width: 100%` in form rows; **`trailing`** only when no chevron conflict
+  (discouraged for refresh / reload beside dropdown — use control-cluster band).
+  In a cluster pass `className="fynns-control-cluster__grow"` — disables the
+  content min-width floor so Select + sibling `IconButton` share one row),
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
   supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
@@ -1086,6 +1100,7 @@ classes.
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
+  | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
@@ -1119,7 +1134,7 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | `FieldBlock` label→control when `FieldHeader` has trailing sm IconButtons | **`field-hint-gap` + `field-stack-header-action-extra`** (**8dp + 4dp**) — hover disc clearance; lone block or **any** icon in a `FieldStack` → **all** blocks in that stack use this step |
+  | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-hint-gap`** |
   | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
