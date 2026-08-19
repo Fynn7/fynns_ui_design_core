@@ -3969,7 +3969,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             variant="plain"
             language="py"
             copyAriaLabel={t("globals.codeBlockCopy")}
-            code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))`}
+            code={`def greet(name: str) -> str:\n    return f"Hello, {name}!"\n\nif __name__ == "__main__":\n    print(greet("world"))\n    print(greet("sandbox"))\n`}
+            maxHeight="8rem"
           />
           <CodeBlock
             variant="plain"

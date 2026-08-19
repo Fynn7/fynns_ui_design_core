@@ -9022,6 +9022,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline-end: var(--fynns-space-sm);
 }
 
+.fynns-code-block--copy-float > .fynns-code-block-pre[data-scrollable],
+.fynns-code-block--copy-float .fynns-code-block-input[data-scrollable] {
+  /* Keep wrapped glyphs clear of the overlay thumb in the copy reserve column. */
+  padding-inline-end: calc(
+    var(--fynns-space-sm) + var(--fynns-scrollbar-size)
+  );
+}
+
 .fynns-code-block--plain .fynns-code-block-pre {
   /* No head hairline — restore equal section pad on both block edges. */
   padding-block: var(--fynns-layout-content-pad-block);
