@@ -1,6 +1,10 @@
 ---
-description: UI pattern bugs — constrain in core + sandbox demo + consumer subagent; never consumer-only.
-alwaysApply: true
+name: constrain-then-consumer
+description: >-
+  Consumer-reported UI pattern bugs — constrain in core, sandbox living demo,
+  bump/publish, consumer subagent verify. Use when a consumer screen is wrong
+  (primitive, density, alignment, host) or when the user runs /constrain-then-consumer.
+disable-model-invocation: true
 ---
 
 # 约束 + Sandbox 呈现 + 消费仓修复

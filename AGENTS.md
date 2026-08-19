@@ -1324,7 +1324,7 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
    and **browser-verify in sandbox**, (c) **dispatch subagent** (or continue in
    consumer checkout) to bump, patch props-only if needed, and **browser-verify
    in the consumer** when the bug was reported there. Never a consumer-only patch.
-   Cursor: [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
+   Cursor: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](.cursor/skills/constrain-then-consumer/SKILL.md).
 
 <!-- OPENWIKI:START -->
 
