@@ -3816,6 +3816,8 @@ a.fynns-breadcrumb-link:visited {
   row-gap: var(--fynns-layout-field-hint-gap);
   align-items: start;
   justify-content: stretch;
+  container-type: inline-size;
+  container-name: fynns-control-block;
 }
 
 .fynns-control-block:has(> .fynns-field-hint):not(
@@ -3862,7 +3864,8 @@ a.fynns-breadcrumb-link:visited {
   grid-column: 1;
   grid-row: 2;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 :is(
@@ -3902,6 +3905,61 @@ a.fynns-breadcrumb-link:visited {
 .fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint)
   .fynns-control-row__controls {
   justify-self: end;
+}
+
+/* Narrow form-host ControlBlock: stack label, hint, controls — never crush
+   the label column to per-glyph wraps beside wide clusters. */
+@container fynns-control-block (max-width: 20rem) {
+  .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ),
+  :is(
+      .fynns-dialog-panel--centered,
+      .fynns-card-body,
+      .fynns-surface--padded
+    )
+    .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  :is(
+      .fynns-dialog-panel--centered,
+      .fynns-card-body,
+      .fynns-surface--padded
+    )
+    .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ),
+  .fynns-collapsible-body
+    > .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  .fynns-collapsible-body
+    > .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--fynns-layout-control-row-gap);
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) > .fynns-field-hint {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__controls {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
+    justify-self: start;
+  }
 }
 
 /* ---------- Unit stack (generic sibling units; not ControlBlock) ---------- */
