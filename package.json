@@ -1,6 +1,6 @@
 {
   "name": "@fynn7/ui-design-core",
-  "version": "0.4.14",
+  "version": "0.4.19",
   "description": "Fynn's shared dark-teal UI design system: canonical --fynns-* design tokens plus self-developed React primitives (no radix, no sonner). Consumed via GitHub Packages (@fynn7/ui-design-core) + Vite alias @fynns/ui.",
   "license": "UNLICENSED",
   "private": false,
@@ -22,8 +22,12 @@
     "src",
     "AGENTS.md",
     "llm",
-    "README.md"
+    "README.md",
+    "scripts/check-ui-update.mjs"
   ],
+  "bin": {
+    "fynns-ui-check-update": "./scripts/check-ui-update.mjs"
+  },
   "scripts": {
     "gen:theme": "node scripts/gen-theme.mjs",
     "typecheck": "tsc --noEmit",
@@ -35,6 +39,7 @@
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",
     "consume:install": "node scripts/install-as-npm.mjs",
     "consume:check": "node scripts/install-as-npm.mjs --check",
+    "consume:check-update": "node scripts/check-ui-update.mjs",
     "prepublishOnly": "npm run check"
   },
   "peerDependencies": {

@@ -39,4 +39,4 @@ When fixing wrong primitive / density / alignment / host reported from a consume
 2. **Consumer second** — subagent (or same agent in consumer checkout) verifies
    the reported screen after `npm install` the published core version.
 
-Both are required in the same task. See `.cursor/rules/constrain-then-consumer.mdc`.
+Both are required in the same task. Invoke `/constrain-then-consumer` (see `.cursor/skills/constrain-then-consumer/SKILL.md`).

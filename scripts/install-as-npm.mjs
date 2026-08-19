@@ -22,6 +22,10 @@ const REGISTRY = "https://npm.pkg.github.com";
 /** Import alias kept for apps; resolves into the published package src. */
 const ALIAS = "@fynns/ui";
 const ENTRY_FROM_PKG = "node_modules/@fynn7/ui-design-core/src/index.ts";
+const UPDATE_SCRIPT = "fynns-ui:check-update";
+const UPDATE_SCRIPT_CMD =
+  "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
+const UPDATE_CACHE_FILE = ".fynns-ui-update-check.json";
 
 function usage() {
   return `Usage: node scripts/install-as-npm.mjs --target <dir> [options]
@@ -310,6 +314,25 @@ function readConsumerPkg(gitRoot) {
   return { path: p, data: JSON.parse(readText(p)) };
 }
 
+function isLocalDependencySpec(spec) {
+  return typeof spec === "string" && /^(file:|link:|workspace:)/.test(spec.trim());
+}
+
+/** Strip range prefix so `^0.4.17` compares equal to `0.4.17`. */
+function normalizeVersionTarget(version) {
+  return String(version || "").replace(/^[\^~]/, "");
+}
+
+function dependencyNeedsInstall(current, version) {
+  if (!current) return true;
+  if (isLocalDependencySpec(current)) return true;
+  if (!version) return false;
+  const target = normalizeVersionTarget(version);
+  const currentNorm = normalizeVersionTarget(current);
+  if (/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(target) && currentNorm !== target) return true;
+  return false;
+}
+
 function ensureDependency(gitRoot, version, dryRun, log) {
   const pkg = readConsumerPkg(gitRoot);
   if (!pkg) {
@@ -317,9 +340,25 @@ function ensureDependency(gitRoot, version, dryRun, log) {
     return false;
   }
   const deps = { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) };
-  if (deps[PKG_NAME]) {
-    log.push({ step: "dependency", status: "ok", detail: `${PKG_NAME}@${deps[PKG_NAME]}` });
+  const current = deps[PKG_NAME];
+  if (current && !dependencyNeedsInstall(current, version)) {
+    log.push({ step: "dependency", status: "ok", detail: `${PKG_NAME}@${current}` });
     return true;
+  }
+  if (current && dryRun) {
+    log.push({
+      step: "dependency",
+      status: "dry-run",
+      detail: `would upgrade ${PKG_NAME} from ${current} to ${version}`,
+    });
+    return true;
+  }
+  if (current) {
+    log.push({
+      step: "dependency",
+      status: "upgrade",
+      detail: `${PKG_NAME} ${current} → ${version}`,
+    });
   }
   if (dryRun) {
     log.push({
@@ -347,6 +386,66 @@ function ensureDependency(gitRoot, version, dryRun, log) {
   }
   log.push({ step: "dependency", status: "installed", detail: `${PKG_NAME}@${version}` });
   return true;
+}
+
+function prependLifecycleHook(existing, hookCmd) {
+  if (!existing) return hookCmd;
+  if (existing.includes(UPDATE_SCRIPT) || existing.includes("check-ui-update.mjs")) return existing;
+  return `${hookCmd} && ${existing}`;
+}
+
+function wireUpdateHooks(pkgRoot, dryRun, log) {
+  const pkgPath = path.join(pkgRoot, "package.json");
+  const pkg = readConsumerPkg(pkgRoot);
+  if (!pkg) {
+    log.push({ step: "update_hooks", status: "fail", detail: "no package.json" });
+    return;
+  }
+
+  const scripts = { ...(pkg.data.scripts || {}) };
+  const hookCmd = `npm run ${UPDATE_SCRIPT}`;
+  let changed = false;
+
+  if (scripts[UPDATE_SCRIPT] !== UPDATE_SCRIPT_CMD) {
+    scripts[UPDATE_SCRIPT] = UPDATE_SCRIPT_CMD;
+    changed = true;
+  }
+
+  for (const hook of ["predev", "prebuild", "prepreview", "postinstall"]) {
+    const next = prependLifecycleHook(scripts[hook], hookCmd);
+    if (next !== scripts[hook]) {
+      scripts[hook] = next;
+      changed = true;
+    }
+  }
+
+  if (!changed) {
+    log.push({ step: "update_hooks", status: "ok", detail: "already wired" });
+    return;
+  }
+
+  if (!dryRun) {
+    pkg.data.scripts = scripts;
+    fs.writeFileSync(pkgPath, `${JSON.stringify(pkg.data, null, 2)}\n`);
+  }
+  log.push({
+    step: "update_hooks",
+    status: dryRun ? "dry-run" : "patched",
+    detail: `${UPDATE_SCRIPT} + predev/prebuild/prepreview/postinstall`,
+  });
+}
+
+function ensureUpdateCacheGitignored(gitRoot, dryRun, log) {
+  const gitignorePath = path.join(gitRoot, ".gitignore");
+  if (!fs.existsSync(gitignorePath)) return;
+  const text = readText(gitignorePath);
+  if (text.includes(UPDATE_CACHE_FILE)) {
+    log.push({ step: "update_cache_gitignore", status: "ok" });
+    return;
+  }
+  const next = `${text.replace(/\s*$/, "")}\n\n# ${PKG_NAME} update-check cache (install-as-npm)\n${UPDATE_CACHE_FILE}\n`;
+  if (!dryRun) fs.writeFileSync(gitignorePath, next);
+  log.push({ step: "update_cache_gitignore", status: dryRun ? "dry-run" : "patched" });
 }
 
 function ensureConsumerRule(gitRoot, dryRun, log) {
@@ -398,6 +497,16 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
     ? { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) }
     : {};
   if (!deps[PKG_NAME]) issues.push(`missing dependency ${PKG_NAME}`);
+  if (!pkg?.data.scripts?.[UPDATE_SCRIPT]) {
+    issues.push(
+      `missing scripts.${UPDATE_SCRIPT} — re-run consume:install (or --wire-only) to wire dev/build update notices`,
+    );
+  }
+  if (deps[PKG_NAME] && isLocalDependencySpec(deps[PKG_NAME])) {
+    issues.push(
+      `${PKG_NAME} uses local ${deps[PKG_NAME]} — run npm run consume:install -- --target <app> --version x.y.z for registry pin`,
+    );
+  }
   if (deps["@fynns/ui"] || deps["@fynns/ui-design-core"]) {
     issues.push("remove obsolete @fynns/ui / @fynns/ui-design-core package names; use @fynn7/ui-design-core");
   }
@@ -512,6 +621,10 @@ function main() {
     wireTsconfig(tsconfigFile, rel, opts.dryRun, log);
   }
   ensureConsumerRule(gitRoot, opts.dryRun, log);
+  if (!opts.check) {
+    wireUpdateHooks(pkgRoot, opts.dryRun, log);
+    ensureUpdateCacheGitignored(gitRoot, opts.dryRun, log);
+  }
 
   const summary = {
     ok: true,

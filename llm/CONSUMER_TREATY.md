@@ -45,7 +45,7 @@ Same task — **all three**, not pick-one:
 3. **Consumer** — dispatch subagent (or continue in consumer checkout): bump core,
    props-only fix, browser-verify on the reported screen.
 
-Authority: [`.cursor/rules/constrain-then-consumer.mdc`](../.cursor/rules/constrain-then-consumer.mdc).
+Authority: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
 Never consumer-only; never core-only without a living sandbox sample.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
