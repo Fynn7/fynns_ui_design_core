@@ -202,7 +202,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
   / ControlBlocks. Plain FieldBlocks share `field-stack-gap` (12dp);
-  FieldBlocks with description/error (no choice cluster) open the next
+  FieldBlocks with trailing **FieldHeader** IconButtons add
+  `field-stack-header-action-extra` (4dp) on label→control; inside one
+  **`FieldStack`**, if **any** sibling has those actions, **every** block in
+  that stack uses the same widened step (max rhythm); FieldBlocks with description/error (no choice cluster) open the next
   sibling to `unit-stack-gap` (16dp); FieldBlocks that host a
   `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
   ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
@@ -1116,6 +1119,7 @@ classes.
   | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
+  | `FieldBlock` label→control when `FieldHeader` has trailing sm IconButtons | **`field-hint-gap` + `field-stack-header-action-extra`** (**8dp + 4dp**) — hover disc clearance; lone block or **any** icon in a `FieldStack` → **all** blocks in that stack use this step |
   | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
@@ -1299,9 +1303,13 @@ Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
    new GitHub Packages version in the **same task**. Authority:
    [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
    ship via a consumer Vite alias to this checkout.
-5. **Consumer pattern bugs (hard):** constrain in this core first (this file +
-   treaty + pasteable rule + sandbox sample), **then** fix the app. Never a
-   consumer-only patch. Cursor: [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
+5. **Consumer pattern bugs (hard):** same-task **three-way** loop — (a) constrain
+   in this core (`AGENTS.md` + treaty + pasteable rule + public CSS if needed),
+   (b) **update sandbox Globals / Preview / Layout demo** that teaches the fix
+   and **browser-verify in sandbox**, (c) **dispatch subagent** (or continue in
+   consumer checkout) to bump, patch props-only if needed, and **browser-verify
+   in the consumer** when the bug was reported there. Never a consumer-only patch.
+   Cursor: [`.cursor/rules/constrain-then-consumer.mdc`](.cursor/rules/constrain-then-consumer.mdc).
 
 <!-- OPENWIKI:START -->
 

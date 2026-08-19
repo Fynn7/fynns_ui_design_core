@@ -3651,6 +3651,13 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
 }
 
+.fynns-field-block__main:has(.fynns-field-header__actions) {
+  gap: calc(
+    var(--fynns-layout-field-hint-gap) +
+      var(--fynns-layout-field-stack-header-action-extra)
+  );
+}
+
 /* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` /
    `.fynns-field-stack` gap — do not re-add margin here. */
 .fynns-field-block:not(:last-child) {
@@ -3664,6 +3671,11 @@ a.fynns-breadcrumb-link:visited {
  * form-cluster-gap (32dp). Default margin is the full cluster step (bare
  * hosts). Card / Collapsible / Dialog body / `.fynns-unit-stack` already
  * contribute unit-stack-gap — those hosts only add the remainder.
+ *
+ * Label→control inside the stack uses a **max** step: when any sibling
+ * FieldBlock hosts trailing FieldHeader IconButtons, every block's
+ * `.fynns-field-block__main` opens to field-hint-gap + header-action-extra
+ * so plain labels align with action rows (live: sandbox `#field-header`).
  */
 .fynns-field-stack {
   display: flex;
@@ -3672,6 +3684,15 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
+}
+
+.fynns-field-stack:has(> .fynns-field-block .fynns-field-header__actions)
+  > .fynns-field-block
+  > .fynns-field-block__main {
+  gap: calc(
+    var(--fynns-layout-field-hint-gap) +
+      var(--fynns-layout-field-stack-header-action-extra)
+  );
 }
 
 .fynns-field-stack + .fynns-field-stack {

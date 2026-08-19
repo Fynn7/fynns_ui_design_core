@@ -877,6 +877,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [nestedPrompt, setNestedPrompt] = useState(
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
+  const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
+  const [fieldHeaderProvider, setFieldHeaderProvider] = useState("ollama");
+  const [fieldHeaderBaseUrl, setFieldHeaderBaseUrl] = useState(
+    "http://localhost:11434/v1",
+  );
+  const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
+  const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
@@ -3189,6 +3196,85 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="field-header">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <FieldStack>
+            <FieldBlock
+              label={t("globals.fieldHeaderProviderLabel")}
+              htmlFor="sandbox-field-header-provider"
+            >
+              <Select
+                id="sandbox-field-header-provider"
+                ariaLabel={t("globals.fieldHeaderProviderLabel")}
+                options={[
+                  { value: "ollama", label: "Ollama" },
+                  { value: "gemini", label: "Gemini" },
+                ]}
+                value={fieldHeaderProvider}
+                onChange={setFieldHeaderProvider}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderBaseUrlLabel")}
+              htmlFor="sandbox-field-header-base-url"
+            >
+              <Input
+                id="sandbox-field-header-base-url"
+                value={fieldHeaderBaseUrl}
+                onChange={(event) => setFieldHeaderBaseUrl(event.target.value)}
+                aria-label={t("globals.fieldHeaderBaseUrlLabel")}
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderApiKeyLabel")}
+              htmlFor="sandbox-field-header-api-key"
+              actions={
+                <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                  <IconButton
+                    size="sm"
+                    aria-label={t("globals.fieldHeaderRevealTip")}
+                    onClick={() => setFieldHeaderReveal((v) => !v)}
+                  >
+                    {fieldHeaderReveal ? (
+                      <EyeOffIcon aria-hidden />
+                    ) : (
+                      <EyeIcon aria-hidden />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <Input
+                id="sandbox-field-header-api-key"
+                type={fieldHeaderReveal ? "text" : "password"}
+                value={fieldHeaderApiKey}
+                onChange={(event) => setFieldHeaderApiKey(event.target.value)}
+                aria-label={t("globals.fieldHeaderApiKeyLabel")}
+                autoComplete="off"
+              />
+            </FieldBlock>
+            <FieldBlock
+              label={t("globals.fieldHeaderBlockLabel")}
+              htmlFor="sandbox-field-header-select"
+              actions={
+                <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <Select
+                id="sandbox-field-header-select"
+                ariaLabel={t("globals.fieldHeaderBlockLabel")}
+                placeholder={t("globals.fieldHeaderSelectPlaceholder")}
+                value={fieldHeaderSelect}
+                onChange={setFieldHeaderSelect}
+                options={[
+                  { value: "a", label: "Option A" },
+                  { value: "b", label: "Option B" },
+                ]}
+              />
+            </FieldBlock>
+          </FieldStack>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
             htmlFor="sandbox-field-header-demo"

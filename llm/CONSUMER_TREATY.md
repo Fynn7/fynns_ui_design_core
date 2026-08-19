@@ -35,6 +35,19 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 / publish. Formal delivery: GitHub Packages version bump
 ([`docs/package-propagation.md`](../docs/package-propagation.md)).
 
+## Core-first loop (when a consumer screen is wrong)
+
+Same task — **all three**, not pick-one:
+
+1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.
+2. **Sandbox demo** — update Globals / Preview / Layout sample that teaches the
+   fix; browser-verify in sandbox (`#field-header`, `#form-recipe`, …).
+3. **Consumer** — dispatch subagent (or continue in consumer checkout): bump core,
+   props-only fix, browser-verify on the reported screen.
+
+Authority: [`.cursor/rules/constrain-then-consumer.mdc`](../.cursor/rules/constrain-then-consumer.mdc).
+Never consumer-only; never core-only without a living sandbox sample.
+
 ## Failure mode this treaty targets: sandbox-only aesthetics
 
 Symptoms: Select / Input look rounder in the aesthetic sandbox than in a

@@ -420,7 +420,7 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 
 ## 改 UI 前检查清单
 
-0. 发现 keep-set **用法错了**（错 primitive、错密度、错对齐）：**先**在 `fynns_ui_design_core` 写约束 + sandbox 活样例，**再**改本仓。禁止只改消费仓。
+0. 发现 keep-set **用法错了**（错 primitive、错密度、错对齐）：**先**在 `fynns_ui_design_core` 写约束 + **更新 sandbox Globals/Preview 活样例并浏览器验收**，**再**派子代理到本仓 `npm install` 新版本并浏览器验收。禁止只改消费仓、禁止只改 core 不更新 sandbox。
 1. 本条约 + 子模块 `llm/CONSUME.md`（安装）/ `AGENTS.md`（组件）。
 2. 主 chrome：默认是否 `DestinationAppShell`？手拼壳时 `navMode` 与 `nav`
    是否**同一时刻**一致？`nav` 是否**只有** destination（无 wiki / 表单 / Chat）？

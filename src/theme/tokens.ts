@@ -1340,6 +1340,12 @@ export const LAYOUT_TOKENS = {
    */
   "field-hint-gap": "0.5rem",
   /**
+   * Extra label→control breath when `FieldHeader` carries trailing sm
+   * `IconButton`s (4dp). On a lone `FieldBlock`, or on **every** sibling
+   * inside a `FieldStack` when any block has those actions (max rhythm).
+   */
+  "field-stack-header-action-extra": "0.25rem",
+  /**
    * Vertical gap between stacked *units* (16dp): Card / Collapsible body
    * siblings, `.fynns-unit-stack`, inspector FieldBlock / ControlBlock /
    * intro copy / Checkbox. Prefer flex + this token (sandbox `.sandbox-stack`)

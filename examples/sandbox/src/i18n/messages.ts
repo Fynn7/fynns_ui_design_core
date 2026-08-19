@@ -378,6 +378,9 @@ const en = {
   "layoutChrome.roFieldStack": "Field stack gap (alias)",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — aliases control-stack-form-gap (12dp). Gap inside FieldStack for consecutive related FieldBlocks / ControlBlocks.",
+  "layoutChrome.roFieldStackHeaderActionExtra": "Field header action extra",
+  "layoutChrome.roFieldStackHeaderActionExtraHint":
+    "--fynns-layout-field-stack-header-action-extra (4dp) — added on FieldBlock label→control when FieldHeader has trailing sm IconButtons (hover disc clearance).",
   "layoutChrome.roFieldHint": "Field hint gap (moved)",
   "layoutChrome.roFieldHintHint":
     "Now editable under rhythm as field-hint-gap (8dp) — no longer an alias of unit-stack-gap.",
@@ -604,11 +607,17 @@ const en = {
     "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
     "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need a static title / icon / actions head.",
+  "globals.fieldHeaderProviderLabel": "Provider",
+  "globals.fieldHeaderBaseUrlLabel": "Base URL",
+  "globals.fieldHeaderApiKeyLabel": "API Key",
+  "globals.fieldHeaderRevealTip": "Show plaintext",
   "globals.fieldHeaderLabel": "Bare FieldHeader",
+  "globals.fieldHeaderBlockLabel": "Sample field",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
+  "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` is the label + trailing actions row alone. Prefer `FieldBlock` when wrapping label + control together (see nested Dialog demo).",
+    "`FieldStack` label→control uses a **max** step: when **any** sibling has trailing sm `IconButton`s, **every** block in the stack gets `field-hint-gap` + `field-stack-header-action-extra` (12dp today) — Provider / Base URL match API Key / Model. Bare `FieldHeader` below is for custom stacks only.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -1776,6 +1785,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.roFieldStack": "字段簇间距（别名）",
   "layoutChrome.roFieldStackHint":
     "--fynns-layout-field-stack-gap — 别名 control-stack-form-gap（12dp）。FieldStack 内连续相关 FieldBlock / ControlBlock 的间距。",
+  "layoutChrome.roFieldStackHeaderActionExtra": "字段头操作额外间距",
+  "layoutChrome.roFieldStackHeaderActionExtraHint":
+    "--fynns-layout-field-stack-header-action-extra（4dp）— FieldHeader 带 trailing sm IconButton 时加在 FieldBlock 标签→控件上（hover 圈留白）。",
   "layoutChrome.roFieldHint": "字段提示间距（已迁出）",
   "layoutChrome.roFieldHintHint":
     "现于节奏区可编辑 field-hint-gap（8dp）— 不再是 unit-stack-gap 的别名。",
@@ -2000,11 +2012,17 @@ const zh: Record<MessageKey, string> = {
     "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
     "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要静态 title / icon / actions 头时用 Card。",
+  "globals.fieldHeaderProviderLabel": "Provider",
+  "globals.fieldHeaderBaseUrlLabel": "Base URL",
+  "globals.fieldHeaderApiKeyLabel": "API Key",
+  "globals.fieldHeaderRevealTip": "显示明文",
   "globals.fieldHeaderLabel": "裸 FieldHeader",
+  "globals.fieldHeaderBlockLabel": "示例字段",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
+  "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` 仅是标签 + 尾部操作行。标签 + 控件一起包时优先用 `FieldBlock`（见嵌套 Dialog 演示）。",
+    "`FieldStack` 标签→控件取 **max**：**任一**兄弟带 trailing sm `IconButton` 时，**整簇** FieldBlock 都用 `field-hint-gap` + `field-stack-header-action-extra`（当前 12dp）— Provider / Base URL 与 API Key / Model 对齐。下方裸 `FieldHeader` 仅用于自定义堆叠。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
