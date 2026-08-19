@@ -2355,7 +2355,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger {
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)) {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -2364,10 +2364,28 @@ input.fynns-input:focus::-webkit-scrollbar {
   min-width: 0;
 }
 
+/* InfoHint in a control row: hug the icon — never stretch to the track (ellipse). */
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-row
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  > .fynns-btn--icon {
+  flex: none;
+  align-self: center;
+}
+
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon))
   > .fynns-btn,
 .fynns-control-stack
   > .fynns-control-row
@@ -2402,6 +2420,22 @@ input.fynns-input:focus::-webkit-scrollbar {
   font-size: var(--fynns-font-size-caption);
   letter-spacing: var(--fynns-letter-spacing-wide);
   color: var(--fynns-color-text-muted);
+}
+
+/* Label + trailing InfoHint (policy copy in Tooltip — not ControlBlock description). */
+.fynns-control-row__label:has(.fynns-info-hint-trigger) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-control-row__label-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fynns-control-row__controls {
