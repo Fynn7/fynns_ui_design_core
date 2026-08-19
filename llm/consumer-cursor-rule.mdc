@@ -131,7 +131,7 @@ FillColumn。
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
 | 表格/列表分页（每页条数 + `Pagination`） | Card body **上下**堆：每页 `Select` / 范围文案，再 `Pagination`（内容宽度 nowrap） | 左右 space-between，把页码挤到 Select 旁边直到数字换行 |
 | KPI / 指标卡（dashboard stats） | `auto-fill` + `--fynns-layout-stats-min-col`（窄屏 `--fynns-layout-stats-min-col-sm`） | 自造未发布的 `--fynns-layout-*` 导致 grid 失效、单列撑满 |
-| 板内警告 + 待办行（未映射模型、路径列表） | **一个** `Card` `title` + `FieldHint` + `List`（警告语义用 head `icon` 或一句说明）；单行瞬态说明才用独立 `InlineAlert` | 页面级 `InlineAlert` 与 orphan `List` 重复同一主题；把 `List` 塞进 `InlineAlert` |
+| 板内警告 + 待办行（未映射模型、路径列表） | **一个** `Card` `title` + `FieldHint` + `List`（警告语义用 head `icon` 或一句说明）；单行瞬态说明才用独立 `InlineAlert` | 页面级 `InlineAlert` 与 orphan `List` 重复同一主题；把 `List` / `CodeBlock` / `FieldHeader` 塞进 `InlineAlert` |
 | TopAppBar / 工具条帮助 | icon-only `InfoHint`（默认 = `IconButton ghost md` 40dp + 16dp 字标；`cursor: help`） | 14px 灰点、裸 `<button>` 或手写 `IconButton`+`Tooltip` 冒充帮助 |
 
 交互 `ListItem` 的 `trailing`（IconButton）在行 `<button>` **外侧**（合法嵌套）—
@@ -344,8 +344,8 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 | 场景 | 选用 |
 | --- | --- |
 | 有真实文件名 / 标题 | `variant="default"`（可省略）+ **非空** `label` → 标题栏 + 分割线 + 复制 |
-| **没有**文件名 / 标题 | **`variant="plain"`** → 只有外框 + 悬停复制（无标题栏、无分割线） |
-| 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（浮层复制） |
+| **没有**文件名 / 标题 | **`variant="plain"`** → 只有外框 + 结束列复制（无标题栏、无分割线；正文不钻到 Copy 底下） |
+| 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（结束列复制） |
 | 语法高亮 | **必须**另传 `language`（或 `highlightProfile` / 已 `registerHighlightLanguage`） |
 | 全屏 / flex 填满编辑器 | **`autoGrow={false}`** + 宿主把 CodeBlock / `textarea` 拉满（默认 autoGrow 跟内容长） |
 
@@ -369,7 +369,8 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 ```
 
 **禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”；
-只写 `label="*.xml"` 却省略 `language`。
+只写 `label="*.xml"` 却省略 `language`；在消费仓给 `.fynns-code-block-pre` 加
+`padding-right` 躲复制按钮（core 已预留结束列）；把 `CodeBlock` 塞进 `InlineAlert`。
 
 ## ChatMessage Markdown（硬 — 优先本仓渲染）
 

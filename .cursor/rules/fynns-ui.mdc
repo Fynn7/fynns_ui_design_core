@@ -86,7 +86,8 @@ ring can paint before heavy work).
   nowrap / max-content → H-scroll when narrow), DiffView (unified-diff panel),
   CodeBlock
   (**strict:** titled `default` needs non-empty `label` or throws; no
-  title → `variant="plain"`; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
+  title → `variant="plain"` with copy in a reserved end column — do not pad
+  `.fynns-code-block-pre` in the app; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
   Behavioral breaking; zero-dep `--fynns-code-*` highlight for
   ts/js/py/cpp/css/json/xml/html/bash; **`label` ≠ `language`** — always pass
   matching `language` / profile (`llm/AGENT_INTERFACES.md`); fill editable →

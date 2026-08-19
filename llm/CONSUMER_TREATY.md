@@ -1,4 +1,4 @@
-﻿# Consumer treaty — pasteable `@fynns/ui` contract
+# Consumer treaty — pasteable `@fynns/ui` contract
 
 **Purpose:** give any consumer repo a short, always-on agent rule so it obeys
 `@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
@@ -351,20 +351,36 @@ Symptoms in a settings / dashboard panel:
 - Warning `InlineAlert` is **tall** with empty bands between title, hint, and rows
 - Model names and trailing actions sit inside the alert tonal box; «映射» hugs the
   far edge under the icon column inset
-- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` were passed as
-  `children` of `InlineAlert`
+- `FieldHeader` / `FieldHint` / `.fynns-unit-stack` / `List` / `CodeBlock` were
+  passed as `children` of `InlineAlert`
 
 **Cause:** `InlineAlert` body is a **phrasing-only** text slot (icon + copy strip).
-Block hosts (`List`, form labels, unit stacks) belong **outside** the alert as
-`.fynns-unit-stack` siblings — same rhythm as «section label → InlineAlert → next
-block» in [`AGENTS.md`](../AGENTS.md) **Inset decision tree**.
+Block hosts (`List`, form labels, unit stacks, `CodeBlock` wells) belong
+**outside** the alert as `.fynns-unit-stack` siblings — same rhythm as
+«section label → InlineAlert → next block» in [`AGENTS.md`](../AGENTS.md)
+**Inset decision tree**.
 
 **Fix in the consumer:** keep `InlineAlert` to title + supporting sentence
 (`message` or short `children` with `<strong>` / `<br />`); stack the catalog
-**below** with `List` / `ListItem` (`headline` + `trailing` actions). Do not
+**below** with `Card` / `List` / `ListItem` (formula snippets → `CodeBlock`
+`variant="plain"` in the Card, not inside the alert). Do not
 restyle `.fynns-inline-alert*`. Live: sandbox Globals severity samples; hub usage
 unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md) **Content density** +
 Feedback **InlineAlert**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: CodeBlock copy covering the last glyphs
+
+Symptoms: `variant="plain"` (or headless `editable`) one-liners hide the last
+word under the hover Copy `IconButton` (e.g. a formula ending in `Output`).
+
+**Cause:** headless copy used to `position: absolute` over the code surface with
+no reserved end column. **Fix in core:** `--copy-float` pads the root by
+`--fynns-space-sm` + `--fynns-size-icon-target` so wrap and nowrap stay clear.
+**Fix in the consumer:** do **not** add private `padding` / `padding-right` on
+`.fynns-code-block-pre`. Formula / snippet catalogs belong in `Card`
+`chrome="plain"`, not nested in `InlineAlert`. Live: sandbox Globals `#code-block`
+(long plain line). Authority: [`AGENTS.md`](../AGENTS.md) CodeBlock chrome.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: plain CodeBlock despite a filetype label
 

@@ -433,9 +433,9 @@ classes.
 - **Feedback:** Banner (M3 chrome), InlineAlert (fynns in-panel severity — **not**
   M3; soft tonal fill; shares Banner pad/gap/icon tokens; icon tinted, body
   on-surface; long copy wraps — **phrasing copy only** (`message` or short
-  `children`); never nest `List`, `FieldHeader`, `FieldStack`, or
-  `.fynns-unit-stack` block hosts inside the alert — stack catalogs **below** as
-  unit-stack siblings; do not confuse with Banner), BadgedBox
+  `children`); never nest `List`, `FieldHeader`, `FieldStack`, `CodeBlock`,
+  `Surface`, or `.fynns-unit-stack` block hosts inside the alert — stack catalogs
+  **below** as unit-stack siblings; do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
   LinearProgress (`value` in `[0,1]` or omit indeterminate) /
@@ -967,9 +967,10 @@ classes.
   panel — add/del/same/meta lines; caller owns `+`/`-` in text), CodeBlock (**strict chrome** — titled
   `default` **requires** non-empty `label` (filename) + head hairline + copy;
   missing / empty / whitespace `label` **throws**; no title →
-  `variant="plain"` (frame + floating copy only — do not pass `label` or
-  `label=""`); `editable` same head rules when `label` is set, omit `label`
-  for float-copy; live highlight via pre backdrop + transparent textarea —
+  `variant="plain"` (frame + copy in a **reserved end column** — do not pass
+  `label` or `label=""`; never pad `.fynns-code-block-pre` in the app to dodge
+  the button); `editable` same head rules when `label` is set, omit `label`
+  for the same reserved-column copy; live highlight via pre backdrop + transparent textarea —
   `value`/`defaultValue`/`onChange` (local draft + deferred highlight;
   `onChange` coalesced while typing / flushed on blur); editable height
   defaults to **autoGrow** (content-sized from `rows` floor, default `1`,

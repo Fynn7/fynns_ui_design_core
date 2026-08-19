@@ -54,6 +54,8 @@ failure modes **squashed drawer** + **wrong shell slot**.
    surface children with `chrome="plain"` / `.fynns-nest`.
 9a. **CodeBlock** titled `default` requires non-empty `label`; else `variant="plain"`.
 9b. **CodeBlock `language`:** always pass matching `language` / profile — `label` is not a detector.
+9c. **CodeBlock headless copy:** core reserves an end column (`--copy-float`) so
+    glyphs never sit under Copy. Do **not** pad `.fynns-code-block-pre` in the app.
 10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
     capability → implement in this core first. Chat radius floor ≥ `--fynns-radius-22`;
     fonts: body `ui`, code `mono`, never serif for main prose.
