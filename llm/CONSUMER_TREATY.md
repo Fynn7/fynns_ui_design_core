@@ -151,16 +151,26 @@ Symptoms inside a `Surface` / `Card` strip:
   name + hint
 - Hint alone on a **full-bleed** second row with a wide empty band to its
   right (common on a **narrow** window)
+- Long `ControlBlock` `description` wrapping in a **~7.5rem** left band while
+  the `Switch` / cluster sits end-aligned — the block grows very tall in
+  Drawer / narrow `Card` (stale core grid on form hosts)
 
 **Cause:** hand-rolled flex/grid, **or** a `FieldHint` / `ControlBlock`
 `description` that still paints as a full-width next row (stale core, or the
-hint is a Surface sibling instead of `ControlBlock` `description`). **Fix:**
+hint is a Surface sibling instead of `ControlBlock` `description`). Stale
+core may also leave the ControlBlock hint grid on fixed
+`--fynns-layout-control-row-label` inside Card / Dialog / padded Surface.
+**Fix:**
 keep `ControlStack` + `ControlRow` `label` + `.fynns-control-cluster` +
-`ControlBlock` `description` (do **not** put the timestamp in `ControlRow`
+`ControlBlock` `description` for **one short phrasing line** (timestamp,
+single-sentence toggle note — do **not** put the timestamp in `ControlRow`
 `label`, do **not** restyle `.fynns-*`). Core docks the hint in the **label
-column** and vertically centers the cluster on name + hint. Bump / `file:`
-link `@fynn7/ui-design-core` if the consumer still shows the empty band.
-Live: sandbox `#rhythm` + `#form-recipe`. Pasteable recipe:
+column** and vertically centers the cluster on name + hint. **Multi-sentence /
+policy paragraphs** in a narrow Drawer or Card → **`InfoHint`** on the **same
+label line** as `ControlRow` (`label={<><span className="fynns-control-row__label-text">…</span><InfoHint size="sm" … /></>}` — dense rows) — **not** trailing the Switch / action cluster and **not**
+`ControlBlock` `description` (see `#info-hint`). Bump / `file:` link
+`@fynn7/ui-design-core` if the consumer still shows the empty band or the
+7.5rem wrap. Live: sandbox `#rhythm` + `#form-recipe` + `#info-hint`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row

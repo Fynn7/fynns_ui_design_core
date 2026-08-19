@@ -216,7 +216,7 @@ FillColumn。
 | --- | --- |
 | 可见名称 \| 控件（同行） | `ControlStack` + `ControlRow` `label={名称}`；控件在 row 子树 |
 | 同行多个控件（ToggleGroup + 刷新按钮） | row 内 `.fynns-control-cluster`（或 `Grid`） |
-| 控件下的说明 / 「截至 …」时间戳 | `ControlBlock` `description`。Core 把说明停在 **名称列**（可在该列内换行）；ToggleGroup / 簇对名称+说明 **纵向居中**。**禁止**塞进 `ControlRow` `label`、禁止写成 Surface 下的通栏兄弟、禁止裸 `<p>` |
+| 控件下的说明 / 「截至 …」时间戳 | **一行**短说明 → `ControlBlock` `description`（停在名称列；ToggleGroup / 簇对名称+说明纵向居中）。**多句 / 政策段落** → 标签行 **`InfoHint`**（`label` 内 `<span className="fynns-control-row__label-text">` + `InfoHint size="sm"`，`#info-hint`）— **禁止**堆进 `ControlBlock` `description` 或 Switch 尾随。**禁止**塞进 `ControlRow` `label` 纯字符串里、禁止 Surface 通栏兄弟、禁止裸 `<p>` |
 | 表单语义分簇（多段选项） | 上节 `FieldStack`（不要把一切塞进一个乱 flex） |
 
 **对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / padded Surface）与
