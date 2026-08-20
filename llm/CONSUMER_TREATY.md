@@ -357,6 +357,23 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode: master–detail grid stacks full-width (undefined list-pane token)
+
+Symptoms in a list + detail catalog (commands / rules / skills split):
+
+- Wide viewport still shows **catalog above detail** (one column), not left
+  list / right detail
+- DevTools: `grid-template-columns` on `.hub-split` (or equivalent) is
+  `var(--fynns-layout-list-pane-width) 1fr` but the custom property is
+  **undefined**, so the whole track list is invalid and collapses
+
+**Cause:** same class as KPI grids — consumer referenced a layout token that
+was not yet shipped (or typo'd).
+**Fix:** use shipped `--fynns-layout-list-pane-width` (default `18rem`, ≥0.4.43).
+Related canvas max: `--fynns-layout-content-max-width` (`73.75rem`); optional
+nav mirror `--fynns-layout-nav-pane-width` (`17.5rem`). Do not invent private
+`--hub-list-w` literals. Authority: `tokens.ts` layout keys; bump core.
+
 ## Failure mode: nested short List well + invented list-well token
 
 Symptoms (repo / graphify / skill catalogs inside a Card):
@@ -551,6 +568,28 @@ label-fill + end-hug so glyphs share one trailing edge. If an apply / fix
 cluster of its own. Live: sandbox `#rhythm` status legend. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density** multi-status / named
 readiness. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: drawer-body Tooltip crush (form panel in nav)
+
+Symptoms when a **form panel** (not destination list) lives in
+`ClippedNavShell` `nav` → `NavigationDrawer` body (e.g. GSC Live Preview LLM
+config):
+
+- `Select` + refresh `IconButton` in `.fynns-control-cluster--end-align`: Select
+  collapses to ~2px; only the refresh glyph shows
+- `ControlRow` label text (`Thinking` / `Prompt-Fabrik`) ellipsizes to **0px**;
+  only the `InfoHint` icon remains beside the Switch / action cluster
+
+**Cause:** a shell rule set **every** `.fynns-tooltip-trigger` under
+`.fynns-nav-drawer-body` to `display: block; width: 100%` (meant for
+destination-row Tooltip hosts). Form Tooltips then steal the flex/grid track
+from siblings with `min-width: 0`.
+
+**Fix in core (do not patch with app CSS):** scope full-width tooltip hosts to
+**destination** rows only — direct `nav-drawer-body > .fynns-tooltip-trigger`
+and `.fynns-nav-drawer-item .fynns-tooltip-trigger` (rail: only under
+`.fynns-nav-rail-destinations`). Form panels in the nav slot keep hug-content
+Tooltips. Authority: `primitives.css` (ClippedNavShell nav rules).
 
 ## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
 

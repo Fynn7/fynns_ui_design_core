@@ -9607,7 +9607,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+/*
+ * Full-width tooltip hosts for **destination** rows only. A descendant
+ * `.fynns-tooltip-trigger { width: 100% }` would also hit form Tooltips
+ * nested in the drawer body (Select refresh / InfoHint beside labels) and
+ * crush flex/grid siblings to 0 — e.g. LLM config Model Select → 2px.
+ * Direct body child = Tooltip wrapping a destination; Item-scoped = ellipsis
+ * on a destination label. Form panels in the nav slot stay hug-content.
+ */
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer
+  .fynns-nav-drawer-body
+  > .fynns-tooltip-trigger,
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer
+  .fynns-nav-drawer-item
+  .fynns-tooltip-trigger {
   display: block;
   width: 100%;
 }
@@ -9622,7 +9637,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-rail
+  .fynns-nav-rail-destinations
+  .fynns-tooltip-trigger {
   display: flex;
   width: 100%;
   justify-content: center;
