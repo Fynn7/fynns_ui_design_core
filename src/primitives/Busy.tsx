@@ -201,11 +201,12 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
 };
 
 /**
- * Sectional busy wrapper: children stay mounted under a dim layer with
- * **one** progress chrome + message. Sets `aria-busy` on the region while
+ * Sectional busy wrapper: children stay mounted under a **transparent**
+ * overlay with **one** progress chrome + message (host / pane background
+ * shows through — no surface wash). Sets `aria-busy` on the region while
  * active. Overlay uses `place-items: center` — the chrome sits in the
  * region's box, so a content-sized host leaves it stuck at the top of a
- * tall pane.
+ * tall pane. Full-viewport tint → `BusyScrim`, not this overlay.
  */
 export function BusyRegion({
   busy,

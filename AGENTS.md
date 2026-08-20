@@ -115,9 +115,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    reserve *block* gutters that clip the first/last pill radii.
 5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
-   blocking) / `BusyRegion` (sectional dim + **one** progress chrome + message —
-   **pane cold-start uses `fill`**, never `EmptyState` + a ring, never a ring
-   stacked on a bar), `EmptyState` (**zero-result
+   blocking) / `BusyRegion` (sectional **transparent** overlay + **one**
+   progress chrome + message — host / pane background shows through; never a
+   second `surface-*` wash; **pane cold-start uses `fill`**, never
+   `EmptyState` + a ring, never a ring stacked on a bar), `EmptyState`
+   (**zero-result
    catalogs only**), `Banner` / `InlineAlert` /
    `BadgedBox` (notification overlay), and
    imperative `snackbar` (+ root `<SnackbarHost />`) for transient feedback. Do
@@ -150,8 +152,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
-   `BusyRegion` (relative dim layer over children; content is `inert` while
-   busy); for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
+   `BusyRegion` (relative **transparent** overlay over children; content is
+   `inert` while busy — no surface tint; full-viewport tint → `BusyScrim`);
+   for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
    paint → then work) so the ring can start before the main thread blocks;
    do not revive `BlockingLoadingOverlay` or purged `Panel` /
    `PanelCard`;
@@ -474,14 +477,16 @@ classes.
   LinearProgress (`value` in `[0,1]` or omit indeterminate) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size?, indicator? }` /
   **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill?, indicator? }`
-  (M3-style fullscreen non-dismissible scrim or sectional dim + **one** progress
-  chrome + visible message; `indicator` `"circular"` (default) | `"linear"` —
-  known % / counts → `linear`, unknown wait → `circular`; never stack a ring on
-  a bar; `message` is phrasing copy only — never nest `LinearProgress` /
-  `CircularProgress`; `label` is the progress accessible name and the default
-  visible copy when `message` is omitted; `value` in `[0, 1]` for determinate,
-  omit for indeterminate; `size` defaults `md` and applies to the ring only;
-  **`fill`** stretches in a height-resolved
+  (M3-style fullscreen non-dismissible scrim via **BusyScrim**, or sectional
+  **transparent** overlay + **one** progress chrome + visible message —
+  keep host / pane background; do **not** wash with `surface-*` /
+  private colored loading shells; `indicator` `"circular"` (default) |
+  `"linear"` — known % / counts → `linear`, unknown wait → `circular`; never
+  stack a ring on a bar; `message` is phrasing copy only — never nest
+  `LinearProgress` / `CircularProgress`; `label` is the progress accessible
+  name and the default visible copy when `message` is omitted; `value` in
+  `[0, 1]` for determinate, omit for indeterminate; `size` defaults `md` and
+  applies to the ring only; **`fill`** stretches in a height-resolved
   parent so the overlay centers in the visible pane — required for cold-start
   with no children). Overlay is `place-items: center` in the region's box;
   a content-sized host parks the chrome at the top of leftover canvas.
@@ -489,8 +494,8 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
-  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children | `EmptyState` as a loading shell; bare `CircularProgress` in a `unit-stack`; private `SectionLoading` |
-  | Refresh over existing surface | `BusyRegion` wrapping the real children (fill optional if the surface already has height) | Unmount the section and swap in EmptyState |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay stays **transparent** | `EmptyState` as a loading shell; bare `CircularProgress` in a `unit-stack`; private `SectionLoading` / colored loading wash |
+  | Refresh over existing surface | `BusyRegion` wrapping the real children (fill optional if the surface already has height); transparent overlay so the surface shows through | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message` |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = `CircularProgress` `sm` | Two progress chromes in one overlay |
   | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level layout |

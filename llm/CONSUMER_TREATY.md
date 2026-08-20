@@ -28,7 +28,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **NavigationDrawer destination gap ≠ unit-stack** /
-**BusyRegion fill / loading placement** / **one progress chrome per busy host** /
+**BusyRegion fill / loading placement** / **BusyRegion transparent overlay (no surface wash)** /
+**one progress chrome per busy host** /
 **Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
@@ -547,6 +548,26 @@ the well first; a height-only host must not add `padding-top`. Do not restyle
 `.fynns-dialog-body`. Not Card `chrome="plain"` flush (`plain ≠ flush`). Live:
 sandbox `#fullscreen-flush`. Authority: [`AGENTS.md`](../AGENTS.md)
 **Flush-start overlay body**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion colored loading wash
+
+Symptoms: pane cold-start or refresh shows a **second** solid / washed
+background under the ring (e.g. `surface-1` block that does not match
+`app-bg` / the card host) — screenshot reads as “loading painted a new
+colored panel”.
+
+**Cause:** `.fynns-busy-region-overlay` used to tint with
+`color-mix(... surface-1 78% ...)`, or the consumer wrapped the ring in a
+private hub loading shell with its own background. **Fix in core:** overlay
+`background: transparent` — host / pane shows through; `BusyScrim` keeps
+`--fynns-color-overlay` for full-viewport blocks. **Fix in the consumer:**
+use `BusyRegion` / `BusyScrim` as-is; do **not** restyle
+`.fynns-busy-region-overlay` or invent a colored `hub-*-loading` wash under
+the chrome. Bare `CircularProgress` in a tinted box is also wrong for pane
+boot — use `BusyRegion` `fill`. Authority: [`AGENTS.md`](../AGENTS.md)
+Feedback **Loading placement**. Live: sandbox `#busy-region` /
+`#busy-region` fill sample. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: stacked progress chromes in BusyRegion

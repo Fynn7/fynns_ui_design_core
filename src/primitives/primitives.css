@@ -3645,7 +3645,9 @@ a.fynns-breadcrumb-link:visited {
   z-index: 1;
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, var(--fynns-color-surface-1) 78%, transparent);
+  /* Transparent — keep host / pane background; do not wash with surface-*.
+     Full-viewport blocking tint stays on BusyScrim (`--fynns-color-overlay`). */
+  background: transparent;
   pointer-events: auto;
 }
 

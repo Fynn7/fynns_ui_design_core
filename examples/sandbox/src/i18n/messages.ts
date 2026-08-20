@@ -480,17 +480,17 @@ const en = {
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
-    "Section content stays mounted under a dim layer while BusyRegion is busy.",
+    "Section content stays mounted under a transparent overlay while BusyRegion is busy (host background shows through).",
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative dim + one progress chrome + visible copy. Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas.",
+    "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim.",
   "globals.busyRegionFillLabel": "Loading pane",
   "globals.busyRegionFillMessage": "Cold-start — no content yet.",
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane. Do not use EmptyState + CircularProgress as a loading shell.",
+    "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane on the original background (transparent overlay). Do not use EmptyState + CircularProgress as a loading shell, and do not add a private colored loading wash.",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -1888,17 +1888,17 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
   "globals.busyRegionBody":
-    "BusyRegion 为 busy 时，区块内容仍挂载在半透明遮罩下方。",
+    "BusyRegion 为 busy 时，区块内容仍挂载在透明遮罩下方（露出宿主原背景，无 surface 洗底）。",
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位半透明层 + 一个进度件 + 可见文案。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。",
+    "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。",
   "globals.busyRegionFillLabel": "栏加载中",
   "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏居中。禁止用 EmptyState + CircularProgress 当 loading 壳。",
+    "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏原背景上居中（透明遮罩）。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有彩色 loading 底。",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
