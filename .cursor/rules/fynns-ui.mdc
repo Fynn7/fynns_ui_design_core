@@ -96,7 +96,9 @@ ring can paint before heavy work).
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
-  destination siblings use `--fynns-navdrawer-section-gap` — never
+  sheet `headline` = static title only — never back IconButton / count toolbar;
+  mode exit → TopAppBar leading/leadingExtra; destination siblings use
+  `--fynns-navdrawer-section-gap` — never
   `.fynns-unit-stack`; SearchBar/tools as a body sibling use
   `--fynns-navdrawer-search-gap` to destinations),
   DestinationAppShell, ClippedNavShell, EndAside,

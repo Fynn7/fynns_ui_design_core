@@ -46,7 +46,16 @@ export type NavigationDrawerProps = {
    * Pass `false` for a dismissible but non-blocking sheet.
    */
   modal?: boolean;
-  /** Optional top headline inside the sheet (M3 title-small). */
+  /**
+   * Optional **static** sheet title (M3 title-small / muted semibold).
+   * Plain text or light markup only — **not** a toolbar. Do **not** put
+   * `IconButton` (back / bulk), counts, or `hub-row` chrome here. Mode exit
+   * (back to root destinations) lives on `TopAppBar` `leading` /
+   * `leadingExtra`; tallies go on `NavigationDrawerItem` `badge` or
+   * `NavigationDrawerGroup` `label` (`Name · N`). Omit when the app bar
+   * already owns the mode title. Live: sandbox Layouts `#layouts-demo-shell`
+   * (`leadingExtra` back) + Globals NavigationDrawer (string `headline`).
+   */
   headline?: ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -143,7 +152,8 @@ export function NavigationDrawer({
 export type NavigationDrawerHeadlineProps = HTMLAttributes<HTMLDivElement>;
 
 /**
- * Static section label inside a navigation drawer (M3 headline).
+ * Static **section** label inside the drawer body (M3 headline) — not the
+ * sheet `headline` prop, and not a place for IconButtons / counts.
  * For collapsible Cursor-style folders use `NavigationDrawerGroup`.
  */
 export function NavigationDrawerHeadline({

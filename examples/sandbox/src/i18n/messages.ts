@@ -970,7 +970,7 @@ const en = {
   "globals.navDrawerGroupAssistItem": "Suggest",
   "globals.navDrawerOpen": "Open modal drawer",
   "globals.navDrawerHelp":
-    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. `NavigationDrawerHeadline` = static section label; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (16dp). Put them as **direct** body children; never wrap destinations in `.fynns-unit-stack`. Prefer Drawer for generic inspector panels.",
+    "[adaptive] NavigationDrawer — destination side sheet (not content Drawer). `standard` = medium+ permanent; `modal` = overlay. Sheet `headline` = **static title string only** (this demo: “Mail”) — never a back IconButton, bulk toolbar, or bare count row. Mode exit → TopAppBar `leading` / `leadingExtra` (Layouts `#layouts-demo-shell`); tallies → Item `badge` or Group `label` (`Name · N`). `NavigationDrawerHeadline` = static **section** label in the body; `NavigationDrawerGroup` = collapsible folder row (leading `icon` any ReactNode) with indented items; collapsed + active leaf shows selected pill on the trigger. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (4dp, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (16dp). Put them as **direct** body children; never wrap destinations in `.fynns-unit-stack`. Prefer Drawer for generic inspector panels.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -980,7 +980,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons (multi-action chrome), and optional `aside` (not assumed Chat). Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons (multi-action chrome), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -2377,7 +2377,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerGroupAssistItem": "建议",
   "globals.navDrawerOpen": "打开模态抽屉",
   "globals.navDrawerHelp":
-    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。`NavigationDrawerHeadline` = 静态分组文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline 间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）。SearchBar / 工具条与目的地行 = `--fynns-navdrawer-search-gap`（16dp）。必须是 body **直接**子节点；禁止用 `.fynns-unit-stack` 包目的地列表。通用检查器请用 Drawer。",
+    "[自适应] NavigationDrawer — 目的地侧栏（不是内容 Drawer）。`standard` = 中等及以上常驻；`modal` = 遮罩覆盖。Sheet `headline` = **仅静态标题字符串**（本样例「邮件」）— 禁止塞返回 IconButton、批量工具条或两端对齐的裸计数。模式返回 → TopAppBar `leading` / `leadingExtra`（布局模板 `#layouts-demo-shell`）；计数 → Item `badge` 或 Group `label`（`名称 · N`）。`NavigationDrawerHeadline` = body 内静态**分组**文案；`NavigationDrawerGroup` = 可折叠分组行（leading `icon` 任意 ReactNode）+ 缩进子项；折叠且子项 active 时 trigger 显示选中 pill。兄弟 Item / Group / Headline 间距 = `--fynns-navdrawer-section-gap`（4dp，与 Group 内叶子相同）。SearchBar / 工具条与目的地行 = `--fynns-navdrawer-search-gap`（16dp）。必须是 body **直接**子节点；禁止用 `.fynns-unit-stack` 包目的地列表。通用检查器请用 Drawer。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
@@ -2387,7 +2387,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` 多枚 IconButton，以及可选 `aside`（不必是 Chat）。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` 多枚 IconButton，以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

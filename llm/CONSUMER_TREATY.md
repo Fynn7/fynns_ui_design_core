@@ -99,6 +99,40 @@ children do not shrink).
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
 
+## Failure mode this treaty targets: drawer headline toolbar
+
+Symptoms (mode sidebars: Favorites / Chats / Archived / “drill-in” destination
+lists):
+
+- `NavigationDrawer` `headline` is a custom row: back `IconButton` flush-start,
+  empty middle, muted count flush-end (often via a private `hub-row` +
+  `CatalogCount`)
+- Reads as a sparse toolbar under an already-titled `TopAppBar`, not an M3
+  drawer title
+- Bulk select chrome (`ListBulkToolbar`) also parked in `headline`
+
+**Cause:** the sheet `headline` slot is M3 **static title-small** chrome
+(`.fynns-nav-drawer-headline` — muted semibold padding). It is **not** a
+ControlRow / Toolbar. Stuffing interactive chrome + tallies fights the type
+role and leaves a hollow space-between strip.
+
+**Consumer fix (props only):**
+
+1. **Omit** `headline`, or pass a **plain string** title only when the app bar
+   does not already name the mode.
+2. Mode **back / exit** → `TopAppBar` `leading` or `DestinationAppShell`
+   `leadingExtra` (`IconButton` + `Tooltip` + `ArrowLeftIcon`) next to the
+   nav toggle — live sample: sandbox Layout templates `#layouts-demo-shell`.
+3. **Counts** → `NavigationDrawerItem` `badge`, or fold into
+   `NavigationDrawerGroup` `label` (`Favorites · 3` / `Project · N`). Do not
+   invent a floating count in the sheet title band.
+4. Bulk / select toolbars → drawer **body** tools sibling (same band as
+   `SearchBar` / `--fynns-navdrawer-search-gap`), or TopAppBar `trailing` while
+   select mode is on — never `headline`.
+
+Authority: [`AGENTS.md`](../AGENTS.md) NavigationDrawer platform row;
+pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: wrong shell slot / “Clipped” misread
 
 **Naming:** `ClippedNavShell` = Material 3 **clipped** chrome (full-bleed
