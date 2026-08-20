@@ -97,7 +97,9 @@ ring can paint before heavy work).
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
   sheet `headline` = static title only — never back IconButton / count toolbar;
-  mode exit → TopAppBar leading/leadingExtra; destination siblings use
+  mode exit → TopAppBar leading/leadingExtra; Group/Item label = name only
+  (no `· N` unless user asks; Item badge only when required); destination
+  siblings use
   `--fynns-navdrawer-section-gap` — never
   `.fynns-unit-stack`; SearchBar/tools as a body sibling use
   `--fynns-navdrawer-search-gap` to destinations),

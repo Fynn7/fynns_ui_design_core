@@ -123,14 +123,39 @@ role and leaves a hollow space-between strip.
 2. Mode **back / exit** → `TopAppBar` `leading` or `DestinationAppShell`
    `leadingExtra` (`IconButton` + `Tooltip` + `ArrowLeftIcon`) next to the
    nav toggle — live sample: sandbox Layout templates `#layouts-demo-shell`.
-3. **Counts** → `NavigationDrawerItem` `badge`, or fold into
-   `NavigationDrawerGroup` `label` (`Favorites · 3` / `Project · N`). Do not
-   invent a floating count in the sheet title band.
+3. **Do not** invent a floating count in the sheet title band. Do **not** pad
+   Group/Item `label` with `· N` either (see **padded destination labels**
+   below). Unread / notification counts → `NavigationDrawerItem` `badge`
+   **only when the product actually needs a badge**.
 4. Bulk / select toolbars → drawer **body** tools sibling (same band as
    `SearchBar` / `--fynns-navdrawer-search-gap`), or TopAppBar `trailing` while
    select mode is on — never `headline`.
 
 Authority: [`AGENTS.md`](../AGENTS.md) NavigationDrawer platform row;
+pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: padded destination labels
+
+Symptoms (Favorites / Chats / Archived group rows, destination lists):
+
+- `NavigationDrawerGroup` `label` shows `全局规则 · 1` / `Global rules · 1` /
+  `Repositories · 3` — middle-dot + child count baked into the trigger text
+- Same pattern on Item / Headline / TopAppBar titles “for density”
+
+**Cause:** agents treat folder tallies as free label chrome. The disclose
+row already has a chevron; the leaf list is the source of truth for how many
+items exist. Padding `label` with decorative `·` + `N` is redundant meta the
+user did not ask for.
+
+**Consumer fix (props only):**
+
+1. Pass the **plain name** only: `label={g.label}` / `label="Global rules"`.
+2. If (and only if) the product needs an unread / notification mark →
+   `NavigationDrawerItem` `badge` on the leaf — not on the Group trigger
+   string.
+3. Never invent `Name · N` because a prior treaty / recipe mentioned it.
+
+Authority: [`AGENTS.md`](../AGENTS.md) Hard rules (chrome label copy);
 pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: wrong shell slot / “Clipped” misread

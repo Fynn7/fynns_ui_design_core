@@ -51,10 +51,11 @@ export type NavigationDrawerProps = {
    * Plain text or light markup only — **not** a toolbar. Do **not** put
    * `IconButton` (back / bulk), counts, or `hub-row` chrome here. Mode exit
    * (back to root destinations) lives on `TopAppBar` `leading` /
-   * `leadingExtra`; tallies go on `NavigationDrawerItem` `badge` or
-   * `NavigationDrawerGroup` `label` (`Name · N`). Omit when the app bar
-   * already owns the mode title. Live: sandbox Layouts `#layouts-demo-shell`
-   * (`leadingExtra` back) + Globals NavigationDrawer (string `headline`).
+   * `leadingExtra`. Omit when the app bar already owns the mode title.
+   * Do **not** invent counts in `headline` or pad Group/Item `label` with
+   * `· N` — see AGENTS Hard rules (chrome label copy). Live: sandbox
+   * Layouts `#layouts-demo-shell` (`leadingExtra` back) + Globals
+   * NavigationDrawer (string `headline`).
    */
   headline?: ReactNode;
   ariaLabel?: string;
@@ -174,7 +175,11 @@ export function NavigationDrawerHeadline({
 }
 
 export type NavigationDrawerGroupProps = {
-  /** Group title (visible + accessible name for the disclose control). */
+  /**
+   * Group title (visible + accessible name for the disclose control).
+   * **Name only** — do not pad with `· N` / counts unless the user explicitly
+   * asks. Unread → nested Item `badge` only when required (AGENTS Hard rules).
+   */
   label: string;
   /**
    * Optional leading glyph — any node (folder, globe, sparkles, …).

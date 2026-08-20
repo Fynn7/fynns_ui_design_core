@@ -334,8 +334,12 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
 7. **禁止把 `NavigationDrawer.headline` 当工具条：** 该槽是 M3 **静态标题**
    （纯文案）。**不要**塞返回 `IconButton`、批量工具条、或两端对齐的裸计数
    （`hub-row` + count）。模式「返回主菜单」→ `TopAppBar` `leading` /
-   `leadingExtra`（对照 `#layouts-demo-shell`）；计数 → Item `badge` 或 Group
-   `label`（`名称 · N`）；批量操作 → body 工具兄弟或 TopAppBar `trailing`。
+   `leadingExtra`（对照 `#layouts-demo-shell`）；批量操作 → body 工具兄弟或
+   TopAppBar `trailing`。
+8. **禁止给目的地 / 分组 `label` 塞冗余元数据：** Group / Item / Headline 的
+   `label` **只要名称**（`全局规则`，不要 `全局规则 · 1`）。除非用户**显式**
+   要求，禁止中间点 `·`、子项计数、装饰分隔。未读等 → 仅在产品需要时用 Item
+   `badge`，不要发明 `名称 · N`。
 
 ## Collapsible / Card `chrome`（嵌套必读）
 
@@ -446,4 +450,4 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
 12. 宽表映射/状态列：是否 muted `.fynns-table-meta` + `--end-align` cluster（缺中间则 `__grow`），而非单元格 `Chip`？行尾操作是否跨行右对齐？
 13. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。
-14. 模式侧栏（收藏 / 聊天 / 归档）：`NavigationDrawer.headline` 是否仍是静态标题或已省略？返回是否在 TopAppBar `leading`/`leadingExtra`（对照 `#layouts-demo-shell`）？计数是否在 Item `badge` / Group `label`，而非 headline 里的 `hub-row` + 裸数字？
+14. 模式侧栏（收藏 / 聊天 / 归档）：`NavigationDrawer.headline` 是否仍是静态标题或已省略？返回是否在 TopAppBar `leading`/`leadingExtra`（对照 `#layouts-demo-shell`）？Group/Item `label` 是否只是名称（无 `· N`）？headline 里是否已无 `hub-row` + 裸数字？

@@ -293,12 +293,21 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   companion-parking `src/primitives/<Name>.tsx` components. Half-deletes that
   only edit sandbox historically caused CI to *restore* demos — never do that.
 - **DON'T** paste **consumer product content** into this core (sandbox Globals /
-  Preview / Layout demos, default labels, i18n samples, docs screenshots used as
-  specs). Forbidden: consumer feature names, LLM/provider settings, app routes,
-  teaching-domain jargon from a specific consumer, or wholesale “realistic”
-  settings cards copied from an app. Use **generic** placeholders only; consumers
-  supply their own strings when they copy a recipe (`#form-recipe`, AGENTS
-  recipes). Cursor rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
+ Preview / Layout demos, default labels, i18n samples, docs screenshots used as
+ specs). Forbidden: consumer feature names, LLM/provider settings, app routes,
+ teaching-domain jargon from a specific consumer, or wholesale “realistic”
+ settings cards copied from an app. Use **generic** placeholders only; consumers
+ supply their own strings when they copy a recipe (`#form-recipe`, AGENTS
+ recipes). Cursor rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
+- **DON'T** pad chrome / destination **labels** with redundant meta unless the
+ user **explicitly** asks (counts, middle-dot tallies, decorative separators).
+ `NavigationDrawerGroup` / `NavigationDrawerItem` / `NavigationDrawerHeadline`
+ `label` stay the **name only** (`Global rules`, not `Global rules · 1`).
+ Optional unread / notification counts → `NavigationDrawerItem` `badge` **only
+ when the product requires a badge**; do not invent `Name · N` on Group
+ triggers “for density.” Same for TopAppBar titles and List headlines unless
+ the user asked for that meta. Failure mode:
+ [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **padded destination labels**.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
@@ -1069,7 +1078,7 @@ classes.
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
   | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell`); tallies → Item `badge` or Group `label` (`Name · N`). Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`). **Never** wrap destinations in `.fynns-unit-stack`. |
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell`). Group/Item `label` = **name only** — no `· N` padding unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`). **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = content-width nowrap strip; stack page-size Select above it (Card body siblings). |
