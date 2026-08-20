@@ -1215,13 +1215,21 @@ const en = {
   "globals.cardTitlePlain": "Title only",
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
+  "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
+  "globals.cardActionsStripBody":
+    "Header actions stay one horizontal strip. Nested .fynns-control-cluster groups hug content — they must not stack as full-width rows.",
+  "globals.cardActionsStripStar": "Star",
+  "globals.cardActionsStripPin": "Pin",
+  "globals.cardActionsStripOpen": "Open file",
+  "globals.cardActionsStripFolder": "Reveal folder",
+  "globals.cardActionsStripDelete": "Delete",
   "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
   "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
   "globals.cardChromePlainBody": "Child Surface owns the well.",
   "globals.cardChromePlainNote":
     "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Header actions = one nowrap strip (nested control-clusters hug). Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting body children → `chrome=\"plain\"` + nest-gap (Preview toggle).",
@@ -2633,13 +2641,21 @@ const zh: Record<MessageKey, string> = {
   "globals.cardTitlePlain": "仅标题",
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
+  "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
+  "globals.cardActionsStripBody":
+    "标题栏 actions 保持一条横向带。嵌套的 .fynns-control-cluster 会 hug 内容 —— 禁止各自占满宽度叠成多行。",
+  "globals.cardActionsStripStar": "收藏",
+  "globals.cardActionsStripPin": "置顶",
+  "globals.cardActionsStripOpen": "打开文件",
+  "globals.cardActionsStripFolder": "打开所在文件夹",
+  "globals.cardActionsStripDelete": "删除",
   "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
   "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
   "globals.cardChromePlainBody": "子级 Surface 自带井面。",
   "globals.cardChromePlainNote":
     "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。标题栏 actions = 一条 nowrap 横向带（嵌套 control-cluster 会 hug）。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套正文子节点 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",

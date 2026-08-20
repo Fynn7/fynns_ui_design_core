@@ -2471,6 +2471,19 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/*
+ * Nested clusters hug content. A child with `width: 100%` inside another
+ * cluster becomes a full-bleed row (Card head icon strips stack vertically —
+ * BookmarkActions + SourceFileActions lesson). Outer form clusters still
+ * fill their ControlRow / FieldBlock.
+ */
+.fynns-control-cluster .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
 /* Table / toolbar row: metadata + optional grow + trailing action on one line.
    Missing middle content still needs `__grow` so the action shares one end edge. */
 .fynns-control-cluster--end-align {
@@ -3111,6 +3124,16 @@ input.fynns-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-line-height-snug);
 }
 
+/* Consumer often wraps title in <span className="mono"> — keep ellipsis. */
+.fynns-card-title > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Single disclose slot: optional rest icon stacked with expand chevron.
  * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
 .fynns-collapsible-disclose,
@@ -3211,6 +3234,18 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* Keep IconButton hover disks off the card edge (not full content-inset). */
   padding-block: var(--fynns-space-xs);
   padding-inline-end: var(--fynns-space-xs);
+}
+
+/*
+ * Header actions = one horizontal strip (M3). Direct cluster must not wrap or
+ * claim `width: 100%` (that fights the lead title and stacks nested clusters).
+ */
+.fynns-card-actions > .fynns-control-cluster,
+.fynns-collapsible-actions > .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .fynns-collapsible-body,

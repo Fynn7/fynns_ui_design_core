@@ -964,6 +964,8 @@ classes.
   same shell as Collapsible, static head — no collapse / hover layer / chevron;
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;
+  **`actions` = one horizontal IconButton strip** (direct `.fynns-control-cluster`
+  is `nowrap` + content width; nested clusters hug — never a tall wrapped stack);
   `chrome="card"` (default) | `chrome="plain"` nesting host (same outer shell;
   body uses `--fynns-layout-nest-gap` — plain ≠ flush),
   old Media/Header/Content/Actions / variant APIs deleted),
@@ -1121,7 +1123,7 @@ classes.
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
-  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form** | Card/Surface **inside** each ListItem |
+  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form**. Header `actions` = one horizontal strip (`.fynns-control-cluster` nowrap); nested clusters hug content. Live: `#card` | Card/Surface **inside** each ListItem; nested `width:100%` clusters stacking IconButtons into a tall head |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
   | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (content-width nowrap strip). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |

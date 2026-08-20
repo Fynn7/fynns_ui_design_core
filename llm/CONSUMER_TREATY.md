@@ -390,6 +390,29 @@ follow the M3 long-strip shape. Live: sandbox `#list` (host tone rows).
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Card head actions wrap into a tall stack
+
+Symptoms in a detail pane (skills / rules Card):
+
+- Header `actions` IconButtons stack **2–3 rows** (~112dp tall) instead of one
+  horizontal strip; empty band to the right of the first column of icons
+- DevTools: `.fynns-card-actions > .fynns-control-cluster` hosts **nested**
+  `.fynns-control-cluster` children (e.g. BookmarkActions + SourceFileActions)
+
+**Cause:** `.fynns-control-cluster` defaults to `width: 100%` + `flex-wrap: wrap`
+(form / ControlRow fill). Nested clusters each claim 100% of the parent → each
+group becomes its own full-width row. Card title may also fail to ellipsize when
+wrapped in an inner `<span className="mono">`.
+
+**Fix in core:** nested clusters hug content (`width: auto`); Card / Collapsible
+actions force `flex-wrap: nowrap` + `width: auto` on the direct cluster; title
+inner children inherit ellipsis. Live: sandbox `#card` (multi-action head).
+**Consumer:** prefer one outer cluster of IconButtons; nested action helpers may
+keep an inner cluster (now safe) or use a fragment. Do **not** invent
+`flex-wrap: nowrap` in app CSS on `.fynns-*`. Authority:
+[`AGENTS.md`](../AGENTS.md) Card keep-set. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
 
 Symptoms in a usage / session catalog (or any `ListItem` with `Tooltip` copy):
