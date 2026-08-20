@@ -30,6 +30,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion transparent overlay (no surface wash)** /
 **one progress chrome per busy host** /
+**bare CircularProgress as body loader** /
+**private hub progress shell vs BusyRegion linear** /
 **Pagination full-row stack**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
@@ -570,6 +572,27 @@ Feedback **Loading placement**. Live: sandbox `#busy-region` /
 `#busy-region` fill sample. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: bare CircularProgress as body loader
+
+Symptoms: Dialog body, Card body, or section `unit-stack` shows a lone
+default-size (`md`) `CircularProgress` (often with a short “Loading…” label)
+instead of a centered busy host — ring sits flush / content-sized at the top
+of the dialog or table well; no `aria-busy` region; looks like a dangling
+spinner, not a sectional load.
+
+**Cause:** treating `CircularProgress` as a page/section loading shell.
+`CircularProgress` default `md` is for **inline widgets**; body / dialog /
+pane waits belong to `BusyRegion` (or `BusyScrim` for full-app). **Fix in the
+consumer:** Dialog / Card / section body cold-start →
+`<BusyRegion fill busy label="…" />` when the host height is resolved (Dialog
+body with a min-height / FillColumn / fill pane), else
+`<BusyRegion busy label="…" />` wrapping or replacing the future surface.
+Button / IconButton / field trailing stay on `CircularProgress` `sm`. Do
+**not** invent private hub loading CSS. Authority: [`AGENTS.md`](../AGENTS.md)
+Feedback **Loading placement**. Live: sandbox Globals `#busy-region`
+(section wrap + fill + **Dialog body** sample). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: stacked progress chromes in BusyRegion
 
 Symptoms: overlay shows **CircularProgress + LinearProgress** (or a consumer
@@ -586,6 +609,25 @@ content (not inside the overlay `message`) is fine. Authority:
 [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Live:
 sandbox Globals `#busy-region` (determinate sample is linear). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: private hub progress shell for section loads
+
+Symptoms: known-progress **cold-start / section load** paints a consumer
+centered shell (e.g. `.hub-progress-block` + `TaskProgressBar` /
+standalone `LinearProgress`) instead of keep-set `BusyRegion` — looks like a
+private loading geometry, not the sandbox `#busy-region` linear sample.
+
+**Cause:** apps wrapped determinate bars in a hub-only flex center block
+(padding / muted copy) and treated that as the section busy host. **Fix in
+the consumer:** section / pane loads with known % → `BusyRegion` `fill` (or
+wrap existing children) + `indicator="linear"` + `value` in `[0,1]`;
+`message` = status copy only. Drop obsolete `.hub-progress-block` (or any
+parallel centered progress host). Keep a domain `TaskProgressBar` /
+`LinearProgress` **only** as a non-overlay strip **beside** live content
+(toolbar / form row) — never as the cold-start shell, and never nested in
+`BusyRegion` `message`. Authority: [`AGENTS.md`](../AGENTS.md) Feedback
+**Loading placement**. Live: sandbox Globals `#busy-region` (determinate
+linear). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 

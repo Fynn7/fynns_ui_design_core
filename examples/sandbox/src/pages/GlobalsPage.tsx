@@ -833,6 +833,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
+  const [busyRegionDialogOpen, setBusyRegionDialogOpen] = useState(false);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
@@ -3669,6 +3670,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.busyRegionFillHelp")} />
+          <div className="sandbox-globals-row">
+            <Button size="sm" onClick={() => setBusyRegionDialogOpen(true)}>
+              {t("globals.busyRegionDialogOpen")}
+            </Button>
+          </div>
+          <Dialog
+            open={busyRegionDialogOpen}
+            onOpenChange={setBusyRegionDialogOpen}
+            title={t("globals.busyRegionDialogTitle")}
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+            size="md"
+          >
+            <BusyRegion
+              busy
+              label={t("globals.busyRegionDialogLabel")}
+              message={t("globals.busyRegionDialogMessage")}
+            />
+          </Dialog>
+          <SandboxHelp text={t("globals.busyRegionDialogHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">

@@ -69,12 +69,15 @@ failure modes **squashed drawer** + **wrong shell slot**.
     `Surface` is content-sized (`fill` only for stretching wells).
 15. **WYSIWYG:** sandbox resting look = consumer default; `check:wysiwyg`.
 16. **Loading placement:** pane cold-start → `BusyRegion` `fill` in a
-    height-resolved host (`FillColumn` children / shell main). Do **not** use
-    `EmptyState` + `CircularProgress` (content-sized → ring stuck at the top).
-    Known % / counts → `indicator="linear"` + `value`; `message` is copy only
-    (never nest a bar or ring). Full-app block → `BusyScrim`. Inline widget busy
-    → `CircularProgress` `sm`.
+    height-resolved host (`FillColumn` children / shell main). Dialog / Card /
+    section **body** load (catalog / table / detail) → `BusyRegion` (+ `fill`
+    when height-resolved) — **not** bare default-`md` `CircularProgress` as the
+    body. Do **not** use `EmptyState` + `CircularProgress` (content-sized →
+    ring stuck at the top). Known % / counts → `indicator="linear"` + `value`;
+    `message` is copy only (never nest a bar or ring). Full-app block →
+    `BusyScrim`. Inline widget busy → `CircularProgress` `sm` only.
     Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
+    Live: sandbox `#busy-region`.
 
 ## Agent checklist (greenfield / short prompt)
 

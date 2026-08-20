@@ -484,13 +484,19 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim.",
+    "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body.",
   "globals.busyRegionFillLabel": "Loading pane",
   "globals.busyRegionFillMessage": "Cold-start — no content yet.",
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
     "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane on the original background (transparent overlay). Do not use EmptyState + CircularProgress as a loading shell, and do not add a private colored loading wash.",
+  "globals.busyRegionDialogOpen": "Open Dialog body load",
+  "globals.busyRegionDialogTitle": "Pick an item",
+  "globals.busyRegionDialogLabel": "Loading catalog",
+  "globals.busyRegionDialogMessage": "Fetching the list…",
+  "globals.busyRegionDialogHelp":
+    "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. CircularProgress sm stays for IconButton / Button slots only.",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -1892,13 +1898,19 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。",
+    "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。",
   "globals.busyRegionFillLabel": "栏加载中",
   "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
     "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏原背景上居中（透明遮罩）。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有彩色 loading 底。",
+  "globals.busyRegionDialogOpen": "打开 Dialog 正文加载",
+  "globals.busyRegionDialogTitle": "选择一项",
+  "globals.busyRegionDialogLabel": "加载目录",
+  "globals.busyRegionDialogMessage": "正在拉取列表…",
+  "globals.busyRegionDialogHelp":
+    "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。CircularProgress sm 仅用于 IconButton / Button 槽。",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",

@@ -494,11 +494,12 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
-  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay stays **transparent** | `EmptyState` as a loading shell; bare `CircularProgress` in a `unit-stack`; private `SectionLoading` / colored loading wash |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay stays **transparent** | `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / colored loading wash |
+  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); omit children or wrap the future surface | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS |
   | Refresh over existing surface | `BusyRegion` wrapping the real children (fill optional if the surface already has height); transparent overlay so the surface shows through | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message` |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = `CircularProgress` `sm` | Two progress chromes in one overlay |
-  | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level layout |
+  | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level / Dialog-body / Card-body layout |
   | Zero-result catalog | `EmptyState` | Using it for loading |
   **paint-before-work:** `afterNextPaint` / `yieldToMain` / `runBusyTask(setBusy,
   task)` / `useBusyTask()` — `flushSync` busy on → wait one paint → then run

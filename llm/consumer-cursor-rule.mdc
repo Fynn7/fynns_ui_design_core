@@ -35,16 +35,26 @@ alwaysApply: true
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`（不要用已删除的 toast）。
    **加载几何（硬）：** 栏目冷启动（尚无内容）用 `BusyRegion` `fill` 放进已定高宿主
    （`FillColumn` `children` / shell main），指示器在可见主栏居中；遮罩**透明**
-   （露出宿主原背景 — **禁止**再铺 `surface-*` / 私有彩色 loading 底）。**禁止**用
-   `EmptyState` + `CircularProgress` 当 loading 壳（内容定高 → 圈贴在主栏顶）。
+   （露出宿主原背景 — **禁止**再铺 `surface-*` / 私有彩色 loading 底）。
+   **Dialog / Card / section 正文加载**（目录、明细表、详情列表尚无内容）同样走
+   `BusyRegion`（宿主已定高 → `fill`）；**禁止**把默认 `md` 的裸
+   `CircularProgress` 当 Dialog/`unit-stack`/Card 正文 loading 壳（圈贴顶、无
+   `aria-busy` 区域）。**禁止**用 `EmptyState` + `CircularProgress` 当 loading 壳。
    **一宿主一进度件：** 已知百分比 / 计数 → `indicator="linear"` + `value`；
    `message` 只放状态文案（可加 `FieldHint`），**禁止**再塞 `LinearProgress` /
-   `CircularProgress` / 消费仓 TaskProgressBar。未知时长 → 默认圈；全屏挡住 →
-   `BusyScrim`（才用 overlay 色）；按钮/图标槽 → `CircularProgress` `sm`；零结果目录才用
-   `EmptyState`。`FillColumn` 里的**目录**用带 `fynns-scroll` 的 `.fynns-unit-stack`；
+   `CircularProgress` / 消费仓 TaskProgressBar。**禁止**用私有居中壳（如
+   `.hub-progress-block` + TaskProgressBar）冒充栏目 / 区块加载几何 — 冷启动与
+   区块 busy 一律 `BusyRegion`（对照 sandbox `#busy-region` linear）。领域
+   `TaskProgressBar` / 独立 `LinearProgress` **仅**可作内容旁的非遮罩条（工具条 /
+   表单行），不可当冷启动壳。未知时长 → 默认圈；全屏挡住 →
+   `BusyScrim`（才用 overlay 色）；**仅**按钮/图标/字段槽 → `CircularProgress`
+   `sm`；零结果目录才用 `EmptyState`。勿发明私有 hub loading CSS。
+   `FillColumn` 里的**目录**用带 `fynns-scroll` 的 `.fynns-unit-stack`；
    `Surface` 默认按内容增高（只有 `fill` 才 `min-height: 0`）。压成 ~36px 药丸、
    ToggleGroup 被裁切 = 井在 flex 里被 shrink，修 core 不要改 `.fynns-*`。
-   权威：包内 `AGENTS.md` Feedback **Loading placement** + **FillColumn**。
+   权威：包内 `AGENTS.md` Feedback **Loading placement** + **FillColumn**；
+   对照 sandbox `#busy-region`；失败模式：`llm/CONSUMER_TREATY.md`
+   **private hub progress shell**。
 7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
 ## 所见即所得（强制）
