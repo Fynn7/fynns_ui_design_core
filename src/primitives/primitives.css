@@ -2423,6 +2423,25 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-items: center;
 }
 
+/*
+ * Catalog / page chrome (list “Name (n/m)” + IconButton strip): standalone
+ * ControlRow (not a ControlStack child) fills the host — label grows, actions
+ * hug the trailing edge. ControlStack rows keep the fixed label track via
+ * subgrid. Form hosts (Card / Dialog / padded Surface) already set the same
+ * 1fr | max-content grid.
+ */
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row) {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row)
+  > .fynns-control-row__controls {
+  justify-self: end;
+  min-width: 0;
+}
+
 .fynns-control-row__label {
   min-width: 0;
   overflow: hidden;
@@ -2475,12 +2494,14 @@ input.fynns-input:focus::-webkit-scrollbar {
  * Nested clusters hug content. A child with `width: 100%` inside another
  * cluster becomes a full-bleed row (Card head icon strips stack vertically —
  * BookmarkActions + SourceFileActions lesson). Outer form clusters still
- * fill their ControlRow / FieldBlock.
+ * fill their ControlRow / FieldBlock. Keep nested strips nowrap so a
+ * constrained head cannot re-wrap helper groups into a tall stack.
  */
 .fynns-control-cluster .fynns-control-cluster {
   width: auto;
   max-width: none;
   flex: 0 0 auto;
+  flex-wrap: nowrap;
   min-width: 0;
 }
 
@@ -3237,15 +3258,20 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Header actions = one horizontal strip (M3). Direct cluster must not wrap or
- * claim `width: 100%` (that fights the lead title and stacks nested clusters).
+ * Header actions = one horizontal strip (M3). Every cluster under the actions
+ * slot must hug + nowrap — including nested helper groups. A sole
+ * `>` rule is not enough when helpers wrap themselves in `.fynns-control-cluster`
+ * (`width: 100%` + wrap) and the head squeezes the strip: each nested group
+ * claims a full row (~72dp tall stack). Prefer a flat outer cluster of
+ * IconButtons; nested helpers must still stay one row.
  */
-.fynns-card-actions > .fynns-control-cluster,
-.fynns-collapsible-actions > .fynns-control-cluster {
+.fynns-card-actions .fynns-control-cluster,
+.fynns-collapsible-actions .fynns-control-cluster {
   width: auto;
   max-width: none;
   flex-wrap: nowrap;
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .fynns-collapsible-body,
@@ -4560,7 +4586,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-linear-progress-active,
 .fynns-linear-progress-track,
-.fynns-linear-progress-stop,
 .fynns-linear-progress-indeterminate-bar {
   box-sizing: border-box;
   height: 100%;
@@ -4575,23 +4600,10 @@ a.fynns-breadcrumb-link:visited {
   transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
-.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
-  width: calc(
-    var(--fynns-progress-value) *
-      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
-  );
-}
-
 .fynns-linear-progress-track {
   flex: 1 1 auto;
   min-width: 0;
   background: var(--fynns-color-accent-24);
-}
-
-.fynns-linear-progress-stop {
-  flex: 0 0 var(--fynns-progress-stop-size);
-  width: var(--fynns-progress-stop-size);
-  background: var(--fynns-color-accent);
 }
 
 .fynns-linear-progress--indeterminate {
@@ -7137,9 +7149,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  /* Clip mid-glyph spill, not the radius-3xl selected wash — keep host
-     corners round so consumer hostClassName tones (inset rail) match. */
-  overflow-x: clip;
+  /*
+   * Clip hostClassName tone fills / inset rails to radius-3xl. Overflow-x-only
+   * left overflow-y visible → background paints a square bar (builtin “pill
+   * island” look). Both axes must clip so tone matches the M3 long-strip.
+   */
+  overflow: clip;
   margin: 0;
   padding: 0;
   border-radius: var(--fynns-radius-3xl);
@@ -7418,7 +7433,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex-shrink: 0;
 }
 
+/*
+ * Trailing action strips hug content. A lone `.fynns-control-cluster` defaults
+ * to `width: 100%` + wrap — inside a crushed trailing column that stacked
+ * IconButtons vertically (UpstreamAssets `interactive={false}` lesson).
+ */
 .fynns-list-item-trailing--end .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
 }
 

@@ -408,6 +408,7 @@ export {
   registerHighlightLanguage,
   unregisterHighlightLanguage,
   getRegisteredHighlightLanguage,
+  codeLanguageFromPath,
 } from "./primitives/codeHighlight";
 export type {
   CodeLanguageId,

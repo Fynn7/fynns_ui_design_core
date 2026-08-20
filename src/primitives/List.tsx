@@ -54,9 +54,10 @@ export type ListItemProps = Omit<
   leading?: ReactNode;
   /**
    * Trailing slot: decorative chevron **or** row actions (`IconButton` /
-   * `.fynns-control-cluster`). On **interactive** rows the slot is a **sibling**
-   * of the row `<button>` (valid nesting — never put buttons inside the row
-   * button). Prefer `ghost` `sm` IconButtons; open/confirm destructive work in
+   * `.fynns-control-cluster`). Always a **sibling** of the row control
+   * (`button` or static `div`) — never inside `.fynns-list-item-trailing-icon`
+   * (that 16dp slot crushes action clusters into a vertical stack). Prefer
+   * `ghost` `sm` IconButtons; open/confirm destructive work in
    * `ConfirmDialog`, not a filled danger disk in the row.
    */
   trailing?: ReactNode;
@@ -112,13 +113,14 @@ function resolveLines(
  * M3 ListItem — one-, two-, or three-line content row with optional
  * leading / trailing slots. Use inside `List`.
  *
- * Interactive rows keep trailing actions **outside** the main `<button>` so
- * `IconButton` / menus are valid HTML — the **host / row** still paints one
- * `radius-3xl` highlight so actions are not a floating island. Path / link
- * catalogs: headline + supporting path + trailing ghost actions — not a
- * padded `Surface` per row. Expandable trees: `detail` stays in this `<li>`;
- * set `aria-expanded` on the row. Long `headline` / `supportingText` ellipsize
- * (including copy wrapped in `Tooltip`).
+ * Trailing actions always sit **outside** the row control so `IconButton` /
+ * menus stay valid HTML **and** keep ghost-sm size — even when
+ * `interactive={false}` (static row + end actions). The **host / row** still
+ * paints one `radius-3xl` highlight so actions are not a floating island.
+ * Path / link catalogs: headline + supporting path + trailing ghost actions —
+ * not a padded `Surface` per row. Expandable trees: `detail` stays in this
+ * `<li>`; set `aria-expanded` on the row. Long `headline` / `supportingText`
+ * ellipsize (including copy wrapped in `Tooltip`).
  */
 export const ListItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,
@@ -179,25 +181,19 @@ export const ListItem = forwardRef<
       <span className="fynns-list-item-trailing-text">{trailingSupportingText}</span>
     ) : null;
 
-  /** Decorative / meta trailing kept inside the row control. */
+  /** Meta-only trailing (duration / count) stays inside the row control. */
   const innerTrailing =
-    metaTrailing != null || (!interactive && trailing != null) ? (
-      <span className="fynns-list-item-trailing">
-        {metaTrailing}
-        {!interactive && trailing != null ? (
-          <span className="fynns-list-item-trailing-icon" aria-hidden>
-            {trailing}
-          </span>
-        ) : null}
-      </span>
+    metaTrailing != null ? (
+      <span className="fynns-list-item-trailing">{metaTrailing}</span>
     ) : null;
 
   /**
-   * Interactive trailing (IconButtons, menus) must sit outside the `<button>`
-   * — nested buttons are invalid HTML and force fat Surface workarounds.
+   * Row actions / decorative trailing always sit outside the row control.
+   * Parking IconButton clusters in `.fynns-list-item-trailing-icon` (16dp)
+   * when `interactive={false}` crushed them to ~20px and wrapped vertically.
    */
   const endTrailing =
-    interactive && trailing != null ? (
+    trailing != null ? (
       <span className="fynns-list-item-trailing fynns-list-item-trailing--end">
         {trailing}
       </span>

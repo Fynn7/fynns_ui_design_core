@@ -420,7 +420,6 @@ export const SEGMENTED_TOKENS = {
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
-  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",
@@ -1215,6 +1214,18 @@ export const LAYOUT_TOKENS = {
    * Matches ChatComposer `composer-max-height` density — not a Chat token.
    */
   "textarea-max-height": "13rem",
+  /**
+   * Soft cap for a **long** in-Card catalog `List` before inner scroll (20rem).
+   * Prefer FillColumn page scroll for short path / repo catalogs — do **not**
+   * put `fynns-scroll` + this max-height on a one-row List (empty scroll chrome).
+   * Consumers must not invent this name; missing var invalidates `max-height`.
+   */
+  "list-well-max-height": "20rem",
+  /**
+   * Denser in-Card list well (12rem) for compact inspectors. Same rule as
+   * `list-well-max-height`: only when the catalog can actually overflow.
+   */
+  "list-well-max-height-sm": "12rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible / Card `chrome="card"` body, Surface `padded`, CodeBlock pre.

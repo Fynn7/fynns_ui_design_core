@@ -215,7 +215,6 @@
   --fynns-segmented-outline: 1px;
   --fynns-progress-track-thickness: 0.25rem;
   --fynns-progress-gap: 0.25rem;
-  --fynns-progress-stop-size: 0.25rem;
   --fynns-progress-circular-size: 3rem;
   --fynns-progress-circular-size-sm: 2.25rem;
   --fynns-progress-circular-size-lg: 4rem;
@@ -465,6 +464,8 @@
   --fynns-layout-field-pad-inline: var(--fynns-space-md);
   --fynns-layout-field-pad-block: var(--fynns-space-md);
   --fynns-layout-textarea-max-height: 13rem;
+  --fynns-layout-list-well-max-height: 20rem;
+  --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-content-pad-block: 1rem;
   --fynns-layout-nest-gap: 1rem;
   --fynns-layout-dialog-inset: 1.5rem;

@@ -10,7 +10,10 @@ export type CardProps = {
    * put meaning in `title`.
    */
   icon?: ReactNode;
-  /** Optional right-aligned header actions (e.g. IconButtons). */
+  /** Optional right-aligned header actions — **interactive chrome only**
+   * (`IconButton` / `Button` / `InfoHint` / one `.fynns-control-cluster`).
+   * Never path / branch / mono meta text (`src-path`) — put that in the body
+   * (or title when it is the section name). */
   actions?: ReactNode;
   /**
    * Outer chrome. Default `card` — bordered shell for padded copy / forms.
