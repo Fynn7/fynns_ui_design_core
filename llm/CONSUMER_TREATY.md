@@ -253,9 +253,25 @@ apps invented Surface wrappers — core now keeps interactive `trailing` **outsi
 the row button. **Fix in the consumer:** one `List` of `ListItem`s —
 `headline` + path `supportingText` + `trailing` = ghost `sm` `IconButton`s
 (`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
-Section chrome stays **one** outer `Card` if needed. Live: sandbox `#list`.
-Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+Section chrome stays **one** outer `Card` if needed.
+
+**Also (path / link rows — scroll + glyphs):**
+
+- **Headline = display name** in the UI font — do **not** put
+  `--fynns-font-mono` / a `mono` class on CJK or mixed labels (Consolas has no
+  Han → tofu / “broken icon” glyphs between Latin and Chinese).
+- **Path / id** may use mono on `supportingText` only.
+- Do **not** wrap the headline in `Tooltip className="tip-fill"` /
+  `tip-grow` — core already ellipsizes `.fynns-list-item-headline`; tip-fill
+  fights that. Optional `Tooltip` for the full **path** on supporting copy.
+- Page scroll lives on the FillColumn catalog host
+  (`.… hub-scroll.fynns-scroll`) with **`overflow-x: clip`** (not `hidden`) —
+  never invent a second scrollport inside the Card body for a short list.
+  Native bars stay hidden; overlay thumbs come from core.
+
+Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc)
+**内容密度**.
 
 ## Failure mode this treaty targets: Pagination squeezed beside page-size
 
@@ -376,7 +392,9 @@ as a top-level List (do **not** zero nested `padding-inline-start` — that flus
 the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
 (`>`): a parent session with a trailing `IconButton` must not crush nested turn
 rows that have no end actions. Consumer: pass `Tooltip` for the full string — do **not**
-`tip-grow` / max-content the trigger. Live: sandbox `#list`. Authority:
+`tip-grow` / max-content the trigger. **Do not** force `--fynns-font-mono` on
+CJK headlines (tofu / false “icon” glyphs) — mono is for path /
+`supportingText` only. Live: sandbox `#list`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

@@ -1168,7 +1168,7 @@ const en = {
   "globals.listHelp":
     "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Expandable trees: children stay in the same li; overline / trailingSupportingText slots; decorative leading chevron. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
   "globals.listCatalogHelp":
-    "Path / link catalog recipe — one List; row actions in trailing (ghost sm). Do not wrap each entry in Surface/Card.",
+    "Path / link catalog recipe — one List; row actions in trailing (ghost sm). Headline = display name in the UI font (never mono on CJK labels). Path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip; do not wrap each entry in Surface/Card. Page scroll = FillColumn host + fynns-scroll (overflow-x: clip), not a nested Card scrollport.",
   "globals.listCatalogAria": "Sample path catalog",
   "globals.listCatalogProject": "Project folder",
   "globals.listCatalogProjectPath": "~/Documents/sample-project",
@@ -2571,7 +2571,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHelp":
     "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。可展开树：children 留在同一个 li；overline / trailingSupportingText；leading 装饰 chevron。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
   "globals.listCatalogHelp":
-    "路径 / 链接目录配方 — 一个 List；行操作放 trailing（ghost sm）。禁止每条外包 Surface/Card。",
+    "路径 / 链接目录配方 — 一个 List；行操作放 trailing（ghost sm）。headline = 显示名用 UI 字族（含 CJK 时禁止 mono）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip；禁止每条外包 Surface/Card。长页滚动 = FillColumn 主槽 + fynns-scroll（overflow-x: clip），不要在 Card 里再套短列表滚动。",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogProject": "项目文件夹",
   "globals.listCatalogProjectPath": "~/Documents/sample-project",
