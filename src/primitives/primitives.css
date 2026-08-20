@@ -7102,9 +7102,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  /* Clip mid-glyph spill, not the radius-3xl selected wash — keep host
+     corners round so consumer hostClassName tones (inset rail) match. */
   overflow-x: clip;
   margin: 0;
   padding: 0;
+  border-radius: var(--fynns-radius-3xl);
 }
 
 .fynns-list-item-host > .fynns-list-item {

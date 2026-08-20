@@ -797,7 +797,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [sheetFullOpen, setSheetFullOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
-  const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
+  const [listId, setListId] = useState<
+    "inbox" | "starred" | "sent" | "tone-a" | "tone-b" | "tone-c"
+  >("inbox");
   const [listTreeOpen, setListTreeOpen] = useState(true);
   const [listTurnOpen, setListTurnOpen] = useState(true);
   const [pickedDate, setPickedDate] = useState<string | null>(null);
@@ -2911,6 +2913,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               leading={<ArchiveIcon />}
               disabled
               onClick={() => {}}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listHostToneHelp")} />
+          <List aria-label={t("globals.listHostToneAria")}>
+            <ListItem
+              hostClassName="sandbox-list-host-tone--accent"
+              headline={t("globals.listHostToneAccent")}
+              supportingText={t("globals.listHostToneAccentSupporting")}
+              leading={<FolderOpenIcon />}
+              selected={listId === "tone-a"}
+              onClick={() => setListId("tone-a")}
+            />
+            <Divider inset />
+            <ListItem
+              hostClassName="sandbox-list-host-tone--muted"
+              headline={t("globals.listHostToneMuted")}
+              supportingText={t("globals.listHostToneMutedSupporting")}
+              leading={<FileIcon />}
+              selected={listId === "tone-b"}
+              onClick={() => setListId("tone-b")}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listHostTonePlain")}
+              supportingText={t("globals.listHostTonePlainSupporting")}
+              leading={<SettingsIcon />}
+              selected={listId === "tone-c"}
+              onClick={() => setListId("tone-c")}
             />
           </List>
           <SandboxHelp text={t("globals.listCatalogHelp")} />

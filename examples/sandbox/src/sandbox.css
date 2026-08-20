@@ -1044,6 +1044,23 @@
   background: var(--fynns-color-surface-1);
 }
 
+/* Teaching hostClassName inset rails — never wrap ListItem in a div. */
+.sandbox-list-host-tone--accent {
+  background: var(--fynns-color-surface-head);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--fynns-color-accent-dim) 55%, var(--fynns-color-border));
+}
+
+:root[data-fynns-theme="light"] .sandbox-list-host-tone--accent {
+  background: color-mix(in srgb, var(--fynns-color-text) 5%, var(--fynns-color-surface-2));
+}
+
+.sandbox-list-host-tone--muted {
+  background: color-mix(in srgb, var(--fynns-color-text-muted) 8%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--fynns-color-text-muted) 55%, transparent);
+}
+
 .sandbox-globals-banner {
   box-sizing: border-box;
   width: 100%;

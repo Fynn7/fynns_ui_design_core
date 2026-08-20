@@ -28,7 +28,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **NavigationDrawer destination gap ≠ unit-stack** /
-**BusyRegion fill / loading placement** / **BusyRegion transparent overlay (no surface wash)** /
+**BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
+**BusyRegion transparent overlay (no surface wash)** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -369,6 +370,26 @@ row `onClick` + decorative chevron in `leading` + `aria-expanded`. Nested
 Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: ListItem tone stripe via wrapping div
+
+Symptoms in a skills / rules / MCP catalog:
+
+- Broken or double **vertical rails** (accent inset) that start/stop between
+  rows; selected `radius-3xl` wash looks **clipped** or oversized empty pills
+- DevTools shows `ul.fynns-list > div.hub-builtin-row--* > li.fynns-list-item-host`
+
+**Cause:** App wraps each `ListItem` in a `div` for builtin tone (inset
+`box-shadow` + wash). `ListItem` **is** the `<li>` — the wrapper breaks
+`ul > li`, so overflow clip and overlay scroll rails fight the selected
+pill. Comment “don’t put stripe on ListItem” was wrong for the **host**.
+
+**Fix:** Pass tone classes on `ListItem` **`hostClassName`** (outer `<li>`).
+`className` stays on the row control. Never `return <div className={tone}>{item}</div>`.
+Core hosts already use `border-radius: var(--fynns-radius-3xl)` so inset rails
+follow the M3 long-strip shape. Live: sandbox `#list` (host tone rows).
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
 
 Symptoms in a usage / session catalog (or any `ListItem` with `Tooltip` copy):
@@ -628,6 +649,31 @@ parallel centered progress host). Keep a domain `TaskProgressBar` /
 `BusyRegion` `message`. Authority: [`AGENTS.md`](../AGENTS.md) Feedback
 **Loading placement**. Live: sandbox Globals `#busy-region` (determinate
 linear). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion fill nested in unit-stack / Card
+
+Symptoms: pane or section cold-start shows `BusyRegion` `fill`, but the ring
+parks at the **top** of the main column (or inside a short Card / List /
+NavigationDrawer well) instead of centering in the visible pane — same
+geometry as a content-sized busy host.
+
+**Cause:** `fill` only stretches in a **height-resolved** flex parent.
+Core wires that for **`FillColumn` `children`** (`.fynns-fill-column-main >
+.fynns-busy-region--fill`) and shell main / canvas direct children. A
+consumer that wraps every section in `.fynns-unit-stack` (children are
+`flex-shrink: 0` / content-sized) or nests `fill` inside `Card` / `List` /
+Dialog `unit-stack` / NavigationDrawer body **breaks** the stretch chain —
+`fill` becomes a no-op. **Fix in the consumer:** pane cold-start →
+`<BusyRegion fill busy … />` as the **`FillColumn` `children`** (or shell
+main flex child) — do **not** park it under an App-level `unit-stack`.
+Catalog siblings stay in a **section-owned** `.fynns-unit-stack` +
+`fynns-scroll` **after** load. Card / List / Dialog / drawer body loads
+without a resolved height → `BusyRegion` **without** `fill` (or wrap the
+future surface). Do not invent a hub CSS rule that makes `unit-stack >
+BusyRegion--fill` “work” — that teaches the anti-pattern. Authority:
+[`AGENTS.md`](../AGENTS.md) Feedback **Loading placement** + **FillColumn**.
+Live: sandbox `#busy-region` fill sample (FillColumn stage — not inside a
+unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 

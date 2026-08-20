@@ -75,6 +75,12 @@ export type ListItemProps = Omit<
   /** Alias of `detail` — nested tree / table in this `<li>`. */
   children?: ReactNode;
   /**
+   * Extra class on the outer `<li>` host (row tone / inset rail). Do **not**
+   * wrap `ListItem` in a `div` for stripes — that breaks `ul > li` and clips
+   * the `radius-3xl` selected wash. `className` stays on the row control.
+   */
+  hostClassName?: string;
+  /**
    * Row height band. Default inferred: overline → 3; supportingText → 2;
    * else 1 (56 / 72 / 88dp).
    */
@@ -132,6 +138,7 @@ export const ListItem = forwardRef<
     interactive: interactiveProp,
     disabled = false,
     className,
+    hostClassName,
     onClick,
     ...rest
   },
@@ -240,6 +247,7 @@ export const ListItem = forwardRef<
         "fynns-list-item-host",
         endTrailing != null && "fynns-list-item-host--with-end",
         hasDetail && "fynns-list-item-host--with-detail",
+        hostClassName,
       )}
     >
       {hasDetail ? <div className="fynns-list-item-row">{row}</div> : row}

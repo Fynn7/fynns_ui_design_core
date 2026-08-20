@@ -490,7 +490,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill inside a height-resolved host (FillColumn children). Ring centers in the visible pane on the original background (transparent overlay). Do not use EmptyState + CircularProgress as a loading shell, and do not add a private colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top). Ring centers in the visible pane on the original background (transparent overlay). Do not use EmptyState + CircularProgress as a loading shell, and do not add a private colored loading wash.",
   "globals.busyRegionDialogOpen": "Open Dialog body load",
   "globals.busyRegionDialogTitle": "Pick an item",
   "globals.busyRegionDialogLabel": "Loading catalog",
@@ -1173,6 +1173,15 @@ const en = {
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
     "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Expandable trees: children stay in the same li; overline / trailingSupportingText slots; decorative leading chevron. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
+  "globals.listHostToneHelp":
+    "Row tone / inset rail: pass app classes on ListItem hostClassName (outer li). Never wrap ListItem in a div for stripes — that breaks ul > li and clips the selected radius-3xl wash. className stays on the row control.",
+  "globals.listHostToneAria": "Sample list with host tone rails",
+  "globals.listHostToneAccent": "Accent-toned entry",
+  "globals.listHostToneAccentSupporting": "hostClassName on the li — not a wrapping div",
+  "globals.listHostToneMuted": "Muted-toned entry",
+  "globals.listHostToneMutedSupporting": "Inset rail follows radius-3xl host corners",
+  "globals.listHostTonePlain": "Plain entry",
+  "globals.listHostTonePlainSupporting": "No hostClassName — default host",
   "globals.listCatalogHelp":
     "Path / link catalog recipe — one List; row actions in trailing (ghost sm). Headline = display name in the UI font (never mono on CJK labels). Path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip; do not wrap each entry in Surface/Card. Page scroll = FillColumn host + fynns-scroll (overflow-x: clip), not a nested Card scrollport.",
   "globals.listCatalogAria": "Sample path catalog",
@@ -1904,7 +1913,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 放进已定高宿主（FillColumn children）。圈在可见主栏原背景上居中（透明遮罩）。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶）。圈在可见主栏原背景上居中（透明遮罩）。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有彩色 loading 底。",
   "globals.busyRegionDialogOpen": "打开 Dialog 正文加载",
   "globals.busyRegionDialogTitle": "选择一项",
   "globals.busyRegionDialogLabel": "加载目录",
@@ -2582,6 +2591,15 @@ const zh: Record<MessageKey, string> = {
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
     "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。可展开树：children 留在同一个 li；overline / trailingSupportingText；leading 装饰 chevron。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
+  "globals.listHostToneHelp":
+    "行色条 / 内嵌轨：把应用 tone class 挂到 ListItem 的 hostClassName（外层 li）。禁止用 div 包 ListItem 画条纹——会破坏 ul > li，并裁切选中 radius-3xl 洗底。className 仍挂在行控件上。",
+  "globals.listHostToneAria": "带 host 色条的列表示例",
+  "globals.listHostToneAccent": "强调色条目",
+  "globals.listHostToneAccentSupporting": "hostClassName 挂在 li 上——不是外包 div",
+  "globals.listHostToneMuted": "弱化色条目",
+  "globals.listHostToneMutedSupporting": "内嵌轨跟随 radius-3xl 宿主圆角",
+  "globals.listHostTonePlain": "普通条目",
+  "globals.listHostTonePlainSupporting": "无 hostClassName — 默认宿主",
   "globals.listCatalogHelp":
     "路径 / 链接目录配方 — 一个 List；行操作放 trailing（ghost sm）。headline = 显示名用 UI 字族（含 CJK 时禁止 mono）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip；禁止每条外包 Surface/Card。长页滚动 = FillColumn 主槽 + fynns-scroll（overflow-x: clip），不要在 Card 里再套短列表滚动。",
   "globals.listCatalogAria": "路径目录示例",
