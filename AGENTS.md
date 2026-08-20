@@ -474,7 +474,8 @@ classes.
   **below** as unit-stack siblings; do not confuse with Banner), BadgedBox
   (notification overlay via `NavigationRailBadge` — **not** the removed pill
   label `Badge`),
-  LinearProgress (`value` in `[0,1]` or omit indeterminate) /
+  LinearProgress (`value` in `[0,1]` or omit indeterminate; determinate =
+  active fill + remaining track only — **no** end-stop / end “dot”) /
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size?, indicator? }` /
   **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill?, indicator? }`
   (M3-style fullscreen non-dismissible scrim via **BusyScrim**, or sectional
@@ -965,7 +966,8 @@ classes.
   title = `--fynns-font-size-md` + medium; body = `--fynns-font-size-sm` /
   body line-height — do not leave both on inherited root size;
   **`actions` = one horizontal IconButton strip** (direct `.fynns-control-cluster`
-  is `nowrap` + content width; nested clusters hug — never a tall wrapped stack);
+  is `nowrap` + content width; nested clusters hug — never a tall wrapped stack;
+  **interactive chrome only** — never path / branch / mono meta in `actions`);
   `chrome="card"` (default) | `chrome="plain"` nesting host (same outer shell;
   body uses `--fynns-layout-nest-gap` — plain ≠ flush),
   old Media/Header/Content/Actions / variant APIs deleted),
@@ -1020,7 +1022,8 @@ classes.
   set `textarea { height: 100% }`); **`label` ≠ `language`** — filename chrome
   does not select a highlighter; always pass matching `language` /
   `highlightProfile` (see [`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md));
-  editable highlight spans inherit
+  prefer `codeLanguageFromPath(path)` for suffixed file bodies (`.txt` /
+  extensionless → `null` → Textarea OK); editable highlight spans inherit
   textarea font-weight (no bold keyword/module metrics — soft-wrap must
   match caret); `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
@@ -1114,20 +1117,24 @@ classes.
 
   | Data shape | Use | Do **not** |
   | --- | --- | --- |
-  | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` = display name in **UI font** — never mono on CJK/mixed labels; `supportingText` = path, mono OK; `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`); destructive → `ConfirmDialog`, not a filled danger disk in the row. No `tip-fill` / `tip-grow` on the headline Tooltip. Page scroll on the FillColumn catalog host (`fynns-scroll`, `overflow-x: clip`) — not a nested Card scrollport | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists; mono headline tofu; tip-fill breaking ellipsis |
+  | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of `ListItem`s (`headline` = display name in **UI font** — never mono on CJK/mixed labels; `supportingText` = path, mono OK; origin/kind / freshness → `overline` / `trailingSupportingText` / `.fynns-table-meta` — **not** `Chip` status pills; `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` `sm` + `Tooltip`, **horizontal nowrap**). Trailing stays on the **end sibling** even when `interactive={false}` (static row + open/folder). Destructive → `ConfirmDialog`, not a filled danger disk in the row. No `tip-fill` / `tip-grow` on the headline Tooltip. **Scroll:** FillColumn catalog host (`fynns-scroll`, `overflow-x: clip`) — not a nested Card scrollport on a short list. Long catalogs only: List + `fynns-scroll` + `max-height: var(--fynns-layout-list-well-max-height)` / `-sm` (shipped — never invent the name). Live: `#list` | One `Surface`/`Card` per entry; actions under the text in a second row; `unit-stack` of single-item Lists; mono headline tofu; tip-fill breaking ellipsis; `Chip` as origin/kind in the headline; IconButton trailing crushed into the 16dp `trailing-icon` slot (`interactive={false}` vertical stack); nested Card `hub-scroll` + invented `--fynns-layout-list-well-*` on a one-row List (phantom scroll chrome) |
   | Expandable catalog (session / turn tree + nested records) | Same `List`: **direct** `ul > li`. Timestamp / kind → `overline`; name → `headline`; path → `supportingText`; duration / count → `trailingSupportingText`. Expand = row `onClick` + decorative leading chevron + `aria-expanded` (do **not** `selected` for open). Nested `List` or `.fynns-table-wrap.fynns-scroll` → `ListItem` **`detail`**. Open-record → trailing `IconButton` (same row chrome as the button). Long copy → `Tooltip` on headline; core ellipsizes. Live: sandbox `#list` | `ul > div` around items; orphan `ListItem` outside `List`; raw `<button>` / `HubTreeDisclosure` in `leading`; `ControlRow` in trailing; `Button` in headline; nested table `width:100%` + `table-layout:fixed` + `overflow-x:hidden`; cell or headline `Chip` as status; consumer `width: max-content` / `tip-grow` on headline (breaks `…`); trailing IconButton as a second highlight island |
-  | Row tone / inset rail (readonly / builtin kinds) | `ListItem` **`hostClassName`** on the outer `<li>` (app tone class + inset `box-shadow`). Live: `#list` host-tone rows | Wrap `ListItem` in `div` for stripes (`ul > div > li`) — clips `radius-3xl` selected wash and breaks vertical rails |
+  | Row tone / inset rail (readonly / builtin kinds) | `ListItem` **`hostClassName`** on the outer `<li>` (app tone class + inset `box-shadow`; host already `radius-3xl` + `overflow: clip`). Headline = **UI font** (not mono). Live: `#list` host-tone rows | Wrap `ListItem` in `div` for stripes (`ul > div > li`); host wash painting a **square bar / chip island** (overflow-x-only); `mono` on catalog display names |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
-  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form**. Header `actions` = one horizontal strip (`.fynns-control-cluster` nowrap); nested clusters hug content. Live: `#card` | Card/Surface **inside** each ListItem; nested `width:100%` clusters stacking IconButtons into a tall head |
+  | **Catalog list chrome** (section name + count \| IconButton strip — e.g. `Servers (7/7)`) | Standalone `ControlRow` (fills host: label `1fr`, actions end-hug) + **one** `.fynns-control-cluster` of `IconButton`s. Live: `#rhythm` catalog strip | `ControlRow` as content-sized island (actions float mid-left); loose IconButton siblings without a cluster; private `hub-spread` / `space-between` for the same job |
+  | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form**. Header `actions` = **interactive chrome only** (one horizontal `.fynns-control-cluster` of `IconButton` / `Button` / `InfoHint` — nowrap under `.fynns-card-actions`); nested helper clusters hug + nowrap. Prefer flat IconButtons in `actions`. Branch / path / pin meta → **body** (mono `src-path` / `.fynns-table-meta`), never `actions`. Live: `#card` | Card/Surface **inside** each ListItem; nested `width:100%` / wrap clusters stacking IconButtons into a ~72dp tall head; raw path/branch text in `actions` |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
   | Table / list pager (page-size + `Pagination`) | Card-body **stack**: page-size `Select` / range cluster, then `Pagination` (content-width nowrap strip). Live: sandbox `#pagination` | Horizontal space-between flex that parks Pagination beside the Select until page numbers wrap |
-  | KPI / metric tiles (dashboard stats) | `repeat(auto-fill, minmax(var(--fynns-layout-stats-min-col), 1fr))` grid with `--fynns-layout-unit-stack-gap`; narrow → `--fynns-layout-stats-min-col-sm` | Invented undefined `--fynns-layout-*` min column (invalidates grid → one full-width column) |
+  | Multi-status indicator strip (behind / CI / protection / sync) | `ControlStack` of `ControlRow`s inside the Card body (`label` = short name, children = tip glyph / muted `—`). Form-host stack → label-fill + end-hug so glyphs share one trailing edge. Live: `#rhythm` status legend | Flat `.fynns-control-cluster` interleaving mono labels + status icons (icon soup / no rhythm) |
+  | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name, children = tip glyph). If an apply / fix `IconButton` shares the row, wrap **glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host |
+  | **Suffixed file body** (inspector / skill / rule / plugin source — `.md`, `.xml`, `.py`, `.ts`, `.json`, …) | **`CodeBlock`** (`variant="editable"` when editing; pass `language` via `codeLanguageFromPath(path)` or explicit id; Card host → `chrome="plain"`; fixed well → `autoGrow={false}`). Unknown suffix still CodeBlock (plain mono). Live: sandbox `#code-block` file-body Card | **`Textarea`** for anything with a real extension other than `.txt` / `.text`; UI-font prose well for `SKILL.md` / `prompt.xml` / `plugin.ts` |
+  | Plain note / extensionless draft / **`.txt`** | `Textarea` (or Form `FieldBlock` + Textarea) | Forcing CodeBlock on freeform notes with no filetype |
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

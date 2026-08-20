@@ -245,6 +245,27 @@ label line** as `ControlRow` (`label={<><span className="fynns-control-row__labe
 7.5rem wrap. Live: sandbox `#rhythm` + `#form-recipe` + `#info-hint`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
+## Failure mode this treaty targets: catalog ControlRow actions float mid-left
+
+Symptoms: list panel chrome like `MCP servers (7/7)` / `技能（28/28）` shows the
+name on the left, but **IconButton**s (bulk / sort / import / +) sit in a
+**content-sized island** just after the label — a huge empty band to the
+trailing edge of the column (Card title `actions` stay end-hug by contrast).
+
+**Cause:** standalone `ControlRow` used to be `width: max-content` with a fixed
+`--fynns-layout-control-row-label` track (toolbar-in-`ControlStack` geometry).
+Catalog chrome is **not** a ControlStack preference row — it must fill the
+host. Loose action siblings (or private `hub-row`) also break cluster gap.
+
+**Fix in core (≥ 0.4.31):** standalone ControlRow (not a `ControlStack` child)
+→ `width: 100%`, `1fr | max-content`, controls `justify-self: end`.
+
+**Fix in the consumer:** keep `ControlRow` `label={<>Name ({n}/{m})</>}` and wrap
+**all** trailing IconButtons in **one** `.fynns-control-cluster` (no private
+`hub-spread` / `space-between` for this job). Live: sandbox `#rhythm` catalog
+strip. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Catalog list
+chrome**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
 
 Symptoms: bookmarks / custom links / path shortcuts each sit in a tall padded
@@ -258,6 +279,31 @@ the row button. **Fix in the consumer:** one `List` of `ListItem`s —
 `headline` + path `supportingText` + `trailing` = ghost `sm` `IconButton`s
 (`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
 Section chrome stays **one** outer `Card` if needed.
+
+## Failure mode this treaty targets: ListItem trailing IconButtons stacked vertically
+
+Symptoms (scan / upstream / readonly path catalogs):
+
+- Open + folder (or edit + delete) glyphs sit in a **vertical** stack on the
+  trailing edge; row looks crushed / “整体错位”
+- DevTools: `interactive={false}` `ListItem` with `trailing` inside
+  `.fynns-list-item-trailing-icon` (~16dp) + `.fynns-control-cluster` at ~20px
+  width and `flex-wrap: wrap`
+
+**Cause:** core used to park **non-interactive** `trailing` in the decorative
+16dp icon slot (and `aria-hidden`). Action clusters need the **end sibling**
+(`.fynns-list-item-trailing--end`) whether or not the row is a button — same as
+interactive catalogs. Secondary cause: stuffing origin/kind **`Chip`**s into
+`headline` (status pills belong in tables as `.fynns-table-meta`, or list
+`overline` / `trailingSupportingText`).
+
+**Fix in core (≥ 0.4.34):** `trailing` always renders on the end sibling;
+`--end` clusters are `width: auto` + `nowrap`. Live: sandbox `#list` static
+catalog row. **Consumer:** keep `interactive={false}` when the row is not
+selectable; pass open/folder on `trailing`; put origin/kind in `overline` /
+`trailingSupportingText` — not `Chip`. Drop nested Card `max-height` list
+scrollports (page scroll on FillColumn). Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 **Also (path / link rows — scroll + glyphs):**
 
@@ -310,6 +356,31 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 `--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: nested short List well + invented list-well token
+
+Symptoms (repo / graphify / skill catalogs inside a Card):
+
+- One-row `List` paints a vertical overlay scrollbar / empty scroll chrome
+  even when content fits; DevTools: `ul.fynns-list.hub-scroll` with
+  `max-height: var(--fynns-layout-list-well-max-height-sm)` while the custom
+  property was **undefined** (or the list cannot overflow)
+- Headline hosts a `Chip` status pill beside a `tip-grow` path Tooltip;
+  trailing IconButtons look cramped or stacked
+
+**Cause:** (1) inventing `--fynns-layout-list-well-*` before core shipped it —
+invalid `max-height` + `overflow-y: auto` / `fynns-scroll` still attaches
+overlay hosts; (2) nesting a Card-body list scrollport for a short catalog
+instead of FillColumn page scroll; (3) Chip / tip-grow fighting ListItem
+slots (status → `overline` / `.fynns-table-meta`).
+
+**Fix in the consumer:** short catalogs → plain `List` (no nested
+`hub-scroll` / max-height). Long catalogs → shipped
+`--fynns-layout-list-well-max-height` / `-sm` + `fynns-scroll` only when rows
+can overflow. Status → `overline`; path → `supportingText` (mono OK); no
+headline `Chip` / `tip-grow`. Live: sandbox `#list`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: tiny InfoHint in TopAppBar / toolbar chrome
 
@@ -385,33 +456,101 @@ pill. Comment “don’t put stripe on ListItem” was wrong for the **host**.
 
 **Fix:** Pass tone classes on `ListItem` **`hostClassName`** (outer `<li>`).
 `className` stays on the row control. Never `return <div className={tone}>{item}</div>`.
-Core hosts already use `border-radius: var(--fynns-radius-3xl)` so inset rails
-follow the M3 long-strip shape. Live: sandbox `#list` (host tone rows).
+Core hosts use `border-radius: var(--fynns-radius-3xl)` + `overflow: clip` so
+tone fills follow the M3 long-strip. Live: sandbox `#list` (host tone rows).
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: builtin ListItem looks like a square / chip island
+
+Symptoms (agents / skills catalog, OpenCode builtins like `build` / `plan`):
+
+- Idle builtin rows look like floating **capsules or square bars** (not the same
+  transparent ListItem rhythm as neighbor rows); mono headline makes them read
+  as code chips rather than catalog names
+- DevTools: tone is already on `li.fynns-list-item-host.hub-builtin-row--*`
+  (not a wrapping `div`) but the wash still paints square
+
+**Cause:** (1) `.fynns-list-item-host` used `overflow-x: clip` only — with
+`overflow-y: visible`, the host **background is not clipped** to
+`radius-3xl`, so `hostClassName` washes read as rectangles. (2) Catalog
+**display names** forced onto `--fynns-font-mono` (UI names belong on
+`--fynns-font-ui`; mono is for paths / ids in supporting text).
+
+**Fix in core:** host `overflow: clip` (both axes) so tone fills match the
+long-strip radius. Live: `#list` host-tone rows. **Consumer:** keep tone on
+`hostClassName`; drop `mono` from `CatalogName` / list headlines (path /
+`supportingText` may stay mono). Do not invent a parallel Chip for builtins.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **Font families**.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Card head actions wrap into a tall stack
 
-Symptoms in a detail pane (skills / rules Card):
+Symptoms in a detail pane (skills / rules / MCP Card):
 
-- Header `actions` IconButtons stack **2–3 rows** (~112dp tall) instead of one
+- Header `actions` IconButtons stack **2–3 rows** (~72–112dp tall) instead of one
   horizontal strip; empty band to the right of the first column of icons
 - DevTools: `.fynns-card-actions > .fynns-control-cluster` hosts **nested**
-  `.fynns-control-cluster` children (e.g. BookmarkActions + SourceFileActions)
+  `.fynns-control-cluster` children (e.g. BookmarkActions + SourceFileActions);
+  outer cluster `height` ≈ 72 while `width` is only content-sized
 
 **Cause:** `.fynns-control-cluster` defaults to `width: 100%` + `flex-wrap: wrap`
 (form / ControlRow fill). Nested clusters each claim 100% of the parent → each
-group becomes its own full-width row. Card title may also fail to ellipsize when
-wrapped in an inner `<span className="mono">`.
+group becomes its own full-width row. A sole `>` nowrap rule on the outer
+cluster is not enough if nested helpers keep `wrap` / full width.
 
-**Fix in core:** nested clusters hug content (`width: auto`); Card / Collapsible
-actions force `flex-wrap: nowrap` + `width: auto` on the direct cluster; title
-inner children inherit ellipsis. Live: sandbox `#card` (multi-action head).
-**Consumer:** prefer one outer cluster of IconButtons; nested action helpers may
-keep an inner cluster (now safe) or use a fragment. Do **not** invent
-`flex-wrap: nowrap` in app CSS on `.fynns-*`. Authority:
-[`AGENTS.md`](../AGENTS.md) Card keep-set. Pasteable:
+**Fix in core:** nested clusters hug + nowrap; **every** cluster under
+`.fynns-card-actions` / `.fynns-collapsible-actions` (descendant) is
+`width: auto` + `flex-wrap: nowrap`. Live: sandbox `#card` (narrow multi-action
+head). **Consumer:** prefer one outer cluster of IconButtons; action helpers
+should return a **fragment** of IconButtons (no inner cluster) when composed
+into Card `actions`. Do **not** invent `flex-wrap: nowrap` in app CSS on
+`.fynns-*`. Authority: [`AGENTS.md`](../AGENTS.md) Card keep-set. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: path / branch text in Card `actions`
+
+Symptoms (shared-UI board / repo cards):
+
+- Card head end shows mono path or branch (`main`, `src-path`) where IconButtons
+  belong; DevTools: `.fynns-card-actions > span.src-path`
+
+**Cause:** treating `Card` `actions` as a free “end of title” text slot. Keep-set
+`actions` is **interactive chrome only** (`IconButton` / `Button` / `InfoHint` /
+one control cluster) — same band as Collapsible head actions.
+
+**Fix in the consumer:** omit `actions` when there is no chrome; put branch /
+path / pin meta in the **body** (first unit-stack row, mono OK). Do not pad the
+`title` with `Name · main` unless the user asked for that meta. Live: sandbox
+`#card` (meta-in-body sample). Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density** titled section shell. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: status icon soup in a control-cluster
+
+Symptoms (repo / submodule board Card body):
+
+- One `.fynns-control-cluster` interleaves short labels (`落后` / `CI` /
+  `保护`) with tip glyphs; reads as a single messy icon string; no shared
+  trailing edge; DevTools shows label spans + `CatalogTipGlyph` as flat
+  cluster siblings
+- **Or** a Card-body `.fynns-control-cluster` whose only child is a tip
+  glyph (check / close) under mono config lines — full-width empty band,
+  icon floats at the start (`bounds` ~600px wide × ~16px tall)
+
+**Cause:** using `.fynns-control-cluster` (sibling **controls** / IconButtons)
+as a free-form status host. Clusters are for **≥2 sibling controls** in a
+toolbar / row end (IconButtons, Switch+Toggle), not a status legend and not
+a lone tip glyph.
+
+**Fix in the consumer:** Card-body `ControlStack` of `ControlRow`s — `label` =
+short status name, children = tip glyph (or muted `—`). Form-host stack keeps
+label-fill + end-hug so glyphs share one trailing edge. If an apply / fix
+`IconButton` shares the readiness row, put **glyph + button** in one cluster
+**inside** that `ControlRow` — never lift the lone glyph into a Card-body
+cluster of its own. Live: sandbox `#rhythm` status legend. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** multi-status / named
+readiness. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ListItem leading column / ellipsis / trailing island
 
@@ -574,9 +713,35 @@ the body is **one-color mono** (no keyword / string spans).
 **Cause:** consumer set `label` (filename chrome) but omitted `language` (or
 passed an unknown id). Core does **not** infer language from the label
 extension. **Fix in the consumer:** pass matching `language` / profile; for
-fill editors also `autoGrow={false}`. Authority:
+fill editors also `autoGrow={false}`. Prefer `codeLanguageFromPath(path)` when
+the path is known. Authority:
 [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) (`label` ≠ `language`) +
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Textarea for a suffixed file body
+
+Symptoms: inspector Card titled `文件内容（SKILL.md）` / `plugin.ts` /
+`prompt.xml` shows a **UI-font** multiline well (native `Textarea`) — no mono
+frame, no reserved Copy column, no highlight path.
+
+**Cause:** consumer treated “editable long text” as Form `Textarea` even when
+the source has a real filetype suffix. **`.md` / `.xml` / `.py` / `.ts` / … are
+not notes** — they are file bodies. Only **`.txt` / `.text` / extensionless**
+drafts stay on Textarea.
+
+**Fix in the consumer:**
+1. Prefer `CodeBlock` `variant="editable"` (omit `label` when the Card title
+   already names the file; else titled `label` + head).
+2. Pass `language={codeLanguageFromPath(path) ?? undefined}` (or an explicit
+   id). `null` from the helper → keep Textarea.
+3. Nesting Card → `chrome="plain"`; fixed / fill well → `autoGrow={false}`.
+4. Do **not** use `ChatMarkdown` for the **source** editor of a `.md` file —
+   that API renders prose; the file body stays CodeBlock.
+
+Live: sandbox Globals `#code-block` (file-body Card). Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Suffixed file body** +
+[`CONSUME.md`](CONSUME.md) Hard rule 9d. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: vacant band under FullscreenDialog title
@@ -652,6 +817,23 @@ copy (+ optional `FieldHint`) only — never nest `LinearProgress` /
 content (not inside the overlay `message`) is fine. Authority:
 [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Live:
 sandbox Globals `#busy-region` (determinate sample is linear). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: LinearProgress end-stop / “dotted” bar
+
+Symptoms (Backup / Inspector / 共享 UI 子模块 / BusyRegion linear):
+
+- Determinate bar shows a **teal end dot** (stop mark) at the track’s far end
+  while active fill is only part-way — reads as a second progress thumb
+- DevTools: `.fynns-linear-progress-stop` or `stopIndicator` on `LinearProgress`
+
+**Cause:** an incomplete purge left `stopIndicator` default `true` +
+`--fynns-progress-stop-size` in core while `BREAKING_PURGE` already listed the
+API as removed. **Fix in core (≥ 0.4.35):** stop prop / CSS / token deleted —
+active fill + remaining track only (optional gap). Live: sandbox `#progress`.
+**Consumer:** drop any `stopIndicator={…}` or private end-dot CSS; keep
+`TaskProgressBar` / `BusyRegion indicator="linear"` as plain bars. Authority:
+[`BREAKING_PURGE.md`](BREAKING_PURGE.md) Behavioral breaking. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: private hub progress shell for section loads

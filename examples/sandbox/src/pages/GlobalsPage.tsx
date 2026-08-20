@@ -17,6 +17,7 @@ import {
   yieldToMain,
   runBusyTask,
   registerHighlightLanguage,
+  codeLanguageFromPath,
   Pagination,
   Card,
   Surface,
@@ -38,7 +39,10 @@ import {
   ChatActivityStep,
   ChatThinking,
   ChatThread,
+  AlertTriangleIcon,
+  CheckCircleIcon,
   ClipboardIcon,
+  CloseIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
@@ -284,6 +288,23 @@ const FULLSCREEN_FLUSH_XML = [
   "  <region>EU</region>",
   "  <contact>sample@example.com</contact>",
   "</notes>",
+].join("\n");
+
+/** Suffixed file-body Card demo — generic placeholders only (not consumer copy). */
+const FILE_BODY_SAMPLE_PATH = "sample.md";
+const FILE_BODY_SAMPLE_MD = [
+  "## Design guidance",
+  "",
+  "Be creative within the host tokens. Avoid slop patterns.",
+  "",
+  "### Visual hierarchy",
+  "",
+  "**Color.** All colors from theme tokens — never hardcode hex.",
+  "",
+  "### Notes",
+  "",
+  "- Prefer CodeBlock for `.md` / `.xml` / `.py` file bodies",
+  "- `.txt` drafts may stay on Textarea",
 ].join("\n");
 
 /** Wave 3: live registry path — CodeBlock resolves language="gsc" via this. */
@@ -2183,6 +2204,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <>
         <GlobalsDemo id="progress">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.progressHelp")} />
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
           <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
@@ -3032,6 +3054,41 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
+          <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
+          <List aria-label={t("globals.listCatalogStaticAria")}>
+            <ListItem
+              interactive={false}
+              lines={2}
+              overline={t("globals.listCatalogStaticOrigin")}
+              headline={t("globals.listCatalogStaticFile")}
+              supportingText={t("globals.listCatalogStaticPath")}
+              trailingSupportingText={
+                <span className="fynns-table-meta">{t("globals.listCatalogStaticKind")}</span>
+              }
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogOpen")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogOpen")}
+                    >
+                      <FileIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogFolder")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogFolder")}
+                    >
+                      <FolderOpenIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+            />
+          </List>
           <SandboxHelp text={t("globals.listTreeHelp")} />
           <List aria-label={t("globals.listTreeAria")}>
             <ListItem
@@ -3154,7 +3211,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.cardBody")}
             </Card>
           <Card
-            className="sandbox-globals-card"
+            className="sandbox-globals-card sandbox-globals-card--actions-strip"
             title={t("globals.cardActionsStripTitle")}
             actions={
               <div className="fynns-control-cluster">
@@ -3214,6 +3271,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}
+          </Card>
+          <Card className="sandbox-globals-card" title={t("globals.cardMetaBodyTitle")}>
+            <div className="fynns-unit-stack">
+              <span className="fynns-table-meta">{t("globals.cardMetaBodyBranch")}</span>
+              <SandboxHelp as="span" text={t("globals.cardMetaBodyHelp")} />
+            </div>
           </Card>
           <Card
             className="sandbox-globals-card"
@@ -4119,6 +4182,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
+          <Card
+            title={t("globals.codeBlockFileBodyTitle")}
+            chrome="plain"
+          >
+            <CodeBlock
+              variant="editable"
+              language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
+              autoGrow={false}
+              rows={12}
+              defaultValue={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockFileBodyAria")}
+            />
+          </Card>
+          <SandboxHelp text={t("globals.codeBlockFileBodyHelp")} />
           <CodeBlock
             wrap={false}
             label={t("globals.codeBlockNowrapLabel")}
@@ -4488,6 +4566,93 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlStack>
           </ControlBlock>
         </Surface>
+        <SandboxHelp text={t("globals.rhythmCatalogHelp")} />
+        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+          <ControlRow label={t("globals.rhythmCatalogLabel")}>
+            <div className="fynns-control-cluster">
+              <Tooltip content={t("globals.rhythmCatalogBulk")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmCatalogBulk")}
+                >
+                  <ClipboardIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmCatalogRefresh")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmCatalogRefresh")}
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmCatalogAdd")}>
+                <IconButton
+                  size="sm"
+                  variant="primary"
+                  aria-label={t("globals.rhythmCatalogAdd")}
+                >
+                  <PlusIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </ControlRow>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmStatusHelp")} />
+        <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.rhythmStatusBehind")}>
+              <Tooltip content={t("globals.rhythmStatusBehindTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusBehindTip")}
+                >
+                  <AlertTriangleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusCi")}>
+              <Tooltip content={t("globals.rhythmStatusCiTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusCiTip")}
+                >
+                  <CloseIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusProtection")}>
+              <Tooltip content={t("globals.rhythmStatusProtectionTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusProtectionTip")}
+                >
+                  <CheckCircleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusLocal")}>
+              <span
+                className="sandbox-globals-rhythm-status-empty"
+                aria-label={t("globals.rhythmStatusLocalEmpty")}
+              >
+                —
+              </span>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusReady")}>
+              <Tooltip content={t("globals.rhythmStatusReadyTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusReadyTip")}
+                >
+                  <CheckCircleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+          </ControlStack>
+        </Card>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

@@ -1044,19 +1044,20 @@
   background: var(--fynns-color-surface-1);
 }
 
-/* Teaching hostClassName inset rails — never wrap ListItem in a div. */
+/* Teaching hostClassName inset rails — never wrap ListItem in a div.
+ * Soft wash + rail; core host radius-3xl + overflow:clip clips the fill. */
 .sandbox-list-host-tone--accent {
-  background: var(--fynns-color-surface-head);
+  background: color-mix(in srgb, var(--fynns-color-accent-dim) 8%, transparent);
   box-shadow: inset 3px 0 0
     color-mix(in srgb, var(--fynns-color-accent-dim) 55%, var(--fynns-color-border));
 }
 
 :root[data-fynns-theme="light"] .sandbox-list-host-tone--accent {
-  background: color-mix(in srgb, var(--fynns-color-text) 5%, var(--fynns-color-surface-2));
+  background: color-mix(in srgb, var(--fynns-color-accent-dim) 6%, transparent);
 }
 
 .sandbox-list-host-tone--muted {
-  background: color-mix(in srgb, var(--fynns-color-text-muted) 8%, transparent);
+  background: color-mix(in srgb, var(--fynns-color-text-muted) 6%, transparent);
   box-shadow: inset 3px 0 0
     color-mix(in srgb, var(--fynns-color-text-muted) 55%, transparent);
 }
@@ -1118,6 +1119,12 @@
 
 .sandbox-globals-card {
   min-height: 8rem;
+}
+
+/* Narrow host for #card multi-action strip — nested clusters must stay one row. */
+.sandbox-globals-card--actions-strip {
+  max-width: 18rem;
+  justify-self: start;
 }
 
 .sandbox-globals-swatches {
@@ -1225,6 +1232,19 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+.sandbox-globals-rhythm-status-glyph {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fynns-color-text-muted);
+  line-height: 0;
+}
+
+.sandbox-globals-rhythm-status-empty {
+  color: var(--fynns-color-text-muted);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-sm);
 }
 
 .sandbox-globals-form-recipe-hosts {

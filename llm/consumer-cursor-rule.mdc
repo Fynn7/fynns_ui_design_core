@@ -52,6 +52,8 @@ alwaysApply: true
    `.hub-progress-block` + TaskProgressBar）冒充栏目 / 区块加载几何 — 冷启动与
    区块 busy 一律 `BusyRegion`（对照 sandbox `#busy-region` linear）。领域
    `TaskProgressBar` / 独立 `LinearProgress` **仅**可作内容旁的非遮罩条（工具条 /
+   已有内容旁的长任务）。**禁止**末端 stop /「带点」进度条（`stopIndicator` /
+   `.fynns-linear-progress-stop` 已删；对照 `#progress`）。
    表单行），不可当冷启动壳。未知时长 → 默认圈；全屏挡住 →
    `BusyScrim`（才用 overlay 色）；**仅**按钮/图标/字段槽 → `CircularProgress`
    `sm`；零结果目录才用 `EmptyState`。勿发明私有 hub loading CSS。
@@ -142,10 +144,10 @@ FillColumn。
 
 | 数据 | 用 | **禁止** |
 | --- | --- | --- |
-| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** `List` 多行 `ListItem`：`headline` + `supportingText` + `trailing` = `.fynns-control-cluster` 里 `IconButton` `ghost` `sm` + `Tooltip`；删除走 `ConfirmDialog` | 每条外包加垫 `Surface`/`Card`；操作堆在文案下方；单条 List 再套 unit-stack；行内实心危险圆钮 |
+| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + 	railing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / 	railingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = FillColumn + ynns-scroll；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；	ip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标 |
 | 可展开目录（会话树 + 嵌套明细表） | 同一个 `List`：**直接** `ul > li`。时间/种类 → `overline`；名称 → `headline`；路径 → `supportingText`；时长/次数 → `trailingSupportingText`。展开 = 行 `onClick` + leading 装饰 chevron + `aria-expanded`。嵌套 `List` 或 `.fynns-table-wrap.fynns-scroll` 放 `ListItem` **`detail`**。打开记录 → trailing `IconButton`（与行同一条 radius-3xl 高亮，不是行外浮岛）。长文案 `Tooltip` 包 headline，省略号由 core 画。对照 `#list` | `ul > div` 包住 ListItem；List 外的孤儿 ListItem；`leading` 里裸 `<button>` / 应用 `HubTreeDisclosure`；trailing 用 `ControlRow`；headline 里再塞 `Button`；嵌套表 `width:100%` + `fixed` + 藏横向滚动；单元格或 headline 用 `Chip` 当状态；headline 上 `tip-grow` / `max-content` 撑破 `…` |
-| 内置/只读行色条（inset rail） | `ListItem` **`hostClassName`** 挂 tone class（`<li>`）。对照 `#list` host tone | `ul > div.hub-*-row > li`；把条纹挂在外包 `div` 上 |
-| Card / Collapsible 头 `actions` | 一个横向 `.fynns-control-cluster`（core 已 nowrap）；嵌套 cluster 会 hug。对照 `#card` | 嵌套 `width:100%` cluster 把 IconButton 叠成多行高头 |
+| 内置/只读行色条（inset rail） | `ListItem` **`hostClassName`** 挂 tone class（`<li>`；core 已 `radius-3xl` + `overflow: clip`）。headline **UI 字族**（勿 `mono`）。对照 `#list` host tone | `ul > div.hub-*-row > li`；host 洗底成方条/胶囊岛；目录显示名套 `mono` |
+| Card / Collapsible 头 `actions` | **交互 chrome 专用**：一个横向 `.fynns-control-cluster`（IconButton / Button / InfoHint）；core：actions 下所有 cluster nowrap + hug；组合进 `actions` 的 helper 用 **fragment**。分支 / 路径 / pin 元数据放 **正文**。对照 `#card` | `actions` 里塞 `src-path` / 分支名等纯文字；嵌套 `width:100%` / wrap cluster 把 IconButton 叠成 ~72dp 多行高头 |
 | 应用目的地（导航） | `NavigationDrawer` / Rail / Bar（或 `DestinationAppShell`） | 用 `List`/`Card` 当根导航 |
 | 多列表格 | **`Card` `title`** + `Table` + `.fynns-table-wrap.fynns-scroll`。对照 `#table` | 同数据的 Card 网格（表能装下时）；`Surface` + `FieldHeader` 冒充分区标题 |
 | 表格单元格：映射来源/状态 + 可选 id + 行尾操作 | `.fynns-table-meta`（muted 文案）+ 可选 mono id，包在 `.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让「映射」等按钮跨行右对齐。对照 `#table` | 单元格里用 `Chip suggestion/filter` 当状态 pill；未映射行把操作顶在列首 |
@@ -153,10 +155,13 @@ FillColumn。
 | Select + 刷新/重载（与 chevron 并存） | `FieldBlock` + `.fynns-control-cluster--end-align` + `Select` `className="fynns-control-cluster__grow"` + 兄弟 `IconButton`（**不要** `Select.trailing`）。对照 `#field-header` | `Select.trailing` 与 chevron 挤同一槽；标签行 `FieldBlock` `actions` |
 | Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
+| **目录列表顶栏**（名称 + 计数 \| IconButton 条） | 独立 `ControlRow`（填满宿主：标签 `1fr`、操作贴尾）+ **一个** `.fynns-control-cluster`。对照 `#rhythm` catalog strip | `ControlRow` 内容岛（按钮贴标签旁、列尾空一大块）；IconButton 散落无 cluster；私有 `hub-spread` / `space-between` |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
 | 表格/列表分页（每页条数 + `Pagination`） | Card body **上下**堆：每页 `Select` / 范围文案，再 `Pagination`（内容宽度 nowrap） | 左右 space-between，把页码挤到 Select 旁边直到数字换行 |
 | KPI / 指标卡（dashboard stats） | `auto-fill` + `--fynns-layout-stats-min-col`（窄屏 `--fynns-layout-stats-min-col-sm`） | 自造未发布的 `--fynns-layout-*` 导致 grid 失效、单列撑满 |
+| 多状态指示条（落后 / CI / 保护 / 同步） | Card 正文里 `ControlStack` + 多个 `ControlRow`（`label` = 短名，子树 = tip 字形）。对照 `#rhythm` status legend | 一个 `.fynns-control-cluster` 里交错 mono 标签 + 状态 icon（icon 汤 / 无节律） |
+| 命名就绪 / tip 状态（配置达标、同步 OK） | 同上：ControlRow（label = 短名，子树 = tip 字形）。若同行还有应用 / 修复 IconButton，把 **字形 + 按钮** 放进该行内的 .fynns-control-cluster。对照 #rhythm | Card 正文单独一个 .fynns-control-cluster 只塞 tip 字形（通栏空带、icon 贴左）— cluster 只给 **≥2 个兄弟控件**，不是状态宿主 |
 | 板内警告 + 待办行（未映射模型、路径列表） | **一个** `Card` `title` + `FieldHint` + `List`（警告语义用 head `icon` 或一句说明）；单行瞬态说明才用独立 `InlineAlert` | 页面级 `InlineAlert` 与 orphan `List` 重复同一主题；把 `List` / `CodeBlock` / `FieldHeader` 塞进 `InlineAlert` |
 | TopAppBar / 工具条帮助 | icon-only `InfoHint`（默认 = `IconButton ghost md` 40dp + 16dp 字标；`cursor: help`） | 14px 灰点、裸 `<button>` 或手写 `IconButton`+`Tooltip` 冒充帮助 |
 
@@ -238,9 +243,15 @@ FillColumn。
 | 控件下的说明 / 「截至 …」时间戳 | **一行**短说明 → `ControlBlock` `description`（停在名称列；ToggleGroup / 簇对名称+说明纵向居中）。**多句 / 政策段落** → 标签行 **`InfoHint`**（`label` 内 `<span className="fynns-control-row__label-text">` + `InfoHint size="sm"`，`#info-hint`）— **禁止**堆进 `ControlBlock` `description` 或 Switch 尾随。**禁止**塞进 `ControlRow` `label` 纯字符串里、禁止 Surface 通栏兄弟、禁止裸 `<p>` |
 | 表单语义分簇（多段选项） | 上节 `FieldStack`（不要把一切塞进一个乱 flex） |
 
-**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / padded Surface）与
-`#form-recipe`。Preferences / Dialog 标签行：Switch 用 `label=""` + `ariaLabel`
-（仅轨道），名称只在 `ControlRow`。Padded `Surface` 与 Card body 同属 form host。
+**对照** sandbox Globals `#rhythm`（ControlRow / ControlBlock / padded Surface /
+catalog strip）与 `#form-recipe`。Preferences / Dialog 标签行：Switch 用
+`label=""` + `ariaLabel`（仅轨道），名称只在 `ControlRow`。Padded `Surface` 与
+Card body 同属 form host。
+
+**目录列表顶栏（硬）：** `ControlRow` `label={<>Servers ({n}/{m})</>}` 填满列宽，
+尾部 **一个** `.fynns-control-cluster`（批量 / 排序 / 导入 / +）。不要用内容宽
+`max-content` 岛把按钮停在标签旁。条约：`CONSUMER_TREATY.md` **catalog ControlRow
+actions float mid-left**。
 
 ```tsx
 // 对 — 保持这棵树；窄窗下说明留在名称列，不要铺成通栏空行
@@ -388,7 +399,8 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 **`label` ≠ `language`（硬）：** `label` 只做标题栏文件名，**不会**根据 `.xml` / `.json` /
 `.ts` 后缀选分词器。漏传 / 未知 `language` → 整块纯 mono（看起来「没高亮」）。
 内置：`ts`/`js`/`py`/`cpp`/`css`/`json`/`xml`/`html`/`bash`/…；应用 DSL → 子模块
-`llm/AGENT_INTERFACES.md`。
+`llm/AGENT_INTERFACES.md`。可用 `codeLanguageFromPath(path)` 从路径得到
+`language`（`.txt` / 无后缀 → `null`，可继续用 `Textarea`）。
 
 ```tsx
 // 错 — 标题像 XML，实际无高亮
@@ -404,9 +416,41 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 />
 ```
 
+### 带后缀的文件正文（硬 — 强烈推荐）
+
+有真实扩展名（`.md` / `.xml` / `.py` / `.ts` / `.json` / …，**除** `.txt` /
+`.text`）的源文件编辑 / 只读正文 → **`CodeBlock`**，不要用 `Textarea`（UI 字体
+长文井）。`codeLanguageFromPath("SKILL.md")` → `"markdown"`；未知后缀仍返回
+扩展名字符串，宿主仍用 CodeBlock（纯 mono 也可）。无后缀或 `.txt` → Textarea。
+Card 包文件正文 → `chrome="plain"`；固定行高井 → `autoGrow={false}`。
+**不要**用 `ChatMarkdown` 当 `.md` 源文件编辑器。对照 sandbox `#code-block`
+file-body Card；条约：`llm/CONSUMER_TREATY.md` **Textarea for a suffixed
+file body**。
+
+```tsx
+// 错 — SKILL.md / prompt.xml 用 Textarea
+<Card title="文件内容（SKILL.md）">
+  <Textarea rows={28} autoGrow={false} value={raw} onChange={…} />
+</Card>
+
+// 对
+<Card title="文件内容（SKILL.md）" chrome="plain">
+  <CodeBlock
+    variant="editable"
+    language={codeLanguageFromPath("SKILL.md")!} // "markdown"
+    autoGrow={false}
+    rows={28}
+    value={raw}
+    onChange={setRaw}
+    aria-label="SKILL.md"
+  />
+</Card>
+```
+
 **禁止**：不传 / 空 `label=""` 却走 titled 变体（会 **throw**）；用空标题栏“占位”；
 只写 `label="*.xml"` 却省略 `language`；在消费仓给 `.fynns-code-block-pre` 加
-`padding-right` 躲复制按钮（core 已预留结束列）；把 `CodeBlock` 塞进 `InlineAlert`。
+`padding-right` 躲复制按钮（core 已预留结束列）；把 `CodeBlock` 塞进 `InlineAlert`；
+带后缀文件正文继续用 `Textarea`。
 
 ## ChatMessage Markdown（硬 — 优先本仓渲染）
 
@@ -458,13 +502,13 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 3. 侧栏异常：是否已按上文「先诊断」查 `data-nav` / 轨宽 / 怪文案所在槽？
    **禁止**先本地改 `.fynns-*` 加宽。
 4. 嵌套自带表面的子件：外层是否 `chrome="plain"` / `.fynns-nest`，且未冲掉 nest-gap？
-5. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？
+5. CodeBlock：有文件名才用 titled + `label`；无标题是否 `variant="plain"`（禁止空 `label`）？带后缀文件正文是否用 CodeBlock（非 Textarea；`.txt` 除外）？`language` / `codeLanguageFromPath` 是否对齐？
    **`language`（或 profile）是否与内容一致？** 填满宿主是否 `autoGrow={false}`？
    `FullscreenDialog` 里带边框井是否顶天（禁止标题下再垫 18dp）？
 6. 表单 / 检查器：是否按语义用 `FieldStack` 分簇，种类切换处是否加了 `Divider`（对照 `#form-recipe`），而非平铺？
 7. Surface/Card 标签行：是否 `ControlRow` + cluster + `ControlBlock`/`FieldHint`
    （对照 `#rhythm`），而非手搓 flex 乱排？
-8. 路径 / 链接 / 书签目录：是否 **一个** `List` + `ListItem`（对照 `#list`），而非每条肥 `Surface`/`Card`？行操作是否 trailing `ghost` `sm` 且与行同一条高亮？可展开树是否 `ul > li` + `detail` 嵌套（而非 `ul > div` / leading 按钮）？内置色条是否用 `ListItem` **`hostClassName`**（禁止 `ul > div` 包条纹）？长 headline 是否靠 core 省略号（禁止 `tip-fill` / `tip-grow` / max-content）？**名称**是否用 UI 字族（禁止给含 CJK 的 headline 套 `mono`——缺字会像坏 icon）；路径才用 mono？长页滚动是否在 FillColumn 主槽 `hub-scroll` + `fynns-scroll` 且 **`overflow-x: clip`**（禁止 Card 内再套一层短列表滚动）？
+8. 路径 / 链接 / 书签目录：是否 **一个** `List` + `ListItem`（对照 `#list`），而非每条肥 `Surface`/`Card`？行操作是否 trailing `ghost` `sm` 且与行同一条高亮？**`interactive={false}` 时 trailing 是否仍在 end 兄弟槽**（禁止塞进 16dp `trailing-icon` 纵向叠图标）？来源/类型是否 `overline` / `trailingSupportingText` / `.fynns-table-meta`（禁止 headline 里塞 `Chip` 状态 pill）？可展开树是否 `ul > li` + `detail` 嵌套（而非 `ul > div` / leading 按钮）？内置色条是否用 `ListItem` **`hostClassName`**（禁止 `ul > div` 包条纹）？长 headline 是否靠 core 省略号（禁止 `tip-fill` / `tip-grow` / max-content）？**名称**是否用 UI 字族（禁止给含 CJK 的 headline 套 `mono`——缺字会像坏 icon）；路径才用 mono？长页滚动是否在 FillColumn 主槽 `hub-scroll` + `fynns-scroll` 且 **`overflow-x: clip`**（禁止 Card 内再套一层短列表滚动）？
 9. ChatMessage：LLM 正文是否用 `markdown` / `<ChatMarkdown>`？禁止把带 `` ` `` / GFM 的裸 string 当 children。
 10. ChatMessage 多块正文（文案 + CodeBlock）：是否依赖 core 的 body-stack-gap，而非消费仓补间距？
 11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？

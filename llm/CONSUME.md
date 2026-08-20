@@ -56,6 +56,12 @@ failure modes **squashed drawer** + **wrong shell slot**.
 9b. **CodeBlock `language`:** always pass matching `language` / profile — `label` is not a detector.
 9c. **CodeBlock headless copy:** core reserves an end column (`--copy-float`) so
     glyphs never sit under Copy. Do **not** pad `.fynns-code-block-pre` in the app.
+9d. **Suffixed file bodies:** any real extension other than `.txt` / `.text`
+    (`.md`, `.xml`, `.py`, `.ts`, `.json`, …) → **`CodeBlock`**, not `Textarea`.
+    Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK).
+    Card host → `chrome="plain"`; fill / fixed well → `autoGrow={false}`.
+    Authority: [`AGENTS.md`](../AGENTS.md) Content density +
+    [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
 10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
     capability → implement in this core first. Chat radius floor ≥ `--fynns-radius-22`;
     fonts: body `ui`, code `mono`, never serif for main prose.

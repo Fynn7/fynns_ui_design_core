@@ -152,6 +152,16 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.textareaMaxHeightHint",
     max: 480,
   },
+  "list-well-max-height": {
+    labelKey: "layoutChrome.listWellMaxHeight",
+    hintKey: "layoutChrome.listWellMaxHeightHint",
+    max: 640,
+  },
+  "list-well-max-height-sm": {
+    labelKey: "layoutChrome.listWellMaxHeightSm",
+    hintKey: "layoutChrome.listWellMaxHeightSmHint",
+    max: 480,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",
