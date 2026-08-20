@@ -136,24 +136,33 @@ pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: padded destination labels
 
-Symptoms (Favorites / Chats / Archived group rows, destination lists):
+Symptoms (Favorites / Chats / Archived group rows, destination lists, root
+drawer sections):
 
 - `NavigationDrawerGroup` `label` shows `全局规则 · 1` / `Global rules · 1` /
   `Repositories · 3` — middle-dot + child count baked into the trigger text
-- Same pattern on Item / Headline / TopAppBar titles “for density”
+- Or `全局（OpenCode + Cursor）` / `Project (each repo .opencode + .cursor)` /
+  `共享 UI（@fynns/ui 子模块）` — parenthetical gloss / product-stack footnote
+  in the title
+- Same patterns on Item / Headline / TopAppBar titles “for clarity” or “for
+  density”
 
-**Cause:** agents treat folder tallies as free label chrome. The disclose
-row already has a chevron; the leaf list is the source of truth for how many
-items exist. Padding `label` with decorative `·` + `N` is redundant meta the
-user did not ask for.
+**Cause:** agents treat folder tallies and “helpful” explanations as free label
+chrome. The disclose row already has a chevron; leaves / page body carry the
+detail. Padding `label` with decorative `·` + `N`, or with `(…)` footnotes the
+user did not ask for, fights truncation and adds noise.
 
 **Consumer fix (props only):**
 
-1. Pass the **plain name** only: `label={g.label}` / `label="Global rules"`.
+1. Pass the **short name** only: `label="全局"` / `label="项目级"` /
+   `label={g.label}` — not `` `${name} · ${n}` `` and not
+   `Name（product A + product B）`.
 2. If (and only if) the product needs an unread / notification mark →
    `NavigationDrawerItem` `badge` on the leaf — not on the Group trigger
    string.
-3. Never invent `Name · N` because a prior treaty / recipe mentioned it.
+3. Never invent `Name · N` or parenthetical glosses because a prior recipe
+   mentioned them. Put longer explanation in page help / `InfoHint` / empty
+   copy if needed.
 
 Authority: [`AGENTS.md`](../AGENTS.md) Hard rules (chrome label copy);
 pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
