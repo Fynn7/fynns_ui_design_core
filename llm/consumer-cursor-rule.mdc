@@ -73,8 +73,9 @@ alwaysApply: true
    `FillColumn` 里的**短目录页滚**：优先 **`PageScroll`**（内建
    `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与
    **窗格右缘对齐**（`hub-main` / shell main — **禁止**在页滚宿主外包一层
-   `padding-inline`；侧向呼吸放在 content-column，core ≥0.4.47 已带
-   `dialog-inset`）。页滚仅 `padding-inline-end: scrollbar-size` 留给 overlay 轨。
+   `padding-inline`；**左右与上下**呼吸都在 content-column，core ≥0.4.58 已带
+   `padding: dialog-inset` — 首张 Card 不得贴 TopAppBar，禁止给首卡发明
+   `padding-top`）。页滚仅 `padding-inline-end: scrollbar-size` 留给 overlay 轨。
    **禁止**把 `fynns-scroll` 挂在 max-width 的 `.content` / `.hub-scroll` 上
    （拇指贴 Card）。对照 `#page-scroll`。
    长目录才用 List + list-well max-height。

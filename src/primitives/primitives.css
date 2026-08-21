@@ -9559,8 +9559,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: 0;
   gap: var(--fynns-layout-unit-stack-gap);
   box-sizing: border-box;
-  /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`. */
+  /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`.
+   * Block pad matches inline (`dialog-inset`) so the first Card / unit clears
+   * TopAppBar / canvas ceiling — never flush under the shell head. */
   padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block: var(--fynns-layout-dialog-inset);
 }
 
 .fynns-content-column > .fynns-busy-region--fill,

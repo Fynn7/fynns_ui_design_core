@@ -7,8 +7,10 @@ function join(...parts: Array<string | false | null | undefined>) {
 export type PageScrollProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Catalog / form units inside `.fynns-content-column` (max-width +
-   * dialog-inset). Do **not** put `fynns-scroll` or max-width on these
-   * children — the outer host is the only scrollport.
+   * dialog-inset on **inline and block**). Do **not** put `fynns-scroll` or
+   * max-width on these children — the outer host is the only scrollport.
+   * Do **not** invent consumer `padding-top` on the first Card — core already
+   * clears the canvas ceiling.
    */
   children?: ReactNode;
 };

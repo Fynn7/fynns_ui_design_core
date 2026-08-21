@@ -1404,9 +1404,8 @@
 
 .sandbox-page-scroll-stage .fynns-content-column {
   /* Soft ceiling below the stage so the gutter is visible in the demo.
-   * Inline pad comes from keep-set `.fynns-content-column` (dialog-inset). */
+   * Inline + block pad come from keep-set `.fynns-content-column` (dialog-inset). */
   max-width: min(22rem, 100%);
-  padding-block: var(--fynns-layout-content-pad-block);
 }
 
 .sandbox-globals-shell-body {

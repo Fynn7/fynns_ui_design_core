@@ -523,7 +523,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side breath is on the content column (dialog-inset). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.49.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first Card must not sit flush under TopAppBar). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.58.",
   "globals.pageScrollCardTitle": "Sample catalog",
   "globals.pageScrollCardTitle2": "Next section",
   "globals.pageScrollCardBody":
@@ -2049,7 +2049,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。侧向呼吸放在内容列（core 已带 padding-inline: dialog-inset）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.49。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 Card 不得贴 TopAppBar）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.58。",
   "globals.pageScrollCardTitle": "样例目录",
   "globals.pageScrollCardTitle2": "下一分区",
   "globals.pageScrollCardBody":

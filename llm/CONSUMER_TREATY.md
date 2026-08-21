@@ -371,27 +371,34 @@ Symptoms (Usage / Quicklinks / any Card catalog under a max-width column):
 - **Or** the thumb floats **inset** from the pane (`hub-main` / shell main)
   right edge — a dead strip between the rail and the pane border (CDP:
   `pageScroll.right < hubMain.right` by the ancestor’s `padding-inline`)
+- **Or** the **first Card** sits flush under TopAppBar / canvas ceiling
+  (`top` ≈ shell head bottom; no block breath — Agents Hub overview 枢纽状态)
 
 **Cause:** (1) `fynns-scroll` on the **content max-width** column. (2) Even with
 `.fynns-page-scroll` → `.fynns-content-column`, a **padded ancestor** of the
 scroll host (e.g. `.hub-main { padding-inline: dialog-inset }`) insets the
 host — overlay paints at `host.rect.right − scrollbar-size`, so the rail
-follows the padded content box, **not** the pane edge. The scroll parent is
-the **pane** (`hub-main` / FillColumn main), not the Card.
+follows the padded content box, **not** the pane edge. (3) Pre-0.4.58
+content-column had **inline-only** pad — block breath was missing (sandbox
+once faked it with private CSS). The scroll parent is the **pane**
+(`hub-main` / FillColumn main), not the Card.
 
-**Fix in core (≥ 0.4.49):** Prefer the **`PageScroll`** primitive (wraps
+**Fix in core (≥ 0.4.58):** Prefer the **`PageScroll`** primitive (wraps
 `.fynns-page-scroll.fynns-scroll` → `.fynns-content-column`). Classes alone
-still work (≥ 0.4.47): page-scroll is edge-flush with the pane
+still work: page-scroll is edge-flush with the pane
 (+ `padding-inline-end: scrollbar-size` for the rail band only);
-content-column carries `padding-inline: dialog-inset`. Live: sandbox
-`#page-scroll`. Do **not** use `scrollbar-gutter`.
+content-column carries `padding-inline` **and** `padding-block`:
+`dialog-inset` (24dp). Live: sandbox `#page-scroll`. Do **not** use
+`scrollbar-gutter`. Do **not** invent consumer `margin-top` /
+`padding-top` on the first Card.
 
 **Fix in the consumer:** FillColumn `children` = `<PageScroll>{catalog}</PageScroll>`
 (or the two keep-set classes). **Do not** put `fynns-scroll` + `max-width` on
 the same `.content` / `.hub-scroll` node. **Do not** put horizontal pad on
 `.hub-main` / shell main **around** the page-scroll host. Bump
-`@fynn7/ui-design-core` ≥ 0.4.49. CDP smoke: `card.right < pageRail.left`
-and `pageScroll.right === hubMain.right`. Authority: [`AGENTS.md`](../AGENTS.md)
+`@fynn7/ui-design-core` ≥ 0.4.58. CDP smoke: `card.right < pageRail.left`,
+`pageScroll.right === hubMain.right`, and first Card
+`top ≥ pageScroll.top + dialog-inset`. Authority: [`AGENTS.md`](../AGENTS.md)
 **FillColumn** / **PageScroll**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: BusyRegion cold body + pager chrome siblings

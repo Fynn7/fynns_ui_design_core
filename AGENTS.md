@@ -1067,8 +1067,10 @@ classes.
   composer docks; loading ring centers; overlay Y rail sits on the **pane**
   edge — page-scroll must be **edge-flush** with the pane; never pad
   `.hub-main` / shell main **around** the scroll host). Inside page-scroll /
-  PageScroll: content column (`max-width` + `padding-inline: dialog-inset`)
-  holds Cards / stacks — **never** put `fynns-scroll` on the content column
+  PageScroll: content column (`max-width` + `padding: dialog-inset` on
+  **inline and block** — first Card clears TopAppBar; never invent
+  consumer `padding-top` on the first unit) holds Cards / stacks — **never**
+  put `fynns-scroll` on the content column
   itself (or on a private `.content` / `.hub-scroll` with `max-width` — rail
   paints on the Card). Page-scroll keeps `padding-inline-end: scrollbar-size`
   for the rail band only. A **long in-Card catalog** may use List +
