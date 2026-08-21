@@ -373,8 +373,9 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
    顶层「快捷链接 / 聊天记录」比折叠组内行疏一大截。core 会对 body 内误用的
    `unit-stack` 重映射到 `section-gap`，但仍应以直接子节点为准。
    **SearchBar / 工具条**（destination density）作为 body 兄弟时，与目的地行之间
-   用 `--fynns-navdrawer-search-gap`（**16dp**，alias `unit-stack-gap`）— 不要
-   和 Item ↔ Item 的 4dp 混用；也不要在消费仓加 margin。
+   用 `--fynns-navdrawer-search-gap`（**4dp**，alias `section-gap`）— 与 Item ↔
+   Item 同一步距，保证 Search 文案与下一 Item 文案的光学间距一致；不要在消费仓
+   再加 margin「收紧」。对照 `#layouts-demo-navigation-drawer`。
 7. **禁止把 `NavigationDrawer.headline` 当工具条：** 该槽是 M3 **静态标题**
    （纯文案）。**不要**塞返回 `IconButton`、批量工具条、或两端对齐的裸计数
    （`hub-row` + count）。模式「返回主菜单」→ `TopAppBar` `leading` /

@@ -213,8 +213,30 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    same as Group leaves). Do **not** wrap the list in `.fynns-unit-stack`
    (16dp) — that makes top-level rows look sparse vs folded sections.
    Destination-density SearchBar / tools as a body sibling use
-   `--fynns-navdrawer-search-gap` (**16dp**, aliases `unit-stack-gap`) to
-   the next destination — not the 4dp row step.
+   `--fynns-navdrawer-search-gap` (**4dp**, aliases `section-gap`) so
+   Search↔Item **label** distance matches Item↔Item optically — not a
+   16dp kind-jump (that left a vacant band under GlobalSearch).
+
+## Failure mode this treaty targets: NavigationDrawer Search↔Item vacant band
+
+Symptoms: destination drawer shows a **taller empty band** between
+GlobalSearch / destination `SearchBar` and the first `NavigationDrawerItem`
+(“快捷链接”) than between two Item labels inside a Group (“全局规则” →
+“工作流”). Icon→label horizontal gap looks fine; the complaint is
+**vertical optical distance between label glyphs**.
+
+**Cause:** `--fynns-navdrawer-search-gap` formerly aliased
+`unit-stack-gap` (**16dp**) while Item↔Item uses `section-gap` (**4dp**).
+Destination-density SearchBar is already a 40dp row peer — the kind-jump
+inflated Search text ↔ next Item text (~40px) vs Item↔Item (~26.5px).
+
+**Fix in core (≥ 0.4.48):** `search-gap` aliases `section-gap` (**4dp**).
+Live: sandbox Layouts `#layouts-demo-navigation-drawer`. Do **not** add
+consumer `margin` under `.hub-mode-nav-tools` / SearchBar to “tighten”.
+
+**Consumer:** bump `@fynn7/ui-design-core` ≥ 0.4.48; re-paste
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Keep SearchBar as a
+**direct** body sibling (or a single tools host that contains it).
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 

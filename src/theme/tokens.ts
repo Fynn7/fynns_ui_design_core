@@ -1127,10 +1127,13 @@ export const NAVDRAWER_TOKENS = {
    */
   "section-gap": "0.25rem",
   /**
-   * SearchBar / tools (chrome) ↔ destination rows. Kind jump — aliases
-   * `--fynns-layout-unit-stack-gap` (16dp). Item ↔ Item stays `section-gap`.
+   * SearchBar / tools ↔ destination rows. **Same step as `section-gap`
+   * (4dp)** — destination-density SearchBar is a 40dp row peer; a 16dp
+   * kind-jump made Search↔Item label distance optically larger than
+   * Item↔Item (sandbox `#layouts-demo-navigation-drawer`). Override only
+   * if a product explicitly wants a chrome jump.
    */
-  "search-gap": "var(--fynns-layout-unit-stack-gap)",
+  "search-gap": "var(--fynns-navdrawer-section-gap)",
   "badge-dot": "0.375rem",
   /**
    * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one
