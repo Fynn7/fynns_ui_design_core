@@ -41,6 +41,13 @@ export type NavigationRailProps = HTMLAttributes<HTMLElement> & {
    * `NavigationRailItem` (any order; items are collected into destinations).
    */
   children?: ReactNode;
+  /**
+   * Optional rail **footer** pinned under destinations (densified drawer
+   * footer). Prefer settings-only chrome here — empty project / workspace /
+   * account-start slots hide via CSS. Same recipe classes as
+   * `NavigationDrawer` `footer`.
+   */
+  footer?: ReactNode;
 };
 
 function isElementOfType(
@@ -59,6 +66,7 @@ function isElementOfType(
 export function NavigationRail({
   labelVisibility = "labeled",
   alignment = "start",
+  footer,
   children,
   className,
   ...rest
@@ -96,6 +104,7 @@ export function NavigationRail({
         className={rootClass}
         data-has-menu={menu.length > 0 ? "true" : undefined}
         data-has-header={header.length > 0 ? "true" : undefined}
+        data-has-footer={footer != null && footer !== false ? "true" : undefined}
         data-label-visibility={labelVisibility}
       >
         {menu}
@@ -103,6 +112,9 @@ export function NavigationRail({
         <div className="fynns-nav-rail-destinations" role="presentation">
           {destinations}
         </div>
+        {footer != null && footer !== false ? (
+          <div className="fynns-nav-rail-footer">{footer}</div>
+        ) : null}
       </nav>
     </NavigationRailContext.Provider>
   );

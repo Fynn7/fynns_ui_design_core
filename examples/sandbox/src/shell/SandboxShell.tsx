@@ -261,18 +261,29 @@ export function SandboxShell() {
         active={page === "motion"}
         onClick={() => setPage("motion")}
       />
-      <Tooltip
-        content={t("nav.templatesTip")}
-        side="right"
-        className="sandbox-nav-templates"
-      >
-        <NavigationDrawerItem
-          icon={<SettingsIcon />}
-          label={t("nav.templates")}
-          active={page === "templates"}
-          onClick={() => setPage("templates")}
-        />
-      </Tooltip>
+    </>
+  );
+
+  /** Cursor-style nav footer: empty project / workspace rows + settings end. */
+  const navFooter = (
+    <>
+      <div className="fynns-nav-drawer-footer-slot" aria-hidden />
+      <div
+        className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
+        aria-hidden
+      />
+      <div className="fynns-nav-drawer-footer-account">
+        <div className="fynns-nav-drawer-footer-account-start" aria-hidden />
+        <Tooltip content={t("nav.templatesTip")} side="top">
+          <IconButton
+            aria-label={t("nav.templates")}
+            aria-pressed={page === "templates"}
+            onClick={() => setPage("templates")}
+          >
+            <SettingsIcon size={16} aria-hidden />
+          </IconButton>
+        </Tooltip>
+      </div>
     </>
   );
 
@@ -282,6 +293,7 @@ export function SandboxShell() {
       className="sandbox-nav-rail"
       aria-label={t("nav.aria")}
       labelVisibility="labeled"
+      footer={navFooter}
     >
       <Tooltip content={t("nav.playgroundHint")} side="right">
         <NavigationRailItem
@@ -319,24 +331,13 @@ export function SandboxShell() {
         active={page === "motion"}
         onClick={() => setPage("motion")}
       />
-      <Tooltip
-        content={t("nav.templatesTip")}
-        side="right"
-        className="sandbox-nav-templates"
-      >
-        <NavigationRailItem
-          icon={<SettingsIcon />}
-          label={t("nav.templates")}
-          active={page === "templates"}
-          onClick={() => setPage("templates")}
-        />
-      </Tooltip>
     </NavigationRail>
   ) : (
     <NavigationDrawer
       variant="standard"
       className="sandbox-nav"
       ariaLabel={t("nav.aria")}
+      footer={navFooter}
     >
       {destinations}
     </NavigationDrawer>

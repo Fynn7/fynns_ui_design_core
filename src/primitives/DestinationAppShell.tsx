@@ -72,6 +72,13 @@ export type DestinationAppShellProps = {
   /** Optional drawer headline (standard / labeled mode only). */
   drawerHeadline?: ReactNode;
   /**
+   * Optional `NavigationDrawer` / `NavigationRail` footer (Cursor-style
+   * account row + settings). Same node is passed to both densify modes —
+   * rail CSS hides empty slots. Prefer settings gear here, not TopAppBar
+   * `trailing`. Live: sandbox Layouts `#layouts-demo-shell`.
+   */
+  navFooter?: ReactNode;
+  /**
    * Rail densify label mode. Default `labeled` (always show destination
    * captions) — agent / greenfield default. Prefer over `selected`.
    */
@@ -129,6 +136,7 @@ export const DestinationAppShell = forwardRef<
     expandNavLabel,
     collapseNavLabel,
     drawerHeadline,
+    navFooter,
     railLabelVisibility = "labeled",
     narrowBreakpoint = DEFAULT_NARROW_BREAKPOINT,
     className,
@@ -244,6 +252,7 @@ export const DestinationAppShell = forwardRef<
       <NavigationRail
         aria-label={navAriaLabel}
         labelVisibility={railLabelVisibility}
+        footer={navFooter}
       >
         {railItems}
       </NavigationRail>
@@ -252,6 +261,7 @@ export const DestinationAppShell = forwardRef<
         variant="standard"
         ariaLabel={navAriaLabel}
         headline={drawerHeadline}
+        footer={navFooter}
       >
         {drawerItems}
       </NavigationDrawer>

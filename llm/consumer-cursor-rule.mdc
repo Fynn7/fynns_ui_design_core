@@ -119,7 +119,9 @@ alwaysApply: true
 未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是
 `DestinationAppShell`（与 sandbox **Layout templates** 首屏
 `#layouts-demo-shell` 同构）。传 `destinations` / `title` / 可选 `leadingExtra` /
-`trailing` / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
+`trailing` / 可选 `navFooter`（Cursor 式侧栏底栏：项目/工作区槽 + 账号行右端
+设置齿轮 — **不要**把该设置塞进 TopAppBar `trailing`，也**不要**用最后一项
+`NavigationDrawerItem` + `margin-top: auto`） / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
 做桌面根，禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
 `labelVisibility="labeled"`（始终显示标签）——不要默认 `selected` / `unlabeled`。
 
@@ -132,6 +134,21 @@ alwaysApply: true
   destinations={[{ id: "home", icon: <HomeIcon />, label: "Home" }]}
   activeId={id}
   onActiveIdChange={setId}
+  navFooter={
+    <>
+      <div className="fynns-nav-drawer-footer-slot" aria-hidden />
+      <div
+        className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
+        aria-hidden
+      />
+      <div className="fynns-nav-drawer-footer-account">
+        <div className="fynns-nav-drawer-footer-account-start" aria-hidden />
+        <IconButton aria-label="Settings">
+          <SettingsIcon />
+        </IconButton>
+      </div>
+    </>
+  }
 >
   {main}
 </DestinationAppShell>
@@ -165,7 +182,7 @@ FillColumn。
 
 | 数据 | 用 | **禁止** |
 | --- | --- | --- |
-| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + trailing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / trailingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = **`PageScroll`**（或 `.fynns-page-scroll.fynns-scroll` + 内层 `.fynns-content-column`）；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list / #page-scroll | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；tip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标；把 fynns-scroll 挂在 max-width 列上（拇指贴 Card） |
+| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 的 **两行** ListItem：headline + path supportingText；种类 → **仅 leading 图标** — 路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成空旷）；新鲜度/内置 → trailingSupportingText / .fynns-table-meta；trailing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）。短目录页滚动 = **`PageScroll`**。对照 #list / #page-scroll | 每条外包加垫 Surface/Card；路径行加 overline「文件/文件夹」撑高；headline 塞 Chip；tip-grow；单行 List 再套 Card 内 hub-scroll |
 | 可展开目录（会话树 + 嵌套明细表） | 同一个 `List`：**直接** `ul > li`。时间/种类 → `overline`；名称 → `headline`；路径 → `supportingText`；时长/次数 → `trailingSupportingText`。展开 = 行 `onClick` + leading 装饰 chevron + `aria-expanded`。嵌套 `List` 或 `.fynns-table-wrap.fynns-scroll` 放 `ListItem` **`detail`**。打开记录 → trailing `IconButton`（与行同一条 radius-3xl 高亮，不是行外浮岛）。长文案 `Tooltip` 包 headline，省略号由 core 画。对照 `#list` | `ul > div` 包住 ListItem；**Collapsible / Card 当 List 直接子节点**（非法 `ul > div`，flex 收缩 + overflow hidden → ~19px「骨架」条）；List 外的孤儿 ListItem；`leading` 里裸 `<button>` / 应用 `HubTreeDisclosure`；trailing 用 `ControlRow`；headline 里再塞 `Button`；嵌套表 `width:100%` + `fixed` + 藏横向滚动；单元格或 headline 用 `Chip` 当状态；headline 上 `tip-grow` / `max-content` 撑破 `…` |
 | 内置/只读行色条（inset rail） | `ListItem` **`hostClassName`** 挂 tone class（`<li>`；core 已 `radius-3xl` + `overflow: clip`）。headline **UI 字族**（勿 `mono`）。对照 `#list` host tone | `ul > div.hub-*-row > li`；host 洗底成方条/胶囊岛；目录显示名套 `mono` |
 | Card / Collapsible 头 `actions` | **交互 chrome 专用**：一个横向 `.fynns-control-cluster`（IconButton / Button / InfoHint）；core：actions 下所有 cluster nowrap + hug；组合进 `actions` 的 helper 用 **fragment**。分支 / 路径 / pin 元数据放 **正文**。对照 `#card` | `actions` 里塞 `src-path` / 分支名等纯文字；嵌套 `width:100%` / wrap cluster 把 IconButton 叠成 ~72dp 多行高头 |
@@ -177,7 +194,7 @@ FillColumn。
 | Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
 | **目录列表顶栏**（名称 + 计数 \| IconButton 条） | 独立 `ControlRow`（填满宿主：标签 `1fr`、操作贴尾）+ **一个** `.fynns-control-cluster`；溢出/排序菜单用 `DropdownMenu` **`iconOnly`**。对照 `#rhythm` / `#menu` | `ControlRow` 内容岛；IconButton 散落无 cluster；裸标注 `.fynns-btn` 菜单夹在 IconButton 中间 |
-| **概览快捷入口**（打开配置目录 / 备份 / 文档） | **一个** `Card`（`actions` = IconButton）包 **一个** 路径/链接 `List`（leading + overline + 真实路径 supportingText + trailing）。对照 `#list` 快捷 Card。**无** ShortcutPanel | Card 体内 Button 条 + 只有「稍后接入」的空 ListItem |
+| **概览快捷入口**（打开配置目录 / 备份 / 文档） | **一个** `Card`（`actions` = IconButton）包 **一个** **两行** 路径 List（leading 种类图标 + headline + 真实路径 supportingText + trailing 打开 — **无** overline）。对照 `#list` 快捷 Card。**无** ShortcutPanel | Card 体内 Button 条；headline-only /「稍后接入」；路径行再加 overline「文件/文件夹」撑到 ~88dp |
 | **无名称动作脚栏**（Import / Export / 重建） | **一个** `.fynns-control-cluster--end-align`（可加 `__grow`）。对照 `#rhythm` end-align footer | `ControlRow` `label=""`（空标签列 / 按钮漂中左）；私有 hub-spread |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
@@ -399,6 +416,10 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
    （`hub-row` + count）。模式「返回主菜单」→ `TopAppBar` `leading` /
    `leadingExtra`（对照 `#layouts-demo-shell`）；批量操作 → body 工具兄弟或
    TopAppBar `trailing`。
+7b. **设置齿轮在侧栏底栏（Cursor 式）：** 用 `NavigationDrawer`/`NavigationRail`
+   `footer` 或 `DestinationAppShell` `navFooter` + `.fynns-nav-drawer-footer*`
+   配方（对照 `#layouts-demo-shell`）。**禁止**把该设置放进 TopAppBar
+   `trailing`，也**禁止**最后一项目的地 + `margin-top: auto`。
 8. **禁止给目的地 / 分组 `label` 塞冗余元数据：** Group / Item / Headline 的
    `label` **只要短名称**（`全局` / `全局规则`，不要 `全局（OpenCode + Cursor）`，
    也不要 `全局规则 · 1`）。除非用户**显式**要求，禁止中间点 `·`、子项计数、

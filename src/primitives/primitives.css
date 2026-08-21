@@ -5446,11 +5446,36 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-rail-destinations {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   align-items: center;
   gap: var(--fynns-navrail-destinations-gap);
   width: 100%;
   min-height: 0;
+}
+
+.fynns-nav-rail-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-width: 0;
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+/* Densified rail: hide empty project / workspace / account-start; keep gear. */
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-slot,
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account-start {
+  display: none;
+}
+
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account {
+  justify-content: center;
+  width: 100%;
 }
 
 /* Keep destination indicators clear of menu chrome when there is no header.
@@ -5460,11 +5485,13 @@ a.fynns-breadcrumb-link:visited {
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
-.fynns-nav-rail--align-center .fynns-nav-rail-destinations {
+.fynns-nav-rail--align-center:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
   margin-block: auto;
 }
 
-.fynns-nav-rail--align-end .fynns-nav-rail-destinations {
+.fynns-nav-rail--align-end:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
   margin-block-start: auto;
 }
 
@@ -6120,6 +6147,55 @@ a.fynns-breadcrumb-link:visited {
   overflow-y: auto;
   /* Native bar hidden; overlay thumb must not steal item width (see theme overlay). */
   scrollbar-gutter: unset;
+}
+
+/*
+ * Cursor-style sheet footer under the destination scroll body — project /
+ * workspace / account chrome. Not destinations (those stay in `.body`).
+ * Recipe: empty `.fynns-nav-drawer-footer-slot` (+ `--pill`), then
+ * `.fynns-nav-drawer-footer-account` (start grow + settings IconButton end).
+ */
+.fynns-nav-drawer-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--fynns-navdrawer-section-gap);
+  min-width: 0;
+  padding-inline: var(--fynns-navdrawer-pad-inline);
+  padding-block: var(--fynns-navdrawer-body-pad-block-start);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-nav-drawer-footer-slot {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--fynns-navdrawer-item-height);
+  border-radius: var(--fynns-radius-md);
+}
+
+.fynns-nav-drawer-footer-slot--pill {
+  background: var(--fynns-color-control-surface);
+  border-radius: var(--fynns-radius-lg);
+}
+
+.fynns-nav-drawer-footer-account {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  min-height: var(--fynns-size-icon-target);
+}
+
+.fynns-nav-drawer-footer-account-start {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--fynns-size-icon-target);
 }
 
 /*

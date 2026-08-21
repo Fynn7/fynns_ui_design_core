@@ -70,15 +70,27 @@ export type NavigationDrawerProps = {
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;
+  /**
+   * Optional sheet **footer** pinned under the scroll body (Cursor-style
+   * account / project / settings chrome). Not a destination — keep
+   * `NavigationDrawerItem`s in `children`. Prefer
+   * `.fynns-nav-drawer-footer-slot` / `--pill` / `--account` recipe
+   * (sandbox Layouts `#layouts-demo-shell` + SandboxShell). Settings
+   * gear → `.fynns-nav-drawer-footer-account` end, not TopAppBar
+   * `trailing`.
+   */
+  footer?: ReactNode;
 };
 
 function DrawerSheet({
   headline,
+  footer,
   className,
   children,
   ...navRest
 }: {
   headline?: ReactNode;
+  footer?: ReactNode;
   className?: string;
   children?: ReactNode;
 } & HTMLAttributes<HTMLElement>) {
@@ -89,6 +101,9 @@ function DrawerSheet({
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
       <div className="fynns-nav-drawer-body fynns-scroll">{children}</div>
+      {footer != null && footer !== false ? (
+        <div className="fynns-nav-drawer-footer">{footer}</div>
+      ) : null}
     </nav>
   );
 }
@@ -111,6 +126,7 @@ export function NavigationDrawer({
   side = "left",
   modal = true,
   headline,
+  footer,
   ariaLabel,
   className,
   children,
@@ -119,6 +135,7 @@ export function NavigationDrawer({
     return (
       <DrawerSheet
         headline={headline}
+        footer={footer}
         className={["fynns-nav-drawer--standard", className ?? ""]
           .filter(Boolean)
           .join(" ")}
@@ -147,7 +164,9 @@ export function NavigationDrawer({
       panelClassName={panelClass}
       ariaLabel={ariaLabel}
     >
-      <DrawerSheet headline={headline}>{children}</DrawerSheet>
+      <DrawerSheet headline={headline} footer={footer}>
+        {children}
+      </DrawerSheet>
     </DialogFrame>
   );
 }

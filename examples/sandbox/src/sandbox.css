@@ -9,14 +9,11 @@
 }
 
 /* Layout chrome lives on ClippedNavShell / EndAside in @fynns/ui.
- * Sandbox keeps brand height knob + destination spacer. */
+ * Sandbox keeps brand height knob. Nav footer settings use core
+ * `.fynns-nav-drawer-footer*` (not margin-top:auto on a destination). */
 .sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {
   height: var(--sandbox-chrome-bar-height);
   min-height: var(--sandbox-chrome-bar-height);
-}
-
-.sandbox-nav-templates {
-  margin-top: auto;
 }
 
 .sandbox-file-input {
@@ -1452,10 +1449,6 @@
     /* Prefer dynamic viewport so mobile browser chrome does not clip the shell. */
     height: 100dvh;
     max-height: 100dvh;
-  }
-
-  .sandbox-nav-templates {
-    margin-top: var(--fynns-space-sm);
   }
 
   .sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {

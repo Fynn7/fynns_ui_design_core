@@ -3097,7 +3097,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             <List aria-label={t("globals.listShortcutCardAria")}>
               <ListItem
-                overline={t("globals.listShortcutCardFolderKind")}
                 headline={t("globals.listShortcutCardFolder")}
                 supportingText={t("globals.listShortcutCardFolderPath")}
                 leading={<FolderOpenIcon />}
@@ -3117,7 +3116,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
               />
               <ListItem
-                overline={t("globals.listShortcutCardFileKind")}
                 headline={t("globals.listShortcutCardFile")}
                 supportingText={t("globals.listShortcutCardFilePath")}
                 leading={<FileIcon />}
@@ -3137,7 +3135,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
               />
               <ListItem
-                overline={t("globals.listShortcutCardUrlKind")}
                 headline={t("globals.listShortcutCardUrl")}
                 supportingText={t("globals.listShortcutCardUrlPath")}
                 leading={<GlobeIcon />}

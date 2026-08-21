@@ -876,7 +876,9 @@ export const CHAT_TOKENS = {
 
 /**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Selected row uses the same
+ * One-line 56dp; two-line **60dp** (path / shortcut catalogs — denser than
+ * classic M3 72dp so overview Cards do not read vacant); three-line 88dp
+ * (session trees / timestamp + name + path only). Selected row uses the same
  * `secondary-container` + `radius-3xl` long-strip highlight as
  * NavigationDrawerItem / Select / menu items. Sidebar destinations still use
  * Navigation* chrome (not deleted ListRow / ListGroup).
@@ -884,7 +886,8 @@ export const CHAT_TOKENS = {
  */
 export const LIST_TOKENS = {
   "height-1": "3.5rem",
-  "height-2": "4.5rem",
+  /** Two-line path / shortcut rows (headline + supporting). Not 72dp. */
+  "height-2": "3.75rem",
   "height-3": "5.5rem",
   "pad-inline": "1rem",
   "pad-block": "0.5rem",

@@ -146,17 +146,30 @@ export function LayoutsPage() {
                   </Tooltip>
                 }
                 trailing={
+                  <Tooltip content={t("globals.appBarSearch")}>
+                    <IconButton aria-label={t("globals.appBarSearch")}>
+                      <SearchIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+                navFooter={
                   <>
-                    <Tooltip content={t("globals.appBarSearch")}>
-                      <IconButton aria-label={t("globals.appBarSearch")}>
-                        <SearchIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip content={t("globals.appBarSettings")}>
-                      <IconButton aria-label={t("globals.appBarSettings")}>
-                        <SettingsIcon />
-                      </IconButton>
-                    </Tooltip>
+                    <div className="fynns-nav-drawer-footer-slot" aria-hidden />
+                    <div
+                      className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
+                      aria-hidden
+                    />
+                    <div className="fynns-nav-drawer-footer-account">
+                      <div
+                        className="fynns-nav-drawer-footer-account-start"
+                        aria-hidden
+                      />
+                      <Tooltip content={t("globals.appBarSettings")}>
+                        <IconButton aria-label={t("globals.appBarSettings")}>
+                          <SettingsIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
                   </>
                 }
                 destinations={[

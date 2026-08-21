@@ -1053,7 +1053,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons (multi-action chrome), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navFooter` (Cursor-style drawer footer: empty project/workspace slots + settings IconButton on the account row end — not TopAppBar `trailing` for that role), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1252,7 +1252,7 @@ const en = {
   "globals.listCatalogHelp":
     "Path / link / repo catalog recipe — one List; row actions in trailing (ghost sm, horizontal nowrap cluster). Trailing stays on the end sibling even when interactive={false}. Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
-    "Dashboard / overview shortcuts — **no** dedicated ShortcutPanel primitive. Whole host = one Card (title + IconButton actions) wrapping **one** List of path/link rows (leading kind glyph + overline kind + headline + real path supportingText + trailing open). Never a Button strip above a List of headline-only rows with placeholder “later” supporting copy — that reads empty. Live: this Card under #list.",
+    "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.60 height-2 = 60dp).",
   "globals.listShortcutCardTitle": "Shortcuts",
   "globals.listShortcutCardAria": "Sample shortcut links",
   "globals.listShortcutCardRefresh": "Refresh links",
@@ -2578,7 +2578,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` 多枚 IconButton，以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navFooter`（Cursor 式侧栏底栏：空的项目/工作区槽 + 账号行右端设置齿轮 — 不要把该设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -2773,7 +2773,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listCatalogHelp":
     "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost sm，横向 nowrap 簇）。即使 interactive={false}，trailing 仍在 end 兄弟槽。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
-    "概览 / 仪表盘快捷入口——**没有**独立 ShortcutPanel 原语。整体宿主 = 一个 Card（title + IconButton actions）包 **一个** 路径/链接 List（leading 类型 glyph + overline 种类 + headline + 真实路径 supportingText + trailing 打开）。禁止 Card 体内 Button 条 + 只有「稍后接入」的空 ListItem——会显得空旷。对照：本段 #list 下的 Card。",
+    "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.60 的 height-2 = 60dp）。",
   "globals.listShortcutCardTitle": "快捷入口",
   "globals.listShortcutCardAria": "快捷链接示例",
   "globals.listShortcutCardRefresh": "刷新链接",

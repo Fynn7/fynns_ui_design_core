@@ -33,6 +33,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **DropdownMenu bare btn in IconButton strip** /
 **sparse dashboard shortcut List** /
 **NavigationDrawer destination gap ≠ unit-stack** /
+**settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
 **BusyRegion cold body + pager chrome siblings** /
@@ -224,6 +225,31 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    `control-stack-gap`) so Search↔Item matches Search↔Toggle inside a
    tools column — wider than Item↔Item `section-gap` (4dp), never a 16dp
    kind-jump.
+
+## Failure mode this treaty targets: settings gear in TopAppBar / destination list
+
+Symptoms (Cursor-like destination apps):
+
+- Settings / Preferences control lives in TopAppBar `trailing` while the
+  left column has no account / footer chrome
+- Settings is a last `NavigationDrawerItem` with consumer
+  `margin-top: auto` (or private spacer) to fake a pinned footer
+- Account / project / workspace strips reinvented as Card rows inside `nav`
+
+**Cause:** destination sheet had no public footer slot — agents parked
+settings in the app bar or last destination.
+
+**Fix in core (≥ 0.4.59):** `NavigationDrawer` / `NavigationRail` `footer`
++ `DestinationAppShell` `navFooter`. Recipe classes:
+`.fynns-nav-drawer-footer-slot` / `--pill` / `--account` /
+`--account-start`. Settings `IconButton` → account row **end**. Live:
+sandbox Layouts `#layouts-demo-shell` + SandboxShell. Rail densify hides
+empty slots and keeps the gear.
+
+**Consumer:** bump ≥ 0.4.59; pass `navFooter` (or Drawer/Rail `footer`);
+do **not** `margin-top: auto` a destination Item; do **not** put that
+settings control in TopAppBar `trailing` when the product wants
+Cursor-style bottom chrome.
 
 ## Failure mode this treaty targets: NavigationDrawer Search↔Item vacant band
 
@@ -498,16 +524,23 @@ Symptoms (Agents Hub overview「快捷入口」):
 
 - Card body hosts a **tonal Button strip** then a `List` of rows with only
   headline + placeholder supporting (“稍后接入”) — rows look **empty / sparse**
-- DevTools: `ListItem` has no `leading` / `overline` / path / trailing open
+- **or** each path row stacks `overline` (“文件/文件夹”) + headline + path →
+  `ListItem` `--3` / ~88dp min-height × N builtins → Card body ~1300px tall
+  and reads as **huge vertical vacant band** (user: 空旷 = spacing, not fake
+  copy)
+- DevTools: `ListItem` has no path / trailing open, **or** has `overline` on
+  a path catalog
 
 **Cause:** there is **no** ShortcutPanel primitive. Dashboard links are the
-**path-catalog** recipe inside one Card. Placeholder supporting text is not
-anatomy.
+**path-catalog** recipe inside one Card. Placeholder supporting is not
+anatomy; **kind as overline** on every shortcut row forces three-line
+geometry meant for session trees.
 
-**Fix in core (≥ 0.4.57):** sandbox `#list` shortcut Card teaches Card
-`actions` + full ListItem anatomy. **Consumer:** wire real quicklinks
-(`headline` + path `supportingText` + kind leading/overline + trailing open);
-refresh lives in Card `actions`, not a body Button row. Pasteable:
+**Fix in core (≥ 0.4.57 anatomy; ≥ 0.4.60 density):** sandbox `#list`
+shortcut Card = Card `actions` + **two-line** ListItem (leading kind glyph +
+headline + real path + trailing open) — **no** `overline`. `height-2` =
+**60dp** (was 72dp). **Consumer:** drop overline on Overview quicklinks;
+kind = leading icon only; refresh in Card `actions`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ListItem zero-gap pill fuse
