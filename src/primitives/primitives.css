@@ -9721,7 +9721,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+/*
+ * Tip-fill only for destination rows (Item wrapped in Tooltip). A broad
+ * `.fynns-tooltip-trigger { width: 100% }` also hit IconButton toolbars in
+ * SearchBar/tools hosts — each tip became a full-bleed 32dp strip and
+ * stacked vertically inside column tools (archived sidebar lesson).
+ */
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer
+  .fynns-nav-drawer-body
+  .fynns-tooltip-trigger:has(.fynns-nav-drawer-item) {
   display: block;
   width: 100%;
 }

@@ -387,7 +387,10 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
    用 `--fynns-navdrawer-search-gap`（**8dp**，alias layout `control-stack-gap`）—
    与 tools 列内 Search↔Toggle 同一步；比 Item↔Item 的 `section-gap`（4dp）略宽，
    禁止回到 16dp kind-jump。消费仓 tools 列 gap 应继续用
-   `--fynns-layout-control-stack-gap` 以保持锁步。对照
+   `--fynns-layout-control-stack-gap` 以保持锁步。**Search 下 IconButton 条：**
+   必须包在 **一个** `.fynns-control-cluster`（横向）；禁止在纵向 tools 宿主里
+   散落 Tooltip→IconButton Fragment。壳层 tip-fill（`width:100%`）只作用于
+   包住 `NavigationDrawerItem` 的 Tooltip，不会再撑开工具图标。对照
    `#layouts-demo-navigation-drawer`。
 7. **禁止把 `NavigationDrawer.headline` 当工具条：** 该槽是 M3 **静态标题**
    （纯文案）。**不要**塞返回 `IconButton`、批量工具条、或两端对齐的裸计数
@@ -542,4 +545,4 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 11. ChatActivity / ChatThinking：进行中标签是否 *-ing*、完成步是否过去时（换 `status` 时同步换文案）？
 12. 宽表映射/状态列：是否 muted `.fynns-table-meta` + `--end-align` cluster（缺中间则 `__grow`），而非单元格 `Chip`？行尾操作是否跨行右对齐？
 13. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。
-14. 模式侧栏 / 根抽屉：`NavigationDrawer.headline` 是否仍是静态标题或已省略？返回是否在 TopAppBar `leading`/`leadingExtra`（对照 `#layouts-demo-shell`）？Group/Item `label` 是否只是短名称（无 `· N`、无括号脚注）？headline 里是否已无 `hub-row` + 裸数字？
+14. 模式侧栏 / 根抽屉：`NavigationDrawer.headline` 是否仍是静态标题或已省略？返回是否在 TopAppBar `leading`/`leadingExtra`（对照 `#layouts-demo-shell`）？Group/Item `label` 是否只是短名称（无 `· N`、无括号脚注）？headline 里是否已无 `hub-row` + 裸数字？Search 下批量 IconButton 是否在 **一个** `.fynns-control-cluster`（非纵向摊开的 Fragment tip）？

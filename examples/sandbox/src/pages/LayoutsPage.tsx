@@ -44,6 +44,7 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
+  ClipboardIcon,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -309,14 +310,48 @@ export function LayoutsPage() {
                 ariaLabel={t("globals.navDrawerAria")}
                 headline={t("globals.navDrawerHeadline")}
               >
-                <SearchBar
-                  density="destination"
-                  value={drawerSearchQuery}
-                  onChange={setDrawerSearchQuery}
-                  ariaLabel={t("globals.navDrawerSearchAria")}
-                  placeholder={t("globals.navDrawerSearchPlaceholder")}
-                  clearAriaLabel={t("globals.searchBarClear")}
-                />
+                <div className="sandbox-navdrawer-tools">
+                  <SearchBar
+                    density="destination"
+                    value={drawerSearchQuery}
+                    onChange={setDrawerSearchQuery}
+                    ariaLabel={t("globals.navDrawerSearchAria")}
+                    placeholder={t("globals.navDrawerSearchPlaceholder")}
+                    clearAriaLabel={t("globals.searchBarClear")}
+                  />
+                  <div
+                    className="fynns-control-cluster"
+                    aria-label={t("globals.navDrawerToolsAria")}
+                  >
+                    <Tooltip content={t("globals.navDrawerToolBulk")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolBulk")}
+                      >
+                        <ClipboardIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolArchive")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolArchive")}
+                      >
+                        <ArchiveIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolRestore")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolRestore")}
+                      >
+                        <UndoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
                 <NavigationDrawerItem
                   icon={<FolderOpenIcon />}
                   label={t("globals.navDrawerInbox")}

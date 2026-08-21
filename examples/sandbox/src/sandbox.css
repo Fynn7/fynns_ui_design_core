@@ -950,7 +950,8 @@
 }
 
 /* Drawer tools + cold BusyRegion as siblings (SearchBar must stay clear). */
-.sandbox-busy-drawer-tools {
+.sandbox-busy-drawer-tools,
+.sandbox-navdrawer-tools {
   display: flex;
   flex-direction: column;
   gap: var(--fynns-navdrawer-search-gap);

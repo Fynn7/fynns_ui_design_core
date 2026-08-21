@@ -28,6 +28,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **Collapsible inside List (skeleton crush)** /
+**Drawer tip-fill ≠ IconButton toolbar** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
@@ -461,6 +462,32 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 `--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Drawer tip-fill stretches IconButton toolbars
+
+Symptoms (归档 / 收藏夹 / mode sidebars under `ClippedNavShell` +
+`NavigationDrawer`):
+
+- Below destination `SearchBar`, bulk / restore IconButtons appear as
+  **full-width 32dp strips stacked vertically** (≈40px step with tools-column
+  gap) instead of one horizontal IconButton row
+- DevTools: each control is `span.fynns-tooltip-trigger` with `width: 100%`
+  inside `.hub-mode-nav-tools` (or any column tools host); often a
+  Fragment of Tooltips without `.fynns-control-cluster`
+
+**Cause:** shell CSS tip-filled **every** `.fynns-tooltip-trigger` in the
+drawer body so Tooltip-wrapped `NavigationDrawerItem`s could span the track.
+That rule also matched Tooltip → `IconButton` chrome. Combined with a
+**column** tools host (`SearchBar` above actions) and loose Fragment
+siblings (no cluster), each tip became its own full-bleed flex row.
+
+**Fix in core (≥ 0.4.54):** tip-fill only
+`.fynns-tooltip-trigger:has(.fynns-nav-drawer-item)`. Live: Layouts
+`#layouts-demo-navigation-drawer` (SearchBar + `.fynns-control-cluster` of
+ghost `sm` IconButtons). **Fix in the consumer:** wrap IconButton /
+Tooltip strips in **one** `.fynns-control-cluster` (nowrap preferred);
+keep tip-fill / `side="right"` only on destination Item wrappers. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Collapsible inside List (skeleton crush)
 
