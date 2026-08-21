@@ -857,6 +857,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
   const [busyRegionDialogOpen, setBusyRegionDialogOpen] = useState(false);
+  const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
@@ -3842,6 +3843,97 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </Dialog>
           <SandboxHelp text={t("globals.busyRegionDialogHelp")} />
+          <SandboxHelp text={t("globals.busyRegionColdHelp")} />
+          <Card title={t("globals.busyRegionColdTitle")}>
+            {busyRegionColdBody ? (
+              <BusyRegion
+                busy
+                label={t("globals.busyRegionColdLabel")}
+                message={t("globals.busyRegionColdMessage")}
+              />
+            ) : (
+              <div className="fynns-unit-stack">
+                <List aria-label={t("globals.busyRegionColdListAria")}>
+                  <ListItem
+                    overline={t("globals.listTreeOverline")}
+                    headline={t("globals.listTreeHeadline")}
+                    supportingText={t("globals.listTreePath")}
+                    trailingSupportingText={t("globals.listTreeDuration")}
+                  />
+                </List>
+                <Select
+                  ariaLabel={t("globals.busyRegionColdSessions")}
+                  value="10"
+                  onChange={() => {}}
+                  options={[
+                    { value: "10", label: t("globals.busyRegionColdSessionsOpt") },
+                  ]}
+                />
+                <Pagination page={1} pageCount={3} onPageChange={() => {}} />
+              </div>
+            )}
+          </Card>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setBusyRegionColdBody(true)}
+              disabled={busyRegionColdBody}
+            >
+              {t("globals.busyRegionColdShow")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegionColdBody(false)}
+              disabled={!busyRegionColdBody}
+            >
+              {t("globals.busyRegionColdClear")}
+            </Button>
+          </div>
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="page-scroll">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.pageScrollHelp")} />
+          <div className="sandbox-page-scroll-stage">
+            <FillColumn>
+              <div className="fynns-page-scroll fynns-scroll">
+                <div className="fynns-content-column">
+                  <Card title={t("globals.pageScrollCardTitle")}>
+                    <List aria-label={t("globals.pageScrollListAria")}>
+                      <ListItem
+                        headline={t("globals.listCatalogProject")}
+                        supportingText={t("globals.listCatalogProjectPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogConfig")}
+                        supportingText={t("globals.listCatalogConfigPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogRules")}
+                        supportingText={t("globals.listCatalogRulesPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogStaticFile")}
+                        supportingText={t("globals.listCatalogStaticPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listTwoLine")}
+                        supportingText={t("globals.listTwoLineSupporting")}
+                      />
+                      <ListItem
+                        headline={t("globals.listThreeLine")}
+                        supportingText={t("globals.listThreeLineSupporting")}
+                      />
+                    </List>
+                  </Card>
+                  <Card title={t("globals.pageScrollCardTitle2")}>
+                    <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
+                  </Card>
+                </div>
+              </div>
+            </FillColumn>
+          </div>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
@@ -4599,6 +4691,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
             </div>
           </ControlRow>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
+        <Surface variant="outlined" padded>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <span className="fynns-control-cluster__grow" aria-hidden />
+            <Button size="sm" variant="tonal">
+              {t("globals.rhythmEndAlignSecondary")}
+            </Button>
+            <Button size="sm">{t("globals.rhythmEndAlignPrimary")}</Button>
+          </div>
         </Surface>
         <SandboxHelp text={t("globals.rhythmStatusHelp")} />
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>

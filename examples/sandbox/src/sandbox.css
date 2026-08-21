@@ -1371,6 +1371,35 @@
   min-height: 0;
 }
 
+/*
+ * Wide × tall stage so `.fynns-content-column` max-width leaves a gutter —
+ * overlay Y rail must sit on the page-scroll host edge, outside Cards.
+ */
+.sandbox-page-scroll-stage {
+  box-sizing: border-box;
+  width: min(100%, 48rem);
+  height: 22rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-page-scroll-stage > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.sandbox-page-scroll-stage .fynns-content-column {
+  /* Soft ceiling below the stage so the gutter is visible in the demo.
+   * Inline pad comes from keep-set `.fynns-content-column` (dialog-inset). */
+  max-width: min(22rem, 100%);
+  padding-block: var(--fynns-layout-content-pad-block);
+}
+
 .sandbox-globals-shell-body {
   display: flex;
   flex: 1;

@@ -1227,6 +1227,27 @@ export const LAYOUT_TOKENS = {
    */
   "list-well-max-height-sm": "12rem",
   /**
+   * Master–detail catalog column width (~288dp). Use as the first track of a
+   * consumer list+detail grid:
+   * `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr`.
+   * **Must exist** — an undefined var invalidates the grid and stacks panes
+   * full-width in one column (same failure mode as `stats-min-col`).
+   */
+  "list-pane-width": "18rem",
+  /**
+   * Destination / mode nav column target (~280dp). Alias for consumers that
+   * mirror drawer chrome outside `ClippedNavShell` (prefer shell +
+   * `--fynns-navdrawer-width` for live drawers). **Must exist** when referenced.
+   */
+  "nav-pane-width": "17.5rem",
+  /**
+   * Soft max width for page canvas content under the shell (~1180dp). Pair with
+   * `.fynns-content-column` (`margin-inline: auto`) **inside** `.fynns-page-scroll`
+   * — never put this max-width on the scroll host itself (overlay Y rail would
+   * flush with Card edges). **Must exist** when referenced.
+   */
+  "content-max-width": "73.75rem",
+  /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible / Card `chrome="card"` body, Surface `padded`, CodeBlock pre.
    * Larger than `--fynns-space-sm` so headers don’t sit on Inputs.

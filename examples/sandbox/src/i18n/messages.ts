@@ -503,6 +503,23 @@ const en = {
   "globals.busyRegionDialogMessage": "Fetching the list…",
   "globals.busyRegionDialogHelp":
     "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. CircularProgress sm stays for IconButton / Button slots only.",
+  "globals.busyRegionColdHelp":
+    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (transparent mask covers the footer; spinner sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
+  "globals.busyRegionColdTitle": "Sessions catalog",
+  "globals.busyRegionColdLabel": "Loading sessions",
+  "globals.busyRegionColdMessage": "Fetching the catalog…",
+  "globals.busyRegionColdListAria": "Sample sessions",
+  "globals.busyRegionColdSessions": "Sessions per page",
+  "globals.busyRegionColdSessionsOpt": "10 per page",
+  "globals.busyRegionColdShow": "Show cold busy",
+  "globals.busyRegionColdClear": "Show loaded catalog",
+  "globals.pageScrollHelp":
+    "Page catalogs: `.fynns-page-scroll` must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset. Put side breath on `.fynns-content-column` (core ships padding-inline: dialog-inset). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.47.",
+  "globals.pageScrollCardTitle": "Sample catalog",
+  "globals.pageScrollCardTitle2": "Next section",
+  "globals.pageScrollCardBody":
+    "Scroll this stage — the overlay thumb tracks the wide page-scroll host, not the Card edge.",
+  "globals.pageScrollListAria": "Sample page-scroll catalog",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -724,6 +741,10 @@ const en = {
   "globals.rhythmCatalogBulk": "Bulk select",
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
+  "globals.rhythmEndAlignHelp":
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (+ optional `__grow` spacer) — never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+  "globals.rhythmEndAlignSecondary": "Secondary",
+  "globals.rhythmEndAlignPrimary": "Primary action",
   "globals.rhythmStatusHelp":
     "**Multi-status / readiness (hard):** named statuses belong in a Card-body `ControlStack` of `ControlRow`s — `label` = short name, children = tip glyph or muted `—`. Do **not** flatten labels + icons into one `.fynns-control-cluster`, and do **not** park a lone tip glyph in a full-bleed Card-body cluster (empty band). Cluster only wraps **≥2 sibling controls** inside a row (e.g. tip glyph + apply `IconButton`).",
   "globals.rhythmStatusTitle": "Sync status",
@@ -1978,6 +1999,23 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionDialogMessage": "正在拉取列表…",
   "globals.busyRegionDialogHelp":
     "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。CircularProgress sm 仅用于 IconButton / Button 槽。",
+  "globals.busyRegionColdHelp":
+    "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（透明遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
+  "globals.busyRegionColdTitle": "会话目录",
+  "globals.busyRegionColdLabel": "加载会话",
+  "globals.busyRegionColdMessage": "正在拉取目录…",
+  "globals.busyRegionColdListAria": "会话样例",
+  "globals.busyRegionColdSessions": "每页会话数",
+  "globals.busyRegionColdSessionsOpt": "每页 10 条",
+  "globals.busyRegionColdShow": "显示冷启动 busy",
+  "globals.busyRegionColdClear": "显示已加载目录",
+  "globals.pageScrollHelp":
+    "页面目录：`.fynns-page-scroll` 必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧）。侧向呼吸放在 `.fynns-content-column`（core 已带 padding-inline: dialog-inset）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.47。",
+  "globals.pageScrollCardTitle": "样例目录",
+  "globals.pageScrollCardTitle2": "下一分区",
+  "globals.pageScrollCardBody":
+    "滚动本舞台 — overlay 拇指跟宽页滚宿主，不跟 Card 右缘。",
+  "globals.pageScrollListAria": "页滚目录样例",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
@@ -2199,6 +2237,10 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmCatalogBulk": "批量选择",
   "globals.rhythmCatalogRefresh": "刷新列表",
   "globals.rhythmCatalogAdd": "新增服务器",
+  "globals.rhythmEndAlignHelp":
+    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（可加 `__grow` 占位）— 禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+  "globals.rhythmEndAlignSecondary": "次要",
+  "globals.rhythmEndAlignPrimary": "主要操作",
   "globals.rhythmStatusHelp":
     "**多状态 / 就绪（硬）：** 命名状态放进 Card 正文 `ControlStack` + 多个 `ControlRow` — `label` = 短名，子树 = tip 字形或 muted `—`。**不要**把标签和 icon 摊进同一个 `.fynns-control-cluster`，也**不要**把单独 tip 字形塞进通栏 Card 正文 cluster（空带）。Cluster 只包行内 **≥2 个兄弟控件**（例如 tip 字形 + 应用 `IconButton`）。",
   "globals.rhythmStatusTitle": "同步状态",

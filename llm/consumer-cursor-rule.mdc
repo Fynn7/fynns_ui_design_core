@@ -42,10 +42,14 @@ alwaysApply: true
    **禁止**再铺 `surface-*` / 私有彩色 loading 底）。
    **Dialog / Card / section 正文加载**（目录、明细表、详情列表尚无内容）走
    `BusyRegion`；仅当该宿主**已定高**时才加 `fill`，否则**不要** `fill`。
+   **冷启动只渲 BusyRegion** — **禁止**再并行渲 Sessions `Select` /
+   `Pagination` 等脚栏兄弟（透明遮罩会盖住 Select，圈叠在控件上）。有数据后
+   翻页 / 刷新：`BusyRegion` **只包** List / 表，脚栏留在 busy 外。
    **禁止**把默认 `md` 的裸 `CircularProgress` 当 Dialog/`unit-stack`/Card
    正文 loading 壳（圈贴顶、无 `aria-busy` 区域）。**禁止**用 `EmptyState` +
    `CircularProgress` 当 loading 壳。失败模式：`llm/CONSUMER_TREATY.md`
-   **BusyRegion fill nested in unit-stack / Card**。
+   **BusyRegion fill nested in unit-stack / Card** /
+   **BusyRegion cold body + pager chrome siblings**。
    **一宿主一进度件：** 已知百分比 / 计数 → `indicator="linear"` + `value`；
    `message` 只放状态文案（可加 `FieldHint`），**禁止**再塞 `LinearProgress` /
    `CircularProgress` / 消费仓 TaskProgressBar。**禁止**用私有居中壳（如
@@ -57,12 +61,17 @@ alwaysApply: true
    表单行），不可当冷启动壳。未知时长 → 默认圈；全屏挡住 →
    `BusyScrim`（才用 overlay 色）；**仅**按钮/图标/字段槽 → `CircularProgress`
    `sm`；零结果目录才用 `EmptyState`。勿发明私有 hub loading CSS。
-   `FillColumn` 里的**目录**用带 `fynns-scroll` 的 `.fynns-unit-stack`；
+   `FillColumn` 里的**短目录页滚**：`.fynns-page-scroll.fynns-scroll` 必须与
+   **窗格右缘对齐**（`hub-main` / shell main — **禁止**在页滚宿主外包一层
+   `padding-inline`；侧向呼吸放在 `.fynns-content-column`，core ≥0.4.47 已带
+   `dialog-inset`）。页滚仅 `padding-inline-end: scrollbar-size` 留给 overlay 轨。
+   **禁止**把 `fynns-scroll` 挂在 max-width 列上。对照 `#page-scroll`。
+   长目录才用 List + list-well max-height。
    `Surface` 默认按内容增高（只有 `fill` 才 `min-height: 0`）。压成 ~36px 药丸、
    ToggleGroup 被裁切 = 井在 flex 里被 shrink，修 core 不要改 `.fynns-*`。
    权威：包内 `AGENTS.md` Feedback **Loading placement** + **FillColumn**；
    对照 sandbox `#busy-region`；失败模式：`llm/CONSUMER_TREATY.md`
-   **private hub progress shell**。
+   **private hub progress shell** / **page-scroll host flush with Card**。
 7. 预览页对齐 sandbox：`examples/sandbox/src/pages/*PreviewCanvas.tsx`。
 
 ## 所见即所得（强制）
@@ -144,7 +153,7 @@ FillColumn。
 
 | 数据 | 用 | **禁止** |
 | --- | --- | --- |
-| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + 	railing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / 	railingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = FillColumn + ynns-scroll；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；	ip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标 |
+| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + trailing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / trailingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = `.fynns-page-scroll.fynns-scroll`（FillColumn 全宽）+ 内层 `.fynns-content-column`；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list / #page-scroll | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；tip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标；把 fynns-scroll 挂在 max-width 列上（拇指贴 Card） |
 | 可展开目录（会话树 + 嵌套明细表） | 同一个 `List`：**直接** `ul > li`。时间/种类 → `overline`；名称 → `headline`；路径 → `supportingText`；时长/次数 → `trailingSupportingText`。展开 = 行 `onClick` + leading 装饰 chevron + `aria-expanded`。嵌套 `List` 或 `.fynns-table-wrap.fynns-scroll` 放 `ListItem` **`detail`**。打开记录 → trailing `IconButton`（与行同一条 radius-3xl 高亮，不是行外浮岛）。长文案 `Tooltip` 包 headline，省略号由 core 画。对照 `#list` | `ul > div` 包住 ListItem；List 外的孤儿 ListItem；`leading` 里裸 `<button>` / 应用 `HubTreeDisclosure`；trailing 用 `ControlRow`；headline 里再塞 `Button`；嵌套表 `width:100%` + `fixed` + 藏横向滚动；单元格或 headline 用 `Chip` 当状态；headline 上 `tip-grow` / `max-content` 撑破 `…` |
 | 内置/只读行色条（inset rail） | `ListItem` **`hostClassName`** 挂 tone class（`<li>`；core 已 `radius-3xl` + `overflow: clip`）。headline **UI 字族**（勿 `mono`）。对照 `#list` host tone | `ul > div.hub-*-row > li`；host 洗底成方条/胶囊岛；目录显示名套 `mono` |
 | Card / Collapsible 头 `actions` | **交互 chrome 专用**：一个横向 `.fynns-control-cluster`（IconButton / Button / InfoHint）；core：actions 下所有 cluster nowrap + hug；组合进 `actions` 的 helper 用 **fragment**。分支 / 路径 / pin 元数据放 **正文**。对照 `#card` | `actions` 里塞 `src-path` / 分支名等纯文字；嵌套 `width:100%` / wrap cluster 把 IconButton 叠成 ~72dp 多行高头 |
@@ -156,6 +165,7 @@ FillColumn。
 | Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
 | **目录列表顶栏**（名称 + 计数 \| IconButton 条） | 独立 `ControlRow`（填满宿主：标签 `1fr`、操作贴尾）+ **一个** `.fynns-control-cluster`。对照 `#rhythm` catalog strip | `ControlRow` 内容岛（按钮贴标签旁、列尾空一大块）；IconButton 散落无 cluster；私有 `hub-spread` / `space-between` |
+| **无名称动作脚栏**（Import / Export / 重建） | **一个** `.fynns-control-cluster--end-align`（可加 `__grow`）。对照 `#rhythm` end-align footer | `ControlRow` `label=""`（空标签列 / 按钮漂中左）；私有 hub-spread |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
 | 表格/列表分页（每页条数 + `Pagination`） | Card body **上下**堆：每页 `Select` / 范围文案，再 `Pagination`（内容宽度 nowrap） | 左右 space-between，把页码挤到 Select 旁边直到数字换行 |
@@ -252,6 +262,10 @@ Card body 同属 form host。
 尾部 **一个** `.fynns-control-cluster`（批量 / 排序 / 导入 / +）。不要用内容宽
 `max-content` 岛把按钮停在标签旁。条约：`CONSUMER_TREATY.md` **catalog ControlRow
 actions float mid-left**。
+
+**无名称动作脚栏（硬）：** 用 `.fynns-control-cluster--end-align`，**禁止**
+`ControlRow` `label=""`。条约：`CONSUMER_TREATY.md` **empty ControlRow label as
+action footer**。
 
 ```tsx
 // 对 — 保持这棵树；窄窗下说明留在名称列，不要铺成通栏空行

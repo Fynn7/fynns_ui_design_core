@@ -9453,12 +9453,68 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-fill-column-main > .fynns-chat,
-.fynns-fill-column-main > .fynns-busy-region--fill {
+.fynns-fill-column-main > .fynns-busy-region--fill,
+.fynns-fill-column-main > .fynns-page-scroll {
   flex: 1 1 auto;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   min-height: 0;
+}
+
+/*
+ * Page scroll host — **edge-flush** with the pane (FillColumn main / shell
+ * main / app `hub-main`). Overlay Y rail paints at `host.rect.right −
+ * scrollbar-size` — so this host’s border box **must** share the pane’s
+ * right edge. Never wrap `.fynns-page-scroll` in a horizontally padded
+ * ancestor (that insets the rail and leaves a dead strip beside the pane).
+ * Put side breath on `.fynns-content-column` instead.
+ *
+ * Put `.fynns-content-column` **inside** this host; do **not** put
+ * `fynns-scroll` on the max-width column itself.
+ * Always pair with keep-set `fynns-scroll` on the same node.
+ *
+ * End gutter (`--fynns-scrollbar-size`): reserves the overlay rail band so
+ * full-bleed content columns clear the thumb. Do **not** use `scrollbar-gutter`.
+ */
+.fynns-page-scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-inline-end: var(--fynns-scrollbar-size);
+}
+
+.fynns-content-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--fynns-layout-content-max-width);
+  margin-inline: auto;
+  min-width: 0;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+  /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`. */
+  padding-inline: var(--fynns-layout-dialog-inset);
+}
+
+.fynns-content-column > .fynns-busy-region--fill,
+.fynns-content-column > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
+}
+
+/* Catalog Cards / unit stacks under a content column: do not flex-shrink
+ * (shrink + Card overflow:hidden clips charts / tables). */
+.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-fill-column) {
+  flex-shrink: 0;
 }
 
 /* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */

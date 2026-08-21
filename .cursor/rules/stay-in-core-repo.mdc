@@ -1,0 +1,30 @@
+---
+description: Parent agent never leaves fynns_ui_design_core; consumer work = subagent only
+alwaysApply: true
+---
+
+# Stay in this core repo (hard)
+
+`fynns_ui_design_core` is the **only** workspace root for the **parent** agent
+in this chat.
+
+## Forbidden
+
+- Calling `move_agent_to_root` (or any equivalent) to switch into another repo
+  (agents-hub, gsc-live-preview, music studio, corrector, thesis tools, …)
+- Doing consumer installs / edits / browser verify by treating a sibling
+  checkout as the active agent root
+- Ending a core task “in” a consumer folder as the parent session
+
+## Required instead
+
+- Consumer work (bump `@fynn7/ui-design-core`, props-only fixes, paste
+  `fynns-ui-consumer.mdc`, browser-verify on `localhost:5180`, …) →
+  **dispatch a Task subagent** with an absolute path to that consumer.
+  Parent stays here and waits for / summarizes the subagent.
+- Subagents: Auto only (no `model` param) — see user rule.
+- Core-first loop unchanged: constrain + sandbox + publish here, then
+  subagent consumer verify (`/constrain-then-consumer`).
+
+If a request seems to require leaving this repo as parent: refuse the root
+move and spawn a subagent instead.

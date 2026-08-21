@@ -30,6 +30,9 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
+**BusyRegion cold body + pager chrome siblings** /
+**page-scroll host flush with Card** /
+**empty ControlRow label as action footer** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -322,6 +325,73 @@ scrollports (page scroll on FillColumn). Authority: [`AGENTS.md`](../AGENTS.md)
 Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc)
 **内容密度**.
+
+## Failure mode this treaty targets: page-scroll host flush with Card
+
+Symptoms (Usage / Quicklinks / any Card catalog under a max-width column):
+
+- Overlay Y scrollbar thumb sits on the **Card’s** right edge (looks like an
+  inner Card scrollbar) even when Card itself is not the scrollport
+- **Or** the thumb floats **inset** from the pane (`hub-main` / shell main)
+  right edge — a dead strip between the rail and the pane border (CDP:
+  `pageScroll.right < hubMain.right` by the ancestor’s `padding-inline`)
+
+**Cause:** (1) `fynns-scroll` on the **content max-width** column. (2) Even with
+`.fynns-page-scroll` → `.fynns-content-column`, a **padded ancestor** of the
+scroll host (e.g. `.hub-main { padding-inline: dialog-inset }`) insets the
+host — overlay paints at `host.rect.right − scrollbar-size`, so the rail
+follows the padded content box, **not** the pane edge. The scroll parent is
+the **pane** (`hub-main` / FillColumn main), not the Card.
+
+**Fix in core (≥ 0.4.47):** `.fynns-page-scroll` is edge-flush with the pane
+(+ `padding-inline-end: scrollbar-size` for the rail band only).
+`.fynns-content-column` carries `padding-inline: dialog-inset` (pane breath).
+Live: sandbox `#page-scroll`. Do **not** use `scrollbar-gutter`.
+
+**Fix in the consumer:** FillColumn `children` =
+`.fynns-page-scroll.fynns-scroll` → inner `.fynns-content-column`. **Do not**
+put horizontal pad on `.hub-main` / shell main **around** the page-scroll
+host — move side breath to the content column (core default ≥ 0.4.47). Bump
+`@fynn7/ui-design-core` ≥ 0.4.47. Authority: [`AGENTS.md`](../AGENTS.md)
+**FillColumn**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion cold body + pager chrome siblings
+
+Symptoms (Usage sessions Card / any catalog + page-size strip):
+
+- Cold load shows a spinner **on top of** a Sessions `Select` / `Pagination`
+  strip (transparent overlay covers the whole Card `unit-stack`)
+- Footer chrome is interactive under the busy mask
+
+**Cause:** Card body renders `BusyRegion` (empty / no children) **and**
+Select / Pagination as **siblings** in the same stack. `BusyRegion` overlay is
+transparent and covers the region’s box — siblings painted under that box still
+show through while the ring centers on the whole stack.
+
+**Fix in the consumer:** cold-start → render **only** `BusyRegion` (no pager
+siblings). After data: keep Sessions / page-size / `Pagination` **outside**
+the busy wrapper; wrap **only** the List / table on refresh. Authority:
+[`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Live: sandbox
+`#busy-region` cold-body sample. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: empty ControlRow label as action footer
+
+Symptoms (Backup / Import / rebuild / Graphify footers):
+
+- A `ControlRow` with `label=""` parks an action cluster mid-left (or leaves
+  an empty label column) instead of hugging the trailing edge
+- Looks like a broken catalog strip without a name
+
+**Cause:** `ControlRow` is for **visible name \| controls**. An empty label
+still allocates the form-host label track. Action-only footers need
+`.fynns-control-cluster--end-align` (optional `__grow`), not a fake row.
+
+**Fix in the consumer:** replace empty-label `ControlRow` with
+`.fynns-control-cluster.fynns-control-cluster--end-align`. Keep real names on
+`ControlRow` `label`. Live: sandbox `#rhythm` end-align footer. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Pagination squeezed beside page-size
 
@@ -879,6 +949,21 @@ BusyRegion--fill` “work” — that teaches the anti-pattern. Authority:
 [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement** + **FillColumn**.
 Live: sandbox `#busy-region` fill sample (FillColumn stage — not inside a
 unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: master–detail / content max-width token missing
+
+Symptoms (hub-split / main canvas):
+
+- List+detail grid stacks full-width in one column; DevTools shows
+  `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr` with the
+  custom property **undefined**
+- Content column sprawls (no soft max-width)
+
+**Cause:** consumer referenced `--fynns-layout-list-pane-width` /
+`nav-pane-width` / `content-max-width` before core shipped them (same class of
+bug as `stats-min-col`). **Fix in core (≥ 0.4.45):** tokens exist. **Consumer:**
+bump `@fynn7/ui-design-core` ≥ 0.4.45; do not invent private rem fallbacks.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **FillColumn**.
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
