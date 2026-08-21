@@ -215,9 +215,10 @@ Symptoms agents mis-attribute to “broken clipped shell”:
    same as Group leaves). Do **not** wrap the list in `.fynns-unit-stack`
    (16dp) — that makes top-level rows look sparse vs folded sections.
    Destination-density SearchBar / tools as a body sibling use
-   `--fynns-navdrawer-search-gap` (**4dp**, aliases `section-gap`) so
-   Search↔Item **label** distance matches Item↔Item optically — not a
-   16dp kind-jump (that left a vacant band under GlobalSearch).
+   `--fynns-navdrawer-search-gap` (**8dp**, aliases layout
+   `control-stack-gap`) so Search↔Item matches Search↔Toggle inside a
+   tools column — wider than Item↔Item `section-gap` (4dp), never a 16dp
+   kind-jump.
 
 ## Failure mode this treaty targets: NavigationDrawer Search↔Item vacant band
 
@@ -232,13 +233,18 @@ GlobalSearch / destination `SearchBar` and the first `NavigationDrawerItem`
 Destination-density SearchBar is already a 40dp row peer — the kind-jump
 inflated Search text ↔ next Item text (~40px) vs Item↔Item (~26.5px).
 
-**Fix in core (≥ 0.4.48):** `search-gap` aliases `section-gap` (**4dp**).
-Live: sandbox Layouts `#layouts-demo-navigation-drawer`. Do **not** add
-consumer `margin` under `.hub-mode-nav-tools` / SearchBar to “tighten”.
+**Fix in core (≥ 0.4.48):** dropped the 16dp kind-jump. **≥ 0.4.52:**
+`search-gap` aliases layout `control-stack-gap` (**8dp**) so Search↔Item
+matches Search↔Toggle inside hub-mode tools — still well below the old
+16dp vacant band; Item↔Item stays on `section-gap` (**4dp**). Live:
+sandbox Layouts `#layouts-demo-navigation-drawer`. Do **not** add
+consumer `margin` under `.hub-mode-nav-tools` / SearchBar to retune.
 
-**Consumer:** bump `@fynn7/ui-design-core` ≥ 0.4.48; re-paste
+**Consumer:** bump `@fynn7/ui-design-core` ≥ 0.4.52; re-paste
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Keep SearchBar as a
-**direct** body sibling (or a single tools host that contains it).
+**direct** body sibling (or a single tools host that contains it). Tools
+column internal gap should stay `--fynns-layout-control-stack-gap` so it
+stays in lockstep with `search-gap`.
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 

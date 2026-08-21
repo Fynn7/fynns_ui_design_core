@@ -6098,9 +6098,9 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   /*
    * No flex gap: destination rhythm is adjacent-sibling
-   * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools use the same
-   * step via `--fynns-navdrawer-search-gap` (aliases `section-gap`) so
-   * Search↔Item label distance matches Item↔Item optically.
+   * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools use
+   * `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` /
+   * 8dp) so Search↔Item matches Search↔Toggle in a tools column.
    */
   gap: 0;
   align-items: stretch;
@@ -6128,8 +6128,8 @@ a.fynns-breadcrumb-link:visited {
  * Group / Headline / Divider / Tooltip-wrapped items. Same step as
  * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
  * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
- * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar uses the same token
- * via `--fynns-navdrawer-search-gap` (aliases `section-gap`) below.
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools ↔ destinations
+ * use `--fynns-navdrawer-search-gap` (8dp / control-stack) below.
  */
 .fynns-nav-drawer-body
   > *
@@ -6151,11 +6151,11 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * SearchBar / tools host ↔ adjacent body sibling. Default equals
- * `--fynns-navdrawer-section-gap` (4dp) so destination-density Search
- * label↔Item label matches Item↔Item. Token kept so a product can open
- * a wider jump without forking CSS. Covers bare SearchBar or a tools
- * wrapper that contains SearchBar (consumer GlobalSearch host).
+ * SearchBar / tools host ↔ adjacent body sibling. Uses
+ * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
+ * Search↔Item matches Search↔Toggle inside a tools column — wider than
+ * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers bare
+ * SearchBar or a tools wrapper that contains SearchBar.
  */
 .fynns-nav-drawer-body > .fynns-search-bar + *,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,

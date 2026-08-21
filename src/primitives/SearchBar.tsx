@@ -46,8 +46,9 @@ export type SearchBarProps = Omit<
    *   (40dp); keeps chrome SearchBar surface / shadow / focus. Use in
    *   destination drawers (e.g. GlobalSearch). Also auto-applied to plain
    *   SearchBars inside `.fynns-nav-drawer-body`. Body sibling gap to
-   *   destinations is `--fynns-navdrawer-search-gap` (aliases
-   *   `section-gap` — same 4dp optical row step as Item↔Item).
+   *   destinations is `--fynns-navdrawer-search-gap` (aliases layout
+   *   `control-stack-gap` / 8dp — matches Search↔Toggle in tools columns;
+   *   wider than Item↔Item `section-gap` 4dp).
    */
   density?: "chrome" | "destination";
   /** Accessible name for the search field (required when no visible label). */
