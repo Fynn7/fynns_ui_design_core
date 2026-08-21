@@ -13,6 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 import { CheckIcon } from "./icons";
 import { useFloatingBoxPosition, type Align } from "./Popover";
 
@@ -181,6 +182,20 @@ export type DropdownMenuProps = {
   /** Controlled open state. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Icon-only circular trigger (`IconButton` geometry). Use in catalog /
+   * toolbar `.fynns-control-cluster` strips beside other `IconButton`s —
+   * never a bare labeled `.fynns-btn` (agents-hub EntrySort lesson).
+   * Defaults `variant="ghost"` and `size="sm"` when omitted.
+   */
+  iconOnly?: boolean;
+  /** Trigger `Button` / `IconButton` size. Default `md` (labeled) or `sm` (`iconOnly`). */
+  size?: ButtonSize;
+  /**
+   * Trigger surface. Labeled menus keep the historical outlined `.fynns-btn`
+   * look when omitted; `iconOnly` defaults to `ghost`.
+   */
+  variant?: ButtonVariant;
 };
 
 /**
@@ -198,6 +213,9 @@ export function DropdownMenu({
   disabled = false,
   open: openProp,
   onOpenChange,
+  iconOnly = false,
+  size,
+  variant,
 }: DropdownMenuProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = openProp ?? uncontrolledOpen;
@@ -259,25 +277,54 @@ export function DropdownMenu({
     }
   };
 
+  const resolvedSize = size ?? (iconOnly ? "sm" : "md");
+  const resolvedVariant = variant ?? (iconOnly ? "ghost" : undefined);
+
   return (
     <div
       ref={rootRef}
       className={join("fynns-menu-root", className)}
     >
-      <button
-        ref={triggerRef}
-        type="button"
-        className={join("fynns-btn", triggerClassName)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-controls={open ? menuId : undefined}
-        aria-label={ariaLabel}
-        disabled={disabled}
-        onClick={() => setOpen(!open)}
-        onKeyDown={onTriggerKeyDown}
-      >
-        {trigger}
-      </button>
+      {iconOnly ? (
+        <Button
+          ref={triggerRef}
+          type="button"
+          variant={resolvedVariant ?? "ghost"}
+          size={resolvedSize}
+          iconOnly
+          className={triggerClassName}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          aria-controls={open ? menuId : undefined}
+          aria-label={ariaLabel}
+          disabled={disabled}
+          onClick={() => setOpen(!open)}
+          onKeyDown={onTriggerKeyDown}
+        >
+          {trigger}
+        </Button>
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          className={join(
+            "fynns-btn",
+            resolvedVariant && `fynns-btn--${resolvedVariant}`,
+            size === "sm" && "fynns-btn--sm",
+            size === "lg" && "fynns-btn--lg",
+            triggerClassName,
+          )}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          aria-controls={open ? menuId : undefined}
+          aria-label={ariaLabel}
+          disabled={disabled}
+          onClick={() => setOpen(!open)}
+          onKeyDown={onTriggerKeyDown}
+        >
+          {trigger}
+        </button>
+      )}
       <MenuSurface
         open={open}
         onClose={close}

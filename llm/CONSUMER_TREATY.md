@@ -30,6 +30,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
 **ListItem zero-gap pill fuse** /
+**DropdownMenu bare btn in IconButton strip** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
@@ -463,6 +464,25 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 `--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: DropdownMenu bare btn in IconButton strip
+
+Symptoms (全局规则 / catalog `ControlRow` chrome — sort / overflow next to
+Import / New `IconButton`s):
+
+- Sort / more control is a **wider 40×48 outlined pill** with a tiny chevron;
+  neighboring `IconButton` `ghost` `sm` are **32dp circles** — vertical and
+  optical misalignment (“按钮位置不对”)
+- DevTools: `DropdownMenu` trigger is bare `.fynns-btn` (no `--icon` / `--sm`)
+
+**Cause:** `DropdownMenu` default trigger is a labeled outlined button.
+Catalog strips are IconButton clusters; icon-only menus must match.
+
+**Fix in core (≥ 0.4.56):** `DropdownMenu` `iconOnly` (defaults `ghost` +
+`size="sm"` circular). Live: sandbox `#menu`. **Consumer:**
+`EntrySortControl` / overflow → `<DropdownMenu iconOnly trigger={<Chevron…/>} />`
+— do not invent private `.entry-sort` height hacks. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ListItem zero-gap pill fuse
 

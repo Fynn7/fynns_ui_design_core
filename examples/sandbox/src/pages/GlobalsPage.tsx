@@ -186,7 +186,7 @@ function ChatDemoActions({
         trigger={<MoreHorizontalIcon />}
         ariaLabel={moreLabel}
         align="start"
-        triggerClassName="fynns-btn--ghost fynns-btn--sm fynns-btn--icon"
+        iconOnly
       >
         <DropdownMenuItem onClick={onMoreShare}>
           {moreShareLabel}
@@ -1473,35 +1473,54 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="menu">
         <div className="sandbox-globals-row">
-          <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
-            <DropdownMenuGroup label={t("globals.menuGroupFile")}>
-              <DropdownMenuItem icon={<FileIcon />}>
-                {t("globals.menuNew")}
+          <div className="fynns-control-cluster">
+            <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+              <DropdownMenuGroup label={t("globals.menuGroupFile")}>
+                <DropdownMenuItem icon={<FileIcon />}>
+                  {t("globals.menuNew")}
+                </DropdownMenuItem>
+                <DropdownMenuItem icon={<FolderOpenIcon />}>
+                  {t("globals.menuOpen")}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup label={t("globals.menuGroupView")}>
+                <DropdownMenuCheckboxItem
+                  checked={menuStarred}
+                  onCheckedChange={setMenuStarred}
+                >
+                  {t("globals.menuStarred")}
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  checked={menuNotify}
+                  onCheckedChange={setMenuNotify}
+                >
+                  {t("globals.menuNotify")}
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem icon={<PencilIcon />}>
+                {t("globals.menuRename")}
               </DropdownMenuItem>
-              <DropdownMenuItem icon={<FolderOpenIcon />}>
-                {t("globals.menuOpen")}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup label={t("globals.menuGroupView")}>
-              <DropdownMenuCheckboxItem
-                checked={menuStarred}
-                onCheckedChange={setMenuStarred}
-              >
-                {t("globals.menuStarred")}
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={menuNotify}
-                onCheckedChange={setMenuNotify}
-              >
-                {t("globals.menuNotify")}
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem icon={<PencilIcon />}>
-              {t("globals.menuRename")}
-            </DropdownMenuItem>
-          </DropdownMenu>
+            </DropdownMenu>
+            <Tooltip content={t("globals.menuIconStripTip")}>
+              <span>
+                <DropdownMenu
+                  trigger={<MoreHorizontalIcon />}
+                  ariaLabel={t("globals.menuIconStripAria")}
+                  align="end"
+                  iconOnly
+                >
+                  <DropdownMenuItem onClick={() => {}}>
+                    {t("globals.menuOpen")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {}}>
+                    {t("globals.menuRename")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </span>
+            </Tooltip>
+          </div>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
         </GlobalsDemo>

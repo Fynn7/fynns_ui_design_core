@@ -995,7 +995,9 @@ const en = {
   "globals.menuNotify": "Notifications",
   "globals.menuRename": "Rename",
   "globals.menuHelp":
-    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Arrow keys move focus; Esc dismisses.",
+    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Arrow keys move focus; Esc dismisses. Icon-only overflow in a catalog / toolbar IconButton strip → `iconOnly` (ghost sm circular — same as IconButton); never a bare labeled `.fynns-btn` beside IconButtons.",
+  "globals.menuIconStripTip": "Overflow (icon-only menu)",
+  "globals.menuIconStripAria": "Overflow menu",
   "globals.sheetOpen": "Open bottom sheet",
   "globals.sheetTitle": "Bottom sheet",
   "globals.sheetDescription": "Slides up from the bottom edge.",
@@ -2503,7 +2505,9 @@ const zh: Record<MessageKey, string> = {
   "globals.menuNotify": "通知",
   "globals.menuRename": "重命名",
   "globals.menuHelp":
-    "M3 Menu（DropdownMenu）：portal 浮层，支持分组、分隔线与勾选项。方向键移动焦点，Esc 关闭。",
+    "M3 Menu（DropdownMenu）：portal 浮层，支持分组、分隔线与勾选项。方向键移动焦点，Esc 关闭。目录 / 工具条 IconButton 旁的溢出菜单 → `iconOnly`（ghost sm 圆标，与 IconButton 同几何）；禁止在 IconButton 旁用裸标注 `.fynns-btn`。",
+  "globals.menuIconStripTip": "溢出（图标菜单）",
+  "globals.menuIconStripAria": "溢出菜单",
   "globals.sheetOpen": "打开底部表单",
   "globals.sheetTitle": "底部表单",
   "globals.sheetDescription": "从底边向上滑入。",

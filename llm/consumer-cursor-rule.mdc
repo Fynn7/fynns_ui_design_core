@@ -175,7 +175,7 @@ FillColumn。
 | Select + 刷新/重载（与 chevron 并存） | `FieldBlock` + `.fynns-control-cluster--end-align` + `Select` `className="fynns-control-cluster__grow"` + 兄弟 `IconButton`（**不要** `Select.trailing`）。对照 `#field-header` | `Select.trailing` 与 chevron 挤同一槽；标签行 `FieldBlock` `actions` |
 | Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |
-| **目录列表顶栏**（名称 + 计数 \| IconButton 条） | 独立 `ControlRow`（填满宿主：标签 `1fr`、操作贴尾）+ **一个** `.fynns-control-cluster`。对照 `#rhythm` catalog strip | `ControlRow` 内容岛（按钮贴标签旁、列尾空一大块）；IconButton 散落无 cluster；私有 `hub-spread` / `space-between` |
+| **目录列表顶栏**（名称 + 计数 \| IconButton 条） | 独立 `ControlRow`（填满宿主：标签 `1fr`、操作贴尾）+ **一个** `.fynns-control-cluster`；溢出/排序菜单用 `DropdownMenu` **`iconOnly`**。对照 `#rhythm` / `#menu` | `ControlRow` 内容岛；IconButton 散落无 cluster；裸标注 `.fynns-btn` 菜单夹在 IconButton 中间 |
 | **无名称动作脚栏**（Import / Export / 重建） | **一个** `.fynns-control-cluster--end-align`（可加 `__grow`）。对照 `#rhythm` end-align footer | `ControlRow` `label=""`（空标签列 / 按钮漂中左）；私有 hub-spread |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
