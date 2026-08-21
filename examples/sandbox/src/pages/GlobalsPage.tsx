@@ -102,6 +102,7 @@ import {
   SearchIcon,
   Select,
   SettingsIcon,
+  SearchBar,
   SkipLink,
   snackbar,
   SplitButton,
@@ -3804,6 +3805,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               message={t("globals.busyRegionNarrowMessage")}
               value={0.35}
             />
+          </div>
+          <SandboxHelp text={t("globals.busyRegionDrawerHelp")} />
+          <div className="sandbox-busy-narrow sandbox-busy-drawer-tools">
+            <SearchBar
+              density="destination"
+              placeholder={t("globals.busyRegionDrawerSearchPh")}
+              value=""
+              onChange={() => {}}
+              ariaLabel={t("globals.busyRegionDrawerSearchAria")}
+            />
+            <BusyRegion busy label={t("globals.busyRegionDrawerBusyLabel")} />
           </div>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
           <div className="sandbox-fill-column-stage">

@@ -949,6 +949,14 @@
   min-height: 6rem;
 }
 
+/* Drawer tools + cold BusyRegion as siblings (SearchBar must stay clear). */
+.sandbox-busy-drawer-tools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-search-gap);
+  min-height: 0;
+}
+
 .sandbox-chat-aside-label {
   margin: 0;
   color: var(--fynns-color-text-muted);

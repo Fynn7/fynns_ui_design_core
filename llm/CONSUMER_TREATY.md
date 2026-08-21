@@ -31,6 +31,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
 **BusyRegion cold body + pager chrome siblings** /
+**BusyRegion empty cold-start overlaps SearchBar** /
 **BusyRegion linear overflows NavigationDrawer** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
@@ -897,6 +898,27 @@ Button / IconButton / field trailing stay on `CircularProgress` `sm`. Do
 **not** invent private hub loading CSS. Authority: [`AGENTS.md`](../AGENTS.md)
 Feedback **Loading placement**. Live: sandbox Globals `#busy-region`
 (section wrap + fill + **Dialog body** sample). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion empty cold-start overlaps SearchBar
+
+Symptoms (收藏夹 / ChatsSidebar / any NavigationDrawer catalog):
+
+- Circular (or linear) BusyStack **sits on top of** the drawer `SearchBar`
+  (magnifier + placeholder clipped / covered)
+- DevTools: `.fynns-busy-region` height ≈ **0** while `.fynns-busy-stack`
+  still paints; overlay `position: absolute; inset: 0` on an empty region
+
+**Cause:** cold-start `BusyRegion` with **no children** and **no `fill`** used an
+absolute overlay. Absolute children do not size the host → height 0 → stack
+overflows upward over the previous sibling (`SearchBar` / tools). Wrapping
+Search **inside** BusyRegion makes the same overlap. **Fix in core (≥ 0.4.51):**
+empty content + not `fill` → overlay is **relative / in-flow** so chrome sits
+below tools. Live: sandbox Globals `#busy-region` drawer-tools sample.
+**Consumer:** keep `SearchBar` / ToggleGroup as **siblings above** BusyRegion
+(see ChatsSidebar / FavoritesSidebar) — do **not** wrap Search in BusyRegion;
+do **not** invent private absolute/offset hacks on `.fynns-busy-*`. Authority:
+[`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: BusyRegion linear overflows NavigationDrawer

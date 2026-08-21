@@ -45,6 +45,11 @@ alwaysApply: true
    **冷启动只渲 BusyRegion** — **禁止**再并行渲 Sessions `Select` /
    `Pagination` 等脚栏兄弟（透明遮罩会盖住 Select，圈叠在控件上）。有数据后
    翻页 / 刷新：`BusyRegion` **只包** List / 表，脚栏留在 busy 外。
+   **NavigationDrawer 冷启动：** `SearchBar` / 工具条必须是 BusyRegion 的
+   **上方兄弟**（对照 `#busy-region` drawer-tools）— **禁止**把 Search 包进
+   BusyRegion。空 region 无 `fill` 时 core ≥0.4.51 走文档流，避免圈叠 Search。
+   失败模式：`llm/CONSUMER_TREATY.md`
+   **BusyRegion empty cold-start overlaps SearchBar**。
    **禁止**把默认 `md` 的裸 `CircularProgress` 当 Dialog/`unit-stack`/Card
    正文 loading 壳（圈贴顶、无 `aria-busy` 区域）。**禁止**用 `EmptyState` +
    `CircularProgress` 当 loading 壳。失败模式：`llm/CONSUMER_TREATY.md`

@@ -495,6 +495,11 @@ const en = {
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
   "globals.busyRegionNarrowMessage": "Scanning sample-files… 24/16099",
+  "globals.busyRegionDrawerHelp":
+    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the ring must not overlap the SearchBar. Live sample below.",
+  "globals.busyRegionDrawerSearchPh": "Search name / description…",
+  "globals.busyRegionDrawerSearchAria": "Search catalog",
+  "globals.busyRegionDrawerBusyLabel": "Loading…",
   "globals.busyRegionFillLabel": "Loading pane",
   "globals.busyRegionFillMessage": "Cold-start — no content yet.",
   "globals.busyRegionFillStart": "Show fill busy",
@@ -1995,6 +2000,11 @@ const zh: Record<MessageKey, string> = {
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
   "globals.busyRegionNarrowMessage": "正在扫描 sample-files… 24/16099",
+  "globals.busyRegionDrawerHelp":
+    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 圈不得叠在 SearchBar 上。下方为活样例。",
+  "globals.busyRegionDrawerSearchPh": "搜索名称 / 描述…",
+  "globals.busyRegionDrawerSearchAria": "搜索目录",
+  "globals.busyRegionDrawerBusyLabel": "加载中…",
   "globals.busyRegionFillLabel": "栏加载中",
   "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
   "globals.busyRegionFillStart": "显示 fill busy",

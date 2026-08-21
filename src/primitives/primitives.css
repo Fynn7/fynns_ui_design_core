@@ -3726,6 +3726,24 @@ a.fynns-breadcrumb-link:visited {
   pointer-events: auto;
 }
 
+/*
+ * Cold-start without `fill`: empty content + absolute overlay → region height 0,
+ * so BusyStack paints outside the box and overlaps prior siblings (SearchBar /
+ * tools in NavigationDrawer). Keep chrome in normal flow instead.
+ */
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty {
+  display: none;
+}
+
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay {
+  position: relative;
+  inset: auto;
+  grid-template-rows: auto;
+}
+
 .fynns-busy-region-overlay > .fynns-busy-stack,
 .fynns-busy-scrim > .fynns-busy-stack {
   max-width: 100%;
