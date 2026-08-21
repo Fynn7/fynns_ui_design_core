@@ -23,8 +23,10 @@ export type ListProps = HTMLAttributes<HTMLUListElement>;
  *
  * **Expandable trees:** `ListItem`s must be **direct** `ul` children. Nested
  * `List` / `.fynns-table-wrap` belong in `ListItem` `detail` (same `<li>`;
- * JSX `children` is an alias), not a wrapper `div` around the item. Expand
- * via the row `onClick`; keep the leading chevron decorative (`aria-hidden`).
+ * JSX `children` is an alias), not a wrapper `div` around the item — and
+ * **never** a `Collapsible` / `Card` as a List child (`ul > div` + flex-shrink
+ * crushes bordered shells to skeleton pills). Expand via the row `onClick`;
+ * keep the leading chevron decorative (`aria-hidden`).
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(

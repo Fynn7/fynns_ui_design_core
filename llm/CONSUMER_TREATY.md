@@ -27,6 +27,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
+**Collapsible inside List (skeleton crush)** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
@@ -460,6 +461,30 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 `--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Collapsible inside List (skeleton crush)
+
+Symptoms (项目规则 / 项目技能 / 工作流 catalogs under `PageScroll`):
+
+- `ul.fynns-list` shows **~19px teal/muted pills** instead of full group heads —
+  reads as broken skeleton loaders
+- DevTools: list children are `div.fynns-collapsible` (`ul > div`); each has
+  `flex-shrink: 1`, `overflow: hidden`, height ≪ head min-height (~49px)
+- Nested `ListItem`s live under Collapsible body (**orphan `li`**, not under `ul`)
+
+**Cause:** `CatalogGroup`-style **Collapsible** (or Card / unit-stack) as a
+**direct** `List` child. `.fynns-list` is a column flex; height-capped
+`hub-scroll` + Collapsible `overflow: hidden` **shrinks** groups into pill
+slivers. Expandable catalogs belong to **`ListItem` + `detail`** (nested
+`List` inside the same `<li>`) — AGENTS **Content density**.
+
+**Fix in core (≥ 0.4.53):** `.fynns-list > * { flex-shrink: 0 }` so mistaken
+children keep intrinsic height (scroll instead of crush). Live: sandbox
+`#list` expandable tree. **Fix in the consumer:** rewrite group chrome to
+`ListItem` (`aria-expanded` + leading chevron + `detail={<List>…}</List>`);
+never wrap Collapsible in `List`. Under page `PageScroll`, prefer **no**
+nested `list-well` max-height — let the pane scroll. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode: nested short List well + invented list-well token
 

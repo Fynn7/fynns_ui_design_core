@@ -7188,6 +7188,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   background: transparent;
 }
 
+/*
+ * Rows must not flex-shrink inside a height-capped / scrolling List.
+ * Mistaken non-`li` children (e.g. Collapsible — illegal `ul > div`) also
+ * keep intrinsic height so overflow:hidden shells do not paint ~19px
+ * “skeleton” pills. Prefer `ListItem` (+ `detail`) — never Collapsible/Card
+ * as a List child.
+ */
+.fynns-list > * {
+  flex-shrink: 0;
+}
+
 .fynns-list-item-host {
   display: flex;
   flex-direction: row;
