@@ -29,6 +29,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **List tree = ul>li + children** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
+**ListItem zero-gap pill fuse** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
@@ -462,6 +463,30 @@ typo'd the token. Invalid `minmax()` invalidates the whole grid column rule.
 `--fynns-layout-stats-min-col-sm` (`min(100%, var(--fynns-layout-stats-min-col))` on
 narrow hosts). Do not hardcode rem in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**; pasteable [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: ListItem zero-gap pill fuse
+
+Symptoms (全局规则 / commands / skills catalogs — `List` of interactive
+`ListItem`s with `selected` + optional hover):
+
+- Adjacent selected / hovered rows look like **one mega-capsule** (shared
+  stadium outline, thin seam only) because both paint `radius-3xl`
+  secondary-container / state-layer washes with **0** sibling gap
+- Unselected rows then read as “loose floating text” with a larger optical
+  band — rhythm feels broken vs NavigationDrawer destinations
+
+**Cause:** `.fynns-list` was a column flex with no `gap` while ListItem
+selected/hover reuse NavigationDrawerItem’s long-strip pill. Drawer items
+already open `--fynns-navdrawer-section-gap` (**4dp**) between siblings;
+List did not.
+
+**Fix in core (≥ 0.4.55):** `--fynns-list-item-gap` aliases
+`navdrawer-section-gap`; `.fynns-list { gap: var(--fynns-list-item-gap) }`.
+`--fynns-list-content-gap` aliases `space-xs` (**4dp**) so headline↔supporting
+stays dense inside the pill. Live: sandbox `#list` (select + hover neighbors).
+**Consumer:** no private row `margin` / `gap` — rely on core. Under
+`PageScroll`, prefer no nested `list-well` max-height for short catalogs.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Drawer tip-fill stretches IconButton toolbars
 

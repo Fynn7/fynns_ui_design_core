@@ -894,6 +894,13 @@ export const LIST_TOKENS = {
    */
   "inset-inline": "0.5rem",
   "inset-block": "0.5rem",
+  /**
+   * Sibling row hosts (`.fynns-list-item-host`). Same optical step as
+   * NavigationDrawerItem (`--fynns-navdrawer-section-gap` / 4dp). Required
+   * because selected / hover use `radius-3xl` pills — zero gap fuses adjacent
+   * washes into one mega-capsule (agents-hub 全局规则 lesson).
+   */
+  "item-gap": "var(--fynns-navdrawer-section-gap)",
   /** Leading glyph → copy (aliases `--fynns-space-sm`). Not a 40dp icon-button column. */
   gap: "0.5rem",
   /**
@@ -907,8 +914,11 @@ export const LIST_TOKENS = {
    * An `Avatar` in `leading` still sizes the slot to the avatar.
    */
   "leading-width": "1.25rem",
-  /** Overline → headline → supporting (aliases `--fynns-space-sm`). */
-  "content-gap": "0.5rem",
+  /**
+   * Overline → headline → supporting. Tighter than unit-stack so two-line
+   * pills stay dense (aliases `--fynns-space-xs` / 4dp).
+   */
+  "content-gap": "var(--fynns-space-xs)",
 } as const;
 
 /**

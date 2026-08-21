@@ -1237,7 +1237,7 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Expandable trees: children stay in the same li; overline / trailingSupportingText slots; decorative leading chevron. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
+    "M3 content List / ListItem (1–3 lines). Selected = secondary-container + radius-3xl (same as NavigationDrawerItem). Sibling rows use `--fynns-list-item-gap` (4dp = navdrawer section-gap) so selected/hover pills do not fuse into one mega-capsule. Path / link catalogs = one List of ListItems (headline + path + trailing ghost sm IconButtons) — never a padded Surface/Card per entry. Expandable trees: children stay in the same li; overline / trailingSupportingText slots; decorative leading chevron. Interactive trailing sits outside the row button. Sidebar destinations: NavigationDrawer / Rail / Bar (not ListGroup / ListRow). See AGENTS.md Content density.",
   "globals.listHostToneHelp":
     "Row tone / inset rail: pass app classes on ListItem hostClassName (outer li). Host already radius-3xl + overflow clip so washes follow the long-strip — never wrap ListItem in a div for stripes (breaks ul > li). Use UI font for headlines (not mono). className stays on the row control.",
   "globals.listHostToneAria": "Sample list with host tone rails",
@@ -2741,7 +2741,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。可展开树：children 留在同一个 li；overline / trailingSupportingText；leading 装饰 chevron。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
+    "M3 内容列表 List / ListItem（1–3 行）。选中 = secondary-container + radius-3xl（与 NavigationDrawerItem 一致）。兄弟行用 `--fynns-list-item-gap`（4dp = navdrawer section-gap），避免 selected/hover 胶囊粘成一体。路径 / 链接目录 = 一个 List 多行 ListItem（标题 + 路径 + trailing ghost sm IconButton）— 禁止每条外包一层加垫 Surface/Card。可展开树：children 留在同一个 li；overline / trailingSupportingText；leading 装饰 chevron。交互行的 trailing 在行按钮外侧。侧栏目的地用 NavigationDrawer / Rail / Bar（勿用已删除的 ListGroup / ListRow）。见 AGENTS.md Content density。",
   "globals.listHostToneHelp":
     "行色条 / 内嵌轨：把应用 tone class 挂到 ListItem 的 hostClassName（外层 li）。host 已 radius-3xl + overflow clip，洗底贴合长条圆角——禁止用 div 包 ListItem 画条纹（破坏 ul > li）。headline 用 UI 字族（勿 mono）。className 仍挂在行控件上。",
   "globals.listHostToneAria": "带 host 色条的列表示例",

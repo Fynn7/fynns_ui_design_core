@@ -941,14 +941,16 @@ classes.
   (`#layouts-demo-shell`).
 - **Content:** List / ListItem (main-content M3 rows; selected =
   `secondary-container` + `radius-3xl` like NavigationDrawerItem / Select /
-  menu; **row tone / inset rail** → `hostClassName` on the outer `<li>` — never
+  menu; sibling hosts use `--fynns-list-item-gap` (= navdrawer `section-gap` /
+  **4dp**) so selected/hover pills do not fuse; **row tone / inset rail** → `hostClassName` on the outer `<li>` — never
   wrap `ListItem` in a `div` for stripes; **path / link / bookmark catalogs** = one `List` of `ListItem`s —
   headline + path `supportingText` + trailing ghost `sm` `IconButton`s
   (interactive trailing is a **sibling** of the row button — valid nesting —
   the **host / row** still paints one `radius-3xl` state-layer so the
   IconButton is not a floating island); headline / supporting ellipsize
   through `Tooltip` wrappers; leading **hugs** the glyph (not a 40dp empty
-  column); overline / headline / supporting stack with `--fynns-list-content-gap`;
+  column); overline / headline / supporting stack with `--fynns-list-content-gap`
+  (**4dp**, aliases `space-xs`);
   timestamp / kind label → `overline`; duration / count →
   `trailingSupportingText` (optional `.fynns-control-cluster` — **not**
   `ControlRow`); **expandable trees** = row `onClick` + decorative leading
