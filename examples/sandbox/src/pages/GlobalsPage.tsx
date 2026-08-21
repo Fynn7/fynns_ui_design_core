@@ -77,6 +77,7 @@ import {
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
+  GlobeIcon,
   Dialog,
   DialogShell,
   ConfirmDialog,
@@ -3076,6 +3077,87 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
+          <SandboxHelp text={t("globals.listShortcutCardHelp")} />
+          <Card
+            title={t("globals.listShortcutCardTitle")}
+            actions={
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.listShortcutCardRefresh")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listShortcutCardRefresh")}
+                    onClick={() => snackbar(t("globals.listShortcutCardRefreshSnack"))}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            }
+          >
+            <List aria-label={t("globals.listShortcutCardAria")}>
+              <ListItem
+                overline={t("globals.listShortcutCardFolderKind")}
+                headline={t("globals.listShortcutCardFolder")}
+                supportingText={t("globals.listShortcutCardFolderPath")}
+                leading={<FolderOpenIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+              <ListItem
+                overline={t("globals.listShortcutCardFileKind")}
+                headline={t("globals.listShortcutCardFile")}
+                supportingText={t("globals.listShortcutCardFilePath")}
+                leading={<FileIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FileIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+              <ListItem
+                overline={t("globals.listShortcutCardUrlKind")}
+                headline={t("globals.listShortcutCardUrl")}
+                supportingText={t("globals.listShortcutCardUrlPath")}
+                leading={<GlobeIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <GlobeIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+            </List>
+          </Card>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
           <List aria-label={t("globals.listCatalogStaticAria")}>
             <ListItem

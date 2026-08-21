@@ -31,6 +31,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Drawer tip-fill ≠ IconButton toolbar** /
 **ListItem zero-gap pill fuse** /
 **DropdownMenu bare btn in IconButton strip** /
+**sparse dashboard shortcut List** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
@@ -482,6 +483,24 @@ Catalog strips are IconButton clusters; icon-only menus must match.
 `size="sm"` circular). Live: sandbox `#menu`. **Consumer:**
 `EntrySortControl` / overflow → `<DropdownMenu iconOnly trigger={<Chevron…/>} />`
 — do not invent private `.entry-sort` height hacks. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: sparse dashboard shortcut List
+
+Symptoms (Agents Hub overview「快捷入口」):
+
+- Card body hosts a **tonal Button strip** then a `List` of rows with only
+  headline + placeholder supporting (“稍后接入”) — rows look **empty / sparse**
+- DevTools: `ListItem` has no `leading` / `overline` / path / trailing open
+
+**Cause:** there is **no** ShortcutPanel primitive. Dashboard links are the
+**path-catalog** recipe inside one Card. Placeholder supporting text is not
+anatomy.
+
+**Fix in core (≥ 0.4.57):** sandbox `#list` shortcut Card teaches Card
+`actions` + full ListItem anatomy. **Consumer:** wire real quicklinks
+(`headline` + path `supportingText` + kind leading/overline + trailing open);
+refresh lives in Card `actions`, not a body Button row. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ListItem zero-gap pill fuse

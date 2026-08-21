@@ -1251,6 +1251,21 @@ const en = {
   "globals.listHostTonePlainSupporting": "No hostClassName — default host",
   "globals.listCatalogHelp":
     "Path / link / repo catalog recipe — one List; row actions in trailing (ghost sm, horizontal nowrap cluster). Trailing stays on the end sibling even when interactive={false}. Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
+  "globals.listShortcutCardHelp":
+    "Dashboard / overview shortcuts — **no** dedicated ShortcutPanel primitive. Whole host = one Card (title + IconButton actions) wrapping **one** List of path/link rows (leading kind glyph + overline kind + headline + real path supportingText + trailing open). Never a Button strip above a List of headline-only rows with placeholder “later” supporting copy — that reads empty. Live: this Card under #list.",
+  "globals.listShortcutCardTitle": "Shortcuts",
+  "globals.listShortcutCardAria": "Sample shortcut links",
+  "globals.listShortcutCardRefresh": "Refresh links",
+  "globals.listShortcutCardRefreshSnack": "Links refreshed",
+  "globals.listShortcutCardFolderKind": "folder",
+  "globals.listShortcutCardFolder": "Project folder",
+  "globals.listShortcutCardFolderPath": "~/Documents/sample-project",
+  "globals.listShortcutCardFileKind": "file",
+  "globals.listShortcutCardFile": "config.json",
+  "globals.listShortcutCardFilePath": "~/.config/sample/config.json",
+  "globals.listShortcutCardUrlKind": "url",
+  "globals.listShortcutCardUrl": "Docs site",
+  "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "Sample path catalog",
   "globals.listCatalogStaticHelp":
     "Static catalog row (interactive={false}) still keeps open/folder IconButtons on the end sibling — horizontal nowrap cluster, not a vertical 16dp crush. Status stays in overline / .fynns-table-meta — not a Chip beside the path.",
@@ -2757,6 +2772,21 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "无 hostClassName — 默认宿主",
   "globals.listCatalogHelp":
     "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost sm，横向 nowrap 簇）。即使 interactive={false}，trailing 仍在 end 兄弟槽。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
+  "globals.listShortcutCardHelp":
+    "概览 / 仪表盘快捷入口——**没有**独立 ShortcutPanel 原语。整体宿主 = 一个 Card（title + IconButton actions）包 **一个** 路径/链接 List（leading 类型 glyph + overline 种类 + headline + 真实路径 supportingText + trailing 打开）。禁止 Card 体内 Button 条 + 只有「稍后接入」的空 ListItem——会显得空旷。对照：本段 #list 下的 Card。",
+  "globals.listShortcutCardTitle": "快捷入口",
+  "globals.listShortcutCardAria": "快捷链接示例",
+  "globals.listShortcutCardRefresh": "刷新链接",
+  "globals.listShortcutCardRefreshSnack": "已刷新链接",
+  "globals.listShortcutCardFolderKind": "文件夹",
+  "globals.listShortcutCardFolder": "项目文件夹",
+  "globals.listShortcutCardFolderPath": "~/Documents/sample-project",
+  "globals.listShortcutCardFileKind": "文件",
+  "globals.listShortcutCardFile": "config.json",
+  "globals.listShortcutCardFilePath": "~/.config/sample/config.json",
+  "globals.listShortcutCardUrlKind": "链接",
+  "globals.listShortcutCardUrl": "文档站点",
+  "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
     "静态目录行（interactive={false}）仍把打开/文件夹 IconButton 放在 end 兄弟槽——横向 nowrap 簇，不是 16dp 纵向压扁。状态放 overline / .fynns-table-meta——不要用 Chip 贴在路径旁。",
