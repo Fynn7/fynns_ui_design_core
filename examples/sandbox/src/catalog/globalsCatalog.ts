@@ -333,7 +333,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "busy-region",
     categoryId: "patterns",
     label: "BusyRegion",
-    keywords: ["忙碌", "busy", "loading region", "linear", "cold", "pager", "sessions"],
+    keywords: ["忙碌", "busy", "loading region", "linear", "cold", "pager", "sessions", "drawer", "narrow", "overflow"],
   },
   {
     id: "page-scroll",
@@ -342,6 +342,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: [
       "页滚",
       "page-scroll",
+      "PageScroll",
       "content-column",
       "scrollbar",
       "overlay",

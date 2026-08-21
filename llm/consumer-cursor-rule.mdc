@@ -54,18 +54,24 @@ alwaysApply: true
    `message` 只放状态文案（可加 `FieldHint`），**禁止**再塞 `LinearProgress` /
    `CircularProgress` / 消费仓 TaskProgressBar。**禁止**用私有居中壳（如
    `.hub-progress-block` + TaskProgressBar）冒充栏目 / 区块加载几何 — 冷启动与
-   区块 busy 一律 `BusyRegion`（对照 sandbox `#busy-region` linear）。领域
+   区块 busy 一律 `BusyRegion`（对照 sandbox `#busy-region` linear）。
+   **窄宿主（NavigationDrawer / EndAside）：** linear chrome 由 core 相对宿主
+   收缩（≥0.4.50）— **禁止**消费仓给 `.fynns-busy-*` 写私有 `max-width` /
+   `20rem` / `100vw`。失败模式：`llm/CONSUMER_TREATY.md`
+   **BusyRegion linear overflows NavigationDrawer**。领域
    `TaskProgressBar` / 独立 `LinearProgress` **仅**可作内容旁的非遮罩条（工具条 /
    已有内容旁的长任务）。**禁止**末端 stop /「带点」进度条（`stopIndicator` /
    `.fynns-linear-progress-stop` 已删；对照 `#progress`）。
    表单行），不可当冷启动壳。未知时长 → 默认圈；全屏挡住 →
    `BusyScrim`（才用 overlay 色）；**仅**按钮/图标/字段槽 → `CircularProgress`
    `sm`；零结果目录才用 `EmptyState`。勿发明私有 hub loading CSS。
-   `FillColumn` 里的**短目录页滚**：`.fynns-page-scroll.fynns-scroll` 必须与
+   `FillColumn` 里的**短目录页滚**：优先 **`PageScroll`**（内建
+   `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与
    **窗格右缘对齐**（`hub-main` / shell main — **禁止**在页滚宿主外包一层
-   `padding-inline`；侧向呼吸放在 `.fynns-content-column`，core ≥0.4.47 已带
+   `padding-inline`；侧向呼吸放在 content-column，core ≥0.4.47 已带
    `dialog-inset`）。页滚仅 `padding-inline-end: scrollbar-size` 留给 overlay 轨。
-   **禁止**把 `fynns-scroll` 挂在 max-width 列上。对照 `#page-scroll`。
+   **禁止**把 `fynns-scroll` 挂在 max-width 的 `.content` / `.hub-scroll` 上
+   （拇指贴 Card）。对照 `#page-scroll`。
    长目录才用 List + list-well max-height。
    `Surface` 默认按内容增高（只有 `fill` 才 `min-height: 0`）。压成 ~36px 药丸、
    ToggleGroup 被裁切 = 井在 flex 里被 shrink，修 core 不要改 `.fynns-*`。
@@ -153,7 +159,7 @@ FillColumn。
 
 | 数据 | 用 | **禁止** |
 | --- | --- | --- |
-| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + trailing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / trailingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = `.fynns-page-scroll.fynns-scroll`（FillColumn 全宽）+ 内层 `.fynns-content-column`；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list / #page-scroll | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；tip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标；把 fynns-scroll 挂在 max-width 列上（拇指贴 Card） |
+| 名称 + 路径/副标题 + 行操作（书签、自定义链接、文件捷径） | **一个** List 多行 ListItem：headline + supportingText + trailing = .fynns-control-cluster 里 IconButton ghost sm + Tooltip（横向 nowrap；interactive={false} 时 trailing 仍在 end 兄弟槽）；状态/新鲜度 → overline / trailingSupportingText / .fynns-table-meta；删除走 ConfirmDialog。短目录页滚动 = **`PageScroll`**（或 `.fynns-page-scroll.fynns-scroll` + 内层 `.fynns-content-column`）；长目录才用 List + max-height: var(--fynns-layout-list-well-max-height) / -sm。对照 #list / #page-scroll | 每条外包加垫 Surface/Card；headline 塞 Chip 状态 pill；tip-grow；单行 List 再套 Card 内 hub-scroll + 自造 --fynns-layout-list-well-*（幽灵滚动条）；16dp 槽纵向叠图标；把 fynns-scroll 挂在 max-width 列上（拇指贴 Card） |
 | 可展开目录（会话树 + 嵌套明细表） | 同一个 `List`：**直接** `ul > li`。时间/种类 → `overline`；名称 → `headline`；路径 → `supportingText`；时长/次数 → `trailingSupportingText`。展开 = 行 `onClick` + leading 装饰 chevron + `aria-expanded`。嵌套 `List` 或 `.fynns-table-wrap.fynns-scroll` 放 `ListItem` **`detail`**。打开记录 → trailing `IconButton`（与行同一条 radius-3xl 高亮，不是行外浮岛）。长文案 `Tooltip` 包 headline，省略号由 core 画。对照 `#list` | `ul > div` 包住 ListItem；List 外的孤儿 ListItem；`leading` 里裸 `<button>` / 应用 `HubTreeDisclosure`；trailing 用 `ControlRow`；headline 里再塞 `Button`；嵌套表 `width:100%` + `fixed` + 藏横向滚动；单元格或 headline 用 `Chip` 当状态；headline 上 `tip-grow` / `max-content` 撑破 `…` |
 | 内置/只读行色条（inset rail） | `ListItem` **`hostClassName`** 挂 tone class（`<li>`；core 已 `radius-3xl` + `overflow: clip`）。headline **UI 字族**（勿 `mono`）。对照 `#list` host tone | `ul > div.hub-*-row > li`；host 洗底成方条/胶囊岛；目录显示名套 `mono` |
 | Card / Collapsible 头 `actions` | **交互 chrome 专用**：一个横向 `.fynns-control-cluster`（IconButton / Button / InfoHint）；core：actions 下所有 cluster nowrap + hug；组合进 `actions` 的 helper 用 **fragment**。分支 / 路径 / pin 元数据放 **正文**。对照 `#card` | `actions` 里塞 `src-path` / 分支名等纯文字；嵌套 `width:100%` / wrap cluster 把 IconButton 叠成 ~72dp 多行高头 |

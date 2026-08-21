@@ -17,7 +17,9 @@ export type FillColumnProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Middle band that absorbs remaining height (`flex: 1; min-height: 0`).
    * Put `<Chat>` here so the thread fills and the composer docks to the
-   * column bottom — or `BusyRegion` `fill` while the pane is booting.
+   * column bottom — or `BusyRegion` `fill` while the pane is booting —
+   * or `<PageScroll>` for Card / List catalogs (never a private
+   * max-width `.hub-scroll` on this slot).
    * Do not stack Preview / EmptyState / Composer as siblings.
    */
   children: ReactNode;

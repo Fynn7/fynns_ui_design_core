@@ -31,6 +31,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **BusyRegion transparent overlay (no surface wash)** /
 **BusyRegion cold body + pager chrome siblings** /
+**BusyRegion linear overflows NavigationDrawer** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
 **one progress chrome per busy host** /
@@ -339,9 +340,10 @@ scrollports (page scroll on FillColumn). Authority: [`AGENTS.md`](../AGENTS.md)
 - Do **not** wrap the headline in `Tooltip className="tip-fill"` /
   `tip-grow` — core already ellipsizes `.fynns-list-item-headline`; tip-fill
   fights that. Optional `Tooltip` for the full **path** on supporting copy.
-- Page scroll lives on the FillColumn catalog host
-  (`.… hub-scroll.fynns-scroll`) with **`overflow-x: clip`** (not `hidden`) —
-  never invent a second scrollport inside the Card body for a short list.
+- Page scroll lives on the FillColumn catalog host via **`PageScroll`**
+  (or `.fynns-page-scroll.fynns-scroll` → `.fynns-content-column`) — **never**
+  a private `.hub-scroll` with `max-width` on the same node (rail paints on
+  the Card). Pane ancestor (`hub-main`) must not add horizontal pad.
   Native bars stay hidden; overlay thumbs come from core.
 
 Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
@@ -365,17 +367,20 @@ host — overlay paints at `host.rect.right − scrollbar-size`, so the rail
 follows the padded content box, **not** the pane edge. The scroll parent is
 the **pane** (`hub-main` / FillColumn main), not the Card.
 
-**Fix in core (≥ 0.4.47):** `.fynns-page-scroll` is edge-flush with the pane
-(+ `padding-inline-end: scrollbar-size` for the rail band only).
-`.fynns-content-column` carries `padding-inline: dialog-inset` (pane breath).
-Live: sandbox `#page-scroll`. Do **not** use `scrollbar-gutter`.
+**Fix in core (≥ 0.4.49):** Prefer the **`PageScroll`** primitive (wraps
+`.fynns-page-scroll.fynns-scroll` → `.fynns-content-column`). Classes alone
+still work (≥ 0.4.47): page-scroll is edge-flush with the pane
+(+ `padding-inline-end: scrollbar-size` for the rail band only);
+content-column carries `padding-inline: dialog-inset`. Live: sandbox
+`#page-scroll`. Do **not** use `scrollbar-gutter`.
 
-**Fix in the consumer:** FillColumn `children` =
-`.fynns-page-scroll.fynns-scroll` → inner `.fynns-content-column`. **Do not**
-put horizontal pad on `.hub-main` / shell main **around** the page-scroll
-host — move side breath to the content column (core default ≥ 0.4.47). Bump
-`@fynn7/ui-design-core` ≥ 0.4.47. Authority: [`AGENTS.md`](../AGENTS.md)
-**FillColumn**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+**Fix in the consumer:** FillColumn `children` = `<PageScroll>{catalog}</PageScroll>`
+(or the two keep-set classes). **Do not** put `fynns-scroll` + `max-width` on
+the same `.content` / `.hub-scroll` node. **Do not** put horizontal pad on
+`.hub-main` / shell main **around** the page-scroll host. Bump
+`@fynn7/ui-design-core` ≥ 0.4.49. CDP smoke: `card.right < pageRail.left`
+and `pageScroll.right === hubMain.right`. Authority: [`AGENTS.md`](../AGENTS.md)
+**FillColumn** / **PageScroll**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: BusyRegion cold body + pager chrome siblings
 
@@ -893,6 +898,27 @@ Button / IconButton / field trailing stay on `CircularProgress` `sm`. Do
 Feedback **Loading placement**. Live: sandbox Globals `#busy-region`
 (section wrap + fill + **Dialog body** sample). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion linear overflows NavigationDrawer
+
+Symptoms (聊天记录 / ChatsSidebar / any drawer-body scan):
+
+- `.fynns-busy-stack--linear` is **~320px (20rem)** while SearchBar /
+  ToggleGroup in the same `NavigationDrawer` body are ~224px
+- Teal bar + long status copy (`扫描 … 8/16099`) crosses the nav|main seam
+- DevTools: stack `width` resolves from **viewport** (`100vw` / fixed `20rem`),
+  not the drawer track; `BusyRegion` content-sizes to that preferred width
+
+**Cause:** BusyStack linear used `width: min(20rem, 100vw − pads)` and a
+content-sized `BusyRegion` grew with the stack; `max-width: 100%` could not
+shrink a parent that had already expanded. **Fix in core (≥ 0.4.50):** stack
+width is host-relative (`min(20rem, 100%)`); region / overlay use `min-width: 0`
++ `minmax(0, 1fr)` grid so the chrome cannot expand the host; message
+`overflow-wrap: anywhere`. Live: sandbox Globals `#busy-region` narrow sample
+(`.sandbox-busy-narrow`). **Consumer:** keep `BusyRegion` `indicator="linear"`
+props-only — do **not** invent a private narrow busy CSS or `max-width` hack on
+`.fynns-busy-*`. Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading
+placement**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: stacked progress chromes in BusyRegion
 

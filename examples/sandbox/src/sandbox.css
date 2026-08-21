@@ -939,14 +939,14 @@
   background: var(--fynns-color-surface-1);
 }
 
-/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow).
- * Match a typical EndAside content width so long values ellipsis at the pane
- * edge — not an artificially crushed column that looks “early-truncated”. */
-.sandbox-activity-narrow {
+/* Narrow host for BusyRegion linear (NavigationDrawer / EndAside overflow).
+ * Prefer drawer preferred width so the bar must shrink below the 20rem cap. */
+.sandbox-busy-narrow {
   box-sizing: border-box;
   width: 100%;
-  max-width: min(100%, var(--fynns-layout-end-aside-width));
+  max-width: min(100%, var(--fynns-navdrawer-width));
   min-width: 0;
+  min-height: 6rem;
 }
 
 .sandbox-chat-aside-label {

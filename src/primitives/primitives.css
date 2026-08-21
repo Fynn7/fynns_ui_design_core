@@ -3634,14 +3634,15 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   text-align: center;
   gap: var(--fynns-layout-unit-stack-gap);
-  max-width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
+  /* Cap vs *host* — never 100vw (that overflows NavigationDrawer / EndAside). */
+  width: min(20rem, 100%);
+  max-width: 100%;
+  min-width: 0;
   padding: var(--fynns-space-lg);
   box-sizing: border-box;
 }
 
 .fynns-busy-stack--linear {
-  width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
-  max-width: 100%;
   align-items: stretch;
   text-align: start;
 }
@@ -3651,6 +3652,8 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   gap: var(--fynns-layout-field-hint-gap);
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--fynns-color-text);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
@@ -3677,10 +3680,15 @@ a.fynns-breadcrumb-link:visited {
 .fynns-busy-region {
   position: relative;
   isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .fynns-busy-region-content {
   min-width: 0;
+  max-width: 100%;
 }
 
 /* Stretch to a height-resolved flex parent so the overlay can center. */
@@ -3705,11 +3713,23 @@ a.fynns-breadcrumb-link:visited {
   inset: 0;
   z-index: 1;
   display: grid;
+  /* minmax(0, 1fr) so a 20rem-preferring stack cannot expand the host
+     (NavigationDrawer / EndAside); place-items still centers the chrome. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   place-items: center;
+  min-width: 0;
+  box-sizing: border-box;
   /* Transparent — keep host / pane background; do not wash with surface-*.
      Full-viewport blocking tint stays on BusyScrim (`--fynns-color-overlay`). */
   background: transparent;
   pointer-events: auto;
+}
+
+.fynns-busy-region-overlay > .fynns-busy-stack,
+.fynns-busy-scrim > .fynns-busy-stack {
+  max-width: 100%;
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

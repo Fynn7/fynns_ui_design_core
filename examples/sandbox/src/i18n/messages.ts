@@ -491,6 +491,10 @@ const en = {
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
     "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body.",
+  "globals.busyRegionNarrowHelp":
+    "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
+  "globals.busyRegionNarrowLabel": "Scanning samples",
+  "globals.busyRegionNarrowMessage": "Scanning sample-files… 24/16099",
   "globals.busyRegionFillLabel": "Loading pane",
   "globals.busyRegionFillMessage": "Cold-start — no content yet.",
   "globals.busyRegionFillStart": "Show fill busy",
@@ -514,7 +518,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.pageScrollHelp":
-    "Page catalogs: `.fynns-page-scroll` must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset. Put side breath on `.fynns-content-column` (core ships padding-inline: dialog-inset). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.47.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side breath is on the content column (dialog-inset). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.49.",
   "globals.pageScrollCardTitle": "Sample catalog",
   "globals.pageScrollCardTitle2": "Next section",
   "globals.pageScrollCardBody":
@@ -1987,6 +1991,10 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
     "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。",
+  "globals.busyRegionNarrowHelp":
+    "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
+  "globals.busyRegionNarrowLabel": "扫描样例",
+  "globals.busyRegionNarrowMessage": "正在扫描 sample-files… 24/16099",
   "globals.busyRegionFillLabel": "栏加载中",
   "globals.busyRegionFillMessage": "冷启动 — 尚无内容。",
   "globals.busyRegionFillStart": "显示 fill busy",
@@ -2010,7 +2018,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
   "globals.pageScrollHelp":
-    "页面目录：`.fynns-page-scroll` 必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧）。侧向呼吸放在 `.fynns-content-column`（core 已带 padding-inline: dialog-inset）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.47。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。侧向呼吸放在内容列（core 已带 padding-inline: dialog-inset）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.49。",
   "globals.pageScrollCardTitle": "样例目录",
   "globals.pageScrollCardTitle2": "下一分区",
   "globals.pageScrollCardBody":

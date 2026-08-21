@@ -126,6 +126,7 @@ import {
   FieldHint,
   Grid,
   FillColumn,
+  PageScroll,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -3794,6 +3795,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
             </Card>
           </BusyRegion>
+          <SandboxHelp text={t("globals.busyRegionNarrowHelp")} />
+          <div className="sandbox-busy-narrow">
+            <BusyRegion
+              busy
+              indicator="linear"
+              label={t("globals.busyRegionNarrowLabel")}
+              message={t("globals.busyRegionNarrowMessage")}
+              value={0.35}
+            />
+          </div>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
           <div className="sandbox-fill-column-stage">
             <FillColumn>
@@ -3897,8 +3908,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.pageScrollHelp")} />
           <div className="sandbox-page-scroll-stage">
             <FillColumn>
-              <div className="fynns-page-scroll fynns-scroll">
-                <div className="fynns-content-column">
+              <PageScroll>
                   <Card title={t("globals.pageScrollCardTitle")}>
                     <List aria-label={t("globals.pageScrollListAria")}>
                       <ListItem
@@ -3930,8 +3940,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <Card title={t("globals.pageScrollCardTitle2")}>
                     <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
                   </Card>
-                </div>
-              </div>
+              </PageScroll>
             </FillColumn>
           </div>
         </div>

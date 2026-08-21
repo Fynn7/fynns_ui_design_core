@@ -498,7 +498,7 @@ classes.
   | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay stays **transparent** | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / colored loading wash |
   | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (transparent overlay covers the footer; spinner sits on the Select) |
   | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; transparent overlay so the surface shows through | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay |
-  | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message` |
+  | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only; chrome width is **host-relative** (`min(20rem, 100%)` — never viewport/`100vw`) so NavigationDrawer / EndAside do not spill | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message`; private `width: 20rem` / `100vw` on the busy chrome |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = `CircularProgress` `sm` | Two progress chromes in one overlay |
   | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level / Dialog-body / Card-body layout |
   | Zero-result catalog | `EmptyState` | Using it for loading |
@@ -1057,16 +1057,18 @@ classes.
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
   height-resolved parent — shell main / DestinationAppShell canvas / fixed
   stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
-  put `<Chat>` **or** pane-boot `BusyRegion` `fill` **or**
-  `.fynns-page-scroll.fynns-scroll` (page catalogs) in `children` so the band
-  absorbs leftover (Chat composer docks; loading ring centers; overlay Y rail
-  sits on the **pane** edge — page-scroll must be **edge-flush** with the
-  pane; never pad `.hub-main` / shell main **around** the scroll host). Inside
-  page-scroll: `.fynns-content-column` (`max-width` + `padding-inline:
-  dialog-inset`) holds Cards / stacks — **never** put `fynns-scroll` on the
-  content column itself. Page-scroll keeps `padding-inline-end:
-  scrollbar-size` for the rail band only. A **long in-Card catalog** may use
-  List + `fynns-scroll` + list-well max-height; short catalogs page-scroll.
+  put `<Chat>` **or** pane-boot `BusyRegion` `fill` **or** **`PageScroll`**
+  (page catalogs; wraps `.fynns-page-scroll.fynns-scroll` →
+  `.fynns-content-column`) in `children` so the band absorbs leftover (Chat
+  composer docks; loading ring centers; overlay Y rail sits on the **pane**
+  edge — page-scroll must be **edge-flush** with the pane; never pad
+  `.hub-main` / shell main **around** the scroll host). Inside page-scroll /
+  PageScroll: content column (`max-width` + `padding-inline: dialog-inset`)
+  holds Cards / stacks — **never** put `fynns-scroll` on the content column
+  itself (or on a private `.content` / `.hub-scroll` with `max-width` — rail
+  paints on the Card). Page-scroll keeps `padding-inline-end: scrollbar-size`
+  for the rail band only. A **long in-Card catalog** may use List +
+  `fynns-scroll` + list-well max-height; short catalogs page-scroll.
   **Do not** stack Preview / EmptyState / Composer as canvas siblings — that
   leaves a dead band under content height. Does **not** apply aside bubble
   100% (`.fynns-chat-host--fill` / EndAside stay for that)),
@@ -1109,7 +1111,7 @@ classes.
   | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-sm`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
-  | Button → Grid / FillColumn (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host (header + flex main); not aside bubble geometry. |
+  | Button → Grid / FillColumn / PageScroll (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll (not aside bubble geometry). |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
