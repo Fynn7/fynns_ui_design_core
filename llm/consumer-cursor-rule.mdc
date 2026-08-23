@@ -215,7 +215,7 @@ FillColumn。
 | **无名称动作脚栏**（Import / Export / 重建） | **一个** `.fynns-control-cluster--end-align`（可加 `__grow`）。对照 `#rhythm` end-align footer | `ControlRow` `label=""`（空标签列 / 按钮漂中左）；私有 hub-spread |
 | 带标题的分区壳 | **一个**外层 `Card` 包住整个 List/表单 | Card 套在每条 ListItem 里 |
 | 无标题井 / 预览台 | `Surface` | 用 Surface 冒充 List 行 |
-| 表格/列表分页（每页条数 + `Pagination`） | Card body **上下**堆：每页 `Select` / 范围文案，再 `Pagination`（内容宽度 nowrap） | 左右 space-between，把页码挤到 Select 旁边直到数字换行 |
+| 表格/列表分页（每页条数 + `Pagination`） | **`.fynns-pagination-bar`** 一行脚栏：`__start` = 内容宽 Select + 范围，`__end` = nowrap `Pagination`（M3 / MUI） | Card body 上下堆 Select 再 Pagination；私有 space-between 把 Select 拉成 1fr 挤换行页码 |
 | KPI / 指标卡（dashboard stats） | `auto-fill` + `--fynns-layout-stats-min-col`（窄屏 `--fynns-layout-stats-min-col-sm`） | 自造未发布的 `--fynns-layout-*` 导致 grid 失效、单列撑满 |
 | 多状态指示条（落后 / CI / 保护 / 同步） | Card 正文里 `ControlStack` + 多个 `ControlRow`（`label` = 短名，子树 = tip 字形）。对照 `#rhythm` status legend | 一个 `.fynns-control-cluster` 里交错 mono 标签 + 状态 icon（icon 汤 / 无节律） |
 | 命名就绪 / tip 状态（配置达标、同步 OK） | 同上：ControlRow（label = 短名，子树 = tip 字形）。若同行还有应用 / 修复 IconButton，把 **字形 + 按钮** 放进该行内的 .fynns-control-cluster。对照 #rhythm | Card 正文单独一个 .fynns-control-cluster 只塞 tip 字形（通栏空带、icon 贴左）— cluster 只给 **≥2 个兄弟控件**，不是状态宿主 |

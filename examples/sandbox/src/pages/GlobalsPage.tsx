@@ -131,6 +131,9 @@ import {
   Grid,
   FillColumn,
   PageScroll,
+  SplitPane,
+  StatusBar,
+  StatusBarItem,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -927,6 +930,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
+  const [splitOrientation, setSplitOrientation] = useState<
+    "horizontal" | "vertical"
+  >("horizontal");
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
@@ -4164,6 +4170,46 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="split-pane">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ToggleGroup
+            showCheck={false}
+            ariaLabel={t("globals.splitPaneOrientationAria")}
+            value={splitOrientation}
+            onChange={setSplitOrientation}
+            options={[
+              {
+                value: "horizontal",
+                label: t("globals.splitPaneHorizontal"),
+              },
+              {
+                value: "vertical",
+                label: t("globals.splitPaneVertical"),
+              },
+            ]}
+          />
+          <div className="sandbox-split-stage">
+            <SplitPane
+              key={splitOrientation}
+              orientation={splitOrientation}
+              label={t("globals.splitPaneResizeAria")}
+              start={
+                <div className="sandbox-split-pane-pad">
+                  <strong>{t("globals.splitPaneStartTitle")}</strong>
+                  <p>{t("globals.splitPaneStartBody")}</p>
+                </div>
+              }
+              end={
+                <div className="sandbox-split-pane-pad">
+                  <strong>{t("globals.splitPaneEndTitle")}</strong>
+                  <p>{t("globals.splitPaneEndBody")}</p>
+                </div>
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.splitPaneHelp")} />
+        </div>
+        </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Button onClick={() => setBusyScrimOpen(true)}>
@@ -4690,43 +4736,85 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           />
           <Card title={t("globals.paginationCardTitle")}>
-            <div className="fynns-control-cluster">
-              <Select
-                ariaLabel={t("globals.paginationPageSizeAria")}
-                value={pageSize}
-                options={[
-                  { value: "10", label: t("globals.paginationPageSize10") },
-                  { value: "50", label: t("globals.paginationPageSize50") },
-                  { value: "100", label: t("globals.paginationPageSize100") },
-                ]}
-                onChange={setPageSize}
-              />
-              <FieldHint>
-                {t("globals.paginationRange")
-                  .replace(
-                    "{from}",
-                    String((page - 1) * Number(pageSize) + 1),
-                  )
-                  .replace(
-                    "{to}",
-                    String(Math.min(page * Number(pageSize), 120)),
-                  )
-                  .replace("{total}", "120")}
-              </FieldHint>
+            <div className="fynns-pagination-bar">
+              <div className="fynns-pagination-bar__start">
+                <Select
+                  ariaLabel={t("globals.paginationPageSizeAria")}
+                  value={pageSize}
+                  options={[
+                    { value: "10", label: t("globals.paginationPageSize10") },
+                    { value: "50", label: t("globals.paginationPageSize50") },
+                    { value: "100", label: t("globals.paginationPageSize100") },
+                  ]}
+                  onChange={setPageSize}
+                />
+                <FieldHint>
+                  {t("globals.paginationRange")
+                    .replace(
+                      "{from}",
+                      String((page - 1) * Number(pageSize) + 1),
+                    )
+                    .replace(
+                      "{to}",
+                      String(Math.min(page * Number(pageSize), 120)),
+                    )
+                    .replace("{total}", "120")}
+                </FieldHint>
+              </div>
+              <div className="fynns-pagination-bar__end">
+                <Pagination
+                  page={page}
+                  pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
+                  onPageChange={setPage}
+                  ariaLabel={t("globals.paginationAria")}
+                  previousAriaLabel={t("globals.paginationPrev")}
+                  nextAriaLabel={t("globals.paginationNext")}
+                  getPageAriaLabel={(n) =>
+                    t("globals.paginationPage").replace("{n}", String(n))
+                  }
+                />
+              </div>
             </div>
-            <Pagination
-              page={page}
-              pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
-              onPageChange={setPage}
-              ariaLabel={t("globals.paginationAria")}
-              previousAriaLabel={t("globals.paginationPrev")}
-              nextAriaLabel={t("globals.paginationNext")}
-              getPageAriaLabel={(n) =>
-                t("globals.paginationPage").replace("{n}", String(n))
-              }
-            />
           </Card>
           <SandboxHelp text={t("globals.paginationHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="status-bar">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-status-bar">
+            <StatusBar
+              aria-label={t("globals.statusBarAria")}
+              leading={
+                <>
+                  <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarWorkspace")}
+                  </StatusBarItem>
+                </>
+              }
+              trailing={
+                <>
+                  <StatusBarItem
+                    onClick={() =>
+                      snackbar(t("globals.statusBarProblemsToast"), {
+                        duration: "short",
+                        dismissAriaLabel: t("globals.snackbarDismiss"),
+                      })
+                    }
+                  >
+                    {t("globals.statusBarProblems")}
+                  </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarEncoding")}
+                  </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarCursor")}
+                  </StatusBarItem>
+                </>
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.statusBarHelp")} />
         </div>
         </GlobalsDemo>
       </>

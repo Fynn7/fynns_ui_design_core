@@ -85,6 +85,20 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     keywords: ["底栏", "bottom app bar", "bottomappbar"],
   },
   {
+    id: "status-bar",
+    label: "StatusBar",
+    keywords: [
+      "状态栏",
+      "status",
+      "statusbar",
+      "ide",
+      "vscode",
+      "cursor",
+      "诊断",
+      "encoding",
+    ],
+  },
+  {
     id: "toolbar",
     label: "Toolbar",
     keywords: ["工具栏", "toolbar"],

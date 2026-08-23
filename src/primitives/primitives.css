@@ -1873,6 +1873,96 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
 }
 
+/* ---------- SplitPane (in-content resizable two panes) ---------- */
+.fynns-split {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: clip;
+}
+
+.fynns-split--vertical {
+  flex-direction: column;
+}
+
+.fynns-split-pane {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fynns-split-pane--start {
+  flex: 0 0 var(--fynns-split-size, 50%);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fynns-split--vertical > .fynns-split-pane--start {
+  max-width: none;
+}
+
+.fynns-split-pane--end {
+  flex: 1 1 0;
+  min-width: var(--fynns-split-min-end);
+}
+
+.fynns-split--vertical > .fynns-split-pane--end {
+  min-width: 0;
+  min-height: var(--fynns-split-min-end);
+}
+
+.fynns-split-handle {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 var(--fynns-split-handle-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-split--vertical > .fynns-split-handle {
+  cursor: row-resize;
+}
+
+.fynns-split-handle::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background: transparent;
+}
+
+.fynns-split--horizontal > .fynns-split-handle::before {
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+}
+
+.fynns-split--vertical > .fynns-split-handle::before {
+  inset-inline: 0;
+  inset-block-start: 50%;
+  height: calc(3 * var(--fynns-border-hairline));
+  transform: translateY(-50%);
+}
+
+.fynns-split-handle:hover::before,
+.fynns-split[data-resizing="true"] > .fynns-split-handle::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-split-handle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-sm {
   max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
 }
@@ -3716,14 +3806,63 @@ a.fynns-breadcrumb-link:visited {
 .fynns-pagination {
   box-sizing: border-box;
   /*
-   * Content-sized nowrap strip. Card-body column stacks place this on its own
-   * row below page-size Select / range copy (unit-stack-gap). Never park it
-   * beside a sibling in space-between flex — that squeezes the list.
+   * Content-sized nowrap strip. In a table/list footer, place inside
+   * `.fynns-pagination-bar` (M3 / MUI single row) — never let a growing
+   * sibling crush this strip into a wrapped page list.
    */
   display: block;
   width: max-content;
   max-width: 100%;
   min-width: 0;
+  flex: 0 0 auto;
+}
+
+/*
+ * Table / list pager footer (M3 data-table pagination / MUI TablePagination):
+ * one horizontal band — meta (rows-per-page Select + range) start, page
+ * navigator end. Narrow hosts may wrap the **whole** end strip below; page
+ * discs stay nowrap inside `.fynns-pagination`.
+ */
+.fynns-pagination-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-pagination-bar__start {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+}
+
+/* Select is width:100% by default — hug content in the pager meta row. */
+.fynns-pagination-bar__start > .fynns-select {
+  width: auto;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+
+/* FieldHint is block by default — keep range copy on the same meta line. */
+.fynns-pagination-bar__start > .fynns-field-hint {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.fynns-pagination-bar__end {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin-inline-start: auto;
 }
 
 .fynns-pagination-list {
@@ -7019,6 +7158,112 @@ a.fynns-breadcrumb-link:visited {
   height: var(--fynns-bottomappbar-action-size);
   min-width: var(--fynns-bottomappbar-action-size);
   min-height: var(--fynns-bottomappbar-action-size);
+}
+
+/* ---------- StatusBar (IDE status strip — Cursor / VS Code) ---------- */
+.fynns-status-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-statusbar-height);
+  height: var(--fynns-statusbar-height);
+  margin: 0;
+  padding-inline: var(--fynns-statusbar-pad-inline);
+  border: 0;
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-statusbar-font-size);
+  line-height: 1;
+  /* Edge-flush — no elevation / no card radius (unlike BottomAppBar). */
+  box-shadow: var(--fynns-shadow-none);
+}
+
+.fynns-status-bar-leading,
+.fynns-status-bar-trailing {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--fynns-statusbar-item-gap);
+  min-width: 0;
+}
+
+.fynns-status-bar-leading {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
+.fynns-status-bar-trailing {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.fynns-status-bar-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--fynns-statusbar-item-pad-inline);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-status-bar-item--interactive {
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.fynns-status-bar-item--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-status-bar-item--interactive:hover::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-status-bar-item--interactive:disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-status-bar-item--interactive:disabled::before {
+  display: none;
 }
 
 /* ---------- Toolbar (M3 Expressive docked / floating) ---------- */

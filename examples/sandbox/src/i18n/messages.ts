@@ -482,7 +482,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table page navigator. Prev/next are IconButton + Tooltip; page numbers reuse Button ghost (current = tonal). The strip is content-width and nowrap — put page-size Select / range copy in the previous Card-body sibling, never in a horizontal space-between with Pagination.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; narrow hosts wrap the whole end strip, not individual page buttons. Do not invent a private space-between that grows Select and crushes the pager.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -571,6 +571,18 @@ const en = {
   "globals.pageScrollCardBody":
     "Scroll this stage — the overlay thumb tracks the wide page-scroll host, not the Card edge.",
   "globals.pageScrollListAria": "Sample page-scroll catalog",
+  "globals.splitPaneHelp":
+    "In-content resizable two panes (editor | preview, list | detail). Not EndAside / drawer shell chrome — those own destination / inspector tracks. Drag or arrow-key the separator; live size is `--fynns-split-size`. Host must resolve height (stage / FillColumn child).",
+  "globals.splitPaneOrientationAria": "Split orientation",
+  "globals.splitPaneHorizontal": "Horizontal",
+  "globals.splitPaneVertical": "Vertical",
+  "globals.splitPaneResizeAria": "Resize sample panes",
+  "globals.splitPaneStartTitle": "Start pane",
+  "globals.splitPaneStartBody":
+    "Drag the seam or focus it and use arrow keys. Shift + arrow = larger steps.",
+  "globals.splitPaneEndTitle": "End pane",
+  "globals.splitPaneEndBody":
+    "Flex remainder after the start size. Soft floors use `--fynns-split-min-*`.",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -1124,6 +1136,15 @@ const en = {
   "globals.bottomAppBarDelete": "Delete",
   "globals.bottomAppBarHelp":
     "[mobile-first] BottomAppBar — bottom action chrome (56dp) with optional FAB. Destinations → NavigationBar. Not a duplicate of NavigationBar.",
+  "globals.statusBarAria": "Sample status bar",
+  "globals.statusBarBranch": "main*",
+  "globals.statusBarWorkspace": "sample-project",
+  "globals.statusBarProblems": "3 problems",
+  "globals.statusBarProblemsToast": "Opened problems panel (sample)",
+  "globals.statusBarEncoding": "UTF-8",
+  "globals.statusBarCursor": "Ln 42, Col 7",
+  "globals.statusBarHelp":
+    "IDE status strip (Cursor / VS Code) — dock at the **bottom of the app shell** under main / EndAside. ~22dp, edge-flush, muted caption. Clickable chips via StatusBarItem `onClick`. **Not** BottomAppBar (actions + FAB) and **not** Banner (severity). Live: Components `#status-bar` (Navigation) and Layout templates `#layouts-demo-status-bar`.",
   "globals.toolbarDockedAria": "Sample docked toolbar",
   "globals.toolbarFloatingAria": "Sample floating toolbar",
   "globals.toolbarVibrantAria": "Sample vibrant floating toolbar",
@@ -2072,7 +2093,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页。上一页/下一页为 IconButton + Tooltip；页码复用 Button ghost（当前页 = tonal）。页码条独占整行且不换行 — 每页条数 Select / 范围文案放在上一个 Card body 兄弟节点，禁止与 Pagination 左右 space-between。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主可整段换行，禁止把 Select 拉成 1fr 挤碎页码条。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -2161,6 +2182,18 @@ const zh: Record<MessageKey, string> = {
   "globals.pageScrollCardBody":
     "滚动本舞台 — overlay 拇指跟宽页滚宿主，不跟 Card 右缘。",
   "globals.pageScrollListAria": "页滚目录样例",
+  "globals.splitPaneHelp":
+    "内容区内可拖分栏（编辑器 | 预览、列表 | 详情）。不是 EndAside / 抽屉壳层 — 那些管 destination / 检查器轨。拖动手柄或聚焦后用方向键；实时尺寸为 `--fynns-split-size`。宿主需定高（舞台 / FillColumn 子级）。",
+  "globals.splitPaneOrientationAria": "分栏方向",
+  "globals.splitPaneHorizontal": "水平",
+  "globals.splitPaneVertical": "垂直",
+  "globals.splitPaneResizeAria": "调整样例分栏",
+  "globals.splitPaneStartTitle": "起始窗格",
+  "globals.splitPaneStartBody":
+    "拖动缝或聚焦后用方向键。Shift + 方向键 = 更大步长。",
+  "globals.splitPaneEndTitle": "结束窗格",
+  "globals.splitPaneEndBody":
+    "起始尺寸之外的弹性剩余。软下限为 `--fynns-split-min-*`。",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
@@ -2713,6 +2746,15 @@ const zh: Record<MessageKey, string> = {
   "globals.bottomAppBarDelete": "删除",
   "globals.bottomAppBarHelp":
     "[偏移动端] BottomAppBar — 底部操作栏（56dp），可选 FAB。目的地请用 NavigationBar。与 NavigationBar 不是同一组件。",
+  "globals.statusBarAria": "示例状态栏",
+  "globals.statusBarBranch": "main*",
+  "globals.statusBarWorkspace": "sample-project",
+  "globals.statusBarProblems": "3 个问题",
+  "globals.statusBarProblemsToast": "已打开问题面板（样例）",
+  "globals.statusBarEncoding": "UTF-8",
+  "globals.statusBarCursor": "第 42 行，第 7 列",
+  "globals.statusBarHelp":
+    "IDE 状态栏（Cursor / VS Code）— 贴在**应用壳底**（main / EndAside 下方）。约 22dp、顶天、弱字号。可点条目用 StatusBarItem `onClick`。**不是** BottomAppBar（操作 + FAB），**也不是** Banner（严重度条）。样例：Components `#status-bar`（Navigation）与布局模板 `#layouts-demo-status-bar`。",
   "globals.toolbarDockedAria": "示例停靠工具栏",
   "globals.toolbarFloatingAria": "示例浮动工具栏",
   "globals.toolbarVibrantAria": "示例鲜艳浮动工具栏",

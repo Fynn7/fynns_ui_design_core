@@ -1095,6 +1095,7 @@
 
 .sandbox-globals-navbar,
 .sandbox-globals-bottom-app-bar,
+.sandbox-globals-status-bar,
 .sandbox-globals-search-bar {
   box-sizing: border-box;
   width: 100%;
@@ -1403,6 +1404,47 @@
   /* Soft ceiling below the stage so the gutter is visible in the demo.
    * Inline + block pad come from keep-set `.fynns-content-column` (dialog-inset). */
   max-width: min(22rem, 100%);
+}
+
+.sandbox-split-stage {
+  box-sizing: border-box;
+  width: min(100%, 40rem);
+  height: 16rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-split-pane-pad {
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--fynns-layout-content-inset);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+}
+
+.sandbox-split-pane-pad > strong {
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.sandbox-split-pane-pad > p {
+  margin: 0;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-split-stage .fynns-split-pane--end {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
 }
 
 .sandbox-globals-shell-body {

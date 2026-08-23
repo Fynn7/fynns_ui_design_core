@@ -530,6 +530,20 @@ export const BOTTOM_APPBAR_TOKENS = {
 } as const;
 
 /**
+ * IDE status strip (Cursor / VS Code bottom bar). Dense caption chrome —
+ * not BottomAppBar (56dp actions) and not Banner (severity).
+ * `--fynns-statusbar-<key>`.
+ */
+export const STATUSBAR_TOKENS = {
+  /** ~22dp — Cursor / VS Code status strip. */
+  height: "1.375rem",
+  "pad-inline": "var(--fynns-space-xs)",
+  "item-pad-inline": "var(--fynns-space-sm)",
+  "item-gap": "0px",
+  "font-size": "var(--fynns-font-size-xs)",
+} as const;
+
+/**
  * Toolbar geometry (M3 Expressive docked / floating at 16px rem).
  * Height shares `--fynns-layout-bar-height` (56dp; stock floating is 64dp).
  * Docked uses long-strip `--fynns-radius-3xl`; floating uses `--fynns-radius-pill`.
@@ -1493,6 +1507,19 @@ export const SCROLLBAR_TOKENS = {
  * full TextMate engine).
  */
 /**
+ * SplitPane geometry. `--fynns-split-<key>`.
+ * In-content resizable two panes — not EndAside / drawer shell seams.
+ */
+export const SPLIT_TOKENS = {
+  /** Drag hit thickness (Cursor-like ~6dp). */
+  "handle-size": "0.375rem",
+  /** Soft floor for the start pane along the split axis. */
+  "min-start": "8rem",
+  /** Soft floor for the end (flex) pane. */
+  "min-end": "8rem",
+};
+
+/**
  * CommandPalette geometry. `--fynns-command-<key>`.
  * Corner radius stays `--fynns-radius-3xl` (dialog panel — no private radius).
  * Row model / type ladder: AGENTS.md **Chrome type & row proportion**.
@@ -1727,6 +1754,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["fabmenu", FABMENU_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
+  ["statusbar", STATUSBAR_TOKENS],
   ["toolbar", TOOLBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
@@ -1742,6 +1770,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
   ["command", COMMAND_TOKENS],
+  ["split", SPLIT_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

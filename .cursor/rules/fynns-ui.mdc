@@ -40,10 +40,12 @@ ring can paint before heavy work).
  never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
-  bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
+  bottom hairline only), BottomAppBar, StatusBar / StatusBarItem (IDE bottom
+  status strip — `#status-bar`; not BottomAppBar / Banner),
+  Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
-  (content-width nowrap strip; page-size Select stacks above as a Card-body
-  sibling — never horizontal space-between), SkipLink, Stepper,
+  (`.fynns-pagination-bar` M3/MUI single footer row — not Select-then-pager stack),
+  SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
   `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
@@ -108,6 +110,7 @@ ring can paint before heavy work).
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
+  PageScroll, SplitPane (in-content resize — not EndAside; live `#split-pane`),
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).

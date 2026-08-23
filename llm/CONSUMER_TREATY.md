@@ -44,7 +44,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
-**Pagination full-row stack**). Local install gate:
+**Pagination crushed or stacked off-spec**). Local install gate:
 `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
 `consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
 / publish. Formal delivery: GitHub Packages version bump
@@ -537,20 +537,23 @@ still allocates the form-host label track. Action-only footers need
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: Pagination squeezed beside page-size
+## Failure mode this treaty targets: Pagination crushed or stacked off-spec
 
 Symptoms in a table / list Card footer:
 
-- Page-size `Select` (“Rows: 10”) sits **left**, `Pagination` sits **right**
-- When the Card is narrow, page numbers **wrap onto a second row** (tall
-  pager, broken disc row) instead of the whole pager dropping below
+- Page-size `Select` and `Pagination` stacked as **two Card-body rows**
+  (tall sparse footer — not M3 / MUI)
+- Or a hand-rolled space-between row where Select grows (`width: 100%` /
+  `flex: 1`) and page numbers **wrap onto a second disc row**
 
-**Cause:** a horizontal space-between flex (`justify-content: space-between`)
-wrapping Select + Pagination as columns. Core Pagination is a **content-width
-nowrap** strip — shrinking it beside a sibling is what wraps the pages.
-**Fix in the consumer:** make page-size / range copy and `Pagination`
-**adjacent Card-body siblings** (unit-stack-gap). Do not restyle
-`.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
+**Cause:** older fynns recipes banned any horizontal pairing and pushed a
+vertical stack; or consumers put `Pagination` beside a full-width Select.
+Mainstream (MDC data-table pagination, MUI `TablePagination`) is **one**
+footer band: rows-per-page + range on the start, navigator on the end.
+**Fix:** use core **`.fynns-pagination-bar`** (`__start` / `__end`). Select
+stays content-hug; `Pagination` stays nowrap `flex: 0 0 auto`. Narrow hosts
+may wrap the **whole** end strip — not individual page buttons. Do not
+restyle `.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
 

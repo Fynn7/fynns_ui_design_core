@@ -380,6 +380,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "split-pane",
+    categoryId: "patterns",
+    label: "SplitPane",
+    keywords: [
+      "分栏",
+      "split",
+      "pane",
+      "resize",
+      "resizable",
+      "editor",
+      "preview",
+      "拖拽",
+    ],
+  },
+  {
     id: "busy-scrim",
     categoryId: "patterns",
     label: "BusyScrim",
@@ -444,6 +459,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     categoryId: "navigation",
     label: "SkipLink",
     keywords: ["跳过", "skip", "a11y", "accessibility", "跳转"],
+  },
+  {
+    id: "status-bar",
+    categoryId: "navigation",
+    label: "StatusBar",
+    keywords: [
+      "状态栏",
+      "status",
+      "statusbar",
+      "ide",
+      "vscode",
+      "cursor",
+      "诊断",
+      "encoding",
+    ],
   },
   {
     id: "rhythm",
