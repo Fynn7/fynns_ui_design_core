@@ -104,6 +104,7 @@ export const EDITABLE_NAVDRAWER_KEYS = [
   "width",
   "min-width",
   "max-width",
+  "body-fade-length",
 ] as const satisfies ReadonlyArray<keyof typeof NAVDRAWER_TOKENS>;
 
 export type EditableNavdrawerKey = (typeof EDITABLE_NAVDRAWER_KEYS)[number];
@@ -318,6 +319,8 @@ const NAVDRAWER_KEY_ROLES: Record<EditableNavdrawerKey, string> = {
   width: "NavigationDrawer preferred width (absolute rem)",
   "min-width": "ClippedNavShell drawer resize floor (absolute rem — no %)",
   "max-width": "ClippedNavShell drawer resize cap (absolute rem — no %)",
+  "body-fade-length":
+    "NavigationDrawer body scroll-edge mask fade length (data-fade-top/bottom)",
 };
 
 /**

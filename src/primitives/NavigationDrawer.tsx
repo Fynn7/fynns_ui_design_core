@@ -119,15 +119,24 @@ function DrawerSheet({
   useLayoutEffect(() => {
     const el = bodyRef.current;
     if (!el) return;
-    const sync = () => syncNavDrawerBodyFade(el);
-    sync();
+    let raf = 0;
+    const sync = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        syncNavDrawerBodyFade(el);
+      });
+    };
+    syncNavDrawerBodyFade(el);
     el.addEventListener("scroll", sync, { passive: true });
     const ro = new ResizeObserver(sync);
     ro.observe(el);
-    // childList only on the body — content length changes; no shell-root probe.
+    // Body direct children only — destination swaps / SearchBar remounts;
+    // avoid subtree thrash from deep SearchBar / tip DOM churn (llm/PERF.md).
     const mo = new MutationObserver(sync);
-    mo.observe(el, { childList: true, subtree: true });
+    mo.observe(el, { childList: true, subtree: false });
     return () => {
+      if (raf) cancelAnimationFrame(raf);
       el.removeEventListener("scroll", sync);
       ro.disconnect();
       mo.disconnect();

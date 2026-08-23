@@ -80,6 +80,7 @@ export const NumberInput = forwardRef(function NumberInput(
     max,
     step = 1,
     disabled = false,
+    readOnly = false,
     invalid = false,
     size = "md",
     variant = "outlined",
@@ -102,6 +103,7 @@ export const NumberInput = forwardRef(function NumberInput(
   const isInvalid = invalid || !!errorText;
   const hint = errorText ?? supportingText;
   const stepAbs = Math.abs(step) || 1;
+  const locked = disabled || readOnly;
 
   const [draft, setDraft] = useState(() => formatValue(value));
   const [focused, setFocused] = useState(false);
@@ -117,25 +119,26 @@ export const NumberInput = forwardRef(function NumberInput(
   };
 
   const nudge = (dir: 1 | -1) => {
-    if (disabled) return;
+    if (locked) return;
     commit(value + dir * stepAbs);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (locked) return;
     const raw = event.target.value;
     if (raw !== "" && !/^-?\d*\.?\d*$/u.test(raw)) return;
+    // Keep draft free while typing; clamp + commit on blur / steppers.
     setDraft(raw);
-    const parsed = parseDraft(raw);
-    if (parsed != null) {
-      const clamped = clamp(parsed, min, max);
-      if (clamped !== value) onChange(clamped);
-    }
   };
 
   const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
     setFocused(false);
-    const parsed = parseDraft(draft);
-    commit(parsed == null ? value : parsed);
+    if (!locked) {
+      const parsed = parseDraft(draft);
+      commit(parsed == null ? value : parsed);
+    } else {
+      setDraft(formatValue(value));
+    }
     onBlur?.(event);
   };
 
@@ -145,7 +148,7 @@ export const NumberInput = forwardRef(function NumberInput(
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) return;
+    if (locked) return;
     if (event.key === "ArrowUp") {
       event.preventDefault();
       nudge(1);
@@ -195,6 +198,7 @@ export const NumberInput = forwardRef(function NumberInput(
           aria-valuemin={min}
           aria-valuemax={max}
           disabled={disabled}
+          readOnly={readOnly}
           value={draft}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -213,7 +217,7 @@ export const NumberInput = forwardRef(function NumberInput(
             type="button"
             className="fynns-number-input-step"
             tabIndex={-1}
-            disabled={disabled || atMax}
+            disabled={locked || atMax}
             aria-label={incrementLabel}
             onClick={() => nudge(1)}
           >
@@ -223,7 +227,7 @@ export const NumberInput = forwardRef(function NumberInput(
             type="button"
             className="fynns-number-input-step"
             tabIndex={-1}
-            disabled={disabled || atMin}
+            disabled={locked || atMin}
             aria-label={decrementLabel}
             onClick={() => nudge(-1)}
           >

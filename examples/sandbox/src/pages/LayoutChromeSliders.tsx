@@ -238,6 +238,11 @@ const NAVDRAWER_ROW_META: Record<
     hintKey: "layoutChrome.navdrawerMaxWidthHint",
     max: 560,
   },
+  "body-fade-length": {
+    labelKey: "layoutChrome.navdrawerBodyFadeLength",
+    hintKey: "layoutChrome.navdrawerBodyFadeLengthHint",
+    max: 64,
+  },
 };
 
 const READONLY_LAYOUT_META: Record<

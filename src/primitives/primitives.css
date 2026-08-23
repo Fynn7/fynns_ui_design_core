@@ -6257,13 +6257,13 @@ a.fynns-breadcrumb-link:visited {
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0%,
-    #000 calc(100% - 1.5rem),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
   mask-image: linear-gradient(
     to bottom,
     #000 0%,
-    #000 calc(100% - 1.5rem),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
 }
@@ -6272,13 +6272,13 @@ a.fynns-breadcrumb-link:visited {
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    #000 1.5rem,
+    #000 var(--fynns-navdrawer-body-fade-length),
     #000 100%
   );
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    #000 1.5rem,
+    #000 var(--fynns-navdrawer-body-fade-length),
     #000 100%
   );
 }
@@ -6287,15 +6287,15 @@ a.fynns-breadcrumb-link:visited {
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    #000 1.5rem,
-    #000 calc(100% - 1.5rem),
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    #000 1.5rem,
-    #000 calc(100% - 1.5rem),
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
 }

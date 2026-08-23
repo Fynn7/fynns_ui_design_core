@@ -1153,6 +1153,11 @@ export const NAVDRAWER_TOKENS = {
    * level indent — ~icon column past top-level `item-pad-inline-start`).
    */
   "group-item-pad-inline-start": "2rem",
+  /**
+   * Scroll-edge mask fade length on `.fynns-nav-drawer-body` when
+   * `data-fade-top` / `data-fade-bottom` (soft edge into account footer).
+   */
+  "body-fade-length": "1.5rem",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */

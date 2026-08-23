@@ -292,6 +292,9 @@ project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
 label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
 Layouts `#layouts-demo-shell` (toggle **Show account name**) + SandboxShell +
 `#layouts-demo-drill-in`. Rail densify hides account-start and keeps the gear.
+**Densify default (≥ 0.4.64):** `DestinationAppShell` `railLabelVisibility`
+defaults to **`unlabeled`** (Cursor icon column — not stacked caption pills).
+Pass `labeled` only when densified captions must stay visible.
 
 **Consumer:** bump ≥ 0.4.65 for Cursor-style footer + body scroll-edge fade;
 pass `navFooter`

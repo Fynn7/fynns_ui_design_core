@@ -388,6 +388,9 @@ const en = {
   "layoutChrome.navdrawerMaxWidth": "Nav drawer max",
   "layoutChrome.navdrawerMaxWidthHint":
     "--fynns-navdrawer-max-width — resize cap (absolute rem).",
+  "layoutChrome.navdrawerBodyFadeLength": "Nav drawer body fade",
+  "layoutChrome.navdrawerBodyFadeLengthHint":
+    "--fynns-navdrawer-body-fade-length — scroll-edge mask fade when body overflows into the account footer.",
   "layoutChrome.readonlyHelp":
     "Complex layout units (vh / min() / clamp() / var aliases) — visible only; edit in tokens.ts if needed.",
   "layoutChrome.specialReadonly": "Read-only layout tokens",
@@ -1955,6 +1958,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.navdrawerMaxWidth": "导航抽屉最大宽度",
   "layoutChrome.navdrawerMaxWidthHint":
     "--fynns-navdrawer-max-width — 拖拽缩放上限（绝对 rem）。",
+  "layoutChrome.navdrawerBodyFadeLength": "导航抽屉正文渐隐",
+  "layoutChrome.navdrawerBodyFadeLengthHint":
+    "--fynns-navdrawer-body-fade-length — body 溢出至账户脚时的滚动边缘 mask 渐隐长度。",
   "layoutChrome.readonlyHelp":
     "复杂 layout 单位（vh / min() / clamp() / var 别名）— 只读可见；需要时在 tokens.ts 手改。",
   "layoutChrome.specialReadonly": "只读 layout token",

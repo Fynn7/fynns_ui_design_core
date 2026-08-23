@@ -124,7 +124,8 @@ alwaysApply: true
 无用户名时只留头像/首字母，身份放 `Tooltip`；footer **无**顶部分隔线；**不要**把该设置塞进 TopAppBar `trailing`，也**不要**用最后一项
 `NavigationDrawerItem` + `margin-top: auto`） / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
 做桌面根，禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
-`labelVisibility="labeled"`（始终显示标签）——不要默认 `selected` / `unlabeled`。
+`labelVisibility="unlabeled"`（Cursor 图标柱 + 底栏齿轮，无堆叠 caption）——需要
+densify 后仍显示标签时再显式传 `labeled` / `selected`。
 
 ```tsx
 <DestinationAppShell
