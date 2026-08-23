@@ -50,6 +50,7 @@ import {
   Collapsible,
   ContextMenu,
   ContextMenuTrigger,
+  CommandPalette,
   DatePicker,
   DatePickerDialog,
   DateRangePicker,
@@ -925,6 +926,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [switchStartOn, setSwitchStartOn] = useState(true);
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
+  const [commandOpen, setCommandOpen] = useState(false);
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
@@ -1562,6 +1564,78 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ContextMenu>
         </div>
         <SandboxHelp text={t("globals.contextMenuHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="command-palette">
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Button onClick={() => setCommandOpen(true)}>
+              {t("globals.commandPaletteOpen")}
+            </Button>
+            <CommandPalette
+              open={commandOpen}
+              onOpenChange={setCommandOpen}
+              label={t("globals.commandPaletteAria")}
+              placeholder={t("globals.commandPalettePlaceholder")}
+              emptyLabel={t("globals.commandPaletteEmpty")}
+              items={[
+                {
+                  id: "nav-home",
+                  group: t("globals.commandPaletteGroupNav"),
+                  label: t("globals.commandPaletteItemHome"),
+                  icon: <LayoutGridIcon />,
+                  shortcut: "Ctrl G",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastHome"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "nav-settings",
+                  group: t("globals.commandPaletteGroupNav"),
+                  label: t("globals.commandPaletteItemSettings"),
+                  icon: <SettingsIcon />,
+                  shortcut: "Ctrl ,",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastSettings"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-search",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemSearch"),
+                  icon: <SearchIcon />,
+                  shortcut: "Ctrl K",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastSearch"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-file",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemFile"),
+                  icon: <FileIcon />,
+                  shortcut: "Ctrl Shift O",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastFile"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-disabled",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemDisabled"),
+                  icon: <ArchiveIcon />,
+                  disabled: true,
+                },
+              ]}
+            />
+          </div>
+          <SandboxHelp text={t("globals.commandPaletteHelp")} />
         </GlobalsDemo>
       </>
         )}

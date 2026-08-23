@@ -247,6 +247,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   chrome inspector in the **same** change. Consumers must not redefine
   margins in app CSS — see [`llm/CONSUME.md`](llm/CONSUME.md). Decision tree:
   **Inset decision tree** below.
+- **DON'T** ship filter / command / menu / picker **chrome with broken type or
+  row proportion** (title two font steps above group captions; description
+  `gap: 0` under a 16dp title; icons centered on title+description when the
+  reference product is single-line). Authority:
+  **Chrome type & row proportion** below (and `.cursor/rules/chrome-proportion.mdc`).
 - **DON'T** pad above the first ceiling-flush **bordered well** in
   `FullscreenDialog` (`CodeBlock` / `Surface` / `.fynns-table-wrap` as the
   first body child, or first child of one unpadded fill host). Core already
@@ -848,7 +853,15 @@ classes.
   Drawer (content side sheet ~400dp, open-edge `radius-xl`; always modal),
   BottomSheet, DropdownMenu (+ Item / CheckboxItem / Group / Separator;
   catalog / toolbar IconButton strips → `iconOnly` ghost sm circular trigger),
-  ContextMenu / ContextMenuTrigger
+  ContextMenu / ContextMenuTrigger,
+  **CommandPalette** `{ open, onOpenChange, items, query?, onQueryChange?,
+  placeholder?, emptyLabel?, label?, closeOnSelect? }` (Spotlight / ⌘K filter
+  dialog — `DialogFrame` centered; apps own the global accelerator; arrow keys
+  + Enter select; Esc / scrim dismiss; display-only `shortcut` on items; not
+  DropdownMenu, not SearchBar alone; Cursor Actions rhythm: single-line rows
+  (icon centered | label | split shortcut chips); optional `description` stacks
+  under the label (then icon aligns to the title row); group gap via
+  `--fynns-command-group-gap`; live `#command-palette`)
 - **Dates / time:** DatePicker / DatePickerDialog / DateRangePicker /
   DateRangePickerDialog, TimePicker / TimePickerDialog
 - **Chrome:** TopAppBar (**edge-flush** — no outer radius / no card frame;
@@ -1129,6 +1142,7 @@ classes.
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). Body: **flush-start** when the first child is a keep-set bordered well — see **Flush-start overlay body**. |
   | Dialog / DialogShell / ConfirmDialog | both | Centered modals. M3 basic + optional close on `Dialog`; dismissible labeled rows = `showCloseButton` + full-width ControlStack (Switch track aligns with CloseIcon glyph, not hit box). Centered Dialog head: **no** head|body divider; non-confirm head pad-block-start `dialog-inset/2` + end `0` + `head + body` pad-top `space-sm`; **ConfirmDialog** title pad-block-start full `dialog-inset`. Date/Time picker dialogs: **no** head hairline (picker head pad may stay picker-specific). |
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
+  | CommandPalette | both | Spotlight / ⌘K filter dialog; apps own accelerator; keyboard-first list. Live `#command-palette`. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
   | Button → Grid / FillColumn / PageScroll (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll (not aside bubble geometry). |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
@@ -1165,6 +1179,39 @@ classes.
   | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name, children = tip glyph). If an apply / fix `IconButton` shares the row, wrap **glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host |
   | **Suffixed file body** (inspector / skill / rule / plugin source — `.md`, `.xml`, `.py`, `.ts`, `.json`, …) | **`CodeBlock`** (`variant="editable"` when editing; pass `language` via `codeLanguageFromPath(path)` or explicit id; Card host → `chrome="plain"`; fixed well → `autoGrow={false}`). Unknown suffix still CodeBlock (plain mono). Live: sandbox `#code-block` file-body Card | **`Textarea`** for anything with a real extension other than `.txt` / `.text`; UI-font prose well for `SKILL.md` / `prompt.xml` / `plugin.ts` |
   | Plain note / extensionless draft / **`.txt`** | `Textarea` (or Form `FieldBlock` + Textarea) | Forcing CodeBlock on freeform notes with no filetype |
+
+  **Chrome type & row proportion (hard — agents):** Applies to filter lists,
+  command palettes, menus, pickers, and similar **dense chrome lists** (live
+  reference: sandbox `#command-palette` vs Cursor Actions). Form / Card
+  rhythm stays under **Toolbar / unit rhythm** below.
+
+  1. **Row model first.** Before CSS, name the **primary** row shape from the
+     product reference (Cursor / ChatGPT / M3):
+     | Primary model | Icon / trailing | Typical height |
+     | --- | --- | --- |
+     | **Single-line** (icon \| label \| shortcut) | Vertically **center** on the row | ~32–36dp (pad ~8dp block + `font-size-sm`) |
+     | **Two-line** (label + description stack) | Icon / shortcut align to the **title line only** — not mid title+description | Grows from content + pad; label↔description ≥ `space-2xs` |
+     Do **not** design for two-line then ship a single-line reference (or the
+     reverse). Optional `description` is a **modifier** (`--described`), not
+     the default when the reference is single-line.
+  2. **Type ladder — one step max.** In one panel, primary text and secondary
+     captions may differ by **at most one** t-shirt step (`md`↔`sm` or
+     `sm`↔`xs`). Command / Actions chrome: search + item label →
+     `--fynns-font-size-sm` (14); group / description / shortcut →
+     `--fynns-font-size-xs` (12). **Forbidden:** label `md` (16) next to group
+     `xs` (12) — reads as “some too big / some too small”.
+  3. **Breath from in-row pad, not crushed gaps.** Prefer item
+     `padding-block` (~8dp) so a single line clears ~32–36dp. Do **not** fake
+     density with `gap: 0` between label and description under a large title,
+     or rely on tiny inter-row gutters while starving in-row pad. Sibling rows
+     may sit flush; selection pills carry separation (Cursor Actions).
+  4. **Shortcut chips are keys.** Split accelerators on whitespace into
+     separate `kbd` chips (`Ctrl` `Shift` `R`), not one fused string capsule.
+  5. **Calibrate with evidence.** Against a positive screenshot: count lines
+     per row, measure title vs group font-size, icon mid vs label mid (and vs
+     title+description mid when two-line). Ship only when those match the
+     chosen row model. Component tokens for CommandPalette live under
+     `COMMAND_TOKENS` / `--fynns-command-*`.
 
   **Toolbar / unit rhythm** (prefer these over ad-hoc `--fynns-space-*`):
 

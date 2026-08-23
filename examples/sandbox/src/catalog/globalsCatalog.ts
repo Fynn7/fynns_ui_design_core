@@ -85,6 +85,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["右键菜单", "context", "contextmenu"],
   },
   {
+    id: "command-palette",
+    categoryId: "actions",
+    label: "CommandPalette",
+    keywords: [
+      "命令面板",
+      "command",
+      "palette",
+      "cmdk",
+      "spotlight",
+      "快捷键",
+      "ctrl+k",
+      "⌘k",
+    ],
+  },
+  {
     id: "input",
     categoryId: "textInputs",
     label: "Input",

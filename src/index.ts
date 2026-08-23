@@ -307,6 +307,11 @@ export type {
   NumberInputSize,
   NumberInputVariant,
 } from "./primitives/NumberInput";
+export { CommandPalette } from "./primitives/CommandPalette";
+export type {
+  CommandPaletteItem,
+  CommandPaletteProps,
+} from "./primitives/CommandPalette";
 export { EmptyState } from "./primitives/EmptyState";
 export type { EmptyStateProps } from "./primitives/EmptyState";
 export {

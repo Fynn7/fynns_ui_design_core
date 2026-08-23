@@ -586,3 +586,4 @@ CommonMark/GFM（无表格 / 原始 HTML）。流式：把 token 追加进 `mark
 12. 宽表映射/状态列：是否 muted `.fynns-table-meta` + `--end-align` cluster（缺中间则 `__grow`），而非单元格 `Chip`？行尾操作是否跨行右对齐？
 13. `npm run build` / typecheck 绿；不要用本地 CSS「修好」挤扁抽屉、错槽窄列或乱排标签行。
 14. 模式侧栏 / 根抽屉：`NavigationDrawer.headline` 是否仍是静态标题或已省略？返回是否在 TopAppBar `leading`/`leadingExtra`（对照 `#layouts-demo-shell`）？Group/Item `label` 是否只是短名称（无 `· N`、无括号脚注）？headline 里是否已无 `hub-row` + 裸数字？Search 下批量 IconButton 是否在 **一个** `.fynns-control-cluster`（非纵向摊开的 Fragment tip）？
+15. CommandPalette / 菜单行比例异常：是否只改 props、并回报 core（`AGENTS.md` **Chrome type & row proportion** / `#command-palette`）？禁止本地改 `.fynns-command-*` 字体阶或行高。

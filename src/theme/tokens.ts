@@ -1492,6 +1492,63 @@ export const SCROLLBAR_TOKENS = {
  * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
  * full TextMate engine).
  */
+/**
+ * CommandPalette geometry. `--fynns-command-<key>`.
+ * Corner radius stays `--fynns-radius-3xl` (dialog panel — no private radius).
+ * Row model / type ladder: AGENTS.md **Chrome type & row proportion**.
+ */
+export const COMMAND_TOKENS = {
+  /** Panel width ceiling (Spotlight-like; aliases dialog md). */
+  "max-width": "var(--fynns-layout-dialog-max-width-md)",
+  /** Scrollable results list max height. */
+  "list-max-height": "20rem",
+  /** Search row + list outer inline pad. */
+  "pad-inline": "var(--fynns-layout-content-inset)",
+  /** Search row block pad (Cursor “Search actions…” breath). */
+  "search-pad-block": "var(--fynns-space-md)",
+  /** Gap between search icon and field. */
+  "search-gap": "var(--fynns-layout-control-cluster-gap)",
+  /** List block pad under the search hairline. */
+  "list-pad-block": "var(--fynns-space-sm)",
+  /**
+   * Option ↔ option gap. Cursor Actions list stacks selection pills with
+   * almost no gutter — rhythm comes from item pad, not inter-row gap.
+   */
+  "item-gap": "0px",
+  /** Group header ↔ first option (and previous section). */
+  "group-gap": "var(--fynns-space-md)",
+  "group-pad-block": "var(--fynns-space-xs)",
+  /** Item block pad — Cursor single-line ~8dp above/below label. */
+  "item-pad-block": "var(--fynns-space-sm)",
+  "item-pad-inline": "var(--fynns-space-md)",
+  /**
+   * Type scale (Cursor Actions / VS Code quick-input):
+   * search + item label share `sm` (14dp); group / description / shortcut
+   * share `xs` (12dp).
+   */
+  "font-search": "var(--fynns-font-size-sm)",
+  "font-item": "var(--fynns-font-size-sm)",
+  "font-description": "var(--fynns-font-size-xs)",
+  "font-group": "var(--fynns-font-size-xs)",
+  "font-shortcut": "var(--fynns-font-size-xs)",
+  /**
+   * Single-line option floor (Cursor Actions ~32–36dp). Two-line
+   * (`description`) grows from content + pad.
+   */
+  "item-min-height": "2rem",
+  /**
+   * Leading icon slot when `description` is set — first text line only
+   * (not centered on title+description). Single-line rows center the icon
+   * in the row instead.
+   */
+  "item-leading-height":
+    "calc(var(--fynns-command-font-item) * var(--fynns-line-height-snug))",
+  /** Gap between label and optional description. */
+  "item-text-gap": "var(--fynns-space-2xs)",
+  /** Gap between split shortcut key chips. */
+  "shortcut-gap": "var(--fynns-space-2xs)",
+} as const;
+
 export const CODE_TOKENS = {
   /** Default code ink (`editor.foreground`). */
   fg: "#b2cacd",
@@ -1684,6 +1741,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
+  ["command", COMMAND_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

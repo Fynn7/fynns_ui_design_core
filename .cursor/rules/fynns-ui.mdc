@@ -27,7 +27,7 @@ ring can paint before heavy work).
   Input,
   Textarea, Select,
   Autocomplete, OtpInput, NumberInput, DropdownMenu (+ Group / Separator / CheckboxItem),
-  ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
+  ContextMenu (+ ContextMenuTrigger), CommandPalette, Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
   full-width ControlStack + track-only Switch — not InfoHint demo as Preferences
   shell; see AGENTS.md), Drawer, FullscreenDialog,
@@ -126,6 +126,9 @@ ring can paint before heavy work).
   ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
   EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
   demos are the composed default; Globals demos are standalone parts.
+- Dense chrome lists (CommandPalette / menus / pickers): **row model first**,
+  type ladder **one step max**, breath from item pad — AGENTS.md **Chrome type
+  & row proportion** + `.cursor/rules/chrome-proportion.mdc`. Live `#command-palette`.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists: Card / Collapsible body already use

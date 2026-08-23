@@ -1671,6 +1671,208 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-shadow: var(--fynns-shadow-md);
 }
 
+/* ---------- CommandPalette (Cursor Actions / ⌘K) ---------- */
+.fynns-dialog-panel--centered.fynns-command-palette {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--fynns-command-max-width));
+  max-width: min(100%, var(--fynns-command-max-width));
+  max-height: min(90vh, calc(var(--fynns-command-list-max-height) + 8rem));
+  padding: 0;
+  overflow: hidden;
+}
+
+.fynns-command-palette-search {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-command-search-gap);
+  flex-shrink: 0;
+  padding: var(--fynns-command-search-pad-block) var(--fynns-command-pad-inline);
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-command-palette-search-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-command-font-search);
+  line-height: var(--fynns-line-height-snug);
+  outline: none;
+}
+
+.fynns-command-palette-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: var(--fynns-command-list-max-height);
+  padding: var(--fynns-command-list-pad-block) var(--fynns-command-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-command-item-gap);
+}
+
+.fynns-command-palette-empty {
+  margin: 0;
+  padding: var(--fynns-space-md) var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-item);
+  text-align: center;
+}
+
+.fynns-command-palette-group {
+  margin: var(--fynns-command-group-gap) 0 var(--fynns-space-2xs);
+  padding: var(--fynns-command-group-pad-block) var(--fynns-command-item-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-group);
+  font-weight: var(--fynns-font-weight-medium);
+  letter-spacing: var(--fynns-letter-spacing-subtle);
+  line-height: var(--fynns-line-height-snug);
+  text-transform: none;
+}
+
+.fynns-command-palette-group:first-child {
+  margin-block-start: var(--fynns-space-2xs);
+}
+
+.fynns-command-item {
+  display: flex;
+  /* Cursor Actions default: single-line — icon + shortcut center on the row. */
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-command-item-min-height);
+  margin: 0;
+  padding: var(--fynns-command-item-pad-block) var(--fynns-command-item-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+  appearance: none;
+}
+
+/* Optional description: lead icon to the title row only (not mid-stack). */
+.fynns-command-item--described {
+  align-items: flex-start;
+}
+
+.fynns-command-item:hover:not(:disabled),
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-command-item:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-command-item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-item--described .fynns-command-item-icon {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-command-item-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--fynns-command-item-text-gap);
+  min-width: 0;
+}
+
+.fynns-command-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-item-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-description);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-shortcuts {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--fynns-command-shortcut-gap);
+  margin-inline-start: auto;
+}
+
+.fynns-command-item--described .fynns-command-shortcuts {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-shortcut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  padding: 0 var(--fynns-space-xs);
+  border-radius: var(--fynns-radius-xs);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text-muted);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-command-font-shortcut);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-sm {
   max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
 }

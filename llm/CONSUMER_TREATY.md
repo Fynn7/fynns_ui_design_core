@@ -220,6 +220,27 @@ user did not ask for, fights truncation and adds noise.
 Authority: [`AGENTS.md`](../AGENTS.md) Hard rules (chrome label copy);
 pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: crushed command / menu chrome proportion
+
+Symptoms (command palette, filter lists, menu rows — often after “tighten
+density” or “align icons”):
+
+- Item label at `font-size-md` (16) next to group captions at `xs` (12) —
+  reads as some text too big / some too small
+- Label↔description `gap: 0` under a large title while inter-row gutters stay
+  tiny — “行间距崩溃”
+- Leading icon centered on title+description when the product reference is
+  **single-line** (Cursor Actions), or the reverse for two-line rows
+- Shortcuts as one fused capsule (`Ctrl K`) instead of split key chips
+
+**Cause:** agents skip naming the **primary row model**, then invent type
+steps and crush gaps for “density.” Rhythm must come from **in-row pad** and
+a **one-step** type ladder.
+
+**Fix (core first):** follow [`AGENTS.md`](../AGENTS.md) **Chrome type & row
+proportion**; live `#command-palette`. Consumers: props only — do not restyle
+`.fynns-command-*`.
+
 ## Failure mode this treaty targets: wrong shell slot / “Clipped” misread
 
 **Naming:** `ClippedNavShell` = Material 3 **clipped** chrome (full-bleed
