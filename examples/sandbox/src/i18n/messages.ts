@@ -17,6 +17,11 @@ const en = {
   "nav.motion": "Motion",
   "nav.templates": "Settings",
   "nav.templatesTip": "Language, templates & config export/import",
+  "nav.footerProject": "Sample project",
+  "nav.footerWorkspace": "Sample workspace",
+  "nav.footerAccountLabel": "c***@student-services.uni-due.de",
+  "nav.footerAccountName": "Sample User",
+  "nav.footerShowAccountLabel": "Show account name in drawer footer",
   "nav.playgroundHint":
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
@@ -24,7 +29,7 @@ const en = {
   "nav.layoutsHint":
     "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
   "layouts.lead":
-    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. NavigationRail alone is mobile/narrow densify only — not a desktop app root. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. NavigationRail alone is mobile/narrow densify only — not a desktop app root. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
@@ -45,6 +50,30 @@ const en = {
   "layouts.fillColumnComposerPlaceholder": "Write a message…",
   "layouts.fillColumnSend": "Send",
   "layouts.fillColumnLabel": "Sample chat",
+  "layouts.drillHelp":
+    "Drill-in (ClippedNavShell): tap Catalog → drawer body swaps to the item list (optional SearchBar); mode exit = TopAppBar back next to the nav toggle — never NavigationDrawer.headline. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + app state.",
+  "layouts.drillNavAria": "Sample destinations",
+  "layouts.drillCatalogNavAria": "Catalog items",
+  "layouts.drillHome": "Home",
+  "layouts.drillCatalogTitle": "Catalog",
+  "layouts.drillPrefs": "Preferences",
+  "layouts.drillBack": "Back to destinations",
+  "layouts.drillCatalogSearchAria": "Filter catalog",
+  "layouts.drillCatalogSearchPlaceholder": "Filter…",
+  "layouts.drillCatalogAlpha": "Alpha note",
+  "layouts.drillCatalogBeta": "Beta note",
+  "layouts.drillCatalogGamma": "Gamma note",
+  "layouts.drillCatalogEmptyTitle": "Select an item",
+  "layouts.drillCatalogEmptyBody":
+    "Pick a row in the drawer. The detail fills this main column — no list pane here.",
+  "layouts.drillCatalogDetailBody":
+    "Full-width detail for “{name}”. Supporting inspector chrome stays optional EndAside — not a second list column.",
+  "layouts.drillHomeEmptyTitle": "Home",
+  "layouts.drillHomeEmptyBody":
+    "Root destinations stay in the drawer. Open Catalog to drill into a list mode.",
+  "layouts.drillPrefsEmptyTitle": "Preferences",
+  "layouts.drillPrefsEmptyBody":
+    "Flat preference pages keep the root drawer. Settings-as-fullscreen is a separate app shell pattern.",
   "nav.expand": "Expand navigation",
   "nav.expandTip": "Show the navigation drawer",
   "nav.collapse": "Hide navigation",
@@ -1024,7 +1053,7 @@ const en = {
   "globals.navBarHelp":
     "[mobile-first] NavigationBar — bottom destinations for phone. Prefer ClippedNavShell + NavigationDrawer on desktop (Layout templates page). Standalone sample — not one composed phone+desktop shell.",
   "globals.navRailHelp":
-    "[mobile / narrow only] NavigationRail — vertical destinations for phone densify or DestinationAppShell / ClippedNavShell crowding. **Not** the default desktop app root; do not greenfield a desktop UI from this standalone sample. Prefer Layout templates → DestinationAppShell. Agent densify default: `labelVisibility=\"labeled\"` (always show labels).",
+    "[mobile / narrow only] NavigationRail — vertical destinations for phone densify or DestinationAppShell / ClippedNavShell crowding. **Not** the default desktop app root; do not greenfield a desktop UI from this standalone sample. Prefer Layout templates → DestinationAppShell. DestinationAppShell densify default: `railLabelVisibility=\"unlabeled\"` (Cursor icon column + bottom gear — pass `labeled` when captions must stay visible).",
   "globals.navDrawerAria": "Sample navigation drawer",
   "globals.navDrawerModalAria": "Modal navigation drawer",
   "globals.navDrawerHeadline": "Mail",
@@ -1053,7 +1082,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navFooter` (Cursor-style drawer footer: empty project/workspace slots + settings IconButton on the account row end — not TopAppBar `trailing` for that role), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`labelVisibility=\"labeled\"` by default) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`railLabelVisibility=\"unlabeled\"` by default — Cursor icon column + bottom gear) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1558,6 +1587,11 @@ const zh: Record<MessageKey, string> = {
   "nav.motion": "动效",
   "nav.templates": "设置",
   "nav.templatesTip": "语言、模板与配置导入导出",
+  "nav.footerProject": "示例项目",
+  "nav.footerWorkspace": "示例工作区",
+  "nav.footerAccountLabel": "c***@student-services.uni-due.de",
+  "nav.footerAccountName": "示例用户",
+  "nav.footerShowAccountLabel": "在侧栏底栏显示账户名",
   "nav.playgroundHint":
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
@@ -1565,7 +1599,7 @@ const zh: Record<MessageKey, string> = {
   "nav.layoutsHint":
     "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
   "layouts.lead":
-    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。单独的 NavigationRail 仅移动端/窄视口 densify — 禁止当桌面根壳。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。单独的 NavigationRail 仅移动端/窄视口 densify — 禁止当桌面根壳。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
@@ -1585,6 +1619,30 @@ const zh: Record<MessageKey, string> = {
   "layouts.fillColumnComposerPlaceholder": "写一条消息…",
   "layouts.fillColumnSend": "发送",
   "layouts.fillColumnLabel": "示例对话",
+  "layouts.drillHelp":
+    "钻入导航（ClippedNavShell）：点 Catalog → 侧栏 body 换成条目列表（可选 SearchBar）；退出模式 = TopAppBar 返回键（紧挨导航开关）— 禁止塞进 NavigationDrawer.headline。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + 应用状态。",
+  "layouts.drillNavAria": "示例目的地",
+  "layouts.drillCatalogNavAria": "目录条目",
+  "layouts.drillHome": "主页",
+  "layouts.drillCatalogTitle": "目录",
+  "layouts.drillPrefs": "偏好",
+  "layouts.drillBack": "返回目的地",
+  "layouts.drillCatalogSearchAria": "筛选目录",
+  "layouts.drillCatalogSearchPlaceholder": "筛选…",
+  "layouts.drillCatalogAlpha": "Alpha 笔记",
+  "layouts.drillCatalogBeta": "Beta 笔记",
+  "layouts.drillCatalogGamma": "Gamma 笔记",
+  "layouts.drillCatalogEmptyTitle": "选择一项",
+  "layouts.drillCatalogEmptyBody":
+    "在侧栏点一行。详情占满主列 — 这里没有列表分栏。",
+  "layouts.drillCatalogDetailBody":
+    "「{name}」的全宽详情。辅助检查器仍用可选 EndAside — 不是第二列列表。",
+  "layouts.drillHomeEmptyTitle": "主页",
+  "layouts.drillHomeEmptyBody":
+    "根目的地留在侧栏。打开目录可钻入列表模式。",
+  "layouts.drillPrefsEmptyTitle": "偏好",
+  "layouts.drillPrefsEmptyBody":
+    "扁平偏好页保持根侧栏。全屏设置是另一套壳层模式。",
   "nav.expand": "展开导航",
   "nav.expandTip": "展开导航抽屉",
   "nav.collapse": "关闭导航",
@@ -2549,7 +2607,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navBarHelp":
     "[偏移动端] NavigationBar — 手机底栏目的地。桌面请用「布局模板」裁切壳 + NavigationDrawer。独立样例 — 不是整站默认。",
   "globals.navRailHelp":
-    "[仅移动端 / 窄视口] NavigationRail — 手机 densify 或 DestinationAppShell / 裁切壳挤拥时用。**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell。Agent densify 默认：`labelVisibility=\"labeled\"`（始终显示标签）。",
+    "[仅移动端 / 窄视口] NavigationRail — 手机 densify 或 DestinationAppShell / 裁切壳挤拥时用。**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell。DestinationAppShell densify 默认：`railLabelVisibility=\"unlabeled\"`（Cursor 图标列 + 底部齿轮 — 需要常驻标签时传 `labeled`）。",
   "globals.navDrawerAria": "示例导航抽屉",
   "globals.navDrawerModalAria": "模态导航抽屉",
   "globals.navDrawerHeadline": "邮件",
@@ -2578,7 +2636,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navFooter`（Cursor 式侧栏底栏：空的项目/工作区槽 + 账号行右端设置齿轮 — 不要把该设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

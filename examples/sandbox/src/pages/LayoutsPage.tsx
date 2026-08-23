@@ -49,6 +49,10 @@ import {
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import {
+  NavDrawerFooterAccount,
+  NavDrawerWorkspaceRow,
+} from "../components/NavDrawerFooterAccount";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 
@@ -101,6 +105,8 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
+    useState(true);
 
   return (
     <div className="sandbox-globals">
@@ -121,6 +127,12 @@ export function LayoutsPage() {
                 label={t("globals.shellAsideOpen")}
                 checked={shellAsideOpen}
                 onCheckedChange={setShellAsideOpen}
+              />
+              <Switch
+                labelSide="end"
+                label={t("nav.footerShowAccountLabel")}
+                checked={shellFooterShowAccountLabel}
+                onCheckedChange={setShellFooterShowAccountLabel}
               />
             </div>
             <div className="sandbox-globals-clipped-shell">
@@ -152,25 +164,17 @@ export function LayoutsPage() {
                     </IconButton>
                   </Tooltip>
                 }
+                navBodyExtra={
+                  <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
+                }
                 navFooter={
-                  <>
-                    <div className="fynns-nav-drawer-footer-slot" aria-hidden />
-                    <div
-                      className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
-                      aria-hidden
-                    />
-                    <div className="fynns-nav-drawer-footer-account">
-                      <div
-                        className="fynns-nav-drawer-footer-account-start"
-                        aria-hidden
-                      />
-                      <Tooltip content={t("globals.appBarSettings")}>
-                        <IconButton aria-label={t("globals.appBarSettings")}>
-                          <SettingsIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
-                  </>
+                  <NavDrawerFooterAccount
+                    showLabel={shellFooterShowAccountLabel}
+                    accountLabel={t("nav.footerAccountLabel")}
+                    accountName={t("nav.footerAccountName")}
+                    settingsLabel={t("globals.appBarSettings")}
+                    settingsTip={t("globals.appBarSettings")}
+                  />
                 }
                 destinations={[
                   {

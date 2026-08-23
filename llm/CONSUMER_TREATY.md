@@ -137,7 +137,9 @@ role and leaves a hollow space-between strip.
    does not already name the mode.
 2. Mode **back / exit** → `TopAppBar` `leading` or `DestinationAppShell`
    `leadingExtra` (`IconButton` + `Tooltip` + `ArrowLeftIcon`) next to the
-   nav toggle — live sample: sandbox Layout templates `#layouts-demo-shell`.
+   nav toggle — live samples: sandbox Layout templates `#layouts-demo-shell`
+   (decorative) and **`#layouts-demo-drill-in`** (interactive drawer-body
+   swap + full-width main detail).
 3. **Do not** invent a floating count in the sheet title band. Do **not** pad
    Group/Item `label` with `· N` either (see **padded destination labels**
    below). Unread / notification counts → `NavigationDrawerItem` `badge`
@@ -148,6 +150,42 @@ role and leaves a hollow space-between strip.
 
 Authority: [`AGENTS.md`](../AGENTS.md) NavigationDrawer platform row;
 pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: main-canvas list|detail split (hub-split)
+
+Symptoms:
+
+- Catalog sections keep a **list column inside main**
+  (`grid-template-columns: var(--fynns-layout-list-pane-width) 1fr` / private
+  `hub-split`) while root destinations stay in the drawer — then “Chats /
+  Favorites” modes **move the list into the drawer**, so switching sections
+  feels like a full page shell swap
+- Main hosts both the pick list and the editor; narrow breakpoints stack
+  inconsistently with drill-in modes
+
+**Cause:** treating `--fynns-layout-list-pane-width` as the default catalog
+layout. That token is for rare **main-internal** master–detail grids only.
+Destination apps that already have a NavigationDrawer should put the catalog
+list in the **nav track** (drawer-body morph) and keep **main full-width
+detail** (M3 compact list-detail / Cursor Agent layout).
+
+**Consumer fix (props / shell state only):**
+
+1. Entering a catalog destination → **swap** `ClippedNavShell.nav` to
+   `NavigationDrawer` + `NavigationDrawerItem`s (+ optional
+   `SearchBar density="destination"`). Omit drawer `headline` toolbar.
+2. Mode exit → TopAppBar back (`leading` / `leadingExtra`) — see
+   **drawer headline toolbar** above.
+3. Selection drives main detail (`EmptyState` when none). Do **not** remount
+   the whole shell on each selection.
+4. Flat root-only apps → keep `DestinationAppShell`. Any dynamic nav body →
+   hand-compose `ClippedNavShell` (no `NavStack` primitive).
+5. Optional `EndAside` remains a **third** supporting axis — not the catalog
+   list column.
+
+Live: sandbox Layout templates **`#layouts-demo-drill-in`**.
+Authority: [`AGENTS.md`](../AGENTS.md) DestinationAppShell / ClippedNavShell /
+NavigationDrawer. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: padded destination labels
 
@@ -240,16 +278,26 @@ Symptoms (Cursor-like destination apps):
 settings in the app bar or last destination.
 
 **Fix in core (≥ 0.4.59):** `NavigationDrawer` / `NavigationRail` `footer`
-+ `DestinationAppShell` `navFooter`. Recipe classes:
-`.fynns-nav-drawer-footer-slot` / `--pill` / `--account` /
-`--account-start`. Settings `IconButton` → account row **end**. Live:
-sandbox Layouts `#layouts-demo-shell` + SandboxShell. Rail densify hides
-empty slots and keeps the gear.
++ `DestinationAppShell` `navFooter` (+ optional `navBodyExtra` for workspace
+row in drawer body). Footer recipe: `.fynns-nav-drawer-footer-account` +
+`.fynns-nav-drawer-footer-account-start` (`Avatar` + optional
+`.fynns-nav-drawer-footer-account-label` with **mask fade**, not `…`) + settings
+`IconButton` end. Footer / rail footer: **no** `border-block-start` hairline
+(≥ 0.4.64 — Cursor separates with pad only). When drawer **body** content
+overflows downward, core applies `data-fade-bottom` / `data-fade-top` mask
+fades on `.fynns-nav-drawer-body` (≥ 0.4.65) — soft edge into the account
+footer, not a hard clip + divider. **Do not** stack dual
+project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
+→ drawer **body** (`.fynns-nav-drawer-footer-slot--pill` row). Omit account
+label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
+Layouts `#layouts-demo-shell` (toggle **Show account name**) + SandboxShell +
+`#layouts-demo-drill-in`. Rail densify hides account-start and keeps the gear.
 
-**Consumer:** bump ≥ 0.4.59; pass `navFooter` (or Drawer/Rail `footer`);
-do **not** `margin-top: auto` a destination Item; do **not** put that
-settings control in TopAppBar `trailing` when the product wants
-Cursor-style bottom chrome.
+**Consumer:** bump ≥ 0.4.65 for Cursor-style footer + body scroll-edge fade;
+pass `navFooter`
+(or Drawer/Rail `footer`); workspace row in body — do **not** `margin-top: auto`
+a destination Item; do **not** put settings in TopAppBar `trailing` when the
+product wants Cursor-style bottom chrome.
 
 ## Failure mode this treaty targets: NavigationDrawer Search↔Item vacant band
 
@@ -1184,7 +1232,7 @@ unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode: master–detail / content max-width token missing
 
-Symptoms (hub-split / main canvas):
+Symptoms (legacy hub-split / main canvas):
 
 - List+detail grid stacks full-width in one column; DevTools shows
   `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr` with the
@@ -1195,6 +1243,13 @@ Symptoms (hub-split / main canvas):
 `nav-pane-width` / `content-max-width` before core shipped them (same class of
 bug as `stats-min-col`). **Fix in core (≥ 0.4.45):** tokens exist. **Consumer:**
 bump `@fynn7/ui-design-core` ≥ 0.4.45; do not invent private rem fallbacks.
+
+**Prefer drill-in over main split:** for destination apps with a drawer, put
+the catalog list in the **nav** track and keep main full-width detail — see
+**main-canvas list|detail split (hub-split)** above and live
+`#layouts-demo-drill-in`. Do not treat `list-pane-width` as the default
+catalog recipe.
+
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **FillColumn**.
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

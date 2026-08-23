@@ -1005,7 +1005,7 @@ export const CAROUSEL_TOKENS = {
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
  * Labeled (icon + caption stacked) keeps a larger inset square — never
  * crush into 40dp or it clips the label (sandbox / DestinationAppShell
- * densify defaults to `labelVisibility="labeled"`).
+ * densify defaults to `railLabelVisibility="unlabeled"` unless overridden).
  * `--fynns-navrail-<key>`.
  */
 export const NAVRAIL_TOKENS = {

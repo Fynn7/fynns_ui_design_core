@@ -18,7 +18,6 @@ import {
   PanelRightIcon,
   restoreFynnsThemeMode,
   SearchIcon,
-  SettingsIcon,
   SparklesIcon,
   SnackbarHost,
   SunIcon,
@@ -43,6 +42,10 @@ import {
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
+import {
+  NavDrawerFooterAccount,
+  NavDrawerWorkspaceRow,
+} from "../components/NavDrawerFooterAccount";
 import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
@@ -264,27 +267,16 @@ export function SandboxShell() {
     </>
   );
 
-  /** Cursor-style nav footer: empty project / workspace rows + settings end. */
+  /** Cursor-style nav footer: account row + settings end (workspace in body). */
   const navFooter = (
-    <>
-      <div className="fynns-nav-drawer-footer-slot" aria-hidden />
-      <div
-        className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
-        aria-hidden
-      />
-      <div className="fynns-nav-drawer-footer-account">
-        <div className="fynns-nav-drawer-footer-account-start" aria-hidden />
-        <Tooltip content={t("nav.templatesTip")} side="top">
-          <IconButton
-            aria-label={t("nav.templates")}
-            aria-pressed={page === "templates"}
-            onClick={() => setPage("templates")}
-          >
-            <SettingsIcon size={16} aria-hidden />
-          </IconButton>
-        </Tooltip>
-      </div>
-    </>
+    <NavDrawerFooterAccount
+      showLabel
+      accountLabel={t("nav.footerAccountLabel")}
+      accountName={t("nav.footerAccountName")}
+      settingsLabel={t("nav.templates")}
+      settingsTip={t("nav.templatesTip")}
+      onSettingsClick={() => setPage("templates")}
+    />
   );
 
   const nav =
@@ -292,7 +284,7 @@ export function SandboxShell() {
     <NavigationRail
       className="sandbox-nav-rail"
       aria-label={t("nav.aria")}
-      labelVisibility="labeled"
+      labelVisibility="unlabeled"
       footer={navFooter}
     >
       <Tooltip content={t("nav.playgroundHint")} side="right">
@@ -340,6 +332,7 @@ export function SandboxShell() {
       footer={navFooter}
     >
       {destinations}
+      <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
     </NavigationDrawer>
   );
 

@@ -1,4 +1,4 @@
-﻿# AGENTS.md — @fynns/ui-design-core
+# AGENTS.md — @fynns/ui-design-core
 
 Authoritative guide for humans and AI agents working with the fynns UI design
 system. This is the **single source of truth** for the design language; other
@@ -859,18 +859,24 @@ classes.
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
   wrap destinations in `.fynns-unit-stack`; SearchBar / tools as a body sibling
   use `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` / 8dp)
-  to destinations; **sheet `footer`** = Cursor-style project / workspace /
-  account chrome under the scroll body — settings gear in
-  `.fynns-nav-drawer-footer-account` end, **not** a destination Item and **not**
-  TopAppBar `trailing` for that role; empty slots via
-  `.fynns-nav-drawer-footer-slot` / `--pill`), SkipLink,
+  to destinations; **sheet `footer`** = Cursor-style **single account row**
+  (Avatar + optional fade-truncated `.fynns-nav-drawer-footer-account-label` +
+  settings gear in `.fynns-nav-drawer-footer-account` end — **not** a
+  destination Item and **not** TopAppBar `trailing` for settings; footer has
+  **no** hairline divider above it — pad only, Cursor-style; when body content
+  overflows, `.fynns-nav-drawer-body` gets `data-fade-bottom` / `data-fade-top`
+  mask fades into the footer / top — not a hard clip). **Workspace /
+  project context** belongs in drawer **body** (`.fynns-nav-drawer-footer-slot--pill`
+  row or `DestinationAppShell` `navBodyExtra` — not stacked footer slots). Omit
+  account label → avatar/initial only; put identity in `Tooltip`. SkipLink,
   Breadcrumb, Pagination (list/table pager: **content-width nowrap** strip;
   page-size Select / “Showing…” copy = previous Card-body sibling via
   unit-stack-gap — never a horizontal space-between that shrinks the pages)
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
-  `trailing` / `navFooter` (Cursor-style drawer/rail footer — settings gear
-  end) / `children` / optional `aside` (not assumed Chat). Internally
+  `trailing` / optional `navBodyExtra` (workspace row in drawer body) /
+  `navFooter` (Cursor-style single account row + settings end) / `children` /
+  optional `aside` (not assumed Chat). Internally
   wires `ClippedNavShell` + `TopAppBar` +
   Drawer|Rail + optional `EndAside` and auto-densifies to rail on narrow (~900px)
   or crowding — agents **must** use this unless the user specifies another
@@ -1106,14 +1112,14 @@ classes.
 
   | Symbol | Platform | Notes |
   | --- | --- | --- |
-  | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside + optional `navFooter` (settings in drawer/rail footer); auto Drawer↔Rail. Prefer over hand-composed ClippedNavShell. |
+  | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside + optional `navFooter` (settings in drawer/rail footer); auto Drawer↔Rail. Prefer over hand-composed ClippedNavShell. **Flat root destinations only** — any drill-in / dynamic drawer body → hand-compose `ClippedNavShell` + app state (live `#layouts-demo-drill-in`); there is no `NavStack` primitive. |
   | TopAppBar | both | **Edge-flush** page header (`border-radius: 0`, no card frame). Slot into `ClippedNavShell.topBar` / DestinationAppShell — shell adds bottom hairline only. Floating rounded strips → `Toolbar`. |
   | BottomAppBar | mobile-first | Bottom **actions** + optional FAB — not destinations. |
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
-  | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. Default / agent densify: `labelVisibility="labeled"` (always show captions). |
-  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell`). Group/Item `label` = **short name only** — no `· N` and no parenthetical glosses unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**8dp**, aliases layout `control-stack-gap` — matches Search↔Toggle in tools; wider than Item↔Item 4dp; not a 16dp kind-jump). Optional sheet `footer` = Cursor-style account chrome (`.fynns-nav-drawer-footer*`; settings IconButton end — not TopAppBar `trailing` for that role; DestinationAppShell `navFooter`). Tools under SearchBar = **one** .fynns-control-cluster of Tooltip→IconButton (horizontal) — tip-fill width:100% applies only to Tooltip wrapping NavigationDrawerItem. **Never** wrap destinations in `.fynns-unit-stack`. |
-  | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
+  | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. **DestinationAppShell** densify default: `railLabelVisibility="unlabeled"` (Cursor icon column + bottom gear — no stacked caption pills). Pass `labeled` when captions must stay visible in rail.
+  | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell` decorative; **`#layouts-demo-drill-in`** interactive drawer-body swap + full-width main). Catalog list-in-drawer (not main `list-pane-width` split) is the destination-app default — see CONSUMER_TREATY **hub-split**. Group/Item `label` = **short name only** — no `· N` and no parenthetical glosses unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**8dp**, aliases layout `control-stack-gap` — matches Search↔Toggle in tools; wider than Item↔Item 4dp; not a 16dp kind-jump). Optional sheet `footer` = Cursor-style account chrome (`.fynns-nav-drawer-footer*`; settings IconButton end — not TopAppBar `trailing` for that role; DestinationAppShell `navFooter`). Tools under SearchBar = **one** .fynns-control-cluster of Tooltip→IconButton (horizontal) — tip-fill width:100% applies only to Tooltip wrapping NavigationDrawerItem. **Never** wrap destinations in `.fynns-unit-stack`. |
+  | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Use this shell when the drawer body must **morph** (catalog / chats drill-in) — swap `nav`, keep main full-width detail; live `#layouts-demo-drill-in`. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination = content-width nowrap strip; stack page-size Select above it (Card body siblings). |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |

@@ -5454,6 +5454,13 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
 }
 
+.fynns-nav-rail[data-has-footer="true"] .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
 .fynns-nav-rail-footer {
   box-sizing: border-box;
   display: flex;
@@ -5464,7 +5471,10 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   min-width: 0;
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
-  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  /* Cursor: gear/account chrome stays on the bottom edge — not under destinations. */
+  margin-top: auto;
+  flex-shrink: 0;
+  border-block-start: none;
 }
 
 /* Densified rail: hide empty project / workspace / account-start; keep gear. */
@@ -5476,6 +5486,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-nav-rail-footer .fynns-nav-drawer-footer-account {
   justify-content: center;
   width: 100%;
+  background: transparent;
 }
 
 /* Keep destination indicators clear of menu chrome when there is no header.
@@ -6150,10 +6161,67 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Cursor-style sheet footer under the destination scroll body — project /
- * workspace / account chrome. Not destinations (those stay in `.body`).
- * Recipe: empty `.fynns-nav-drawer-footer-slot` (+ `--pill`), then
- * `.fynns-nav-drawer-footer-account` (start grow + settings IconButton end).
+ * Cursor: when destinations overflow the scrollport, soft-fade the edge that
+ * still has more content (into the account footer / top) — not a hard clip
+ * + hairline. Attrs set by NavigationDrawer sync (scroll / ResizeObserver).
+ */
+.fynns-nav-drawer-body[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 1.5rem,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 1.5rem,
+    #000 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 1.5rem,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 1.5rem,
+    #000 calc(100% - 1.5rem),
+    transparent 100%
+  );
+}
+
+/*
+ * Cursor-style sheet footer under the destination scroll body — single account
+ * row + settings. **No** hairline / divider above the footer (Cursor separates
+ * with pad only). Project / workspace context belongs in drawer **body**
+ * (`.fynns-nav-drawer-footer-slot--pill` row or destinations — not stacked
+ * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
+ * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
+ * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
+ * label → avatar/initial only; identity may live in Tooltip. Rail densify
+ * hides account-start and keeps the gear.
  */
 .fynns-nav-drawer-footer {
   box-sizing: border-box;
@@ -6164,20 +6232,59 @@ a.fynns-breadcrumb-link:visited {
   gap: var(--fynns-navdrawer-section-gap);
   min-width: 0;
   padding-inline: var(--fynns-navdrawer-pad-inline);
-  padding-block: var(--fynns-navdrawer-body-pad-block-start);
-  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  /*
+   * Top: breath above account row (body already pads block-end with the same
+   * token). Bottom: 0 — shell `padding-block-end` matches NavigationRail
+   * (`--fynns-space-md`) so the settings hover disk ↔ outer edge matches rail.
+   */
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+  padding-block-end: 0;
+  border-block-start: none;
+}
+
+/* Rail parity: one bottom inset on the sheet — not footer pad + shell pad. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) {
+  padding-block-end: var(--fynns-space-md);
+}
+
+/* Cursor: footer/account row pins to the sheet bottom; body scrolls above. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .fynns-nav-drawer-footer-slot {
   box-sizing: border-box;
+  display: flex;
   flex: 0 0 auto;
+  align-items: center;
+  min-width: 0;
   min-height: var(--fynns-navdrawer-item-height);
+  padding-inline: var(--fynns-navdrawer-item-pad-inline-start)
+    var(--fynns-navdrawer-item-pad-inline-end);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
 }
 
 .fynns-nav-drawer-footer-slot--pill {
-  background: var(--fynns-color-control-surface);
   border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-control-surface-hover);
+}
+
+.fynns-nav-drawer-footer-slot-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .fynns-nav-drawer-footer-account {
@@ -6193,9 +6300,42 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-drawer-footer-account-start {
+  box-sizing: border-box;
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
   min-height: var(--fynns-size-icon-target);
+}
+
+.fynns-nav-drawer-footer-account-avatar-wrap {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.fynns-nav-drawer-footer-account-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: var(--fynns-color-text-muted);
+  /* Cursor: soft end fade into the settings gap — not `…` ellipsis. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
 }
 
 /*
@@ -9752,6 +9892,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-clipped-nav-shell-nav {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -9779,6 +9921,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /* Permanent destinations clipped under the top bar. */
 .fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
 .fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+  flex: 1 1 auto;
   height: 100%;
   min-height: 0;
   min-width: 0;
@@ -9818,6 +9961,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-clipped-nav-shell-nav > .fynns-nav-rail {
   width: 100%;
   max-width: none;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
@@ -10094,6 +10240,24 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     border-inline-end-color: transparent;
   }
 
+  /*
+   * Stacked *drawer* track only — side rail keeps full column height so the
+   * settings footer can pin to the bottom edge (Cursor parity).
+   */
+  .fynns-clipped-nav-shell[data-nav="drawer"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav {
+    height: auto;
+    align-self: start;
+  }
+
+  .fynns-clipped-nav-shell[data-nav="rail"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav {
+    height: 100%;
+    align-self: stretch;
+  }
+
   .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
     width: 100%;
     max-width: none;
@@ -10120,10 +10284,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     }
   }
 
+  /*
+   * Shrink-wrap destinations when content fits under the cap — do not
+   * flex-grow an empty scroll band between items and the account footer.
+   * When content exceeds `max-height`, `flex-shrink: 1` + `min-height: 0`
+   * lets the body scroll inside the clipped shell.
+   */
   .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-height: 0;
-    max-height: 100%;
+    overflow-y: auto;
   }
 
   .fynns-clipped-nav-shell-main {

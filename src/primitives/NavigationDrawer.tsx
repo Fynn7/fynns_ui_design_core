@@ -3,6 +3,8 @@ import {
   forwardRef,
   isValidElement,
   useId,
+  useLayoutEffect,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ForwardedRef,
@@ -25,6 +27,21 @@ function hasActiveDestination(node: ReactNode): boolean {
     if (props.children != null) found = hasActiveDestination(props.children);
   });
   return found;
+}
+
+/**
+ * Cursor-style scroll-edge fade: soft mask when more content is past the
+ * top / bottom edge (no hairline divider into the footer). Observes the
+ * drawer **body** only — never the ClippedNavShell root (see llm/PERF.md).
+ */
+function syncNavDrawerBodyFade(el: HTMLElement) {
+  const max = Math.max(0, el.scrollHeight - el.clientHeight);
+  const canDown = max > 1 && el.scrollTop < max - 1;
+  const canUp = max > 1 && el.scrollTop > 1;
+  if (canDown) el.setAttribute("data-fade-bottom", "");
+  else el.removeAttribute("data-fade-bottom");
+  if (canUp) el.setAttribute("data-fade-top", "");
+  else el.removeAttribute("data-fade-top");
 }
 
 export type NavigationDrawerVariant = "modal" | "standard";
@@ -72,12 +89,14 @@ export type NavigationDrawerProps = {
   children?: ReactNode;
   /**
    * Optional sheet **footer** pinned under the scroll body (Cursor-style
-   * account / project / settings chrome). Not a destination — keep
-   * `NavigationDrawerItem`s in `children`. Prefer
-   * `.fynns-nav-drawer-footer-slot` / `--pill` / `--account` recipe
-   * (sandbox Layouts `#layouts-demo-shell` + SandboxShell). Settings
-   * gear → `.fynns-nav-drawer-footer-account` end, not TopAppBar
-   * `trailing`.
+   * single account row + settings). Not a destination — keep
+   * `NavigationDrawerItem`s in `children`. Workspace / project context
+   * belongs in **body** (e.g. `.fynns-nav-drawer-footer-slot--pill` row via
+   * `navBodyExtra` on `DestinationAppShell`). Footer recipe:
+   * `.fynns-nav-drawer-footer-account` + `.fynns-nav-drawer-footer-account-start`
+   * (Avatar + optional `.fynns-nav-drawer-footer-account-label`) + settings
+   * IconButton end — not TopAppBar `trailing`. Live: sandbox Layouts
+   * `#layouts-demo-shell` + SandboxShell.
    */
   footer?: ReactNode;
 };
@@ -94,13 +113,35 @@ function DrawerSheet({
   className?: string;
   children?: ReactNode;
 } & HTMLAttributes<HTMLElement>) {
+  const bodyRef = useRef<HTMLDivElement>(null);
   const rootClass = ["fynns-nav-drawer", className ?? ""].filter(Boolean).join(" ");
+
+  useLayoutEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const sync = () => syncNavDrawerBodyFade(el);
+    sync();
+    el.addEventListener("scroll", sync, { passive: true });
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    // childList only on the body — content length changes; no shell-root probe.
+    const mo = new MutationObserver(sync);
+    mo.observe(el, { childList: true, subtree: true });
+    return () => {
+      el.removeEventListener("scroll", sync);
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
   return (
     <nav {...navRest} className={rootClass}>
       {headline != null && headline !== false ? (
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
-      <div className="fynns-nav-drawer-body fynns-scroll">{children}</div>
+      <div ref={bodyRef} className="fynns-nav-drawer-body fynns-scroll">
+        {children}
+      </div>
       {footer != null && footer !== false ? (
         <div className="fynns-nav-drawer-footer">{footer}</div>
       ) : null}

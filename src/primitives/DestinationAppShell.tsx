@@ -72,15 +72,21 @@ export type DestinationAppShellProps = {
   /** Optional drawer headline (standard / labeled mode only). */
   drawerHeadline?: ReactNode;
   /**
+   * Optional extra drawer **body** chrome after destinations (workspace /
+   * repo context row — not a destination Item). Ignored in rail densify.
+   * Live: sandbox Layouts `#layouts-demo-shell`.
+   */
+  navBodyExtra?: ReactNode;
+  /**
    * Optional `NavigationDrawer` / `NavigationRail` footer (Cursor-style
-   * account row + settings). Same node is passed to both densify modes —
-   * rail CSS hides empty slots. Prefer settings gear here, not TopAppBar
-   * `trailing`. Live: sandbox Layouts `#layouts-demo-shell`.
+   * single account row + settings). Same node is passed to both densify
+   * modes — rail CSS hides account-start and keeps the gear. Prefer settings
+   * here, not TopAppBar `trailing`. Live: sandbox Layouts `#layouts-demo-shell`.
    */
   navFooter?: ReactNode;
   /**
-   * Rail densify label mode. Default `labeled` (always show destination
-   * captions) — agent / greenfield default. Prefer over `selected`.
+   * When densified to rail (narrow / crowding). Default `unlabeled` — Cursor
+   * icon column + bottom gear. Pass `labeled` when captions must stay visible.
    */
   railLabelVisibility?: "labeled" | "selected" | "unlabeled";
   /**
@@ -136,8 +142,9 @@ export const DestinationAppShell = forwardRef<
     expandNavLabel,
     collapseNavLabel,
     drawerHeadline,
+    navBodyExtra,
     navFooter,
-    railLabelVisibility = "labeled",
+    railLabelVisibility = "unlabeled",
     narrowBreakpoint = DEFAULT_NARROW_BREAKPOINT,
     className,
     drawerWidth,
@@ -264,6 +271,7 @@ export const DestinationAppShell = forwardRef<
         footer={navFooter}
       >
         {drawerItems}
+        {navBodyExtra}
       </NavigationDrawer>
     );
 

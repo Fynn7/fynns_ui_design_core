@@ -119,8 +119,9 @@ alwaysApply: true
 未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是
 `DestinationAppShell`（与 sandbox **Layout templates** 首屏
 `#layouts-demo-shell` 同构）。传 `destinations` / `title` / 可选 `leadingExtra` /
-`trailing` / 可选 `navFooter`（Cursor 式侧栏底栏：项目/工作区槽 + 账号行右端
-设置齿轮 — **不要**把该设置塞进 TopAppBar `trailing`，也**不要**用最后一项
+`trailing` / 可选 `navBodyExtra`（工作区/仓库行 — 在 drawer **body**，不是 footer 双槽）/
+可选 `navFooter`（Cursor 式**单**账户行：`Avatar` + 可选**渐隐**标签 + 右端设置齿轮 —
+无用户名时只留头像/首字母，身份放 `Tooltip`；footer **无**顶部分隔线；**不要**把该设置塞进 TopAppBar `trailing`，也**不要**用最后一项
 `NavigationDrawerItem` + `margin-top: auto`） / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
 做桌面根，禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
 `labelVisibility="labeled"`（始终显示标签）——不要默认 `selected` / `unlabeled`。
@@ -134,25 +135,40 @@ alwaysApply: true
   destinations={[{ id: "home", icon: <HomeIcon />, label: "Home" }]}
   activeId={id}
   onActiveIdChange={setId}
+  navBodyExtra={
+    <div className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill">
+      <span className="fynns-nav-drawer-footer-slot-label">Workspace</span>
+    </div>
+  }
   navFooter={
-    <>
-      <div className="fynns-nav-drawer-footer-slot" aria-hidden />
-      <div
-        className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill"
-        aria-hidden
-      />
-      <div className="fynns-nav-drawer-footer-account">
-        <div className="fynns-nav-drawer-footer-account-start" aria-hidden />
-        <IconButton aria-label="Settings">
-          <SettingsIcon />
-        </IconButton>
+    <div className="fynns-nav-drawer-footer-account">
+      <div className="fynns-nav-drawer-footer-account-start">
+        <Avatar size="sm" name="Sample User" alt="sample@example.com" />
+        {showAccountLabel ? (
+          <span className="fynns-nav-drawer-footer-account-label">
+            sample@example.com
+          </span>
+        ) : null}
       </div>
-    </>
+      <IconButton aria-label="Settings">
+        <SettingsIcon />
+      </IconButton>
+    </div>
   }
 >
   {main}
 </DestinationAppShell>
 ```
+
+**钻入 / 目录列表（强制 grammar）：** 有侧栏的 destination app，catalog
+（技能、会话、规则…）的**列表进 `NavigationDrawer` body**（进入模式时整列
+swap），主区只放全宽详情 / `EmptyState`。**禁止**主画布
+`hub-split` / `--fynns-layout-list-pane-width` list|detail 当默认。退出模式 =
+TopAppBar 返回（`leading` / `DestinationAppShell.leadingExtra`），**禁止**
+drawer `headline` 工具条。扁平根目的地仍用 `DestinationAppShell`；动态侧栏
+→ 手拼 `ClippedNavShell`（无 `NavStack` 原语）。对照 sandbox
+`#layouts-demo-drill-in`。权威：`CONSUMER_TREATY.md` **hub-split** /
+**drawer headline toolbar**。
 
 **主画布纵向填满：** 上方 Preview（或其它顶带）+ 下方 Chat 贴底时，用
 `FillColumn`（`header` = Preview，`children` = `Chat`，empty 放进
