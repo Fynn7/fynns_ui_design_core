@@ -94,6 +94,7 @@ import {
   ListItem,
   MenuIcon,
   OtpInput,
+  NumberInput,
   PlusIcon,
   PencilIcon,
   Radio,
@@ -847,6 +848,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [selectObjValue, setSelectObjValue] = useState("teal");
   const [otpValue, setOtpValue] = useState("");
   const [otpShortValue, setOtpShortValue] = useState("");
+  const [numberValue, setNumberValue] = useState(8);
+  const [numberDenseValue, setNumberDenseValue] = useState(1.5);
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [stepperIndex, setStepperIndex] = useState(1);
@@ -1690,6 +1693,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               supportingText={t("globals.otpDisabledSupporting")}
             />
             <SandboxHelp text={t("globals.otpHelp")} />
+          </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="number-input">
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <FieldBlock label={t("globals.numberInputLabel")}>
+              <NumberInput
+                value={numberValue}
+                onChange={setNumberValue}
+                min={0}
+                max={24}
+                step={1}
+                aria-label={t("globals.numberInputAria")}
+                supportingText={t("globals.numberInputSupporting")}
+                incrementLabel={t("globals.numberInputInc")}
+                decrementLabel={t("globals.numberInputDec")}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.numberInputDenseLabel")}>
+              <NumberInput
+                size="sm"
+                value={numberDenseValue}
+                onChange={setNumberDenseValue}
+                min={0}
+                max={4}
+                step={0.25}
+                aria-label={t("globals.numberInputDenseAria")}
+                supportingText={t("globals.numberInputDenseSupporting")}
+                incrementLabel={t("globals.numberInputInc")}
+                decrementLabel={t("globals.numberInputDec")}
+              />
+            </FieldBlock>
+            <SandboxHelp text={t("globals.numberInputHelp")} />
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="password">

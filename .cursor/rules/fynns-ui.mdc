@@ -26,7 +26,7 @@ ring can paint before heavy work).
 - Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, SplitButton,
   Input,
   Textarea, Select,
-  Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
+  Autocomplete, OtpInput, NumberInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
   full-width ControlStack + track-only Switch — not InfoHint demo as Preferences

@@ -453,7 +453,9 @@ classes.
   content min-width floor so Select + sibling `IconButton` share one row),
   Autocomplete (same docked SearchBar expand shell as Select; open on
   click/type/ArrowDown, not focus alone; hint wrap only when
-  supporting/error text), OtpInput, SearchBar / SearchBarResult (narrow hosts
+  supporting/error text), OtpInput, NumberInput (spinbutton + trailing steppers;
+  discrete inspector / form counts — prefer over Slider when typing or stepping;
+  not RangeSlider), SearchBar / SearchBarResult (narrow hosts
   ellipsis the field value — not mid-glyph hard clip; same on Autocomplete
   **and** single-line `Input`; idle ellipsis / focused caret scroll; chrome
   default 56dp; `density="destination"` / SearchBar in NavigationDrawer body

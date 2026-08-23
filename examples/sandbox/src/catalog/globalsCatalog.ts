@@ -109,6 +109,20 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["验证码", "otp", "pin"],
   },
   {
+    id: "number-input",
+    categoryId: "textInputs",
+    label: "NumberInput",
+    keywords: [
+      "数字",
+      "number",
+      "spinbutton",
+      "stepper",
+      "步进",
+      "integer",
+      "inspector",
+    ],
+  },
+  {
     id: "password",
     categoryId: "textInputs",
     label: "Password",

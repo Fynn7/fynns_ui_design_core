@@ -301,6 +301,12 @@ export { Divider } from "./primitives/Divider";
 export type { DividerProps } from "./primitives/Divider";
 export { OtpInput } from "./primitives/OtpInput";
 export type { OtpInputProps } from "./primitives/OtpInput";
+export { NumberInput } from "./primitives/NumberInput";
+export type {
+  NumberInputProps,
+  NumberInputSize,
+  NumberInputVariant,
+} from "./primitives/NumberInput";
 export { EmptyState } from "./primitives/EmptyState";
 export type { EmptyStateProps } from "./primitives/EmptyState";
 export {
