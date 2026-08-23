@@ -18,7 +18,6 @@ import {
   PanelRightIcon,
   restoreFynnsThemeMode,
   SearchIcon,
-  SettingsIcon,
   SparklesIcon,
   SnackbarHost,
   SunIcon,
@@ -43,6 +42,10 @@ import {
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
+import {
+  NavDrawerFooterAccount,
+  NavDrawerWorkspaceRow,
+} from "../components/NavDrawerFooterAccount";
 import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
@@ -261,19 +264,19 @@ export function SandboxShell() {
         active={page === "motion"}
         onClick={() => setPage("motion")}
       />
-      <Tooltip
-        content={t("nav.templatesTip")}
-        side="right"
-        className="sandbox-nav-templates"
-      >
-        <NavigationDrawerItem
-          icon={<SettingsIcon />}
-          label={t("nav.templates")}
-          active={page === "templates"}
-          onClick={() => setPage("templates")}
-        />
-      </Tooltip>
     </>
+  );
+
+  /** Cursor-style nav footer: account row + settings end (workspace in body). */
+  const navFooter = (
+    <NavDrawerFooterAccount
+      showLabel
+      accountLabel={t("nav.footerAccountLabel")}
+      accountName={t("nav.footerAccountName")}
+      settingsLabel={t("nav.templates")}
+      settingsTip={t("nav.templatesTip")}
+      onSettingsClick={() => setPage("templates")}
+    />
   );
 
   const nav =
@@ -281,7 +284,8 @@ export function SandboxShell() {
     <NavigationRail
       className="sandbox-nav-rail"
       aria-label={t("nav.aria")}
-      labelVisibility="labeled"
+      labelVisibility="unlabeled"
+      footer={navFooter}
     >
       <Tooltip content={t("nav.playgroundHint")} side="right">
         <NavigationRailItem
@@ -319,26 +323,16 @@ export function SandboxShell() {
         active={page === "motion"}
         onClick={() => setPage("motion")}
       />
-      <Tooltip
-        content={t("nav.templatesTip")}
-        side="right"
-        className="sandbox-nav-templates"
-      >
-        <NavigationRailItem
-          icon={<SettingsIcon />}
-          label={t("nav.templates")}
-          active={page === "templates"}
-          onClick={() => setPage("templates")}
-        />
-      </Tooltip>
     </NavigationRail>
   ) : (
     <NavigationDrawer
       variant="standard"
       className="sandbox-nav"
       ariaLabel={t("nav.aria")}
+      footer={navFooter}
     >
       {destinations}
+      <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
     </NavigationDrawer>
   );
 

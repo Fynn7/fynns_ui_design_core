@@ -152,6 +152,16 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.textareaMaxHeightHint",
     max: 480,
   },
+  "list-well-max-height": {
+    labelKey: "layoutChrome.listWellMaxHeight",
+    hintKey: "layoutChrome.listWellMaxHeightHint",
+    max: 640,
+  },
+  "list-well-max-height-sm": {
+    labelKey: "layoutChrome.listWellMaxHeightSm",
+    hintKey: "layoutChrome.listWellMaxHeightSmHint",
+    max: 480,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",
@@ -227,6 +237,11 @@ const NAVDRAWER_ROW_META: Record<
     labelKey: "layoutChrome.navdrawerMaxWidth",
     hintKey: "layoutChrome.navdrawerMaxWidthHint",
     max: 560,
+  },
+  "body-fade-length": {
+    labelKey: "layoutChrome.navdrawerBodyFadeLength",
+    hintKey: "layoutChrome.navdrawerBodyFadeLengthHint",
+    max: 64,
   },
 };
 

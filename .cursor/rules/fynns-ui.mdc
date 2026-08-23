@@ -26,7 +26,7 @@ ring can paint before heavy work).
 - Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, SplitButton,
   Input,
   Textarea, Select,
-  Autocomplete, OtpInput, DropdownMenu (+ Group / Separator / CheckboxItem),
+  Autocomplete, OtpInput, NumberInput, DropdownMenu (+ Group / Separator / CheckboxItem),
   ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
   full-width ControlStack + track-only Switch — not InfoHint demo as Preferences
@@ -35,8 +35,9 @@ ring can paint before heavy work).
   Collapsible shell, static head),
   Surface,
    LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
-  `indicator="linear"` for known % — never nest a second progress in `message`;
-  never EmptyState + ring),
+ Dialog/Card/section body load → BusyRegion, never bare md CircularProgress;
+ `indicator="linear"` for known % — never nest a second progress in `message`;
+ never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
   bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
@@ -96,7 +97,12 @@ ring can paint before heavy work).
   DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
   TimePicker/TimePickerDialog, Carousel/CarouselItem,
   NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
-  destination siblings use `--fynns-navdrawer-section-gap` — never
+  sheet `headline` = static title only — never back IconButton / count toolbar;
+  mode exit → TopAppBar leading/leadingExtra; Group/Item label = short name
+  only (no `· N` / no parenthetical glosses unless user asks; Item badge only
+  when required); destination
+  siblings use
+  `--fynns-navdrawer-section-gap` — never
   `.fynns-unit-stack`; SearchBar/tools as a body sibling use
   `--fynns-navdrawer-search-gap` to destinations),
   DestinationAppShell, ClippedNavShell, EndAside,

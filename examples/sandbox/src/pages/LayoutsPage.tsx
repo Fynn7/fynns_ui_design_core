@@ -44,12 +44,18 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
+  ClipboardIcon,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import {
+  NavDrawerFooterAccount,
+  NavDrawerWorkspaceRow,
+} from "../components/NavDrawerFooterAccount";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
+import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -100,6 +106,8 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
+    useState(true);
 
   return (
     <div className="sandbox-globals">
@@ -120,6 +128,12 @@ export function LayoutsPage() {
                 label={t("globals.shellAsideOpen")}
                 checked={shellAsideOpen}
                 onCheckedChange={setShellAsideOpen}
+              />
+              <Switch
+                labelSide="end"
+                label={t("nav.footerShowAccountLabel")}
+                checked={shellFooterShowAccountLabel}
+                onCheckedChange={setShellFooterShowAccountLabel}
               />
             </div>
             <div className="sandbox-globals-clipped-shell">
@@ -145,18 +159,23 @@ export function LayoutsPage() {
                   </Tooltip>
                 }
                 trailing={
-                  <>
-                    <Tooltip content={t("globals.appBarSearch")}>
-                      <IconButton aria-label={t("globals.appBarSearch")}>
-                        <SearchIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip content={t("globals.appBarSettings")}>
-                      <IconButton aria-label={t("globals.appBarSettings")}>
-                        <SettingsIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </>
+                  <Tooltip content={t("globals.appBarSearch")}>
+                    <IconButton aria-label={t("globals.appBarSearch")}>
+                      <SearchIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+                navBodyExtra={
+                  <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
+                }
+                navFooter={
+                  <NavDrawerFooterAccount
+                    showLabel={shellFooterShowAccountLabel}
+                    accountLabel={t("nav.footerAccountLabel")}
+                    accountName={t("nav.footerAccountName")}
+                    settingsLabel={t("globals.appBarSettings")}
+                    settingsTip={t("globals.appBarSettings")}
+                  />
                 }
                 destinations={[
                   {
@@ -197,6 +216,10 @@ export function LayoutsPage() {
               </DestinationAppShell>
             </div>
             <SandboxHelp text={t("globals.shellHelp")} />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="drill-in">
+            <DrillInLayoutsDemo />
           </LayoutsDemo>
 
           <LayoutsDemo id="fill-column">
@@ -309,14 +332,48 @@ export function LayoutsPage() {
                 ariaLabel={t("globals.navDrawerAria")}
                 headline={t("globals.navDrawerHeadline")}
               >
-                <SearchBar
-                  density="destination"
-                  value={drawerSearchQuery}
-                  onChange={setDrawerSearchQuery}
-                  ariaLabel={t("globals.navDrawerSearchAria")}
-                  placeholder={t("globals.navDrawerSearchPlaceholder")}
-                  clearAriaLabel={t("globals.searchBarClear")}
-                />
+                <div className="sandbox-navdrawer-tools">
+                  <SearchBar
+                    density="destination"
+                    value={drawerSearchQuery}
+                    onChange={setDrawerSearchQuery}
+                    ariaLabel={t("globals.navDrawerSearchAria")}
+                    placeholder={t("globals.navDrawerSearchPlaceholder")}
+                    clearAriaLabel={t("globals.searchBarClear")}
+                  />
+                  <div
+                    className="fynns-control-cluster"
+                    aria-label={t("globals.navDrawerToolsAria")}
+                  >
+                    <Tooltip content={t("globals.navDrawerToolBulk")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolBulk")}
+                      >
+                        <ClipboardIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolArchive")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolArchive")}
+                      >
+                        <ArchiveIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolRestore")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolRestore")}
+                      >
+                        <UndoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
                 <NavigationDrawerItem
                   icon={<FolderOpenIcon />}
                   label={t("globals.navDrawerInbox")}

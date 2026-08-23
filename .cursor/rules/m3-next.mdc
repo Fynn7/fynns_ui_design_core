@@ -22,13 +22,14 @@ When the user says **下一个** (or “next” in the same sense):
    cheap), `typecheck`, then **semver bump + GitHub Packages publish** in the
    same task (`docs/package-propagation.md`). Never leave the fix only on a
    sibling Vite alias.
-5. Recent sequence for reference: DatePicker → TimePicker → Carousel → Toolbar →
-   DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
-   Pagination → BadgedBox / AvatarGroup / OtpInput / EmptyState / SkipLink /
-   Stepper / Dropzone / Table / CodeBlock / FullscreenDialog / ContextMenu /
-   ToggleGroup `multiple` / EyeOffIcon / BusyScrim / BusyRegion / ChatMessage /
-   NavigationDrawerGroup → ChatThinking motion → ChatActivity → (next gap).
-   Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
+5. Recent sequence for reference:   DatePicker → TimePicker → Carousel → Toolbar →
+  DateRangePicker → Autocomplete → FabMenu → Menu anatomy → Breadcrumb →
+  Pagination → BadgedBox / AvatarGroup / OtpInput / EmptyState / SkipLink /
+  Stepper / Dropzone / Table / CodeBlock / FullscreenDialog / ContextMenu /
+  ToggleGroup `multiple` / EyeOffIcon / BusyScrim / BusyRegion / ChatMessage /
+  NavigationDrawerGroup → ChatThinking motion → ChatActivity → NumberInput →
+  (next gap).
+  Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
    **TimePicker dial (表盘/时钟面)** / **BlockingLoadingOverlay** / **PanelSkeleton**
    — skipped forever (user asked twice on dial; digital TimePicker input is
    enough). LoadingIndicator / ButtonGroup / RangeSlider stay skipped as

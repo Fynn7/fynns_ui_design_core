@@ -14,3 +14,4 @@ export {
   unregisterHighlightLanguage,
   getRegisteredHighlightLanguage,
 } from "./simple";
+export { codeLanguageFromPath } from "./fromPath";

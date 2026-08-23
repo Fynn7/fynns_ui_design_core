@@ -3,6 +3,8 @@ import {
   forwardRef,
   isValidElement,
   useId,
+  useLayoutEffect,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ForwardedRef,
@@ -27,6 +29,21 @@ function hasActiveDestination(node: ReactNode): boolean {
   return found;
 }
 
+/**
+ * Cursor-style scroll-edge fade: soft mask when more content is past the
+ * top / bottom edge (no hairline divider into the footer). Observes the
+ * drawer **body** only — never the ClippedNavShell root (see llm/PERF.md).
+ */
+function syncNavDrawerBodyFade(el: HTMLElement) {
+  const max = Math.max(0, el.scrollHeight - el.clientHeight);
+  const canDown = max > 1 && el.scrollTop < max - 1;
+  const canUp = max > 1 && el.scrollTop > 1;
+  if (canDown) el.setAttribute("data-fade-bottom", "");
+  else el.removeAttribute("data-fade-bottom");
+  if (canUp) el.setAttribute("data-fade-top", "");
+  else el.removeAttribute("data-fade-top");
+}
+
 export type NavigationDrawerVariant = "modal" | "standard";
 
 export type NavigationDrawerProps = {
@@ -46,7 +63,17 @@ export type NavigationDrawerProps = {
    * Pass `false` for a dismissible but non-blocking sheet.
    */
   modal?: boolean;
-  /** Optional top headline inside the sheet (M3 title-small). */
+  /**
+   * Optional **static** sheet title (M3 title-small / muted semibold).
+   * Plain text or light markup only — **not** a toolbar. Do **not** put
+   * `IconButton` (back / bulk), counts, or `hub-row` chrome here. Mode exit
+   * (back to root destinations) lives on `TopAppBar` `leading` /
+   * `leadingExtra`. Omit when the app bar already owns the mode title.
+   * Do **not** invent counts in `headline` or pad Group/Item `label` with
+   * `· N` / parenthetical glosses — see AGENTS Hard rules (chrome label
+   * copy). Live: sandbox Layouts `#layouts-demo-shell` (`leadingExtra`
+   * back) + Globals NavigationDrawer (string `headline`).
+   */
   headline?: ReactNode;
   ariaLabel?: string;
   className?: string;
@@ -54,30 +81,79 @@ export type NavigationDrawerProps = {
    * Destinations as **direct** body children: `NavigationDrawerItem`,
    * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
    * Item ↔ Item uses `--fynns-navdrawer-section-gap` (4dp). SearchBar /
-   * tools as a body sibling uses `--fynns-navdrawer-search-gap` (16dp,
-   * aliases unit-stack-gap) to the next destination.
+   * tools as a body sibling uses `--fynns-navdrawer-search-gap` (aliases
+   * layout `control-stack-gap` — 8dp; matches Search↔Toggle in a tools
+   * column; wider than Item↔Item, not a 16dp kind-jump).
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;
+  /**
+   * Optional sheet **footer** pinned under the scroll body (Cursor-style
+   * single account row + settings). Not a destination — keep
+   * `NavigationDrawerItem`s in `children`. Workspace / project context
+   * belongs in **body** (e.g. `.fynns-nav-drawer-footer-slot--pill` row via
+   * `navBodyExtra` on `DestinationAppShell`). Footer recipe:
+   * `.fynns-nav-drawer-footer-account` + `.fynns-nav-drawer-footer-account-start`
+   * (Avatar + optional `.fynns-nav-drawer-footer-account-label`) + settings
+   * IconButton end — not TopAppBar `trailing`. Live: sandbox Layouts
+   * `#layouts-demo-shell` + SandboxShell.
+   */
+  footer?: ReactNode;
 };
 
 function DrawerSheet({
   headline,
+  footer,
   className,
   children,
   ...navRest
 }: {
   headline?: ReactNode;
+  footer?: ReactNode;
   className?: string;
   children?: ReactNode;
 } & HTMLAttributes<HTMLElement>) {
+  const bodyRef = useRef<HTMLDivElement>(null);
   const rootClass = ["fynns-nav-drawer", className ?? ""].filter(Boolean).join(" ");
+
+  useLayoutEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    let raf = 0;
+    const sync = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        syncNavDrawerBodyFade(el);
+      });
+    };
+    syncNavDrawerBodyFade(el);
+    el.addEventListener("scroll", sync, { passive: true });
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    // Body direct children only — destination swaps / SearchBar remounts;
+    // avoid subtree thrash from deep SearchBar / tip DOM churn (llm/PERF.md).
+    const mo = new MutationObserver(sync);
+    mo.observe(el, { childList: true, subtree: false });
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", sync);
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, []);
+
   return (
     <nav {...navRest} className={rootClass}>
       {headline != null && headline !== false ? (
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
-      <div className="fynns-nav-drawer-body fynns-scroll">{children}</div>
+      <div ref={bodyRef} className="fynns-nav-drawer-body fynns-scroll">
+        {children}
+      </div>
+      {footer != null && footer !== false ? (
+        <div className="fynns-nav-drawer-footer">{footer}</div>
+      ) : null}
     </nav>
   );
 }
@@ -88,8 +164,9 @@ function DrawerSheet({
  * Prefer `Drawer` for generic side panels (forms, inspectors).
  * Sibling Item / Group / Headline spacing uses
  * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools ↔ destinations
- * uses `--fynns-navdrawer-search-gap`. Never `.fynns-unit-stack` for the
- * destination list itself.
+ * uses `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap`
+ * / 8dp). Never
+ * `.fynns-unit-stack` for the destination list itself.
  * @see https://m3.material.io/components/navigation-drawer/overview
  */
 export function NavigationDrawer({
@@ -99,6 +176,7 @@ export function NavigationDrawer({
   side = "left",
   modal = true,
   headline,
+  footer,
   ariaLabel,
   className,
   children,
@@ -107,6 +185,7 @@ export function NavigationDrawer({
     return (
       <DrawerSheet
         headline={headline}
+        footer={footer}
         className={["fynns-nav-drawer--standard", className ?? ""]
           .filter(Boolean)
           .join(" ")}
@@ -135,7 +214,9 @@ export function NavigationDrawer({
       panelClassName={panelClass}
       ariaLabel={ariaLabel}
     >
-      <DrawerSheet headline={headline}>{children}</DrawerSheet>
+      <DrawerSheet headline={headline} footer={footer}>
+        {children}
+      </DrawerSheet>
     </DialogFrame>
   );
 }
@@ -143,7 +224,8 @@ export function NavigationDrawer({
 export type NavigationDrawerHeadlineProps = HTMLAttributes<HTMLDivElement>;
 
 /**
- * Static section label inside a navigation drawer (M3 headline).
+ * Static **section** label inside the drawer body (M3 headline) — not the
+ * sheet `headline` prop, and not a place for IconButtons / counts.
  * For collapsible Cursor-style folders use `NavigationDrawerGroup`.
  */
 export function NavigationDrawerHeadline({
@@ -164,7 +246,12 @@ export function NavigationDrawerHeadline({
 }
 
 export type NavigationDrawerGroupProps = {
-  /** Group title (visible + accessible name for the disclose control). */
+  /**
+   * Group title (visible + accessible name for the disclose control).
+   * **Short name only** — do not pad with `· N` / counts / parenthetical
+   * glosses unless the user explicitly asks. Unread → nested Item `badge`
+   * only when required (AGENTS Hard rules).
+   */
   label: string;
   /**
    * Optional leading glyph — any node (folder, globe, sparkles, …).

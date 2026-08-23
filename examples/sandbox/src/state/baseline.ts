@@ -76,6 +76,8 @@ export const EDITABLE_LAYOUT_KEYS = [
   "field-pad-inline",
   "field-pad-block",
   "textarea-max-height",
+  "list-well-max-height",
+  "list-well-max-height-sm",
   // sheetPads
   "sheet-pad-inline",
   "sheet-pad-block",
@@ -102,6 +104,7 @@ export const EDITABLE_NAVDRAWER_KEYS = [
   "width",
   "min-width",
   "max-width",
+  "body-fade-length",
 ] as const satisfies ReadonlyArray<keyof typeof NAVDRAWER_TOKENS>;
 
 export type EditableNavdrawerKey = (typeof EDITABLE_NAVDRAWER_KEYS)[number];
@@ -159,6 +162,8 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "field-pad-inline",
     "field-pad-block",
     "textarea-max-height",
+    "list-well-max-height",
+    "list-well-max-height-sm",
   ],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
@@ -289,6 +294,10 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "textarea-max-height":
     "Form field · Textarea autoGrow soft cap before inner scroll (13rem)",
+  "list-well-max-height":
+    "List well · long in-Card List soft cap (20rem; short catalogs → page scroll, no nested fynns-scroll)",
+  "list-well-max-height-sm":
+    "List well · dense in-Card List soft cap (12rem; only when the catalog can overflow)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",
@@ -310,6 +319,8 @@ const NAVDRAWER_KEY_ROLES: Record<EditableNavdrawerKey, string> = {
   width: "NavigationDrawer preferred width (absolute rem)",
   "min-width": "ClippedNavShell drawer resize floor (absolute rem — no %)",
   "max-width": "ClippedNavShell drawer resize cap (absolute rem — no %)",
+  "body-fade-length":
+    "NavigationDrawer body scroll-edge mask fade length (data-fade-top/bottom)",
 };
 
 /**

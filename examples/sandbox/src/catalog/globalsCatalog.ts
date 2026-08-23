@@ -109,6 +109,20 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["验证码", "otp", "pin"],
   },
   {
+    id: "number-input",
+    categoryId: "textInputs",
+    label: "NumberInput",
+    keywords: [
+      "数字",
+      "number",
+      "spinbutton",
+      "stepper",
+      "步进",
+      "integer",
+      "inspector",
+    ],
+  },
+  {
     id: "password",
     categoryId: "textInputs",
     label: "Password",
@@ -333,7 +347,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "busy-region",
     categoryId: "patterns",
     label: "BusyRegion",
-    keywords: ["忙碌", "busy", "loading region", "linear"],
+    keywords: ["忙碌", "busy", "loading region", "linear", "cold", "pager", "sessions", "drawer", "narrow", "overflow", "searchbar", "overlap"],
+  },
+  {
+    id: "page-scroll",
+    categoryId: "patterns",
+    label: "Page scroll",
+    keywords: [
+      "页滚",
+      "page-scroll",
+      "PageScroll",
+      "content-column",
+      "scrollbar",
+      "overlay",
+      "FillColumn",
+      "catalog",
+    ],
   },
   {
     id: "busy-scrim",
@@ -414,6 +443,8 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "unit-stack",
       "toolbar rhythm",
       "layout",
+      "end-align",
+      "footer",
     ],
   },
   {

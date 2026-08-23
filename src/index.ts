@@ -205,6 +205,8 @@ export { Grid } from "./primitives/Grid";
 export type { GridProps } from "./primitives/Grid";
 export { FillColumn } from "./primitives/FillColumn";
 export type { FillColumnProps } from "./primitives/FillColumn";
+export { PageScroll } from "./primitives/PageScroll";
+export type { PageScrollProps } from "./primitives/PageScroll";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";
@@ -299,6 +301,12 @@ export { Divider } from "./primitives/Divider";
 export type { DividerProps } from "./primitives/Divider";
 export { OtpInput } from "./primitives/OtpInput";
 export type { OtpInputProps } from "./primitives/OtpInput";
+export { NumberInput } from "./primitives/NumberInput";
+export type {
+  NumberInputProps,
+  NumberInputSize,
+  NumberInputVariant,
+} from "./primitives/NumberInput";
 export { EmptyState } from "./primitives/EmptyState";
 export type { EmptyStateProps } from "./primitives/EmptyState";
 export {
@@ -408,6 +416,7 @@ export {
   registerHighlightLanguage,
   unregisterHighlightLanguage,
   getRegisteredHighlightLanguage,
+  codeLanguageFromPath,
 } from "./primitives/codeHighlight";
 export type {
   CodeLanguageId,

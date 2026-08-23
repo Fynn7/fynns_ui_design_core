@@ -810,6 +810,94 @@
   color: var(--fynns-color-danger);
 }
 
+/* ---------- NumberInput (spinbutton + trailing steppers) ---------- */
+.fynns-number-input-shell {
+  /* Steppers own the end edge — keep start pad, tighten end to capsule. */
+  padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline);
+}
+
+.fynns-number-input-shell .fynns-number-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  /* Tabular so steppers do not shift when 9 → 10. */
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-number-input-steppers {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-self: stretch;
+  width: var(--fynns-size-icon);
+  margin-block: var(--fynns-space-2xs);
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-number-input-step {
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fynns-radius-xs);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-number-input-step + .fynns-number-input-step {
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-number-input-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-number-input-step:hover:not(:disabled)::before {
+  opacity: var(--fynns-state-hover);
+}
+
+.fynns-number-input-step:active:not(:disabled)::before {
+  opacity: var(--fynns-state-pressed);
+}
+
+.fynns-number-input-step:focus-visible {
+  outline: none;
+}
+
+.fynns-number-input-step:focus-visible::before {
+  opacity: var(--fynns-state-focus);
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-number-input-step:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-number-input-step svg {
+  position: relative;
+  z-index: 1;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
 .fynns-input {
   /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
   width: 100%;
@@ -2423,6 +2511,25 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-items: center;
 }
 
+/*
+ * Catalog / page chrome (list “Name (n/m)” + IconButton strip): standalone
+ * ControlRow (not a ControlStack child) fills the host — label grows, actions
+ * hug the trailing edge. ControlStack rows keep the fixed label track via
+ * subgrid. Form hosts (Card / Dialog / padded Surface) already set the same
+ * 1fr | max-content grid.
+ */
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row) {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row)
+  > .fynns-control-row__controls {
+  justify-self: end;
+  min-width: 0;
+}
+
 .fynns-control-row__label {
   min-width: 0;
   overflow: hidden;
@@ -2469,6 +2576,21 @@ input.fynns-input:focus::-webkit-scrollbar {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/*
+ * Nested clusters hug content. A child with `width: 100%` inside another
+ * cluster becomes a full-bleed row (Card head icon strips stack vertically —
+ * BookmarkActions + SourceFileActions lesson). Outer form clusters still
+ * fill their ControlRow / FieldBlock. Keep nested strips nowrap so a
+ * constrained head cannot re-wrap helper groups into a tall stack.
+ */
+.fynns-control-cluster .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 /* Table / toolbar row: metadata + optional grow + trailing action on one line.
@@ -3111,6 +3233,16 @@ input.fynns-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-line-height-snug);
 }
 
+/* Consumer often wraps title in <span className="mono"> — keep ellipsis. */
+.fynns-card-title > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Single disclose slot: optional rest icon stacked with expand chevron.
  * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
 .fynns-collapsible-disclose,
@@ -3211,6 +3343,23 @@ input.fynns-input:focus::-webkit-scrollbar {
   /* Keep IconButton hover disks off the card edge (not full content-inset). */
   padding-block: var(--fynns-space-xs);
   padding-inline-end: var(--fynns-space-xs);
+}
+
+/*
+ * Header actions = one horizontal strip (M3). Every cluster under the actions
+ * slot must hug + nowrap — including nested helper groups. A sole
+ * `>` rule is not enough when helpers wrap themselves in `.fynns-control-cluster`
+ * (`width: 100%` + wrap) and the head squeezes the strip: each nested group
+ * claims a full row (~72dp tall stack). Prefer a flat outer cluster of
+ * IconButtons; nested helpers must still stay one row.
+ */
+.fynns-card-actions .fynns-control-cluster,
+.fynns-collapsible-actions .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  min-width: 0;
 }
 
 .fynns-collapsible-body,
@@ -3573,14 +3722,15 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   text-align: center;
   gap: var(--fynns-layout-unit-stack-gap);
-  max-width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
+  /* Cap vs *host* — never 100vw (that overflows NavigationDrawer / EndAside). */
+  width: min(20rem, 100%);
+  max-width: 100%;
+  min-width: 0;
   padding: var(--fynns-space-lg);
   box-sizing: border-box;
 }
 
 .fynns-busy-stack--linear {
-  width: min(20rem, calc(100vw - 2 * var(--fynns-space-lg)));
-  max-width: 100%;
   align-items: stretch;
   text-align: start;
 }
@@ -3590,6 +3740,8 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: column;
   gap: var(--fynns-layout-field-hint-gap);
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--fynns-color-text);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);
@@ -3616,10 +3768,15 @@ a.fynns-breadcrumb-link:visited {
 .fynns-busy-region {
   position: relative;
   isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .fynns-busy-region-content {
   min-width: 0;
+  max-width: 100%;
 }
 
 /* Stretch to a height-resolved flex parent so the overlay can center. */
@@ -3644,9 +3801,41 @@ a.fynns-breadcrumb-link:visited {
   inset: 0;
   z-index: 1;
   display: grid;
+  /* minmax(0, 1fr) so a 20rem-preferring stack cannot expand the host
+     (NavigationDrawer / EndAside); place-items still centers the chrome. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   place-items: center;
-  background: color-mix(in srgb, var(--fynns-color-surface-1) 78%, transparent);
+  min-width: 0;
+  box-sizing: border-box;
+  /* Transparent — keep host / pane background; do not wash with surface-*.
+     Full-viewport blocking tint stays on BusyScrim (`--fynns-color-overlay`). */
+  background: transparent;
   pointer-events: auto;
+}
+
+/*
+ * Cold-start without `fill`: empty content + absolute overlay → region height 0,
+ * so BusyStack paints outside the box and overlaps prior siblings (SearchBar /
+ * tools in NavigationDrawer). Keep chrome in normal flow instead.
+ */
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty {
+  display: none;
+}
+
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay {
+  position: relative;
+  inset: auto;
+  grid-template-rows: auto;
+}
+
+.fynns-busy-region-overlay > .fynns-busy-stack,
+.fynns-busy-scrim > .fynns-busy-stack {
+  max-width: 100%;
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4523,7 +4712,6 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-linear-progress-active,
 .fynns-linear-progress-track,
-.fynns-linear-progress-stop,
 .fynns-linear-progress-indeterminate-bar {
   box-sizing: border-box;
   height: 100%;
@@ -4538,23 +4726,10 @@ a.fynns-breadcrumb-link:visited {
   transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
-.fynns-linear-progress--stop.fynns-linear-progress--active .fynns-linear-progress-active {
-  width: calc(
-    var(--fynns-progress-value) *
-      (100% - var(--fynns-progress-gap) - var(--fynns-progress-stop-size))
-  );
-}
-
 .fynns-linear-progress-track {
   flex: 1 1 auto;
   min-width: 0;
   background: var(--fynns-color-accent-24);
-}
-
-.fynns-linear-progress-stop {
-  flex: 0 0 var(--fynns-progress-stop-size);
-  width: var(--fynns-progress-stop-size);
-  background: var(--fynns-color-accent);
 }
 
 .fynns-linear-progress--indeterminate {
@@ -5359,11 +5534,47 @@ a.fynns-breadcrumb-link:visited {
 
 .fynns-nav-rail-destinations {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   align-items: center;
   gap: var(--fynns-navrail-destinations-gap);
   width: 100%;
   min-height: 0;
+}
+
+.fynns-nav-rail[data-has-footer="true"] .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.fynns-nav-rail-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-width: 0;
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+  /* Cursor: gear/account chrome stays on the bottom edge — not under destinations. */
+  margin-top: auto;
+  flex-shrink: 0;
+  border-block-start: none;
+}
+
+/* Densified rail: hide empty project / workspace / account-start; keep gear. */
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-slot,
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account-start {
+  display: none;
+}
+
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account {
+  justify-content: center;
+  width: 100%;
+  background: transparent;
 }
 
 /* Keep destination indicators clear of menu chrome when there is no header.
@@ -5373,11 +5584,13 @@ a.fynns-breadcrumb-link:visited {
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
-.fynns-nav-rail--align-center .fynns-nav-rail-destinations {
+.fynns-nav-rail--align-center:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
   margin-block: auto;
 }
 
-.fynns-nav-rail--align-end .fynns-nav-rail-destinations {
+.fynns-nav-rail--align-end:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
   margin-block-start: auto;
 }
 
@@ -6012,8 +6225,8 @@ a.fynns-breadcrumb-link:visited {
   /*
    * No flex gap: destination rhythm is adjacent-sibling
    * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools use
-   * `--fynns-navdrawer-search-gap` (aliases unit-stack-gap) to the next
-   * destination — not the 4dp row step.
+   * `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` /
+   * 8dp) so Search↔Item matches Search↔Toggle in a tools column.
    */
   gap: 0;
   align-items: stretch;
@@ -6036,12 +6249,191 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
+ * Cursor: when destinations overflow the scrollport, soft-fade the edge that
+ * still has more content (into the account footer / top) — not a hard clip
+ * + hairline. Attrs set by NavigationDrawer sync (scroll / ResizeObserver).
+ */
+.fynns-nav-drawer-body[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
+/*
+ * Cursor-style sheet footer under the destination scroll body — single account
+ * row + settings. **No** hairline / divider above the footer (Cursor separates
+ * with pad only). Project / workspace context belongs in drawer **body**
+ * (`.fynns-nav-drawer-footer-slot--pill` row or destinations — not stacked
+ * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
+ * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
+ * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
+ * label → avatar/initial only; identity may live in Tooltip. Rail densify
+ * hides account-start and keeps the gear.
+ */
+.fynns-nav-drawer-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--fynns-navdrawer-section-gap);
+  min-width: 0;
+  padding-inline: var(--fynns-navdrawer-pad-inline);
+  /*
+   * Top: breath above account row (body already pads block-end with the same
+   * token). Bottom: 0 — shell `padding-block-end` matches NavigationRail
+   * (`--fynns-space-md`) so the settings hover disk ↔ outer edge matches rail.
+   */
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+  padding-block-end: 0;
+  border-block-start: none;
+}
+
+/* Rail parity: one bottom inset on the sheet — not footer pad + shell pad. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) {
+  padding-block-end: var(--fynns-space-md);
+}
+
+/* Cursor: footer/account row pins to the sheet bottom; body scrolls above. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fynns-nav-drawer-footer-slot {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--fynns-navdrawer-item-height);
+  padding-inline: var(--fynns-navdrawer-item-pad-inline-start)
+    var(--fynns-navdrawer-item-pad-inline-end);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+}
+
+.fynns-nav-drawer-footer-slot--pill {
+  border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-control-surface-hover);
+}
+
+.fynns-nav-drawer-footer-slot-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-footer-account {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  min-height: var(--fynns-size-icon-target);
+}
+
+.fynns-nav-drawer-footer-account-start {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  min-height: var(--fynns-size-icon-target);
+}
+
+.fynns-nav-drawer-footer-account-avatar-wrap {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.fynns-nav-drawer-footer-account-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: var(--fynns-color-text-muted);
+  /* Cursor: soft end fade into the settings gap — not `…` ellipsis. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+}
+
+/*
  * Destination rhythm: every direct body sibling opens
  * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
  * Group / Headline / Divider / Tooltip-wrapped items. Same step as
  * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
  * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
- * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar kind-jump is below.
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools ↔ destinations
+ * use `--fynns-navdrawer-search-gap` (8dp / control-stack) below.
  */
 .fynns-nav-drawer-body
   > *
@@ -6063,16 +6455,24 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * SearchBar / tools is chrome, not a destination row. Open
- * `--fynns-navdrawer-search-gap` (16dp) to the adjacent ordinary element.
- * Must follow the section-gap rules. Covers a bare SearchBar or a tools
- * wrapper that contains SearchBar (consumer GlobalSearch host).
+ * SearchBar / tools host ↔ adjacent body sibling. Uses
+ * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
+ * Search↔Item matches Search↔Toggle inside a tools column — wider than
+ * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers bare
+ * SearchBar or a tools wrapper that contains SearchBar.
  */
 .fynns-nav-drawer-body > .fynns-search-bar + *,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
 .fynns-nav-drawer-body > * + .fynns-search-bar,
 .fynns-nav-drawer-body > * + *:has(.fynns-search-bar) {
   margin-block-start: var(--fynns-navdrawer-search-gap);
+}
+
+/* Destination SearchBar is a 40dp row peer — never flex-shrink under a
+ * height-capped drawer body (would crush to border-only ~2px). */
+.fynns-nav-drawer-body > .fynns-search-bar,
+.fynns-nav-drawer-body > *:has(.fynns-search-bar) {
+  flex-shrink: 0;
 }
 
 .fynns-nav-drawer-body .fynns-unit-stack {
@@ -7081,6 +7481,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  gap: var(--fynns-list-item-gap);
   margin: 0;
   padding-block: var(--fynns-list-inset-block);
   padding-inline: var(--fynns-list-inset-inline);
@@ -7092,6 +7493,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   background: transparent;
 }
 
+/*
+ * Rows must not flex-shrink inside a height-capped / scrolling List.
+ * Mistaken non-`li` children (e.g. Collapsible — illegal `ul > div`) also
+ * keep intrinsic height so overflow:hidden shells do not paint ~19px
+ * “skeleton” pills. Prefer `ListItem` (+ `detail`) — never Collapsible/Card
+ * as a List child.
+ */
+.fynns-list > * {
+  flex-shrink: 0;
+}
+
 .fynns-list-item-host {
   display: flex;
   flex-direction: row;
@@ -7100,9 +7512,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  overflow-x: clip;
+  /*
+   * Clip hostClassName tone fills / inset rails to radius-3xl. Overflow-x-only
+   * left overflow-y visible → background paints a square bar (builtin “pill
+   * island” look). Both axes must clip so tone matches the M3 long-strip.
+   */
+  overflow: clip;
   margin: 0;
   padding: 0;
+  border-radius: var(--fynns-radius-3xl);
 }
 
 .fynns-list-item-host > .fynns-list-item {
@@ -7378,7 +7796,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex-shrink: 0;
 }
 
+/*
+ * Trailing action strips hug content. A lone `.fynns-control-cluster` defaults
+ * to `width: 100%` + wrap — inside a crushed trailing column that stacked
+ * IconButtons vertically (UpstreamAssets `interactive={false}` lesson).
+ */
 .fynns-list-item-trailing--end .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
 }
 
@@ -9390,12 +9816,71 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-fill-column-main > .fynns-chat,
-.fynns-fill-column-main > .fynns-busy-region--fill {
+.fynns-fill-column-main > .fynns-busy-region--fill,
+.fynns-fill-column-main > .fynns-page-scroll {
   flex: 1 1 auto;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   min-height: 0;
+}
+
+/*
+ * Page scroll host — **edge-flush** with the pane (FillColumn main / shell
+ * main / app `hub-main`). Overlay Y rail paints at `host.rect.right −
+ * scrollbar-size` — so this host’s border box **must** share the pane’s
+ * right edge. Never wrap `.fynns-page-scroll` in a horizontally padded
+ * ancestor (that insets the rail and leaves a dead strip beside the pane).
+ * Put side breath on `.fynns-content-column` instead.
+ *
+ * Put `.fynns-content-column` **inside** this host; do **not** put
+ * `fynns-scroll` on the max-width column itself.
+ * Always pair with keep-set `fynns-scroll` on the same node.
+ *
+ * End gutter (`--fynns-scrollbar-size`): reserves the overlay rail band so
+ * full-bleed content columns clear the thumb. Do **not** use `scrollbar-gutter`.
+ */
+.fynns-page-scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-inline-end: var(--fynns-scrollbar-size);
+}
+
+.fynns-content-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--fynns-layout-content-max-width);
+  margin-inline: auto;
+  min-width: 0;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+  /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`.
+   * Block pad matches inline (`dialog-inset`) so the first Card / unit clears
+   * TopAppBar / canvas ceiling — never flush under the shell head. */
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block: var(--fynns-layout-dialog-inset);
+}
+
+.fynns-content-column > .fynns-busy-region--fill,
+.fynns-content-column > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
+}
+
+/* Catalog Cards / unit stacks under a content column: do not flex-shrink
+ * (shrink + Card overflow:hidden clips charts / tables). */
+.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-fill-column) {
+  flex-shrink: 0;
 }
 
 /* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */
@@ -9495,6 +9980,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-clipped-nav-shell-nav {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -9522,6 +10009,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /* Permanent destinations clipped under the top bar. */
 .fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
 .fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+  flex: 1 1 auto;
   height: 100%;
   min-height: 0;
   min-width: 0;
@@ -9544,7 +10032,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body .fynns-tooltip-trigger {
+/*
+ * Tip-fill only for destination rows (Item wrapped in Tooltip). A broad
+ * `.fynns-tooltip-trigger { width: 100% }` also hit IconButton toolbars in
+ * SearchBar/tools hosts — each tip became a full-bleed 32dp strip and
+ * stacked vertically inside column tools (archived sidebar lesson).
+ */
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer
+  .fynns-nav-drawer-body
+  .fynns-tooltip-trigger:has(.fynns-nav-drawer-item) {
   display: block;
   width: 100%;
 }
@@ -9552,6 +10049,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-clipped-nav-shell-nav > .fynns-nav-rail {
   width: 100%;
   max-width: none;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
@@ -9828,6 +10328,24 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     border-inline-end-color: transparent;
   }
 
+  /*
+   * Stacked *drawer* track only — side rail keeps full column height so the
+   * settings footer can pin to the bottom edge (Cursor parity).
+   */
+  .fynns-clipped-nav-shell[data-nav="drawer"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav {
+    height: auto;
+    align-self: start;
+  }
+
+  .fynns-clipped-nav-shell[data-nav="rail"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav {
+    height: 100%;
+    align-self: stretch;
+  }
+
   .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
     width: 100%;
     max-width: none;
@@ -9854,10 +10372,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     }
   }
 
+  /*
+   * Shrink-wrap destinations when content fits under the cap — do not
+   * flex-grow an empty scroll band between items and the account footer.
+   * When content exceeds `max-height`, `flex-shrink: 1` + `min-height: 0`
+   * lets the body scroll inside the clipped shell.
+   */
   .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-height: 0;
-    max-height: 100%;
+    overflow-y: auto;
   }
 
   .fynns-clipped-nav-shell-main {

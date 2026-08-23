@@ -17,6 +17,7 @@ import {
   yieldToMain,
   runBusyTask,
   registerHighlightLanguage,
+  codeLanguageFromPath,
   Pagination,
   Card,
   Surface,
@@ -38,7 +39,10 @@ import {
   ChatActivityStep,
   ChatThinking,
   ChatThread,
+  AlertTriangleIcon,
+  CheckCircleIcon,
   ClipboardIcon,
+  CloseIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
@@ -73,6 +77,7 @@ import {
   FileIcon,
   FolderOpenIcon,
   FullscreenDialog,
+  GlobeIcon,
   Dialog,
   DialogShell,
   ConfirmDialog,
@@ -89,6 +94,7 @@ import {
   ListItem,
   MenuIcon,
   OtpInput,
+  NumberInput,
   PlusIcon,
   PencilIcon,
   Radio,
@@ -98,6 +104,7 @@ import {
   SearchIcon,
   Select,
   SettingsIcon,
+  SearchBar,
   SkipLink,
   snackbar,
   SplitButton,
@@ -122,6 +129,7 @@ import {
   FieldHint,
   Grid,
   FillColumn,
+  PageScroll,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -180,7 +188,7 @@ function ChatDemoActions({
         trigger={<MoreHorizontalIcon />}
         ariaLabel={moreLabel}
         align="start"
-        triggerClassName="fynns-btn--ghost fynns-btn--sm fynns-btn--icon"
+        iconOnly
       >
         <DropdownMenuItem onClick={onMoreShare}>
           {moreShareLabel}
@@ -284,6 +292,23 @@ const FULLSCREEN_FLUSH_XML = [
   "  <region>EU</region>",
   "  <contact>sample@example.com</contact>",
   "</notes>",
+].join("\n");
+
+/** Suffixed file-body Card demo — generic placeholders only (not consumer copy). */
+const FILE_BODY_SAMPLE_PATH = "sample.md";
+const FILE_BODY_SAMPLE_MD = [
+  "## Design guidance",
+  "",
+  "Be creative within the host tokens. Avoid slop patterns.",
+  "",
+  "### Visual hierarchy",
+  "",
+  "**Color.** All colors from theme tokens — never hardcode hex.",
+  "",
+  "### Notes",
+  "",
+  "- Prefer CodeBlock for `.md` / `.xml` / `.py` file bodies",
+  "- `.txt` drafts may stay on Textarea",
 ].join("\n");
 
 /** Wave 3: live registry path — CodeBlock resolves language="gsc" via this. */
@@ -797,7 +822,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [sheetFullOpen, setSheetFullOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
-  const [listId, setListId] = useState<"inbox" | "starred" | "sent">("inbox");
+  const [listId, setListId] = useState<
+    "inbox" | "starred" | "sent" | "tone-a" | "tone-b" | "tone-c"
+  >("inbox");
   const [listTreeOpen, setListTreeOpen] = useState(true);
   const [listTurnOpen, setListTurnOpen] = useState(true);
   const [pickedDate, setPickedDate] = useState<string | null>(null);
@@ -821,6 +848,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [selectObjValue, setSelectObjValue] = useState("teal");
   const [otpValue, setOtpValue] = useState("");
   const [otpShortValue, setOtpShortValue] = useState("");
+  const [numberValue, setNumberValue] = useState(8);
+  const [numberDenseValue, setNumberDenseValue] = useState(1.5);
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [stepperIndex, setStepperIndex] = useState(1);
@@ -833,6 +862,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
+  const [busyRegionDialogOpen, setBusyRegionDialogOpen] = useState(false);
+  const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyScrimOpen, setBusyScrimOpen] = useState(false);
   const [busyScrimDeterminateOpen, setBusyScrimDeterminateOpen] = useState(false);
   const [busyPaintBad, setBusyPaintBad] = useState(false);
@@ -1446,35 +1477,54 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="menu">
         <div className="sandbox-globals-row">
-          <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
-            <DropdownMenuGroup label={t("globals.menuGroupFile")}>
-              <DropdownMenuItem icon={<FileIcon />}>
-                {t("globals.menuNew")}
+          <div className="fynns-control-cluster">
+            <DropdownMenu trigger={t("globals.menuTrigger")} ariaLabel={t("globals.menuAria")}>
+              <DropdownMenuGroup label={t("globals.menuGroupFile")}>
+                <DropdownMenuItem icon={<FileIcon />}>
+                  {t("globals.menuNew")}
+                </DropdownMenuItem>
+                <DropdownMenuItem icon={<FolderOpenIcon />}>
+                  {t("globals.menuOpen")}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup label={t("globals.menuGroupView")}>
+                <DropdownMenuCheckboxItem
+                  checked={menuStarred}
+                  onCheckedChange={setMenuStarred}
+                >
+                  {t("globals.menuStarred")}
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  checked={menuNotify}
+                  onCheckedChange={setMenuNotify}
+                >
+                  {t("globals.menuNotify")}
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem icon={<PencilIcon />}>
+                {t("globals.menuRename")}
               </DropdownMenuItem>
-              <DropdownMenuItem icon={<FolderOpenIcon />}>
-                {t("globals.menuOpen")}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup label={t("globals.menuGroupView")}>
-              <DropdownMenuCheckboxItem
-                checked={menuStarred}
-                onCheckedChange={setMenuStarred}
-              >
-                {t("globals.menuStarred")}
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={menuNotify}
-                onCheckedChange={setMenuNotify}
-              >
-                {t("globals.menuNotify")}
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem icon={<PencilIcon />}>
-              {t("globals.menuRename")}
-            </DropdownMenuItem>
-          </DropdownMenu>
+            </DropdownMenu>
+            <Tooltip content={t("globals.menuIconStripTip")}>
+              <span>
+                <DropdownMenu
+                  trigger={<MoreHorizontalIcon />}
+                  ariaLabel={t("globals.menuIconStripAria")}
+                  align="end"
+                  iconOnly
+                >
+                  <DropdownMenuItem onClick={() => {}}>
+                    {t("globals.menuOpen")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {}}>
+                    {t("globals.menuRename")}
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </span>
+            </Tooltip>
+          </div>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
         </GlobalsDemo>
@@ -1643,6 +1693,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               supportingText={t("globals.otpDisabledSupporting")}
             />
             <SandboxHelp text={t("globals.otpHelp")} />
+          </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="number-input">
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <FieldBlock label={t("globals.numberInputLabel")}>
+              <NumberInput
+                value={numberValue}
+                onChange={setNumberValue}
+                min={0}
+                max={24}
+                step={1}
+                aria-label={t("globals.numberInputAria")}
+                supportingText={t("globals.numberInputSupporting")}
+                incrementLabel={t("globals.numberInputInc")}
+                decrementLabel={t("globals.numberInputDec")}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.numberInputDenseLabel")}>
+              <NumberInput
+                size="sm"
+                value={numberDenseValue}
+                onChange={setNumberDenseValue}
+                min={0}
+                max={4}
+                step={0.25}
+                aria-label={t("globals.numberInputDenseAria")}
+                supportingText={t("globals.numberInputDenseSupporting")}
+                incrementLabel={t("globals.numberInputInc")}
+                decrementLabel={t("globals.numberInputDec")}
+              />
+            </FieldBlock>
+            <SandboxHelp text={t("globals.numberInputHelp")} />
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="password">
@@ -2180,6 +2262,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <>
         <GlobalsDemo id="progress">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.progressHelp")} />
           <SandboxHelp as="span" text={t("globals.progressLinear")} />
           <LinearProgress value={0.42} label={t("globals.progressLinearAria")} />
           <SandboxHelp as="span" text={t("globals.progressLinearIndeterminate")} />
@@ -2912,6 +2995,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => {}}
             />
           </List>
+          <SandboxHelp text={t("globals.listHostToneHelp")} />
+          <List aria-label={t("globals.listHostToneAria")}>
+            <ListItem
+              hostClassName="sandbox-list-host-tone--accent"
+              headline={t("globals.listHostToneAccent")}
+              supportingText={t("globals.listHostToneAccentSupporting")}
+              leading={<FolderOpenIcon />}
+              selected={listId === "tone-a"}
+              onClick={() => setListId("tone-a")}
+            />
+            <Divider inset />
+            <ListItem
+              hostClassName="sandbox-list-host-tone--muted"
+              headline={t("globals.listHostToneMuted")}
+              supportingText={t("globals.listHostToneMutedSupporting")}
+              leading={<FileIcon />}
+              selected={listId === "tone-b"}
+              onClick={() => setListId("tone-b")}
+            />
+            <Divider inset />
+            <ListItem
+              headline={t("globals.listHostTonePlain")}
+              supportingText={t("globals.listHostTonePlainSupporting")}
+              leading={<SettingsIcon />}
+              selected={listId === "tone-c"}
+              onClick={() => setListId("tone-c")}
+            />
+          </List>
           <SandboxHelp text={t("globals.listCatalogHelp")} />
           <List aria-label={t("globals.listCatalogAria")}>
             <ListItem
@@ -2999,6 +3110,119 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </div>
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listShortcutCardHelp")} />
+          <Card
+            title={t("globals.listShortcutCardTitle")}
+            actions={
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.listShortcutCardRefresh")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listShortcutCardRefresh")}
+                    onClick={() => snackbar(t("globals.listShortcutCardRefreshSnack"))}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            }
+          >
+            <List aria-label={t("globals.listShortcutCardAria")}>
+              <ListItem
+                headline={t("globals.listShortcutCardFolder")}
+                supportingText={t("globals.listShortcutCardFolderPath")}
+                leading={<FolderOpenIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+              <ListItem
+                headline={t("globals.listShortcutCardFile")}
+                supportingText={t("globals.listShortcutCardFilePath")}
+                leading={<FileIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FileIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+              <ListItem
+                headline={t("globals.listShortcutCardUrl")}
+                supportingText={t("globals.listShortcutCardUrlPath")}
+                leading={<GlobeIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <GlobeIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              />
+            </List>
+          </Card>
+          <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
+          <List aria-label={t("globals.listCatalogStaticAria")}>
+            <ListItem
+              interactive={false}
+              lines={2}
+              overline={t("globals.listCatalogStaticOrigin")}
+              headline={t("globals.listCatalogStaticFile")}
+              supportingText={t("globals.listCatalogStaticPath")}
+              trailingSupportingText={
+                <span className="fynns-table-meta">{t("globals.listCatalogStaticKind")}</span>
+              }
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogOpen")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogOpen")}
+                    >
+                      <FileIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listCatalogFolder")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogFolder")}
+                    >
+                      <FolderOpenIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
             />
           </List>
           <SandboxHelp text={t("globals.listTreeHelp")} />
@@ -3122,8 +3346,73 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardBody")}
             </Card>
+          <Card
+            className="sandbox-globals-card sandbox-globals-card--actions-strip"
+            title={t("globals.cardActionsStripTitle")}
+            actions={
+              <div className="fynns-control-cluster">
+                <span className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardActionsStripStar")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.cardActionsStripStar")}
+                    >
+                      <SparklesIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardActionsStripPin")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.cardActionsStripPin")}
+                    >
+                      <SaveIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </span>
+                <span className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardActionsStripOpen")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.cardActionsStripOpen")}
+                    >
+                      <FileIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardActionsStripFolder")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.cardActionsStripFolder")}
+                    >
+                      <FolderOpenIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </span>
+                <Tooltip content={t("globals.cardActionsStripDelete")}>
+                  <IconButton
+                    size="sm"
+                    variant="danger"
+                    aria-label={t("globals.cardActionsStripDelete")}
+                  >
+                    <TrashIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            }
+          >
+            {t("globals.cardActionsStripBody")}
+          </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}
+          </Card>
+          <Card className="sandbox-globals-card" title={t("globals.cardMetaBodyTitle")}>
+            <div className="fynns-unit-stack">
+              <span className="fynns-table-meta">{t("globals.cardMetaBodyBranch")}</span>
+              <SandboxHelp as="span" text={t("globals.cardMetaBodyHelp")} />
+            </div>
           </Card>
           <Card
             className="sandbox-globals-card"
@@ -3640,6 +3929,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <p style={{ margin: 0 }}>{t("globals.busyRegionBody")}</p>
             </Card>
           </BusyRegion>
+          <SandboxHelp text={t("globals.busyRegionNarrowHelp")} />
+          <div className="sandbox-busy-narrow">
+            <BusyRegion
+              busy
+              indicator="linear"
+              label={t("globals.busyRegionNarrowLabel")}
+              message={t("globals.busyRegionNarrowMessage")}
+              value={0.35}
+            />
+          </div>
+          <SandboxHelp text={t("globals.busyRegionDrawerHelp")} />
+          <div className="sandbox-busy-narrow sandbox-busy-drawer-tools">
+            <SearchBar
+              density="destination"
+              placeholder={t("globals.busyRegionDrawerSearchPh")}
+              value=""
+              onChange={() => {}}
+              ariaLabel={t("globals.busyRegionDrawerSearchAria")}
+            />
+            <BusyRegion busy label={t("globals.busyRegionDrawerBusyLabel")} />
+          </div>
           <SandboxHelp text={t("globals.busyRegionHelp")} />
           <div className="sandbox-fill-column-stage">
             <FillColumn>
@@ -3669,6 +3979,115 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.busyRegionFillHelp")} />
+          <div className="sandbox-globals-row">
+            <Button size="sm" onClick={() => setBusyRegionDialogOpen(true)}>
+              {t("globals.busyRegionDialogOpen")}
+            </Button>
+          </div>
+          <Dialog
+            open={busyRegionDialogOpen}
+            onOpenChange={setBusyRegionDialogOpen}
+            title={t("globals.busyRegionDialogTitle")}
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+            size="md"
+          >
+            <BusyRegion
+              busy
+              label={t("globals.busyRegionDialogLabel")}
+              message={t("globals.busyRegionDialogMessage")}
+            />
+          </Dialog>
+          <SandboxHelp text={t("globals.busyRegionDialogHelp")} />
+          <SandboxHelp text={t("globals.busyRegionColdHelp")} />
+          <Card title={t("globals.busyRegionColdTitle")}>
+            {busyRegionColdBody ? (
+              <BusyRegion
+                busy
+                label={t("globals.busyRegionColdLabel")}
+                message={t("globals.busyRegionColdMessage")}
+              />
+            ) : (
+              <div className="fynns-unit-stack">
+                <List aria-label={t("globals.busyRegionColdListAria")}>
+                  <ListItem
+                    overline={t("globals.listTreeOverline")}
+                    headline={t("globals.listTreeHeadline")}
+                    supportingText={t("globals.listTreePath")}
+                    trailingSupportingText={t("globals.listTreeDuration")}
+                  />
+                </List>
+                <Select
+                  ariaLabel={t("globals.busyRegionColdSessions")}
+                  value="10"
+                  onChange={() => {}}
+                  options={[
+                    { value: "10", label: t("globals.busyRegionColdSessionsOpt") },
+                  ]}
+                />
+                <Pagination page={1} pageCount={3} onPageChange={() => {}} />
+              </div>
+            )}
+          </Card>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setBusyRegionColdBody(true)}
+              disabled={busyRegionColdBody}
+            >
+              {t("globals.busyRegionColdShow")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegionColdBody(false)}
+              disabled={!busyRegionColdBody}
+            >
+              {t("globals.busyRegionColdClear")}
+            </Button>
+          </div>
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="page-scroll">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <SandboxHelp text={t("globals.pageScrollHelp")} />
+          <div className="sandbox-page-scroll-stage">
+            <FillColumn>
+              <PageScroll>
+                  <Card title={t("globals.pageScrollCardTitle")}>
+                    <List aria-label={t("globals.pageScrollListAria")}>
+                      <ListItem
+                        headline={t("globals.listCatalogProject")}
+                        supportingText={t("globals.listCatalogProjectPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogConfig")}
+                        supportingText={t("globals.listCatalogConfigPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogRules")}
+                        supportingText={t("globals.listCatalogRulesPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogStaticFile")}
+                        supportingText={t("globals.listCatalogStaticPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listTwoLine")}
+                        supportingText={t("globals.listTwoLineSupporting")}
+                      />
+                      <ListItem
+                        headline={t("globals.listThreeLine")}
+                        supportingText={t("globals.listThreeLineSupporting")}
+                      />
+                    </List>
+                  </Card>
+                  <Card title={t("globals.pageScrollCardTitle2")}>
+                    <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
+                  </Card>
+              </PageScroll>
+            </FillColumn>
+          </div>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
@@ -4009,6 +4428,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
+          <Card
+            title={t("globals.codeBlockFileBodyTitle")}
+            chrome="plain"
+          >
+            <CodeBlock
+              variant="editable"
+              language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
+              autoGrow={false}
+              rows={12}
+              defaultValue={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockFileBodyAria")}
+            />
+          </Card>
+          <SandboxHelp text={t("globals.codeBlockFileBodyHelp")} />
           <CodeBlock
             wrap={false}
             label={t("globals.codeBlockNowrapLabel")}
@@ -4378,6 +4812,103 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlStack>
           </ControlBlock>
         </Surface>
+        <SandboxHelp text={t("globals.rhythmCatalogHelp")} />
+        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+          <ControlRow label={t("globals.rhythmCatalogLabel")}>
+            <div className="fynns-control-cluster">
+              <Tooltip content={t("globals.rhythmCatalogBulk")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmCatalogBulk")}
+                >
+                  <ClipboardIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmCatalogRefresh")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmCatalogRefresh")}
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmCatalogAdd")}>
+                <IconButton
+                  size="sm"
+                  variant="primary"
+                  aria-label={t("globals.rhythmCatalogAdd")}
+                >
+                  <PlusIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </ControlRow>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
+        <Surface variant="outlined" padded>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <span className="fynns-control-cluster__grow" aria-hidden />
+            <Button size="sm" variant="tonal">
+              {t("globals.rhythmEndAlignSecondary")}
+            </Button>
+            <Button size="sm">{t("globals.rhythmEndAlignPrimary")}</Button>
+          </div>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmStatusHelp")} />
+        <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
+          <ControlStack columns={1}>
+            <ControlRow label={t("globals.rhythmStatusBehind")}>
+              <Tooltip content={t("globals.rhythmStatusBehindTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusBehindTip")}
+                >
+                  <AlertTriangleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusCi")}>
+              <Tooltip content={t("globals.rhythmStatusCiTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusCiTip")}
+                >
+                  <CloseIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusProtection")}>
+              <Tooltip content={t("globals.rhythmStatusProtectionTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusProtectionTip")}
+                >
+                  <CheckCircleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusLocal")}>
+              <span
+                className="sandbox-globals-rhythm-status-empty"
+                aria-label={t("globals.rhythmStatusLocalEmpty")}
+              >
+                —
+              </span>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmStatusReady")}>
+              <Tooltip content={t("globals.rhythmStatusReadyTip")}>
+                <span
+                  className="sandbox-globals-rhythm-status-glyph"
+                  aria-label={t("globals.rhythmStatusReadyTip")}
+                >
+                  <CheckCircleIcon />
+                </span>
+              </Tooltip>
+            </ControlRow>
+          </ControlStack>
+        </Card>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

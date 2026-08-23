@@ -10,9 +10,12 @@ export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Labeled control row for toolbars / labeled strips.
  *
- * Uses a fixed label column (`--fynns-layout-control-row-label`) so every row's
- * controls share the same left edge — avoids the recurring consumer patch of
- * ad-hoc `flex-basis` labels that still expand with content (`min-width: auto`).
+ * Inside `ControlStack`, uses a fixed label column
+ * (`--fynns-layout-control-row-label`) via subgrid so sibling rows share one
+ * control edge. **Standalone** (catalog “Name (n/m)” chrome, etc.) fills the
+ * host: label `1fr`, controls `max-content` end-hug — same as form-host
+ * Card / Dialog rows. Prefer one `.fynns-control-cluster` for the action
+ * strip.
  */
 export function ControlRow({ label, children, className, ...rest }: ControlRowProps) {
   return (

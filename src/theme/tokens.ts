@@ -420,7 +420,6 @@ export const SEGMENTED_TOKENS = {
 export const PROGRESS_TOKENS = {
   "track-thickness": "0.25rem",
   gap: "0.25rem",
-  "stop-size": "0.25rem",
   "circular-size": "3rem",
   "circular-size-sm": "2.25rem",
   "circular-size-lg": "4rem",
@@ -877,7 +876,9 @@ export const CHAT_TOKENS = {
 
 /**
  * M3 content List / ListItem geometry (at 16px rem).
- * One-line 56dp; two-line 72dp; three-line 88dp. Selected row uses the same
+ * One-line 56dp; two-line **60dp** (path / shortcut catalogs — denser than
+ * classic M3 72dp so overview Cards do not read vacant); three-line 88dp
+ * (session trees / timestamp + name + path only). Selected row uses the same
  * `secondary-container` + `radius-3xl` long-strip highlight as
  * NavigationDrawerItem / Select / menu items. Sidebar destinations still use
  * Navigation* chrome (not deleted ListRow / ListGroup).
@@ -885,7 +886,8 @@ export const CHAT_TOKENS = {
  */
 export const LIST_TOKENS = {
   "height-1": "3.5rem",
-  "height-2": "4.5rem",
+  /** Two-line path / shortcut rows (headline + supporting). Not 72dp. */
+  "height-2": "3.75rem",
   "height-3": "5.5rem",
   "pad-inline": "1rem",
   "pad-block": "0.5rem",
@@ -895,6 +897,13 @@ export const LIST_TOKENS = {
    */
   "inset-inline": "0.5rem",
   "inset-block": "0.5rem",
+  /**
+   * Sibling row hosts (`.fynns-list-item-host`). Same optical step as
+   * NavigationDrawerItem (`--fynns-navdrawer-section-gap` / 4dp). Required
+   * because selected / hover use `radius-3xl` pills — zero gap fuses adjacent
+   * washes into one mega-capsule (agents-hub 全局规则 lesson).
+   */
+  "item-gap": "var(--fynns-navdrawer-section-gap)",
   /** Leading glyph → copy (aliases `--fynns-space-sm`). Not a 40dp icon-button column. */
   gap: "0.5rem",
   /**
@@ -908,8 +917,11 @@ export const LIST_TOKENS = {
    * An `Avatar` in `leading` still sizes the slot to the avatar.
    */
   "leading-width": "1.25rem",
-  /** Overline → headline → supporting (aliases `--fynns-space-sm`). */
-  "content-gap": "0.5rem",
+  /**
+   * Overline → headline → supporting. Tighter than unit-stack so two-line
+   * pills stay dense (aliases `--fynns-space-xs` / 4dp).
+   */
+  "content-gap": "var(--fynns-space-xs)",
 } as const;
 
 /**
@@ -993,7 +1005,7 @@ export const CAROUSEL_TOKENS = {
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
  * Labeled (icon + caption stacked) keeps a larger inset square — never
  * crush into 40dp or it clips the label (sandbox / DestinationAppShell
- * densify defaults to `labelVisibility="labeled"`).
+ * densify defaults to `railLabelVisibility="unlabeled"` unless overridden).
  * `--fynns-navrail-<key>`.
  */
 export const NAVRAIL_TOKENS = {
@@ -1128,16 +1140,24 @@ export const NAVDRAWER_TOKENS = {
    */
   "section-gap": "0.25rem",
   /**
-   * SearchBar / tools (chrome) ↔ destination rows. Kind jump — aliases
-   * `--fynns-layout-unit-stack-gap` (16dp). Item ↔ Item stays `section-gap`.
+   * SearchBar / tools host ↔ destination rows. **One step above
+   * `section-gap` (4dp)** — aliases `--fynns-layout-control-stack-gap`
+   * (8dp), the same gap hub-mode tools use between SearchBar ↔ ToggleGroup.
+   * Do **not** jump back to 16dp (`unit-stack-gap` / former kind-jump).
+   * Item↔Item stays on `section-gap`.
    */
-  "search-gap": "var(--fynns-layout-unit-stack-gap)",
+  "search-gap": "var(--fynns-layout-control-stack-gap)",
   "badge-dot": "0.375rem",
   /**
    * Nested destination pad inside `NavigationDrawerGroup` (Cursor-style one
    * level indent — ~icon column past top-level `item-pad-inline-start`).
    */
   "group-item-pad-inline-start": "2rem",
+  /**
+   * Scroll-edge mask fade length on `.fynns-nav-drawer-body` when
+   * `data-fade-top` / `data-fade-bottom` (soft edge into account footer).
+   */
+  "body-fade-length": "1.5rem",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */
@@ -1215,6 +1235,39 @@ export const LAYOUT_TOKENS = {
    * Matches ChatComposer `composer-max-height` density — not a Chat token.
    */
   "textarea-max-height": "13rem",
+  /**
+   * Soft cap for a **long** in-Card catalog `List` before inner scroll (20rem).
+   * Prefer FillColumn page scroll for short path / repo catalogs — do **not**
+   * put `fynns-scroll` + this max-height on a one-row List (empty scroll chrome).
+   * Consumers must not invent this name; missing var invalidates `max-height`.
+   */
+  "list-well-max-height": "20rem",
+  /**
+   * Denser in-Card list well (12rem) for compact inspectors. Same rule as
+   * `list-well-max-height`: only when the catalog can actually overflow.
+   */
+  "list-well-max-height-sm": "12rem",
+  /**
+   * Master–detail catalog column width (~288dp). Use as the first track of a
+   * consumer list+detail grid:
+   * `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr`.
+   * **Must exist** — an undefined var invalidates the grid and stacks panes
+   * full-width in one column (same failure mode as `stats-min-col`).
+   */
+  "list-pane-width": "18rem",
+  /**
+   * Destination / mode nav column target (~280dp). Alias for consumers that
+   * mirror drawer chrome outside `ClippedNavShell` (prefer shell +
+   * `--fynns-navdrawer-width` for live drawers). **Must exist** when referenced.
+   */
+  "nav-pane-width": "17.5rem",
+  /**
+   * Soft max width for page canvas content under the shell (~1180dp). Pair with
+   * `.fynns-content-column` (`margin-inline: auto`) **inside** `.fynns-page-scroll`
+   * — never put this max-width on the scroll host itself (overlay Y rail would
+   * flush with Card edges). **Must exist** when referenced.
+   */
+  "content-max-width": "73.75rem",
   /**
    * Vertical pad under section chrome before the first control (16dp):
    * Collapsible / Card `chrome="card"` body, Surface `padded`, CodeBlock pre.

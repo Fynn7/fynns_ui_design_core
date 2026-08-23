@@ -31,6 +31,22 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     ],
   },
   {
+    id: "drill-in",
+    label: "Drill-in nav",
+    keywords: [
+      "钻入",
+      "drill",
+      "drill-in",
+      "morph",
+      "sidebar mode",
+      "master detail",
+      "hub-split",
+      "catalog",
+      "mode exit",
+      "leadingExtra",
+    ],
+  },
+  {
     id: "fill-column",
     label: "FillColumn",
     keywords: [

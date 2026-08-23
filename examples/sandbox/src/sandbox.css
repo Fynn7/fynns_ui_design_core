@@ -9,14 +9,11 @@
 }
 
 /* Layout chrome lives on ClippedNavShell / EndAside in @fynns/ui.
- * Sandbox keeps brand height knob + destination spacer. */
+ * Sandbox keeps brand height knob. Nav footer settings use core
+ * `.fynns-nav-drawer-footer*` (not margin-top:auto on a destination). */
 .sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {
   height: var(--sandbox-chrome-bar-height);
   min-height: var(--sandbox-chrome-bar-height);
-}
-
-.sandbox-nav-templates {
-  margin-top: auto;
 }
 
 .sandbox-file-input {
@@ -939,14 +936,23 @@
   background: var(--fynns-color-surface-1);
 }
 
-/* Narrow host for ChatActivity + ControlRow value Buttons (EndAside overflow).
- * Match a typical EndAside content width so long values ellipsis at the pane
- * edge — not an artificially crushed column that looks “early-truncated”. */
-.sandbox-activity-narrow {
+/* Narrow host for BusyRegion linear (NavigationDrawer / EndAside overflow).
+ * Prefer drawer preferred width so the bar must shrink below the 20rem cap. */
+.sandbox-busy-narrow {
   box-sizing: border-box;
   width: 100%;
-  max-width: min(100%, var(--fynns-layout-end-aside-width));
+  max-width: min(100%, var(--fynns-navdrawer-width));
   min-width: 0;
+  min-height: 6rem;
+}
+
+/* Drawer tools + cold BusyRegion as siblings (SearchBar must stay clear). */
+.sandbox-busy-drawer-tools,
+.sandbox-navdrawer-tools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-search-gap);
+  min-height: 0;
 }
 
 .sandbox-chat-aside-label {
@@ -1044,6 +1050,24 @@
   background: var(--fynns-color-surface-1);
 }
 
+/* Teaching hostClassName inset rails — never wrap ListItem in a div.
+ * Soft wash + rail; core host radius-3xl + overflow:clip clips the fill. */
+.sandbox-list-host-tone--accent {
+  background: color-mix(in srgb, var(--fynns-color-accent-dim) 8%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--fynns-color-accent-dim) 55%, var(--fynns-color-border));
+}
+
+:root[data-fynns-theme="light"] .sandbox-list-host-tone--accent {
+  background: color-mix(in srgb, var(--fynns-color-accent-dim) 6%, transparent);
+}
+
+.sandbox-list-host-tone--muted {
+  background: color-mix(in srgb, var(--fynns-color-text-muted) 6%, transparent);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--fynns-color-text-muted) 55%, transparent);
+}
+
 .sandbox-globals-banner {
   box-sizing: border-box;
   width: 100%;
@@ -1101,6 +1125,12 @@
 
 .sandbox-globals-card {
   min-height: 8rem;
+}
+
+/* Narrow host for #card multi-action strip — nested clusters must stay one row. */
+.sandbox-globals-card--actions-strip {
+  max-width: 18rem;
+  justify-self: start;
 }
 
 .sandbox-globals-swatches {
@@ -1208,6 +1238,19 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+.sandbox-globals-rhythm-status-glyph {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fynns-color-text-muted);
+  line-height: 0;
+}
+
+.sandbox-globals-rhythm-status-empty {
+  color: var(--fynns-color-text-muted);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-sm);
 }
 
 .sandbox-globals-form-recipe-hosts {
@@ -1334,6 +1377,34 @@
   min-height: 0;
 }
 
+/*
+ * Wide × tall stage so `.fynns-content-column` max-width leaves a gutter —
+ * overlay Y rail must sit on the page-scroll host edge, outside Cards.
+ */
+.sandbox-page-scroll-stage {
+  box-sizing: border-box;
+  width: min(100%, 48rem);
+  height: 22rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-page-scroll-stage > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.sandbox-page-scroll-stage .fynns-content-column {
+  /* Soft ceiling below the stage so the gutter is visible in the demo.
+   * Inline + block pad come from keep-set `.fynns-content-column` (dialog-inset). */
+  max-width: min(22rem, 100%);
+}
+
 .sandbox-globals-shell-body {
   display: flex;
   flex: 1;
@@ -1378,10 +1449,6 @@
     /* Prefer dynamic viewport so mobile browser chrome does not clip the shell. */
     height: 100dvh;
     max-height: 100dvh;
-  }
-
-  .sandbox-nav-templates {
-    margin-top: var(--fynns-space-sm);
   }
 
   .sandbox-root.fynns-clipped-nav-shell > .fynns-top-app-bar--sm {
