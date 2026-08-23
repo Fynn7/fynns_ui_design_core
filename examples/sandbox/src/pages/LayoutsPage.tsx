@@ -55,6 +55,7 @@ import {
 } from "../components/NavDrawerFooterAccount";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
+import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
 
@@ -215,6 +216,10 @@ export function LayoutsPage() {
               </DestinationAppShell>
             </div>
             <SandboxHelp text={t("globals.shellHelp")} />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="drill-in">
+            <DrillInLayoutsDemo />
           </LayoutsDemo>
 
           <LayoutsDemo id="fill-column">
