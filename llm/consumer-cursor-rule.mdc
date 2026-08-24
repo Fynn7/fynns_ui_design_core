@@ -24,6 +24,24 @@ alwaysApply: true
    `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`（`read:packages`）。权威：`llm/CONSUME.md`
    Hard rule 5a。**没有** `consume:sync` / `consume:watch`；未发布本地联调用
    `file:` / `npm link` / 发版后 bump。
+2a. **安装 / bump `@fynn7/ui-design-core` 失败时必须先自查认证（硬）：**
+   出现 `E401` / `401 Unauthorized` /「token provided」/ `E404`（打到
+   `registry.npmjs.org/@fynn7/...`）时，**禁止**直接断定「包没发」或把锅甩给
+   core。按下列顺序自行 debug 并修复，再重试 install：
+   1. 当前 shell 是否有非空 `NODE_AUTH_TOKEN`（或 `GITHUB_TOKEN`）？仓内
+      `.npmrc` 是 `${NODE_AUTH_TOKEN}` 占位时，**空展开会盖掉**用户级
+      `~/.npmrc` 里本来可用的 token → 典型 E401。
+   2. `.npmrc` 是否同时有 `@fynn7:registry=https://npm.pkg.github.com` 与
+      `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`？缺 scope → 会去
+      npmjs 拿包 → E404。
+   3. token 是否带 `read:packages`（本机可用 `gh auth token` / 经典 PAT；
+      **勿**把明文 PAT 提交进 git）？CI 是否在 job `env` 注入了
+      `secrets.NODE_AUTH_TOKEN`？
+   4. 自检：`npm view @fynn7/ui-design-core version`（在有 `.npmrc` 的目录）
+      能通再 `npm install` / `consume:install`。
+   失败模式全文：`llm/CONSUMER_TREATY.md` **GitHub Packages install auth
+   (E401 / empty NODE_AUTH_TOKEN)**；细节：`llm/CONSUME.md` Auth
+   troubleshooting。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；consumer `tsconfig` `target`/`lib` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止平行
    Collapsible/Toast、禁止 `@radix-ui/*` / `sonner`。缺能力 → 先在 core 加原语，再消费。

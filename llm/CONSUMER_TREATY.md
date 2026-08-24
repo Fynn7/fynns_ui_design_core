@@ -44,10 +44,11 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
-**Pagination crushed or stacked off-spec**). Local install gate:
-`consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is no
-`consume:sync` / `consume:watch`; unreleased local tries use `file:` / `npm link`
-/ publish. Formal delivery: GitHub Packages version bump
+**Pagination crushed or stacked off-spec** /
+**GitHub Packages install auth (E401 / empty NODE_AUTH_TOKEN)**). Local install
+gate: `consume --check` — see [`CONSUME.md`](CONSUME.md) Hard rule 5a. There is
+no `consume:sync` / `consume:watch`; unreleased local tries use `file:` /
+`npm link` / publish. Formal delivery: GitHub Packages version bump
 ([`docs/package-propagation.md`](../docs/package-propagation.md)).
 
 ## Core-first loop (when a consumer screen is wrong)
@@ -62,6 +63,52 @@ Same task — **all three**, not pick-one:
 
 Authority: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
 Never consumer-only; never core-only without a living sandbox sample.
+
+## Failure mode this treaty targets: GitHub Packages install auth (E401 / empty NODE_AUTH_TOKEN)
+
+**Consumer agents own this.** On `npm install` / `consume:install` / version bump
+of `@fynn7/ui-design-core`, treat registry auth as a **first-class debug path** —
+do **not** escalate as “core unpublished” or invent a sibling Vite alias until
+the checklist below fails honestly.
+
+**Symptoms:**
+
+- `npm error code E401` / `401 Unauthorized` /
+  `User cannot be authenticated with the token provided`
+- `E404` for `@fynn7/ui-design-core` on **`registry.npmjs.org`** (wrong registry)
+- Install works in one shell / machine and fails in another (or in CI)
+
+**Typical causes (check in order):**
+
+1. **Empty `${NODE_AUTH_TOKEN}` in the consumer `.npmrc`** — project
+   `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}` expands to empty and
+   **overrides** a working user-level `~/.npmrc` token.
+2. **Missing `@fynn7:registry=https://npm.pkg.github.com`** — npm hits npmjs →
+   E404.
+3. **Token lacks `read:packages`** (or expired / rotated `gho_` from `gh`).
+4. **Other machine / CI** never set `NODE_AUTH_TOKEN` — User env and Actions
+   secrets are **not** inherited across machines.
+
+**Consumer self-fix (do this before asking core):**
+
+```text
+# 1) Ensure non-empty token in THIS shell (Windows User env example)
+NODE_AUTH_TOKEN = User env or `gh auth token` (read:packages / write:packages)
+
+# 2) .npmrc (commit placeholder only — never a literal PAT)
+@fynn7:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+
+# 3) Probe then install (from the directory that owns .npmrc)
+npm view @fynn7/ui-design-core version
+npm install @fynn7/ui-design-core@<ver>
+```
+
+CI: inject `env.NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}` (PAT with
+`read:packages`). Do **not** commit secrets.
+
+Authority detail: [`CONSUME.md`](CONSUME.md) **Auth troubleshooting (E401)**.
+Pasteable hard rule: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) §2a.
 
 ## Failure mode this treaty targets: sandbox-only aesthetics
 

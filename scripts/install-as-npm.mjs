@@ -369,18 +369,35 @@ function ensureDependency(gitRoot, version, dryRun, log) {
     return true;
   }
   const token = process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN || "";
-  const env = { ...process.env };
-  if (token) env.NODE_AUTH_TOKEN = token;
+  if (!token.trim()) {
+    log.push({
+      step: "dependency",
+      status: "fail",
+      detail:
+        "missing NODE_AUTH_TOKEN / GITHUB_TOKEN (read:packages). " +
+        "Consumer .npmrc uses ${NODE_AUTH_TOKEN}; an empty expansion overrides a " +
+        "working user-level token and yields npm E401. Set the env var (Windows User " +
+        "env is fine), then retry. Example: export NODE_AUTH_TOKEN=$(gh auth token) " +
+        "when `gh` has packages scope.",
+    });
+    return false;
+  }
+  const env = { ...process.env, NODE_AUTH_TOKEN: token };
   const r = spawnSync(
     "npm",
     ["install", `${PKG_NAME}@${version}`, "--save"],
     { cwd: gitRoot, encoding: "utf8", shell: true, env },
   );
   if (r.status !== 0) {
+    const raw = (r.stderr || r.stdout || "").trim() || "npm install failed";
+    const hint = /E401|401 Unauthorized/i.test(raw)
+      ? " — token rejected by GitHub Packages; create a PAT with read:packages " +
+        "(or refresh `gh auth login` / re-export NODE_AUTH_TOKEN)."
+      : "";
     log.push({
       step: "dependency",
       status: "fail",
-      detail: (r.stderr || r.stdout || "").trim() || "npm install failed",
+      detail: `${raw}${hint}`,
     });
     return false;
   }

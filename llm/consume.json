@@ -31,6 +31,7 @@
     "Keep resolve.dedupe [react, react-dom] so package source shares the app React instance.",
     "Do not modify files inside node_modules/@fynn7/ui-design-core for consumer features (bump package version / file: link instead). There is no consume:sync / consume:watch worktree mirror.",
     "Before any @fynns/ui UI work: run consume --check (dependency + .npmrc + alias; fails if legacy submodule tree remains). Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
+    "On npm install / consume:install / bump of @fynn7/ui-design-core failing with E401 or npmjs E404: consumer agents MUST self-debug GitHub Packages auth before blaming core — empty ${NODE_AUTH_TOKEN} overrides user ~/.npmrc; need @fynn7 registry scope + read:packages token (or CI secret). See llm/CONSUME.md Auth troubleshooting + llm/CONSUMER_TREATY.md GitHub Packages install auth + consumer-cursor-rule.mdc §2a.",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
     "Update notices: consume:install wires fynns-ui:check-update into predev/prebuild/prepreview/postinstall so npm run dev/build reminds when GitHub Packages has a newer @fynn7/ui-design-core. Silence with FYNNS_UI_SKIP_UPDATE_CHECK=1.",
     "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
