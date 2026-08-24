@@ -914,20 +914,22 @@ classes.
   `trailing` / optional `navBodyExtra` (workspace row in drawer body) /
   `navFooter` (Cursor-style single account row + settings end) / `children` /
   optional `aside` (not assumed Chat). Internally
-  wires `ClippedNavShell` + `TopAppBar` +
-  Drawer|Rail + optional `EndAside` and auto-densifies to rail on narrow (~900px)
-  or crowding — agents **must** use this unless the user specifies another
-  template. Demo: sandbox **Layout templates** `#layouts-demo-shell`.
+  wires `ClippedNavShell` + `TopAppBar` + labeled `NavigationDrawer` + optional
+  `EndAside`. Destinations are **binary**: open labeled drawer (resizable) or
+  fully `hidden` — **no** icon-only `NavigationRail` densify on narrow /
+  crowding (`onNavCrowded` **closes** nav). Agents **must** use this unless the
+  user specifies another template. Demo: sandbox **Layout templates**
+  `#layouts-demo-shell`.
   Low-level **ClippedNavShell** (full-bleed `TopAppBar` + `nav | main`
   under it — M3 clipped; no topbar×sidebar crosshair; `navMode`
   `drawer`|`rail`|`hidden` drives column width via `--fynns-navdrawer-width` /
   `--fynns-navrail-width` / `0`. Open↔closed **width-morphs** the destination
   track (two grid columns → `0px`; shell keeps the last `nav` through
   `--fynns-duration-flyout` so consumers may pass `null` when hidden).
-  TopAppBar leading toggle is **open ↔ closed**
-  only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
-  narrow viewports (apps should pass `rail` below ~900px — do not keep a
-  labeled `drawer` mode below ~900px without densifying to `"rail"`).
+  TopAppBar leading toggle is **open ↔ closed** only (`drawer` ↔ `hidden`).
+  `"rail"` is **not** a DestinationAppShell / crowding intermediate — only when
+  the app intentionally mounts `NavigationRail` (phone greenfield standalone).
+  Crowding → **close** destinations (`hidden`), never swap to unlabeled rail.
   **Consumer sync (slot API only):** `navMode` and the `nav` slot must match
   (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`); the shell never
   auto-swaps. Prefer `DestinationAppShell` so agents never hand-sync this.
@@ -952,13 +954,13 @@ classes.
   nav column ≥ main while EndAside is open).   On open, crowding is predicted from
   **target** drawer width (`wouldClippedNavDrawerCrowd(shellEl, { endAsideOpen })`)
   in `useLayoutEffect` **before** applying `navMode="drawer"` paint — if the open
-  width would crowd, densify to `"rail"` first so destinations never flash as a
-  full labeled drawer then snap. Export is also available for apps that open
-  destinations themselves. It **must not** fire while the
+  width would crowd, **close** destinations (`hidden`) so they never flash as a
+  full labeled drawer then snap to an icon rail. Export is also available for
+  apps that open destinations themselves. It **must not** fire while the
   drawer seam is being dragged, while `EndAside` is in `data-state="closing"`,
   or while `EndAside` is mid-drag (`data-resizing`)
-  (closing morph would otherwise false-trip overflow and collapse labeled
-  drawer → rail). Crowding length reads (`readVarPx` / `readRemPx`) resolve
+  (closing morph would otherwise false-trip overflow and collapse the labeled
+  drawer). Crowding length reads (`readVarPx` / `readRemPx`) resolve
   `px`/`rem`/`%`/`clamp()` **without** inserting measure probes into the shell
   root — probes under a `subtree` `MutationObserver` cause idle layout thrash
   (see [`llm/PERF.md`](llm/PERF.md)).
@@ -972,20 +974,18 @@ classes.
   `main-min-width`; `width` / `defaultWidth` / `onWidthChange` /
   `disableResize`; DestinationAppShell mirrors as `asideWidth` / …). Hidden on
   the ≤56.25rem bottom-sheet path. Mid-drag sets `data-resizing` so
-  `onNavCrowded` does not densify. Flex panes use **`min-width: 0`** (not
+  `onNavCrowded` does not fire. Flex panes use **`min-width: 0`** (not
   `min(token, 100%)` of the full row — that percentage resolves against the
   parent and overflows when both panes are open). Preferred size stays on
   `width` / `flex-basis`. When `.fynns-clipped-nav-shell-main` is ≤32rem
   (container query — works for nested demos), EndAside **overlays** the end
   edge at its min/preferred width (out of flex flow) so both mins stay usable
   without horizontal overflow. Drawer still open + floors overflowing →
-  `onNavCrowded` → rail. Viewport ≤56.25rem → EndAside bottom sheet
-  (`max-height: min(52dvh, 22rem)` — usable sheet, not a thin ribbon). If
-  `navMode` stays `"drawer"` on a narrow viewport, core **keeps a side
-  column** (no rem-capped stack above main) and fires `onNavCrowded` when
-  wired — apps **must** densify to `"rail"` + `NavigationRail` below ~900px
-  (`DestinationAppShell` does this). Do not keep a labeled drawer that
-  never densifies.
+  `onNavCrowded` → **close** (`hidden`). Viewport ≤56.25rem → EndAside bottom
+  sheet (`max-height: min(52dvh, 22rem)` — usable sheet, not a thin ribbon).
+  Narrow viewports keep a **side column** for an open drawer (no rem-capped
+  stack above main); geometric crowd still **closes** destinations —
+  `DestinationAppShell` never densifies to an unlabeled icon rail.
   Slot-only — destinations stay in `nav`, inspector content in `EndAside`
   children; toggle IconButtons live in the consumer `TopAppBar`. Prefer for
   destination chrome apps. **Not** `Drawer` (modal content side sheet) and
@@ -1162,21 +1162,23 @@ classes.
   chrome does **not** auto-swap — the **app** chooses Rail vs Bar vs Drawer.
 
   **Destination ladder (not duplicates):** phone → `NavigationBar` (bottom) or
-  densified `NavigationRail` inside ClippedNavShell / DestinationAppShell; wide labeled →
-  `NavigationDrawer` `standard` inside **DestinationAppShell** (desktop default);
+  intentional `NavigationRail` as a **standalone** phone root (not
+  DestinationAppShell densify); wide labeled →
+  `NavigationDrawer` `standard` inside **DestinationAppShell** (desktop default;
+  open drawer or fully hidden — never unlabeled rail intermediate);
   overlay → `modal`. Live composed default: sandbox **Layout templates**
   (`#layouts-demo-shell`). Standalone Rail/Bar demos on that page are parts —
   not a desktop greenfield root.
 
   | Symbol | Platform | Notes |
   | --- | --- | --- |
-  | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside + optional `navFooter` (settings in drawer/rail footer); auto Drawer↔Rail. Prefer over hand-composed ClippedNavShell. **Flat root destinations only** — any drill-in / dynamic drawer body → hand-compose `ClippedNavShell` + app state (live `#layouts-demo-drill-in`); there is no `NavStack` primitive. |
+  | DestinationAppShell | adaptive | **Default greenfield chrome.** Declarative destinations + TopAppBar + optional EndAside + optional `navFooter` (settings in drawer footer). Destinations **binary**: labeled resizable drawer or fully `hidden` — **no** icon-only rail densify (`onNavCrowded` closes). Prefer over hand-composed ClippedNavShell. **Flat root destinations only** — any drill-in / dynamic drawer body → hand-compose `ClippedNavShell` + app state (live `#layouts-demo-drill-in`); there is no `NavStack` primitive. |
   | TopAppBar | both | **Edge-flush** page header (`border-radius: 0`, no card frame). Slot into `ClippedNavShell.topBar` / DestinationAppShell — shell adds bottom hairline only. Floating rounded strips → `Toolbar`. |
   | BottomAppBar | mobile-first | Bottom **actions** + optional FAB — not destinations. |
   | StatusBar | desktop-first | IDE status strip under shell (~22dp). Not BottomAppBar / Banner. Live `#status-bar`. |
   | Toolbar | both | Contextual actions (`docked` / `floating`). |
   | NavigationBar | mobile-first | Bottom **destinations** (phone). |
-  | NavigationRail | mobile-first / narrow densify | Vertical destinations for phone densify or ClippedNavShell crowding. **Never** the default desktop app root. **DestinationAppShell** densify default: `railLabelVisibility="unlabeled"` (Cursor icon column + bottom gear — no stacked caption pills). Pass `labeled` when captions must stay visible in rail.
+  | NavigationRail | mobile-first | Vertical destinations for **intentional** phone / icon-column roots only. **Never** DestinationAppShell / ClippedNav crowding densify, and **never** the default desktop app root. Standalone Layouts demo `#layouts-demo-navigation-rail`. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell` decorative; **`#layouts-demo-drill-in`** interactive drawer-body swap + full-width main). Catalog list-in-drawer (not main `list-pane-width` split) is the destination-app default — see CONSUMER_TREATY **hub-split**. Group/Item `label` = **short name only** — no `· N` and no parenthetical glosses unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools ↔ destinations = `--fynns-navdrawer-search-gap` (**8dp**, aliases layout `control-stack-gap` — matches Search↔Toggle in tools; wider than Item↔Item 4dp; not a 16dp kind-jump). Optional sheet `footer` = Cursor-style account chrome (`.fynns-nav-drawer-footer*`; settings IconButton end — not TopAppBar `trailing` for that role; DestinationAppShell `navFooter`). Tools under SearchBar = **one** .fynns-control-cluster of Tooltip→IconButton (horizontal) — tip-fill width:100% applies only to Tooltip wrapping NavigationDrawerItem. **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Use this shell when the drawer body must **morph** (catalog / chats drill-in) — swap `nav`, keep main full-width detail; live `#layouts-demo-drill-in`. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |

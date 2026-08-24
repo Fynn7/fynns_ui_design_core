@@ -29,7 +29,7 @@ const en = {
   "nav.layoutsHint":
     "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
   "layouts.lead":
-    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. NavigationRail alone is mobile/narrow densify only — not a desktop app root. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. Destinations are binary (labeled drawer or hidden) — NavigationRail alone is an intentional phone part, not DestinationAppShell densify. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
@@ -1110,7 +1110,7 @@ const en = {
   "globals.navBarHelp":
     "[mobile-first] NavigationBar — bottom destinations for phone. Prefer ClippedNavShell + NavigationDrawer on desktop (Layout templates page). Standalone sample — not one composed phone+desktop shell.",
   "globals.navRailHelp":
-    "[mobile / narrow only] NavigationRail — vertical destinations for phone densify or DestinationAppShell / ClippedNavShell crowding. **Not** the default desktop app root; do not greenfield a desktop UI from this standalone sample. Prefer Layout templates → DestinationAppShell. DestinationAppShell densify default: `railLabelVisibility=\"unlabeled\"` (Cursor icon column + bottom gear — pass `labeled` when captions must stay visible).",
+    "[mobile / intentional phone] NavigationRail — vertical destinations for a **standalone** phone / icon-column root. **Not** DestinationAppShell crowding densify and **not** the default desktop app root. Prefer Layout templates → DestinationAppShell (drawer \| hidden only).",
   "globals.navDrawerAria": "Sample navigation drawer",
   "globals.navDrawerModalAria": "Modal navigation drawer",
   "globals.navDrawerHeadline": "Mail",
@@ -1139,7 +1139,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`railLabelVisibility=\"unlabeled\"` by default — Cursor icon column + bottom gear) — never treat standalone Rail as the desktop root. **Resize below ~900px:** destinations stay a **side rail**, never a rem-capped drawer ribbon under the TopAppBar. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1692,7 +1692,7 @@ const zh: Record<MessageKey, string> = {
   "nav.layoutsHint":
     "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
   "layouts.lead":
-    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。单独的 NavigationRail 仅移动端/窄视口 densify — 禁止当桌面根壳。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。目的地二态（全宽抽屉或收起）— 单独的 NavigationRail 仅作有意的手机样例，不是 DestinationAppShell densify。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
@@ -2757,7 +2757,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navBarHelp":
     "[偏移动端] NavigationBar — 手机底栏目的地。桌面请用「布局模板」裁切壳 + NavigationDrawer。独立样例 — 不是整站默认。",
   "globals.navRailHelp":
-    "[仅移动端 / 窄视口] NavigationRail — 手机 densify 或 DestinationAppShell / 裁切壳挤拥时用。**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell。DestinationAppShell densify 默认：`railLabelVisibility=\"unlabeled\"`（Cursor 图标列 + 底部齿轮 — 需要常驻标签时传 `labeled`）。",
+    "[仅移动端 / 有意根壳] NavigationRail — 独立手机 / 图标列根。**禁止**当作 DestinationAppShell 拥挤 densify，也**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell（仅抽屉 \| 收起）。",
   "globals.navDrawerAria": "示例导航抽屉",
   "globals.navDrawerModalAria": "模态导航抽屉",
   "globals.navDrawerHeadline": "邮件",
@@ -2786,7 +2786,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认 `railLabelVisibility=\"unlabeled\"`）— 禁止把独立 Rail 当桌面根。**窗口缩到约 ≤900px：** 目的地保持**侧栏 rail**，绝不是顶栏下 9rem 短条抽屉。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

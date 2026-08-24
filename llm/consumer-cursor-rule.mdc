@@ -141,9 +141,9 @@ alwaysApply: true
 可选 `navFooter`（Cursor 式**单**账户行：`Avatar` + 可选**渐隐**标签 + 右端设置齿轮 —
 无用户名时只留头像/首字母，身份放 `Tooltip`；footer **无**顶部分隔线；**不要**把该设置塞进 TopAppBar `trailing`，也**不要**用最后一项
 `NavigationDrawerItem` + `margin-top: auto`） / `children` / 可选 `aside`（不必是 Chat）。**禁止**用裸 `NavigationRail`
-做桌面根，禁止自造顶栏+侧栏平行体系。窄屏 densify 到 Rail 时默认
-`labelVisibility="unlabeled"`（Cursor 图标柱 + 底栏齿轮，无堆叠 caption）——需要
-densify 后仍显示标签时再显式传 `labeled` / `selected`。
+做桌面根，禁止自造顶栏+侧栏平行体系。目的地 **二态**：全宽可调宽度的
+`NavigationDrawer`，或完全 `hidden` — **禁止**窄屏 / 拥挤 densify 成仅 icon 的
+`NavigationRail` 过渡态（`onNavCrowded` → 收起，不是换 rail）。
 
 ```tsx
 <DestinationAppShell
@@ -390,19 +390,17 @@ destination 列在顶栏**下方**），**不是**把侧栏标签裁成竖条、
 横向标签。症状：左栏缩成 ~80px 细条、文字仍横向、出现异常滚动条 —— 这是
 **挤扁的 Drawer**，不是正常 icon rail。
 
-正确写法（与 sandbox `SandboxShell.tsx` 同构）：
+正确写法（与 sandbox `SandboxShell.tsx` / `DestinationAppShell` 同构 — **二态**）：
 
 ```tsx
-const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
+const navMode = open ? "drawer" : "hidden";
 <ClippedNavShell
   navMode={navMode}
-  onNavCrowded={() => setCompact(true)}
+  onNavCrowded={() => setOpen(false)}
   nav={
     !open
       ? null
-      : navMode === "rail"
-        ? <NavigationRail>…NavigationRailItem…</NavigationRail>
-        : <NavigationDrawer variant="standard">…NavigationDrawerItem…</NavigationDrawer>
+      : <NavigationDrawer variant="standard">…NavigationDrawerItem…</NavigationDrawer>
   }
   topBar={…}
 >
@@ -410,13 +408,13 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
 </ClippedNavShell>
 ```
 
-- TopAppBar 开关只做 **open ↔ closed**（`drawer|rail` ↔ `hidden`），不要用开关在
-  drawer/rail 间来回拧。
-- 窄视口（约 ≤900px / 56.25rem）与 `onNavCrowded`：**都走 `"rail"` + Rail 组件**，
-  不要继续 `"drawer"`。core **不再**把 labeled drawer 叠成顶栏 9rem 短条；窄宽下
-  仍是侧栏轨道，且 `onNavCrowded` 会在 ≤56.25rem 触发。永不 densify → 全宽
-  drawer 列挤占主区（或仍见顶栏短条若消费仓私有 CSS 重叠）。对照
-  `#layouts-demo-shell`。
+- TopAppBar 开关只做 **open ↔ closed**（`drawer` ↔ `hidden`），不要用开关拧出
+  ~80px 仅 icon 的 `"rail"` 过渡态。
+- `onNavCrowded`：**关闭**目的地（`hidden`），不要 densify 到 `"rail"` +
+  `NavigationRail`。core **不再**把 labeled drawer 叠成顶栏 9rem 短条；窄宽下
+  仍是侧栏抽屉轨道。对照 `#layouts-demo-shell`。
+- `"rail"` + `NavigationRail` **仅**在主动做手机 icon 列根壳时使用（Layouts
+  独立样例）——不是 DestinationAppShell / crowding 配方。
 - Shell / 检查器 / live token GUI → 另读 `llm/PERF.md`（禁止 observer↔probe 环）。
 
 ### 侧栏「坏了」时先诊断（禁止先改 CSS）

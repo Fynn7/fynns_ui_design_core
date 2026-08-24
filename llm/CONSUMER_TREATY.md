@@ -161,9 +161,33 @@ children do not shrink).
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
 
+## Failure mode this treaty targets: icon-only rail densify (narrow)
+
+Symptoms when the window crowds or shrinks while destinations stay “open”:
+
+- Left column is ~80px with **icons only** (`data-label-visibility=unlabeled`
+  / `nav.fynns-nav-rail`)
+- Badge numbers dominate; destination **names** are gone
+- User wanted either a full labeled drawer (resizable) or fully collapsed
+
+**Cause (legacy ≤ 0.4.83):** apps densified `drawer` → `"rail"` +
+`NavigationRail` on narrow / `onNavCrowded` (including DestinationAppShell).
+
+**Fix in core (≥ 0.4.84):** DestinationAppShell destinations are **binary** —
+labeled `NavigationDrawer` or `hidden`. `onNavCrowded` **closes** nav (never
+swaps to unlabeled rail). Narrow viewports still keep a side column for an
+open drawer (no rem-capped stack — that was 0.4.83). Standalone
+`NavigationRail` remains for intentional phone roots only (`#layouts-demo-navigation-rail`).
+
+**Consumer fix:** hand-composed `ClippedNavShell` →
+`navMode={open ? "drawer" : "hidden"}` + `onNavCrowded={() => setOpen(false)}`
++ drawer-only `nav` slot. Drop `narrow` / `compact` → rail branches and
+`railLabelVisibility`. Re-paste `consumer-cursor-rule.mdc`.
+
 ## Failure mode this treaty targets: stacked drawer ribbon (narrow)
 
-Symptoms when the window is ≤56.25rem (~900px) and destinations stay open:
+Symptoms when the window is ≤56.25rem (~900px) and destinations stay open
+**(legacy ≤ 0.4.82 only)**:
 
 - Nav is a **full-width band under the TopAppBar** (~9rem / 144dp tall historically)
 - Only SearchBar + account footer peek through; destination rows are clipped
@@ -171,20 +195,14 @@ Symptoms when the window is ≤56.25rem (~900px) and destinations stay open:
   `max-height` while `visible_text` still lists every destination
 
 **Cause (legacy core ≤ 0.4.82):** narrow CSS stacked `NavigationDrawer` above
-main with `max-height: 9rem`. Consumers that never densify
-(`navMode={open ? "drawer" : "hidden"}` with no `NavigationRail` /
-`onNavCrowded`) hit that path.
+main with `max-height: 9rem`.
 
-**Fix in core (≥ 0.4.83):** narrow keeps a **side column** for drawer and rail
-(no rem-capped stack). `onNavCrowded` also fires on viewport ≤56.25rem when
-`navMode="drawer"`. Apps **must** densify to `"rail"` + `NavigationRail`
-(or use `DestinationAppShell`). Live: Layouts `#layouts-demo-shell` — resize
-below ~900px and destinations stay a side rail, not a top ribbon.
+**Fix in core (≥ 0.4.83):** narrow keeps a **side column** for drawer (and for
+intentional rail). Do **not** densify to icon rail — see **icon-only rail
+densify** above (≥ 0.4.84 closes instead).
 
-**Consumer fix:** hand-composed `ClippedNavShell` → same densify recipe as
-`consumer-cursor-rule.mdc` / `DestinationAppShell` (`narrow || compact ?
-"rail" : "drawer"` + swap nav slot). Drop any private CSS that re-stacks
-the drawer.
+**Consumer fix:** binary drawer|hidden (same as DestinationAppShell). Drop any
+private CSS that re-stacks the drawer.
 
 ## Failure mode this treaty targets: drawer headline toolbar
 
@@ -384,13 +402,11 @@ project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
 → drawer **body** (`.fynns-nav-drawer-footer-slot--pill` row). Omit account
 label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
 Layouts `#layouts-demo-shell` (toggle **Show account name**) + SandboxShell +
-`#layouts-demo-drill-in`. Rail densify hides account-start and keeps the gear.
-**Densify default (≥ 0.4.64):** `DestinationAppShell` `railLabelVisibility`
-defaults to **`unlabeled`** (Cursor icon column — not stacked caption pills).
-Pass `labeled` only when densified captions must stay visible.
+`#layouts-demo-drill-in`. DestinationAppShell (≥ 0.4.84) keeps the drawer
+footer when open and **closes** on crowd — no rail densify that hides the
+account label strip.
 
-**Consumer:** bump ≥ 0.4.65 for Cursor-style footer + body scroll-edge fade;
-pass `navFooter`
+**Consumer:** bump ≥ 0.4.84 for binary drawer|hidden; pass `navFooter`
 (or Drawer/Rail `footer`); workspace row in body — do **not** `margin-top: auto`
 a destination Item; do **not** put settings in TopAppBar `trailing` when the
 product wants Cursor-style bottom chrome.

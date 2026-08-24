@@ -127,7 +127,8 @@ ring can paint before heavy work).
   (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
-  mobile-first densify only (never desktop greenfield root); Drawer /
+  mobile-first intentional phone root only (never DestinationAppShell densify;
+  never desktop greenfield root); Drawer /
   ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
   EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
   demos are the composed default; Globals demos are standalone parts.
