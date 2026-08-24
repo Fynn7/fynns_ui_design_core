@@ -1406,7 +1406,7 @@ const en = {
   "globals.cardActionAria": "Sample header action",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "Header actions stay one horizontal strip. Nested .fynns-control-cluster groups hug content — they must not stack as full-width rows.",
+    "Header actions stay one horizontal .fynns-control-cluster strip (flat IconButtons — no nested clusters stacking as full-width rows).",
   "globals.cardActionsStripStar": "Star",
   "globals.cardActionsStripPin": "Pin",
   "globals.cardActionsStripOpen": "Open file",
@@ -3025,7 +3025,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionAria": "示例标题操作",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "标题栏 actions 保持一条横向带。嵌套的 .fynns-control-cluster 会 hug 内容 —— 禁止各自占满宽度叠成多行。",
+    "标题栏 actions 保持一条横向 .fynns-control-cluster（扁平 IconButton，禁止嵌套 cluster 叠成多行）。",
   "globals.cardActionsStripStar": "收藏",
   "globals.cardActionsStripPin": "置顶",
   "globals.cardActionsStripOpen": "打开文件",

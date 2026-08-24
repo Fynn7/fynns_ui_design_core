@@ -3432,46 +3432,42 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             title={t("globals.cardActionsStripTitle")}
             actions={
               <div className="fynns-control-cluster">
-                <span className="fynns-control-cluster">
-                  <Tooltip content={t("globals.cardActionsStripStar")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripStar")}
-                    >
-                      <SparklesIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.cardActionsStripPin")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripPin")}
-                    >
-                      <SaveIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                </span>
-                <span className="fynns-control-cluster">
-                  <Tooltip content={t("globals.cardActionsStripOpen")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripOpen")}
-                    >
-                      <FileIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.cardActionsStripFolder")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripFolder")}
-                    >
-                      <FolderOpenIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                </span>
+                <Tooltip content={t("globals.cardActionsStripStar")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripStar")}
+                  >
+                    <SparklesIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripPin")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripPin")}
+                  >
+                    <SaveIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripOpen")}
+                  >
+                    <FileIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripFolder")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripFolder")}
+                  >
+                    <FolderOpenIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripDelete")}>
                   <IconButton
                     size="sm"

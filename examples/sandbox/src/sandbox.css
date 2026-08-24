@@ -1129,10 +1129,13 @@
   min-height: 8rem;
 }
 
-/* Narrow host for #card multi-action strip — nested clusters must stay one row. */
+/* Full-row host for #card multi-action strip — auto-fit columns (~12rem)
+ * would crush the title band; span the grid so lead + actions share ~28rem. */
 .sandbox-globals-card--actions-strip {
-  max-width: 18rem;
+  grid-column: 1 / -1;
+  max-width: 28rem;
   justify-self: start;
+  width: 100%;
 }
 
 .sandbox-globals-swatches {

@@ -3480,7 +3480,13 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
-  min-width: 0;
+  /*
+   * Keep a readable title band when trailing actions are dense. Bare
+   * `min-width: 0` alone lets a narrow host crush the lead to ~one glyph
+   * (sandbox `#card` actions-strip lesson). Floor ≈ two t-shirt steps of
+   * title — still allows ellipsis via `.fynns-card-title { min-width: 0 }`.
+   */
+  min-width: max(0px, 40%);
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
