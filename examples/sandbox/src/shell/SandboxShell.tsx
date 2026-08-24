@@ -1,7 +1,6 @@
 import {
   applyFynnsThemeMode,
   ClippedNavShell,
-  wouldClippedNavDrawerCrowd,
   EndAside,
   EyeIcon,
   FileIcon,
@@ -12,8 +11,6 @@ import {
   MoonIcon,
   NavigationDrawer,
   NavigationDrawerItem,
-  NavigationRail,
-  NavigationRailItem,
   PanelLeftIcon,
   PanelRightIcon,
   restoreFynnsThemeMode,
@@ -24,6 +21,7 @@ import {
   ToggleGroup,
   Tooltip,
   TopAppBar,
+  wouldClippedNavDrawerCrowd,
   type FynnsThemeMode,
 } from "@fynns/ui";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -81,32 +79,18 @@ export function SandboxShell() {
   const [preferNavOpen, setPreferNavOpen] = useState(
     () => initialSessionRef.current?.preferNavOpen ?? true,
   );
-  /** Automatic icon rail when open drawer + EndAside mins still overflow. */
-  const [navCompact, setNavCompact] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLElement>(null);
   const pageRef = useRef(page);
   pageRef.current = page;
   /** Ignore scroll events fired while restoring scrollTop after navigation / refresh. */
   const canvasScrollRestoreLockRef = useRef(false);
-  const [narrow, setNarrow] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(max-width: 900px)").matches;
-  });
   const { undo, redo } = useTokenDraftHistoryActions();
   const { target, setTarget } = usePlaygroundTarget();
 
-  /** Prefer user choice on all widths — do not force destinations open on phone. */
+  /** Binary destinations: labeled drawer or fully closed — no icon-rail densify. */
   const navOpen = preferNavOpen;
-  /**
-   * Narrow / crowded → icon rail (side column). Full drawer only when there is
-   * room; stacking a labeled drawer above the canvas starves the main stage.
-   */
-  const navMode = !navOpen
-    ? "hidden"
-    : narrow || navCompact
-      ? "rail"
-      : "drawer";
+  const navMode = navOpen ? "drawer" : "hidden";
 
   useEffect(() => {
     setTheme(restoreFynnsThemeMode());
@@ -119,14 +103,6 @@ export function SandboxShell() {
     setGlobalsSearchFocusTick((n) => Math.max(n, 1));
     const clearId = window.setTimeout(() => clearFreshBootFocusArm(), 0);
     return () => window.clearTimeout(clearId);
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 900px)");
-    const sync = () => setNarrow(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -279,52 +255,7 @@ export function SandboxShell() {
     />
   );
 
-  const nav =
-    !navOpen ? null : navMode === "rail" ? (
-    <NavigationRail
-      className="sandbox-nav-rail"
-      aria-label={t("nav.aria")}
-      labelVisibility="unlabeled"
-      footer={navFooter}
-    >
-      <Tooltip content={t("nav.playgroundHint")} side="right">
-        <NavigationRailItem
-          icon={<EyeIcon />}
-          label={t("nav.playground")}
-          active={page === "playground"}
-          onClick={() => setPage("playground")}
-        />
-      </Tooltip>
-      <Tooltip content={t("nav.globalsHint")} side="right">
-        <NavigationRailItem
-          icon={<LayoutGridIcon />}
-          label={t("nav.globals")}
-          active={page === "globals"}
-          onClick={() => setPage("globals")}
-        />
-      </Tooltip>
-      <Tooltip content={t("nav.layoutsHint")} side="right">
-        <NavigationRailItem
-          icon={<PanelLeftIcon />}
-          label={t("nav.layouts")}
-          active={page === "layouts"}
-          onClick={() => setPage("layouts")}
-        />
-      </Tooltip>
-      <NavigationRailItem
-        icon={<FileIcon />}
-        label={t("nav.foundations")}
-        active={page === "foundations"}
-        onClick={() => setPage("foundations")}
-      />
-      <NavigationRailItem
-        icon={<SparklesIcon />}
-        label={t("nav.motion")}
-        active={page === "motion"}
-        onClick={() => setPage("motion")}
-      />
-    </NavigationRail>
-  ) : (
+  const nav = !navOpen ? null : (
     <NavigationDrawer
       variant="standard"
       className="sandbox-nav"
@@ -343,7 +274,7 @@ export function SandboxShell() {
         className="sandbox-root"
         navMode={navMode}
         onNavCrowded={() => {
-          setNavCompact(true);
+          setPreferNavOpen(false);
         }}
         topBar={
           <TopAppBar
@@ -356,15 +287,19 @@ export function SandboxShell() {
                   onClick={() => {
                     if (preferNavOpen) {
                       setPreferNavOpen(false);
-                    } else {
-                      const crowd =
-                        narrow ||
-                        (shellRef.current
-                          ? wouldClippedNavDrawerCrowd(shellRef.current)
-                          : false);
-                      setNavCompact(crowd);
-                      setPreferNavOpen(true);
+                      return;
                     }
+                    const root = shellRef.current;
+                    if (
+                      root &&
+                      wouldClippedNavDrawerCrowd(root)
+                    ) {
+                      /* Crowding closes destinations — refuse open into a squeeze
+                       * instead of flashing drawer then hidden (binary, no rail). */
+                      setPreferNavOpen(false);
+                      return;
+                    }
+                    setPreferNavOpen(true);
                   }}
                 >
                   {navOpen ? (

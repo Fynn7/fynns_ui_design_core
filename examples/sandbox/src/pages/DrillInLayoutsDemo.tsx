@@ -188,6 +188,7 @@ export function DrillInLayoutsDemo() {
       <div className="sandbox-globals-clipped-shell">
         <ClippedNavShell
           navMode={navOpen ? "drawer" : "hidden"}
+          onNavCrowded={() => setNavOpen(false)}
           topBar={
             <TopAppBar
               title={title}

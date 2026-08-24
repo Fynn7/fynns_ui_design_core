@@ -1035,8 +1035,9 @@ export const CAROUSEL_TOKENS = {
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
  * Labeled (icon + caption stacked) keeps a larger inset square — never
- * crush into 40dp or it clips the label (sandbox / DestinationAppShell
- * densify defaults to `railLabelVisibility="unlabeled"` unless overridden).
+ * crush into 40dp or it clips the label. Prefer `labelVisibility="unlabeled"`
+ * only for intentional phone icon columns — DestinationAppShell does **not**
+ * densify to rail.
  * `--fynns-navrail-<key>`.
  */
 export const NAVRAIL_TOKENS = {

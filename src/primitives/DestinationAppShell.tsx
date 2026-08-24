@@ -1,15 +1,10 @@
 import {
   forwardRef,
   useCallback,
-  useEffect,
   useState,
   type ReactNode,
 } from "react";
-import {
-  ClippedNavShell,
-  wouldClippedNavDrawerCrowd,
-  type ClippedNavShellProps,
-} from "./ClippedNavShell";
+import { ClippedNavShell } from "./ClippedNavShell";
 import { EndAside } from "./EndAside";
 import { IconButton } from "./IconButton";
 import { MenuIcon, PanelLeftIcon, PanelRightIcon } from "./icons";
@@ -17,10 +12,6 @@ import {
   NavigationDrawer,
   NavigationDrawerItem,
 } from "./NavigationDrawer";
-import {
-  NavigationRail,
-  NavigationRailItem,
-} from "./NavigationRail";
 import { TopAppBar } from "./TopAppBar";
 import { Tooltip } from "./Tooltip";
 
@@ -36,7 +27,8 @@ export type DestinationAppShellProps = {
   title?: ReactNode;
   /**
    * Left destination list — fixed structure; vary icon, label, count, badge.
-   * Wide → `NavigationDrawer`; narrow / crowded → `NavigationRail`.
+   * Open → labeled `NavigationDrawer` (resizable); closed → hidden.
+   * No icon-only rail densify.
    */
   destinations: readonly DestinationAppShellDestination[];
   activeId: string;
@@ -73,27 +65,16 @@ export type DestinationAppShellProps = {
   drawerHeadline?: ReactNode;
   /**
    * Optional extra drawer **body** chrome after destinations (workspace /
-   * repo context row — not a destination Item). Ignored in rail densify.
+   * repo context row — not a destination Item).
    * Live: sandbox Layouts `#layouts-demo-shell`.
    */
   navBodyExtra?: ReactNode;
   /**
-   * Optional `NavigationDrawer` / `NavigationRail` footer (Cursor-style
-   * single account row + settings). Same node is passed to both densify
-   * modes — rail CSS hides account-start and keeps the gear. Prefer settings
-   * here, not TopAppBar `trailing`. Live: sandbox Layouts `#layouts-demo-shell`.
+   * Optional `NavigationDrawer` footer (Cursor-style single account row +
+   * settings). Prefer settings here, not TopAppBar `trailing`. Live: sandbox
+   * Layouts `#layouts-demo-shell`.
    */
   navFooter?: ReactNode;
-  /**
-   * When densified to rail (narrow / crowding). Default `unlabeled` — Cursor
-   * icon column + bottom gear. Pass `labeled` when captions must stay visible.
-   */
-  railLabelVisibility?: "labeled" | "selected" | "unlabeled";
-  /**
-   * Viewport max-width (px) at or below which open destinations densify to
-   * `NavigationRail`. Default `900`.
-   */
-  narrowBreakpoint?: number;
   className?: string;
   drawerWidth?: number;
   defaultDrawerWidth?: number;
@@ -106,15 +87,13 @@ export type DestinationAppShellProps = {
   disableAsideResize?: boolean;
 };
 
-const DEFAULT_NARROW_BREAKPOINT = 900;
-
 /**
  * Declarative destination-app chrome — **default greenfield template**.
  *
- * Wraps `ClippedNavShell` + `TopAppBar` + Drawer|Rail + optional `EndAside`
- * so consumers (and agents) pass destinations / title / trailing / children
- * without hand-syncing `navMode`. Prefer this over composing the slots alone
- * unless the app needs a fully custom shell.
+ * Wraps `ClippedNavShell` + `TopAppBar` + labeled `NavigationDrawer` + optional
+ * `EndAside`. Destinations are **binary**: open drawer (resizable) or fully
+ * closed — no icon-only `NavigationRail` densify. Prefer this over composing
+ * the slots alone unless the app needs a fully custom shell.
  *
  * @see AGENTS.md App shells / Layout templates
  */
@@ -144,8 +123,6 @@ export const DestinationAppShell = forwardRef<
     drawerHeadline,
     navBodyExtra,
     navFooter,
-    railLabelVisibility = "unlabeled",
-    narrowBreakpoint = DEFAULT_NARROW_BREAKPOINT,
     className,
     drawerWidth,
     defaultDrawerWidth,
@@ -158,16 +135,6 @@ export const DestinationAppShell = forwardRef<
   },
   ref,
 ) {
-  const [shellEl, setShellEl] = useState<HTMLDivElement | null>(null);
-  const setShellRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      setShellEl(node);
-      if (typeof ref === "function") ref(node);
-      else if (ref) ref.current = node;
-    },
-    [ref],
-  );
-
   const [navOpenUncontrolled, setNavOpenUncontrolled] = useState(defaultNavOpen);
   const navOpen = navOpenProp ?? navOpenUncontrolled;
   const setNavOpen = useCallback(
@@ -189,48 +156,17 @@ export const DestinationAppShell = forwardRef<
     [asideOpenProp, onAsideOpenChange],
   );
 
-  const [narrow, setNarrow] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia(`(max-width: ${narrowBreakpoint}px)`).matches;
-  });
-  const [navCompact, setNavCompact] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${narrowBreakpoint}px)`);
-    const sync = () => setNarrow(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, [narrowBreakpoint]);
-
-  useEffect(() => {
-    if (!navOpen) setNavCompact(false);
-  }, [navOpen]);
-
   if (aside != null && !asideToggleLabel) {
     throw new Error(
       "DestinationAppShell: `asideToggleLabel` is required when `aside` is set.",
     );
   }
 
-  const navMode: ClippedNavShellProps["navMode"] = !navOpen
-    ? "hidden"
-    : narrow || navCompact
-      ? "rail"
-      : "drawer";
-
-  const openNav = useCallback(() => {
-    const crowd =
-      narrow ||
-      (shellEl ? wouldClippedNavDrawerCrowd(shellEl) : false);
-    setNavCompact(crowd);
-    setNavOpen(true);
-  }, [narrow, setNavOpen, shellEl]);
+  const navMode = navOpen ? "drawer" : "hidden";
 
   const toggleNav = useCallback(() => {
-    if (navOpen) setNavOpen(false);
-    else openNav();
-  }, [navOpen, openNav, setNavOpen]);
+    setNavOpen(!navOpen);
+  }, [navOpen, setNavOpen]);
 
   const drawerItems = destinations.map((d) => (
     <NavigationDrawerItem
@@ -243,37 +179,17 @@ export const DestinationAppShell = forwardRef<
     />
   ));
 
-  const railItems = destinations.map((d) => (
-    <NavigationRailItem
-      key={d.id}
-      icon={d.icon}
-      label={d.label}
-      badge={d.badge}
-      active={activeId === d.id}
-      onClick={() => onActiveIdChange(d.id)}
-    />
-  ));
-
-  const nav =
-    !navOpen ? null : navMode === "rail" ? (
-      <NavigationRail
-        aria-label={navAriaLabel}
-        labelVisibility={railLabelVisibility}
-        footer={navFooter}
-      >
-        {railItems}
-      </NavigationRail>
-    ) : (
-      <NavigationDrawer
-        variant="standard"
-        ariaLabel={navAriaLabel}
-        headline={drawerHeadline}
-        footer={navFooter}
-      >
-        {drawerItems}
-        {navBodyExtra}
-      </NavigationDrawer>
-    );
+  const nav = !navOpen ? null : (
+    <NavigationDrawer
+      variant="standard"
+      ariaLabel={navAriaLabel}
+      headline={drawerHeadline}
+      footer={navFooter}
+    >
+      {drawerItems}
+      {navBodyExtra}
+    </NavigationDrawer>
+  );
 
   const asideToggle =
     aside != null && asideToggleLabel ? (
@@ -294,10 +210,10 @@ export const DestinationAppShell = forwardRef<
 
   return (
     <ClippedNavShell
-      ref={setShellRef}
+      ref={ref}
       className={rootClass}
       navMode={navMode}
-      onNavCrowded={() => setNavCompact(true)}
+      onNavCrowded={() => setNavOpen(false)}
       drawerWidth={drawerWidth}
       defaultDrawerWidth={defaultDrawerWidth}
       onDrawerWidthChange={onDrawerWidthChange}
