@@ -693,6 +693,20 @@ stays dense inside the pill. Live: sandbox `#list` (select + hover neighbors).
 `PageScroll`, prefer no nested `list-well` max-height for short catalogs.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Divider between contained ListItems
+
+Symptoms: inbox / bookmark / settings List looks like a spreadsheet; selected
+or hover pill is cut by a hairline; `#list` anatomy demo used inset `Divider`
+as `ul` children.
+
+**Cause:** treating M3 **contained** lists (gap + filled items) as uncontained
+ruled lists. Hairlines fight `radius-3xl` pills.
+
+**Fix:** no `Divider` between `ListItem`s. Use `--fynns-list-item-gap` + host
+hover/selected wash. `Divider` only at **section** boundaries (FieldStack
+jumps, sidebar footer, unrelated blocks). Decorative chevron stays in the row
+hit; IconButton trailing is a sibling but the **host** still paints one pill.
+
 ## Failure mode this treaty targets: Drawer tip-fill stretches IconButton toolbars
 
 Symptoms (归档 / 收藏夹 / mode sidebars under `ClippedNavShell` +

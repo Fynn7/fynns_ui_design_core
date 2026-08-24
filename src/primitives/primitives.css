@@ -8185,9 +8185,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   cursor: pointer;
 }
 
-.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
+}
+
+.fynns-list-item--selected {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+/*
+ * Hover / selected wash lives on the host (or the row shell when `detail`
+ * is open) so trailing chevrons / IconButtons share one radius-3xl pill.
+ * Static / disabled rows never get a hover layer.
+ */
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):hover {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -8195,9 +8207,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):active {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -8205,17 +8215,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--interactive:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
-}
-
-.fynns-list-item--selected {
+.fynns-list-item-host--selected:not(.fynns-list-item-host--with-detail) {
   background: var(--fynns-color-secondary-container);
   color: var(--fynns-color-on-secondary-container);
 }
 
-.fynns-list-item--selected.fynns-list-item--interactive:hover:not(:disabled) {
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):hover {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -8223,7 +8230,46 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--selected.fynns-list-item--interactive:active:not(:disabled) {
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-list-item-row--interactive:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-list-item-row--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:active {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -8433,94 +8479,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline-end: var(--fynns-space-xs);
 }
 
-/*
- * Interactive trailing is a sibling of the row `<button>` (valid HTML). The
- * **row** (or host, when there is no `detail`) owns radius-3xl + state-layer
- * so the IconButton is not a floating island outside the highlight.
- */
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) {
-  border-radius: var(--fynns-radius-3xl);
-}
-
-.fynns-list-item-host--with-end > .fynns-list-item-row {
-  border-radius: var(--fynns-radius-3xl);
-}
-
 .fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
   background: transparent;
   border-radius: 0;
 }
 
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--interactive
-  ):hover,
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):hover {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--interactive
-  ):active,
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):active {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--selected) {
-  background: var(--fynns-color-secondary-container);
-  color: var(--fynns-color-on-secondary-container);
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--selected.fynns-list-item--interactive
-  ):hover,
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row:has(> .fynns-list-item--selected.fynns-list-item--interactive):hover {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
-    var(--fynns-color-secondary-container)
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
-  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row
-  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
-  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row
-  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item--selected,
-.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item--selected {
-  background: transparent;
-}
-
 .fynns-list-item-host.fynns-list-item-host--with-detail {
   flex-direction: column;
   align-items: stretch;
   gap: 0;
+}
+
+.fynns-list-item-trailing > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex-shrink: 0;
 }
 
 .fynns-list-item-row {
@@ -8530,6 +8504,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-layout-control-cluster-gap);
   width: 100%;
   min-width: 0;
+  border-radius: var(--fynns-radius-3xl);
+  overflow: clip;
 }
 
 .fynns-list-item-row > .fynns-list-item {

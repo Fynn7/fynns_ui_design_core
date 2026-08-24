@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  isValidElement,
   type ButtonHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
@@ -8,6 +9,38 @@ import {
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
+}
+
+function elementName(type: unknown): string {
+  if (typeof type === "string") return type;
+  if (typeof type === "function") {
+    const fn = type as { displayName?: string; name?: string };
+    return fn.displayName || fn.name || "";
+  }
+  if (type && typeof type === "object" && "render" in type) {
+    const render = (type as { render?: { displayName?: string; name?: string } }).render;
+    return render?.displayName || render?.name || "";
+  }
+  return "";
+}
+
+/** True when `trailing` must stay outside the row button (IconButton / cluster). */
+function trailingIsRowAction(node: ReactNode, depth = 0): boolean {
+  if (node == null || typeof node === "boolean" || depth > 5) return false;
+  if (typeof node === "string" || typeof node === "number") return false;
+  if (Array.isArray(node)) return node.some((child) => trailingIsRowAction(child, depth));
+  if (!isValidElement(node)) return false;
+  const name = elementName(node.type);
+  if (name === "button" || node.type === "button") return true;
+  if (/IconButton|Button|SplitButton/.test(name)) return true;
+  const className = (node.props as { className?: unknown }).className;
+  if (typeof className === "string" && /fynns-icon-btn|fynns-btn|fynns-control-cluster/.test(className)) {
+    return true;
+  }
+  return trailingIsRowAction(
+    (node.props as { children?: ReactNode }).children,
+    depth + 1,
+  );
 }
 
 export type ListProps = HTMLAttributes<HTMLUListElement>;
@@ -56,10 +89,11 @@ export type ListItemProps = Omit<
   leading?: ReactNode;
   /**
    * Trailing slot: decorative chevron **or** row actions (`IconButton` /
-   * `.fynns-control-cluster`). Always a **sibling** of the row control
-   * (`button` or static `div`) — never inside `.fynns-list-item-trailing-icon`
-   * (that 16dp slot crushes action clusters into a vertical stack). Prefer
-   * `ghost` `sm` IconButtons; open/confirm destructive work in
+   * `.fynns-control-cluster`). Action clusters stay a **sibling** of the row
+   * control (valid HTML — never nest a button in a button). Decorative
+   * chevrons / glyphs render **inside** the row so click + hover match the
+   * host wash. Never park actions in `.fynns-list-item-trailing-icon` (16dp
+   * crushes clusters). Prefer `ghost` `sm` IconButtons; destructive work in
    * `ConfirmDialog`, not a filled danger disk in the row.
    */
   trailing?: ReactNode;
@@ -115,19 +149,19 @@ function resolveLines(
  * M3 ListItem — one-, two-, or three-line content row with optional
  * leading / trailing slots. Use inside `List`.
  *
- * Trailing actions always sit **outside** the row control so `IconButton` /
+ * Trailing **actions** sit **outside** the row control so `IconButton` /
  * menus stay valid HTML **and** keep ghost-sm size — even when
- * `interactive={false}` (static row + end actions). The **host / row** still
- * paints one `radius-3xl` highlight so actions are not a floating island.
- * Path / link catalogs: headline + supporting path + trailing ghost actions —
- * not a padded `Surface` per row. Expandable trees: `detail` stays in this
- * `<li>`; set `aria-expanded` on the row. Long `headline` / `supportingText`
- * ellipsize (including copy wrapped in `Tooltip`).
+ * `interactive={false}` (static row + end actions). Decorative chevrons
+ * stay **inside** the row. The **host** paints one `radius-3xl` hover /
+ * selected wash (including trailing actions via host `:hover`) so actions
+ * are not a floating island. Path / link catalogs: headline + supporting
+ * path + trailing ghost actions — not a padded `Surface` per row.
+ * Expandable trees: `detail` stays in this `<li>`; set `aria-expanded` on
+ * the row. Long `headline` / `supportingText` ellipsize (including copy
+ * wrapped in `Tooltip`). Do not put `Divider` between ListItem rows —
+ * sibling gap + pills separate rows.
  */
-export const ListItem = forwardRef<
-  HTMLButtonElement | HTMLDivElement,
-  ListItemProps
->(function ListItem(
+export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemProps>(function ListItem(
   {
     headline,
     supportingText,
@@ -183,19 +217,18 @@ export const ListItem = forwardRef<
       <span className="fynns-list-item-trailing-text">{trailingSupportingText}</span>
     ) : null;
 
-  /** Meta-only trailing (duration / count) stays inside the row control. */
+  const actionTrailing = trailing != null && trailingIsRowAction(trailing);
+  const chromeTrailing = trailing != null && !actionTrailing ? trailing : null;
   const innerTrailing =
-    metaTrailing != null ? (
-      <span className="fynns-list-item-trailing">{metaTrailing}</span>
+    metaTrailing != null || chromeTrailing != null ? (
+      <span className="fynns-list-item-trailing">
+        {metaTrailing}
+        {chromeTrailing}
+      </span>
     ) : null;
 
-  /**
-   * Row actions / decorative trailing always sit outside the row control.
-   * Parking IconButton clusters in `.fynns-list-item-trailing-icon` (16dp)
-   * when `interactive={false}` crushed them to ~20px and wrapped vertically.
-   */
   const endTrailing =
-    trailing != null ? (
+    actionTrailing && trailing != null ? (
       <span className="fynns-list-item-trailing fynns-list-item-trailing--end">
         {trailing}
       </span>
@@ -239,16 +272,28 @@ export const ListItem = forwardRef<
     </>
   );
 
+  const liveInteractive = interactive && !disabled;
+  const hostStateClass = join(
+    liveInteractive && "fynns-list-item-host--interactive",
+    selected && "fynns-list-item-host--selected",
+  );
+  const rowShellClass = join(
+    "fynns-list-item-row",
+    liveInteractive && "fynns-list-item-row--interactive",
+    selected && "fynns-list-item-row--selected",
+  );
+
   return (
     <li
       className={join(
         "fynns-list-item-host",
+        hostStateClass,
         endTrailing != null && "fynns-list-item-host--with-end",
         hasDetail && "fynns-list-item-host--with-detail",
         hostClassName,
       )}
     >
-      {hasDetail ? <div className="fynns-list-item-row">{row}</div> : row}
+      {hasDetail ? <div className={rowShellClass}>{row}</div> : row}
       {hasDetail ? <div className="fynns-list-item-detail">{nested}</div> : null}
     </li>
   );

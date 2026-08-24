@@ -3046,7 +3046,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "inbox"}
               onClick={() => setListId("inbox")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listTwoLine")}
               supportingText={t("globals.listTwoLineSupporting")}
@@ -3055,7 +3054,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "starred"}
               onClick={() => setListId("starred")}
             />
-            <Divider inset />
             <ListItem
               overline={t("globals.listOverline")}
               headline={t("globals.listThreeLine")}
@@ -3065,13 +3063,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "sent"}
               onClick={() => setListId("sent")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listStatic")}
               supportingText={t("globals.listStaticSupporting")}
               leading={<SettingsIcon />}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listDisabled")}
               supportingText={t("globals.listDisabledSupporting")}
@@ -3090,7 +3086,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "tone-a"}
               onClick={() => setListId("tone-a")}
             />
-            <Divider inset />
             <ListItem
               hostClassName="sandbox-list-host-tone--muted"
               headline={t("globals.listHostToneMuted")}
@@ -3099,7 +3094,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "tone-b"}
               onClick={() => setListId("tone-b")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listHostTonePlain")}
               supportingText={t("globals.listHostTonePlainSupporting")}
@@ -3138,7 +3132,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listCatalogConfig")}
               supportingText={t("globals.listCatalogConfigPath")}
@@ -3167,7 +3160,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listCatalogRules")}
               supportingText={t("globals.listCatalogRulesPath")}
