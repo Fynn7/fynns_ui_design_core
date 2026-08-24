@@ -8435,6 +8435,73 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   white-space: nowrap;
 }
 
+.fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
+  white-space: normal;
+  line-height: inherit;
+}
+
+/*
+ * Multi-metric trailing meta (elapse | tokens | cost | count). Fixed column
+ * tracks so sibling rows share vertical column edges — not a flex
+ * `.fynns-control-cluster` (content-width cells drift per row). Live: `#list`.
+ */
+.fynns-list-item-trailing-stats {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-tokens)
+    var(--fynns-list-stats-col-cost)
+    var(--fynns-list-stats-col-count);
+  column-gap: var(--fynns-layout-control-cluster-gap);
+  align-items: center;
+  justify-items: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.fynns-list-item-trailing-stats--pair {
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-count);
+}
+
+.fynns-list-item-trailing-stats > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: end;
+}
+
+.fynns-list-item-trailing-stats > .fynns-tooltip-trigger {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+/*
+ * Left copy | right stats as an explicit grid when trailing-stats is present
+ * (leading | content | stats, or content | stats when no leading).
+ */
+.fynns-list-item:has(.fynns-list-item-trailing-stats) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) max-content;
+  align-items: center;
+  column-gap: var(--fynns-list-gap);
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats):not(
+    :has(> .fynns-list-item-leading)
+  ) {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats) > .fynns-list-item-trailing {
+  margin-inline-start: 0;
+  grid-column: -1;
+}
+
 .fynns-list-item-trailing-icon {
   display: inline-flex;
   align-items: center;

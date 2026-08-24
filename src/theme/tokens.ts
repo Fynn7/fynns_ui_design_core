@@ -944,6 +944,15 @@ export const LIST_TOKENS = {
    * `content-gap` so the block does not crush (aliases `--fynns-space-sm` / 8dp).
    */
   "content-gap-3": "var(--fynns-space-sm)",
+  /**
+   * `.fynns-list-item-trailing-stats` fixed tracks (usage / session meta).
+   * Fixed widths — not `max-content` — so duration / tokens / cost / count
+   * columns share the same edge across sibling rows. Live: sandbox `#list`.
+   */
+  "stats-col-elapse": "4.75rem",
+  "stats-col-tokens": "3.5rem",
+  "stats-col-cost": "3.75rem",
+  "stats-col-count": "3.25rem",
 } as const;
 
 /**

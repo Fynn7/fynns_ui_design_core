@@ -914,10 +914,30 @@ Symptoms in session / turn catalogs:
 shipped `1m47s` as a bad example.
 
 **Fix (consumer-owned strings):** space between units — `1m 47s`, `2h 5m`
-(locale equivalent OK). Put duration in `trailingSupportingText` (optional
-`.fynns-control-cluster` with count). Live: `#list` tree rows
+(locale equivalent OK). Put duration in `trailingSupportingText`. For
+**multi-metric** trailing that must align across rows, use
+`.fynns-list-item-trailing-stats` (not a flex `.fynns-control-cluster`);
+duration + count only → add `--pair`. Live: `#list` stats + tree rows
 (`globals.listTreeDuration`). Authority: [`AGENTS.md`](../AGENTS.md) Hard
 rules / **Content density**.
+
+## Failure mode this treaty targets: List trailing stats drift across rows
+
+Symptoms in usage / session catalogs:
+
+- Each row’s duration / tokens / cost / count sit in a flex cluster; `$0.081`
+  on one row does **not** share a vertical edge with `$1.240` on the next
+- Short values (`2m 15s`, `12k`) pull later columns left; long values push
+  them right — the strip reads as one fused string, not columns
+
+**Cause:** `.fynns-control-cluster` sizes each cell to content. Cross-row
+column alignment needs **shared track widths**, not per-row flex gaps.
+
+**Fix:** wrap metric cells in `.fynns-list-item-trailing-stats` (core fixed
+CSS grid: elapse | tokens | cost | count; `tabular-nums`; end-aligned).
+Two metrics → `--pair`. Do **not** invent a private `hub-*-stats` grid.
+Live: sandbox `#list` usage-stats sample. Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Card head actions wrap into a tall stack
 

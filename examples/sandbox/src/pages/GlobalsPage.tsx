@@ -3303,6 +3303,84 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
             />
           </List>
+          <SandboxHelp text={t("globals.listStatsHelp")} />
+          <List aria-label={t("globals.listStatsAria")}>
+            <ListItem
+              overline={t("globals.listStatsRow1Overline")}
+              headline={t("globals.listStatsRow1Headline")}
+              supportingText={t("globals.listStatsRow1Path")}
+              trailingSupportingText={
+                <span className="fynns-list-item-trailing-stats">
+                  <span>{t("globals.listStatsRow1Elapse")}</span>
+                  <span>{t("globals.listStatsRow1Tokens")}</span>
+                  <span>{t("globals.listStatsRow1Cost")}</span>
+                  <span className="fynns-table-meta">{t("globals.listStatsRow1Count")}</span>
+                </span>
+              }
+              trailing={
+                <Tooltip content={t("globals.listTreeOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listTreeOpen")}
+                  >
+                    <BotIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <ListItem
+              overline={t("globals.listStatsRow2Overline")}
+              headline={t("globals.listStatsRow2Headline")}
+              supportingText={t("globals.listStatsRow2Path")}
+              trailingSupportingText={
+                <span className="fynns-list-item-trailing-stats">
+                  <span>{t("globals.listStatsRow2Elapse")}</span>
+                  <span>{t("globals.listStatsRow2Tokens")}</span>
+                  <span className="fynns-table-meta">{t("globals.listStatsRow2Cost")}</span>
+                  <span className="fynns-table-meta">{t("globals.listStatsRow2Count")}</span>
+                </span>
+              }
+              trailing={
+                <Tooltip content={t("globals.listTreeOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listTreeOpen")}
+                  >
+                    <BotIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <ListItem
+              overline={t("globals.listStatsRow3Overline")}
+              headline={t("globals.listStatsRow3Headline")}
+              supportingText={t("globals.listStatsRow3Path")}
+              trailingSupportingText={
+                <span className="fynns-list-item-trailing-stats">
+                  <span>{t("globals.listStatsRow3Elapse")}</span>
+                  <span>{t("globals.listStatsRow3Tokens")}</span>
+                  <span>{t("globals.listStatsRow3Cost")}</span>
+                  <span className="fynns-table-meta">{t("globals.listStatsRow3Count")}</span>
+                </span>
+              }
+              trailing={
+                <Tooltip content={t("globals.listTreeOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.listTreeOpen")}
+                  >
+                    <BotIcon />
+                  </IconButton>
+                </Tooltip>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+          </List>
           <SandboxHelp text={t("globals.listTreeHelp")} />
           <List aria-label={t("globals.listTreeAria")}>
             <ListItem
@@ -3311,7 +3389,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               headline={t("globals.listTreeHeadline")}
               supportingText={t("globals.listTreePath")}
               trailingSupportingText={
-                <span className="fynns-control-cluster">
+                <span className="fynns-list-item-trailing-stats fynns-list-item-trailing-stats--pair">
                   <span>{t("globals.listTreeDuration")}</span>
                   <span className="fynns-table-meta">{t("globals.listTreeCalls")}</span>
                 </span>
