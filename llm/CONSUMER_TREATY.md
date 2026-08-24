@@ -687,8 +687,10 @@ List did not.
 
 **Fix in core (≥ 0.4.55):** `--fynns-list-item-gap` aliases
 `navdrawer-section-gap`; `.fynns-list { gap: var(--fynns-list-item-gap) }`.
-`--fynns-list-content-gap` aliases `space-xs` (**4dp**) so headline↔supporting
-stays dense inside the pill. Live: sandbox `#list` (select + hover neighbors).
+`--fynns-list-content-gap` aliases `space-xs` (**4dp**) so two-line
+headline↔supporting stays dense; three-line uses `--fynns-list-content-gap-3`
+(`space-sm` / **8dp**). Leading → copy is `--fynns-list-gap` (`space-lg` /
+**16dp**), not a 40dp icon column. Live: sandbox `#list` (select + hover neighbors).
 **Consumer:** no private row `margin` / `gap` — rely on core. Under
 `PageScroll`, prefer no nested `list-well` max-height for short catalogs.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
@@ -841,24 +843,25 @@ row `onClick` + decorative chevron in `leading` + `aria-expanded`. Nested
 Live: sandbox `#list`. Authority: [`AGENTS.md`](../AGENTS.md) **Content
 density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: ListItem tone stripe via wrapping div
+## Failure mode this treaty targets: ListItem kind via wrapping div / start rail
 
 Symptoms in a skills / rules / MCP catalog:
 
-- Broken or double **vertical rails** (accent inset) that start/stop between
-  rows; selected `radius-3xl` wash looks **clipped** or oversized empty pills
+- **Vertical rails** or ticks (accent inset) on the start of rows
+- Selected `radius-3xl` wash looks **clipped** or oversized empty pills
 - DevTools shows `ul.fynns-list > div.hub-builtin-row--* > li.fynns-list-item-host`
 
 **Cause:** App wraps each `ListItem` in a `div` for builtin tone (inset
-`box-shadow` + wash). `ListItem` **is** the `<li>` — the wrapper breaks
-`ul > li`, so overflow clip and overlay scroll rails fight the selected
-pill. Comment “don’t put stripe on ListItem” was wrong for the **host**.
+`box-shadow` + wash / `::before` tick). `ListItem` **is** the `<li>` — the
+wrapper breaks `ul > li`. Kind was painted as a second highlight language
+(rail / tick / extra wash) on top of the selected pill.
 
-**Fix:** Pass tone classes on `ListItem` **`hostClassName`** (outer `<li>`).
-`className` stays on the row control. Never `return <div className={tone}>{item}</div>`.
-Core hosts use `border-radius: var(--fynns-radius-3xl)` + `overflow: clip` so
-tone fills follow the M3 long-strip. Live: sandbox `#list` (host tone rows).
-Authority: [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+**Fix:** Do **not** wrap. Do **not** paint start ticks, inset rails, or a
+second host wash. Builtin / readonly = **leading icon** +
+`trailingSupportingText` / `.fynns-table-meta`. Selected already owns the
+host pill. `hostClassName` is layout-only if you need a class on `<li>` —
+never a stripe. Live: sandbox `#list` kind rows. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: builtin ListItem looks like a square / chip island
@@ -868,21 +871,53 @@ Symptoms (agents / skills catalog, OpenCode builtins like `build` / `plan`):
 - Idle builtin rows look like floating **capsules or square bars** (not the same
   transparent ListItem rhythm as neighbor rows); mono headline makes them read
   as code chips rather than catalog names
-- DevTools: tone is already on `li.fynns-list-item-host.hub-builtin-row--*`
-  (not a wrapping `div`) but the wash still paints square
+- DevTools: a wash or rail on `li.fynns-list-item-host.hub-builtin-row--*`
 
-**Cause:** (1) `.fynns-list-item-host` used `overflow-x: clip` only — with
-`overflow-y: visible`, the host **background is not clipped** to
-`radius-3xl`, so `hostClassName` washes read as rectangles. (2) Catalog
-**display names** forced onto `--fynns-font-mono` (UI names belong on
-`--fynns-font-ui`; mono is for paths / ids in supporting text).
+**Cause:** Extra `hostClassName` background / rail, plus catalog **display
+names** forced onto `--fynns-font-mono` (UI names belong on `--fynns-font-ui`;
+mono is for paths / ids in supporting text).
 
-**Fix in core:** host `overflow: clip` (both axes) so tone fills match the
-long-strip radius. Live: `#list` host-tone rows. **Consumer:** keep tone on
-`hostClassName`; drop `mono` from `CatalogName` / list headlines (path /
-`supportingText` may stay mono). Do not invent a parallel Chip for builtins.
-Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **Font families**.
+**Fix:** Drop the wash / rail. Kind = leading icon + trailing meta. Headline
+UI font. Core still `overflow: clip` on the host so leftover backgrounds
+cannot paint a square bar. Live: `#list` kind rows. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** / **Font families**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List icon↔copy / three-line stack crushed
+
+Symptoms:
+
+- Leading glyph kisses the headline (reads as one blob)
+- Three-line rows (overline + title + supporting) have `gap: 0` under a
+  large title (“行间距崩溃”)
+- Consumer CSS invents private `--hub-list-*` gaps or a 40dp empty leading
+  column for a 16–20dp icon
+
+**Cause:** Ignoring core List tokens after density work, or copying an old
+8dp leading gutter / 4dp-only three-line stack.
+
+**Fix:** Do **not** restyle `.fynns-list-*` gaps. Core owns:
+`--fynns-list-gap` (**16dp**, leading→copy), `--fynns-list-content-gap`
+(**4dp**, two-line), `--fynns-list-content-gap-3` (**8dp**, three-line).
+Leading slot **hugs** the glyph (`leading-width` = icon-size). Live: `#list`.
+Authority: [`AGENTS.md`](../AGENTS.md) Hard rules / **Content density**.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: duration meta glued (`1m47s`)
+
+Symptoms in session / turn catalogs:
+
+- Trailing duration reads `1m47s` / `2h5m` with no space between units
+- Cluster of duration + count (`1m47s` + `4 次`) looks denser than neighbors
+
+**Cause:** Compact duration formatters omit the unit separator; sandbox once
+shipped `1m47s` as a bad example.
+
+**Fix (consumer-owned strings):** space between units — `1m 47s`, `2h 5m`
+(locale equivalent OK). Put duration in `trailingSupportingText` (optional
+`.fynns-control-cluster` with count). Live: `#list` tree rows
+(`globals.listTreeDuration`). Authority: [`AGENTS.md`](../AGENTS.md) Hard
+rules / **Content density**.
 
 ## Failure mode this treaty targets: Card head actions wrap into a tall stack
 
@@ -901,11 +936,15 @@ cluster is not enough if nested helpers keep `wrap` / full width.
 
 **Fix in core:** nested clusters hug + nowrap; **every** cluster under
 `.fynns-card-actions` / `.fynns-collapsible-actions` (descendant) is
-`width: auto` + `flex-wrap: nowrap`. Live: sandbox `#card` (narrow multi-action
-head). **Consumer:** prefer one outer cluster of IconButtons; action helpers
+`width: auto` + `flex-wrap: nowrap`. Lead / Collapsible trigger keeps
+`min-width: max(0px, 40%)` so a dense strip cannot crush the title to one
+glyph. Live: sandbox `#card` (multi-action head on a full-row ~28rem host).
+**Consumer:** prefer one **flat** outer cluster of IconButtons; action helpers
 should return a **fragment** of IconButtons (no inner cluster) when composed
-into Card `actions`. Do **not** invent `flex-wrap: nowrap` in app CSS on
-`.fynns-*`. Authority: [`AGENTS.md`](../AGENTS.md) Card keep-set. Pasteable:
+into Card `actions`. Do not park the Card in a ~12rem grid cell with five
+IconButtons and expect a long path title to survive. Do **not** invent
+`flex-wrap: nowrap` in app CSS on `.fynns-*`. Authority: [`AGENTS.md`](../AGENTS.md)
+Card keep-set / **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: path / branch text in Card `actions`

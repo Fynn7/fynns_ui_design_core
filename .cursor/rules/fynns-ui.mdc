@@ -156,10 +156,14 @@ ring can paint before heavy work).
   `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
-  (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
+  (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
-  sandbox `#list`). Expandable trees: `ListItem` **`detail`** in the same
+  sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
+  — **never** start tick / inset rail / second host wash. Leading→copy
+  `--fynns-list-gap` (**16dp**); three-line stack `--fynns-list-content-gap-3`
+  (**8dp**). Duration meta spaces units (`1m 47s`). Expandable trees:
+  `ListItem` **`detail`** in the same
   `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
   leading chevron — never a button in `leading`, never `ul > div`. Long
   headline (optional `Tooltip`) ellipsizes in core — do not `tip-grow` /
