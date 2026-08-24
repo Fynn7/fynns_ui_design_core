@@ -3077,10 +3077,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </List>
           <SandboxHelp text={t("globals.listHostToneHelp")} />
-          <List
-            className="sandbox-list-kind"
-            aria-label={t("globals.listHostToneAria")}
-          >
+          <List aria-label={t("globals.listHostToneAria")}>
             <ListItem
               headline={t("globals.listHostToneAccent")}
               supportingText={t("globals.listHostToneAccentSupporting")}

@@ -24,23 +24,49 @@ function elementName(type: unknown): string {
   return "";
 }
 
-/** True when `trailing` must stay outside the row button (IconButton / cluster). */
+/**
+ * True when `trailing` must stay outside the row control (IconButton / cluster).
+ * Prefer **outside** for unknown / minified composites so production builds
+ * never nest `<button>` inside the interactive row (Vite name-mangling lesson).
+ * Only leave clearly decorative leaves (text, svg, `*Icon`) inside.
+ */
 function trailingIsRowAction(node: ReactNode, depth = 0): boolean {
   if (node == null || typeof node === "boolean" || depth > 5) return false;
   if (typeof node === "string" || typeof node === "number") return false;
   if (Array.isArray(node)) return node.some((child) => trailingIsRowAction(child, depth));
   if (!isValidElement(node)) return false;
-  const name = elementName(node.type);
-  if (name === "button" || node.type === "button") return true;
-  if (/IconButton|Button|SplitButton/.test(name)) return true;
-  const className = (node.props as { className?: unknown }).className;
-  if (typeof className === "string" && /fynns-icon-btn|fynns-btn|fynns-control-cluster/.test(className)) {
+
+  if (node.type === "button" || node.type === "a") return true;
+  if (typeof node.type === "string") {
+    if (node.type === "svg" || node.type === "path" || node.type === "span") {
+      return trailingIsRowAction(
+        (node.props as { children?: ReactNode }).children,
+        depth + 1,
+      );
+    }
     return true;
   }
-  return trailingIsRowAction(
-    (node.props as { children?: ReactNode }).children,
-    depth + 1,
-  );
+
+  const name = elementName(node.type);
+  const className = (node.props as { className?: unknown }).className;
+  if (
+    typeof className === "string" &&
+    /fynns-btn|fynns-control-cluster/.test(className)
+  ) {
+    return true;
+  }
+  if (/IconButton|Button|SplitButton|DropdownMenu|Tooltip/.test(name)) {
+    return true;
+  }
+  // Named decorative glyphs (ChevronRightIcon, …) stay inside the row.
+  if (/Icon$/.test(name)) return false;
+  // Fragment / anonymous wrappers: inspect children; empty → treat as action.
+  const children = (node.props as { children?: ReactNode }).children;
+  if (children != null && (name === "" || /Fragment/.test(name))) {
+    return trailingIsRowAction(children, depth + 1);
+  }
+  // Unknown or minified component names → outside (safe nesting).
+  return true;
 }
 
 export type ListProps = HTMLAttributes<HTMLUListElement>;

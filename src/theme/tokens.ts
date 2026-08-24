@@ -1509,12 +1509,6 @@ export const SCROLLBAR_TOKENS = {
 } as const;
 
 /**
- * CodeBlock syntax colors — distilled from Fynn’s VS C/C++ theme
- * (`cpptools_dark_vs_new` / `cpptools_light_vs_new` TextMate last-wins).
- * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
- * full TextMate engine).
- */
-/**
  * SplitPane geometry. `--fynns-split-<key>`.
  * In-content resizable two panes — not EndAside / drawer shell seams.
  */
@@ -1612,6 +1606,12 @@ export const COMMAND_TOKENS = {
   "shortcut-gap": "var(--fynns-space-2xs)",
 } as const;
 
+/**
+ * CodeBlock syntax colors — distilled from Fynn’s VS C/C++ theme
+ * (`cpptools_dark_vs_new` / `cpptools_light_vs_new` TextMate last-wins).
+ * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
+ * full TextMate engine).
+ */
 export const CODE_TOKENS = {
   /** Default code ink (`editor.foreground`). */
   fg: "#b2cacd",
