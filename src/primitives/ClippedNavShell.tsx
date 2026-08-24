@@ -22,8 +22,10 @@ export type ClippedNavShellProps = {
    *
    * TopAppBar leading toggle should flip **open ↔ closed** only (`drawer`|`rail`
    * ↔ `hidden`). Prefer `"rail"` for automatic crowding (`onNavCrowded`) **and**
-   * for narrow viewports — keeping `"drawer"` below ~900px stacks labeled
-   * destinations above the canvas and starves the main stage.
+   * for narrow viewports (≤56.25rem / ~900px) — keep destinations a side column
+   * with `NavigationRail`. Core no longer stacks a rem-capped labeled drawer
+   * above main; leaving `"drawer"` on narrow still sizes a full drawer track
+   * and will fire `onNavCrowded` when wired.
    */
   navMode: ClippedNavShellNavMode;
   /**
@@ -42,10 +44,11 @@ export type ClippedNavShellProps = {
   className?: string;
   /**
    * When `navMode` is `"drawer"` and a full labeled drawer would starve
-   * canvas + `EndAside` mins (or force EndAside overlay), call this so the
-   * consumer can densify to rail / icon mode (not hidden). Fired from
-   * `useLayoutEffect` using **target** drawer width (not mid-transition
-   * layout) so open does not paint full drawer then snap to rail.
+   * canvas + `EndAside` mins (or force EndAside overlay), **or** the
+   * viewport is ≤56.25rem (~900px), call this so the consumer can densify
+   * to rail / icon mode (not hidden). Fired from `useLayoutEffect` using
+   * **target** drawer width (not mid-transition layout) so open does not
+   * paint full drawer then snap to rail.
    */
   onNavCrowded?: () => void;
   /**
@@ -208,6 +211,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
    * identity churn would spam the console every parent render).
    */
   const squashedDrawerWarnedRef = useRef(false);
+  const narrowDrawerWarnedRef = useRef(false);
   useEffect(() => {
     // Avoid bare `process` (consumer tsc may lack @types/node).
     const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
@@ -233,6 +237,30 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
         "Swap to NavigationRail / NavigationRailItem (see llm/CONSUMER_TREATY.md). " +
         "Leaving a labeled drawer in the rail track produces a squashed column and unexpected scrollbars.",
     );
+  }, [navMode, phase]);
+
+  useEffect(() => {
+    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
+      .process?.env?.NODE_ENV;
+    if (nodeEnv === "production") return;
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 56.25rem)");
+    const warn = () => {
+      if (!mq.matches || navMode !== "drawer" || phase === "closed") {
+        narrowDrawerWarnedRef.current = false;
+        return;
+      }
+      if (narrowDrawerWarnedRef.current) return;
+      narrowDrawerWarnedRef.current = true;
+      console.warn(
+        '[ClippedNavShell] navMode="drawer" on viewport ≤56.25rem. Densify to ' +
+          '"rail" + NavigationRail (DestinationAppShell / onNavCrowded). Core keeps ' +
+          "a side column — it no longer stacks a rem-capped drawer ribbon above main.",
+      );
+    };
+    warn();
+    mq.addEventListener("change", warn);
+    return () => mq.removeEventListener("change", warn);
   }, [navMode, phase]);
 
   const setDrawerWidthPx = useCallback(
@@ -266,6 +294,15 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       /* Prefer target width over mid-flyout interpolated columns — otherwise
        * open expands to full drawer then densifies after settleTimer. */
       if (wouldClippedNavDrawerCrowd(root, drawerTarget)) return true;
+
+      /* Narrow viewport: densify drawer → rail (same ~900px as DestinationAppShell).
+       * Core no longer stacks a rem-capped drawer above main. */
+      if (
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 56.25rem)").matches
+      ) {
+        return true;
+      }
 
       if (root.scrollWidth > root.clientWidth + 1) return true;
       if (body && body.scrollWidth > body.clientWidth + 1) return true;

@@ -412,8 +412,11 @@ const navMode = !open ? "hidden" : narrow || compact ? "rail" : "drawer";
 
 - TopAppBar 开关只做 **open ↔ closed**（`drawer|rail` ↔ `hidden`），不要用开关在
   drawer/rail 间来回拧。
-- 窄视口（约 ≤900px）与 `onNavCrowded`：**都走 `"rail"` + Rail 组件**，不要继续
-  `"drawer"`（CSS 会把 labeled drawer 叠到主舞台上方）。
+- 窄视口（约 ≤900px / 56.25rem）与 `onNavCrowded`：**都走 `"rail"` + Rail 组件**，
+  不要继续 `"drawer"`。core **不再**把 labeled drawer 叠成顶栏 9rem 短条；窄宽下
+  仍是侧栏轨道，且 `onNavCrowded` 会在 ≤56.25rem 触发。永不 densify → 全宽
+  drawer 列挤占主区（或仍见顶栏短条若消费仓私有 CSS 重叠）。对照
+  `#layouts-demo-shell`。
 - Shell / 检查器 / live token GUI → 另读 `llm/PERF.md`（禁止 observer↔probe 环）。
 
 ### 侧栏「坏了」时先诊断（禁止先改 CSS）

@@ -1346,7 +1346,7 @@
 .sandbox-globals-clipped-shell {
   width: 100%;
   max-width: 44rem;
-  /* Taller than 18rem so phone stacked nav + EndAside bottom sheet still leave a usable main. */
+  /* Tall enough for phone EndAside bottom sheet + main canvas. */
   height: 22rem;
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);

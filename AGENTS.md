@@ -927,7 +927,7 @@ classes.
   TopAppBar leading toggle is **open ↔ closed**
   only; `"rail"` is for automatic crowding via `onNavCrowded` **and** for
   narrow viewports (apps should pass `rail` below ~900px — do not keep a
-  labeled `drawer` mode that stacks above the canvas).
+  labeled `drawer` mode below ~900px without densifying to `"rail"`).
   **Consumer sync (slot API only):** `navMode` and the `nav` slot must match
   (`drawer`→`NavigationDrawer`, `rail`→`NavigationRail`); the shell never
   auto-swaps. Prefer `DestinationAppShell` so agents never hand-sync this.
@@ -979,10 +979,13 @@ classes.
   (container query — works for nested demos), EndAside **overlays** the end
   edge at its min/preferred width (out of flex flow) so both mins stay usable
   without horizontal overflow. Drawer still open + floors overflowing →
-  `onNavCrowded` → rail. Viewport ≤56.25rem → bottom sheet
+  `onNavCrowded` → rail. Viewport ≤56.25rem → EndAside bottom sheet
   (`max-height: min(52dvh, 22rem)` — usable sheet, not a thin ribbon). If
-  `navMode` stays `"drawer"` on a narrow viewport, CSS stacks that drawer
-  above main (rem-capped); prefer `"rail"` so destinations stay a side column.
+  `navMode` stays `"drawer"` on a narrow viewport, core **keeps a side
+  column** (no rem-capped stack above main) and fires `onNavCrowded` when
+  wired — apps **must** densify to `"rail"` + `NavigationRail` below ~900px
+  (`DestinationAppShell` does this). Do not keep a labeled drawer that
+  never densifies.
   Slot-only — destinations stay in `nav`, inspector content in `EndAside`
   children; toggle IconButtons live in the consumer `TopAppBar`. Prefer for
   destination chrome apps. **Not** `Drawer` (modal content side sheet) and

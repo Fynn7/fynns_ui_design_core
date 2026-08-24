@@ -161,6 +161,31 @@ children do not shrink).
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
 
+## Failure mode this treaty targets: stacked drawer ribbon (narrow)
+
+Symptoms when the window is ≤56.25rem (~900px) and destinations stay open:
+
+- Nav is a **full-width band under the TopAppBar** (~9rem / 144dp tall historically)
+- Only SearchBar + account footer peek through; destination rows are clipped
+- DevTools: `data-nav="drawer"` + `.fynns-nav-drawer` with tiny `height` /
+  `max-height` while `visible_text` still lists every destination
+
+**Cause (legacy core ≤ 0.4.82):** narrow CSS stacked `NavigationDrawer` above
+main with `max-height: 9rem`. Consumers that never densify
+(`navMode={open ? "drawer" : "hidden"}` with no `NavigationRail` /
+`onNavCrowded`) hit that path.
+
+**Fix in core (≥ 0.4.83):** narrow keeps a **side column** for drawer and rail
+(no rem-capped stack). `onNavCrowded` also fires on viewport ≤56.25rem when
+`navMode="drawer"`. Apps **must** densify to `"rail"` + `NavigationRail`
+(or use `DestinationAppShell`). Live: Layouts `#layouts-demo-shell` — resize
+below ~900px and destinations stay a side rail, not a top ribbon.
+
+**Consumer fix:** hand-composed `ClippedNavShell` → same densify recipe as
+`consumer-cursor-rule.mdc` / `DestinationAppShell` (`narrow || compact ?
+"rail" : "drawer"` + swap nav slot). Drop any private CSS that re-stacks
+the drawer.
+
 ## Failure mode this treaty targets: drawer headline toolbar
 
 Symptoms (mode sidebars: Favorites / Chats / Archived / “drill-in” destination

@@ -10950,20 +10950,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   }
 }
 
-/* Narrow viewport: stack *drawer* above main; rail stays a side column. */
+/*
+ * Narrow viewport (≤56.25rem): destinations stay a **side column** for both
+ * drawer and rail. Do **not** stack a labeled drawer above main as a rem-capped
+ * ribbon (legacy 9rem clip → SearchBar + footer only). Apps densify
+ * `drawer` → `rail` below ~900px (`DestinationAppShell` / `onNavCrowded`).
+ * EndAside still becomes a bottom sheet on this breakpoint.
+ */
 @media (max-width: 56.25rem) {
-  .fynns-clipped-nav-shell-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  /*
-   * Hidden nav on narrow: always one main row. The base rule above would
-   * otherwise leave an empty second track when the nav slot is null (no
-   * drawer/rail `:has()` match) — visible as a dead band under main/EndAside.
-   */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
-    grid-template-columns: 0px minmax(0, 1fr);
+  .fynns-clipped-nav-shell[data-nav="drawer"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 
@@ -10972,27 +10968,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     grid-template-rows: minmax(0, 1fr);
   }
 
-  /* Rail close: keep two columns and collapse the rail track. */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-rail) {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: 0px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
-  }
-
-  /* Stacked drawer close: collapse max-height (auto row shrinks with it). */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-drawer) {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-drawer {
-    max-height: 0;
-    border-block-end-color: transparent;
-    pointer-events: none;
-  }
-
+    > .fynns-nav-drawer,
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
@@ -11001,60 +10985,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     border-inline-end-color: transparent;
   }
 
-  /*
-   * Stacked *drawer* track only — side rail keeps full column height so the
-   * settings footer can pin to the bottom edge (Cursor parity).
-   */
-  .fynns-clipped-nav-shell[data-nav="drawer"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav {
-    height: auto;
-    align-self: start;
-  }
-
-  .fynns-clipped-nav-shell[data-nav="rail"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav {
+  .fynns-clipped-nav-shell-nav {
     height: 100%;
     align-self: stretch;
-  }
-
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    /*
-     * Rem-only cap: `%` max-height does not resolve against an `auto` grid
-     * row, so a stacked drawer would otherwise grow to every destination.
-     * Nested demos prefer rail (side column) over this stack path.
-     * Clip here; scroll on `.fynns-nav-drawer-body.fynns-scroll` (not the
-     * outer shell — avoids browser-default scrollbars).
-     */
-    max-height: 9rem;
-    overflow: hidden;
-    border-inline-end: none;
-    border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    transition:
-      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
-      border-block-end-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
-      transition: none;
-    }
-  }
-
-  /*
-   * Shrink-wrap destinations when content fits under the cap — do not
-   * flex-grow an empty scroll band between items and the account footer.
-   * When content exceeds `max-height`, `flex-shrink: 1` + `min-height: 0`
-   * lets the body scroll inside the clipped shell.
-   */
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
-    flex: 0 1 auto;
-    min-height: 0;
-    overflow-y: auto;
   }
 
   .fynns-clipped-nav-shell-main {
