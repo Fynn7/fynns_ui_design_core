@@ -50,6 +50,7 @@ import {
   Collapsible,
   ContextMenu,
   ContextMenuTrigger,
+  CommandPalette,
   DatePicker,
   DatePickerDialog,
   DateRangePicker,
@@ -130,6 +131,11 @@ import {
   Grid,
   FillColumn,
   PageScroll,
+  SplitPane,
+  StatusBar,
+  StatusBarItem,
+  Tree,
+  TreeItem,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -925,6 +931,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [switchStartOn, setSwitchStartOn] = useState(true);
   const [collapsibleOpen, setCollapsibleOpen] = useState(false);
   const [ctxOpen, setCtxOpen] = useState(false);
+  const [commandOpen, setCommandOpen] = useState(false);
+  const [splitOrientation, setSplitOrientation] = useState<
+    "horizontal" | "vertical"
+  >("horizontal");
+  const [treeSelectedId, setTreeSelectedId] = useState<string | null>(
+    "src/components/Tree.tsx",
+  );
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
@@ -1562,6 +1575,78 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ContextMenu>
         </div>
         <SandboxHelp text={t("globals.contextMenuHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="command-palette">
+          <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <Button onClick={() => setCommandOpen(true)}>
+              {t("globals.commandPaletteOpen")}
+            </Button>
+            <CommandPalette
+              open={commandOpen}
+              onOpenChange={setCommandOpen}
+              label={t("globals.commandPaletteAria")}
+              placeholder={t("globals.commandPalettePlaceholder")}
+              emptyLabel={t("globals.commandPaletteEmpty")}
+              items={[
+                {
+                  id: "nav-home",
+                  group: t("globals.commandPaletteGroupNav"),
+                  label: t("globals.commandPaletteItemHome"),
+                  icon: <LayoutGridIcon />,
+                  shortcut: "Ctrl G",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastHome"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "nav-settings",
+                  group: t("globals.commandPaletteGroupNav"),
+                  label: t("globals.commandPaletteItemSettings"),
+                  icon: <SettingsIcon />,
+                  shortcut: "Ctrl ,",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastSettings"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-search",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemSearch"),
+                  icon: <SearchIcon />,
+                  shortcut: "Ctrl K",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastSearch"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-file",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemFile"),
+                  icon: <FileIcon />,
+                  shortcut: "Ctrl Shift O",
+                  onSelect: () =>
+                    snackbar(t("globals.commandPaletteToastFile"), {
+                      duration: "short",
+                      dismissAriaLabel: t("globals.snackbarDismiss"),
+                    }),
+                },
+                {
+                  id: "act-disabled",
+                  group: t("globals.commandPaletteGroupActions"),
+                  label: t("globals.commandPaletteItemDisabled"),
+                  icon: <ArchiveIcon />,
+                  disabled: true,
+                },
+              ]}
+            />
+          </div>
+          <SandboxHelp text={t("globals.commandPaletteHelp")} />
         </GlobalsDemo>
       </>
         )}
@@ -2961,7 +3046,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "inbox"}
               onClick={() => setListId("inbox")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listTwoLine")}
               supportingText={t("globals.listTwoLineSupporting")}
@@ -2970,7 +3054,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "starred"}
               onClick={() => setListId("starred")}
             />
-            <Divider inset />
             <ListItem
               overline={t("globals.listOverline")}
               headline={t("globals.listThreeLine")}
@@ -2980,13 +3063,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               selected={listId === "sent"}
               onClick={() => setListId("sent")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listStatic")}
               supportingText={t("globals.listStaticSupporting")}
               leading={<SettingsIcon />}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listDisabled")}
               supportingText={t("globals.listDisabledSupporting")}
@@ -2998,26 +3079,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.listHostToneHelp")} />
           <List aria-label={t("globals.listHostToneAria")}>
             <ListItem
-              hostClassName="sandbox-list-host-tone--accent"
               headline={t("globals.listHostToneAccent")}
               supportingText={t("globals.listHostToneAccentSupporting")}
+              trailingSupportingText={t("globals.listHostToneAccentMeta")}
               leading={<FolderOpenIcon />}
               selected={listId === "tone-a"}
               onClick={() => setListId("tone-a")}
             />
-            <Divider inset />
             <ListItem
-              hostClassName="sandbox-list-host-tone--muted"
               headline={t("globals.listHostToneMuted")}
               supportingText={t("globals.listHostToneMutedSupporting")}
+              trailingSupportingText={t("globals.listHostToneMutedMeta")}
               leading={<FileIcon />}
               selected={listId === "tone-b"}
               onClick={() => setListId("tone-b")}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listHostTonePlain")}
               supportingText={t("globals.listHostTonePlainSupporting")}
+              trailingSupportingText={t("globals.listHostTonePlainMeta")}
               leading={<SettingsIcon />}
               selected={listId === "tone-c"}
               onClick={() => setListId("tone-c")}
@@ -3053,7 +3133,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listCatalogConfig")}
               supportingText={t("globals.listCatalogConfigPath")}
@@ -3082,7 +3161,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
-            <Divider inset />
             <ListItem
               headline={t("globals.listCatalogRules")}
               supportingText={t("globals.listCatalogRulesPath")}
@@ -3351,46 +3429,42 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             title={t("globals.cardActionsStripTitle")}
             actions={
               <div className="fynns-control-cluster">
-                <span className="fynns-control-cluster">
-                  <Tooltip content={t("globals.cardActionsStripStar")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripStar")}
-                    >
-                      <SparklesIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.cardActionsStripPin")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripPin")}
-                    >
-                      <SaveIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                </span>
-                <span className="fynns-control-cluster">
-                  <Tooltip content={t("globals.cardActionsStripOpen")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripOpen")}
-                    >
-                      <FileIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.cardActionsStripFolder")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.cardActionsStripFolder")}
-                    >
-                      <FolderOpenIcon size={16} aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                </span>
+                <Tooltip content={t("globals.cardActionsStripStar")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripStar")}
+                  >
+                    <SparklesIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripPin")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripPin")}
+                  >
+                    <SaveIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripOpen")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripOpen")}
+                  >
+                    <FileIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardActionsStripFolder")}>
+                  <IconButton
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t("globals.cardActionsStripFolder")}
+                  >
+                    <FolderOpenIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripDelete")}>
                   <IconButton
                     size="sm"
@@ -4090,6 +4164,99 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="split-pane">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <ToggleGroup
+            showCheck={false}
+            ariaLabel={t("globals.splitPaneOrientationAria")}
+            value={splitOrientation}
+            onChange={setSplitOrientation}
+            options={[
+              {
+                value: "horizontal",
+                label: t("globals.splitPaneHorizontal"),
+              },
+              {
+                value: "vertical",
+                label: t("globals.splitPaneVertical"),
+              },
+            ]}
+          />
+          <div className="sandbox-split-stage">
+            <SplitPane
+              key={splitOrientation}
+              orientation={splitOrientation}
+              label={t("globals.splitPaneResizeAria")}
+              start={
+                <div className="sandbox-split-pane-pad">
+                  <strong>{t("globals.splitPaneStartTitle")}</strong>
+                  <p>{t("globals.splitPaneStartBody")}</p>
+                </div>
+              }
+              end={
+                <div className="sandbox-split-pane-pad">
+                  <strong>{t("globals.splitPaneEndTitle")}</strong>
+                  <p>{t("globals.splitPaneEndBody")}</p>
+                </div>
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.splitPaneHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="tree">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Card title={t("globals.treeAria")}>
+            <div className="sandbox-tree-stage fynns-scroll">
+              <Tree
+                label={t("globals.treeAria")}
+                selectedId={treeSelectedId}
+                onSelectedChange={setTreeSelectedId}
+              >
+                <TreeItem
+                  id="src"
+                  label={t("globals.treeFolderSrc")}
+                  icon={<FolderOpenIcon />}
+                  defaultExpanded
+                >
+                  <TreeItem
+                    id="src/components"
+                    label={t("globals.treeFolderComponents")}
+                    icon={<FolderOpenIcon />}
+                    defaultExpanded
+                  >
+                    <TreeItem
+                      id="src/components/Tree.tsx"
+                      label={t("globals.treeFileTree")}
+                      icon={<FileIcon />}
+                    />
+                    <TreeItem
+                      id="src/App.tsx"
+                      label={t("globals.treeFileApp")}
+                      icon={<FileIcon />}
+                    />
+                  </TreeItem>
+                </TreeItem>
+                <TreeItem
+                  id="README.md"
+                  label={t("globals.treeFileReadme")}
+                  icon={<FileIcon />}
+                />
+                <TreeItem
+                  id="package.json"
+                  label={t("globals.treeFilePackage")}
+                  icon={<FileIcon />}
+                />
+              </Tree>
+            </div>
+            <p className="sandbox-tree-selected" aria-live="polite">
+              {t("globals.treeSelected")}:{" "}
+              <code>{treeSelectedId ?? "—"}</code>
+            </p>
+          </Card>
+          <SandboxHelp text={t("globals.treeHelp")} />
+        </div>
+        </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Button onClick={() => setBusyScrimOpen(true)}>
@@ -4616,43 +4783,85 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           />
           <Card title={t("globals.paginationCardTitle")}>
-            <div className="fynns-control-cluster">
-              <Select
-                ariaLabel={t("globals.paginationPageSizeAria")}
-                value={pageSize}
-                options={[
-                  { value: "10", label: t("globals.paginationPageSize10") },
-                  { value: "50", label: t("globals.paginationPageSize50") },
-                  { value: "100", label: t("globals.paginationPageSize100") },
-                ]}
-                onChange={setPageSize}
-              />
-              <FieldHint>
-                {t("globals.paginationRange")
-                  .replace(
-                    "{from}",
-                    String((page - 1) * Number(pageSize) + 1),
-                  )
-                  .replace(
-                    "{to}",
-                    String(Math.min(page * Number(pageSize), 120)),
-                  )
-                  .replace("{total}", "120")}
-              </FieldHint>
+            <div className="fynns-pagination-bar">
+              <div className="fynns-pagination-bar__start">
+                <Select
+                  ariaLabel={t("globals.paginationPageSizeAria")}
+                  value={pageSize}
+                  options={[
+                    { value: "10", label: t("globals.paginationPageSize10") },
+                    { value: "50", label: t("globals.paginationPageSize50") },
+                    { value: "100", label: t("globals.paginationPageSize100") },
+                  ]}
+                  onChange={setPageSize}
+                />
+                <FieldHint>
+                  {t("globals.paginationRange")
+                    .replace(
+                      "{from}",
+                      String((page - 1) * Number(pageSize) + 1),
+                    )
+                    .replace(
+                      "{to}",
+                      String(Math.min(page * Number(pageSize), 120)),
+                    )
+                    .replace("{total}", "120")}
+                </FieldHint>
+              </div>
+              <div className="fynns-pagination-bar__end">
+                <Pagination
+                  page={page}
+                  pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
+                  onPageChange={setPage}
+                  ariaLabel={t("globals.paginationAria")}
+                  previousAriaLabel={t("globals.paginationPrev")}
+                  nextAriaLabel={t("globals.paginationNext")}
+                  getPageAriaLabel={(n) =>
+                    t("globals.paginationPage").replace("{n}", String(n))
+                  }
+                />
+              </div>
             </div>
-            <Pagination
-              page={page}
-              pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
-              onPageChange={setPage}
-              ariaLabel={t("globals.paginationAria")}
-              previousAriaLabel={t("globals.paginationPrev")}
-              nextAriaLabel={t("globals.paginationNext")}
-              getPageAriaLabel={(n) =>
-                t("globals.paginationPage").replace("{n}", String(n))
-              }
-            />
           </Card>
           <SandboxHelp text={t("globals.paginationHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="status-bar">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <div className="sandbox-globals-status-bar">
+            <StatusBar
+              aria-label={t("globals.statusBarAria")}
+              leading={
+                <>
+                  <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarWorkspace")}
+                  </StatusBarItem>
+                </>
+              }
+              trailing={
+                <>
+                  <StatusBarItem
+                    onClick={() =>
+                      snackbar(t("globals.statusBarProblemsToast"), {
+                        duration: "short",
+                        dismissAriaLabel: t("globals.snackbarDismiss"),
+                      })
+                    }
+                  >
+                    {t("globals.statusBarProblems")}
+                  </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarEncoding")}
+                  </StatusBarItem>
+                  <StatusBarItem>
+                    {t("globals.statusBarCursor")}
+                  </StatusBarItem>
+                </>
+              }
+            />
+          </div>
+          <SandboxHelp text={t("globals.statusBarHelp")} />
         </div>
         </GlobalsDemo>
       </>

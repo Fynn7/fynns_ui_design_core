@@ -207,6 +207,13 @@ export { FillColumn } from "./primitives/FillColumn";
 export type { FillColumnProps } from "./primitives/FillColumn";
 export { PageScroll } from "./primitives/PageScroll";
 export type { PageScrollProps } from "./primitives/PageScroll";
+export { SplitPane } from "./primitives/SplitPane";
+export type {
+  SplitPaneOrientation,
+  SplitPaneProps,
+} from "./primitives/SplitPane";
+export { Tree, TreeItem } from "./primitives/Tree";
+export type { TreeItemProps, TreeProps } from "./primitives/Tree";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";
@@ -266,6 +273,11 @@ export { EndAside } from "./primitives/EndAside";
 export type { EndAsideProps } from "./primitives/EndAside";
 export { BottomAppBar } from "./primitives/BottomAppBar";
 export type { BottomAppBarProps } from "./primitives/BottomAppBar";
+export { StatusBar, StatusBarItem } from "./primitives/StatusBar";
+export type {
+  StatusBarItemProps,
+  StatusBarProps,
+} from "./primitives/StatusBar";
 export { Toolbar } from "./primitives/Toolbar";
 export type { ToolbarProps } from "./primitives/Toolbar";
 export {
@@ -307,6 +319,11 @@ export type {
   NumberInputSize,
   NumberInputVariant,
 } from "./primitives/NumberInput";
+export { CommandPalette } from "./primitives/CommandPalette";
+export type {
+  CommandPaletteItem,
+  CommandPaletteProps,
+} from "./primitives/CommandPalette";
 export { EmptyState } from "./primitives/EmptyState";
 export type { EmptyStateProps } from "./primitives/EmptyState";
 export {

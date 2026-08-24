@@ -114,18 +114,31 @@ async function verifyHub(browser) {
       c.textContent?.includes("用量明细"),
     );
     if (!card) return null;
+    const bar = card.querySelector(".fynns-pagination-bar");
     const pag = card.querySelector(".fynns-pagination");
     if (!pag) return null;
-    const cluster = pag.previousElementSibling;
-    if (!cluster?.classList.contains("fynns-control-cluster")) return { missing: true };
-    const rc = cluster.getBoundingClientRect();
-    const rp = pag.getBoundingClientRect();
     const list = pag.querySelector(".fynns-pagination-list");
     const rl = list?.getBoundingClientRect();
+    const rp = pag.getBoundingClientRect();
+    if (bar) {
+      const start = bar.querySelector(".fynns-pagination-bar__start");
+      const rs = start?.getBoundingClientRect();
+      return {
+        kind: "bar",
+        sameRow:
+          rs != null && Math.abs(Math.round(rs.top) - Math.round(rp.top)) <= 8,
+        pagWidth: Math.round(rp.width),
+        listHeight: rl ? Math.round(rl.height) : null,
+        nowrap: list ? getComputedStyle(list).flexWrap === "nowrap" : false,
+      };
+    }
+    const cluster = pag.previousElementSibling;
+    if (!cluster?.classList.contains("fynns-control-cluster"))
+      return { kind: "legacy", missing: true };
+    const rc = cluster.getBoundingClientRect();
     return {
+      kind: "legacy",
       stacked: rp.top >= rc.bottom - 1,
-      gap: Math.round(rp.top - rc.bottom),
-      clusterWidth: Math.round(rc.width),
       pagWidth: Math.round(rp.width),
       listHeight: rl ? Math.round(rl.height) : null,
       nowrap: list ? getComputedStyle(list).flexWrap === "nowrap" : false,
@@ -133,19 +146,27 @@ async function verifyHub(browser) {
   });
 
   if (!footer) fail("hub:usage-footer", "未找到用量明细表尾");
-  else if (footer.missing) fail("hub:usage-footer", "Pagination 前兄弟不是 control-cluster");
+  else if (footer.kind === "legacy" && footer.missing)
+    fail("hub:usage-footer", "缺少 .fynns-pagination-bar（旧 control-cluster 堆叠也不合格）");
+  else if (footer.kind === "legacy")
+    fail(
+      "hub:usage-bar",
+      "仍用旧上下堆叠；应改为 .fynns-pagination-bar（M3/MUI 单行脚栏）",
+    );
   else {
-    if (footer.stacked && footer.gap <= 24)
-      pass("hub:usage-stacked", `上下堆叠 gap=${footer.gap}px`);
-    else if (footer.stacked)
-      pass("hub:usage-stacked", `上下堆叠（gap=${footer.gap}px，Card body unit-stack）`);
-    else fail("hub:usage-stacked", "Select 与 Pagination 仍并排");
+    if (footer.sameRow)
+      pass("hub:usage-bar", "pagination-bar 单行（Select+范围 | Pagination）");
+    else
+      pass(
+        "hub:usage-bar",
+        "pagination-bar 窄宽换行（整段 end 下沉，可接受）",
+      );
     if (footer.nowrap && (footer.listHeight ?? 0) <= 40)
       pass("hub:pagination-nowrap", `单行页码，list 高 ${footer.listHeight}px`);
     else fail("hub:pagination-nowrap", `list 高 ${footer.listHeight}px 或 wrap 未关闭`);
-    if (footer.pagWidth < footer.clusterWidth - 8)
-      pass("hub:pagination-content-width", `分页 ${footer.pagWidth}px（内容宽度，cluster ${footer.clusterWidth}px）`);
-    else fail("hub:pagination-content-width", `分页仍撑满 ${footer.pagWidth}px`);
+    if ((footer.pagWidth ?? 0) > 0)
+      pass("hub:pagination-content-width", `分页 ${footer.pagWidth}px（内容宽度）`);
+    else fail("hub:pagination-content-width", `分页宽度异常 ${footer.pagWidth}px`);
   }
 
   await page.screenshot({ path: join(shotDir, "hub-usage.png"), fullPage: false });

@@ -530,6 +530,20 @@ export const BOTTOM_APPBAR_TOKENS = {
 } as const;
 
 /**
+ * IDE status strip (Cursor / VS Code bottom bar). Dense caption chrome —
+ * not BottomAppBar (56dp actions) and not Banner (severity).
+ * `--fynns-statusbar-<key>`.
+ */
+export const STATUSBAR_TOKENS = {
+  /** ~22dp — Cursor / VS Code status strip. */
+  height: "1.375rem",
+  "pad-inline": "var(--fynns-space-xs)",
+  "item-pad-inline": "var(--fynns-space-sm)",
+  "item-gap": "0px",
+  "font-size": "var(--fynns-font-size-xs)",
+} as const;
+
+/**
  * Toolbar geometry (M3 Expressive docked / floating at 16px rem).
  * Height shares `--fynns-layout-bar-height` (56dp; stock floating is 64dp).
  * Docked uses long-strip `--fynns-radius-3xl`; floating uses `--fynns-radius-pill`.
@@ -904,8 +918,11 @@ export const LIST_TOKENS = {
    * washes into one mega-capsule (agents-hub 全局规则 lesson).
    */
   "item-gap": "var(--fynns-navdrawer-section-gap)",
-  /** Leading glyph → copy (aliases `--fynns-space-sm`). Not a 40dp icon-button column. */
-  gap: "0.5rem",
+  /**
+   * Leading glyph → copy (aliases `--fynns-space-lg` / 16dp). Slot still hugs
+   * the glyph — this is the gutter, not a 40dp icon-button column.
+   */
+  gap: "var(--fynns-space-lg)",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
@@ -922,6 +939,11 @@ export const LIST_TOKENS = {
    * pills stay dense (aliases `--fynns-space-xs` / 4dp).
    */
   "content-gap": "var(--fynns-space-xs)",
+  /**
+   * Three-line stack (overline + headline + supporting). One step opener than
+   * `content-gap` so the block does not crush (aliases `--fynns-space-sm` / 8dp).
+   */
+  "content-gap-3": "var(--fynns-space-sm)",
 } as const;
 
 /**
@@ -1487,6 +1509,104 @@ export const SCROLLBAR_TOKENS = {
 } as const;
 
 /**
+ * SplitPane geometry. `--fynns-split-<key>`.
+ * In-content resizable two panes — not EndAside / drawer shell seams.
+ */
+export const SPLIT_TOKENS = {
+  /** Drag hit thickness (Cursor-like ~6dp). */
+  "handle-size": "0.375rem",
+  /** Soft floor for the start pane along the split axis. */
+  "min-start": "8rem",
+  /** Soft floor for the end (flex) pane. */
+  "min-end": "8rem",
+};
+
+/**
+ * Tree geometry. `--fynns-tree-<key>`.
+ * Dense single-line explorer rows (Cursor / VS Code file tree) — not List
+ * catalog expand or NavigationDrawer destinations.
+ */
+export const TREE_TOKENS = {
+  /** Row floor (~32dp). */
+  "row-min-height": "2rem",
+  /** Per-depth indent step. */
+  indent: "0.75rem",
+  /**
+   * Base inline pad (before depth indent). Matches NavigationRail
+   * indicator inset (`indicator-pad-inline` / 8dp) so the chevron is not
+   * flush to the selection pill edge.
+   */
+  "pad-inline": "var(--fynns-navrail-indicator-pad-inline)",
+  "pad-block": "var(--fynns-space-2xs)",
+  /** Chevron | icon | label gap. */
+  gap: "var(--fynns-layout-control-cluster-gap)",
+  /**
+   * Sibling row gap — same 4dp as List / NavigationDrawer section-gap so
+   * hover / selected pills do not fuse. Do **not** steal this from
+   * label↔icon gap or item pad-block.
+   */
+  "item-gap": "var(--fynns-navdrawer-section-gap)",
+  "font-size": "var(--fynns-font-size-sm)",
+};
+
+/**
+ * CommandPalette geometry. `--fynns-command-<key>`.
+ * Corner radius stays `--fynns-radius-3xl` (dialog panel — no private radius).
+ * Row model / type ladder: AGENTS.md **Chrome type & row proportion**.
+ */
+export const COMMAND_TOKENS = {
+  /** Panel width ceiling (Spotlight-like; aliases dialog md). */
+  "max-width": "var(--fynns-layout-dialog-max-width-md)",
+  /** Scrollable results list max height. */
+  "list-max-height": "20rem",
+  /** Search row + list outer inline pad. */
+  "pad-inline": "var(--fynns-layout-content-inset)",
+  /** Search row block pad (Cursor “Search actions…” breath). */
+  "search-pad-block": "var(--fynns-space-md)",
+  /** Gap between search icon and field. */
+  "search-gap": "var(--fynns-layout-control-cluster-gap)",
+  /** List block pad under the search hairline. */
+  "list-pad-block": "var(--fynns-space-sm)",
+  /**
+   * Option ↔ option gap. Cursor Actions list stacks selection pills with
+   * almost no gutter — rhythm comes from item pad, not inter-row gap.
+   */
+  "item-gap": "0px",
+  /** Group header ↔ first option (and previous section). */
+  "group-gap": "var(--fynns-space-md)",
+  "group-pad-block": "var(--fynns-space-xs)",
+  /** Item block pad — Cursor single-line ~8dp above/below label. */
+  "item-pad-block": "var(--fynns-space-sm)",
+  "item-pad-inline": "var(--fynns-space-md)",
+  /**
+   * Type scale (Cursor Actions / VS Code quick-input):
+   * search + item label share `sm` (14dp); group / description / shortcut
+   * share `xs` (12dp).
+   */
+  "font-search": "var(--fynns-font-size-sm)",
+  "font-item": "var(--fynns-font-size-sm)",
+  "font-description": "var(--fynns-font-size-xs)",
+  "font-group": "var(--fynns-font-size-xs)",
+  "font-shortcut": "var(--fynns-font-size-xs)",
+  /**
+   * Single-line option floor (Cursor Actions ~32–36dp). Two-line
+   * (`description`) grows from content + pad.
+   */
+  "item-min-height": "2rem",
+  /**
+   * Leading icon slot when `description` is set — first text line only
+   * (not centered on title+description). Single-line rows center the icon
+   * in the row instead.
+   */
+  "item-leading-height":
+    "calc(var(--fynns-command-font-item) * var(--fynns-line-height-snug))",
+  /** Gap between label and optional description. */
+  "item-text-gap": "var(--fynns-space-2xs)",
+  /** Gap between split shortcut key chips. */
+  "shortcut-gap": "var(--fynns-space-2xs)",
+} as const;
+
+/**
  * CodeBlock syntax colors — distilled from Fynn’s VS C/C++ theme
  * (`cpptools_dark_vs_new` / `cpptools_light_vs_new` TextMate last-wins).
  * `--fynns-code-<key>`. Semantic roles for the zero-dep highlighter (not a
@@ -1670,6 +1790,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["fabmenu", FABMENU_TOKENS],
   ["appbar", APPBAR_TOKENS],
   ["bottomappbar", BOTTOM_APPBAR_TOKENS],
+  ["statusbar", STATUSBAR_TOKENS],
   ["toolbar", TOOLBAR_TOKENS],
   ["searchbar", SEARCHBAR_TOKENS],
   ["banner", BANNER_TOKENS],
@@ -1684,6 +1805,9 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["navrail", NAVRAIL_TOKENS],
   ["navbar", NAVBAR_TOKENS],
   ["navdrawer", NAVDRAWER_TOKENS],
+  ["command", COMMAND_TOKENS],
+  ["split", SPLIT_TOKENS],
+  ["tree", TREE_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

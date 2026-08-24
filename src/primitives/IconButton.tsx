@@ -15,3 +15,4 @@ export const IconButton = forwardRef(function IconButton(
 ) {
   return <Button {...props} ref={ref} variant={variant} size={size} iconOnly />;
 });
+IconButton.displayName = "IconButton";

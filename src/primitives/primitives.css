@@ -1671,6 +1671,298 @@ input.fynns-input:focus::-webkit-scrollbar {
   box-shadow: var(--fynns-shadow-md);
 }
 
+/* ---------- CommandPalette (Cursor Actions / ⌘K) ---------- */
+.fynns-dialog-panel--centered.fynns-command-palette {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--fynns-command-max-width));
+  max-width: min(100%, var(--fynns-command-max-width));
+  max-height: min(90vh, calc(var(--fynns-command-list-max-height) + 8rem));
+  padding: 0;
+  overflow: hidden;
+}
+
+.fynns-command-palette-search {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-command-search-gap);
+  flex-shrink: 0;
+  padding: var(--fynns-command-search-pad-block) var(--fynns-command-pad-inline);
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-command-palette-search-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-command-font-search);
+  line-height: var(--fynns-line-height-snug);
+  outline: none;
+}
+
+.fynns-command-palette-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: var(--fynns-command-list-max-height);
+  padding: var(--fynns-command-list-pad-block) var(--fynns-command-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-command-item-gap);
+}
+
+.fynns-command-palette-empty {
+  margin: 0;
+  padding: var(--fynns-space-md) var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-item);
+  text-align: center;
+}
+
+.fynns-command-palette-group {
+  margin: var(--fynns-command-group-gap) 0 var(--fynns-space-2xs);
+  padding: var(--fynns-command-group-pad-block) var(--fynns-command-item-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-group);
+  font-weight: var(--fynns-font-weight-medium);
+  letter-spacing: var(--fynns-letter-spacing-subtle);
+  line-height: var(--fynns-line-height-snug);
+  text-transform: none;
+}
+
+.fynns-command-palette-group:first-child {
+  margin-block-start: var(--fynns-space-2xs);
+}
+
+.fynns-command-item {
+  display: flex;
+  /* Cursor Actions default: single-line — icon + shortcut center on the row. */
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-command-item-min-height);
+  margin: 0;
+  padding: var(--fynns-command-item-pad-block) var(--fynns-command-item-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+  appearance: none;
+}
+
+/* Optional description: lead icon to the title row only (not mid-stack). */
+.fynns-command-item--described {
+  align-items: flex-start;
+}
+
+.fynns-command-item:hover:not(:disabled),
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-command-item:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-command-item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-item--described .fynns-command-item-icon {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-command-item-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--fynns-command-item-text-gap);
+  min-width: 0;
+}
+
+.fynns-command-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-item-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-description);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-shortcuts {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--fynns-command-shortcut-gap);
+  margin-inline-start: auto;
+}
+
+.fynns-command-item--described .fynns-command-shortcuts {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-shortcut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  padding: 0 var(--fynns-space-xs);
+  border-radius: var(--fynns-radius-xs);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text-muted);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-command-font-shortcut);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* ---------- SplitPane (in-content resizable two panes) ---------- */
+.fynns-split {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: clip;
+}
+
+.fynns-split--vertical {
+  flex-direction: column;
+}
+
+.fynns-split-pane {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fynns-split-pane--start {
+  flex: 0 0 var(--fynns-split-size, 50%);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fynns-split--vertical > .fynns-split-pane--start {
+  max-width: none;
+}
+
+.fynns-split-pane--end {
+  flex: 1 1 0;
+  min-width: var(--fynns-split-min-end);
+}
+
+.fynns-split--vertical > .fynns-split-pane--end {
+  min-width: 0;
+  min-height: var(--fynns-split-min-end);
+}
+
+.fynns-split-handle {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 var(--fynns-split-handle-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-split--vertical > .fynns-split-handle {
+  cursor: row-resize;
+}
+
+.fynns-split-handle::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background: transparent;
+}
+
+.fynns-split--horizontal > .fynns-split-handle::before {
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+}
+
+.fynns-split--vertical > .fynns-split-handle::before {
+  inset-inline: 0;
+  inset-block-start: 50%;
+  height: calc(3 * var(--fynns-border-hairline));
+  transform: translateY(-50%);
+}
+
+.fynns-split-handle:hover::before,
+.fynns-split[data-resizing="true"] > .fynns-split-handle::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-split-handle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-sm {
   max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
 }
@@ -3188,7 +3480,13 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
-  min-width: 0;
+  /*
+   * Keep a readable title band when trailing actions are dense. Bare
+   * `min-width: 0` alone lets a narrow host crush the lead to ~one glyph
+   * (sandbox `#card` actions-strip lesson). Floor ≈ two t-shirt steps of
+   * title — still allows ellipsis via `.fynns-card-title { min-width: 0 }`.
+   */
+  min-width: max(0px, 40%);
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
@@ -3514,14 +3812,63 @@ a.fynns-breadcrumb-link:visited {
 .fynns-pagination {
   box-sizing: border-box;
   /*
-   * Content-sized nowrap strip. Card-body column stacks place this on its own
-   * row below page-size Select / range copy (unit-stack-gap). Never park it
-   * beside a sibling in space-between flex — that squeezes the list.
+   * Content-sized nowrap strip. In a table/list footer, place inside
+   * `.fynns-pagination-bar` (M3 / MUI single row) — never let a growing
+   * sibling crush this strip into a wrapped page list.
    */
   display: block;
   width: max-content;
   max-width: 100%;
   min-width: 0;
+  flex: 0 0 auto;
+}
+
+/*
+ * Table / list pager footer (M3 data-table pagination / MUI TablePagination):
+ * one horizontal band — meta (rows-per-page Select + range) start, page
+ * navigator end. Narrow hosts may wrap the **whole** end strip below; page
+ * discs stay nowrap inside `.fynns-pagination`.
+ */
+.fynns-pagination-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-pagination-bar__start {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+}
+
+/* Select is width:100% by default — hug content in the pager meta row. */
+.fynns-pagination-bar__start > .fynns-select {
+  width: auto;
+  max-width: 100%;
+  flex: 0 1 auto;
+}
+
+/* FieldHint is block by default — keep range copy on the same meta line. */
+.fynns-pagination-bar__start > .fynns-field-hint {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.fynns-pagination-bar__end {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin-inline-start: auto;
 }
 
 .fynns-pagination-list {
@@ -6819,6 +7166,285 @@ a.fynns-breadcrumb-link:visited {
   min-height: var(--fynns-bottomappbar-action-size);
 }
 
+/* ---------- StatusBar (IDE status strip — Cursor / VS Code) ---------- */
+.fynns-status-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-statusbar-height);
+  height: var(--fynns-statusbar-height);
+  margin: 0;
+  padding-inline: var(--fynns-statusbar-pad-inline);
+  border: 0;
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-statusbar-font-size);
+  line-height: 1;
+  /* Edge-flush — no elevation / no card radius (unlike BottomAppBar). */
+  box-shadow: var(--fynns-shadow-none);
+}
+
+.fynns-status-bar-leading,
+.fynns-status-bar-trailing {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--fynns-statusbar-item-gap);
+  min-width: 0;
+}
+
+.fynns-status-bar-leading {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
+.fynns-status-bar-trailing {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.fynns-status-bar-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--fynns-statusbar-item-pad-inline);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-status-bar-item--interactive {
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.fynns-status-bar-item--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-status-bar-item--interactive:hover::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-status-bar-item--interactive:disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-status-bar-item--interactive:disabled::before {
+  display: none;
+}
+
+/* ---------- Tree (hierarchical file / settings explorer) ---------- */
+.fynns-tree {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.fynns-tree-branch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-item-host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  overflow: clip;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-tree-item-host > .fynns-tree-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-tree-item {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-tree-gap);
+  width: 100%;
+  min-height: var(--fynns-tree-row-min-height);
+  padding-block: var(--fynns-tree-pad-block);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-tree-font-size);
+  line-height: var(--fynns-line-height-snug);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item:hover:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-tree-item:active:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-tree-item:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-tree-item--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-tree-item--selected:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item--selected:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item:disabled,
+.fynns-tree-item--disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-tree-item-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item-chevron--open {
+  transform: rotate(90deg);
+}
+
+.fynns-tree-item-chevron--spacer {
+  visibility: hidden;
+}
+
+.fynns-tree-item--selected .fynns-tree-item-chevron {
+  color: inherit;
+}
+
+.fynns-tree-item-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-tree-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-tree-item--selected .fynns-tree-item-icon {
+  color: inherit;
+}
+
+.fynns-tree-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-tree-item-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+}
+
 /* ---------- Toolbar (M3 Expressive docked / floating) ---------- */
 .fynns-toolbar-cluster {
   box-sizing: border-box;
@@ -7513,9 +8139,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: 0;
   max-width: 100%;
   /*
-   * Clip hostClassName tone fills / inset rails to radius-3xl. Overflow-x-only
-   * left overflow-y visible → background paints a square bar (builtin “pill
-   * island” look). Both axes must clip so tone matches the M3 long-strip.
+   * Clip any host background to radius-3xl. Overflow-x-only left overflow-y
+   * visible → leftover washes paint a square bar. Kind chrome stays leading
+   * icon + trailing meta — not a start tick.
    */
   overflow: clip;
   margin: 0;
@@ -7565,9 +8191,21 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   cursor: pointer;
 }
 
-.fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
+}
+
+.fynns-list-item--selected {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+/*
+ * Hover / selected wash lives on the host (or the row shell when `detail`
+ * is open) so trailing chevrons / IconButtons share one radius-3xl pill.
+ * Static / disabled rows never get a hover layer.
+ */
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):hover {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
@@ -7575,9 +8213,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-  .fynns-list-item--selected
-) {
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):active {
   background: color-mix(
     in srgb,
     var(--fynns-color-text) var(--fynns-state-pressed),
@@ -7585,17 +8221,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--interactive:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
-}
-
-.fynns-list-item--selected {
+.fynns-list-item-host--selected:not(.fynns-list-item-host--with-detail) {
   background: var(--fynns-color-secondary-container);
   color: var(--fynns-color-on-secondary-container);
 }
 
-.fynns-list-item--selected.fynns-list-item--interactive:hover:not(:disabled) {
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):hover {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
@@ -7603,7 +8236,46 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   );
 }
 
-.fynns-list-item--selected.fynns-list-item--interactive:active:not(:disabled) {
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-list-item-row--interactive:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-list-item-row--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:active {
   background: color-mix(
     in srgb,
     var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
@@ -7660,6 +8332,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-list-content-gap);
   min-width: 0;
   max-width: 100%;
+}
+
+.fynns-list-item--3 .fynns-list-item-content {
+  gap: var(--fynns-list-content-gap-3);
 }
 
 .fynns-list-item-overline {
@@ -7813,94 +8489,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-inline-end: var(--fynns-space-xs);
 }
 
-/*
- * Interactive trailing is a sibling of the row `<button>` (valid HTML). The
- * **row** (or host, when there is no `detail`) owns radius-3xl + state-layer
- * so the IconButton is not a floating island outside the highlight.
- */
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) {
-  border-radius: var(--fynns-radius-3xl);
-}
-
-.fynns-list-item-host--with-end > .fynns-list-item-row {
-  border-radius: var(--fynns-radius-3xl);
-}
-
 .fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
   background: transparent;
   border-radius: 0;
 }
 
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--interactive
-  ):hover,
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):hover {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-hover),
-    transparent
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--interactive
-  ):active,
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--interactive):active {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-text) var(--fynns-state-pressed),
-    transparent
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end > .fynns-list-item-row:has(> .fynns-list-item--selected) {
-  background: var(--fynns-color-secondary-container);
-  color: var(--fynns-color-on-secondary-container);
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail):has(
-    > .fynns-list-item--selected.fynns-list-item--interactive
-  ):hover,
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row:has(> .fynns-list-item--selected.fynns-list-item--interactive):hover {
-  background: color-mix(
-    in srgb,
-    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
-    var(--fynns-color-secondary-container)
-  );
-}
-
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
-  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row
-  > .fynns-list-item--interactive:hover:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail)
-  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end
-  > .fynns-list-item-row
-  > .fynns-list-item--interactive:active:not(:disabled):not(.fynns-list-item--disabled):not(
-    .fynns-list-item--selected
-  ),
-.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item--selected,
-.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item--selected {
-  background: transparent;
-}
-
 .fynns-list-item-host.fynns-list-item-host--with-detail {
   flex-direction: column;
   align-items: stretch;
   gap: 0;
+}
+
+.fynns-list-item-trailing > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex-shrink: 0;
 }
 
 .fynns-list-item-row {
@@ -7910,6 +8514,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-layout-control-cluster-gap);
   width: 100%;
   min-width: 0;
+  border-radius: var(--fynns-radius-3xl);
+  overflow: clip;
 }
 
 .fynns-list-item-row > .fynns-list-item {

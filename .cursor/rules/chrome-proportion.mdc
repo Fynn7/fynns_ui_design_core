@@ -1,0 +1,37 @@
+---
+description: Dense chrome lists (command/menu/picker) — row model, one-step type ladder, in-row pad.
+alwaysApply: true
+---
+
+# Chrome type & row proportion
+
+When adding or restyling **filter lists, command palettes, menus, pickers**,
+or similar dense chrome lists in this repo:
+
+## Do
+
+1. **Name the primary row model** from a product reference before writing CSS:
+   - **Single-line** (Cursor Actions): icon centered on the row; ~32–36dp;
+     optional `description` is not the default.
+   - **Two-line**: icon/shortcut align to the **title line only**; label↔description
+     gap ≥ `--fynns-space-2xs`.
+2. **Type ladder — one t-shirt step max** in one panel (`sm`↔`xs` or `md`↔`sm`).
+   Command chrome: label/search → `font-size-sm`; group/description/shortcut →
+   `font-size-xs`.
+3. **Breath from item `padding-block`**, not from crushing text gaps or inventing
+   a second type scale.
+4. **Split shortcut strings** into separate key chips (`Ctrl` `K`), not one blob.
+5. **Measure** (font-size, icon mid vs label mid) against the reference before
+   calling UI done — see browser-verify-ui.
+
+## Don't
+
+- Label at `md` (16) beside group captions at `xs` (12)
+- `gap: 0` between title and description under a large title (“行间距崩溃”)
+- Assume “icons never center” or “always center” — **follow the row model**
+- Copy a two-line layout when the approved screenshot is single-line (or reverse)
+
+## Authority
+
+Full checklist: [`AGENTS.md`](../../AGENTS.md) → **Chrome type & row proportion**.
+Live sample: sandbox `#command-palette` (`COMMAND_TOKENS` / `--fynns-command-*`).

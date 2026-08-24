@@ -1048,24 +1048,25 @@
   border-radius: var(--fynns-radius-md);
   overflow: hidden;
   background: var(--fynns-color-surface-1);
+  /*
+   * Teaching-frame breath (dialog-inset / 24dp) — content-inset alone still
+   * reads flush against the demo border for captions + List.
+   */
+  padding: var(--fynns-layout-dialog-inset);
 }
 
-/* Teaching hostClassName inset rails — never wrap ListItem in a div.
- * Soft wash + rail; core host radius-3xl + overflow:clip clips the fill. */
-.sandbox-list-host-tone--accent {
-  background: color-mix(in srgb, var(--fynns-color-accent-dim) 8%, transparent);
-  box-shadow: inset 3px 0 0
-    color-mix(in srgb, var(--fynns-color-accent-dim) 55%, var(--fynns-color-border));
-}
-
-:root[data-fynns-theme="light"] .sandbox-list-host-tone--accent {
-  background: color-mix(in srgb, var(--fynns-color-accent-dim) 6%, transparent);
-}
-
-.sandbox-list-host-tone--muted {
-  background: color-mix(in srgb, var(--fynns-color-text-muted) 6%, transparent);
-  box-shadow: inset 3px 0 0
-    color-mix(in srgb, var(--fynns-color-text-muted) 55%, transparent);
+/*
+ * Captions align with ListItem *copy* (past ul inset + row pad + leading +
+ * gap), not the icon gutter — otherwise help sits left of the glyphs.
+ */
+.sandbox-globals-list > .sandbox-help {
+  padding-inline-start: calc(
+    var(--fynns-list-inset-inline) + var(--fynns-list-pad-inline) +
+      var(--fynns-list-leading-width) + var(--fynns-list-gap)
+  );
+  padding-inline-end: calc(
+    var(--fynns-list-inset-inline) + var(--fynns-list-pad-inline)
+  );
 }
 
 .sandbox-globals-banner {
@@ -1095,6 +1096,7 @@
 
 .sandbox-globals-navbar,
 .sandbox-globals-bottom-app-bar,
+.sandbox-globals-status-bar,
 .sandbox-globals-search-bar {
   box-sizing: border-box;
   width: 100%;
@@ -1127,10 +1129,13 @@
   min-height: 8rem;
 }
 
-/* Narrow host for #card multi-action strip — nested clusters must stay one row. */
+/* Full-row host for #card multi-action strip — auto-fit columns (~12rem)
+ * would crush the title band; span the grid so lead + actions share ~28rem. */
 .sandbox-globals-card--actions-strip {
-  max-width: 18rem;
+  grid-column: 1 / -1;
+  max-width: 28rem;
   justify-self: start;
+  width: 100%;
 }
 
 .sandbox-globals-swatches {
@@ -1403,6 +1408,66 @@
   /* Soft ceiling below the stage so the gutter is visible in the demo.
    * Inline + block pad come from keep-set `.fynns-content-column` (dialog-inset). */
   max-width: min(22rem, 100%);
+}
+
+.sandbox-split-stage {
+  box-sizing: border-box;
+  width: min(100%, 40rem);
+  height: 16rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-surface-1);
+}
+
+.sandbox-split-pane-pad {
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--fynns-layout-content-inset);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+}
+
+.sandbox-split-pane-pad > strong {
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.sandbox-split-pane-pad > p {
+  margin: 0;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-split-stage .fynns-split-pane--end {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.sandbox-tree-stage {
+  box-sizing: border-box;
+  max-height: 16rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.sandbox-tree-selected {
+  margin: var(--fynns-layout-unit-stack-gap) 0 0;
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-tree-selected code {
+  font-family: var(--fynns-font-mono);
+  color: var(--fynns-color-text);
 }
 
 .sandbox-globals-shell-body {

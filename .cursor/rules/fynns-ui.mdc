@@ -27,7 +27,7 @@ ring can paint before heavy work).
   Input,
   Textarea, Select,
   Autocomplete, OtpInput, NumberInput, DropdownMenu (+ Group / Separator / CheckboxItem),
-  ContextMenu (+ ContextMenuTrigger), Tooltip, InfoHint, Dialog / DialogShell /
+  ContextMenu (+ ContextMenuTrigger), CommandPalette, Tooltip, InfoHint, Dialog / DialogShell /
   ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
   full-width ControlStack + track-only Switch — not InfoHint demo as Preferences
   shell; see AGENTS.md), Drawer, FullscreenDialog,
@@ -40,10 +40,12 @@ ring can paint before heavy work).
  never EmptyState + ring),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
-  bottom hairline only), BottomAppBar, Toolbar, SearchBar, Banner,
+  bottom hairline only), BottomAppBar, StatusBar / StatusBarItem (IDE bottom
+  status strip — `#status-bar`; not BottomAppBar / Banner),
+  Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
-  (content-width nowrap strip; page-size Select stacks above as a Card-body
-  sibling — never horizontal space-between), SkipLink, Stepper,
+  (`.fynns-pagination-bar` M3/MUI single footer row — not Select-then-pager stack),
+  SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
   `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
@@ -108,6 +110,9 @@ ring can paint before heavy work).
   DestinationAppShell, ClippedNavShell, EndAside,
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
+  PageScroll, SplitPane (in-content resize — not EndAside; live `#split-pane`),
+  Tree / TreeItem (file/settings hierarchy — not NavigationDrawer destinations,
+  not List detail catalog expand; live `#tree`),
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).
@@ -126,6 +131,9 @@ ring can paint before heavy work).
   ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
   EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
   demos are the composed default; Globals demos are standalone parts.
+- Dense chrome lists (CommandPalette / menus / pickers): **row model first**,
+  type ladder **one step max**, breath from item pad — AGENTS.md **Chrome type
+  & row proportion** + `.cursor/rules/chrome-proportion.mdc`. Live `#command-palette`.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists: Card / Collapsible body already use
@@ -148,10 +156,14 @@ ring can paint before heavy work).
   `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
-  (plain ≠ flush). **Path / link / bookmark catalogs:** one `List` of
+  (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
-  sandbox `#list`). Expandable trees: `ListItem` **`detail`** in the same
+  sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
+  — **never** start tick / inset rail / second host wash. Leading→copy
+  `--fynns-list-gap` (**16dp**); three-line stack `--fynns-list-content-gap-3`
+  (**8dp**). Duration meta spaces units (`1m 47s`). Expandable trees:
+  `ListItem` **`detail`** in the same
   `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
   leading chevron — never a button in `leading`, never `ul > div`. Long
   headline (optional `Tooltip`) ellipsizes in core — do not `tip-grow` /

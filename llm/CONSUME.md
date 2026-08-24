@@ -120,6 +120,26 @@ Consumer `.npmrc`:
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
+**Auth troubleshooting (E401):** GitHub Packages still requires a token even when
+the package visibility is public. The consumer `.npmrc` line expands
+`${NODE_AUTH_TOKEN}` at install time — if that env var is **unset/empty**, npm
+sends an empty credential and **overrides** a working user-level
+`~/.npmrc` token, which surfaces as:
+
+`401 Unauthorized … User cannot be authenticated with the token provided.`
+
+Fix: set `NODE_AUTH_TOKEN` (or `GITHUB_TOKEN`) to a credential with
+`read:packages` (a classic PAT, or `gh auth token` after `gh auth login` with
+packages scope). On Windows, a **User** environment variable is enough so new
+shells inherit it. Do **not** commit a literal token into the repo `.npmrc`.
+
+**Consumer agents (hard):** on install / bump failure (`E401`, wrong-registry
+`E404`, “token provided”), **self-debug with the checklist above** before
+claiming the package is missing or pointing Vite at a sibling core checkout.
+Treaty failure mode + pasteable §2a:
+[`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **GitHub Packages install auth** /
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## What the script does
 
 1. Resolves the nearest `package.json` above `--target` (so monorepo apps

@@ -35,6 +35,8 @@ import {
   SearchBarResult,
   SettingsIcon,
   SparklesIcon,
+  StatusBar,
+  StatusBarItem,
   Surface,
   Switch,
   ToggleGroup,
@@ -45,6 +47,7 @@ import {
   UndoIcon,
   UploadIcon,
   ClipboardIcon,
+  snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
@@ -626,6 +629,43 @@ export function LayoutsPage() {
               />
             </div>
             <SandboxHelp text={t("globals.bottomAppBarHelp")} />
+          </LayoutsDemo>
+
+          <LayoutsDemo id="status-bar">
+            <div className="sandbox-globals-status-bar">
+              <StatusBar
+                aria-label={t("globals.statusBarAria")}
+                leading={
+                  <>
+                    <StatusBarItem>{t("globals.statusBarBranch")}</StatusBarItem>
+                    <StatusBarItem>
+                      {t("globals.statusBarWorkspace")}
+                    </StatusBarItem>
+                  </>
+                }
+                trailing={
+                  <>
+                    <StatusBarItem
+                      onClick={() =>
+                        snackbar(t("globals.statusBarProblemsToast"), {
+                          duration: "short",
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        })
+                      }
+                    >
+                      {t("globals.statusBarProblems")}
+                    </StatusBarItem>
+                    <StatusBarItem>
+                      {t("globals.statusBarEncoding")}
+                    </StatusBarItem>
+                    <StatusBarItem>
+                      {t("globals.statusBarCursor")}
+                    </StatusBarItem>
+                  </>
+                }
+              />
+            </div>
+            <SandboxHelp text={t("globals.statusBarHelp")} />
           </LayoutsDemo>
 
           <LayoutsDemo id="toolbar">
