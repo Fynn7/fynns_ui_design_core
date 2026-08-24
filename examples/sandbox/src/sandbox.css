@@ -1048,24 +1048,25 @@
   border-radius: var(--fynns-radius-md);
   overflow: hidden;
   background: var(--fynns-color-surface-1);
+  /*
+   * Teaching-frame breath (dialog-inset / 24dp) — content-inset alone still
+   * reads flush against the demo border for captions + List.
+   */
+  padding: var(--fynns-layout-dialog-inset);
 }
 
-/* Teaching hostClassName inset rails — never wrap ListItem in a div.
- * Soft wash + rail; core host radius-3xl + overflow:clip clips the fill. */
-.sandbox-list-host-tone--accent {
-  background: color-mix(in srgb, var(--fynns-color-accent-dim) 8%, transparent);
-  box-shadow: inset 3px 0 0
-    color-mix(in srgb, var(--fynns-color-accent-dim) 55%, var(--fynns-color-border));
-}
-
-:root[data-fynns-theme="light"] .sandbox-list-host-tone--accent {
-  background: color-mix(in srgb, var(--fynns-color-accent-dim) 6%, transparent);
-}
-
-.sandbox-list-host-tone--muted {
-  background: color-mix(in srgb, var(--fynns-color-text-muted) 6%, transparent);
-  box-shadow: inset 3px 0 0
-    color-mix(in srgb, var(--fynns-color-text-muted) 55%, transparent);
+/*
+ * Captions align with ListItem *copy* (past ul inset + row pad + leading +
+ * gap), not the icon gutter — otherwise help sits left of the glyphs.
+ */
+.sandbox-globals-list > .sandbox-help {
+  padding-inline-start: calc(
+    var(--fynns-list-inset-inline) + var(--fynns-list-pad-inline) +
+      var(--fynns-list-leading-width) + var(--fynns-list-gap)
+  );
+  padding-inline-end: calc(
+    var(--fynns-list-inset-inline) + var(--fynns-list-pad-inline)
+  );
 }
 
 .sandbox-globals-banner {

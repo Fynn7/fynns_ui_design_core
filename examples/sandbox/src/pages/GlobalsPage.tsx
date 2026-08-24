@@ -3077,19 +3077,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </List>
           <SandboxHelp text={t("globals.listHostToneHelp")} />
-          <List aria-label={t("globals.listHostToneAria")}>
+          <List
+            className="sandbox-list-kind"
+            aria-label={t("globals.listHostToneAria")}
+          >
             <ListItem
-              hostClassName="sandbox-list-host-tone--accent"
               headline={t("globals.listHostToneAccent")}
               supportingText={t("globals.listHostToneAccentSupporting")}
+              trailingSupportingText={t("globals.listHostToneAccentMeta")}
               leading={<FolderOpenIcon />}
               selected={listId === "tone-a"}
               onClick={() => setListId("tone-a")}
             />
             <ListItem
-              hostClassName="sandbox-list-host-tone--muted"
               headline={t("globals.listHostToneMuted")}
               supportingText={t("globals.listHostToneMutedSupporting")}
+              trailingSupportingText={t("globals.listHostToneMutedMeta")}
               leading={<FileIcon />}
               selected={listId === "tone-b"}
               onClick={() => setListId("tone-b")}
@@ -3097,6 +3100,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <ListItem
               headline={t("globals.listHostTonePlain")}
               supportingText={t("globals.listHostTonePlainSupporting")}
+              trailingSupportingText={t("globals.listHostTonePlainMeta")}
               leading={<SettingsIcon />}
               selected={listId === "tone-c"}
               onClick={() => setListId("tone-c")}
