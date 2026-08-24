@@ -918,8 +918,11 @@ export const LIST_TOKENS = {
    * washes into one mega-capsule (agents-hub 全局规则 lesson).
    */
   "item-gap": "var(--fynns-navdrawer-section-gap)",
-  /** Leading glyph → copy (aliases `--fynns-space-sm`). Not a 40dp icon-button column. */
-  gap: "0.5rem",
+  /**
+   * Leading glyph → copy (aliases `--fynns-space-lg` / 16dp). Slot still hugs
+   * the glyph — this is the gutter, not a 40dp icon-button column.
+   */
+  gap: "var(--fynns-space-lg)",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
@@ -936,6 +939,11 @@ export const LIST_TOKENS = {
    * pills stay dense (aliases `--fynns-space-xs` / 4dp).
    */
   "content-gap": "var(--fynns-space-xs)",
+  /**
+   * Three-line stack (overline + headline + supporting). One step opener than
+   * `content-gap` so the block does not crush (aliases `--fynns-space-sm` / 8dp).
+   */
+  "content-gap-3": "var(--fynns-space-sm)",
 } as const;
 
 /**

@@ -99,7 +99,8 @@ export type ListItemProps = Omit<
   trailing?: ReactNode;
   /**
    * Compact meta at the trailing edge (duration, count, …). Optional
-   * `.fynns-control-cluster` of muted spans — not `ControlRow`.
+   * `.fynns-control-cluster` of muted spans — not `ControlRow`. Duration
+   * units are spaced (`1m 47s`, never `1m47s`) — consumer-owned strings.
    */
   trailingSupportingText?: ReactNode;
   /**
@@ -112,9 +113,11 @@ export type ListItemProps = Omit<
   /** Alias of `detail` — nested tree / table in this `<li>`. */
   children?: ReactNode;
   /**
-   * Extra class on the outer `<li>` host (row tone / inset rail). Do **not**
-   * wrap `ListItem` in a `div` for stripes — that breaks `ul > li` and clips
-   * the `radius-3xl` selected wash. `className` stays on the row control.
+   * Extra class on the outer `<li>` (layout hooks only). Do **not** wrap
+   * `ListItem` in a `div` — that breaks `ul > li` and clips the selected
+   * pill. Do **not** paint start ticks, inset rails, or a second host wash
+   * for builtin / readonly kind — use `leading` + `trailingSupportingText`.
+   * `className` stays on the row control.
    */
   hostClassName?: string;
   /**

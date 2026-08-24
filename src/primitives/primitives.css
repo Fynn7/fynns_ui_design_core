@@ -8133,9 +8133,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: 0;
   max-width: 100%;
   /*
-   * Clip hostClassName tone fills / inset rails to radius-3xl. Overflow-x-only
-   * left overflow-y visible → background paints a square bar (builtin “pill
-   * island” look). Both axes must clip so tone matches the M3 long-strip.
+   * Clip any host background to radius-3xl. Overflow-x-only left overflow-y
+   * visible → leftover washes paint a square bar. Kind chrome stays leading
+   * icon + trailing meta — not a start tick.
    */
   overflow: clip;
   margin: 0;
@@ -8326,6 +8326,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-list-content-gap);
   min-width: 0;
   max-width: 100%;
+}
+
+.fynns-list-item--3 .fynns-list-item-content {
+  gap: var(--fynns-list-content-gap-3);
 }
 
 .fynns-list-item-overline {
