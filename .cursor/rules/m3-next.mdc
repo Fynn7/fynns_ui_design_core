@@ -28,7 +28,7 @@ When the user says **下一个** (or “next” in the same sense):
   Stepper / Dropzone / Table / CodeBlock / FullscreenDialog / ContextMenu /
   ToggleGroup `multiple` / EyeOffIcon / BusyScrim / BusyRegion / ChatMessage /
   NavigationDrawerGroup → ChatThinking motion → ChatActivity → NumberInput →
-  CommandPalette → SplitPane → StatusBar → (next gap).
+  CommandPalette → SplitPane → StatusBar → Tree → (next gap).
   Do **not** reintroduce LoadingIndicator / ButtonGroup / RangeSlider /
    **TimePicker dial (表盘/时钟面)** / **BlockingLoadingOverlay** / **PanelSkeleton**
    — skipped forever (user asked twice on dial; digital TimePicker input is

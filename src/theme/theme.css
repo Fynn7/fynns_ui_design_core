@@ -479,6 +479,13 @@
   --fynns-split-handle-size: 0.375rem;
   --fynns-split-min-start: 8rem;
   --fynns-split-min-end: 8rem;
+  --fynns-tree-row-min-height: 2rem;
+  --fynns-tree-indent: 0.75rem;
+  --fynns-tree-pad-inline: var(--fynns-navrail-indicator-pad-inline);
+  --fynns-tree-pad-block: var(--fynns-space-2xs);
+  --fynns-tree-gap: var(--fynns-layout-control-cluster-gap);
+  --fynns-tree-item-gap: var(--fynns-navdrawer-section-gap);
+  --fynns-tree-font-size: var(--fynns-font-size-sm);
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;

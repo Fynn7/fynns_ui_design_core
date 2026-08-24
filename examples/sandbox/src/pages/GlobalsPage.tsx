@@ -134,6 +134,8 @@ import {
   SplitPane,
   StatusBar,
   StatusBarItem,
+  Tree,
+  TreeItem,
   InfoHint,
   Slider,
   SparklesIcon,
@@ -933,6 +935,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [splitOrientation, setSplitOrientation] = useState<
     "horizontal" | "vertical"
   >("horizontal");
+  const [treeSelectedId, setTreeSelectedId] = useState<string | null>(
+    "src/components/Tree.tsx",
+  );
   const [ctxPos, setCtxPos] = useState({ x: 0, y: 0 });
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
@@ -4208,6 +4213,59 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </div>
           <SandboxHelp text={t("globals.splitPaneHelp")} />
+        </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="tree">
+        <div className="sandbox-globals-row sandbox-globals-row--stack">
+          <Card title={t("globals.treeAria")}>
+            <div className="sandbox-tree-stage fynns-scroll">
+              <Tree
+                label={t("globals.treeAria")}
+                selectedId={treeSelectedId}
+                onSelectedChange={setTreeSelectedId}
+              >
+                <TreeItem
+                  id="src"
+                  label={t("globals.treeFolderSrc")}
+                  icon={<FolderOpenIcon />}
+                  defaultExpanded
+                >
+                  <TreeItem
+                    id="src/components"
+                    label={t("globals.treeFolderComponents")}
+                    icon={<FolderOpenIcon />}
+                    defaultExpanded
+                  >
+                    <TreeItem
+                      id="src/components/Tree.tsx"
+                      label={t("globals.treeFileTree")}
+                      icon={<FileIcon />}
+                    />
+                    <TreeItem
+                      id="src/App.tsx"
+                      label={t("globals.treeFileApp")}
+                      icon={<FileIcon />}
+                    />
+                  </TreeItem>
+                </TreeItem>
+                <TreeItem
+                  id="README.md"
+                  label={t("globals.treeFileReadme")}
+                  icon={<FileIcon />}
+                />
+                <TreeItem
+                  id="package.json"
+                  label={t("globals.treeFilePackage")}
+                  icon={<FileIcon />}
+                />
+              </Tree>
+            </div>
+            <p className="sandbox-tree-selected" aria-live="polite">
+              {t("globals.treeSelected")}:{" "}
+              <code>{treeSelectedId ?? "—"}</code>
+            </p>
+          </Card>
+          <SandboxHelp text={t("globals.treeHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-scrim">

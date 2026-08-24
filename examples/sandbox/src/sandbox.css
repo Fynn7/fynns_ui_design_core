@@ -1447,6 +1447,25 @@
   );
 }
 
+.sandbox-tree-stage {
+  box-sizing: border-box;
+  max-height: 16rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.sandbox-tree-selected {
+  margin: var(--fynns-layout-unit-stack-gap) 0 0;
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+}
+
+.sandbox-tree-selected code {
+  font-family: var(--fynns-font-mono);
+  color: var(--fynns-color-text);
+}
+
 .sandbox-globals-shell-body {
   display: flex;
   flex: 1;

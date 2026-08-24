@@ -111,6 +111,8 @@ ring can paint before heavy work).
   Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
   ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
   PageScroll, SplitPane (in-content resize — not EndAside; live `#split-pane`),
+  Tree / TreeItem (file/settings hierarchy — not NavigationDrawer destinations,
+  not List detail catalog expand; live `#tree`),
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).

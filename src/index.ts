@@ -212,6 +212,8 @@ export type {
   SplitPaneOrientation,
   SplitPaneProps,
 } from "./primitives/SplitPane";
+export { Tree, TreeItem } from "./primitives/Tree";
+export type { TreeItemProps, TreeProps } from "./primitives/Tree";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";

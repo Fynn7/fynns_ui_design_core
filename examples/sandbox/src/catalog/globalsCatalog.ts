@@ -395,6 +395,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "tree",
+    categoryId: "patterns",
+    label: "Tree",
+    keywords: [
+      "树",
+      "tree",
+      "file tree",
+      "explorer",
+      "folder",
+      "hierarchy",
+      "outline",
+      "目录树",
+    ],
+  },
+  {
     id: "busy-scrim",
     categoryId: "patterns",
     label: "BusyScrim",

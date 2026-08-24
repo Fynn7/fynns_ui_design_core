@@ -7266,6 +7266,179 @@ a.fynns-breadcrumb-link:visited {
   display: none;
 }
 
+/* ---------- Tree (hierarchical file / settings explorer) ---------- */
+.fynns-tree {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.fynns-tree-branch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-item-host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  overflow: clip;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-tree-item-host > .fynns-tree-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-tree-item {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-tree-gap);
+  width: 100%;
+  min-height: var(--fynns-tree-row-min-height);
+  padding-block: var(--fynns-tree-pad-block);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-tree-font-size);
+  line-height: var(--fynns-line-height-snug);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item:hover:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-tree-item:active:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-tree-item:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-tree-item--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-tree-item--selected:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item--selected:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item:disabled,
+.fynns-tree-item--disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-tree-item-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item-chevron--open {
+  transform: rotate(90deg);
+}
+
+.fynns-tree-item-chevron--spacer {
+  visibility: hidden;
+}
+
+.fynns-tree-item--selected .fynns-tree-item-chevron {
+  color: inherit;
+}
+
+.fynns-tree-item-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-tree-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-tree-item--selected .fynns-tree-item-icon {
+  color: inherit;
+}
+
+.fynns-tree-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-tree-item-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+}
+
 /* ---------- Toolbar (M3 Expressive docked / floating) ---------- */
 .fynns-toolbar-cluster {
   box-sizing: border-box;

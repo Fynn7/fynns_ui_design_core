@@ -51,6 +51,7 @@
     "SPLIT_TOKENS",
     "STATE_LAYER_TOKENS",
     "STATUSBAR_TOKENS",
+    "TREE_TOKENS",
     "SnackbarHost",
     "TIMEPICKER_TOKENS",
     "TOGGLE_TOKENS",

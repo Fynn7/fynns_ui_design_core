@@ -1520,6 +1520,34 @@ export const SPLIT_TOKENS = {
 };
 
 /**
+ * Tree geometry. `--fynns-tree-<key>`.
+ * Dense single-line explorer rows (Cursor / VS Code file tree) — not List
+ * catalog expand or NavigationDrawer destinations.
+ */
+export const TREE_TOKENS = {
+  /** Row floor (~32dp). */
+  "row-min-height": "2rem",
+  /** Per-depth indent step. */
+  indent: "0.75rem",
+  /**
+   * Base inline pad (before depth indent). Matches NavigationRail
+   * indicator inset (`indicator-pad-inline` / 8dp) so the chevron is not
+   * flush to the selection pill edge.
+   */
+  "pad-inline": "var(--fynns-navrail-indicator-pad-inline)",
+  "pad-block": "var(--fynns-space-2xs)",
+  /** Chevron | icon | label gap. */
+  gap: "var(--fynns-layout-control-cluster-gap)",
+  /**
+   * Sibling row gap — same 4dp as List / NavigationDrawer section-gap so
+   * hover / selected pills do not fuse. Do **not** steal this from
+   * label↔icon gap or item pad-block.
+   */
+  "item-gap": "var(--fynns-navdrawer-section-gap)",
+  "font-size": "var(--fynns-font-size-sm)",
+};
+
+/**
  * CommandPalette geometry. `--fynns-command-<key>`.
  * Corner radius stays `--fynns-radius-3xl` (dialog panel — no private radius).
  * Row model / type ladder: AGENTS.md **Chrome type & row proportion**.
@@ -1771,6 +1799,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["navdrawer", NAVDRAWER_TOKENS],
   ["command", COMMAND_TOKENS],
   ["split", SPLIT_TOKENS],
+  ["tree", TREE_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

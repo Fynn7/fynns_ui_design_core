@@ -441,6 +441,10 @@ selectable; pass open/folder on `trailing`; put origin/kind in `overline` /
 scrollports (page scroll on FillColumn). Authority: [`AGENTS.md`](../AGENTS.md)
 **Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+**File / settings hierarchy (not session catalogs):** use **`Tree`** /
+**`TreeItem`** (`#tree`) — do not stretch `List` + `detail` into a deep
+folder explorer, and do not invent a private disclosure button.
+
 **Also (path / link rows — scroll + glyphs):**
 
 - **Headline = display name** in the UI font — do **not** put

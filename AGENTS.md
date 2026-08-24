@@ -1115,6 +1115,11 @@ classes.
   resizable two panes — editor | preview, list | detail; **not** `EndAside`
   / drawer shell seams. Live drag paints `--fynns-split-size` via rAF;
   host must resolve height. Tokens `--fynns-split-*`. Live `#split-pane`),
+  **Tree** / **TreeItem** `{ id, label, icon?, expanded?, defaultExpanded?,
+  trailing?, children? }` (hierarchical file / settings explorer —
+  WAI-ARIA `tree`; branch row click selects **and** toggles expand; ↑↓ →← keyboard. **Not**
+  `NavigationDrawer` destinations and **not** expandable catalog
+  `List` / `ListItem` `detail`. Tokens `--fynns-tree-*`. Live `#tree`),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
@@ -1156,7 +1161,7 @@ classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | CommandPalette | both | Spotlight / ⌘K filter dialog; apps own accelerator; keyboard-first list. Live `#command-palette`. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
-  | Button → Grid / FillColumn / PageScroll / SplitPane (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll; SplitPane = in-content resize (not EndAside). |
+  | Button → Grid / FillColumn / PageScroll / SplitPane / Tree (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll; SplitPane = in-content resize (not EndAside); Tree = file/settings hierarchy (not nav destinations / not List detail). |
   | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
@@ -1186,6 +1191,7 @@ classes.
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form**. Header `actions` = **interactive chrome only** (one horizontal `.fynns-control-cluster` of `IconButton` / `Button` / `InfoHint` — nowrap under `.fynns-card-actions`); nested helper clusters hug + nowrap. Prefer flat IconButtons in `actions`. Branch / path / pin meta → **body** (mono `src-path` / `.fynns-table-meta`), never `actions`. Live: `#card` | Card/Surface **inside** each ListItem; nested `width:100%` / wrap clusters stacking IconButtons into a ~72dp tall head; raw path/branch text in `actions` |
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | **In-content editor \| preview / list \| detail** (resizable) | **`SplitPane`** (`start` / `end`; optional `orientation`). Host must resolve height. **Not** `EndAside` (shell inspector). Live `#split-pane` | Hand-rolled flex + private resize handles; using EndAside inside a Card for a local split |
+  | **File / settings hierarchy** (folders + leaves, keyboard tree) | **`Tree`** / **`TreeItem`** (`role=tree`). Branch row click selects **and** toggles expand. Live `#tree` | `NavigationDrawer` / `NavigationDrawerGroup` for app destinations; expandable catalog `List` + `ListItem` `detail` for session/record trees; inventing `HubTreeDisclosure` |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
   | Table / list pager (page-size + `Pagination`) | **`.fynns-pagination-bar`**: one footer row — `__start` = content-hug Select + range, `__end` = nowrap `Pagination` (M3 data-table / MUI TablePagination). Live `#pagination` | Vertical Card-body stack of Select then pager; private space-between that grows Select (`width:100%` / `1fr`) and wraps page discs |
   | Multi-status indicator strip (behind / CI / protection / sync) | `ControlStack` of `ControlRow`s inside the Card body (`label` = short name, children = tip glyph / muted `—`). Form-host stack → label-fill + end-hug so glyphs share one trailing edge. Live: `#rhythm` status legend | Flat `.fynns-control-cluster` interleaving mono labels + status icons (icon soup / no rhythm) |

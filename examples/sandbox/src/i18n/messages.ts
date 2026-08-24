@@ -583,6 +583,16 @@ const en = {
   "globals.splitPaneEndTitle": "End pane",
   "globals.splitPaneEndBody":
     "Flex remainder after the start size. Soft floors use `--fynns-split-min-*`.",
+  "globals.treeHelp":
+    "Hierarchical file / settings explorer (`role=tree`). Branch row click selects **and** toggles expand (not chevron-only). ↑↓ move, →← expand/collapse, Enter/Space select. **Not** NavigationDrawer destinations and **not** expandable catalog List / ListItem detail (session trees). Live `#tree`.",
+  "globals.treeAria": "Sample project files",
+  "globals.treeSelected": "Selected",
+  "globals.treeFolderSrc": "src",
+  "globals.treeFolderComponents": "components",
+  "globals.treeFileApp": "App.tsx",
+  "globals.treeFileTree": "Tree.tsx",
+  "globals.treeFileReadme": "README.md",
+  "globals.treeFilePackage": "package.json",
   "globals.busyScrimOpen": "Show fullscreen busy (2s)",
   "globals.busyScrimLabel": "Loading",
   "globals.busyScrimMessage": "Working — please wait…",
@@ -2194,6 +2204,16 @@ const zh: Record<MessageKey, string> = {
   "globals.splitPaneEndTitle": "结束窗格",
   "globals.splitPaneEndBody":
     "起始尺寸之外的弹性剩余。软下限为 `--fynns-split-min-*`。",
+  "globals.treeHelp":
+    "层级文件 / 设置树（`role=tree`）。点整条分支行即选中并展开/收起（不只点 chevron）。↑↓ 移动，→← 展开/收起，Enter/Space 选中。**不是** NavigationDrawer 目的地，也**不是**可展开目录 List / ListItem detail（会话树）。样例 `#tree`。",
+  "globals.treeAria": "样例项目文件",
+  "globals.treeSelected": "已选",
+  "globals.treeFolderSrc": "src",
+  "globals.treeFolderComponents": "components",
+  "globals.treeFileApp": "App.tsx",
+  "globals.treeFileTree": "Tree.tsx",
+  "globals.treeFileReadme": "README.md",
+  "globals.treeFilePackage": "package.json",
   "globals.busyScrimOpen": "显示全屏 busy（2 秒）",
   "globals.busyScrimLabel": "加载中",
   "globals.busyScrimMessage": "处理中，请稍候…",
