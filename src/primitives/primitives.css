@@ -3301,6 +3301,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   border-radius: 0;
   border-inline-end: var(--fynns-segmented-outline) solid
     var(--fynns-color-outline-subtle);
+  /* Optical translate on empty leading must not paint into sibling segments. */
+  overflow: hidden;
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
@@ -6885,23 +6887,33 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * SearchBar / tools host ↔ adjacent body sibling. Uses
+ * Mode / destination **chrome band** ↔ adjacent body sibling. Uses
  * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
- * Search↔Item matches Search↔Toggle inside a tools column — wider than
- * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers bare
- * SearchBar or a tools wrapper that contains SearchBar.
+ * Search ↔ Item, tools column ↔ SyncSideFilter `ToggleGroup`, and
+ * toolbar-end host ↔ filter / destinations share one step — wider than
+ * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers
+ * bare SearchBar / ToggleGroup or a tools wrapper that hosts SearchBar,
+ * `--toolbar-end`, or a preference `ControlRow`.
  */
 .fynns-nav-drawer-body > .fynns-search-bar + *,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
 .fynns-nav-drawer-body > * + .fynns-search-bar,
-.fynns-nav-drawer-body > * + *:has(.fynns-search-bar) {
+.fynns-nav-drawer-body > * + *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group + *,
+.fynns-nav-drawer-body > * + .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) + *,
+.fynns-nav-drawer-body > * + *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > *:has(> .fynns-control-row) + *,
+.fynns-nav-drawer-body > * + *:has(> .fynns-control-row) {
   margin-block-start: var(--fynns-navdrawer-search-gap);
 }
 
-/* Destination SearchBar is a 40dp row peer — never flex-shrink under a
- * height-capped drawer body (would crush to border-only ~2px). */
+/* Destination SearchBar / chrome peers are 40dp / content-sized — never
+ * flex-shrink under a height-capped drawer body. */
 .fynns-nav-drawer-body > .fynns-search-bar,
-.fynns-nav-drawer-body > *:has(.fynns-search-bar) {
+.fynns-nav-drawer-body > *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) {
   flex-shrink: 0;
 }
 

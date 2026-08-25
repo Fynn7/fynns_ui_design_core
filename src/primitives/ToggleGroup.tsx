@@ -1,7 +1,7 @@
 import type { KeyboardEvent, ReactElement, ReactNode } from "react";
 import { useId } from "react";
 import { CheckIcon } from "./icons";
-import { Tooltip } from "./Tooltip";
+import { Tooltip, type TooltipSide } from "./Tooltip";
 
 export type ToggleGroupOption<V extends string> = {
   value: V;
@@ -28,6 +28,14 @@ type ToggleGroupSharedProps<V extends string> = {
   fullWidth?: boolean;
   /** Tighter height/padding for narrow panels. */
   size?: "default" | "compact";
+  /**
+   * Tooltip placement for option `tip` strings. Default `top`.
+   * Mode-drawer SyncSideFilter (toolbar ↔ catalog in ~224px): **omit `tip`**
+   * entirely — keep `ariaLabel`. Vertical sides cover neighbors; even
+   * `right` with short copy still kisses the trailing `+` column.
+   * Use `tipSide="right"` only when the host has clear space beside the group.
+   */
+  tipSide?: TooltipSide;
   /**
    * Show the M3 selected checkmark (leading). Default true. When an option
    * provides `icon`, the check replaces that icon while selected.
@@ -59,7 +67,10 @@ export type ToggleGroupProps<V extends string> =
  * `.fynns-toggle-group`. Equal-width segments; pass `fullWidth` to stretch.
  * Leading check/icon fades/scales in; slot width is always reserved so equal
  * columns (and ControlStack max-content tracks) do not reflow. Unselected
- * labels stay optically centered via content translate.
+ * labels stay optically centered via content translate (chip `overflow:
+ * hidden` clips that translate so it cannot bleed into the neighbor segment).
+ * When the **label itself** is a mark glyph (SyncSideFilter C/O), pass
+ * `showCheck={false}` — do not reserve an empty leading slot beside the mark.
  *
  * Default: single-select (`radiogroup` / `radio`, arrows select).
  * `multiple`: multi-select (`group` / `aria-pressed`, Space toggles, arrows
@@ -81,6 +92,7 @@ export function ToggleGroup<V extends string>({
   fullWidth = false,
   size = "default",
   showCheck = true,
+  tipSide = "top",
   multiple = false,
 }: ToggleGroupProps<V>) {
   const baseId = useId();
@@ -269,6 +281,7 @@ export function ToggleGroup<V extends string>({
           <Tooltip
             key={option.value}
             content={option.tip}
+            side={tipSide}
             className="fynns-toggle-group__segment"
           >
             {chip}
