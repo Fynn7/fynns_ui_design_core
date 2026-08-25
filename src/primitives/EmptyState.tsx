@@ -13,6 +13,13 @@ export type EmptyStateProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   actions?: ReactNode;
   /** @default "md" */
   size?: EmptyStateSize;
+  /**
+   * Stretch in a height-resolved parent (DestinationAppShell canvas /
+   * FillColumn children / shell main) and center title + description in the
+   * visible pane. Use for sole zero-result pane bodies — not inside Card /
+   * List / ChatThread.empty (those stay content-sized).
+   */
+  fill?: boolean;
 };
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -22,6 +29,8 @@ function join(...parts: Array<string | false | null | undefined>) {
 /**
  * Layout-only empty / zero-result placeholder (icon + title + description +
  * actions). No Card chrome and no hover affordances — compose actions yourself.
+ * Pane sole body → pass `fill` so copy centers in the visible canvas (same
+ * host contract as `BusyRegion` `fill`).
  */
 export function EmptyState({
   icon,
@@ -29,6 +38,7 @@ export function EmptyState({
   description,
   actions,
   size = "md",
+  fill = false,
   className,
   ...rest
 }: EmptyStateProps) {
@@ -38,6 +48,7 @@ export function EmptyState({
       className={join(
         "fynns-empty-state",
         size === "sm" && "fynns-empty-state--sm",
+        fill && "fynns-empty-state--fill",
         className,
       )}
     >

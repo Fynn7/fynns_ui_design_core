@@ -434,7 +434,35 @@ account label strip.
 **Consumer:** bump ≥ 0.4.84 for binary drawer|hidden; pass `navFooter`
 (or Drawer/Rail `footer`); workspace row in body — do **not** `margin-top: auto`
 a destination Item; do **not** put settings in TopAppBar `trailing` when the
-product wants Cursor-style bottom chrome.
+product wants Cursor-style bottom chrome; do **not** also list Settings as a
+root `NavigationDrawerItem` beside the footer gear.
+
+## Failure mode this treaty targets: feature panels parked in Settings
+
+Symptoms:
+
+- Root destination **Settings** (or footer gear → Settings) hosts LLM /
+  provider / tool / catalog / generation-pipeline Cards next to (or instead of)
+  locale / appearance / account
+- Drawer shows both an active **Settings** `NavigationDrawerItem` and a footer
+  settings gear for the same screen
+
+**Cause:** treating Settings as a catch-all inspector. Cursor-style apps keep
+**software chrome** prefs under the footer gear; **feature** surfaces are
+first-class destinations.
+
+**Fix in the consumer:**
+
+1. Entry: `navFooter` settings `IconButton` only — remove Settings from
+   `destinations[]` when the footer gear opens that screen.
+2. Settings body: locale / theme / account / other **software** prefs only
+   (UI language = `FieldBlock` + compact `ToggleGroup` — **not** TopAppBar).
+3. Feature / runtime panels → their **own** destinations (or feature Cards on
+   those pages) — not under Settings.
+
+Live: Layouts `#layouts-demo-shell` (footer gear → software prefs Card;
+destinations stay Home / Search / Archive). Authority: [`AGENTS.md`](../AGENTS.md)
+Hard rules. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: NavigationDrawer Search↔Item vacant band
 
@@ -516,6 +544,70 @@ label line** as `ControlRow` (`label={<><span className="fynns-control-row__labe
 7.5rem wrap. Live: sandbox `#rhythm` + `#form-recipe` + `#info-hint`. Pasteable recipe:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **标签行 / 工具条节奏**.
 
+## Failure mode this treaty targets: diagnostic prose wall (probe / connection)
+
+Symptoms (Settings / LLM backend / sync Cards):
+
+- Card body is a `.fynns-unit-stack` of `FieldHint` (or muted `<p>`) lines like
+  `Ollama: Fail — reachable but model '…' not found. Installed: a, b, c, …`
+- Long installed-model lists, proxy URLs, and API-key reasons sit **inline** so
+  the Card grows into a text wall; hard to scan OK vs Fail
+
+**Cause:** treating probe / connection detail as visible body copy. `FieldHint`
+and `ControlBlock` `description` are for **one short phrasing line** — not
+multi-sentence diagnostics or comma-lists.
+
+**Fix in the consumer:**
+
+1. One `ControlStack` of `ControlRow`s — `label` = short service name
+   (`Ollama` / `Gemini` / …).
+2. Children = short status (`OK` / `Fail` / `—`) **plus** `InfoHint` `size="sm"`
+   (or tip glyph + `InfoHint`) whose `content` holds the long reason /
+   installed list / proxy URL.
+3. Do **not** concatenate `Name: Fail — essay` into a FieldHint stack.
+
+Live: sandbox `#rhythm` status legend + `#info-hint`. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Multi-status /
+probe strip**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: language control in TopAppBar
+
+Symptoms (CV Generator / destination apps):
+
+- TopAppBar `trailing` shows compact **`ToggleGroup`** (`English` | `中文`) or a
+  chevron **`Select`** pill for UI locale
+- Settings screen has no language row while the app bar carries chrome locale
+
+**Cause:** treating binary locale as always-on app-bar chrome. After software-
+prefs densify, locale belongs with other Settings body prefs opened from the
+footer gear — not beside theme / search IconButtons.
+
+**Fix in the consumer:**
+
+1. Remove language from TopAppBar `trailing`.
+2. Put compact **`ToggleGroup`** (`showCheck={false}`, `English` / `中文`) in
+   Settings inside a `FieldBlock` (copy sandbox
+   `examples/sandbox/src/components/LanguageSwitcher.tsx`).
+3. Do **not** invent a core `LanguageSwitcher` primitive. Longer locale lists
+   may use `Select` **inside Settings** only.
+
+Live: Layouts `#layouts-demo-shell` Settings Card + Templates language Card.
+Authority: [`AGENTS.md`](../AGENTS.md) **Chrome locale switch**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Select language pill in TopAppBar
+
+> **Superseded for placement by the failure mode above** (language leaves the
+> app bar entirely). Kept for agents still shipping chevron Select in chrome:
+
+Symptoms (legacy):
+
+- TopAppBar `trailing` shows a **chevron Select** pill (`中文 ▼` / `English ▼`)
+  for English ↔ Chinese UI locale
+
+**Fix:** move language to Settings as compact `ToggleGroup` in a `FieldBlock`
+— never Select in TopAppBar. See **language control in TopAppBar** above.
+
 ## Failure mode this treaty targets: catalog ControlRow actions float mid-left
 
 Symptoms: list panel chrome like `MCP servers (7/7)` / `技能（28/28）` shows the
@@ -547,9 +639,12 @@ huge empty bands; wrong type / gap rhythm.
 Nested `IconButton` inside interactive `ListItem` used to be invalid HTML, so
 apps invented Surface wrappers — core now keeps interactive `trailing` **outside**
 the row button. **Fix in the consumer:** one `List` of `ListItem`s —
-`headline` + path `supportingText` + `trailing` = ghost `sm` `IconButton`s
-(`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
-Section chrome stays **one** outer `Card` if needed.
+`headline` + path `supportingText` + `trailing` = ghost **md** `IconButton`s
+(`.fynns-control-cluster`; default size — do not pass `size="sm"` on path
+catalogs). Core **`--with-end` overlay reveal** keeps idle rows full-bleed;
+hover / focus-within shows actions; touch always visible. Open/confirm
+destructive work in `ConfirmDialog`. Section chrome stays **one** outer `Card`
+if needed.
 
 ## Failure mode this treaty targets: ListItem trailing IconButtons stacked vertically
 
@@ -637,6 +732,35 @@ the same `.content` / `.hub-scroll` node. **Do not** put horizontal pad on
 `pageScroll.right === hubMain.right`, and first Card
 `top ≥ pageScroll.top + dialog-inset`. Authority: [`AGENTS.md`](../AGENTS.md)
 **FillColumn** / **PageScroll**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: catalog ControlRow sinks below drawer labels
+
+Symptoms (CV Generator Experiences / any DestinationAppShell catalog page):
+
+- Active `NavigationDrawerItem` label (“经历”) and the main `PageScroll`
+  catalog `ControlRow` label (“经历（1）”) sit on **different** horizontal
+  bands — ControlRow text reads ~12–16dp lower
+- Browser measure: drawer label `top` ≈ appbar + body-pad + item centering;
+  ControlRow label `top` ≈ appbar + **dialog-inset** + IconButton centering
+
+**Cause:** `.fynns-content-column` used full `dialog-inset` (24dp) for
+**every** first child. Catalog chrome is a 40dp `ControlRow` (IconButton md)
+that should share the drawer destination band
+(`--fynns-navdrawer-body-pad-block-start` / 12dp under ClippedNavShell, where
+drawer `pad-block-start` is already 0) — not Card-style 24dp breath.
+
+**Fix in core (≥ 0.4.101):** when the first child of `.fynns-content-column`
+is a standalone `.fynns-control-row`, `padding-block-start` becomes
+`--fynns-navdrawer-body-pad-block-start`. First Card / EmptyState / other
+units keep full `dialog-inset`. Live: Layouts `#layouts-demo-shell`.
+
+**Fix in the consumer:** keep catalog chrome as the **first** `PageScroll`
+child (`ControlRow` + IconButton strip, then List). Do **not** invent
+consumer `padding-top` / negative margin / private CSS on
+`.fynns-control-row` / `.fynns-content-column`. Bump
+`@fynn7/ui-design-core` ≥ **0.4.101**. CDP: ControlRow label mid ≈
+NavigationDrawerItem label mid (±2px). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: BusyRegion cold body + pager chrome siblings
 
@@ -1303,8 +1427,9 @@ Symptoms (MCP / settings destination pages):
 
 **Fix in the consumer (hard):**
 1. In one strip (TopAppBar leading+trailing, `.fynns-card-actions`, one
-   icon `.fynns-control-cluster`) every `IconButton` and icon `InfoHint`
-   uses the **same** `size`.
+   icon `.fynns-control-cluster`, **or the same page’s catalog ControlRow +
+   List trailing**) every `IconButton` and icon `InfoHint` uses the **same**
+   `size`.
 2. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
    `size="sm"` on TopAppBar InfoHint when siblings are `md`.
 3. Dense Card heads may use **`sm`** only when **every** icon in that head
@@ -1363,7 +1488,9 @@ lived only on the inner `<button>`.
 
 **Fix in core (do not patch with app CSS):** leading hugs the glyph;
 `--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
-`--with-end` paints hover/selected on the **row / host**. Nested `List` under
+`--with-end` paints hover/selected on the **row / host** and **overlay-reveals**
+end action clusters (idle copy full-bleed; hover / focus-within shows trailing;
+touch always visible — ≥ 0.4.107). Nested `List` under
 `detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
 as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
 the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
@@ -1712,6 +1839,25 @@ BusyRegion--fill` “work” — that teaches the anti-pattern. Authority:
 [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement** + **FillColumn**.
 Live: sandbox `#busy-region` fill sample (FillColumn stage — not inside a
 unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EmptyState parks top-left in destination canvas
+
+Symptoms: DestinationAppShell / ClippedNavShell main shows a zero-result
+`EmptyState` (title + description) **flush to the top** of the canvas (or
+mid-left as a short content box) instead of **centered** in the visible pane —
+users expect empty-pane copy like BusyRegion chrome.
+
+**Cause:** default `EmptyState` is **content-sized** (`max-width: 24rem`, no
+vertical stretch). As the sole child of `.fynns-destination-app-shell-canvas`
+/ shell main / FillColumn main it parks at the start of the flex column.
+**Fix in the consumer (≥ 0.4.106):** pass **`fill`** on that sole pane
+EmptyState — core stretches `.fynns-empty-state--fill` and
+`justify-content: center`s the copy (BusyRegion `fill` host contract). Keep
+default (no `fill`) inside Card / List / `ChatThread.empty`. Do **not** invent
+private `margin: auto` / absolute / min-height hacks on `.fynns-empty-state`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** Empty catalog +
+Loading placement. Live: sandbox `#empty-state` fill stage + Layouts
+`#layouts-demo-drill-in`. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode: master–detail / content max-width token missing
 

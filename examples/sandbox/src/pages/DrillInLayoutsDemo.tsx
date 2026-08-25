@@ -164,6 +164,7 @@ export function DrillInLayoutsDemo() {
         <EmptyState
           title={t("layouts.drillCatalogEmptyTitle")}
           description={t("layouts.drillCatalogEmptyBody")}
+          fill
         />
       );
     }
@@ -172,6 +173,7 @@ export function DrillInLayoutsDemo() {
       <EmptyState
         title={t("layouts.drillPrefsEmptyTitle")}
         description={t("layouts.drillPrefsEmptyBody")}
+        fill
       />
     );
   } else {
@@ -179,6 +181,7 @@ export function DrillInLayoutsDemo() {
       <EmptyState
         title={t("layouts.drillHomeEmptyTitle")}
         description={t("layouts.drillHomeEmptyBody")}
+        fill
       />
     );
   }

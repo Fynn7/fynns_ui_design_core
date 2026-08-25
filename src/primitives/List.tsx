@@ -119,8 +119,9 @@ export type ListItemProps = Omit<
    * control (valid HTML — never nest a button in a button). Decorative
    * chevrons / glyphs render **inside** the row so click + hover match the
    * host wash. Never park actions in `.fynns-list-item-trailing-icon` (16dp
-   * crushes clusters). Prefer `ghost` `sm` IconButtons; destructive work in
-   * `ConfirmDialog`, not a filled danger disk in the row.
+   * crushes clusters). Prefer `ghost` **`md`** IconButtons on destination
+   * catalog surfaces (same size as sibling ControlRow tool strips); dense-only
+   * Card heads may use `sm` when no md strip shares the surface.
    */
   trailing?: ReactNode;
   /**
@@ -179,7 +180,7 @@ function resolveLines(
  * leading / trailing slots. Use inside `List`.
  *
  * Trailing **actions** sit **outside** the row control so `IconButton` /
- * menus stay valid HTML **and** keep ghost-sm size — even when
+ * menus stay valid HTML **and** keep ghost-md size — even when
  * `interactive={false}` (static row + end actions). Decorative chevrons
  * stay **inside** the row. The **host** paints one `radius-3xl` hover /
  * selected wash (including trailing actions via host `:hover`) so actions

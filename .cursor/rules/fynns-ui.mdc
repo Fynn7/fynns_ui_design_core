@@ -37,7 +37,7 @@ ring can paint before heavy work).
    LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
  Dialog/Card/section body load → BusyRegion, never bare md CircularProgress;
  `indicator="linear"` for known % — never nest a second progress in `message`;
- never EmptyState + ring),
+   never EmptyState + ring; pane sole zero-result → EmptyState `fill`),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
   bottom hairline only), BottomAppBar, StatusBar / StatusBarItem (IDE bottom
@@ -126,6 +126,9 @@ ring can paint before heavy work).
   children) so composer docks; never stack Preview/EmptyState/Composer as
   siblings. A catalog in that band = `.fynns-unit-stack` + `fynns-scroll`
   (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
+  **PageScroll first child = catalog ControlRow:** pad-block-start aligns to
+  `--fynns-navdrawer-body-pad-block-start` so the label midlines with the
+  active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
   mobile-first intentional phone root only (never DestinationAppShell densify;
@@ -136,6 +139,13 @@ ring can paint before heavy work).
 - Dense chrome lists (CommandPalette / menus / pickers): **row model first**,
   type ladder **one step max**, breath from item pad — AGENTS.md **Chrome type
   & row proportion** + `.cursor/rules/chrome-proportion.mdc`. Live `#command-palette`.
+- Probe / connection / multi-status Cards: short `ControlRow` + `OK`/`Fail` +
+  **`InfoHint`** for long detail — never a `.fynns-unit-stack` of `FieldHint`
+  essays. Live `#rhythm` status legend.
+- Settings: footer gear only (not a root destination Item beside it); body =
+  software chrome prefs including **UI language** (`FieldBlock` + compact
+  `ToggleGroup`) — never language in TopAppBar; feature panels get their own
+  destinations. Live `#layouts-demo-shell` + Templates.
 - Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
   Vertical unit lists: Card / Collapsible body already use
@@ -159,7 +169,8 @@ ring can paint before heavy work).
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
   (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
-  `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
+  `ListItem`s (headline + path + trailing ghost **md** actions — default size;
+  `--with-end` overlay reveal on hover) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
   sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
   — **never** start tick / inset rail / second host wash. Leading→copy
@@ -249,4 +260,6 @@ ring can paint before heavy work).
 See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
 catalog. Text in this package (docs / default labels) is English or German;
 consumer sandboxes may offer English ↔ Chinese UI locale switching for their
-own chrome.
+own chrome. Binary en↔zh → Settings body (`FieldBlock` + compact
+`ToggleGroup`, sandbox `LanguageSwitcher`) opened from footer gear — **never**
+TopAppBar `trailing` (ToggleGroup or Select).

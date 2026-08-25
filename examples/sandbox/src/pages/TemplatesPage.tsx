@@ -1,7 +1,10 @@
 import {
   applyFynnsThemeMode,
   Button,
+  Card,
   DownloadIcon,
+  FieldBlock,
+  FieldStack,
   FullscreenDialog,
   Input,
   snackbar,
@@ -141,13 +144,16 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
 
   return (
     <div className="sandbox-templates">
-      <section className="sandbox-templates-hero" aria-labelledby="sandbox-settings-language">
-        <h2 id="sandbox-settings-language" className="sandbox-templates-section-title">
-          {t("settings.languageTitle")}
-        </h2>
-        <p className="sandbox-templates-lead">{t("settings.languageLead")}</p>
-        <LanguageSwitcher />
-      </section>
+      <Card title={t("settings.languageTitle")}>
+        <FieldStack>
+          <FieldBlock
+            label={t("settings.languageAria")}
+            description={t("settings.languageLead")}
+          >
+            <LanguageSwitcher />
+          </FieldBlock>
+        </FieldStack>
+      </Card>
 
       <header className="sandbox-templates-hero">
         <p className="sandbox-templates-lead">{t("templates.lead")}</p>

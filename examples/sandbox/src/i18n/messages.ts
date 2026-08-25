@@ -33,6 +33,21 @@ const en = {
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
+  "layouts.shellCatalogCount": "Entries (2)",
+  "layouts.shellCatalogPaste": "Paste",
+  "layouts.shellCatalogAdd": "Add entry",
+  "layouts.shellCatalogListAria": "Sample entries",
+  "layouts.shellCatalogItem1": "Sample project notes",
+  "layouts.shellCatalogItem1Path": "/docs/notes.md",
+  "layouts.shellCatalogItem2": "Region preferences",
+  "layouts.shellCatalogItem2Path": "/prefs/region.json",
+  "layouts.shellSettingsTitle": "Settings",
+  "layouts.shellSettingsLanguage": "UI language",
+  "layouts.shellSettingsLanguageHint":
+    "Software chrome locale only — feature / provider panels stay on their own destinations.",
+  "layouts.shellSettingsDensity": "Show account name in footer",
+  "layouts.shellSettingsDensityHint":
+    "Appearance preference for drawer chrome — not a feature catalog.",
   "layouts.shellAsideLabel": "EndAside (inspector sample)",
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat.",
@@ -524,6 +539,11 @@ const en = {
   "globals.emptyAction": "Create project",
   "globals.emptyHelp":
     "EmptyState is layout-only (icon + title + description + actions). Pass Button CTAs yourself.",
+  "globals.emptyFillTitle": "Nothing in this pane yet",
+  "globals.emptyFillDescription":
+    "Save something first, then return here. Pane sole EmptyState uses fill so copy centers in the canvas.",
+  "globals.emptyFillHelp":
+    "Pane sole zero-result (DestinationAppShell canvas / FillColumn children / shell main): EmptyState fill — centers like BusyRegion fill. Inside Card / List / ChatThread.empty keep the default (no fill).",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
@@ -565,7 +585,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first Card must not sit flush under TopAppBar). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.58.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.58.",
   "globals.pageScrollCardTitle": "Sample catalog",
   "globals.pageScrollCardTitle2": "Next section",
   "globals.pageScrollCardBody":
@@ -833,7 +853,7 @@ const en = {
   "globals.rhythmSurfaceHelp":
     "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
   "globals.rhythmCatalogHelp":
-    "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge. Do not leave a content-sized island with actions mid-left.",
+    "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). Do not leave a content-sized island with actions mid-left.",
   "globals.rhythmCatalogLabel": "Servers (3/3)",
   "globals.rhythmCatalogBulk": "Bulk select",
   "globals.rhythmCatalogRefresh": "Refresh list",
@@ -847,8 +867,10 @@ const en = {
   "globals.rhythmEndAlignSecondary": "Secondary",
   "globals.rhythmEndAlignPrimary": "Primary action",
   "globals.rhythmStatusHelp":
-    "**Multi-status / readiness (hard):** named statuses belong in a Card-body `ControlStack` of `ControlRow`s — `label` = short name, children = tip glyph or muted `—`. Do **not** flatten labels + icons into one `.fynns-control-cluster`, and do **not** park a lone tip glyph in a full-bleed Card-body cluster (empty band). Cluster only wraps **≥2 sibling controls** inside a row (e.g. tip glyph + apply `IconButton`).",
+    "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`—` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
   "globals.rhythmStatusTitle": "Sync status",
+  "globals.rhythmStatusOk": "OK",
+  "globals.rhythmStatusFail": "Fail",
   "globals.rhythmStatusBehind": "Behind",
   "globals.rhythmStatusBehindTip": "Local pin is behind the latest upstream",
   "globals.rhythmStatusCi": "CI",
@@ -1167,7 +1189,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1376,9 +1398,9 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listCatalogHelp":
-    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost sm, horizontal nowrap cluster). Trailing stays on the end sibling even when interactive={false}. Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
+    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed; hover / focus-within shows trailing; touch always visible. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
-    "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.60 height-2 = 60dp).",
+    "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.107 height-2 = 56dp).",
   "globals.listShortcutCardTitle": "Shortcuts",
   "globals.listShortcutCardAria": "Sample shortcut links",
   "globals.listShortcutCardRefresh": "Refresh links",
@@ -1734,6 +1756,20 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
+  "layouts.shellCatalogCount": "条目（2）",
+  "layouts.shellCatalogPaste": "粘贴",
+  "layouts.shellCatalogAdd": "添加条目",
+  "layouts.shellCatalogListAria": "示例条目",
+  "layouts.shellCatalogItem1": "示例项目笔记",
+  "layouts.shellCatalogItem1Path": "/docs/notes.md",
+  "layouts.shellCatalogItem2": "区域偏好",
+  "layouts.shellCatalogItem2Path": "/prefs/region.json",
+  "layouts.shellSettingsTitle": "设置",
+  "layouts.shellSettingsLanguage": "界面语言",
+  "layouts.shellSettingsLanguageHint":
+    "仅软件壳层语言 — 功能 / 后端面板放在各自目的地，不要塞进设置。",
+  "layouts.shellSettingsDensity": "底栏显示账户名",
+  "layouts.shellSettingsDensityHint": "抽屉壳层外观偏好 — 不是功能目录。",
   "layouts.shellAsideLabel": "EndAside（检查器示例）",
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。",
@@ -2210,6 +2246,11 @@ const zh: Record<MessageKey, string> = {
   "globals.emptyAction": "创建项目",
   "globals.emptyHelp":
     "EmptyState 只负责布局（图标 + 标题 + 说明 + 操作区）。CTA 自行传入 Button。",
+  "globals.emptyFillTitle": "此栏还没有内容",
+  "globals.emptyFillDescription":
+    "先保存内容再回到这里。画布唯一子级 EmptyState 用 fill，文案在可见区内居中。",
+  "globals.emptyFillHelp":
+    "栏目唯一零结果（DestinationAppShell canvas / FillColumn children / shell main）：EmptyState fill — 与 BusyRegion fill 同宿主契约居中。Card / List / ChatThread.empty 内保持默认（不要 fill）。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
@@ -2251,7 +2292,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 Card 不得贴 TopAppBar）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.58。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.58。",
   "globals.pageScrollCardTitle": "样例目录",
   "globals.pageScrollCardTitle2": "下一分区",
   "globals.pageScrollCardBody":
@@ -2519,7 +2560,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmSurfaceHelp":
     "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
   "globals.rhythmCatalogHelp":
-    "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾。不要留内容宽小岛、按钮停在标签旁。",
+    "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。不要留内容宽小岛、按钮停在标签旁。",
   "globals.rhythmCatalogLabel": "服务器（3/3）",
   "globals.rhythmCatalogBulk": "批量选择",
   "globals.rhythmCatalogRefresh": "刷新列表",
@@ -2533,8 +2574,10 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmEndAlignSecondary": "次要",
   "globals.rhythmEndAlignPrimary": "主要操作",
   "globals.rhythmStatusHelp":
-    "**多状态 / 就绪（硬）：** 命名状态放进 Card 正文 `ControlStack` + 多个 `ControlRow` — `label` = 短名，子树 = tip 字形或 muted `—`。**不要**把标签和 icon 摊进同一个 `.fynns-control-cluster`，也**不要**把单独 tip 字形塞进通栏 Card 正文 cluster（空带）。Cluster 只包行内 **≥2 个兄弟控件**（例如 tip 字形 + 应用 `IconButton`）。",
+    "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`—`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
   "globals.rhythmStatusTitle": "同步状态",
+  "globals.rhythmStatusOk": "OK",
+  "globals.rhythmStatusFail": "Fail",
   "globals.rhythmStatusBehind": "落后",
   "globals.rhythmStatusBehindTip": "本机 pin 落后于上游最新",
   "globals.rhythmStatusCi": "CI",
@@ -2852,7 +2895,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`；**也不要**再把「设置」做成 `NavigationDrawerItem`）。**设置正文（硬）：** 只放软件壳层偏好（语言 / 外观 / 账户）— 点本样例底栏齿轮进入。功能 / 运行时 / 领域面板（后端、工具、目录）用**独立目的地**，禁止堆进设置。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。主画布以 **catalog ControlRow** 作为 `PageScroll` 首子 — 其标签与活跃 `NavigationDrawerItem` 中线对齐（core ≥ 0.4.101 把 content-column pad-block-start 降到 `--fynns-navdrawer-body-pad-block-start`）。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -3057,9 +3100,9 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listCatalogHelp":
-    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost sm，横向 nowrap 簇）。即使 interactive={false}，trailing 仍在 end 兄弟槽。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
+    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽；悬停/聚焦内显示 trailing；触摸端常显。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
-    "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.60 的 height-2 = 60dp）。",
+    "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.107 的 height-2 = 56dp）。",
   "globals.listShortcutCardTitle": "快捷入口",
   "globals.listShortcutCardAria": "快捷链接示例",
   "globals.listShortcutCardRefresh": "刷新链接",

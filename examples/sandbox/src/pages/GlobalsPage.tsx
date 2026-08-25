@@ -39,10 +39,7 @@ import {
   ChatActivityStep,
   ChatThinking,
   ChatThread,
-  AlertTriangleIcon,
-  CheckCircleIcon,
   ClipboardIcon,
-  CloseIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
@@ -3113,7 +3110,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3122,7 +3118,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3141,7 +3136,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3150,7 +3144,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3169,7 +3162,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3178,7 +3170,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3196,9 +3187,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             actions={
               <div className="fynns-control-cluster">
                 <Tooltip content={t("globals.listShortcutCardRefresh")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listShortcutCardRefresh")}
                     onClick={() => snackbar(t("globals.listShortcutCardRefreshSnack"))}
                   >
@@ -3216,9 +3206,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <FolderOpenIcon />
@@ -3235,9 +3224,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <FileIcon />
@@ -3254,9 +3242,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <GlobeIcon />
@@ -3283,7 +3270,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogOpen")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogOpen")}
                     >
@@ -3292,7 +3278,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogFolder")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogFolder")}
                     >
@@ -3319,9 +3304,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3344,9 +3328,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3369,9 +3352,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3396,9 +3378,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -4052,6 +4033,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             description={t("globals.emptySmDescription")}
           />
           <SandboxHelp text={t("globals.emptyHelp")} />
+          <SandboxHelp text={t("globals.emptyFillHelp")} />
+          <div className="sandbox-fill-column-stage">
+            <FillColumn>
+              <EmptyState
+                fill
+                icon={<FolderOpenIcon />}
+                title={t("globals.emptyFillTitle")}
+                description={t("globals.emptyFillDescription")}
+                actions={<Button>{t("globals.emptyAction")}</Button>}
+              />
+            </FillColumn>
+          </div>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-region">
@@ -5135,7 +5128,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <div className="fynns-control-cluster">
               <Tooltip content={t("globals.rhythmCatalogBulk")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogBulk")}
                 >
@@ -5144,7 +5136,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogRefresh")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogRefresh")}
                 >
@@ -5153,7 +5144,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogAdd")}>
                 <IconButton
-                  size="sm"
                   variant="primary"
                   aria-label={t("globals.rhythmCatalogAdd")}
                 >
@@ -5194,34 +5184,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
           <ControlStack columns={1}>
             <ControlRow label={t("globals.rhythmStatusBehind")}>
-              <Tooltip content={t("globals.rhythmStatusBehindTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusBehindTip")}
-                >
-                  <AlertTriangleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusBehindTip")}
+                  ariaLabel={t("globals.rhythmStatusBehindTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusCi")}>
-              <Tooltip content={t("globals.rhythmStatusCiTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusCiTip")}
-                >
-                  <CloseIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusCiTip")}
+                  ariaLabel={t("globals.rhythmStatusCiTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusProtection")}>
-              <Tooltip content={t("globals.rhythmStatusProtectionTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusProtectionTip")}
-                >
-                  <CheckCircleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusProtectionTip")}
+                  ariaLabel={t("globals.rhythmStatusProtectionTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusLocal")}>
               <span
@@ -5232,14 +5222,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </span>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusReady")}>
-              <Tooltip content={t("globals.rhythmStatusReadyTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusReadyTip")}
-                >
-                  <CheckCircleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusReadyTip")}
+                  ariaLabel={t("globals.rhythmStatusReadyTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmSyncNow")}>
               <Tooltip content={t("globals.rhythmSyncNowTip")}>
