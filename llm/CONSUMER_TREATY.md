@@ -1834,6 +1834,25 @@ BusyRegion--fill` “work” — that teaches the anti-pattern. Authority:
 Live: sandbox `#busy-region` fill sample (FillColumn stage — not inside a
 unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode: EmptyState parks top-left in destination canvas
+
+Symptoms: DestinationAppShell / ClippedNavShell main shows a zero-result
+`EmptyState` (title + description) **flush to the top** of the canvas (or
+mid-left as a short content box) instead of **centered** in the visible pane —
+users expect empty-pane copy like BusyRegion chrome.
+
+**Cause:** default `EmptyState` is **content-sized** (`max-width: 24rem`, no
+vertical stretch). As the sole child of `.fynns-destination-app-shell-canvas`
+/ shell main / FillColumn main it parks at the start of the flex column.
+**Fix in the consumer (≥ 0.4.106):** pass **`fill`** on that sole pane
+EmptyState — core stretches `.fynns-empty-state--fill` and
+`justify-content: center`s the copy (BusyRegion `fill` host contract). Keep
+default (no `fill`) inside Card / List / `ChatThread.empty`. Do **not** invent
+private `margin: auto` / absolute / min-height hacks on `.fynns-empty-state`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** Empty catalog +
+Loading placement. Live: sandbox `#empty-state` fill stage + Layouts
+`#layouts-demo-drill-in`. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode: master–detail / content max-width token missing
 
 Symptoms (legacy hub-split / main canvas):

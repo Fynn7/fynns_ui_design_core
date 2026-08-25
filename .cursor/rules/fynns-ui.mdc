@@ -37,7 +37,7 @@ ring can paint before heavy work).
    LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
  Dialog/Card/section body load → BusyRegion, never bare md CircularProgress;
  `indicator="linear"` for known % — never nest a second progress in `message`;
- never EmptyState + ring),
+   never EmptyState + ring; pane sole zero-result → EmptyState `fill`),
   afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
   FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
   bottom hairline only), BottomAppBar, StatusBar / StatusBarItem (IDE bottom

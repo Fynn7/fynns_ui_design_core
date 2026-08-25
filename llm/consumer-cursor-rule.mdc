@@ -87,7 +87,12 @@ alwaysApply: true
    `.fynns-linear-progress-stop` 已删；对照 `#progress`）。
    表单行），不可当冷启动壳。未知时长 → 默认圈；全屏挡住 →
    `BusyScrim`（才用 overlay 色）；**仅**按钮/图标/字段槽 → `CircularProgress`
-   `sm`；零结果目录才用 `EmptyState`。勿发明私有 hub loading CSS。
+   `sm`；零结果目录才用 `EmptyState`。**画布唯一零结果**（DestinationAppShell
+   canvas / FillColumn children / shell main）→ `EmptyState` **`fill`**（与
+   BusyRegion fill 同宿主契约，文案在可见区居中；对照 `#empty-state` fill
+   stage / `#layouts-demo-drill-in`）。Card / List / `ChatThread.empty` 内
+   **不要** `fill`。禁止给 `.fynns-empty-state` 写私有居中 / `min-height`。
+   失败模式：`llm/CONSUMER_TREATY.md` **EmptyState parks top-left**。勿发明私有 hub loading CSS。
    `FillColumn` 里的**短目录页滚**：优先 **`PageScroll`**（内建
    `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与
    **窗格右缘对齐**（`hub-main` / shell main — **禁止**在页滚宿主外包一层
