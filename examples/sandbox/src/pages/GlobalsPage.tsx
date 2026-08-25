@@ -3110,7 +3110,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3119,7 +3118,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3138,7 +3136,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3147,7 +3144,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3166,7 +3162,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogEdit")}
                     >
@@ -3175,7 +3170,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
                     >
@@ -3193,9 +3187,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             actions={
               <div className="fynns-control-cluster">
                 <Tooltip content={t("globals.listShortcutCardRefresh")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listShortcutCardRefresh")}
                     onClick={() => snackbar(t("globals.listShortcutCardRefreshSnack"))}
                   >
@@ -3213,9 +3206,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <FolderOpenIcon />
@@ -3232,9 +3224,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <FileIcon />
@@ -3251,9 +3242,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailing={
                   <div className="fynns-control-cluster">
                     <Tooltip content={t("globals.listCatalogOpen")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
+                        <IconButton
+                          variant="ghost"
                         aria-label={t("globals.listCatalogOpen")}
                       >
                         <GlobeIcon />
@@ -3280,7 +3270,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogOpen")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogOpen")}
                     >
@@ -3289,7 +3278,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   </Tooltip>
                   <Tooltip content={t("globals.listCatalogFolder")}>
                     <IconButton
-                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.listCatalogFolder")}
                     >
@@ -3316,9 +3304,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3341,9 +3328,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3366,9 +3352,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -3393,9 +3378,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
               trailing={
                 <Tooltip content={t("globals.listTreeOpen")}>
-                  <IconButton
-                    size="sm"
-                    variant="ghost"
+                        <IconButton
+                          variant="ghost"
                     aria-label={t("globals.listTreeOpen")}
                   >
                     <BotIcon />
@@ -5144,7 +5128,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <div className="fynns-control-cluster">
               <Tooltip content={t("globals.rhythmCatalogBulk")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogBulk")}
                 >
@@ -5153,7 +5136,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogRefresh")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogRefresh")}
                 >
@@ -5162,7 +5144,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogAdd")}>
                 <IconButton
-                  size="sm"
                   variant="primary"
                   aria-label={t("globals.rhythmCatalogAdd")}
                 >

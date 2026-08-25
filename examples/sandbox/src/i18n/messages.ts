@@ -853,7 +853,7 @@ const en = {
   "globals.rhythmSurfaceHelp":
     "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
   "globals.rhythmCatalogHelp":
-    "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge. Do not leave a content-sized island with actions mid-left.",
+    "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). Do not leave a content-sized island with actions mid-left.",
   "globals.rhythmCatalogLabel": "Servers (3/3)",
   "globals.rhythmCatalogBulk": "Bulk select",
   "globals.rhythmCatalogRefresh": "Refresh list",
@@ -1398,9 +1398,9 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listCatalogHelp":
-    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost sm, horizontal nowrap cluster). Trailing stays on the end sibling even when interactive={false}. Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
+    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed; hover / focus-within shows trailing; touch always visible. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
-    "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.60 height-2 = 60dp).",
+    "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.107 height-2 = 56dp).",
   "globals.listShortcutCardTitle": "Shortcuts",
   "globals.listShortcutCardAria": "Sample shortcut links",
   "globals.listShortcutCardRefresh": "Refresh links",
@@ -2560,7 +2560,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmSurfaceHelp":
     "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
   "globals.rhythmCatalogHelp":
-    "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾。不要留内容宽小岛、按钮停在标签旁。",
+    "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。不要留内容宽小岛、按钮停在标签旁。",
   "globals.rhythmCatalogLabel": "服务器（3/3）",
   "globals.rhythmCatalogBulk": "批量选择",
   "globals.rhythmCatalogRefresh": "刷新列表",
@@ -3100,9 +3100,9 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listCatalogHelp":
-    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost sm，横向 nowrap 簇）。即使 interactive={false}，trailing 仍在 end 兄弟槽。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
+    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽；悬停/聚焦内显示 trailing；触摸端常显。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
-    "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.60 的 height-2 = 60dp）。",
+    "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.107 的 height-2 = 56dp）。",
   "globals.listShortcutCardTitle": "快捷入口",
   "globals.listShortcutCardAria": "快捷链接示例",
   "globals.listShortcutCardRefresh": "刷新链接",
