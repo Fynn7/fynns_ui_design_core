@@ -6752,8 +6752,8 @@ a.fynns-breadcrumb-link:visited {
  * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
  * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
  * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
- * label → avatar/initial only; identity may live in Tooltip. Rail densify
- * hides account-start and keeps the gear.
+ * label → avatar/initial only; identity may live in Tooltip. Standalone
+ * `NavigationRail` footer hides account-start and keeps the gear.
  */
 .fynns-nav-drawer-footer {
   box-sizing: border-box;
@@ -11073,8 +11073,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * Narrow viewport (≤56.25rem): destinations stay a **side column** for both
  * drawer and rail. Do **not** stack a labeled drawer above main as a rem-capped
- * ribbon (legacy 9rem clip → SearchBar + footer only). Apps densify
- * `drawer` → `rail` below ~900px (`DestinationAppShell` / `onNavCrowded`).
+ * ribbon (legacy 9rem clip → SearchBar + footer only). DestinationAppShell
+ * stays binary open `drawer` or fully `hidden` — crowding closes destinations
+ * (`onNavCrowded`); never densify to an icon-only rail. Intentional phone
+ * roots may still mount standalone `NavigationRail` via ClippedNavShell.
  * EndAside still becomes a bottom sheet on this breakpoint.
  */
 @media (max-width: 56.25rem) {
