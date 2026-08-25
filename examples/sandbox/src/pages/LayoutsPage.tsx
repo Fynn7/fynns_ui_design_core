@@ -39,6 +39,8 @@ import {
   StatusBarItem,
   Surface,
   Switch,
+  ControlRow,
+  InfoHint,
   ToggleGroup,
   TopAppBar,
   Toolbar,
@@ -47,6 +49,8 @@ import {
   UndoIcon,
   UploadIcon,
   ClipboardIcon,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
   snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
@@ -103,6 +107,12 @@ export function LayoutsPage() {
   >("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerSearchQuery, setDrawerSearchQuery] = useState("");
+  const [modeDrawerSort, setModeDrawerSort] = useState<"alphabet" | "updated">("alphabet");
+  const [modeDrawerHideBuiltin, setModeDrawerHideBuiltin] = useState(false);
+  const [modeDrawerSideFilter, setModeDrawerSideFilter] = useState<
+    "all" | "alpha" | "beta"
+  >("all");
+  const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
   const [shellNavOpen, setShellNavOpen] = useState(true);
   const [shellAsideOpen, setShellAsideOpen] = useState(true);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
@@ -318,6 +328,10 @@ export function LayoutsPage() {
 
           <LayoutsDemo id="navigation-drawer">
             <div
+              className="sandbox-globals-row"
+              style={{ alignItems: "stretch", flexWrap: "wrap" }}
+            >
+            <div
               className="sandbox-globals-navdrawer"
               style={{
                 display: "flex",
@@ -433,6 +447,121 @@ export function LayoutsPage() {
                 </NavigationDrawerGroup>
               </NavigationDrawer>
             </div>
+            <div
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "22rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerModeAria")}
+              >
+                <div className="sandbox-navdrawer-tools">
+                  <div
+                    className="fynns-control-cluster fynns-control-cluster--toolbar-end"
+                    aria-label={t("globals.navDrawerModeToolsAria")}
+                  >
+                    <Tooltip content={t("globals.navDrawerModeSortTip")}>
+                      <DropdownMenu
+                        iconOnly
+                        ariaLabel={t("globals.navDrawerModeSortTip")}
+                        align="end"
+                        trigger={<BarChartIcon size={16} />}
+                      >
+                        <DropdownMenuCheckboxItem
+                          checked={modeDrawerSort === "alphabet"}
+                          closeOnSelect
+                          onCheckedChange={(checked) => {
+                            if (checked) setModeDrawerSort("alphabet");
+                          }}
+                        >
+                          {t("globals.navDrawerModeSortAlpha")}
+                        </DropdownMenuCheckboxItem>
+                        <DropdownMenuCheckboxItem
+                          checked={modeDrawerSort === "updated"}
+                          closeOnSelect
+                          onCheckedChange={(checked) => {
+                            if (checked) setModeDrawerSort("updated");
+                          }}
+                        >
+                          {t("globals.navDrawerModeSortUpdated")}
+                        </DropdownMenuCheckboxItem>
+                      </DropdownMenu>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerModeNewTip")}>
+                      <IconButton
+                        size="sm"
+                        variant="primary"
+                        aria-label={t("globals.navDrawerModeNewTip")}
+                      >
+                        <PlusIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                  <ControlRow label={t("globals.navDrawerModeHideBuiltin")}>
+                    <div className="fynns-control-cluster">
+                      <InfoHint
+                        size="sm"
+                        content={t("globals.navDrawerModeHideBuiltinHint")}
+                        ariaLabel={t("globals.navDrawerModeHideBuiltinHintAria")}
+                      />
+                      <Switch
+                        label=""
+                        ariaLabel={t("globals.navDrawerModeHideBuiltinAria")}
+                        checked={modeDrawerHideBuiltin}
+                        onCheckedChange={setModeDrawerHideBuiltin}
+                      />
+                    </div>
+                  </ControlRow>
+                </div>
+                <ToggleGroup
+                  size="compact"
+                  fullWidth
+                  showCheck={false}
+                  ariaLabel={t("globals.navDrawerModeSideFilterAria")}
+                  value={modeDrawerSideFilter}
+                  onChange={setModeDrawerSideFilter}
+                  options={[
+                    {
+                      value: "all",
+                      label: t("globals.navDrawerModeSideAll"),
+                    },
+                    {
+                      value: "alpha",
+                      label: "A",
+                      ariaLabel: t("globals.navDrawerModeSideAlphaTip"),
+                    },
+                    {
+                      value: "beta",
+                      label: "B",
+                      ariaLabel: t("globals.navDrawerModeSideBetaTip"),
+                    },
+                  ]}
+                />
+                <NavigationDrawerItem
+                  icon={<FileIcon />}
+                  label={t("globals.navDrawerModeEntryAlpha")}
+                  active={modeDrawerEntry === "alpha"}
+                  onClick={() => setModeDrawerEntry("alpha")}
+                />
+                <NavigationDrawerItem
+                  icon={<FileIcon />}
+                  label={t("globals.navDrawerModeEntryBeta")}
+                  active={modeDrawerEntry === "beta"}
+                  onClick={() => setModeDrawerEntry("beta")}
+                />
+              </NavigationDrawer>
+            </div>
+            </div>
+            <SandboxHelp text={t("globals.navDrawerModeToolsHelp")} />
             <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
               <Button size="sm" onClick={() => setDrawerOpen(true)}>
                 {t("globals.navDrawerOpen")}

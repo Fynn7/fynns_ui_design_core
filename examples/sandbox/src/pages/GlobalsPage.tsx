@@ -3503,13 +3503,31 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.cardBody")}
             </Card>
           <Card
+            className="sandbox-globals-card"
+            title={t("globals.cardHintTitle")}
+            actions={
+              <InfoHint
+                content={t("globals.cardHintTip")}
+                ariaLabel={t("globals.cardHintAria")}
+              />
+            }
+          >
+            <div className="fynns-unit-stack">
+              <FieldHint>{t("globals.cardHintBodyLead")}</FieldHint>
+              <span className="fynns-table-meta">{t("globals.cardHintBodyMeta")}</span>
+            </div>
+          </Card>
+          <Card
             className="sandbox-globals-card sandbox-globals-card--actions-strip"
             title={t("globals.cardActionsStripTitle")}
             actions={
               <div className="fynns-control-cluster">
+                <InfoHint
+                  content={t("globals.cardActionsStripHint")}
+                  ariaLabel={t("globals.cardActionsStripHintAria")}
+                />
                 <Tooltip content={t("globals.cardActionsStripStar")}>
                   <IconButton
-                    size="sm"
                     variant="ghost"
                     aria-label={t("globals.cardActionsStripStar")}
                   >
@@ -3518,7 +3536,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripPin")}>
                   <IconButton
-                    size="sm"
                     variant="ghost"
                     aria-label={t("globals.cardActionsStripPin")}
                   >
@@ -3527,7 +3544,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripOpen")}>
                   <IconButton
-                    size="sm"
                     variant="ghost"
                     aria-label={t("globals.cardActionsStripOpen")}
                   >
@@ -3536,7 +3552,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripFolder")}>
                   <IconButton
-                    size="sm"
                     variant="ghost"
                     aria-label={t("globals.cardActionsStripFolder")}
                   >
@@ -3545,7 +3560,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </Tooltip>
                 <Tooltip content={t("globals.cardActionsStripDelete")}>
                   <IconButton
-                    size="sm"
                     variant="danger"
                     aria-label={t("globals.cardActionsStripDelete")}
                   >
@@ -3562,7 +3576,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardMetaBodyTitle")}>
             <div className="fynns-unit-stack">
-              <span className="fynns-table-meta">{t("globals.cardMetaBodyBranch")}</span>
+              <span className="fynns-table-meta">{t("globals.cardMetaBodyCount")}</span>
+              <span className="fynns-table-meta mono">{t("globals.cardMetaBodyBranch")}</span>
               <SandboxHelp as="span" text={t("globals.cardMetaBodyHelp")} />
             </div>
           </Card>
@@ -4688,6 +4703,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </Card>
           <SandboxHelp text={t("globals.codeBlockFileBodyHelp")} />
+          <Card title={t("globals.codeBlockFileBodyTitle")} chrome="plain">
+            <CodeBlock
+              variant="editable"
+              language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
+              autoGrow={false}
+              rows={12}
+              readOnly
+              defaultValue={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockFileBodyAria")}
+            />
+          </Card>
+          <SandboxHelp text={t("globals.codeBlockFileBodyReadOnlyHelp")} />
           <CodeBlock
             wrap={false}
             label={t("globals.codeBlockNowrapLabel")}
@@ -4860,47 +4888,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               t("globals.paginationPage").replace("{n}", String(n))
             }
           />
-          <Card title={t("globals.paginationCardTitle")}>
-            <div className="fynns-pagination-bar">
-              <div className="fynns-pagination-bar__start">
-                <Select
-                  ariaLabel={t("globals.paginationPageSizeAria")}
-                  value={pageSize}
-                  options={[
-                    { value: "10", label: t("globals.paginationPageSize10") },
-                    { value: "50", label: t("globals.paginationPageSize50") },
-                    { value: "100", label: t("globals.paginationPageSize100") },
-                  ]}
-                  onChange={setPageSize}
-                />
-                <FieldHint>
-                  {t("globals.paginationRange")
-                    .replace(
-                      "{from}",
-                      String((page - 1) * Number(pageSize) + 1),
-                    )
-                    .replace(
-                      "{to}",
-                      String(Math.min(page * Number(pageSize), 120)),
-                    )
-                    .replace("{total}", "120")}
-                </FieldHint>
+          <div className="sandbox-pagination-narrow-host">
+            <Card title={t("globals.paginationCardTitle")}>
+              <div className="fynns-pagination-bar fynns-scroll">
+                <div className="fynns-pagination-bar__start">
+                  <Select
+                    ariaLabel={t("globals.paginationPageSizeAria")}
+                    value={pageSize}
+                    options={[
+                      { value: "10", label: t("globals.paginationPageSize10") },
+                      { value: "50", label: t("globals.paginationPageSize50") },
+                      { value: "100", label: t("globals.paginationPageSize100") },
+                    ]}
+                    onChange={setPageSize}
+                  />
+                  <FieldHint>
+                    {t("globals.paginationRange")
+                      .replace(
+                        "{from}",
+                        String((page - 1) * Number(pageSize) + 1),
+                      )
+                      .replace(
+                        "{to}",
+                        String(Math.min(page * Number(pageSize), 120)),
+                      )
+                      .replace("{total}", "120")}
+                  </FieldHint>
+                </div>
+                <div className="fynns-pagination-bar__end">
+                  <Pagination
+                    page={page}
+                    pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
+                    onPageChange={setPage}
+                    ariaLabel={t("globals.paginationAria")}
+                    previousAriaLabel={t("globals.paginationPrev")}
+                    nextAriaLabel={t("globals.paginationNext")}
+                    getPageAriaLabel={(n) =>
+                      t("globals.paginationPage").replace("{n}", String(n))
+                    }
+                  />
+                </div>
               </div>
-              <div className="fynns-pagination-bar__end">
-                <Pagination
-                  page={page}
-                  pageCount={Math.max(1, Math.ceil(120 / Number(pageSize)))}
-                  onPageChange={setPage}
-                  ariaLabel={t("globals.paginationAria")}
-                  previousAriaLabel={t("globals.paginationPrev")}
-                  nextAriaLabel={t("globals.paginationNext")}
-                  getPageAriaLabel={(n) =>
-                    t("globals.paginationPage").replace("{n}", String(n))
-                  }
-                />
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
           <SandboxHelp text={t("globals.paginationHelp")} />
         </div>
         </GlobalsDemo>
@@ -5136,11 +5166,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">
-            <span className="fynns-control-cluster__grow" aria-hidden />
             <Button size="sm" variant="tonal">
               {t("globals.rhythmEndAlignSecondary")}
             </Button>
             <Button size="sm">{t("globals.rhythmEndAlignPrimary")}</Button>
+          </div>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmEndAlignIconHelp")} />
+        <Surface variant="outlined" padded>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Tooltip content={t("globals.rhythmEndAlignIconOpenTip")}>
+              <IconButton aria-label={t("globals.rhythmEndAlignIconOpenTip")}>
+                <FolderOpenIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmEndAlignIconPrimaryTip")}>
+              <IconButton
+                variant="primary"
+                aria-label={t("globals.rhythmEndAlignIconPrimaryTip")}
+              >
+                <ArchiveIcon />
+              </IconButton>
+            </Tooltip>
           </div>
         </Surface>
         <SandboxHelp text={t("globals.rhythmStatusHelp")} />
@@ -5192,6 +5239,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   <CheckCircleIcon />
                 </span>
+              </Tooltip>
+            </ControlRow>
+            <ControlRow label={t("globals.rhythmSyncNow")}>
+              <Tooltip content={t("globals.rhythmSyncNowTip")}>
+                <IconButton
+                  variant="primary"
+                  aria-label={t("globals.rhythmSyncNowTip")}
+                >
+                  <RefreshIcon />
+                </IconButton>
               </Tooltip>
             </ControlRow>
           </ControlStack>

@@ -855,6 +855,12 @@
     outline-color var(--fynns-duration-base) var(--fynns-ease-standard);
 }
 
+/* Teach `.fynns-pagination-bar` single-row under Usage-like ~554px hosts. */
+.sandbox-pagination-narrow-host {
+  max-width: 34.625rem;
+  min-width: 0;
+}
+
 .sandbox-globals-section-body {
   display: flex;
   flex-direction: column;

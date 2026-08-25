@@ -482,7 +482,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; narrow hosts wrap the whole end strip, not individual page buttons. Do not invent a private space-between that grows Select and crushes the pager.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -643,11 +643,13 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink so selection aligns — use `wrap={false}` for live token colors while typing.",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). Fixed well → `autoGrow={false}`. Do not use `ChatMarkdown` as the source editor for a `.md` file.",
+    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). Fixed well → `autoGrow={false}`. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
+  "globals.codeBlockFileBodyReadOnlyHelp":
+    "Same file body with `readOnly` — full highlight on one pre; drag-select should not show striped / misaligned wash (contrast with overlay while editing).",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -837,7 +839,11 @@ const en = {
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
   "globals.rhythmEndAlignHelp":
-    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (+ optional `__grow` spacer) — never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+  "globals.rhythmEndAlignIconHelp":
+    "Icon-only end-align strip: Tooltip → IconButton siblings stay 40dp circles (not crushed ellipses on the full-width row).",
+  "globals.rhythmEndAlignIconOpenTip": "Open destination folder",
+  "globals.rhythmEndAlignIconPrimaryTip": "Start archive copy",
   "globals.rhythmEndAlignSecondary": "Secondary",
   "globals.rhythmEndAlignPrimary": "Primary action",
   "globals.rhythmStatusHelp":
@@ -853,6 +859,8 @@ const en = {
   "globals.rhythmStatusLocalEmpty": "Local sync unknown",
   "globals.rhythmStatusReady": "Ready",
   "globals.rhythmStatusReadyTip": "Recommended settings are already applied",
+  "globals.rhythmSyncNow": "Sync now",
+  "globals.rhythmSyncNowTip": "Sync to the backup branch immediately",
   "globals.rhythmSourceLabel": "Catalog source",
   "globals.rhythmSourceAlpha": "Catalog",
   "globals.rhythmSourceBeta": "Mirror",
@@ -930,7 +938,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -1130,6 +1138,26 @@ const en = {
   "globals.navDrawerToolBulk": "Bulk select",
   "globals.navDrawerToolArchive": "Archive",
   "globals.navDrawerToolRestore": "Restore",
+  "globals.navDrawerModeAria": "Sample mode sidebar",
+  "globals.navDrawerModeToolsAria": "Sample mode sidebar tools",
+  "globals.navDrawerModeSortTip": "Sort catalog",
+  "globals.navDrawerModeSortAlpha": "Name A–Z",
+  "globals.navDrawerModeSortUpdated": "Last updated",
+  "globals.navDrawerModeNewTip": "New entry",
+  "globals.navDrawerModeEntryAlpha": "Sample entry A",
+  "globals.navDrawerModeEntryBeta": "Sample entry B",
+  "globals.navDrawerModeHideBuiltin": "Hide built-in",
+  "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
+  "globals.navDrawerModeHideBuiltinHint":
+    "When enabled, built-in read-only entries are hidden from this catalog (sample policy copy — use InfoHint, not ControlBlock description).",
+  "globals.navDrawerModeHideBuiltinHintAria": "About hiding built-in entries",
+  "globals.navDrawerModeSideFilterAria": "Sample presence-side filter",
+  "globals.navDrawerModeSideAll": "All",
+  "globals.navDrawerModeSideAllTip": "All",
+  "globals.navDrawerModeSideAlphaTip": "Side A",
+  "globals.navDrawerModeSideBetaTip": "Side B",
+  "globals.navDrawerModeToolsHelp":
+    "Mode sidebar (no SearchBar): sort + new → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort). Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch`. Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** (mark-glyph labels). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: Globals `#info-hint` / Layouts mode sample.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -1428,9 +1456,18 @@ const en = {
   "globals.cardTitlePlain": "Title only",
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
+  "globals.cardHintTitle": "Export package",
+  "globals.cardHintAria": "Export package help",
+  "globals.cardHintTip":
+    "Packs managed configs only — large local DBs use Archive below.",
+  "globals.cardHintBodyLead":
+    "Longer include / exclude detail belongs in the body (FieldHint), not a second head “i”.",
+  "globals.cardHintBodyMeta": "One InfoHint in actions · short tip · detail in body",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "Header actions stay one horizontal .fynns-control-cluster strip (flat IconButtons — no nested clusters stacking as full-width rows).",
+    "Header actions stay one horizontal .fynns-control-cluster (flat IconButtons + at most one InfoHint). All icon chrome shares size md (40dp hover) — never mix sm/md disks in the same strip; match TopAppBar md on the same page.",
+  "globals.cardActionsStripHint": "Short head tip only — detail stays in the body.",
+  "globals.cardActionsStripHintAria": "Entry actions help",
   "globals.cardActionsStripStar": "Star",
   "globals.cardActionsStripPin": "Pin",
   "globals.cardActionsStripOpen": "Open file",
@@ -1442,11 +1479,12 @@ const en = {
   "globals.cardChromePlainNote":
     "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / InfoHint — one nowrap strip; nested control-clusters hug). Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.cardMetaBodyTitle": "sample-repo status",
+  "globals.cardMetaBodyCount": "8 catalog entries",
   "globals.cardMetaBodyBranch": "default branch: main",
   "globals.cardMetaBodyHelp":
-    "Branch / path meta belongs in the Card body (mono OK). Leave actions empty unless there is an IconButton / InfoHint strip.",
+    "Counts / branch / path meta belong in the Card body (`.fynns-table-meta` / mono). `title` = short section name only — never wrap name + count in a title `fynns-control-cluster` (reads as glued `OpenSpec8`). Leave actions empty unless there is an IconButton / InfoHint strip.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting body children → `chrome=\"plain\"` + nest-gap (Preview toggle).",
@@ -2130,7 +2168,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主可整段换行，禁止把 Select 拉成 1fr 挤碎页码条。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -2291,11 +2329,13 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿以保证选区对齐 — 打字时要 live token 色请 `wrap={false}`。",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。固定井 → `autoGrow={false}`。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
+    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。固定井 → `autoGrow={false}`。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
+  "globals.codeBlockFileBodyReadOnlyHelp":
+    "同一文件正文 + `readOnly` — 完整高亮单层 pre；拖选不应出现条纹/错位 wash（可与上方可编辑 overlay 对照）。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2485,7 +2525,11 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmCatalogRefresh": "刷新列表",
   "globals.rhythmCatalogAdd": "新增服务器",
   "globals.rhythmEndAlignHelp":
-    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（可加 `__grow` 占位）— 禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+  "globals.rhythmEndAlignIconHelp":
+    "纯 IconButton 贴尾条：Tooltip → IconButton 保持 40dp 正圆（不要在通栏 flex 行上被压成细椭圆）。",
+  "globals.rhythmEndAlignIconOpenTip": "打开目标文件夹",
+  "globals.rhythmEndAlignIconPrimaryTip": "开始拷贝归档",
   "globals.rhythmEndAlignSecondary": "次要",
   "globals.rhythmEndAlignPrimary": "主要操作",
   "globals.rhythmStatusHelp":
@@ -2501,6 +2545,8 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusLocalEmpty": "本机同步未知",
   "globals.rhythmStatusReady": "就绪",
   "globals.rhythmStatusReadyTip": "推荐配置已应用",
+  "globals.rhythmSyncNow": "立即同步",
+  "globals.rhythmSyncNowTip": "立即同步到备份分支",
   "globals.rhythmSourceLabel": "目录来源",
   "globals.rhythmSourceAlpha": "目录",
   "globals.rhythmSourceBeta": "镜像",
@@ -2577,7 +2623,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
+    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
@@ -2777,6 +2823,26 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerToolBulk": "批量选择",
   "globals.navDrawerToolArchive": "归档",
   "globals.navDrawerToolRestore": "恢复",
+  "globals.navDrawerModeAria": "示例模式侧栏",
+  "globals.navDrawerModeToolsAria": "示例模式侧栏工具",
+  "globals.navDrawerModeSortTip": "目录排序",
+  "globals.navDrawerModeSortAlpha": "名称 A–Z",
+  "globals.navDrawerModeSortUpdated": "最近更新",
+  "globals.navDrawerModeNewTip": "新建条目",
+  "globals.navDrawerModeEntryAlpha": "示例条目 A",
+  "globals.navDrawerModeEntryBeta": "示例条目 B",
+  "globals.navDrawerModeHideBuiltin": "隐藏内置",
+  "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
+  "globals.navDrawerModeHideBuiltinHint":
+    "开启后不显示只读内置条目（示例政策说明 — 用 InfoHint，不要用 ControlBlock description）。",
+  "globals.navDrawerModeHideBuiltinHintAria": "关于隐藏内置条目",
+  "globals.navDrawerModeSideFilterAria": "示例存在侧筛选",
+  "globals.navDrawerModeSideAll": "全部",
+  "globals.navDrawerModeSideAllTip": "全部",
+  "globals.navDrawerModeSideAlphaTip": "A 侧",
+  "globals.navDrawerModeSideBetaTip": "B 侧",
+  "globals.navDrawerModeToolsHelp":
+    "模式侧栏（无 SearchBar）：排序 + 新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron）。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch`。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`**（标记字形标签）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 Globals `#info-hint` / Layouts 模式样例。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
@@ -3071,9 +3137,17 @@ const zh: Record<MessageKey, string> = {
   "globals.cardTitlePlain": "仅标题",
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
+  "globals.cardHintTitle": "导出包",
+  "globals.cardHintAria": "导出包说明",
+  "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
+  "globals.cardHintBodyLead":
+    "更长的纳入 / 排除说明放正文（FieldHint），不要再叠第二个标题「i」。",
+  "globals.cardHintBodyMeta": "标题最多一个 InfoHint · tip 要短 · 细节在正文",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "标题栏 actions 保持一条横向 .fynns-control-cluster（扁平 IconButton，禁止嵌套 cluster 叠成多行）。",
+    "标题操作区保持一条横向 .fynns-control-cluster（扁平 IconButton + 最多一个 InfoHint）。同一条带内所有图标 chrome 共用 size md（40dp hover）— 禁止 sm/md 混盘；同页 TopAppBar 也用 md。",
+  "globals.cardActionsStripHint": "标题只放短 tip — 细节留在正文。",
+  "globals.cardActionsStripHintAria": "条目操作说明",
   "globals.cardActionsStripStar": "收藏",
   "globals.cardActionsStripPin": "置顶",
   "globals.cardActionsStripOpen": "打开文件",
@@ -3085,11 +3159,12 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromePlainNote":
     "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.cardMetaBodyTitle": "示例仓库状态",
+  "globals.cardMetaBodyCount": "8 条目录条目",
   "globals.cardMetaBodyBranch": "默认分支：main",
   "globals.cardMetaBodyHelp":
-    "分支 / 路径元数据放 Card 正文（可用 mono）。没有 IconButton / InfoHint 就不要写 actions。",
+    "计数 / 分支 / 路径元数据放 Card 正文（`.fynns-table-meta` / mono）。`title` 只要短分区名 — 禁止用 title 内 `fynns-control-cluster` 包「名 + 计数」（会读成粘连的 `OpenSpec8`）。没有 IconButton / InfoHint 就不要写 actions。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套正文子节点 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",
