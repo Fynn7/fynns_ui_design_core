@@ -10663,6 +10663,18 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block: var(--fynns-layout-dialog-inset);
 }
 
+/*
+ * Destination catalog chrome: first child is a standalone ControlRow
+ * (section name + IconButton strip). Drop pad-block-start to the
+ * NavigationDrawer body band so that ControlRow label shares the active
+ * NavigationDrawerItem label midline (ClippedNavShell drawer pad-block is 0;
+ * destinations start after `--fynns-navdrawer-body-pad-block-start`). Card /
+ * EmptyState / other first units keep full `dialog-inset`.
+ */
+.fynns-content-column:has(> .fynns-control-row:first-child) {
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+}
+
 .fynns-content-column > .fynns-busy-region--fill,
 .fynns-content-column > .fynns-fill-column {
   flex: 1 1 auto;
