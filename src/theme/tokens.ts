@@ -900,8 +900,11 @@ export const CHAT_TOKENS = {
  */
 export const LIST_TOKENS = {
   "height-1": "3.5rem",
-  /** Two-line path / shortcut rows (headline + supporting). Not 72dp. */
-  "height-2": "3.75rem",
+  /**
+   * Two-line path / shortcut rows (headline + supporting). Matches height-1
+   * (56dp) — still below M3 72; less idle vertical air around md IconButtons.
+   */
+  "height-2": "3.5rem",
   "height-3": "5.5rem",
   "pad-inline": "1rem",
   "pad-block": "0.5rem",

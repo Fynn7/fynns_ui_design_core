@@ -8625,7 +8625,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Interactive row actions (IconButton / cluster) — sibling of the row button.
- * Do not crush to list-icon 16dp; keep ghost sm targets.
+ * Do not crush to list-icon 16dp; prefer ghost md (40dp) to match page
+ * ControlRow chrome on the same destination catalog surface.
  */
 .fynns-list-item-trailing--end {
   box-sizing: border-box;
@@ -8658,9 +8659,83 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex-wrap: nowrap;
 }
 
-.fynns-list-item-host--with-end > .fynns-list-item {
-  /* End pad lives on the actions column so IconButtons clear the list edge. */
+/*
+ * Overlay reveal (ChatMessage / Fluent / Cursor): idle actions do not reserve
+ * a flex slot so short headlines fill the row; hover / focus-within shows the
+ * cluster. Touch / coarse pointer keeps actions always visible.
+ * Reserve = two md IconButtons + cluster gap + list pad-inline.
+ */
+.fynns-list-item-host--with-end {
+  position: relative;
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-list-item-host--with-end:hover > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:focus-within > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+  /* Idle: full-bleed copy. Reveal: clear under two md IconButtons. */
   padding-inline-end: var(--fynns-space-xs);
+  transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-list-item-host--with-end:hover > .fynns-list-item,
+.fynns-list-item-host--with-end:focus-within > .fynns-list-item,
+.fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item,
+.fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  padding-inline-end: calc(
+    (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
+      var(--fynns-list-pad-inline)
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+
+  .fynns-list-item-host--with-end > .fynns-list-item,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+    padding-inline-end: calc(
+      (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
+        var(--fynns-list-pad-inline)
+    );
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+    transition: none;
+  }
 }
 
 .fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
@@ -8696,10 +8771,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
   width: auto;
   min-width: 0;
-}
-
-.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
-  padding-inline-end: var(--fynns-space-xs);
 }
 
 .fynns-list-item-detail {
