@@ -639,9 +639,12 @@ huge empty bands; wrong type / gap rhythm.
 Nested `IconButton` inside interactive `ListItem` used to be invalid HTML, so
 apps invented Surface wrappers — core now keeps interactive `trailing` **outside**
 the row button. **Fix in the consumer:** one `List` of `ListItem`s —
-`headline` + path `supportingText` + `trailing` = ghost `sm` `IconButton`s
-(`.fynns-control-cluster`); open/confirm destructive work in `ConfirmDialog`.
-Section chrome stays **one** outer `Card` if needed.
+`headline` + path `supportingText` + `trailing` = ghost **md** `IconButton`s
+(`.fynns-control-cluster`; default size — do not pass `size="sm"` on path
+catalogs). Core **`--with-end` overlay reveal** keeps idle rows full-bleed;
+hover / focus-within shows actions; touch always visible. Open/confirm
+destructive work in `ConfirmDialog`. Section chrome stays **one** outer `Card`
+if needed.
 
 ## Failure mode this treaty targets: ListItem trailing IconButtons stacked vertically
 
@@ -1424,8 +1427,9 @@ Symptoms (MCP / settings destination pages):
 
 **Fix in the consumer (hard):**
 1. In one strip (TopAppBar leading+trailing, `.fynns-card-actions`, one
-   icon `.fynns-control-cluster`) every `IconButton` and icon `InfoHint`
-   uses the **same** `size`.
+   icon `.fynns-control-cluster`, **or the same page’s catalog ControlRow +
+   List trailing**) every `IconButton` and icon `InfoHint` uses the **same**
+   `size`.
 2. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
    `size="sm"` on TopAppBar InfoHint when siblings are `md`.
 3. Dense Card heads may use **`sm`** only when **every** icon in that head
@@ -1484,7 +1488,9 @@ lived only on the inner `<button>`.
 
 **Fix in core (do not patch with app CSS):** leading hugs the glyph;
 `--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
-`--with-end` paints hover/selected on the **row / host**. Nested `List` under
+`--with-end` paints hover/selected on the **row / host** and **overlay-reveals**
+end action clusters (idle copy full-bleed; hover / focus-within shows trailing;
+touch always visible — ≥ 0.4.107). Nested `List` under
 `detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
 as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
 the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**

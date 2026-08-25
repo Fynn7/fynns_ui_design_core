@@ -169,7 +169,8 @@ ring can paint before heavy work).
   control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
   (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
-  `ListItem`s (headline + path + trailing ghost `sm` actions) — never a
+  `ListItem`s (headline + path + trailing ghost **md** actions — default size;
+  `--with-end` overlay reveal on hover) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
   sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
   — **never** start tick / inset rail / second host wash. Leading→copy
