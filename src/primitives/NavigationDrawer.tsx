@@ -81,9 +81,10 @@ export type NavigationDrawerProps = {
    * Destinations as **direct** body children: `NavigationDrawerItem`,
    * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
    * Item ↔ Item uses `--fynns-navdrawer-section-gap` (4dp). SearchBar /
-   * tools as a body sibling uses `--fynns-navdrawer-search-gap` (aliases
-   * layout `control-stack-gap` — 8dp; matches Search↔Toggle in a tools
-   * column; wider than Item↔Item, not a 16dp kind-jump).
+   * tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` host as a body
+   * sibling uses `--fynns-navdrawer-search-gap` (aliases layout
+   * `control-stack-gap` — 8dp; chrome band peers + chrome↔destinations;
+   * wider than Item↔Item, not a 16dp kind-jump).
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;

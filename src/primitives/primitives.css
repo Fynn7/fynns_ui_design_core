@@ -2934,6 +2934,67 @@ input.fynns-input:focus::-webkit-scrollbar {
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 
+/*
+ * IconButton strips in end-align clusters (Tooltip wrapper included): hug the
+ * 40dp circular target — never crush tips/buttons on the shared flex row
+ * (Card action footers / archive start-open strips).
+ */
+.fynns-control-cluster--end-align > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align > .fynns-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-cluster--end-align
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon)
+  > .fynns-btn--icon {
+  flex: none;
+  min-width: var(--fynns-size-icon-target);
+  min-height: var(--fynns-size-icon-target);
+}
+
+/* Pure IconButton end-align strips (no grow Select): center on the 40dp row. */
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow)),
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  ) {
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow))
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-tooltip-trigger:has(.fynns-btn--sm.fynns-btn--icon)
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-btn--sm.fynns-btn--icon {
+  margin-block-start: 0;
+}
+
+/*
+ * Mode / drawer tool strip (sort menu + primary new, no SearchBar): nowrap +
+ * trailing hug so controls do not read as the first destination row /
+ * NavigationDrawerGroup chevron. Not `--end-align` (form Select + row action).
+ */
+.fynns-control-cluster--toolbar-end {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.fynns-control-cluster--toolbar-end > * {
+  flex-shrink: 0;
+}
+
 .fynns-control-cluster__grow {
   flex: 1 1 auto;
   min-width: 0;
@@ -6801,8 +6862,8 @@ a.fynns-breadcrumb-link:visited {
  * Group / Headline / Divider / Tooltip-wrapped items. Same step as
  * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
  * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
- * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools ↔ destinations
- * use `--fynns-navdrawer-search-gap` (8dp / control-stack) below.
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools / SyncSideFilter
+ * chrome ↔ neighbors use `--fynns-navdrawer-search-gap` (8dp) below.
  */
 .fynns-nav-drawer-body
   > *

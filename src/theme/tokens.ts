@@ -1172,11 +1172,12 @@ export const NAVDRAWER_TOKENS = {
    */
   "section-gap": "0.25rem",
   /**
-   * SearchBar / tools host ↔ destination rows. **One step above
-   * `section-gap` (4dp)** — aliases `--fynns-layout-control-stack-gap`
-   * (8dp), the same gap hub-mode tools use between SearchBar ↔ ToggleGroup.
-   * Do **not** jump back to 16dp (`unit-stack-gap` / former kind-jump).
-   * Item↔Item stays on `section-gap`.
+   * Chrome band ↔ next body sibling (SearchBar, tools/`--toolbar-end` host,
+   * SyncSideFilter `ToggleGroup`, preference `ControlRow` wrappers) **and**
+   * that chrome ↔ destination rows. **One step above `section-gap` (4dp)** —
+   * aliases `--fynns-layout-control-stack-gap` (8dp), the same gap hub-mode
+   * tools use inside a tools column. Do **not** jump back to 16dp
+   * (`unit-stack-gap` / former kind-jump). Item↔Item stays on `section-gap`.
    */
   "search-gap": "var(--fynns-layout-control-stack-gap)",
   "badge-dot": "0.375rem",
