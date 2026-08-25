@@ -3616,14 +3616,23 @@ input.fynns-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-line-height-snug);
 }
 
-/* Consumer often wraps title in <span className="mono"> — keep ellipsis. */
-.fynns-card-title > * {
+/* Consumer often wraps title in <span className="mono"> — keep ellipsis.
+ * Do **not** force `display: block` on `.fynns-control-cluster` (would cancel
+ * flex + gap and glue title + muted count into `OpenSpec8`). */
+.fynns-card-title > :not(.fynns-control-cluster) {
   display: block;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.fynns-card-title > .fynns-control-cluster {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* Single disclose slot: optional rest icon stacked with expand chevron.
@@ -3911,41 +3920,44 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Table / list pager footer (M3 data-table pagination / MUI TablePagination):
  * one horizontal band — meta (rows-per-page Select + range) start, page
- * navigator end. Narrow hosts may wrap the **whole** end strip below; page
- * discs stay nowrap inside `.fynns-pagination`.
+ * navigator end. **Never wrap to two rows** (even on narrow hosts): keep
+ * `nowrap` and let the bar scroll inline (`overflow-x: auto` + `fynns-scroll`).
+ * Page discs stay nowrap inside `.fynns-pagination`.
  */
 .fynns-pagination-bar {
   box-sizing: border-box;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-layout-control-cluster-gap);
   width: 100%;
   min-width: 0;
+  overflow-x: auto;
+  overflow-y: clip;
 }
 
 .fynns-pagination-bar__start {
   display: inline-flex;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--fynns-layout-control-cluster-gap);
-  min-width: 0;
+  min-width: max-content;
 }
 
 /* Select is width:100% by default — hug content in the pager meta row. */
 .fynns-pagination-bar__start > .fynns-select {
   width: auto;
-  max-width: 100%;
-  flex: 0 1 auto;
+  max-width: none;
+  flex: 0 0 auto;
 }
 
 /* FieldHint is block by default — keep range copy on the same meta line. */
 .fynns-pagination-bar__start > .fynns-field-hint {
   display: inline-flex;
   align-items: center;
-  flex: 0 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
   white-space: nowrap;
 }
 
