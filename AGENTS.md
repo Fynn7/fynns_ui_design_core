@@ -52,7 +52,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    Pure informational help uses **`InfoHint`**: standalone icon when there is no
    visible name (`cursor: help` — **same 40dp circular target and 16dp glyph as
    `IconButton` `ghost` `md`**, not a separate 14px muted dot); dense rows may
-   use `size="sm"`. For form/inspector rows pass `label` (plain text trigger,
+   use `size="sm"`. **`tone="danger"`** tints the info glyph for Fail / error
+   detail beside short `OK`/`Fail` probe rows (OK rows stay default). For
+   form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not an action `IconButton`.
    **Field header actions:** **M3 in-field icons** (reveal password, refresh
    list, clear) belong in `Input` **`trailing`** inside the field shell. **Select
@@ -360,6 +362,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
+- **DON'T** invent consumer `width` / `min-width` on `.fynns-dialog-panel` to
+ fix a skinny tall form — body must use `FieldStack` / `FieldBlock` (core
+ stretches form hosts to the `size` ceiling); prefer `size="lg"` for long
+ inspector / edit dialogs. ControlStack-only preference rows stay content-fit.
+ Live: `#form-recipe` Dialog host.
 - **DON'T** set main app body / chrome / forms / Chat / Dialog / lists to
   `--fynns-font-serif` (or any serif / “editorial” stack). Default text inherits
   `body { font-family: var(--fynns-font-ui) }`. Serif is reserved — see Tokens
@@ -872,7 +879,7 @@ classes.
   | Role | API | Close | Notes |
   | --- | --- | --- | --- |
   | Basic confirm | `ConfirmDialog` | none | Title + supporting text + foot actions; `dialog-inset`. |
-  | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). Optional X is a web extension for dismissible forms — **not** a separate component. |
+  | Basic content | `Dialog` (`showCloseButton` default **false**) | optional | Same M3 basic shell (`radius-3xl`, content-fit width / `size` ceiling). **Form body** (`FieldStack` / `FieldBlock` / `Textarea`) **stretches to the `size` ceiling** — prefer `size="lg"` (35rem / M3 560dp max) for tall inspector forms; body scrolls at panel `max-height`. ControlStack-only preference rows stay content-fit. Optional X is a web extension for dismissible forms — **not** a separate component. |
   | Full-screen | `FullscreenDialog` | leading X | `content-inset` header; **flush-start** when the first body child is a bordered well — see **Flush-start overlay body**. Mobile-first long tasks. |
   **Dismissible Dialog + ControlStack** (do **not** invent a parallel
   `SettingsDialog` / Preferences shell): `Dialog` + `showCloseButton` +
@@ -925,8 +932,10 @@ classes.
   (4dp) for that band
   to destinations; **sheet `footer`** = Cursor-style **single account row**
   (Avatar + optional fade-truncated `.fynns-nav-drawer-footer-account-label` +
-  settings gear in `.fynns-nav-drawer-footer-account` end — **not** a
-  destination Item and **not** TopAppBar `trailing` for settings; footer has
+  settings gear (`IconButton` `size="sm"`; core optical end-align so glyph
+  right edge matches Avatar left inset at `--fynns-navdrawer-pad-inline`) in
+  `.fynns-nav-drawer-footer-account` end — **not** a destination Item and
+  **not** TopAppBar `trailing` for settings; footer has
   **no** hairline divider above it — pad only, Cursor-style; when body content
   overflows, `.fynns-nav-drawer-body` gets `data-fade-bottom` / `data-fade-top`
   mask fades into the footer / top — not a hard clip). **Workspace /
@@ -1251,11 +1260,11 @@ classes.
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
-  | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh |
+  | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — sibling stays on **trigger band** when open (core ≥ 0.4.112); `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh; private `align-self` on refresh when list expands |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | **Catalog list chrome** (section name + count \| IconButton strip — e.g. `Servers (3/3)`) | Standalone `ControlRow` (fills host: label `1fr`, actions end-hug) + **one** `.fynns-control-cluster` of **`md`** `IconButton`s (overflow / sort menus → `DropdownMenu` **`iconOnly`**). **Same destination page:** match List `trailing` `size`. Live: `#rhythm` catalog strip | `ControlRow` as content-sized island (actions float mid-left); loose IconButton siblings without a cluster; private `hub-spread` / `space-between` for the same job; bare labeled `.fynns-btn` DropdownMenu beside IconButtons (48×40 pill vs 32dp circle) |
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
-  | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). Live: `#rhythm` end-align footer + icon strip | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon` |
+  | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). **Dialog body** foot (several labeled Buttons): same cluster as last body child — core ≥ 0.4.111 wraps inside the clipped scroll host so the first action is never clipped. `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). Live: `#rhythm` end-align footer + icon strip; `#form-recipe` Dialog multi-action foot | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon`; Dialog body `overflow-x: visible` hacks |
 | **Mode drawer tools** (sort menu + primary new — no SearchBar above destinations) | One `.fynns-control-cluster.fynns-control-cluster--toolbar-end` of Tooltip→sort menu + Tooltip→`IconButton` (nowrap, trailing hug; sort trigger **not** `ChevronDown`). Live: Layouts `#layouts-demo-navigation-drawer` mode sample | Full-width default cluster start-packed above first `NavigationDrawerItem` (reads as stray group chevron / overlap); chevron sort icon beside `NavigationDrawerGroup` expanders |
 | **Mode drawer preference** (hide built-in / long policy toggle in ~224px tools column) | One **`ControlRow`** + **`InfoHint` `size="sm"`** + track-only **`Switch`** (`label=""` + `ariaLabel`) — paragraph in Tooltip, **not** `ControlBlock` `description`. Live: same Layouts sample + Globals `#info-hint` | `ControlBlock` + multi-sentence `description` (~102dp tall stack above destination list) |
 | **Mode drawer SyncSideFilter** (compact `ToggleGroup` between toolbar and catalog) | **Omit option `tip`** (keep `ariaLabel` / visible labels) — ≥ 0.4.97. **`showCheck={false}`** when labels are mark glyphs (C / O) — default check slot + optical translate used to bleed into “全部” (≥ 0.4.100 also clips chips). Body sibling gap to tools / destinations = `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98 — not Item `section-gap` 4dp). Live: Layouts `#layouts-demo-navigation-drawer` | Any `tip` collides with sort/+ or EmptyState; tools↔filter crushed to 4dp `section-gap`; default `showCheck` wash bleed onto next mark |
@@ -1265,8 +1274,8 @@ classes.
   | **File / settings hierarchy** (folders + leaves, keyboard tree) | **`Tree`** / **`TreeItem`** (`role=tree`). Branch row click selects **and** toggles expand. Live `#tree` | `NavigationDrawer` / `NavigationDrawerGroup` for app destinations; expandable catalog `List` + `ListItem` `detail` for session/record trees; inventing `HubTreeDisclosure` |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s). **Pane sole body** → `fill` so copy centers in the canvas (live `#empty-state` fill stage / Layouts `#layouts-demo-drill-in`). Inside Card / List / `ChatThread.empty` → default (no `fill`) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`); content-sized EmptyState as the only DestinationAppShell canvas child (parks top — not centered) |
   | Table / list pager (page-size + `Pagination`) | **`.fynns-pagination-bar`**: one footer row — `__start` = content-hug Select + range, `__end` = nowrap `Pagination` (M3 data-table / MUI TablePagination). **Never** wrap start/end onto two rows when narrow — add `fynns-scroll` and let the bar scroll inline. Live `#pagination` | Vertical Card-body stack of Select then pager; private space-between that grows Select (`width:100%` / `1fr`) and wraps page discs; `flex-wrap` two-line footer |
-  | Multi-status / probe strip (behind / CI / protection / connection OK·Fail) | `ControlStack` of `ControlRow`s (`label` = short name; children = short `OK`/`Fail`/`—` **or** tip glyph + **`InfoHint`** for the long reason / installed list / proxy URL). Form-host → label-fill + end-hug. Live: `#rhythm` status legend | `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …Installed: …`); flat cluster of mono labels + icons; dumping diagnostics into visible body copy |
-  | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name; children = short status + **`InfoHint`** for detail, tip glyph, **or** lone `Tooltip` → `IconButton` for row actions like sync). If an apply / fix `IconButton` shares the row, wrap **status/glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend (+ sync row) | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host; private width hacks on `.fynns-btn--icon`; multi-line Fail essays as FieldHint siblings |
+ | Multi-status / probe strip (behind / CI / protection / connection OK·Fail) | `ControlStack` of `ControlRow`s (`label` = short name; children = short `OK`/`Fail`/`—` **or** tip glyph + **`InfoHint`** for the long reason / installed list / proxy URL; **Fail** → `InfoHint` `tone="danger"`). Form-host → label-fill + end-hug. Live: `#rhythm` status legend | `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …Installed: …`); flat cluster of mono labels + icons; Fail row uses default white InfoHint; dumping diagnostics into visible body copy |
+ | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name; children = short status + **`InfoHint`** for detail (`tone="danger"` when status is Fail), tip glyph, **or** lone `Tooltip` → `IconButton` for row actions like sync). If an apply / fix `IconButton` shares the row, wrap **status/glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend (+ sync row) | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host; private width hacks on `.fynns-btn--icon`; multi-line Fail essays as FieldHint siblings |
   | **Suffixed file body** (inspector / skill / rule / plugin source — `.md`, `.xml`, `.py`, `.ts`, `.json`, …) | **`CodeBlock`** (`variant="editable"` when editing; pass `language` via `codeLanguageFromPath(path)` or explicit id; Card host → `chrome="plain"`; fixed well → `autoGrow={false}`). Unknown suffix still CodeBlock (plain mono). Live: sandbox `#code-block` file-body Card | **`Textarea`** for anything with a real extension other than `.txt` / `.text`; UI-font prose well for `SKILL.md` / `prompt.xml` / `plugin.ts` |
   | Plain note / extensionless draft / **`.txt`** | `Textarea` (or Form `FieldBlock` + Textarea) | Forcing CodeBlock on freeform notes with no filetype |
 
@@ -1458,10 +1467,13 @@ classes.
   tokens: `head + body` pad-top `space-sm`; foot **block-end** `space-lg`
   (under 40dp action Buttons). (**no** head|body hairline.)
   Width: content-fit (`max-content`) up to the `size` token ceiling
-  (`--fynns-layout-dialog-max-width-*`); at the ceiling, Switch / ControlStack
-  labels wrap (body `overflow-x: clip` — no horizontal scrollbar). Do not
-  invent consumer width or wrap hacks. Vertical scroll only when body exceeds
-  panel `max-height`.
+  (`--fynns-layout-dialog-max-width-*`) for short copy / ControlStack-only
+  bodies; **form hosts** (`FieldStack` / `FieldBlock` / `Textarea` in body)
+  **fill to that ceiling** so tall fields are not a ~280px skinny column —
+  use `size="lg"` for long inspector / edit forms (M3 560dp max). At the
+  ceiling, Switch / ControlStack labels wrap (body `overflow-x: clip` — no
+  horizontal scrollbar). Do not invent consumer width or wrap hacks. Vertical
+  scroll only when body exceeds panel `max-height`.
   FullscreenDialog inherits content-inset on head/body — **no** head|body
   hairline / `surface-head`. **Flush-start overlay body (hard):** when the
   first child of `.fynns-dialog-body` (or that child’s first child — one
