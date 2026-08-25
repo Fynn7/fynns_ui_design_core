@@ -44,7 +44,8 @@ ring can paint before heavy work).
   status strip — `#status-bar`; not BottomAppBar / Banner),
   Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
-  (`.fynns-pagination-bar` M3/MUI single footer row — not Select-then-pager stack),
+  (`.fynns-pagination-bar fynns-scroll` M3/MUI single footer row — never two
+  lines on narrow; not Select-then-pager stack),
   SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
