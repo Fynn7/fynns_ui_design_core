@@ -39,10 +39,7 @@ import {
   ChatActivityStep,
   ChatThinking,
   ChatThread,
-  AlertTriangleIcon,
-  CheckCircleIcon,
   ClipboardIcon,
-  CloseIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
@@ -5194,34 +5191,34 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
           <ControlStack columns={1}>
             <ControlRow label={t("globals.rhythmStatusBehind")}>
-              <Tooltip content={t("globals.rhythmStatusBehindTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusBehindTip")}
-                >
-                  <AlertTriangleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusBehindTip")}
+                  ariaLabel={t("globals.rhythmStatusBehindTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusCi")}>
-              <Tooltip content={t("globals.rhythmStatusCiTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusCiTip")}
-                >
-                  <CloseIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusCiTip")}
+                  ariaLabel={t("globals.rhythmStatusCiTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusProtection")}>
-              <Tooltip content={t("globals.rhythmStatusProtectionTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusProtectionTip")}
-                >
-                  <CheckCircleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusProtectionTip")}
+                  ariaLabel={t("globals.rhythmStatusProtectionTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusLocal")}>
               <span
@@ -5232,14 +5229,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </span>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusReady")}>
-              <Tooltip content={t("globals.rhythmStatusReadyTip")}>
-                <span
-                  className="sandbox-globals-rhythm-status-glyph"
-                  aria-label={t("globals.rhythmStatusReadyTip")}
-                >
-                  <CheckCircleIcon />
-                </span>
-              </Tooltip>
+              <div className="fynns-control-cluster">
+                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmStatusReadyTip")}
+                  ariaLabel={t("globals.rhythmStatusReadyTip")}
+                />
+              </div>
             </ControlRow>
             <ControlRow label={t("globals.rhythmSyncNow")}>
               <Tooltip content={t("globals.rhythmSyncNowTip")}>

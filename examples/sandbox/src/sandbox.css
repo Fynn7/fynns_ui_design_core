@@ -143,10 +143,9 @@
   flex: 0 0 auto;
 }
 
-/* Templates language field — form Select (content-sized host). */
-.sandbox-language-select {
-  width: fit-content;
-  max-width: 100%;
+/* Chrome locale switch — compact ToggleGroup (not Select / chevron). */
+.sandbox-language-switcher {
+  flex: 0 0 auto;
 }
 
 .sandbox-body {

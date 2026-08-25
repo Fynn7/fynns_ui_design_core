@@ -4,6 +4,7 @@ import {
   BarChartIcon,
   BottomAppBar,
   Button,
+  Card,
   Chat,
   ChatComposer,
   ChatMessage,
@@ -11,6 +12,8 @@ import {
   DestinationAppShell,
   EmptyState,
   Fab,
+  FieldBlock,
+  FieldStack,
   FileIcon,
   FillColumn,
   FolderOpenIcon,
@@ -41,6 +44,9 @@ import {
   Switch,
   ControlRow,
   InfoHint,
+  List,
+  ListItem,
+  PageScroll,
   ToggleGroup,
   TopAppBar,
   Toolbar,
@@ -56,6 +62,7 @@ import {
 import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import {
   NavDrawerFooterAccount,
   NavDrawerWorkspaceRow,
@@ -114,8 +121,9 @@ export function LayoutsPage() {
   >("all");
   const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
   const [shellNavOpen, setShellNavOpen] = useState(true);
-  const [shellAsideOpen, setShellAsideOpen] = useState(true);
+  const [shellAsideOpen, setShellAsideOpen] = useState(false);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
+  const [shellSettingsOpen, setShellSettingsOpen] = useState(false);
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
@@ -160,10 +168,11 @@ export function LayoutsPage() {
                 onNavOpenChange={setShellNavOpen}
                 asideOpen={shellAsideOpen}
                 onAsideOpenChange={setShellAsideOpen}
-                activeId={shellDest}
-                onActiveIdChange={(id) =>
-                  setShellDest(id as "home" | "search" | "long")
-                }
+                activeId={shellSettingsOpen ? "" : shellDest}
+                onActiveIdChange={(id) => {
+                  setShellSettingsOpen(false);
+                  setShellDest(id as "home" | "search" | "long");
+                }}
                 leadingExtra={
                   <Tooltip content={t("globals.appBarBack")}>
                     <IconButton aria-label={t("globals.appBarBack")}>
@@ -188,6 +197,7 @@ export function LayoutsPage() {
                     accountName={t("nav.footerAccountName")}
                     settingsLabel={t("globals.appBarSettings")}
                     settingsTip={t("globals.appBarSettings")}
+                    onSettingsClick={() => setShellSettingsOpen(true)}
                   />
                 }
                 destinations={[
@@ -220,12 +230,66 @@ export function LayoutsPage() {
                   </div>
                 }
               >
-                <div className="sandbox-globals-shell-canvas sandbox-stack">
-                  <EmptyState
-                    title={t("layouts.shellMainTitle")}
-                    description={t("layouts.shellMainBody")}
-                  />
-                </div>
+                <PageScroll>
+                  {shellSettingsOpen ? (
+                    <Card title={t("layouts.shellSettingsTitle")}>
+                      <FieldStack>
+                        <FieldBlock
+                          label={t("layouts.shellSettingsLanguage")}
+                          description={t("layouts.shellSettingsLanguageHint")}
+                        >
+                          <LanguageSwitcher />
+                        </FieldBlock>
+                        <FieldBlock
+                          label={t("layouts.shellSettingsDensity")}
+                          description={t("layouts.shellSettingsDensityHint")}
+                        >
+                          <Switch
+                            label=""
+                            ariaLabel={t("layouts.shellSettingsDensity")}
+                            checked={shellFooterShowAccountLabel}
+                            onCheckedChange={setShellFooterShowAccountLabel}
+                          />
+                        </FieldBlock>
+                      </FieldStack>
+                    </Card>
+                  ) : (
+                    <>
+                      <ControlRow label={t("layouts.shellCatalogCount")}>
+                        <div className="fynns-control-cluster">
+                          <Tooltip content={t("layouts.shellCatalogPaste")}>
+                            <IconButton
+                              variant="ghost"
+                              aria-label={t("layouts.shellCatalogPaste")}
+                            >
+                              <ClipboardIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip content={t("layouts.shellCatalogAdd")}>
+                            <IconButton
+                              variant="ghost"
+                              aria-label={t("layouts.shellCatalogAdd")}
+                            >
+                              <PlusIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      </ControlRow>
+                      <List aria-label={t("layouts.shellCatalogListAria")}>
+                        <ListItem
+                          leading={<FolderOpenIcon />}
+                          headline={t("layouts.shellCatalogItem1")}
+                          supportingText={t("layouts.shellCatalogItem1Path")}
+                        />
+                        <ListItem
+                          leading={<FileIcon />}
+                          headline={t("layouts.shellCatalogItem2")}
+                          supportingText={t("layouts.shellCatalogItem2Path")}
+                        />
+                      </List>
+                    </>
+                  )}
+                </PageScroll>
               </DestinationAppShell>
             </div>
             <SandboxHelp text={t("globals.shellHelp")} />
