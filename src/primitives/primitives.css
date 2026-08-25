@@ -2746,7 +2746,9 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)) {
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  ) {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -2773,10 +2775,28 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-self: center;
 }
 
+/* IconButton in a control row: hug the circular target — never stretch to the track (ellipse). */
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) > .fynns-btn--icon {
+  flex: none;
+  align-self: center;
+}
+
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon))
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  )
   > .fynns-btn,
 .fynns-control-stack
   > .fynns-control-row
@@ -2885,10 +2905,12 @@ input.fynns-input:focus::-webkit-scrollbar {
   min-width: 0;
 }
 
-/* Table / toolbar row: metadata + optional grow + trailing action on one line.
-   Missing middle content still needs `__grow` so the action shares one end edge. */
+/* Action footer / Select+row-action / table trailing action: dock to the
+   trailing edge. Pure IconButton strips need no `__grow` — justify does it.
+   Leading Select / meta that must fill leftover still use `__grow`. */
 .fynns-control-cluster--end-align {
   flex-wrap: nowrap;
+  justify-content: flex-end;
   /* Docked Select lists grow the grow flex item — pin row actions to the
      trigger band (40dp), not the vertical center of trigger + results. */
   align-items: flex-start;
