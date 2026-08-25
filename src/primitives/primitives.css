@@ -9751,11 +9751,34 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding: var(--fynns-space-xl) var(--fynns-space-lg);
   max-width: 24rem;
   margin-inline: auto;
+  box-sizing: border-box;
 }
 
 .fynns-empty-state--sm {
   gap: var(--fynns-space-sm);
   padding: var(--fynns-space-lg) var(--fynns-space-md);
+}
+
+/*
+ * Pane sole zero-result: stretch in a height-resolved flex parent and center
+ * the copy block (BusyRegion fill parity). Host wires flex growth below.
+ */
+.fynns-empty-state--fill {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  margin-inline: 0;
+  justify-content: center;
+}
+
+.fynns-empty-state--fill > .fynns-empty-state-icon,
+.fynns-empty-state--fill > .fynns-empty-state-title,
+.fynns-empty-state--fill > .fynns-empty-state-description,
+.fynns-empty-state--fill > .fynns-empty-state-actions {
+  max-width: 24rem;
 }
 
 .fynns-empty-state-icon {
@@ -10610,6 +10633,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 .fynns-fill-column-main > .fynns-chat,
 .fynns-fill-column-main > .fynns-busy-region--fill,
+.fynns-fill-column-main > .fynns-empty-state--fill,
 .fynns-fill-column-main > .fynns-page-scroll {
   flex: 1 1 auto;
   width: 100%;
@@ -10676,6 +10700,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-content-column > .fynns-busy-region--fill,
+.fynns-content-column > .fynns-empty-state--fill,
 .fynns-content-column > .fynns-fill-column {
   flex: 1 1 auto;
   min-height: 0;
@@ -10684,7 +10709,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /* Catalog Cards / unit stacks under a content column: do not flex-shrink
  * (shrink + Card overflow:hidden clips charts / tables). */
-.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-fill-column) {
+.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-empty-state--fill):not(.fynns-fill-column) {
   flex-shrink: 0;
 }
 
@@ -10882,7 +10907,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-clipped-nav-shell-main > .fynns-busy-region--fill,
-.fynns-destination-app-shell-canvas > .fynns-busy-region--fill {
+.fynns-clipped-nav-shell-main > .fynns-empty-state--fill,
+.fynns-destination-app-shell-canvas > .fynns-busy-region--fill,
+.fynns-destination-app-shell-canvas > .fynns-empty-state--fill {
   flex: 1 1 auto;
   width: 100%;
   min-width: 0;
