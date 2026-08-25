@@ -10302,9 +10302,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-code-block-input::selection {
-  background: color-mix(in srgb, var(--fynns-color-accent) 35%, transparent);
+  background: var(--fynns-color-accent-soft);
   color: transparent;
   -webkit-text-fill-color: transparent;
+}
+
+/* Editable soft-wrap: token spans shift wrap points vs the textarea — flat mono
+   ink on the highlight layer keeps caret + ::selection aligned (see AGENTS). */
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight,
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight code {
+  color: var(--fynns-code-fg);
+}
+
+.fynns-code-block-highlight,
+.fynns-code-block-input {
+  font-variant-ligatures: none;
+  font-feature-settings: normal;
 }
 
 .fynns-code-block-input:disabled {
