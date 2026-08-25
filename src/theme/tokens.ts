@@ -944,6 +944,15 @@ export const LIST_TOKENS = {
    * `content-gap` so the block does not crush (aliases `--fynns-space-sm` / 8dp).
    */
   "content-gap-3": "var(--fynns-space-sm)",
+  /**
+   * `.fynns-list-item-trailing-stats` fixed tracks (usage / session meta).
+   * Fixed widths — not `max-content` — so duration / tokens / cost / count
+   * columns share the same edge across sibling rows. Live: sandbox `#list`.
+   */
+  "stats-col-elapse": "4.75rem",
+  "stats-col-tokens": "3.5rem",
+  "stats-col-cost": "3.75rem",
+  "stats-col-count": "3.25rem",
 } as const;
 
 /**
@@ -1026,8 +1035,9 @@ export const CAROUSEL_TOKENS = {
  * Container 80dp; destination highlight wraps icon (+ label when shown).
  * Icon-only / unlabeled hover = TopAppBar IconButton target (40dp).
  * Labeled (icon + caption stacked) keeps a larger inset square — never
- * crush into 40dp or it clips the label (sandbox / DestinationAppShell
- * densify defaults to `railLabelVisibility="unlabeled"` unless overridden).
+ * crush into 40dp or it clips the label. Prefer `labelVisibility="unlabeled"`
+ * only for intentional phone icon columns — DestinationAppShell does **not**
+ * densify to rail.
  * `--fynns-navrail-<key>`.
  */
 export const NAVRAIL_TOKENS = {
@@ -1162,11 +1172,12 @@ export const NAVDRAWER_TOKENS = {
    */
   "section-gap": "0.25rem",
   /**
-   * SearchBar / tools host ↔ destination rows. **One step above
-   * `section-gap` (4dp)** — aliases `--fynns-layout-control-stack-gap`
-   * (8dp), the same gap hub-mode tools use between SearchBar ↔ ToggleGroup.
-   * Do **not** jump back to 16dp (`unit-stack-gap` / former kind-jump).
-   * Item↔Item stays on `section-gap`.
+   * Chrome band ↔ next body sibling (SearchBar, tools/`--toolbar-end` host,
+   * SyncSideFilter `ToggleGroup`, preference `ControlRow` wrappers) **and**
+   * that chrome ↔ destination rows. **One step above `section-gap` (4dp)** —
+   * aliases `--fynns-layout-control-stack-gap` (8dp), the same gap hub-mode
+   * tools use inside a tools column. Do **not** jump back to 16dp
+   * (`unit-stack-gap` / former kind-jump). Item↔Item stays on `section-gap`.
    */
   "search-gap": "var(--fynns-layout-control-stack-gap)",
   "badge-dot": "0.375rem",

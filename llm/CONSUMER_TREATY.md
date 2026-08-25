@@ -161,6 +161,49 @@ children do not shrink).
 Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
 `data-nav="rail"` still hosts `.fynns-nav-drawer`.
 
+## Failure mode this treaty targets: icon-only rail densify (narrow)
+
+Symptoms when the window crowds or shrinks while destinations stay “open”:
+
+- Left column is ~80px with **icons only** (`data-label-visibility=unlabeled`
+  / `nav.fynns-nav-rail`)
+- Badge numbers dominate; destination **names** are gone
+- User wanted either a full labeled drawer (resizable) or fully collapsed
+
+**Cause (legacy ≤ 0.4.83):** apps densified `drawer` → `"rail"` +
+`NavigationRail` on narrow / `onNavCrowded` (including DestinationAppShell).
+
+**Fix in core (≥ 0.4.84):** DestinationAppShell destinations are **binary** —
+labeled `NavigationDrawer` or `hidden`. `onNavCrowded` **closes** nav (never
+swaps to unlabeled rail). Narrow viewports still keep a side column for an
+open drawer (no rem-capped stack — that was 0.4.83). Standalone
+`NavigationRail` remains for intentional phone roots only (`#layouts-demo-navigation-rail`).
+
+**Consumer fix:** hand-composed `ClippedNavShell` →
+`navMode={open ? "drawer" : "hidden"}` + `onNavCrowded={() => setOpen(false)}`
++ drawer-only `nav` slot. Drop `narrow` / `compact` → rail branches and
+`railLabelVisibility`. Re-paste `consumer-cursor-rule.mdc`.
+
+## Failure mode this treaty targets: stacked drawer ribbon (narrow)
+
+Symptoms when the window is ≤56.25rem (~900px) and destinations stay open
+**(legacy ≤ 0.4.82 only)**:
+
+- Nav is a **full-width band under the TopAppBar** (~9rem / 144dp tall historically)
+- Only SearchBar + account footer peek through; destination rows are clipped
+- DevTools: `data-nav="drawer"` + `.fynns-nav-drawer` with tiny `height` /
+  `max-height` while `visible_text` still lists every destination
+
+**Cause (legacy core ≤ 0.4.82):** narrow CSS stacked `NavigationDrawer` above
+main with `max-height: 9rem`.
+
+**Fix in core (≥ 0.4.83):** narrow keeps a **side column** for drawer (and for
+intentional rail). Do **not** densify to icon rail — see **icon-only rail
+densify** above (≥ 0.4.84 closes instead).
+
+**Consumer fix:** binary drawer|hidden (same as DestinationAppShell). Drop any
+private CSS that re-stacks the drawer.
+
 ## Failure mode this treaty targets: drawer headline toolbar
 
 Symptoms (mode sidebars: Favorites / Chats / Archived / “drill-in” destination
@@ -233,6 +276,31 @@ detail** (M3 compact list-detail / Cursor Agent layout).
 Live: sandbox Layout templates **`#layouts-demo-drill-in`**.
 Authority: [`AGENTS.md`](../AGENTS.md) DestinationAppShell / ClippedNavShell /
 NavigationDrawer. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Card title count glued (OpenSpec8)
+
+Symptoms (上游资产 / any catalog Card):
+
+- Card head reads as **`OpenSpec8`** / `oh-my-opencode-slim12` — section name
+  and entry count fused with **no gap**
+- DevTools: `.fynns-card-title > .fynns-control-cluster` wraps a text node +
+  muted `<span>{n}</span>` but computed `display` is **`block`**, not flex
+
+**Cause:** consumers put count meta in `Card` `title` via
+`fynns-control-cluster`. Core (≤ **0.4.90**) forced
+`.fynns-card-title > * { display: block }` for mono ellipsis — that **cancelled
+the cluster’s flex + gap**. Separately, counts in Card `title` fight the
+**short section name** rule (meta belongs in body / catalog ControlRow).
+
+**Fix in core (≥ 0.4.91):** `.fynns-card-title > .fynns-control-cluster` keeps
+`display: flex`; only non-cluster children stay `display: block` for ellipsis.
+Live: sandbox `#card` meta-in-body sample (`cardMetaBody*`).
+**Fix in the consumer:** `title="OpenSpec"` (short name only). Put counts /
+paths in the **body** as `.fynns-table-meta` (or omit — the List already
+shows rows). Do **not** invent title clusters for tallies. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules **padded destination labels** + Card
+`actions` / Content density. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: padded destination labels
 
@@ -359,13 +427,11 @@ project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
 → drawer **body** (`.fynns-nav-drawer-footer-slot--pill` row). Omit account
 label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
 Layouts `#layouts-demo-shell` (toggle **Show account name**) + SandboxShell +
-`#layouts-demo-drill-in`. Rail densify hides account-start and keeps the gear.
-**Densify default (≥ 0.4.64):** `DestinationAppShell` `railLabelVisibility`
-defaults to **`unlabeled`** (Cursor icon column — not stacked caption pills).
-Pass `labeled` only when densified captions must stay visible.
+`#layouts-demo-drill-in`. DestinationAppShell (≥ 0.4.84) keeps the drawer
+footer when open and **closes** on crowd — no rail densify that hides the
+account label strip.
 
-**Consumer:** bump ≥ 0.4.65 for Cursor-style footer + body scroll-edge fade;
-pass `navFooter`
+**Consumer:** bump ≥ 0.4.84 for binary drawer|hidden; pass `navFooter`
 (or Drawer/Rail `footer`); workspace row in body — do **not** `margin-top: auto`
 a destination Item; do **not** put settings in TopAppBar `trailing` when the
 product wants Cursor-style bottom chrome.
@@ -395,6 +461,28 @@ consumer `margin` under `.hub-mode-nav-tools` / SearchBar to retune.
 **direct** body sibling (or a single tools host that contains it). Tools
 column internal gap should stay `--fynns-layout-control-stack-gap` so it
 stays in lockstep with `search-gap`.
+
+## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
+
+Symptoms (MCP / skills mode sidebars): `--toolbar-end` IconButton strip and
+the SyncSideFilter `ToggleGroup` (or preference `ControlRow`) sit almost
+flush — DevTools ~**4px** between `hub-mode-nav-tools` bottom and the
+filter top — while Item↔Item also reads ~4dp.
+
+**Cause:** `.fynns-nav-drawer-body > * + *` defaulted to `section-gap`
+(**4dp**). `--fynns-navdrawer-search-gap` (**8dp**) only matched
+`SearchBar` / `:has(.fynns-search-bar)` — mode drawers with **no** SearchBar
+(toolbar + ToggleGroup + catalog) never got the chrome step.
+
+**Fix in core (≥ 0.4.98):** `search-gap` also applies when a body sibling is
+`.fynns-toggle-group`, `:has(.fynns-control-cluster--toolbar-end)`, or a
+direct `ControlRow` host — chrome↔ chrome and chrome ↔ destinations.
+Live: Layouts `#layouts-demo-navigation-drawer` mode sample. Do **not**
+invent consumer `margin` / private gap under `.hub-mode-nav-tools`.
+
+**Consumer:** bump ≥ 0.4.98; keep tools host + SyncSideFilter as **direct**
+drawer-body siblings (no extra wrapper that drops `:has(--toolbar-end)`).
+Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ad-hoc Surface / inspector row chaos
 
@@ -572,21 +660,72 @@ the busy wrapper; wrap **only** the List / table on refresh. Authority:
 
 ## Failure mode this treaty targets: empty ControlRow label as action footer
 
-Symptoms (Backup / Import / rebuild / Graphify footers):
+Symptoms (Backup / Import / rebuild / Graphify / LLM pack footers):
 
 - A `ControlRow` with `label=""` parks an action cluster mid-left (or leaves
   an empty label column) instead of hugging the trailing edge
+- Or a full-width `.fynns-control-cluster--end-align` of IconButtons still
+  **start-packs** (teal pack / download / folder flush-start under a Card)
 - Looks like a broken catalog strip without a name
 
 **Cause:** `ControlRow` is for **visible name \| controls**. An empty label
 still allocates the form-host label track. Action-only footers need
-`.fynns-control-cluster--end-align` (optional `__grow`), not a fake row.
+`.fynns-control-cluster--end-align`. Before **0.4.90**, that modifier only
+set `nowrap` + `align-items: flex-start` and did **not** `justify-content:
+flex-end`, so consumers who followed the class name still saw a left island
+unless they also inserted `__grow`.
 
+**Fix in core (≥ 0.4.90):** `--end-align` sets `justify-content: flex-end`.
+Pure IconButton footers need no `__grow`. Keep `__grow` for Select / meta
+fillers. Live: sandbox `#rhythm` end-align footer.
 **Fix in the consumer:** replace empty-label `ControlRow` with
-`.fynns-control-cluster.fynns-control-cluster--end-align`. Keep real names on
-`ControlRow` `label`. Live: sandbox `#rhythm` end-align footer. Authority:
+`.fynns-control-cluster.fynns-control-cluster--end-align`; bump core ≥
+0.4.90. Keep real names on `ControlRow` `label`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
+
+Symptoms (Card-body `ControlStack` — sync / apply row beside status legend):
+
+- Primary `IconButton` in `ControlRow` reads as a **tall narrow pill**
+  (~18×40px) instead of a **40×40dp circle**
+- DevTools: `.fynns-tooltip-trigger` is `width: 100%` on the subgrid control
+  track; inner `.fynns-btn--icon` has `min-width: 0` and flex-shrinks
+
+**Cause:** form-host `ControlStack` subgrid stretches value-button tooltip
+hosts to the shared track width; the shrink rule intended for labeled Buttons
+also applied to `Tooltip` → `IconButton`.
+
+**Fix in core (≥ 0.4.92):** `ControlRow` tooltip hosts with `.fynns-btn--icon`
+hug the circular target (`width: auto`, `flex-shrink: 0`) — same band as
+InfoHint. **Consumer:** keep `ControlRow` + `Tooltip` + `IconButton`; no
+private width on the button. Live: sandbox `#rhythm` sync row. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** named readiness. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: end-align IconButton strip crushed
+
+Symptoms (Card-body `.fynns-control-cluster--end-align` — archive open/start
+footers, import IconButton strips):
+
+- Primary `IconButton` inside `Tooltip` reads as a **tall narrow pill**
+  (~18×40px) or the full-width cluster looks like an empty bar with a sliver
+  at the trailing edge
+- DevTools: `.fynns-control-cluster` is `width: 100%`; tooltip flex child
+  shrinks; inner `.fynns-btn--icon` loses its 40dp min width
+
+**Cause:** end-align clusters are full-width flex rows; tooltip triggers /
+icon buttons inherited generic flex shrink (`min-width: 0`) meant for labeled
+value buttons — not circular IconButton targets.
+
+**Fix in core (≥ 0.4.93):** `--end-align` icon strips hug tips and restore
+`min-width` / `min-height` on `.fynns-btn--icon`; pure icon strips use
+`align-items: center`. **Consumer:** keep one
+`.fynns-control-cluster.fynns-control-cluster--end-align` of
+`Tooltip` → `IconButton` — no private width hacks. Live: sandbox `#rhythm`
+end-align icon strip. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density** action footer. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Pagination crushed or stacked off-spec
 
@@ -601,12 +740,27 @@ Symptoms in a table / list Card footer:
 vertical stack; or consumers put `Pagination` beside a full-width Select.
 Mainstream (MDC data-table pagination, MUI `TablePagination`) is **one**
 footer band: rows-per-page + range on the start, navigator on the end.
-**Fix:** use core **`.fynns-pagination-bar`** (`__start` / `__end`). Select
-stays content-hug; `Pagination` stays nowrap `flex: 0 0 auto`. Narrow hosts
-may wrap the **whole** end strip — not individual page buttons. Do not
-restyle `.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
+**Fix:** use core **`.fynns-pagination-bar`** (`__start` / `__end`) +
+`fynns-scroll`. Select stays content-hug; `Pagination` stays nowrap
+`flex: 0 0 auto`. Core keeps **`flex-wrap: nowrap`** — narrow hosts must **not**
+stack start above end (two-line ~80dp footer); overflow scrolls on the bar.
+Do not restyle `.fynns-pagination*`. Live: sandbox `#pagination`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **内容密度**.
+
+## Failure mode this treaty targets: Pagination bar wraps to two rows
+
+Symptoms (Usage / table Card footer ~554px wide → ~82dp tall):
+
+- `.fynns-pagination-bar` shows Select + range on row 1 and page discs on row 2
+- DevTools: `flex-wrap: wrap` (legacy core) or consumer `flex-wrap` / stacked
+  siblings
+
+**Cause (legacy ≤ 0.4.84):** core allowed wrapping the whole end strip under
+start on narrow hosts.
+
+**Fix in core (≥ 0.4.85):** `.fynns-pagination-bar` is `nowrap` +
+`overflow-x: auto`. Pair with `fynns-scroll`. Drop private wrap CSS.
 
 ## Failure mode: KPI stat grid stacks full-width (undefined layout token)
 
@@ -733,6 +887,130 @@ siblings (no cluster), each tip became its own full-bleed flex row.
 ghost `sm` IconButtons). **Fix in the consumer:** wrap IconButton /
 Tooltip strips in **one** `.fynns-control-cluster` (nowrap preferred);
 keep tip-fill / `side="right"` only on destination Item wrappers. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: mode drawer sort+new cluster start-packed
+
+Symptoms (全局规则 / 技能 / 代理 mode sidebars — `MdSidebar` / `SkillsSidebar` under
+`NavigationDrawer` without SearchBar):
+
+- Sort menu + primary **New** sit **start-left** in a full-width
+  `.fynns-control-cluster` directly above the first `NavigationDrawerItem`
+- The sort trigger uses **`ChevronDown`** (icon-only menu) — reads like a
+  `NavigationDrawerGroup` expander beside the first destination row; users
+  report overlap / “不合理” layout
+- DevTools: `.hub-mode-nav-tools .fynns-control-cluster` is ~224×32dp with
+  children at `x≈10` / `x≈50` while the track is full drawer width
+
+**Cause:** default `.fynns-control-cluster` is `width: 100%` + start-packed.
+Mode catalogs omit SearchBar but reuse the archived bulk-toolbar cluster
+without **`--toolbar-end`**. Chevron sort triggers collide visually with
+group/row chevron language.
+
+**Fix in core (≥ 0.4.86):** public `.fynns-control-cluster--toolbar-end`
+(nowrap + `justify-content: flex-end`). Live: Layouts
+`#layouts-demo-navigation-drawer` mode sidebar sample.
+**Fix in the consumer:** mode tools row →
+`fynns-control-cluster fynns-control-cluster--toolbar-end`; sort menu
+trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: mode drawer hide-builtin ControlBlock stack
+
+Symptoms (全局技能 / 全局规则 mode sidebars — `SkillsSidebar` / `MdSidebar` tools
+column under `NavigationDrawer`):
+
+- A **`ControlBlock`** with label **隐藏内置** + multi-sentence `description`
+  wraps in a **~224px** drawer body band (~102dp tall) while the `Switch` sits
+  below the wrapped copy
+- DevTools: `.hub-mode-nav-tools > .fynns-control-block` ≈ 224×102dp directly
+  under the sort+new cluster and above the first destination row
+- Reads as a broken form strip — not a single preference row
+
+**Cause:** long policy / built-in help copy passed as `ControlBlock`
+`description` in a **narrow nav tools column**. Core docks one-line hints in
+the label column of form hosts; multi-sentence paragraphs still wrap and
+inflate block height in Drawer (~7.5rem label track).
+
+**Fix in core (≥ 0.4.87):** documented recipe only — **one-row**
+`ControlRow` + `InfoHint size="sm"` (Tooltip for the paragraph) + track-only
+`Switch` (`label=""` + `ariaLabel`). Live: Layouts
+`#layouts-demo-navigation-drawer` mode sidebar sample + Globals `#info-hint`.
+**Fix in the consumer:** replace `ControlBlock description={…}` in
+`.hub-mode-nav-tools` with the row above; keep sort+new on
+`--toolbar-end`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: SyncSideFilter tooltip covers chrome or list
+
+Symptoms (MCP / 全局规则 / 全局技能 mode sidebars):
+
+- Hovering a compact `ToggleGroup` segment (e.g. Cursor **C** mark) shows a
+  tooltip **over** the sort / **+** / bulk icons (`side=top`), **or** over
+  the catalog / EmptyState (`side=bottom`), **or** still under the trailing
+  **+** when `side=right` but the tip is long / even a short tip in a
+  ~224px tools column (`tip.right` ≥ `+`.left)
+- DevTools: a `.fynns-tooltip` while the pointer is on the SyncSideFilter
+
+**Cause:** option `tip` always portals a bubble. This filter is sandwiched
+between a trailing-hug toolbar and the list — **no** side has clear air in
+the narrow mode drawer (long `right` tips sit under `+`; short ones still
+kiss the `+` column).
+
+**Fix in core (≥ 0.4.97):** recipe = **omit option `tip`** on sandwich
+SyncSideFilter (keep `ariaLabel` / visible labels). `tipSide="right"` remains
+for other ToggleGroups that have room. Live Layouts mode sample omits tips.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+**Fix in the consumer:** `SyncSideFilter` — **no** `tip` props; do not re-add
+essay tooltips. Keep the filter **outside** `hub-mode-nav-tools`. Pass
+**`showCheck={false}`** when labels are mark glyphs (C / O / dual) — see next
+failure mode.
+
+## Failure mode this treaty targets: SyncSideFilter / ToggleGroup segment wash bleed
+
+Symptoms (mode drawer SyncSideFilter — 全部 | C | O | dual):
+
+- Selected “全部” teal wash overlaps the next segment’s “C” mark
+- DevTools: unselected chip content `getBoundingClientRect().left` is **left of**
+  its own button’s left (optical `translateX` spill)
+- Classes: `fynns-toggle-chip--with-icon` without `--leading-open` on the mark
+  segments while `showCheck` defaults true
+
+**Cause:** default `showCheck` reserves a leading check slot on **every**
+segment. Empty-slot optical centering translates content left; without clip it
+paints into the previous selected wash. Mark-glyph labels do not need that slot.
+
+**Fix in core (≥ 0.4.100):** `.fynns-toggle-chip { overflow: hidden }` so the
+translate cannot bleed into siblings. Live: Globals `#toggle-group` (default
+check) + Layouts mode SyncSideFilter sample (`showCheck={false}`).
+**Fix in the consumer:** SyncSideFilter / compact mark filters →
+`showCheck={false}` (match Layouts `#layouts-demo-navigation-drawer`). Do not
+restyle `.fynns-toggle-*`.
+
+## Failure mode this treaty targets: CodeBlock editable selection stripes
+
+Symptoms (suffixed file body — `FileBodyCodeBlock` / `variant="editable"` in a
+Card, e.g. agents-hub `SKILL.md` viewer):
+
+- Drag-select shows **teal wash stripes** with dark gaps between lines — wash
+  does not hug visible syntax-colored glyphs
+- DevTools: `.fynns-code-block-input` + `.fynns-code-block-highlight` stack
+  while **`readOnly={true}`** (view mode still on textarea overlay)
+- Long wrapped paragraphs (markdown frontmatter / policy copy) look worst
+
+**Cause:** editable overlay = transparent textarea over a highlighted `<pre>`.
+Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
+plain textarea text → `::selection` rectangles drift. View mode should not use
+the overlay at all.
+
+**Fix in core (≥ 0.4.88):** `readOnly` on `variant="editable"` → **single**
+`.fynns-code-block-pre` (full token colors + native selection). Active edit +
+`wrap` → flat mono highlight layer (no token spans); `wrap={false}` when live
+token colors must show while typing. Live: Globals `#code-block` file-body +
+readOnly pair.
+**Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
+`FileBodyCodeBlock`); do not patch selection in app CSS. Bump
+`@fynn7/ui-design-core`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Collapsible inside List (skeleton crush)
@@ -914,10 +1192,30 @@ Symptoms in session / turn catalogs:
 shipped `1m47s` as a bad example.
 
 **Fix (consumer-owned strings):** space between units — `1m 47s`, `2h 5m`
-(locale equivalent OK). Put duration in `trailingSupportingText` (optional
-`.fynns-control-cluster` with count). Live: `#list` tree rows
+(locale equivalent OK). Put duration in `trailingSupportingText`. For
+**multi-metric** trailing that must align across rows, use
+`.fynns-list-item-trailing-stats` (not a flex `.fynns-control-cluster`);
+duration + count only → add `--pair`. Live: `#list` stats + tree rows
 (`globals.listTreeDuration`). Authority: [`AGENTS.md`](../AGENTS.md) Hard
 rules / **Content density**.
+
+## Failure mode this treaty targets: List trailing stats drift across rows
+
+Symptoms in usage / session catalogs:
+
+- Each row’s duration / tokens / cost / count sit in a flex cluster; `$0.081`
+  on one row does **not** share a vertical edge with `$1.240` on the next
+- Short values (`2m 15s`, `12k`) pull later columns left; long values push
+  them right — the strip reads as one fused string, not columns
+
+**Cause:** `.fynns-control-cluster` sizes each cell to content. Cross-row
+column alignment needs **shared track widths**, not per-row flex gaps.
+
+**Fix:** wrap metric cells in `.fynns-list-item-trailing-stats` (core fixed
+CSS grid: elapse | tokens | cost | count; `tabular-nums`; end-aligned).
+Two metrics → `--pair`. Do **not** invent a private `hub-*-stats` grid.
+Live: sandbox `#list` usage-stats sample. Authority: [`AGENTS.md`](../AGENTS.md)
+**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Card head actions wrap into a tall stack
 
@@ -963,6 +1261,60 @@ path / pin meta in the **body** (first unit-stack row, mono OK). Do not pad the
 `title` with `Name · main` unless the user asked for that meta. Live: sandbox
 `#card` (meta-in-body sample). Authority: [`AGENTS.md`](../AGENTS.md)
 **Content density** titled section shell. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: stacked InfoHints / essay tips in Card head
+
+Symptoms (Backup / snapshot / settings Cards):
+
+- Two identical “i” icons in `.fynns-card-actions` (e.g. include vs exclude)
+- Hover opens a **long multi-topic paragraph** (include list + exclude list +
+  cross-links) that crowds the title strip and reads as stacked help clutter
+
+**Cause:** treating `InfoHint` as a docs dump / splitting one topic into twin
+head icons. Keep-set help in `actions` is **one** short tip; dense inspectors
+prefer plain labels (`llm/PERF.md`).
+
+**Fix in the consumer (hard):**
+1. **At most one** `InfoHint` in Card / Collapsible `actions` (may sit beside
+   IconButtons in one cluster — still ≤1 help glyph).
+2. `content` = **short tip** (≈1–2 sentences / prefer ≤~120 characters). No
+   multi-topic essays.
+3. Longer scope / include·exclude / policy → Card **body** `FieldHint`,
+   `InlineAlert`, or a short unit-stack of bullets — not a second head “i”.
+4. Prefer merge: one tip that names the rule (“Full snapshot packs managed
+   configs; large chat DBs use Archive below”) over two encyclopedic tips.
+
+Live: sandbox `#card` (single short InfoHint sample) + `#info-hint`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** titled section shell /
+**InfoHint density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: mixed IconButton / InfoHint hover sizes
+
+Symptoms (MCP / settings destination pages):
+
+- TopAppBar trailing: InfoHint `size="sm"` (32dp) beside Import/Export
+  `size="md"` (40dp) — hover disks jump
+- Card `actions`: default InfoHint `md` (40) beside ImportButton default
+  `sm` (32) — reverse mismatch on the same screen
+
+**Cause:** mixing `IconButton` / icon `InfoHint` `size` in one chrome strip
+(or leaving wrapper defaults that disagree). Not a CSS bug.
+
+**Fix in the consumer (hard):**
+1. In one strip (TopAppBar leading+trailing, `.fynns-card-actions`, one
+   icon `.fynns-control-cluster`) every `IconButton` and icon `InfoHint`
+   uses the **same** `size`.
+2. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
+   `size="sm"` on TopAppBar InfoHint when siblings are `md`.
+3. Dense Card heads may use **`sm`** only when **every** icon in that head
+   is `sm` (pass `size="sm"` on InfoHint too). Prefer matching TopAppBar
+   `md` for Card actions on the same destination page (pass `size="md"` on
+   Import/Export wrappers if their default is `sm`).
+4. Do **not** invent private width CSS on `.fynns-btn--icon`.
+
+Live: sandbox `#card` actions strip (InfoHint + IconButtons all `md`).
+Authority: [`AGENTS.md`](../AGENTS.md) **Chrome icon size lock**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status icon soup in a control-cluster

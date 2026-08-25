@@ -20,10 +20,13 @@ export type ClippedNavShellProps = {
    * Destination column mode. Drives `data-nav` and the body grid track
    * (`--fynns-navdrawer-width` / `--fynns-navrail-width` / `0` when hidden).
    *
-   * TopAppBar leading toggle should flip **open ↔ closed** only (`drawer`|`rail`
-   * ↔ `hidden`). Prefer `"rail"` for automatic crowding (`onNavCrowded`) **and**
-   * for narrow viewports — keeping `"drawer"` below ~900px stacks labeled
-   * destinations above the canvas and starves the main stage.
+   * TopAppBar leading toggle should flip **open ↔ closed** only (`drawer`
+   * ↔ `hidden`). Destination chrome is **binary**: labeled resizable drawer
+   * or fully closed — do **not** densify to an icon-only `"rail"` as a
+   * narrow/crowding intermediate. `"rail"` remains valid only when the app
+   * intentionally mounts `NavigationRail` (phone greenfield), not as a
+   * drawer densify step. `onNavCrowded` should **close** destinations
+   * (`hidden`), not swap to rail.
    */
   navMode: ClippedNavShellNavMode;
   /**
@@ -43,9 +46,9 @@ export type ClippedNavShellProps = {
   /**
    * When `navMode` is `"drawer"` and a full labeled drawer would starve
    * canvas + `EndAside` mins (or force EndAside overlay), call this so the
-   * consumer can densify to rail / icon mode (not hidden). Fired from
-   * `useLayoutEffect` using **target** drawer width (not mid-transition
-   * layout) so open does not paint full drawer then snap to rail.
+   * consumer can **close** destinations (`hidden`) — not densify to an
+   * icon-only rail. Fired from `useLayoutEffect` using **target** drawer
+   * width (not mid-transition layout).
    */
   onNavCrowded?: () => void;
   /**
@@ -123,16 +126,17 @@ export function wouldClippedNavDrawerCrowd(
  * commits on pointerup; clamped by navdrawer min/max and remaining room for
  * main / EndAside mins). `onNavCrowded` uses target drawer width (see
  * `wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so opening never paints a
- * full drawer then snaps to rail; also skips while resizing or while an
- * `EndAside` is closing.
+ * full drawer then snaps closed; also skips while resizing or while an
+ * `EndAside` is closing. Crowding → consumer **closes** destinations
+ * (`hidden`) — not densify to icon-only rail.
  *
  * @example
  * ```tsx
  * <ClippedNavShell
- *   navMode={open ? (narrow || compact ? "rail" : "drawer") : "hidden"}
- *   onNavCrowded={() => setCompact(true)}
+ *   navMode={open ? "drawer" : "hidden"}
+ *   onNavCrowded={() => setOpen(false)}
  *   topBar={<TopAppBar leading={…} title="App" trailing={…} />}
- *   nav={open ? (narrow || compact ? <NavigationRail …/> : <NavigationDrawer …/>) : null}
+ *   nav={open ? <NavigationDrawer>…</NavigationDrawer> : null}
  * >
  *   <main>…</main>
  * </ClippedNavShell>
@@ -208,6 +212,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
    * identity churn would spam the console every parent render).
    */
   const squashedDrawerWarnedRef = useRef(false);
+  const narrowDrawerWarnedRef = useRef(false);
   useEffect(() => {
     // Avoid bare `process` (consumer tsc may lack @types/node).
     const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
@@ -233,6 +238,31 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
         "Swap to NavigationRail / NavigationRailItem (see llm/CONSUMER_TREATY.md). " +
         "Leaving a labeled drawer in the rail track produces a squashed column and unexpected scrollbars.",
     );
+  }, [navMode, phase]);
+
+  useEffect(() => {
+    const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } })
+      .process?.env?.NODE_ENV;
+    if (nodeEnv === "production") return;
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 56.25rem)");
+    const warn = () => {
+      if (!mq.matches || navMode !== "drawer" || phase === "closed") {
+        narrowDrawerWarnedRef.current = false;
+        return;
+      }
+      if (narrowDrawerWarnedRef.current) return;
+      narrowDrawerWarnedRef.current = true;
+      console.warn(
+        '[ClippedNavShell] navMode="drawer" on viewport ≤56.25rem with a full ' +
+          "labeled drawer is OK (side column — not a rem-capped stack). Prefer " +
+          "keeping drawer or closing to hidden — do not densify to an icon-only " +
+          "NavigationRail as an intermediate (DestinationAppShell closes on crowd).",
+      );
+    };
+    warn();
+    mq.addEventListener("change", warn);
+    return () => mq.removeEventListener("change", warn);
   }, [navMode, phase]);
 
   const setDrawerWidthPx = useCallback(
@@ -279,7 +309,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       /*
        * Shrink-to-fit can hide overflow: the drawer track keeps its width while
        * main collapses below the soft floors (no scrollWidth growth). Detect
-       * that starvation and densify destinations to rail.
+       * that starvation and close destinations (not densify to rail).
        */
       if (body && main) {
         const mainW = main.clientWidth;
@@ -300,7 +330,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
         if (aside && navW > 0 && mainW > 0 && navW >= mainW) return true;
 
         /* Overlay + still-open drawer (common under CSS zoom / nested squeeze):
-         * densify destinations so the canvas is not permanently covered. */
+         * close destinations so the canvas is not permanently covered. */
         if (
           aside &&
           navCol?.classList.contains("fynns-nav-drawer") &&
@@ -313,16 +343,16 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     };
 
     const check = () => {
-      /* Dragging rewrites the drawer track every frame — never densify mid-drag.
+      /* Dragging rewrites the drawer track every frame — never crowd-close mid-drag.
        * Closing EndAside keeps content min-width while the pane morphs to 0,
-       * which falsely trips scrollWidth/floor checks and collapsed labeled
-       * drawer → rail when the user only meant to hide the inspector. */
+       * which falsely trips scrollWidth/floor checks and closes the labeled
+       * drawer when the user only meant to hide the inspector. */
       if (root.getAttribute("data-drawer-resizing") === "true") return;
       const main = body?.querySelector(
         ":scope > .fynns-clipped-nav-shell-main",
       );
       if (main?.querySelector(".fynns-end-aside[data-state='closing']")) return;
-      /* EndAside live-drag paints width every frame — never densify mid-drag. */
+      /* EndAside live-drag paints width every frame — never crowd-close mid-drag. */
       if (main?.querySelector(".fynns-end-aside[data-resizing='true']")) return;
       if (isCrowded()) onNavCrowdedRef.current?.();
     };

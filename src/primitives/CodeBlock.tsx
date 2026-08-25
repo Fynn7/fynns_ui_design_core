@@ -300,6 +300,9 @@ export function CodeBlock(props: CodeBlockProps) {
   const surfaceStyle: CSSProperties | undefined =
     maxHeightCss == null ? undefined : { maxHeight: maxHeightCss };
 
+  const readOnly = editable ? props.readOnly : undefined;
+  const showEditorOverlay = editable && !readOnly;
+
   const syncHighlightScroll = () => {
     const input = inputRef.current;
     const pre = highlightRef.current;
@@ -318,7 +321,7 @@ export function CodeBlock(props: CodeBlockProps) {
      ResizeObserver stays mounted across keystrokes — content changes call
      `updateScrollableRef` without reconnecting observers every paint. */
   useLayoutEffect(() => {
-    const el = editable ? inputRef.current : preRef.current;
+    const el = showEditorOverlay ? inputRef.current : preRef.current;
     if (!el) return;
 
     let padRaf = 0;
@@ -326,7 +329,7 @@ export function CodeBlock(props: CodeBlockProps) {
 
     const syncHighlightPad = (scrollable: boolean) => {
       const pre = highlightRef.current;
-      if (!pre || !editable) return;
+      if (!pre || !showEditorOverlay) return;
       if (!scrollable) {
         pre.style.paddingInlineEnd = "";
         return;
@@ -358,7 +361,7 @@ export function CodeBlock(props: CodeBlockProps) {
         if (wasScrollable) {
           if (el.scrollTop !== 0) el.scrollTop = 0;
           if (el.scrollLeft !== 0) el.scrollLeft = 0;
-          if (editable && highlightRef.current) {
+          if (showEditorOverlay && highlightRef.current) {
             highlightRef.current.scrollTop = 0;
             highlightRef.current.scrollLeft = 0;
           }
@@ -383,10 +386,9 @@ export function CodeBlock(props: CodeBlockProps) {
       updateScrollableRef.current = () => {};
       if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
     };
-  }, [editable, wrap, maxHeightCss]);
+  }, [showEditorOverlay, wrap, maxHeightCss]);
 
   const disabled = editable ? props.disabled : undefined;
-  const readOnly = editable ? props.readOnly : undefined;
   const placeholder = editable ? props.placeholder : undefined;
   const rows = editable ? (props.rows ?? 1) : undefined;
   const autoGrow = editable ? (props.autoGrow ?? true) : false;
@@ -395,7 +397,7 @@ export function CodeBlock(props: CodeBlockProps) {
 
   const syncEditableHeight = useCallback(() => {
     const el = inputRef.current;
-    if (!el || !editable) return;
+    if (!el || !showEditorOverlay) return;
     if (!autoGrow) {
       el.style.height = "";
       return;
@@ -426,14 +428,15 @@ export function CodeBlock(props: CodeBlockProps) {
     const contentBox = el.scrollHeight + borderY;
     const next = Math.min(Math.max(contentBox, floor), cap);
     el.style.height = `${next}px`;
-  }, [autoGrow, editable, rows]);
+  }, [autoGrow, rows, showEditorOverlay]);
 
   /* Content / autoGrow / deferred highlight: resize → overflow gate → scroll lock. */
   useLayoutEffect(() => {
+    if (!showEditorOverlay) return;
     syncEditableHeight();
     updateScrollableRef.current();
-    if (editable) syncHighlightScroll();
-  }, [autoGrow, editable, source, deferredSource, maxHeightCss, syncEditableHeight]);
+    syncHighlightScroll();
+  }, [autoGrow, showEditorOverlay, source, deferredSource, maxHeightCss, syncEditableHeight]);
 
   const flushNotify = (next: string) => {
     if (!onChangeProp) return;
@@ -514,15 +517,23 @@ export function CodeBlock(props: CodeBlockProps) {
 
   /* Trailing newline on the highlight layer only — keeps last-line height
      aligned with the textarea caret. Defer tokenization so typing stays
-     responsive while spans catch up a frame or two behind. */
-  const highlightBase = editable ? deferredSource : source;
+     responsive while spans catch up a frame or two behind.
+     Soft-wrap + overlay: token spans can shift wrap points vs the textarea —
+     use flat mono ink until `wrap={false}` or `readOnly` (single pre layer). */
+  const highlightBase = showEditorOverlay ? deferredSource : source;
   const highlightText =
-    editable && !highlightBase.endsWith("\n")
+    showEditorOverlay && !highlightBase.endsWith("\n")
       ? `${highlightBase}\n`
       : highlightBase;
-  const codeBody = highlighted
-    ? highlightSource(highlightText, language, highlightProfile)
-    : highlightText;
+  const highlightFlat = showEditorOverlay && wrap && highlighted;
+  const readonlyPreBody = highlighted
+    ? highlightSource(source, language, highlightProfile)
+    : source;
+  const overlayBody = highlightFlat
+    ? highlightText
+    : highlighted
+      ? highlightSource(highlightText, language, highlightProfile)
+      : highlightText;
 
   const rootProps = omitKnownKeys(props, [
     "variant",
@@ -558,6 +569,7 @@ export function CodeBlock(props: CodeBlockProps) {
         "fynns-code-block",
         plain && "fynns-code-block--plain",
         editable && "fynns-code-block--editable",
+        highlightFlat && "fynns-code-block--editable-flat-highlight",
         highlighted && "fynns-code-block--highlighted",
         !wrap && "fynns-code-block--nowrap",
         headlessCopy && "fynns-code-block--copy-float",
@@ -574,14 +586,14 @@ export function CodeBlock(props: CodeBlockProps) {
       ) : (
         copyControl
       )}
-      {editable ? (
+      {showEditorOverlay ? (
         <div className="fynns-code-block-editor">
           <pre
             ref={highlightRef}
             className="fynns-code-block-highlight"
             aria-hidden
           >
-            <code className="fynns-code-block-code">{codeBody}</code>
+            <code className="fynns-code-block-code">{overlayBody}</code>
           </pre>
           <textarea
             ref={inputRef}
@@ -601,7 +613,6 @@ export function CodeBlock(props: CodeBlockProps) {
             data-enable-grammarly="false"
             wrap={wrap ? "soft" : "off"}
             disabled={disabled}
-            readOnly={readOnly}
             placeholder={placeholder}
             /* Intrinsic row floor — with autoGrow (default) this is the min
                height; pass autoGrow={false} for a fixed well or fill hosts
@@ -618,9 +629,11 @@ export function CodeBlock(props: CodeBlockProps) {
           style={surfaceStyle}
         >
           <code className="fynns-code-block-code">
-            {highlighted
-              ? highlightSource(source, language, highlightProfile)
-              : source}
+            {editable
+              ? readonlyPreBody
+              : highlighted
+                ? highlightSource(source, language, highlightProfile)
+                : source}
           </code>
         </pre>
       )}

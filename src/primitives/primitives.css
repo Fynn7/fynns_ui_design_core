@@ -2746,7 +2746,9 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)) {
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  ) {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -2773,10 +2775,28 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-self: center;
 }
 
+/* IconButton in a control row: hug the circular target — never stretch to the track (ellipse). */
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) > .fynns-btn--icon {
+  flex: none;
+  align-self: center;
+}
+
 .fynns-control-stack
   > .fynns-control-row
   > .fynns-control-row__controls
-  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon))
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  )
   > .fynns-btn,
 .fynns-control-stack
   > .fynns-control-row
@@ -2885,10 +2905,12 @@ input.fynns-input:focus::-webkit-scrollbar {
   min-width: 0;
 }
 
-/* Table / toolbar row: metadata + optional grow + trailing action on one line.
-   Missing middle content still needs `__grow` so the action shares one end edge. */
+/* Action footer / Select+row-action / table trailing action: dock to the
+   trailing edge. Pure IconButton strips need no `__grow` — justify does it.
+   Leading Select / meta that must fill leftover still use `__grow`. */
 .fynns-control-cluster--end-align {
   flex-wrap: nowrap;
+  justify-content: flex-end;
   /* Docked Select lists grow the grow flex item — pin row actions to the
      trigger band (40dp), not the vertical center of trigger + results. */
   align-items: flex-start;
@@ -2910,6 +2932,67 @@ input.fynns-input:focus::-webkit-scrollbar {
   > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
 .fynns-control-cluster--end-align > .fynns-btn--sm.fynns-btn--icon {
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+/*
+ * IconButton strips in end-align clusters (Tooltip wrapper included): hug the
+ * 40dp circular target — never crush tips/buttons on the shared flex row
+ * (Card action footers / archive start-open strips).
+ */
+.fynns-control-cluster--end-align > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align > .fynns-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-cluster--end-align
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon)
+  > .fynns-btn--icon {
+  flex: none;
+  min-width: var(--fynns-size-icon-target);
+  min-height: var(--fynns-size-icon-target);
+}
+
+/* Pure IconButton end-align strips (no grow Select): center on the 40dp row. */
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow)),
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  ) {
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow))
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-tooltip-trigger:has(.fynns-btn--sm.fynns-btn--icon)
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-btn--sm.fynns-btn--icon {
+  margin-block-start: 0;
+}
+
+/*
+ * Mode / drawer tool strip (sort menu + primary new, no SearchBar): nowrap +
+ * trailing hug so controls do not read as the first destination row /
+ * NavigationDrawerGroup chevron. Not `--end-align` (form Select + row action).
+ */
+.fynns-control-cluster--toolbar-end {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.fynns-control-cluster--toolbar-end > * {
+  flex-shrink: 0;
 }
 
 .fynns-control-cluster__grow {
@@ -3218,6 +3301,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   border-radius: 0;
   border-inline-end: var(--fynns-segmented-outline) solid
     var(--fynns-color-outline-subtle);
+  /* Optical translate on empty leading must not paint into sibling segments. */
+  overflow: hidden;
   background: transparent;
   color: var(--fynns-color-text);
   font: inherit;
@@ -3531,14 +3616,23 @@ input.fynns-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-line-height-snug);
 }
 
-/* Consumer often wraps title in <span className="mono"> — keep ellipsis. */
-.fynns-card-title > * {
+/* Consumer often wraps title in <span className="mono"> — keep ellipsis.
+ * Do **not** force `display: block` on `.fynns-control-cluster` (would cancel
+ * flex + gap and glue title + muted count into `OpenSpec8`). */
+.fynns-card-title > :not(.fynns-control-cluster) {
   display: block;
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.fynns-card-title > .fynns-control-cluster {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* Single disclose slot: optional rest icon stacked with expand chevron.
@@ -3826,41 +3920,44 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Table / list pager footer (M3 data-table pagination / MUI TablePagination):
  * one horizontal band — meta (rows-per-page Select + range) start, page
- * navigator end. Narrow hosts may wrap the **whole** end strip below; page
- * discs stay nowrap inside `.fynns-pagination`.
+ * navigator end. **Never wrap to two rows** (even on narrow hosts): keep
+ * `nowrap` and let the bar scroll inline (`overflow-x: auto` + `fynns-scroll`).
+ * Page discs stay nowrap inside `.fynns-pagination`.
  */
 .fynns-pagination-bar {
   box-sizing: border-box;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-layout-control-cluster-gap);
   width: 100%;
   min-width: 0;
+  overflow-x: auto;
+  overflow-y: clip;
 }
 
 .fynns-pagination-bar__start {
   display: inline-flex;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--fynns-layout-control-cluster-gap);
-  min-width: 0;
+  min-width: max-content;
 }
 
 /* Select is width:100% by default — hug content in the pager meta row. */
 .fynns-pagination-bar__start > .fynns-select {
   width: auto;
-  max-width: 100%;
-  flex: 0 1 auto;
+  max-width: none;
+  flex: 0 0 auto;
 }
 
 /* FieldHint is block by default — keep range copy on the same meta line. */
 .fynns-pagination-bar__start > .fynns-field-hint {
   display: inline-flex;
   align-items: center;
-  flex: 0 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
   white-space: nowrap;
 }
 
@@ -6655,8 +6752,8 @@ a.fynns-breadcrumb-link:visited {
  * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
  * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
  * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
- * label → avatar/initial only; identity may live in Tooltip. Rail densify
- * hides account-start and keeps the gear.
+ * label → avatar/initial only; identity may live in Tooltip. Standalone
+ * `NavigationRail` footer hides account-start and keeps the gear.
  */
 .fynns-nav-drawer-footer {
   box-sizing: border-box;
@@ -6779,8 +6876,8 @@ a.fynns-breadcrumb-link:visited {
  * Group / Headline / Divider / Tooltip-wrapped items. Same step as
  * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
  * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
- * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools ↔ destinations
- * use `--fynns-navdrawer-search-gap` (8dp / control-stack) below.
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools / SyncSideFilter
+ * chrome ↔ neighbors use `--fynns-navdrawer-search-gap` (8dp) below.
  */
 .fynns-nav-drawer-body
   > *
@@ -6802,23 +6899,33 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * SearchBar / tools host ↔ adjacent body sibling. Uses
+ * Mode / destination **chrome band** ↔ adjacent body sibling. Uses
  * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
- * Search↔Item matches Search↔Toggle inside a tools column — wider than
- * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers bare
- * SearchBar or a tools wrapper that contains SearchBar.
+ * Search ↔ Item, tools column ↔ SyncSideFilter `ToggleGroup`, and
+ * toolbar-end host ↔ filter / destinations share one step — wider than
+ * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers
+ * bare SearchBar / ToggleGroup or a tools wrapper that hosts SearchBar,
+ * `--toolbar-end`, or a preference `ControlRow`.
  */
 .fynns-nav-drawer-body > .fynns-search-bar + *,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
 .fynns-nav-drawer-body > * + .fynns-search-bar,
-.fynns-nav-drawer-body > * + *:has(.fynns-search-bar) {
+.fynns-nav-drawer-body > * + *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group + *,
+.fynns-nav-drawer-body > * + .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) + *,
+.fynns-nav-drawer-body > * + *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > *:has(> .fynns-control-row) + *,
+.fynns-nav-drawer-body > * + *:has(> .fynns-control-row) {
   margin-block-start: var(--fynns-navdrawer-search-gap);
 }
 
-/* Destination SearchBar is a 40dp row peer — never flex-shrink under a
- * height-capped drawer body (would crush to border-only ~2px). */
+/* Destination SearchBar / chrome peers are 40dp / content-sized — never
+ * flex-shrink under a height-capped drawer body. */
 .fynns-nav-drawer-body > .fynns-search-bar,
-.fynns-nav-drawer-body > *:has(.fynns-search-bar) {
+.fynns-nav-drawer-body > *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) {
   flex-shrink: 0;
 }
 
@@ -8433,6 +8540,73 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-list-icon-size);
   color: inherit;
   white-space: nowrap;
+}
+
+.fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
+  white-space: normal;
+  line-height: inherit;
+}
+
+/*
+ * Multi-metric trailing meta (elapse | tokens | cost | count). Fixed column
+ * tracks so sibling rows share vertical column edges — not a flex
+ * `.fynns-control-cluster` (content-width cells drift per row). Live: `#list`.
+ */
+.fynns-list-item-trailing-stats {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-tokens)
+    var(--fynns-list-stats-col-cost)
+    var(--fynns-list-stats-col-count);
+  column-gap: var(--fynns-layout-control-cluster-gap);
+  align-items: center;
+  justify-items: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.fynns-list-item-trailing-stats--pair {
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-count);
+}
+
+.fynns-list-item-trailing-stats > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: end;
+}
+
+.fynns-list-item-trailing-stats > .fynns-tooltip-trigger {
+  display: inline-flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+/*
+ * Left copy | right stats as an explicit grid when trailing-stats is present
+ * (leading | content | stats, or content | stats when no leading).
+ */
+.fynns-list-item:has(.fynns-list-item-trailing-stats) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) max-content;
+  align-items: center;
+  column-gap: var(--fynns-list-gap);
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats):not(
+    :has(> .fynns-list-item-leading)
+  ) {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats) > .fynns-list-item-trailing {
+  margin-inline-start: 0;
+  grid-column: -1;
 }
 
 .fynns-list-item-trailing-icon {
@@ -10235,9 +10409,22 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-code-block-input::selection {
-  background: color-mix(in srgb, var(--fynns-color-accent) 35%, transparent);
+  background: var(--fynns-color-accent-soft);
   color: transparent;
   -webkit-text-fill-color: transparent;
+}
+
+/* Editable soft-wrap: token spans shift wrap points vs the textarea — flat mono
+   ink on the highlight layer keeps caret + ::selection aligned (see AGENTS). */
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight,
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight code {
+  color: var(--fynns-code-fg);
+}
+
+.fynns-code-block-highlight,
+.fynns-code-block-input {
+  font-variant-ligatures: none;
+  font-feature-settings: normal;
 }
 
 .fynns-code-block-input:disabled {
@@ -10883,20 +11070,18 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   }
 }
 
-/* Narrow viewport: stack *drawer* above main; rail stays a side column. */
+/*
+ * Narrow viewport (≤56.25rem): destinations stay a **side column** for both
+ * drawer and rail. Do **not** stack a labeled drawer above main as a rem-capped
+ * ribbon (legacy 9rem clip → SearchBar + footer only). DestinationAppShell
+ * stays binary open `drawer` or fully `hidden` — crowding closes destinations
+ * (`onNavCrowded`); never densify to an icon-only rail. Intentional phone
+ * roots may still mount standalone `NavigationRail` via ClippedNavShell.
+ * EndAside still becomes a bottom sheet on this breakpoint.
+ */
 @media (max-width: 56.25rem) {
-  .fynns-clipped-nav-shell-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  /*
-   * Hidden nav on narrow: always one main row. The base rule above would
-   * otherwise leave an empty second track when the nav slot is null (no
-   * drawer/rail `:has()` match) — visible as a dead band under main/EndAside.
-   */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
-    grid-template-columns: 0px minmax(0, 1fr);
+  .fynns-clipped-nav-shell[data-nav="drawer"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
   }
 
@@ -10905,27 +11090,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     grid-template-rows: minmax(0, 1fr);
   }
 
-  /* Rail close: keep two columns and collapse the rail track. */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-rail) {
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
     grid-template-columns: 0px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
-  }
-
-  /* Stacked drawer close: collapse max-height (auto row shrinks with it). */
-  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body:has(> .fynns-clipped-nav-shell-nav > .fynns-nav-drawer) {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-drawer {
-    max-height: 0;
-    border-block-end-color: transparent;
-    pointer-events: none;
-  }
-
+    > .fynns-nav-drawer,
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
@@ -10934,60 +11107,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     border-inline-end-color: transparent;
   }
 
-  /*
-   * Stacked *drawer* track only — side rail keeps full column height so the
-   * settings footer can pin to the bottom edge (Cursor parity).
-   */
-  .fynns-clipped-nav-shell[data-nav="drawer"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav {
-    height: auto;
-    align-self: start;
-  }
-
-  .fynns-clipped-nav-shell[data-nav="rail"]
-    > .fynns-clipped-nav-shell-body
-    > .fynns-clipped-nav-shell-nav {
+  .fynns-clipped-nav-shell-nav {
     height: 100%;
     align-self: stretch;
-  }
-
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    /*
-     * Rem-only cap: `%` max-height does not resolve against an `auto` grid
-     * row, so a stacked drawer would otherwise grow to every destination.
-     * Nested demos prefer rail (side column) over this stack path.
-     * Clip here; scroll on `.fynns-nav-drawer-body.fynns-scroll` (not the
-     * outer shell — avoids browser-default scrollbars).
-     */
-    max-height: 9rem;
-    overflow: hidden;
-    border-inline-end: none;
-    border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    transition:
-      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
-      border-block-end-color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
-      transition: none;
-    }
-  }
-
-  /*
-   * Shrink-wrap destinations when content fits under the cap — do not
-   * flex-grow an empty scroll band between items and the account footer.
-   * When content exceeds `max-height`, `flex-shrink: 1` + `min-height: 0`
-   * lets the body scroll inside the clipped shell.
-   */
-  .fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
-    flex: 0 1 auto;
-    min-height: 0;
-    overflow-y: auto;
   }
 
   .fynns-clipped-nav-shell-main {

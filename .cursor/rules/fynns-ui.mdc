@@ -44,7 +44,8 @@ ring can paint before heavy work).
   status strip — `#status-bar`; not BottomAppBar / Banner),
   Toolbar, SearchBar, Banner,
   InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
-  (`.fynns-pagination-bar` M3/MUI single footer row — not Select-then-pager stack),
+  (`.fynns-pagination-bar fynns-scroll` M3/MUI single footer row — never two
+  lines on narrow; not Select-then-pager stack),
   SkipLink, Stepper,
   EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
   ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
@@ -127,7 +128,8 @@ ring can paint before heavy work).
   (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
   **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
   BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
-  mobile-first densify only (never desktop greenfield root); Drawer /
+  mobile-first intentional phone root only (never DestinationAppShell densify;
+  never desktop greenfield root); Drawer /
   ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
   EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
   demos are the composed default; Globals demos are standalone parts.

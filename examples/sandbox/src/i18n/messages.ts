@@ -29,7 +29,7 @@ const en = {
   "nav.layoutsHint":
     "Default app chrome for greenfield: DestinationAppShell first, then TopAppBar / Drawer / Rail / Bar and related strips. Not the Settings Templates page.",
   "layouts.lead":
-    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. NavigationRail alone is mobile/narrow densify only — not a desktop app root. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
+    "Greenfield default: copy DestinationAppShell (first demo) as the desktop main UI. Catalog drill-in (second demo): swap the drawer body to the item list and keep main full-width — do not hub-split the canvas. Destinations are binary (labeled drawer or hidden) — NavigationRail alone is an intentional phone part, not DestinationAppShell densify. Small nav helpers (Breadcrumb / Pagination / SkipLink) stay on Components.",
   "layouts.shellMainTitle": "Main canvas",
   "layouts.shellMainBody":
     "Children of DestinationAppShell — any page content. Aside is optional and not required to be Chat.",
@@ -482,7 +482,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; narrow hosts wrap the whole end strip, not individual page buttons. Do not invent a private space-between that grows Select and crushes the pager.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -643,11 +643,13 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`).",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink so selection aligns — use `wrap={false}` for live token colors while typing.",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). Fixed well → `autoGrow={false}`. Do not use `ChatMarkdown` as the source editor for a `.md` file.",
+    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). Fixed well → `autoGrow={false}`. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
+  "globals.codeBlockFileBodyReadOnlyHelp":
+    "Same file body with `readOnly` — full highlight on one pre; drag-select should not show striped / misaligned wash (contrast with overlay while editing).",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -837,7 +839,11 @@ const en = {
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
   "globals.rhythmEndAlignHelp":
-    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (+ optional `__grow` spacer) — never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+  "globals.rhythmEndAlignIconHelp":
+    "Icon-only end-align strip: Tooltip → IconButton siblings stay 40dp circles (not crushed ellipses on the full-width row).",
+  "globals.rhythmEndAlignIconOpenTip": "Open destination folder",
+  "globals.rhythmEndAlignIconPrimaryTip": "Start archive copy",
   "globals.rhythmEndAlignSecondary": "Secondary",
   "globals.rhythmEndAlignPrimary": "Primary action",
   "globals.rhythmStatusHelp":
@@ -853,6 +859,8 @@ const en = {
   "globals.rhythmStatusLocalEmpty": "Local sync unknown",
   "globals.rhythmStatusReady": "Ready",
   "globals.rhythmStatusReadyTip": "Recommended settings are already applied",
+  "globals.rhythmSyncNow": "Sync now",
+  "globals.rhythmSyncNowTip": "Sync to the backup branch immediately",
   "globals.rhythmSourceLabel": "Catalog source",
   "globals.rhythmSourceAlpha": "Catalog",
   "globals.rhythmSourceBeta": "Mirror",
@@ -930,7 +938,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -1110,7 +1118,7 @@ const en = {
   "globals.navBarHelp":
     "[mobile-first] NavigationBar — bottom destinations for phone. Prefer ClippedNavShell + NavigationDrawer on desktop (Layout templates page). Standalone sample — not one composed phone+desktop shell.",
   "globals.navRailHelp":
-    "[mobile / narrow only] NavigationRail — vertical destinations for phone densify or DestinationAppShell / ClippedNavShell crowding. **Not** the default desktop app root; do not greenfield a desktop UI from this standalone sample. Prefer Layout templates → DestinationAppShell. DestinationAppShell densify default: `railLabelVisibility=\"unlabeled\"` (Cursor icon column + bottom gear — pass `labeled` when captions must stay visible).",
+    "[mobile / intentional phone] NavigationRail — vertical destinations for a **standalone** phone / icon-column root. **Not** DestinationAppShell crowding densify and **not** the default desktop app root. Prefer Layout templates → DestinationAppShell (drawer \| hidden only).",
   "globals.navDrawerAria": "Sample navigation drawer",
   "globals.navDrawerModalAria": "Modal navigation drawer",
   "globals.navDrawerHeadline": "Mail",
@@ -1130,6 +1138,26 @@ const en = {
   "globals.navDrawerToolBulk": "Bulk select",
   "globals.navDrawerToolArchive": "Archive",
   "globals.navDrawerToolRestore": "Restore",
+  "globals.navDrawerModeAria": "Sample mode sidebar",
+  "globals.navDrawerModeToolsAria": "Sample mode sidebar tools",
+  "globals.navDrawerModeSortTip": "Sort catalog",
+  "globals.navDrawerModeSortAlpha": "Name A–Z",
+  "globals.navDrawerModeSortUpdated": "Last updated",
+  "globals.navDrawerModeNewTip": "New entry",
+  "globals.navDrawerModeEntryAlpha": "Sample entry A",
+  "globals.navDrawerModeEntryBeta": "Sample entry B",
+  "globals.navDrawerModeHideBuiltin": "Hide built-in",
+  "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
+  "globals.navDrawerModeHideBuiltinHint":
+    "When enabled, built-in read-only entries are hidden from this catalog (sample policy copy — use InfoHint, not ControlBlock description).",
+  "globals.navDrawerModeHideBuiltinHintAria": "About hiding built-in entries",
+  "globals.navDrawerModeSideFilterAria": "Sample presence-side filter",
+  "globals.navDrawerModeSideAll": "All",
+  "globals.navDrawerModeSideAllTip": "All",
+  "globals.navDrawerModeSideAlphaTip": "Side A",
+  "globals.navDrawerModeSideBetaTip": "Side B",
+  "globals.navDrawerModeToolsHelp":
+    "Mode sidebar (no SearchBar): sort + new → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort). Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch`. Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** (mark-glyph labels). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: Globals `#info-hint` / Layouts mode sample.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -1139,7 +1167,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — prefer NavigationDrawer when open on desktop; densify to NavigationRail only on narrow / crowding (`railLabelVisibility=\"unlabeled\"` by default — Cursor icon column + bottom gear) — never treat standalone Rail as the desktop root. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings), and optional `aside` (not assumed Chat). This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1383,8 +1411,32 @@ const en = {
   "globals.listCatalogEdit": "Edit",
   "globals.listCatalogRemove": "Remove",
   "globals.listCatalogOpenSnack": "Opened sample entry",
+  "globals.listStatsHelp":
+    "Multi-metric trailing meta: wrap cells in `.fynns-list-item-trailing-stats` (fixed CSS grid tracks — elapse | tokens | cost | count). Sibling rows share column edges; do **not** use a flex `.fynns-control-cluster` for cross-row alignment. Duration units stay spaced (`1m 47s`). Two metrics → add `--pair`. Live sample below.",
+  "globals.listStatsAria": "Sample usage stats catalog",
+  "globals.listStatsRow1Overline": "2026.08.24 18:49",
+  "globals.listStatsRow1Headline": "Build a desktop UI shell",
+  "globals.listStatsRow1Path": "~/Documents/sample-project/work/build-r2",
+  "globals.listStatsRow1Elapse": "41m 40s",
+  "globals.listStatsRow1Tokens": "513k",
+  "globals.listStatsRow1Cost": "$0.081",
+  "globals.listStatsRow1Count": "25 calls",
+  "globals.listStatsRow2Overline": "2026.08.24 17:46",
+  "globals.listStatsRow2Headline": "Short sample session",
+  "globals.listStatsRow2Path": "~/Documents/sample-project/work/quick",
+  "globals.listStatsRow2Elapse": "2m 15s",
+  "globals.listStatsRow2Tokens": "12k",
+  "globals.listStatsRow2Cost": "—",
+  "globals.listStatsRow2Count": "3 calls",
+  "globals.listStatsRow3Overline": "2026.08.24 16:02",
+  "globals.listStatsRow3Headline": "Long-running review pass",
+  "globals.listStatsRow3Path": "~/Documents/sample-project/work/review-long",
+  "globals.listStatsRow3Elapse": "1h 5m",
+  "globals.listStatsRow3Tokens": "1.2M",
+  "globals.listStatsRow3Cost": "$1.240",
+  "globals.listStatsRow3Count": "108 calls",
   "globals.listTreeHelp":
-    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); expand = row click + decorative chevron. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
+    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + decorative chevron. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
   "globals.listTreeAria": "Sample expandable catalog",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "Sample session",
@@ -1404,9 +1456,18 @@ const en = {
   "globals.cardTitlePlain": "Title only",
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
+  "globals.cardHintTitle": "Export package",
+  "globals.cardHintAria": "Export package help",
+  "globals.cardHintTip":
+    "Packs managed configs only — large local DBs use Archive below.",
+  "globals.cardHintBodyLead":
+    "Longer include / exclude detail belongs in the body (FieldHint), not a second head “i”.",
+  "globals.cardHintBodyMeta": "One InfoHint in actions · short tip · detail in body",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "Header actions stay one horizontal .fynns-control-cluster strip (flat IconButtons — no nested clusters stacking as full-width rows).",
+    "Header actions stay one horizontal .fynns-control-cluster (flat IconButtons + at most one InfoHint). All icon chrome shares size md (40dp hover) — never mix sm/md disks in the same strip; match TopAppBar md on the same page.",
+  "globals.cardActionsStripHint": "Short head tip only — detail stays in the body.",
+  "globals.cardActionsStripHintAria": "Entry actions help",
   "globals.cardActionsStripStar": "Star",
   "globals.cardActionsStripPin": "Pin",
   "globals.cardActionsStripOpen": "Open file",
@@ -1418,11 +1479,12 @@ const en = {
   "globals.cardChromePlainNote":
     "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / InfoHint — one nowrap strip; nested control-clusters hug). Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.cardMetaBodyTitle": "sample-repo status",
+  "globals.cardMetaBodyCount": "8 catalog entries",
   "globals.cardMetaBodyBranch": "default branch: main",
   "globals.cardMetaBodyHelp":
-    "Branch / path meta belongs in the Card body (mono OK). Leave actions empty unless there is an IconButton / InfoHint strip.",
+    "Counts / branch / path meta belong in the Card body (`.fynns-table-meta` / mono). `title` = short section name only — never wrap name + count in a title `fynns-control-cluster` (reads as glued `OpenSpec8`). Leave actions empty unless there is an IconButton / InfoHint strip.",
   "globals.collapsible": "Fold section sample",
   "globals.collapsibleHelp":
     "Collapsible headers use `radius-md`. Optional `icon` rests in the chevron slot and swaps to the expand chevron on header hover (Preview → Collapsible). `actions` stay trailing. When open, a full-bleed hairline under the head meets the outer border. Focus matches Input’s quiet accent border. Nesting body children → `chrome=\"plain\"` + nest-gap (Preview toggle).",
@@ -1668,7 +1730,7 @@ const zh: Record<MessageKey, string> = {
   "nav.layoutsHint":
     "Greenfield 默认应用壳：首屏 DestinationAppShell，另有 TopAppBar / 抽屉 / Rail / 底栏等。不是底部「模板」设置页。",
   "layouts.lead":
-    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。单独的 NavigationRail 仅移动端/窄视口 densify — 禁止当桌面根壳。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
+    "Greenfield 默认：抄首屏 DestinationAppShell 做桌面主界面。目录钻入（第二项）：侧栏换成条目列表、主区全宽详情 — 禁止主画布 hub-split。目的地二态（全宽抽屉或收起）— 单独的 NavigationRail 仅作有意的手机样例，不是 DestinationAppShell densify。小导航（Breadcrumb / Pagination / SkipLink）仍在「组件」。",
   "layouts.shellMainTitle": "主画布",
   "layouts.shellMainBody":
     "DestinationAppShell 的 children — 任意页面内容。右侧 aside 可选，且不必是 Chat。",
@@ -2106,7 +2168,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主可整段换行，禁止把 Select 拉成 1fr 挤碎页码条。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -2267,11 +2329,13 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿以保证选区对齐 — 打字时要 live token 色请 `wrap={false}`。",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。固定井 → `autoGrow={false}`。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
+    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。固定井 → `autoGrow={false}`。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
+  "globals.codeBlockFileBodyReadOnlyHelp":
+    "同一文件正文 + `readOnly` — 完整高亮单层 pre；拖选不应出现条纹/错位 wash（可与上方可编辑 overlay 对照）。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2461,7 +2525,11 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmCatalogRefresh": "刷新列表",
   "globals.rhythmCatalogAdd": "新增服务器",
   "globals.rhythmEndAlignHelp":
-    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（可加 `__grow` 占位）— 禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+  "globals.rhythmEndAlignIconHelp":
+    "纯 IconButton 贴尾条：Tooltip → IconButton 保持 40dp 正圆（不要在通栏 flex 行上被压成细椭圆）。",
+  "globals.rhythmEndAlignIconOpenTip": "打开目标文件夹",
+  "globals.rhythmEndAlignIconPrimaryTip": "开始拷贝归档",
   "globals.rhythmEndAlignSecondary": "次要",
   "globals.rhythmEndAlignPrimary": "主要操作",
   "globals.rhythmStatusHelp":
@@ -2477,6 +2545,8 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusLocalEmpty": "本机同步未知",
   "globals.rhythmStatusReady": "就绪",
   "globals.rhythmStatusReadyTip": "推荐配置已应用",
+  "globals.rhythmSyncNow": "立即同步",
+  "globals.rhythmSyncNowTip": "立即同步到备份分支",
   "globals.rhythmSourceLabel": "目录来源",
   "globals.rhythmSourceAlpha": "目录",
   "globals.rhythmSourceBeta": "镜像",
@@ -2553,7 +2623,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
+    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
@@ -2733,7 +2803,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navBarHelp":
     "[偏移动端] NavigationBar — 手机底栏目的地。桌面请用「布局模板」裁切壳 + NavigationDrawer。独立样例 — 不是整站默认。",
   "globals.navRailHelp":
-    "[仅移动端 / 窄视口] NavigationRail — 手机 densify 或 DestinationAppShell / 裁切壳挤拥时用。**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell。DestinationAppShell densify 默认：`railLabelVisibility=\"unlabeled\"`（Cursor 图标列 + 底部齿轮 — 需要常驻标签时传 `labeled`）。",
+    "[仅移动端 / 有意根壳] NavigationRail — 独立手机 / 图标列根。**禁止**当作 DestinationAppShell 拥挤 densify，也**禁止**当作桌面 app 默认根壳；greenfield 请抄「布局模板」→ DestinationAppShell（仅抽屉 \| 收起）。",
   "globals.navDrawerAria": "示例导航抽屉",
   "globals.navDrawerModalAria": "模态导航抽屉",
   "globals.navDrawerHeadline": "邮件",
@@ -2753,6 +2823,26 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerToolBulk": "批量选择",
   "globals.navDrawerToolArchive": "归档",
   "globals.navDrawerToolRestore": "恢复",
+  "globals.navDrawerModeAria": "示例模式侧栏",
+  "globals.navDrawerModeToolsAria": "示例模式侧栏工具",
+  "globals.navDrawerModeSortTip": "目录排序",
+  "globals.navDrawerModeSortAlpha": "名称 A–Z",
+  "globals.navDrawerModeSortUpdated": "最近更新",
+  "globals.navDrawerModeNewTip": "新建条目",
+  "globals.navDrawerModeEntryAlpha": "示例条目 A",
+  "globals.navDrawerModeEntryBeta": "示例条目 B",
+  "globals.navDrawerModeHideBuiltin": "隐藏内置",
+  "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
+  "globals.navDrawerModeHideBuiltinHint":
+    "开启后不显示只读内置条目（示例政策说明 — 用 InfoHint，不要用 ControlBlock description）。",
+  "globals.navDrawerModeHideBuiltinHintAria": "关于隐藏内置条目",
+  "globals.navDrawerModeSideFilterAria": "示例存在侧筛选",
+  "globals.navDrawerModeSideAll": "全部",
+  "globals.navDrawerModeSideAllTip": "全部",
+  "globals.navDrawerModeSideAlphaTip": "A 侧",
+  "globals.navDrawerModeSideBetaTip": "B 侧",
+  "globals.navDrawerModeToolsHelp":
+    "模式侧栏（无 SearchBar）：排序 + 新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron）。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch`。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`**（标记字形标签）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 Globals `#info-hint` / Layouts 模式样例。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
@@ -2762,7 +2852,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 桌面展开优先 NavigationDrawer；仅窄屏 / 拥挤 densify 到 NavigationRail（默认始终显示标签）— 禁止把独立 Rail 当桌面根。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`），以及可选 `aside`（不必是 Chat）。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",
@@ -3002,8 +3092,32 @@ const zh: Record<MessageKey, string> = {
   "globals.listCatalogEdit": "编辑",
   "globals.listCatalogRemove": "移除",
   "globals.listCatalogOpenSnack": "已打开示例条目",
+  "globals.listStatsHelp":
+    "多指标 trailing 元数据：单元格包在 `.fynns-list-item-trailing-stats`（固定 CSS grid 轨：耗时 | tokens | 费用 | 次数）。兄弟行共享列边；**禁止**用 flex `.fynns-control-cluster` 做跨行对齐。时长单位之间仍有空格（`1m 47s`）。两项指标加 `--pair`。下方为活样例。",
+  "globals.listStatsAria": "用量统计目录示例",
+  "globals.listStatsRow1Overline": "2026.08.24 18:49",
+  "globals.listStatsRow1Headline": "构建桌面应用 UI 壳",
+  "globals.listStatsRow1Path": "~/Documents/sample-project/work/build-r2",
+  "globals.listStatsRow1Elapse": "41m 40s",
+  "globals.listStatsRow1Tokens": "513k",
+  "globals.listStatsRow1Cost": "$0.081",
+  "globals.listStatsRow1Count": "25 次",
+  "globals.listStatsRow2Overline": "2026.08.24 17:46",
+  "globals.listStatsRow2Headline": "短会话示例",
+  "globals.listStatsRow2Path": "~/Documents/sample-project/work/quick",
+  "globals.listStatsRow2Elapse": "2m 15s",
+  "globals.listStatsRow2Tokens": "12k",
+  "globals.listStatsRow2Cost": "—",
+  "globals.listStatsRow2Count": "3 次",
+  "globals.listStatsRow3Overline": "2026.08.24 16:02",
+  "globals.listStatsRow3Headline": "长时评审回合",
+  "globals.listStatsRow3Path": "~/Documents/sample-project/work/review-long",
+  "globals.listStatsRow3Elapse": "1h 5m",
+  "globals.listStatsRow3Tokens": "1.2M",
+  "globals.listStatsRow3Cost": "$1.240",
+  "globals.listStatsRow3Count": "108 次",
   "globals.listTreeHelp":
-    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；展开 = 行点击 + 装饰 chevron。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
+    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + 装饰 chevron。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
   "globals.listTreeAria": "可展开目录示例",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "示例会话",
@@ -3023,9 +3137,17 @@ const zh: Record<MessageKey, string> = {
   "globals.cardTitlePlain": "仅标题",
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
+  "globals.cardHintTitle": "导出包",
+  "globals.cardHintAria": "导出包说明",
+  "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
+  "globals.cardHintBodyLead":
+    "更长的纳入 / 排除说明放正文（FieldHint），不要再叠第二个标题「i」。",
+  "globals.cardHintBodyMeta": "标题最多一个 InfoHint · tip 要短 · 细节在正文",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
-    "标题栏 actions 保持一条横向 .fynns-control-cluster（扁平 IconButton，禁止嵌套 cluster 叠成多行）。",
+    "标题操作区保持一条横向 .fynns-control-cluster（扁平 IconButton + 最多一个 InfoHint）。同一条带内所有图标 chrome 共用 size md（40dp hover）— 禁止 sm/md 混盘；同页 TopAppBar 也用 md。",
+  "globals.cardActionsStripHint": "标题只放短 tip — 细节留在正文。",
+  "globals.cardActionsStripHintAria": "条目操作说明",
   "globals.cardActionsStripStar": "收藏",
   "globals.cardActionsStripPin": "置顶",
   "globals.cardActionsStripOpen": "打开文件",
@@ -3037,11 +3159,12 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromePlainNote":
     "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.cardMetaBodyTitle": "示例仓库状态",
+  "globals.cardMetaBodyCount": "8 条目录条目",
   "globals.cardMetaBodyBranch": "默认分支：main",
   "globals.cardMetaBodyHelp":
-    "分支 / 路径元数据放 Card 正文（可用 mono）。没有 IconButton / InfoHint 就不要写 actions。",
+    "计数 / 分支 / 路径元数据放 Card 正文（`.fynns-table-meta` / mono）。`title` 只要短分区名 — 禁止用 title 内 `fynns-control-cluster` 包「名 + 计数」（会读成粘连的 `OpenSpec8`）。没有 IconButton / InfoHint 就不要写 actions。",
   "globals.collapsible": "折叠分区示例",
   "globals.collapsibleHelp":
     "折叠分区标题栏使用 `radius-md`。可选 `icon` 占 chevron 位，悬停标题栏时换成展开箭头（预览 → Collapsible）。`actions` 仍在右侧。展开时标题下为通栏 hairline；焦点边框与 Input 相同的淡青绿。嵌套正文子节点 → `chrome=\"plain\"` + nest-gap（Preview 可切换）。",

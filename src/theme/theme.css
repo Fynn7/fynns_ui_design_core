@@ -371,6 +371,10 @@
   --fynns-list-leading-width: 1.25rem;
   --fynns-list-content-gap: var(--fynns-space-xs);
   --fynns-list-content-gap-3: var(--fynns-space-sm);
+  --fynns-list-stats-col-elapse: 4.75rem;
+  --fynns-list-stats-col-tokens: 3.5rem;
+  --fynns-list-stats-col-cost: 3.75rem;
+  --fynns-list-stats-col-count: 3.25rem;
   --fynns-datepicker-day-size: 2.5rem;
   --fynns-datepicker-pad-inline: 0.75rem;
   --fynns-datepicker-pad-block: 0.75rem;
