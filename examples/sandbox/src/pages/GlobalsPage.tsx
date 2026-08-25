@@ -4049,6 +4049,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             description={t("globals.emptySmDescription")}
           />
           <SandboxHelp text={t("globals.emptyHelp")} />
+          <SandboxHelp text={t("globals.emptyFillHelp")} />
+          <div className="sandbox-fill-column-stage">
+            <FillColumn>
+              <EmptyState
+                fill
+                icon={<FolderOpenIcon />}
+                title={t("globals.emptyFillTitle")}
+                description={t("globals.emptyFillDescription")}
+                actions={<Button>{t("globals.emptyAction")}</Button>}
+              />
+            </FillColumn>
+          </div>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="busy-region">

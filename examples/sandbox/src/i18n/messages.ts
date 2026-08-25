@@ -539,6 +539,11 @@ const en = {
   "globals.emptyAction": "Create project",
   "globals.emptyHelp":
     "EmptyState is layout-only (icon + title + description + actions). Pass Button CTAs yourself.",
+  "globals.emptyFillTitle": "Nothing in this pane yet",
+  "globals.emptyFillDescription":
+    "Save something first, then return here. Pane sole EmptyState uses fill so copy centers in the canvas.",
+  "globals.emptyFillHelp":
+    "Pane sole zero-result (DestinationAppShell canvas / FillColumn children / shell main): EmptyState fill — centers like BusyRegion fill. Inside Card / List / ChatThread.empty keep the default (no fill).",
   "globals.busyRegionLabel": "Loading section",
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
@@ -2241,6 +2246,11 @@ const zh: Record<MessageKey, string> = {
   "globals.emptyAction": "创建项目",
   "globals.emptyHelp":
     "EmptyState 只负责布局（图标 + 标题 + 说明 + 操作区）。CTA 自行传入 Button。",
+  "globals.emptyFillTitle": "此栏还没有内容",
+  "globals.emptyFillDescription":
+    "先保存内容再回到这里。画布唯一子级 EmptyState 用 fill，文案在可见区内居中。",
+  "globals.emptyFillHelp":
+    "栏目唯一零结果（DestinationAppShell canvas / FillColumn children / shell main）：EmptyState fill — 与 BusyRegion fill 同宿主契约居中。Card / List / ChatThread.empty 内保持默认（不要 fill）。",
   "globals.busyRegionLabel": "区块加载中",
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
