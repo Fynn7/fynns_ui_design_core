@@ -193,6 +193,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
  an **English ↔ Chinese** UI locale switch for their own chrome strings; Chinese
  is allowed when the active locale is `zh`. Do not bake CJK into `@fynns/ui`
  default labels — pass localized strings from the app.
+ **Chrome locale switch (hard):** binary en↔zh lives in the **Settings** body
+ (footer gear → software prefs) as compact **`ToggleGroup`**
+ (`showCheck={false}`, labels `English` / `中文`) inside a `FieldBlock` —
+ live sandbox `LanguageSwitcher` on Layouts `#layouts-demo-shell` Settings +
+ Templates. **Never** put language in TopAppBar `trailing` (neither
+ `ToggleGroup` nor form `Select` / chevron). Longer locale lists may still use
+ Select **inside Settings**, not the app bar.
  **Sandbox / core demos must stay product-agnostic:** never paste consumer app
  copy (feature names, providers, routes, domain jargon) into Globals, Preview,
  Layout templates, or primitive defaults — invent generic placeholders instead
@@ -323,9 +330,25 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
  settings cards copied from an app. Use **generic** placeholders only; consumers
  supply their own strings when they copy a recipe (`#form-recipe`, AGENTS
  recipes). Cursor rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
+- **DON'T** stack diagnostic / probe / connection essays as a
+  `.fynns-unit-stack` of `FieldHint` / muted `<p>` / bare strings
+  (`Provider: Fail — long reason… Installed: a, b, c…`). Visible chrome stays
+  **short** (service name + `OK` / `Fail` / `—`). Important detail →
+  **`InfoHint`** on the same `ControlRow` (bubble / Tooltip — not inline
+  essay). Same for multi-sentence policy next to a Switch: `InfoHint`, not
+  `ControlBlock` `description`. Live: sandbox `#rhythm` status legend +
+  `#info-hint`.
+- **DON'T** put **Settings** both as a root `NavigationDrawerItem` **and** as
+  the footer gear — Cursor-style entry is **`navFooter` only**. **DON'T** park
+  feature / runtime / domain panels (providers, tools, catalogs, generation
+  pipelines) inside the Settings screen — Settings body stays **software chrome**
+  (locale, appearance, account). Feature config gets its **own** destination.
+  **DON'T** put UI language in TopAppBar `trailing` — language belongs in that
+  Settings body (`FieldBlock` + compact `ToggleGroup`). Live: Layouts
+  `#layouts-demo-shell` (footer gear → software prefs Card).
 - **DON'T** pad chrome / destination **labels** with redundant meta unless the
- user **explicitly** asks (counts, middle-dot tallies, decorative separators,
- parenthetical glosses, product-stack footnotes).
+  user **explicitly** asks (counts, middle-dot tallies, decorative separators,
+  parenthetical glosses, product-stack footnotes).
  `NavigationDrawerGroup` / `NavigationDrawerItem` / `NavigationDrawerHeadline`
  `label` stay the **short name only** (`Global` / `全局规则` — not
  `Global (OpenCode + Cursor)`, not `Global rules · 1`).
@@ -1132,11 +1155,14 @@ classes.
   `.fynns-content-column`) in `children` so the band absorbs leftover (Chat
   composer docks; loading ring centers; overlay Y rail sits on the **pane**
   edge — page-scroll must be **edge-flush** with the pane; never pad
-  `.hub-main` / shell main **around** the scroll host). Inside page-scroll /
+  `.hub-main` / shell main **around** the scroll host).   Inside page-scroll /
   PageScroll: content column (`max-width` + `padding: dialog-inset` on
   **inline and block** — first Card clears TopAppBar; never invent
-  consumer `padding-top` on the first unit) holds Cards / stacks — **never**
-  put `fynns-scroll` on the content column
+  consumer `padding-top` on the first unit). When the **first** child is a
+  standalone catalog `ControlRow`, pad-block-start uses
+  `--fynns-navdrawer-body-pad-block-start` so that label midlines with the
+  active `NavigationDrawerItem` (Layouts `#layouts-demo-shell`; ≥ 0.4.101).
+  Never put `fynns-scroll` on the content column
   itself (or on a private `.content` / `.hub-scroll` with `max-width` — rail
   paints on the Card). Page-scroll keeps `padding-inline-end: scrollbar-size`
   for the rail band only. A **long in-Card catalog** may use List +
@@ -1223,7 +1249,7 @@ classes.
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` — `#field-header` | `Select.trailing` beside chevron; `FieldBlock` label-row refresh |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
-  | **Catalog list chrome** (section name + count \| IconButton strip — e.g. `Servers (7/7)`) | Standalone `ControlRow` (fills host: label `1fr`, actions end-hug) + **one** `.fynns-control-cluster` of `IconButton`s (overflow / sort menus → `DropdownMenu` **`iconOnly`**). Live: `#rhythm` catalog strip / `#menu` | `ControlRow` as content-sized island (actions float mid-left); loose IconButton siblings without a cluster; private `hub-spread` / `space-between` for the same job; bare labeled `.fynns-btn` DropdownMenu beside IconButtons (48×40 pill vs 32dp circle) |
+  | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
   | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). Live: `#rhythm` end-align footer + icon strip | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon` |
 | **Mode drawer tools** (sort menu + primary new — no SearchBar above destinations) | One `.fynns-control-cluster.fynns-control-cluster--toolbar-end` of Tooltip→sort menu + Tooltip→`IconButton` (nowrap, trailing hug; sort trigger **not** `ChevronDown`). Live: Layouts `#layouts-demo-navigation-drawer` mode sample | Full-width default cluster start-packed above first `NavigationDrawerItem` (reads as stray group chevron / overlap); chevron sort icon beside `NavigationDrawerGroup` expanders |
 | **Mode drawer preference** (hide built-in / long policy toggle in ~224px tools column) | One **`ControlRow`** + **`InfoHint` `size="sm"`** + track-only **`Switch`** (`label=""` + `ariaLabel`) — paragraph in Tooltip, **not** `ControlBlock` `description`. Live: same Layouts sample + Globals `#info-hint` | `ControlBlock` + multi-sentence `description` (~102dp tall stack above destination list) |
@@ -1234,8 +1260,8 @@ classes.
   | **File / settings hierarchy** (folders + leaves, keyboard tree) | **`Tree`** / **`TreeItem`** (`role=tree`). Branch row click selects **and** toggles expand. Live `#tree` | `NavigationDrawer` / `NavigationDrawerGroup` for app destinations; expandable catalog `List` + `ListItem` `detail` for session/record trees; inventing `HubTreeDisclosure` |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`) |
   | Table / list pager (page-size + `Pagination`) | **`.fynns-pagination-bar`**: one footer row — `__start` = content-hug Select + range, `__end` = nowrap `Pagination` (M3 data-table / MUI TablePagination). **Never** wrap start/end onto two rows when narrow — add `fynns-scroll` and let the bar scroll inline. Live `#pagination` | Vertical Card-body stack of Select then pager; private space-between that grows Select (`width:100%` / `1fr`) and wraps page discs; `flex-wrap` two-line footer |
-  | Multi-status indicator strip (behind / CI / protection / sync) | `ControlStack` of `ControlRow`s inside the Card body (`label` = short name, children = tip glyph / muted `—`). Form-host stack → label-fill + end-hug so glyphs share one trailing edge. Live: `#rhythm` status legend | Flat `.fynns-control-cluster` interleaving mono labels + status icons (icon soup / no rhythm) |
-  | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name, children = tip glyph **or** lone `Tooltip` → `IconButton` for row actions like sync). If an apply / fix `IconButton` shares the row, wrap **glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend (+ sync row) | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host; private width hacks on `.fynns-btn--icon` |
+  | Multi-status / probe strip (behind / CI / protection / connection OK·Fail) | `ControlStack` of `ControlRow`s (`label` = short name; children = short `OK`/`Fail`/`—` **or** tip glyph + **`InfoHint`** for the long reason / installed list / proxy URL). Form-host → label-fill + end-hug. Live: `#rhythm` status legend | `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …Installed: …`); flat cluster of mono labels + icons; dumping diagnostics into visible body copy |
+  | Named readiness / tip status (config OK, sync OK) | Same: Card-body `ControlRow` (`label` = short name; children = short status + **`InfoHint`** for detail, tip glyph, **or** lone `Tooltip` → `IconButton` for row actions like sync). If an apply / fix `IconButton` shares the row, wrap **status/glyph + button** in one `.fynns-control-cluster` **inside** that row. Live: `#rhythm` status legend (+ sync row) | A Card-body `.fynns-control-cluster` whose only child is a tip glyph (full-width empty band; icon floats start) — cluster is for **≥2 sibling controls**, not a status host; private width hacks on `.fynns-btn--icon`; multi-line Fail essays as FieldHint siblings |
   | **Suffixed file body** (inspector / skill / rule / plugin source — `.md`, `.xml`, `.py`, `.ts`, `.json`, …) | **`CodeBlock`** (`variant="editable"` when editing; pass `language` via `codeLanguageFromPath(path)` or explicit id; Card host → `chrome="plain"`; fixed well → `autoGrow={false}`). Unknown suffix still CodeBlock (plain mono). Live: sandbox `#code-block` file-body Card | **`Textarea`** for anything with a real extension other than `.txt` / `.text`; UI-font prose well for `SKILL.md` / `prompt.xml` / `plugin.ts` |
   | Plain note / extensionless draft / **`.txt`** | `Textarea` (or Form `FieldBlock` + Textarea) | Forcing CodeBlock on freeform notes with no filetype |
 
