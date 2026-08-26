@@ -1391,6 +1391,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ariaLabel={t("globals.infoHintIconAria")}
           />
           <InfoHint
+            tone="danger"
+            content={t("globals.infoHintDangerBody")}
+            ariaLabel={t("globals.infoHintDangerAria")}
+          />
+          <InfoHint
             label={t("globals.infoHintLabeledTrigger")}
             content={t("globals.infoHintLabeledBody")}
             ariaLabel={t("globals.infoHintLabeledAria")}
@@ -3628,97 +3633,120 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="field-header">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <FieldStack>
-            <FieldBlock
-              label={t("globals.fieldHeaderProviderLabel")}
-              htmlFor="sandbox-field-header-provider"
-            >
-              <Select
-                id="sandbox-field-header-provider"
-                ariaLabel={t("globals.fieldHeaderProviderLabel")}
-                options={[
-                  { value: "alpha", label: t("globals.fieldHeaderRegionAlpha") },
-                  { value: "beta", label: t("globals.fieldHeaderRegionBeta") },
-                ]}
-                value={fieldHeaderRegion}
-                onChange={setFieldHeaderRegion}
+          <Card
+            title={t("globals.fieldHeaderCardTitle")}
+            actions={
+              <InfoHint
+                content={t("globals.fieldHeaderCardScopeInfo")}
+                ariaLabel={t("globals.fieldHeaderCardScopeAria")}
               />
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.fieldHeaderBaseUrlLabel")}
-              htmlFor="sandbox-field-header-base-url"
-            >
-              <Input
-                id="sandbox-field-header-base-url"
-                value={fieldHeaderEndpoint}
-                onChange={(event) => setFieldHeaderEndpoint(event.target.value)}
-                aria-label={t("globals.fieldHeaderBaseUrlLabel")}
-              />
-            </FieldBlock>
-            <FieldBlock label={t("globals.fieldHeaderApiKeyLabel")} htmlFor="sandbox-field-header-api-key">
-              <Input
-                id="sandbox-field-header-api-key"
-                type={fieldHeaderReveal ? "text" : "password"}
-                value={fieldHeaderApiKey}
-                onChange={(event) => setFieldHeaderApiKey(event.target.value)}
-                aria-label={t("globals.fieldHeaderApiKeyLabel")}
-                autoComplete="off"
-                trailing={
-                  <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+            }
+          >
+            <FieldStack>
+              <FieldBlock
+                label={t("globals.fieldHeaderProviderLabel")}
+                htmlFor="sandbox-field-header-provider"
+              >
+                <Select
+                  id="sandbox-field-header-provider"
+                  ariaLabel={t("globals.fieldHeaderProviderLabel")}
+                  options={[
+                    { value: "alpha", label: t("globals.fieldHeaderRegionAlpha") },
+                    { value: "beta", label: t("globals.fieldHeaderRegionBeta") },
+                  ]}
+                  value={fieldHeaderRegion}
+                  onChange={setFieldHeaderRegion}
+                />
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.fieldHeaderBaseUrlLabel")}
+                htmlFor="sandbox-field-header-base-url"
+              >
+                <Input
+                  id="sandbox-field-header-base-url"
+                  value={fieldHeaderEndpoint}
+                  onChange={(event) => setFieldHeaderEndpoint(event.target.value)}
+                  aria-label={t("globals.fieldHeaderBaseUrlLabel")}
+                />
+              </FieldBlock>
+              <FieldBlock label={t("globals.fieldHeaderApiKeyLabel")} htmlFor="sandbox-field-header-api-key">
+                <Input
+                  id="sandbox-field-header-api-key"
+                  type={fieldHeaderReveal ? "text" : "password"}
+                  value={fieldHeaderApiKey}
+                  onChange={(event) => setFieldHeaderApiKey(event.target.value)}
+                  aria-label={t("globals.fieldHeaderApiKeyLabel")}
+                  autoComplete="off"
+                  trailing={
+                    <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                      <IconButton
+                        size="sm"
+                        aria-label={t("globals.fieldHeaderRevealTip")}
+                        onClick={() => setFieldHeaderReveal((v) => !v)}
+                      >
+                        {fieldHeaderReveal ? (
+                          <EyeOffIcon aria-hidden />
+                        ) : (
+                          <EyeIcon aria-hidden />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  }
+                />
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.fieldHeaderCatalogLabel")}
+                htmlFor="sandbox-field-header-select"
+                actions={
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.fieldHeaderCatalogPolicyInfo")}
+                    ariaLabel={t("globals.fieldHeaderCatalogPolicyAria")}
+                  />
+                }
+              >
+                <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                  <Select
+                    id="sandbox-field-header-select"
+                    className="fynns-control-cluster__grow"
+                    ariaLabel={t("globals.fieldHeaderCatalogLabel")}
+                    placeholder={t("globals.fieldHeaderSelectPlaceholder")}
+                    value={fieldHeaderSelect}
+                    onChange={setFieldHeaderSelect}
+                    options={[
+                      { value: "a", label: "Option A" },
+                      { value: "b", label: "Option B" },
+                    ]}
+                  />
+                  <Tooltip content={t("globals.fieldHeaderReloadTip")}>
                     <IconButton
                       size="sm"
-                      aria-label={t("globals.fieldHeaderRevealTip")}
-                      onClick={() => setFieldHeaderReveal((v) => !v)}
+                      aria-label={t("globals.fieldHeaderReloadAria")}
                     >
-                      {fieldHeaderReveal ? (
-                        <EyeOffIcon aria-hidden />
-                      ) : (
-                        <EyeIcon aria-hidden />
-                      )}
+                      <RefreshIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.fieldHeaderNotesLabel")}
+                htmlFor="sandbox-field-header-notes"
+                actions={
+                  <Tooltip content={t("globals.fieldHeaderActionTip")}>
+                    <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
+                      <UndoIcon aria-hidden />
                     </IconButton>
                   </Tooltip>
                 }
-              />
-            </FieldBlock>
-            <FieldBlock label={t("globals.fieldHeaderBlockLabel")} htmlFor="sandbox-field-header-select">
-              <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                <Select
-                  id="sandbox-field-header-select"
-                  className="fynns-control-cluster__grow"
-                  ariaLabel={t("globals.fieldHeaderBlockLabel")}
-                  placeholder={t("globals.fieldHeaderSelectPlaceholder")}
-                  value={fieldHeaderSelect}
-                  onChange={setFieldHeaderSelect}
-                  options={[
-                    { value: "a", label: "Option A" },
-                    { value: "b", label: "Option B" },
-                  ]}
+              >
+                <Textarea
+                  id="sandbox-field-header-notes"
+                  aria-label={t("globals.fieldHeaderNotesLabel")}
+                  minRows={2}
                 />
-                <Tooltip content={t("globals.fieldHeaderActionTip")}>
-                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            </FieldBlock>
-            <FieldBlock
-              label={t("globals.fieldHeaderNotesLabel")}
-              htmlFor="sandbox-field-header-notes"
-              actions={
-                <Tooltip content={t("globals.fieldHeaderActionTip")}>
-                  <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
-                    <UndoIcon aria-hidden />
-                  </IconButton>
-                </Tooltip>
-              }
-            >
-              <Textarea
-                id="sandbox-field-header-notes"
-                aria-label={t("globals.fieldHeaderNotesLabel")}
-                minRows={2}
-              />
-            </FieldBlock>
-          </FieldStack>
+              </FieldBlock>
+            </FieldStack>
+          </Card>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
             htmlFor="sandbox-field-header-bare"
@@ -5188,6 +5216,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
                 <InfoHint
                   size="sm"
+                  tone="danger"
                   content={t("globals.rhythmStatusBehindTip")}
                   ariaLabel={t("globals.rhythmStatusBehindTip")}
                 />
@@ -5198,6 +5227,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
                 <InfoHint
                   size="sm"
+                  tone="danger"
                   content={t("globals.rhythmStatusCiTip")}
                   ariaLabel={t("globals.rhythmStatusCiTip")}
                 />
@@ -5288,7 +5318,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             open={formRecipeDialogOpen}
             onOpenChange={setFormRecipeDialogOpen}
             title={t("globals.formRecipeTitle")}
-            size="md"
+            size="lg"
             showCloseButton
             closeAriaLabel={t("globals.dialogClose")}
           >
@@ -5296,6 +5326,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               idPrefix="sandbox-form-dialog"
               {...formRecipeFieldProps}
             />
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button variant="ghost" size="sm">
+                {t("globals.formRecipeDialogCancel")}
+              </Button>
+              <Button variant="tonal" size="sm">
+                {t("globals.formRecipeDialogCopyPrompt")}
+              </Button>
+              <Button variant="tonal" size="sm">
+                {t("globals.formRecipeDialogImportJson")}
+              </Button>
+              <Button size="sm" loading>
+                {t("globals.formRecipeDialogExtract")}
+              </Button>
+            </div>
           </Dialog>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>

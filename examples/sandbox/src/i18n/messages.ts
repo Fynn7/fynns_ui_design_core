@@ -743,12 +743,23 @@ const en = {
   "globals.fieldHeaderRevealTip": "Show plaintext",
   "globals.fieldHeaderLabel": "Bare FieldHeader",
   "globals.fieldHeaderBlockLabel": "Sample field",
+  "globals.fieldHeaderCardTitle": "Connection profile",
+  "globals.fieldHeaderCardScopeInfo":
+    "Session picks apply here; cold-start defaults still come from the host config. Choices persist in this browser.",
+  "globals.fieldHeaderCardScopeAria": "About this connection profile section",
+  "globals.fieldHeaderCatalogLabel": "Catalog",
+  "globals.fieldHeaderCatalogPolicyInfo":
+    "Options load from the selected endpoint. Use refresh to reload; a failed refresh keeps the last cached list.",
+  "globals.fieldHeaderCatalogPolicyAria": "About the catalog field",
+  "globals.fieldHeaderReloadAria": "Reload catalog",
+  "globals.fieldHeaderReloadTip":
+    "Reload the catalog from the endpoint. On failure, the previous cached list stays selected.",
   "globals.fieldHeaderNotesLabel": "Notes",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "M3: **Input** reveal → `trailing` inside the field. **Select + refresh** → `FieldBlock` + `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton`) — not `Select.trailing`. Textarea expand stays on label-row `actions`; FieldStack shares 32dp header band when needed.",
+    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton`) — not `Select.trailing`.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -896,8 +907,12 @@ const en = {
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
   "globals.formRecipeHostDialog":
-    "Dialog host — `Dialog` + `showCloseButton` + the same FieldStack tree (md ceiling). Switch-only close-stack anatomy stays under Containment overlays.",
+    "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays.",
   "globals.formRecipeDialogOpen": "Open Dialog form",
+  "globals.formRecipeDialogCancel": "Cancel",
+  "globals.formRecipeDialogCopyPrompt": "Copy browser prompt",
+  "globals.formRecipeDialogImportJson": "Import JSON reply",
+  "globals.formRecipeDialogExtract": "Extracting with auto…",
   "globals.formRecipeTitle": "Project preferences",
   "globals.formRecipeIntro":
     "These preferences apply to the current sandbox project only. They illustrate FieldBlock and ControlBlock rhythm — not a real backend.",
@@ -950,6 +965,9 @@ const en = {
   "globals.infoHintIconBody":
     "Standalone help: hover or focus the “i” for a short explanation. Prefer InfoHint over inventing an IconButton + Tooltip for pure information.",
   "globals.infoHintIconAria": "More about InfoHint",
+  "globals.infoHintDangerBody":
+    "Fail / error detail: use `tone=\"danger\"` on icon-only InfoHint beside a short `Fail` status so OK vs Fail rows scan at a glance.",
+  "globals.infoHintDangerAria": "Fail detail help",
   "globals.infoHintLabeledTrigger": "What is this?",
   "globals.infoHintLabeledBody":
     "Labeled help: the plain text is the trigger (`cursor: help`, no underline / trailing “i”). Prefer for dense form or inspector rows.",
@@ -960,7 +978,7 @@ const en = {
     "Typical ControlRow pattern: Switch + trailing InfoHint for longer guidance without crowding the label.",
   "globals.infoHintRowAria": "Preview mode help",
   "globals.infoHintHelp":
-    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
+    "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. **`tone=\"danger\"`** tints the “i” for Fail / error detail beside short `OK`/`Fail` status rows (probe strips — live `#rhythm`). Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
@@ -1398,7 +1416,7 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listCatalogHelp":
-    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed; hover / focus-within shows trailing; touch always visible. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
+    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed; hover / focus-within shows trailing; touch always visible. Reveal clears copy→first action with `--fynns-list-end-actions-gap` (10dp = navdrawer pad-inline, ≥ 0.4.115) — ellipsis must not kiss the first IconButton disk. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
     "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.107 height-2 = 56dp).",
   "globals.listShortcutCardTitle": "Shortcuts",
@@ -2450,12 +2468,23 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderRevealTip": "显示明文",
   "globals.fieldHeaderLabel": "裸 FieldHeader",
   "globals.fieldHeaderBlockLabel": "示例字段",
+  "globals.fieldHeaderCardTitle": "连接配置",
+  "globals.fieldHeaderCardScopeInfo":
+    "此处切换仅影响当前会话；冷启动默认仍由宿主配置决定。选择会保存在本浏览器。",
+  "globals.fieldHeaderCardScopeAria": "关于连接配置分区",
+  "globals.fieldHeaderCatalogLabel": "目录",
+  "globals.fieldHeaderCatalogPolicyInfo":
+    "选项来自所选端点。点刷新重载；刷新失败时保留上次缓存列表。",
+  "globals.fieldHeaderCatalogPolicyAria": "关于目录字段",
+  "globals.fieldHeaderReloadAria": "重载目录",
+  "globals.fieldHeaderReloadTip":
+    "从端点重载目录。失败时仍保留上次缓存列表与当前选择。",
   "globals.fieldHeaderNotesLabel": "备注",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "M3：**Input** reveal 用字段内 `trailing`。**Select + 刷新** 用 `FieldBlock` + `.fynns-control-cluster--end-align`（Select 加 `fynns-control-cluster__grow` + 兄弟 `IconButton`）— 不要用 `Select.trailing`。Textarea 展开仍放标签行 `actions`；需要时 FieldStack 共享 32dp 标签行高度。",
+    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton`）— 不要用 `Select.trailing`。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -2603,8 +2632,12 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
   "globals.formRecipeHostDialog":
-    "Dialog 宿主 — `Dialog` + `showCloseButton` + 同一 FieldStack 树（md 上限）。纯 Switch 关栈解剖仍在 Containment overlays。",
+    "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。",
   "globals.formRecipeDialogOpen": "打开 Dialog 表单",
+  "globals.formRecipeDialogCancel": "取消",
+  "globals.formRecipeDialogCopyPrompt": "复制浏览器 prompt",
+  "globals.formRecipeDialogImportJson": "导入 JSON 回复",
+  "globals.formRecipeDialogExtract": "正在用 auto 抽取…",
   "globals.formRecipeTitle": "项目偏好",
   "globals.formRecipeIntro":
     "这些偏好仅作用于当前沙盒项目，用来演示 FieldBlock / ControlBlock 节奏 — 不接真实后端。",
@@ -2656,6 +2689,9 @@ const zh: Record<MessageKey, string> = {
   "globals.infoHintIconBody":
     "独立帮助：悬停或聚焦 “i” 查看简短说明。纯信息请用 InfoHint，不要手写 IconButton + Tooltip。",
   "globals.infoHintIconAria": "关于 InfoHint 的更多说明",
+  "globals.infoHintDangerBody":
+    "Fail / 错误详情：短 `Fail` 状态旁的 icon-only InfoHint 使用 `tone=\"danger\"`，便于一眼区分 OK 与 Fail。",
+  "globals.infoHintDangerAria": "失败详情帮助",
   "globals.infoHintLabeledTrigger": "这是什么？",
   "globals.infoHintLabeledBody":
     "标签型帮助：纯文字为触发器（`cursor: help`，无下划线 / 无尾随 “i”）。适合密排表单或 inspector 行。",
@@ -2666,7 +2702,7 @@ const zh: Record<MessageKey, string> = {
     "常见 ControlRow 写法：Switch + 尾随 InfoHint，用 tip 放长说明，避免挤占行标签。",
   "globals.infoHintRowAria": "预览模式帮助",
   "globals.infoHintHelp":
-    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
+    "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。**`tone=\"danger\"`** 将 “i” 染红，用于短 `OK`/`Fail` 状态行旁的 Fail / 错误详情（探测条 — 见 `#rhythm`）。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
@@ -3100,7 +3136,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listCatalogHelp":
-    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽；悬停/聚焦内显示 trailing；触摸端常显。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
+    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽；悬停/聚焦内显示 trailing；触摸端常显。揭示时文案→首颗动作盘间距 `--fynns-list-end-actions-gap`（10dp = navdrawer pad-inline，≥ 0.4.115）— 省略号不得贴住首颗 IconButton。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
     "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.107 的 height-2 = 56dp）。",
   "globals.listShortcutCardTitle": "快捷入口",
