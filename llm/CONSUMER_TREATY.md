@@ -1763,8 +1763,8 @@ OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without
 5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
    fake column alignment.
 
-Also: lone ControlRow `.fynns-table-meta` (`—` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
-(label InfoHint + refresh + probe OK/Fail + idle `—` all on the `sm` trail). Authority:
+Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+(label InfoHint + refresh + probe OK/Fail + idle `-` all on the `sm` trail). Authority:
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
