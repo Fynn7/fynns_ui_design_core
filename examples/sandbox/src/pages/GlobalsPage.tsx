@@ -954,6 +954,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
+  const [rhythmFooterBusy, setRhythmFooterBusy] = useState<
+    null | "secondary" | "primary"
+  >(null);
   const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
@@ -5444,10 +5447,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">
-            <Button size="sm" variant="tonal">
+            <Button
+              size="sm"
+              variant="tonal"
+              loading={rhythmFooterBusy === "secondary"}
+              disabled={
+                rhythmFooterBusy !== null && rhythmFooterBusy !== "secondary"
+              }
+              onClick={() => {
+                setRhythmFooterBusy("secondary");
+                window.setTimeout(() => setRhythmFooterBusy(null), 1600);
+              }}
+            >
               {t("globals.rhythmEndAlignSecondary")}
             </Button>
-            <Button size="sm">{t("globals.rhythmEndAlignPrimary")}</Button>
+            <Button
+              size="sm"
+              loading={rhythmFooterBusy === "primary"}
+              disabled={
+                rhythmFooterBusy !== null && rhythmFooterBusy !== "primary"
+              }
+              onClick={() => {
+                setRhythmFooterBusy("primary");
+                window.setTimeout(() => setRhythmFooterBusy(null), 1600);
+              }}
+            >
+              {t("globals.rhythmEndAlignPrimary")}
+            </Button>
           </div>
         </Surface>
         <SandboxHelp text={t("globals.rhythmEndAlignIconHelp")} />
@@ -5587,13 +5613,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               {...formRecipeFieldProps}
             />
             <div className="fynns-control-cluster fynns-control-cluster--end-align">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" disabled>
                 {t("globals.formRecipeDialogCancel")}
               </Button>
-              <Button variant="tonal" size="sm">
+              <Button variant="tonal" size="sm" disabled>
                 {t("globals.formRecipeDialogCopyPrompt")}
               </Button>
-              <Button variant="tonal" size="sm">
+              <Button variant="tonal" size="sm" disabled>
                 {t("globals.formRecipeDialogImportJson")}
               </Button>
               <Button size="sm" loading>

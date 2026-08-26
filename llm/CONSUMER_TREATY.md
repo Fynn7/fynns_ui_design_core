@@ -28,6 +28,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **org · dates glued in supportingText** /
+**UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
 **status meta far from --with-end action** /
@@ -45,6 +46,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion linear overflows NavigationDrawer** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
+**twin Button loading rings in one control-cluster** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -805,21 +807,39 @@ Symptoms (experience / job / internship catalogs):
 - Org and date range share one muted line under the title; middle-dot / en-dash
   stacks unrelated meta; row looks like a prose blob instead of a list record
 
-**Cause:** joining every secondary field with ` · ` into one `supportingText`
-string instead of using List slots. **Fix in the consumer:** `headline` =
-role/title; `supportingText` = **organization only**; date range →
-`trailingSupportingText` (stays inside the row button — layout separates L/R);
-`trailing` IconButtons stay on the end sibling. **Never** invent a private
-third text column or keep the middle-dot glue. Live: sandbox `#list` org+dates
-sample. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Title +
-organization + date range**. Pasteable:
+**Cause:** joining every secondary field with ` · ` / fancy dashes into one
+`supportingText` string instead of using List slots. **Fix in the consumer:**
+`headline` = role/title; `supportingText` = **organization only**; date range →
+`trailingSupportingText` (ASCII hyphen: `2025-10 - 2026-03`; stays inside the
+row button — layout separates L/R); `trailing` IconButtons stay on the end
+sibling. **Never** invent a private third text column or keep `·` / `–` / `—`
+glue. Live: sandbox `#list` org+dates sample. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Title + organization + date
+range** + Language **UI punctuation**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: UI · — punctuation in chrome
+
+Symptoms (any destination / list / status chrome):
+
+- Visible labels use middle-dot **`·`** as a field joiner (`Name · N`,
+  `Org · dates`, `A · B`)
+- Em-dash **`—`** or decorative en-dash **`–`** appears in chrome strings as
+  prose separators or fancy range marks (not a lone empty trail mark that
+  should be ASCII `-`)
+
+**Cause:** treating UI meta like newspaper / CV body copy instead of structured
+slots. **Fix:** split unrelated fields across keep-set slots / layout; date
+ranges → `2025-10 - 2026-03` or locale words; counts → `badge` or body meta;
+empty trail → ASCII `-`. Docs / source comments may keep English em dashes.
+Live: `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md) Language
+**UI punctuation**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: trailingSupportingText right-hug drift
 
 Symptoms (experience / job date columns):
 
-- Full ranges (`2025-10 – 2026-03`) and short open dates (`2023-03`) sit in
+- Full ranges (`2025-10 - 2026-03`) and short open dates (`2023-03`) sit in
   **content-width** boxes parked with `margin-inline-start: auto` — short
   strings start further right; no shared meta **column** across sibling rows
 
@@ -1067,6 +1087,33 @@ fillers. Live: sandbox `#rhythm` end-align footer.
 0.4.90. Keep real names on `ControlRow` `label`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: twin Button loading rings in one control-cluster
+
+Symptoms (Models / LLM backend Card foot, Dialog multi-action foot, Probe +
+Start / Copy + Import strips):
+
+- Two sibling `Button`s in one `.fynns-control-cluster--end-align` both show
+  a leading `CircularProgress` (`loading`) at the same time
+- Often both also share one `busy` boolean on every `loading={busy}`
+- Reads as **information redundancy** — two rings for one strip wait
+
+**Cause:** consumers treat “section busy” as “every action button paints
+busy chrome.” Core `Button` `loading` is a **per-control** slot spinner,
+not a section-level BusyRegion. Same philosophy as Loading placement: **one**
+progress chrome per wait host.
+
+**Fix (docs + sandbox ≥ 0.4.146):** track **which** action is in flight
+(`busy === "probe" | "proxy" | null`). Only that Button gets `loading`;
+siblings get `disabled` **without** a spinner. Live: sandbox `#rhythm`
+end-align (click either action) + `#form-recipe` Dialog foot (Extract
+loading; Cancel / Copy / Import disabled, no rings).
+
+**Fix in the consumer:** split shared `busy` into an action id (or
+mutually exclusive flags). Never `loading={busy}` on two cluster siblings.
+Bump / re-paste `consumer-cursor-rule.mdc`. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules + Loading placement **Multi-action
+footer wait**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 
@@ -1716,8 +1763,8 @@ OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without
 5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
    fake column alignment.
 
-Also: lone ControlRow `.fynns-table-meta` (`—` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
-(label InfoHint + refresh + probe OK/Fail + idle `—` all on the `sm` trail). Authority:
+Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+(label InfoHint + refresh + probe OK/Fail + idle `-` all on the `sm` trail). Authority:
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
