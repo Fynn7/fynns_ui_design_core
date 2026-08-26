@@ -2242,8 +2242,8 @@ input.fynns-input:focus::-webkit-scrollbar {
  * em-dash glued to the end edge leaves a thin glyph under a 32/40dp disk and
  * reads as a broken column next to Select+refresh. When meta + InfoHint share
  * a cluster, InfoHint keeps the trail box; meta stays content-width to the left.
- * Trail size follows the Card’s IconButton/InfoHint size lock (sm → 2rem,
- * else icon-target 40dp).
+ * Trail size follows the Card’s IconButton/InfoHint size lock (sm →
+ * field-header-action-row-min-height 32dp, else icon-target 40dp).
  */
 .fynns-dialog-panel--centered,
 .fynns-card-body,
@@ -2256,7 +2256,8 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-card-body:has(.fynns-btn--sm.fynns-btn--icon),
 .fynns-surface--padded:has(.fynns-btn--sm.fynns-btn--icon),
 .fynns-collapsible-body:has(.fynns-btn--sm.fynns-btn--icon) {
-  --fynns-form-trail-chrome: 2rem;
+  /* IconButton sm = field-header action band (32dp), not bare 2rem */
+  --fynns-form-trail-chrome: var(--fynns-layout-field-header-action-row-min-height);
 }
 
 .fynns-dialog-panel--centered
