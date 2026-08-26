@@ -927,13 +927,14 @@ export const LIST_TOKENS = {
    */
   gap: "var(--fynns-space-lg)",
   /**
-   * Copy → overlay-reveal trailing IconButton cluster (`--with-end` hover /
-   * focus / touch). Aliases `--fynns-navdrawer-pad-inline` (**10dp**) — same
-   * breath as footer Avatar → drawer start edge. Do **not** calibrate to the
-   * footer settings gear optical end inset (negative margin on the sm disk).
-   * Live: sandbox `#list` path catalog.
+   * Preceding content → overlay-reveal trailing IconButton (`--with-end`
+   * hover / focus / touch). Aliases `--fynns-layout-control-cluster-gap`
+   * (**4dp**, ≥ 0.4.123) — same rhythm as any sibling immediately left of
+   * an IconButton in `.fynns-control-cluster` (meta, Chip, Switch, …). Do
+   * **not** invent a larger private gap, and do **not** calibrate to
+   * navdrawer pad-inline / footer Avatar inset. Live: `#list` org+dates.
    */
-  "end-actions-gap": "var(--fynns-navdrawer-pad-inline)",
+  "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
@@ -955,6 +956,14 @@ export const LIST_TOKENS = {
    * `content-gap` so the block does not crush (aliases `--fynns-space-sm` / 8dp).
    */
   "content-gap-3": "var(--fynns-space-sm)",
+  /**
+   * Opt-in via `List` `trailingMetaAlign="start"`. Floor for a full
+   * `YYYY-MM – YYYY-MM` range so short values share the **start** edge across
+   * sibling rows. Default List (prop omitted) keeps content-width meta hugged
+   * to the trailing edge — short status next to `--with-end` actions.
+   * Live: sandbox `#list` org+dates / status+action.
+   */
+  "trailing-meta-min-width": "17ch",
   /**
    * `.fynns-list-item-trailing-stats` fixed tracks (usage / session meta).
    * Fixed widths — not `max-content` — so duration / tokens / cost / count
@@ -1162,6 +1171,15 @@ export const NAVDRAWER_TOKENS = {
    * do not steal item width — this pad is optical edge breath only.
    */
   "pad-inline": "0.625rem",
+  /**
+   * Account footer chrome inset (≥ 0.4.129; Cursor-calibrated **0.4.131**):
+   * Avatar↔sheet start, settings↔sheet end, Avatar/settings↔sheet bottom,
+   * and footer pad-block-start — **one** value so those four distances stay
+   * equal. Aliases `space-lg` / **16dp** so left/Avatar (~0.5 on sm 32dp)
+   * and Avatar↔label (`pad-inline` ~10dp) keep Cursor’s “edge > gap” rhythm.
+   * Do **not** stack Item `item-pad` here.
+   */
+  "footer-account-inset": "var(--fynns-space-lg)",
   "item-height": "2.5rem",
   "item-pad-inline-start": "1rem",
   "item-pad-inline-end": "1rem",
@@ -1420,8 +1438,14 @@ export const LAYOUT_TOKENS = {
   "control-row-gap": "0.25rem",
   /** Label | controls when the row is horizontal. */
   "control-row-column-gap": "0.5rem",
-  /** Sibling switches / chips / Grid cells inside one controls cluster. */
-  "control-cluster-gap": "0.5rem",
+  /**
+   * Sibling immediately left of an IconButton (and IconButton↔IconButton) in
+   * one `.fynns-control-cluster` (**4dp**). Canonical chrome density for
+   * “whatever sits before the icon” — List `--with-end` meta→disk aliases
+   * this via `--fynns-list-end-actions-gap`. Still looser than TopAppBar
+   * `chrome-icon-gap` (**2dp**). Live: `#rhythm` catalog strip / `#list`.
+   */
+  "control-cluster-gap": "0.25rem",
   /**
    * Gap between adjacent chrome icon targets (2dp): TopAppBar leading/trailing
    * IconButtons and NavigationRail destination indicators (icon-only).

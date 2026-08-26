@@ -176,13 +176,18 @@ ring can paint before heavy work).
   (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost **md** actions — default size;
   `--with-end` overlay reveal on hover; copy→first action
-  `--fynns-list-end-actions-gap` **10dp** ≥ 0.4.115, aliases navdrawer
-  `pad-inline` — not settings-gear optical end) — never a
+  `--fynns-list-end-actions-gap` **4dp** ≥ 0.4.123, aliases
+  `control-cluster-gap` — any sibling left of IconButton) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
   sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
   — **never** start tick / inset rail / second host wash. Leading→copy
   `--fynns-list-gap` (**16dp**); three-line stack `--fynns-list-content-gap-3`
-  (**8dp**). Duration meta spaces units (`1m 47s`). Expandable trees:
+  (**8dp**). Duration meta spaces units (`1m 47s`). Experience / job rows:
+  org under title (`supportingText`), dates → `trailingSupportingText` +
+  `List` `trailingMetaAlign="start"` for mixed lengths; short status + delete
+  omit the prop (core ≥ 0.4.121: one-icon `--with-end` reserve — not a phantom
+  second disk). Live `#list` org+dates / status+action.
+  Expandable trees:
   `ListItem` **`detail`** in the same
   `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
   leading chevron — never a button in `leading`, never `ul > div`. Long

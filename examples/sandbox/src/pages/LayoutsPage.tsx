@@ -129,6 +129,8 @@ export function LayoutsPage() {
   const [fillColumnDraft, setFillColumnDraft] = useState("");
   const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
     useState(true);
+  const [shellFooterLongAccountLabel, setShellFooterLongAccountLabel] =
+    useState(false);
 
   return (
     <div className="sandbox-globals">
@@ -155,6 +157,13 @@ export function LayoutsPage() {
                 label={t("nav.footerShowAccountLabel")}
                 checked={shellFooterShowAccountLabel}
                 onCheckedChange={setShellFooterShowAccountLabel}
+              />
+              <Switch
+                labelSide="end"
+                label={t("nav.footerShowLongAccountLabel")}
+                checked={shellFooterLongAccountLabel}
+                disabled={!shellFooterShowAccountLabel}
+                onCheckedChange={setShellFooterLongAccountLabel}
               />
             </div>
             <div className="sandbox-globals-clipped-shell">
@@ -193,7 +202,11 @@ export function LayoutsPage() {
                 navFooter={
                   <NavDrawerFooterAccount
                     showLabel={shellFooterShowAccountLabel}
-                    accountLabel={t("nav.footerAccountLabel")}
+                    accountLabel={
+                      shellFooterLongAccountLabel
+                        ? t("nav.footerAccountLabelLong")
+                        : t("nav.footerAccountLabel")
+                    }
                     accountName={t("nav.footerAccountName")}
                     settingsLabel={t("globals.appBarSettings")}
                     settingsTip={t("globals.appBarSettings")}

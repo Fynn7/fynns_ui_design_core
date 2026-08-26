@@ -44,6 +44,20 @@ function syncNavDrawerBodyFade(el: HTMLElement) {
   else el.removeAttribute("data-fade-top");
 }
 
+/**
+ * Account label soft end fade only when the string is clipped (long name
+ * hits account-start max-width). Short names must stay fully opaque —
+ * always-on mask ate the last glyphs of content-hug labels (≥ 0.4.130).
+ */
+function syncNavDrawerAccountLabelFade(root: ParentNode) {
+  root
+    .querySelectorAll<HTMLElement>(".fynns-nav-drawer-footer-account-label")
+    .forEach((el) => {
+      if (el.scrollWidth > el.clientWidth + 1) el.setAttribute("data-fade", "");
+      else el.removeAttribute("data-fade");
+    });
+}
+
 export type NavigationDrawerVariant = "modal" | "standard";
 
 export type NavigationDrawerProps = {
@@ -95,7 +109,8 @@ export type NavigationDrawerProps = {
    * belongs in **body** (e.g. `.fynns-nav-drawer-footer-slot--pill` row via
    * `navBodyExtra` on `DestinationAppShell`). Footer recipe:
    * `.fynns-nav-drawer-footer-account` + `.fynns-nav-drawer-footer-account-start`
-   * (Avatar `size="sm"` + optional `.fynns-nav-drawer-footer-account-label`) +
+   * (Avatar `size="sm"` + optional `.fynns-nav-drawer-footer-account-label`
+   * — soft end fade only when truncated via `data-fade`) +
    * settings `IconButton` `size="sm"` end (core optical glyph align — not
    * TopAppBar `trailing`. Live: sandbox Layouts
    * `#layouts-demo-shell` + SandboxShell.
@@ -116,6 +131,7 @@ function DrawerSheet({
   children?: ReactNode;
 } & HTMLAttributes<HTMLElement>) {
   const bodyRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
   const rootClass = ["fynns-nav-drawer", className ?? ""].filter(Boolean).join(" ");
 
   useLayoutEffect(() => {
@@ -145,6 +161,34 @@ function DrawerSheet({
     };
   }, []);
 
+  useLayoutEffect(() => {
+    const foot = footerRef.current;
+    if (!foot) return;
+    let raf = 0;
+    const sync = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        syncNavDrawerAccountLabelFade(foot);
+      });
+    };
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(foot);
+    // Footer recipe is shallow (account / workspace slots) — subtree OK.
+    const mo = new MutationObserver(sync);
+    mo.observe(foot, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
+      mo.disconnect();
+    };
+  }, [footer]);
+
   return (
     <nav {...navRest} className={rootClass}>
       {headline != null && headline !== false ? (
@@ -154,7 +198,9 @@ function DrawerSheet({
         {children}
       </div>
       {footer != null && footer !== false ? (
-        <div className="fynns-nav-drawer-footer">{footer}</div>
+        <div ref={footerRef} className="fynns-nav-drawer-footer">
+          {footer}
+        </div>
       ) : null}
     </nav>
   );

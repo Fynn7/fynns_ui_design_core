@@ -86,7 +86,7 @@ export type { BreadcrumbItemData, BreadcrumbProps } from "./primitives/Breadcrum
 export { Pagination } from "./primitives/Pagination";
 export type { PaginationProps } from "./primitives/Pagination";
 export { List, ListItem } from "./primitives/List";
-export type { ListItemProps, ListProps } from "./primitives/List";
+export type { ListItemProps, ListProps, ListTrailingMetaAlign } from "./primitives/List";
 export {
   DatePicker,
   DatePickerDialog,

@@ -19,9 +19,12 @@ const en = {
   "nav.templatesTip": "Language, templates & config export/import",
   "nav.footerProject": "Sample project",
   "nav.footerWorkspace": "Sample workspace",
-  "nav.footerAccountLabel": "c***@student-services.uni-due.de",
+  "nav.footerAccountLabel": "Sample user",
+  "nav.footerAccountLabelLong":
+    "Sample user with a long display name that should fade at the end",
   "nav.footerAccountName": "Sample User",
   "nav.footerShowAccountLabel": "Show account name in drawer footer",
+  "nav.footerShowLongAccountLabel": "Use long account name (truncation fade)",
   "nav.playgroundHint":
     "Live Card / Collapsible stage. Use the right inspector for color, elevation, and spacing.",
   "nav.globalsHint":
@@ -1207,7 +1210,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional **fade-truncated** label + settings IconButton end — **no** hairline above the footer; toggle **Show account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional label — soft end fade **only when truncated** (`data-fade`, ≥ 0.4.130); short names stay opaque + settings IconButton end — **no** hairline above the footer; toggle **Show account name** / **Use long account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1415,8 +1418,26 @@ const en = {
   "globals.listHostTonePlain": "Workspace prefs",
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
+  "globals.listOrgDatesHelp":
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** so short open dates share a start edge with full ranges (`--fynns-list-trailing-meta-min-width`). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. See AGENTS.md Content density.",
+  "globals.listOrgDatesAria": "Sample organization and date-range list rows",
+  "globals.listOrgDatesHeadline":
+    "Business intelligence intern, sample corp",
+  "globals.listOrgDatesOrg": "Acme",
+  "globals.listOrgDatesRange": "2025-10 – 2026-03",
+  "globals.listOrgDatesHeadlineShort": "Research assistant",
+  "globals.listOrgDatesOrgB": "Northwind",
+  "globals.listOrgDatesRangeShort": "2023-03",
+  "globals.listOrgDatesHeadlineC": "Campus tutor",
+  "globals.listOrgDatesOrgC": "Contoso",
+  "globals.listOrgDatesRangeC": "2024-01 – 2025-03",
+  "globals.listStatusActionHelp":
+    "Short status beside `--with-end` actions — leave **`trailingMetaAlign` unset** so `trailingSupportingText` stays content-width and hugs the trailing edge (status sits next to the reveal IconButton on hover). Do **not** force `trailingMetaAlign=\"start\"` here — that floors a 17ch band and parks short labels far from the action.",
+  "globals.listStatusActionAria": "Sample status and delete list row",
+  "globals.listStatusActionHeadline": "Untitled project",
+  "globals.listStatusActionMeta": "Current",
   "globals.listCatalogHelp":
-    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed; hover / focus-within shows trailing; touch always visible. Reveal clears copy→first action with `--fynns-list-end-actions-gap` (10dp = navdrawer pad-inline, ≥ 0.4.115) — ellipsis must not kiss the first IconButton disk. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
+    "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed (balanced L/R breath); hover / focus-within shows trailing; touch always visible. Reveal clears copy→first action with `--fynns-list-end-actions-gap` (4dp = control-cluster-gap, ≥ 0.4.123) — ellipsis must not kiss the first IconButton disk. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
     "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.107 height-2 = 56dp).",
   "globals.listShortcutCardTitle": "Shortcuts",
@@ -1760,9 +1781,12 @@ const zh: Record<MessageKey, string> = {
   "nav.templatesTip": "语言、模板与配置导入导出",
   "nav.footerProject": "示例项目",
   "nav.footerWorkspace": "示例工作区",
-  "nav.footerAccountLabel": "c***@student-services.uni-due.de",
+  "nav.footerAccountLabel": "示例用户",
+  "nav.footerAccountLabelLong":
+    "示例用户的超长显示名称用于验证截断端侧渐隐",
   "nav.footerAccountName": "示例用户",
   "nav.footerShowAccountLabel": "在侧栏底栏显示账户名",
+  "nav.footerShowLongAccountLabel": "使用长账户名（截断渐隐）",
   "nav.playgroundHint":
     "Card / Collapsible 实时舞台。右侧检查器调颜色、表面明度与间距。",
   "nav.globalsHint":
@@ -3135,8 +3159,25 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlain": "工作区偏好",
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
+  "globals.listOrgDatesHelp":
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**，短开放日期与完整区间共起笔（`--fynns-list-trailing-meta-min-width`）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。见 AGENTS.md Content density。",
+  "globals.listOrgDatesAria": "组织与日期区间列表示例",
+  "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
+  "globals.listOrgDatesOrg": "Acme",
+  "globals.listOrgDatesRange": "2025-10 – 2026-03",
+  "globals.listOrgDatesHeadlineShort": "研究助理",
+  "globals.listOrgDatesOrgB": "Northwind",
+  "globals.listOrgDatesRangeShort": "2023-03",
+  "globals.listOrgDatesHeadlineC": "校园辅导",
+  "globals.listOrgDatesOrgC": "Contoso",
+  "globals.listOrgDatesRangeC": "2024-01 – 2025-03",
+  "globals.listStatusActionHelp":
+    "短状态 + `--with-end` 动作 — **不要**设 `trailingMetaAlign`，让 `trailingSupportingText` 保持内容宽并贴尾（悬停揭示时状态紧挨 IconButton）。此处强制 `trailingMetaAlign=\"start\"` 会铺 17ch 空带，把短标签甩离动作。",
+  "globals.listStatusActionAria": "状态与删除列表示例",
+  "globals.listStatusActionHeadline": "未命名项目",
+  "globals.listStatusActionMeta": "当前",
   "globals.listCatalogHelp":
-    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽；悬停/聚焦内显示 trailing；触摸端常显。揭示时文案→首颗动作盘间距 `--fynns-list-end-actions-gap`（10dp = navdrawer pad-inline，≥ 0.4.115）— 省略号不得贴住首颗 IconButton。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
+    "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽（左右边距更均衡）；悬停/聚焦内显示 trailing；触摸端常显。揭示时文案→首颗动作盘间距 `--fynns-list-end-actions-gap`（4dp = control-cluster-gap，≥ 0.4.123）— 省略号不得贴住首颗 IconButton。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
     "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.107 的 height-2 = 56dp）。",
   "globals.listShortcutCardTitle": "快捷入口",

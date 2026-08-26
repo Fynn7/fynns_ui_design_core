@@ -27,6 +27,9 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **ChatMessage Markdown ownership** / **shell slot ownership** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
+**org · dates glued in supportingText** /
+**trailingSupportingText right-hug drift** /
+**status meta far from --with-end action** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
 **ListItem zero-gap pill fuse** /
@@ -417,7 +420,9 @@ settings in the app bar or last destination.
 + `DestinationAppShell` `navFooter` (+ optional `navBodyExtra` for workspace
 row in drawer body). Footer recipe: `.fynns-nav-drawer-footer-account` +
 `.fynns-nav-drawer-footer-account-start` (`Avatar` + optional
-`.fynns-nav-drawer-footer-account-label` with **mask fade**, not `…`) + settings
+`.fynns-nav-drawer-footer-account-label` — soft end fade **only when the
+name truncates** (`data-fade` from DrawerSheet; ≥ **0.4.130** — short names
+must not fade), not `…`) + settings
 `IconButton` **`size="sm"`** end (core optical glyph align — not default md
 40dp disk). Footer / rail footer: **no** `border-block-start` hairline
 (≥ 0.4.64 — Cursor separates with pad only). When drawer **body** content
@@ -427,7 +432,8 @@ footer, not a hard clip + divider. **Do not** stack dual
 project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
 → drawer **body** (`.fynns-nav-drawer-footer-slot--pill` row). Omit account
 label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
-Layouts `#layouts-demo-shell` (toggle **Show account name**) + SandboxShell +
+Layouts `#layouts-demo-shell` (toggle **Show account name** / **Long account
+name**) + SandboxShell +
 `#layouts-demo-drill-in`. DestinationAppShell (≥ 0.4.84) keeps the drawer
 footer when open and **closes** on crowd — no rail densify that hides the
 account label strip.
@@ -444,7 +450,7 @@ Symptoms (NavigationDrawer / DestinationAppShell footer):
 
 - Settings `IconButton` uses default **md** (40dp hover disk) beside **sm**
   (32dp) `Avatar` — reads as an oversized gear vs account chrome
-- Settings glyph right edge sits **~12dp** inside footer pad while Avatar
+- Settings glyph right edge sits **~16dp** inside footer pad while Avatar
   left edge sits at `--fynns-navdrawer-pad-inline` (~10dp) — asymmetric
 
 **Cause:** footer recipe omitted `size="sm"` on settings; md disk centers 16dp
@@ -457,6 +463,114 @@ Live: sandbox `#layouts-demo-shell` + `NavDrawerFooterAccount`.
 
 **Consumer:** bump ≥ 0.4.109; footer gear `size="sm"` + keep public
 `.fynns-nav-drawer-footer-account` structure — no private negative margins.
+
+## Failure mode this treaty targets: drawer footer Avatar/settings packed tight
+
+Symptoms (NavigationDrawer / DestinationAppShell `navFooter`):
+
+- Avatar (start) and settings gear sit with only **~4dp** breath; faded
+  account label kisses the gear
+- Row does not read as Cursor-style **left account | right settings** across
+  the sheet width
+
+**Cause:** `.fynns-nav-drawer-footer-account` reused
+`--fynns-layout-control-cluster-gap` after that token densified to **4dp**
+(0.4.122) for IconButton strips — wrong rhythm for the account row.
+
+**Fix in core (≥ 0.4.124):** account row `width: 100%` +
+`justify-content: space-between` + gap `--fynns-layout-control-stack-gap`
+(**8dp**); settings keeps `margin-inline-start: auto` + optical end inset.
+Live: `#layouts-demo-shell` / `NavDrawerFooterAccount`.
+
+**Consumer:** bump ≥ 0.4.124; keep `.fynns-nav-drawer-footer-account` +
+`account-start` + end `IconButton` `sm` — do **not** invent private
+`space-between` / gap CSS.
+
+## Failure mode this treaty targets: drawer footer Avatar↔label packed tight
+
+Symptoms (NavigationDrawer / DestinationAppShell `navFooter` with account
+label visible):
+
+- Avatar and `.fynns-nav-drawer-footer-account-label` sit with only **~4dp**
+  (reads as “本地” kissing “本地用户”)
+- Sheet edge inset is ~10dp (`pad-inline`) but Avatar↔copy is denser
+
+**Cause:** `.fynns-nav-drawer-footer-account-start` reused
+`--fynns-layout-control-cluster-gap` after that token densified to **4dp**
+(0.4.122).
+
+**Fix in core (≥ 0.4.125):** start-column gap =
+`--fynns-navdrawer-pad-inline` (**~10dp**) — same as footer L/R inset /
+Avatar↔drawer edge. Live: `#layouts-demo-shell` (Show account name on).
+
+**Consumer:** bump ≥ 0.4.125; no private Avatar↔label gap.
+
+## Failure mode this treaty targets: drawer footer middle still packed (flex-grow)
+
+Symptoms (NavigationDrawer / DestinationAppShell `navFooter`):
+
+- Avatar at start and settings at end of the **sheet** look correct in
+  bounds, but the faded account label still **kisses** the gear — only
+  ~8dp between label box and disk; no Cursor-style empty middle band
+- Bumping 0.4.124 / 0.4.125 appears to “do nothing” for Avatar↔settings
+
+**Cause:** `.fynns-nav-drawer-footer-account-start` (and the label) used
+`flex: 1` / grow — free space went **inside** the start column, so
+`justify-content: space-between` never opened a visible middle.
+
+**Fix in core (≥ 0.4.126):** `account-start` and label `flex: 0 1 auto`
+(hug / shrink) + start `max-width` reserving the gear; parent keeps
+`space-between` + `control-stack-gap`. Short names leave a clear middle
+band; long names fade before the gear. Live: `#layouts-demo-shell`.
+
+**Consumer:** bump ≥ 0.4.126; keep public footer-account structure — do
+**not** set `width: 100%` / `flex: 1` on `account-start` in app CSS.
+
+## Failure mode this treaty targets: drawer footer Avatar/gear flush to sheet edge
+
+Symptoms (NavigationDrawer / DestinationAppShell `navFooter`):
+
+- Avatar sits at **~10dp** from the sheet start while destination icons sit
+  at **~26dp** (`pad-inline` + `item-pad-inline-start`)
+- Settings sm disk ends **~2dp** from the sheet end (Dialog-style optical
+  `margin-inline-end: −8` on top of footer pad only)
+- Feels “restored middle band but still cramped to the chrome edges”
+
+**Cause:** account row omitted Item-level inline pad; optical end pull was
+tuned for glyph↔pad-inline, not disk↔sheet symmetry with destinations.
+
+**Fix in core (≥ 0.4.127 / adjusted **0.4.128** / equal four-way **0.4.129** /
+Cursor-calibrated **0.4.131**):**
+drop settings optical `margin-inline-end: −8`. Do **not** stack
+`item-pad-inline-*` on the account row (~26dp over-pad in 0.4.127).
+**0.4.129 / 0.4.131:** `.fynns-nav-drawer-footer` uses
+`--fynns-navdrawer-footer-account-inset` (**≈16dp** / `space-lg`; was 12dp
+in 0.4.129) on all four
+sides so Avatar↔sheet start, settings↔sheet end, and both disks↔sheet bottom
+are **equal** (top breath matches). Sheet `padding-block-end` stays 0 when a
+footer is present. Live: `#layouts-demo-shell`.
+
+**Consumer:** bump ≥ 0.4.131; do **not** invent private footer pad /
+negative margins on the gear.
+
+## Failure mode this treaty targets: short account label always fades
+
+Symptoms (NavigationDrawer / DestinationAppShell `navFooter`):
+
+- Short names (`本地用户` / `Sample user`) show a **soft end fade** on the
+  last glyphs even though the string fully fits
+- Feels like damaged / translucent copy next to a wide empty middle band
+
+**Cause:** `.fynns-nav-drawer-footer-account-label` always painted a
+1.25rem end `mask-image`. Content-hug short labels are only as wide as the
+glyphs, so the mask ate the trailing characters.
+
+**Fix in core (≥ 0.4.130):** DrawerSheet sets `data-fade` only when
+`scrollWidth > clientWidth`; CSS mask applies solely under `[data-fade]`.
+Live: `#layouts-demo-shell` (short default; optional long-name toggle).
+
+**Consumer:** bump ≥ 0.4.130; keep the public `footer-account-label` class —
+do **not** force a private always-on mask.
 
 ## Failure mode this treaty targets: feature panels parked in Settings
 
@@ -681,6 +795,79 @@ host. Loose action siblings (or private `hub-row`) also break cluster gap.
 `hub-spread` / `space-between` for this job). Live: sandbox `#rhythm` catalog
 strip. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Catalog list
 chrome**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: org · dates glued in supportingText
+
+Symptoms (experience / job / internship catalogs):
+
+- `supportingText` reads `Vodafone · 2025-10 – 2026-03` (or `Acme · Jan 2024`)
+- Org and date range share one muted line under the title; middle-dot / en-dash
+  stacks unrelated meta; row looks like a prose blob instead of a list record
+
+**Cause:** joining every secondary field with ` · ` into one `supportingText`
+string instead of using List slots. **Fix in the consumer:** `headline` =
+role/title; `supportingText` = **organization only**; date range →
+`trailingSupportingText` (stays inside the row button — layout separates L/R);
+`trailing` IconButtons stay on the end sibling. **Never** invent a private
+third text column or keep the middle-dot glue. Live: sandbox `#list` org+dates
+sample. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Title +
+organization + date range**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: trailingSupportingText right-hug drift
+
+Symptoms (experience / job date columns):
+
+- Full ranges (`2025-10 – 2026-03`) and short open dates (`2023-03`) share a
+  **right** edge; short strings start further right (content-width boxes
+  parked with `margin-inline-start: auto`)
+- Digits do not share a vertical start column across sibling rows
+
+**Cause:** mixed-length `trailingSupportingText` without a shared column.
+**Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
+since 0.4.119) — shared `--fynns-list-trailing-meta-min-width` + start align.
+Do **not** invent `text-align: end` private CSS. Multi-metric grids stay on
+`.fynns-list-item-trailing-stats`. Live: `#list` org+dates. Authority:
+[`AGENTS.md`](../AGENTS.md). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: status meta far from --with-end action
+
+Symptoms (application / catalog rows with short status + delete):
+
+- Hover reveals the end IconButton; short `trailingSupportingText` (`当前` /
+  `Current`) sits far left of the action with a large empty band between
+- Looks like the status is stranded mid-row
+
+**Cause:** (1) **`trailingMetaAlign="start"`** / always-on 17ch band on a
+status+action list; and/or (2) `--with-end` hover pad reserved **two** md
+IconButtons while the row only has one (phantom disk between status and
+trash) — fixed in core ≥ **0.4.121** (`--fynns-list-end-actions-reserve`
+scales 1→2 via `:has`).
+**Fix:** **omit** `trailingMetaAlign` (default); bump core ≥ 0.4.121; keep
+status in `trailingSupportingText` and delete in `trailing`. Live: `#list`
+status+action. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Short
+status + row action**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: loose IconButton pair in control-cluster
+
+Symptoms (catalog ControlRow / Card actions / List trailing strips):
+
+- Two adjacent ghost IconButtons sit with an **8dp** air gap that reads sparse
+  next to TopAppBar chrome (2dp)
+- **Or** List `trailingSupportingText` / any preceding meta sits **~10dp+**
+  from the first `--with-end` IconButton (date / 当前 / Chip left of pencil)
+
+**Cause:** pinning core &lt; **0.4.123**, or a consumer `gap` override on
+`.fynns-control-cluster` / inventing a larger meta→icon margin.
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.123** —
+`--fynns-layout-control-cluster-gap` is **4dp**; List
+`--fynns-list-end-actions-gap` **aliases** it (any sibling immediately left of
+an IconButton shares that rhythm). Do not invent private cluster / end-action
+gaps. TopAppBar / NavigationRail stay on `chrome-icon-gap` (**2dp**). Live:
+`#rhythm` catalog strip / `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md)
+Toolbar / unit rhythm. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
 
@@ -1544,10 +1731,10 @@ lived only on the inner `<button>`.
 `--with-end` paints hover/selected on the **row / host** and **overlay-reveals**
 end action clusters (idle copy full-bleed; hover / focus-within shows trailing;
 touch always visible — ≥ 0.4.107). Reveal pad-end includes
-`--fynns-list-end-actions-gap` (**10dp**, aliases
-`--fynns-navdrawer-pad-inline`, ≥ 0.4.115) so ellipsis does not kiss
-the first IconButton disk — same breath as footer **Avatar → drawer start**,
-**not** the settings-gear optical end inset. Do **not** invent consumer
+`--fynns-list-end-actions-gap` (**4dp**, aliases
+`--fynns-layout-control-cluster-gap`, ≥ 0.4.123) so preceding meta / ellipsis
+clears the first IconButton with the same rhythm as any sibling left of an
+icon — **not** navdrawer pad-inline / footer Avatar inset. Do **not** invent consumer
 `padding` / `margin` on
 `.fynns-list-item*` to fake it. Nested `List` under
 `detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
@@ -1568,17 +1755,13 @@ Symptoms on a path / experience / bookmark `ListItem` with trailing edit/delete:
 - Long headline ellipsis sits flush against the first `IconButton` hover disk
 - Supporting line (company · dates) also runs into the action cluster
 - Consumer adds private `padding-inline-end` / `margin` on `.fynns-list-item*`
-- Gap is calibrated to the **footer settings gear optical end inset** (sm disk
-  negative margin) instead of the **Avatar → drawer start** pad
 
-**Cause:** `--with-end` reveal reserved only two md targets + cluster gap +
-list pad — **zero** copy→disk breath; or a later tweak used the wrong chrome
-reference (gear optical vs Avatar pad-inline).
+**Cause:** `--with-end` reveal reserved only icon targets + list pad — **zero**
+copy→disk breath.
 
-**Fix in core (≥ 0.4.115):** `--fynns-list-end-actions-gap` aliases
-`--fynns-navdrawer-pad-inline` (**10dp** — same as footer Avatar left inset).
-Consumer: bump only — no app CSS. Live: sandbox `#list` path catalog (hover a
-long headline row).
+**Fix in core (≥ 0.4.115; denser alias ≥ 0.4.123):** `--fynns-list-end-actions-gap`
+aliases `--fynns-layout-control-cluster-gap` (**4dp**). Consumer: bump only —
+no app CSS. Live: sandbox `#list` path catalog / org+dates (hover a row).
 
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 
