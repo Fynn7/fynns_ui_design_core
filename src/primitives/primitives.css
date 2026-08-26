@@ -2159,6 +2159,41 @@ input.fynns-input:focus::-webkit-scrollbar {
   justify-self: end;
 }
 
+/*
+ * Form-host ControlRow clusters default to `width: 100%` of the shared
+ * max-content track. Without flex-end, shorter status+InfoHint rows
+ * (OK vs Fail) start-pack and leave the trailing “i” inset from FieldHeader /
+ * Select refresh — Card body trailing icon column breaks (≥ 0.4.136).
+ */
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster {
+  justify-content: flex-end;
+}
+
 .fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
   width: 100%;
   max-width: 100%;
@@ -3033,8 +3068,9 @@ input.fynns-input:focus::-webkit-scrollbar {
   > .fynns-tooltip-trigger:has(.fynns-btn--icon)
   > .fynns-btn--icon {
   flex: none;
-  min-width: var(--fynns-size-icon-target);
-  min-height: var(--fynns-size-icon-target);
+  /* Do not re-floor to `--fynns-size-icon-target` (40dp) — that inflates
+     `size="sm"` (32dp) IconButtons and breaks Card body trailing icon columns
+     that match FieldHeader / ControlRow InfoHint `sm` (≥ 0.4.136). */
 }
 
 /* Pure IconButton end-align strips (no grow Select): center on the 40dp row. */
