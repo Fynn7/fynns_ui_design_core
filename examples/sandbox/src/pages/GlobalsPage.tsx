@@ -40,6 +40,7 @@ import {
   ChatThinking,
   ChatThread,
   ClipboardIcon,
+  BriefcaseIcon,
   Carousel,
   CarouselItem,
   CodeBlock,
@@ -82,6 +83,8 @@ import {
   Drawer,
   IconButton,
   InfoIcon,
+  CheckCircleIcon,
+  AlertTriangleIcon,
   InlineAlert,
   Input,
   Textarea,
@@ -826,7 +829,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [bannerVisible, setBannerVisible] = useState(true);
   const [bannerDefaultVisible, setBannerDefaultVisible] = useState(true);
   const [listId, setListId] = useState<
-    "inbox" | "starred" | "sent" | "tone-a" | "tone-b" | "tone-c"
+    | "inbox"
+    | "starred"
+    | "sent"
+    | "tone-a"
+    | "tone-b"
+    | "tone-c"
+    | "run-ok"
+    | "run-fail"
+    | "run-overflow"
   >("inbox");
   const [listTreeOpen, setListTreeOpen] = useState(true);
   const [listTurnOpen, setListTurnOpen] = useState(true);
@@ -3116,7 +3127,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               headline={t("globals.listOrgDatesHeadline")}
               supportingText={t("globals.listOrgDatesOrg")}
               trailingSupportingText={t("globals.listOrgDatesRange")}
-              leading={<ClipboardIcon />}
+              leading={<BriefcaseIcon />}
               trailing={
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
@@ -3135,7 +3146,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               headline={t("globals.listOrgDatesHeadlineShort")}
               supportingText={t("globals.listOrgDatesOrgB")}
               trailingSupportingText={t("globals.listOrgDatesRangeShort")}
-              leading={<ClipboardIcon />}
+              leading={<BriefcaseIcon />}
               trailing={
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.listCatalogEdit")}>
@@ -3195,6 +3206,76 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 setListCatalogEditName(t("globals.listStatusActionHeadline"));
                 setListCatalogEditOpen(true);
               }}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listRunSummaryHelp")} />
+          <List
+            aria-label={t("globals.listRunSummaryAria")}
+            trailingMetaAlign="start"
+          >
+            <ListItem
+              headline={
+                <span className="fynns-control-cluster">
+                  <span className="fynns-list-item-status">
+                    <CheckCircleIcon aria-hidden />
+                    {t("globals.listRunSummaryOk")}
+                  </span>
+                  <span className="fynns-control-cluster__grow">
+                    {t("globals.listRunSummaryModel")}
+                  </span>
+                  <span className="fynns-table-meta">
+                    <span>{t("globals.listRunSummaryDuration")}</span>
+                  </span>
+                </span>
+              }
+              trailingSupportingText={t("globals.listRunSummaryTime")}
+              trailing={<ChevronRightIcon />}
+              selected={listId === "run-ok"}
+              onClick={() => setListId("run-ok")}
+            />
+            <ListItem
+              headline={
+                <span className="fynns-control-cluster">
+                  <span className="fynns-list-item-status" data-tone="danger">
+                    <AlertTriangleIcon aria-hidden />
+                    {t("globals.listRunSummaryFail")}
+                  </span>
+                  <span className="fynns-control-cluster__grow">
+                    {t("globals.listRunSummaryModelB")}
+                  </span>
+                  <span className="fynns-table-meta">
+                    <span>{t("globals.listRunSummaryDurationB")}</span>
+                  </span>
+                </span>
+              }
+              trailingSupportingText={t("globals.listRunSummaryTimeB")}
+              trailing={<ChevronRightIcon />}
+              selected={listId === "run-fail"}
+              onClick={() => setListId("run-fail")}
+            />
+            <ListItem
+              headline={
+                <span className="fynns-control-cluster">
+                  <span className="fynns-list-item-status">
+                    <CheckCircleIcon aria-hidden />
+                    {t("globals.listRunSummaryOk")}
+                  </span>
+                  <span className="fynns-control-cluster__grow">
+                    {t("globals.listRunSummaryModelOverflow")}
+                  </span>
+                  <span className="fynns-table-meta">
+                    <BarChartIcon aria-hidden />
+                    <span>{t("globals.listRunSummaryDurationOverflow")}</span>
+                  </span>
+                  <span className="fynns-table-meta">
+                    <span>{t("globals.listRunSummaryTokens")}</span>
+                  </span>
+                </span>
+              }
+              trailingSupportingText={t("globals.listRunSummaryTimeOverflow")}
+              trailing={<ChevronRightIcon />}
+              selected={listId === "run-overflow"}
+              onClick={() => setListId("run-overflow")}
             />
           </List>
           <Dialog
@@ -4879,6 +4960,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
+          {/* Narrow host so the long loadvolume path soft-wraps (selection wash demo). */}
+          <div style={{ maxWidth: "22rem" }}>
+            <CodeBlock
+              variant="editable"
+              label={t("globals.codeBlockSoftWrapSelLabel")}
+              language="bash"
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              defaultValue={t("globals.codeBlockSoftWrapSelCode")}
+              aria-label={t("globals.codeBlockSoftWrapSelAria")}
+              maxHeight="8rem"
+            />
+          </div>
+          <SandboxHelp text={t("globals.codeBlockSoftWrapSelHelp")} />
           <Card
             title={t("globals.codeBlockFileBodyTitle")}
             chrome="plain"

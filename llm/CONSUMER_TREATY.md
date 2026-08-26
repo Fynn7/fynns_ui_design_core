@@ -28,6 +28,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **org · dates glued in supportingText** /
+**List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
 **status meta far from --with-end action** /
 **Collapsible inside List (skeleton crush)** /
@@ -822,31 +823,33 @@ Symptoms (experience / job date columns):
   **content-width** boxes parked with `margin-inline-start: auto` — short
   strings start further right; no shared meta **column** across sibling rows
 
-**Cause:** mixed-length `trailingSupportingText` without a shared column floor.
+**Cause:** mixed-length `trailingSupportingText` without a shared column floor,
+or content-width meta that only lines up trailing glyphs.
 **Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
-since 0.4.119; **glyph end-align inside the column ≥ 0.4.133**) — shared
-`--fynns-list-trailing-meta-min-width` (box start edges align) + end-aligned
-copy so glyphs sit `--fynns-list-end-actions-gap` from `--with-end` actions.
-Do **not** invent private `text-align` / `min-width` on `.fynns-list-item-trailing*`.
-Multi-metric grids stay on `.fynns-list-item-trailing-stats`. Live: `#list`
-org+dates. Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-
-## Failure mode this treaty targets: date glyphs far from --with-end actions
-
-Symptoms (experience / job rows with `trailingMetaAlign="start"` + edit/delete):
-
-- Date string (`2025-10 – 2026-03`) leaves a wide empty band before the first
-  `--with-end` IconButton even though `end-actions-gap` is 4dp
-- Looks like meta→icon spacing is still “too large” after densify
-
-**Cause:** core &lt; **0.4.133** used `text-align: start` inside the 17ch floor —
-proportional digits are narrower than `17ch`, so dead space sat **between
-glyphs and icons** (box→icon was 4dp; text→icon ~17dp).
-**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.133** (column kept; copy
-end-aligned inside). Keep consumer `trailingMetaAlign="start"` — do not patch
-with app CSS. Live: `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md).
+since 0.4.119; **column start-ink ≥ 0.4.144** — reverses 0.4.133 end-ink) —
+shared `--fynns-list-trailing-meta-min-width` (box **and** digit starts
+align). Do **not** invent private `text-align` / `min-width` on
+`.fynns-list-item-trailing*`. Multi-metric grids stay on
+`.fynns-list-item-trailing-stats` (start-aligned cells ≥ 0.4.144). Live:
+`#list` org+dates / run-summary. Authority: [`AGENTS.md`](../AGENTS.md).
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: trailing meta end-ink (right-aligned glyphs)
+
+Symptoms (date / timestamp / stats columns after `trailingMetaAlign="start"`):
+
+- Shared column boxes align, but shorter strings hug the **right** edge
+  (trailing digits / `s` line up; starts stagger) — same failure as
+  headline duration end-pack
+
+**Cause:** core **0.4.133–0.4.143** used `text-align: end` /
+`justify-items: end` inside list meta columns.
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.144** (start-ink in
+`trailingMetaAlign="start"` + `.fynns-list-item-trailing-stats`). Keep
+consumer `trailingMetaAlign="start"` on date / timestamp catalogs — do not
+patch with app CSS. Live: `#list` org+dates / run-summary / usage-stats.
+Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status meta far from --with-end action
 
@@ -1593,10 +1596,11 @@ Symptoms in usage / session catalogs:
 column alignment needs **shared track widths**, not per-row flex gaps.
 
 **Fix:** wrap metric cells in `.fynns-list-item-trailing-stats` (core fixed
-CSS grid: elapse | tokens | cost | count; `tabular-nums`; end-aligned).
-Two metrics → `--pair`. Do **not** invent a private `hub-*-stats` grid.
-Live: sandbox `#list` usage-stats sample. Authority: [`AGENTS.md`](../AGENTS.md)
-**Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+CSS grid: elapse | tokens | cost | count; `tabular-nums`; **start**-aligned ≥
+**0.4.144**). Two metrics → `--pair`. Do **not** invent a private
+`hub-*-stats` grid. Live: sandbox `#list` usage-stats sample. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: Card head actions wrap into a tall stack
 
@@ -2325,6 +2329,76 @@ GFM lists inside `.fynns-chat-message-prose`.
 (core L2 subset). Raw children stay plain prose. Authority:
 [`AGENTS.md`](../AGENTS.md) **Parity note (markdown / GFM)** + pasteable
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **ChatMessage Markdown**.
+
+## Failure mode this treaty targets: ChatComposer field↔Send tighter than glyph↔field
+
+Symptoms (collapsed EndAside / main ChatComposer with leading + Send):
+
+- Ghost leading **glyph** → textarea looks ~12dp open
+- Textarea → filled Send/Generate **disk** looks ~4dp (same as IconButton hit
+  box → field) — Send reads cramped vs the leading side
+- Measuring IconButton box → field and matching that on the Send side is the
+  wrong reference
+
+**Cause:** collapsed body uses one `composer-gap` between all flex peers.
+Leading visual mass is the **16dp glyph** inside a 32dp ghost circle; Send
+visual mass is the **full filled disk**. Equating hit-box gaps leaves
+field→disk short by `composer-glyph-inset` (~8dp).
+
+**Fix in core (≥ 0.4.140):** `.fynns-chat-composer-primary-slot` gets
+`padding-inline-start: var(--fynns-chat-composer-glyph-inset)` when collapsed
+so **field → primary disk == leading glyph → field**. **Consumer:** bump
+core; do **not** invent private margin on Send / Generate. Spec:
+[`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md). Live: sandbox `#chat`
+(leading + Send collapsed). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List run history stacked vertically
+
+Symptoms (FullscreenDialog / catalog run list):
+
+- Left column reads **three bands**: Success pill → model id → duration /
+  tokens (user asks to put them on **one** horizontal line)
+- Timestamp sits on the trailing edge while status alone shares its row
+- DevTools: `ListItem` `lines={2}` with `InlineAlert` (or private summary
+  wrap) in `headline` and metrics in `supportingText`
+
+**Cause:** (1) `InlineAlert` defaults to **`width: 100%`** panel chrome — inside
+a headline flex cluster it steals the full row so the model wraps under
+Success; (2) `supportingText` opens a **second** List line for duration; (3)
+optional `Divider` between `ListItem`s fights gap+pill separation.
+
+**Fix in core (≥ 0.4.141):** single-line recipe — `headline` = one
+`.fynns-control-cluster` of `.fynns-list-item-status` + identity
+(`__grow`) + duration meta; timestamp → `trailingSupportingText`; **no**
+`InlineAlert` in `ListItem`. **Gap (≥ 0.4.142):** headline run-summary
+cluster uses `--fynns-layout-control-stack-gap` (**8dp**), not IconButton
+`control-cluster-gap` 4dp — do **not** pad status↔title in the consumer.
+**Duration column (≥ 0.4.143):** headline `.fynns-table-meta` uses a fixed
+track (elapse + optional icon) + **start** align so digit / glyph starts
+share a vertical line (content-width end-pack lined up trailing `s`). Do
+**not** invent consumer `text-align` / `min-width` on `.gsc-llm-history-meta`.
+**Overflow / one metric (≥ 0.4.145):** wrap the label in `<span>`; **do not**
+jam latency+tokens into one cell (hard mid-glyph clip) — use a **sibling**
+`.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`.
+Trailing timestamp columns also ellipsize when squeezed.
+**Consumer:** drop `StatusInline` / `lines={2}` / between-row `Divider`;
+split jammed meta; bump core. Live: sandbox `#list` run-summary. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: jammed headline list meta (overflow clip)
+
+Symptoms (run / LLM history rows):
+
+- One `.fynns-table-meta` shows duration + token count (two icons / two
+  numbers); the second value is **hard-clipped** mid-glyph inside a ~96px box
+- Private `.gsc-*-meta { display: inline-flex }` cannot widen the core track
+
+**Cause:** core sizes each headline `.fynns-table-meta` for **one** metric
+(elapse + optional one icon). Packing latency+tokens exceeds `max-width`.
+**Fix:** bump ≥ **0.4.145**; **one metric per cell** (label in `<span>`);
+second metric → sibling `.fynns-table-meta` or trailing-stats. Live: `#list`
+run-summary. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Related docs
 

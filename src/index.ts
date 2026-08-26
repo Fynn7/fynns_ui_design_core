@@ -24,6 +24,7 @@ export {
   ArrowLeftIcon,
   BarChartIcon,
   BotIcon,
+  BriefcaseIcon,
   CheckCircleIcon,
   CheckIcon,
   ChevronRightIcon,

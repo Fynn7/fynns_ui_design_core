@@ -89,6 +89,13 @@ Reuse `--fynns-chat-composer-*` (`CHAT_TOKENS`):
 - Collapsed, no leading: textarea start = strip breath
   (`strip-pad-inline − composer-pad-inline`).
 - Collapsed, with primary: textarea end pad 0 (button owns the edge).
+- **Collapsed optical gaps (hard — ≥ 0.4.140):** measure leading **glyph** →
+  field (not IconButton hit box → field). Body `composer-gap` alone makes
+  field → filled Send/Stop **disk** match the hit-box gap and read too tight.
+  Core adds `composer-glyph-inset` as `padding-inline-start` on
+  `.fynns-chat-composer-primary-slot` so **field → primary disk == leading
+  glyph → field**. Do not “fix” in the consumer with private margin on
+  Send. Expanded toolbar stays `space-between` (no extra primary pad).
 - Expanded: shell `expanded-pad-*` + textarea `glyph-inset` (optical glyphs).
 
 ## Column alignment (thread ↔ composer)
