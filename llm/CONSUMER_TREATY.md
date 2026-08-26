@@ -592,6 +592,37 @@ Live: sandbox `#rhythm` status legend + `#info-hint`. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Multi-status /
 probe strip**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: settings Card FieldHint wall (hint compression)
+
+Symptoms in a settings / provider Card (`FieldStack` of backends / models):
+
+- Card body opens with a full-width **`FieldHint`** paragraph (session scope,
+  env defaults, browser persistence, …) before any control
+- **`FieldBlock` `description`** under a Select repeats catalog source /
+  refresh / cache policy in visible copy
+- Reload behavior is buried in a one-word **`IconButton` `Tooltip`** while the
+  paragraph stays visible
+- Status lines (`Model list as of …`) stack as more **`FieldHint`** siblings
+
+**Cause:** using **`FieldHint` / `description`** as the default help surface
+instead of **compressing**: short action copy → **Tooltip** on the
+**IconButton**; medium field / section policy → **`InfoHint`** on the label row
+or Card `actions`; **`FieldHint`** only for one-line validation / format /
+empty-state.
+
+**Fix in the consumer (props only):**
+
+1. Remove Card-body scope essays → **Card `actions` `InfoHint`** (≤1) or omit.
+2. Remove multi-sentence **`FieldBlock` `description`** → **`FieldBlock`
+   `actions` `InfoHint` `size="sm"`** on the label row.
+3. Put reload / cache / failure copy on the refresh **`Tooltip`** (`content` =
+   full sentence; short `aria-label`).
+4. Fold “last updated” into that Tooltip or drop the visible line.
+
+Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md) Hard
+rules (**hint compression**) + Content density. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: language control in TopAppBar
 
 Symptoms (CV Generator / destination apps):
@@ -1512,7 +1543,13 @@ lived only on the inner `<button>`.
 `--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
 `--with-end` paints hover/selected on the **row / host** and **overlay-reveals**
 end action clusters (idle copy full-bleed; hover / focus-within shows trailing;
-touch always visible — ≥ 0.4.107). Nested `List` under
+touch always visible — ≥ 0.4.107). Reveal pad-end includes
+`--fynns-list-end-actions-gap` (**10dp**, aliases
+`--fynns-navdrawer-pad-inline`, ≥ 0.4.115) so ellipsis does not kiss
+the first IconButton disk — same breath as footer **Avatar → drawer start**,
+**not** the settings-gear optical end inset. Do **not** invent consumer
+`padding` / `margin` on
+`.fynns-list-item*` to fake it. Nested `List` under
 `detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
 as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
 the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
@@ -1523,6 +1560,25 @@ CJK headlines (tofu / false “icon” glyphs) — mono is for path /
 `supportingText` only. Live: sandbox `#list`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List --with-end ellipsis kisses action disk
+
+Symptoms on a path / experience / bookmark `ListItem` with trailing edit/delete:
+
+- Long headline ellipsis sits flush against the first `IconButton` hover disk
+- Supporting line (company · dates) also runs into the action cluster
+- Consumer adds private `padding-inline-end` / `margin` on `.fynns-list-item*`
+- Gap is calibrated to the **footer settings gear optical end inset** (sm disk
+  negative margin) instead of the **Avatar → drawer start** pad
+
+**Cause:** `--with-end` reveal reserved only two md targets + cluster gap +
+list pad — **zero** copy→disk breath; or a later tweak used the wrong chrome
+reference (gear optical vs Avatar pad-inline).
+
+**Fix in core (≥ 0.4.115):** `--fynns-list-end-actions-gap` aliases
+`--fynns-navdrawer-pad-inline` (**10dp** — same as footer Avatar left inset).
+Consumer: bump only — no app CSS. Live: sandbox `#list` path catalog (hover a
+long headline row).
 
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 

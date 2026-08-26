@@ -140,8 +140,13 @@ ring can paint before heavy work).
   type ladder **one step max**, breath from item pad — AGENTS.md **Chrome type
   & row proportion** + `.cursor/rules/chrome-proportion.mdc`. Live `#command-palette`.
 - Probe / connection / multi-status Cards: short `ControlRow` + `OK`/`Fail` +
-  **`InfoHint`** for long detail — never a `.fynns-unit-stack` of `FieldHint`
-  essays. Live `#rhythm` status legend.
+  **`InfoHint`** for long detail — **`tone="danger"`** on Fail rows — never a
+  `.fynns-unit-stack` of `FieldHint` essays. Live `#rhythm` status legend.
+- **Hint compression (settings / inspector):** no Card-body `FieldHint`
+  essays or multi-sentence `FieldBlock` `description` for session scope /
+  catalog policy — **Tooltip** on the related IconButton (action copy);
+  **`InfoHint`** on field label row or Card `actions` (≤1). `FieldHint` =
+  one short line only. Live `#field-header`.
 - Settings: footer gear only (not a root destination Item beside it); body =
   software chrome prefs including **UI language** (`FieldBlock` + compact
   `ToggleGroup`) — never language in TopAppBar; feature panels get their own
@@ -170,7 +175,9 @@ ring can paint before heavy work).
   surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
   (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
   `ListItem`s (headline + path + trailing ghost **md** actions — default size;
-  `--with-end` overlay reveal on hover) — never a
+  `--with-end` overlay reveal on hover; copy→first action
+  `--fynns-list-end-actions-gap` **10dp** ≥ 0.4.115, aliases navdrawer
+  `pad-inline` — not settings-gear optical end) — never a
   padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
   sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
   — **never** start tick / inset rail / second host wash. Leading→copy
