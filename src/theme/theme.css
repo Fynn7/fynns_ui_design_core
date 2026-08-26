@@ -367,6 +367,7 @@
   --fynns-list-inset-block: 0.5rem;
   --fynns-list-item-gap: var(--fynns-navdrawer-section-gap);
   --fynns-list-gap: var(--fynns-space-lg);
+  --fynns-list-end-actions-gap: var(--fynns-navdrawer-pad-inline);
   --fynns-list-icon-size: 1.25rem;
   --fynns-list-leading-width: 1.25rem;
   --fynns-list-content-gap: var(--fynns-space-xs);

@@ -418,7 +418,8 @@ settings in the app bar or last destination.
 row in drawer body). Footer recipe: `.fynns-nav-drawer-footer-account` +
 `.fynns-nav-drawer-footer-account-start` (`Avatar` + optional
 `.fynns-nav-drawer-footer-account-label` with **mask fade**, not `…`) + settings
-`IconButton` end. Footer / rail footer: **no** `border-block-start` hairline
+`IconButton` **`size="sm"`** end (core optical glyph align — not default md
+40dp disk). Footer / rail footer: **no** `border-block-start` hairline
 (≥ 0.4.64 — Cursor separates with pad only). When drawer **body** content
 overflows downward, core applies `data-fade-bottom` / `data-fade-top` mask
 fades on `.fynns-nav-drawer-body` (≥ 0.4.65) — soft edge into the account
@@ -436,6 +437,26 @@ account label strip.
 a destination Item; do **not** put settings in TopAppBar `trailing` when the
 product wants Cursor-style bottom chrome; do **not** also list Settings as a
 root `NavigationDrawerItem` beside the footer gear.
+
+## Failure mode this treaty targets: footer settings gear md disk / asymmetric inset
+
+Symptoms (NavigationDrawer / DestinationAppShell footer):
+
+- Settings `IconButton` uses default **md** (40dp hover disk) beside **sm**
+  (32dp) `Avatar` — reads as an oversized gear vs account chrome
+- Settings glyph right edge sits **~12dp** inside footer pad while Avatar
+  left edge sits at `--fynns-navdrawer-pad-inline` (~10dp) — asymmetric
+
+**Cause:** footer recipe omitted `size="sm"` on settings; md disk centers 16dp
+glyph inside 40dp target.
+
+**Fix in core (≥ 0.4.109):** settings `IconButton` **`size="sm"`** +
+`.fynns-nav-drawer-footer-account` optical end-align (glyph edge = pad-inline,
+same math as Dialog close). Rail footer resets margin (gear stays centered).
+Live: sandbox `#layouts-demo-shell` + `NavDrawerFooterAccount`.
+
+**Consumer:** bump ≥ 0.4.109; footer gear `size="sm"` + keep public
+`.fynns-nav-drawer-footer-account` structure — no private negative margins.
 
 ## Failure mode this treaty targets: feature panels parked in Settings
 
@@ -563,12 +584,44 @@ multi-sentence diagnostics or comma-lists.
    (`Ollama` / `Gemini` / …).
 2. Children = short status (`OK` / `Fail` / `—`) **plus** `InfoHint` `size="sm"`
    (or tip glyph + `InfoHint`) whose `content` holds the long reason /
-   installed list / proxy URL.
+   installed list / proxy URL. **`Fail` rows:** `InfoHint` `tone="danger"` so
+   the help glyph reads as error detail — OK rows stay default tone.
 3. Do **not** concatenate `Name: Fail — essay` into a FieldHint stack.
 
 Live: sandbox `#rhythm` status legend + `#info-hint`. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Multi-status /
 probe strip**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: settings Card FieldHint wall (hint compression)
+
+Symptoms in a settings / provider Card (`FieldStack` of backends / models):
+
+- Card body opens with a full-width **`FieldHint`** paragraph (session scope,
+  env defaults, browser persistence, …) before any control
+- **`FieldBlock` `description`** under a Select repeats catalog source /
+  refresh / cache policy in visible copy
+- Reload behavior is buried in a one-word **`IconButton` `Tooltip`** while the
+  paragraph stays visible
+- Status lines (`Model list as of …`) stack as more **`FieldHint`** siblings
+
+**Cause:** using **`FieldHint` / `description`** as the default help surface
+instead of **compressing**: short action copy → **Tooltip** on the
+**IconButton**; medium field / section policy → **`InfoHint`** on the label row
+or Card `actions`; **`FieldHint`** only for one-line validation / format /
+empty-state.
+
+**Fix in the consumer (props only):**
+
+1. Remove Card-body scope essays → **Card `actions` `InfoHint`** (≤1) or omit.
+2. Remove multi-sentence **`FieldBlock` `description`** → **`FieldBlock`
+   `actions` `InfoHint` `size="sm"`** on the label row.
+3. Put reload / cache / failure copy on the refresh **`Tooltip`** (`content` =
+   full sentence; short `aria-label`).
+4. Fold “last updated” into that Tooltip or drop the visible line.
+
+Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md) Hard
+rules (**hint compression**) + Content density. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: language control in TopAppBar
 
@@ -1490,7 +1543,13 @@ lived only on the inner `<button>`.
 `--fynns-list-content-gap`; headline/supporting constrain `.fynns-tooltip-trigger`;
 `--with-end` paints hover/selected on the **row / host** and **overlay-reveals**
 end action clusters (idle copy full-bleed; hover / focus-within shows trailing;
-touch always visible — ≥ 0.4.107). Nested `List` under
+touch always visible — ≥ 0.4.107). Reveal pad-end includes
+`--fynns-list-end-actions-gap` (**10dp**, aliases
+`--fynns-navdrawer-pad-inline`, ≥ 0.4.115) so ellipsis does not kiss
+the first IconButton disk — same breath as footer **Avatar → drawer start**,
+**not** the settings-gear optical end inset. Do **not** invent consumer
+`padding` / `margin` on
+`.fynns-list-item*` to fake it. Nested `List` under
 `detail` keeps the same `--fynns-list-inset-inline` and item `--fynns-list-pad-inline`
 as a top-level List (do **not** zero nested `padding-inline-start` — that flushes
 the child chevron). `--with-end` pad-end / row-chrome rules are **child-only**
@@ -1501,6 +1560,25 @@ CJK headlines (tofu / false “icon” glyphs) — mono is for path /
 `supportingText` only. Live: sandbox `#list`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List --with-end ellipsis kisses action disk
+
+Symptoms on a path / experience / bookmark `ListItem` with trailing edit/delete:
+
+- Long headline ellipsis sits flush against the first `IconButton` hover disk
+- Supporting line (company · dates) also runs into the action cluster
+- Consumer adds private `padding-inline-end` / `margin` on `.fynns-list-item*`
+- Gap is calibrated to the **footer settings gear optical end inset** (sm disk
+  negative margin) instead of the **Avatar → drawer start** pad
+
+**Cause:** `--with-end` reveal reserved only two md targets + cluster gap +
+list pad — **zero** copy→disk breath; or a later tweak used the wrong chrome
+reference (gear optical vs Avatar pad-inline).
+
+**Fix in core (≥ 0.4.115):** `--fynns-list-end-actions-gap` aliases
+`--fynns-navdrawer-pad-inline` (**10dp** — same as footer Avatar left inset).
+Consumer: bump only — no app CSS. Live: sandbox `#list` path catalog (hover a
+long headline row).
 
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 
@@ -1549,6 +1627,28 @@ use `FieldBlock` `actions` on the label row for Select refresh. Live: sandbox
 `#field-header`, `#form-recipe`; consumer settings Model row. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Select row-action IconButton drifts when open
+
+Symptoms in a settings Card / inspector `FieldBlock`:
+
+- `Select` `className="fynns-control-cluster__grow"` + sibling refresh /
+  reload `IconButton` in `.fynns-control-cluster--end-align` looks correct
+  when closed
+- Opening the dropdown list moves the refresh button **down** — it vertically
+  centers against trigger + results instead of staying on the **trigger row**
+  (often ~160px gap vs the closed state)
+
+**Cause:** Core end-align clusters pin row actions with `align-items:
+flex-start`, but IconButton siblings also had `align-self: center`. When the
+grow Select stacks its results, cluster height grows and the centered sibling
+drifts. Not a consumer flex hack — fixed in core (≥ 0.4.112).
+
+**Fix in the consumer:** Keep the **`FieldBlock` + control-cluster** recipe
+(`Select` `__grow` + trailing `IconButton` — no `Select.trailing`). Bump
+`@fynn7/ui-design-core`; do **not** add private `align-self` / margin on the
+button. Live: sandbox `#field-header` (open Select — refresh stays on trigger
+band). Authority: [`AGENTS.md`](../AGENTS.md) **Select + reload** row.
 
 ## Failure mode this treaty targets: table row action not sharing one trailing edge
 
@@ -1661,6 +1761,44 @@ Live: sandbox Globals `#code-block` (file-body Card). Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Suffixed file body** +
 [`CONSUME.md`](CONSUME.md) Hard rule 9d. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: skinny form Dialog (tall FieldStack)
+
+Symptoms: centered `Dialog` with many `FieldBlock` / `Textarea` rows looks like
+a **narrow column** (~280px) beside a tall scroll body — `size="lg"` does not
+seem to widen the panel.
+
+**Cause:** centered Dialog default width is `max-content`; `Input` /
+`Textarea` are `width: 100%` inside content-sized hosts, so the panel shrinks
+to the M3 min width while height grows — wrong aspect for inspector forms.
+**Fix in core:** when body hosts `FieldStack` / `FieldBlock` / `Textarea`,
+panel width **fills to the `size` ceiling** (`--fynns-layout-dialog-max-width-*`).
+**Fix in the consumer:** keep `FieldStack` tree (not bare stacked inputs);
+use `size="lg"` for long edit forms; do **not** private `.fynns-dialog-panel {
+width: … }`. Body scrolls at panel `max-height` — do not invent aspect-ratio
+CSS. Live: sandbox `#form-recipe` Dialog host. Authority:
+[`AGENTS.md`](../AGENTS.md) **Inset decision tree** (Dialog width). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Dialog body end-align footer clipped
+
+Symptoms: centered `Dialog` with several labeled footer Buttons inside
+`.fynns-dialog-body` (Cancel + Copy prompt + Import JSON + Extract…) shows the
+**leftmost action clipped** — only part of “Cancel” visible; DevTools: cluster
+`nowrap` wider than body, body `overflow-x: clip`, first button `left` slightly
+left of body `left`.
+
+**Cause:** `.fynns-control-cluster--end-align` defaults to `flex-wrap: nowrap`
++ `justify-content: flex-end`. When the cluster is wider than the dialog body,
+overflow extends to the **start** edge and is clipped — not scrollable.
+
+**Fix in core (≥ 0.4.111):** direct `.fynns-dialog-body > .fynns-control-cluster--end-align`
+wraps (`flex-wrap: wrap`, `align-items: center`) while keeping end alignment per
+row. **Fix in the consumer:** keep one end-align cluster in the Dialog body
+(props-only); do **not** negative margin / private `overflow-x: visible` on
+`.fynns-dialog-body`. Live: sandbox `#form-recipe` Dialog multi-action foot.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** action footer.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: vacant band under FullscreenDialog title
 

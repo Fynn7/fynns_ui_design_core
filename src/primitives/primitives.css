@@ -1500,6 +1500,24 @@ input.fynns-input:focus::-webkit-scrollbar {
   height: var(--fynns-size-icon);
 }
 
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon:hover,
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon:focus-visible {
+  color: color-mix(in srgb, var(--fynns-color-danger) 72%, var(--fynns-color-text));
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--labeled {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--labeled:hover
+  .fynns-info-hint-label {
+  color: color-mix(in srgb, var(--fynns-color-danger) 72%, var(--fynns-color-text));
+}
+
 .fynns-info-hint-trigger--labeled {
   max-width: 100%;
   border-radius: var(--fynns-radius-sm);
@@ -1658,9 +1676,10 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-dialog-panel--centered {
   /* M3 basic dialog: ExtraLarge 28dp, min 280.
-   * Default width is content-fit (`max-content`); `size` only sets the
-   * max-width ceiling so short copy / ControlStack+Switch rows do not sit
-   * in empty space and consumers need not invent width hacks. */
+   * Default width is content-fit (`max-content`); `size` sets the max-width
+   * ceiling. Form hosts (FieldStack / FieldBlock / Textarea in body) stretch
+   * to that ceiling — see rules after `--size-lg` — so tall forms are not a
+   * skinny column. ControlStack-only rows keep content-fit. */
   min-width: min(100%, 17.5rem);
   width: max-content;
   max-width: min(100%, var(--fynns-layout-dialog-max-width));
@@ -1976,6 +1995,49 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Form-host centered Dialog: stretch panel width to the `size` ceiling when
+ * body hosts FieldStack / FieldBlock / multiline fields. `width: max-content`
+ * alone shrinks to the M3 min (~280px) while tall Textarea stacks read as a
+ * skinny column — fill to max-width instead (M3 basic max 560dp via lg).
+ * ControlStack-only preference dialogs keep content-fit width.
+ */
+.fynns-dialog-panel--centered:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-sm:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-sm));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-md:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-md));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-lg:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+}
+
+.fynns-dialog-panel--centered .fynns-field-stack,
+.fynns-dialog-panel--centered .fynns-field-block {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-self: stretch;
+}
+
+/*
  * Contained body: never grow a horizontal scrollbar from long Switch /
  * ControlStack labels. `overflow-y: auto` alone promotes overflow-x to auto
  * (CSS overflow pairing) — pin overflow-x to clip. Vertical scroll only when
@@ -2101,6 +2163,14 @@ input.fynns-input:focus::-webkit-scrollbar {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+/* Dialog body action footers: end-align clusters must wrap inside the clipped
+   scroll host — nowrap + justify-end overflows left and clips the first
+   button when several labeled actions exceed the panel width. */
+.fynns-dialog-body > .fynns-control-cluster--end-align {
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Inside ControlRow, size to the track — the row grid (1fr | max-content)
@@ -2948,6 +3018,15 @@ input.fynns-input:focus::-webkit-scrollbar {
   flex: 0 0 auto;
   flex-shrink: 0;
   align-self: center;
+}
+
+/* Select + row action: sibling IconButton stays on the trigger band when the
+   grow item stacks results — not vertically centered in trigger + list. */
+.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+  > .fynns-btn--icon {
+  align-self: flex-start;
 }
 
 .fynns-control-cluster--end-align
@@ -6828,7 +6907,7 @@ a.fynns-breadcrumb-link:visited {
   justify-content: space-between;
   gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
-  min-height: var(--fynns-size-icon-target);
+  min-height: var(--fynns-avatar-size-sm);
 }
 
 .fynns-nav-drawer-footer-account-start {
@@ -6839,7 +6918,7 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
-  min-height: var(--fynns-size-icon-target);
+  min-height: var(--fynns-avatar-size-sm);
 }
 
 .fynns-nav-drawer-footer-account-avatar-wrap {
@@ -6868,6 +6947,31 @@ a.fynns-breadcrumb-link:visited {
     #000 calc(100% - 1.25rem),
     transparent 100%
   );
+}
+
+/* Settings gear: sm (32dp) disk; optical end-align so glyph right edge shares
+ * footer pad-inline with Avatar left edge (same math as Dialog close). */
+.fynns-nav-drawer-footer-account > .fynns-tooltip-trigger {
+  flex: 0 0 auto;
+}
+
+.fynns-nav-drawer-footer-account
+  > .fynns-tooltip-trigger
+  .fynns-btn--sm.fynns-btn--icon,
+.fynns-nav-drawer-footer-account > .fynns-btn--sm.fynns-btn--icon {
+  margin-inline-end: calc(
+    (var(--fynns-avatar-size-sm) - var(--fynns-size-icon)) / -2
+  );
+}
+
+.fynns-nav-rail-footer
+  .fynns-nav-drawer-footer-account
+  > .fynns-tooltip-trigger
+  .fynns-btn--sm.fynns-btn--icon,
+.fynns-nav-rail-footer
+  .fynns-nav-drawer-footer-account
+  > .fynns-btn--sm.fynns-btn--icon {
+  margin-inline-end: 0;
 }
 
 /*
@@ -8663,7 +8767,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * Overlay reveal (ChatMessage / Fluent / Cursor): idle actions do not reserve
  * a flex slot so short headlines fill the row; hover / focus-within shows the
  * cluster. Touch / coarse pointer keeps actions always visible.
- * Reserve = two md IconButtons + cluster gap + list pad-inline.
+ * Reserve = end-actions-gap (copy → first disk) + two md IconButtons +
+ * cluster gap + list pad-inline.
  */
 .fynns-list-item-host--with-end {
   position: relative;
@@ -8706,8 +8811,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   > .fynns-list-item-row
   > .fynns-list-item {
   padding-inline-end: calc(
-    (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
-      var(--fynns-list-pad-inline)
+    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
   );
 }
 
@@ -8722,8 +8827,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-list-item-host--with-end > .fynns-list-item,
   .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
     padding-inline-end: calc(
-      (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
-        var(--fynns-list-pad-inline)
+      var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+        var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
     );
     transition: none;
   }

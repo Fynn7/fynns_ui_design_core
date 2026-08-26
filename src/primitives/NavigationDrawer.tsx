@@ -95,8 +95,9 @@ export type NavigationDrawerProps = {
    * belongs in **body** (e.g. `.fynns-nav-drawer-footer-slot--pill` row via
    * `navBodyExtra` on `DestinationAppShell`). Footer recipe:
    * `.fynns-nav-drawer-footer-account` + `.fynns-nav-drawer-footer-account-start`
-   * (Avatar + optional `.fynns-nav-drawer-footer-account-label`) + settings
-   * IconButton end — not TopAppBar `trailing`. Live: sandbox Layouts
+   * (Avatar `size="sm"` + optional `.fynns-nav-drawer-footer-account-label`) +
+   * settings `IconButton` `size="sm"` end (core optical glyph align — not
+   * TopAppBar `trailing`. Live: sandbox Layouts
    * `#layouts-demo-shell` + SandboxShell.
    */
   footer?: ReactNode;
