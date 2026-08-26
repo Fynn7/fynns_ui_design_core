@@ -74,12 +74,14 @@ export type ListTrailingMetaAlign = "start";
 export type ListProps = HTMLAttributes<HTMLUListElement> & {
   /**
    * Plain `trailingSupportingText` column across sibling rows. Pass `"start"`
-   * for date / kind catalogs: shared `--fynns-list-trailing-meta-min-width`
-   * column (box start edges align); copy is **end-aligned** inside so glyphs
-   * sit next to `--with-end` actions. Default **omit** = content-width meta
-   * hugged to the trailing edge (short status like “Current” stays next to
-   * actions — not stranded in a 17ch band). Live: `#list` org+dates (`start`)
-   * vs Applications-style status+delete (default).
+   * for date / kind / timestamp catalogs: shared
+   * `--fynns-list-trailing-meta-min-width` column (box start edges align);
+   * copy is **start-aligned** inside (≥ 0.4.144 — same as headline duration /
+   * trailing-stats cells); ellipsizes when squeezed (≥ 0.4.145). Default
+   * **omit** = content-width meta hugged to the trailing edge (short status
+   * like “Current” stays next to actions — not stranded in a 17ch band).
+   * Live: `#list` org+dates / run-summary
+   * (`start`) vs Applications-style status+delete (default).
    */
   trailingMetaAlign?: ListTrailingMetaAlign;
 };
@@ -148,9 +150,10 @@ export type ListItemProps = Omit<
    * Compact meta at the trailing edge (duration, count, status, dates, …).
    * Optional `.fynns-control-cluster` of muted spans — not `ControlRow`.
    * Duration units are spaced (`1m 47s`, never `1m47s`) — consumer-owned
-   * strings. Cross-row **start** column for mixed-length dates → parent
-   * `List` `trailingMetaAlign="start"`; short status beside `--with-end`
-   * actions leave that prop unset so meta hugs the end.
+   * strings. Cross-row **start** column for mixed-length dates / timestamps →
+   * parent `List` `trailingMetaAlign="start"` (column ink **start**-aligned ≥
+   * 0.4.144); short status beside `--with-end` actions leave that prop unset
+   * so meta hugs the end.
    */
   trailingSupportingText?: ReactNode;
   /**

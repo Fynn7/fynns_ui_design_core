@@ -666,7 +666,13 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink so selection aligns — use `wrap={false}` for live token colors while typing.",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink + continuous selection wash (no dark seams on wrapped lines) — use `wrap={false}` for live token colors while typing.",
+  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.gsc",
+  "globals.codeBlockSoftWrapSelHelp":
+    "Soft-wrap editable: select across a wrapped long line — wash must stay continuous (no dark seams between wrap fragments). Overlay stays flat mono while wrapping.",
+  "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
+  "globals.codeBlockSoftWrapSelCode":
+    "loadvolume D:/datasets/sample-project/_data/volume/volume-heptane/volume-heptane.dat\nresetrotation\naddrotationy 45\n",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -1427,7 +1433,7 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listOrgDatesHelp":
-    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **end-aligned inside** so glyphs sit `--fynns-list-end-actions-gap` from `--with-end` actions (≥ 0.4.133). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. See AGENTS.md Content density.",
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **start**-aligned inside (≥ 0.4.144 — not end-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. See AGENTS.md Content density.",
   "globals.listOrgDatesAria": "Sample organization and date-range list rows",
   "globals.listOrgDatesHeadline":
     "Business intelligence intern, sample corp",
@@ -1444,6 +1450,21 @@ const en = {
   "globals.listStatusActionAria": "Sample status and delete list row",
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
+  "globals.listRunSummaryHelp":
+    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (start ink + ellipsis ≥ 0.4.144 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
+  "globals.listRunSummaryAria": "Sample run summary list",
+  "globals.listRunSummaryOk": "Success",
+  "globals.listRunSummaryFail": "Failed",
+  "globals.listRunSummaryModel": "sample-model-flash",
+  "globals.listRunSummaryModelB": "sample-model-pro",
+  "globals.listRunSummaryModelOverflow": "sample-model-long-overflow",
+  "globals.listRunSummaryDuration": "1m 47s",
+  "globals.listRunSummaryDurationB": "12s",
+  "globals.listRunSummaryDurationOverflow": "999h 59m 59s",
+  "globals.listRunSummaryTokens": "2.18k",
+  "globals.listRunSummaryTime": "26.08.2026, 18:45:59",
+  "globals.listRunSummaryTimeB": "26.08.2026, 17:02:11",
+  "globals.listRunSummaryTimeOverflow": "26.08.2026, 15:02:11",
   "globals.listCatalogEditDialogTitle": "Edit project",
   "globals.listCatalogEditDialogName": "Name",
   "globals.listCatalogEditDialogNotes": "Notes",
@@ -2427,7 +2448,13 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿以保证选区对齐 — 打字时要 live token 色请 `wrap={false}`。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿 + 连续选区 wash（软换行片段之间无暗缝）— 打字时要 live token 色请 `wrap={false}`。",
+  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.gsc",
+  "globals.codeBlockSoftWrapSelHelp":
+    "软换行可编辑：跨过换行长行拖选 — wash 须连续（换行片段之间无暗缝）。wrap 时 overlay 保持单色底稿。",
+  "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
+  "globals.codeBlockSoftWrapSelCode":
+    "loadvolume D:/datasets/sample-project/_data/volume/volume-heptane/volume-heptane.dat\nresetrotation\naddrotationy 45\n",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -3183,7 +3210,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listOrgDatesHelp":
-    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内右对齐，字形贴 `--with-end`，≥ 0.4.133）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。见 AGENTS.md Content density。",
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内**左对齐** ≥ 0.4.144）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。见 AGENTS.md Content density。",
   "globals.listOrgDatesAria": "组织与日期区间列表示例",
   "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
   "globals.listOrgDatesOrg": "Acme",
@@ -3199,6 +3226,21 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionAria": "状态与删除列表示例",
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
+  "globals.listRunSummaryHelp":
+    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内左对齐 + 省略 ≥ 0.4.144 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
+  "globals.listRunSummaryAria": "运行摘要列表示例",
+  "globals.listRunSummaryOk": "成功",
+  "globals.listRunSummaryFail": "失败",
+  "globals.listRunSummaryModel": "sample-model-flash",
+  "globals.listRunSummaryModelB": "sample-model-pro",
+  "globals.listRunSummaryModelOverflow": "sample-model-long-overflow",
+  "globals.listRunSummaryDuration": "1m 47s",
+  "globals.listRunSummaryDurationB": "12s",
+  "globals.listRunSummaryDurationOverflow": "999h 59m 59s",
+  "globals.listRunSummaryTokens": "2.18k",
+  "globals.listRunSummaryTime": "26.08.2026, 18:45:59",
+  "globals.listRunSummaryTimeB": "26.08.2026, 17:02:11",
+  "globals.listRunSummaryTimeOverflow": "26.08.2026, 15:02:11",
   "globals.listCatalogEditDialogTitle": "编辑项目",
   "globals.listCatalogEditDialogName": "名称",
   "globals.listCatalogEditDialogNotes": "备注",

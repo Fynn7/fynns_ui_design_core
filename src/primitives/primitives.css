@@ -8747,6 +8747,125 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Single-line run / job summary: status mark + title + metrics in one
+ * `.fynns-control-cluster` as the sole headline child (not InlineAlert —
+ * that is width:100% panel chrome and forces wrap). Cluster owns nowrap;
+ * `__grow` ellipsizes the identity string. Spec: AGENTS Content density.
+ */
+.fynns-list-item-headline:has(> .fynns-control-cluster) {
+  display: flex;
+  align-items: center;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.fynns-list-item-headline > .fynns-control-cluster {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  /* Status pill ↔ title / metrics: one step above IconButton cluster 4dp. */
+  gap: var(--fynns-layout-control-stack-gap);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > :not(.fynns-control-cluster__grow) {
+  flex: 0 0 auto;
+}
+
+/*
+ * Run-summary duration in the headline cluster (after `__grow`).
+ * **One metric per cell** (duration / count) + optional **one** leading
+ * icon — fixed track = elapse col + icon + cluster gap. Digit / glyph
+ * **starts** share a column (≥ 0.4.143). Do **not** jam latency+tokens /
+ * cost into the same cell (hard mid-glyph clip). Second metric → sibling
+ * `.fynns-table-meta` (tokens track below) or `.fynns-list-item-trailing-stats`.
+ * Overflow (≥ 0.4.145): wrap the label in a `<span>` so ellipsis paints;
+ * icons never shrink. Live: `#list` run-summary.
+ */
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: var(--fynns-list-headline-meta-width);
+  min-width: var(--fynns-list-headline-meta-width);
+  max-width: var(--fynns-list-headline-meta-width);
+  overflow: hidden;
+  text-align: start;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Second headline metric (tokens / count) — sibling cell, not jammed. */
+.fynns-list-item-headline
+  > .fynns-control-cluster
+  > .fynns-table-meta
+  + .fynns-table-meta {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-tokens) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta svg {
+  flex: 0 0 auto;
+}
+
+/*
+ * Label span inside the fixed track — required for text-overflow when an
+ * icon shares the cell (bare text nodes are anonymous flex items and only
+ * hard-clip). Prefer one short metric; long copy ellipsizes at the track.
+ */
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta > span {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compact Success/Failed mark in List headline — not InlineAlert / Banner. */
+.fynns-list-item-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  box-sizing: border-box;
+  padding-block: var(--fynns-space-2xs);
+  padding-inline: var(--fynns-space-sm);
+  border-radius: var(--fynns-radius-pill);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-success);
+  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+}
+
+.fynns-list-item-status[data-tone="danger"] {
+  color: var(--fynns-color-danger);
+  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+}
+
+.fynns-list-item-status svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  flex: 0 0 auto;
+}
+
+/*
  * Ellipsis is on the headline box; Tooltip wraps copy in `.fynns-tooltip-trigger`
  * (`inline-flex` → min-content = full string). Constrain the trigger and its
  * child so `…` still paints (do not restyle this in the consumer).
@@ -8816,14 +8935,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
- * Opt-in date / kind column: List trailingMetaAlign="start" floors a shared
- * min-width so sibling rows share one meta **column** (box start edges align).
- * Copy is **end-aligned inside** that column so glyphs sit
- * `--fynns-list-end-actions-gap` from `--with-end` actions — never
- * `text-align: start` dead space after a full date that is still narrower
- * than `17ch` (proportional digits). Default (no data attr) = content-width
- * meta hugged to the trailing edge — short status (“Current”) stays next to
- * actions. Exclude trailing-stats (fixed tracks of their own).
+ * Opt-in date / kind / timestamp column: List trailingMetaAlign="start"
+ * floors a shared min-width so sibling rows share one meta **column**
+ * (box start edges align). Copy is **start-aligned inside** (≥ 0.4.144 —
+ * same as headline run-summary duration; not end-ink that lines up
+ * trailing glyphs). Default (no data attr) = content-width meta hugged to
+ * the trailing edge — short status (“Current”) stays next to actions.
+ * Exclude trailing-stats (fixed tracks of their own — also start-aligned).
  */
 .fynns-list[data-trailing-meta-align="start"]
   .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
@@ -8848,7 +8966,10 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   > .fynns-list-item-trailing-text {
   flex: 1 1 auto;
   min-width: 0;
-  text-align: end;
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
@@ -8859,7 +8980,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * Multi-metric trailing meta (elapse | tokens | cost | count). Fixed column
  * tracks so sibling rows share vertical column edges — not a flex
- * `.fynns-control-cluster` (content-width cells drift per row). Live: `#list`.
+ * `.fynns-control-cluster` (content-width cells drift per row). Cells are
+ * **start**-aligned (≥ 0.4.144 — same column grammar as trailingMetaAlign).
+ * Live: `#list`.
  */
 .fynns-list-item-trailing-stats {
   box-sizing: border-box;
@@ -8871,7 +8994,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     var(--fynns-list-stats-col-count);
   column-gap: var(--fynns-layout-control-cluster-gap);
   align-items: center;
-  justify-items: end;
+  justify-items: start;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -8887,12 +9010,12 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: end;
+  text-align: start;
 }
 
 .fynns-list-item-trailing-stats > .fynns-tooltip-trigger {
   display: inline-flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   width: 100%;
 }
 
