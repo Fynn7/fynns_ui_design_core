@@ -9,6 +9,10 @@
  * dragged / track-clicked without covering the page. Textarea / input: native
  * bar hidden only (no overlay rail).
  *
+ * Y rails are clamped to the straight vertical edge of rounded
+ * `overflow: hidden|clip` ancestors (e.g. centered Dialog `radius-3xl`) so the
+ * thumb does not paint through the bottom/top corner curves.
+ *
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
 
@@ -108,6 +112,89 @@ function copyFloatVerticalRailGeometry(
   }
 
   return { top: hostRect.top, height: hostRect.height, left };
+}
+
+function parseCssLengthPx(raw: string, el: Element): number {
+  const t = raw.trim().split(/\s+/)[0] ?? "";
+  if (!t || t === "0") return 0;
+  const n = Number.parseFloat(t);
+  if (!Number.isFinite(n) || n <= 0) return 0;
+  if (t.endsWith("%")) {
+    const box = (el as HTMLElement).getBoundingClientRect?.();
+    const basis = box ? Math.min(box.width, box.height) : 0;
+    return (n / 100) * basis;
+  }
+  if (t.endsWith("rem")) {
+    const rootFs =
+      Number.parseFloat(getComputedStyle(document.documentElement).fontSize) ||
+      16;
+    return n * rootFs;
+  }
+  if (t.endsWith("em")) {
+    const fs = Number.parseFloat(getComputedStyle(el).fontSize) || 16;
+    return n * fs;
+  }
+  return n;
+}
+
+function readCornerRadii(el: HTMLElement): {
+  tl: number;
+  tr: number;
+  br: number;
+  bl: number;
+} {
+  const cs = getComputedStyle(el);
+  return {
+    tl: parseCssLengthPx(cs.borderTopLeftRadius, el),
+    tr: parseCssLengthPx(cs.borderTopRightRadius, el),
+    br: parseCssLengthPx(cs.borderBottomRightRadius, el),
+    bl: parseCssLengthPx(cs.borderBottomLeftRadius, el),
+  };
+}
+
+function clipsDescendants(cs: CSSStyleDeclaration): boolean {
+  const clip = (v: string) => v === "hidden" || v === "clip";
+  return (
+    clip(cs.overflow) ||
+    clip(cs.overflowX) ||
+    clip(cs.overflowY)
+  );
+}
+
+/**
+ * Fixed portal rails ignore ancestor `overflow` + `border-radius`. When a
+ * scroll host sits in a rounded clip shell (centered Dialog `radius-3xl`),
+ * shrink the Y rail to the straight vertical edge so the thumb bottom is
+ * tangent to the start of the bottom corner — never paints through the curve.
+ */
+function clampVerticalRailToRoundedClip(
+  host: HTMLElement,
+  railTop: number,
+  railHeight: number,
+  railLeft: number,
+  sb: number,
+): { top: number; height: number } {
+  let top = railTop;
+  let bottom = railTop + railHeight;
+  const railRight = railLeft + sb;
+  let el: HTMLElement | null = host.parentElement;
+  while (el && el !== document.documentElement) {
+    if (el.classList.contains("fynns-dialog-overlay")) break;
+    const cs = getComputedStyle(el);
+    if (clipsDescendants(cs)) {
+      const er = el.getBoundingClientRect();
+      const r = readCornerRadii(el);
+      const nearRight = railRight >= er.right - 1;
+      const nearLeft = railLeft <= er.left + 1;
+      const topR = nearRight ? r.tr : nearLeft ? r.tl : Math.max(r.tl, r.tr);
+      const botR = nearRight ? r.br : nearLeft ? r.bl : Math.max(r.bl, r.br);
+      /* Straight vertical band of the rounded rect. */
+      top = Math.max(top, er.top + topR);
+      bottom = Math.min(bottom, er.bottom - botR);
+    }
+    el = el.parentElement;
+  }
+  return { top, height: Math.max(0, bottom - top) };
 }
 
 function prefersFineHover(): boolean {
@@ -313,11 +400,21 @@ function updateHost(host: HTMLElement, state: HostState) {
       railTop = rail.top;
       railHeight = rail.height;
       railLeft = rail.left;
+    } else {
+      const clipped = clampVerticalRailToRoundedClip(
+        host,
+        railTop,
+        railHeight,
+        railLeft,
+        sb,
+      );
+      railTop = clipped.top;
+      railHeight = clipped.height;
     }
 
     const thumbH = Math.max(
       MIN_THUMB_PX,
-      (clientHeight / scrollHeight) * clientHeight,
+      Math.min(railHeight, (clientHeight / scrollHeight) * railHeight),
     );
     const maxTop = Math.max(0, railHeight - thumbH);
     const range = Math.max(1, scrollHeight - clientHeight);
