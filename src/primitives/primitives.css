@@ -2194,6 +2194,69 @@ input.fynns-input:focus::-webkit-scrollbar {
   justify-content: flex-end;
 }
 
+/*
+ * Form trailing chrome column (≥ 0.4.137) — not “icons only”.
+ * Lone `.fynns-table-meta` (—, OK / Fail without InfoHint) is the same *cell*
+ * as IconButton / InfoHint: fixed trail box, content centered. Content-width
+ * em-dash glued to the end edge leaves a thin glyph under a 32/40dp disk and
+ * reads as a broken column next to Select+refresh. When meta + InfoHint share
+ * a cluster, InfoHint keeps the trail box; meta stays content-width to the left.
+ * Trail size follows the Card’s IconButton/InfoHint size lock (sm → 2rem,
+ * else icon-target 40dp).
+ */
+.fynns-dialog-panel--centered,
+.fynns-card-body,
+.fynns-surface--padded,
+.fynns-collapsible-body {
+  --fynns-form-trail-chrome: var(--fynns-size-icon-target);
+}
+
+.fynns-dialog-panel--centered:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-card-body:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-surface--padded:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-collapsible-body:has(.fynns-btn--sm.fynns-btn--icon) {
+  --fynns-form-trail-chrome: 2rem;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--fynns-form-trail-chrome);
+  min-height: var(--fynns-form-trail-chrome);
+}
+
 .fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
   width: 100%;
   max-width: 100%;

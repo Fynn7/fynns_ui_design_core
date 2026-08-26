@@ -3908,6 +3908,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   />
                 </div>
               </ControlRow>
+              <ControlRow label={t("globals.fieldHeaderProbeIdle")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.fieldHeaderProbeIdleMeta")}
+                  </span>
+                </div>
+              </ControlRow>
             </ControlStack>
           </Card>
           <FieldHeader

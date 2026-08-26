@@ -1690,7 +1690,7 @@ refresh, ControlRow trailing InfoHint). End-align + different diameters
 shifts the **left** edge by 8dp (40−32). Core `< 0.4.136` also (a) re-floored
 Tooltip-wrapped end-align IconButtons to 40dp even when `size="sm"` was
 passed, and (b) start-packed form-host ControlRow clusters so shorter
-OK/Fail status rows inset the trailing “i”. Bump to ≥ **0.4.136**.
+OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without InfoHint stayed content-width at the end edge under a 32/40dp disk (broken trail column). Bump to ≥ **0.4.137** (icon size lock alone was **0.4.136**).
 
 **Fix in the consumer (hard):**
 1. In one strip (TopAppBar leading+trailing, `.fynns-card-actions`, one
@@ -1712,9 +1712,9 @@ OK/Fail status rows inset the trailing “i”. Bump to ≥ **0.4.136**.
 5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
    fake column alignment.
 
-Live: sandbox `#card` actions strip (head all `md`); `#field-header`
-(label InfoHint + refresh + probe InfoHints all `sm`). Authority:
-[`AGENTS.md`](../AGENTS.md) **Chrome icon size lock**. Pasteable:
+Also: lone ControlRow `.fynns-table-meta` (`—` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+(label InfoHint + refresh + probe OK/Fail + idle `—` all on the `sm` trail). Authority:
+[`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status icon soup in a control-cluster
