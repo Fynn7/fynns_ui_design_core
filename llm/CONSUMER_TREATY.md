@@ -1717,6 +1717,31 @@ Also: lone ControlRow `.fynns-table-meta` (`—` / status without InfoHint) must
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: form ControlRow label vs Select value text
+
+Symptoms (Models / provider Card):
+
+- Select shell and ControlRow **boxes** share one left edge (DevTools
+  `left` equal on `.fynns-select` and `.fynns-control-row`)
+- Select **value** text (`.fynns-select-trigger-text`) starts ~16–17dp inset
+  (capsule + field-pad + hairline); ControlRow **label** (“Ollama”) sits flush
+  at the shell edge — glyphs look skewed under the field
+- Agent “fixes” by inventing consumer `padding-left` / `margin` on
+  `.fynns-control-row__label`
+
+**Cause:** aligning chrome **boxes** instead of **value text**. Form hosts that
+mix `FieldBlock` + `ControlStack` need the ControlRow label on the same
+text-start column as Input / Select / Autocomplete value ink. Core ≥ **0.4.138**
+sets `--fynns-form-control-text-inset-inline` when the host `:has(.fynns-field-block):has(.fynns-control-stack)`.
+
+**Fix in the consumer (hard):** bump to ≥ **0.4.138**; keep FieldStack +
+ControlStack siblings (no private pad). FieldBlock titles stay flush with the
+control outer edge — do not pad those to match value text.
+
+Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md)
+**Form control text-start**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: status icon soup in a control-cluster
 
 Symptoms (repo / submodule board Card body):

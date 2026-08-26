@@ -2106,6 +2106,47 @@ input.fynns-input:focus::-webkit-scrollbar {
   letter-spacing: normal;
 }
 
+/*
+ * Form control text-start column (≥ 0.4.138) — glyphs, not chrome boxes.
+ * When a form host mixes FieldBlock / Select / Input with ControlStack, the
+ * ControlRow label sits under the field *value* text (Select trigger /
+ * Input), not under the field outer border. Densified Select text start =
+ * border hairline + searchbar field capsule pad + trigger `space-md`
+ * (aliases field-pad-inline) — same as Input’s capsule+field-pad inside the
+ * border. Do **not** flush ControlRow labels to the Select box left (reads
+ * as “containers aligned, copy skewed”). FieldBlock *titles* stay flush with
+ * the control outer edge (label→control recipe unchanged).
+ */
+.fynns-dialog-panel--centered,
+.fynns-card-body,
+.fynns-surface--padded,
+.fynns-collapsible-body {
+  --fynns-form-control-text-inset-inline: calc(
+    var(--fynns-border-hairline) +
+      var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
+}
+
+.fynns-dialog-panel--centered:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-card-body:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-surface--padded:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-collapsible-body:has(.fynns-field-block):has(.fynns-control-stack)
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label {
+  padding-inline-start: var(--fynns-form-control-text-inset-inline);
+}
+
 .fynns-dialog-panel--centered .fynns-control-row__controls,
 .fynns-card-body .fynns-control-row__controls,
 .fynns-surface--padded .fynns-control-row__controls,

@@ -150,7 +150,7 @@ ring can paint before heavy work).
   one short line only. Live `#field-header`. When a FieldBlock label-row
   InfoHint is `sm`, Select-row refresh + ControlRow probe InfoHints in that
   Card stay **`size="sm"`** (one trailing chrome column — icons **and** lone
-  `.fynns-table-meta`; never md refresh under sm “i”; ≥ 0.4.137).
+  `.fynns-table-meta`; never md refresh under sm “i”; ≥ 0.4.137). FieldBlock+ControlStack: ControlRow **label glyphs** align Select/Input **value** text (≥ 0.4.138) — not shell left edges.
 - Settings: footer gear only (not a root destination Item beside it); body =
   software chrome prefs including **UI language** (`FieldBlock` + compact
   `ToggleGroup`) — never language in TopAppBar; feature panels get their own
