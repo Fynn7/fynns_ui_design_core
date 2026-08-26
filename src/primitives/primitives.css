@@ -6842,20 +6842,20 @@ a.fynns-breadcrumb-link:visited {
   align-items: stretch;
   gap: var(--fynns-navdrawer-section-gap);
   min-width: 0;
-  padding-inline: var(--fynns-navdrawer-pad-inline);
   /*
-   * Top: breath above account row (body already pads block-end with the same
-   * token). Bottom: 0 — shell `padding-block-end` matches NavigationRail
-   * (`--fynns-space-md`) so the settings hover disk ↔ outer edge matches rail.
+   * Equal chrome inset on all four sides of the account band
+   * (`--fynns-navdrawer-footer-account-inset` ≈ 16dp / Cursor ≥ 0.4.131):
+   * Avatar start, settings end, Avatar/settings bottom, and top breath above
+   * the row. Bottom lives here (not on the sheet) so L/R/B stay one token —
+   * ≥ 0.4.129; inset stepped 12→16 for Cursor Avatar edge breath.
    */
-  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
-  padding-block-end: 0;
+  padding: var(--fynns-navdrawer-footer-account-inset);
   border-block-start: none;
 }
 
-/* Rail parity: one bottom inset on the sheet — not footer pad + shell pad. */
+/* Bottom inset is footer pad — do not double with sheet padding-block-end. */
 .fynns-nav-drawer:has(> .fynns-nav-drawer-footer) {
-  padding-block-end: var(--fynns-space-md);
+  padding-block-end: 0;
 }
 
 /* Cursor: footer/account row pins to the sheet bottom; body scrolls above. */
@@ -6905,7 +6905,17 @@ a.fynns-breadcrumb-link:visited {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fynns-layout-control-cluster-gap);
+  /*
+   * Full sheet width: Avatar+label hug start, settings hug end, **free
+   * space in the middle** (Cursor account row). Gap floors min breath.
+   * Do **not** let account-start `flex-grow` — that ate the middle.
+   * Edge inset = parent footer `--fynns-navdrawer-footer-account-inset`
+   * (~16dp L/R/B/T equal, ≥ 0.4.131) — stacking Item `item-pad` (0.4.127)
+   * made L/R ~26dp. Keep settings `margin-inline-end: 0`. Live:
+   * `#layouts-demo-shell`.
+   */
+  width: 100%;
+  gap: var(--fynns-layout-control-stack-gap);
   min-width: 0;
   min-height: var(--fynns-avatar-size-sm);
 }
@@ -6913,11 +6923,24 @@ a.fynns-breadcrumb-link:visited {
 .fynns-nav-drawer-footer-account-start {
   box-sizing: border-box;
   display: flex;
-  flex: 1 1 auto;
+  /* Hug content so space-between opens a real middle band; shrink when
+   * the label is long so the gear stays end-aligned. */
+  flex: 0 1 auto;
   flex-direction: row;
   align-items: center;
-  gap: var(--fynns-layout-control-cluster-gap);
+  /*
+   * Avatar ↔ label = sheet inline inset (`--fynns-navdrawer-pad-inline`,
+   * ~10dp) — **tighter than** footer edge inset (16dp) so Cursor’s
+   * edge > gap rhythm holds. Do **not** use control-cluster-gap (4dp).
+   * Live: `#layouts-demo-shell`.
+   */
+  gap: var(--fynns-navdrawer-pad-inline);
   min-width: 0;
+  /* Reserve gear + min middle band so long labels cannot kiss the disk. */
+  max-width: calc(
+    100% - var(--fynns-avatar-size-sm) - var(--fynns-layout-control-stack-gap) -
+      var(--fynns-layout-unit-stack-gap)
+  );
   min-height: var(--fynns-avatar-size-sm);
 }
 
@@ -6927,13 +6950,21 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-nav-drawer-footer-account-label {
-  flex: 1 1 auto;
+  /* Hug the string — do not grow inside start (that re-fills the middle). */
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   font-size: var(--fynns-navdrawer-label-size);
   line-height: var(--fynns-navdrawer-label-line);
   color: var(--fynns-color-text-muted);
+  /*
+   * Soft end fade only when DrawerSheet sets `data-fade` (scrollWidth >
+   * clientWidth). Always-on mask faded short content-hug names (≥ 0.4.130).
+   */
+}
+
+.fynns-nav-drawer-footer-account-label[data-fade] {
   /* Cursor: soft end fade into the settings gap — not `…` ellipsis. */
   -webkit-mask-image: linear-gradient(
     to right,
@@ -6949,19 +6980,23 @@ a.fynns-breadcrumb-link:visited {
   );
 }
 
-/* Settings gear: sm (32dp) disk; optical end-align so glyph right edge shares
- * footer pad-inline with Avatar left edge (same math as Dialog close). */
+/* Settings gear: sm (32dp) disk. Keep flex: 0 so space-between parks the
+ * gear at the account row end. `margin-inline-end: 0` — Dialog-close
+ * optical −8 left only ~2dp to the sheet edge; do not restore it.
+ * Disk inset = footer `pad-inline` (~10dp), same as Avatar start.
+ * ≥ 0.4.128 (0.4.127 item-pad stack was too wide). */
 .fynns-nav-drawer-footer-account > .fynns-tooltip-trigger {
   flex: 0 0 auto;
+  margin-inline-start: auto;
 }
 
 .fynns-nav-drawer-footer-account
   > .fynns-tooltip-trigger
   .fynns-btn--sm.fynns-btn--icon,
 .fynns-nav-drawer-footer-account > .fynns-btn--sm.fynns-btn--icon {
-  margin-inline-end: calc(
-    (var(--fynns-avatar-size-sm) - var(--fynns-size-icon)) / -2
-  );
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
 }
 
 .fynns-nav-rail-footer
@@ -8639,11 +8674,37 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: var(--fynns-list-icon-size);
 }
 
+/*
+ * Opt-in date / kind column: List trailingMetaAlign="start" floors a shared
+ * min-width so short strings share the **start** edge with longer siblings.
+ * Default (no data attr) = content-width meta hugged to the trailing edge —
+ * short status (“Current”) stays next to `--with-end` actions. Exclude
+ * trailing-stats (fixed tracks of their own).
+ */
+.fynns-list[data-trailing-meta-align="start"]
+  .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
+    :has(.fynns-list-item-trailing-stats)
+  ) {
+  min-width: var(--fynns-list-trailing-meta-min-width);
+  justify-content: flex-start;
+}
+
 .fynns-list-item-trailing-text {
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-list-icon-size);
   color: inherit;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-list[data-trailing-meta-align="start"]
+  .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
+    :has(.fynns-list-item-trailing-stats)
+  )
+  > .fynns-list-item-trailing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: start;
 }
 
 .fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
@@ -8765,13 +8826,34 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Overlay reveal (ChatMessage / Fluent / Cursor): idle actions do not reserve
- * a flex slot so short headlines fill the row; hover / focus-within shows the
- * cluster. Touch / coarse pointer keeps actions always visible.
- * Reserve = end-actions-gap (copy → first disk) + two md IconButtons +
- * cluster gap + list pad-inline.
+ * a flex slot so short headlines fill the row with balanced L/R breath; hover /
+ * focus-within shows the cluster. Touch / coarse pointer keeps actions always
+ * visible. Reserve matches the **actual** end cluster: one md IconButton by
+ * default; two (+ cluster gap) when the cluster has a second child — never
+ * leave a phantom second disk that strands short `trailingSupportingText`
+ * (“Current” / 当前) far from a lone trash. Live: `#list` status+action.
  */
 .fynns-list-item-host--with-end {
   position: relative;
+  --fynns-list-end-actions-reserve: calc(
+    var(--fynns-list-end-actions-gap) + var(--fynns-size-icon-target) +
+      var(--fynns-list-pad-inline)
+  );
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-control-cluster > :nth-child(2)
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end > .fynns-btn--icon + .fynns-btn--icon
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end > .fynns-tooltip-trigger + .fynns-tooltip-trigger
+  ) {
+  --fynns-list-end-actions-reserve: calc(
+    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
+  );
 }
 
 .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
@@ -8799,7 +8881,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 .fynns-list-item-host--with-end > .fynns-list-item,
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
-  /* Idle: full-bleed copy. Reveal: clear under two md IconButtons. */
+  /* Idle: full-bleed copy. Reveal: clear under the measured end cluster. */
   padding-inline-end: var(--fynns-space-xs);
   transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
 }
@@ -8810,10 +8892,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-list-item-host--with-end:focus-within
   > .fynns-list-item-row
   > .fynns-list-item {
-  padding-inline-end: calc(
-    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
-      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
-  );
+  padding-inline-end: var(--fynns-list-end-actions-reserve);
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -8826,10 +8905,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
   .fynns-list-item-host--with-end > .fynns-list-item,
   .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
-    padding-inline-end: calc(
-      var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
-        var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
-    );
+    padding-inline-end: var(--fynns-list-end-actions-reserve);
     transition: none;
   }
 }

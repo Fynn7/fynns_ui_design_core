@@ -69,7 +69,19 @@ function trailingIsRowAction(node: ReactNode, depth = 0): boolean {
   return true;
 }
 
-export type ListProps = HTMLAttributes<HTMLUListElement>;
+export type ListTrailingMetaAlign = "start";
+
+export type ListProps = HTMLAttributes<HTMLUListElement> & {
+  /**
+   * Plain `trailingSupportingText` column across sibling rows. Pass `"start"`
+   * for date / kind catalogs so short and long meta share one **start** edge
+   * (`--fynns-list-trailing-meta-min-width`). Default **omit** = content-width
+   * meta hugged to the trailing edge (short status like “Current” stays next
+   * to `--with-end` actions — not stranded in a 17ch band). Live: `#list`
+   * org+dates (`start`) vs Applications-style status+delete (default).
+   */
+  trailingMetaAlign?: ListTrailingMetaAlign;
+};
 
 /**
  * M3 content List — vertical index of text / images for main content,
@@ -89,10 +101,17 @@ export type ListProps = HTMLAttributes<HTMLUListElement>;
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(
-  { className, ...rest },
+  { className, trailingMetaAlign, ...rest },
   ref,
 ) {
-  return <ul {...rest} ref={ref} className={join("fynns-list", className)} />;
+  return (
+    <ul
+      {...rest}
+      ref={ref}
+      data-trailing-meta-align={trailingMetaAlign || undefined}
+      className={join("fynns-list", className)}
+    />
+  );
 });
 
 export type ListItemLines = 1 | 2 | 3;
@@ -125,9 +144,12 @@ export type ListItemProps = Omit<
    */
   trailing?: ReactNode;
   /**
-   * Compact meta at the trailing edge (duration, count, …). Optional
-   * `.fynns-control-cluster` of muted spans — not `ControlRow`. Duration
-   * units are spaced (`1m 47s`, never `1m47s`) — consumer-owned strings.
+   * Compact meta at the trailing edge (duration, count, status, dates, …).
+   * Optional `.fynns-control-cluster` of muted spans — not `ControlRow`.
+   * Duration units are spaced (`1m 47s`, never `1m47s`) — consumer-owned
+   * strings. Cross-row **start** column for mixed-length dates → parent
+   * `List` `trailingMetaAlign="start"`; short status beside `--with-end`
+   * actions leave that prop unset so meta hugs the end.
    */
   trailingSupportingText?: ReactNode;
   /**

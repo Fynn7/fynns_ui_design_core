@@ -257,12 +257,24 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   (**16dp**); two-line stack `--fynns-list-content-gap` (**4dp**); three-line
   (overline + headline + supporting) `--fynns-list-content-gap-3` (**8dp**);
   `--with-end` reveal copy→first action disk stays `--fynns-list-end-actions-gap`
-  (**10dp**, aliases `--fynns-navdrawer-pad-inline` — same as footer Avatar →
-  drawer start; not the settings-gear optical end inset). Do not override with
+  (**4dp**, aliases `--fynns-layout-control-cluster-gap` — ≥ 0.4.123; same as
+  any sibling immediately left of an IconButton — not navdrawer pad-inline). Do not override with
   private gaps or a 40dp empty leading column.
 - **DON'T** glue duration units in List meta (`1m47s`). Compact duration
   copy uses a **space between units** (`1m 47s`, `2h 5m`) in
   `trailingSupportingText` / overline — same for consumer zh/en strings.
+- **DON'T** stack organization + date range in one `supportingText` with a
+  middle-dot / `·` (`Acme · 2025-10 – 2026-03`). **Org stays under the title**
+  (`supportingText`); **dates → `trailingSupportingText`** so layout separates
+  them — never a glued meta blob. Mixed-length date catalogs → parent
+  **`List` `trailingMetaAlign="start"`**. Live: sandbox `#list` org+dates.
+- **DON'T** put `trailingMetaAlign="start"` on catalogs whose short status
+  (`Current` / `当前`) must sit next to `--with-end` actions — the 17ch floor
+  parks the label far from the IconButton. Leave the prop unset (content-width
+  hug). Live: `#list` status+action.
+- **DON'T** right-align plain List `trailingSupportingText` with private CSS
+  when you meant a cross-row date column — use `trailingMetaAlign="start"`
+  instead. Multi-metric grids stay on `.fynns-list-item-trailing-stats`.
 - **DON'T** use a flex `.fynns-control-cluster` for multi-metric List trailing
   meta that must **column-align across sibling rows** (elapse / tokens / cost /
   count). Use `.fynns-list-item-trailing-stats` (fixed grid tracks; `--pair`
@@ -942,10 +954,22 @@ classes.
   between chrome peers and before destinations — never Item `section-gap`
   (4dp) for that band
   to destinations; **sheet `footer`** = Cursor-style **single account row**
-  (Avatar + optional fade-truncated `.fynns-nav-drawer-footer-account-label` +
-  settings gear (`IconButton` `size="sm"`; core optical end-align so glyph
-  right edge matches Avatar left inset at `--fynns-navdrawer-pad-inline`) in
-  `.fynns-nav-drawer-footer-account` end — **not** a destination Item and
+  (Avatar + optional `.fynns-nav-drawer-footer-account-label` — soft end
+  fade **only when truncated** via core `data-fade`, ≥ 0.4.130; short names
+  stay fully opaque — not always-on mask) +
+  settings gear (`IconButton` `size="sm"`; Avatar start / settings end /
+  Avatar+settings bottom / footer top = one
+  `--fynns-navdrawer-footer-account-inset` ≈ **16dp** / `space-lg` — equal
+  four-way chrome, ≥ 0.4.131 (was 12dp in 0.4.129); **no** Dialog optical negative end margin,
+  **no** Item `item-pad` stack) in
+  `.fynns-nav-drawer-footer-account` end — **full-width**
+  `space-between` + gap `--fynns-layout-control-stack-gap` (**8dp**, ≥ 0.4.124 —
+  **not** denser `control-cluster-gap` 4dp, or the label kisses the gear);
+  Avatar↔label in `account-start` = `--fynns-navdrawer-pad-inline` (**~10dp**,
+  ≥ 0.4.125 — body sheet inset, not 4dp cluster gap); start + label
+  **hug** (no `flex-grow`, ≥ 0.4.126) so space-between leaves a visible
+  middle band before the gear —
+  **not** a destination Item and
   **not** TopAppBar `trailing` for settings; footer has
   **no** hairline divider above it — pad only, Cursor-style; when body content
   overflows, `.fynns-nav-drawer-body` gets `data-fade-bottom` / `data-fade-top`
@@ -1057,8 +1081,9 @@ classes.
   through `Tooltip` wrappers; leading **hugs** the glyph (not a 40dp empty
   column); leading → copy gutter `--fynns-list-gap` (**16dp**, aliases `space-lg`);
   `--with-end` reveal clears copy→first action with `--fynns-list-end-actions-gap`
-  (**10dp**, aliases `--fynns-navdrawer-pad-inline` — ≥ 0.4.115; same breath as
-  footer Avatar → drawer start — not the settings-gear optical end inset);
+  (**4dp**, aliases `--fynns-layout-control-cluster-gap` — ≥ 0.4.123; same
+  “sibling left of IconButton” rhythm as `.fynns-control-cluster`, not
+  navdrawer pad-inline / footer Avatar inset);
   overline / headline / supporting stack with
   `--fynns-list-content-gap`
   (**4dp**, aliases `space-xs`; three-line uses `--fynns-list-content-gap-3` /
@@ -1268,9 +1293,11 @@ classes.
   | --- | --- | --- |
   | Name + path / subtitle + optional row actions (bookmarks, custom links, file shortcuts) | One `List` of **two-line** `ListItem`s (`headline` = display name in **UI font** — never mono on CJK/mixed labels; `supportingText` = path, mono OK; kind → **leading icon only** — **never** `overline` on path/shortcut catalogs (`overline` forces `height-3` / ~88dp and reads as vacant band; freshness / builtin → `trailingSupportingText` / `.fynns-table-meta` — **not** `Chip`; `trailing` = `.fynns-control-cluster` of `IconButton` `ghost` **md** (default) + `Tooltip`, **horizontal nowrap**). **`--with-end` overlay reveal** — idle row copy fills width; hover / focus-within shows trailing; touch always visible. Trailing **actions** stay on the **end sibling** even when `interactive={false}` (static row + open/folder); decorative chevron / count stay **in** the row. **Same destination page:** catalog `ControlRow` strip + List trailing share one IconButton `size` (**md** default). **Never** `Divider` between `ListItem`s — `--fynns-list-item-gap` + host pill. Destructive → `ConfirmDialog`, not a filled danger disk in the row. No `tip-fill` / `tip-grow` on the headline Tooltip. **Scroll:** `.fynns-page-scroll.fynns-scroll` **edge-flush** with the pane (FillColumn / `hub-main` — never pad that ancestor horizontally) + inner `.fynns-content-column` (max-width + dialog-inset pad) — **not** `fynns-scroll` on the max-width column, and **not** a nested Card scrollport on a short list. Long catalogs only: List + `fynns-scroll` + `max-height: var(--fynns-layout-list-well-max-height)` / `-sm` (shipped — never invent the name). Live: `#list` / `#page-scroll` | One `Surface`/`Card` per entry; **`Divider` between rows** of a contained List; actions under the text in a second row; `unit-stack` of single-item Lists; mono headline tofu; tip-fill breaking ellipsis; `Chip` as origin/kind in the headline; IconButton trailing crushed into the 16dp `trailing-icon` slot (`interactive={false}` vertical stack); nested Card `hub-scroll` + invented `--fynns-layout-list-well-*` on a one-row List (phantom scroll chrome); scroll host = content max-width column; padded `.hub-main` around page-scroll (rail floats inset from pane); **always-visible trailing** reserving flex on wide idle rows (sparse middle); **ControlRow md + List trailing sm** on the same page |
   | Expandable catalog (session / turn tree + nested records) | Same `List`: **direct** `ul > li`. Timestamp / kind → `overline`; name → `headline`; path → `supportingText`; duration / count → `trailingSupportingText` (duration units **spaced**: `1m 47s`, never `1m47s`). **Multi-metric trailing** (elapse \| tokens \| cost \| count that must **column-align across rows**) → `.fynns-list-item-trailing-stats` (fixed CSS grid tracks; `--pair` for duration + count only) — **not** a flex `.fynns-control-cluster` (content-width cells drift per row). Expand = row `onClick` + decorative leading chevron + `aria-expanded` (do **not** `selected` for open). Nested `List` or `.fynns-table-wrap.fynns-scroll` → `ListItem` **`detail`**. Open-record → trailing `IconButton` (same row chrome as the button). Long copy → `Tooltip` on headline; core ellipsizes. Live: sandbox `#list` | `ul > div` around items (**Collapsible / Card / unit-stack as List children** — illegal nesting; flex-shrink + `overflow: hidden` crushes groups to ~19px “skeleton” pills); orphan `ListItem` outside `List`; raw `<button>` / `HubTreeDisclosure` in `leading`; `ControlRow` in trailing; `Button` in headline; nested table `width:100%` + `table-layout:fixed` + `overflow-x:hidden`; cell or headline `Chip` as status; consumer `width: max-content` / `tip-grow` on headline (breaks `…`); trailing IconButton as a second highlight island; glued duration `1m47s`; flex cluster for multi-stat trailing that must align across rows |
+  | **Title + organization + date range** (experience / job / internship records) | Two-line `ListItem`: `headline` = role/title; `supportingText` = **organization only**; date range → **`trailingSupportingText`**; parent **`List` `trailingMetaAlign="start"`** so short dates share a start edge with full ranges (`--fynns-list-trailing-meta-min-width`). Optional IconButtons optional. Live: `#list` org+dates | Gluing org + dates with `·` in `supportingText`; inventing a third text column; forcing `text-align: end`; omitting `trailingMetaAlign="start"` on mixed-length date catalogs |
+  | **Short status + row action** (e.g. Current + delete) | Same `ListItem` slots: short `trailingSupportingText` + `--with-end` IconButton. **Omit** `trailingMetaAlign` so meta stays content-width. Core ≥ **0.4.121** reserves `--with-end` pad for **1** md IconButton by default (2 when the cluster has a second child) so status sits `--fynns-list-end-actions-gap` from the trash — not a phantom second disk. Live: `#list` status+action | `trailingMetaAlign="start"`; core &lt; 0.4.121 always-2-icon pad; inventing private end margins |
   | **Dashboard / overview shortcut links** | **One** `Card` (`title` + `actions` = IconButtons — **not** a tonal Button strip in the body) wrapping **one** path/link `List` (leading kind icon + headline + real path `supportingText` + trailing open — **no** `overline`). Live: `#list` shortcut Card. **No** `ShortcutPanel` primitive | Card body = Button cluster + List of headline-only / “稍后接入” rows (reads empty); inventing a parallel shortcut host; path/shortcut rows with `overline` |
   | Catalog kind (builtin / readonly) | **Leading icon** + `trailingSupportingText` / `.fynns-table-meta`. Selected = host pill only — **no** start tick / inset rail / second wash. Headline = **UI font** (not mono). Leading→copy `--fynns-list-gap` (**16dp**). Live: `#list` kind rows | Start ticks / inset rails / `hostClassName` wash; wrap `ListItem` in `div` (`ul > div > li`); `Chip` as kind; `mono` on catalog display names; private gaps crushing icon↔copy |
-  | List row type stack | Two-line: `--fynns-list-content-gap` (**4dp**). Three-line (overline + headline + supporting): `--fynns-list-content-gap-3` (**8dp**). Leading→copy: `--fynns-list-gap` (**16dp**). `--with-end` reveal copy→first action: `--fynns-list-end-actions-gap` (**10dp**, aliases navdrawer `pad-inline`, ≥ 0.4.115). Live: `#list` | `gap: 0` under title; inventing private list gaps; 40dp empty leading column for a 16–20dp glyph; ellipsis kissing the first trailing IconButton disk; calibrating to footer settings-gear optical end inset |
+  | List row type stack | Two-line: `--fynns-list-content-gap` (**4dp**). Three-line (overline + headline + supporting): `--fynns-list-content-gap-3` (**8dp**). Leading→copy: `--fynns-list-gap` (**16dp**). Preceding content → first `--with-end` IconButton: `--fynns-list-end-actions-gap` (**4dp**, aliases `control-cluster-gap`, ≥ 0.4.123). Live: `#list` | `gap: 0` under title; inventing private list gaps; 40dp empty leading column; ellipsis kissing the disk; calibrating meta→icon to navdrawer 10dp / footer Avatar inset |
   | App destinations (nav) | `NavigationDrawer` / `Rail` / `Bar` (or `DestinationAppShell`) | `List` / `Card` as the app root nav |
   | Multi-column records / sortable grids | `Table` in `.fynns-table-wrap.fynns-scroll` inside **`Card` `title`** | `Surface` + `FieldHeader` as a fake section head; Card grid of the same rows when a table fits |
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start |
@@ -1351,7 +1378,7 @@ classes.
   | Between `ControlRow`s in a **form-host** `ControlStack` (centered Dialog / Card body / **padded Surface** / Collapsible body direct) | `--fynns-layout-control-stack-form-gap` (**12dp**, aliases `space-md` — between `control-stack-gap` 8dp and `unit-stack-gap` 16dp) |
   | Label \| controls (horizontal) | `--fynns-layout-control-row-column-gap` |
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
-  | Sibling switches / chips in one cluster | `--fynns-layout-control-cluster-gap` |
+  | Sibling switches / chips / IconButtons in one cluster | `--fynns-layout-control-cluster-gap` (**4dp** — also the canonical gap for any sibling immediately left of an IconButton; List `--with-end` aliases via `end-actions-gap`) |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
   | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
   | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-hint-gap`** |

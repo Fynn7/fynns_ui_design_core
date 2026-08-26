@@ -3105,6 +3105,89 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => setListId("tone-c")}
             />
           </List>
+          <SandboxHelp text={t("globals.listOrgDatesHelp")} />
+          <List
+            aria-label={t("globals.listOrgDatesAria")}
+            trailingMetaAlign="start"
+          >
+            <ListItem
+              headline={t("globals.listOrgDatesHeadline")}
+              supportingText={t("globals.listOrgDatesOrg")}
+              trailingSupportingText={t("globals.listOrgDatesRange")}
+              leading={<ClipboardIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <ListItem
+              headline={t("globals.listOrgDatesHeadlineShort")}
+              supportingText={t("globals.listOrgDatesOrgB")}
+              trailingSupportingText={t("globals.listOrgDatesRangeShort")}
+              leading={<ClipboardIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+            <ListItem
+              headline={t("globals.listOrgDatesHeadlineC")}
+              supportingText={t("globals.listOrgDatesOrgC")}
+              trailingSupportingText={t("globals.listOrgDatesRangeC")}
+              leading={<ClipboardIcon />}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogEdit")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogEdit")}
+                    >
+                      <PencilIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listStatusActionHelp")} />
+          <List aria-label={t("globals.listStatusActionAria")}>
+            <ListItem
+              headline={t("globals.listStatusActionHeadline")}
+              trailingSupportingText={t("globals.listStatusActionMeta")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listCatalogRemove")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listCatalogRemove")}
+                    >
+                      <TrashIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+            />
+          </List>
           <SandboxHelp text={t("globals.listCatalogHelp")} />
           <List aria-label={t("globals.listCatalogAria")}>
             <ListItem

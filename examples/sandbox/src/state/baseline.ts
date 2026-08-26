@@ -272,7 +272,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Form clusters · between adjacent FieldStacks (fields → switches; 32dp)",
   "control-row-gap": "Toolbar rhythm · stacked label above controls",
   "control-row-column-gap": "Toolbar rhythm · horizontal label | controls",
-  "control-cluster-gap": "Toolbar rhythm · siblings in one controls cluster",
+  "control-cluster-gap": "Toolbar rhythm · siblings in one controls cluster (4dp)",
   "chrome-icon-gap":
     "Chrome icons · TopAppBar actions + NavigationRail destination gap (shared)",
   "control-row-label": "Toolbar structure · ControlRow fixed label column",
