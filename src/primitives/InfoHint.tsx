@@ -4,6 +4,8 @@ import { IconButton } from "./IconButton";
 import { InfoIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
 
+export type InfoHintTone = "default" | "danger";
+
 export type InfoHintProps = {
   content: ReactNode;
   /**
@@ -17,6 +19,8 @@ export type InfoHintProps = {
   size?: ButtonSize;
   /** Rare override — default follows `--fynns-size-icon` (16dp). */
   iconSize?: number;
+  /** `danger` tints the info glyph for Fail / error detail rows (probe strips). */
+  tone?: InfoHintTone;
   className?: string;
 };
 
@@ -27,8 +31,11 @@ export function InfoHint({
   ariaLabel = "More information",
   size = "md",
   iconSize,
+  tone = "default",
   className,
 }: InfoHintProps) {
+  const toneClass =
+    tone === "danger" ? "fynns-info-hint-trigger--danger" : "";
   const labeled = label != null;
   if (labeled) {
     return (
@@ -38,6 +45,7 @@ export function InfoHint({
           className={[
             "fynns-info-hint-trigger",
             "fynns-info-hint-trigger--labeled",
+            toneClass,
             className ?? "",
           ]
             .filter(Boolean)
@@ -56,9 +64,14 @@ export function InfoHint({
         variant="ghost"
         size={size}
         aria-label={ariaLabel}
-        className={["fynns-info-hint-trigger", "fynns-info-hint-trigger--icon", className ?? ""]
-          .filter(Boolean)
-          .join(" ")}
+        className={[
+            "fynns-info-hint-trigger",
+            "fynns-info-hint-trigger--icon",
+            toneClass,
+            className ?? "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
       >
         <InfoIcon {...(iconSize != null ? { size: iconSize } : {})} />
       </IconButton>
