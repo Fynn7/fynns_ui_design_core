@@ -4799,7 +4799,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <CodeBlock
               variant="editable"
               language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
-              autoGrow={false}
               rows={12}
               defaultValue={FILE_BODY_SAMPLE_MD}
               copyAriaLabel={t("globals.codeBlockCopy")}
@@ -4811,7 +4810,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <CodeBlock
               variant="editable"
               language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
-              autoGrow={false}
               rows={12}
               readOnly
               defaultValue={FILE_BODY_SAMPLE_MD}

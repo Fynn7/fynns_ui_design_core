@@ -59,7 +59,9 @@ failure modes **squashed drawer** + **wrong shell slot**.
 9d. **Suffixed file bodies:** any real extension other than `.txt` / `.text`
     (`.md`, `.xml`, `.py`, `.ts`, `.json`, …) → **`CodeBlock`**, not `Textarea`.
     Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK).
-    Card host → `chrome="plain"`; fill / fixed well → `autoGrow={false}`.
+    Card host → `chrome="plain"`; **default autoGrow** on PageScroll / Card /
+    Dialog (page scrolls). `autoGrow={false}` **only** for height-resolved
+    fill hosts (FullscreenDialog fill, SplitPane, `textarea { height: 100% }`).
     Authority: [`AGENTS.md`](../AGENTS.md) Content density +
     [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
 10. **API-only:** props/children/labels only; never restyle `.fynns-*`. Missing
