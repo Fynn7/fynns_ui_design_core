@@ -45,6 +45,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion linear overflows NavigationDrawer** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
+**twin Button loading rings in one control-cluster** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -1067,6 +1068,33 @@ fillers. Live: sandbox `#rhythm` end-align footer.
 0.4.90. Keep real names on `ControlRow` `label`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: twin Button loading rings in one control-cluster
+
+Symptoms (Models / LLM backend Card foot, Dialog multi-action foot, Probe +
+Start / Copy + Import strips):
+
+- Two sibling `Button`s in one `.fynns-control-cluster--end-align` both show
+  a leading `CircularProgress` (`loading`) at the same time
+- Often both also share one `busy` boolean on every `loading={busy}`
+- Reads as **information redundancy** — two rings for one strip wait
+
+**Cause:** consumers treat “section busy” as “every action button paints
+busy chrome.” Core `Button` `loading` is a **per-control** slot spinner,
+not a section-level BusyRegion. Same philosophy as Loading placement: **one**
+progress chrome per wait host.
+
+**Fix (docs + sandbox ≥ 0.4.146):** track **which** action is in flight
+(`busy === "probe" | "proxy" | null`). Only that Button gets `loading`;
+siblings get `disabled` **without** a spinner. Live: sandbox `#rhythm`
+end-align (click either action) + `#form-recipe` Dialog foot (Extract
+loading; Cancel / Copy / Import disabled, no rings).
+
+**Fix in the consumer:** split shared `busy` into an action id (or
+mutually exclusive flags). Never `loading={busy}` on two cluster siblings.
+Bump / re-paste `consumer-cursor-rule.mdc`. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules + Loading placement **Multi-action
+footer wait**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 

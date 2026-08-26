@@ -887,7 +887,7 @@ const en = {
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
   "globals.rhythmEndAlignHelp":
-    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island).",
+    "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` ring; the sibling stays `disabled` without a second spinner. Never bind the same `busy` to every `loading`.",
   "globals.rhythmEndAlignIconHelp":
     "Icon-only end-align strip: Tooltip → IconButton siblings stay 40dp circles (not crushed ellipses on the full-width row).",
   "globals.rhythmEndAlignIconOpenTip": "Open destination folder",
@@ -968,7 +968,7 @@ const en = {
   "globals.formRecipeReset": "Reset",
   "globals.formRecipeSave": "Save",
   "globals.formRecipeHelp":
-    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. See AGENTS.md Toolbar / unit rhythm.",
+    "Recipe hosts: `Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` intro → `FieldStack`(`FieldBlock` text…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → feedback / foot. Dialog foot: **one** `loading` (Extract); siblings `disabled` without rings. See AGENTS.md Toolbar / unit rhythm.",
   "globals.btnSmall": "Small",
   "globals.btnDefault": "Filled",
   "globals.btnOutlined": "Outlined",
@@ -2669,7 +2669,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmCatalogRefresh": "刷新列表",
   "globals.rhythmCatalogAdd": "新增服务器",
   "globals.rhythmEndAlignHelp":
-    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。",
+    "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。**Busy（硬）：** 点任一按钮 — **最多一颗** `loading` 圈；兄弟只 `disabled`、不画第二圈。禁止 `loading={busy}` 绑到每一颗。",
   "globals.rhythmEndAlignIconHelp":
     "纯 IconButton 贴尾条：Tooltip → IconButton 保持 40dp 正圆（不要在通栏 flex 行上被压成细椭圆）。",
   "globals.rhythmEndAlignIconOpenTip": "打开目标文件夹",
@@ -2749,7 +2749,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeReset": "重置",
   "globals.formRecipeSave": "保存",
   "globals.formRecipeHelp":
-    "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。见 AGENTS.md Toolbar / unit rhythm。",
+    "配方宿主：`Card` | `Collapsible` | `Dialog`(+`showCloseButton`) → `FieldHint` 引言 → `FieldStack`(`FieldBlock` 文本…) → `FieldStack`(`Radio` / `Checkbox` / `Slider`) → `FieldStack`(`ControlBlock`…) → 反馈 / 底栏。Dialog 底栏：**一颗** `loading`（Extract）；兄弟只 `disabled`、不画圈。见 AGENTS.md Toolbar / unit rhythm。",
   "globals.btnSmall": "小号",
   "globals.btnDefault": "实心",
   "globals.btnOutlined": "描边",
