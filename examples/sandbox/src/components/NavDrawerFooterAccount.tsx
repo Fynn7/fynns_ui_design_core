@@ -45,7 +45,11 @@ export function NavDrawerFooterAccount({
         ) : null}
       </div>
       <Tooltip content={settingsTip ?? settingsLabel}>
-        <IconButton aria-label={settingsLabel} onClick={onSettingsClick}>
+        <IconButton
+          size="sm"
+          aria-label={settingsLabel}
+          onClick={onSettingsClick}
+        >
           <SettingsIcon size={16} aria-hidden />
         </IconButton>
       </Tooltip>
