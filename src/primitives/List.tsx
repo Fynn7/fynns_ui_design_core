@@ -74,11 +74,12 @@ export type ListTrailingMetaAlign = "start";
 export type ListProps = HTMLAttributes<HTMLUListElement> & {
   /**
    * Plain `trailingSupportingText` column across sibling rows. Pass `"start"`
-   * for date / kind catalogs so short and long meta share one **start** edge
-   * (`--fynns-list-trailing-meta-min-width`). Default **omit** = content-width
-   * meta hugged to the trailing edge (short status like “Current” stays next
-   * to `--with-end` actions — not stranded in a 17ch band). Live: `#list`
-   * org+dates (`start`) vs Applications-style status+delete (default).
+   * for date / kind catalogs: shared `--fynns-list-trailing-meta-min-width`
+   * column (box start edges align); copy is **end-aligned** inside so glyphs
+   * sit next to `--with-end` actions. Default **omit** = content-width meta
+   * hugged to the trailing edge (short status like “Current” stays next to
+   * actions — not stranded in a 17ch band). Live: `#list` org+dates (`start`)
+   * vs Applications-style status+delete (default).
    */
   trailingMetaAlign?: ListTrailingMetaAlign;
 };

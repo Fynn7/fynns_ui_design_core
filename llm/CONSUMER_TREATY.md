@@ -818,18 +818,35 @@ organization + date range**. Pasteable:
 
 Symptoms (experience / job date columns):
 
-- Full ranges (`2025-10 – 2026-03`) and short open dates (`2023-03`) share a
-  **right** edge; short strings start further right (content-width boxes
-  parked with `margin-inline-start: auto`)
-- Digits do not share a vertical start column across sibling rows
+- Full ranges (`2025-10 – 2026-03`) and short open dates (`2023-03`) sit in
+  **content-width** boxes parked with `margin-inline-start: auto` — short
+  strings start further right; no shared meta **column** across sibling rows
 
-**Cause:** mixed-length `trailingSupportingText` without a shared column.
+**Cause:** mixed-length `trailingSupportingText` without a shared column floor.
 **Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
-since 0.4.119) — shared `--fynns-list-trailing-meta-min-width` + start align.
-Do **not** invent `text-align: end` private CSS. Multi-metric grids stay on
-`.fynns-list-item-trailing-stats`. Live: `#list` org+dates. Authority:
-[`AGENTS.md`](../AGENTS.md). Pasteable:
+since 0.4.119; **glyph end-align inside the column ≥ 0.4.133**) — shared
+`--fynns-list-trailing-meta-min-width` (box start edges align) + end-aligned
+copy so glyphs sit `--fynns-list-end-actions-gap` from `--with-end` actions.
+Do **not** invent private `text-align` / `min-width` on `.fynns-list-item-trailing*`.
+Multi-metric grids stay on `.fynns-list-item-trailing-stats`. Live: `#list`
+org+dates. Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: date glyphs far from --with-end actions
+
+Symptoms (experience / job rows with `trailingMetaAlign="start"` + edit/delete):
+
+- Date string (`2025-10 – 2026-03`) leaves a wide empty band before the first
+  `--with-end` IconButton even though `end-actions-gap` is 4dp
+- Looks like meta→icon spacing is still “too large” after densify
+
+**Cause:** core &lt; **0.4.133** used `text-align: start` inside the 17ch floor —
+proportional digits are narrower than `17ch`, so dead space sat **between
+glyphs and icons** (box→icon was 4dp; text→icon ~17dp).
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.133** (column kept; copy
+end-aligned inside). Keep consumer `trailingMetaAlign="start"` — do not patch
+with app CSS. Live: `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md).
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status meta far from --with-end action
 
@@ -1661,25 +1678,68 @@ Symptoms (MCP / settings destination pages):
   `size="md"` (40dp) — hover disks jump
 - Card `actions`: default InfoHint `md` (40) beside ImportButton default
   `sm` (32) — reverse mismatch on the same screen
+- **Same Card body trailing column:** FieldBlock label-row InfoHint `sm`
+  (left≈810) beside Select-row refresh IconButton default `md` (left≈802) —
+  disks do not share one vertical end edge; ControlRow probe InfoHints at
+  `sm` look aligned with the label “i” but the refresh sits inset
 
 **Cause:** mixing `IconButton` / icon `InfoHint` `size` in one chrome strip
-(or leaving wrapper defaults that disagree). Not a CSS bug.
+**or** across components that share one end-docked trailing column in the
+same Card (FieldHeader / FieldBlock `actions`, `.fynns-control-cluster--end-align`
+refresh, ControlRow trailing InfoHint). End-align + different diameters
+shifts the **left** edge by 8dp (40−32). Core `< 0.4.136` also (a) re-floored
+Tooltip-wrapped end-align IconButtons to 40dp even when `size="sm"` was
+passed, and (b) start-packed form-host ControlRow clusters so shorter
+OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without InfoHint stayed content-width at the end edge under a 32/40dp disk (broken trail column). Bump to ≥ **0.4.137** (icon size lock alone was **0.4.136**).
 
 **Fix in the consumer (hard):**
 1. In one strip (TopAppBar leading+trailing, `.fynns-card-actions`, one
    icon `.fynns-control-cluster`, **or the same page’s catalog ControlRow +
    List trailing**) every `IconButton` and icon `InfoHint` uses the **same**
    `size`.
-2. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
+2. In one Card **body trailing icon column** that spans FieldBlock /
+   FieldHeader `actions` InfoHint + end-align refresh + ControlRow InfoHint —
+   same rule: **one** `size` so end-docked hover disks share one vertical
+   end edge. When the label-row InfoHint is `sm`, pass **`size="sm"`** on
+   the refresh IconButton (and keep probe InfoHints `sm`) — do **not** leave
+   refresh at default `md`. Prefer adjusting the refresh to match the
+   InfoHint column (keep the `sm` InfoHint position).
+3. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
    `size="sm"` on TopAppBar InfoHint when siblings are `md`.
-3. Dense Card heads may use **`sm`** only when **every** icon in that head
+4. Dense Card heads may use **`sm`** only when **every** icon in that head
    is `sm` (pass `size="sm"` on InfoHint too). Prefer matching TopAppBar
-   `md` for Card actions on the same destination page (pass `size="md"` on
-   Import/Export wrappers if their default is `sm`).
-4. Do **not** invent private width CSS on `.fynns-btn--icon`.
+   `md` for Card **head** actions on the same destination page.
+5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
+   fake column alignment.
 
-Live: sandbox `#card` actions strip (InfoHint + IconButtons all `md`).
-Authority: [`AGENTS.md`](../AGENTS.md) **Chrome icon size lock**. Pasteable:
+Also: lone ControlRow `.fynns-table-meta` (`—` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+(label InfoHint + refresh + probe OK/Fail + idle `—` all on the `sm` trail). Authority:
+[`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: form ControlRow label vs Select value text
+
+Symptoms (Models / provider Card):
+
+- Select shell and ControlRow **boxes** share one left edge (DevTools
+  `left` equal on `.fynns-select` and `.fynns-control-row`)
+- Select **value** text (`.fynns-select-trigger-text`) starts ~16–17dp inset
+  (capsule + field-pad + hairline); ControlRow **label** (“Ollama”) sits flush
+  at the shell edge — glyphs look skewed under the field
+- Agent “fixes” by inventing consumer `padding-left` / `margin` on
+  `.fynns-control-row__label`
+
+**Cause:** aligning chrome **boxes** instead of **value text**. Form hosts that
+mix `FieldBlock` + `ControlStack` need the ControlRow label on the same
+text-start column as Input / Select / Autocomplete value ink. Core ≥ **0.4.138**
+sets `--fynns-form-control-text-inset-inline` when the host `:has(.fynns-field-block):has(.fynns-control-stack)`.
+
+**Fix in the consumer (hard):** bump to ≥ **0.4.138**; keep FieldStack +
+ControlStack siblings (no private pad). FieldBlock titles stay flush with the
+control outer edge — do not pad those to match value text.
+
+Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md)
+**Form control text-start**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status icon soup in a control-cluster
@@ -1914,8 +1974,9 @@ the body is **one-color mono** (no keyword / string spans).
 **Cause:** consumer set `label` (filename chrome) but omitted `language` (or
 passed an unknown id). Core does **not** infer language from the label
 extension. **Fix in the consumer:** pass matching `language` / profile; for
-fill editors also `autoGrow={false}`. Prefer `codeLanguageFromPath(path)` when
-the path is known. Authority:
+Prefer `codeLanguageFromPath(path)` when the path is known. Fill / pane editors
+that must stretch to a resolved height also use `autoGrow={false}` — not
+PageScroll Cards. Authority:
 [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) (`label` ≠ `language`) +
 [`CONSUME.md`](CONSUME.md) Hard rule 9b. Pasteable checklist:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
@@ -1936,7 +1997,9 @@ drafts stay on Textarea.
    already names the file; else titled `label` + head).
 2. Pass `language={codeLanguageFromPath(path) ?? undefined}` (or an explicit
    id). `null` from the helper → keep Textarea.
-3. Nesting Card → `chrome="plain"`; fixed / fill well → `autoGrow={false}`.
+3. Nesting Card → `chrome="plain"`; keep **default autoGrow** on PageScroll /
+   Card / Dialog (page scrolls). `autoGrow={false}` **only** for
+   height-resolved fill hosts.
 4. Do **not** use `ChatMarkdown` for the **source** editor of a `.md` file —
    that API renders prose; the file body stays CodeBlock.
 
@@ -1944,6 +2007,56 @@ Live: sandbox Globals `#code-block` (file-body Card). Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Suffixed file body** +
 [`CONSUME.md`](CONSUME.md) Hard rule 9d. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: catalog edit as silent PageScroll replace
+
+Symptoms (Applications / similar main-canvas catalogs): clicking a `ListItem`
+(or `+`) **unmounts** the list and paints a second full `PageScroll` “detail”
+with **no** Dialog close X and **no** TopAppBar back — only a ghost text
+`Button` / `ControlRow` (“All applications” / “全部申请”). Sibling catalogs
+(Experiences / 档案) correctly open `Dialog` + `showCloseButton`. Feels like a
+broken navigation stack and breaks product grammar unity.
+
+**Cause:** consumer invented a third host — silent main-canvas list→detail
+swap — instead of the keep-set overlays. That pattern is **not** nav
+**drill-in** (`#layouts-demo-drill-in`: catalog lives in the drawer body;
+exit = TopAppBar `leading` / `leadingExtra`). A text “back” in the canvas is
+not chrome.
+
+**Fix in the consumer:**
+1. Keep the catalog `List` mounted under `PageScroll`.
+2. Row click / create / edit → **`Dialog` `size="lg"` + `showCloseButton`** +
+   `FieldStack` (same as Experiences / sandbox `#form-recipe`).
+3. If the body is a multi-Card long workflow that cannot fit a centered panel →
+   **`FullscreenDialog`** (leading X) — still an overlay; never a silent
+   PageScroll replace.
+4. Delete → `ConfirmDialog`. Do not invent a destination id per edit, and do
+   not leave one catalog on Dialog while a sibling uses page-swap.
+
+Live: sandbox `#list` status+action (row opens Dialog) + `#form-recipe`
+Dialog host. Authority: [`AGENTS.md`](../AGENTS.md) Hard rules + Content
+density **Catalog row create / edit**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: fixed-height CodeBlock / Textarea on page scroll
+
+Symptoms (Prompts / settings Cards under `PageScroll`): editable
+`CodeBlock` / `Textarea` sits at a **fixed ~400–500px** with a **visible
+inner vertical scrollbar**, while the page canvas barely scrolls — long
+prompts feel trapped in a well.
+
+**Cause:** consumer passed `autoGrow={false}` + large `rows` (or a private
+height) on a **content-sized** PageScroll / Card / Dialog host. Core defaults
+to **autoGrow** so the well grows with content and the **page** scrolls.
+`autoGrow={false}` is for **fill** hosts only (FullscreenDialog fill pane,
+SplitPane editor, `textarea { height: 100% }`).
+
+**Fix in the consumer:** drop `autoGrow={false}` (and oversized fixed `rows`)
+on page catalogs; keep soft `maxHeight` only when a long body must not dominate
+the viewport. Do not invent app CSS height on `.fynns-code-block*`. Live:
+sandbox `#code-block` file-body Card (default autoGrow). Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Suffixed file body**.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: skinny form Dialog (tall FieldStack)
 

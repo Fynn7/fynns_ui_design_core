@@ -964,6 +964,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeCollapsibleOpen, setFormRecipeCollapsibleOpen] =
     useState(true);
   const [formRecipeDialogOpen, setFormRecipeDialogOpen] = useState(false);
+  const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
+  const [listCatalogEditName, setListCatalogEditName] = useState("");
   const formRecipeFieldProps = {
     t,
     region: formRegion,
@@ -3179,15 +3181,66 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     <IconButton
                       variant="ghost"
                       aria-label={t("globals.listCatalogRemove")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        snackbar(t("globals.listCatalogRemoveSnack"));
+                      }}
                     >
                       <TrashIcon />
                     </IconButton>
                   </Tooltip>
                 </div>
               }
-              onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
+              onClick={() => {
+                setListCatalogEditName(t("globals.listStatusActionHeadline"));
+                setListCatalogEditOpen(true);
+              }}
             />
           </List>
+          <Dialog
+            open={listCatalogEditOpen}
+            onOpenChange={setListCatalogEditOpen}
+            title={t("globals.listCatalogEditDialogTitle")}
+            size="lg"
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+          >
+            <FieldStack>
+              <FieldBlock label={t("globals.listCatalogEditDialogName")}>
+                <Input
+                  value={listCatalogEditName}
+                  onChange={(e) => setListCatalogEditName(e.target.value)}
+                />
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.listCatalogEditDialogNotes")}
+                description={t("globals.listCatalogEditDialogNotesHint")}
+              >
+                <Textarea
+                  minRows={3}
+                  placeholder={t("globals.listCatalogEditDialogNotesPh")}
+                />
+              </FieldBlock>
+            </FieldStack>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setListCatalogEditOpen(false)}
+              >
+                {t("globals.formRecipeDialogCancel")}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setListCatalogEditOpen(false);
+                  snackbar(t("globals.listCatalogEditDialogSaved"));
+                }}
+              >
+                {t("globals.formRecipeSave")}
+              </Button>
+            </div>
+          </Dialog>
           <SandboxHelp text={t("globals.listCatalogHelp")} />
           <List aria-label={t("globals.listCatalogAria")}>
             <ListItem
@@ -3829,6 +3882,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 />
               </FieldBlock>
             </FieldStack>
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.fieldHeaderProbeAlpha")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.fieldHeaderProbeOk")}
+                  </span>
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.fieldHeaderProbeAlphaTip")}
+                    ariaLabel={t("globals.fieldHeaderProbeAlphaTip")}
+                  />
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.fieldHeaderProbeBeta")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.fieldHeaderProbeFail")}
+                  </span>
+                  <InfoHint
+                    size="sm"
+                    tone="danger"
+                    content={t("globals.fieldHeaderProbeBetaTip")}
+                    ariaLabel={t("globals.fieldHeaderProbeBetaTip")}
+                  />
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.fieldHeaderProbeIdle")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.fieldHeaderProbeIdleMeta")}
+                  </span>
+                </div>
+              </ControlRow>
+            </ControlStack>
           </Card>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
@@ -4799,8 +4886,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <CodeBlock
               variant="editable"
               language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
-              autoGrow={false}
-              rows={12}
               defaultValue={FILE_BODY_SAMPLE_MD}
               copyAriaLabel={t("globals.codeBlockCopy")}
               aria-label={t("globals.codeBlockFileBodyAria")}
@@ -4811,8 +4896,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <CodeBlock
               variant="editable"
               language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
-              autoGrow={false}
-              rows={12}
               readOnly
               defaultValue={FILE_BODY_SAMPLE_MD}
               copyAriaLabel={t("globals.codeBlockCopy")}

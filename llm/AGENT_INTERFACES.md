@@ -105,21 +105,23 @@ registerHighlightLanguage("gsc", gscProfile);
   result as `language`. Suffixed file-body host rule: [`AGENTS.md`](../AGENTS.md)
   Content density + [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md).
 - `variant="editable"` keeps the same highlighter under a transparent textarea (`value` / `defaultValue` / `onChange`). Local draft + deferred highlight keep the caret snappy; `onChange` is coalesced (~120ms, flushed on blur) and parent updates run in `startTransition` so a large controlled tree does not re-render on every key. Pass non-empty `label` for a titled head; omit `label` for reserved-column copy chrome.
-- Editable overlay: keyword/module spans **must not** bold against the transparent textarea (soft-wrap drift → wrong-line selection). Highlight scroll re-locks after deferred tokenize; overflow observers stay mounted across keystrokes (content remounts do not reset `scrollTop` every paint). Editable height defaults to **autoGrow** (content-sized from `rows` floor `1` up to `maxHeight`). **Fill hosts** (FullscreenDialog body, flex column, host `textarea { height: 100% }`): pass **`autoGrow={false}`**, stretch the CodeBlock root (`flex: 1` / definite height) — core does not put percentage height on the editor (collapses when parent height is indefinite). Do not leave default autoGrow on a fill editor (inline content height fights `height: 100%`).
+- Editable overlay: keyword/module spans **must not** bold against the transparent textarea (soft-wrap drift → wrong-line selection). Highlight scroll re-locks after deferred tokenize; overflow observers stay mounted across keystrokes (content remounts do not reset `scrollTop` every paint). Editable height defaults to **autoGrow** (content-sized from `rows` floor `1` up to `maxHeight`) — prefer this on **PageScroll / Card / Dialog** (page scrolls). **Fill hosts only** (FullscreenDialog body, flex column with definite height, host `textarea { height: 100% }`): pass **`autoGrow={false}`**, stretch the CodeBlock root (`flex: 1` / definite height) — core does not put percentage height on the editor (collapses when parent height is indefinite). Do not leave default autoGrow on a fill editor (inline content height fights `height: 100%`). Do not pin `autoGrow={false}` + large `rows` on page catalogs (inner scrollbar anti-pattern).
 - `wrap` defaults to `true` (soft-wrap long lines; no horizontal scrollbar). Pass `wrap={false}` for classic horizontal `pre` scroll (textarea `wrap="off"`). Readonly and editable share the same class (`--nowrap` when scroll).
 
 ```tsx
 // Wrong — looks like XML but stays plain mono
 <CodeBlock variant="editable" label="system-prompt.xml" value={prompt} />
 
-// Right — language matches content; fill host disables autoGrow
+// Right — language matches; PageScroll/Card keeps default autoGrow
 <CodeBlock
   variant="editable"
   label="system-prompt.xml"
   language="xml"
-  autoGrow={false}
   value={prompt}
 />
+
+// Fill host only
+<CodeBlock variant="editable" language="xml" autoGrow={false} value={prompt} />
 ```
 
 Consumers should own the command list (generate from signatures / JSON). Do not fork core to add a **DSL**; missing **general** languages (e.g. a new markup id) → land in `fynns_ui_design_core` first, then bump the pin.
