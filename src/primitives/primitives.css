@@ -8676,17 +8676,20 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Opt-in date / kind column: List trailingMetaAlign="start" floors a shared
- * min-width so short strings share the **start** edge with longer siblings.
- * Default (no data attr) = content-width meta hugged to the trailing edge —
- * short status (“Current”) stays next to `--with-end` actions. Exclude
- * trailing-stats (fixed tracks of their own).
+ * min-width so sibling rows share one meta **column** (box start edges align).
+ * Copy is **end-aligned inside** that column so glyphs sit
+ * `--fynns-list-end-actions-gap` from `--with-end` actions — never
+ * `text-align: start` dead space after a full date that is still narrower
+ * than `17ch` (proportional digits). Default (no data attr) = content-width
+ * meta hugged to the trailing edge — short status (“Current”) stays next to
+ * actions. Exclude trailing-stats (fixed tracks of their own).
  */
 .fynns-list[data-trailing-meta-align="start"]
   .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
     :has(.fynns-list-item-trailing-stats)
   ) {
   min-width: var(--fynns-list-trailing-meta-min-width);
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .fynns-list-item-trailing-text {
@@ -8704,7 +8707,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   > .fynns-list-item-trailing-text {
   flex: 1 1 auto;
   min-width: 0;
-  text-align: start;
+  text-align: end;
 }
 
 .fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
