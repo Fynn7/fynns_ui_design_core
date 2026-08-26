@@ -28,6 +28,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **org · dates glued in supportingText** /
+**UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
 **status meta far from --with-end action** /
@@ -806,21 +807,39 @@ Symptoms (experience / job / internship catalogs):
 - Org and date range share one muted line under the title; middle-dot / en-dash
   stacks unrelated meta; row looks like a prose blob instead of a list record
 
-**Cause:** joining every secondary field with ` · ` into one `supportingText`
-string instead of using List slots. **Fix in the consumer:** `headline` =
-role/title; `supportingText` = **organization only**; date range →
-`trailingSupportingText` (stays inside the row button — layout separates L/R);
-`trailing` IconButtons stay on the end sibling. **Never** invent a private
-third text column or keep the middle-dot glue. Live: sandbox `#list` org+dates
-sample. Authority: [`AGENTS.md`](../AGENTS.md) Content density **Title +
-organization + date range**. Pasteable:
+**Cause:** joining every secondary field with ` · ` / fancy dashes into one
+`supportingText` string instead of using List slots. **Fix in the consumer:**
+`headline` = role/title; `supportingText` = **organization only**; date range →
+`trailingSupportingText` (ASCII hyphen: `2025-10 - 2026-03`; stays inside the
+row button — layout separates L/R); `trailing` IconButtons stay on the end
+sibling. **Never** invent a private third text column or keep `·` / `–` / `—`
+glue. Live: sandbox `#list` org+dates sample. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Title + organization + date
+range** + Language **UI punctuation**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: UI · — punctuation in chrome
+
+Symptoms (any destination / list / status chrome):
+
+- Visible labels use middle-dot **`·`** as a field joiner (`Name · N`,
+  `Org · dates`, `A · B`)
+- Em-dash **`—`** or decorative en-dash **`–`** appears in chrome strings as
+  prose separators or fancy range marks (not a lone empty trail mark that
+  should be ASCII `-`)
+
+**Cause:** treating UI meta like newspaper / CV body copy instead of structured
+slots. **Fix:** split unrelated fields across keep-set slots / layout; date
+ranges → `2025-10 - 2026-03` or locale words; counts → `badge` or body meta;
+empty trail → ASCII `-`. Docs / source comments may keep English em dashes.
+Live: `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md) Language
+**UI punctuation**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: trailingSupportingText right-hug drift
 
 Symptoms (experience / job date columns):
 
-- Full ranges (`2025-10 – 2026-03`) and short open dates (`2023-03`) sit in
+- Full ranges (`2025-10 - 2026-03`) and short open dates (`2023-03`) sit in
   **content-width** boxes parked with `margin-inline-start: auto` — short
   strings start further right; no shared meta **column** across sibling rows
 
