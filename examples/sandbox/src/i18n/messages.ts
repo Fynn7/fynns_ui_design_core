@@ -667,12 +667,12 @@ const en = {
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink + continuous selection wash (no dark seams on wrapped lines) — use `wrap={false}` for live token colors while typing.",
-  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.gsc",
+  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
     "Soft-wrap editable: select across a wrapped long line — wash must stay continuous (no dark seams between wrap fragments). Overlay stays flat mono while wrapping.",
   "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
   "globals.codeBlockSoftWrapSelCode":
-    "loadvolume D:/datasets/sample-project/_data/volume/volume-heptane/volume-heptane.dat\nresetrotation\naddrotationy 45\n",
+    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -2449,12 +2449,12 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
     "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿 + 连续选区 wash（软换行片段之间无暗缝）— 打字时要 live token 色请 `wrap={false}`。",
-  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.gsc",
+  "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
     "软换行可编辑：跨过换行长行拖选 — wash 须连续（换行片段之间无暗缝）。wrap 时 overlay 保持单色底稿。",
   "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
   "globals.codeBlockSoftWrapSelCode":
-    "loadvolume D:/datasets/sample-project/_data/volume/volume-heptane/volume-heptane.dat\nresetrotation\naddrotationy 45\n",
+    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":

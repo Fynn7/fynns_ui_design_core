@@ -4965,7 +4965,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <CodeBlock
               variant="editable"
               label={t("globals.codeBlockSoftWrapSelLabel")}
-              language="gsc"
+              language="bash"
               copyAriaLabel={t("globals.codeBlockCopy")}
               defaultValue={t("globals.codeBlockSoftWrapSelCode")}
               aria-label={t("globals.codeBlockSoftWrapSelAria")}
