@@ -670,7 +670,7 @@ const en = {
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). Fixed well → `autoGrow={false}`. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
+    "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "Same file body with `readOnly` — full highlight on one pre; drag-select should not show striped / misaligned wash (contrast with overlay while editing).",
   "globals.diffViewHelp":
@@ -762,7 +762,13 @@ const en = {
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton`) — not `Select.trailing`.",
+    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Trailing icon column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints in this Card share **`sm`** so end-docked hover disks share one vertical end edge — never default `md` refresh under `sm` “i”.",
+  "globals.fieldHeaderProbeAlpha": "Alpha service",
+  "globals.fieldHeaderProbeBeta": "Beta service",
+  "globals.fieldHeaderProbeOk": "OK",
+  "globals.fieldHeaderProbeFail": "Fail",
+  "globals.fieldHeaderProbeAlphaTip": "Sample reachable — short tip only.",
+  "globals.fieldHeaderProbeBetaTip": "Sample unreachable — reason stays in the tip.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -910,7 +916,7 @@ const en = {
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
   "globals.formRecipeHostDialog":
-    "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays.",
+    "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). **Also the default host for in-canvas catalog create/edit** (List stays mounted — see `#list` status+action). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays.",
   "globals.formRecipeDialogOpen": "Open Dialog form",
   "globals.formRecipeDialogCancel": "Cancel",
   "globals.formRecipeDialogCopyPrompt": "Copy browser prompt",
@@ -1419,7 +1425,7 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listOrgDatesHelp":
-    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** so short open dates share a start edge with full ranges (`--fynns-list-trailing-meta-min-width`). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. See AGENTS.md Content density.",
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **end-aligned inside** so glyphs sit `--fynns-list-end-actions-gap` from `--with-end` actions (≥ 0.4.133). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. See AGENTS.md Content density.",
   "globals.listOrgDatesAria": "Sample organization and date-range list rows",
   "globals.listOrgDatesHeadline":
     "Business intelligence intern, sample corp",
@@ -1432,10 +1438,17 @@ const en = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 – 2025-03",
   "globals.listStatusActionHelp":
-    "Short status beside `--with-end` actions — leave **`trailingMetaAlign` unset** so `trailingSupportingText` stays content-width and hugs the trailing edge (status sits next to the reveal IconButton on hover). Do **not** force `trailingMetaAlign=\"start\"` here — that floors a 17ch band and parks short labels far from the action.",
+    "Short status beside `--with-end` actions — leave **`trailingMetaAlign` unset** so `trailingSupportingText` stays content-width and hugs the trailing edge (status sits next to the reveal IconButton on hover). Do **not** force `trailingMetaAlign=\"start\"` here — that floors a 17ch band and parks short labels far from the action. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo) — never silent-replace `PageScroll` with a detail whose only exit is a ghost text “back”. Multi-Card long workflows may escalate to `FullscreenDialog`. See AGENTS.md Content density **Catalog row create / edit**.",
   "globals.listStatusActionAria": "Sample status and delete list row",
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
+  "globals.listCatalogEditDialogTitle": "Edit project",
+  "globals.listCatalogEditDialogName": "Name",
+  "globals.listCatalogEditDialogNotes": "Notes",
+  "globals.listCatalogEditDialogNotesHint": "Optional notes for this sample — not persisted.",
+  "globals.listCatalogEditDialogNotesPh": "Add a short note…",
+  "globals.listCatalogEditDialogSaved": "Saved sample project",
+  "globals.listCatalogRemoveSnack": "Removed sample entry",
   "globals.listCatalogHelp":
     "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed (balanced L/R breath); hover / focus-within shows trailing; touch always visible. Reveal clears copy→first action with `--fynns-list-end-actions-gap` (4dp = control-cluster-gap, ≥ 0.4.123) — ellipsis must not kiss the first IconButton disk. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
@@ -2416,7 +2429,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
-    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。固定井 → `autoGrow={false}`。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
+    "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "同一文件正文 + `readOnly` — 完整高亮单层 pre；拖选不应出现条纹/错位 wash（可与上方可编辑 overlay 对照）。",
   "globals.diffViewHelp":
@@ -2508,7 +2521,13 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton`）— 不要用 `Select.trailing`。",
+    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton` **`size=\"sm\"`**，当标签行 InfoHint 为 `sm`）— 不要用 `Select.trailing`。**尾部图标列（强制）：** 本 Card 内标签行「i」+ 刷新 + ControlRow 探测「i」共用 **`sm`**，贴尾 hover 盘共一条竖线 — 禁止默认 md 刷新顶开 sm「i」。",
+  "globals.fieldHeaderProbeAlpha": "甲服务",
+  "globals.fieldHeaderProbeBeta": "乙服务",
+  "globals.fieldHeaderProbeOk": "OK",
+  "globals.fieldHeaderProbeFail": "Fail",
+  "globals.fieldHeaderProbeAlphaTip": "示例可达 — 仅短提示。",
+  "globals.fieldHeaderProbeBetaTip": "示例不可达 — 原因放在 tip 里。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -2656,7 +2675,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
   "globals.formRecipeHostDialog":
-    "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。",
+    "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。**也是主画布目录创建/编辑的默认宿主**（List 保持挂载 — 见 `#list` status+action）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。",
   "globals.formRecipeDialogOpen": "打开 Dialog 表单",
   "globals.formRecipeDialogCancel": "取消",
   "globals.formRecipeDialogCopyPrompt": "复制浏览器 prompt",
@@ -3160,7 +3179,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listOrgDatesHelp":
-    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**，短开放日期与完整区间共起笔（`--fynns-list-trailing-meta-min-width`）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。见 AGENTS.md Content density。",
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内右对齐，字形贴 `--with-end`，≥ 0.4.133）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。见 AGENTS.md Content density。",
   "globals.listOrgDatesAria": "组织与日期区间列表示例",
   "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
   "globals.listOrgDatesOrg": "Acme",
@@ -3172,10 +3191,17 @@ const zh: Record<MessageKey, string> = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 – 2025-03",
   "globals.listStatusActionHelp":
-    "短状态 + `--with-end` 动作 — **不要**设 `trailingMetaAlign`，让 `trailingSupportingText` 保持内容宽并贴尾（悬停揭示时状态紧挨 IconButton）。此处强制 `trailingMetaAlign=\"start\"` 会铺 17ch 空带，把短标签甩离动作。",
+    "短状态 + `--with-end` 动作 — **不要**设 `trailingMetaAlign`，让 `trailingSupportingText` 保持内容宽并贴尾（悬停揭示时状态紧挨 IconButton）。此处强制 `trailingMetaAlign=\"start\"` 会铺 17ch 空带，把短标签甩离动作。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）— 禁止静默把 `PageScroll` 换成只有 ghost「返回」文案的假详情。多 Card 长工作流可升 `FullscreenDialog`。见 AGENTS.md Content density **Catalog row create / edit**。",
   "globals.listStatusActionAria": "状态与删除列表示例",
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
+  "globals.listCatalogEditDialogTitle": "编辑项目",
+  "globals.listCatalogEditDialogName": "名称",
+  "globals.listCatalogEditDialogNotes": "备注",
+  "globals.listCatalogEditDialogNotesHint": "本样例可选备注 — 不会持久化。",
+  "globals.listCatalogEditDialogNotesPh": "写一句备注…",
+  "globals.listCatalogEditDialogSaved": "已保存示例项目",
+  "globals.listCatalogRemoveSnack": "已移除示例条目",
   "globals.listCatalogHelp":
     "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽（左右边距更均衡）；悬停/聚焦内显示 trailing；触摸端常显。揭示时文案→首颗动作盘间距 `--fynns-list-end-actions-gap`（4dp = control-cluster-gap，≥ 0.4.123）— 省略号不得贴住首颗 IconButton。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
