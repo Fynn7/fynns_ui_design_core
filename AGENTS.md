@@ -1505,6 +1505,11 @@ classes.
   **Collapsed ChatComposer shell** uses `--fynns-chat-composer-pad-inline` /
   `pad-block` (~6dp equal inset around the 32dp Send/Stop circle — not
   capsule-chrome). Text-only start (no leading) adds pad so copy lands at
+Collapsed **with**
+  leading + Send: optical gap is **leading glyph → field** (not IconButton
+  hit box → field); core pads `.fynns-chat-composer-primary-slot` by
+  `composer-glyph-inset` so **field → filled Send disk** matches that glyph
+  gap (≥ 0.4.140 — `llm/CHAT_COMPOSER_LAYOUT.md`).
   `strip-pad-inline` (`strip − composer-pad-inline`).
   **Capsule chrome** (SearchBar field next to IconButtons — ChatGPT-style
   flush): `--fynns-layout-capsule-chrome-pad-inline` (4dp). Do **not** use

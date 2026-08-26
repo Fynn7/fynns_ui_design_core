@@ -13278,6 +13278,17 @@ a.fynns-chat-activity-artifact:hover {
   margin-inline-start: auto;
 }
 
+/*
+ * Collapsed optical rhythm (hard): leading visual mass is the **glyph**, not
+ * the 32dp hit box. Body `composer-gap` alone makes field→filled Send disk
+ * match IconButton→field (too tight vs glyph→field). Add `glyph-inset` so
+ * field→primary disk == leading glyph→field. Expanded toolbar is
+ * space-between — do not apply. Spec: llm/CHAT_COMPOSER_LAYOUT.md.
+ */
+.fynns-chat-composer-shell:not([data-expanded]) .fynns-chat-composer-primary-slot {
+  padding-inline-start: var(--fynns-chat-composer-glyph-inset);
+}
+
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-leading,
 .fynns-chat-composer-shell[data-expanded] .fynns-chat-composer-primary-slot {
   order: unset;

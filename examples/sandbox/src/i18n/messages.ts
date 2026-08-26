@@ -1327,7 +1327,7 @@ const en = {
   "globals.chatComposerMultiLabel": "Composer · multiline (expanded toolbar)",
   "globals.chatComposerMultiAria": "Multiline message",
   "globals.chatComposerMultiHelp":
-    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell pad = strip − glyph-inset, textarea glyph-inset so copy aligns with + / Send glyphs; height follows `scrollHeight` (remeasures after expand morph); text line ~22dp. Collapsed empty shells stay one ~44dp row (`display: contents`; 32dp controls + 6dp pad — Cursor-dense circle, not SearchBar). Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
+    "Expanded `ChatComposer`: full-width text above a bottom toolbar (leading | Send); shell pad = strip − glyph-inset, textarea glyph-inset so copy aligns with + / Send glyphs; height follows `scrollHeight` (remeasures after expand morph); text line ~22dp. Collapsed empty shells stay one ~44dp row (`display: contents`; 32dp controls + 6dp pad — Cursor-dense circle, not SearchBar). Collapsed optical: **leading glyph → field** == **field → filled Send disk** (not IconButton hit box → field) — core ≥ 0.4.140. Spec: `llm/CHAT_COMPOSER_LAYOUT.md`.",
   "globals.chatSend": "Send",
   "globals.chatStop": "Stop generating",
   "globals.chatScrollBottom": "Scroll to bottom",
@@ -3086,7 +3086,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatComposerMultiLabel": "Composer · 多行（展开底栏）",
   "globals.chatComposerMultiAria": "多行消息",
   "globals.chatComposerMultiHelp":
-    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距 = strip − glyph-inset，textarea glyph-inset 与 + / Send 字形光学对齐；高度跟 `scrollHeight`（展开 morph 后重测）；正文字行约 22dp。空/单行塌缩为约 44dp 一行（toolbar `display: contents`；32dp 控件 + 6dp pad，Cursor 密排圆钮，非 SearchBar）。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
+    "展开态 `ChatComposer`：全文宽文本在上，底栏工具 | Send；壳距 = strip − glyph-inset，textarea glyph-inset 与 + / Send 字形光学对齐；高度跟 `scrollHeight`（展开 morph 后重测）；正文字行约 22dp。空/单行塌缩为约 44dp 一行（toolbar `display: contents`；32dp 控件 + 6dp pad，Cursor 密排圆钮，非 SearchBar）。塌缩光学：**leading 字形 → field** == **field → 实心 Send 圆盘**（不是 IconButton 热区 → field）— core ≥ 0.4.140。规格：`llm/CHAT_COMPOSER_LAYOUT.md`。",
   "globals.chatSend": "发送",
   "globals.chatStop": "停止生成",
   "globals.chatScrollBottom": "滚到最新",
