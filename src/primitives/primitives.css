@@ -8767,7 +8767,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * Overlay reveal (ChatMessage / Fluent / Cursor): idle actions do not reserve
  * a flex slot so short headlines fill the row; hover / focus-within shows the
  * cluster. Touch / coarse pointer keeps actions always visible.
- * Reserve = two md IconButtons + cluster gap + list pad-inline.
+ * Reserve = end-actions-gap (copy → first disk) + two md IconButtons +
+ * cluster gap + list pad-inline.
  */
 .fynns-list-item-host--with-end {
   position: relative;
@@ -8810,8 +8811,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   > .fynns-list-item-row
   > .fynns-list-item {
   padding-inline-end: calc(
-    (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
-      var(--fynns-list-pad-inline)
+    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
   );
 }
 
@@ -8826,8 +8827,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-list-item-host--with-end > .fynns-list-item,
   .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
     padding-inline-end: calc(
-      (var(--fynns-size-icon-target) * 2) + var(--fynns-layout-control-cluster-gap) +
-        var(--fynns-list-pad-inline)
+      var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+        var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
     );
     transition: none;
   }

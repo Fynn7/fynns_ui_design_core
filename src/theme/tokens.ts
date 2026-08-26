@@ -927,6 +927,14 @@ export const LIST_TOKENS = {
    */
   gap: "var(--fynns-space-lg)",
   /**
+   * Copy → overlay-reveal trailing IconButton cluster (`--with-end` hover /
+   * focus / touch). Aliases `--fynns-navdrawer-pad-inline` (**10dp**) — same
+   * breath as footer Avatar → drawer start edge. Do **not** calibrate to the
+   * footer settings gear optical end inset (negative margin on the sm disk).
+   * Live: sandbox `#list` path catalog.
+   */
+  "end-actions-gap": "var(--fynns-navdrawer-pad-inline)",
+  /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
    */
