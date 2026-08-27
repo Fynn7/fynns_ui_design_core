@@ -1555,7 +1555,7 @@ const en = {
     "Flat Timeline (default catalog): row click → Dialog. Edit + delete live **in the Dialog foot** — **not** `--with-end` hover IconButtons, **not** leading kind glyphs (default disc). Slots: `headline` / org `supportingText` / dates `trailingSupportingText` + `trailingMetaAlign=\"start\"` (**start-ink** date column — short and long dates share one glyph start edge). Disc mid locks to the **headline** line (`node-band`) — not mid title+org.",
   "globals.timelineFlatAria": "Sample flat timeline",
   "globals.timelineDetailHelp":
-    "Timeline with detail: same rail; `detail` / `expanded` shows short **read** bullets. No row action icons — expand only.",
+    "Timeline with detail: same rail; `detail` / `expanded` shows short **read** bullets. Expand chevron tucks into the pad band so **headlines share the flat start edge** (≥ 0.5.15). No row action icons — expand only.",
   "globals.timelineDetailAria": "Sample expandable timeline",
   "globals.timelineEditDialogTitle": "Edit sample item",
   "globals.timelineEditDialogName": "Title",
@@ -3360,7 +3360,7 @@ const zh: Record<MessageKey, string> = {
     "扁平 Timeline（默认目录）：行点击 → Dialog。编辑 / 删除在 **Dialog 脚** — **禁止** `--with-end` 悬停 IconButton，**禁止** leading 种类图标（默认圆点）。槽位：`headline` / 组织 `supportingText` / 日期 `trailingSupportingText` + `trailingMetaAlign=\"start\"`（日期列 **左齐墨迹** — 短/长日期共用起点）。圆点中线对齐 **标题行**（`node-band`）— 不是标题+组织整块中线。",
   "globals.timelineFlatAria": "扁平时间线示例",
   "globals.timelineDetailHelp":
-    "带 detail 的 Timeline：与扁平同竖轨；`detail` / `expanded` 显示短 **只读** bullets。无行动作图标 — 仅展开。",
+    "带 detail 的 Timeline：与扁平同竖轨；`detail` / `expanded` 显示短 **只读** bullets。展开 chevron 收进 pad 带，**标题与扁平行共起点**（≥ 0.5.15）。无行动作图标 — 仅展开。",
   "globals.timelineDetailAria": "可展开时间线示例",
   "globals.timelineEditDialogTitle": "编辑示例条目",
   "globals.timelineEditDialogName": "标题",

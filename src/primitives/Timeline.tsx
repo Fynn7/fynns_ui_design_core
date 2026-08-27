@@ -100,7 +100,9 @@ export type TimelineItemProps = Omit<
  * edit / delete in the Dialog foot (`ConfirmDialog` for destroy) — do
  * **not** park `--with-end` hover IconButtons on the rail. Prefer omit
  * `leading` (default disc). Disc mid aligns to the **headline** line
- * (`--fynns-timeline-node-band`, ≥ 0.5.14). Live: sandbox `#timeline`.
+ * (`--fynns-timeline-node-band`, ≥ 0.5.14). Expandable chevron tucks into
+ * `pad-inline-start` so flat ↔ detail headlines share one start (≥ 0.5.15).
+ * Live: sandbox `#timeline`.
  */
 export const TimelineItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,

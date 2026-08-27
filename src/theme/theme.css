@@ -503,7 +503,8 @@
   --fynns-timeline-rail-width: var(--fynns-border-hairline);
   --fynns-timeline-rail-color: var(--fynns-color-border-strong);
   --fynns-timeline-gap: var(--fynns-list-gap);
-  --fynns-timeline-chevron-gap: var(--fynns-list-gap);
+  --fynns-timeline-chevron-inset: var(--fynns-space-xs);
+  --fynns-timeline-chevron-gap: calc(var(--fynns-timeline-pad-inline-start) - var(--fynns-timeline-chevron-inset) - var(--fynns-size-icon));
   --fynns-timeline-hover-inset-inline-start: calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap));
   --fynns-timeline-pad-block: var(--fynns-list-pad-block);
   --fynns-timeline-pad-inline-start: calc(var(--fynns-radius-md) + var(--fynns-space-xs));
@@ -512,7 +513,7 @@
   --fynns-timeline-trailing-meta-min-width: var(--fynns-list-trailing-meta-min-width);
   --fynns-timeline-content-gap: var(--fynns-list-content-gap);
   --fynns-timeline-detail-pad-block: var(--fynns-space-sm);
-  --fynns-timeline-detail-pad-inline-start: calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start) + var(--fynns-size-icon) + var(--fynns-timeline-chevron-gap));
+  --fynns-timeline-detail-pad-inline-start: calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start));
   --fynns-focus-ring-width: 2px;
   --fynns-focus-ring-offset-control: 2px;
   --fynns-focus-ring-offset-input: 1px;

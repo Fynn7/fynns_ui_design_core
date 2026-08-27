@@ -859,16 +859,32 @@ never revive `list-detail` as recommended. Gate:
 
 Symptoms (`Timeline` / Experiences-style dated rows):
 
-- Headline / org sit ~4dp from the node glyph or expand chevron (reads glued)
+- Headline / org sit ~4dp from the **node** glyph (reads glued to the rail)
 - Consumer tries private `margin-inline-start` / pad on `.fynns-timeline-*`
 
-**Cause:** early Timeline used `space-md` (12dp) for node→copy and
-`control-cluster-gap` (4dp) for chevron→copy — denser than List
-`--fynns-list-gap` (**16dp**). **Fix (core ≥ 0.5.6):**
-`--fynns-timeline-gap` and `--fynns-timeline-chevron-gap` both alias
-`list-gap` (**16dp**); detail pad uses `chevron-gap`. Consumers bump only —
-do **not** restyle `.fynns-timeline-*`. Live: `#timeline`. Authority:
-[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline**.
+**Cause:** early Timeline used `space-md` (12dp) for node→copy. **Fix (core
+≥ 0.5.6):** `--fynns-timeline-gap` aliases `list-gap` (**16dp**). Expandable
+chevron is **not** a second 16dp column beside the copy — it tucks into
+`pad-inline-start` (≥ 0.5.15). Consumers bump only — do **not** restyle
+`.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
+Content density **Chronological timeline**.
+
+## Failure mode this treaty targets: Timeline flat vs detail headline stagger
+
+Symptoms (sandbox `#timeline` flat shell next to with-`detail` shell):
+
+- Flat headlines start ~32dp left of expandable headlines (chevron + 16dp gap
+  shoved the title)
+- Consumer tries private negative margin on `.fynns-timeline-item-chevron` /
+  pad on `.fynns-timeline-item-copy`
+
+**Cause:** expandable rows painted chevron **before** the copy after a full
+`pad-inline-start`, then added `chevron-gap` (= list-gap 16dp). **Fix (core
+≥ 0.5.15):** chevron lives **inside** the pad band —
+`chevron-inset` (wash→glyph breath) + icon + `chevron-gap` (remainder) =
+`pad-inline-start`, so flat and detail **headline** starts match; detail
+bullets use the same start (no extra icon+gap in `detail-pad-inline-start`).
+Consumers bump only. Live: `#timeline`.
 
 ## Failure mode this treaty targets: Timeline hover pill kissing the node
 

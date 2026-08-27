@@ -196,10 +196,20 @@
   flex: 1 1 auto;
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--fynns-timeline-chevron-gap);
+  gap: 0;
   min-width: 0;
-  /* Inner breath vs hover wash curve (chevron/copy — ≥ 0.5.10). */
+  /* Flat: pad → copy. Detail: see `:has(> .chevron)` — pad band hosts glyph. */
   padding-inline-start: var(--fynns-timeline-pad-inline-start);
+}
+
+/*
+ * Expandable: tuck chevron into the pad-inline-start band so headline /
+ * copy share the same start as flat rows (was icon + 16dp gap push).
+ * `chevron-inset` keeps the glyph off the hover wash curve.
+ */
+.fynns-timeline-item-content:has(> .fynns-timeline-item-chevron) {
+  padding-inline-start: var(--fynns-timeline-chevron-inset);
+  gap: var(--fynns-timeline-chevron-gap);
 }
 
 .fynns-timeline-item-chevron {

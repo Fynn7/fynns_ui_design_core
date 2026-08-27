@@ -1632,10 +1632,17 @@ export const TIMELINE_TOKENS = {
    */
   gap: "var(--fynns-list-gap)",
   /**
-   * Expandable chevron | copy gutter. Same 16dp as `gap` (not
-   * `control-cluster-gap` 4dp — that crushed `#timeline` with-detail rows).
+   * Hover wash → expandable chevron inset (keeps the glyph off the wash
+   * curve). Chevron lives **inside** `pad-inline-start` so flat and detail
+   * headlines share one start edge (≥ 0.5.15 / `#timeline`).
    */
-  "chevron-gap": "var(--fynns-list-gap)",
+  "chevron-inset": "var(--fynns-space-xs)",
+  /**
+   * Expandable chevron | copy — remainder of `pad-inline-start` after inset
+   * + icon so copy lines up with flat (no-chevron) headlines.
+   */
+  "chevron-gap":
+    "calc(var(--fynns-timeline-pad-inline-start) - var(--fynns-timeline-chevron-inset) - var(--fynns-size-icon))",
   /**
    * Hover wash `inset-inline-start` — after node column **and** `gap` so the
    * pill does not kiss the node (was `node-col` only → wash filled the gutter).
@@ -1649,11 +1656,11 @@ export const TIMELINE_TOKENS = {
    */
   "pad-block": "var(--fynns-list-pad-block)",
   /**
-   * Inner breath inside the hover wash (content start — not the node).
-   * `radius-md` + `space-xs` (**24dp**) so the first child (chevron or copy)
-   * clears the wash curve — List `pad-inline` alone (**16dp**) is shorter
-   * than the pill radius (**20dp**) and still reads flush (≥ 0.5.10 /
-   * `#timeline`).
+   * Inner breath inside the hover wash to the **headline / copy** start
+   * (not the node). `radius-md` + `space-xs` (**24dp**). Flat rows pad
+   * content directly; expandable rows tuck the chevron into this band
+   * (`chevron-inset` + icon + `chevron-gap` = this token) so title ink
+   * matches (≥ 0.5.10 pad / ≥ 0.5.15 chevron tuck / `#timeline`).
    */
   "pad-inline-start":
     "calc(var(--fynns-radius-md) + var(--fynns-space-xs))",
@@ -1674,11 +1681,11 @@ export const TIMELINE_TOKENS = {
   "detail-pad-block": "var(--fynns-space-sm)",
   /**
    * Align detail bullets with the headline start (node | gap |
-   * pad-inline-start | chevron | chevron-gap | copy). Expandable rows
-   * always paint the chevron column.
+   * pad-inline-start). Expandable chevron tucks into the pad band
+   * (≥ 0.5.15) — do **not** add icon + chevron-gap again.
    */
   "detail-pad-inline-start":
-    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start) + var(--fynns-size-icon) + var(--fynns-timeline-chevron-gap))",
+    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start))",
 };
 
 /**
