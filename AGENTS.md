@@ -1,4 +1,4 @@
-﻿# AGENTS.md — @fynns/ui-design-core
+# AGENTS.md — @fynns/ui-design-core
 
 Authoritative guide for humans and AI agents working with the fynns UI design
 system. This is the **single source of truth** for the design language; other
@@ -1245,13 +1245,13 @@ classes.
   prefer `codeLanguageFromPath(path)` for suffixed file bodies (`.txt` /
   extensionless → `null` → Textarea OK); **`readOnly`** on `variant="editable"`
   renders a **single** `.fynns-code-block-pre` (full token colors + native
-  `::selection` — not the textarea overlay). Soft-wrap **edit** overlay skips
-  token spans (flat mono highlight) so selection/caret stay column-locked, and
-  paints selection as `.fynns-code-block-sel` (continuous wash — no dark seams
-  between soft-wrap fragments; native textarea `::selection` is transparent
-  in that mode); use `wrap={false}` when live token colors must show while typing; editable highlight spans inherit
-  textarea font-weight (no bold keyword/module metrics — soft-wrap must
-  match caret); `wrap` defaults
+  `::selection` — not the textarea overlay). Soft-wrap **edit** uses a
+  **single visible textarea** (no highlight `<pre>`) — Chromium soft-wraps
+  textarea vs pre at different breakpoints (dual-layer → ghost glyphs);
+  native `::selection` on the ink. Use `wrap={false}` when live token colors
+  must show while typing (transparent caret over dual-layer highlight);
+  editable highlight spans inherit textarea font-weight (no bold
+  keyword/module metrics). `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); vertical thumb only when content exceeds the host
   (`data-scrollable`, same gate as ChatComposer — avoids early bars from

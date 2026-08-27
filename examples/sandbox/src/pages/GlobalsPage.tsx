@@ -5111,7 +5111,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
-          {/* Narrow host so the long loadvolume path soft-wraps (selection wash demo). */}
+          {/* Narrow host so the long path soft-wraps (single-textarea layer). */}
           <div style={{ maxWidth: "22rem" }}>
             <CodeBlock
               variant="editable"

@@ -1599,11 +1599,13 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88):** `readOnly` on `variant="editable"` → **single**
-`.fynns-code-block-pre` (full token colors + native selection). Active edit +
-`wrap` → flat mono highlight layer (no token spans); `wrap={false}` when live
-token colors must show while typing. Live: Globals `#code-block` file-body +
-readOnly pair.
+**Fix in core (≥ 0.4.88; soft-wrap single layer ≥ **0.5.22**):** `readOnly` on
+`variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
+native selection). Active edit + `wrap` → **single visible textarea** (no
+highlight `<pre>` — Chromium soft-wraps textarea≠pre → dual-layer ghost
+glyphs); `wrap={false}` when live token colors must show while typing
+(dual-layer under transparent caret). Live: Globals `#code-block` soft-wrap
+sample + file-body + readOnly pair.
 **Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
 `FileBodyCodeBlock`); do not patch selection in app CSS. Bump
 `@fynn7/ui-design-core`. Pasteable:

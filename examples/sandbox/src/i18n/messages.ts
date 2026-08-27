@@ -666,10 +666,10 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). While editing with wrap, overlay uses flat mono ink + continuous selection wash (no dark seams on wrapped lines) — use `wrap={false}` for live token colors while typing.",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). Soft-wrap edit is a **single visible textarea** (no dual-layer ghost glyphs) — use `wrap={false}` for live token colors while typing.",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "Soft-wrap editable: select across a wrapped long line — wash must stay continuous (no dark seams between wrap fragments). Overlay stays flat mono while wrapping.",
+    "Soft-wrap editable: long path wraps in a narrow host — single textarea layer (no ghost glyphs). Select across a wrap; native selection wash. Live tokens while typing → `wrap={false}`.",
   "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
   "globals.codeBlockSoftWrapSelCode":
     "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
@@ -2477,10 +2477,10 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。编辑且 wrap 时 overlay 用单色底稿 + 连续选区 wash（软换行片段之间无暗缝）— 打字时要 live token 色请 `wrap={false}`。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。软换行编辑为**单层可见 textarea**（无双层幽灵字）— 打字时要 live token 色请 `wrap={false}`。",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "软换行可编辑：跨过换行长行拖选 — wash 须连续（换行片段之间无暗缝）。wrap 时 overlay 保持单色底稿。",
+    "软换行可编辑：窄宿主长路径换行 — 单层 textarea（无幽灵字）。跨换行拖选走原生选区。打字时要 live token 色 → `wrap={false}`。",
   "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
   "globals.codeBlockSoftWrapSelCode":
     "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
