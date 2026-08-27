@@ -21,9 +21,11 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
    (`headline` / org `supportingText` / dates `trailingSupportingText` +
    `trailingMetaAlign="start"` — **start-ink** date column ≥ 0.5.13). Live
    `#timeline`.
-2. Node→copy (`--fynns-timeline-gap`) and expandable chevron→copy
-   (`--fynns-timeline-chevron-gap`) both alias `--fynns-list-gap` (**16dp**) —
-   same breath as List leading→copy (≥ 0.5.6). Hover pill height comes from
+2. Node→copy (`--fynns-timeline-gap`) aliases `--fynns-list-gap` (**16dp**) —
+   same breath as List leading→copy (≥ 0.5.6). Expandable chevron→copy
+   (`--fynns-timeline-chevron-gap`) is **not** that alias — it is the
+   remainder of `pad-inline-start` after `chevron-inset` + icon (~4dp,
+   ≥ **0.5.15**). Hover pill height comes from
    `--fynns-timeline-pad-block` → `--fynns-list-pad-block` (**8dp**, ≥ 0.5.7)
    — never crush to `space-xs` (**4dp**). Hover wash starts at
    `--fynns-timeline-hover-inset-inline-start` (`node-col` + `gap`, ≥ 0.5.8)
@@ -58,8 +60,10 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
 - **`--with-end` hover edit/delete IconButtons** on Timeline as the default
   catalog recipe (List path-catalog chrome on a rail) — actions belong in the
   Dialog after row click
-- Crushing node/chevron→copy to `control-cluster-gap` (**4dp**) or private
-  pad/margin on `.fynns-timeline-*`
+- Crushing **node→copy** (`--fynns-timeline-gap`) to `control-cluster-gap`
+  (**4dp**) or private pad/margin on `.fynns-timeline-*` (chevron→copy
+  remainder ~4dp after tuck is intentional ≥ 0.5.15 — do not “restore” it
+  to 16dp)
 - Consumer product strings (résumé / employer / university / CV Generator
   Experiences) in Globals `#timeline`
 - Shipping Timeline / density fixes **only** in a consumer — constrain core +

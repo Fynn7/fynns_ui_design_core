@@ -879,12 +879,13 @@ Symptoms (sandbox `#timeline` flat shell next to with-`detail` shell):
   pad on `.fynns-timeline-item-copy`
 
 **Cause:** expandable rows painted chevron **before** the copy after a full
-`pad-inline-start`, then added `chevron-gap` (= list-gap 16dp). **Fix (core
-≥ 0.5.15):** chevron lives **inside** the pad band —
-`chevron-inset` (wash→glyph breath) + icon + `chevron-gap` (remainder) =
-`pad-inline-start`, so flat and detail **headline** starts match; detail
-bullets use the same start (no extra icon+gap in `detail-pad-inline-start`).
-Consumers bump only. Live: `#timeline`.
+`pad-inline-start`, then added a second `chevron-gap` that still aliased
+list-gap (**16dp**). **Fix (core ≥ 0.5.15):** chevron lives **inside** the
+pad band — `chevron-inset` (wash→glyph breath) + icon + `chevron-gap`
+(remainder, ~4dp — **not** list-gap) = `pad-inline-start`, so flat and
+detail **headline** starts match; detail bullets use the same start (no
+extra icon+gap in `detail-pad-inline-start`). Consumers bump only. Live:
+`#timeline`.
 
 ## Failure mode this treaty targets: Timeline hover pill kissing the node
 

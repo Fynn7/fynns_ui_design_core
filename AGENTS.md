@@ -1314,9 +1314,11 @@ classes.
   trailingMetaAlign? }` (chronological history **rail** — node + vertical
   line; optional expandable `detail` bullets; org+dates same slots as List.
   **Not** List pills, ChatActivity, Tree, or lettered A/B/C / list-detail
-  shells. Node→copy / chevron→copy alias `--fynns-list-gap` (**16dp**, ≥ 0.5.6);
-  `pad-block` → List (**8dp**, ≥ 0.5.7); hover wash starts at `node-col` +
-  `gap` (≥ 0.5.8); content **inner** `pad-inline-start` =
+  shells. Node→copy (`--fynns-timeline-gap`) aliases `--fynns-list-gap`
+  (**16dp**, ≥ 0.5.6); expandable chevron→copy is **not** that alias —
+  `chevron-gap` is the pad-band remainder after `chevron-inset` + icon
+  (≥ **0.5.15**, ~4dp). `pad-block` → List (**8dp**, ≥ 0.5.7); hover wash
+  starts at `node-col` + `gap` (≥ 0.5.8); content **inner** `pad-inline-start` =
   `radius-md` + `space-xs` (**24dp**, ≥ 0.5.10) so **copy / headline** clear the
   wash curve — never flush to the pill’s rounded start. Expandable chevron
   tucks into that pad band (`chevron-inset` + icon + `chevron-gap`, ≥ **0.5.15**)
