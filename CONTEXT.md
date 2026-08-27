@@ -112,3 +112,7 @@ _Avoid_: inserting probe nodes into the shell root, densify to unlabeled rail as
 **Status-tree timing policy**:
 Pure open / settle / queue helpers for a Status tree (`chatActivityPolicy` module). ChatActivity keeps DOM, timers, and paint.
 _Avoid_: embedding settle prediction only inside React effects with no tests
+
+**Catalog row geometry**:
+Shared trailing-action vs decorative decision for catalog rows (`catalogRowGeometry` module — `trailingIsRowAction`). ListItem (pill) and TimelineItem (rail) are **adapters** at this **seam**; skins stay separate — never synthesize a third list-detail host.
+_Avoid_: duplicating nesting heuristics in each row skin, painting List start ticks as fake chronology
