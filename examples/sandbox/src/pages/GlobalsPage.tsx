@@ -3742,6 +3742,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </FieldStack>
               <div className="fynns-control-cluster fynns-control-cluster--end-align">
                 <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTimelineEditOpen(false)}
+                >
+                  {t("globals.formRecipeDialogCancel")}
+                </Button>
+                <Button
                   variant="danger"
                   size="sm"
                   onClick={() => {
@@ -3750,13 +3757,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   }}
                 >
                   {t("globals.timelineEditDialogDelete")}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setTimelineEditOpen(false)}
-                >
-                  {t("globals.formRecipeDialogCancel")}
                 </Button>
                 <Button
                   size="sm"

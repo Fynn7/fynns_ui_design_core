@@ -39,7 +39,8 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
    `--fynns-timeline-copy-band-2` (≥ **0.5.16**).
 3. Sandbox teaches **exactly two shells** — unlabeled:
    - **Flat** Timeline (no expand) — **catalog edit default:** row click →
-     Dialog; edit / delete in Dialog foot (**not** `--with-end` hover icons)
+     Dialog; edit / delete in Dialog foot (**not** `--with-end` hover icons);
+     foot LTR **Cancel → Delete → Save** (primary rightmost)
    - Timeline **with `detail`** (optional **read** bullets under the node —
      no row action IconButtons)
 4. Prefer **omit `leading`** (default disc). Kind / role chrome → Dialog fields.
