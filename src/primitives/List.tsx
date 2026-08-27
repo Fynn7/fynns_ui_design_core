@@ -76,10 +76,11 @@ export type ListProps = HTMLAttributes<HTMLUListElement> & {
    * Plain `trailingSupportingText` column across sibling rows. Pass `"start"`
    * for date / kind / timestamp catalogs: shared
    * `--fynns-list-trailing-meta-min-width` column (box start edges align);
-   * copy is **start-aligned** inside (≥ 0.4.144 — same as headline duration /
-   * trailing-stats cells); ellipsizes when squeezed (≥ 0.4.145). Default
-   * **omit** = content-width meta hugged to the trailing edge (short status
-   * like “Current” stays next to actions — not stranded in a 17ch band).
+   * copy is **end-aligned** inside (≥ 0.4.148 / 0.4.133 — glyphs sit
+   * `end-actions-gap` from `--with-end` actions; not 0.4.144 start-ink dead
+   * space); ellipsizes when squeezed (≥ 0.4.145). Default **omit** =
+   * content-width meta hugged to the trailing edge (short status like
+   * “Current” stays next to actions — not stranded in a 17ch band).
    * Live: `#list` org+dates / run-summary
    * (`start`) vs Applications-style status+delete (default).
    */
@@ -150,9 +151,9 @@ export type ListItemProps = Omit<
    * Compact meta at the trailing edge (duration, count, status, dates, …).
    * Optional `.fynns-control-cluster` of muted spans — not `ControlRow`.
    * Duration units are spaced (`1m 47s`, never `1m47s`) — consumer-owned
-   * strings. Cross-row **start** column for mixed-length dates / timestamps →
-   * parent `List` `trailingMetaAlign="start"` (column ink **start**-aligned ≥
-   * 0.4.144); short status beside `--with-end` actions leave that prop unset
+   * strings. Cross-row **column** for mixed-length dates / timestamps →
+   * parent `List` `trailingMetaAlign="start"` (column ink **end**-aligned ≥
+   * 0.4.148); short status beside `--with-end` actions leave that prop unset
    * so meta hugs the end.
    */
   trailingSupportingText?: ReactNode;

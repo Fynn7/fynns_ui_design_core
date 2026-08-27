@@ -958,9 +958,10 @@ export const LIST_TOKENS = {
   "content-gap-3": "var(--fynns-space-sm)",
   /**
    * Opt-in via `List` `trailingMetaAlign="start"`. Floor for a full
-   * `YYYY-MM – YYYY-MM` range so short values share the **start** edge across
-   * sibling rows. Default List (prop omitted) keeps content-width meta hugged
-   * to the trailing edge — short status next to `--with-end` actions.
+   * `YYYY-MM - YYYY-MM` range so sibling rows share one meta **column**
+   * (box start edges align). Copy is **end**-aligned inside (≥ 0.4.148).
+   * Default List (prop omitted) keeps content-width meta hugged to the
+   * trailing edge — short status next to `--with-end` actions.
    * Live: sandbox `#list` org+dates / status+action.
    */
   "trailing-meta-min-width": "17ch",
