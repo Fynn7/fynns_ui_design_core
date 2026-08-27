@@ -70,9 +70,15 @@
   cursor: default;
 }
 
-/* Two-line: node + chevron optically center on title + supporting block. */
+/*
+ * Two-line rows: keep the node **top-aligned** with the title line so the
+ * host rail (`pad-block + node-col/2`) meets the disc mid. `align-items:
+ * center` dropped the node on tall org+dates stacks and left a stub of rail
+ * above the ball (Experiences / `#timeline`). Chevron + copy still center
+ * as a stack via `.fynns-timeline-item-content`.
+ */
 .fynns-timeline-item--2 {
-  align-items: center;
+  align-items: flex-start;
 }
 
 .fynns-timeline-item--2 .fynns-timeline-item-content {
