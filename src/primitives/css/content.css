@@ -3558,6 +3558,15 @@ a.fynns-breadcrumb-link:visited {
   -webkit-text-fill-color: transparent;
 }
 
+/* Chromium can still paint native spelling/grammar marks on transparent
+   overlay textareas even with `spellcheck=false` (soft-wrap editable). Hide
+   them so GSC / technical tokens are not covered in red squiggles. */
+.fynns-code-block-input::spelling-error,
+.fynns-code-block-input::grammar-error {
+  text-decoration-line: none;
+  background-color: transparent;
+}
+
 .fynns-code-block-input[data-scrollable] {
   overflow-y: auto;
 }

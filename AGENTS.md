@@ -588,7 +588,8 @@ classes.
   optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
   + vertical resize; block pad → `--fynns-layout-field-pad-block`; default
   **`spellCheck={false}`** so multilingual / technical copy has no browser
-  red squiggles — pass `spellCheck` to opt in), **FieldHeader** /
+  red squiggles — pass `spellCheck` to opt in; Chromium overlay editors also
+  hide marks via `::spelling-error` / `::grammar-error`), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select
   (trigger `min-width` floors to the widest option / placeholder so
   content-sized hosts do not resize when the value changes; still

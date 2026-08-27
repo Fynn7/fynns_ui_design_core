@@ -193,6 +193,17 @@
   outline: none;
 }
 
+/* Hide native spelling/grammar marks (Chromium may still paint them). */
+.fynns-input::spelling-error,
+.fynns-input::grammar-error,
+.fynns-textarea::spelling-error,
+.fynns-textarea::grammar-error,
+.fynns-search-bar-input::spelling-error,
+.fynns-search-bar-input::grammar-error {
+  text-decoration-line: none;
+  background-color: transparent;
+}
+
 /*
  * Single-line text fields only (`input`, not `textarea.fynns-input`).
  * Idle: ellipsis in narrow hosts — never mid-glyph hard clip (SearchBar /

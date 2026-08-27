@@ -685,6 +685,7 @@ export function CodeBlock(props: CodeBlockProps) {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
+            lang="zxx"
             data-gramm="false"
             data-gramm_editor="false"
             data-enable-grammarly="false"
