@@ -1582,11 +1582,11 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Opt-in date / kind / timestamp column: List trailingMetaAlign="start"
  * floors a shared min-width so sibling rows share one meta **column**
- * (box start edges align). Copy is **end-aligned inside** (≥ 0.4.148 /
- * restore 0.4.133) so glyphs sit `--fynns-list-end-actions-gap` from
- * `--with-end` actions — never `text-align: start` dead space after a
- * short date still narrower than `17ch` (0.4.144 start-ink regressed
- * Experiences hover). Ellipsis / overflow still apply (≥ 0.4.145).
+ * (box **and** glyph start edges align — **start-ink** ≥ **0.5.13**).
+ * End-ink inside the band (≥ 0.4.148) staggered short dates (`2026-04`)
+ * far right of long ranges and fought Timeline catalogs without row
+ * actions. `--with-end` actions still dock at the row end; do not use
+ * end-ink to fake proximity. Ellipsis / overflow still apply (≥ 0.4.145).
  * Default (no data attr) = content-width meta hugged to the trailing
  * edge — short status (“Current”) stays next to actions. Exclude
  * trailing-stats (fixed tracks of their own — start-aligned cells).
@@ -1596,7 +1596,7 @@ a.fynns-breadcrumb-link:visited {
     :has(.fynns-list-item-trailing-stats)
   ) {
   min-width: var(--fynns-list-trailing-meta-min-width);
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .fynns-list-item-trailing-text {
@@ -1615,7 +1615,7 @@ a.fynns-breadcrumb-link:visited {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
-  text-align: end;
+  text-align: start;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1629,8 +1629,8 @@ a.fynns-breadcrumb-link:visited {
  * Multi-metric trailing meta (elapse | tokens | cost | count). Fixed column
  * tracks so sibling rows share vertical column edges — not a flex
  * `.fynns-control-cluster` (content-width cells drift per row). Cells are
- * **start**-aligned (tabular digit columns — distinct from plain
- * `trailingMetaAlign` **end**-ink for dates ≥ 0.4.148). Live: `#list`.
+ * **start**-aligned (tabular digit columns — same start-ink as plain
+ * `trailingMetaAlign` date columns ≥ **0.5.13**). Live: `#list`.
  */
 .fynns-list-item-trailing-stats {
   box-sizing: border-box;

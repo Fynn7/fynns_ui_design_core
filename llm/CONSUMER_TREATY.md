@@ -33,7 +33,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
-**trailing meta start-ink (dead space before --with-end)** /
+**trailing meta end-ink (staggered date starts)** /
 **status meta far from --with-end action** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
@@ -859,16 +859,33 @@ never revive `list-detail` as recommended. Gate:
 
 Symptoms (`Timeline` / Experiences-style dated rows):
 
-- Headline / org sit ~4dp from the node glyph or expand chevron (reads glued)
+- Headline / org sit ~4dp from the **node** glyph (reads glued to the rail)
 - Consumer tries private `margin-inline-start` / pad on `.fynns-timeline-*`
 
-**Cause:** early Timeline used `space-md` (12dp) for node→copy and
-`control-cluster-gap` (4dp) for chevron→copy — denser than List
-`--fynns-list-gap` (**16dp**). **Fix (core ≥ 0.5.6):**
-`--fynns-timeline-gap` and `--fynns-timeline-chevron-gap` both alias
-`list-gap` (**16dp**); detail pad uses `chevron-gap`. Consumers bump only —
-do **not** restyle `.fynns-timeline-*`. Live: `#timeline`. Authority:
-[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline**.
+**Cause:** early Timeline used `space-md` (12dp) for node→copy. **Fix (core
+≥ 0.5.6):** `--fynns-timeline-gap` aliases `list-gap` (**16dp**). Expandable
+chevron is **not** a second 16dp column beside the copy — it tucks into
+`pad-inline-start` (≥ 0.5.15). Consumers bump only — do **not** restyle
+`.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
+Content density **Chronological timeline**.
+
+## Failure mode this treaty targets: Timeline flat vs detail headline stagger
+
+Symptoms (sandbox `#timeline` flat shell next to with-`detail` shell):
+
+- Flat headlines start ~32dp left of expandable headlines (chevron + 16dp gap
+  shoved the title)
+- Consumer tries private negative margin on `.fynns-timeline-item-chevron` /
+  pad on `.fynns-timeline-item-copy`
+
+**Cause:** expandable rows painted chevron **before** the copy after a full
+`pad-inline-start`, then added a second `chevron-gap` that still aliased
+list-gap (**16dp**). **Fix (core ≥ 0.5.15):** chevron lives **inside** the
+pad band — `chevron-inset` (wash→glyph breath) + icon + `chevron-gap`
+(remainder, ~4dp — **not** list-gap) = `pad-inline-start`, so flat and
+detail **headline** starts match; detail bullets use the same start (no
+extra icon+gap in `detail-pad-inline-start`). Consumers bump only. Live:
+`#timeline`.
 
 ## Failure mode this treaty targets: Timeline hover pill kissing the node
 
@@ -903,6 +920,45 @@ indent adds the same step. Consumers bump only — do **not** restyle
 `.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
 Content density **Chronological timeline**.
 
+## Failure mode this treaty targets: Timeline disc not centered on copy
+
+Symptoms (two-line org+dates `TimelineItem` — Experiences / `#timeline`):
+
+- Default disc sits on the **title line only** (or floats high) while the
+  full `.fynns-timeline-item-copy` (headline + org) reads as one block —
+  disc mid ≠ copy mid
+- Consumer tries private `align-items` / `margin-block` on
+  `.fynns-timeline-node` / `.fynns-timeline-node-disc`
+
+**Cause:** 0.5.14 locked the node to the headline band and top-aligned it;
+rail used `node-band/2`. **Fix (core ≥ 0.5.16):** two-line rows
+`align-items: center` so the node centers on the copy stack; rail mid uses
+`--fynns-timeline-copy-band-2` (`pad-block + copy-band-2/2`) so the stroke
+still meets the disc (no stub above the first ball). Consumers bump only —
+do **not** restyle `.fynns-timeline-*`. Live: `#timeline`. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline**.
+
+## Failure mode this treaty targets: Timeline row hover edit/delete icons
+
+Symptoms (dated history / Experiences-style `Timeline` catalogs):
+
+- Pencil / trash `IconButton`s appear on hover (`--with-end` overlay) beside
+  date meta — same chrome as List path catalogs
+- Leading kind glyphs + hover edit/delete stacked on the rail as the default
+  recipe; row click also expands `detail` while icons open edit (dual paths)
+
+**Cause:** copying List `--with-end` hover actions onto Timeline. Chronological
+catalogs read as a clean rail; edit/delete belong after the row opens a form.
+**Fix:** flat `TimelineItem` `onClick` → **`Dialog` `size="lg"` +
+`showCloseButton`**; edit fields + delete in the Dialog foot (`ConfirmDialog`
+for destroy). Prefer omit `leading` (default disc) — kind / role via Dialog
+fields. `detail` expand is **read** disclosure only; when the row opens an
+edit Dialog, prefer flat + bullets in the Dialog body. List path / status
+rows may keep trailing hover IconButtons — that is not the Timeline default.
+Live: sandbox `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md) Content
+density **Chronological timeline** + Hard rules. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: UI · — punctuation in chrome
 
 Symptoms (any destination / list / status chrome):
@@ -930,31 +986,30 @@ Symptoms (experience / job date columns):
 
 **Cause:** mixed-length `trailingSupportingText` without a shared column floor,
 or content-width meta that only lines up trailing glyphs.
-**Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
-since 0.4.119; **column end-ink ≥ 0.4.148** / 0.4.133 — restores after
-0.4.144 start-ink) — shared `--fynns-list-trailing-meta-min-width` (box
-starts align; copy docks to the end so short dates sit
-`end-actions-gap` from `--with-end` actions). Do **not** invent private
-`text-align` / `min-width` on `.fynns-list-item-trailing*`. Multi-metric
-grids stay on `.fynns-list-item-trailing-stats` (start-aligned cells ≥
-0.4.144). Live: `#list` org+dates / run-summary. Authority:
-[`AGENTS.md`](../AGENTS.md). Pasteable:
+**Fix:** parent **`List` / `Timeline` `trailingMetaAlign="start"`** (≥ **0.4.120**;
+token since 0.4.119; **column start-ink ≥ 0.5.13**) — shared
+`--fynns-*-trailing-meta-min-width` (box **and** glyph start edges align).
+Do **not** invent private `text-align` / `min-width` on `.fynns-*-trailing*`.
+Multi-metric grids stay on `.fynns-list-item-trailing-stats` (start-aligned
+cells ≥ 0.4.144). Live: `#list` org+dates / `#timeline` / run-summary.
+Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: trailing meta start-ink (dead space before --with-end)
+## Failure mode this treaty targets: trailing meta end-ink (staggered date starts)
 
-Symptoms (experience / job date columns with hover edit/delete):
+Symptoms (Timeline / List date columns with `trailingMetaAlign="start"`):
 
-- Shared column boxes align, but shorter dates (`2023-03`) hug the **start**
-  of the 17ch band — large empty gap before the pencil / trash on hover
+- Shared column **boxes** align, but shorter dates (`2026-04`) hug the
+  **end** of the band while long ranges (`2025-10 - 2026-03`) start further
+  left — glyph start edges stagger (reads as right-aligned noise, not a grid)
 
-**Cause:** core **0.4.144–0.4.147** used `text-align: start` inside
-`trailingMetaAlign="start"` (aimed at run-summary digit columns) and
-regressed **0.4.133** end-ink for Experiences.
-**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.148** (end-ink restored in
-plain `trailingSupportingText` columns; trailing-stats cells stay
-start-aligned). Keep consumer `trailingMetaAlign="start"` on date catalogs —
-do not patch with app CSS. Live: `#list` org+dates. Authority:
+**Cause:** core **0.4.148–0.5.12** used `text-align: end` inside the shared
+column (aimed at hugging `--with-end` IconButtons). Timeline catalogs without
+row actions make that look broken; date grids need start-ink.
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.5.13** (start-ink for plain
+`trailingSupportingText` columns; trailing-stats cells stay start-aligned).
+Keep consumer `trailingMetaAlign="start"` on date catalogs — do not patch
+with app CSS. Live: `#timeline` / `#list` org+dates. Authority:
 [`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

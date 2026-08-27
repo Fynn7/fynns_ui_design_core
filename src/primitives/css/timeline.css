@@ -21,20 +21,35 @@
  * node mid. Last item has no ::before (no dangling stroke below the final
  * node). Glyph / disc paint an opaque `node-mask` halo so the rail does
  * not pierce hollow outline icons (still continuous between nodes).
+ *
+ * Default (1-line): mid of `node-band` under pad-block.
+ * Two-line (`--2`): mid of `copy-band-2` — matches vertically centered
+ * node vs `.fynns-timeline-item-copy` (≥ 0.5.16).
  */
 .fynns-timeline-item-host:not(:last-child)::before {
   content: "";
   position: absolute;
   z-index: 0;
-  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-col) / 2));
+  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-band) / 2));
   bottom: calc(
     -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
-      (var(--fynns-timeline-node-col) / 2))
+      (var(--fynns-timeline-node-band) / 2))
   );
   left: calc((var(--fynns-timeline-node-col) - var(--fynns-timeline-rail-width)) / 2);
   width: var(--fynns-timeline-rail-width);
   background: var(--fynns-timeline-rail-color);
   pointer-events: none;
+}
+
+.fynns-timeline-item-host:not(:last-child):has(> .fynns-timeline-item--2)::before,
+.fynns-timeline-item-host:not(:last-child):has(
+    > .fynns-timeline-item-row > .fynns-timeline-item--2
+  )::before {
+  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-copy-band-2) / 2));
+  bottom: calc(
+    -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
+      (var(--fynns-timeline-copy-band-2) / 2))
+  );
 }
 
 .fynns-timeline-item-row {
@@ -70,7 +85,12 @@
   cursor: default;
 }
 
-/* Two-line: node + chevron optically center on title + supporting block. */
+/*
+ * Two-line rows: vertically **center** the node on the full copy stack
+ * (headline + supporting — `.fynns-timeline-item-copy`), not the title line
+ * alone. Rail mid uses `copy-band-2` so the stroke still meets the disc
+ * (no stub above the first ball). ≥ 0.5.16.
+ */
 .fynns-timeline-item--2 {
   align-items: center;
 }
@@ -145,7 +165,9 @@
   justify-content: center;
   box-sizing: border-box;
   width: var(--fynns-timeline-node-col);
-  min-height: var(--fynns-timeline-node-col);
+  /* Node box; two-line rows center this on the copy stack (≥ 0.5.16). */
+  min-height: var(--fynns-timeline-node-band);
+  height: var(--fynns-timeline-node-band);
   color: var(--fynns-color-text-muted);
   /* Column stays open — mask lives on glyph / disc only (not a square plate). */
   background: transparent;
@@ -186,10 +208,20 @@
   flex: 1 1 auto;
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--fynns-timeline-chevron-gap);
+  gap: 0;
   min-width: 0;
-  /* Inner breath vs hover wash curve (chevron/copy — ≥ 0.5.10). */
+  /* Flat: pad → copy. Detail: see `:has(> .chevron)` — pad band hosts glyph. */
   padding-inline-start: var(--fynns-timeline-pad-inline-start);
+}
+
+/*
+ * Expandable: tuck chevron into the pad-inline-start band so headline /
+ * copy share the same start as flat rows (was icon + 16dp gap push).
+ * `chevron-inset` keeps the glyph off the hover wash curve.
+ */
+.fynns-timeline-item-content:has(> .fynns-timeline-item-chevron) {
+  padding-inline-start: var(--fynns-timeline-chevron-inset);
+  gap: var(--fynns-timeline-chevron-gap);
 }
 
 .fynns-timeline-item-chevron {
@@ -262,7 +294,7 @@
 .fynns-timeline[data-trailing-meta-align="start"]
   .fynns-timeline-item-trailing:has(> .fynns-timeline-item-trailing-text) {
   min-width: var(--fynns-timeline-trailing-meta-min-width);
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .fynns-timeline-item-trailing-text {
@@ -272,14 +304,16 @@
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
   color: var(--fynns-color-text-muted);
-  text-align: end;
+  text-align: start;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .fynns-timeline[data-trailing-meta-align="start"] .fynns-timeline-item-trailing-text {
-  text-align: end;
+  flex: 1 1 auto;
+  text-align: start;
 }
 
 /* --with-end overlay reveal (parity with List — reserve includes pad-inline). */

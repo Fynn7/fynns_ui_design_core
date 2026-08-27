@@ -1606,6 +1606,20 @@ export const TIMELINE_TOKENS = {
   "item-gap": "var(--fynns-layout-unit-stack-gap)",
   /** Node column width (rail centered in this track). */
   "node-col": "1.5rem",
+  /**
+   * Vertical box for disc / glyph centering inside the node column.
+   * Two-line rows center this whole box on `.fynns-timeline-item-copy`
+   * (not the headline alone). ≥ 0.5.16 / `#timeline`.
+   */
+  "node-band":
+    "calc(var(--fynns-font-size-md) * var(--fynns-line-height-snug))",
+  /**
+   * Two-line copy stack height (headline + content-gap + supporting) —
+   * rail mid for `--2` rows = `pad-block + copy-band-2/2` so the stroke
+   * meets the vertically centered disc (≥ 0.5.16).
+   */
+  "copy-band-2":
+    "calc((var(--fynns-font-size-md) * var(--fynns-line-height-snug)) + var(--fynns-timeline-content-gap) + (var(--fynns-font-size-sm) * var(--fynns-line-height-snug)))",
   /** Default disc diameter when `leading` is omitted. */
   "node-size": "0.625rem",
   /**
@@ -1624,10 +1638,17 @@ export const TIMELINE_TOKENS = {
    */
   gap: "var(--fynns-list-gap)",
   /**
-   * Expandable chevron | copy gutter. Same 16dp as `gap` (not
-   * `control-cluster-gap` 4dp — that crushed `#timeline` with-detail rows).
+   * Hover wash → expandable chevron inset (keeps the glyph off the wash
+   * curve). Chevron lives **inside** `pad-inline-start` so flat and detail
+   * headlines share one start edge (≥ 0.5.15 / `#timeline`).
    */
-  "chevron-gap": "var(--fynns-list-gap)",
+  "chevron-inset": "var(--fynns-space-xs)",
+  /**
+   * Expandable chevron | copy — remainder of `pad-inline-start` after inset
+   * + icon so copy lines up with flat (no-chevron) headlines.
+   */
+  "chevron-gap":
+    "calc(var(--fynns-timeline-pad-inline-start) - var(--fynns-timeline-chevron-inset) - var(--fynns-size-icon))",
   /**
    * Hover wash `inset-inline-start` — after node column **and** `gap` so the
    * pill does not kiss the node (was `node-col` only → wash filled the gutter).
@@ -1641,11 +1662,11 @@ export const TIMELINE_TOKENS = {
    */
   "pad-block": "var(--fynns-list-pad-block)",
   /**
-   * Inner breath inside the hover wash (content start — not the node).
-   * `radius-md` + `space-xs` (**24dp**) so the first child (chevron or copy)
-   * clears the wash curve — List `pad-inline` alone (**16dp**) is shorter
-   * than the pill radius (**20dp**) and still reads flush (≥ 0.5.10 /
-   * `#timeline`).
+   * Inner breath inside the hover wash to the **headline / copy** start
+   * (not the node). `radius-md` + `space-xs` (**24dp**). Flat rows pad
+   * content directly; expandable rows tuck the chevron into this band
+   * (`chevron-inset` + icon + `chevron-gap` = this token) so title ink
+   * matches (≥ 0.5.10 pad / ≥ 0.5.15 chevron tuck / `#timeline`).
    */
   "pad-inline-start":
     "calc(var(--fynns-radius-md) + var(--fynns-space-xs))",
@@ -1657,7 +1678,7 @@ export const TIMELINE_TOKENS = {
   "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
    * Opt-in via `Timeline` `trailingMetaAlign="start"`. Shared date column
-   * (end-ink like List ≥ 0.4.148).
+   * (**start**-ink like List ≥ 0.5.13).
    */
   "trailing-meta-min-width": "var(--fynns-list-trailing-meta-min-width)",
   /** Headline ↔ supporting. */
@@ -1666,11 +1687,11 @@ export const TIMELINE_TOKENS = {
   "detail-pad-block": "var(--fynns-space-sm)",
   /**
    * Align detail bullets with the headline start (node | gap |
-   * pad-inline-start | chevron | chevron-gap | copy). Expandable rows
-   * always paint the chevron column.
+   * pad-inline-start). Expandable chevron tucks into the pad band
+   * (≥ 0.5.15) — do **not** add icon + chevron-gap again.
    */
   "detail-pad-inline-start":
-    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start) + var(--fynns-size-icon) + var(--fynns-timeline-chevron-gap))",
+    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start))",
 };
 
 /**

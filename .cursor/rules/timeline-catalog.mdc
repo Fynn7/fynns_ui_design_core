@@ -1,9 +1,11 @@
 ---
 description: >-
-  Hard gate — chronological catalogs use Timeline (flat + optional detail only);
-  never List rails, ChatActivity/Tree, lettered A/B/C shells, or list-detail fakes.
-alwaysApply: true
+  Timeline catalog hard gate — flat + optional detail only; never List rails,
+  ChatActivity/Tree, lettered A/B/C, or list-detail fakes. Apply for Timeline work.
+globs: "**/Timeline*,**/css/timeline*.css,**/GlobalsPage.tsx"
+alwaysApply: false
 ---
+
 
 # Timeline catalog (hard gate)
 
@@ -17,22 +19,33 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
 
 1. Dated history with a **vertical rail** → **`Timeline` / `TimelineItem`**
    (`headline` / org `supportingText` / dates `trailingSupportingText` +
-   `trailingMetaAlign="start"`). Live `#timeline`.
-2. Node→copy (`--fynns-timeline-gap`) and expandable chevron→copy
-   (`--fynns-timeline-chevron-gap`) both alias `--fynns-list-gap` (**16dp**) —
-   same breath as List leading→copy (≥ 0.5.6). Hover pill height comes from
+   `trailingMetaAlign="start"` — **start-ink** date column ≥ 0.5.13). Live
+   `#timeline`.
+2. Node→copy (`--fynns-timeline-gap`) aliases `--fynns-list-gap` (**16dp**) —
+   same breath as List leading→copy (≥ 0.5.6). Expandable chevron→copy
+   (`--fynns-timeline-chevron-gap`) is **not** that alias — it is the
+   remainder of `pad-inline-start` after `chevron-inset` + icon (~4dp,
+   ≥ **0.5.15**). Hover pill height comes from
    `--fynns-timeline-pad-block` → `--fynns-list-pad-block` (**8dp**, ≥ 0.5.7)
    — never crush to `space-xs` (**4dp**). Hover wash starts at
    `--fynns-timeline-hover-inset-inline-start` (`node-col` + `gap`, ≥ 0.5.8)
    — never flush to the node edge. Content **inside** the wash uses
    `--fynns-timeline-pad-inline-start` = `radius-md` + `space-xs` (**24dp**,
-   ≥ 0.5.10) — chevron/headline clear the wash curve (not List pad alone).
+   ≥ 0.5.10) — **headline / copy** clear the wash curve (not List pad alone).
+   Expandable chevron tucks into that band (`chevron-inset` + icon +
+   `chevron-gap` = `pad-inline-start`, ≥ **0.5.15**) so flat ↔ detail titles
+   share one start edge. Two-line rows **center** the disc on the full
+   `.fynns-timeline-item-copy` stack; rail mid uses
+   `--fynns-timeline-copy-band-2` (≥ **0.5.16**).
 3. Sandbox teaches **exactly two shells** — unlabeled:
-   - **Flat** Timeline (no expand)
-   - Timeline **with `detail`** (optional bullets under the node)
-4. Title + org + dates **without** a rail → plain **List** org+dates (`#list`) —
+   - **Flat** Timeline (no expand) — **catalog edit default:** row click →
+     Dialog; edit / delete in Dialog foot (**not** `--with-end` hover icons)
+   - Timeline **with `detail`** (optional **read** bullets under the node —
+     no row action IconButtons)
+4. Prefer **omit `leading`** (default disc). Kind / role chrome → Dialog fields.
+5. Title + org + dates **without** a rail → plain **List** org+dates (`#list`) —
    never paint a fake rail on List.
-5. Sandbox copy = **generic UI shell** only (see `no-consumer-content.mdc`).
+6. Sandbox copy = **generic UI shell** only (see `no-consumer-content.mdc`).
 
 ## Don't (hard)
 
@@ -44,8 +57,13 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
   recommended consumer layout mode
 - List start tick / inset rail / `::before` bar to fake chronology
 - **ChatActivity** or **Tree** for role / org / date history rows
-- Crushing node/chevron→copy to `control-cluster-gap` (**4dp**) or private
-  pad/margin on `.fynns-timeline-*`
+- **`--with-end` hover edit/delete IconButtons** on Timeline as the default
+  catalog recipe (List path-catalog chrome on a rail) — actions belong in the
+  Dialog after row click
+- Crushing **node→copy** (`--fynns-timeline-gap`) to `control-cluster-gap`
+  (**4dp**) or private pad/margin on `.fynns-timeline-*` (chevron→copy
+  remainder ~4dp after tuck is intentional ≥ 0.5.15 — do not “restore” it
+  to 16dp)
 - Consumer product strings (résumé / employer / university / CV Generator
   Experiences) in Globals `#timeline`
 - Shipping Timeline / density fixes **only** in a consumer — constrain core +
@@ -53,7 +71,7 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
 
 ## Gate
 
-- This rule (`alwaysApply`)
+- This rule (on-demand / Timeline globs — not alwaysApply)
 - AGENTS Hard rules + Content density row
 - `npm run check:no-consumer` (lettered-shell + consumer-product denylist)
 - Dual-end browser verify when the bug was consumer-reported

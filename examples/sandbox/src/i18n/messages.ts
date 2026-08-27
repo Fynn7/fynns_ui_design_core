@@ -1433,7 +1433,7 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listOrgDatesHelp":
-    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **end**-aligned inside (≥ 0.4.148 / 0.4.133 — glyphs sit `end-actions-gap` from `--with-end` actions; not 0.4.144 start-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box **and** glyph **start** edges align — **start-ink** ≥ **0.5.13**; not 0.4.148 end-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
   "globals.listOrgDatesAria": "Sample organization and date-range list rows",
   "globals.listOrgDatesHeadline":
     "Business intelligence intern, sample corp",
@@ -1451,7 +1451,7 @@ const en = {
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
   "globals.listRunSummaryHelp":
-    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (end-ink + ellipsis ≥ 0.4.148 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
+    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (start-ink + ellipsis ≥ 0.5.13 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
   "globals.listRunSummaryAria": "Sample run summary list",
   "globals.listRunSummaryOk": "Success",
   "globals.listRunSummaryFail": "Failed",
@@ -1550,14 +1550,21 @@ const en = {
   "globals.listTreeColTokens": "Tokens",
   "globals.listTreeEstimated": "Est.",
   "globals.timelineIntroHelp":
-    "Chronological **UI shell** — one flat Timeline and one Timeline with `detail`. Generic placeholders only (not a consumer screen). **Do not** paint List start ticks / inset rails to fake a rail; **do not** reuse ChatActivity or Tree for this anatomy. Live: `#timeline`.",
+    "Chronological **UI shell** — one flat Timeline (catalog edit) and one Timeline with read-only `detail`. Generic placeholders only. **Do not** paint List start ticks / inset rails; **do not** reuse ChatActivity or Tree. Live: `#timeline`.",
   "globals.timelineFlatHelp":
-    "Flat Timeline: `Timeline` + `TimelineItem` (vertical rail + node). Slots: `headline` / secondary `supportingText` / meta `trailingSupportingText` + `trailingMetaAlign=\"start\"` end-ink. Row click / pencil → Dialog. No expand.",
+    "Flat Timeline (default catalog): row click → Dialog. Edit + delete live **in the Dialog foot** — **not** `--with-end` hover IconButtons, **not** leading kind glyphs (default disc). Slots: `headline` / org `supportingText` / dates `trailingSupportingText` + `trailingMetaAlign=\"start\"` (**start-ink** date column — short and long dates share one glyph start edge). Two-line: disc **centers on the full copy stack** (headline + org), not the title line alone (≥ 0.5.16).",
   "globals.timelineFlatAria": "Sample flat timeline",
   "globals.timelineDetailHelp":
-    "Timeline with detail: same rail; `detail` / `expanded` shows short bullets under the node. Pencil stays `--with-end` overlay.",
+    "Timeline with detail: same rail; `detail` / `expanded` shows short **read** bullets. Expand chevron tucks into the pad band so **headlines share the flat start edge** (≥ 0.5.15). No row action icons — expand only.",
   "globals.timelineDetailAria": "Sample expandable timeline",
-  "globals.timelineEdit": "Edit sample item",
+  "globals.timelineEditDialogTitle": "Edit sample item",
+  "globals.timelineEditDialogName": "Title",
+  "globals.timelineEditDialogNotes": "Notes",
+  "globals.timelineEditDialogNotesHint": "Optional notes for this sample — not persisted.",
+  "globals.timelineEditDialogNotesPh": "Add a short note…",
+  "globals.timelineEditDialogDelete": "Delete",
+  "globals.timelineEditDialogDeleted": "Deleted sample item",
+  "globals.timelineEditDialogSaved": "Saved sample item",
   "globals.timelineItemHeadlineLead": "Sample role",
   "globals.timelineItemOrgLead": "Sample org",
   "globals.timelineItemRangeLead": "2025-10 - 2026-03",
@@ -3232,7 +3239,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listOrgDatesHelp":
-    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内**右齐** ≥ 0.4.148 / 0.4.133 — 短日期贴 `--with-end` 动作）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；盒与墨迹**左齐** ≥ 0.5.13 — 非 0.4.148 列内右齐）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
   "globals.listOrgDatesAria": "组织与日期区间列表示例",
   "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
   "globals.listOrgDatesOrg": "Acme",
@@ -3249,7 +3256,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
   "globals.listRunSummaryHelp":
-    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内右齐 + 省略 ≥ 0.4.148 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
+    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内左齐 + 省略 ≥ 0.5.13 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
   "globals.listRunSummaryAria": "运行摘要列表示例",
   "globals.listRunSummaryOk": "成功",
   "globals.listRunSummaryFail": "失败",
@@ -3348,14 +3355,21 @@ const zh: Record<MessageKey, string> = {
   "globals.listTreeColTokens": "Tokens",
   "globals.listTreeEstimated": "估",
   "globals.timelineIntroHelp":
-    "时间线 **UI 壳** — 一条扁平 Timeline，一条带 `detail` 的 Timeline。仅通用占位（不是消费仓屏幕）。**禁止**用 List start tick / inset rail 冒充竖轨；**禁止**用 ChatActivity 或 Tree 做该解剖。对照 `#timeline`。",
+    "时间线 **UI 壳** — 一条扁平 Timeline（目录编辑），一条只读 `detail` Timeline。仅通用占位。**禁止**用 List start tick / inset rail 冒充竖轨；**禁止**用 ChatActivity 或 Tree。对照 `#timeline`。",
   "globals.timelineFlatHelp":
-    "扁平 Timeline：`Timeline` + `TimelineItem`（竖轨 + 节点）。槽位：`headline` / 次行 `supportingText` / 元数据 `trailingSupportingText` + `trailingMetaAlign=\"start\"` 列内右齐。行点击 / 铅笔 → Dialog。无展开。",
+    "扁平 Timeline（默认目录）：行点击 → Dialog。编辑 / 删除在 **Dialog 脚** — **禁止** `--with-end` 悬停 IconButton，**禁止** leading 种类图标（默认圆点）。槽位：`headline` / 组织 `supportingText` / 日期 `trailingSupportingText` + `trailingMetaAlign=\"start\"`（日期列 **左齐墨迹** — 短/长日期共用起点）。两行：圆点相对 **整块 copy**（标题+组织）垂直居中，不是只对齐标题行（≥ 0.5.16）。",
   "globals.timelineFlatAria": "扁平时间线示例",
   "globals.timelineDetailHelp":
-    "带 detail 的 Timeline：与扁平同竖轨；`detail` / `expanded` 在节点下显示短 bullets。铅笔仍为 `--with-end` 悬停揭示。",
+    "带 detail 的 Timeline：与扁平同竖轨；`detail` / `expanded` 显示短 **只读** bullets。展开 chevron 收进 pad 带，**标题与扁平行共起点**（≥ 0.5.15）。无行动作图标 — 仅展开。",
   "globals.timelineDetailAria": "可展开时间线示例",
-  "globals.timelineEdit": "编辑示例条目",
+  "globals.timelineEditDialogTitle": "编辑示例条目",
+  "globals.timelineEditDialogName": "标题",
+  "globals.timelineEditDialogNotes": "备注",
+  "globals.timelineEditDialogNotesHint": "本样例可选备注 — 不会持久化。",
+  "globals.timelineEditDialogNotesPh": "写一句备注…",
+  "globals.timelineEditDialogDelete": "删除",
+  "globals.timelineEditDialogDeleted": "已删除示例条目",
+  "globals.timelineEditDialogSaved": "已保存示例条目",
   "globals.timelineItemHeadlineLead": "示例角色",
   "globals.timelineItemOrgLead": "示例组织",
   "globals.timelineItemRangeLead": "2025-10 - 2026-03",

@@ -1,0 +1,11 @@
+﻿# Local dumps / commit-split snaps — never inject as AGENTS or rules context
+.tmp/
+
+# Generated / local build noise
+examples/sandbox/dist/
+dist/
+*.tgz
+scripts/_focus-verify/
+scripts/_scale-out/
+scripts/_tmp-*/
+scripts/_verify-*/

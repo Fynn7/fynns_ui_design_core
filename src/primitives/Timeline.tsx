@@ -23,8 +23,9 @@ export type TimelineTrailingMetaAlign = CatalogTrailingMetaAlign;
 export type TimelineProps = HTMLAttributes<HTMLOListElement> & {
   /**
    * Plain `trailingSupportingText` column across sibling items. Pass
-   * `"start"` for date catalogs (shared min-width column; **end**-aligned
-   * ink like List ≥ 0.4.148). Live: `#timeline`.
+   * `"start"` for date catalogs (shared min-width column; **start**-aligned
+   * ink so short and long dates share one glyph start edge — ≥ 0.5.13).
+   * Live: `#timeline`.
    */
   trailingMetaAlign?: TimelineTrailingMetaAlign;
 };
@@ -65,6 +66,8 @@ export type TimelineItemProps = Omit<
   /**
    * Trailing actions (`IconButton` / cluster) or decorative chrome.
    * Action clusters stay a **sibling** of the row control.
+   * **Catalog edit:** prefer Dialog foot actions over `--with-end`
+   * hover IconButtons — see sandbox `#timeline`.
    */
   trailing?: ReactNode;
   /** Compact meta (dates). Prefer parent `trailingMetaAlign="start"`. */
@@ -91,9 +94,15 @@ export type TimelineItemProps = Omit<
 
 /**
  * One timeline entry. Expandable when `detail` / `children` is set —
- * row click toggles expand (caller may also pass `onClick` for edit;
- * both fire). Prefer trailing IconButtons for edit/delete with
- * `stopPropagation` when the row owns expand.
+ * row click toggles expand.
+ *
+ * **Catalog edit (recommended):** flat row `onClick` → `Dialog`; put
+ * edit / delete in the Dialog foot (`ConfirmDialog` for destroy) — do
+ * **not** park `--with-end` hover IconButtons on the rail. Prefer omit
+ * `leading` (default disc). Two-line rows center the disc on the full
+ * `.fynns-timeline-item-copy` stack (`copy-band-2` rail, ≥ 0.5.16).
+ * Expandable chevron tucks into `pad-inline-start` so flat ↔ detail
+ * headlines share one start (≥ 0.5.15). Live: sandbox `#timeline`.
  */
 export const TimelineItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,

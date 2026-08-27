@@ -34,7 +34,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Add primitive | [`openwiki/workflows/add-primitive.md`](../openwiki/workflows/add-primitive.md) | New component workflow |
 | OpenWiki consume | [`openwiki/operations/consume.md`](../openwiki/operations/consume.md) | Consume ops notes |
 | OpenWiki brief | [`openwiki/INSTRUCTIONS.md`](../openwiki/INSTRUCTIONS.md) | Wiki regeneration brief |
-| Cursor rule | [`.cursor/rules/fynns-ui.mdc`](../.cursor/rules/fynns-ui.mdc) | Always-on keep-set + tokens |
+| Cursor rule | [`.cursor/rules/fynns-ui.mdc`](../.cursor/rules/fynns-ui.mdc) | Always-on pointer → AGENTS (catalog on demand) |
 | OpenCode rule | [`.opencode/rules/fynns-ui.md`](../.opencode/rules/fynns-ui.md) | OpenCode mirror of constraints |
 | Claude entry | [`CLAUDE.md`](../CLAUDE.md) | Short entry → AGENTS + CONSUME |
 
