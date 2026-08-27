@@ -166,6 +166,7 @@ export const SearchBar = forwardRef(function SearchBar(
           aria-expanded={onExpandedChange ? isExpanded : undefined}
           aria-controls={children != null ? resultsId : undefined}
           autoComplete="off"
+          spellCheck={false}
           onChange={(event) => {
             onChange(event.target.value);
             if (onExpandedChange && !isExpanded) setExpanded(true);

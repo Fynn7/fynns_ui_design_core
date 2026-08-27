@@ -59,7 +59,8 @@ function resolveMinRows(
 
 /** Multiline form control sharing Input chrome. Not a full M3 Text Field
  * (no floating label; `filled` is a dense fill, not M3 filled anatomy).
- * `.fynns-input .fynns-textarea`. Default `autoGrow` — height follows text. */
+ * `.fynns-input .fynns-textarea`. Default `autoGrow` — height follows text.
+ * Default `spellCheck={false}` (same as `Input`); pass `spellCheck` to opt in. */
 export const Textarea = forwardRef(function Textarea(
   {
     className,
@@ -78,6 +79,7 @@ export const Textarea = forwardRef(function Textarea(
     defaultValue,
     onChange,
     style,
+    spellCheck = false,
     ...rest
   }: TextareaProps,
   ref: ForwardedRef<HTMLTextAreaElement>,
@@ -160,6 +162,7 @@ export const Textarea = forwardRef(function Textarea(
       defaultValue={defaultValue}
       onChange={handleChange}
       style={style}
+      spellCheck={spellCheck}
       aria-invalid={isInvalid || undefined}
       aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
       className={join(

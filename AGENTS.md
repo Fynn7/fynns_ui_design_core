@@ -586,7 +586,9 @@ classes.
   floating label — not full M3 Text Field anatomy; **autoGrow** height from
   content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
   optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
-  + vertical resize; block pad → `--fynns-layout-field-pad-block`), **FieldHeader** /
+  + vertical resize; block pad → `--fynns-layout-field-pad-block`; default
+  **`spellCheck={false}`** so multilingual / technical copy has no browser
+  red squiggles — pass `spellCheck` to opt in), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select
   (trigger `min-width` floors to the widest option / placeholder so
   content-sized hosts do not resize when the value changes; still
