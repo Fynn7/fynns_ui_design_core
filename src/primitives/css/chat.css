@@ -1489,13 +1489,6 @@ a.fynns-chat-activity-artifact:hover {
   );
   border: none;
   outline: none;
-}
-
-.fynns-chat-composer-input::spelling-error,
-.fynns-chat-composer-input::grammar-error {
-  text-decoration-line: none;
-  background-color: transparent;
-}
   resize: none;
   background: transparent;
   color: var(--fynns-color-text);
@@ -1520,6 +1513,12 @@ a.fynns-chat-activity-artifact:hover {
   field-sizing: fixed;
   position: relative;
   z-index: 1;
+}
+
+.fynns-chat-composer-input::spelling-error,
+.fynns-chat-composer-input::grammar-error {
+  text-decoration-line: none;
+  background-color: transparent;
 }
 
 /*
