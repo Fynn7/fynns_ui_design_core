@@ -19,7 +19,8 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
 
 1. Dated history with a **vertical rail** → **`Timeline` / `TimelineItem`**
    (`headline` / org `supportingText` / dates `trailingSupportingText` +
-   `trailingMetaAlign="start"`). Live `#timeline`.
+   `trailingMetaAlign="start"` — **start-ink** date column ≥ 0.5.13). Live
+   `#timeline`.
 2. Node→copy (`--fynns-timeline-gap`) and expandable chevron→copy
    (`--fynns-timeline-chevron-gap`) both alias `--fynns-list-gap` (**16dp**) —
    same breath as List leading→copy (≥ 0.5.6). Hover pill height comes from

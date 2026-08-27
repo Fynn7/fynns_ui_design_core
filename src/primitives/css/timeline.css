@@ -268,7 +268,7 @@
 .fynns-timeline[data-trailing-meta-align="start"]
   .fynns-timeline-item-trailing:has(> .fynns-timeline-item-trailing-text) {
   min-width: var(--fynns-timeline-trailing-meta-min-width);
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .fynns-timeline-item-trailing-text {
@@ -278,14 +278,16 @@
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
   color: var(--fynns-color-text-muted);
-  text-align: end;
+  text-align: start;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .fynns-timeline[data-trailing-meta-align="start"] .fynns-timeline-item-trailing-text {
-  text-align: end;
+  flex: 1 1 auto;
+  text-align: start;
 }
 
 /* --with-end overlay reveal (parity with List — reserve includes pad-inline). */

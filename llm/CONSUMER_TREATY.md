@@ -33,7 +33,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
-**trailing meta start-ink (dead space before --with-end)** /
+**trailing meta end-ink (staggered date starts)** /
 **status meta far from --with-end action** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
@@ -951,31 +951,30 @@ Symptoms (experience / job date columns):
 
 **Cause:** mixed-length `trailingSupportingText` without a shared column floor,
 or content-width meta that only lines up trailing glyphs.
-**Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
-since 0.4.119; **column end-ink ≥ 0.4.148** / 0.4.133 — restores after
-0.4.144 start-ink) — shared `--fynns-list-trailing-meta-min-width` (box
-starts align; copy docks to the end so short dates sit
-`end-actions-gap` from `--with-end` actions). Do **not** invent private
-`text-align` / `min-width` on `.fynns-list-item-trailing*`. Multi-metric
-grids stay on `.fynns-list-item-trailing-stats` (start-aligned cells ≥
-0.4.144). Live: `#list` org+dates / run-summary. Authority:
-[`AGENTS.md`](../AGENTS.md). Pasteable:
+**Fix:** parent **`List` / `Timeline` `trailingMetaAlign="start"`** (≥ **0.4.120**;
+token since 0.4.119; **column start-ink ≥ 0.5.13**) — shared
+`--fynns-*-trailing-meta-min-width` (box **and** glyph start edges align).
+Do **not** invent private `text-align` / `min-width` on `.fynns-*-trailing*`.
+Multi-metric grids stay on `.fynns-list-item-trailing-stats` (start-aligned
+cells ≥ 0.4.144). Live: `#list` org+dates / `#timeline` / run-summary.
+Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: trailing meta start-ink (dead space before --with-end)
+## Failure mode this treaty targets: trailing meta end-ink (staggered date starts)
 
-Symptoms (experience / job date columns with hover edit/delete):
+Symptoms (Timeline / List date columns with `trailingMetaAlign="start"`):
 
-- Shared column boxes align, but shorter dates (`2023-03`) hug the **start**
-  of the 17ch band — large empty gap before the pencil / trash on hover
+- Shared column **boxes** align, but shorter dates (`2026-04`) hug the
+  **end** of the band while long ranges (`2025-10 - 2026-03`) start further
+  left — glyph start edges stagger (reads as right-aligned noise, not a grid)
 
-**Cause:** core **0.4.144–0.4.147** used `text-align: start` inside
-`trailingMetaAlign="start"` (aimed at run-summary digit columns) and
-regressed **0.4.133** end-ink for Experiences.
-**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.148** (end-ink restored in
-plain `trailingSupportingText` columns; trailing-stats cells stay
-start-aligned). Keep consumer `trailingMetaAlign="start"` on date catalogs —
-do not patch with app CSS. Live: `#list` org+dates. Authority:
+**Cause:** core **0.4.148–0.5.12** used `text-align: end` inside the shared
+column (aimed at hugging `--with-end` IconButtons). Timeline catalogs without
+row actions make that look broken; date grids need start-ink.
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.5.13** (start-ink for plain
+`trailingSupportingText` columns; trailing-stats cells stay start-aligned).
+Keep consumer `trailingMetaAlign="start"` on date catalogs — do not patch
+with app CSS. Live: `#timeline` / `#list` org+dates. Authority:
 [`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

@@ -23,8 +23,9 @@ export type TimelineTrailingMetaAlign = CatalogTrailingMetaAlign;
 export type TimelineProps = HTMLAttributes<HTMLOListElement> & {
   /**
    * Plain `trailingSupportingText` column across sibling items. Pass
-   * `"start"` for date catalogs (shared min-width column; **end**-aligned
-   * ink like List ≥ 0.4.148). Live: `#timeline`.
+   * `"start"` for date catalogs (shared min-width column; **start**-aligned
+   * ink so short and long dates share one glyph start edge — ≥ 0.5.13).
+   * Live: `#timeline`.
    */
   trailingMetaAlign?: TimelineTrailingMetaAlign;
 };
