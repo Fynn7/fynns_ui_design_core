@@ -903,6 +903,27 @@ indent adds the same step. Consumers bump only — do **not** restyle
 `.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
 Content density **Chronological timeline**.
 
+## Failure mode this treaty targets: Timeline row hover edit/delete icons
+
+Symptoms (dated history / Experiences-style `Timeline` catalogs):
+
+- Pencil / trash `IconButton`s appear on hover (`--with-end` overlay) beside
+  date meta — same chrome as List path catalogs
+- Leading kind glyphs + hover edit/delete stacked on the rail as the default
+  recipe; row click also expands `detail` while icons open edit (dual paths)
+
+**Cause:** copying List `--with-end` hover actions onto Timeline. Chronological
+catalogs read as a clean rail; edit/delete belong after the row opens a form.
+**Fix:** flat `TimelineItem` `onClick` → **`Dialog` `size="lg"` +
+`showCloseButton`**; edit fields + delete in the Dialog foot (`ConfirmDialog`
+for destroy). Prefer omit `leading` (default disc) — kind / role via Dialog
+fields. `detail` expand is **read** disclosure only; when the row opens an
+edit Dialog, prefer flat + bullets in the Dialog body. List path / status
+rows may keep trailing hover IconButtons — that is not the Timeline default.
+Live: sandbox `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md) Content
+density **Chronological timeline** + Hard rules. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: UI · — punctuation in chrome
 
 Symptoms (any destination / list / status chrome):

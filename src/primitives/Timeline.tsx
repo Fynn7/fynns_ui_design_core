@@ -65,6 +65,8 @@ export type TimelineItemProps = Omit<
   /**
    * Trailing actions (`IconButton` / cluster) or decorative chrome.
    * Action clusters stay a **sibling** of the row control.
+   * **Catalog edit:** prefer Dialog foot actions over `--with-end`
+   * hover IconButtons — see sandbox `#timeline`.
    */
   trailing?: ReactNode;
   /** Compact meta (dates). Prefer parent `trailingMetaAlign="start"`. */
@@ -91,9 +93,12 @@ export type TimelineItemProps = Omit<
 
 /**
  * One timeline entry. Expandable when `detail` / `children` is set —
- * row click toggles expand (caller may also pass `onClick` for edit;
- * both fire). Prefer trailing IconButtons for edit/delete with
- * `stopPropagation` when the row owns expand.
+ * row click toggles expand.
+ *
+ * **Catalog edit (recommended):** flat row `onClick` → `Dialog`; put
+ * edit / delete in the Dialog foot (`ConfirmDialog` for destroy) — do
+ * **not** park `--with-end` hover IconButtons on the rail. Prefer omit
+ * `leading` (default disc). Live: sandbox `#timeline`.
  */
 export const TimelineItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,
