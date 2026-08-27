@@ -1606,6 +1606,14 @@ export const TIMELINE_TOKENS = {
   "item-gap": "var(--fynns-layout-unit-stack-gap)",
   /** Node column width (rail centered in this track). */
   "node-col": "1.5rem",
+  /**
+   * Vertical band for disc / glyph — matches the **headline** line box
+   * (`font-size-md` × `line-height-snug`) so node mid = title mid on
+   * two-line org+dates rows (not mid title+supporting). Rail `::before`
+   * uses the same band. ≥ 0.5.14 / `#timeline`.
+   */
+  "node-band":
+    "calc(var(--fynns-font-size-md) * var(--fynns-line-height-snug))",
   /** Default disc diameter when `leading` is omitted. */
   "node-size": "0.625rem",
   /**
@@ -1657,7 +1665,7 @@ export const TIMELINE_TOKENS = {
   "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
    * Opt-in via `Timeline` `trailingMetaAlign="start"`. Shared date column
-   * (end-ink like List ≥ 0.4.148).
+   * (**start**-ink like List ≥ 0.5.13).
    */
   "trailing-meta-min-width": "var(--fynns-list-trailing-meta-min-width)",
   /** Headline ↔ supporting. */

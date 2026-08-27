@@ -26,10 +26,11 @@
   content: "";
   position: absolute;
   z-index: 0;
-  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-col) / 2));
+  /* Mid of the headline band (not the taller title+org stack). */
+  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-band) / 2));
   bottom: calc(
     -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
-      (var(--fynns-timeline-node-col) / 2))
+      (var(--fynns-timeline-node-band) / 2))
   );
   left: calc((var(--fynns-timeline-node-col) - var(--fynns-timeline-rail-width)) / 2);
   width: var(--fynns-timeline-rail-width);
@@ -71,11 +72,11 @@
 }
 
 /*
- * Two-line rows: keep the node **top-aligned** with the title line so the
- * host rail (`pad-block + node-col/2`) meets the disc mid. `align-items:
- * center` dropped the node on tall org+dates stacks and left a stub of rail
- * above the ball (Experiences / `#timeline`). Chevron + copy still center
- * as a stack via `.fynns-timeline-item-content`.
+ * Two-line rows: node **top-aligned** with content; disc mid locks to the
+ * **headline** line via `--fynns-timeline-node-band` (not mid title+org).
+ * Host rail uses `pad-block + node-band/2`. `align-items: center` on the
+ * row dropped the node and left a stub of rail above the ball. Chevron +
+ * copy still center as a stack via `.fynns-timeline-item-content`.
  */
 .fynns-timeline-item--2 {
   align-items: flex-start;
@@ -149,9 +150,12 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
+  align-self: flex-start;
   box-sizing: border-box;
   width: var(--fynns-timeline-node-col);
-  min-height: var(--fynns-timeline-node-col);
+  /* Height = headline line box so disc mid ≡ title mid (≥ 0.5.14). */
+  min-height: var(--fynns-timeline-node-band);
+  height: var(--fynns-timeline-node-band);
   color: var(--fynns-color-text-muted);
   /* Column stays open — mask lives on glyph / disc only (not a square plate). */
   background: transparent;

@@ -30,6 +30,9 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
    — never flush to the node edge. Content **inside** the wash uses
    `--fynns-timeline-pad-inline-start` = `radius-md` + `space-xs` (**24dp**,
    ≥ 0.5.10) — chevron/headline clear the wash curve (not List pad alone).
+   Disc / node mid = **headline** line box
+   (`--fynns-timeline-node-band` = `font-size-md` × `line-height-snug`,
+   ≥ **0.5.14**) — not mid title+supporting; rail uses the same band.
 3. Sandbox teaches **exactly two shells** — unlabeled:
    - **Flat** Timeline (no expand) — **catalog edit default:** row click →
      Dialog; edit / delete in Dialog foot (**not** `--with-end` hover icons)

@@ -496,6 +496,7 @@
   --fynns-tree-font-size: var(--fynns-font-size-sm);
   --fynns-timeline-item-gap: var(--fynns-layout-unit-stack-gap);
   --fynns-timeline-node-col: 1.5rem;
+  --fynns-timeline-node-band: calc(var(--fynns-font-size-md) * var(--fynns-line-height-snug));
   --fynns-timeline-node-size: 0.625rem;
   --fynns-timeline-node-mask: var(--fynns-color-surface-1);
   --fynns-timeline-node-mask-outset: var(--fynns-space-2xs);
