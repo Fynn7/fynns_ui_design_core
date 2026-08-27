@@ -950,13 +950,15 @@ Symptoms (dated history / Experiences-style `Timeline` catalogs):
 **Cause:** copying List `--with-end` hover actions onto Timeline. Chronological
 catalogs read as a clean rail; edit/delete belong after the row opens a form.
 **Fix:** flat `TimelineItem` `onClick` → **`Dialog` `size="lg"` +
-`showCloseButton`**; edit fields + delete in the Dialog foot (`ConfirmDialog`
-for destroy). Prefer omit `leading` (default disc) — kind / role via Dialog
-fields. `detail` expand is **read** disclosure only; when the row opens an
-edit Dialog, prefer flat + bullets in the Dialog body. List path / status
-rows may keep trailing hover IconButtons — that is not the Timeline default.
-Live: sandbox `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md) Content
-density **Chronological timeline** + Hard rules. Pasteable:
+`showCloseButton`**; edit fields + delete in the Dialog foot —
+LTR **Cancel → Delete → Save** (≥ **0.5.17**; `ConfirmDialog` for destroy —
+see **Dialog foot Delete leftmost of Cancel**). Prefer omit `leading`
+(default disc) — kind / role via Dialog fields. `detail` expand is **read**
+disclosure only; when the row opens an edit Dialog, prefer flat + bullets
+in the Dialog body. List path / status rows may keep trailing hover
+IconButtons — that is not the Timeline default. Live: sandbox `#timeline`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Chronological
+timeline** + Hard rules. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: UI · — punctuation in chrome
@@ -1229,6 +1231,27 @@ fillers. Live: sandbox `#rhythm` end-align footer.
 0.4.90. Keep real names on `ControlRow` `label`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Dialog foot Delete leftmost of Cancel
+
+Symptoms (Timeline / Experiences edit Dialog body end-align foot):
+
+- Cluster reads `删除 | 取消 | 保存` / `Delete | Cancel | Save`
+- Primary Save is on the right (correct), but **Cancel is not** the
+  leftmost action in the end-aligned strip — Delete occupies that slot
+
+**Cause:** agents park danger Delete first “because destructive is left,”
+mirroring some Material samples, without matching `ConfirmDialog` (Cancel
+then confirm) or the end-align **dismiss → … → primary** recipe.
+
+**Fix (docs + sandbox ≥ 0.5.17):** LTR order in
+`.fynns-control-cluster--end-align` Dialog feet —
+**Cancel → optional secondary → optional Delete → Save / primary**.
+Live: `#timeline` edit Dialog; `#form-recipe` already starts with Cancel.
+Prefer `ConfirmDialog` for destroy when the product needs a second step.
+**Fix in the consumer:** reorder the three Buttons only (props); re-paste
+`consumer-cursor-rule.mdc`. Authority: [`AGENTS.md`](../AGENTS.md)
+**Action footer / end-aligned button strip**.
 
 ## Failure mode this treaty targets: twin Button loading rings in one control-cluster
 

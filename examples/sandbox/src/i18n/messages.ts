@@ -1552,7 +1552,7 @@ const en = {
   "globals.timelineIntroHelp":
     "Chronological **UI shell** — one flat Timeline (catalog edit) and one Timeline with read-only `detail`. Generic placeholders only. **Do not** paint List start ticks / inset rails; **do not** reuse ChatActivity or Tree. Live: `#timeline`.",
   "globals.timelineFlatHelp":
-    "Flat Timeline (default catalog): row click → Dialog. Edit + delete live **in the Dialog foot** — **not** `--with-end` hover IconButtons, **not** leading kind glyphs (default disc). Slots: `headline` / org `supportingText` / dates `trailingSupportingText` + `trailingMetaAlign=\"start\"` (**start-ink** date column — short and long dates share one glyph start edge). Two-line: disc **centers on the full copy stack** (headline + org), not the title line alone (≥ 0.5.16).",
+    "Flat Timeline (default catalog): row click → Dialog. Edit + delete live **in the Dialog foot** — **not** `--with-end` hover IconButtons, **not** leading kind glyphs (default disc). Foot LTR order: **Cancel → Delete → Save** (dismiss start of the end-align cluster; primary on the right — never Delete leftmost when Cancel is present). Slots: `headline` / org `supportingText` / dates `trailingSupportingText` + `trailingMetaAlign=\"start\"` (**start-ink** date column — short and long dates share one glyph start edge). Two-line: disc **centers on the full copy stack** (headline + org), not the title line alone (≥ 0.5.16).",
   "globals.timelineFlatAria": "Sample flat timeline",
   "globals.timelineDetailHelp":
     "Timeline with detail: same rail; `detail` / `expanded` shows short **read** bullets. Expand chevron tucks into the pad band so **headlines share the flat start edge** (≥ 0.5.15). No row action icons — expand only.",
@@ -3357,7 +3357,7 @@ const zh: Record<MessageKey, string> = {
   "globals.timelineIntroHelp":
     "时间线 **UI 壳** — 一条扁平 Timeline（目录编辑），一条只读 `detail` Timeline。仅通用占位。**禁止**用 List start tick / inset rail 冒充竖轨；**禁止**用 ChatActivity 或 Tree。对照 `#timeline`。",
   "globals.timelineFlatHelp":
-    "扁平 Timeline（默认目录）：行点击 → Dialog。编辑 / 删除在 **Dialog 脚** — **禁止** `--with-end` 悬停 IconButton，**禁止** leading 种类图标（默认圆点）。槽位：`headline` / 组织 `supportingText` / 日期 `trailingSupportingText` + `trailingMetaAlign=\"start\"`（日期列 **左齐墨迹** — 短/长日期共用起点）。两行：圆点相对 **整块 copy**（标题+组织）垂直居中，不是只对齐标题行（≥ 0.5.16）。",
+    "扁平 Timeline（默认目录）：行点击 → Dialog。编辑 / 删除在 **Dialog 脚** — **禁止** `--with-end` 悬停 IconButton，**禁止** leading 种类图标（默认圆点）。脚栏 LTR：**取消 → 删除 → 保存**（Dismiss 在 end-align 簇起点；主操作在右 — 有取消时禁止删除占最左）。槽位：`headline` / 组织 `supportingText` / 日期 `trailingSupportingText` + `trailingMetaAlign=\"start\"`（日期列 **左齐墨迹** — 短/长日期共用起点）。两行：圆点相对 **整块 copy**（标题+组织）垂直居中，不是只对齐标题行（≥ 0.5.16）。",
   "globals.timelineFlatAria": "扁平时间线示例",
   "globals.timelineDetailHelp":
     "带 detail 的 Timeline：与扁平同竖轨；`detail` / `expanded` 显示短 **只读** bullets。展开 chevron 收进 pad 带，**标题与扁平行共起点**（≥ 0.5.15）。无行动作图标 — 仅展开。",
