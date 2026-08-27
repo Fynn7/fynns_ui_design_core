@@ -291,6 +291,19 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline"],
   },
   {
+    id: "timeline",
+    categoryId: "containment",
+    label: "Timeline",
+    keywords: [
+      "时间线",
+      "timeline",
+      "chronology",
+      "history",
+      "rail",
+      "sequence",
+    ],
+  },
+  {
     id: "divider",
     categoryId: "containment",
     label: "Divider",

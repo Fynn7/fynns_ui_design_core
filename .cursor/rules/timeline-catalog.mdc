@@ -1,0 +1,59 @@
+---
+description: >-
+  Hard gate — chronological catalogs use Timeline (flat + optional detail only);
+  never List rails, ChatActivity/Tree, lettered A/B/C shells, or list-detail fakes.
+alwaysApply: true
+---
+
+# Timeline catalog (hard gate)
+
+Authority: [`AGENTS.md`](../../AGENTS.md) Content density **Chronological
+timeline**; [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
+pasteable [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
+Consumer-reported pattern bugs → `/constrain-then-consumer`
+([`.cursor/skills/constrain-then-consumer/SKILL.md`](../skills/constrain-then-consumer/SKILL.md)).
+
+## Do
+
+1. Dated history with a **vertical rail** → **`Timeline` / `TimelineItem`**
+   (`headline` / org `supportingText` / dates `trailingSupportingText` +
+   `trailingMetaAlign="start"`). Live `#timeline`.
+2. Node→copy (`--fynns-timeline-gap`) and expandable chevron→copy
+   (`--fynns-timeline-chevron-gap`) both alias `--fynns-list-gap` (**16dp**) —
+   same breath as List leading→copy (≥ 0.5.6). Hover pill height comes from
+   `--fynns-timeline-pad-block` → `--fynns-list-pad-block` (**8dp**, ≥ 0.5.7)
+   — never crush to `space-xs` (**4dp**). Hover wash starts at
+   `--fynns-timeline-hover-inset-inline-start` (`node-col` + `gap`, ≥ 0.5.8)
+   — never flush to the node edge. Content **inside** the wash uses
+   `--fynns-timeline-pad-inline-start` = `radius-md` + `space-xs` (**24dp**,
+   ≥ 0.5.10) — chevron/headline clear the wash curve (not List pad alone).
+3. Sandbox teaches **exactly two shells** — unlabeled:
+   - **Flat** Timeline (no expand)
+   - Timeline **with `detail`** (optional bullets under the node)
+4. Title + org + dates **without** a rail → plain **List** org+dates (`#list`) —
+   never paint a fake rail on List.
+5. Sandbox copy = **generic UI shell** only (see `no-consumer-content.mdc`).
+
+## Don't (hard)
+
+- Letter / number **comparison chrome** in sandbox or keep-set docs as the
+  product UI: **A / B / C**, `Variant A`, `Shell A`, `A · flat`, `B list-detail`,
+  `C with detail`, or any A/B/C ranking of timeline hosts
+- A third host **`list-detail`** (List + chevron / expand masquerading as a
+  timeline middle option) — retired; never reintroduce in core demos or as a
+  recommended consumer layout mode
+- List start tick / inset rail / `::before` bar to fake chronology
+- **ChatActivity** or **Tree** for role / org / date history rows
+- Crushing node/chevron→copy to `control-cluster-gap` (**4dp**) or private
+  pad/margin on `.fynns-timeline-*`
+- Consumer product strings (résumé / employer / university / CV Generator
+  Experiences) in Globals `#timeline`
+- Shipping Timeline / density fixes **only** in a consumer — constrain core +
+  sandbox demo + publish, then subagent consumer verify
+
+## Gate
+
+- This rule (`alwaysApply`)
+- AGENTS Hard rules + Content density row
+- `npm run check:no-consumer` (lettered-shell + consumer-product denylist)
+- Dual-end browser verify when the bug was consumer-reported

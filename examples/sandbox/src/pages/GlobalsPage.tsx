@@ -93,6 +93,8 @@ import {
   LinearProgress,
   List,
   ListItem,
+  Timeline,
+  TimelineItem,
   MenuIcon,
   OtpInput,
   NumberInput,
@@ -841,6 +843,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   >("inbox");
   const [listTreeOpen, setListTreeOpen] = useState(true);
   const [listTurnOpen, setListTurnOpen] = useState(true);
+  const [timelineExpand, setTimelineExpand] = useState<
+    Partial<Record<"lead" | "mid" | "trail", boolean>>
+  >({ lead: true });
   const [pickedDate, setPickedDate] = useState<string | null>(null);
   const [dateDialogOpen, setDateDialogOpen] = useState(false);
   const [pickedRange, setPickedRange] = useState<{
@@ -3671,6 +3676,167 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </List>
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="timeline">
+          <div className="fynns-unit-stack">
+            <SandboxHelp text={t("globals.timelineIntroHelp")} />
+            <SandboxHelp text={t("globals.timelineFlatHelp")} />
+            <Timeline
+              aria-label={t("globals.timelineFlatAria")}
+              trailingMetaAlign="start"
+            >
+              <TimelineItem
+                headline={t("globals.timelineItemHeadlineLead")}
+                supportingText={t("globals.timelineItemOrgLead")}
+                trailingSupportingText={t("globals.timelineItemRangeLead")}
+                leading={<BriefcaseIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.timelineEdit")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.timelineEdit")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setListCatalogEditName(t("globals.timelineItemHeadlineLead"));
+                          setListCatalogEditOpen(true);
+                        }}
+                      >
+                        <PencilIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => {
+                  setListCatalogEditName(t("globals.timelineItemHeadlineLead"));
+                  setListCatalogEditOpen(true);
+                }}
+              />
+              <TimelineItem
+                headline={t("globals.timelineItemHeadlineMid")}
+                supportingText={t("globals.timelineItemOrgMid")}
+                trailingSupportingText={t("globals.timelineItemRangeMid")}
+                leading={<BriefcaseIcon />}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.timelineEdit")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.timelineEdit")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setListCatalogEditName(t("globals.timelineItemHeadlineMid"));
+                          setListCatalogEditOpen(true);
+                        }}
+                      >
+                        <PencilIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => {
+                  setListCatalogEditName(t("globals.timelineItemHeadlineMid"));
+                  setListCatalogEditOpen(true);
+                }}
+              />
+              <TimelineItem
+                headline={t("globals.timelineItemHeadlineTrail")}
+                supportingText={t("globals.timelineItemOrgTrail")}
+                trailingSupportingText={t("globals.timelineItemRangeTrail")}
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.timelineEdit")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.timelineEdit")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setListCatalogEditName(t("globals.timelineItemHeadlineTrail"));
+                          setListCatalogEditOpen(true);
+                        }}
+                      >
+                        <PencilIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                onClick={() => {
+                  setListCatalogEditName(t("globals.timelineItemHeadlineTrail"));
+                  setListCatalogEditOpen(true);
+                }}
+              />
+            </Timeline>
+
+            <SandboxHelp text={t("globals.timelineDetailHelp")} />
+            <Timeline
+              aria-label={t("globals.timelineDetailAria")}
+              trailingMetaAlign="start"
+            >
+              {(
+                [
+                  {
+                    id: "lead" as const,
+                    headline: "globals.timelineItemHeadlineLead" as MessageKey,
+                    org: "globals.timelineItemOrgLead" as MessageKey,
+                    range: "globals.timelineItemRangeLead" as MessageKey,
+                    bullet: "globals.timelineBulletLead" as MessageKey,
+                    icon: <BriefcaseIcon />,
+                  },
+                  {
+                    id: "mid" as const,
+                    headline: "globals.timelineItemHeadlineMid" as MessageKey,
+                    org: "globals.timelineItemOrgMid" as MessageKey,
+                    range: "globals.timelineItemRangeMid" as MessageKey,
+                    bullet: "globals.timelineBulletMid" as MessageKey,
+                    icon: <BriefcaseIcon />,
+                  },
+                  {
+                    id: "trail" as const,
+                    headline: "globals.timelineItemHeadlineTrail" as MessageKey,
+                    org: "globals.timelineItemOrgTrail" as MessageKey,
+                    range: "globals.timelineItemRangeTrail" as MessageKey,
+                    bullet: "globals.timelineBulletTrail" as MessageKey,
+                    icon: <ClipboardIcon />,
+                  },
+                ] as const
+              ).map((row) => (
+                <TimelineItem
+                  key={row.id}
+                  leading={row.icon}
+                  headline={t(row.headline)}
+                  supportingText={t(row.org)}
+                  trailingSupportingText={t(row.range)}
+                  expanded={Boolean(timelineExpand[row.id])}
+                  onExpandedChange={(next) =>
+                    setTimelineExpand((prev) => ({ ...prev, [row.id]: next }))
+                  }
+                  trailing={
+                    <div className="fynns-control-cluster">
+                      <Tooltip content={t("globals.timelineEdit")}>
+                        <IconButton
+                          variant="ghost"
+                          aria-label={t("globals.timelineEdit")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setListCatalogEditName(t(row.headline));
+                            setListCatalogEditOpen(true);
+                          }}
+                        >
+                          <PencilIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  }
+                  detail={
+                    <ul className="fynns-timeline-bullets">
+                      <li>{t(row.bullet)}</li>
+                      <li>{t("globals.timelineBulletShared")}</li>
+                    </ul>
+                  }
+                />
+              ))}
+            </Timeline>
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="divider">
         <div className="sandbox-globals-row sandbox-globals-row--stack">

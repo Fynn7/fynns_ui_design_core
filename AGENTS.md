@@ -1300,6 +1300,18 @@ classes.
   WAI-ARIA `tree`; branch row click selects **and** toggles expand; ↑↓ →← keyboard. **Not**
   `NavigationDrawer` destinations and **not** expandable catalog
   `List` / `ListItem` `detail`. Tokens `--fynns-tree-*`. Live `#tree`),
+  **Timeline** / **TimelineItem** `{ headline, supportingText?,
+  trailingSupportingText?, leading?, detail?, trailing?, interactive?,
+  trailingMetaAlign? }` (chronological history **rail** — node + vertical
+  line; optional expandable `detail` bullets; org+dates same slots as List.
+  **Not** List pills, ChatActivity, Tree, or lettered A/B/C / list-detail
+  shells. Node→copy / chevron→copy alias `--fynns-list-gap` (**16dp**, ≥ 0.5.6);
+  `pad-block` → List (**8dp**, ≥ 0.5.7); hover wash starts at `node-col` +
+  `gap` (≥ 0.5.8); content **inner** `pad-inline-start` =
+  `radius-md` + `space-xs` (**24dp**, ≥ 0.5.10) so chevron/headline clear the
+  wash curve — never flush to the pill’s rounded start. Tokens
+  `--fynns-timeline-*`. Live `#timeline`;
+  [`.cursor/rules/timeline-catalog.mdc`](.cursor/rules/timeline-catalog.mdc)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds` (dynamic border-box or scroll overflow vs a container or
   the viewport — small public API; prefer over ad-hoc getBoundingClientRect).
@@ -1343,8 +1355,8 @@ classes.
   | DropdownMenu / snackbar / SnackbarHost / BusyScrim / BusyRegion | both | Menus / feedback / busy. |
   | CommandPalette | both | Spotlight / ⌘K filter dialog; apps own accelerator; keyboard-first list. Live `#command-palette`. |
   | ContextMenu / Tooltip / InfoHint | desktop-first | Pointer / hover-first; touch apps need care. |
-  | Button → Grid / FillColumn / PageScroll / SplitPane / Tree (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll; SplitPane = in-content resize (not EndAside); Tree = file/settings hierarchy (not nav destinations / not List detail). |
-  | Card / Surface / List / ListItem / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. |
+  | Button → Grid / FillColumn / PageScroll / SplitPane / Tree / Timeline (form / selection / action / layout keep-set) | both | FillColumn = vertical fill host; PageScroll = pane-edge catalog scroll; SplitPane = in-content resize (not EndAside); Tree = file/settings hierarchy (not nav destinations / not List detail); Timeline = chronological rail (`#timeline` — flat + detail only). |
+  | Card / Surface / List / ListItem / Timeline* / Divider / Avatar* / Carousel* / EmptyState / Chat* / ChatMessage / ChatThinking / ChatActivity* / Progress* / BadgedBox / InlineAlert / Date* / Time* / measureOverflow* | both | Content / data. Timeline = chronological rail (`#timeline`) — not ChatActivity / List fake rails. |
   | Collapsible / CodeBlock | adaptive | `(hover: none)` changes disclose / copy visibility. |
   | Table* | desktop-first | Wide tables; narrow = **horizontal scroll**, not reflow. Host in `.fynns-table-wrap.fynns-scroll`; cells are `nowrap` + table `width: max-content; min-width: 100%` so dense columns / CJK headers do not crush or character-stack. |
   | Dropzone | desktop-first | Drag-drop primary; file input still works on touch. |
@@ -1384,6 +1396,7 @@ classes.
   | Untitled well / stage / preview | `Surface` | Surface as a substitute for List rows |
   | **In-content editor \| preview / list \| detail** (resizable) | **`SplitPane`** (`start` / `end`; optional `orientation`). Host must resolve height. **Not** `EndAside` (shell inspector). Live `#split-pane` | Hand-rolled flex + private resize handles; using EndAside inside a Card for a local split |
   | **File / settings hierarchy** (folders + leaves, keyboard tree) | **`Tree`** / **`TreeItem`** (`role=tree`). Branch row click selects **and** toggles expand. Live `#tree` | `NavigationDrawer` / `NavigationDrawerGroup` for app destinations; expandable catalog `List` + `ListItem` `detail` for session/record trees; inventing `HubTreeDisclosure` |
+  | **Chronological timeline** (dated history + vertical rail) | **`Timeline`** / **`TimelineItem`**: `headline` / org `supportingText` / dates `trailingSupportingText` + `trailingMetaAlign="start"`; optional `detail` bullets. Sandbox teaches **exactly two** unlabeled shells — **flat** and **with `detail`**. Node→copy / chevron→copy = `--fynns-list-gap` (**16dp**, ≥ 0.5.6); hover wash = `node-col` + `gap` (≥ 0.5.8); content inner breath `--fynns-timeline-pad-inline-start` = `radius-md` + `space-xs` (**24dp**, ≥ **0.5.10**) — chevron/headline clear the wash curve. Live `#timeline` | List start tick / inset rail / `::before` fake chronology; **ChatActivity** / **Tree** for role/org/date rows; lettered **A/B/C** / **`list-detail`** comparison shells; private pad on `.fynns-timeline-*`; hover pill that kisses the node **or** flush chevron/text inside the wash |
   | Empty catalog | `EmptyState` (optional suggestion `Chip`s). **Pane sole body** → `fill` so copy centers in the canvas (live `#empty-state` fill stage / Layouts `#layouts-demo-drill-in`). Inside Card / List / `ChatThread.empty` → default (no `fill`) | A lone tall empty Card; **EmptyState as a loading shell** (use `BusyRegion` `fill`); content-sized EmptyState as the only DestinationAppShell canvas child (parks top — not centered) |
   | Table / list pager (page-size + `Pagination`) | **`.fynns-pagination-bar`**: one footer row — `__start` = content-hug Select + range, `__end` = nowrap `Pagination` (M3 data-table / MUI TablePagination). **Never** wrap start/end onto two rows when narrow — add `fynns-scroll` and let the bar scroll inline. Live `#pagination` | Vertical Card-body stack of Select then pager; private space-between that grows Select (`width:100%` / `1fr`) and wraps page discs; `flex-wrap` two-line footer |
  | Multi-status / probe strip (behind / CI / protection / connection OK·Fail) | `ControlStack` of `ControlRow`s (`label` = short name; children = short `OK`/`Fail`/`-` **or** tip glyph + **`InfoHint`** for the long reason / installed list / proxy URL; **Fail** → `InfoHint` `tone="danger"`). Form-host → label-fill + end-hug. Live: `#rhythm` status legend | `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …Installed: …`); flat cluster of mono labels + icons; Fail row uses default white InfoHint; dumping diagnostics into visible body copy |

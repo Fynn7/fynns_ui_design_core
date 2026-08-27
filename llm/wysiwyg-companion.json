@@ -52,6 +52,7 @@
     "STATE_LAYER_TOKENS",
     "STATUSBAR_TOKENS",
     "TREE_TOKENS",
+    "TIMELINE_TOKENS",
     "SnackbarHost",
     "TIMEPICKER_TOKENS",
     "TOGGLE_TOKENS",
