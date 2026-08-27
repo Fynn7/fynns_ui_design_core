@@ -7,8 +7,10 @@ examples/sandbox/dist
 *.tgz
 
 # Local research / measurement dumps (do not commit)
+.tmp/
 scripts/_focus-verify/
 scripts/_scale-out/
 scripts/_tmp-*/
 scripts/_verify-*/
 scripts/_tmp-*.json
+

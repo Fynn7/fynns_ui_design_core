@@ -1,9 +1,11 @@
 ---
 description: >-
-  Hard gate — chronological catalogs use Timeline (flat + optional detail only);
-  never List rails, ChatActivity/Tree, lettered A/B/C shells, or list-detail fakes.
-alwaysApply: true
+  Timeline catalog hard gate — flat + optional detail only; never List rails,
+  ChatActivity/Tree, lettered A/B/C, or list-detail fakes. Apply for Timeline work.
+globs: "**/Timeline*,**/css/timeline*.css,**/GlobalsPage.tsx"
+alwaysApply: false
 ---
+
 
 # Timeline catalog (hard gate)
 
@@ -53,7 +55,7 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
 
 ## Gate
 
-- This rule (`alwaysApply`)
+- This rule (on-demand / Timeline globs — not alwaysApply)
 - AGENTS Hard rules + Content density row
 - `npm run check:no-consumer` (lettered-shell + consumer-product denylist)
 - Dual-end browser verify when the bug was consumer-reported

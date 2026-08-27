@@ -1,7 +1,10 @@
 ---
-description: When user says 下一个, start next M3 / uncovered common component without asking
-alwaysApply: true
+description: >-
+  When user says 下一个 / next M3 gap — pick uncovered component and implement
+  without asking; skip dial TimePicker / LoadingIndicator / ButtonGroup / RangeSlider.
+alwaysApply: false
 ---
+
 
 # M3 “下一个” workflow
 

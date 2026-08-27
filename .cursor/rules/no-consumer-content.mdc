@@ -41,7 +41,7 @@ Preview / Layout demos teach **primitive anatomy** — not any consumer product.
 ## Gate
 
 - Cursor rule: this file (alwaysApply)
-- Timeline host gate: [`.cursor/rules/timeline-catalog.mdc`](timeline-catalog.mdc)
+- Timeline host gate: [`.cursor/rules/timeline-catalog.mdc`](timeline-catalog.mdc) (on-demand)
 - AGENTS.md Hard rules (**DON'T** paste consumer content / lettered shells)
 - CI / local: `npm run check:no-consumer` (denylist scan of sandbox + demo paths)
 

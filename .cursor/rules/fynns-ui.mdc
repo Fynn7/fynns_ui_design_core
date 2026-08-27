@@ -1,289 +1,36 @@
 ---
-description: Use the @fynns/ui design system for all UI; style only with --fynns-* tokens; never add radix or sonner.
-globs:
+description: >-
+  @fynns/ui keep-set — tokens only, props-only consumers, publish+sandbox;
+  full catalog lives in AGENTS.md (read on demand, do not duplicate here).
 alwaysApply: true
 ---
 
-# fynns UI design system
+# fynns UI design system (pointer)
 
-This repo consumes `@fynns/ui` via **`@fynn7/ui-design-core`** (GitHub Packages)
-with a Vite/tsconfig alias to
-`node_modules/@fynn7/ui-design-core/src/index.ts`. It is the single source of
-truth for UI. To install into a **new** consumer: follow `llm/CONSUME.md` and run
-`scripts/install-as-npm.mjs` (`npm run consume:install`). Do **not** use a git
-submodule for day-to-day consume. Short prompts still require reading
-`llm/CONSUME.md` first (see `llm/opencode-fynns-ui-consume.md`).
+Authority: [`AGENTS.md`](../../AGENTS.md). Install / consume:
+[`llm/CONSUME.md`](../../llm/CONSUME.md). Treaty / failure modes:
+[`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md). Pasteable consumer
+rule: [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
+Purge / migration: [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md).
+Publish: [`docs/package-propagation.md`](../../docs/package-propagation.md).
 
-**Public API purge / migration:** `llm/BREAKING_PURGE.md` — only symbols demoed in
-sandbox Globals + Preview are public; do not import deleted APIs (Toast, Popover,
-UnitStack, SearchInput, Panel*, BlockingLoadingOverlay, PanelSkeleton, …).
-Dialog / Drawer / Textarea / Tabs / InlineAlert are restored; blocking /
-sectional busy → BusyScrim / BusyRegion (+ runBusyTask / afterNextPaint so the
-ring can paint before heavy work).
+## Hard (always)
 
-## Rules
+- Build from `@fynns/ui` keep-set only; no `@radix-ui/*`, no `sonner`, no revived
+  purged APIs (Toast / Popover / Panel* / BlockingLoadingOverlay / …).
+- Style with `var(--fynns-*)` only — never hardcode hex/rgba or invent shell
+  insets / private radius vars.
+- Consumers are **props-only** — no local `.fynns-*` restyles; missing capability
+  lands in this core first, then bump + publish.
+- Sandbox Globals/Preview = consumer default; keep `SANDBOX_DEFAULT_OVERRIDES`
+  empty; demo ↔ barrel stay atomic (`npm run check:wysiwyg`).
+- No consumer product copy in core/sandbox — see `no-consumer-content` rule +
+  `npm run check:no-consumer`.
+- Destination apps: prefer `DestinationAppShell`; inspector = `EndAside`;
+  blocking/sectional busy = `BusyScrim` / `BusyRegion` (+ `runBusyTask`).
+- Dense chrome lists / Timeline / 「下一个」 → use the matching **on-demand**
+  rules (`chrome-proportion`, `timeline-catalog`, `m3-next`) or read AGENTS
+  sections — do not re-paste catalogs into this file.
 
-- Build UI from `@fynns/ui` keep-set primitives (Button, IconButton, SplitButton,
-  Input,
-  Textarea, Select,
-  Autocomplete, OtpInput, NumberInput, DropdownMenu (+ Group / Separator / CheckboxItem),
-  ContextMenu (+ ContextMenuTrigger), CommandPalette, Tooltip, InfoHint, Dialog / DialogShell /
-  ConfirmDialog (M3 basic; dismissible labeled rows = Dialog + showCloseButton +
-  full-width ControlStack + track-only Switch — not InfoHint demo as Preferences
-  shell; see AGENTS.md), Drawer, FullscreenDialog,
-  BottomSheet, Switch (dense only — no size/md), ToggleGroup, Tabs, Slider, Card (title/icon/actions + body;
-  Collapsible shell, static head),
-  Surface,
-   LinearProgress/CircularProgress, BusyScrim/BusyRegion (`fill` = pane cold-start;
- Dialog/Card/section body load → BusyRegion, never bare md CircularProgress;
- `indicator="linear"` for known % — never nest a second progress in `message`;
-   never EmptyState + ring; pane sole zero-result → EmptyState `fill`),
-  afterNextPaint/yieldToMain/runBusyTask/useBusyTask, BadgedBox, Avatar, AvatarGroup, Fab,
-  FabMenu/FabMenuItem, TopAppBar (edge-flush — no radius / card frame; shell
-  bottom hairline only), BottomAppBar, StatusBar / StatusBarItem (IDE bottom
-  status strip — `#status-bar`; not BottomAppBar / Banner),
-  Toolbar, SearchBar, Banner,
-  InlineAlert, snackbar/SnackbarHost, List/ListItem, Breadcrumb, Pagination
-  (`.fynns-pagination-bar fynns-scroll` M3/MUI single footer row — never two
-  lines on narrow; not Select-then-pager stack),
-  SkipLink, Stepper,
-  EmptyState, Dropzone, Chat/ChatThread/ChatComposer/ChatScrollToBottom,
-  ChatMessage (dual placement: main 48rem host, bubble 70%; EndAside /
-  `.fynns-chat-host--fill` — bubble 100% of host to match composer shell on
-  long turns, composer 100%; soft floor
-  `--fynns-layout-chat-min-width`; `error`/`onRetry` = ChatGPT failed-
-  generation footer under assistant turns; `actions` = Copy + Regenerate + More
-  chrome (hover reveal; consumer wires LLM rerun — not core);
-  `thinking` / `ChatThinking` =
-  single-block reasoning / agent-activity disclosure between name and
-  bubble (`streamingLabel` for tool status; label shimmer;
-  collapsible while streaming unless user pinned closed);
-  `ChatActivity` / `ChatActivityStep` / `ChatActivityArtifact` = Wave 2
-  multi-step status tree (collapsible + rail; `icon` any ReactNode per step;
-  consumer labels: **step active = progressive *-ing*** /
-  **step done = past**; header may past-summarize while streaming —
-  `Calling…` / `Ran the script`; AGENTS.md Label tense;
-  stable `key` per logical step; step-row floor
-  `--fynns-chatmessage-activity-step-min-height` then measured max across
-  open steps — icon/label/artifact vertically centered; streaming min-busy
-  hold on instant-done steps then complete one-shot on glyph + artifact;
-  later steps stay queued until prior hold **and** complete, then fade as
-  a whole — no translateY / no height morph / no clip-wipe); `citations` /
-  `ChatCitations` / `ChatCitationChip` = browsing source chips under
-  assistant body; body **element** siblings stack with
-  `--fynns-chatmessage-body-stack-gap` (**16dp**, aliases `unit-stack-gap` —
-  same as `.fynns-unit-stack`; core wraps bare string/number children as
-  `.fynns-chat-message-prose` so `{text}<CodeBlock/>` gets the gap — do not
-  patch in the consumer; streaming wraps last glyph in trailing prose); inline
-  `code` = ChatGPT pill
-  (`--fynns-color-chat-inline-code-bg`, radius-xs); prefer `ChatMessage markdown` /
-  `ChatMarkdown` (L2 GFM subset); CJK IME Enter while
-  composing does not send — AGENTS.md Composer keys; composer =
-  growing `<textarea>` not ChatGPT ProseMirror — AGENTS.md Chat
-  **composer input model** + `llm/CHAT_COMPOSER_LAYOUT.md` (multiline =
-  bottom toolbar when expanded, compact single row when collapsed);
-  reduced-motion
-  stream-tail / scroll / shell — AGENTS.md Chat **Parity note
-  (`prefers-reduced-motion`)**; user-edit parity:
-  `llm/CHAT_USER_EDIT_UX.md`),
-  Table (+ Head/Body/Row/HeaderCell/Cell/Caption; `.fynns-table-wrap` +
-  nowrap / max-content → H-scroll when narrow), DiffView (unified-diff panel),
-  CodeBlock
-  (**strict:** titled `default` needs non-empty `label` or throws; no
-  title → `variant="plain"` with copy in a reserved end column — do not pad
-  `.fynns-code-block-pre` in the app; see `llm/CONSUME.md` / `llm/BREAKING_PURGE.md`
-  Behavioral breaking; zero-dep `--fynns-code-*` highlight for
-  ts/js/py/cpp/css/json/xml/html/bash; **`label` ≠ `language`** — always pass
-  matching `language` / profile (`llm/AGENT_INTERFACES.md`); PageScroll /
-  Card editable → **default autoGrow**; fill hosts only →
-  `autoGrow={false}`; consumer DSLs via `highlightProfile` /
-  `registerHighlightLanguage`; unknown language stays plain),
-  DatePicker/DatePickerDialog/DateRangePicker/DateRangePickerDialog,
-  TimePicker/TimePickerDialog, Carousel/CarouselItem,
-  NavigationRail, NavigationBar, NavigationDrawer (+ Headline / Group / Item;
-  sheet `headline` = static title only — never back IconButton / count toolbar;
-  mode exit → TopAppBar leading/leadingExtra; Group/Item label = short name
-  only (no `· N` / no parenthetical glosses unless user asks; Item badge only
-  when required); destination
-  siblings use
-  `--fynns-navdrawer-section-gap` — never
-  `.fynns-unit-stack`; SearchBar/tools as a body sibling use
-  `--fynns-navdrawer-search-gap` to destinations),
-  DestinationAppShell, ClippedNavShell, EndAside,
-  Divider, Checkbox, Radio, Chip (`assist`|`filter`|`input`|`suggestion` — not table-cell status),
-  ControlStack/ControlRow/ControlBlock/FieldHint/FieldStack/Grid/FillColumn,
-  PageScroll, SplitPane (in-content resize — not EndAside; live `#split-pane`),
-  Tree / TreeItem (file/settings hierarchy — not NavigationDrawer destinations,
-  not List detail catalog expand; live `#tree`),
-  Timeline / TimelineItem (chronological history rail — flat + optional
-  `detail` only; not List pills / ChatActivity / Tree / lettered A/B/C /
-  list-detail; live `#timeline`; `.cursor/rules/timeline-catalog.mdc`),
-  FieldBlock/FieldHeader (optional description/errorText; label→control =
-  `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
-  measureOverflow/useOverflowBounds, Collapsible).
-  Reach for an existing keep-set primitive before writing a new control.
-  See `AGENTS.md` catalog + `llm/BREAKING_PURGE.md` for removed → replacement.
-  Destination chrome apps: **`DestinationAppShell`** (default) — or
-  `ClippedNavShell` + `NavigationDrawer`/`NavigationRail` when fully custom;
-  end inspector: `EndAside` (not modal `Drawer`, not revived Panel/ListGroup).
-  Main canvas with Preview above Chat: **`FillColumn`** (`header` + `Chat` in
-  children) so composer docks; never stack Preview/EmptyState/Composer as
-  siblings. A catalog in that band = `.fynns-unit-stack` + `fynns-scroll`
-  (default `Surface` is content-sized; only `fill` uses `min-height: 0`).
-  **PageScroll first child = catalog ControlRow:** pad-block-start aligns to
-  `--fynns-navdrawer-body-pad-block-start` so the label midlines with the
-  active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101).
-  **Platform:** see AGENTS.md **Platform targeting** — NavigationBar /
-  BottomAppBar / BottomSheet / FullscreenDialog = mobile-first; NavigationRail =
-  mobile-first intentional phone root only (never DestinationAppShell densify;
-  never desktop greenfield root); Drawer /
-  ContextMenu / Tooltip = desktop-first; DestinationAppShell / ClippedNavShell /
-  EndAside / NavigationDrawer = adaptive; most controls = both. Layout templates
-  demos are the composed default; Globals demos are standalone parts.
-- Dense chrome lists (CommandPalette / menus / pickers): **row model first**,
-  type ladder **one step max**, breath from item pad — AGENTS.md **Chrome type
-  & row proportion** + `.cursor/rules/chrome-proportion.mdc`. Live `#command-palette`.
-- Probe / connection / multi-status Cards: short `ControlRow` + `OK`/`Fail` +
-  **`InfoHint`** for long detail — **`tone="danger"`** on Fail rows — never a
-  `.fynns-unit-stack` of `FieldHint` essays. Live `#rhythm` status legend.
-- **Hint compression (settings / inspector):** no Card-body `FieldHint`
-  essays or multi-sentence `FieldBlock` `description` for session scope /
-  catalog policy — **Tooltip** on the related IconButton (action copy);
-  **`InfoHint`** on field label row or Card `actions` (≤1). `FieldHint` =
-  one short line only. Live `#field-header`. When a FieldBlock label-row
-  InfoHint is `sm`, Select-row refresh + ControlRow probe InfoHints in that
-  Card stay **`size="sm"`** (one trailing chrome column — icons **and** lone
-  `.fynns-table-meta`; never md refresh under sm “i”; ≥ 0.4.137). FieldBlock+ControlStack: ControlRow **label glyphs** align Select/Input **value** text (≥ 0.4.138) — not shell left edges.
-- Settings: footer gear only (not a root destination Item beside it); body =
-  software chrome prefs including **UI language** (`FieldBlock` + compact
-  `ToggleGroup`) — never language in TopAppBar; feature panels get their own
-  destinations. Live `#layouts-demo-shell` + Templates.
-- Style with `--fynns-*` tokens only (e.g. `var(--fynns-color-accent)`,
-  `var(--fynns-space-3)`, `var(--fynns-radius-md)`). Never hardcode hex/rgba.
-  Vertical unit lists: Card / Collapsible body already use
-  `--fynns-layout-unit-stack-gap`; outside those shells use `.fynns-unit-stack`
-  (or sandbox `.sandbox-stack`). **Control + related note → `ControlBlock`**
-  (`field-hint-gap`) — never a loose muted `<p>` under `ControlStack`. Single-row
-  `description` docks in the **label column**; ToggleGroup centers on name+hint
-  (not a full-bleed next row). Padded `Surface` is a form host. **Form
-  options by semantic kind → `FieldStack`** (strongly recommended): plain
-  FieldBlocks keep `field-stack-gap` (12dp); label-row **FieldHeader** actions
-  lift headers to `field-header-action-row-min-height` (32dp); when **any**
-  sibling in the same **`FieldStack`** has those actions, **every** header
-  shares the band — label→control stays `field-hint-gap` (8dp); **Input**
-  `trailing` for reveal; **Select + row action** → `.fynns-control-cluster--end-align`
-  (not `Select.trailing`); FieldBlocks with description/error (no choice cluster) open the next
-  sibling to `unit-stack-gap` (16dp); FieldBlocks with a `.fynns-control-cluster` open to `form-cluster-gap` (32dp);
-  ControlBlocks to `unit-stack-gap` (16dp); adjacent stacks get
-  `form-cluster-gap` **plus a horizontal `Divider`** on kind jumps. Do
-  **not** flatten multi-topic forms as bare Card siblings — copy
-  `#form-recipe` (`AGENTS.md` **FieldStack semantic clusters**). Form
-  control → hint: `--fynns-layout-field-hint-gap` / `FieldHint`. Nested
-  surface wells (`chrome="plain"` / `.fynns-nest`): `--fynns-layout-nest-gap`
-  (plain ≠ flush).   **Path / link / bookmark catalogs:** one `List` of
-  `ListItem`s (headline + path + trailing ghost **md** actions — default size;
-  `--with-end` overlay reveal on hover; copy→first action
-  `--fynns-list-end-actions-gap` **4dp** ≥ 0.4.123, aliases
-  `control-cluster-gap` — any sibling left of IconButton) — never a
-  padded `Surface`/`Card` per entry (`AGENTS.md` **Content density**;
-  sandbox `#list`). Catalog kind = leading icon + `trailingSupportingText`
-  — **never** start tick / inset rail / second host wash. Leading→copy
-  `--fynns-list-gap` (**16dp**); three-line stack `--fynns-list-content-gap-3`
-  (**8dp**). Duration meta spaces units (`1m 47s`). Experience / job rows:
-  org under title (`supportingText`), dates → `trailingSupportingText` +
-  `List` `trailingMetaAlign="start"` for mixed lengths (column + **end**-aligned
-  glyphs ≥ 0.4.148); short status + delete
-  omit the prop (core ≥ 0.4.121: one-icon `--with-end` reserve — not a phantom
-  second disk). **Catalog create/edit:** keep List mounted → `Dialog`
-  `size="lg"` + `showCloseButton` (or `FullscreenDialog` for multi-Card long
-  forms) — never silent PageScroll replace with ghost text back. Live `#list`
-  status+action / `#form-recipe`.
-  Expandable trees:
-  `ListItem` **`detail`** in the same
-  `<li>` (`ul > li` only); `overline` / `trailingSupportingText`; decorative
-  leading chevron — never a button in `leading`, never `ul > div`. Long
-  headline (optional `Tooltip`) ellipsizes in core — do not `tip-grow` /
-  `max-content` the trigger. Trailing `IconButton` shares the row highlight.
-  **Font families:** inherit `--fynns-font-ui` for body/chrome; `--fynns-font-mono`
-  for code only; **never** `--fynns-font-serif` for main prose / forms / Chat /
-  Dialog (serif = rare explicit editorial only — `AGENTS.md` **Font families**).
-  Toolbar / labeled
-  strips: prefer `ControlStack` + `ControlRow` and `--fynns-layout-control-*`
-  (see AGENTS.md **Toolbar / unit rhythm**). Shell insets: content-inset
-  (Collapsible / Drawer / Card / Fullscreen) vs nest-gap (plain nest hosts) vs
-  dialog-inset (centered Dialog
-  **and** Chat column outer via `--fynns-chat-thread-pad-inline`) vs
-  strip-pad-inline (Banner / InlineAlert / Snackbar / ChatComposer collapsed
-  text-only start + expanded text edge; shell = strip − glyph-inset — see
-  `llm/CHAT_COMPOSER_LAYOUT.md`) vs capsule-chrome-pad-inline (SearchBar
-  only — not ChatComposer; Composer uses `--fynns-chat-composer-pad-*`) vs
-  field-pad-inline (Input / field-shell compose capsule + field-pad for
-  Select text-start parity) /
-  field-pad-block (Textarea — not Input sm zero block) — AGENTS.md
-  **Inset decision tree**. **FullscreenDialog flush-start:** first body child
-  a bordered well (`CodeBlock` / `Surface` / table wrap) → no pad-block-start
-  (not `chrome="plain"` flush). **Never** invent rem/px/private inset vars for
-  shell / column / chat margins — alias an existing `--fynns-layout-*` (or
-  component token that already aliases one); consumers follow `llm/CONSUME.md`.
-- Corner radius: only `var(--fynns-radius-*)`. Never add a private
-  `--fynns-<component>-*-radius` (or any non-`radius` group radius alias).
-  Every `RADIUS_TOKENS` key must show in the sandbox Globals shape inspector;
-  new radius steps require a GUI row in the same change.
-  **Chat containers** (bubble, citation cards, composer shell, new Chat*
-  panels): never squarer than `--fynns-radius-22` unless the user
-  **explicitly** asks; use `22` or rounder (`3xl` / `pill`). Micro marks
-  (`code` / favicon) may stay smaller. See AGENTS.md Hard rules.
-- **Consumers:** `@fynns/ui` is props-only — no local restyle wrappers or
-  `.fynns-*` overrides. Missing capability → tell the user to land it in
-  `fynns_ui_design_core` first (`llm/CONSUME.md`).
-- **WYSIWYG / surface sync:** sandbox Globals/Preview resting look = consumer
-  default. Keep `SANDBOX_DEFAULT_OVERRIDES` empty; promote aesthetics via
-  `tokens.ts` + `npm run gen:theme`. **Never** remove a Globals demo while the
-  symbol stays exported (or export without demo) — delete is **atomic**
-  (unexport + TSX/CSS + demo/catalog/i18n + AGENTS + BREAKING_PURGE Removed
-  row). `npm run check:wysiwyg` enforces this. Pasteable rule:
-  `llm/consumer-cursor-rule.mdc`.
-- **No consumer content in core/sandbox (hard):** never paste consumer product
-  strings, providers, routes, résumé facts, or domain jargon into Globals /
-  Preview / defaults — **UI shell placeholders only** (AGENTS Hard rules +
-  `.cursor/rules/no-consumer-content.mdc`). Gate: `npm run check:no-consumer`.
-- Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
-  primitives in the submodule instead. Do not resurrect purged Toast /
-  Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient
-  feedback: `snackbar` + `SnackbarHost`. Blocking / sectional busy:
-  `BusyScrim` / `BusyRegion`.
-- App/teaching-specific tokens stay app-side under `--afs-*` (automata canvas)
-  or `--dsa-*` (DSA bars/pointers/DSU). The global namespace is `--fynns-*`.
-- If a token or component is missing, add it in the core package
-  (`fynns_ui_design_core`) and run its `npm run gen:theme`, then **bump
-  semver + publish GitHub Packages in the same task**
-  (`docs/package-propagation.md`). Never deliver by aliasing a consumer at
-  this checkout.
-- Elevation ladder: `surface-1` → `surface-2` → `surface-3` → `surface-4` /
-  `surface-5`. Light theme: `applyFynnsThemeMode("light")` /
-  `restoreFynnsThemeMode()` from `@fynns/ui`.
-- Nested containment (host → section → field): page / Dialog / Drawer may host
-  `Card` sections (static `title` / optional `icon` / `actions`); title-less
-  wells use `Surface`. Field-header trailing actions use
-  `FieldHeader` / `FieldBlock` (`IconButton` + `Tooltip`). Overlay optional —
-  agents choose the host. See AGENTS.md **Nested containment** /
-  **Field header actions**.
-- Skip `Tooltip` on self-evident dismiss/clear chrome (Dialog / Drawer /
-  FullscreenDialog close X, Banner / Snackbar dismiss, Chip remove,
-  SearchBar clear) — `aria-label` only. See AGENTS.md principle 3.
-- **Performance:** for `ClippedNavShell` / `EndAside`, token inspectors,
-  Globals-style catalogs, or live draft GUIs, read
-  `packages/fynns_ui_design_core/llm/PERF.md` (or this repo’s `llm/PERF.md`)
-  before coding — no observer↔probe loops, no tip forests, lazy-mount dense
-  sections.
-- **Consumer-reported UI bugs:** invoke **`/constrain-then-consumer`** — core constraint +
-  sandbox Globals/Preview demo + publish + subagent consumer verify in one task;
-  never consumer-only. Skill:
-  [`.cursor/skills/constrain-then-consumer/SKILL.md`](.cursor/skills/constrain-then-consumer/SKILL.md).
-
-See `packages/fynns_ui_design_core/AGENTS.md` for the full token + component
-catalog. Text in this package (docs / default labels) is English or German;
-consumer sandboxes may offer English ↔ Chinese UI locale switching for their
-own chrome. Binary en↔zh → Settings body (`FieldBlock` + compact
-`ToggleGroup`, sandbox `LanguageSwitcher`) opened from footer gear — **never**
-TopAppBar `trailing` (ToggleGroup or Select).
+When unsure about a primitive or density recipe: **Read `AGENTS.md`** (Content
+density / Hard rules) rather than guessing from memory.

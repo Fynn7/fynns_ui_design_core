@@ -1,7 +1,11 @@
 ---
-description: Dense chrome lists (command/menu/picker) — row model, one-step type ladder, in-row pad.
-alwaysApply: true
+description: >-
+  Dense chrome lists (CommandPalette / menu / picker) — row model first,
+  one-step type ladder, breath from item pad. Apply when editing command/menu/picker UI.
+globs: "**/CommandPalette*,**/DropdownMenu*,**/ContextMenu*,**/Select*,**/Autocomplete*,**/css/command*.css,**/css/menu*.css"
+alwaysApply: false
 ---
+
 
 # Chrome type & row proportion
 
