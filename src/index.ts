@@ -215,6 +215,12 @@ export type {
 } from "./primitives/SplitPane";
 export { Tree, TreeItem } from "./primitives/Tree";
 export type { TreeItemProps, TreeProps } from "./primitives/Tree";
+export { Timeline, TimelineItem } from "./primitives/Timeline";
+export type {
+  TimelineItemProps,
+  TimelineProps,
+  TimelineTrailingMetaAlign,
+} from "./primitives/Timeline";
 export { ToggleGroup } from "./primitives/ToggleGroup";
 export type { ToggleGroupOption, ToggleGroupProps } from "./primitives/ToggleGroup";
 export { Collapsible } from "./primitives/Collapsible";

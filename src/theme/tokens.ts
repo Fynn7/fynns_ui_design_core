@@ -1597,6 +1597,83 @@ export const TREE_TOKENS = {
 };
 
 /**
+ * Chronological Timeline (CV / history catalogs — not List pills, not
+ * ChatActivity tool rails). `--fynns-timeline-<key>`.
+ * Live: sandbox `#timeline`.
+ */
+export const TIMELINE_TOKENS = {
+  /** Sibling item gap (breath between nodes — wider than List 4dp pills). */
+  "item-gap": "var(--fynns-layout-unit-stack-gap)",
+  /** Node column width (rail centered in this track). */
+  "node-col": "1.5rem",
+  /** Default disc diameter when `leading` is omitted. */
+  "node-size": "0.625rem",
+  /**
+   * Opaque wash behind glyph / disc so the vertical rail does not show
+   * through hollow outline icons. Matches Card / Collapsible `surface-1`.
+   */
+  "node-mask": "var(--fynns-color-surface-1)",
+  /** Halo around the glyph so the rail stops before the icon stroke. */
+  "node-mask-outset": "var(--fynns-space-2xs)",
+  /** Vertical rail stroke. */
+  "rail-width": "var(--fynns-border-hairline)",
+  "rail-color": "var(--fynns-color-border-strong)",
+  /**
+   * Node | content gutter. Aliases List leading→copy (`list-gap` / **16dp**)
+   * — never crush to `space-md` / control-cluster 4dp.
+   */
+  gap: "var(--fynns-list-gap)",
+  /**
+   * Expandable chevron | copy gutter. Same 16dp as `gap` (not
+   * `control-cluster-gap` 4dp — that crushed `#timeline` with-detail rows).
+   */
+  "chevron-gap": "var(--fynns-list-gap)",
+  /**
+   * Hover wash `inset-inline-start` — after node column **and** `gap` so the
+   * pill does not kiss the node (was `node-col` only → wash filled the gutter).
+   */
+  "hover-inset-inline-start":
+    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap))",
+  /**
+   * Row pad (content band — hover/selected wash height). Matches List
+   * `pad-block` (**8dp**) — `space-xs` (**4dp**) crushed two-line org+dates
+   * pills (CV Experiences / `#timeline` with-detail ~50px).
+   */
+  "pad-block": "var(--fynns-list-pad-block)",
+  /**
+   * Inner breath inside the hover wash (content start — not the node).
+   * `radius-md` + `space-xs` (**24dp**) so the first child (chevron or copy)
+   * clears the wash curve — List `pad-inline` alone (**16dp**) is shorter
+   * than the pill radius (**20dp**) and still reads flush (≥ 0.5.10 /
+   * `#timeline`).
+   */
+  "pad-inline-start":
+    "calc(var(--fynns-radius-md) + var(--fynns-space-xs))",
+  "pad-inline-end": "var(--fynns-space-sm)",
+  /**
+   * Preceding content → `--with-end` IconButton. Same as List
+   * `end-actions-gap` / control-cluster-gap.
+   */
+  "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
+  /**
+   * Opt-in via `Timeline` `trailingMetaAlign="start"`. Shared date column
+   * (end-ink like List ≥ 0.4.148).
+   */
+  "trailing-meta-min-width": "var(--fynns-list-trailing-meta-min-width)",
+  /** Headline ↔ supporting. */
+  "content-gap": "var(--fynns-list-content-gap)",
+  /** Nested detail under an expanded item. */
+  "detail-pad-block": "var(--fynns-space-sm)",
+  /**
+   * Align detail bullets with the headline start (node | gap |
+   * pad-inline-start | chevron | chevron-gap | copy). Expandable rows
+   * always paint the chevron column.
+   */
+  "detail-pad-inline-start":
+    "calc(var(--fynns-timeline-node-col) + var(--fynns-timeline-gap) + var(--fynns-timeline-pad-inline-start) + var(--fynns-size-icon) + var(--fynns-timeline-chevron-gap))",
+};
+
+/**
  * CommandPalette geometry. `--fynns-command-<key>`.
  * Corner radius stays `--fynns-radius-3xl` (dialog panel — no private radius).
  * Row model / type ladder: AGENTS.md **Chrome type & row proportion**.
@@ -1855,6 +1932,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["command", COMMAND_TOKENS],
   ["split", SPLIT_TOKENS],
   ["tree", TREE_TOKENS],
+  ["timeline", TIMELINE_TOKENS],
   ["focus", FOCUS_TOKENS],
   ["layout", LAYOUT_TOKENS],
   ["scrollbar", SCROLLBAR_TOKENS],

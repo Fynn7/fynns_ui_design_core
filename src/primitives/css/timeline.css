@@ -1,0 +1,419 @@
+/* Chronological Timeline — not List pills, not ChatActivity rails. */
+
+.fynns-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-timeline-item-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-timeline-item-host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/*
+ * Vertical rail through the node column — from this node mid to the next
+ * node mid. Last item has no ::before (no dangling stroke below the final
+ * node). Glyph / disc paint an opaque `node-mask` halo so the rail does
+ * not pierce hollow outline icons (still continuous between nodes).
+ */
+.fynns-timeline-item-host:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-col) / 2));
+  bottom: calc(
+    -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
+      (var(--fynns-timeline-node-col) / 2))
+  );
+  left: calc((var(--fynns-timeline-node-col) - var(--fynns-timeline-rail-width)) / 2);
+  width: var(--fynns-timeline-rail-width);
+  background: var(--fynns-timeline-rail-color);
+  pointer-events: none;
+}
+
+.fynns-timeline-item-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+}
+
+.fynns-timeline-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--fynns-timeline-gap);
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
+  padding-block: var(--fynns-timeline-pad-block);
+  padding-inline-start: 0;
+  padding-inline-end: var(--fynns-timeline-pad-inline-end);
+  border: none;
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  text-align: start;
+  cursor: default;
+}
+
+/* Two-line: node + chevron optically center on title + supporting block. */
+.fynns-timeline-item--2 {
+  align-items: center;
+}
+
+.fynns-timeline-item--2 .fynns-timeline-item-content {
+  align-items: center;
+}
+
+.fynns-timeline-item--2 .fynns-timeline-item-chevron {
+  margin-block-start: 0;
+}
+
+.fynns-timeline-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.fynns-timeline-item--interactive {
+  cursor: pointer;
+}
+
+.fynns-timeline-item--interactive:focus {
+  outline: none;
+}
+
+.fynns-timeline-item--interactive:focus-visible {
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width)
+    color-mix(in srgb, var(--fynns-color-focus) 80%, transparent);
+}
+
+/*
+ * Hover wash starts after node column + gap so the rail stays continuous,
+ * the node is not covered, and the pill does not kiss the node edge
+ * (`hover-inset-inline-start` = node-col + gap — not node-col alone).
+ */
+.fynns-timeline-item-host--interactive:hover > .fynns-timeline-item::after,
+.fynns-timeline-item-host--interactive:hover
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item::after,
+.fynns-timeline-item-host--interactive:focus-within > .fynns-timeline-item::after,
+.fynns-timeline-item-host--interactive:focus-within
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inset-inline-start: var(--fynns-timeline-hover-inset-inline-start);
+  border-radius: var(--fynns-radius-md);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.fynns-timeline-item--disabled,
+.fynns-timeline-item--disabled:hover {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+  background: transparent;
+}
+
+.fynns-timeline-node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--fynns-timeline-node-col);
+  min-height: var(--fynns-timeline-node-col);
+  color: var(--fynns-color-text-muted);
+  /* Column stays open — mask lives on glyph / disc only (not a square plate). */
+  background: transparent;
+  line-height: 0;
+}
+
+.fynns-timeline-node-disc {
+  display: block;
+  width: var(--fynns-timeline-node-size);
+  height: var(--fynns-timeline-node-size);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  box-shadow: 0 0 0 var(--fynns-timeline-node-mask-outset)
+    var(--fynns-timeline-node-mask);
+}
+
+.fynns-timeline-node-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-timeline-node-mask);
+  box-shadow: 0 0 0 var(--fynns-timeline-node-mask-outset)
+    var(--fynns-timeline-node-mask);
+  color: var(--fynns-color-accent);
+}
+
+.fynns-timeline-node-glyph svg {
+  display: block;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-timeline-item-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--fynns-timeline-chevron-gap);
+  min-width: 0;
+  /* Inner breath vs hover wash curve (chevron/copy — ≥ 0.5.10). */
+  padding-inline-start: var(--fynns-timeline-pad-inline-start);
+}
+
+.fynns-timeline-item-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 0.125rem;
+  color: var(--fynns-color-text-muted);
+  line-height: 0;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-timeline-item-chevron--open {
+  transform: rotate(90deg);
+}
+
+.fynns-timeline-item-copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--fynns-timeline-content-gap);
+  min-width: 0;
+}
+
+.fynns-timeline-item-headline {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-timeline-item-headline .fynns-tooltip-trigger,
+.fynns-timeline-item-headline .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-timeline-item-supporting {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-timeline-item-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  gap: var(--fynns-space-sm);
+  margin-inline-start: auto;
+  color: var(--fynns-color-text-muted);
+  min-height: var(--fynns-size-icon);
+}
+
+.fynns-timeline[data-trailing-meta-align="start"]
+  .fynns-timeline-item-trailing:has(> .fynns-timeline-item-trailing-text) {
+  min-width: var(--fynns-timeline-trailing-meta-min-width);
+  justify-content: flex-end;
+}
+
+.fynns-timeline-item-trailing-text {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+  text-align: end;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-timeline[data-trailing-meta-align="start"] .fynns-timeline-item-trailing-text {
+  text-align: end;
+}
+
+/* --with-end overlay reveal (parity with List — reserve includes pad-inline). */
+.fynns-timeline-item-host--with-end {
+  position: relative;
+  --fynns-timeline-end-reserve: calc(
+    var(--fynns-timeline-end-actions-gap) + var(--fynns-size-icon-target) +
+      var(--fynns-timeline-pad-inline-end)
+  );
+}
+
+.fynns-timeline-item-host--with-end:has(
+    .fynns-timeline-item-trailing--end .fynns-control-cluster > :nth-child(2)
+  ),
+.fynns-timeline-item-host--with-end:has(
+    .fynns-timeline-item-trailing--end > .fynns-btn--icon + .fynns-btn--icon
+  ),
+.fynns-timeline-item-host--with-end:has(
+    .fynns-timeline-item-trailing--end > .fynns-tooltip-trigger + .fynns-tooltip-trigger
+  ) {
+  --fynns-timeline-end-reserve: calc(
+    var(--fynns-timeline-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+      var(--fynns-layout-control-cluster-gap) + var(--fynns-timeline-pad-inline-end)
+  );
+}
+
+.fynns-timeline-item-host--with-end > .fynns-timeline-item-trailing--end,
+.fynns-timeline-item-host--with-end
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item-trailing--end {
+  position: absolute;
+  z-index: 2;
+  inset-inline-end: 0;
+  inset-block: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-timeline-item-host--with-end:hover > .fynns-timeline-item-trailing--end,
+.fynns-timeline-item-host--with-end:focus-within > .fynns-timeline-item-trailing--end,
+.fynns-timeline-item-host--with-end:hover
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item-trailing--end,
+.fynns-timeline-item-host--with-end:focus-within
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item-trailing--end {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fynns-timeline-item-host--with-end > .fynns-timeline-item,
+.fynns-timeline-item-host--with-end > .fynns-timeline-item-row > .fynns-timeline-item {
+  /* Idle: light end pad. Reveal: clear under the measured end cluster. */
+  padding-inline-end: var(--fynns-space-xs);
+  transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-timeline-item-host--with-end:hover > .fynns-timeline-item,
+.fynns-timeline-item-host--with-end:focus-within > .fynns-timeline-item,
+.fynns-timeline-item-host--with-end:hover
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item,
+.fynns-timeline-item-host--with-end:focus-within
+  > .fynns-timeline-item-row
+  > .fynns-timeline-item {
+  padding-inline-end: var(--fynns-timeline-end-reserve);
+}
+
+@media (hover: none) {
+  .fynns-timeline-item-host--with-end > .fynns-timeline-item-trailing--end,
+  .fynns-timeline-item-host--with-end
+    > .fynns-timeline-item-row
+    > .fynns-timeline-item-trailing--end {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .fynns-timeline-item-host--with-end > .fynns-timeline-item,
+  .fynns-timeline-item-host--with-end > .fynns-timeline-item-row > .fynns-timeline-item {
+    padding-inline-end: var(--fynns-timeline-end-reserve);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-timeline-item-chevron,
+  .fynns-timeline-item-host--with-end > .fynns-timeline-item-trailing--end,
+  .fynns-timeline-item-host--with-end
+    > .fynns-timeline-item-row
+    > .fynns-timeline-item-trailing--end {
+    transition: none;
+  }
+}
+
+.fynns-timeline-item-host--with-end:not(.fynns-timeline-item-host--with-detail)
+  > .fynns-timeline-item,
+.fynns-timeline-item-host--with-end > .fynns-timeline-item-row {
+  position: relative;
+}
+
+.fynns-timeline-item-detail {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  padding-block: var(--fynns-timeline-detail-pad-block);
+  padding-inline-start: var(--fynns-timeline-detail-pad-inline-start);
+  padding-inline-end: var(--fynns-timeline-pad-inline-end);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-timeline-item-detail > .fynns-list {
+  margin: 0;
+}
+
+/* Bullet recipe inside Timeline detail (sandbox shell). */
+.fynns-timeline-item-detail > .fynns-unit-stack {
+  gap: var(--fynns-space-xs);
+}
+
+.fynns-timeline-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-xs);
+  margin: 0;
+  padding-inline-start: 1.1em;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-timeline-bullets > li {
+  margin: 0;
+}

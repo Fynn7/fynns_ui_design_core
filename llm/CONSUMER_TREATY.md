@@ -28,6 +28,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **Clipped ≠ text-clip** / **ControlRow toolbar rhythm** /
 **List tree = ul>li + children** /
 **org · dates glued in supportingText** /
+**List rail / ChatActivity as timeline** /
+**lettered timeline A/B/C / list-detail** /
 **UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
@@ -818,6 +820,88 @@ glue. Live: sandbox `#list` org+dates sample. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Title + organization + date
 range** + Language **UI punctuation**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: List rail / ChatActivity as timeline
+
+Symptoms (dated history / experience catalogs in a consumer):
+
+- Consumer CSS paints a start tick, inset rail, or `::before` bar on `ListItem`
+  to look “chronological”
+- `ChatActivity` / `Tree` hosts dated role rows (missing org+date columns, wrong a11y)
+
+**Cause:** List hard-forbids start rails (kind = leading icon only); ChatActivity
+is agent tool status; Tree is file/settings hierarchy. **Fix:** use
+**`Timeline` / `TimelineItem`** for a vertical rail (optional `detail` bullets),
+or keep plain List org+dates without a fake rail — never a private timeline
+clone — never invent a List+chevron fake rail. Live: sandbox
+`#timeline`. Authority: [`AGENTS.md`](../AGENTS.md) Content density
+**Chronological timeline** + [`.cursor/rules/timeline-catalog.mdc`](../.cursor/rules/timeline-catalog.mdc).
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: lettered timeline A/B/C / list-detail
+
+Symptoms (core sandbox or consumer layout pickers):
+
+- Visible chrome ranks hosts as **A / B / C**, `Variant A`, `Shell B`,
+  `A · flat`, `C with detail`
+- A third layout mode **`list-detail`** (List + chevron expand sold as a
+  timeline middle option alongside flat Timeline / Timeline+detail)
+
+**Cause:** treating density research as shippable product UI; List expand ≠
+Timeline rail. **Fix:** keep-set / sandbox teach **exactly two** unlabeled
+shells — **flat** Timeline and Timeline **with `detail`**. Consumers may keep
+plain List org+dates as a separate density (no rail) — never letter the trio,
+never revive `list-detail` as recommended. Gate:
+[`.cursor/rules/timeline-catalog.mdc`](../.cursor/rules/timeline-catalog.mdc);
+`npm run check:no-consumer`. Live: `#timeline`.
+
+## Failure mode this treaty targets: Timeline node/chevron kissing copy
+
+Symptoms (`Timeline` / Experiences-style dated rows):
+
+- Headline / org sit ~4dp from the node glyph or expand chevron (reads glued)
+- Consumer tries private `margin-inline-start` / pad on `.fynns-timeline-*`
+
+**Cause:** early Timeline used `space-md` (12dp) for node→copy and
+`control-cluster-gap` (4dp) for chevron→copy — denser than List
+`--fynns-list-gap` (**16dp**). **Fix (core ≥ 0.5.6):**
+`--fynns-timeline-gap` and `--fynns-timeline-chevron-gap` both alias
+`list-gap` (**16dp**); detail pad uses `chevron-gap`. Consumers bump only —
+do **not** restyle `.fynns-timeline-*`. Live: `#timeline`. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline**.
+
+## Failure mode this treaty targets: Timeline hover pill kissing the node
+
+Symptoms (interactive / expandable Timeline rows on hover):
+
+- The row hover wash (pill) starts flush against the node disc — the **16dp**
+  flex gap disappears under the wash
+- Consumer tries private `::after` / negative margin on `.fynns-timeline-item`
+
+**Cause:** early hover wash used `inset-inline-start: node-col` only, so the
+pill painted across the node→copy gap. **Fix (core ≥ 0.5.8):**
+`--fynns-timeline-hover-inset-inline-start` = `node-col` + `gap`. Consumers
+bump only — do **not** restyle `.fynns-timeline-*`. Live: `#timeline`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Chronological
+timeline**.
+
+## Failure mode this treaty targets: Timeline hover pill flush text (zero inner pad)
+
+Symptoms (interactive Timeline rows on hover — Experiences / `#timeline`):
+
+- Headline / supporting / expandable **chevron** sit **flush** on the pill’s
+  **start** edge (rounded wash kisses the first glyph) even when node↔wash
+  gap looks correct
+- Consumer tries private `padding-inline-start` on `.fynns-timeline-item-*`
+
+**Cause:** hover wash starts at `node-col` + `gap` (content box start) while
+inner pad was missing or only List `pad-inline` (**16dp**) — shorter than
+wash `radius-md` (**20dp**), so the first child still reads flush inside the
+curve. **Fix (core ≥ 0.5.10):** `--fynns-timeline-pad-inline-start` =
+`radius-md` + `space-xs` (**24dp**) on `.fynns-timeline-item-content`; detail
+indent adds the same step. Consumers bump only — do **not** restyle
+`.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
+Content density **Chronological timeline**.
 
 ## Failure mode this treaty targets: UI · — punctuation in chrome
 

@@ -115,6 +115,9 @@ ring can paint before heavy work).
   PageScroll, SplitPane (in-content resize — not EndAside; live `#split-pane`),
   Tree / TreeItem (file/settings hierarchy — not NavigationDrawer destinations,
   not List detail catalog expand; live `#tree`),
+  Timeline / TimelineItem (chronological history rail — flat + optional
+  `detail` only; not List pills / ChatActivity / Tree / lettered A/B/C /
+  list-detail; live `#timeline`; `.cursor/rules/timeline-catalog.mdc`),
   FieldBlock/FieldHeader (optional description/errorText; label→control =
   `--fynns-layout-field-hint-gap` on FieldBlock `__main`),
   measureOverflow/useOverflowBounds, Collapsible).
@@ -240,9 +243,10 @@ ring can paint before heavy work).
   (unexport + TSX/CSS + demo/catalog/i18n + AGENTS + BREAKING_PURGE Removed
   row). `npm run check:wysiwyg` enforces this. Pasteable rule:
   `llm/consumer-cursor-rule.mdc`.
-- **No consumer content in core/sandbox:** never paste consumer product strings,
-  providers, routes, or domain jargon into Globals / Preview / defaults — generic
-  placeholders only (AGENTS Hard rules + `.cursor/rules/no-consumer-content.mdc`).
+- **No consumer content in core/sandbox (hard):** never paste consumer product
+  strings, providers, routes, résumé facts, or domain jargon into Globals /
+  Preview / defaults — **UI shell placeholders only** (AGENTS Hard rules +
+  `.cursor/rules/no-consumer-content.mdc`). Gate: `npm run check:no-consumer`.
 - Do NOT reintroduce `@radix-ui/*` or `sonner`. Extend the self-developed
   primitives in the submodule instead. Do not resurrect purged Toast /
   Popover / Panel / BlockingLoadingOverlay / PanelSkeleton APIs. Transient
