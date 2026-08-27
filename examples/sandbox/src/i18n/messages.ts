@@ -1433,7 +1433,7 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listOrgDatesHelp":
-    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **start**-aligned inside (≥ 0.4.144 — not end-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box start edges align); copy is **end**-aligned inside (≥ 0.4.148 / 0.4.133 — glyphs sit `end-actions-gap` from `--with-end` actions; not 0.4.144 start-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
   "globals.listOrgDatesAria": "Sample organization and date-range list rows",
   "globals.listOrgDatesHeadline":
     "Business intelligence intern, sample corp",
@@ -1451,7 +1451,7 @@ const en = {
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
   "globals.listRunSummaryHelp":
-    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (start ink + ellipsis ≥ 0.4.144 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
+    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (end-ink + ellipsis ≥ 0.4.148 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
   "globals.listRunSummaryAria": "Sample run summary list",
   "globals.listRunSummaryOk": "Success",
   "globals.listRunSummaryFail": "Failed",
@@ -3210,7 +3210,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listOrgDatesHelp":
-    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内**左对齐** ≥ 0.4.144）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；列内**右齐** ≥ 0.4.148 / 0.4.133 — 短日期贴 `--with-end` 动作）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
   "globals.listOrgDatesAria": "组织与日期区间列表示例",
   "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
   "globals.listOrgDatesOrg": "Acme",
@@ -3227,7 +3227,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
   "globals.listRunSummaryHelp":
-    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内左对齐 + 省略 ≥ 0.4.144 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
+    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内右齐 + 省略 ≥ 0.4.148 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
   "globals.listRunSummaryAria": "运行摘要列表示例",
   "globals.listRunSummaryOk": "成功",
   "globals.listRunSummaryFail": "失败",
