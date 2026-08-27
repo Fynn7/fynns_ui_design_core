@@ -1623,14 +1623,19 @@ classes.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
-`DialogFrame`, `Spinner`, and floating-box helpers are **internal**.
+`DialogFrame` (`src/primitives/DialogFrame.tsx`), `Spinner`, and floating
+placement (`src/primitives/floatingBox.tsx`) are **internal**. Domain CSS
+lives under `src/primitives/css/` — `primitives.css` only `@import`s (see
+CONTEXT.md **Architecture seams**).
 
 ## Adding to the system
 
 1. New token → edit `tokens.ts` / `motionTokens.ts`, run `npm run gen:theme`,
    reference it as `var(--fynns-...)`.
-2. New component → add `src/primitives/X.tsx` (+ styles in
-   `src/primitives/primitives.css` using `.fynns-*` + tokens), export from
+2. New component → add `src/primitives/X.tsx` (+ styles in the matching
+   `src/primitives/css/<domain>.css` — form Field cluster → `form-rhythm.css`;
+   do **not** invent empty TSX for CSS-only hosts; barrel
+   `src/primitives/primitives.css` keeps `@import` order), export from
    `src/index.ts`, document it here, **and add a live sample to sandbox
    Globals or Preview** in the same change. Prefer **one live sample +
    Preview switches** for optional anatomy (`icon`, `actions`, …) — do not

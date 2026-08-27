@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useId } from "react";
-import { DialogFrame } from "./Dialog";
-import type { DrawerSide } from "./Dialog";
+import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
 

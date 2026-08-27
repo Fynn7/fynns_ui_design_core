@@ -1,0 +1,1146 @@
+/* Domain: overlays — extracted from primitives.css */
+/* ---------- DropdownMenu ---------- */
+.fynns-menu-root {
+  position: relative;
+  display: inline-flex;
+}
+
+/*
+ * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
+ * state layers never kiss the outer edge.
+ */
+.fynns-menu {
+  position: fixed;
+  z-index: var(--fynns-z-dropdown);
+  box-sizing: border-box;
+  min-width: 12rem;
+  max-width: min(20rem, calc(100vw - 1rem));
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+  padding: var(--fynns-space-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-flyout);
+  transform-origin: top center;
+}
+
+.fynns-menu[data-side="top"] {
+  transform-origin: bottom center;
+}
+
+.fynns-menu[data-side="bottom"] {
+  transform-origin: top center;
+}
+
+.fynns-menu[data-state="open"] {
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="open"] {
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-menu[data-state="closing"] {
+  pointer-events: none;
+  animation: fynns-flyout-exit var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-menu[data-side="top"][data-state="closing"] {
+  animation-name: fynns-flyout-exit-top;
+}
+
+.fynns-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+}
+
+.fynns-menu-label {
+  box-sizing: border-box;
+  /* Extra block-start so section titles clear the menu edge / prior separator. */
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-xs);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  user-select: none;
+}
+
+.fynns-menu-separator {
+  height: 0;
+  margin-block: var(--fynns-space-2xs);
+  border: 0;
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+/*
+ * Menu item: 48dp row, 12dp inline pad. Highlight shape matches SearchBar /
+ * Select / Autocomplete results (`radius-3xl` long-strip) so all “dropdown
+ * list” surfaces share one hover language. Fill state-layer, not an outer ring.
+ */
+.fynns-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-size-icon-target);
+  margin: 0;
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fynns-font-size-md);
+  line-height: var(--fynns-line-height-snug);
+  appearance: none;
+}
+
+.fynns-menu-item:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-menu-item:focus-visible {
+  outline: none;
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-menu-item:hover:not(:disabled):focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-menu-item:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-menu-item-icon,
+.fynns-menu-item-leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-menu-item--checked .fynns-menu-item-leading {
+  color: var(--fynns-color-accent);
+}
+
+.fynns-menu-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- Tooltip / InfoHint ---------- */
+.fynns-tooltip-trigger {
+  display: inline-flex;
+}
+
+.fynns-tooltip {
+  position: fixed;
+  z-index: var(--fynns-z-tooltip);
+  display: inline-block;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: var(--fynns-layout-tooltip-max-width);
+  padding: var(--fynns-space-15) var(--fynns-space-35);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-3);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-caption);
+  line-height: var(--fynns-line-height-snug);
+  box-shadow: var(--fynns-shadow-tooltip);
+  pointer-events: none;
+  /* Long content wraps inside max-width: CSS token plus the inline pixel cap
+     from resolveFloatingBox (`vw − 2×viewport margin`) so the bubble cannot
+     spill past the window even when the trigger sits on a panel edge. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  overflow: visible;
+  /* Placement is absolute top/left (no transform). Enter motion waits until
+     `data-ready` so measuring with visibility:hidden does not burn the fade. */
+  opacity: 0;
+}
+
+.fynns-tooltip[data-ready="true"] {
+  animation: fynns-tooltip-enter var(--fynns-duration-tooltip) var(--fynns-ease-out) both;
+}
+
+.fynns-tooltip--interactive {
+  pointer-events: auto;
+}
+
+.fynns-tooltip[data-side="bottom"][data-ready="true"] {
+  animation-name: fynns-tooltip-enter-bottom;
+}
+
+.fynns-tooltip[data-side="left"][data-ready="true"] {
+  animation-name: fynns-tooltip-enter-left;
+}
+
+.fynns-tooltip[data-side="right"][data-ready="true"] {
+  animation-name: fynns-tooltip-enter-right;
+}
+
+/* Caret: a rotated square straddling the bubble edge that faces the trigger,
+   so the bubble reads as belonging to its anchor (Material-style plain tooltip).
+   Two outer faces keep the border; the inner half blends into the bubble. */
+/* The caret always sits at the bubble's geometric midpoint along the edge it
+   straddles (transform-based centering, robust to the caret's border). The
+   bubble itself is centered on the anchor, so this midpoint also points at the
+   trigger. Two outer faces keep the border; the inner half blends into the
+   bubble. */
+.fynns-tooltip__caret {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--fynns-color-surface-3);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  pointer-events: none;
+}
+.fynns-tooltip[data-side="bottom"] .fynns-tooltip__caret {
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-right: 0;
+  border-bottom: 0;
+}
+.fynns-tooltip[data-side="top"] .fynns-tooltip__caret {
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-left: 0;
+  border-top: 0;
+}
+.fynns-tooltip[data-side="right"] .fynns-tooltip__caret {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 0;
+  border-right: 0;
+}
+.fynns-tooltip[data-side="left"] .fynns-tooltip__caret {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.fynns-info-hint {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-caption);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-info-hint-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  line-height: 0;
+  cursor: help;
+}
+
+.fynns-info-hint-trigger--icon.fynns-btn {
+  cursor: help;
+}
+
+.fynns-info-hint-trigger--icon.fynns-btn > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon:hover,
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--icon:focus-visible {
+  color: color-mix(in srgb, var(--fynns-color-danger) 72%, var(--fynns-color-text));
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--labeled {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-info-hint-trigger--danger.fynns-info-hint-trigger--labeled:hover
+  .fynns-info-hint-label {
+  color: color-mix(in srgb, var(--fynns-color-danger) 72%, var(--fynns-color-text));
+}
+
+.fynns-info-hint-trigger--labeled {
+  max-width: 100%;
+  border-radius: var(--fynns-radius-sm);
+  line-height: var(--fynns-line-height-snug);
+  font: inherit;
+  color: inherit;
+  text-align: start;
+}
+
+.fynns-info-hint-label {
+  min-width: 0;
+}
+
+.fynns-info-hint-trigger--labeled:hover {
+  color: inherit;
+}
+
+.fynns-info-hint-trigger--labeled:hover .fynns-info-hint-label {
+  color: var(--fynns-color-text);
+}
+
+.fynns-info-hint-trigger:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+/* ---------- Dialog ---------- */
+.fynns-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fynns-z-modal);
+  background: var(--fynns-color-overlay);
+  opacity: 0;
+  transition: opacity var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog-overlay[data-state="open"] {
+  opacity: 1;
+}
+
+.fynns-dialog-overlay[data-state="closing"] {
+  opacity: 0;
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
+}
+
+.fynns-dialog-overlay--centered {
+  display: grid;
+  place-items: center;
+  padding: var(--fynns-space-lg);
+  /*
+   * Cap the sole column to the overlay. Long `pre` / CodeBlock min-content
+   * must not inflate the track and shove a max-width-clamped panel off-screen
+   * (panel used width stays ~560px while left jumps to ~17k).
+   */
+  grid-template-columns: minmax(0, 100%);
+}
+
+.fynns-dialog-overlay--fullscreen {
+  display: flex;
+  padding: 0;
+}
+
+.fynns-dialog--fullscreen {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog--fullscreen[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-dialog--fullscreen[data-state="closing"] {
+  opacity: 0;
+  transform: translateY(8px);
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
+}
+
+.fynns-dialog-head--fullscreen {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dialog-head--fullscreen .fynns-dialog-title {
+  min-width: 0;
+}
+
+.fynns-dialog-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.fynns-dialog-scrim--inert {
+  pointer-events: none;
+  cursor: default;
+}
+
+.fynns-dialog-panel {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-lg);
+  overflow: hidden;
+}
+
+/* Panel is programmatically focused (tabIndex=-1) — suppress UA outline; children own rings. */
+.fynns-dialog-panel:focus,
+.fynns-dialog-panel:focus-visible {
+  outline: none;
+}
+
+.fynns-dialog-panel--centered {
+  opacity: 0;
+  transform: scale(0.97) translateY(8px);
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-out),
+    transform var(--fynns-duration-base) var(--fynns-ease-out);
+}
+
+.fynns-dialog-panel--centered[data-state="open"] {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.fynns-dialog-panel--centered[data-state="closing"] {
+  opacity: 0;
+  transform: scale(0.97) translateY(8px);
+  transition-duration: var(--fynns-duration-fast);
+  transition-timing-function: var(--fynns-ease-in-out);
+}
+
+.fynns-dialog-panel--centered {
+  /* M3 basic dialog: ExtraLarge 28dp, min 280.
+   * Default width is content-fit (`max-content`); `size` sets the max-width
+   * ceiling. Form hosts (FieldStack / FieldBlock / Textarea in body) stretch
+   * to that ceiling — see rules after `--size-lg` — so tall forms are not a
+   * skinny column. ControlStack-only rows keep content-fit. */
+  min-width: min(100%, 17.5rem);
+  width: max-content;
+  max-width: min(100%, var(--fynns-layout-dialog-max-width));
+  max-height: min(90vh, 48rem);
+  border: none;
+  border-radius: var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+/* ---------- CommandPalette (Cursor Actions / ⌘K) ---------- */
+.fynns-dialog-panel--centered.fynns-command-palette {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, var(--fynns-command-max-width));
+  max-width: min(100%, var(--fynns-command-max-width));
+  max-height: min(90vh, calc(var(--fynns-command-list-max-height) + 8rem));
+  padding: 0;
+  overflow: hidden;
+}
+
+.fynns-command-palette-search {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-command-search-gap);
+  flex-shrink: 0;
+  padding: var(--fynns-command-search-pad-block) var(--fynns-command-pad-inline);
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-command-palette-search-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-command-font-search);
+  line-height: var(--fynns-line-height-snug);
+  outline: none;
+}
+
+.fynns-command-palette-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-palette-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: var(--fynns-command-list-max-height);
+  padding: var(--fynns-command-list-pad-block) var(--fynns-command-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-command-item-gap);
+}
+
+.fynns-command-palette-empty {
+  margin: 0;
+  padding: var(--fynns-space-md) var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-item);
+  text-align: center;
+}
+
+.fynns-command-palette-group {
+  margin: var(--fynns-command-group-gap) 0 var(--fynns-space-2xs);
+  padding: var(--fynns-command-group-pad-block) var(--fynns-command-item-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-group);
+  font-weight: var(--fynns-font-weight-medium);
+  letter-spacing: var(--fynns-letter-spacing-subtle);
+  line-height: var(--fynns-line-height-snug);
+  text-transform: none;
+}
+
+.fynns-command-palette-group:first-child {
+  margin-block-start: var(--fynns-space-2xs);
+}
+
+.fynns-command-item {
+  display: flex;
+  /* Cursor Actions default: single-line — icon + shortcut center on the row. */
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-command-item-min-height);
+  margin: 0;
+  padding: var(--fynns-command-item-pad-block) var(--fynns-command-item-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+  appearance: none;
+}
+
+/* Optional description: lead icon to the title row only (not mid-stack). */
+.fynns-command-item--described {
+  align-items: flex-start;
+}
+
+.fynns-command-item:hover:not(:disabled),
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-command-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-command-item:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-command-item-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-command-item--described .fynns-command-item-icon {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-command-item-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--fynns-command-item-text-gap);
+  min-width: 0;
+}
+
+.fynns-command-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-command-font-item);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-item-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-command-font-description);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-command-shortcuts {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--fynns-command-shortcut-gap);
+  margin-inline-start: auto;
+}
+
+.fynns-command-item--described .fynns-command-shortcuts {
+  height: var(--fynns-command-item-leading-height);
+}
+
+.fynns-command-shortcut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  padding: 0 var(--fynns-space-xs);
+  border-radius: var(--fynns-radius-xs);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text-muted);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-command-font-shortcut);
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* ---------- Side drawer (content inspector, not NavigationDrawer) ---------- */
+.fynns-dialog-overlay--drawer {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+}
+
+.fynns-dialog-overlay--nonmodal {
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-dialog-overlay--nonmodal .fynns-dialog-panel {
+  pointer-events: auto;
+}
+
+.fynns-dialog-panel--drawer {
+  width: var(--fynns-layout-drawer-width);
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  /* M3 side sheet: no dialog chrome border; low elevation. */
+  border: none;
+  box-shadow: var(--fynns-shadow-xs);
+  background: var(--fynns-color-surface-1);
+  will-change: transform;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+/* Open-edge Corner Large (~16dp); NavigationDrawer resets to 0. */
+.fynns-dialog-panel--drawer-right:not(.fynns-dialog-panel--nav-drawer) {
+  margin-left: auto;
+  border-radius: var(--fynns-radius-xl) 0 0 var(--fynns-radius-xl);
+  transform: translateX(100%);
+}
+
+.fynns-dialog-panel--drawer-left:not(.fynns-dialog-panel--nav-drawer) {
+  margin-right: auto;
+  border-radius: 0 var(--fynns-radius-xl) var(--fynns-radius-xl) 0;
+  transform: translateX(-100%);
+}
+
+.fynns-dialog-panel--drawer-right.fynns-dialog-panel--nav-drawer {
+  margin-left: auto;
+  border-radius: 0;
+  transform: translateX(100%);
+}
+
+.fynns-dialog-panel--drawer-left.fynns-dialog-panel--nav-drawer {
+  margin-right: auto;
+  border-radius: 0;
+  transform: translateX(-100%);
+}
+
+.fynns-dialog-panel--drawer[data-state="open"] {
+  transform: translateX(0);
+}
+
+.fynns-dialog-panel--drawer-right[data-state="closing"] {
+  transform: translateX(100%);
+}
+
+.fynns-dialog-panel--drawer-left[data-state="closing"] {
+  transform: translateX(-100%);
+}
+
+/* Side sheet head: single surface with body — no hairline / surface-head.
+ * Equal content-inset on all edges so the close IconButton hover disk clears
+ * the panel edge (do not zero padding-bottom). */
+.fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-head {
+  background: transparent;
+  border-bottom: none;
+  padding: var(--fynns-layout-content-inset);
+  align-items: center;
+}
+
+.fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer)
+  > .fynns-dialog-description {
+  padding: var(--fynns-space-sm) var(--fynns-layout-content-inset) 0;
+  font-size: var(--fynns-font-size-sm);
+}
+
+.fynns-dialog-panel--drawer:not(.fynns-dialog-panel--nav-drawer) > .fynns-dialog-body {
+  /* Block-start matches Card/Collapsible section body; sides/bottom stay content-inset. */
+  padding: var(--fynns-layout-content-pad-block) var(--fynns-layout-content-inset)
+    var(--fynns-layout-content-inset);
+}
+
+/* ---------- Bottom sheet (M3) ---------- */
+/* Specs: https://m3.material.io/components/bottom-sheets/specs */
+.fynns-dialog-overlay--sheet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--fynns-layout-sheet-top-margin) 0 0;
+  box-sizing: border-box;
+}
+
+@media (min-width: 40rem) {
+  .fynns-dialog-overlay--sheet {
+    padding: var(--fynns-layout-sheet-top-margin-wide)
+      var(--fynns-layout-sheet-side-margin-wide) 0;
+  }
+}
+
+.fynns-dialog-panel--sheet {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--fynns-layout-sheet-max-width);
+  max-height: 100%;
+  margin: 0 auto;
+  /* Reset dialog chrome — M3 sheet is borderless surface-container-low + level1. */
+  border: none;
+  border-radius: var(--fynns-radius-3xl) var(--fynns-radius-3xl) 0 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-xs);
+  overflow: hidden;
+  will-change: transform;
+  transform: translateY(100%);
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-dialog-panel--sheet[data-state="open"] {
+  transform: translateY(0);
+}
+
+.fynns-dialog-panel--sheet[data-state="closing"] {
+  transform: translateY(100%);
+}
+
+.fynns-dialog-panel--sheet-half {
+  height: var(--fynns-layout-sheet-half-height);
+  max-height: 100%;
+}
+
+.fynns-dialog-panel--sheet-full {
+  height: var(--fynns-layout-sheet-max-height);
+  max-height: 100%;
+}
+
+.fynns-sheet-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding-block: var(--fynns-layout-sheet-handle-pad-block);
+}
+
+.fynns-sheet-handle-pill {
+  width: var(--fynns-layout-sheet-handle-width);
+  height: var(--fynns-layout-sheet-handle-height);
+  border-radius: var(--fynns-radius-pill);
+  /* on-surface-variant */
+  background: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-sheet-header-gap);
+  flex: 0 0 auto;
+  padding: var(--fynns-layout-sheet-header-gap) var(--fynns-layout-sheet-pad-inline);
+  /* M3 sheet = drag handle + one surface; no header|body hairline (PR #65). */
+  border: none;
+  border-bottom: none;
+  background: transparent;
+}
+
+.fynns-sheet-header-spacer {
+  flex: 1 1 auto;
+}
+
+.fynns-sheet-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-font-size-title-large);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-title-large);
+  letter-spacing: 0;
+}
+
+.fynns-sheet-close {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-sheet-close:hover:not(:disabled) {
+  color: var(--fynns-color-text);
+}
+
+.fynns-sheet-description {
+  margin: var(--fynns-layout-sheet-header-gap) 0 0;
+  padding: 0 var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  padding: var(--fynns-layout-sheet-pad-block) var(--fynns-layout-sheet-pad-inline);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-sheet-header + .fynns-sheet-body,
+.fynns-sheet-description + .fynns-sheet-body {
+  padding-top: var(--fynns-layout-sheet-header-gap);
+}
+
+.fynns-sheet-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-layout-sheet-actions-pad-top)
+    var(--fynns-layout-sheet-pad-inline)
+    var(--fynns-layout-sheet-actions-pad-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-dialog-panel--drawer,
+  .fynns-dialog-panel--sheet {
+    transition: none;
+  }
+
+  .fynns-dialog-overlay,
+  .fynns-dialog-panel--centered,
+  .fynns-dialog--fullscreen,
+  .fynns-menu,
+  .fynns-select-list,
+  .fynns-popover,
+  .fynns-tooltip {
+    animation: none;
+    transition: none;
+  }
+
+  .fynns-tooltip[data-ready="true"] {
+    opacity: 1;
+  }
+}
+
+/* ---------- Toast ---------- */
+/* ---------- BusyScrim / BusyRegion (M3 scrim + progress + message) ---------- */
+.fynns-busy-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-layout-unit-stack-gap);
+  /* Cap vs *host* — never 100vw (that overflows NavigationDrawer / EndAside). */
+  width: min(20rem, 100%);
+  max-width: 100%;
+  min-width: 0;
+  padding: var(--fynns-space-lg);
+  box-sizing: border-box;
+}
+
+.fynns-busy-stack--linear {
+  align-items: stretch;
+  text-align: start;
+}
+
+.fynns-busy-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-busy-stack--linear .fynns-busy-message {
+  text-align: start;
+}
+
+.fynns-busy-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--fynns-z-modal);
+  display: grid;
+  place-items: center;
+  background: var(--fynns-color-overlay);
+  outline: none;
+}
+
+.fynns-busy-scrim .fynns-busy-message {
+  color: var(--fynns-color-text);
+}
+
+.fynns-busy-region {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.fynns-busy-region-content {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Stretch to a height-resolved flex parent so the overlay can center. */
+.fynns-busy-region--fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-busy-region--fill > .fynns-busy-region-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-busy-region-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  /* minmax(0, 1fr) so a 20rem-preferring stack cannot expand the host
+     (NavigationDrawer / EndAside); place-items still centers the chrome. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  min-width: 0;
+  box-sizing: border-box;
+  /* Transparent — keep host / pane background; do not wash with surface-*.
+     Full-viewport blocking tint stays on BusyScrim (`--fynns-color-overlay`). */
+  background: transparent;
+  pointer-events: auto;
+}
+
+/*
+ * Cold-start without `fill`: empty content + absolute overlay → region height 0,
+ * so BusyStack paints outside the box and overlaps prior siblings (SearchBar /
+ * tools in NavigationDrawer). Keep chrome in normal flow instead.
+ */
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty {
+  display: none;
+}
+
+.fynns-busy-region--busy:not(.fynns-busy-region--fill)
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay {
+  position: relative;
+  inset: auto;
+  grid-template-rows: auto;
+}
+
+.fynns-busy-region-overlay > .fynns-busy-stack,
+.fynns-busy-scrim > .fynns-busy-stack {
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-loading-spinner-ring {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+}
+
+/* ---------- Snackbar (M3) ---------- */
+.fynns-snackbar-host {
+  position: fixed;
+  z-index: var(--fynns-z-toast);
+  left: 50%;
+  bottom: var(--fynns-layout-snackbar-inset);
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  max-width: var(--fynns-layout-snackbar-max-width);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.fynns-snackbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-layout-snackbar-gap);
+  width: max-content;
+  max-width: var(--fynns-layout-snackbar-max-width);
+  min-height: var(--fynns-layout-snackbar-min-height);
+  padding: var(--fynns-layout-snackbar-pad-block) var(--fynns-layout-snackbar-pad-inline);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-toast-surface);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-md);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(var(--fynns-layout-snackbar-enter-offset));
+  transition:
+    opacity var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-snackbar[data-state="open"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fynns-snackbar__message {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.fynns-snackbar__trailing {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  margin-inline-start: var(--fynns-space-xs);
+}
+
+.fynns-snackbar__action.fynns-btn {
+  color: var(--fynns-color-accent);
+  flex-shrink: 0;
+  min-height: var(--fynns-layout-snackbar-dismiss-size);
+}
+
+.fynns-snackbar__dismiss.fynns-btn.fynns-btn--icon {
+  flex-shrink: 0;
+  width: var(--fynns-layout-snackbar-dismiss-size);
+  min-width: var(--fynns-layout-snackbar-dismiss-size);
+  height: var(--fynns-layout-snackbar-dismiss-size);
+  min-height: var(--fynns-layout-snackbar-dismiss-size);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-snackbar {
+    transform: none;
+    transition: opacity var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  }
+
+  .fynns-snackbar[data-state="open"] {
+    transform: none;
+  }
+}

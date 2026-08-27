@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+﻿import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   coversAnchor,
   floatingViewportRect,
@@ -7,7 +7,7 @@ import {
   viewportFloatMaxWidth,
   type Align,
   type Side,
-} from "./Popover";
+} from "./floatingBox";
 
 const MARGIN = 8;
 const VW = 1024;

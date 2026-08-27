@@ -11,7 +11,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-import { DialogFrame, type DrawerSide } from "./Dialog";
+import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
 
 /** True when any nested destination (or nested group) reports `active`. */

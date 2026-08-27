@@ -15,11 +15,18 @@ import {
 } from "react";
 import { ChevronRightIcon, FileIcon, ICON_SIZE, WrenchIcon } from "./icons";
 import { DURATION_TOKENS } from "../theme/motionTokens";
+import {
+  anyPriorIndex,
+  initialStepMotion,
+  predictStepSettle,
+  resolveActivityOpen,
+  type ChatActivityStepStatus,
+} from "./chatActivityPolicy";
+
+export type { ChatActivityStepStatus };
 
 /** Fallback when `--fynns-chatmessage-activity-enter|complete` cannot resolve. */
 const ACTIVITY_MOTION_FALLBACK_MS = Number.parseFloat(DURATION_TOKENS.activity);
-
-export type ChatActivityStepStatus = "pending" | "active" | "done";
 
 export type ChatActivityProps = Omit<
   HTMLAttributes<HTMLDivElement>,
@@ -228,22 +235,45 @@ export function ChatActivityStep({
   const completeTimerRef = useRef<number | null>(null);
   const [holding, setHolding] = useState(
     () =>
-      stream.streaming &&
-      status === "done" &&
-      !(stream.priorWillHold || stream.priorWillComplete),
+      initialStepMotion({
+        streaming: stream.streaming,
+        status,
+        priorWillHold: stream.priorWillHold,
+        priorWillComplete: stream.priorWillComplete,
+        prefersReducedMotion: prefersReducedMotion(),
+      }).holding,
   );
   const [completing, setCompleting] = useState(false);
   const [queued, setQueued] = useState(
     () =>
-      stream.streaming && (stream.priorWillHold || stream.priorWillComplete),
+      initialStepMotion({
+        streaming: stream.streaming,
+        status,
+        priorWillHold: stream.priorWillHold,
+        priorWillComplete: stream.priorWillComplete,
+        prefersReducedMotion: prefersReducedMotion(),
+      }).queued,
   );
-  const initiallyQueued =
-    stream.streaming &&
-    (stream.priorWillHold || stream.priorWillComplete);
   const [entering, setEntering] = useState(
-    () => stream.streaming && !initiallyQueued && !prefersReducedMotion(),
+    () =>
+      initialStepMotion({
+        streaming: stream.streaming,
+        status,
+        priorWillHold: stream.priorWillHold,
+        priorWillComplete: stream.priorWillComplete,
+        prefersReducedMotion: prefersReducedMotion(),
+      }).entering,
   );
-  const [expandOpen, setExpandOpen] = useState(() => !initiallyQueued);
+  const [expandOpen, setExpandOpen] = useState(
+    () =>
+      initialStepMotion({
+        streaming: stream.streaming,
+        status,
+        priorWillHold: stream.priorWillHold,
+        priorWillComplete: stream.priorWillComplete,
+        prefersReducedMotion: prefersReducedMotion(),
+      }).expandOpen,
+  );
   const enterPlayedRef = useRef(false);
   const enteringRef = useRef(false);
   enteringRef.current = entering;
@@ -571,19 +601,20 @@ export function ChatActivity({
 
   const childList = Children.toArray(children);
   const childKeys = childList.map((child, index) => childKey(child, index));
-  const predictedHold = new Set<number>();
-  const predictedComplete = new Set<number>();
-  if (streaming) {
-    childList.forEach((child, index) => {
-      const key = childKeys[index];
-      const st = childStepStatus(child) ?? "done";
-      const prev = prevStatusByKeyRef.current.get(key);
-      if (!prevKeysRef.current.has(key) && st === "done") {
-        predictedHold.add(index);
-      }
-      if (prev === "active" && st === "done") predictedComplete.add(index);
-    });
-  }
+  const { holdIndices: predictedHold, completeIndices: predictedComplete } =
+    streaming
+      ? predictStepSettle({
+          keys: childKeys,
+          statuses: childList.map(
+            (child) => childStepStatus(child) ?? "done",
+          ),
+          prevKeys: prevKeysRef.current,
+          prevStatusByKey: prevStatusByKeyRef.current,
+        })
+      : {
+          holdIndices: new Set<number>(),
+          completeIndices: new Set<number>(),
+        };
 
   useLayoutEffect(() => {
     prevKeysRef.current = new Set(childKeys);
@@ -605,11 +636,12 @@ export function ChatActivity({
     wasStreamingRef.current = streaming;
   }, [streaming, isControlled]);
 
-  const isOpen = isControlled
-    ? Boolean(open)
-    : streaming && !userPinnedClosed
-      ? true
-      : internalOpen;
+  const isOpen = resolveActivityOpen({
+    streaming,
+    open,
+    internalOpen,
+    userPinnedClosed,
+  });
 
   /*
    * Form-like list rhythm: natural height per open step-row → take max →
@@ -737,18 +769,6 @@ export function ChatActivity({
           >
             {childList.map((child, index, list) => {
               const last = index === list.length - 1;
-              let priorWillHold = false;
-              let priorWillComplete = false;
-              let priorHolding = false;
-              for (const i of predictedHold) {
-                if (i < index) priorWillHold = true;
-              }
-              for (const i of predictedComplete) {
-                if (i < index) priorWillComplete = true;
-              }
-              for (const i of holds) {
-                if (i < index) priorHolding = true;
-              }
               return (
                 <ChatActivityStream.Provider
                   key={childKeys[index]}
@@ -757,9 +777,11 @@ export function ChatActivity({
                     cycle: streamCycle,
                     index,
                     isLast: last,
-                    priorWillHold: streaming && priorWillHold,
-                    priorWillComplete: streaming && priorWillComplete,
-                    priorHolding,
+                    priorWillHold:
+                      streaming && anyPriorIndex(predictedHold, index),
+                    priorWillComplete:
+                      streaming && anyPriorIndex(predictedComplete, index),
+                    priorHolding: anyPriorIndex(holds, index),
                     reportHold,
                   }}
                 >

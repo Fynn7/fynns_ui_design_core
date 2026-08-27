@@ -88,3 +88,27 @@ _Avoid_: flat Card of mixed fields, narrative `<p>` under a control
 **Chrome list**:
 A dense command, filter, or menu list with a named row model (single-line vs two-line). Type steps at most one shirt size inside one panel.
 _Avoid_: form Field cluster rhythm, title two sizes above captions
+
+## Architecture seams (implementation)
+
+Names for **modules** that keep Core navigable. Not public Consumer APIs.
+
+**Overlay frame**:
+Shared presence lifecycle for centered and sheet overlays (`DialogFrame` module). Dialog / Drawer / BottomSheet / CommandPalette / date-time dialogs adapt at this **seam** — they do not each own enter/exit/focus trap.
+_Avoid_: copy-paste presence in every overlay file, public Export of DialogFrame
+
+**Floating placement**:
+Pure geometry for anchored flyouts (`floatingBox` module). Tooltip and DropdownMenu are **adapters**; placement math is testable without React.
+_Avoid_: revived public Popover primitive (purged), probes under observed shells
+
+**Form rhythm sheet**:
+CSS that paints Field cluster gaps and form-host ControlStack rhythm (`src/primitives/css/form-rhythm.css`). FieldStack / FieldBlock / ControlBlock stay thin React **adapters** over this sheet — do not invent empty TSX shells for CSS-only hosts.
+_Avoid_: flat Card of mixed fields, private gap vars outside `--fynns-layout-*`
+
+**Destination geometry**:
+Length resolution for DestinationAppShell / ClippedNavShell crowding without measure probes under a subtree `MutationObserver` (`layoutMeasure` module — see `llm/PERF.md`).
+_Avoid_: inserting probe nodes into the shell root, densify to unlabeled rail as DestinationAppShell default
+
+**Status-tree timing policy**:
+Pure open / settle / queue helpers for a Status tree (`chatActivityPolicy` module). ChatActivity keeps DOM, timers, and paint.
+_Avoid_: embedding settle prediction only inside React effects with no tests

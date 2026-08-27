@@ -84,4 +84,6 @@ fixes ship.
 - Sandbox helpers: `examples/sandbox/src/components/LazyCollapsible.tsx`,
   `examples/sandbox/src/state/TokenDraftProvider.tsx`,
   `examples/sandbox/src/manipulators/HueWheel.tsx`
-- Shell: `src/primitives/layoutMeasure.ts` (`resolveLengthPx` — no host probes; used by `ClippedNavShell` / `EndAside`)
+- Shell / Destination geometry: `src/primitives/layoutMeasure.ts`
+  (`resolveLengthPx` — no host probes; used by `ClippedNavShell` / `EndAside`;
+  CONTEXT.md **Destination geometry**)

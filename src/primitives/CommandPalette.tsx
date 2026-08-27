@@ -4,7 +4,7 @@ import type {
   ReactNode,
 } from "react";
 import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
-import { DialogFrame } from "./Dialog";
+import { DialogFrame } from "./DialogFrame";
 import { SearchIcon } from "./icons";
 
 export type CommandPaletteItem = {

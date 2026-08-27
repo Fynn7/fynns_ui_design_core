@@ -1,0 +1,3447 @@
+/* Domain: chrome — extracted from primitives.css */
+/* ---------- SplitPane (in-content resizable two panes) ---------- */
+.fynns-split {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: clip;
+}
+
+.fynns-split--vertical {
+  flex-direction: column;
+}
+
+.fynns-split-pane {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fynns-split-pane--start {
+  flex: 0 0 var(--fynns-split-size, 50%);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fynns-split--vertical > .fynns-split-pane--start {
+  max-width: none;
+}
+
+.fynns-split-pane--end {
+  flex: 1 1 0;
+  min-width: var(--fynns-split-min-end);
+}
+
+.fynns-split--vertical > .fynns-split-pane--end {
+  min-width: 0;
+  min-height: var(--fynns-split-min-end);
+}
+
+.fynns-split-handle {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 var(--fynns-split-handle-size);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-split--vertical > .fynns-split-handle {
+  cursor: row-resize;
+}
+
+.fynns-split-handle::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background: transparent;
+}
+
+.fynns-split--horizontal > .fynns-split-handle::before {
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+}
+
+.fynns-split--vertical > .fynns-split-handle::before {
+  inset-inline: 0;
+  inset-block-start: 50%;
+  height: calc(3 * var(--fynns-border-hairline));
+  transform: translateY(-50%);
+}
+
+.fynns-split-handle:hover::before,
+.fynns-split[data-resizing="true"] > .fynns-split-handle::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-split-handle:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-sm {
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-md {
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-md));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-lg {
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+}
+
+/*
+ * Form-host centered Dialog: stretch panel width to the `size` ceiling when
+ * body hosts FieldStack / FieldBlock / multiline fields. `width: max-content`
+ * alone shrinks to the M3 min (~280px) while tall Textarea stacks read as a
+ * skinny column — fill to max-width instead (M3 basic max 560dp via lg).
+ * ControlStack-only preference dialogs keep content-fit width.
+ */
+.fynns-dialog-panel--centered:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-sm:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-sm));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-md:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-md));
+}
+
+.fynns-dialog-panel--centered.fynns-dialog-panel--size-lg:has(
+  > .fynns-dialog-body
+    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+) {
+  width: min(100%, var(--fynns-layout-dialog-max-width-lg));
+}
+
+.fynns-dialog-panel--centered .fynns-field-stack,
+.fynns-dialog-panel--centered .fynns-field-block {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-self: stretch;
+}
+
+/*
+ * Contained body: never grow a horizontal scrollbar from long Switch /
+ * ControlStack labels. `overflow-y: auto` alone promotes overflow-x to auto
+ * (CSS overflow pairing) — pin overflow-x to clip. Vertical scroll only when
+ * body exceeds the panel max-height.
+ *
+ * ControlStack defaults use `min-width: min-content` so toolbar rows don't
+ * ellipsis; that must lose inside a sized dialog or labels refuse to wrap.
+ */
+.fynns-dialog-panel--centered > .fynns-dialog-body {
+  min-width: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.fynns-dialog-panel--centered .fynns-control-stack,
+.fynns-dialog-panel--centered .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Form hosts (centered Dialog + Card body + padded Surface + Collapsible
+ * body *direct* ControlStack / ControlBlock): label eats remaining space so
+ * trailing Switch tracks share one end edge. Do **not** use a descendant
+ * `.fynns-collapsible-body .fynns-control-stack` — sandbox Globals wraps
+ * every demo in a category Collapsible and would force toolbar stacks into
+ * Preferences layout. Row recipe (AGENTS): ControlRow label + track-only
+ * Switch. Toolbar / page chrome outside these hosts keep the fixed label
+ * track and the tight `control-stack-gap` (8dp).
+ *
+ * Preference rows use `--fynns-layout-control-stack-form-gap` (12dp /
+ * aliases `space-md`) — between toolbar-tight `control-stack-gap` (8dp)
+ * and sibling-unit `unit-stack-gap` (16dp).
+ */
+.fynns-dialog-panel--centered .fynns-control-stack,
+.fynns-card-body .fynns-control-stack,
+.fynns-surface--padded .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-stack,
+.fynns-collapsible-body > .fynns-control-block .fynns-control-stack {
+  width: 100%;
+  max-width: 100%;
+  gap: var(--fynns-layout-control-stack-form-gap);
+  grid-template-columns:
+    minmax(0, 1fr)
+    repeat(var(--fynns-control-stack-cols, 2), max-content);
+}
+
+.fynns-dialog-panel--centered .fynns-control-row,
+.fynns-card-body .fynns-control-row,
+.fynns-surface--padded .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+/* Form-host preference rows share FieldHeader label type (not toolbar caption). */
+.fynns-dialog-panel--centered .fynns-control-row__label,
+.fynns-card-body .fynns-control-row__label,
+.fynns-surface--padded .fynns-control-row__label,
+.fynns-collapsible-body > .fynns-control-row__label,
+.fynns-collapsible-body > .fynns-control-block .fynns-control-row__label {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  letter-spacing: normal;
+}
+
+/*
+ * Form control text-start column (≥ 0.4.138) — glyphs, not chrome boxes.
+ * When a form host mixes FieldBlock / Select / Input with ControlStack, the
+ * ControlRow label sits under the field *value* text (Select trigger /
+ * Input), not under the field outer border. Densified Select text start =
+ * border hairline + searchbar field capsule pad + trigger `space-md`
+ * (aliases field-pad-inline) — same as Input’s capsule+field-pad inside the
+ * border. Do **not** flush ControlRow labels to the Select box left (reads
+ * as “containers aligned, copy skewed”). FieldBlock *titles* stay flush with
+ * the control outer edge (label→control recipe unchanged).
+ */
+.fynns-dialog-panel--centered,
+.fynns-card-body,
+.fynns-surface--padded,
+.fynns-collapsible-body {
+  --fynns-form-control-text-inset-inline: calc(
+    var(--fynns-border-hairline) +
+      var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
+}
+
+.fynns-dialog-panel--centered:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-card-body:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-surface--padded:has(.fynns-field-block):has(.fynns-control-stack)
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label,
+.fynns-collapsible-body:has(.fynns-field-block):has(.fynns-control-stack)
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__label {
+  padding-inline-start: var(--fynns-form-control-text-inset-inline);
+}
+
+.fynns-dialog-panel--centered .fynns-control-row__controls,
+.fynns-card-body .fynns-control-row__controls,
+.fynns-surface--padded .fynns-control-row__controls,
+.fynns-collapsible-body > .fynns-control-row > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row__controls {
+  min-width: 0;
+  justify-self: end;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-grid > *,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-card-body .fynns-control-stack .fynns-grid > *,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-surface--padded .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body > .fynns-control-stack .fynns-grid > *,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  .fynns-grid
+  > * {
+  min-width: 0;
+  max-width: 100%;
+  /* Subgrid control tracks size to the widest sibling; pack shorter
+     switches / clusters to the shared end edge (Preferences). */
+  justify-self: end;
+}
+
+/*
+ * Form-host ControlRow clusters default to `width: 100%` of the shared
+ * max-content track. Without flex-end, shorter status+InfoHint rows
+ * (OK vs Fail) start-pack and leave the trailing “i” inset from FieldHeader /
+ * Select refresh — Card body trailing icon column breaks (≥ 0.4.136).
+ */
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster {
+  justify-content: flex-end;
+}
+
+/*
+ * Form trailing chrome column (≥ 0.4.137) — not “icons only”.
+ * Lone `.fynns-table-meta` (—, OK / Fail without InfoHint) is the same *cell*
+ * as IconButton / InfoHint: fixed trail box, content centered. Content-width
+ * em-dash glued to the end edge leaves a thin glyph under a 32/40dp disk and
+ * reads as a broken column next to Select+refresh. When meta + InfoHint share
+ * a cluster, InfoHint keeps the trail box; meta stays content-width to the left.
+ * Trail size follows the Card’s IconButton/InfoHint size lock (sm →
+ * field-header-action-row-min-height 32dp, else icon-target 40dp).
+ */
+.fynns-dialog-panel--centered,
+.fynns-card-body,
+.fynns-surface--padded,
+.fynns-collapsible-body {
+  --fynns-form-trail-chrome: var(--fynns-size-icon-target);
+}
+
+.fynns-dialog-panel--centered:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-card-body:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-surface--padded:has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-collapsible-body:has(.fynns-btn--sm.fynns-btn--icon) {
+  /* IconButton sm = field-header action band (32dp), not bare 2rem */
+  --fynns-form-trail-chrome: var(--fynns-layout-field-header-action-row-min-height);
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-collapsible-body
+  > .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster
+  > .fynns-table-meta:only-child {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--fynns-form-trail-chrome);
+  min-height: var(--fynns-form-trail-chrome);
+}
+
+.fynns-dialog-panel--centered .fynns-dialog-body > .fynns-switch {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Dialog body action footers: end-align clusters must wrap inside the clipped
+   scroll host — nowrap + justify-end overflows left and clips the first
+   button when several labeled actions exceed the panel width. */
+.fynns-dialog-body > .fynns-control-cluster--end-align {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Inside ControlRow, size to the track — the row grid (1fr | max-content)
+ * already pins the controls column to the panel end edge. */
+.fynns-dialog-panel--centered .fynns-control-stack .fynns-switch,
+.fynns-dialog-panel--centered .fynns-control-row .fynns-switch {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.fynns-dialog-panel--centered .fynns-switch-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Basic / confirm: no chrome title-bar strip and **no** head|body divider
+ * (M3 basic dialog is a single surface — do not paint a Card-like hairline).
+ * Outer inline → `--fynns-layout-dialog-inset`. Non-confirm head: block-start
+ * dialog-inset/2, block-end 0 (40dp close owns row height when present).
+ * Confirm head overrides block-start to full dialog-inset. `head + body`
+ * pad-top space-sm (close row already leaves optical space under the title);
+ * foot block-end space-lg (optical under Buttons). Body
+ * block-end / no-head bodies keep content-inset. Never full four-side 24dp
+ * (~88dp). Do not change the optical margin-inline-end on `.fynns-dialog-close`. */
+.fynns-dialog-panel--centered > .fynns-dialog-head {
+  background: transparent;
+  border-bottom: none;
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block-start: calc(var(--fynns-layout-dialog-inset) / 2);
+  padding-block-end: 0;
+  align-items: center;
+}
+
+.fynns-dialog-panel--centered > .fynns-dialog-description {
+  padding: var(--fynns-space-sm) var(--fynns-layout-dialog-inset) 0;
+  font-size: var(--fynns-font-size-sm);
+}
+
+.fynns-dialog-panel--centered > .fynns-dialog-body {
+  padding-block: var(--fynns-layout-content-inset);
+  padding-inline: var(--fynns-layout-dialog-inset);
+}
+
+/* Head height is owned by the 40dp close — title is vertically centered, so
+ * body start only needs a light step (matches description pad), not space-md. */
+.fynns-dialog-panel--centered > .fynns-dialog-head + .fynns-dialog-body {
+  padding-top: var(--fynns-space-sm);
+}
+
+/* Body/description before actions: drop bottom pad so foot owns the outer inset. */
+.fynns-dialog-panel--centered > .fynns-dialog-body:has(+ .fynns-dialog-foot),
+.fynns-dialog-panel--centered
+  > .fynns-dialog-description:has(+ .fynns-dialog-foot) {
+  padding-bottom: 0;
+}
+
+/* Outer optical symmetry with confirm head: title ink sits ~dialog-inset
+ * below the panel top, but action labels sit inside a 40dp Button — equal
+ * `dialog-inset` under the hit box leaves ~12dp extra under the glyphs.
+ * block-end = space-lg (between space-md optical-flush and full dialog-inset). */
+.fynns-dialog-panel--centered > .fynns-dialog-foot {
+  padding-block-start: var(--fynns-space-lg);
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block-end: var(--fynns-space-lg);
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dialog-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-md);
+  /* Base for FullscreenDialog / non-centered shells. Overlay heads are a
+   * single surface with the body — no Card-like hairline, no surface-head
+   * strip (PR #65 pollution). Centered Dialog overrides padding below. */
+  padding: var(--fynns-layout-content-inset);
+  border-bottom: none;
+  background: transparent;
+}
+
+.fynns-dialog-title {
+  margin: 0;
+  font-size: var(--fynns-font-size-root);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+}
+
+.fynns-dialog-head-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-15);
+  flex-shrink: 0;
+}
+
+.fynns-dialog-close {
+  line-height: var(--fynns-line-height-tight);
+}
+
+/*
+ * Optical end align: 40dp IconButton sits inside dialog-inset, but the 16dp
+ * CloseIcon ink must share the Switch track’s end edge (not the hover disk).
+ * Same glyph-inset math as ChatComposer: (target − icon) / 2.
+ */
+.fynns-dialog-panel--centered > .fynns-dialog-head .fynns-dialog-close {
+  margin-inline-end: calc(
+    (var(--fynns-size-icon-target) - var(--fynns-size-icon)) / -2
+  );
+}
+
+/* Confirm: start-aligned title (M3 centers only with dialog icon).
+ * Full dialog-inset on block-start so the title clears the panel radius
+ * (non-confirm centered heads keep inset/2). */
+.fynns-dialog-panel--centered > .fynns-dialog-head--confirm {
+  padding-block-start: var(--fynns-layout-dialog-inset);
+}
+
+.fynns-dialog-head--confirm {
+  justify-content: flex-start;
+}
+
+.fynns-dialog-head--confirm .fynns-dialog-title {
+  font-weight: var(--fynns-font-weight-medium);
+  font-size: var(--fynns-font-size-lg);
+}
+
+/* Date/Time picker dialogs: centered title with trailing close. */
+.fynns-dialog-head--centered {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.fynns-dialog-head--centered .fynns-dialog-title {
+  grid-column: 2;
+  text-align: center;
+  font-weight: var(--fynns-font-weight-bold);
+}
+
+.fynns-dialog-head--centered .fynns-dialog-close {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* Confirm dialog footer: right-aligned Cancel + Confirm buttons. */
+.fynns-dialog-foot {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--fynns-space-sm);
+  padding: 0 var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset);
+}
+
+.fynns-dialog-description {
+  margin: 0;
+  padding: var(--fynns-space-md) var(--fynns-layout-dialog-inset) 0;
+  font-size: var(--fynns-font-size-form-label);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-dialog-body {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  /* Pin x so `overflow-y: auto` does not promote x→auto (CSS overflow pairing)
+     and invent a horizontal scrollbar for wrapping text. */
+  overflow-x: clip;
+  overflow-y: auto;
+  /* Same sibling rhythm as Card / Collapsible body: FieldStack → Checkbox /
+     InlineAlert / actions use unit-stack-gap (16dp). Adjacent FieldStacks keep
+     form-cluster-gap via margin compensation below. */
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  /* FullscreenDialog + other non-centered shells; centered overrides inset. */
+  padding: var(--fynns-layout-content-inset);
+}
+
+/*
+ * Flush-start (FullscreenDialog — hard): do not pad above the first
+ * ceiling-flush bordered well. Title chrome stays content-inset; the well
+ * frame sits under the head — not an 18dp vacant band. Keep inline /
+ * block-end inset. One unpadded fill wrapper is allowed (the well is still
+ * that host’s first child). Not Card/Collapsible Field* crush; not
+ * chrome="plain" flush (plain ≠ flush still holds inside Card).
+ * Wells: CodeBlock, Surface, .fynns-table-wrap.
+ */
+.fynns-dialog--fullscreen > .fynns-dialog-body:has(
+    > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child
+  ),
+.fynns-dialog--fullscreen > .fynns-dialog-body:has(
+    > :first-child
+      > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child
+  ) {
+  padding-block-start: 0;
+}
+
+.fynns-dialog--fullscreen
+  > .fynns-dialog-body
+  > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child,
+.fynns-dialog--fullscreen
+  > .fynns-dialog-body
+  > :first-child
+  > :is(.fynns-code-block, .fynns-surface, .fynns-table-wrap):first-child {
+  margin-block-start: 0;
+}
+
+/* ---------- TopAppBar (M3 top app bar) ---------- */
+/*
+ * Edge-flush page chrome — not a Card / floating Toolbar.
+ * Never round the outer shell or paint a four-side frame: greenfield hosts
+ * (`ClippedNavShell` / `DestinationAppShell`) pin this bar to the viewport
+ * top edge. Seam under the bar is owned by the shell (bottom hairline only).
+ */
+.fynns-top-app-bar {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--fynns-appbar-height);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-none);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-top-app-bar--scrolled {
+  /* M3 on-scroll: surface-container + level-2 elevation. */
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-sm);
+}
+
+.fynns-top-app-bar--md {
+  min-height: var(--fynns-appbar-height-md);
+}
+
+.fynns-top-app-bar--lg {
+  min-height: var(--fynns-appbar-height-lg);
+}
+
+.fynns-top-app-bar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: var(--fynns-appbar-row-height);
+  padding-inline: var(--fynns-appbar-pad-inline);
+}
+
+.fynns-top-app-bar-leading,
+.fynns-top-app-bar-trailing {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--fynns-appbar-actions-gap);
+  color: var(--fynns-color-text);
+}
+
+.fynns-top-app-bar-trailing {
+  color: var(--fynns-color-text-muted);
+}
+
+/* Tooltip wrappers must not collapse IconButton hit targets in the action row. */
+.fynns-top-app-bar-leading .fynns-tooltip-trigger,
+.fynns-top-app-bar-trailing .fynns-tooltip-trigger {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-top-app-bar-spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-top-app-bar-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-appbar-title-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line);
+  color: var(--fynns-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-top-app-bar--md .fynns-top-app-bar-title,
+.fynns-top-app-bar--lg .fynns-top-app-bar-title {
+  flex: 0 0 auto;
+  padding-inline: var(--fynns-appbar-title-pad-inline);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-top-app-bar--md .fynns-top-app-bar-title {
+  padding-bottom: var(--fynns-appbar-title-pad-bottom-md);
+  font-size: var(--fynns-appbar-title-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line-md);
+}
+
+.fynns-top-app-bar--lg .fynns-top-app-bar-title {
+  padding-bottom: var(--fynns-appbar-title-pad-bottom-lg);
+  font-size: var(--fynns-appbar-title-size-lg);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-appbar-title-line-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-top-app-bar {
+    transition: none;
+  }
+}
+
+/* ---------- NavigationRail (M3 anatomy) ---------- */
+.fynns-nav-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-width);
+  min-height: 100%;
+  height: 100%;
+  padding-block: var(--fynns-navrail-pad-block-start) var(--fynns-space-md);
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail[data-has-menu="true"] {
+  padding-block-start: 0;
+}
+
+.fynns-nav-rail-menu {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(
+    var(--fynns-navrail-menu-pad-block) * 2 + var(--fynns-navrail-menu-target)
+  );
+  padding-block: var(--fynns-navrail-menu-pad-block);
+  color: var(--fynns-color-text);
+}
+
+/* Menu IconButton: 16dp glyph inside a 40dp hover/press target (--fynns-size-icon-target). */
+.fynns-nav-rail-menu .fynns-tooltip-trigger {
+  display: inline-flex;
+}
+
+.fynns-nav-rail-menu .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-menu-target);
+  height: var(--fynns-navrail-menu-target);
+  min-width: var(--fynns-navrail-menu-target);
+  min-height: var(--fynns-navrail-menu-target);
+  padding: 0;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-rail-menu .fynns-btn--icon svg {
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+}
+
+.fynns-nav-rail-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding-block: var(--fynns-navrail-header-pad-block);
+  margin-bottom: var(--fynns-navrail-header-gap);
+}
+
+.fynns-nav-rail-destinations {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-height: 0;
+}
+
+.fynns-nav-rail[data-has-footer="true"] .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.fynns-nav-rail-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-navrail-destinations-gap);
+  width: 100%;
+  min-width: 0;
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+  /* Cursor: gear/account chrome stays on the bottom edge — not under destinations. */
+  margin-top: auto;
+  flex-shrink: 0;
+  border-block-start: none;
+}
+
+/* Densified rail: hide empty project / workspace / account-start; keep gear. */
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-slot,
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account-start {
+  display: none;
+}
+
+.fynns-nav-rail-footer .fynns-nav-drawer-footer-account {
+  justify-content: center;
+  width: 100%;
+  background: transparent;
+}
+
+/* Keep destination indicators clear of menu chrome when there is no header.
+ * Header → first item uses `header-gap` only (= destinations-gap). */
+.fynns-nav-rail[data-has-menu="true"]:not([data-has-header="true"])
+  .fynns-nav-rail-destinations {
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+}
+
+.fynns-nav-rail--align-center:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
+  margin-block: auto;
+}
+
+.fynns-nav-rail--align-end:not([data-has-footer="true"])
+  .fynns-nav-rail-destinations {
+  margin-block-start: auto;
+}
+
+.fynns-nav-rail-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0;
+  padding: var(--fynns-navrail-item-pad-block) 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-nav-rail-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Full destination highlight: icon + label (not an icon-only pill).
+   Active fill lives on ::before so activate ↔ deactivate both morph
+   (transform + opacity) instead of a one-shot keyframe pop.
+   Shape morph (circle ↔ rounded square) uses interpolable radii — never
+   `--fynns-radius-pill` (999px), which stays circular until the last frames. */
+.fynns-nav-rail-indicator {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-navrail-label-gap);
+  box-sizing: border-box;
+  width: var(--fynns-navrail-indicator-width);
+  max-width: 100%;
+  height: auto;
+  padding-block: var(--fynns-navrail-indicator-pad-block);
+  padding-inline: var(--fynns-navrail-indicator-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  overflow: visible;
+  transform: scale(1);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    gap var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-rail-item--labeled .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-size-labeled);
+  height: var(--fynns-navrail-indicator-size-labeled);
+  min-width: var(--fynns-navrail-indicator-size-labeled);
+  max-width: var(--fynns-navrail-indicator-size-labeled);
+  min-height: var(--fynns-navrail-indicator-size-labeled);
+  max-height: var(--fynns-navrail-indicator-size-labeled);
+  border-radius: var(--fynns-radius-md);
+}
+
+.fynns-nav-rail-item--icon .fynns-nav-rail-indicator,
+.fynns-nav-rail[data-label-visibility="unlabeled"] .fynns-nav-rail-indicator {
+  flex: 0 0 auto;
+  width: var(--fynns-navrail-indicator-height-icon);
+  height: var(--fynns-navrail-indicator-height-icon);
+  min-width: var(--fynns-navrail-indicator-height-icon);
+  max-width: var(--fynns-navrail-indicator-height-icon);
+  min-height: var(--fynns-navrail-indicator-height-icon);
+  max-height: var(--fynns-navrail-indicator-height-icon);
+  padding: 0;
+  /* Half of icon size (= circle). Interpolates cleanly to radius-md. */
+  border-radius: calc(var(--fynns-navrail-indicator-height-icon) / 2);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator {
+  background: transparent;
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-rail-item--active:hover:not(:disabled) .fynns-nav-rail-indicator::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:active:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+  transform: scale(0.96);
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-rail-item--active:active:not(:disabled) .fynns-nav-rail-indicator::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-rail-item:focus-visible {
+  outline: none;
+}
+
+.fynns-nav-rail-item:focus-visible .fynns-nav-rail-indicator {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-rail-icon-wrap {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  overflow: visible;
+}
+
+.fynns-nav-rail-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navrail-icon-size);
+  height: var(--fynns-navrail-icon-size);
+  color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-icon {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:not(.fynns-nav-rail-item--active) .fynns-nav-rail-icon {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-icon {
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-rail-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Badge center shares one anchor: the icon’s top-end corner (half outside).
+ * Size-specific offsets keep the “3” and the red dot on the same center point.
+ */
+.fynns-nav-rail-badge {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-danger);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-navrail-badge-font-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.fynns-nav-rail-badge--dot {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-dot) - var(--fynns-navrail-badge-nudge)
+  );
+  width: var(--fynns-navrail-badge-dot);
+  height: var(--fynns-navrail-badge-dot);
+  min-width: var(--fynns-navrail-badge-dot);
+  padding: 0;
+}
+
+.fynns-nav-rail-badge--large {
+  top: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navrail-badge-size) - var(--fynns-navrail-badge-nudge)
+  );
+  min-width: var(--fynns-navrail-badge-size);
+  height: var(--fynns-navrail-badge-size);
+  padding-inline: var(--fynns-space-2xs);
+}
+
+.fynns-nav-rail-label {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navrail-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navrail-label-line);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-rail-item--active .fynns-nav-rail-label {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-rail-item:hover:not(:disabled):not(.fynns-nav-rail-item--active)
+  .fynns-nav-rail-label {
+  color: var(--fynns-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-rail-indicator,
+  .fynns-nav-rail-indicator::before,
+  .fynns-nav-rail-icon,
+  .fynns-nav-rail-label {
+    transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-rail-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-rail-item--active .fynns-nav-rail-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-rail-item:active:not(:disabled) .fynns-nav-rail-indicator {
+    transform: none;
+  }
+}
+
+/* ---------- NavigationBar (M3 bottom destinations) ---------- */
+.fynns-nav-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-height: var(--fynns-navbar-height);
+  height: var(--fynns-navbar-height);
+  padding-inline: var(--fynns-navbar-pad-inline);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-nav-bar-destinations {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  justify-content: space-around;
+  width: 100%;
+  min-height: 0;
+  gap: 0;
+}
+
+.fynns-nav-bar-item {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-nav-bar-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-nav-bar-indicator {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-navbar-label-gap);
+  box-sizing: border-box;
+  width: var(--fynns-navbar-indicator-size-labeled);
+  max-width: 100%;
+  height: var(--fynns-navbar-indicator-size-labeled);
+  min-width: 0;
+  min-height: var(--fynns-navbar-indicator-size-labeled);
+  max-height: var(--fynns-navbar-indicator-size-labeled);
+  padding-block: var(--fynns-navbar-indicator-pad-block);
+  padding-inline: var(--fynns-navbar-indicator-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  overflow: visible;
+  transform: scale(1);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    width var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    min-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    max-height var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    padding var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    border-radius var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-bar-indicator::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-secondary-container);
+  opacity: 0;
+  transform: scale(0.88);
+  transform-origin: center;
+  pointer-events: none;
+  transition:
+    opacity var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-slow) var(--fynns-ease-emphasized),
+    background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-bar-item--icon .fynns-nav-bar-indicator,
+.fynns-nav-bar[data-label-visibility="unlabeled"] .fynns-nav-bar-indicator {
+  width: var(--fynns-navbar-indicator-height-icon);
+  height: var(--fynns-navbar-indicator-height-icon);
+  min-height: var(--fynns-navbar-indicator-height-icon);
+  max-height: var(--fynns-navbar-indicator-height-icon);
+  padding: 0;
+  border-radius: calc(var(--fynns-navbar-indicator-height-icon) / 2);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-indicator {
+  background: transparent;
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-nav-bar-item--active:hover:not(:disabled) .fynns-nav-bar-indicator::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-bar-item:active:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-indicator {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+  transform: scale(0.96);
+}
+
+.fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator {
+  transform: scale(0.96);
+}
+
+.fynns-nav-bar-item--active:active:not(:disabled) .fynns-nav-bar-indicator::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-bar-item:focus-visible {
+  outline: none;
+}
+
+.fynns-nav-bar-item:focus-visible .fynns-nav-bar-indicator {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-nav-bar-icon-wrap {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navbar-icon-size);
+  height: var(--fynns-navbar-icon-size);
+  overflow: visible;
+}
+
+.fynns-nav-bar-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navbar-icon-size);
+  height: var(--fynns-navbar-icon-size);
+  color: inherit;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-icon {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item:not(.fynns-nav-bar-item--active) .fynns-nav-bar-icon {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-icon {
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-bar-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Reuse rail badge chrome when NavigationRailBadge is nested in a bar item. */
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge {
+  top: calc(
+    -0.5 * var(--fynns-navbar-badge-size) - var(--fynns-navbar-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navbar-badge-size) - var(--fynns-navbar-badge-nudge)
+  );
+}
+
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge--dot {
+  top: calc(
+    -0.5 * var(--fynns-navbar-badge-dot) - var(--fynns-navbar-badge-nudge)
+  );
+  inset-inline-end: calc(
+    -0.5 * var(--fynns-navbar-badge-dot) - var(--fynns-navbar-badge-nudge)
+  );
+  width: var(--fynns-navbar-badge-dot);
+  height: var(--fynns-navbar-badge-dot);
+  min-width: var(--fynns-navbar-badge-dot);
+}
+
+.fynns-nav-bar-icon-wrap .fynns-nav-rail-badge--large {
+  min-width: var(--fynns-navbar-badge-size);
+  height: var(--fynns-navbar-badge-size);
+  font-size: var(--fynns-navbar-badge-font-size);
+}
+
+.fynns-nav-bar-label {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navbar-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navbar-label-line);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+  transition: color var(--fynns-duration-base) var(--fynns-ease-emphasized);
+  animation: fynns-nav-rail-label-enter
+    var(--fynns-duration-slow) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-bar-item--active .fynns-nav-bar-label {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-bar-item:hover:not(:disabled):not(.fynns-nav-bar-item--active)
+  .fynns-nav-bar-label {
+  color: var(--fynns-color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-bar-indicator,
+  .fynns-nav-bar-indicator::before,
+  .fynns-nav-bar-icon,
+  .fynns-nav-bar-label {
+    transition: none;
+    animation: none;
+  }
+
+  .fynns-nav-bar-indicator::before {
+    transform: none;
+  }
+
+  .fynns-nav-bar-item--active .fynns-nav-bar-indicator::before {
+    opacity: 1;
+  }
+
+  .fynns-nav-bar-item:active:not(:disabled) .fynns-nav-bar-indicator {
+    transform: none;
+  }
+}
+
+/* ---------- NavigationDrawer (M3 destination side sheet) ---------- */
+.fynns-dialog-panel--nav-drawer {
+  width: var(--fynns-navdrawer-width);
+  max-width: 100%;
+}
+
+.fynns-dialog-panel--nav-drawer .fynns-nav-drawer {
+  height: 100%;
+}
+
+.fynns-nav-drawer {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: var(--fynns-navdrawer-width);
+  max-width: 100%;
+  height: 100%;
+  min-height: 0;
+  padding-block: var(--fynns-navdrawer-pad-block);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer--standard {
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+.fynns-nav-drawer-headline {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding-block: var(--fynns-navdrawer-headline-pad-block);
+  /*
+   * Match section-headline start: body pad-inline + headline-pad-inline.
+   * No scrollbar-gutter here — sheet title is outside the scrollport.
+   */
+  padding-inline: calc(
+    var(--fynns-navdrawer-pad-inline) + var(--fynns-navdrawer-headline-pad-inline)
+  );
+  font-size: var(--fynns-navdrawer-headline-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-navdrawer-headline-line);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-nav-drawer-body {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  /*
+   * No flex gap: destination rhythm is adjacent-sibling
+   * `--fynns-navdrawer-section-gap` (4dp). SearchBar / tools use
+   * `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` /
+   * 8dp) so Search↔Item matches Search↔Toggle in a tools column.
+   */
+  gap: 0;
+  align-items: stretch;
+  min-height: 0;
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+  padding-block-end: var(--fynns-navdrawer-body-pad-block-start);
+  /*
+   * Outer inset = `--fynns-navdrawer-pad-inline` (10dp) only. No both-edges /
+   * scrollbar-size inflation (oversized); do not crush pad below ~8dp (flush).
+   */
+  padding-inline: var(--fynns-navdrawer-pad-inline);
+  /*
+   * Pin x: bare `overflow: auto` promotes both axes and can reserve *block*
+   * gutters that clip first/last pill radii. Vertical scroll only.
+   */
+  overflow-x: clip;
+  overflow-y: auto;
+  /* Native bar hidden; overlay thumb must not steal item width (see theme overlay). */
+  scrollbar-gutter: unset;
+}
+
+/*
+ * Cursor: when destinations overflow the scrollport, soft-fade the edge that
+ * still has more content (into the account footer / top) — not a hard clip
+ * + hairline. Attrs set by NavigationDrawer sync (scroll / ResizeObserver).
+ */
+.fynns-nav-drawer-body[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
+/*
+ * Cursor-style sheet footer under the destination scroll body — single account
+ * row + settings. **No** hairline / divider above the footer (Cursor separates
+ * with pad only). Project / workspace context belongs in drawer **body**
+ * (`.fynns-nav-drawer-footer-slot--pill` row or destinations — not stacked
+ * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
+ * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
+ * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
+ * label → avatar/initial only; identity may live in Tooltip. Standalone
+ * `NavigationRail` footer hides account-start and keeps the gear.
+ */
+.fynns-nav-drawer-footer {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--fynns-navdrawer-section-gap);
+  min-width: 0;
+  /*
+   * Equal chrome inset on all four sides of the account band
+   * (`--fynns-navdrawer-footer-account-inset` ≈ 16dp / Cursor ≥ 0.4.131):
+   * Avatar start, settings end, Avatar/settings bottom, and top breath above
+   * the row. Bottom lives here (not on the sheet) so L/R/B stay one token —
+   * ≥ 0.4.129; inset stepped 12→16 for Cursor Avatar edge breath.
+   */
+  padding: var(--fynns-navdrawer-footer-account-inset);
+  border-block-start: none;
+}
+
+/* Bottom inset is footer pad — do not double with sheet padding-block-end. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) {
+  padding-block-end: 0;
+}
+
+/* Cursor: footer/account row pins to the sheet bottom; body scrolls above. */
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fynns-nav-drawer-footer-slot {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--fynns-navdrawer-item-height);
+  padding-inline: var(--fynns-navdrawer-item-pad-inline-start)
+    var(--fynns-navdrawer-item-pad-inline-end);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+}
+
+.fynns-nav-drawer-footer-slot--pill {
+  border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-control-surface-hover);
+}
+
+.fynns-nav-drawer-footer-slot-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-footer-account {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  /*
+   * Full sheet width: Avatar+label hug start, settings hug end, **free
+   * space in the middle** (Cursor account row). Gap floors min breath.
+   * Do **not** let account-start `flex-grow` — that ate the middle.
+   * Edge inset = parent footer `--fynns-navdrawer-footer-account-inset`
+   * (~16dp L/R/B/T equal, ≥ 0.4.131) — stacking Item `item-pad` (0.4.127)
+   * made L/R ~26dp. Keep settings `margin-inline-end: 0`. Live:
+   * `#layouts-demo-shell`.
+   */
+  width: 100%;
+  gap: var(--fynns-layout-control-stack-gap);
+  min-width: 0;
+  min-height: var(--fynns-avatar-size-sm);
+}
+
+.fynns-nav-drawer-footer-account-start {
+  box-sizing: border-box;
+  display: flex;
+  /* Hug content so space-between opens a real middle band; shrink when
+   * the label is long so the gear stays end-aligned. */
+  flex: 0 1 auto;
+  flex-direction: row;
+  align-items: center;
+  /*
+   * Avatar ↔ label = sheet inline inset (`--fynns-navdrawer-pad-inline`,
+   * ~10dp) — **tighter than** footer edge inset (16dp) so Cursor’s
+   * edge > gap rhythm holds. Do **not** use control-cluster-gap (4dp).
+   * Live: `#layouts-demo-shell`.
+   */
+  gap: var(--fynns-navdrawer-pad-inline);
+  min-width: 0;
+  /* Reserve gear + min middle band so long labels cannot kiss the disk. */
+  max-width: calc(
+    100% - var(--fynns-avatar-size-sm) - var(--fynns-layout-control-stack-gap) -
+      var(--fynns-layout-unit-stack-gap)
+  );
+  min-height: var(--fynns-avatar-size-sm);
+}
+
+.fynns-nav-drawer-footer-account-avatar-wrap {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.fynns-nav-drawer-footer-account-label {
+  /* Hug the string — do not grow inside start (that re-fills the middle). */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: var(--fynns-color-text-muted);
+  /*
+   * Soft end fade only when DrawerSheet sets `data-fade` (scrollWidth >
+   * clientWidth). Always-on mask faded short content-hug names (≥ 0.4.130).
+   */
+}
+
+.fynns-nav-drawer-footer-account-label[data-fade] {
+  /* Cursor: soft end fade into the settings gap — not `…` ellipsis. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 0%,
+    #000 calc(100% - 1.25rem),
+    transparent 100%
+  );
+}
+
+/* Settings gear: sm (32dp) disk. Keep flex: 0 so space-between parks the
+ * gear at the account row end. `margin-inline-end: 0` — Dialog-close
+ * optical −8 left only ~2dp to the sheet edge; do not restore it.
+ * Disk inset = footer `pad-inline` (~10dp), same as Avatar start.
+ * ≥ 0.4.128 (0.4.127 item-pad stack was too wide). */
+.fynns-nav-drawer-footer-account > .fynns-tooltip-trigger {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+.fynns-nav-drawer-footer-account
+  > .fynns-tooltip-trigger
+  .fynns-btn--sm.fynns-btn--icon,
+.fynns-nav-drawer-footer-account > .fynns-btn--sm.fynns-btn--icon {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+.fynns-nav-rail-footer
+  .fynns-nav-drawer-footer-account
+  > .fynns-tooltip-trigger
+  .fynns-btn--sm.fynns-btn--icon,
+.fynns-nav-rail-footer
+  .fynns-nav-drawer-footer-account
+  > .fynns-btn--sm.fynns-btn--icon {
+  margin-inline-end: 0;
+}
+
+/*
+ * Destination rhythm: every direct body sibling opens
+ * `--fynns-navdrawer-section-gap` (4dp) before the next row — Item /
+ * Group / Headline / Divider / Tooltip-wrapped items. Same step as
+ * `.fynns-nav-drawer-group-body`. Do **not** wrap destinations in
+ * `.fynns-unit-stack` (16dp form/unit rhythm). Specificity must beat
+ * `.fynns-nav-drawer-item { margin: 0 }`. SearchBar / tools / SyncSideFilter
+ * chrome ↔ neighbors use `--fynns-navdrawer-search-gap` (8dp) below.
+ */
+.fynns-nav-drawer-body
+  > *
+  + :is(
+    .fynns-nav-drawer-item,
+    .fynns-nav-drawer-group,
+    .fynns-nav-drawer-section-headline,
+    .fynns-divider,
+    .fynns-tooltip-trigger,
+    .fynns-search-bar
+  ) {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+/* Tools wrappers (e.g. app SearchBar host) ↔ next sibling when the next
+ * node is not in the :is() list above — still use section-gap. */
+.fynns-nav-drawer-body > * + * {
+  margin-block-start: var(--fynns-navdrawer-section-gap);
+}
+
+/*
+ * Mode / destination **chrome band** ↔ adjacent body sibling. Uses
+ * `--fynns-navdrawer-search-gap` (= layout `control-stack-gap` / 8dp) so
+ * Search ↔ Item, tools column ↔ SyncSideFilter `ToggleGroup`, and
+ * toolbar-end host ↔ filter / destinations share one step — wider than
+ * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers
+ * bare SearchBar / ToggleGroup or a tools wrapper that hosts SearchBar,
+ * `--toolbar-end`, or a preference `ControlRow`.
+ */
+.fynns-nav-drawer-body > .fynns-search-bar + *,
+.fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
+.fynns-nav-drawer-body > * + .fynns-search-bar,
+.fynns-nav-drawer-body > * + *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group + *,
+.fynns-nav-drawer-body > * + .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) + *,
+.fynns-nav-drawer-body > * + *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > *:has(> .fynns-control-row) + *,
+.fynns-nav-drawer-body > * + *:has(> .fynns-control-row) {
+  margin-block-start: var(--fynns-navdrawer-search-gap);
+}
+
+/* Destination SearchBar / chrome peers are 40dp / content-sized — never
+ * flex-shrink under a height-capped drawer body. */
+.fynns-nav-drawer-body > .fynns-search-bar,
+.fynns-nav-drawer-body > *:has(.fynns-search-bar),
+.fynns-nav-drawer-body > .fynns-toggle-group,
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) {
+  flex-shrink: 0;
+}
+
+.fynns-nav-drawer-body .fynns-unit-stack {
+  gap: var(--fynns-navdrawer-section-gap);
+}
+
+.fynns-nav-drawer-section-headline {
+  box-sizing: border-box;
+  padding-block: var(--fynns-navdrawer-headline-pad-block);
+  padding-inline: var(--fynns-navdrawer-headline-pad-inline);
+  font-size: var(--fynns-navdrawer-headline-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: var(--fynns-navdrawer-headline-line);
+  color: var(--fynns-color-text-muted);
+}
+
+/* Collapsible Cursor-style group: trigger matches item geometry; leaf items nest. */
+.fynns-nav-drawer-group {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-trigger {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  width: 100%;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-group-trigger:hover:not(.fynns-nav-drawer-group-trigger--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-group-trigger:active:not(.fynns-nav-drawer-group-trigger--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-group-trigger:focus-visible:not(.fynns-nav-drawer-group-trigger--active) {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+/* Collapsed group with an active leaf — same pill as NavigationDrawerItem. */
+.fynns-nav-drawer-group-trigger--active {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-drawer-group-trigger--active:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-trigger--active:focus-visible {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-group-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+  margin-inline-start: auto;
+  color: inherit;
+  transition: transform var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-nav-drawer-group-chevron > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Collapsed = `>`; open rotates to point down. */
+.fynns-nav-drawer-group--open > .fynns-nav-drawer-group-trigger .fynns-nav-drawer-group-chevron {
+  transform: rotate(90deg);
+}
+
+.fynns-nav-drawer-group-body {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-navdrawer-section-gap);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-group-body .fynns-nav-drawer-item {
+  padding-inline-start: var(--fynns-navdrawer-group-item-pad-inline-start);
+}
+
+.fynns-nav-drawer-item {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  width: 100%;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-nav-drawer-item--active {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-nav-drawer-item:hover:not(:disabled):not(.fynns-nav-drawer-item--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-item--active:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-item:active:not(:disabled):not(.fynns-nav-drawer-item--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-item--active:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-item:focus-visible {
+  outline: none;
+  /* Full-row ring is too loud; soft state-layer wash (active keeps container fill). */
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-item--active:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-nav-drawer-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+  color: inherit;
+}
+
+.fynns-nav-drawer-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-nav-drawer-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-navdrawer-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: inherit;
+}
+
+.fynns-nav-drawer-badge {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  font-size: var(--fynns-navdrawer-label-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-navdrawer-label-line);
+  color: inherit;
+}
+
+.fynns-nav-drawer-badge--mark {
+  width: var(--fynns-navdrawer-badge-dot);
+  height: var(--fynns-navdrawer-badge-dot);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-nav-drawer-item,
+  .fynns-nav-drawer-group-trigger,
+  .fynns-nav-drawer-group-chevron {
+    transition: none;
+  }
+}
+
+/* ---------- BottomAppBar (M3 bottom app bar, densified) ---------- */
+.fynns-bottom-app-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-bottomappbar-height);
+  height: var(--fynns-bottomappbar-height);
+  margin: 0;
+  padding-block: var(--fynns-bottomappbar-pad-block);
+  padding-inline: var(--fynns-bottomappbar-pad-inline);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  /* Elevation only — no top hairline. Hairline + radius-3xl + shadow stacked into
+   * a double stroke on the top edge (unlike flush NavigationBar). */
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  box-shadow: var(--fynns-shadow-sm);
+}
+
+.fynns-bottom-app-bar-actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-bottomappbar-actions-gap);
+  min-width: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+/* Match Fab sm: 40dp targets so ghost IconButtons fill the dense bar. */
+.fynns-bottom-app-bar-actions .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+  padding: 0;
+}
+
+.fynns-bottom-app-bar-actions .fynns-btn--icon svg {
+  width: var(--fynns-bottomappbar-action-icon-size);
+  height: var(--fynns-bottomappbar-action-icon-size);
+}
+
+.fynns-bottom-app-bar-fab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding-inline-end: var(--fynns-bottomappbar-fab-pad-inline-end);
+}
+
+.fynns-bottom-app-bar-fab .fynns-fab--sm {
+  width: var(--fynns-bottomappbar-action-size);
+  height: var(--fynns-bottomappbar-action-size);
+  min-width: var(--fynns-bottomappbar-action-size);
+  min-height: var(--fynns-bottomappbar-action-size);
+}
+
+/* ---------- StatusBar (IDE status strip — Cursor / VS Code) ---------- */
+.fynns-status-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: var(--fynns-statusbar-height);
+  height: var(--fynns-statusbar-height);
+  margin: 0;
+  padding-inline: var(--fynns-statusbar-pad-inline);
+  border: 0;
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: 0;
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-statusbar-font-size);
+  line-height: 1;
+  /* Edge-flush — no elevation / no card radius (unlike BottomAppBar). */
+  box-shadow: var(--fynns-shadow-none);
+}
+
+.fynns-status-bar-leading,
+.fynns-status-bar-trailing {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--fynns-statusbar-item-gap);
+  min-width: 0;
+}
+
+.fynns-status-bar-leading {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}
+
+.fynns-status-bar-trailing {
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.fynns-status-bar-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--fynns-statusbar-item-pad-inline);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-status-bar-item--interactive {
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.fynns-status-bar-item--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-status-bar-item--interactive:hover::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:active::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-status-bar-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-status-bar-item--interactive:disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-status-bar-item--interactive:disabled::before {
+  display: none;
+}
+
+/* ---------- Tree (hierarchical file / settings explorer) ---------- */
+.fynns-tree {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.fynns-tree-branch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-tree-item-gap);
+  min-width: 0;
+}
+
+.fynns-tree-item-host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  overflow: clip;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-tree-item-host > .fynns-tree-item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-tree-item {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-tree-gap);
+  width: 100%;
+  min-height: var(--fynns-tree-row-min-height);
+  padding-block: var(--fynns-tree-pad-block);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-tree-font-size);
+  line-height: var(--fynns-line-height-snug);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item:hover:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-tree-item:active:not(:disabled):not(.fynns-tree-item--selected) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-tree-item:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+.fynns-tree-item--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-tree-item--selected:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item--selected:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-tree-item:disabled,
+.fynns-tree-item--disabled {
+  cursor: default;
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-tree-item-chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tree-item-chevron--open {
+  transform: rotate(90deg);
+}
+
+.fynns-tree-item-chevron--spacer {
+  visibility: hidden;
+}
+
+.fynns-tree-item--selected .fynns-tree-item-chevron {
+  color: inherit;
+}
+
+.fynns-tree-item-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-tree-item-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-tree-item--selected .fynns-tree-item-icon {
+  color: inherit;
+}
+
+.fynns-tree-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-tree-item-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  padding-inline-end: var(--fynns-tree-pad-inline);
+}
+
+/* ---------- Toolbar (M3 Expressive docked / floating) ---------- */
+.fynns-toolbar-cluster {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-toolbar-fab-gap);
+}
+
+.fynns-toolbar-cluster--vertical {
+  flex-direction: column;
+}
+
+.fynns-toolbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding-block: var(--fynns-toolbar-pad-block);
+  padding-inline: var(--fynns-toolbar-pad-inline);
+  border: 0;
+  color: var(--fynns-color-text);
+}
+
+.fynns-toolbar--horizontal {
+  flex-direction: row;
+  min-height: var(--fynns-toolbar-height);
+}
+
+.fynns-toolbar--vertical {
+  flex-direction: column;
+  min-width: var(--fynns-toolbar-height);
+}
+
+.fynns-toolbar--docked {
+  width: 100%;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  background: var(--fynns-color-surface-1);
+  border-radius: var(--fynns-radius-3xl);
+  box-shadow: var(--fynns-shadow-sm);
+}
+
+.fynns-toolbar--floating {
+  width: max-content;
+  max-width: 100%;
+  justify-content: center;
+  background: var(--fynns-color-surface-2);
+  border-radius: var(--fynns-radius-pill);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+.fynns-toolbar--vibrant {
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-toolbar--vibrant.fynns-toolbar--docked {
+  box-shadow: none;
+}
+
+.fynns-toolbar-actions {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-toolbar-actions-gap);
+  min-width: 0;
+  color: inherit;
+}
+
+.fynns-toolbar--docked .fynns-toolbar-actions {
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-toolbar--docked.fynns-toolbar--vibrant .fynns-toolbar-actions {
+  color: inherit;
+}
+
+.fynns-toolbar--vertical .fynns-toolbar-actions {
+  flex-direction: column;
+}
+
+.fynns-toolbar-actions .fynns-btn.fynns-btn--icon {
+  box-sizing: border-box;
+  width: var(--fynns-toolbar-action-size);
+  height: var(--fynns-toolbar-action-size);
+  min-width: var(--fynns-toolbar-action-size);
+  min-height: var(--fynns-toolbar-action-size);
+  padding: 0;
+}
+
+.fynns-toolbar-actions .fynns-btn--icon svg {
+  width: var(--fynns-toolbar-action-icon-size);
+  height: var(--fynns-toolbar-action-icon-size);
+}
+
+.fynns-toolbar--vibrant .fynns-toolbar-actions .fynns-btn--ghost {
+  color: inherit;
+}
+
+.fynns-toolbar-fab {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-toolbar-fab .fynns-fab--sm,
+.fynns-toolbar-fab .fynns-btn.fynns-btn--icon {
+  width: var(--fynns-toolbar-action-size);
+  height: var(--fynns-toolbar-action-size);
+  min-width: var(--fynns-toolbar-action-size);
+  min-height: var(--fynns-toolbar-action-size);
+}
+
+/* ---------- SearchBar (M3 elevated search) ---------- */
+.fynns-search-bar {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  border-radius: var(--fynns-radius-3xl);
+  border: var(--fynns-border-hairline) solid transparent;
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-md);
+  overflow: hidden;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    box-shadow var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+/* Collapsed: capsule field. Expanded: one continuous shell (Google-style). */
+.fynns-search-bar-field {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  min-height: var(--fynns-searchbar-height);
+  height: var(--fynns-searchbar-height);
+  padding-inline: var(--fynns-searchbar-pad-inline);
+  border-radius: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  box-shadow: none;
+}
+
+/*
+ * Elevate only while open. Collapsed Select/Autocomplete share this shell and
+ * must stay at auto z so sticky catalog SearchBar can occlude them when they
+ * scroll underneath (equal `--fynns-z-dropdown` + later DOM painted through).
+ */
+.fynns-search-bar--expanded {
+  z-index: var(--fynns-z-dropdown);
+  box-shadow: var(--fynns-shadow-lg);
+}
+
+/* Field / results join: paint on the field as soon as `--expanded` is set
+ * (not on `.fynns-search-bar-results`, which fades in after the panel opens). */
+.fynns-search-bar--expanded > .fynns-search-bar-field {
+  border-block-end: var(--fynns-border-hairline) solid var(--fynns-color-border);
+}
+
+/*
+ * Focus: same quiet teal border tint as `.fynns-input` — keep elevation,
+ * no outline / accent-soft glow (SearchBar, Select, Autocomplete).
+ */
+.fynns-search-bar--expanded:focus-within {
+  box-shadow: var(--fynns-shadow-lg);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  outline: none;
+}
+
+.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow: var(--fynns-shadow-md);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  outline: none;
+}
+
+.fynns-autocomplete--invalid.fynns-search-bar:focus-within {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-search-bar--disabled {
+  opacity: var(--fynns-opacity-muted);
+}
+
+.fynns-search-bar--disabled .fynns-search-bar-field {
+  opacity: 1;
+}
+
+.fynns-search-bar-leading,
+.fynns-search-bar-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-space-2xs);
+  min-width: var(--fynns-searchbar-icon-slot);
+  height: var(--fynns-searchbar-height);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-search-bar-leading svg {
+  width: var(--fynns-searchbar-icon-size);
+  height: var(--fynns-searchbar-icon-size);
+}
+
+.fynns-search-bar-input {
+  box-sizing: border-box;
+  /* `0%` basis so the field tracks drawer/host resize (auto basis can keep a
+   * stale intrinsic width after ClippedNavShell seam drag). */
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding-inline: var(--fynns-searchbar-input-pad-inline);
+  border: 0;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-searchbar-font-size);
+  line-height: var(--fynns-searchbar-line-height);
+  outline: none;
+  appearance: none;
+}
+
+/*
+ * Text fields only (SearchBar / Autocomplete) — not Select's button trigger
+ * (that ellipsizes via `.fynns-select-trigger-text`). Single-line `.fynns-input`
+ * shares the same idle-ellipsis / focus-scroll contract.
+ * Idle: ellipsis in narrow hosts (not mid-glyph hard clip from the shell).
+ * Focused: caret horizontal scroll without painting a scrollbar (Chromium
+ * skips text-overflow ellipsis while focused).
+ */
+input.fynns-search-bar-input {
+  white-space: nowrap;
+}
+
+input.fynns-search-bar-input:not(:focus) {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+input.fynns-search-bar-input:focus {
+  overflow-x: auto;
+  text-overflow: clip;
+  scrollbar-width: none;
+}
+
+input.fynns-search-bar-input:focus::-webkit-scrollbar {
+  display: none;
+}
+
+/* No leading icon; SearchBar's tiny input pad would leave the label flush. */
+.fynns-select .fynns-search-bar-input.fynns-select-trigger,
+.fynns-autocomplete .fynns-search-bar-input.fynns-autocomplete-input {
+  padding-inline-start: var(--fynns-space-md);
+}
+
+/*
+ * Form density: Select / Autocomplete sit beside Input — use 40dp control
+ * height + Input surface/radius/border, not chrome SearchBar 56dp capsule.
+ * SearchBar itself keeps `--fynns-searchbar-height` / elevation.
+ */
+.fynns-select.fynns-search-bar,
+.fynns-autocomplete.fynns-search-bar {
+  border-radius: var(--fynns-radius-md);
+  border-color: var(--fynns-color-border);
+  background: var(--fynns-color-surface-muted);
+  box-shadow: none;
+}
+
+/* Beat densify resting border (same 0,2,0, later in source). */
+.fynns-autocomplete--invalid.fynns-search-bar {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-select .fynns-search-bar-field,
+.fynns-autocomplete .fynns-search-bar-field {
+  min-height: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select .fynns-search-bar-trailing,
+.fynns-autocomplete .fynns-search-bar-trailing {
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+}
+
+.fynns-select-trailing-cluster {
+  gap: var(--fynns-space-2xs);
+}
+
+.fynns-select-trailing-action {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.fynns-select-trailing-cluster:has(.fynns-select-trailing-action) {
+  min-width: auto;
+}
+
+.fynns-select.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within,
+.fynns-autocomplete.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
+  box-shadow: none;
+}
+
+.fynns-select.fynns-search-bar--expanded,
+.fynns-autocomplete.fynns-search-bar--expanded {
+  /* Docked results: light elevation only (still not the chrome 56dp field). */
+  box-shadow: var(--fynns-shadow-md);
+}
+
+/* Beat `.fynns-autocomplete.fynns-search-bar { border-color }` (same 0,2,0, later). */
+.fynns-select.fynns-search-bar--expanded:focus-within,
+.fynns-autocomplete.fynns-search-bar--expanded:focus-within {
+  box-shadow: var(--fynns-shadow-md);
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
+/* Reaffirm after denser Autocomplete rules (same 0,3,0 source order). */
+.fynns-autocomplete--invalid.fynns-search-bar:focus-within {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-search-bar-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+/*
+ * Destination density — match NavigationDrawerItem row geometry only (40dp
+ * height, label type, icon gap / size, item pads). Keep chrome SearchBar
+ * surface / elevation / focus border (do not restyle as a destination pill).
+ * Auto-applied to plain SearchBars in drawer body so GlobalSearch densifies
+ * without consumer restyles.
+ */
+.fynns-search-bar--destination .fynns-search-bar-field,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-field {
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  gap: var(--fynns-navdrawer-item-gap);
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading,
+.fynns-search-bar--destination .fynns-search-bar-trailing,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-trailing {
+  min-width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-item-height);
+  gap: 0;
+}
+
+.fynns-search-bar--destination .fynns-search-bar-leading svg,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-leading
+  svg {
+  width: var(--fynns-navdrawer-icon-size);
+  height: var(--fynns-navdrawer-icon-size);
+}
+
+.fynns-search-bar--destination .fynns-search-bar-input,
+.fynns-nav-drawer-body
+  .fynns-search-bar:not(.fynns-select):not(.fynns-autocomplete)
+  .fynns-search-bar-input {
+  padding-inline: 0;
+  font-size: var(--fynns-navdrawer-label-size);
+  line-height: var(--fynns-navdrawer-label-line);
+}
+
+/* Results share the expanded shell. Row highlight matches DropdownMenu items
+   (`radius-3xl` long-strip) — one hover language for all dropdown lists.
+   Inset from the shell edge so hover does not kiss the outer curve.
+   Height morph via shared `.fynns-expand` (open ↔ closed). */
+
+.fynns-search-bar-results {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-searchbar-results-gap);
+  max-height: var(--fynns-searchbar-results-max-height);
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/*
+ * No opacity fade on docked results — height morph via `.fynns-expand` only.
+ * A results fade made the field↔list hairline feel late (empty panel grows,
+ * then content appears). Hairline stays on
+ * `.fynns-search-bar--expanded > .fynns-search-bar-field`.
+ */
+
+.fynns-search-bar-result {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  width: 100%;
+  min-height: 2.5rem;
+  margin: 0;
+  padding-block: var(--fynns-space-sm);
+  padding-inline: var(--fynns-space-md);
+  border: 0;
+  /* Same long-strip highlight as `.fynns-menu-item`. */
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-search-bar-result:hover:not(:disabled),
+.fynns-search-bar-result--active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:focus-visible {
+  outline: none;
+  box-shadow: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:hover:not(:disabled):focus-visible,
+.fynns-search-bar-result--active:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-search-bar-result:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-search-bar,
+  .fynns-search-bar-field,
+  .fynns-search-bar-results {
+    transition: none;
+  }
+}
+
+/* ---------- ClippedNavShell (full-bleed top bar + nav | main) ---------- */
+.fynns-clipped-nav-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  color: var(--fynns-color-text);
+}
+
+/* Prefer clipped chrome: surface-1 + hairline under the bar (no crosshair).
+ * Keep radius 0 / no side borders — bar stays flush with the viewport top. */
+.fynns-clipped-nav-shell > .fynns-top-app-bar {
+  background: var(--fynns-color-surface-1);
+  box-shadow: var(--fynns-shadow-none);
+  border: none;
+  border-radius: 0;
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.fynns-clipped-nav-shell-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  transition: grid-template-columns var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
+}
+
+.fynns-clipped-nav-shell[data-drawer-resizing="true"] > .fynns-clipped-nav-shell-body {
+  transition: none;
+}
+
+.fynns-clipped-nav-shell-resize {
+  position: absolute;
+  z-index: 4;
+  inset-block: 0;
+  inset-inline-start: calc(var(--fynns-navdrawer-width) - 0.1875rem);
+  /* Wide hit target; visible cue is a Cursor-like 2dp muted seam ::before. */
+  width: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-clipped-nav-shell-resize::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  /* Seam sits at the hit-target center (drawer track | main). */
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-clipped-nav-shell-resize:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+/*
+ * Cursor panel-seam hover: ~3px, low-luma teal (not full accent).
+ * Sampled ~rgb(14 36 40) → `--fynns-color-border` (not accent / border-strong).
+ */
+.fynns-clipped-nav-shell-resize:hover::before,
+.fynns-clipped-nav-shell[data-drawer-resizing="true"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-resize::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
+  grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+}
+
+/*
+ * Keep two tracks so width can interpolate (1-track `1fr` cannot morph from
+ * `drawer|rail + main`). Permanent `.fynns-clipped-nav-shell-nav` slot holds
+ * the first track even when empty so main never falls into the 0px column.
+ */
+.fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
+  grid-template-columns: 0px minmax(0, 1fr);
+}
+
+.fynns-clipped-nav-shell-nav {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fynns-clipped-nav-shell[data-nav="hidden"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer,
+.fynns-clipped-nav-shell[data-nav="hidden"]
+  > .fynns-clipped-nav-shell-body
+  > .fynns-clipped-nav-shell-nav
+  > .fynns-nav-rail {
+  pointer-events: none;
+  border-inline-end-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-clipped-nav-shell-body {
+    transition: none;
+  }
+}
+
+/* Permanent destinations clipped under the top bar. */
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--fynns-color-surface-1);
+  border-inline-end: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+/*
+ * Column width is owned by the body grid track. Fill the track — strip the
+ * drawer/rail’s own width/min/max so they cannot fight resize or the close morph.
+ */
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+  width: 100%;
+  max-width: none;
+  padding-block-start: 0;
+}
+
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+}
+
+/*
+ * Tip-fill only for destination rows (Item wrapped in Tooltip). A broad
+ * `.fynns-tooltip-trigger { width: 100% }` also hit IconButton toolbars in
+ * SearchBar/tools hosts — each tip became a full-bleed 32dp strip and
+ * stacked vertically inside column tools (archived sidebar lesson).
+ */
+.fynns-clipped-nav-shell-nav
+  > .fynns-nav-drawer
+  .fynns-nav-drawer-body
+  .fynns-tooltip-trigger:has(.fynns-nav-drawer-item) {
+  display: block;
+  width: 100%;
+}
+
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
+}
+
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-nav-rail-destinations {
+  flex: 1 1 auto;
+}
+
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.fynns-clipped-nav-shell-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  /* Drive EndAside overlay when the main track is too narrow for both floors. */
+  container-type: inline-size;
+  container-name: fynns-shell-main;
+}
+
+.fynns-clipped-nav-shell-main > .fynns-busy-region--fill,
+.fynns-clipped-nav-shell-main > .fynns-empty-state--fill,
+.fynns-destination-app-shell-canvas > .fynns-busy-region--fill,
+.fynns-destination-app-shell-canvas > .fynns-empty-state--fill {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---------- DestinationAppShell (declarative chrome body) ---------- */
+.fynns-destination-app-shell-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.fynns-destination-app-shell-canvas {
+  display: flex;
+  flex: 1 1 var(--fynns-layout-main-min-width);
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+/*
+ * Soft floor for the main canvas beside an open EndAside. Use `min-width: 0`
+ * (not `min(token, 100%)`): percentage min-width resolves against the **full
+ * flex parent**, so `100%` claims the whole row and overflows once EndAside
+ * takes space. Preferred size stays on flex-basis / sandbox `flex: 1 1
+ * var(--fynns-layout-main-min-width)`. Extreme squeeze → overlay CQ below.
+ */
+*:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
+  min-width: 0;
+}
+
+/* ---------- EndAside (width-morph supporting pane) ---------- */
+.fynns-end-aside {
+  position: relative;
+  flex: 0 1 auto;
+  box-sizing: border-box;
+  width: var(--fynns-layout-end-aside-width);
+  max-width: var(--fynns-layout-end-aside-max-width);
+  /* Same flex trap as main: do not use min(token, 100%) of the full row. */
+  min-width: 0;
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  background: var(--fynns-color-surface-1);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  /* Visible so the resize hit can straddle the start border; clip children. */
+  overflow: visible;
+  transition:
+    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-end-aside[data-resizing="true"] {
+  transition: none;
+}
+
+/* Leading-edge seam — hit + cue centered on the start border (Cursor). */
+.fynns-end-aside-resize {
+  position: absolute;
+  z-index: 4;
+  inset-block: 0;
+  /*
+   * Absolute insets are vs the padding edge; the 1dp border sits just outside.
+   * Shift the 6dp hit left by half-hit + half-border so its center = border mid.
+   */
+  inset-inline-start: calc(-0.1875rem - (var(--fynns-border-hairline) * 0.5));
+  width: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.fynns-end-aside-resize::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  width: calc(3 * var(--fynns-border-hairline));
+  transform: translateX(-50%);
+  background: transparent;
+  pointer-events: none;
+}
+
+.fynns-end-aside-resize:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+}
+
+/*
+ * Hover / drag: ~3px muted teal cue centered on the border mid-line.
+ * Hide the resting hairline so only one seam paints.
+ */
+.fynns-end-aside-resize:hover::before,
+.fynns-end-aside[data-resizing="true"] > .fynns-end-aside-resize::before {
+  background: var(--fynns-color-border);
+}
+
+.fynns-end-aside:has(> .fynns-end-aside-resize:hover),
+.fynns-end-aside[data-resizing="true"] {
+  border-inline-start-color: transparent;
+}
+
+.fynns-end-aside[data-state="closing"] {
+  width: 0;
+  max-width: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/*
+ * Preferred child width while open; cap at 100% so a flex-shrunk aside cannot
+ * spill its layout box past ClippedNavShell / demo frames.
+ */
+.fynns-end-aside > *:not(.fynns-end-aside-resize) {
+  box-sizing: border-box;
+  width: var(--fynns-layout-end-aside-width);
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Fill hosts track the (possibly flex-shrunk) pane, not the preferred width. */
+.fynns-end-aside > .fynns-chat-host--fill {
+  width: 100%;
+}
+
+.fynns-end-aside[data-state="closing"] > *:not(.fynns-end-aside-resize) {
+  max-width: none;
+  min-width: var(--fynns-layout-end-aside-min-width);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-end-aside,
+  .fynns-end-aside[data-state="closing"] {
+    transition: none;
+  }
+}
+
+/*
+ * Extreme: main track narrower than both floors (~10rem + 12rem). Keep the
+ * EndAside min clamp as an end-edge overlay (out of flex flow) so canvas can
+ * fill the track without horizontal overflow. Works for nested demos too
+ * (viewport media queries do not see the demo frame width).
+ */
+/*
+ * Extreme (desktop / nested demos): main track narrower than both floors.
+ * EndAside leaves flex flow and overlays the end edge. Skip below the phone
+ * breakpoint — that path uses a bottom sheet (higher-specificity container
+ * selectors must not override it).
+ */
+@container fynns-shell-main (max-width: 32rem) {
+  @media (min-width: 56.26rem) {
+    *:has(> .fynns-end-aside) {
+      position: relative;
+    }
+
+    *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+      min-width: 0;
+  flex: 1 1 auto;
+      max-width: 100%;
+    }
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: 0;
+      z-index: 3;
+      width: min(var(--fynns-layout-end-aside-width), 100%);
+      min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
+      max-width: min(var(--fynns-layout-end-aside-max-width), 100%);
+      box-shadow: var(--fynns-shadow-md);
+    }
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+      width: 100%;
+      max-width: none;
+  min-width: 0;
+}
+
+    *:has(> .fynns-end-aside) > .fynns-end-aside[data-state="closing"] {
+      width: 0;
+      max-width: 0;
+      min-width: 0;
+      box-shadow: var(--fynns-shadow-none);
+    }
+  }
+}
+
+/*
+ * Narrow viewport (≤56.25rem): destinations stay a **side column** for both
+ * drawer and rail. Do **not** stack a labeled drawer above main as a rem-capped
+ * ribbon (legacy 9rem clip → SearchBar + footer only). DestinationAppShell
+ * stays binary open `drawer` or fully `hidden` — crowding closes destinations
+ * (`onNavCrowded`); never densify to an icon-only rail. Intentional phone
+ * roots may still mount standalone `NavigationRail` via ClippedNavShell.
+ * EndAside still becomes a bottom sheet on this breakpoint.
+ */
+@media (max-width: 56.25rem) {
+  .fynns-clipped-nav-shell[data-nav="drawer"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: var(--fynns-navdrawer-width) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="rail"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: var(--fynns-navrail-width) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="hidden"] > .fynns-clipped-nav-shell-body {
+    grid-template-columns: 0px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .fynns-clipped-nav-shell[data-nav="hidden"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav
+    > .fynns-nav-drawer,
+  .fynns-clipped-nav-shell[data-nav="hidden"]
+    > .fynns-clipped-nav-shell-body
+    > .fynns-clipped-nav-shell-nav
+    > .fynns-nav-rail {
+    pointer-events: none;
+    border-inline-end-color: transparent;
+  }
+
+  .fynns-clipped-nav-shell-nav {
+    height: 100%;
+    align-self: stretch;
+  }
+
+  .fynns-clipped-nav-shell-main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .fynns-clipped-nav-shell-main:has(.fynns-end-aside) {
+    position: relative;
+  }
+
+  .fynns-end-aside {
+    position: absolute;
+    inset-inline: 0;
+    /* Keep sheet on the block-end edge when max-height caps size (ignore
+     * static-position top from the flex row). */
+    inset-block-start: auto;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    border-inline-start: none;
+    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+    /* Sheet, not a ribbon: leave canvas room but keep room for inspector rows. */
+    max-height: min(52dvh, 22rem);
+    box-shadow: var(--fynns-shadow-md);
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  }
+
+  .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .fynns-end-aside-resize {
+    display: none;
+  }
+
+  .fynns-end-aside[data-state="closing"] {
+    width: 100%;
+    max-width: none;
+    max-height: 0;
+    box-shadow: var(--fynns-shadow-none);
+    transition:
+      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+  }
+}

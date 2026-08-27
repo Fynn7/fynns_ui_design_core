@@ -1,0 +1,3807 @@
+/* Domain: content — extracted from primitives.css */
+/* ---------- DiffView ---------- */
+.fynns-diff-view {
+  margin: 0;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-caption);
+  line-height: var(--fynns-line-height-compact);
+  background: var(--fynns-color-surface-muted);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  padding: var(--fynns-space-3);
+  overflow-x: clip;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.fynns-diff-view-line {
+  white-space: inherit;
+  word-break: inherit;
+  overflow-wrap: inherit;
+}
+
+.fynns-diff-view-line--add {
+  color: var(--fynns-color-success);
+}
+
+.fynns-diff-view-line--del {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-diff-view-line--meta {
+  color: var(--fynns-color-text-muted);
+}
+
+/* ---------- Collapsible / Card (shared shell) ---------- */
+.fynns-collapsible,
+.fynns-card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  /* Flex/grid parents (EndAside open, nested demos): shrink below content min. */
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+}
+
+/*
+ * `chrome="plain"`: nesting host for a surface-owning child (CodeBlock, Surface,
+ * canvas, …). Keeps the **same outer shell** as `card` (Collapsible = main
+ * container). Body uses `--fynns-layout-nest-gap` (pad + column gap) so the
+ * child sits as a secondary frame — not flush, not a second sibling chip.
+ * Prefer nested CodeBlock `variant="plain"` to avoid an empty code head.
+ * Never cancel nest-gap with negative margins or by zeroing `.fynns-*-body` pad.
+ */
+
+.fynns-collapsible {
+  transition: border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-head,
+.fynns-card-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  min-width: 0;
+  /*
+   * One header height for every anatomy (title-only / icon / trailing IconButton).
+   * Theme reset uses border-box everywhere, so include the open/Card hairline in
+   * min-height. Otherwise IconButton + space-xs×2 (= content 48) overflows the
+   * content box (48 − hairline) and grows the head ~1px vs title-only.
+   */
+  min-height: calc(
+    var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs) + var(--fynns-border-hairline)
+  );
+}
+.fynns-collapsible-head {
+  /* M3 state layer: full-bleed inside the card outline (no inset gutter).
+     Parent `overflow` + `border-radius` clip the layer to the outer shape. */
+  transition: background-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-head::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-head:hover::before {
+  opacity: 1;
+}
+
+/*
+ * Open Collapsible / always-visible Card: full-bleed hairline under the head —
+ * meets the outer border (no inset gap). Focus uses quiet border-color only
+ * (no inset ring), so the join stays a clean T, not a cut through a thick highlight.
+ */
+.fynns-collapsible--open > .fynns-collapsible-head,
+.fynns-card > .fynns-card-head {
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-collapsible-trigger,
+.fynns-card-lead {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
+  gap: var(--fynns-space-3);
+  /*
+   * Keep a readable title band when trailing actions are dense. Bare
+   * `min-width: 0` alone lets a narrow host crush the lead to ~one glyph
+   * (sandbox `#card` actions-strip lesson). Floor ≈ two t-shirt steps of
+   * title — still allows ellipsis via `.fynns-card-title { min-width: 0 }`.
+   */
+  min-width: max(0px, 40%);
+  /* Vertical rhythm comes from the shared head min-height + flex centering —
+   * no padding-block (it fought IconButton+xs and caused variant drift). */
+  padding-block: 0;
+  padding-inline-start: var(--fynns-layout-content-inset);
+  padding-inline-end: var(--fynns-layout-content-inset);
+  color: var(--fynns-color-text);
+  text-align: left;
+}
+
+.fynns-collapsible-trigger {
+  background: transparent;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.fynns-collapsible-trigger:focus,
+.fynns-collapsible-trigger:focus-visible {
+  outline: none;
+}
+
+/* Same quiet accent-tinted border as `.fynns-input` — no inset focus ring.
+ * Scope to this instance's trigger (nested Collapsibles must not light the parent). */
+.fynns-collapsible:has(> .fynns-collapsible-head > .fynns-collapsible-trigger:focus-visible) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
+}
+
+.fynns-collapsible-title,
+.fynns-card-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+}
+
+/* Consumer often wraps title in <span className="mono"> — keep ellipsis.
+ * Do **not** force `display: block` on `.fynns-control-cluster` (would cancel
+ * flex + gap and glue title + muted count into `OpenSpec8`). */
+.fynns-card-title > :not(.fynns-control-cluster) {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-card-title > .fynns-control-cluster {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Single disclose slot: optional rest icon stacked with expand chevron.
+ * Same glyph size as IconButton / `--fynns-size-icon` (16dp). */
+.fynns-collapsible-disclose,
+.fynns-card-disclose {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+  line-height: 0;
+}
+
+.fynns-collapsible-disclose > .fynns-collapsible-chevron,
+.fynns-collapsible-disclose > .fynns-collapsible-icon {
+  grid-area: 1 / 1;
+}
+
+.fynns-collapsible-chevron {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: inherit;
+  transition:
+    transform var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+/* Collapsed = `>` (ChevronRight); open rotates to point down.
+ * Child combinator: nested Collapsibles must not inherit the parent's --open. */
+.fynns-collapsible--open > .fynns-collapsible-head .fynns-collapsible-chevron {
+  transform: rotate(90deg);
+}
+
+.fynns-collapsible-icon,
+.fynns-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  line-height: 0;
+}
+
+.fynns-collapsible-icon {
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-collapsible-icon > svg,
+.fynns-card-icon > svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+/*
+ * With `icon`: rest = custom glyph; header hover (or keyboard focus-visible)
+ * → chevron. Do not use :focus-within — mouse click leaves focus on the
+ * trigger and would keep the chevron after unhover.
+ * Card never swaps — icon stays visible (no chevron rules).
+ * Scope via `>` so a parent `--has-icon` / hover does not drive nested slots.
+ */
+.fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-chevron {
+  opacity: 0;
+}
+
+.fynns-collapsible--has-icon > .fynns-collapsible-head:hover .fynns-collapsible-chevron,
+.fynns-collapsible--has-icon
+  > .fynns-collapsible-head
+  > .fynns-collapsible-trigger:focus-visible
+  .fynns-collapsible-chevron {
+  opacity: 1;
+}
+
+.fynns-collapsible--has-icon > .fynns-collapsible-head:hover .fynns-collapsible-icon,
+.fynns-collapsible--has-icon
+  > .fynns-collapsible-head
+  > .fynns-collapsible-trigger:focus-visible
+  .fynns-collapsible-icon {
+  opacity: 0;
+}
+
+@media (hover: none) {
+  .fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-icon {
+    opacity: 0;
+  }
+
+  .fynns-collapsible--has-icon > .fynns-collapsible-head .fynns-collapsible-chevron {
+    opacity: 1;
+  }
+}
+
+.fynns-collapsible-actions,
+.fynns-card-actions {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-space-2);
+  /* Keep IconButton hover disks off the card edge (not full content-inset). */
+  padding-block: var(--fynns-space-xs);
+  padding-inline-end: var(--fynns-space-xs);
+}
+
+/*
+ * Header actions = one horizontal strip (M3). Every cluster under the actions
+ * slot must hug + nowrap — including nested helper groups. A sole
+ * `>` rule is not enough when helpers wrap themselves in `.fynns-control-cluster`
+ * (`width: 100%` + wrap) and the head squeezes the strip: each nested group
+ * claims a full row (~72dp tall stack). Prefer a flat outer cluster of
+ * IconButtons; nested helpers must still stay one row.
+ */
+.fynns-card-actions .fynns-control-cluster,
+.fynns-collapsible-actions .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.fynns-collapsible-body,
+.fynns-card-body {
+  /* Shared block pad — breathing room under the header (`chrome="card"`).
+   * Nesting surface-owning children: use `chrome="plain"` (overrides below).
+   * Sibling units (FieldBlock, ControlBlock, intro copy) share unit-stack-gap
+   * so consumers do not invent ad-hoc margins between related sections. */
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-body);
+}
+
+/*
+ * Nest frame: four-side inset + stack gap between child wells / meta.
+ * Overrides the card body content-* pad so nest-gap is not doubled.
+ */
+.fynns-collapsible--plain .fynns-collapsible-body,
+.fynns-card--plain .fynns-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-nest-gap);
+}
+
+/*
+ * Generic nest host for surface wells outside Card/Collapsible
+ * (e.g. page region wrapping Surface + CodeBlock). Same nest-gap contract.
+ */
+.fynns-nest {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-nest-gap);
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-collapsible-body {
+  opacity: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+/* Bidirectional height morph: body stays mounted; `open` ↔ `closed` both animate. */
+.fynns-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  max-width: 100%;
+  transition: grid-template-rows var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-expand[data-state="open"] {
+  grid-template-rows: 1fr;
+}
+
+.fynns-expand[data-state="open"] .fynns-collapsible-body {
+  opacity: 1;
+}
+
+.fynns-expand-inner {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-expand,
+  .fynns-collapsible-body,
+  .fynns-collapsible-chevron,
+  .fynns-collapsible-icon,
+  .fynns-collapsible-head::before {
+    transition: none;
+  }
+}
+
+/* ---------- Breadcrumb ---------- */
+.fynns-breadcrumb {
+  min-width: 0;
+}
+
+.fynns-breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-breadcrumb-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  font-size: var(--fynns-breadcrumb-font-size);
+  line-height: var(--fynns-line-height-compact);
+}
+
+.fynns-breadcrumb-sep {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding-inline: var(--fynns-breadcrumb-sep-pad-inline);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-breadcrumb-sep-icon {
+  display: block;
+}
+
+/* Ancestor crumbs: geometry + hover/press come from `.fynns-btn--ghost.fynns-btn--sm`.
+   This class only sets M3 text-button ink (accent) + anchor reset. */
+.fynns-breadcrumb-link {
+  color: var(--fynns-color-accent);
+  text-decoration: none;
+}
+
+a.fynns-breadcrumb-link:hover,
+a.fynns-breadcrumb-link:active,
+a.fynns-breadcrumb-link:visited {
+  color: var(--fynns-color-accent);
+  text-decoration: none;
+}
+
+.fynns-breadcrumb-current {
+  /* Same content box as `.fynns-btn--sm` so label insets align with ancestor crumbs. */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 var(--fynns-space-md);
+  border: var(--fynns-border-hairline) solid transparent;
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-breadcrumb-font-size);
+  font-weight: var(--fynns-font-weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- Pagination ---------- */
+.fynns-pagination {
+  box-sizing: border-box;
+  /*
+   * Content-sized nowrap strip. In a table/list footer, place inside
+   * `.fynns-pagination-bar` (M3 / MUI single row) — never let a growing
+   * sibling crush this strip into a wrapped page list.
+   */
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+/*
+ * Table / list pager footer (M3 data-table pagination / MUI TablePagination):
+ * one horizontal band — meta (rows-per-page Select + range) start, page
+ * navigator end. **Never wrap to two rows** (even on narrow hosts): keep
+ * `nowrap` and let the bar scroll inline (`overflow-x: auto` + `fynns-scroll`).
+ * Page discs stay nowrap inside `.fynns-pagination`.
+ */
+.fynns-pagination-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: clip;
+}
+
+.fynns-pagination-bar__start {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: max-content;
+}
+
+/* Select is width:100% by default — hug content in the pager meta row. */
+.fynns-pagination-bar__start > .fynns-select {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+}
+
+/* FieldHint is block by default — keep range copy on the same meta line. */
+.fynns-pagination-bar__start > .fynns-field-hint {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.fynns-pagination-bar__end {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+.fynns-pagination-list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fynns-pagination-gap);
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-pagination-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-pagination-ellipsis {
+  min-width: 2rem;
+  min-height: 2rem;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  user-select: none;
+}
+
+/* Match IconButton sm circle. No bg/border transition — sliding the page window
+   must not animate ghost↔tonal (that read as a flashing selected disc). Motion
+   is limited to transform + label remount so the tonal slot can stay put. */
+.fynns-btn.fynns-pagination-page {
+  box-sizing: border-box;
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+  padding: 0;
+  border-radius: var(--fynns-radius-round);
+  border-color: transparent;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-spring);
+}
+
+.fynns-btn.fynns-pagination-page:hover:not(:disabled),
+.fynns-btn.fynns-pagination-page:active:not(:disabled) {
+  border-color: transparent;
+}
+
+.fynns-btn.fynns-pagination-page:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.fynns-btn.fynns-pagination-page--current {
+  animation: fynns-pagination-current-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-pagination-page-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-pagination-label-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-btn.fynns-pagination-page--md {
+  width: var(--fynns-size-icon-target);
+  min-width: var(--fynns-size-icon-target);
+  height: var(--fynns-size-icon-target);
+  min-height: var(--fynns-size-icon-target);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-btn.fynns-pagination-page,
+  .fynns-pagination-page-label {
+    transition: none;
+    animation: none;
+  }
+
+  .fynns-btn.fynns-pagination-page:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ---------- Loading ---------- */
+.fynns-loading-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-loading-spinner--sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.fynns-loading-spinner--md {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.fynns-loading-spinner--lg {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.fynns-loading-spinner-ring {
+  width: 100%;
+  height: 100%;
+  border: 3px solid color-mix(in srgb, var(--fynns-color-accent) 20%, transparent);
+  border-top-color: var(--fynns-color-accent);
+  border-radius: var(--fynns-radius-round);
+  animation: fynns-spin var(--fynns-duration-loading-spin) linear infinite;
+}
+
+/* Filled buttons use accent/danger background — default accent ring is invisible there. */
+.fynns-btn--primary .fynns-loading-spinner-ring,
+.fynns-btn--danger .fynns-loading-spinner-ring {
+  border-color: color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+}
+
+@keyframes fynns-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Divider (M3) ---------- */
+.fynns-divider {
+  box-sizing: border-box;
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  width: 100%;
+  height: var(--fynns-border-hairline);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fynns-color-outline-subtle);
+}
+
+.fynns-divider::before {
+  content: "";
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  background: currentColor;
+}
+
+.fynns-divider--inset,
+.fynns-divider--inset-start {
+  padding-inline-start: var(--fynns-space-lg);
+}
+
+.fynns-divider--inset,
+.fynns-divider--inset-end {
+  padding-inline-end: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical {
+  flex-direction: column;
+  width: var(--fynns-border-hairline);
+  height: auto;
+  align-self: stretch;
+  min-height: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical.fynns-divider--inset,
+.fynns-divider--vertical.fynns-divider--inset-start {
+  padding-inline-start: 0;
+  padding-block-start: var(--fynns-space-lg);
+}
+
+.fynns-divider--vertical.fynns-divider--inset,
+.fynns-divider--vertical.fynns-divider--inset-end {
+  padding-inline-end: 0;
+  padding-block-end: var(--fynns-space-lg);
+}
+
+@media (forced-colors: active) {
+  .fynns-divider {
+    color: CanvasText;
+  }
+}
+
+/* ---------- Progress (M3 linear / circular) ---------- */
+.fynns-linear-progress {
+  --fynns-progress-value: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  height: var(--fynns-progress-track-thickness);
+  min-width: 4rem;
+  overflow: hidden;
+}
+
+.fynns-linear-progress--active {
+  gap: var(--fynns-progress-gap);
+}
+
+.fynns-linear-progress-active,
+.fynns-linear-progress-track,
+.fynns-linear-progress-indeterminate-bar {
+  box-sizing: border-box;
+  height: 100%;
+  border-radius: var(--fynns-radius-pill);
+}
+
+.fynns-linear-progress-active {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: calc(var(--fynns-progress-value) * 100%);
+  background: var(--fynns-color-accent);
+  transition: width var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-linear-progress-track {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--fynns-color-accent-24);
+}
+
+.fynns-linear-progress--indeterminate {
+  position: relative;
+  background: var(--fynns-color-accent-24);
+  border-radius: var(--fynns-radius-pill);
+  gap: 0;
+}
+
+.fynns-linear-progress-indeterminate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* Short traveling segments (not full-width + scaleX — that reads as a solid bar). */
+.fynns-linear-progress-indeterminate-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-accent);
+}
+
+.fynns-linear-progress-indeterminate-bar--1 {
+  animation: fynns-linear-progress-1 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+}
+
+.fynns-linear-progress-indeterminate-bar--2 {
+  animation: fynns-linear-progress-2 calc(var(--fynns-duration-presentation-hint) * 1.75)
+    var(--fynns-ease-in-out) infinite;
+  animation-delay: calc(var(--fynns-duration-presentation-hint) * 0.7);
+}
+
+@keyframes fynns-linear-progress-1 {
+  0% {
+    left: -40%;
+    width: 32%;
+  }
+  40% {
+    left: 25%;
+    width: 48%;
+  }
+  100% {
+    left: 100%;
+    width: 24%;
+  }
+}
+
+@keyframes fynns-linear-progress-2 {
+  0% {
+    left: -30%;
+    width: 18%;
+  }
+  50% {
+    left: 40%;
+    width: 36%;
+  }
+  100% {
+    left: 100%;
+    width: 14%;
+  }
+}
+
+.fynns-circular-progress {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-progress-circular-size);
+  height: var(--fynns-progress-circular-size);
+  flex: 0 0 auto;
+  color: var(--fynns-color-accent);
+}
+
+.fynns-circular-progress--sm {
+  width: var(--fynns-progress-circular-size-sm);
+  height: var(--fynns-progress-circular-size-sm);
+}
+
+.fynns-circular-progress--lg {
+  width: var(--fynns-progress-circular-size-lg);
+  height: var(--fynns-progress-circular-size-lg);
+}
+
+.fynns-circular-progress-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-circular-progress-track,
+.fynns-circular-progress-active {
+  stroke-width: var(--fynns-progress-track-thickness);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.fynns-circular-progress-track {
+  stroke: var(--fynns-color-accent-24);
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard),
+    stroke-dashoffset var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress-active {
+  stroke: currentColor;
+  transition: stroke-dasharray var(--fynns-duration-base) var(--fynns-ease-standard);
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+  animation: fynns-circular-progress-rotate var(--fynns-duration-loading-spin) linear infinite;
+}
+
+.fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+  animation: fynns-circular-progress-dash calc(var(--fynns-duration-presentation-hint) * 1.5)
+    var(--fynns-ease-in-out) infinite;
+  transition: none;
+}
+
+@keyframes fynns-circular-progress-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fynns-circular-progress-dash {
+  0% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 80 45.6;
+    stroke-dashoffset: -24;
+  }
+  100% {
+    stroke-dasharray: 20 105.6;
+    stroke-dashoffset: -125.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-linear-progress-active,
+  .fynns-circular-progress-track,
+  .fynns-circular-progress-active {
+    transition: none;
+  }
+
+  .fynns-linear-progress-indeterminate-bar--1,
+  .fynns-linear-progress-indeterminate-bar--2 {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-svg {
+    animation-duration: var(--fynns-duration-reduced-motion-spin);
+  }
+
+  .fynns-circular-progress--indeterminate .fynns-circular-progress-active {
+    animation-duration: calc(var(--fynns-duration-reduced-motion-spin) * 1.5);
+  }
+}
+
+/* ---------- Avatar (M3) ---------- */
+.fynns-avatar {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: var(--fynns-avatar-size);
+  height: var(--fynns-avatar-size);
+  border-radius: var(--fynns-radius-round);
+  overflow: hidden;
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-avatar-font-size);
+  font-weight: var(--fynns-font-weight-semibold);
+  line-height: 1;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.fynns-avatar--sm {
+  width: var(--fynns-avatar-size-sm);
+  height: var(--fynns-avatar-size-sm);
+  font-size: var(--fynns-avatar-font-size-sm);
+}
+
+.fynns-avatar--lg {
+  width: var(--fynns-avatar-size-lg);
+  height: var(--fynns-avatar-size-lg);
+  font-size: var(--fynns-avatar-font-size-lg);
+}
+
+.fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fynns-avatar-initials,
+.fynns-avatar-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+
+/* ---------- InlineAlert (in-panel severity; not chrome Banner) ---------- */
+/* Soft tonal fill. Icon carries severity; body is on-surface (readable).
+   Pad rhythm shared with Banner strip tokens. Not M3 — maps to Banner / Snackbar. */
+.fynns-inline-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fynns-banner-gap);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding-block: var(--fynns-banner-pad-block);
+  padding-inline: var(--fynns-banner-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-md);
+  background: transparent;
+  color: var(--fynns-color-text);
+  line-height: var(--fynns-line-height-body);
+  font-size: var(--fynns-font-size-sm);
+}
+
+.fynns-inline-alert__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.125rem;
+  flex: 0 0 auto;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  line-height: 0;
+}
+
+.fynns-inline-alert__icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+}
+
+.fynns-inline-alert__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.fynns-inline-alert--info {
+  background: color-mix(in srgb, var(--fynns-color-info) 12%, transparent);
+}
+
+.fynns-inline-alert--info .fynns-inline-alert__icon {
+  color: var(--fynns-color-info);
+}
+
+.fynns-inline-alert--success {
+  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+}
+
+.fynns-inline-alert--success .fynns-inline-alert__icon {
+  color: var(--fynns-color-success);
+}
+
+.fynns-inline-alert--warning {
+  background: color-mix(in srgb, var(--fynns-color-warning) 12%, transparent);
+}
+
+.fynns-inline-alert--warning .fynns-inline-alert__icon {
+  color: var(--fynns-color-warning);
+}
+
+.fynns-inline-alert--error {
+  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+}
+
+.fynns-inline-alert--error .fynns-inline-alert__icon {
+  color: var(--fynns-color-danger);
+}
+
+/* ---------- Banner (M3 full-width strip) ---------- */
+.fynns-banner {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--fynns-banner-gap);
+  width: 100%;
+  min-height: var(--fynns-banner-min-height);
+  padding-block: var(--fynns-banner-pad-block);
+  padding-inline: var(--fynns-banner-pad-inline);
+  border: 0;
+  border-radius: var(--fynns-radius-3xl);
+  color: var(--fynns-color-text);
+}
+
+.fynns-banner--default {
+  background: var(--fynns-color-surface-2);
+}
+
+.fynns-banner--tonal {
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-banner-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+  color: inherit;
+}
+
+.fynns-banner-icon svg {
+  width: var(--fynns-banner-icon-size);
+  height: var(--fynns-banner-icon-size);
+}
+
+.fynns-banner-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-space-2xs);
+  padding-block: 0.125rem;
+}
+
+.fynns-banner-text {
+  font-size: var(--fynns-banner-text-size);
+  line-height: var(--fynns-banner-text-line);
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-banner-supporting {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-banner--tonal .fynns-banner-supporting {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.fynns-banner-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  gap: var(--fynns-banner-actions-gap);
+  margin-inline-start: auto;
+}
+
+.fynns-banner-trailing .fynns-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+.fynns-banner-actions {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--fynns-banner-actions-gap);
+}
+
+/* ---------- List / ListItem (M3 content list) ---------- */
+.fynns-list {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-list-item-gap);
+  margin: 0;
+  padding-block: var(--fynns-list-inset-block);
+  padding-inline: var(--fynns-list-inset-inline);
+  list-style: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  background: transparent;
+}
+
+/*
+ * Rows must not flex-shrink inside a height-capped / scrolling List.
+ * Mistaken non-`li` children (e.g. Collapsible — illegal `ul > div`) also
+ * keep intrinsic height so overflow:hidden shells do not paint ~19px
+ * “skeleton” pills. Prefer `ListItem` (+ `detail`) — never Collapsible/Card
+ * as a List child.
+ */
+.fynns-list > * {
+  flex-shrink: 0;
+}
+
+.fynns-list-item-host {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  /*
+   * Clip any host background to radius-3xl. Overflow-x-only left overflow-y
+   * visible → leftover washes paint a square bar. Kind chrome stays leading
+   * icon + trailing meta — not a start tick.
+   */
+  overflow: clip;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+.fynns-list-item-host > .fynns-list-item {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.fynns-list-item {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-list-gap);
+  width: 100%;
+  min-height: var(--fynns-list-height-1);
+  padding-block: var(--fynns-list-pad-block);
+  padding-inline: var(--fynns-list-pad-inline);
+  border: 0;
+  /* Long-strip row highlight (NavigationDrawerItem / Select / menu). */
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  text-align: start;
+  cursor: default;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-list-item--2 {
+  min-height: var(--fynns-list-height-2);
+}
+
+.fynns-list-item--3 {
+  min-height: var(--fynns-list-height-3);
+}
+
+.fynns-list-item--interactive {
+  cursor: pointer;
+}
+
+.fynns-list-item--interactive:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
+}
+
+.fynns-list-item--selected {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+/*
+ * Hover / selected wash lives on the host (or the row shell when `detail`
+ * is open) so trailing chevrons / IconButtons share one radius-3xl pill.
+ * Static / disabled rows never get a hover layer.
+ */
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-list-item-host--interactive:not(.fynns-list-item-host--with-detail):active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-list-item-host--selected:not(.fynns-list-item-host--with-detail) {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-host--selected.fynns-list-item-host--interactive:not(
+    .fynns-list-item-host--with-detail
+  ):active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-list-item-row--interactive:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-list-item-row--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item-row--selected.fynns-list-item-row--interactive:active {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-list-item:disabled,
+.fynns-list-item--disabled {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--fynns-color-text) 38%, transparent);
+}
+
+.fynns-list-item:disabled .fynns-list-item-leading,
+.fynns-list-item:disabled .fynns-list-item-trailing-icon,
+.fynns-list-item--disabled .fynns-list-item-leading,
+.fynns-list-item--disabled .fynns-list-item-trailing-icon {
+  opacity: 0.38;
+}
+
+.fynns-list-item:disabled .fynns-list-item-headline,
+.fynns-list-item--disabled .fynns-list-item-headline {
+  opacity: 0.38;
+}
+
+.fynns-list-item-leading {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: auto;
+  min-width: var(--fynns-list-leading-width);
+  min-height: var(--fynns-list-icon-size);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-list-item-leading > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex: 0 0 auto;
+}
+
+.fynns-list-item--selected .fynns-list-item-leading {
+  color: inherit;
+}
+
+.fynns-list-item-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--fynns-list-content-gap);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-list-item--3 .fynns-list-item-content {
+  gap: var(--fynns-list-content-gap-3);
+}
+
+.fynns-list-item-overline {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-list-item-headline {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-snug);
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * Single-line run / job summary: status mark + title + metrics in one
+ * `.fynns-control-cluster` as the sole headline child (not InlineAlert —
+ * that is width:100% panel chrome and forces wrap). Cluster owns nowrap;
+ * `__grow` ellipsizes the identity string. Spec: AGENTS Content density.
+ */
+.fynns-list-item-headline:has(> .fynns-control-cluster) {
+  display: flex;
+  align-items: center;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.fynns-list-item-headline > .fynns-control-cluster {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  /* Status pill ↔ title / metrics: one step above IconButton cluster 4dp. */
+  gap: var(--fynns-layout-control-stack-gap);
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > :not(.fynns-control-cluster__grow) {
+  flex: 0 0 auto;
+}
+
+/*
+ * Run-summary duration in the headline cluster (after `__grow`).
+ * **One metric per cell** (duration / count) + optional **one** leading
+ * icon — fixed track = elapse col + icon + cluster gap. Digit / glyph
+ * **starts** share a column (≥ 0.4.143). Do **not** jam latency+tokens /
+ * cost into the same cell (hard mid-glyph clip). Second metric → sibling
+ * `.fynns-table-meta` (tokens track below) or `.fynns-list-item-trailing-stats`.
+ * Overflow (≥ 0.4.145): wrap the label in a `<span>` so ellipsis paints;
+ * icons never shrink. Live: `#list` run-summary.
+ */
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-elapse) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: var(--fynns-list-headline-meta-width);
+  min-width: var(--fynns-list-headline-meta-width);
+  max-width: var(--fynns-list-headline-meta-width);
+  overflow: hidden;
+  text-align: start;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Second headline metric (tokens / count) — sibling cell, not jammed. */
+.fynns-list-item-headline
+  > .fynns-control-cluster
+  > .fynns-table-meta
+  + .fynns-table-meta {
+  --fynns-list-headline-meta-width: calc(
+    var(--fynns-list-stats-col-tokens) + var(--fynns-size-icon) +
+      var(--fynns-layout-control-cluster-gap)
+  );
+}
+
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta svg {
+  flex: 0 0 auto;
+}
+
+/*
+ * Label span inside the fixed track — required for text-overflow when an
+ * icon shares the cell (bare text nodes are anonymous flex items and only
+ * hard-clip). Prefer one short metric; long copy ellipsizes at the track.
+ */
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-table-meta > span {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compact Success/Failed mark in List headline — not InlineAlert / Banner. */
+.fynns-list-item-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  box-sizing: border-box;
+  padding-block: var(--fynns-space-2xs);
+  padding-inline: var(--fynns-space-sm);
+  border-radius: var(--fynns-radius-pill);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-success);
+  background: color-mix(in srgb, var(--fynns-color-success) 12%, transparent);
+}
+
+.fynns-list-item-status[data-tone="danger"] {
+  color: var(--fynns-color-danger);
+  background: color-mix(in srgb, var(--fynns-color-danger) 12%, transparent);
+}
+
+.fynns-list-item-status svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  flex: 0 0 auto;
+}
+
+/*
+ * Ellipsis is on the headline box; Tooltip wraps copy in `.fynns-tooltip-trigger`
+ * (`inline-flex` → min-content = full string). Constrain the trigger and its
+ * child so `…` still paints (do not restyle this in the consumer).
+ */
+.fynns-list-item-headline .fynns-tooltip-trigger,
+.fynns-list-item-headline .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item-supporting {
+  min-width: 0;
+  max-width: 100%;
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item:not(.fynns-list-item--3) .fynns-list-item-supporting .fynns-tooltip-trigger,
+.fynns-list-item:not(.fynns-list-item--3) .fynns-list-item-supporting .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item--3 .fynns-list-item-supporting .fynns-tooltip-trigger,
+.fynns-list-item--3 .fynns-list-item-supporting .fynns-tooltip-trigger > * {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-list-item--3 .fynns-list-item-supporting {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.fynns-list-item--selected .fynns-list-item-overline,
+.fynns-list-item--selected .fynns-list-item-supporting {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.fynns-list-item-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  gap: var(--fynns-space-sm);
+  margin-inline-start: auto;
+  color: var(--fynns-color-text-muted);
+  min-height: var(--fynns-list-icon-size);
+}
+
+/*
+ * Opt-in date / kind / timestamp column: List trailingMetaAlign="start"
+ * floors a shared min-width so sibling rows share one meta **column**
+ * (box start edges align). Copy is **end-aligned inside** (≥ 0.4.148 /
+ * restore 0.4.133) so glyphs sit `--fynns-list-end-actions-gap` from
+ * `--with-end` actions — never `text-align: start` dead space after a
+ * short date still narrower than `17ch` (0.4.144 start-ink regressed
+ * Experiences hover). Ellipsis / overflow still apply (≥ 0.4.145).
+ * Default (no data attr) = content-width meta hugged to the trailing
+ * edge — short status (“Current”) stays next to actions. Exclude
+ * trailing-stats (fixed tracks of their own — start-aligned cells).
+ */
+.fynns-list[data-trailing-meta-align="start"]
+  .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
+    :has(.fynns-list-item-trailing-stats)
+  ) {
+  min-width: var(--fynns-list-trailing-meta-min-width);
+  justify-content: flex-end;
+}
+
+.fynns-list-item-trailing-text {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-list-icon-size);
+  color: inherit;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-list[data-trailing-meta-align="start"]
+  .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
+    :has(.fynns-list-item-trailing-stats)
+  )
+  > .fynns-list-item-trailing-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: end;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-list-item-trailing-text:has(.fynns-list-item-trailing-stats) {
+  white-space: normal;
+  line-height: inherit;
+}
+
+/*
+ * Multi-metric trailing meta (elapse | tokens | cost | count). Fixed column
+ * tracks so sibling rows share vertical column edges — not a flex
+ * `.fynns-control-cluster` (content-width cells drift per row). Cells are
+ * **start**-aligned (tabular digit columns — distinct from plain
+ * `trailingMetaAlign` **end**-ink for dates ≥ 0.4.148). Live: `#list`.
+ */
+.fynns-list-item-trailing-stats {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-tokens)
+    var(--fynns-list-stats-col-cost)
+    var(--fynns-list-stats-col-count);
+  column-gap: var(--fynns-layout-control-cluster-gap);
+  align-items: center;
+  justify-items: start;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.fynns-list-item-trailing-stats--pair {
+  grid-template-columns:
+    var(--fynns-list-stats-col-elapse)
+    var(--fynns-list-stats-col-count);
+}
+
+.fynns-list-item-trailing-stats > * {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: start;
+}
+
+.fynns-list-item-trailing-stats > .fynns-tooltip-trigger {
+  display: inline-flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/*
+ * Left copy | right stats as an explicit grid when trailing-stats is present
+ * (leading | content | stats, or content | stats when no leading).
+ */
+.fynns-list-item:has(.fynns-list-item-trailing-stats) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) max-content;
+  align-items: center;
+  column-gap: var(--fynns-list-gap);
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats):not(
+    :has(> .fynns-list-item-leading)
+  ) {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-list-item:has(.fynns-list-item-trailing-stats) > .fynns-list-item-trailing {
+  margin-inline-start: 0;
+  grid-column: -1;
+}
+
+.fynns-list-item-trailing-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  color: inherit;
+}
+
+.fynns-list-item-trailing-icon svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+}
+
+/*
+ * Interactive row actions (IconButton / cluster) — sibling of the row button.
+ * Do not crush to list-icon 16dp; prefer ghost md (40dp) to match page
+ * ControlRow chrome on the same destination catalog surface.
+ */
+.fynns-list-item-trailing--end {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-self: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin-inline-start: 0;
+  padding-inline-end: var(--fynns-list-pad-inline);
+  color: var(--fynns-color-text-muted);
+}
+
+/* Decorative chevron / glyph only — IconButton / cluster keep their own size. */
+.fynns-list-item-trailing--end > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex-shrink: 0;
+}
+
+/*
+ * Trailing action strips hug content. A lone `.fynns-control-cluster` defaults
+ * to `width: 100%` + wrap — inside a crushed trailing column that stacked
+ * IconButtons vertically (UpstreamAssets `interactive={false}` lesson).
+ */
+.fynns-list-item-trailing--end .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+}
+
+/*
+ * Overlay reveal (ChatMessage / Fluent / Cursor): idle actions do not reserve
+ * a flex slot so short headlines fill the row with balanced L/R breath; hover /
+ * focus-within shows the cluster. Touch / coarse pointer keeps actions always
+ * visible. Reserve matches the **actual** end cluster: one md IconButton by
+ * default; two (+ cluster gap) when the cluster has a second child — never
+ * leave a phantom second disk that strands short `trailingSupportingText`
+ * (“Current” / 当前) far from a lone trash. Live: `#list` status+action.
+ */
+.fynns-list-item-host--with-end {
+  position: relative;
+  --fynns-list-end-actions-reserve: calc(
+    var(--fynns-list-end-actions-gap) + var(--fynns-size-icon-target) +
+      var(--fynns-list-pad-inline)
+  );
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-control-cluster > :nth-child(2)
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end > .fynns-btn--icon + .fynns-btn--icon
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end > .fynns-tooltip-trigger + .fynns-tooltip-trigger
+  ) {
+  --fynns-list-end-actions-reserve: calc(
+    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
+      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
+  );
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-list-item-host--with-end:hover > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:focus-within > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fynns-list-item-host--with-end > .fynns-list-item,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+  /* Idle: full-bleed copy. Reveal: clear under the measured end cluster. */
+  padding-inline-end: var(--fynns-space-xs);
+  transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-list-item-host--with-end:hover > .fynns-list-item,
+.fynns-list-item-host--with-end:focus-within > .fynns-list-item,
+.fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item,
+.fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  padding-inline-end: var(--fynns-list-end-actions-reserve);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+
+  .fynns-list-item-host--with-end > .fynns-list-item,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+    padding-inline-end: var(--fynns-list-end-actions-reserve);
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item-trailing--end,
+  .fynns-list-item-host--with-end > .fynns-list-item,
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+    transition: none;
+  }
+}
+
+.fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
+.fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
+  background: transparent;
+  border-radius: 0;
+}
+
+.fynns-list-item-host.fynns-list-item-host--with-detail {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.fynns-list-item-trailing > svg {
+  width: var(--fynns-list-icon-size);
+  height: var(--fynns-list-icon-size);
+  flex-shrink: 0;
+}
+
+.fynns-list-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--fynns-radius-3xl);
+  overflow: clip;
+}
+
+.fynns-list-item-row > .fynns-list-item {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+
+.fynns-list-item-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  /* One leading column of indent. Nested ListItems keep the same pad-inline
+     as a top-level row — do not flush the nested chevron to this edge. */
+  padding-inline-start: calc(var(--fynns-list-icon-size) + var(--fynns-list-gap));
+  padding-inline-end: 0;
+  padding-block-end: var(--fynns-layout-nest-gap);
+}
+
+.fynns-list-item-detail > .fynns-list {
+  padding-inline: var(--fynns-list-inset-inline);
+  padding-block: 0;
+  max-width: 100%;
+}
+
+.fynns-list-item-trailing-text .fynns-control-cluster {
+  flex-wrap: nowrap;
+}
+
+.fynns-list-item--selected .fynns-list-item-trailing {
+  color: inherit;
+}
+
+.fynns-list .fynns-divider {
+  margin-block: 0;
+}
+
+/* —— DatePicker (M3 calendar) ———————————————————————————————— */
+
+.fynns-datepicker {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* Preferred 7×day + gaps + pads; shrink with the parent instead of clipping. */
+  width: min(
+    100%,
+    calc(
+      7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap) +
+        2 * var(--fynns-datepicker-pad-inline)
+    )
+  );
+  min-width: 0;
+  padding-block: var(--fynns-datepicker-pad-block);
+  padding-inline: var(--fynns-datepicker-pad-inline);
+  border-radius: var(--fynns-radius-lg);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+.fynns-datepicker--disabled {
+  opacity: var(--fynns-opacity-muted);
+  pointer-events: none;
+}
+
+.fynns-datepicker-header {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--fynns-datepicker-gap);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--fynns-datepicker-header-min-height);
+  margin-block-end: var(--fynns-space-xs);
+}
+
+.fynns-datepicker-title {
+  grid-column: 1 / span 5;
+  margin: 0;
+  min-width: 0;
+  /* Optical align with centered weekday/day glyphs in column 1. */
+  padding-inline-start: calc(
+    (var(--fynns-datepicker-day-size) - 1em) / 2
+  );
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-font-size-md);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-tight);
+  color: var(--fynns-color-text);
+}
+
+/* Children (tooltip triggers) occupy day columns 6–7 via the header grid. */
+.fynns-datepicker-nav {
+  display: contents;
+}
+
+/*
+ * Nav sits in day columns 6–7: button box = day cell (40dp). Hover/pressed
+ * disc uses `--fynns-appbar-action-hover-size` (36dp) — slightly under the
+ * 40dp day cell, 20dp glyph, not glued to the icon.
+ */
+.fynns-datepicker-nav .fynns-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  height: auto;
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon {
+  position: relative;
+  z-index: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--fynns-appbar-action-hover-size);
+  height: var(--fynns-appbar-action-hover-size);
+  transform: translate(-50%, -50%);
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:hover:not(:disabled),
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:active:not(:disabled) {
+  background: transparent;
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:hover:not(:disabled)::before {
+  background: var(--fynns-color-surface-hover);
+}
+
+.fynns-datepicker-nav .fynns-btn.fynns-btn--icon:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-datepicker-weekdays,
+.fynns-datepicker-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--fynns-datepicker-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-datepicker-weekday {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  height: auto;
+  font-size: var(--fynns-datepicker-weekday-font);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-datepicker-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-datepicker-gap);
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-datepicker-day {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: var(--fynns-border-hairline) solid transparent;
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fynns-datepicker-day-label {
+  position: relative;
+  z-index: 1;
+}
+
+.fynns-datepicker-day--outside {
+  color: var(--fynns-color-text-muted);
+}
+
+/* Mute only the numeral by default. In-range outside cells additionally use a
+   quieter strip fill (see range rules below). */
+.fynns-datepicker-day--outside .fynns-datepicker-day-label {
+  opacity: 0.55;
+}
+
+.fynns-datepicker-day:hover:not(:disabled):not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end):not(.fynns-datepicker-day--in-range):not(
+  .fynns-datepicker-day--range-preview
+) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-datepicker-day:active:not(:disabled):not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end):not(.fynns-datepicker-day--in-range):not(
+  .fynns-datepicker-day--range-preview
+) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-datepicker-day:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-datepicker-day--today:not(.fynns-datepicker-day--selected):not(
+  .fynns-datepicker-day--range-start
+):not(.fynns-datepicker-day--range-end) {
+  border-color: var(--fynns-color-accent);
+  color: var(--fynns-color-accent);
+}
+
+.fynns-datepicker-day--selected {
+  background: var(--fynns-color-accent);
+  color: var(--fynns-color-on-accent);
+  border-color: transparent;
+}
+
+.fynns-datepicker-day--selected:hover:not(:disabled) {
+  background: var(--fynns-color-accent-hover);
+}
+
+.fynns-datepicker-day--selected:active:not(:disabled) {
+  background: var(--fynns-color-accent-active);
+}
+
+/*
+ * Date range: continuous horizontal strip (M3). Column tracks absorb the
+ * usual day-gap into equal 1fr cells (gap: 0). Day hairline borders are zeroed
+ * in range mode — otherwise ::before (padding-box) leaves a visible seam
+ * between adjacent cells. Bars also overlap 1px trailing to kill subpixel
+ * cracks. Start/end keep a day-size accent disc centered in the wider cell.
+ * Row wraps stay separate strips (round on first/last cell of the row).
+ */
+.fynns-datepicker--range .fynns-datepicker-header,
+.fynns-datepicker--range .fynns-datepicker-weekdays,
+.fynns-datepicker--range .fynns-datepicker-row {
+  gap: 0;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.fynns-datepicker--range .fynns-datepicker-day,
+.fynns-datepicker--range .fynns-datepicker-weekday {
+  width: 100%;
+}
+
+/* Hairline borders would show as cracks between abutting range bars. */
+.fynns-datepicker--range .fynns-datepicker-day {
+  border-width: 0;
+}
+
+/* Today cue without reintroducing a layout border. */
+.fynns-datepicker--range
+  .fynns-datepicker-day--today:not(.fynns-datepicker-day--selected):not(
+    .fynns-datepicker-day--range-start
+  ):not(.fynns-datepicker-day--range-end) {
+  box-shadow: inset 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start,
+.fynns-datepicker--range .fynns-datepicker-day--range-end,
+.fynns-datepicker--range .fynns-datepicker-day--in-range,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview {
+  background: transparent;
+  border-radius: 0;
+  z-index: 0;
+  overflow: visible;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start,
+.fynns-datepicker--range .fynns-datepicker-day--range-end {
+  color: var(--fynns-color-on-accent);
+  z-index: 1;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--in-range,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview {
+  color: var(--fynns-color-on-secondary-container);
+}
+
+/*
+ * Outside days in a range stay visually “other month”: muted numerals and a
+ * quieter strip fill — not the same ink/bar as in-month in-range cells.
+ */
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--in-range
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview
+  .fynns-datepicker-day-label {
+  opacity: 0.55;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-start
+  .fynns-datepicker-day-label,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-end
+  .fynns-datepicker-day-label {
+  opacity: 0.78;
+  color: var(--fynns-color-on-accent);
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-preview::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-start:not(
+    .fynns-datepicker-day--range-end
+  )::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--outside.fynns-datepicker-day--range-end:not(
+    .fynns-datepicker-day--range-start
+  )::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-secondary-container) 40%,
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:not(.fynns-datepicker-day--range-end)::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-block: 0;
+  background: var(--fynns-color-secondary-container);
+  pointer-events: none;
+}
+
+/*
+ * Middle / start bars: full width + 1px trailing overlap so fractional track
+ * widths never leave a hairline of the surface between cells.
+ */
+.fynns-datepicker--range .fynns-datepicker-day--in-range::before,
+.fynns-datepicker--range .fynns-datepicker-day--range-preview::before {
+  inset-inline-start: 0;
+  inset-inline-end: -1px;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:not(.fynns-datepicker-day--range-end)::before {
+  inset-inline-start: 50%;
+  inset-inline-end: -1px;
+}
+
+/*
+ * End bar: from cell start through disc center. Overlap 1px past center so the
+ * opaque accent disc does not leave a dark crack against the previous cell.
+ */
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-end:not(.fynns-datepicker-day--range-start)::before {
+  inset-inline-start: 0;
+  inset-inline-end: calc(50% - 1px);
+}
+
+/* Do not spill past the row's trailing edge. */
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-start:last-child:not(
+    .fynns-datepicker-day--range-end
+  )::before {
+  inset-inline-end: 0;
+}
+
+/* Keep the strip flush into a same-row range-end (no rounded “pill end”). */
+.fynns-datepicker--range
+  .fynns-datepicker-day--in-range:has(+ .fynns-datepicker-day--range-end)::before,
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-preview:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.fynns-datepicker--range
+  .fynns-datepicker-day--range-start:has(+ .fynns-datepicker-day--range-end)::before {
+  inset-inline-end: -1px;
+}
+
+/* Accent discs: never exceed the cell (narrow dialog hosts used to keep a
+ * fixed day-size disc → overflow + body scrollbar). */
+.fynns-datepicker--range .fynns-datepicker-day--range-start::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: min(100%, var(--fynns-datepicker-day-size));
+  height: min(100%, var(--fynns-datepicker-day-size));
+  translate: -50% -50%;
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  pointer-events: none;
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start:hover:not(:disabled)::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end:hover:not(:disabled)::after {
+  background: var(--fynns-color-accent-hover);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day--range-start:active:not(:disabled)::after,
+.fynns-datepicker--range .fynns-datepicker-day--range-end:active:not(:disabled)::after {
+  background: var(--fynns-color-accent-active);
+}
+
+/* Soften row-wrap ends (not the true range start/end). */
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:first-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:first-child::before {
+  border-start-start-radius: var(--fynns-radius-round);
+  border-end-start-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--in-range:last-child::before,
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-preview:last-child::before {
+  border-start-end-radius: var(--fynns-radius-round);
+  border-end-end-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-end:first-child:not(
+    .fynns-datepicker-day--range-start
+  )::before {
+  border-start-start-radius: var(--fynns-radius-round);
+  border-end-start-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker-row
+  > .fynns-datepicker-day--range-start:last-child:not(
+    .fynns-datepicker-day--range-end
+  )::before {
+  border-start-end-radius: var(--fynns-radius-round);
+  border-end-end-radius: var(--fynns-radius-round);
+}
+
+.fynns-datepicker--range .fynns-datepicker-day-label {
+  z-index: 2;
+}
+
+.fynns-datepicker-day:disabled {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--fynns-color-text) 38%, transparent);
+  border-color: transparent;
+  background: transparent;
+}
+
+/*
+ * Modal DatePicker / DateRangePicker: same calendar metrics as the docked
+ * control. Do not strip pad-inline (that + dialog-inset squeezed day cells
+ * below day-size and made range discs overflow into a scrollbar).
+ */
+.fynns-dialog-panel.fynns-datepicker-dialog {
+  /* Fit the calendar; ignore the generic centered min 280dp squeeze. */
+  min-width: max-content;
+  width: max-content;
+  max-width: min(100%, var(--fynns-layout-dialog-max-width-sm));
+  border-radius: var(--fynns-radius-3xl);
+  border-color: transparent;
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-xl);
+}
+
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-datepicker-dialog-body {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  /* Light outer breath; calendar keeps its own pad-* tokens. */
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-md);
+  overflow: hidden;
+}
+
+.fynns-datepicker-dialog-body .fynns-datepicker {
+  box-shadow: none;
+  background: transparent;
+  /* Keep --fynns-datepicker-pad-* so metrics match the docked picker. */
+  flex: 0 0 auto;
+  width: calc(
+    7 * var(--fynns-datepicker-day-size) + 6 * var(--fynns-datepicker-gap) +
+      2 * var(--fynns-datepicker-pad-inline)
+  );
+  max-width: 100%;
+}
+
+.fynns-datepicker-dialog .fynns-datepicker-dialog-head {
+  /* Centered Dialog head already has no divider; do not reintroduce one. */
+  border-bottom: none;
+  background: transparent;
+  /* Equal block pad + center: titles column + close share one vertical mid
+   * (was flex-start + lg/md asymmetry — optically low / X top-aligned). */
+  align-items: center;
+  padding: var(--fynns-space-lg);
+}
+
+.fynns-datepicker-dialog-titles {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  min-width: 0;
+}
+
+.fynns-datepicker-dialog .fynns-datepicker-dialog-head .fynns-dialog-title {
+  grid-column: auto;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-datepicker-dialog-supporting {
+  margin: 0;
+  font-size: var(--fynns-font-size-xl);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+  white-space: nowrap;
+}
+
+.fynns-dialog-panel.fynns-datepicker-dialog > .fynns-dialog-foot {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  padding: var(--fynns-space-md) var(--fynns-space-lg) var(--fynns-space-lg);
+}
+
+/* —— TimePicker (M3 input / digital) ————————————————————————— */
+
+.fynns-timepicker {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: column;
+  padding-block: var(--fynns-timepicker-pad-block);
+  padding-inline: var(--fynns-timepicker-pad-inline);
+  background: var(--fynns-color-surface-1);
+  border-radius: var(--fynns-radius-xl);
+  color: var(--fynns-color-text);
+}
+
+.fynns-timepicker--disabled {
+  opacity: var(--fynns-opacity-muted);
+  pointer-events: none;
+}
+
+.fynns-timepicker-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--fynns-timepicker-gap);
+}
+
+.fynns-timepicker-field-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.fynns-timepicker-field {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--fynns-timepicker-field-min-width);
+  min-height: var(--fynns-timepicker-field-min-height);
+  margin: 0;
+  padding: 0 var(--fynns-space-sm);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-timepicker-field-font);
+  font-weight: var(--fynns-font-weight-regular);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-timepicker-field:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-field:focus-visible {
+  outline: none;
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
+}
+
+.fynns-timepicker-field--active {
+  border-color: var(--fynns-color-accent);
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-timepicker-field--active:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    var(--fynns-color-accent-container)
+  );
+}
+
+.fynns-timepicker-colon {
+  /* Two dots — avoids font glyph metrics that make ":" look low. */
+  box-sizing: border-box;
+  align-self: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-timepicker-colon-gap);
+  min-height: var(--fynns-timepicker-field-min-height);
+  padding-inline: var(--fynns-timepicker-colon-pad-inline);
+  user-select: none;
+}
+
+.fynns-timepicker-colon-dot {
+  width: var(--fynns-timepicker-colon-dot);
+  height: var(--fynns-timepicker-colon-dot);
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-text);
+}
+
+.fynns-timepicker-period {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: var(--fynns-timepicker-period-min-width);
+  min-height: var(--fynns-timepicker-field-min-height);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+}
+
+.fynns-timepicker-period-btn {
+  box-sizing: border-box;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: var(--fynns-space-xs) var(--fynns-space-sm);
+  border: none;
+  background: var(--fynns-color-surface-2);
+  color: var(--fynns-color-text);
+  font-family: var(--fynns-font-ui);
+  font-size: var(--fynns-timepicker-period-font);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-timepicker-period-btn + .fynns-timepicker-period-btn {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-timepicker-period-btn:hover:not(:disabled):not(
+    .fynns-timepicker-period-btn--selected
+  ) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-period:has(.fynns-timepicker-period-btn:focus-visible) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
+.fynns-timepicker-period-btn:focus-visible {
+  outline: none;
+  z-index: 1;
+  box-shadow: none;
+  /* Parent shell gets quiet border; button still needs a per-control cue. */
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    var(--fynns-color-surface-2)
+  );
+}
+
+.fynns-timepicker-period-btn--selected:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-focus),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+.fynns-timepicker-period-btn--selected {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-timepicker-dialog-body {
+  display: flex;
+  justify-content: center;
+  padding: var(--fynns-space-md) var(--fynns-space-lg);
+}
+
+.fynns-timepicker-dialog-body .fynns-timepicker {
+  background: transparent;
+  padding: 0;
+}
+
+.fynns-dialog-panel.fynns-timepicker-dialog {
+  border-radius: var(--fynns-radius-3xl);
+  max-width: min(100%, 22rem);
+}
+
+.fynns-timepicker-dialog .fynns-timepicker-dialog-head {
+  /* Centered Dialog head already has no divider; do not reintroduce one. */
+  border-bottom: none;
+}
+
+.fynns-timepicker-dialog-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  min-width: 0;
+}
+
+.fynns-timepicker-dialog .fynns-timepicker-dialog-head .fynns-dialog-title {
+  text-align: center;
+}
+
+.fynns-timepicker-dialog-supporting {
+  margin: 0;
+  font-size: var(--fynns-font-size-xl);
+  font-weight: var(--fynns-font-weight-regular);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-timepicker-dialog .fynns-dialog-foot {
+  border-top: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  padding: var(--fynns-space-sm) var(--fynns-space-md) var(--fynns-space-lg);
+}
+
+/* —— Carousel (M3 horizontal snap) ——————————————————————————— */
+
+.fynns-carousel {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  gap: var(--fynns-carousel-controls-gap);
+  padding-block: var(--fynns-carousel-pad-block);
+  /* Transparent hairline so focus tint does not shift layout. */
+  border: var(--fynns-border-hairline) solid transparent;
+  border-radius: var(--fynns-radius-md);
+  outline: none;
+  color: var(--fynns-color-text);
+}
+
+/* Quiet Input-like border — not a full-block focus ring around the stage. */
+.fynns-carousel:focus-visible {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
+}
+
+.fynns-carousel-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--fynns-carousel-controls-gap);
+}
+
+.fynns-carousel-track {
+  display: flex;
+  gap: var(--fynns-carousel-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-block: var(--fynns-space-2xs);
+  -webkit-overflow-scrolling: touch;
+  /* Drag/swipe stays; chrome is arrows + dots — no scrollbar. */
+  scrollbar-width: none;
+}
+
+.fynns-carousel-track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Side gutters so first/last multi slides can center in the viewport. */
+.fynns-carousel--multi .fynns-carousel-track::before,
+.fynns-carousel--multi .fynns-carousel-track::after {
+  content: "";
+  flex: 0 0 calc((100% - var(--fynns-carousel-item-width-multi)) / 2);
+  scroll-snap-align: none;
+  pointer-events: none;
+}
+
+.fynns-carousel-slide {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  min-width: 0;
+}
+
+.fynns-carousel--hero .fynns-carousel-slide {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.fynns-carousel--multi .fynns-carousel-slide {
+  flex-basis: var(--fynns-carousel-item-width-multi);
+  width: var(--fynns-carousel-item-width-multi);
+}
+
+.fynns-carousel-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--fynns-space-xs);
+  min-height: var(--fynns-carousel-item-min-height);
+  height: 100%;
+  padding: var(--fynns-space-md);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-2);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  overflow: hidden;
+}
+
+.fynns-carousel-arrow {
+  flex-shrink: 0;
+}
+
+.fynns-carousel-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--fynns-carousel-indicator-gap);
+}
+
+.fynns-carousel-indicator {
+  box-sizing: border-box;
+  width: var(--fynns-carousel-indicator-size);
+  height: var(--fynns-carousel-indicator-size);
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-pill);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) 32%,
+    transparent
+  );
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-carousel-indicator:hover {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) 48%,
+    transparent
+  );
+}
+
+.fynns-carousel-indicator:focus-visible {
+  outline: none;
+  /* Hairline soft ring — 2px focus halo dominated the 8dp dot. */
+  box-shadow: 0 0 0 var(--fynns-border-hairline) var(--fynns-color-accent-ring);
+}
+
+.fynns-carousel-indicator--active {
+  background: var(--fynns-color-accent);
+}
+
+
+/* ---------- BadgedBox / AvatarGroup ---------- */
+.fynns-badged-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fynns-badged-box > .fynns-nav-rail-badge {
+  /* Anchor to the box top-end (same chrome as rail icon wrap). */
+  pointer-events: none;
+}
+
+.fynns-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  isolation: isolate;
+}
+
+.fynns-avatar-group-item {
+  display: inline-flex;
+  position: relative;
+  margin-inline-start: calc(-1 * var(--fynns-space-sm));
+  border-radius: var(--fynns-radius-round);
+}
+
+.fynns-avatar-group-item:first-child {
+  margin-inline-start: 0;
+}
+
+/*
+ * Standalone Avatar uses translucent accent-container; stacked copies would
+ * double-tint at overlaps. Bake the fill onto surface-1 and paint an opaque
+ * surface ring so crescents stay even.
+ */
+.fynns-avatar-group .fynns-avatar {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) 20%,
+    var(--fynns-color-surface-1)
+  );
+  box-shadow: 0 0 0 2px var(--fynns-color-surface-1);
+}
+
+.fynns-avatar-group .fynns-avatar--image {
+  background: var(--fynns-color-surface-4);
+}
+
+.fynns-avatar-group .fynns-avatar.fynns-avatar-group-overflow {
+  background: var(--fynns-color-surface-3);
+  color: var(--fynns-color-text-muted);
+}
+
+/* ---------- EmptyState ---------- */
+.fynns-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl) var(--fynns-space-lg);
+  max-width: 24rem;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+.fynns-empty-state--sm {
+  gap: var(--fynns-space-sm);
+  padding: var(--fynns-space-lg) var(--fynns-space-md);
+}
+
+/*
+ * Pane sole zero-result: stretch in a height-resolved flex parent and center
+ * the copy block (BusyRegion fill parity). Host wires flex growth below.
+ */
+.fynns-empty-state--fill {
+  flex: 1 1 auto;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  margin-inline: 0;
+  justify-content: center;
+}
+
+.fynns-empty-state--fill > .fynns-empty-state-icon,
+.fynns-empty-state--fill > .fynns-empty-state-title,
+.fynns-empty-state--fill > .fynns-empty-state-description,
+.fynns-empty-state--fill > .fynns-empty-state-actions {
+  max-width: 24rem;
+}
+
+.fynns-empty-state-icon {
+  display: inline-flex;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-empty-state-title {
+  font-size: var(--fynns-font-size-lg);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.fynns-empty-state--sm .fynns-empty-state-title {
+  font-size: var(--fynns-font-size-md);
+}
+
+.fynns-empty-state-description {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  line-height: var(--fynns-line-height-body);
+}
+
+.fynns-empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+}
+
+/* ---------- SkipLink ---------- */
+.fynns-skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fynns-skip-link:focus-visible {
+  position: fixed;
+  inset-inline-start: var(--fynns-space-md);
+  top: var(--fynns-space-md);
+  z-index: var(--fynns-z-tooltip);
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: var(--fynns-space-2xs) var(--fynns-space-sm);
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ---------- Stepper ---------- */
+.fynns-stepper-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-stepper--vertical .fynns-stepper-list {
+  flex-direction: column;
+  gap: var(--fynns-space-md);
+}
+
+.fynns-stepper-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--fynns-space-sm);
+  min-width: 0;
+}
+
+.fynns-stepper--horizontal .fynns-stepper-item {
+  flex: 1 1 0;
+  position: relative;
+}
+
+.fynns-stepper-circle {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--fynns-radius-round);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border-strong);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  font-weight: var(--fynns-font-weight-medium);
+  transform: scale(1);
+  transition:
+    background var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    border-color var(--fynns-duration-base) var(--fynns-ease-emphasized),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    transform var(--fynns-duration-fast) var(--fynns-ease-spring),
+    box-shadow var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-number,
+.fynns-stepper-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: fynns-stepper-glyph-enter
+    var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-stepper-item--active .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-accent);
+  color: var(--fynns-color-on-accent);
+  box-shadow: 0 0 0 3px var(--fynns-color-accent-soft);
+  animation: fynns-stepper-circle-activate
+    var(--fynns-duration-base) var(--fynns-ease-emphasized);
+}
+
+.fynns-stepper-item--completed .fynns-stepper-circle {
+  border-color: transparent;
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+  box-shadow: none;
+}
+
+.fynns-stepper-label {
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item--active .fynns-stepper-label,
+.fynns-stepper-item--completed .fynns-stepper-label {
+  color: var(--fynns-color-text);
+}
+
+/*
+ * Completed clickable labels reuse Button ghost sm, but must keep the same
+ * box as the plain `<span>` or “Next” shifts every label right (btn pad + border).
+ */
+.fynns-stepper-item .fynns-btn.fynns-stepper-label {
+  min-height: auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-sm);
+  justify-content: flex-start;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+  white-space: normal;
+}
+
+.fynns-stepper-description {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-stepper-item:not(.fynns-stepper-item--active):not(
+    .fynns-stepper-item--completed
+  )
+  .fynns-stepper-description {
+  opacity: 0.72;
+}
+
+.fynns-stepper-optional {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-stepper--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-stepper-circle,
+  .fynns-stepper-label,
+  .fynns-stepper-description {
+    transition: none;
+  }
+
+  .fynns-stepper-circle,
+  .fynns-stepper-number,
+  .fynns-stepper-check {
+    animation: none;
+  }
+}
+
+/* ---------- Dropzone ---------- */
+.fynns-dropzone {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: var(--fynns-space-md);
+  padding: var(--fynns-space-xl);
+  border: var(--fynns-border-hairline) dashed var(--fynns-color-border-strong);
+  border-radius: var(--fynns-radius-xl);
+  background: var(--fynns-color-surface-1);
+  color: var(--fynns-color-text);
+  cursor: pointer;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-dropzone:hover:not(.fynns-dropzone--disabled):not(.fynns-dropzone--busy) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--active {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border-strong)
+  );
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    var(--fynns-color-surface-1)
+  );
+}
+
+.fynns-dropzone--disabled,
+.fynns-dropzone--busy {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fynns-dropzone-label {
+  font-weight: var(--fynns-font-weight-medium);
+}
+
+.fynns-dropzone-hint {
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  text-align: center;
+}
+
+.fynns-dropzone-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-dropzone-progress {
+  width: 100%;
+}
+
+.fynns-dropzone-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Table ---------- */
+/*
+ * Two-axis scroll host (AGENTS: narrow = horizontal scroll, not reflow).
+ * Do **not** pin overflow-x: clip here — that rule is for vertical-only
+ * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs.
+ */
+.fynns-table-wrap {
+  overflow: auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.fynns-table {
+  /* Fill when short; grow past the wrap when columns need width → H-scroll. */
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text);
+}
+
+.fynns-table-caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: var(--fynns-space-sm);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+}
+
+.fynns-table-header-cell,
+.fynns-table-cell {
+  padding: var(--fynns-space-sm) var(--fynns-space-md);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  vertical-align: middle;
+  /* Prevent CJK character-stack when the host is narrow. */
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* Table-cell status / mapping kind — muted caption, not Chip. */
+.fynns-table-meta {
+  flex: 0 0 auto;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-xs);
+  white-space: nowrap;
+}
+
+.fynns-table-header-cell {
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text-muted);
+  text-align: start;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-table--sticky-header .fynns-table-head .fynns-table-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.fynns-table-header-cell--align-center,
+.fynns-table-cell--align-center {
+  text-align: center;
+}
+
+.fynns-table-header-cell--align-end,
+.fynns-table-cell--align-end {
+  text-align: end;
+}
+
+.fynns-table-row[data-selected="true"] {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+/* ---------- CodeBlock ---------- */
+.fynns-code-block {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* Head hairline separates chrome from code — no extra column gap. */
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-1);
+  overflow: hidden;
+}
+
+.fynns-code-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  /* Inline-start matches `.fynns-code-block-pre` so label lines up with code. */
+  padding-block: var(--fynns-space-2xs);
+  padding-inline: var(--fynns-layout-content-inset) var(--fynns-space-xs);
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-code-block-label {
+  font-size: var(--fynns-font-size-xs);
+  color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-code-block-pre {
+  margin: 0;
+  /* Slightly denser start under the head hairline; keep section inset on end. */
+  padding-block-start: var(--fynns-space-md);
+  padding-block-end: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+  min-width: 0;
+  max-width: 100%;
+  /* Default `wrap` (no `--nowrap`): soft-wrap; vertical scroll only when
+   * `data-scrollable` (content exceeds host — avoids early thumbs). */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: clip;
+  overflow-y: hidden;
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-body);
+  color: var(--fynns-code-fg);
+  /* Native bar hidden on .fynns-scroll; overlay does not steal width. When
+     data-scrollable, highlight pad sync stays (sb width is 0 under overlay). */
+  scrollbar-gutter: unset;
+}
+
+.fynns-code-block-pre[data-scrollable] {
+  overflow-y: auto;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-pre {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow: hidden;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-pre[data-scrollable] {
+  overflow: auto;
+}
+
+.fynns-code-block-pre code {
+  font: inherit;
+  color: inherit;
+}
+
+/* Syntax spans — colors from `--fynns-code-*` (VS C++ theme distill). */
+.fynns-code-block-code .fynns-code-comment {
+  color: var(--fynns-code-comment);
+}
+.fynns-code-block-code .fynns-code-keyword {
+  color: var(--fynns-code-keyword);
+  font-weight: var(--fynns-font-weight-bold);
+}
+/* Editable overlay: never change glyph metrics vs the transparent textarea
+   (bold advance / soft-wrap drift → selection wash on the wrong visual lines). */
+.fynns-code-block--editable .fynns-code-block-highlight .fynns-code-keyword,
+.fynns-code-block--editable .fynns-code-block-highlight .fynns-code-module {
+  font-weight: inherit;
+}
+.fynns-code-block-code .fynns-code-string {
+  color: var(--fynns-code-string);
+}
+.fynns-code-block-code .fynns-code-number {
+  color: var(--fynns-code-number);
+}
+.fynns-code-block-code .fynns-code-type {
+  color: var(--fynns-code-type);
+}
+.fynns-code-block-code .fynns-code-function {
+  color: var(--fynns-code-function);
+}
+.fynns-code-block-code .fynns-code-variable {
+  color: var(--fynns-code-variable);
+}
+.fynns-code-block-code .fynns-code-property {
+  color: var(--fynns-code-property);
+}
+.fynns-code-block-code .fynns-code-parameter {
+  color: var(--fynns-code-parameter);
+}
+.fynns-code-block-code .fynns-code-operator {
+  color: var(--fynns-code-operator);
+}
+.fynns-code-block-code .fynns-code-module {
+  color: var(--fynns-code-module);
+  font-weight: var(--fynns-font-weight-bold);
+}
+.fynns-code-block-code .fynns-code-constant {
+  color: var(--fynns-code-constant);
+}
+.fynns-code-block-code .fynns-code-constant-named {
+  color: var(--fynns-code-constant-named);
+}
+.fynns-code-block-code .fynns-code-escape {
+  color: var(--fynns-code-escape);
+}
+.fynns-code-block-code .fynns-code-invalid {
+  color: var(--fynns-code-invalid);
+}
+
+/* Copy fades in on hover; keyboard uses :focus-visible (not sticky :focus). */
+.fynns-code-block-copy {
+  flex: 0 0 auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-code-block:hover .fynns-code-block-copy,
+.fynns-code-block-copy:has(:focus-visible) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Headless / no-label: copy sits in a reserved end column (not over glyphs).
+   Root padding-end = copy inset + IconButton target so wrap *and* nowrap
+   stay clear of the overlay; pre/editor keep a short text↔disk gap. */
+.fynns-code-block--copy-float {
+  padding-inline-end: calc(
+    var(--fynns-space-sm) + var(--fynns-size-icon-target)
+  );
+}
+
+.fynns-code-block--plain .fynns-code-block-copy,
+.fynns-code-block--copy-float > .fynns-code-block-copy {
+  position: absolute;
+  top: var(--fynns-space-sm);
+  inset-inline-end: var(--fynns-space-sm);
+  z-index: 2;
+}
+
+.fynns-code-block--copy-float > .fynns-code-block-pre,
+.fynns-code-block--copy-float .fynns-code-block-highlight,
+.fynns-code-block--copy-float .fynns-code-block-input {
+  padding-inline-end: var(--fynns-space-sm);
+}
+
+.fynns-code-block--copy-float > .fynns-code-block-pre[data-scrollable],
+.fynns-code-block--copy-float .fynns-code-block-input[data-scrollable] {
+  /* Keep wrapped glyphs clear of the overlay thumb in the copy reserve column. */
+  padding-inline-end: calc(
+    var(--fynns-space-sm) + var(--fynns-scrollbar-size)
+  );
+}
+
+.fynns-code-block--plain .fynns-code-block-pre {
+  /* No head hairline — restore equal section pad on both block edges. */
+  padding-block: var(--fynns-layout-content-pad-block);
+}
+
+@media (hover: none) {
+  .fynns-code-block-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-code-block-copy {
+    transition: none;
+  }
+}
+
+/* Editable: highlighted <pre> under a transparent textarea; scroll on input.
+   `flex: 1 1 auto` + `min-height: 0` so fill hosts (flex column with a definite
+   height on the CodeBlock root) can grow the editor; do **not** set
+   `height: 100%` here — percentage height with an indefinite parent collapses
+   the stack (rows / content sizing / default autoGrow must win in Globals
+   demos). Fill hosts that need the caret layer to stretch: pass
+   `autoGrow={false}` and set `textarea { height: 100% }` in host CSS
+   (see gsc-live-preview `.gsc-editor-code` / `.gsc-llm-fullscreen-code`).
+   FullscreenDialog flush-start (no pad above a first-child CodeBlock) is
+   independent — AGENTS.md **Flush-start overlay body**. */
+.fynns-code-block-editor {
+  position: relative;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-code-block-highlight,
+.fynns-code-block-input {
+  box-sizing: border-box;
+  margin: 0;
+  padding-block-start: var(--fynns-space-md);
+  padding-block-end: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+  font-family: var(--fynns-font-mono);
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-body);
+  tab-size: 2;
+  /* Default wrap — must match textarea `wrap="soft"` for caret/highlight lock. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  /* Native bar hidden; overlay thumbs do not steal width. */
+  scrollbar-gutter: unset;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-highlight,
+.fynns-code-block--nowrap .fynns-code-block-input {
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.fynns-code-block-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: var(--fynns-code-fg);
+}
+
+.fynns-code-block-highlight code {
+  font: inherit;
+  color: inherit;
+}
+
+.fynns-code-block-input {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--fynns-code-fg);
+  resize: none;
+  outline: none;
+  overflow-x: clip;
+  /* Scroll only when `data-scrollable` — same gate as ChatComposer. */
+  overflow-y: hidden;
+  /* Match highlight ink metrics so caret tracks glyphs. */
+  -webkit-text-fill-color: transparent;
+}
+
+.fynns-code-block-input[data-scrollable] {
+  overflow-y: auto;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-input {
+  overflow: hidden;
+}
+
+.fynns-code-block--nowrap .fynns-code-block-input[data-scrollable] {
+  overflow: auto;
+}
+
+.fynns-code-block-input::placeholder {
+  color: var(--fynns-color-text-muted);
+  -webkit-text-fill-color: var(--fynns-color-text-muted);
+  opacity: 1;
+}
+
+.fynns-code-block-input::selection {
+  background: var(--fynns-color-accent-soft);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Soft-wrap flat overlay: native selection paints glyph-box height under
+   line-height leading → dark seams between wrap fragments. Continuous wash
+   lives on `.fynns-code-block-sel` instead — hide the native wash. */
+.fynns-code-block--soft-wrap-sel .fynns-code-block-input::selection {
+  background: transparent;
+}
+
+/* Soft-wrap selection wash — fill the line box so wrap fragments abut.
+   Native `::selection` / plain background only cover the glyph box under
+   `line-height` leading → dark seams. Pad + canceling margin closes most of
+   the leading; vertical 0-blur shadows overshoot subpixel gaps without
+   shifting caret metrics vs the textarea. */
+.fynns-code-block-sel {
+  background: var(--fynns-color-accent-soft);
+  color: inherit;
+  -webkit-text-fill-color: inherit;
+  border-radius: 0;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  /* Half leading (body lh − 1em). */
+  --fynns-code-sel-lead: calc((1em * var(--fynns-line-height-body) - 1em) / 2);
+  padding-block: var(--fynns-code-sel-lead);
+  margin-block: calc(-1 * var(--fynns-code-sel-lead));
+  /* Overshoot into the seam (pad alone still left ~3px gaps in Chromium). */
+  box-shadow:
+    0 var(--fynns-code-sel-lead) 0 0 var(--fynns-color-accent-soft),
+    0 calc(-1 * var(--fynns-code-sel-lead)) 0 0 var(--fynns-color-accent-soft);
+}
+
+/* Editable soft-wrap: token spans shift wrap points vs the textarea — flat mono
+   ink on the highlight layer keeps caret + selection aligned (see AGENTS). */
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight,
+.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight code {
+  color: var(--fynns-code-fg);
+}
+
+.fynns-code-block--editable-flat-highlight .fynns-code-block-sel {
+  color: var(--fynns-code-fg);
+  -webkit-text-fill-color: var(--fynns-code-fg);
+}
+
+.fynns-code-block-highlight,
+.fynns-code-block-input {
+  font-variant-ligatures: none;
+  font-feature-settings: normal;
+}
+
+.fynns-code-block-input:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+/* Quiet Input-like border while the editor is focused — not when Copy is focused. */
+.fynns-code-block--editable:has(.fynns-code-block-input:focus-visible) {
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  outline: none;
+}
+
+/* ---------- Surface (generic bordered / tonal well) ---------- */
+.fynns-surface {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  color: var(--fynns-color-text);
+  border: var(--fynns-border-hairline) solid transparent;
+  background: var(--fynns-color-surface-1);
+}
+
+.fynns-surface--outlined {
+  background: var(--fynns-color-app-bg);
+  border-color: var(--fynns-color-outline-subtle);
+}
+
+.fynns-surface--filled {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+}
+
+.fynns-surface--elevated {
+  background: var(--fynns-color-surface-1);
+  border-color: transparent;
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-surface--fill {
+  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fynns-surface--padded {
+  padding-block: var(--fynns-layout-content-pad-block);
+  padding-inline: var(--fynns-layout-content-inset);
+}
+
+.fynns-surface--fill > * {
+  min-height: 0;
+  min-width: 0;
+}
+
+/*
+ * FillColumn — vertical fill host for a height-resolved parent (shell main /
+ * DestinationAppShell canvas / fixed stage). header/footer = content height;
+ * main absorbs leftover so nested Chat docks composer at the column bottom.
+ * Does **not** apply aside bubble 100% (`.fynns-chat-host--fill`).
+ */
+.fynns-fill-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.fynns-fill-column-header,
+.fynns-fill-column-footer {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.fynns-fill-column-main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fynns-fill-column-main > .fynns-chat,
+.fynns-fill-column-main > .fynns-busy-region--fill,
+.fynns-fill-column-main > .fynns-empty-state--fill,
+.fynns-fill-column-main > .fynns-page-scroll {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/*
+ * Page scroll host — **edge-flush** with the pane (FillColumn main / shell
+ * main / app `hub-main`). Overlay Y rail paints at `host.rect.right −
+ * scrollbar-size` — so this host’s border box **must** share the pane’s
+ * right edge. Never wrap `.fynns-page-scroll` in a horizontally padded
+ * ancestor (that insets the rail and leaves a dead strip beside the pane).
+ * Put side breath on `.fynns-content-column` instead.
+ *
+ * Put `.fynns-content-column` **inside** this host; do **not** put
+ * `fynns-scroll` on the max-width column itself.
+ * Always pair with keep-set `fynns-scroll` on the same node.
+ *
+ * End gutter (`--fynns-scrollbar-size`): reserves the overlay rail band so
+ * full-bleed content columns clear the thumb. Do **not** use `scrollbar-gutter`.
+ */
+.fynns-page-scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-inline-end: var(--fynns-scrollbar-size);
+}
+
+.fynns-content-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--fynns-layout-content-max-width);
+  margin-inline: auto;
+  min-width: 0;
+  gap: var(--fynns-layout-unit-stack-gap);
+  box-sizing: border-box;
+  /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`.
+   * Block pad matches inline (`dialog-inset`) so the first Card / unit clears
+   * TopAppBar / canvas ceiling — never flush under the shell head. */
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block: var(--fynns-layout-dialog-inset);
+}
+
+/*
+ * Destination catalog chrome: first child is a standalone ControlRow
+ * (section name + IconButton strip). Drop pad-block-start to the
+ * NavigationDrawer body band so that ControlRow label shares the active
+ * NavigationDrawerItem label midline (ClippedNavShell drawer pad-block is 0;
+ * destinations start after `--fynns-navdrawer-body-pad-block-start`). Card /
+ * EmptyState / other first units keep full `dialog-inset`.
+ */
+.fynns-content-column:has(> .fynns-control-row:first-child) {
+  padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
+}
+
+.fynns-content-column > .fynns-busy-region--fill,
+.fynns-content-column > .fynns-empty-state--fill,
+.fynns-content-column > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
+}
+
+/* Catalog Cards / unit stacks under a content column: do not flex-shrink
+ * (shrink + Card overflow:hidden clips charts / tables). */
+.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-empty-state--fill):not(.fynns-fill-column) {
+  flex-shrink: 0;
+}

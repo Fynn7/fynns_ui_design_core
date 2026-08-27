@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useId } from "react";
 import { Button } from "./Button";
-import { DialogFrame } from "./Dialog";
+import { DialogFrame } from "./DialogFrame";
 import { CloseIcon } from "./icons";
 
 export type BottomSheetSize = "content" | "half" | "full";
