@@ -293,12 +293,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 - **DON'T** park edit / delete as `TimelineItem` `--with-end` hover
   `IconButton`s (or stack leading kind glyphs + hover chrome as the default
   rail recipe). Chronological catalog edit → flat row `onClick` → **`Dialog`**
-  (`size="lg"` + `showCloseButton`); actions live in the Dialog foot
-  (`ConfirmDialog` for destroy). Prefer omit `leading` (default disc). List
+  (`size="lg"` + `showCloseButton`); Dialog foot LTR **Cancel → Delete →
+  Save** (≥ **0.5.17**; `ConfirmDialog` for destroy — never Delete leftmost
+  when Cancel is present). Prefer omit `leading` (default disc). List
   path catalogs still use trailing hover IconButtons — that is **not** the
-  Timeline default. Live: `#timeline`. Failure mode:
+  Timeline default. Live: `#timeline`. Failure modes:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **Timeline row hover
-  edit/delete icons**.
+  edit/delete icons** / **Dialog foot Delete leftmost of Cancel**.
 - **DON'T** nest `InlineAlert` / `Banner` inside `ListItem` headline or
   supporting (panel chrome is `width: 100%` and stacks status above the title).
   Run / job history Success|title|duration → **one** single-line

@@ -950,13 +950,15 @@ Symptoms (dated history / Experiences-style `Timeline` catalogs):
 **Cause:** copying List `--with-end` hover actions onto Timeline. Chronological
 catalogs read as a clean rail; edit/delete belong after the row opens a form.
 **Fix:** flat `TimelineItem` `onClick` → **`Dialog` `size="lg"` +
-`showCloseButton`**; edit fields + delete in the Dialog foot (`ConfirmDialog`
-for destroy). Prefer omit `leading` (default disc) — kind / role via Dialog
-fields. `detail` expand is **read** disclosure only; when the row opens an
-edit Dialog, prefer flat + bullets in the Dialog body. List path / status
-rows may keep trailing hover IconButtons — that is not the Timeline default.
-Live: sandbox `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md) Content
-density **Chronological timeline** + Hard rules. Pasteable:
+`showCloseButton`**; edit fields + delete in the Dialog foot —
+LTR **Cancel → Delete → Save** (≥ **0.5.17**; `ConfirmDialog` for destroy —
+see **Dialog foot Delete leftmost of Cancel**). Prefer omit `leading`
+(default disc) — kind / role via Dialog fields. `detail` expand is **read**
+disclosure only; when the row opens an edit Dialog, prefer flat + bullets
+in the Dialog body. List path / status rows may keep trailing hover
+IconButtons — that is not the Timeline default. Live: sandbox `#timeline`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Chronological
+timeline** + Hard rules. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: UI · — punctuation in chrome

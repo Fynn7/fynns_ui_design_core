@@ -97,12 +97,13 @@ export type TimelineItemProps = Omit<
  * row click toggles expand.
  *
  * **Catalog edit (recommended):** flat row `onClick` → `Dialog`; put
- * edit / delete in the Dialog foot (`ConfirmDialog` for destroy) — do
- * **not** park `--with-end` hover IconButtons on the rail. Prefer omit
- * `leading` (default disc). Two-line rows center the disc on the full
- * `.fynns-timeline-item-copy` stack (`copy-band-2` rail, ≥ 0.5.16).
- * Expandable chevron tucks into `pad-inline-start` so flat ↔ detail
- * headlines share one start (≥ 0.5.15). Live: sandbox `#timeline`.
+ * edit / delete in the Dialog foot — LTR **Cancel → Delete → Save**
+ * (≥ 0.5.17; `ConfirmDialog` for destroy) — do **not** park `--with-end`
+ * hover IconButtons on the rail. Prefer omit `leading` (default disc).
+ * Two-line rows center the disc on the full `.fynns-timeline-item-copy`
+ * stack (`copy-band-2` rail, ≥ 0.5.16). Expandable chevron tucks into
+ * `pad-inline-start` so flat ↔ detail headlines share one start (≥ 0.5.15).
+ * Live: sandbox `#timeline`.
  */
 export const TimelineItem = forwardRef<
   HTMLButtonElement | HTMLDivElement,
