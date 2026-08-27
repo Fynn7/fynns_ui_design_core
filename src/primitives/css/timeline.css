@@ -197,7 +197,7 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  margin-block-start: 0.125rem;
+  margin-block-start: var(--fynns-space-2xs);
   color: var(--fynns-color-text-muted);
   line-height: 0;
   transition: transform var(--fynns-duration-fast) var(--fynns-ease-out);
@@ -408,7 +408,7 @@
   flex-direction: column;
   gap: var(--fynns-space-xs);
   margin: 0;
-  padding-inline-start: 1.1em;
+  padding-inline-start: var(--fynns-space-md);
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-body);

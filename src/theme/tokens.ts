@@ -1597,7 +1597,7 @@ export const TREE_TOKENS = {
 };
 
 /**
- * Chronological Timeline (CV / history catalogs — not List pills, not
+ * Chronological Timeline (role / org history catalogs — not List pills, not
  * ChatActivity tool rails). `--fynns-timeline-<key>`.
  * Live: sandbox `#timeline`.
  */
@@ -1637,7 +1637,7 @@ export const TIMELINE_TOKENS = {
   /**
    * Row pad (content band — hover/selected wash height). Matches List
    * `pad-block` (**8dp**) — `space-xs` (**4dp**) crushed two-line org+dates
-   * pills (CV Experiences / `#timeline` with-detail ~50px).
+   * pills (`#timeline` with-detail ~50px).
    */
   "pad-block": "var(--fynns-list-pad-block)",
   /**

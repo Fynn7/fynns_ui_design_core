@@ -105,7 +105,7 @@ export type TimelineItemProps = Omit<
 > & {
   /** Primary label (role / title). */
   headline: ReactNode;
-  /** Secondary line (organization only for CV-style rows). */
+  /** Secondary line (organization only for role / org history rows). */
   supportingText?: ReactNode;
   /**
    * Node content (icon). Omit → default disc. Always `aria-hidden` —
