@@ -1623,9 +1623,10 @@ classes.
   Prefer `IconButton` + `Tooltip` over `title=`.
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
-`DialogFrame` (`src/primitives/DialogFrame.tsx`), `Spinner`, and floating
-placement (`src/primitives/floatingBox.tsx`) are **internal**. Domain CSS
-lives under `src/primitives/css/` — `primitives.css` only `@import`s (see
+`DialogFrame` (`src/primitives/DialogFrame.tsx`), `Spinner`, floating
+placement (`src/primitives/floatingBox.tsx`), and ChatActivity stream timing
+(`src/primitives/chatActivityPolicy.ts`) are **internal**. Domain CSS lives
+under `src/primitives/css/` — `primitives.css` only `@import`s (see
 CONTEXT.md **Architecture seams**).
 
 ## Adding to the system

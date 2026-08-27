@@ -16,8 +16,8 @@ sandbox Globals/Preview demo and review.
    `applyFynnsThemeMode` / `restoreFynnsThemeMode` / `getFynnsThemeMode`,
    scrollbar helpers, `fynnsVarName`, etc.).
 3. **Internals** (`DialogFrame`, `MenuSurface`, `Spinner`, floating-box helpers in
-   `Popover.tsx`) may exist on disk for KEEP components but are **not** barrel
-   exports.
+   `floatingBox.tsx`; `Popover.tsx` is a deprecate re-export shim only) may exist
+   on disk for KEEP components but are **not** barrel exports.
 4. **Gallery** (`examples/gallery`) is removed. Foundations / Motion live under
    the sandbox pages.
 5. **Atomic delete (sandbox ↔ source).** Never drop a Globals/Layouts/catalog demo while
