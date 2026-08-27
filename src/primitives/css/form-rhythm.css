@@ -1,0 +1,1020 @@
+/*
+ * Domain: form-rhythm (CONTEXT.md → Field cluster / Form rhythm sheet).
+ * FieldStack / FieldBlock / ControlBlock / ControlRow paint here — thin React
+ * adapters only; do not invent empty TSX shells for CSS-only hosts.
+ * Gaps: `--fynns-layout-field-stack-gap`, `form-cluster-gap`, `unit-stack-gap`,
+ * `control-stack-form-gap`, `field-hint-gap`. Live sandbox `#form-recipe`.
+ */
+/* ---------- ControlStack ---------- */
+/* Shared label + X control tracks across nested ControlRow / Grid.
+   Each ControlRow is one stack row via subgrid — NOT display:contents on the
+   row itself. Flattening every cell into one auto-flow grid packs the next
+   row's label into empty columns when a row has fewer than `columns` controls
+   (e.g. Anatomy with only Media). */
+.fynns-control-stack {
+  display: grid;
+  /* Toolbar default: fixed label track (same as ControlRow) so sibling stacks
+     share one start edge; control tracks share leftover. Form hosts (Card /
+     Collapsible body / centered Dialog) override to label `1fr` + end-hug
+     controls — see rules near `.fynns-dialog-panel--centered`. */
+  grid-template-columns:
+    var(--fynns-layout-control-row-label)
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, 1fr));
+  gap: var(--fynns-layout-control-stack-gap);
+  /* start — not stretch: a narrower ToggleGroup must not expand to the
+     shared column track width of a wider Switch in the same column. */
+  align-items: center;
+  justify-items: start;
+  justify-content: start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.fynns-control-stack > .fynns-control-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  width: auto;
+  max-width: none;
+  /* Label | controls on shared tracks; cluster gap is for __controls / Grid siblings. */
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  row-gap: var(--fynns-layout-control-row-gap);
+  align-items: center;
+  /* Subgrid does not inherit the stack's justify-items; without this,
+     a short ToggleGroup stretches to the shared track of a wider Switch. */
+  justify-items: start;
+}
+
+/* Controls / Grid dissolve so switches sit on the shared tracks. */
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-grid {
+  display: contents;
+}
+
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__label,
+.fynns-control-stack .fynns-grid > *,
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__controls > :not(.fynns-grid) {
+  min-width: 0;
+  max-width: 100%;
+  /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
+}
+
+/*
+ * Value Buttons in a ControlStack track: hug label width (pill follows text)
+ * until the track edge, then shrink + ellipsis via `.fynns-btn-label`.
+ * Trigger is width:100% of the grid area so `max-width` on the button is
+ * definite — not circular with intrinsic sizing (which hard-clipped without …).
+ * Full copy stays on aria-label / Tooltip.
+ */
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  ) {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* InfoHint in a control row: hug the icon — never stretch to the track (ellipse). */
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-row
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  > .fynns-btn--icon {
+  flex: none;
+  align-self: center;
+}
+
+/* IconButton in a control row: hug the circular target — never stretch to the track (ellipse). */
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.fynns-control-row .fynns-tooltip-trigger:has(.fynns-btn--icon) > .fynns-btn--icon {
+  flex: none;
+  align-self: center;
+}
+
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-tooltip-trigger:not(:has(.fynns-info-hint-trigger--icon)):not(
+    :has(.fynns-btn--icon)
+  )
+  > .fynns-btn,
+.fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-btn {
+  flex: 0 1 auto;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+/* ---------- ControlRow ---------- */
+.fynns-control-row {
+  display: grid;
+  width: max-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Label column fixed; controls size to content (no 1fr squeeze → overflow clip). */
+  grid-template-columns: var(--fynns-layout-control-row-label) max-content;
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  /* Used when a consumer stacks label above controls (narrow toolbars). */
+  row-gap: var(--fynns-layout-control-row-gap);
+  align-items: center;
+}
+
+/*
+ * Catalog / page chrome (list “Name (n/m)” + IconButton strip): standalone
+ * ControlRow (not a ControlStack child) fills the host — label grows, actions
+ * hug the trailing edge. ControlStack rows keep the fixed label track via
+ * subgrid. Form hosts (Card / Dialog / padded Surface) already set the same
+ * 1fr | max-content grid.
+ */
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row) {
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.fynns-control-row:not(.fynns-control-stack > .fynns-control-row)
+  > .fynns-control-row__controls {
+  justify-self: end;
+  min-width: 0;
+}
+
+.fynns-control-row__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fynns-font-size-caption);
+  letter-spacing: var(--fynns-letter-spacing-wide);
+  color: var(--fynns-color-text-muted);
+}
+
+/* Label + trailing InfoHint (policy copy in Tooltip — not ControlBlock description). */
+.fynns-control-row__label:has(.fynns-info-hint-trigger) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-control-row__label-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-control-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: min-content;
+  overflow: visible;
+}
+
+/* Sibling switches / chips in one ControlRow when ControlStack would otherwise
+   place each child on its own shared column (narrow hosts overflow). */
+.fynns-control-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/*
+ * Nested clusters hug content. A child with `width: 100%` inside another
+ * cluster becomes a full-bleed row (Card head icon strips stack vertically —
+ * BookmarkActions + SourceFileActions lesson). Outer form clusters still
+ * fill their ControlRow / FieldBlock. Keep nested strips nowrap so a
+ * constrained head cannot re-wrap helper groups into a tall stack.
+ */
+.fynns-control-cluster .fynns-control-cluster {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+/* Action footer / Select+row-action / table trailing action: dock to the
+   trailing edge. Pure IconButton strips need no `__grow` — justify does it.
+   Leading Select / meta that must fill leftover still use `__grow`. */
+.fynns-control-cluster--end-align {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  /* Docked Select lists grow the grow flex item — pin row actions to the
+     trigger band (40dp), not the vertical center of trigger + results. */
+  align-items: flex-start;
+}
+
+.fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow {
+  flex: 1 1 0%;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+}
+
+.fynns-control-cluster--end-align > :not(.fynns-control-cluster__grow) {
+  flex-shrink: 0;
+}
+
+/* sm IconButton (32dp) optical center on the 40dp form control row. */
+.fynns-control-cluster--end-align
+  > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-control-cluster--end-align > .fynns-btn--sm.fynns-btn--icon {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+/*
+ * IconButton strips in end-align clusters (Tooltip wrapper included): hug the
+ * 40dp circular target — never crush tips/buttons on the shared flex row
+ * (Card action footers / archive start-open strips).
+ */
+.fynns-control-cluster--end-align > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align > .fynns-btn--icon {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* Select + row action: sibling IconButton stays on the trigger band when the
+   grow item stacks results — not vertically centered in trigger + list. */
+.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+  > .fynns-btn--icon {
+  align-self: flex-start;
+}
+
+.fynns-control-cluster--end-align
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon)
+  > .fynns-btn--icon {
+  flex: none;
+  /* Do not re-floor to `--fynns-size-icon-target` (40dp) — that inflates
+     `size="sm"` (32dp) IconButtons and breaks Card body trailing icon columns
+     that match FieldHeader / ControlRow InfoHint `sm` (≥ 0.4.136). */
+}
+
+/* Pure IconButton end-align strips (no grow Select): center on the 40dp row. */
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow)),
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  ) {
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-btn--icon):not(:has(.fynns-control-cluster__grow))
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-tooltip-trigger:has(.fynns-btn--sm.fynns-btn--icon)
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(> .fynns-tooltip-trigger .fynns-btn--icon):not(
+    :has(.fynns-control-cluster__grow)
+  )
+  > .fynns-btn--sm.fynns-btn--icon {
+  margin-block-start: 0;
+}
+
+/*
+ * Mode / drawer tool strip (sort menu + primary new, no SearchBar): nowrap +
+ * trailing hug so controls do not read as the first destination row /
+ * NavigationDrawerGroup chevron. Not `--end-align` (form Select + row action).
+ */
+.fynns-control-cluster--toolbar-end {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.fynns-control-cluster--toolbar-end > * {
+  flex-shrink: 0;
+}
+
+.fynns-control-cluster__grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/*
+ * Vertical choice lists (Radio / Checkbox) inside FieldBlock.
+ * Do **not** put bare radios into form-host ControlStack — that grid is
+ * label | control tracks, so siblings auto-flow into multiple columns.
+ *
+ * Option floor: every direct child uses the dense control-row **min-height**
+ * (2rem / 32dp — `Input` `sm`, one step below `--fynns-size-icon-target`).
+ * Taller children win — used height is max(floor, content); never set a fixed
+ * `height` that would clip. Radio "Other" + free-text uses `--choice-extra`.
+ */
+.fynns-control-cluster--stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  /* Tighter than horizontal cluster gap (8dp) — choice rows read as one list. */
+  gap: var(--fynns-space-xs);
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox,
+.fynns-control-cluster--stack > .fynns-control-cluster--choice-extra {
+  box-sizing: border-box;
+  min-height: 2rem;
+  align-items: center;
+}
+
+.fynns-control-cluster--stack > .fynns-radio,
+.fynns-control-cluster--stack > .fynns-checkbox {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Choice option + related free-text (Radio "Other"): Google Forms-style
+ * same-row — mark | label | short Input. Keep the Input mounted; disable it
+ * when Other is not selected (preserve draft text — do not unmount/clear).
+ *
+ * Height: floor = one option (2rem). Flex line cross-size = tallest child
+ * (max principle) — e.g. `Input` `md` / multi-line content grows the row.
+ */
+.fynns-control-cluster--choice-extra {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  /* Option floor — do not set `height` / `max-height` (taller kids must win). */
+  min-height: 2rem;
+}
+
+.fynns-control-cluster--choice-extra > .fynns-radio,
+.fynns-control-cluster--choice-extra > .fynns-checkbox {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  /* Match stack option floor; grow with own content if taller. */
+  min-height: 2rem;
+  align-self: center;
+}
+
+.fynns-control-cluster--choice-extra > .fynns-input {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Stretch only in the inline axis — block size from the control itself
+   * drives the row via the flex line max. */
+  align-self: center;
+}
+
+/* ---------- Grid ---------- */
+.fynns-grid {
+  display: grid;
+  align-items: center;
+  justify-content: start;
+  width: max-content;
+  max-width: 100%;
+  min-width: min-content;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.fynns-grid > * {
+  min-width: min-content;
+  max-width: none;
+  overflow: visible;
+}
+
+/* equalCells: stretch every cell to the measured max box */
+.fynns-grid[data-equal-cells="true"] {
+  width: 100%;
+  max-width: 100%;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.fynns-grid[data-equal-cells="true"]:not([data-equal-measuring]) > * {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Natural size pass for ResizeObserver measure */
+.fynns-grid[data-equal-cells="true"][data-equal-measuring] {
+  grid-template-columns: repeat(auto-fill, max-content) !important;
+  grid-template-rows: none !important;
+  grid-auto-rows: auto !important;
+  grid-auto-columns: max-content !important;
+  grid-auto-flow: row !important;
+}
+
+.fynns-grid[data-equal-cells="true"][data-equal-measuring] > * {
+  width: max-content !important;
+  height: max-content !important;
+  min-width: min-content !important;
+}
+
+/* ---------- Tabs (M3 primary underline; not ToggleGroup) ---------- */
+/*
+ * Underline indicator on the active tab. Hover/pressed use an inset rounded
+ * state layer (`::before`) — not a sharp full-bleed rectangle (reads wrong on
+ * equal-width / fullWidth tabs).
+ */
+.fynns-tabs {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  max-width: 100%;
+  border-bottom: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-tabs--full {
+  width: 100%;
+}
+
+.fynns-tabs--full .fynns-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  justify-content: center;
+}
+
+.fynns-tabs--sm .fynns-tab {
+  min-height: 2.5rem;
+  padding-inline: var(--fynns-space-md);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
+  font-size: var(--fynns-font-size-caption);
+}
+
+.fynns-tab {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 3rem;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  /* Indicator track below the label; label centers in the remaining content box. */
+  padding-inline: var(--fynns-space-lg);
+  padding-block-end: calc(3px + var(--fynns-space-sm));
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fynns-font-size-form-label);
+  font-weight: var(--fynns-font-weight-medium);
+  transition: color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tab::before {
+  content: "";
+  position: absolute;
+  top: var(--fynns-space-xs);
+  right: var(--fynns-space-xs);
+  left: var(--fynns-space-xs);
+  /* Same inset as padding-block-end — state layer wraps the label only. */
+  bottom: calc(3px + var(--fynns-space-sm));
+  border-radius: var(--fynns-radius-lg);
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-tab:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-tab:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-tab:hover:not(:disabled):not(.fynns-tab--active) {
+  color: var(--fynns-color-text);
+}
+
+.fynns-tab--active {
+  color: var(--fynns-color-accent);
+}
+
+.fynns-tab--active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: var(--fynns-radius-2xs) var(--fynns-radius-2xs) 0 0;
+  background: var(--fynns-color-accent);
+}
+
+.fynns-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-tab:focus-visible {
+  outline: none;
+}
+
+.fynns-tab:focus-visible::before {
+  box-shadow: inset 0 0 0 2px var(--fynns-color-focus);
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+/* ---------- ToggleGroup (M3 Segmented button) ---------- */
+/*
+ * Outlined stadium row: shared outer outline, hairline dividers, 40dp height,
+ * selected = secondary/accent-container + leading check. Equal-width segments.
+ */
+.fynns-toggle-group {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: stretch;
+  box-sizing: border-box;
+  height: var(--fynns-segmented-height);
+  border: var(--fynns-segmented-outline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-pill);
+  overflow: hidden;
+  background: transparent;
+}
+
+.fynns-toggle-group--full {
+  display: grid;
+  width: 100%;
+}
+
+.fynns-toggle-group--compact {
+  height: var(--fynns-segmented-height-compact);
+}
+
+.fynns-toggle-group__segment {
+  display: grid;
+  min-width: max-content;
+  height: 100%;
+}
+
+.fynns-toggle-group__segment > .fynns-toggle-chip {
+  width: 100%;
+  height: 100%;
+}
+
+.fynns-toggle-chip {
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: max-content;
+  margin: 0;
+  padding: 0 var(--fynns-segmented-pad-inline);
+  gap: 0;
+  border: none;
+  border-radius: 0;
+  border-inline-end: var(--fynns-segmented-outline) solid
+    var(--fynns-color-outline-subtle);
+  /* Optical translate on empty leading must not paint into sibling segments. */
+  overflow: hidden;
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  letter-spacing: var(--fynns-letter-spacing-subtle);
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    color var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-toggle-group--compact .fynns-toggle-chip {
+  padding-inline: var(--fynns-segmented-pad-inline-compact);
+  font-size: var(--fynns-font-size-xs);
+}
+
+.fynns-toggle-chip[data-pos="end"],
+.fynns-toggle-chip[data-pos="only"],
+.fynns-toggle-group__segment:last-child > .fynns-toggle-chip {
+  border-inline-end: none;
+}
+
+.fynns-toggle-chip[data-pos="start"],
+.fynns-toggle-group__segment:first-child > .fynns-toggle-chip {
+  border-start-start-radius: var(--fynns-radius-pill);
+  border-end-start-radius: var(--fynns-radius-pill);
+}
+
+.fynns-toggle-chip[data-pos="end"],
+.fynns-toggle-group__segment:last-child > .fynns-toggle-chip {
+  border-start-end-radius: var(--fynns-radius-pill);
+  border-end-end-radius: var(--fynns-radius-pill);
+}
+
+.fynns-toggle-chip[data-pos="only"] {
+  border-radius: var(--fynns-radius-pill);
+}
+
+.fynns-toggle-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+  z-index: -1;
+  transition: background var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-toggle-chip:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-toggle-chip:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-toggle-chip--on {
+  background: var(--fynns-color-secondary-container);
+  color: var(--fynns-color-on-secondary-container);
+}
+
+.fynns-toggle-chip--on:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-toggle-chip--on:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+/*
+ * M3 select motion without layout reflow: leading slot width is always
+ * reserved (equal columns / ControlStack max-content stay stable). Check
+ * scales+fades; unselected content translates so the label stays optically
+ * centered. Reverse on deselect.
+ */
+.fynns-toggle-chip-content {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+/* Empty reserved leading would right-bias the label — pull cluster back. */
+.fynns-toggle-chip--with-icon:not(.fynns-toggle-chip--leading-open)
+  .fynns-toggle-chip-content {
+  transform: translateX(
+    calc(
+      -0.5 * (var(--fynns-segmented-icon-size) + var(--fynns-segmented-gap))
+    )
+  );
+}
+
+.fynns-toggle-chip-leading {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
+  margin-inline-end: var(--fynns-segmented-gap);
+  pointer-events: none;
+}
+
+.fynns-toggle-chip-check,
+.fynns-toggle-chip-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized),
+    transform var(--fynns-duration-fast) var(--fynns-ease-emphasized);
+}
+
+.fynns-toggle-chip-check--on,
+.fynns-toggle-chip-icon--on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When both check + option icon exist, stack in the same slot (crossfade). */
+.fynns-toggle-chip-leading:has(.fynns-toggle-chip-icon) .fynns-toggle-chip-check,
+.fynns-toggle-chip-leading:has(.fynns-toggle-chip-check) .fynns-toggle-chip-icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.fynns-toggle-chip-icon > svg {
+  width: var(--fynns-segmented-icon-size);
+  height: var(--fynns-segmented-icon-size);
+}
+
+.fynns-toggle-chip-label {
+  min-width: 0;
+}
+
+.fynns-toggle-chip:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: calc(-1 * var(--fynns-focus-ring-width));
+  z-index: 1;
+}
+
+.fynns-toggle-chip:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* ---------- ControlBlock (control unit + supporting hint) ---------- */
+.fynns-control-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-control-block > .fynns-control-stack,
+.fynns-control-block > .fynns-control-row {
+  /* Toolbar tracks stay content-sized; single-row + hint uses the grid below. */
+  max-width: 100%;
+}
+
+/*
+ * Single-row ControlBlock + description: keep the note in the **label column**
+ * of the same row unit. ToggleGroup / cluster vertically centers against
+ * name + hint. Do **not** let FieldHint become a full-bleed next row (empty
+ * band to the right of the timestamp, controls look top-heavy).
+ */
+.fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-row
+  ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+.fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-stack > .fynns-control-row:only-child
+  ) {
+  display: grid;
+  grid-template-columns:
+    minmax(0, var(--fynns-layout-control-row-label))
+    minmax(0, 1fr);
+  column-gap: var(--fynns-layout-control-row-column-gap);
+  row-gap: var(--fynns-layout-field-hint-gap);
+  align-items: start;
+  justify-content: stretch;
+  container-type: inline-size;
+  container-name: fynns-control-block;
+}
+
+.fynns-control-block:has(> .fynns-field-hint):not(
+    :has(> .fynns-control-row ~ .fynns-control-row)
+  )
+  > .fynns-control-row,
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child),
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child)
+  > .fynns-control-row {
+  display: contents;
+}
+
+.fynns-control-block:has(> .fynns-field-hint)
+  > .fynns-control-stack:has(> .fynns-control-row:only-child)
+  > .fynns-control-row
+  > .fynns-control-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  overflow: visible;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__label {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__controls {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: end;
+}
+
+.fynns-control-block:has(> .fynns-field-hint) > .fynns-field-hint {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-row
+  ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint):has(
+    > .fynns-control-stack > .fynns-control-row:only-child
+  ),
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint):has(
+  > .fynns-control-row
+):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint):has(
+  > .fynns-control-stack > .fynns-control-row:only-child
+) {
+  width: 100%;
+  /* Match form-host ControlRow: label + hint eat 1fr; controls end-hug. */
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+:is(
+    .fynns-dialog-panel--centered,
+    .fynns-card-body,
+    .fynns-surface--padded
+  )
+  .fynns-control-block:has(> .fynns-field-hint)
+  .fynns-control-row__controls,
+.fynns-collapsible-body > .fynns-control-block:has(> .fynns-field-hint)
+  .fynns-control-row__controls {
+  justify-self: end;
+}
+
+/* Narrow form-host ControlBlock: stack label, hint, controls — never crush
+   the label column to per-glyph wraps beside wide clusters. */
+@container fynns-control-block (max-width: 20rem) {
+  .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ),
+  :is(
+      .fynns-dialog-panel--centered,
+      .fynns-card-body,
+      .fynns-surface--padded
+    )
+    .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  :is(
+      .fynns-dialog-panel--centered,
+      .fynns-card-body,
+      .fynns-surface--padded
+    )
+    .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ),
+  .fynns-collapsible-body
+    > .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-row
+    ):not(:has(> .fynns-control-row ~ .fynns-control-row)),
+  .fynns-collapsible-body
+    > .fynns-control-block:has(> .fynns-field-hint):has(
+      > .fynns-control-stack > .fynns-control-row:only-child
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--fynns-layout-control-row-gap);
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) > .fynns-field-hint {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .fynns-control-block:has(> .fynns-field-hint) .fynns-control-row__controls {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
+    justify-self: start;
+  }
+}
+
+/* ---------- Unit stack (generic sibling units; not ControlBlock) ---------- */
+/*
+ * Named replacement for purged `UnitStack`: vertical siblings that are
+ * independent units (sections, FieldBlocks already inside Card use body gap).
+ * Control + its own note → `ControlBlock`, not another unit-stack child pair.
+ */
+.fynns-unit-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-unit-stack > * {
+  /* Sibling units are content-sized. A height-capped host (FillColumn-main)
+     must scroll the stack — never shrink wells. Surface `overflow: hidden`
+     plus a flex `min-height: 0` otherwise clips ToggleGroup into a 36px pill. */
+  flex-shrink: 0;
+}

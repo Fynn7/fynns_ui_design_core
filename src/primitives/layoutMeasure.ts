@@ -1,6 +1,7 @@
 /**
- * Resolve layout CSS lengths without inserting measure probes under a host
- * watched by `MutationObserver` (ClippedNavShell crowding — see llm/PERF.md).
+ * Destination geometry (CONTEXT.md): resolve layout CSS lengths without
+ * inserting measure probes under a host watched by `MutationObserver`
+ * (ClippedNavShell crowding — see llm/PERF.md).
  */
 
 function hostFontSizePx(host: Element): number {

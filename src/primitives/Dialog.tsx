@@ -1,239 +1,21 @@
-import type { KeyboardEvent, ReactNode } from "react";
-import { useEffect, useId, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+﻿import type { ReactNode } from "react";
+import { useId } from "react";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
+import {
+  DialogFrame,
+  type DialogVariant,
+} from "./DialogFrame";
 
-export type DialogVariant = "centered" | "drawer" | "sheet" | "fullscreen";
-
-export type DrawerSide = "left" | "right";
-
-/** Enter/exit animation phase for overlay surfaces. */
-export type DialogDataState = "open" | "closing";
-
-/** Keep in sync with `--fynns-duration-base` (dialog/drawer transitions). */
-export const DIALOG_TRANSITION_MS = 240;
-
-const FOCUSABLE_SELECTOR =
-  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-function getFocusable(container: HTMLElement): HTMLElement[] {
-  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
-}
-
-export type DialogFrameProps = {
-  open: boolean;
-  onClose: () => void;
-  variant: DialogVariant;
-  /** Drawer slide-in edge. Ignored for non-drawer variants. */
-  side?: DrawerSide;
-  /**
-   * Modal frames lock body scroll, trap focus, and render a click-dismiss
-   * scrim. Non-modal frames (e.g. a side drawer) leave the rest of the page
-   * interactive: no scroll lock, no focus trap, and a click-through overlay.
-   */
-  modal?: boolean;
-  /** 为 false 时 scrim 不响应点击（避免长任务误触遮罩）。 */
-  scrimDismiss?: boolean;
-  /**
-   * Drives CSS enter/exit transitions via `data-state`. When omitted, the frame
-   * manages its own presence lifecycle (mount → enter → exit → unmount).
-   */
-  dataState?: DialogDataState;
-  panelClassName?: string;
-  labelledBy?: string;
-  ariaLabel?: string;
-  children: ReactNode;
-};
-
-/**
- * Shared frame: portal + scrim + focus-trap + Esc + body scroll lock.
- * Low-level building block reused by FullscreenDialog, BottomSheet,
- * NavigationDrawer, and date/time dialogs. Not part of the public barrel.
- */
-export function DialogFrame({
-  open,
-  onClose,
-  variant,
-  side = "right",
-  modal = true,
-  scrimDismiss = true,
-  dataState: dataStateProp,
-  panelClassName,
-  labelledBy,
-  ariaLabel,
-  children,
-}: DialogFrameProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const [rendered, setRendered] = useState(open);
-  const [entered, setEntered] = useState(false);
-  const managesPresence = dataStateProp === undefined;
-
-  useEffect(() => {
-    if (!managesPresence) return;
-    if (open) {
-      // Mount (or keep mounted) in the closed visual state first.
-      setRendered(true);
-      return;
-    }
-    setEntered(false);
-    const timer = setTimeout(() => setRendered(false), DIALOG_TRANSITION_MS);
-    return () => clearTimeout(timer);
-  }, [open, managesPresence]);
-
-  // Enter only after the closed frame has committed — otherwise React can paint
-  // `rendered` + `entered` together and skip the sheet/drawer slide-in.
-  useEffect(() => {
-    if (!managesPresence || !open || !rendered) return;
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => setEntered(true));
-    });
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [open, rendered, managesPresence]);
-
-  const visible = managesPresence ? rendered : open;
-  const resolvedDataState: DialogDataState | undefined = managesPresence
-    ? entered
-      ? "open"
-      : "closing"
-    : dataStateProp;
-
-  useEffect(() => {
-    if (!visible || resolvedDataState !== "open") return;
-    const previous = document.activeElement as HTMLElement | null;
-    const container = panelRef.current;
-    if (container) {
-      const focusable = getFocusable(container);
-      (focusable[0] ?? container).focus();
-    }
-    if (!modal) {
-      return () => {
-        previous?.focus?.();
-      };
-    }
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      previous?.focus?.();
-    };
-  }, [visible, resolvedDataState, modal]);
-
-  // Non-modal frames cannot rely on the panel's onKeyDown for Esc, because
-  // focus may live outside the panel (e.g. the list behind a side drawer).
-  useEffect(() => {
-    if (!visible || modal) return;
-    const onWindowKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", onWindowKeyDown);
-    return () => window.removeEventListener("keydown", onWindowKeyDown);
-  }, [visible, modal, onClose]);
-
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      onClose();
-      return;
-    }
-    if (event.key !== "Tab" || !modal) return;
-    const container = panelRef.current;
-    if (!container) return;
-    const focusable = getFocusable(container);
-    if (focusable.length === 0) {
-      event.preventDefault();
-      container.focus();
-      return;
-    }
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const active = document.activeElement as HTMLElement | null;
-    if (!active || !container.contains(active)) {
-      event.preventDefault();
-      first.focus();
-      return;
-    }
-    if (event.shiftKey && (active === first || active === container)) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && active === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  };
-
-  if (!visible) return null;
-
-  const overlayVariantClass =
-    variant === "drawer"
-      ? "fynns-dialog-overlay--drawer"
-      : variant === "sheet"
-        ? "fynns-dialog-overlay--sheet"
-        : variant === "fullscreen"
-          ? "fynns-dialog-overlay--fullscreen"
-          : "fynns-dialog-overlay--centered";
-  const panelVariantClass =
-    variant === "drawer"
-      ? `fynns-dialog-panel--drawer fynns-dialog-panel--drawer-${side}`
-      : variant === "sheet"
-        ? "fynns-dialog-panel--sheet"
-        : variant === "fullscreen"
-          ? "fynns-dialog--fullscreen"
-          : "fynns-dialog-panel--centered";
-
-  return createPortal(
-    <div
-      className={[
-        "fynns-dialog-overlay",
-        overlayVariantClass,
-        modal ? "" : "fynns-dialog-overlay--nonmodal",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      data-state={resolvedDataState}
-    >
-      {modal ? (
-        <button
-          type="button"
-          className={["fynns-dialog-scrim", scrimDismiss ? "" : "fynns-dialog-scrim--inert"]
-            .filter(Boolean)
-            .join(" ")}
-          aria-hidden="true"
-          tabIndex={-1}
-          onClick={scrimDismiss ? onClose : undefined}
-        />
-      ) : null}
-      <div
-        ref={panelRef}
-        className={[
-          "fynns-dialog-panel",
-          panelVariantClass,
-          panelClassName ?? "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        role="dialog"
-        aria-modal={modal}
-        aria-labelledby={labelledBy}
-        aria-label={ariaLabel}
-        data-state={resolvedDataState}
-        tabIndex={-1}
-        onKeyDown={onKeyDown}
-      >
-        {children}
-      </div>
-    </div>,
-    document.body,
-  );
-}
+export {
+  DialogFrame,
+  DIALOG_TRANSITION_MS,
+  type DialogVariant,
+  type DrawerSide,
+  type DialogDataState,
+  type DialogFrameProps,
+} from "./DialogFrame";
 
 /**
  * Low-level modal shell. The caller renders the full panel content (head +
@@ -499,3 +281,4 @@ export function FullscreenDialog({
     </DialogFrame>
   );
 }
+

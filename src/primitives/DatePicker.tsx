@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
-import { DialogFrame } from "./Dialog";
+import { DialogFrame } from "./DialogFrame";
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "./icons";
 import { Tooltip } from "./Tooltip";

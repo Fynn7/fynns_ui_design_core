@@ -2,7 +2,12 @@ import type { CSSProperties, FocusEvent, ReactNode } from "react";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { DURATION_TOKENS } from "../theme/motionTokens";
-import { anchorTargetRect, useFloatingBoxPosition, type Align, type Side } from "./Popover";
+import {
+  anchorTargetRect,
+  useFloatingBoxPosition,
+  type Align,
+  type Side,
+} from "./floatingBox";
 import {
   configureTooltipSkipDelay,
   isTooltipWarm,

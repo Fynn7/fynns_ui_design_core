@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { Button } from "./Button";
-import { DialogFrame } from "./Dialog";
+import { DialogFrame } from "./DialogFrame";
 import { CloseIcon } from "./icons";
 
 /** Clock time as `HH:mm` (24-hour, local). */

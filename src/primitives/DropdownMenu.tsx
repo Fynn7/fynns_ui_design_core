@@ -15,7 +15,7 @@ import {
 import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 import { CheckIcon } from "./icons";
-import { useFloatingBoxPosition, type Align } from "./Popover";
+import { useFloatingBoxPosition, type Align } from "./floatingBox";
 
 type MenuContextValue = {
   close: () => void;

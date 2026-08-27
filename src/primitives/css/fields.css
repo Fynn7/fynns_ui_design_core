@@ -1,0 +1,1269 @@
+/* Domain: fields — extracted from primitives.css */
+/* ---------- Input ---------- */
+.fynns-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.fynns-field-shell {
+  display: flex;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  min-width: 0;
+  box-sizing: border-box;
+  /* Match densified Select / Input control height (40dp). */
+  min-height: var(--fynns-size-icon-target);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-muted);
+  /* Same text inset as standalone Input / densified Select (capsule + field-pad). */
+  padding-inline: calc(
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
+}
+
+.fynns-field-shell--sm {
+  min-height: 2rem;
+  height: 2rem;
+}
+
+.fynns-field-shell--sm .fynns-input.fynns-input--in-shell {
+  min-height: 0;
+  height: 100%;
+  align-self: stretch;
+}
+
+.fynns-field-shell--filled {
+  background: var(--fynns-color-input-fill);
+}
+
+.fynns-field-shell--invalid {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-field-shell:focus-within {
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
+}
+
+.fynns-field-shell--invalid:focus-within {
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
+}
+
+.fynns-field-affix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-field-hint {
+  margin: 0;
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-field-hint--error {
+  color: var(--fynns-color-danger);
+}
+
+/* ---------- NumberInput (spinbutton + trailing steppers) ---------- */
+.fynns-number-input-shell {
+  /* Steppers own the end edge — keep start pad, tighten end to capsule. */
+  padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline);
+}
+
+.fynns-number-input-shell .fynns-number-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  /* Tabular so steppers do not shift when 9 → 10. */
+  font-variant-numeric: tabular-nums;
+}
+
+.fynns-number-input-steppers {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-self: stretch;
+  width: var(--fynns-size-icon);
+  margin-block: var(--fynns-space-2xs);
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-number-input-step {
+  box-sizing: border-box;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fynns-radius-xs);
+  background: transparent;
+  color: var(--fynns-color-text-muted);
+  cursor: pointer;
+  appearance: none;
+}
+
+.fynns-number-input-step + .fynns-number-input-step {
+  border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+}
+
+.fynns-number-input-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--fynns-color-text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-number-input-step:hover:not(:disabled)::before {
+  opacity: var(--fynns-state-hover);
+}
+
+.fynns-number-input-step:active:not(:disabled)::before {
+  opacity: var(--fynns-state-pressed);
+}
+
+.fynns-number-input-step:focus-visible {
+  outline: none;
+}
+
+.fynns-number-input-step:focus-visible::before {
+  opacity: var(--fynns-state-focus);
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-number-input-step:disabled {
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-number-input-step svg {
+  position: relative;
+  z-index: 1;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.fynns-input {
+  /* Match Select: fill the parent track (UA cols≈20 otherwise leaves Dialog/Card gaps). */
+  width: 100%;
+  /* Flex toolbars / TopAppBar agent row: shrink below intrinsic text width. */
+  min-width: 0;
+  box-sizing: border-box;
+  /* Same form control height as densified Select / Autocomplete (40dp). */
+  min-height: var(--fynns-size-icon-target);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-muted);
+  color: var(--fynns-color-text);
+  /*
+   * Text start matches densified Select: searchbar/capsule field pad (4dp) +
+   * trigger `space-md` / field-pad (12dp). Do **not** subtract hairline —
+   * that left Input optically tighter than Select in FieldStack forms.
+   */
+  padding-block: var(--fynns-space-25);
+  padding-inline: calc(
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
+  font: inherit;
+  outline: none;
+}
+
+/*
+ * Single-line text fields only (`input`, not `textarea.fynns-input`).
+ * Idle: ellipsis in narrow hosts — never mid-glyph hard clip (SearchBar /
+ * Autocomplete parity). Focused: caret horizontal scroll, scrollbar hidden.
+ */
+input.fynns-input {
+  white-space: nowrap;
+}
+
+input.fynns-input:not(:focus) {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+input.fynns-input:focus {
+  overflow-x: auto;
+  text-overflow: clip;
+  scrollbar-width: none;
+}
+
+input.fynns-input:focus::-webkit-scrollbar {
+  display: none;
+}
+
+.fynns-input--sm {
+  min-height: 2rem;
+  /* Fit 32dp: no block pad (md uses space-25 inside 40dp). */
+  padding-block: 0;
+  padding-inline: calc(
+    var(--fynns-layout-capsule-chrome-pad-inline) +
+      var(--fynns-layout-field-pad-inline)
+  );
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-tight);
+}
+
+.fynns-input--filled {
+  background: var(--fynns-color-input-fill);
+}
+
+.fynns-input--invalid {
+  border-color: var(--fynns-color-danger-border);
+}
+
+.fynns-input--in-shell {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding-inline: 0;
+  box-shadow: none;
+}
+
+/*
+ * No leading affix: shell already applies field-pad-inline; keep nested input
+ * flush so text start matches standalone `.fynns-input` (field-pad − hairline).
+ */
+.fynns-field-shell:not(:has(.fynns-field-affix--leading))
+  .fynns-input.fynns-input--in-shell {
+  padding-inline-start: 0;
+}
+
+.fynns-input:focus,
+.fynns-input:focus-visible {
+  /* Quiet teal tint of the resting border — not full/mid accent. */
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+  box-shadow: none;
+}
+
+.fynns-input--invalid:focus,
+.fynns-input--invalid:focus-visible {
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
+}
+
+/* Shell owns the focus ring via `:focus-within` — keep the nested input quiet.
+   Must follow `.fynns-input:focus` (equal specificity otherwise loses by order). */
+.fynns-input.fynns-input--in-shell:focus,
+.fynns-input.fynns-input--in-shell:focus-visible {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.fynns-input::placeholder {
+  color: var(--fynns-color-text-muted);
+}
+
+/* Disabled / read-only inputs read clearly as non-editable: a darker, muted
+   surface with muted text and a not-allowed cursor (no focus ring). */
+.fynns-input:disabled,
+.fynns-input[readonly] {
+  background: var(--fynns-color-surface-head);
+  color: var(--fynns-color-text-muted);
+  opacity: var(--fynns-opacity-muted);
+  cursor: not-allowed;
+}
+
+.fynns-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 6rem;
+  resize: vertical;
+  line-height: var(--fynns-line-height-body);
+  font-family: inherit;
+  /*
+   * Multiline needs real block pad. `.fynns-input--sm` zeroes padding-block for
+   * 32dp single-line Input — override here with layout field-pad-block.
+   */
+  padding-block: calc(
+    var(--fynns-layout-field-pad-block) - var(--fynns-border-hairline)
+  );
+}
+
+.fynns-textarea.fynns-input--sm {
+  /* Keep sm type; do not inherit Input sm’s padding-block: 0. */
+  padding-block: calc(
+    var(--fynns-layout-field-pad-block) - var(--fynns-border-hairline)
+  );
+  min-height: 6rem;
+}
+
+/*
+ * Content-driven height (default). JS sets `height` from scrollHeight between
+ * minRows and max-height; no manual resize grip.
+ */
+.fynns-textarea--auto-grow,
+.fynns-textarea--auto-grow.fynns-input--sm {
+  resize: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  field-sizing: fixed;
+  min-height: 0;
+  max-height: var(--fynns-layout-textarea-max-height);
+}
+
+/* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
+.fynns-select {
+  position: relative;
+  width: 100%;
+}
+
+/*
+ * Hidden probe rows: reuse Select shell classes so pad / chevron / hairline
+ * match the closed trigger. `min-width: min(100%, …)` floors to the widest
+ * option without value flicker on content-sized hosts.
+ */
+.fynns-select-measure {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fynns-select-measure-row {
+  box-sizing: border-box;
+  display: flex;
+  width: max-content;
+  max-width: none;
+  border: var(--fynns-border-hairline) solid transparent;
+}
+
+.fynns-select-measure-row .fynns-select-shell {
+  width: max-content;
+}
+
+.fynns-select-measure-row .fynns-select-trigger {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.fynns-select-measure-row .fynns-select-trigger-text {
+  flex: 0 0 auto;
+  overflow: visible;
+  text-overflow: clip;
+  min-width: auto;
+}
+
+.fynns-select-shell {
+  width: 100%;
+}
+
+.fynns-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding-block: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fynns-select-trigger:focus,
+.fynns-select-trigger:focus-visible {
+  outline: none;
+}
+
+.fynns-select-trigger:disabled {
+  cursor: not-allowed;
+}
+
+.fynns-select-trigger-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fynns-select-chevron {
+  cursor: pointer;
+}
+
+.fynns-select--disabled .fynns-select-chevron {
+  cursor: not-allowed;
+}
+
+.fynns-select-trigger-chevron {
+  flex-shrink: 0;
+  width: var(--fynns-searchbar-icon-size);
+  height: var(--fynns-searchbar-icon-size);
+  color: var(--fynns-color-text-muted);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-select-trigger--open ~ .fynns-search-bar-trailing .fynns-select-trigger-chevron,
+.fynns-select-trigger--open ~ .fynns-select-chevron .fynns-select-trigger-chevron,
+.fynns-search-bar--expanded .fynns-select-trigger-chevron {
+  transform: rotate(180deg);
+}
+
+/* Results are `.fynns-search-bar-results` — no separate flyout skin. */
+.fynns-select-list {
+  list-style: none;
+  margin: 0;
+}
+
+/* ---------- Autocomplete (Select chrome + filterable input) ---------- */
+.fynns-autocomplete-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  width: 100%;
+  max-width: 100%;
+}
+
+.fynns-autocomplete {
+  width: 100%;
+}
+
+.fynns-autocomplete-shell {
+  width: 100%;
+}
+
+.fynns-autocomplete .fynns-autocomplete-input {
+  width: 100%;
+  padding-block: 0;
+}
+
+.fynns-autocomplete-chevron {
+  cursor: pointer;
+}
+
+.fynns-autocomplete--disabled .fynns-autocomplete-chevron {
+  cursor: not-allowed;
+}
+
+.fynns-autocomplete--invalid.fynns-search-bar {
+  border-color: var(--fynns-color-danger-border);
+  box-shadow: none;
+}
+
+.fynns-autocomplete-list {
+  list-style: none;
+  margin: 0;
+}
+
+.fynns-autocomplete-empty {
+  box-sizing: border-box;
+  padding: var(--fynns-space-sm) var(--fynns-searchbar-pad-inline);
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+}
+
+/* ---------- Switch (dense track / thumb; no handle icon; no md size) ---------- */
+.fynns-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  color: var(--fynns-color-text);
+  line-height: var(--fynns-line-height-tight);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-switch--label-end {
+  /* Track-leading: dense toolbars align tracks with ToggleGroup / other glyphs. */
+  justify-content: flex-start;
+}
+
+.fynns-switch-label {
+  font-size: var(--fynns-font-size-caption);
+  color: var(--fynns-color-text-muted);
+  white-space: nowrap;
+}
+
+/* Cap end-labels so narrow ControlStack / Card hosts do not spill past the
+   frame (token was unused — apply as max, not a floor). */
+.fynns-switch--label-end .fynns-switch-label {
+  max-width: var(--fynns-layout-switch-label-end);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-switch-track {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: var(--fynns-toggle-track-w);
+  height: var(--fynns-toggle-track-h);
+  margin: 0;
+  padding: 0;
+  border: var(--fynns-toggle-track-outline) solid var(--fynns-color-border-strong);
+  border-radius: var(--fynns-radius-pill);
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  overflow: visible;
+  transition:
+    background var(--fynns-duration-toggle),
+    border-color var(--fynns-duration-toggle),
+    box-shadow var(--fynns-duration-toggle);
+}
+
+/*
+ * Thumb uses `--fynns-toggle-track-pad-*` (padding-box). Pads are sized so
+ * outer gap ≈ pad + outline ≈ (track-h − thumb) / 2 on both ends.
+ * No hover/pressed state-layer halo on the thumb.
+ */
+.fynns-switch-track[data-state="checked"] {
+  /* Soft filled track + accent outline; thumb stays accent (not on-accent). */
+  background: var(--fynns-color-accent-24);
+  border-color: var(--fynns-color-accent);
+}
+
+.fynns-switch-track:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-switch-track:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-switch-thumb {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: var(--fynns-toggle-track-pad-inline);
+  display: block;
+  width: var(--fynns-toggle-thumb);
+  height: var(--fynns-toggle-thumb);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-border-strong);
+  box-shadow: var(--fynns-shadow-none);
+  transform: translateY(-50%);
+  transition:
+    left var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    width var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    height var(--fynns-duration-toggle) var(--fynns-ease-spring),
+    background var(--fynns-duration-toggle) var(--fynns-ease-in-out);
+}
+
+.fynns-switch-thumb[data-state="checked"] {
+  left: calc(
+    100% - var(--fynns-toggle-track-pad-checked) - var(--fynns-toggle-thumb-checked)
+  );
+  width: var(--fynns-toggle-thumb-checked);
+  height: var(--fynns-toggle-thumb-checked);
+  background: var(--fynns-color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-switch-track,
+  .fynns-switch-thumb {
+    transition: none;
+  }
+}
+
+/* ---------- Slider ---------- */
+.fynns-slider {
+  width: 100%;
+  height: 1.25rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.fynns-slider:focus-visible {
+  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
+  outline-offset: var(--fynns-focus-ring-offset-control);
+}
+
+.fynns-slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.25rem;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-toggle-track);
+}
+
+.fynns-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.375rem;
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  border: none;
+  cursor: pointer;
+  transition: background var(--fynns-duration-fast);
+}
+
+.fynns-slider:hover::-webkit-slider-thumb {
+  background: var(--fynns-color-accent-dim);
+}
+
+.fynns-slider::-moz-range-track {
+  height: 0.25rem;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-color-toggle-track);
+}
+
+.fynns-slider::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  border: none;
+  cursor: pointer;
+}
+
+.fynns-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- FieldHeader / FieldBlock (label | trailing IconButtons) ---------- */
+.fynns-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-sm);
+  /* Label→control gap lives on `.fynns-field-block__main` (`field-hint-gap`). */
+  box-sizing: border-box;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.fynns-field-header:has(.fynns-field-header__actions) {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+}
+
+.fynns-field-header__label {
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+  color: var(--fynns-color-text-muted);
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-field-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-2xs);
+  flex-shrink: 0;
+}
+
+.fynns-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-block__main {
+  display: flex;
+  flex-direction: column;
+  /* Label row → control (single- or multi-line prompts). */
+  gap: var(--fynns-layout-field-hint-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Sibling spacing comes from Card / Collapsible / `.fynns-unit-stack` /
+   `.fynns-field-stack` gap — do not re-add margin here. */
+.fynns-field-block:not(:last-child) {
+  margin-bottom: 0;
+}
+
+/* ---------- FieldStack (related FieldBlock / ControlBlock cluster) ---------- */
+/*
+ * Invisible group: consecutive Input/Select FieldBlocks (or same-kind
+ * ControlBlocks) share field-stack-gap (12dp). Adjacent FieldStacks target
+ * form-cluster-gap (32dp). Default margin is the full cluster step (bare
+ * hosts). Card / Collapsible / Dialog body / `.fynns-unit-stack` already
+ * contribute unit-stack-gap — those hosts only add the remainder.
+ *
+ * Label→control inside the stack uses a **max header band**: when any sibling
+ * FieldBlock hosts trailing FieldHeader IconButtons, every header in the
+ * stack shares `field-header-action-row-min-height` — label→control stays on
+ * `field-hint-gap` alone (live: sandbox `#field-header`, `#form-recipe`).
+ */
+.fynns-field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-stack-gap);
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fynns-field-stack:has(> .fynns-field-block .fynns-field-header__actions)
+  .fynns-field-header {
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+}
+
+.fynns-field-stack + .fynns-field-stack {
+  margin-block-start: var(--fynns-layout-form-cluster-gap);
+}
+
+.fynns-card-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-collapsible-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-dialog-body > .fynns-field-stack + .fynns-field-stack,
+.fynns-unit-stack > .fynns-field-stack + .fynns-field-stack {
+  margin-block-start: calc(
+    var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-unit-stack-gap)
+  );
+}
+
+/*
+ * Plain FieldBlocks keep field-stack-gap (12dp). FieldBlock + description/error
+ * (no choice cluster) opens the next sibling to unit-stack (16dp) so hint copy
+ * does not collide with the next label. FieldBlocks that host a
+ * `.fynns-control-cluster` open to form-cluster-gap (32dp). ControlBlock +
+ * note stays at unit-stack (16dp). Prefer a `Divider` between FieldStacks.
+ */
+.fynns-field-stack
+  > .fynns-field-block:has(> .fynns-field-hint):not(:has(.fynns-control-cluster))
+  + .fynns-field-block {
+  margin-block-start: calc(
+    var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
+.fynns-field-stack > .fynns-field-block:has(.fynns-control-cluster) + .fynns-field-block {
+  margin-block-start: calc(
+    var(--fynns-layout-form-cluster-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
+.fynns-field-stack > .fynns-control-block + .fynns-control-block {
+  margin-block-start: calc(
+    var(--fynns-layout-unit-stack-gap) - var(--fynns-layout-field-stack-gap)
+  );
+}
+
+/* ---------- Checkbox / Radio (M3 selection) ---------- */
+.fynns-checkbox,
+.fynns-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+  color: var(--fynns-color-text);
+  font-size: var(--fynns-font-size-form-label);
+  line-height: var(--fynns-line-height-compact);
+  cursor: pointer;
+  user-select: none;
+}
+
+.fynns-checkbox-input,
+.fynns-radio-input {
+  position: absolute;
+  opacity: 0;
+  width: var(--fynns-border-hairline);
+  height: var(--fynns-border-hairline);
+  margin: 0;
+  pointer-events: none;
+}
+
+.fynns-checkbox-box,
+.fynns-radio-mark {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--fynns-duration-toggle),
+    border-color var(--fynns-duration-toggle),
+    box-shadow var(--fynns-duration-toggle),
+    color var(--fynns-duration-toggle);
+}
+
+.fynns-checkbox-box::before,
+.fynns-radio-mark::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: var(--fynns-selection-state-layer);
+  height: var(--fynns-selection-state-layer);
+  border-radius: var(--fynns-radius-round);
+  transform: translate(-50%, -50%);
+  background: transparent;
+  pointer-events: none;
+  transition: background var(--fynns-duration-toggle);
+}
+
+.fynns-checkbox:hover:not(:has(.fynns-checkbox-input:disabled)) .fynns-checkbox-box::before,
+.fynns-radio:hover:not(:has(.fynns-radio-input:disabled)) .fynns-radio-mark::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-checkbox:has(.fynns-checkbox-input:checked):hover:not(
+    :has(.fynns-checkbox-input:disabled)
+  )
+  .fynns-checkbox-box::before,
+.fynns-radio:has(.fynns-radio-input:checked):hover:not(:has(.fynns-radio-input:disabled))
+  .fynns-radio-mark::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-checkbox-box {
+  width: var(--fynns-selection-box-size);
+  height: var(--fynns-selection-box-size);
+  border-radius: var(--fynns-radius-2xs);
+  border: var(--fynns-selection-box-outline) solid var(--fynns-color-text-muted);
+  background: transparent;
+  color: var(--fynns-color-on-accent);
+}
+
+.fynns-checkbox-icon {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  width: var(--fynns-selection-icon-size);
+  height: var(--fynns-selection-icon-size);
+  transition: opacity var(--fynns-duration-toggle);
+}
+
+.fynns-checkbox-dash {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: var(--fynns-selection-radio-dot);
+  height: var(--fynns-selection-box-outline);
+  border-radius: var(--fynns-radius-pill);
+  background: currentColor;
+}
+
+.fynns-checkbox-input:checked + .fynns-checkbox-box,
+.fynns-checkbox-input:indeterminate + .fynns-checkbox-box {
+  background: var(--fynns-color-accent);
+  border-color: var(--fynns-color-accent);
+}
+
+.fynns-checkbox-input:checked + .fynns-checkbox-box .fynns-checkbox-icon {
+  opacity: 1;
+}
+
+.fynns-checkbox--invalid .fynns-checkbox-box {
+  border-color: var(--fynns-color-danger);
+}
+
+.fynns-checkbox--invalid .fynns-checkbox-input:checked + .fynns-checkbox-box,
+.fynns-checkbox--invalid .fynns-checkbox-input:indeterminate + .fynns-checkbox-box {
+  background: var(--fynns-color-danger);
+  border-color: var(--fynns-color-danger);
+}
+
+.fynns-checkbox-input:focus-visible + .fynns-checkbox-box {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-checkbox:has(.fynns-checkbox-input:disabled) {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.fynns-checkbox-label,
+.fynns-radio-label {
+  min-width: 0;
+}
+
+.fynns-radio-mark {
+  width: var(--fynns-selection-radio-size);
+  height: var(--fynns-selection-radio-size);
+  border-radius: var(--fynns-radius-round);
+  border: var(--fynns-selection-box-outline) solid var(--fynns-color-text-muted);
+  background: transparent;
+}
+
+.fynns-radio-mark::after {
+  content: "";
+  position: relative;
+  z-index: 1;
+  width: var(--fynns-selection-radio-dot);
+  height: var(--fynns-selection-radio-dot);
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-color-accent);
+  transform: scale(0);
+  transition: transform var(--fynns-duration-toggle) var(--fynns-ease-spring);
+}
+
+.fynns-radio-input:checked + .fynns-radio-mark {
+  border-color: var(--fynns-color-accent);
+}
+
+.fynns-radio-input:checked + .fynns-radio-mark::after {
+  transform: scale(1);
+}
+
+.fynns-radio--invalid .fynns-radio-mark {
+  border-color: var(--fynns-color-danger);
+}
+
+.fynns-radio--invalid .fynns-radio-input:checked + .fynns-radio-mark {
+  border-color: var(--fynns-color-danger);
+}
+
+.fynns-radio--invalid .fynns-radio-input:checked + .fynns-radio-mark::after {
+  background: var(--fynns-color-danger);
+}
+
+.fynns-radio-input:focus-visible + .fynns-radio-mark {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-radio:has(.fynns-radio-input:disabled) {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-checkbox-box,
+  .fynns-checkbox-box::before,
+  .fynns-checkbox-icon,
+  .fynns-radio-mark,
+  .fynns-radio-mark::before,
+  .fynns-radio-mark::after {
+    transition: none;
+  }
+}
+
+/* ---------- Chip (M3 assist / filter / input) ---------- */
+.fynns-chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-chip,
+.fynns-chip-face {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fynns-chip-gap);
+  min-height: var(--fynns-chip-height);
+  padding: 0 var(--fynns-chip-pad-inline);
+  border: var(--fynns-chip-outline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-pill);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font-family: inherit;
+  font-size: var(--fynns-font-size-form-label);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-compact);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background var(--fynns-duration-fast),
+    border-color var(--fynns-duration-fast),
+    box-shadow var(--fynns-duration-fast),
+    color var(--fynns-duration-fast);
+}
+
+.fynns-chip--removable {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+.fynns-chip--removable .fynns-chip-face {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  min-height: calc(var(--fynns-chip-height) - 2 * var(--fynns-chip-outline));
+  padding-inline-start: var(--fynns-chip-pad-inline);
+  padding-inline-end: var(--fynns-space-2xs);
+  flex: 1 1 auto;
+}
+
+/* Removable: no local wash on the face — only the shell lights up. */
+.fynns-chip--removable .fynns-chip-face::before {
+  content: none;
+}
+
+.fynns-chip:has(.fynns-chip-leading),
+.fynns-chip-face:has(.fynns-chip-leading) {
+  padding-inline-start: var(--fynns-chip-pad-inline-icon);
+}
+
+.fynns-chip::before,
+.fynns-chip-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: none;
+  transition: background var(--fynns-duration-fast);
+}
+
+.fynns-chip:hover:not(:disabled)::before,
+.fynns-chip-face:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip:active:not(:disabled)::before,
+.fynns-chip-face:active:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+/* Hovering the remove control must not wash the whole chip. */
+.fynns-chip--removable:hover::before,
+.fynns-chip--removable:active::before {
+  background: transparent;
+}
+
+.fynns-chip--removable:has(.fynns-chip-face:hover)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--removable:has(.fynns-chip-face:active)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip--elevated {
+  border-color: transparent;
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-xs);
+}
+
+.fynns-chip--selected {
+  border-color: transparent;
+  background: var(--fynns-color-accent-container);
+  color: var(--fynns-color-on-accent-container);
+}
+
+.fynns-chip--selected:hover:not(:disabled)::before,
+.fynns-chip--selected .fynns-chip-face:hover:not(:disabled)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--removable.fynns-chip--selected:hover::before {
+  background: transparent;
+}
+
+.fynns-chip--removable.fynns-chip--selected:has(.fynns-chip-face:hover)::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip:focus-visible,
+.fynns-chip-face:focus-visible,
+.fynns-chip-remove-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-accent-ring);
+}
+
+.fynns-chip:disabled,
+.fynns-chip:has(.fynns-chip-face:disabled) {
+  opacity: 0.38;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fynns-chip-leading,
+.fynns-chip-trailing {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-chip-icon-size);
+  height: var(--fynns-chip-icon-size);
+  color: var(--fynns-color-accent);
+}
+
+.fynns-chip--selected .fynns-chip-leading,
+.fynns-chip--selected .fynns-chip-trailing {
+  color: inherit;
+}
+
+.fynns-chip-label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.fynns-chip-check {
+  display: block;
+}
+
+.fynns-chip .fynns-chip-remove-btn.fynns-btn.fynns-btn--icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  /* M3 trailing action state layer: 24dp (beats IconButton sm 32dp). */
+  width: var(--fynns-chip-trailing-action-size);
+  height: var(--fynns-chip-trailing-action-size);
+  min-width: var(--fynns-chip-trailing-action-size);
+  min-height: var(--fynns-chip-trailing-action-size);
+  margin: 0 var(--fynns-space-2xs) 0 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--fynns-radius-round);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background var(--fynns-duration-fast);
+}
+
+.fynns-chip .fynns-chip-remove-btn.fynns-btn--icon svg {
+  width: var(--fynns-chip-icon-size);
+  height: var(--fynns-chip-icon-size);
+}
+
+.fynns-chip-remove-btn:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip--selected .fynns-chip-remove-btn:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-chip-remove-btn:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip--selected .fynns-chip-remove-btn:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-accent-container) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-chip-remove-btn:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chip,
+  .fynns-chip-face,
+  .fynns-chip::before,
+  .fynns-chip-face::before {
+    transition: none;
+  }
+}
+
+/* ---------- OtpInput ---------- */
+.fynns-otp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
+  min-width: 0;
+}
+
+.fynns-otp-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fynns-space-sm);
+}
+
+.fynns-otp-cell.fynns-input {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  padding-inline: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
