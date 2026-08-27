@@ -32,9 +32,9 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`
    ≥ 0.5.10) — **headline / copy** clear the wash curve (not List pad alone).
    Expandable chevron tucks into that band (`chevron-inset` + icon +
    `chevron-gap` = `pad-inline-start`, ≥ **0.5.15**) so flat ↔ detail titles
-   share one start edge. Disc / node mid = **headline** line box
-   (`--fynns-timeline-node-band` = `font-size-md` × `line-height-snug`,
-   ≥ **0.5.14**) — not mid title+supporting; rail uses the same band.
+   share one start edge. Two-line rows **center** the disc on the full
+   `.fynns-timeline-item-copy` stack; rail mid uses
+   `--fynns-timeline-copy-band-2` (≥ **0.5.16**).
 3. Sandbox teaches **exactly two shells** — unlabeled:
    - **Flat** Timeline (no expand) — **catalog edit default:** row click →
      Dialog; edit / delete in Dialog foot (**not** `--with-end` hover icons)

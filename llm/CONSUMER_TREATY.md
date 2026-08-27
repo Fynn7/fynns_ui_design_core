@@ -919,23 +919,23 @@ indent adds the same step. Consumers bump only — do **not** restyle
 `.fynns-timeline-*`. Live: `#timeline`. Authority: [`AGENTS.md`](../AGENTS.md)
 Content density **Chronological timeline**.
 
-## Failure mode this treaty targets: Timeline disc mid title+org
+## Failure mode this treaty targets: Timeline disc not centered on copy
 
 Symptoms (two-line org+dates `TimelineItem` — Experiences / `#timeline`):
 
-- Default disc sits between the headline and org (mid of the whole
-  `.fynns-timeline-item-content` stack) instead of on the **title** line
+- Default disc sits on the **title line only** (or floats high) while the
+  full `.fynns-timeline-item-copy` (headline + org) reads as one block —
+  disc mid ≠ copy mid
 - Consumer tries private `align-items` / `margin-block` on
   `.fynns-timeline-node` / `.fynns-timeline-node-disc`
 
-**Cause:** early node column used `min-height: node-col` (**24dp**) while the
-headline line box is `font-size-md` × `line-height-snug` (**20dp**), so the
-centered disc dropped below the title midline. **Fix (core ≥ 0.5.14):**
-`--fynns-timeline-node-band` = that headline line box; node height + rail
-`::before` mid use `node-band` (width stays `node-col`). Consumers bump only —
+**Cause:** 0.5.14 locked the node to the headline band and top-aligned it;
+rail used `node-band/2`. **Fix (core ≥ 0.5.16):** two-line rows
+`align-items: center` so the node centers on the copy stack; rail mid uses
+`--fynns-timeline-copy-band-2` (`pad-block + copy-band-2/2`) so the stroke
+still meets the disc (no stub above the first ball). Consumers bump only —
 do **not** restyle `.fynns-timeline-*`. Live: `#timeline`. Authority:
-[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline** +
-Chrome type **two-line → title line only**.
+[`AGENTS.md`](../AGENTS.md) Content density **Chronological timeline**.
 
 ## Failure mode this treaty targets: Timeline row hover edit/delete icons
 

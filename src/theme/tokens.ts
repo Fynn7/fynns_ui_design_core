@@ -1607,13 +1607,19 @@ export const TIMELINE_TOKENS = {
   /** Node column width (rail centered in this track). */
   "node-col": "1.5rem",
   /**
-   * Vertical band for disc / glyph — matches the **headline** line box
-   * (`font-size-md` × `line-height-snug`) so node mid = title mid on
-   * two-line org+dates rows (not mid title+supporting). Rail `::before`
-   * uses the same band. ≥ 0.5.14 / `#timeline`.
+   * Vertical box for disc / glyph centering inside the node column.
+   * Two-line rows center this whole box on `.fynns-timeline-item-copy`
+   * (not the headline alone). ≥ 0.5.16 / `#timeline`.
    */
   "node-band":
     "calc(var(--fynns-font-size-md) * var(--fynns-line-height-snug))",
+  /**
+   * Two-line copy stack height (headline + content-gap + supporting) —
+   * rail mid for `--2` rows = `pad-block + copy-band-2/2` so the stroke
+   * meets the vertically centered disc (≥ 0.5.16).
+   */
+  "copy-band-2":
+    "calc((var(--fynns-font-size-md) * var(--fynns-line-height-snug)) + var(--fynns-timeline-content-gap) + (var(--fynns-font-size-sm) * var(--fynns-line-height-snug)))",
   /** Default disc diameter when `leading` is omitted. */
   "node-size": "0.625rem",
   /**

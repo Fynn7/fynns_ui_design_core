@@ -21,12 +21,15 @@
  * node mid. Last item has no ::before (no dangling stroke below the final
  * node). Glyph / disc paint an opaque `node-mask` halo so the rail does
  * not pierce hollow outline icons (still continuous between nodes).
+ *
+ * Default (1-line): mid of `node-band` under pad-block.
+ * Two-line (`--2`): mid of `copy-band-2` — matches vertically centered
+ * node vs `.fynns-timeline-item-copy` (≥ 0.5.16).
  */
 .fynns-timeline-item-host:not(:last-child)::before {
   content: "";
   position: absolute;
   z-index: 0;
-  /* Mid of the headline band (not the taller title+org stack). */
   top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-node-band) / 2));
   bottom: calc(
     -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
@@ -36,6 +39,17 @@
   width: var(--fynns-timeline-rail-width);
   background: var(--fynns-timeline-rail-color);
   pointer-events: none;
+}
+
+.fynns-timeline-item-host:not(:last-child):has(> .fynns-timeline-item--2)::before,
+.fynns-timeline-item-host:not(:last-child):has(
+    > .fynns-timeline-item-row > .fynns-timeline-item--2
+  )::before {
+  top: calc(var(--fynns-timeline-pad-block) + (var(--fynns-timeline-copy-band-2) / 2));
+  bottom: calc(
+    -1 * (var(--fynns-timeline-item-gap) + var(--fynns-timeline-pad-block) +
+      (var(--fynns-timeline-copy-band-2) / 2))
+  );
 }
 
 .fynns-timeline-item-row {
@@ -72,14 +86,13 @@
 }
 
 /*
- * Two-line rows: node **top-aligned** with content; disc mid locks to the
- * **headline** line via `--fynns-timeline-node-band` (not mid title+org).
- * Host rail uses `pad-block + node-band/2`. `align-items: center` on the
- * row dropped the node and left a stub of rail above the ball. Chevron +
- * copy still center as a stack via `.fynns-timeline-item-content`.
+ * Two-line rows: vertically **center** the node on the full copy stack
+ * (headline + supporting — `.fynns-timeline-item-copy`), not the title line
+ * alone. Rail mid uses `copy-band-2` so the stroke still meets the disc
+ * (no stub above the first ball). ≥ 0.5.16.
  */
 .fynns-timeline-item--2 {
-  align-items: flex-start;
+  align-items: center;
 }
 
 .fynns-timeline-item--2 .fynns-timeline-item-content {
@@ -150,10 +163,9 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  align-self: flex-start;
   box-sizing: border-box;
   width: var(--fynns-timeline-node-col);
-  /* Height = headline line box so disc mid ≡ title mid (≥ 0.5.14). */
+  /* Node box; two-line rows center this on the copy stack (≥ 0.5.16). */
   min-height: var(--fynns-timeline-node-band);
   height: var(--fynns-timeline-node-band);
   color: var(--fynns-color-text-muted);
