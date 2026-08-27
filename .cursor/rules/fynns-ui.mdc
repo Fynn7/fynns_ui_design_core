@@ -188,8 +188,8 @@ ring can paint before heavy work).
   `--fynns-list-gap` (**16dp**); three-line stack `--fynns-list-content-gap-3`
   (**8dp**). Duration meta spaces units (`1m 47s`). Experience / job rows:
   org under title (`supportingText`), dates → `trailingSupportingText` +
-  `List` `trailingMetaAlign="start"` for mixed lengths (column + **start**-aligned
-  glyphs ≥ 0.4.144); short status + delete
+  `List` `trailingMetaAlign="start"` for mixed lengths (column + **end**-aligned
+  glyphs ≥ 0.4.148); short status + delete
   omit the prop (core ≥ 0.4.121: one-icon `--with-end` reserve — not a phantom
   second disk). **Catalog create/edit:** keep List mounted → `Dialog`
   `size="lg"` + `showCloseButton` (or `FullscreenDialog` for multi-Card long

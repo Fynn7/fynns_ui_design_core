@@ -31,6 +31,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **UI · — punctuation in chrome** /
 **List run history stacked vertically** /
 **trailingSupportingText right-hug drift** /
+**trailing meta start-ink (dead space before --with-end)** /
 **status meta far from --with-end action** /
 **Collapsible inside List (skeleton crush)** /
 **Drawer tip-fill ≠ IconButton toolbar** /
@@ -699,7 +700,7 @@ multi-sentence diagnostics or comma-lists.
 
 1. One `ControlStack` of `ControlRow`s — `label` = short service name
    (`Ollama` / `Gemini` / …).
-2. Children = short status (`OK` / `Fail` / `—`) **plus** `InfoHint` `size="sm"`
+2. Children = short status (`OK` / `Fail` / `-`) **plus** `InfoHint` `size="sm"`
    (or tip glyph + `InfoHint`) whose `content` holds the long reason /
    installed list / proxy URL. **`Fail` rows:** `InfoHint` `tone="danger"` so
    the help glyph reads as error detail — OK rows stay default tone.
@@ -846,29 +847,31 @@ Symptoms (experience / job date columns):
 **Cause:** mixed-length `trailingSupportingText` without a shared column floor,
 or content-width meta that only lines up trailing glyphs.
 **Fix:** parent **`List` `trailingMetaAlign="start"`** (≥ **0.4.120**; token
-since 0.4.119; **column start-ink ≥ 0.4.144** — reverses 0.4.133 end-ink) —
-shared `--fynns-list-trailing-meta-min-width` (box **and** digit starts
-align). Do **not** invent private `text-align` / `min-width` on
-`.fynns-list-item-trailing*`. Multi-metric grids stay on
-`.fynns-list-item-trailing-stats` (start-aligned cells ≥ 0.4.144). Live:
-`#list` org+dates / run-summary. Authority: [`AGENTS.md`](../AGENTS.md).
-Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+since 0.4.119; **column end-ink ≥ 0.4.148** / 0.4.133 — restores after
+0.4.144 start-ink) — shared `--fynns-list-trailing-meta-min-width` (box
+starts align; copy docks to the end so short dates sit
+`end-actions-gap` from `--with-end` actions). Do **not** invent private
+`text-align` / `min-width` on `.fynns-list-item-trailing*`. Multi-metric
+grids stay on `.fynns-list-item-trailing-stats` (start-aligned cells ≥
+0.4.144). Live: `#list` org+dates / run-summary. Authority:
+[`AGENTS.md`](../AGENTS.md). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: trailing meta end-ink (right-aligned glyphs)
+## Failure mode this treaty targets: trailing meta start-ink (dead space before --with-end)
 
-Symptoms (date / timestamp / stats columns after `trailingMetaAlign="start"`):
+Symptoms (experience / job date columns with hover edit/delete):
 
-- Shared column boxes align, but shorter strings hug the **right** edge
-  (trailing digits / `s` line up; starts stagger) — same failure as
-  headline duration end-pack
+- Shared column boxes align, but shorter dates (`2023-03`) hug the **start**
+  of the 17ch band — large empty gap before the pencil / trash on hover
 
-**Cause:** core **0.4.133–0.4.143** used `text-align: end` /
-`justify-items: end` inside list meta columns.
-**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.144** (start-ink in
-`trailingMetaAlign="start"` + `.fynns-list-item-trailing-stats`). Keep
-consumer `trailingMetaAlign="start"` on date / timestamp catalogs — do not
-patch with app CSS. Live: `#list` org+dates / run-summary / usage-stats.
-Authority: [`AGENTS.md`](../AGENTS.md). Pasteable:
+**Cause:** core **0.4.144–0.4.147** used `text-align: start` inside
+`trailingMetaAlign="start"` (aimed at run-summary digit columns) and
+regressed **0.4.133** end-ink for Experiences.
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.148** (end-ink restored in
+plain `trailingSupportingText` columns; trailing-stats cells stay
+start-aligned). Keep consumer `trailingMetaAlign="start"` on date catalogs —
+do not patch with app CSS. Live: `#list` org+dates. Authority:
+[`AGENTS.md`](../AGENTS.md). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status meta far from --with-end action
@@ -1811,7 +1814,7 @@ toolbar / row end (IconButtons, Switch+Toggle), not a status legend and not
 a lone tip glyph.
 
 **Fix in the consumer:** Card-body `ControlStack` of `ControlRow`s — `label` =
-short status name, children = tip glyph (or muted `—`). Form-host stack keeps
+short status name, children = tip glyph (or muted `-`). Form-host stack keeps
 label-fill + end-hug so glyphs share one trailing edge. If an apply / fix
 `IconButton` shares the readiness row, put **glyph + button** in one cluster
 **inside** that `ControlRow` — never lift the lone glyph into a Card-body
