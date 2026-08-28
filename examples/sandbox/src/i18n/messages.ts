@@ -664,7 +664,7 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Default **soft-wrap** (`wrap`) uses a **single visible textarea** + native `::selection` (Chromium textarea vs `<pre>` wrap at different breakpoints — no dual-layer overlay). **Live token colors while typing** → `wrap={false}` (dual-layer under transparent caret). **`readOnly`** → single `<pre>` (full syntax colors + native selection).",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Default **soft-wrap** (`wrap`): with `language` / `highlightProfile` → **visual-line token overlay** (`--soft-wrap-lines`); plain text → **single visible textarea** + native `::selection` (`--soft-wrap-single`). **Live token colors while typing** (classic dual-layer) → `wrap={false}`. **`readOnly`** → single `<pre>` (full syntax colors + native selection).",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
     "Soft-wrap editable in a narrow host: long path wraps on one textarea — Ctrl+A / drag-select uses native wash (no mirror overlay). Need live token colors while editing → `wrap={false}`.",
@@ -676,7 +676,7 @@ const en = {
   "globals.codeBlockFileBodyHelp":
     "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "Same file body with `readOnly` — full highlight on one pre; drag-select should not show striped / misaligned wash (contrast with overlay while editing).",
+    "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` stays single textarea (no live token overlay — use `wrap={false}` for dual-layer colors while typing).",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2496,7 +2496,7 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认 **软换行**（`wrap`）为 **单层可见 textarea** + 原生 `::selection`（Chromium 下 textarea 与 `<pre>` 换行点不同 — 不做双层 overlay）。**编辑时 live token 色** → `wrap={false}`（透明 caret 下双层高亮）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认 **软换行**（`wrap`）：有 `language` / `highlightProfile` → **visual-line token overlay**（`--soft-wrap-lines`）；纯文本 → **单层可见 textarea** + 原生 `::selection`（`--soft-wrap-single`）。**编辑时 live token 色**（经典双层）→ `wrap={false}`。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
     "软换行可编辑 + 窄宿主：长路径在单层 textarea 上换行 — Ctrl+A / 拖选走原生 wash（无镜像 overlay）。编辑时要 live token 色 → `wrap={false}`。",
@@ -2508,7 +2508,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockFileBodyHelp":
     "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "同一文件正文 + `readOnly` — 完整高亮单层 pre；拖选不应出现条纹/错位 wash（可与上方可编辑 overlay 对照）。",
+    "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 仍为单层 textarea（输入时无 live token overlay — 需 `wrap={false}` 才双层高亮）。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",

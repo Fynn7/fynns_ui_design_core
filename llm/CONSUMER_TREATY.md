@@ -1596,12 +1596,12 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88; soft-wrap single textarea ≥ **0.5.27** — visual-line overlay **0.5.23–0.5.26 removed**):** `readOnly` on
+**Fix in core (≥ 0.4.88; soft-wrap visual-line tokens ≥ **0.5.38** for highlighted edit; plain soft-wrap single textarea when language unknown):** `readOnly` on
 `variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
-native selection). Active edit + `wrap` → **single visible textarea** + native
-`::selection` (no live token overlay — dual-layer caused ghost glyphs / selection
-gaps). **Live token colors while typing** → `wrap={false}` (classic dual-layer
-`<pre>`). Live: Globals `#code-block` soft-wrap sample + file-body + readOnly pair.
+native selection). Active edit + `wrap` + highlight → **visual-line token overlay**
+(`--soft-wrap-lines`). Plain soft-wrap edit (unknown language) → single visible
+textarea. **`wrap={false}`** → classic dual-layer `<pre>`. Live: Globals `#code-block`
+soft-wrap sample + file-body + readOnly pair.
 **Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
 `FileBodyCodeBlock`); do not patch selection in app CSS. Bump
 `@fynn7/ui-design-core`. Pasteable:

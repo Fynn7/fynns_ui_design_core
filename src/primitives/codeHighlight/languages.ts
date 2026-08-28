@@ -398,6 +398,9 @@ const ALIASES: Record<string, CodeLanguageId> = {
   bash: "bash",
   sh: "sh",
   shell: "shell",
+  md: "markdown",
+  markdown: "markdown",
+  mdx: "markdown",
 };
 
 export function normalizeLanguage(language?: string): CodeLanguageId | null {
@@ -430,6 +433,9 @@ export function profileFor(language: CodeLanguageId): LangProfile {
     case "sh":
     case "shell":
       return BASH_PROFILE;
+    case "markdown":
+    case "md":
+      return MARKUP_PROFILE;
     default:
       return JS_PROFILE;
   }

@@ -1252,12 +1252,13 @@ classes.
   prefer `codeLanguageFromPath(path)` for suffixed file bodies (`.txt` /
   extensionless → `null` → Textarea OK); **`readOnly`** on `variant="editable"`
   renders a **single** `.fynns-code-block-pre` (full token colors + native
-  `::selection` — not the textarea overlay). Soft-wrap **edit** (`wrap` default)
-  uses a **single visible textarea** + native `::selection` — Chromium soft-wraps
-  textarea vs `<pre>` at different breakpoints; dual-layer overlay caused ghost
-  glyphs, selection gaps, and remeasure jank (visual-line path removed ≥ **0.5.27** / ship **0.5.28**).
-  **Live token colors while typing** → `wrap={false}` (classic dual-layer
-  `<pre>` under transparent caret). Editable highlight spans
+  `::selection` — not the textarea overlay). Soft-wrap **edit** with a known
+  `language` / `highlightProfile` (≥ **0.5.38**) → **visual-line token overlay**
+  (textarea mirror measures wrap columns; one `pre` row per visual line). Plain
+  soft-wrap edit (unknown language) → **single visible textarea** + native
+  `::selection`. Classic dual-layer `<pre>` under transparent caret caused ghost
+  glyphs when `<pre>` soft-wrapped (avoided by visual-line rows). **`wrap={false}`**
+  still uses dual-layer deferred highlight. Editable highlight spans
   inherit textarea font-weight (no bold keyword/module metrics). `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); vertical thumb only when content exceeds the host
@@ -1265,7 +1266,7 @@ classes.
   pad / trailing-newline noise); focus = quiet Input-like border
   (`--fynns-focus-border-mix`), not an inset ring;
   supported `language` → zero-dep `--fynns-code-*` spans (`ts`/`js`/`py`/`cpp`/
-  `css`/`json`/`xml`/`html`/`bash`/… or consumer `registerHighlightLanguage` /
+  `css`/`json`/`xml`/`html`/`bash`/`markdown`/… or consumer `registerHighlightLanguage` /
   `highlightProfile`); unknown → plain mono;
   copy fades in on hover, keyboard via :focus-visible), Stepper, Dropzone, Avatar /
   AvatarGroup

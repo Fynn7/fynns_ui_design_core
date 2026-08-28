@@ -579,8 +579,7 @@ Card 包文件正文 → `chrome="plain"`；**PageScroll / Card / Dialog 默认
 autoGrow**（整页滚动）；`autoGrow={false}` **仅** fill 宿主（FullscreenDialog
 填满、SplitPane、`textarea { height: 100% }`）。
 **查看**（不可编辑）→ `readOnly`（单层 `<pre>` + 完整 token 色 + 原生选区 — 禁止
-view 模式仍走 textarea overlay）。软换行编辑（默认 `wrap`）core ≥ **0.5.27**
-为单层可见 textarea + 原生 `::selection`（visual-line overlay 0.5.23–0.5.26 已移除）。
+view 模式仍走 textarea overlay）。软换行 + 已知 `language` / `highlightProfile`（≥ **0.5.38**）→ visual-line token overlay（`--soft-wrap-lines`）；无高亮语言 → 单层可见 textarea（`--soft-wrap-single`）。
 打字时要 live token 色 → `wrap={false}`。
 **不要**用 `ChatMarkdown` 当 `.md` 源文件编辑器。对照 sandbox `#code-block`
 file-body + readOnly 对照 Card；条约：`llm/CONSUMER_TREATY.md` **Textarea for a
