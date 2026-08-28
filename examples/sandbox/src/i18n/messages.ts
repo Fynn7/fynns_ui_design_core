@@ -946,7 +946,7 @@ const en = {
   "globals.formRecipeNotesHint": "Optional free-form notes for this sample — not persisted.",
   "globals.formRecipeHighlights": "Highlights",
   "globals.formRecipeHighlightsHint":
-    "Repeatable rows: Textarea + trailing remove in `.fynns-control-cluster--end-align` (nowrap — not bare `.fynns-control-cluster`, which wraps the IconButton under tall text).",
+    "Repeatable rows: Textarea + trailing remove in `.fynns-control-cluster--end-align` (nowrap — not bare `.fynns-control-cluster`, which wraps the IconButton under tall text). Delete centers vertically on the autoGrow well.",
   "globals.formRecipeHighlightsEmpty": "No highlight rows yet. Add one below.",
   "globals.formRecipeHighlightItem": "Highlight {n}",
   "globals.formRecipeHighlightRemove": "Remove row",
@@ -2766,7 +2766,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeNotesHint": "本样例的可选自由备注 — 不会持久化。",
   "globals.formRecipeHighlights": "要点",
   "globals.formRecipeHighlightsHint":
-    "可重复行：Textarea + 贴尾删除须用 `.fynns-control-cluster--end-align`（nowrap）；裸 `.fynns-control-cluster` 会把 IconButton 换行到多行文本下方。",
+    "可重复行：Textarea + 贴尾删除须用 `.fynns-control-cluster--end-align`（nowrap）；裸 cluster 会把 IconButton 换行到多行文本下方。删除盘在 autoGrow 井上竖直居中。",
   "globals.formRecipeHighlightsEmpty": "尚无要点行。请在下方添加。",
   "globals.formRecipeHighlightItem": "要点 {n}",
   "globals.formRecipeHighlightRemove": "移除行",

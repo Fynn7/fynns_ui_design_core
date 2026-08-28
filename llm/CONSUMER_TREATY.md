@@ -2126,6 +2126,10 @@ between entries.
 `.fynns-control-cluster--end-align` shares the Select grow flex recipe; sandbox
 `#form-recipe` Highlights teaches the row.
 
+**Fix in core (≥ 0.5.30):** delete IconButton **centers vertically** on the
+autoGrow Textarea well. The Select + refresh rule (`align-self: flex-start`) no
+longer applies to Textarea `__grow` rows — only `.fynns-select.__grow`.
+
 **Fix in the consumer:** each repeatable row →
 `.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea`
 `className="fynns-control-cluster__grow"` + sibling `Tooltip` → `IconButton`.

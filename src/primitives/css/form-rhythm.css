@@ -280,12 +280,27 @@
 }
 
 /* Select + row action: sibling IconButton stays on the trigger band when the
-   grow item stacks results — not vertically centered in trigger + list. */
-.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+   grow item stacks results — not vertically centered in trigger + list.
+   Textarea + row action uses center (below) — autoGrow wells can exceed 40dp. */
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > .fynns-tooltip-trigger:has(.fynns-btn--icon),
-.fynns-control-cluster--end-align:has(> .fynns-control-cluster__grow)
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > .fynns-btn--icon {
   align-self: flex-start;
+}
+
+/* Textarea + row action (repeatable bullet rows): one nowrap row; delete centers
+   on the autoGrow well — not pinned to the top band like Select + refresh. */
+.fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow) {
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow)
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(> .fynns-textarea.fynns-control-cluster__grow)
+  > .fynns-btn--icon {
+  align-self: center;
+  margin-block-start: 0;
 }
 
 .fynns-control-cluster--end-align
