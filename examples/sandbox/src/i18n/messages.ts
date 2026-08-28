@@ -666,13 +666,13 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Soft-wrap is on by default (`wrap`). **`readOnly`** → single `<pre>` (full syntax colors + native selection). Soft-wrap edit is a **single visible textarea** (no dual-layer ghost glyphs) — use `wrap={false}` for live token colors while typing.",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Default **soft-wrap** (`wrap`) uses a **single visible textarea** + native `::selection` (Chromium textarea vs `<pre>` wrap at different breakpoints — no dual-layer overlay). **Live token colors while typing** → `wrap={false}` (dual-layer under transparent caret). **`readOnly`** → single `<pre>` (full syntax colors + native selection).",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "Soft-wrap editable: long path wraps in a narrow host — single textarea layer (no ghost glyphs). Select across a wrap; native selection wash. Live tokens while typing → `wrap={false}`.",
+    "Soft-wrap editable in a narrow host: long path wraps on one textarea — Ctrl+A / drag-select uses native wash (no mirror overlay). Need live token colors while editing → `wrap={false}`.",
   "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
   "globals.codeBlockSoftWrapSelCode":
-    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
+    "loadvolume D:/sample/projects/thesis/_data/zsi/zsi-heptane/zsi-heptane.dat\necho done\n",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -924,8 +924,11 @@ const en = {
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
   "globals.formRecipeHostDialog":
-    "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). **Also the default host for in-canvas catalog create/edit** (List stays mounted — see `#list` status+action). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays.",
+    "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). **Also the default host for in-canvas catalog create/edit** (List stays mounted — see `#list` status+action). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays. **File-body edit:** second button opens `CodeBlock` `variant=\"editable\"` in the same `size=\"lg\"` shell — panel must fill to the lg ceiling (not ~280px).",
   "globals.formRecipeDialogOpen": "Open Dialog form",
+  "globals.formRecipeFileDialogOpen": "Open Dialog file body",
+  "globals.formRecipeFileDialogTitle": "Edit sample file",
+  "globals.formRecipeFileDialogSave": "Save",
   "globals.formRecipeDialogCancel": "Cancel",
   "globals.formRecipeDialogCopyPrompt": "Copy browser prompt",
   "globals.formRecipeDialogImportJson": "Import JSON reply",
@@ -2477,13 +2480,13 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认软换行（`wrap`）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。软换行编辑为**单层可见 textarea**（无双层幽灵字）— 打字时要 live token 色请 `wrap={false}`。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认 **软换行**（`wrap`）为 **单层可见 textarea** + 原生 `::selection`（Chromium 下 textarea 与 `<pre>` 换行点不同 — 不做双层 overlay）。**编辑时 live token 色** → `wrap={false}`（透明 caret 下双层高亮）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "软换行可编辑：窄宿主长路径换行 — 单层 textarea（无幽灵字）。跨换行拖选走原生选区。打字时要 live token 色 → `wrap={false}`。",
+    "软换行可编辑 + 窄宿主：长路径在单层 textarea 上换行 — Ctrl+A / 拖选走原生 wash（无镜像 overlay）。编辑时要 live token 色 → `wrap={false}`。",
   "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
   "globals.codeBlockSoftWrapSelCode":
-    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
+    "loadvolume D:/sample/projects/thesis/_data/zsi/zsi-heptane/zsi-heptane.dat\necho done\n",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -2735,8 +2738,11 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
   "globals.formRecipeHostDialog":
-    "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。**也是主画布目录创建/编辑的默认宿主**（List 保持挂载 — 见 `#list` status+action）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。",
+    "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。**也是主画布目录创建/编辑的默认宿主**（List 保持挂载 — 见 `#list` status+action）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。**文件体编辑：** 第二颗按钮在同一 `size=\"lg\"` 壳内打开 `CodeBlock` `variant=\"editable\"` — panel 须撑满 lg 上限（非 ~280px）。",
   "globals.formRecipeDialogOpen": "打开 Dialog 表单",
+  "globals.formRecipeFileDialogOpen": "打开 Dialog 文件体",
+  "globals.formRecipeFileDialogTitle": "编辑示例文件",
+  "globals.formRecipeFileDialogSave": "保存",
   "globals.formRecipeDialogCancel": "取消",
   "globals.formRecipeDialogCopyPrompt": "复制浏览器 prompt",
   "globals.formRecipeDialogImportJson": "导入 JSON 回复",

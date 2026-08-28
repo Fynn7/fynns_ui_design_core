@@ -103,41 +103,67 @@
 
 /*
  * Form-host centered Dialog: stretch panel width to the `size` ceiling when
- * body hosts FieldStack / FieldBlock / multiline fields. `width: max-content`
- * alone shrinks to the M3 min (~280px) while tall Textarea stacks read as a
- * skinny column — fill to max-width instead (M3 basic max 560dp via lg).
- * ControlStack-only preference dialogs keep content-fit width.
+ * body hosts FieldStack / FieldBlock / multiline fields / CodeBlock file
+ * editors. `width: max-content` alone shrinks to the M3 min (~280px) while
+ * tall Textarea / editable CodeBlock stacks read as a skinny column — fill to
+ * max-width instead (M3 basic max 560dp via lg). ControlStack-only preference
+ * dialogs keep content-fit width.
  */
 .fynns-dialog-panel--centered:has(
   > .fynns-dialog-body
-    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+    :is(
+      .fynns-field-stack,
+      .fynns-field-block,
+      .fynns-textarea,
+      .fynns-otp-input,
+      .fynns-code-block
+    )
 ) {
   width: min(100%, var(--fynns-layout-dialog-max-width));
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-sm:has(
   > .fynns-dialog-body
-    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+    :is(
+      .fynns-field-stack,
+      .fynns-field-block,
+      .fynns-textarea,
+      .fynns-otp-input,
+      .fynns-code-block
+    )
 ) {
   width: min(100%, var(--fynns-layout-dialog-max-width-sm));
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-md:has(
   > .fynns-dialog-body
-    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+    :is(
+      .fynns-field-stack,
+      .fynns-field-block,
+      .fynns-textarea,
+      .fynns-otp-input,
+      .fynns-code-block
+    )
 ) {
   width: min(100%, var(--fynns-layout-dialog-max-width-md));
 }
 
 .fynns-dialog-panel--centered.fynns-dialog-panel--size-lg:has(
   > .fynns-dialog-body
-    :is(.fynns-field-stack, .fynns-field-block, .fynns-textarea, .fynns-otp-input)
+    :is(
+      .fynns-field-stack,
+      .fynns-field-block,
+      .fynns-textarea,
+      .fynns-otp-input,
+      .fynns-code-block
+    )
 ) {
   width: min(100%, var(--fynns-layout-dialog-max-width-lg));
 }
 
 .fynns-dialog-panel--centered .fynns-field-stack,
-.fynns-dialog-panel--centered .fynns-field-block {
+.fynns-dialog-panel--centered .fynns-field-block,
+.fynns-dialog-panel--centered .fynns-code-block {
   width: 100%;
   max-width: 100%;
   min-width: 0;

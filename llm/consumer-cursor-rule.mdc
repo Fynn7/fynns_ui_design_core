@@ -147,9 +147,11 @@ alwaysApply: true
   `padding-top` / 负 margin 去「贴标题」。这不是 Card `chrome="plain"` 贴边
   （plain ≠ flush）。对照 sandbox `#fullscreen-flush`。
 - **长表单 / 编辑 Dialog** → body 用 `FieldStack` / `FieldBlock`（勿裸堆
-  `Input`）；`size="lg"`（M3 560dp 上限）。Core ≥ 0.4.110 会把表单 body **撑满
-  size 上限** — 禁止 private `.fynns-dialog-panel { width: … }`。正文超高时 panel
-  内滚动，勿发明 aspect-ratio CSS。对照 `#form-recipe` Dialog host。
+  `Input`）或 suffixed 文件体 **`CodeBlock` `variant="editable"`**；`size="lg"`
+  （M3 560dp 上限）。Core ≥ 0.4.110 会把表单 / 文件编辑 body **撑满 size 上限**
+  — 禁止 private `.fynns-dialog-panel { width: … }`。正文超高时 panel 内滚动，
+  勿发明 aspect-ratio CSS。对照 `#form-recipe` Dialog host（FieldStack + 文件体
+  CodeBlock）。
 - **不要**自造平行 Dialog 变体（`SettingsDialog` / Preferences 专用壳）/ 平行圆角卡片框。
 
 ## DestinationAppShell（默认主界面 — 强制）
@@ -580,8 +582,9 @@ Card 包文件正文 → `chrome="plain"`；**PageScroll / Card / Dialog 默认
 autoGrow**（整页滚动）；`autoGrow={false}` **仅** fill 宿主（FullscreenDialog
 填满、SplitPane、`textarea { height: 100% }`）。
 **查看**（不可编辑）→ `readOnly`（单层 `<pre>` + 完整 token 色 + 原生选区 — 禁止
-view 模式仍走 textarea overlay）。软换行编辑（默认 `wrap`）core ≥ **0.5.22**
-为单层可见 textarea（无双层幽灵字）；打字时要 live token 色 → `wrap={false}`。
+view 模式仍走 textarea overlay）。软换行编辑（默认 `wrap`）core ≥ **0.5.27**
+为单层可见 textarea + 原生 `::selection`（visual-line overlay 0.5.23–0.5.26 已移除）。
+打字时要 live token 色 → `wrap={false}`。
 **不要**用 `ChatMarkdown` 当 `.md` 源文件编辑器。对照 sandbox `#code-block`
 file-body + readOnly 对照 Card；条约：`llm/CONSUMER_TREATY.md` **Textarea for a
 suffixed file body** / **CodeBlock editable selection stripes** /

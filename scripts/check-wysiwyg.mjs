@@ -405,6 +405,31 @@ function assertRadiusMdThemeSynced() {
 
 assertRadiusMdThemeSynced();
 
+/**
+ * Centered Dialog form-host stretch must include CodeBlock file editors
+ * (PromptEditDialog / skill bodies) — not only FieldStack / Textarea.
+ */
+function assertDialogFormHostStretchIncludesCodeBlock() {
+  const chromeCss = read("src/primitives/css/chrome.css");
+  const marker =
+    ".fynns-dialog-panel--centered.fynns-dialog-panel--size-lg:has(";
+  const idx = chromeCss.indexOf(marker);
+  if (idx < 0) {
+    fail("[check-wysiwyg] dialog form-host stretch rule not found in chrome.css");
+    return;
+  }
+  const slice = chromeCss.slice(idx, idx + 600);
+  if (!slice.includes(".fynns-code-block")) {
+    fail(
+      "[check-wysiwyg] centered Dialog form-host :has() must include .fynns-code-block\n" +
+        "  so size=\"lg\" file-editor dialogs fill to the size ceiling (not ~280px skinny).\n" +
+        "  See chrome.css Form-host centered Dialog stretch rules.",
+    );
+  }
+}
+
+assertDialogFormHostStretchIncludesCodeBlock();
+
 if (errors.length) {
   for (const e of errors) console.error(`${e}\n`);
   process.exit(1);
