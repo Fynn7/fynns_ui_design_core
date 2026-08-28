@@ -17,7 +17,6 @@ const en = {
   "nav.motion": "Motion",
   "nav.templates": "Settings",
   "nav.templatesTip": "Language, templates & config export/import",
-  "nav.footerProject": "Sample project",
   "nav.footerAccountLabel": "Sample user",
   "nav.footerAccountLabelLong":
     "Sample user with a long display name that should fade at the end",
@@ -945,8 +944,7 @@ const en = {
   "globals.formRecipeNotes": "Notes",
   "globals.formRecipeNotesHint": "Optional free-form notes for this sample — not persisted.",
   "globals.formRecipeHighlights": "Highlights",
-  "globals.formRecipeHighlightsHint":
-    "Repeatable rows: Textarea + trailing remove in `.fynns-control-cluster--end-align` (nowrap — not bare `.fynns-control-cluster`, which wraps the IconButton under tall text). Delete centers vertically on the autoGrow well.",
+  "globals.formRecipeHighlightsHint": "One end-align row per entry; delete stays beside the well.",
   "globals.formRecipeHighlightsEmpty": "No highlight rows yet. Add one below.",
   "globals.formRecipeHighlightItem": "Highlight {n}",
   "globals.formRecipeHighlightRemove": "Remove row",
@@ -1853,7 +1851,6 @@ const zh: Record<MessageKey, string> = {
   "nav.motion": "动效",
   "nav.templates": "设置",
   "nav.templatesTip": "语言、模板与配置导入导出",
-  "nav.footerProject": "示例项目",
   "nav.footerAccountLabel": "示例用户",
   "nav.footerAccountLabelLong":
     "示例用户的超长显示名称用于验证截断端侧渐隐",
@@ -2765,8 +2762,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeNotes": "备注",
   "globals.formRecipeNotesHint": "本样例的可选自由备注 — 不会持久化。",
   "globals.formRecipeHighlights": "要点",
-  "globals.formRecipeHighlightsHint":
-    "可重复行：Textarea + 贴尾删除须用 `.fynns-control-cluster--end-align`（nowrap）；裸 cluster 会把 IconButton 换行到多行文本下方。删除盘在 autoGrow 井上竖直居中。",
+  "globals.formRecipeHighlightsHint": "每行一个 end-align 簇；删除盘贴在井旁。",
   "globals.formRecipeHighlightsEmpty": "尚无要点行。请在下方添加。",
   "globals.formRecipeHighlightItem": "要点 {n}",
   "globals.formRecipeHighlightRemove": "移除行",

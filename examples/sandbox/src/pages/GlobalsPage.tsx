@@ -609,11 +609,12 @@ function FormRecipeFields({
                   />
                   <Tooltip content={t("globals.formRecipeHighlightRemove")}>
                     <IconButton
+                      size="sm"
                       variant="ghost"
                       aria-label={t("globals.formRecipeHighlightRemove")}
                       onClick={() => removeHighlightAt(index)}
                     >
-                      <TrashIcon size={16} aria-hidden />
+                      <TrashIcon aria-hidden />
                     </IconButton>
                   </Tooltip>
                 </div>
