@@ -79,6 +79,20 @@ try {
   }
 
   await page.locator(".fynns-dialog-panel--size-lg .fynns-dialog-body").waitFor({
+    state: "attached",
+    timeout: 15000,
+  });
+  report.metrics.mounting = await measure(page);
+  if (report.metrics.mounting.dialogRailVisible === "true") {
+    report.issues.push("mounting: dialog thumb visible on overlay mount");
+  }
+  if (
+    report.metrics.mounting.rails.some((r) => !r.hidden && r.visible === "true")
+  ) {
+    report.issues.push("mounting: painted Y rail thumb visible during mount");
+  }
+
+  await page.locator(".fynns-dialog-panel--size-lg .fynns-dialog-body").waitFor({
     state: "visible",
     timeout: 15000,
   });

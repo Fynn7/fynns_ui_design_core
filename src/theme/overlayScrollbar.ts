@@ -272,11 +272,23 @@ function isRailNode(state: HostState, node: EventTarget | null): boolean {
   );
 }
 
+function isModalDialogOverlay(el: Element | null): el is HTMLElement {
+  return (
+    el instanceof HTMLElement &&
+    el.classList.contains("fynns-dialog-overlay") &&
+    !el.classList.contains("fynns-dialog-overlay--nonmodal")
+  );
+}
+
 function isModalDialogBodyHost(host: HTMLElement): boolean {
   return (
     host.classList.contains("fynns-dialog-body") &&
     !!host.closest(".fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)")
   );
+}
+
+function modalDialogBodyEnterHidden(host: HTMLElement, state: HostState): boolean {
+  return isModalDialogBodyHost(host) && state.dialogEnterSuppressed;
 }
 
 function syncThumbVisibility(state: HostState, host: HTMLElement) {
@@ -429,9 +441,10 @@ function updateHost(host: HTMLElement, state: HostState) {
   const yOverflow = scrollHeight - clientHeight > 1;
   const xOverflow = state.allowX && scrollWidth - clientWidth > 1;
   const paintRail = shouldPaintOverlayRail(host);
+  const enterHidden = modalDialogBodyEnterHidden(host, state);
 
-  state.railY.hidden = !paintRail || !yOverflow;
-  state.railX.hidden = !paintRail || !xOverflow;
+  state.railY.hidden = !paintRail || !yOverflow || enterHidden;
+  state.railX.hidden = !paintRail || !xOverflow || enterHidden;
 
   if (paintRail && yOverflow) {
     const copyRoot = codeBlockCopyFloatRoot(host);
@@ -519,6 +532,7 @@ function attach(host: HTMLElement) {
     raf: 0,
     onScroll: () => scheduleUpdate(host, state),
     onEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -536,6 +550,7 @@ function attach(host: HTMLElement) {
       syncThumbVisibility(state, host);
     },
     onRailYEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -549,6 +564,7 @@ function attach(host: HTMLElement) {
       syncThumbVisibility(state, host);
     },
     onRailXEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -590,7 +606,7 @@ function attach(host: HTMLElement) {
   }
 
   states.set(host, state);
-  if (isModalDialogBodyHost(host) && dialogEnterReleaseTimer) {
+  if (isModalDialogBodyHost(host) && modalDialogEnterActive) {
     state.dialogEnterSuppressed = true;
   }
   updateHost(host, state);
@@ -640,6 +656,8 @@ function onViewportChange() {
 const DIALOG_ENTER_REFRESH_MS = 280;
 
 let dialogEnterReleaseTimer = 0;
+let modalDialogEnterActive = false;
+let dialogEnterTransitionCleanup: (() => void) | null = null;
 
 function forEachModalDialogBodyHost(
   fn: (host: HTMLElement, state: HostState) => void,
@@ -655,32 +673,76 @@ function forEachModalDialogBodyHost(
 }
 
 function setModalDialogEnterSuppressed(suppress: boolean) {
-  forEachModalDialogBodyHost((_host, state) => {
+  forEachModalDialogBodyHost((host, state) => {
     state.dialogEnterSuppressed = suppress;
-    syncThumbVisibility(state, _host);
+    if (!suppress) {
+      /* Ignore pointerenter queued while the panel was still entering. */
+      state.hover = host.matches(":hover");
+    }
+    syncThumbVisibility(state, host);
+    scheduleUpdate(host, state);
   });
 }
 
-function beginModalDialogEnterSuppression() {
-  setModalDialogEnterSuppressed(true);
-  if (dialogEnterReleaseTimer) window.clearTimeout(dialogEnterReleaseTimer);
-  dialogEnterReleaseTimer = window.setTimeout(() => {
-    dialogEnterReleaseTimer = 0;
-    setModalDialogEnterSuppressed(false);
-    onViewportChange();
-  }, DIALOG_ENTER_REFRESH_MS);
-}
-
-function clearModalDialogEnterSuppression() {
+function releaseModalDialogEnterSuppression() {
+  if (!modalDialogEnterActive) return;
+  modalDialogEnterActive = false;
   if (dialogEnterReleaseTimer) {
     window.clearTimeout(dialogEnterReleaseTimer);
     dialogEnterReleaseTimer = 0;
   }
+  if (dialogEnterTransitionCleanup) {
+    dialogEnterTransitionCleanup();
+    dialogEnterTransitionCleanup = null;
+  }
   setModalDialogEnterSuppressed(false);
+  onViewportChange();
+}
+
+function armModalDialogEnterSuppression(
+  overlay: HTMLElement,
+  fromOpen: boolean,
+) {
+  if (overlay.classList.contains("fynns-dialog-overlay--nonmodal")) return;
+  modalDialogEnterActive = true;
+  setModalDialogEnterSuppressed(true);
+
+  if (dialogEnterReleaseTimer) window.clearTimeout(dialogEnterReleaseTimer);
+  if (dialogEnterTransitionCleanup) {
+    dialogEnterTransitionCleanup();
+    dialogEnterTransitionCleanup = null;
+  }
+
+  const panel = overlay.querySelector(".fynns-dialog-panel");
+  if (fromOpen && panel instanceof HTMLElement) {
+    const onEnd = (e: TransitionEvent) => {
+      if (e.target !== panel) return;
+      if (e.propertyName !== "opacity" && e.propertyName !== "transform") return;
+      releaseModalDialogEnterSuppression();
+    };
+    panel.addEventListener("transitionend", onEnd);
+    dialogEnterTransitionCleanup = () =>
+      panel.removeEventListener("transitionend", onEnd);
+  }
+
+  dialogEnterReleaseTimer = window.setTimeout(
+    releaseModalDialogEnterSuppression,
+    fromOpen ? DIALOG_ENTER_REFRESH_MS : DIALOG_ENTER_REFRESH_MS + 80,
+  );
+}
+
+function clearModalDialogEnterSuppression() {
+  releaseModalDialogEnterSuppression();
 }
 
 function scheduleOverlayLayerRefresh(options?: { suppressDialogEnter?: boolean }) {
-  if (options?.suppressDialogEnter) beginModalDialogEnterSuppression();
+  if (options?.suppressDialogEnter) {
+    document
+      .querySelectorAll<HTMLElement>(
+        '.fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)[data-state="open"]',
+      )
+      .forEach((overlay) => armModalDialogEnterSuppression(overlay, true));
+  }
   requestAnimationFrame(() => {
     requestAnimationFrame(onViewportChange);
   });
@@ -718,6 +780,16 @@ export function ensureOverlayScrollbars(): void {
       }
       record.addedNodes.forEach((node) => {
         if (node instanceof Element) {
+          const overlays: HTMLElement[] = isModalDialogOverlay(node)
+            ? [node]
+            : [
+                ...node.querySelectorAll<HTMLElement>(
+                  ".fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)",
+                ),
+              ];
+          for (const overlay of overlays) {
+            armModalDialogEnterSuppression(overlay, false);
+          }
           scan(node);
           if (
             node.matches(".fynns-dialog-overlay") ||

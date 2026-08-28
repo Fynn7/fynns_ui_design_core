@@ -106,7 +106,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    otherwise PageScroll / shell rails behind Dialog paint a idle thumb at
    `scrollTop=0` while the dialog body scrolls (phantom jump). **Modal
    `.fynns-dialog-body`:** suppress thumb until panel enter transition settles
-   (≥ **0.5.34**); on fine pointer reveal on **host hover only** — not
+   (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine pointer reveal on **host hover only** — not
    `:focus-within` from the focus trap. On fine pointer + hover
    (`(hover: hover) and (pointer: fine)`), overlay thumbs are **idle-transparent**
    and reveal on host `:hover` or `:focus-within` with a soft fade
