@@ -56,12 +56,3 @@ export function NavDrawerFooterAccount({
     </div>
   );
 }
-
-/** Workspace / repo context row — lives in drawer **body**, not footer slots. */
-export function NavDrawerWorkspaceRow({ label }: { label: string }) {
-  return (
-    <div className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill">
-      <span className="fynns-nav-drawer-footer-slot-label">{label}</span>
-    </div>
-  );
-}

@@ -17,8 +17,6 @@ const en = {
   "nav.motion": "Motion",
   "nav.templates": "Settings",
   "nav.templatesTip": "Language, templates & config export/import",
-  "nav.footerProject": "Sample project",
-  "nav.footerWorkspace": "Sample workspace",
   "nav.footerAccountLabel": "Sample user",
   "nav.footerAccountLabelLong":
     "Sample user with a long display name that should fade at the end",
@@ -945,6 +943,12 @@ const en = {
   "globals.formRecipeRefreshTip": "Reset timezone to default",
   "globals.formRecipeNotes": "Notes",
   "globals.formRecipeNotesHint": "Optional free-form notes for this sample — not persisted.",
+  "globals.formRecipeHighlights": "Highlights",
+  "globals.formRecipeHighlightsHint": "One end-align row per entry; delete stays beside the well.",
+  "globals.formRecipeHighlightsEmpty": "No highlight rows yet. Add one below.",
+  "globals.formRecipeHighlightItem": "Highlight {n}",
+  "globals.formRecipeHighlightRemove": "Remove row",
+  "globals.formRecipeHighlightAdd": "Add row",
   "globals.formRecipeAccess": "Access",
   "globals.formRecipeAccessHint": "Who can open this sample project (single choice).",
   "globals.formRecipeAccessAnyone": "Anyone with the link",
@@ -1227,7 +1231,7 @@ const en = {
   "globals.shellNavLongLabel":
     "Archive and sync-failure retry queue with very long destination label for ellipsis",
   "globals.shellHelp":
-    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navBodyExtra` (workspace / repo context row in drawer body — not footer slots), optional `navFooter` (Cursor-style **single** account row: Avatar + optional label — soft end fade **only when truncated** (`data-fade`, ≥ 0.4.130); short names stay opaque + settings IconButton end — **no** hairline above the footer; toggle **Show account name** / **Use long account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
+    "[adaptive · desktop default] Greenfield main UI: DestinationAppShell — pass `destinations`, `title`, optional `leadingExtra` / `trailing` IconButtons, optional `navFooter` (Cursor-style **single** account row: Avatar + optional label — soft end fade **only when truncated** (`data-fade`, ≥ 0.4.130); short names stay opaque + settings IconButton end — **no** hairline above the footer; toggle **Show account name** / **Use long account name** below; omit label → avatar/initial only with identity in Tooltip; not TopAppBar `trailing` for settings; **do not** also list Settings as a `NavigationDrawerItem`). **Settings body (hard):** software chrome only (locale / appearance / account) — click the footer gear in this sample. Feature / runtime / domain panels (providers, tools, catalogs) get their **own** destinations — never park them under Settings. This sample’s `leadingExtra` ArrowLeft is the **mode-exit** recipe — put back there (or TopAppBar `leading`), not inside `NavigationDrawer.headline`. Main canvas teaches **catalog ControlRow** as the first `PageScroll` child — its label midlines with the active `NavigationDrawerItem` (core ≥ 0.4.101 drops content-column pad-block-start to `--fynns-navdrawer-body-pad-block-start`). Internally uses ClippedNavShell — destinations are **binary**: labeled resizable `NavigationDrawer` or fully `hidden`. Crowding **closes** nav — never densify to an unlabeled icon-only `NavigationRail`. Standalone Rail demos on this page are intentional phone parts only. Live on sandbox Layout templates (this page).",
   "globals.bottomAppBarAria": "Sample bottom app bar",
   "globals.bottomAppBarSearch": "Search",
   "globals.bottomAppBarArchive": "Archive",
@@ -1847,8 +1851,6 @@ const zh: Record<MessageKey, string> = {
   "nav.motion": "动效",
   "nav.templates": "设置",
   "nav.templatesTip": "语言、模板与配置导入导出",
-  "nav.footerProject": "示例项目",
-  "nav.footerWorkspace": "示例工作区",
   "nav.footerAccountLabel": "示例用户",
   "nav.footerAccountLabelLong":
     "示例用户的超长显示名称用于验证截断端侧渐隐",
@@ -2759,6 +2761,12 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeRefreshTip": "重置为默认时区",
   "globals.formRecipeNotes": "备注",
   "globals.formRecipeNotesHint": "本样例的可选自由备注 — 不会持久化。",
+  "globals.formRecipeHighlights": "要点",
+  "globals.formRecipeHighlightsHint": "每行一个 end-align 簇；删除盘贴在井旁。",
+  "globals.formRecipeHighlightsEmpty": "尚无要点行。请在下方添加。",
+  "globals.formRecipeHighlightItem": "要点 {n}",
+  "globals.formRecipeHighlightRemove": "移除行",
+  "globals.formRecipeHighlightAdd": "添加行",
   "globals.formRecipeAccess": "访问范围",
   "globals.formRecipeAccessHint": "谁可以打开本样例项目（单选）。",
   "globals.formRecipeAccessAnyone": "任何有链接的人",
@@ -3040,7 +3048,7 @@ const zh: Record<MessageKey, string> = {
   "globals.shellNavLongLabel":
     "归档与同步失败的重试队列以及故意超长的目的地标签用来验证省略号截断",
   "globals.shellHelp":
-    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navBodyExtra`（工作区/仓库行在 drawer body — 不是 footer 双槽）、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`；**也不要**再把「设置」做成 `NavigationDrawerItem`）。**设置正文（硬）：** 只放软件壳层偏好（语言 / 外观 / 账户）— 点本样例底栏齿轮进入。功能 / 运行时 / 领域面板（后端、工具、目录）用**独立目的地**，禁止堆进设置。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。主画布以 **catalog ControlRow** 作为 `PageScroll` 首子 — 其标签与活跃 `NavigationDrawerItem` 中线对齐（core ≥ 0.4.101 把 content-column pad-block-start 降到 `--fynns-navdrawer-body-pad-block-start`）。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
+    "[自适应 · 桌面默认] Greenfield 主界面：DestinationAppShell — 传 `destinations`、`title`、可选 `leadingExtra` / `trailing` IconButton、可选 `navFooter`（Cursor 式**单**账户行：Avatar + 可选**渐隐**标签 + 右端设置齿轮 — footer **无**顶部分隔线；下方 Switch 切换「显示账户名」；省略标签时仅头像/首字母，身份放 Tooltip；不要把设置塞进 TopAppBar `trailing`；**也不要**再把「设置」做成 `NavigationDrawerItem`）。**设置正文（硬）：** 只放软件壳层偏好（语言 / 外观 / 账户）— 点本样例底栏齿轮进入。功能 / 运行时 / 领域面板（后端、工具、目录）用**独立目的地**，禁止堆进设置。本样例 `leadingExtra` 的 ArrowLeft 即**模式返回**配方 — 返回放这里（或 TopAppBar `leading`），不要塞进 `NavigationDrawer.headline`。主画布以 **catalog ControlRow** 作为 `PageScroll` 首子 — 其标签与活跃 `NavigationDrawerItem` 中线对齐（core ≥ 0.4.101 把 content-column pad-block-start 降到 `--fynns-navdrawer-body-pad-block-start`）。内部是 ClippedNavShell — 目的地**二态**：全宽可调 `NavigationDrawer` 或完全 `hidden`。拥挤时**收起**侧栏 — 禁止 densify 成仅 icon 的 unlabeled `NavigationRail`。本页独立 Rail 样例仅作有意的手机零件。样例在 sandbox 布局模板（本页）首屏。",
   "globals.bottomAppBarAria": "示例底部应用栏",
   "globals.bottomAppBarSearch": "搜索",
   "globals.bottomAppBarArchive": "归档",

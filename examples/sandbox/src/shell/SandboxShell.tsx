@@ -40,10 +40,7 @@ import {
 import { AgentInputBar } from "../pages/AgentInputBar";
 import { CardPreviewCanvas } from "../pages/CardPreviewCanvas";
 import { CollapsiblePreviewCanvas } from "../pages/CollapsiblePreviewCanvas";
-import {
-  NavDrawerFooterAccount,
-  NavDrawerWorkspaceRow,
-} from "../components/NavDrawerFooterAccount";
+import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
 import { PropertyInspector } from "../pages/PropertyInspector";
 import { FoundationsPage } from "../pages/FoundationsPage";
 import { GlobalsInspector } from "../pages/GlobalsInspector";
@@ -263,7 +260,6 @@ export function SandboxShell() {
       footer={navFooter}
     >
       {destinations}
-      <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
     </NavigationDrawer>
   );
 

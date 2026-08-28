@@ -144,7 +144,7 @@ import {
   useOverflowBounds,
 } from "@fynns/ui";
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
-import { useLocale, type MessageKey } from "../i18n";
+import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { TokenList } from "../components/TokenList";
 import {
@@ -427,6 +427,8 @@ function FormRecipeFields({
   onTimezoneChange,
   notes,
   onNotesChange,
+  highlights,
+  onHighlightsChange,
   access,
   onAccessChange,
   accessOther,
@@ -447,7 +449,7 @@ function FormRecipeFields({
   onExperimentalChange,
 }: {
   idPrefix: string;
-  t: (key: MessageKey) => string;
+  t: TranslateFn;
   region: string;
   onRegionChange: (value: string) => void;
   displayName: string;
@@ -460,6 +462,8 @@ function FormRecipeFields({
   onTimezoneChange: (value: string) => void;
   notes: string;
   onNotesChange: (value: string) => void;
+  highlights: string[];
+  onHighlightsChange: (value: string[]) => void;
   access: "anyone" | "team" | "private" | "other";
   onAccessChange: (value: "anyone" | "team" | "private" | "other") => void;
   accessOther: string;
@@ -484,6 +488,17 @@ function FormRecipeFields({
   const emailId = `${idPrefix}-email`;
   const timezoneId = `${idPrefix}-timezone`;
   const notesId = `${idPrefix}-notes`;
+  const updateHighlightAt = (index: number, value: string) => {
+    const next = [...highlights];
+    next[index] = value;
+    onHighlightsChange(next);
+  };
+  const removeHighlightAt = (index: number) => {
+    onHighlightsChange(highlights.filter((_, i) => i !== index));
+  };
+  const addHighlight = () => {
+    onHighlightsChange([...highlights, ""]);
+  };
   const accessName = `${idPrefix}-access`;
   const accessOtherId = `${idPrefix}-access-other`;
   const previewId = `${idPrefix}-preview-length`;
@@ -570,6 +585,48 @@ function FormRecipeFields({
             onChange={(event) => onNotesChange(event.target.value)}
             minRows={2}
           />
+        </FieldBlock>
+        <FieldBlock
+          label={t("globals.formRecipeHighlights")}
+          description={t("globals.formRecipeHighlightsHint")}
+        >
+          {highlights.length === 0 ? (
+            <FieldHint>{t("globals.formRecipeHighlightsEmpty")}</FieldHint>
+          ) : (
+            <FieldStack>
+              {highlights.map((entry, index) => (
+                <div
+                  key={`${idPrefix}-highlight-${index}`}
+                  className="fynns-control-cluster fynns-control-cluster--end-align"
+                >
+                  <Textarea
+                    className="fynns-control-cluster__grow"
+                    value={entry}
+                    minRows={2}
+                    autoGrow
+                    aria-label={t("globals.formRecipeHighlightItem", { n: index + 1 })}
+                    onChange={(event) => updateHighlightAt(index, event.target.value)}
+                  />
+                  <Tooltip content={t("globals.formRecipeHighlightRemove")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.formRecipeHighlightRemove")}
+                      onClick={() => removeHighlightAt(index)}
+                    >
+                      <TrashIcon aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              ))}
+            </FieldStack>
+          )}
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Button variant="tonal" size="sm" onClick={addHighlight}>
+              <PlusIcon size={16} aria-hidden />
+              {t("globals.formRecipeHighlightAdd")}
+            </Button>
+          </div>
         </FieldBlock>
       </FieldStack>
       <Divider />
@@ -969,6 +1026,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRevealEmail, setFormRevealEmail] = useState(false);
   const [formTimezone, setFormTimezone] = useState("UTC");
   const [formNotes, setFormNotes] = useState("");
+  const [formHighlights, setFormHighlights] = useState([
+    "Sample achievement one for the record.",
+    "Sample achievement two with longer copy that wraps to two lines when the host is narrow.",
+  ]);
   const [formAccess, setFormAccess] = useState<
     "anyone" | "team" | "private" | "other"
   >("team");
@@ -1002,6 +1063,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     onTimezoneChange: setFormTimezone,
     notes: formNotes,
     onNotesChange: setFormNotes,
+    highlights: formHighlights,
+    onHighlightsChange: setFormHighlights,
     access: formAccess,
     onAccessChange: setFormAccess,
     accessOther: formAccessOther,

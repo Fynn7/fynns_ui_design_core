@@ -237,7 +237,10 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   **any** sibling has those actions, **every** header in that stack shares the
   band — label→control stays `field-hint-gap` (8dp); **Input** `trailing` for
   in-field reveal; **Select + row action** → control-cluster band (not
-  `Select.trailing`). FieldBlocks with description/error (no choice cluster) open the next
+  `Select.trailing`); **repeatable Textarea + remove rows** → same
+  `.fynns-control-cluster--end-align` + `__grow` on each Textarea inside
+  `FieldStack` (not bare `.fynns-control-cluster` — default wrap parks delete
+  under tall autoGrow wells). FieldBlocks with description/error (no choice cluster) open the next
   sibling to `unit-stack-gap` (16dp); FieldBlocks that host a
   `.fynns-control-cluster` open to `form-cluster-gap` (32dp); sibling
   ControlBlocks open to `unit-stack-gap` (16dp). **Strongly recommend** a
@@ -1049,9 +1052,7 @@ classes.
   **not** TopAppBar `trailing` for settings; footer has
   **no** hairline divider above it — pad only, Cursor-style; when body content
   overflows, `.fynns-nav-drawer-body` gets `data-fade-bottom` / `data-fade-top`
-  mask fades into the footer / top — not a hard clip). **Workspace /
-  project context** belongs in drawer **body** (`.fynns-nav-drawer-footer-slot--pill`
-  row or `DestinationAppShell` `navBodyExtra` — not stacked footer slots). Omit
+  mask fades into the footer / top — not a hard clip). Omit
   account label → avatar/initial only; put identity in `Tooltip`. SkipLink,
   Breadcrumb, Pagination (list/table pager: **`.fynns-pagination-bar`** —
   M3/MUI single footer row: rows-per-page Select + range start, content-width
@@ -1059,8 +1060,7 @@ classes.
   inline (`fynns-scroll`); do not grow Select to crush page discs)
 - **App shells:** **`DestinationAppShell` (default greenfield template)** —
   declarative `destinations[]` / `title` / optional `leadingExtra` /
-  `trailing` / optional `navBodyExtra` (workspace row in drawer body) /
-  `navFooter` (Cursor-style single account row + settings end) / `children` /
+  `trailing` / `navFooter` (Cursor-style single account row + settings end) / `children` /
   optional `aside` (not assumed Chat). Internally
   wires `ClippedNavShell` + `TopAppBar` + labeled `NavigationDrawer` + optional
   `EndAside`. Destinations are **binary**: open labeled drawer (resizable) or
@@ -1405,6 +1405,7 @@ classes.
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Settings Card scope / field policy copy | **Compress:** Card `actions` **`InfoHint`** (≤1) for section scope; **`FieldBlock` `actions` `InfoHint`** for field policy; **Tooltip** on row **IconButton** for reload/cache behavior. **`FieldHint` / `description`** = one short line only (validation / format / empty). Live: `#field-header` | Card-body `<FieldHint>` essay before `FieldStack`; multi-sentence `FieldBlock` `description`; duplicate same copy in hint + tooltip |
   | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` **`size="sm"`** when the field label row has `InfoHint` `size="sm"` (same Card trailing icon column — hover-disk **end edges** share one vertical line with FieldHeader actions and ControlRow probe InfoHints; do **not** leave refresh at default `md` 40dp). **Form control text-start (hard — glyphs, not boxes):** when the same Card / Dialog mixes `FieldBlock` / Select / Input with a `ControlStack` of probe / status `ControlRow`s, `ControlRow` **label** text start aligns with Select trigger / Input **value** text (core ≥ **0.4.138** — `--fynns-form-control-text-inset-inline` = hairline + capsule + field-pad); do **not** treat ControlRow box left ≡ Select shell left as done. FieldBlock **titles** stay flush with the control outer edge. Reload/policy copy in **Tooltip** (action) + optional **`InfoHint` on label row** — not `FieldBlock` `description`; `#field-header` | `Select.trailing` beside chevron; **ControlRow label flush to Select shell** while value text is inset; `FieldBlock` label-row refresh; private `align-self`; Card-body / `FieldBlock` **FieldHint** essays for session or reload policy; **sm InfoHint + md refresh** in one Card (disks jump left/right) |
+  | **Repeatable multiline rows** (bullet / highlight list in Dialog — Textarea + remove per row) | **`FieldBlock` + `FieldStack`**; each row = **one** `.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea` `className="fynns-control-cluster__grow"` + trailing `Tooltip` → `IconButton` (delete **vertically centered** on the autoGrow well — core ≥ **0.5.30**; Select + refresh stays trigger-band `flex-start`). Add row = end-align `Button`/`IconButton` strip below the stack. Default `.fynns-control-cluster` is `flex-wrap: wrap` — tall autoGrow Textarea **wraps** the IconButton to the next line without `--end-align`. Live: `#form-recipe` Highlights | Bare `.fynns-control-cluster` (remove parks under the well); delete top-pinned on multi-line wells; ListItem / `--with-end` hover chrome for static catalog rows; private margin to fake inline delete |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | **Catalog list chrome** (section name + count \| IconButton strip — e.g. `Servers (3/3)`) | Standalone `ControlRow` (fills host: label `1fr`, actions end-hug) + **one** `.fynns-control-cluster` of **`md`** `IconButton`s (overflow / sort menus → `DropdownMenu` **`iconOnly`**). **Same destination page:** match List `trailing` `size`. Live: `#rhythm` catalog strip | `ControlRow` as content-sized island (actions float mid-left); loose IconButton siblings without a cluster; private `hub-spread` / `space-between` for the same job; bare labeled `.fynns-btn` DropdownMenu beside IconButtons (48×40 pill vs 32dp circle) |
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
