@@ -906,7 +906,12 @@ export const LIST_TOKENS = {
    */
   "height-2": "3.5rem",
   "height-3": "5.5rem",
-  "pad-inline": "1rem",
+  /**
+   * Row copy inset inside the radius-3xl pill (aliases
+   * `--fynns-layout-strip-pad-inline` / 20dp — same long-strip text breath as
+   * Banner / Snackbar; was 16dp and read cramped on 56dp catalog rows).
+   */
+  "pad-inline": "var(--fynns-layout-strip-pad-inline)",
   "pad-block": "0.5rem",
   /**
    * Outer inset on `.fynns-list` so `radius-3xl` row highlights breathe

@@ -2037,6 +2037,24 @@ copy→disk breath.
 aliases `--fynns-layout-control-cluster-gap` (**4dp**). Consumer: bump only —
 no app CSS. Live: sandbox `#list` path catalog / org+dates (hover a row).
 
+## Failure mode this treaty targets: List row copy cramped on the start edge
+
+Symptoms on a page-catalog `ListItem` (Applications / Experiences-style
+create-edit rows — headline + org `supportingText` + short status meta):
+
+- Headline / supporting copy sits visually tight against the **left** curve of
+  the `radius-3xl` hover pill (≈16dp inner pad felt narrow on 56dp rows)
+- Consumer adds private `padding-inline-start` on `.fynns-list-item*` or wraps
+  copy in an extra padded `div`
+
+**Cause:** legacy `--fynns-list-pad-inline: 1rem` (16dp) was one step below
+long-strip text breath on the same pill geometry.
+
+**Fix in core (≥ 0.5.36):** `--fynns-list-pad-inline` aliases
+`--fynns-layout-strip-pad-inline` (**20dp**). Trailing `--with-end` reserve
+uses the same token — end breath stays symmetric. Consumer: bump only — no app
+CSS. Live: sandbox `#list` status+action.
+
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 
 Symptoms in a wide usage / catalog table:
