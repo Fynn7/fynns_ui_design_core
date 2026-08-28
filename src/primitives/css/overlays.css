@@ -457,9 +457,10 @@
 .fynns-dialog-panel--centered {
   /* M3 basic dialog: ExtraLarge 28dp, min 280.
    * Default width is content-fit (`max-content`); `size` sets the max-width
-   * ceiling. Form hosts (FieldStack / FieldBlock / Textarea in body) stretch
-   * to that ceiling — see rules after `--size-lg` — so tall forms are not a
-   * skinny column. ControlStack-only rows keep content-fit. */
+   * ceiling. Form hosts (FieldStack / FieldBlock / Textarea / CodeBlock in
+   * body) stretch to that ceiling — see chrome.css after `--size-lg` — so tall
+   * forms / file editors are not a skinny column. ControlStack-only rows keep
+   * content-fit. */
   min-width: min(100%, 17.5rem);
   width: max-content;
   max-width: min(100%, var(--fynns-layout-dialog-max-width));

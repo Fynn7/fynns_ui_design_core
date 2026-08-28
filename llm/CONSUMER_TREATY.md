@@ -1599,11 +1599,12 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88):** `readOnly` on `variant="editable"` → **single**
-`.fynns-code-block-pre` (full token colors + native selection). Active edit +
-`wrap` → flat mono highlight layer (no token spans); `wrap={false}` when live
-token colors must show while typing. Live: Globals `#code-block` file-body +
-readOnly pair.
+**Fix in core (≥ 0.4.88; soft-wrap single textarea ≥ **0.5.27** — visual-line overlay **0.5.23–0.5.26 removed**):** `readOnly` on
+`variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
+native selection). Active edit + `wrap` → **single visible textarea** + native
+`::selection` (no live token overlay — dual-layer caused ghost glyphs / selection
+gaps). **Live token colors while typing** → `wrap={false}` (classic dual-layer
+`<pre>`). Live: Globals `#code-block` soft-wrap sample + file-body + readOnly pair.
 **Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
 `FileBodyCodeBlock`); do not patch selection in app CSS. Bump
 `@fynn7/ui-design-core`. Pasteable:
@@ -2274,21 +2275,24 @@ sandbox `#code-block` file-body Card (default autoGrow). Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Suffixed file body**.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: skinny form Dialog (tall FieldStack)
+## Failure mode this treaty targets: skinny form Dialog (tall FieldStack / CodeBlock)
 
-Symptoms: centered `Dialog` with many `FieldBlock` / `Textarea` rows looks like
-a **narrow column** (~280px) beside a tall scroll body — `size="lg"` does not
-seem to widen the panel.
+Symptoms: centered `Dialog` with many `FieldBlock` / `Textarea` rows **or** an
+editable `CodeBlock` file body looks like a **narrow column** (~280px) beside a
+tall scroll body — `size="lg"` does not seem to widen the panel.
 
 **Cause:** centered Dialog default width is `max-content`; `Input` /
-`Textarea` are `width: 100%` inside content-sized hosts, so the panel shrinks
-to the M3 min width while height grows — wrong aspect for inspector forms.
-**Fix in core:** when body hosts `FieldStack` / `FieldBlock` / `Textarea`,
-panel width **fills to the `size` ceiling** (`--fynns-layout-dialog-max-width-*`).
-**Fix in the consumer:** keep `FieldStack` tree (not bare stacked inputs);
-use `size="lg"` for long edit forms; do **not** private `.fynns-dialog-panel {
-width: … }`. Body scrolls at panel `max-height` — do not invent aspect-ratio
-CSS. Live: sandbox `#form-recipe` Dialog host. Authority:
+`Textarea` / `CodeBlock` are `width: 100%` inside content-sized hosts, so the
+panel shrinks to the M3 min width while height grows — wrong aspect for
+inspector forms and prompt / skill file editors.
+**Fix in core:** when body hosts `FieldStack` / `FieldBlock` / `Textarea` /
+`CodeBlock`, panel width **fills to the `size` ceiling**
+(`--fynns-layout-dialog-max-width-*`).
+**Fix in the consumer:** keep `FieldStack` tree (not bare stacked inputs) or
+`CodeBlock` `variant="editable"` for suffixed file bodies; use `size="lg"` for
+long edit dialogs; do **not** private `.fynns-dialog-panel { width: … }`. Body
+scrolls at panel `max-height` — do not invent aspect-ratio CSS. Live: sandbox
+`#form-recipe` Dialog hosts (FieldStack + file-body CodeBlock). Authority:
 [`AGENTS.md`](../AGENTS.md) **Inset decision tree** (Dialog width). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

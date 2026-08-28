@@ -175,30 +175,6 @@ function highlightSource(
   );
 }
 
-/**
- * Soft-wrap editable overlay: native `textarea::selection` paints the glyph
- * box under `line-height` leading, so wrap fragments / sibling lines show dark
- * seams. Mirror the range onto an in-flow `<mark>` (box-decoration-break) so
- * the wash fills each line box continuously.
- */
-function renderFlatHighlightWithSelection(
-  text: string,
-  selectionStart: number,
-  selectionEnd: number,
-): ReactNode {
-  if (selectionStart === selectionEnd || text.length === 0) return text;
-  const a = Math.max(0, Math.min(selectionStart, selectionEnd, text.length));
-  const b = Math.max(a, Math.min(Math.max(selectionStart, selectionEnd), text.length));
-  if (a >= b) return text;
-  return (
-    <>
-      {text.slice(0, a)}
-      <mark className="fynns-code-block-sel">{text.slice(a, b)}</mark>
-      {text.slice(b)}
-    </>
-  );
-}
-
 function initialEditableSource(props: CodeBlockEditableProps): string {
   if (props.value != null) return props.value;
   if (props.defaultValue != null) return props.defaultValue;
@@ -315,9 +291,6 @@ export function CodeBlock(props: CodeBlockProps) {
   const preRef = useRef<HTMLPreElement>(null);
   const updateScrollableRef = useRef<() => void>(() => {});
   const scrollSyncRafRef = useRef(0);
-  /** Editable soft-wrap selection → highlight `<mark>` (see renderFlat…). */
-  const [selectionRange, setSelectionRange] = useState({ start: 0, end: 0 });
-  const selectionRafRef = useRef(0);
   const maxHeightCss =
     maxHeight == null
       ? undefined
@@ -512,32 +485,12 @@ export function CodeBlock(props: CodeBlockProps) {
     }, 120);
   };
 
-  const syncSelectionRange = useCallback(() => {
-    const ta = inputRef.current;
-    if (!ta) return;
-    const start = ta.selectionStart;
-    const end = ta.selectionEnd;
-    setSelectionRange((prev) =>
-      prev.start === start && prev.end === end ? prev : { start, end },
-    );
-  }, []);
-
-  const scheduleSelectionSync = useCallback(() => {
-    if (selectionRafRef.current) cancelAnimationFrame(selectionRafRef.current);
-    selectionRafRef.current = requestAnimationFrame(() => {
-      selectionRafRef.current = 0;
-      syncSelectionRange();
-    });
-  }, [syncSelectionRange]);
-
   const onInputFocus = () => {
     focusedRef.current = true;
-    scheduleSelectionSync();
   };
 
   const onInputBlur = () => {
     focusedRef.current = false;
-    setSelectionRange({ start: 0, end: 0 });
     if (notifyTimerRef.current != null) {
       clearTimeout(notifyTimerRef.current);
       notifyTimerRef.current = null;
@@ -546,8 +499,8 @@ export function CodeBlock(props: CodeBlockProps) {
   };
 
   const onInputScroll = () => {
-    /* Sync now + one trailing frame — trackpad inertia / scroll coalescing
-       can leave the highlight layer a paint behind the caret otherwise. */
+    /* Dual-layer (`wrap={false}`) only — soft-wrap edit is single textarea. */
+    if (!highlightRef.current) return;
     syncHighlightScroll();
     if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
     scrollSyncRafRef.current = requestAnimationFrame(() => {
@@ -557,53 +510,33 @@ export function CodeBlock(props: CodeBlockProps) {
   };
 
   useEffect(() => {
-    if (!showEditorOverlay) return;
-    const onSelChange = () => {
-      if (!focusedRef.current) return;
-      if (document.activeElement !== inputRef.current) return;
-      scheduleSelectionSync();
-    };
-    document.addEventListener("selectionchange", onSelChange);
-    return () => {
-      document.removeEventListener("selectionchange", onSelChange);
-    };
-  }, [scheduleSelectionSync, showEditorOverlay]);
-
-  useEffect(() => {
     return () => {
       if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
-      if (selectionRafRef.current) cancelAnimationFrame(selectionRafRef.current);
     };
   }, []);
 
-  /* Trailing newline on the highlight layer only — keeps last-line height
-     aligned with the textarea caret. Defer tokenization so typing stays
-     responsive while spans catch up a frame or two behind.
-     Soft-wrap + overlay: token spans can shift wrap points vs the textarea —
-     use flat mono ink until `wrap={false}` or `readOnly` (single pre layer). */
-  const highlightBase = showEditorOverlay ? deferredSource : source;
+  /* Soft-wrap editable: Chromium soft-wraps `<textarea>` and `<pre>` at
+     different breakpoints even with identical CSS → dual-layer ghost glyphs /
+     wash. Single visible textarea + native `::selection`. Live token colors
+     while typing require `wrap={false}` (dual-layer highlight under transparent
+     caret). Trailing newline on the dual-layer highlight only — last-line
+     height aligned with the caret. Defer tokenization so typing stays
+     responsive. */
+  const dualLayerOverlay = showEditorOverlay && !wrap;
+  const softWrapSingle = showEditorOverlay && wrap;
+  const highlightBase = dualLayerOverlay ? deferredSource : source;
   const highlightText =
-    showEditorOverlay && !highlightBase.endsWith("\n")
+    dualLayerOverlay && !highlightBase.endsWith("\n")
       ? `${highlightBase}\n`
       : highlightBase;
-  const softWrapOverlay = showEditorOverlay && wrap;
-  const highlightFlat = softWrapOverlay && highlighted;
   const readonlyPreBody = highlighted
     ? highlightSource(source, language, highlightProfile)
     : source;
-  const overlayBodyRaw = highlightFlat
-    ? highlightText
-    : highlighted
+  const overlayBody = dualLayerOverlay
+    ? highlighted
       ? highlightSource(highlightText, language, highlightProfile)
-      : highlightText;
-  const overlayBody =
-    softWrapOverlay && typeof overlayBodyRaw === "string"
-      ? renderFlatHighlightWithSelection(
-          overlayBodyRaw,
-          selectionRange.start,
-          selectionRange.end,
-        )
-      : overlayBodyRaw;
+      : highlightText
+    : null;
 
   const rootProps = omitKnownKeys(props, [
     "variant",
@@ -639,8 +572,7 @@ export function CodeBlock(props: CodeBlockProps) {
         "fynns-code-block",
         plain && "fynns-code-block--plain",
         editable && "fynns-code-block--editable",
-        highlightFlat && "fynns-code-block--editable-flat-highlight",
-        softWrapOverlay && "fynns-code-block--soft-wrap-sel",
+        softWrapSingle && "fynns-code-block--soft-wrap-single",
         highlighted && "fynns-code-block--highlighted",
         !wrap && "fynns-code-block--nowrap",
         headlessCopy && "fynns-code-block--copy-float",
@@ -659,32 +591,29 @@ export function CodeBlock(props: CodeBlockProps) {
       )}
       {showEditorOverlay ? (
         <div className="fynns-code-block-editor">
-          <pre
-            ref={highlightRef}
-            className="fynns-code-block-highlight"
-            aria-hidden
-          >
-            <code className="fynns-code-block-code">{overlayBody}</code>
-          </pre>
+          {dualLayerOverlay ? (
+            <pre
+              ref={highlightRef}
+              className="fynns-code-block-highlight"
+              aria-hidden
+            >
+              <code className="fynns-code-block-code">{overlayBody}</code>
+            </pre>
+          ) : null}
           <textarea
             ref={inputRef}
             className="fynns-code-block-input fynns-scroll"
             style={surfaceStyle}
             value={source}
-            onChange={(event) => {
-              onInputChange(event);
-              scheduleSelectionSync();
-            }}
+            onChange={onInputChange}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
             onScroll={onInputScroll}
-            onSelect={scheduleSelectionSync}
-            onKeyUp={scheduleSelectionSync}
-            onMouseUp={scheduleSelectionSync}
             spellCheck={false}
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
+            lang="zxx"
             data-gramm="false"
             data-gramm_editor="false"
             data-enable-grammarly="false"

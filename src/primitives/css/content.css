@@ -3455,8 +3455,21 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-code-block--copy-float > .fynns-code-block-pre[data-scrollable],
+.fynns-code-block--copy-float .fynns-code-block-highlight[data-scrollable],
 .fynns-code-block--copy-float .fynns-code-block-input[data-scrollable] {
   /* Keep wrapped glyphs clear of the overlay thumb in the copy reserve column. */
+  padding-inline-end: calc(
+    var(--fynns-space-sm) + var(--fynns-scrollbar-size)
+  );
+}
+
+.fynns-code-block-highlight[data-scrollable] {
+  padding-inline-end: calc(
+    var(--fynns-layout-content-inset) + var(--fynns-scrollbar-size)
+  );
+}
+
+.fynns-code-block--copy-float .fynns-code-block-highlight[data-scrollable] {
   padding-inline-end: calc(
     var(--fynns-space-sm) + var(--fynns-scrollbar-size)
   );
@@ -3558,6 +3571,15 @@ a.fynns-breadcrumb-link:visited {
   -webkit-text-fill-color: transparent;
 }
 
+/* Chromium can still paint native spelling/grammar marks on transparent
+   overlay textareas even with `spellcheck=false` (soft-wrap editable). Hide
+   them so GSC / technical tokens are not covered in red squiggles. */
+.fynns-code-block-input::spelling-error,
+.fynns-code-block-input::grammar-error {
+  text-decoration-line: none;
+  background-color: transparent;
+}
+
 .fynns-code-block-input[data-scrollable] {
   overflow-y: auto;
 }
@@ -3582,43 +3604,17 @@ a.fynns-breadcrumb-link:visited {
   -webkit-text-fill-color: transparent;
 }
 
-/* Soft-wrap flat overlay: native selection paints glyph-box height under
-   line-height leading → dark seams between wrap fragments. Continuous wash
-   lives on `.fynns-code-block-sel` instead — hide the native wash. */
-.fynns-code-block--soft-wrap-sel .fynns-code-block-input::selection {
-  background: transparent;
-}
-
-/* Soft-wrap selection wash — fill the line box so wrap fragments abut.
-   Native `::selection` / plain background only cover the glyph box under
-   `line-height` leading → dark seams. Pad + canceling margin closes most of
-   the leading; vertical 0-blur shadows overshoot subpixel gaps without
-   shifting caret metrics vs the textarea. */
-.fynns-code-block-sel {
-  background: var(--fynns-color-accent-soft);
-  color: inherit;
-  -webkit-text-fill-color: inherit;
-  border-radius: 0;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  /* Half leading (body lh − 1em). */
-  --fynns-code-sel-lead: calc((1em * var(--fynns-line-height-body) - 1em) / 2);
-  padding-block: var(--fynns-code-sel-lead);
-  margin-block: calc(-1 * var(--fynns-code-sel-lead));
-  /* Overshoot into the seam (pad alone still left ~3px gaps in Chromium). */
-  box-shadow:
-    0 var(--fynns-code-sel-lead) 0 0 var(--fynns-color-accent-soft),
-    0 calc(-1 * var(--fynns-code-sel-lead)) 0 0 var(--fynns-color-accent-soft);
-}
-
-/* Editable soft-wrap: token spans shift wrap points vs the textarea — flat mono
-   ink on the highlight layer keeps caret + selection aligned (see AGENTS). */
-.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight,
-.fynns-code-block--editable-flat-highlight .fynns-code-block-highlight code {
+/* Soft-wrap editable: single visible textarea (no highlight `<pre>`). Chromium
+   soft-wraps textarea vs pre at different breakpoints — dual-layer caused
+   ghost glyphs / wash. Native `::selection` on the visible ink. Live token
+   colors while typing → `wrap={false}` (dual-layer under transparent caret). */
+.fynns-code-block--soft-wrap-single .fynns-code-block-input {
   color: var(--fynns-code-fg);
+  -webkit-text-fill-color: var(--fynns-code-fg);
 }
 
-.fynns-code-block--editable-flat-highlight .fynns-code-block-sel {
+.fynns-code-block--soft-wrap-single .fynns-code-block-input::selection {
+  background: var(--fynns-color-accent-soft);
   color: var(--fynns-code-fg);
   -webkit-text-fill-color: var(--fynns-code-fg);
 }

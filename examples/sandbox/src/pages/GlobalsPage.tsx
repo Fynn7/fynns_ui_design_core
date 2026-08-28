@@ -983,6 +983,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeCollapsibleOpen, setFormRecipeCollapsibleOpen] =
     useState(true);
   const [formRecipeDialogOpen, setFormRecipeDialogOpen] = useState(false);
+  const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
@@ -5111,7 +5112,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
-          {/* Narrow host so the long loadvolume path soft-wraps (selection wash demo). */}
+          {/* Narrow host — soft-wrap single textarea + native selection (no overlay). */}
           <div style={{ maxWidth: "22rem" }}>
             <CodeBlock
               variant="editable"
@@ -5740,13 +5741,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               />
             </Collapsible>
             <SandboxHelp text={t("globals.formRecipeHostDialog")} />
-            <Button
-              size="sm"
-              variant="tonal"
-              onClick={() => setFormRecipeDialogOpen(true)}
-            >
-              {t("globals.formRecipeDialogOpen")}
-            </Button>
+            <div className="sandbox-globals-row" style={{ gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="tonal"
+                onClick={() => setFormRecipeDialogOpen(true)}
+              >
+                {t("globals.formRecipeDialogOpen")}
+              </Button>
+              <Button
+                size="sm"
+                variant="tonal"
+                onClick={() => setFormRecipeFileDialogOpen(true)}
+              >
+                {t("globals.formRecipeFileDialogOpen")}
+              </Button>
+            </div>
           </div>
           <Dialog
             open={formRecipeDialogOpen}
@@ -5772,6 +5782,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Button>
               <Button size="sm" loading>
                 {t("globals.formRecipeDialogExtract")}
+              </Button>
+            </div>
+          </Dialog>
+          <Dialog
+            open={formRecipeFileDialogOpen}
+            onOpenChange={setFormRecipeFileDialogOpen}
+            title={t("globals.formRecipeFileDialogTitle")}
+            size="lg"
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+          >
+            <CodeBlock
+              variant="editable"
+              label={FILE_BODY_SAMPLE_PATH}
+              language={codeLanguageFromPath(FILE_BODY_SAMPLE_PATH) ?? "markdown"}
+              defaultValue={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockFileBodyAria")}
+            />
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setFormRecipeFileDialogOpen(false)}
+              >
+                {t("globals.formRecipeDialogCancel")}
+              </Button>
+              <Button size="sm" onClick={() => setFormRecipeFileDialogOpen(false)}>
+                {t("globals.formRecipeFileDialogSave")}
               </Button>
             </div>
           </Dialog>

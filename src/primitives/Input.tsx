@@ -27,6 +27,9 @@ function join(...parts: Array<string | false | null | undefined>) {
  * Narrow hosts: idle single-line value/placeholder uses ellipsis (not mid-glyph
  * hard clip); focused allows caret scroll with a hidden scrollbar — same
  * contract as SearchBar / Autocomplete text fields.
+ *
+ * Default `spellCheck={false}` — multilingual / technical copy must not show
+ * browser red squiggles; pass `spellCheck` to opt in.
  */
 export const Input = forwardRef(function Input(
   {
@@ -40,6 +43,7 @@ export const Input = forwardRef(function Input(
     errorText,
     id,
     "aria-describedby": ariaDescribedBy,
+    spellCheck = false,
     ...rest
   }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
@@ -56,6 +60,7 @@ export const Input = forwardRef(function Input(
       {...rest}
       id={inputId}
       ref={ref}
+      spellCheck={spellCheck}
       aria-invalid={isInvalid || undefined}
       aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
       className={join(

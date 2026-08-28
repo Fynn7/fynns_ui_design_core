@@ -1515,6 +1515,12 @@ a.fynns-chat-activity-artifact:hover {
   z-index: 1;
 }
 
+.fynns-chat-composer-input::spelling-error,
+.fynns-chat-composer-input::grammar-error {
+  text-decoration-line: none;
+  background-color: transparent;
+}
+
 /*
  * Collapsed flex item for leading | field | primary. Holds the ellipsis
  * placeholder overlay (textarea cannot paint text-overflow ellipsis).

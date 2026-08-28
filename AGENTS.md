@@ -1,4 +1,4 @@
-﻿# AGENTS.md — @fynns/ui-design-core
+# AGENTS.md — @fynns/ui-design-core
 
 Authoritative guide for humans and AI agents working with the fynns UI design
 system. This is the **single source of truth** for the design language; other
@@ -446,10 +446,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
 - **DON'T** invent consumer `width` / `min-width` on `.fynns-dialog-panel` to
-  fix a skinny tall form — body must use `FieldStack` / `FieldBlock` (core
-  stretches form hosts to the `size` ceiling); prefer `size="lg"` for long
-  inspector / edit dialogs. ControlStack-only preference rows stay content-fit.
-  Live: `#form-recipe` Dialog host.
+  fix a skinny tall form — body must use `FieldStack` / `FieldBlock` /
+  `CodeBlock` (core stretches form / file-editor hosts to the `size` ceiling);
+  prefer `size="lg"` for long inspector / edit dialogs. ControlStack-only
+  preference rows stay content-fit. Live: `#form-recipe` Dialog host (FieldStack
+  + file-body CodeBlock dialogs).
 - **DON'T** pin `CodeBlock` `variant="editable"` or form `Textarea` to a
   fixed height (`autoGrow={false}` + large `rows` / private `max-height`) on
   **PageScroll / Card / Dialog** catalogs so the well grows an **inner**
@@ -586,7 +587,10 @@ classes.
   floating label — not full M3 Text Field anatomy; **autoGrow** height from
   content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
   optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
-  + vertical resize; block pad → `--fynns-layout-field-pad-block`), **FieldHeader** /
+  + vertical resize; block pad → `--fynns-layout-field-pad-block`; default
+  **`spellCheck={false}`** so multilingual / technical copy has no browser
+  red squiggles — pass `spellCheck` to opt in; Chromium overlay editors also
+  hide marks via `::spelling-error` / `::grammar-error`), **FieldHeader** /
   **FieldBlock** (label | trailing IconButtons above a control), Select
   (trigger `min-width` floors to the widest option / placeholder so
   content-sized hosts do not resize when the value changes; still
@@ -1242,13 +1246,13 @@ classes.
   prefer `codeLanguageFromPath(path)` for suffixed file bodies (`.txt` /
   extensionless → `null` → Textarea OK); **`readOnly`** on `variant="editable"`
   renders a **single** `.fynns-code-block-pre` (full token colors + native
-  `::selection` — not the textarea overlay). Soft-wrap **edit** overlay skips
-  token spans (flat mono highlight) so selection/caret stay column-locked, and
-  paints selection as `.fynns-code-block-sel` (continuous wash — no dark seams
-  between soft-wrap fragments; native textarea `::selection` is transparent
-  in that mode); use `wrap={false}` when live token colors must show while typing; editable highlight spans inherit
-  textarea font-weight (no bold keyword/module metrics — soft-wrap must
-  match caret); `wrap` defaults
+  `::selection` — not the textarea overlay). Soft-wrap **edit** (`wrap` default)
+  uses a **single visible textarea** + native `::selection` — Chromium soft-wraps
+  textarea vs `<pre>` at different breakpoints; dual-layer overlay caused ghost
+  glyphs, selection gaps, and remeasure jank (visual-line path removed ≥ **0.5.27** / ship **0.5.28**).
+  **Live token colors while typing** → `wrap={false}` (classic dual-layer
+  `<pre>` under transparent caret). Editable highlight spans
+  inherit textarea font-weight (no bold keyword/module metrics). `wrap` defaults
   **true** (soft-wrap, no horizontal scrollbar; `wrap={false}` → classic
   `pre` scroll); vertical thumb only when content exceeds the host
   (`data-scrollable`, same gate as ChatComposer — avoids early bars from
@@ -1613,8 +1617,9 @@ classes.
   (under 40dp action Buttons). (**no** head|body hairline.)
   Width: content-fit (`max-content`) up to the `size` token ceiling
   (`--fynns-layout-dialog-max-width-*`) for short copy / ControlStack-only
-  bodies; **form hosts** (`FieldStack` / `FieldBlock` / `Textarea` in body)
-  **fill to that ceiling** so tall fields are not a ~280px skinny column —
+  bodies; **form hosts** (`FieldStack` / `FieldBlock` / `Textarea` / `CodeBlock`
+  in body) **fill to that ceiling** so tall fields / file editors are not a
+  ~280px skinny column —
   use `size="lg"` for long inspector / edit forms (M3 560dp max). At the
   ceiling, Switch / ControlStack labels wrap (body `overflow-x: clip` — no
   horizontal scrollbar). Do not invent consumer width or wrap hacks. Vertical

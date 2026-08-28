@@ -601,6 +601,7 @@ export const ChatComposer = forwardRef<HTMLTextAreaElement, ChatComposerProps>(
                 /* Visual hint is `.fynns-chat-composer-placeholder` (ellipsis). */
                 placeholder=""
                 disabled={disabled}
+                spellCheck={textareaProps?.spellCheck ?? false}
                 aria-label={ariaLabel || placeholder}
                 rows={1}
               />
