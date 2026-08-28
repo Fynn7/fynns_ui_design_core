@@ -625,6 +625,15 @@
   padding: var(--fynns-layout-content-inset);
 }
 
+/* Direct dialog-body siblings stay content-sized — same contract as
+ * `.fynns-unit-stack > *` / `.fynns-list > *`. Without this, height-capped
+ * centered panels (`max-height: min(90vh, 48rem)`) flex-shrink Card /
+ * Collapsible shells (`overflow: hidden`) into ~head-height pills instead of
+ * scrolling the body. */
+.fynns-dialog-body > * {
+  flex-shrink: 0;
+}
+
 /*
  * Flush-start (FullscreenDialog — hard): do not pad above the first
  * ceiling-flush bordered well. Title chrome stays content-inset; the well
