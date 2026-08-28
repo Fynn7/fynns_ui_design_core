@@ -672,7 +672,7 @@ const en = {
     "Soft-wrap editable in a narrow host: long path wraps on one textarea — Ctrl+A / drag-select uses native wash (no mirror overlay). Need live token colors while editing → `wrap={false}`.",
   "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
   "globals.codeBlockSoftWrapSelCode":
-    "loadvolume D:/sample/projects/thesis/_data/zsi/zsi-heptane/zsi-heptane.dat\necho done\n",
+    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
@@ -2486,7 +2486,7 @@ const zh: Record<MessageKey, string> = {
     "软换行可编辑 + 窄宿主：长路径在单层 textarea 上换行 — Ctrl+A / 拖选走原生 wash（无镜像 overlay）。编辑时要 live token 色 → `wrap={false}`。",
   "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
   "globals.codeBlockSoftWrapSelCode":
-    "loadvolume D:/sample/projects/thesis/_data/zsi/zsi-heptane/zsi-heptane.dat\necho done\n",
+    "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":

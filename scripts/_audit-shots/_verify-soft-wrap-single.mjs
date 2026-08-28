@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 const __dir = dirname(fileURLToPath(import.meta.url));
 const baseUrl = process.env.VERIFY_URL ?? "http://127.0.0.1:5174/#code-block";
 const LONG =
-  "loadvolume D:/fynns_local_ws/fynns_bachelor_thesis/_data/zsi/zsi-heptane/zsi-heptane.dat";
+  "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png";
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
