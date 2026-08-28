@@ -589,6 +589,18 @@ function FormRecipeFields({
         <FieldBlock
           label={t("globals.formRecipeHighlights")}
           description={t("globals.formRecipeHighlightsHint")}
+          actions={
+            <Tooltip content={t("globals.formRecipeHighlightAdd")}>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.formRecipeHighlightAdd")}
+                onClick={addHighlight}
+              >
+                <PlusIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
+          }
         >
           {highlights.length === 0 ? (
             <FieldHint>{t("globals.formRecipeHighlightsEmpty")}</FieldHint>
@@ -621,12 +633,6 @@ function FormRecipeFields({
               ))}
             </FieldStack>
           )}
-          <div className="fynns-control-cluster fynns-control-cluster--end-align">
-            <Button variant="tonal" size="sm" onClick={addHighlight}>
-              <PlusIcon size={16} aria-hidden />
-              {t("globals.formRecipeHighlightAdd")}
-            </Button>
-          </div>
         </FieldBlock>
       </FieldStack>
       <Divider />

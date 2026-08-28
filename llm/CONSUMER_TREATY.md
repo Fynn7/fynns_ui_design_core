@@ -2133,9 +2133,10 @@ longer applies to Textarea `__grow` rows — only `.fynns-select.__grow`.
 **Fix in the consumer:** each repeatable row →
 `.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea`
 `className="fynns-control-cluster__grow"` + sibling `Tooltip` → `IconButton`.
-Stack rows in `FieldStack` under one `FieldBlock`; add-row button in a trailing
-end-align cluster below. Do **not** private margin / absolute delete on the
-well. Live: sandbox `#form-recipe`; consumer repeatable bullet fields. Authority:
+Stack rows in `FieldStack` under one `FieldBlock`; **add row** on `FieldBlock`
+`actions` (label-row `Tooltip` → ghost `IconButton` `sm` — not a body-foot
+end-align strip). Do **not** private margin / absolute delete on the well. Live:
+sandbox `#form-recipe`; consumer repeatable bullet fields. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density** repeatable multiline rows.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
