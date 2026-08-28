@@ -20,7 +20,6 @@ import { useLocale } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import {
   NavDrawerFooterAccount,
-  NavDrawerWorkspaceRow,
 } from "../components/NavDrawerFooterAccount";
 
 type RootDest = "home" | "catalog" | "prefs";
@@ -115,7 +114,6 @@ export function DrillInLayoutsDemo() {
         active={rootDest === "prefs"}
         onClick={() => setRootDest("prefs")}
       />
-      <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
     </NavigationDrawer>
   );
 

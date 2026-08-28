@@ -105,9 +105,7 @@ export type NavigationDrawerProps = {
   /**
    * Optional sheet **footer** pinned under the scroll body (Cursor-style
    * single account row + settings). Not a destination — keep
-   * `NavigationDrawerItem`s in `children`. Workspace / project context
-   * belongs in **body** (e.g. `.fynns-nav-drawer-footer-slot--pill` row via
-   * `navBodyExtra` on `DestinationAppShell`). Footer recipe:
+   * `NavigationDrawerItem`s in `children`. Footer recipe:
    * `.fynns-nav-drawer-footer-account` + `.fynns-nav-drawer-footer-account-start`
    * (Avatar `size="sm"` + optional `.fynns-nav-drawer-footer-account-label`
    * — soft end fade only when truncated via `data-fade`) +

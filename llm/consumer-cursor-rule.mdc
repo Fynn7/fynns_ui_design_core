@@ -159,8 +159,7 @@ alwaysApply: true
 未指定其它模板时，任何 destination App / 网页的**默认 chrome** 必须是
 `DestinationAppShell`（与 sandbox **Layout templates** 首屏
 `#layouts-demo-shell` 同构）。传 `destinations` / `title` / 可选 `leadingExtra` /
-`trailing` / 可选 `navBodyExtra`（工作区/仓库行 — 在 drawer **body**，不是 footer 双槽）/
-可选 `navFooter`（Cursor 式**单**账户行：`Avatar` + 可选标签（**仅截断时**端侧渐隐 `data-fade`，≥ 0.4.130 — 短名勿渐隐） + 右端设置齿轮 —
+`trailing` / 可选 `navFooter`（Cursor 式**单**账户行：`Avatar` + 可选标签（**仅截断时**端侧渐隐 `data-fade`，≥ 0.4.130 — 短名勿渐隐） + 右端设置齿轮 —
 **全宽左右对齐**，start↔gear 最小间距 `control-stack-gap` **8dp**（≥ 0.4.124）；
 Avatar↔label = `navdrawer-pad-inline` **~10dp**（≥ 0.4.125）；
 `account-start` / label **勿 flex-grow**（≥ 0.4.126 — 否则中间空白被吃掉，短名仍贴齿轮）；
@@ -182,11 +181,6 @@ Avatar↔label = `navdrawer-pad-inline` **~10dp**（≥ 0.4.125）；
   destinations={[{ id: "home", icon: <HomeIcon />, label: "Home" }]}
   activeId={id}
   onActiveIdChange={setId}
-  navBodyExtra={
-    <div className="fynns-nav-drawer-footer-slot fynns-nav-drawer-footer-slot--pill">
-      <span className="fynns-nav-drawer-footer-slot-label">Workspace</span>
-    </div>
-  }
   navFooter={
     <div className="fynns-nav-drawer-footer-account">
       <div className="fynns-nav-drawer-footer-account-start">
@@ -260,6 +254,7 @@ FillColumn。
 | 表格单元格：映射来源/状态 + 可选 id + 行尾操作 | `.fynns-table-meta`（muted 文案）+ 可选 mono id，包在 `.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让「映射」等按钮跨行右对齐。对照 `#table` | 单元格里用 `Chip suggestion/filter` 当状态 pill；未映射行把操作顶在列首 |
 | 表单 / 偏好 | `FieldStack`（`#form-recipe`） | 每字段一张肥 Card |
 | Select + 刷新/重载（与 chevron 并存） | `FieldBlock` + `.fynns-control-cluster--end-align` + `Select` `className="fynns-control-cluster__grow"` + 兄弟 `IconButton`（**不要** `Select.trailing`）；标签行已有 `InfoHint` `size="sm"` 时刷新也必须 **`size="sm"`**（同一 Card 正文尾部 chrome 列：FieldHeader/FieldBlock actions、「i」、refresh、ControlRow 探测 InfoHint **或 lone `.fynns-table-meta`（- / OK）** 共用同一 trail 盒（≥ 0.4.137；禁止细 ASCII 占位贴尾而图标占 32/40dp）；贴尾共一条竖线；禁止默认 md 刷新顶开 sm「i」）。展开时刷新仍贴 **trigger 行**（core ≥ 0.4.112）；重载/策略 → **Tooltip** + 可选标签行 **`InfoHint`** — 不用 `FieldBlock` `description`。同一 Card 混 FieldBlock+ControlStack 时 ControlRow **标签文字**与 Select/Input **值文字**左齐（≥ 0.4.138，勿对齐外壳 left）。对照 `#field-header` | `Select.trailing`；标签行 refresh；refresh 漂移；**sm InfoHint + md refresh**；**ControlRow 标签贴 Select 外壳**而值文 inset（盘左右错位）；Card-body / `FieldBlock` **FieldHint** 长段 |
+| **可重复多行条目**（Dialog 要点 / bullet 列表 — 每行 Textarea + 删除） | **`FieldBlock` + `FieldStack`**；每行 **一个** `.fynns-control-cluster.fynns-control-cluster--end-align` + `Textarea` `className="fynns-control-cluster__grow"` + 兄弟 `Tooltip`→`IconButton`；下方 end-align 添加按钮。裸 `.fynns-control-cluster` 会在 autoGrow 换行后把删除盘挤到下一行。对照 `#form-recipe` Highlights | 裸 cluster；删除用 margin/absolute 贴 well；把静态 List `--with-end` 借来当表单行 |
 | 设置 Card 范围 / 字段策略文案 | **压缩：** Card `actions` **`InfoHint`**（≤1）；**`FieldBlock` `actions` `InfoHint`**；行内 **IconButton** **Tooltip** 讲重载/缓存。**`FieldHint` / `description`** 仅一行。对照 `#field-header` | Card 顶 `<FieldHint>` 长段；`description` 多句；hint 与 tooltip 重复 |
 | Input 密码 reveal | `Input` `trailing` + `IconButton` | 标签行眼睛 icon |
 | 工具条（名 + Switch + 说明） | `ControlRow` / `ControlBlock`（`#rhythm`） | 手搓 flex |

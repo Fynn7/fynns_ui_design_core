@@ -63,10 +63,7 @@ import { useState, type ReactNode } from "react";
 import { useLocale, type MessageKey } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
-import {
-  NavDrawerFooterAccount,
-  NavDrawerWorkspaceRow,
-} from "../components/NavDrawerFooterAccount";
+import { NavDrawerFooterAccount } from "../components/NavDrawerFooterAccount";
 import { TokenList } from "../components/TokenList";
 import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
@@ -195,9 +192,6 @@ export function LayoutsPage() {
                       <SearchIcon />
                     </IconButton>
                   </Tooltip>
-                }
-                navBodyExtra={
-                  <NavDrawerWorkspaceRow label={t("nav.footerWorkspace")} />
                 }
                 navFooter={
                   <NavDrawerFooterAccount

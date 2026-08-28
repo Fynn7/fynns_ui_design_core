@@ -423,8 +423,7 @@ Symptoms (Cursor-like destination apps):
 settings in the app bar or last destination.
 
 **Fix in core (≥ 0.4.59):** `NavigationDrawer` / `NavigationRail` `footer`
-+ `DestinationAppShell` `navFooter` (+ optional `navBodyExtra` for workspace
-row in drawer body). Footer recipe: `.fynns-nav-drawer-footer-account` +
++ `DestinationAppShell` `navFooter`. Footer recipe: `.fynns-nav-drawer-footer-account` +
 `.fynns-nav-drawer-footer-account-start` (`Avatar` + optional
 `.fynns-nav-drawer-footer-account-label` — soft end fade **only when the
 name truncates** (`data-fade` from DrawerSheet; ≥ **0.4.130** — short names
@@ -434,9 +433,7 @@ must not fade), not `…`) + settings
 (≥ 0.4.64 — Cursor separates with pad only). When drawer **body** content
 overflows downward, core applies `data-fade-bottom` / `data-fade-top` mask
 fades on `.fynns-nav-drawer-body` (≥ 0.4.65) — soft edge into the account
-footer, not a hard clip + divider. **Do not** stack dual
-project/workspace footer slots (pre-0.4.63 teaching). Workspace / repo context
-→ drawer **body** (`.fynns-nav-drawer-footer-slot--pill` row). Omit account
+footer, not a hard clip + divider. Omit account
 label → avatar/initial only; identity in `Tooltip` on avatar. Live: sandbox
 Layouts `#layouts-demo-shell` (toggle **Show account name** / **Long account
 name**) + SandboxShell +
@@ -2109,6 +2106,34 @@ drifts. Not a consumer flex hack — fixed in core (≥ 0.4.112).
 `@fynn7/ui-design-core`; do **not** add private `align-self` / margin on the
 button. Live: sandbox `#field-header` (open Select — refresh stays on trigger
 band). Authority: [`AGENTS.md`](../AGENTS.md) **Select + reload** row.
+
+## Failure mode this treaty targets: repeatable Textarea remove wraps below row
+
+Symptoms in a Dialog / Card `FieldBlock` with a dynamic bullet / highlight list:
+
+- Each row is `Textarea` + trash `IconButton` inside `.fynns-control-cluster`
+- Multi-line / autoGrow copy is fine, but the remove disk sits **on the next
+  line** under the well — often flush-start below the text block, not beside it
+- DevTools: cluster is `flex-wrap: wrap` (default); IconButton `top` clears
+  the Textarea `bottom` by one row height + gap
+
+**Cause:** default `.fynns-control-cluster` is full-width + `flex-wrap: wrap`.
+Tall `Textarea` `__grow` fills the first flex line; the trailing IconButton
+wraps when there is no horizontal room on that line — reads as a stray delete
+between entries.
+
+**Fix in core (≥ 0.5.29):** `Textarea.fynns-control-cluster__grow` in
+`.fynns-control-cluster--end-align` shares the Select grow flex recipe; sandbox
+`#form-recipe` Highlights teaches the row.
+
+**Fix in the consumer:** each repeatable row →
+`.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea`
+`className="fynns-control-cluster__grow"` + sibling `Tooltip` → `IconButton`.
+Stack rows in `FieldStack` under one `FieldBlock`; add-row button in a trailing
+end-align cluster below. Do **not** private margin / absolute delete on the
+well. Live: sandbox `#form-recipe`; consumer repeatable bullet fields. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** repeatable multiline rows.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: table row action not sharing one trailing edge
 

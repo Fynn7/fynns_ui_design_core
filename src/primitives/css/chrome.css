@@ -891,8 +891,7 @@
   border-block-start: none;
 }
 
-/* Densified rail: hide empty project / workspace / account-start; keep gear. */
-.fynns-nav-rail-footer .fynns-nav-drawer-footer-slot,
+/* Densified rail: hide account-start; keep gear. */
 .fynns-nav-rail-footer .fynns-nav-drawer-footer-account-start {
   display: none;
 }
@@ -1629,9 +1628,7 @@
 /*
  * Cursor-style sheet footer under the destination scroll body — single account
  * row + settings. **No** hairline / divider above the footer (Cursor separates
- * with pad only). Project / workspace context belongs in drawer **body**
- * (`.fynns-nav-drawer-footer-slot--pill` row or destinations — not stacked
- * footer slots). Recipe: `.fynns-nav-drawer-footer-account` with
+ * with pad only). Recipe: `.fynns-nav-drawer-footer-account` with
  * `.fynns-nav-drawer-footer-account-start` (Avatar + optional fade-truncated
  * `.fynns-nav-drawer-footer-account-label`) + settings IconButton end. Omit
  * label → avatar/initial only; identity may live in Tooltip. Standalone
@@ -1670,35 +1667,6 @@
 .fynns-nav-drawer:has(> .fynns-nav-drawer-footer) .fynns-nav-drawer-body {
   flex: 1 1 auto;
   min-height: 0;
-}
-
-.fynns-nav-drawer-footer-slot {
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  min-width: 0;
-  min-height: var(--fynns-navdrawer-item-height);
-  padding-inline: var(--fynns-navdrawer-item-pad-inline-start)
-    var(--fynns-navdrawer-item-pad-inline-end);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md);
-  background: var(--fynns-color-surface-1);
-  color: var(--fynns-color-text-muted);
-  font-size: var(--fynns-navdrawer-label-size);
-  line-height: var(--fynns-navdrawer-label-line);
-}
-
-.fynns-nav-drawer-footer-slot--pill {
-  border-radius: var(--fynns-radius-lg);
-  background: var(--fynns-color-control-surface-hover);
-}
-
-.fynns-nav-drawer-footer-slot-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
 }
 
 .fynns-nav-drawer-footer-account {

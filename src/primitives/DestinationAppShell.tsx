@@ -64,15 +64,9 @@ export type DestinationAppShellProps = {
   /** Optional drawer headline (standard / labeled mode only). */
   drawerHeadline?: ReactNode;
   /**
-   * Optional extra drawer **body** chrome after destinations (workspace /
-   * repo context row — not a destination Item).
-   * Live: sandbox Layouts `#layouts-demo-shell`.
-   */
-  navBodyExtra?: ReactNode;
-  /**
    * Optional `NavigationDrawer` footer (Cursor-style single account row +
    * settings). Prefer settings here, not TopAppBar `trailing`. Live: sandbox
-   * Layouts `#layouts-demo-shell`.
+   * Layouts `#layouts-demo-shell` + SandboxShell.
    */
   navFooter?: ReactNode;
   className?: string;
@@ -121,7 +115,6 @@ export const DestinationAppShell = forwardRef<
     expandNavLabel,
     collapseNavLabel,
     drawerHeadline,
-    navBodyExtra,
     navFooter,
     className,
     drawerWidth,
@@ -187,7 +180,6 @@ export const DestinationAppShell = forwardRef<
       footer={navFooter}
     >
       {drawerItems}
-      {navBodyExtra}
     </NavigationDrawer>
   );
 
