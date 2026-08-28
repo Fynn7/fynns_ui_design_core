@@ -78,6 +78,32 @@ try {
     });
   });
 
+  report.metrics.addInHeader = await page.evaluate(() => {
+    const demo = document.querySelector("#globals-demo-form-recipe");
+    const blocks = [...(demo?.querySelectorAll(".fynns-field-block") ?? [])];
+    const block = blocks.find(
+      (el) =>
+        el.querySelector(".fynns-field-header__actions .fynns-btn--icon") &&
+        el.querySelector(".fynns-field-stack .fynns-control-cluster--end-align .fynns-textarea"),
+    );
+    const headerActions = block?.querySelector(".fynns-field-header__actions");
+    const addBtn = headerActions?.querySelector(".fynns-btn--icon");
+    const bodyAddCluster = block?.querySelector(
+      ".fynns-field-block__main > .fynns-control-cluster--end-align:not(:has(.fynns-textarea))",
+    );
+    return {
+      addInHeaderActions: Boolean(addBtn),
+      bodyFootAddCluster: Boolean(bodyAddCluster),
+    };
+  });
+
+  if (!report.metrics.addInHeader?.addInHeaderActions) {
+    report.issues.push("add button missing from FieldBlock header actions");
+  }
+  if (report.metrics.addInHeader?.bodyFootAddCluster) {
+    report.issues.push("add button still in body-foot end-align cluster");
+  }
+
   await mkdir(OUT, { recursive: true });
   await page.locator("#globals-demo-form-recipe, #form-recipe").first().screenshot({
     path: path.join(OUT, "form-recipe-highlights-browser-card.png"),

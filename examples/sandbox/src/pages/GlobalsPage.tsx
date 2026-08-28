@@ -589,6 +589,18 @@ function FormRecipeFields({
         <FieldBlock
           label={t("globals.formRecipeHighlights")}
           description={t("globals.formRecipeHighlightsHint")}
+          actions={
+            <Tooltip content={t("globals.formRecipeHighlightAdd")}>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.formRecipeHighlightAdd")}
+                onClick={addHighlight}
+              >
+                <PlusIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
+          }
         >
           {highlights.length === 0 ? (
             <FieldHint>{t("globals.formRecipeHighlightsEmpty")}</FieldHint>
@@ -621,12 +633,6 @@ function FormRecipeFields({
               ))}
             </FieldStack>
           )}
-          <div className="fynns-control-cluster fynns-control-cluster--end-align">
-            <Button variant="tonal" size="sm" onClick={addHighlight}>
-              <PlusIcon size={16} aria-hidden />
-              {t("globals.formRecipeHighlightAdd")}
-            </Button>
-          </div>
         </FieldBlock>
       </FieldStack>
       <Divider />
@@ -1044,6 +1050,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeCollapsibleOpen, setFormRecipeCollapsibleOpen] =
     useState(true);
   const [formRecipeDialogOpen, setFormRecipeDialogOpen] = useState(false);
+  const [formRecipeStackDialogOpen, setFormRecipeStackDialogOpen] = useState(false);
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
@@ -5815,6 +5822,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <Button
                 size="sm"
                 variant="tonal"
+                onClick={() => setFormRecipeStackDialogOpen(true)}
+              >
+                {t("globals.formRecipeStackDialogOpen")}
+              </Button>
+              <Button
+                size="sm"
+                variant="tonal"
                 onClick={() => setFormRecipeFileDialogOpen(true)}
               >
                 {t("globals.formRecipeFileDialogOpen")}
@@ -5847,6 +5861,57 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 {t("globals.formRecipeDialogExtract")}
               </Button>
             </div>
+          </Dialog>
+          <Dialog
+            open={formRecipeStackDialogOpen}
+            onOpenChange={setFormRecipeStackDialogOpen}
+            title={t("globals.formRecipeStackDialogTitle")}
+            size="lg"
+            showCloseButton
+            closeAriaLabel={t("globals.dialogClose")}
+          >
+            <FieldHint>{t("globals.formRecipeStackDialogHelp")}</FieldHint>
+            <Card title={t("globals.formRecipeStackStepOne")}>
+              <FieldHint>{t("globals.formRecipeStackStepOneHint")}</FieldHint>
+              <FieldHint>{t("globals.formRecipeStackStepOneBody")}</FieldHint>
+            </Card>
+            <Divider />
+            <Card title={t("globals.formRecipeStackStepTwo")}>
+              <FieldHint>{t("globals.formRecipeStackStepTwoHint")}</FieldHint>
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button size="sm" variant="tonal" disabled>
+                  {t("globals.formRecipeStackStepTwo")}
+                </Button>
+              </div>
+            </Card>
+            <Divider />
+            <Card title={t("globals.formRecipeStackStepThree")}>
+              <FieldHint>{t("globals.formRecipeStackStepThreeHint")}</FieldHint>
+              <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                <Button size="sm" disabled>
+                  {t("globals.formRecipeSave")}
+                </Button>
+              </div>
+            </Card>
+            <Divider />
+            <Card title={t("globals.formRecipeStackStepFour")}>
+              <FieldHint>{t("globals.formRecipeStackStepFourHint")}</FieldHint>
+              <FieldStack>
+                <FieldBlock
+                  label={t("globals.formRecipeStackPasteLabel")}
+                  htmlFor="sandbox-form-stack-paste"
+                >
+                  <Textarea
+                    id="sandbox-form-stack-paste"
+                    rows={8}
+                    autoGrow
+                    aria-label={t("globals.formRecipeStackPasteLabel")}
+                    defaultValue=""
+                    placeholder={t("globals.formRecipeStackStepFourHint")}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
           </Dialog>
           <Dialog
             open={formRecipeFileDialogOpen}

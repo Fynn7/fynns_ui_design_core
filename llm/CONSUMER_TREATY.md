@@ -2133,11 +2133,83 @@ longer applies to Textarea `__grow` rows — only `.fynns-select.__grow`.
 **Fix in the consumer:** each repeatable row →
 `.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea`
 `className="fynns-control-cluster__grow"` + sibling `Tooltip` → `IconButton`.
-Stack rows in `FieldStack` under one `FieldBlock`; add-row button in a trailing
-end-align cluster below. Do **not** private margin / absolute delete on the
-well. Live: sandbox `#form-recipe`; consumer repeatable bullet fields. Authority:
+Stack rows in `FieldStack` under one `FieldBlock`; **add row** on `FieldBlock`
+`actions` (label-row `Tooltip` → ghost `IconButton` `sm` — not a body-foot
+end-align strip). Do **not** private margin / absolute delete on the well. Live:
+sandbox `#form-recipe`; consumer repeatable bullet fields. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density** repeatable multiline rows.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Dialog body Card stack crush
+
+Symptoms in a `Dialog` `size="lg"` multi-step / workflow host:
+
+- Several `Card` siblings show **only the title row** (~49–69px tall); body copy,
+  lists, and buttons are clipped or invisible
+- DevTools: each `.fynns-card` has `flex-shrink: 1` (default) inside
+  `.fynns-dialog-body` (column flex + `max-height` on the panel); Card
+  `overflow: hidden` hides crushed body
+- A later Card with a tall `Textarea` may keep more height and look like the
+  only “broken overflow” card while earlier steps are silently squashed
+
+**Cause:** `.fynns-dialog-body` is a height-capped scroll flex column but direct
+children lacked the **`flex-shrink: 0`** contract already used on
+`.fynns-unit-stack > *` and `.fynns-list > *`. Total intrinsic height exceeds
+the panel → flex distributes shrink to every Card shell.
+
+**Fix in core (≥ 0.5.32):** `.fynns-dialog-body > * { flex-shrink: 0 }` — body
+scrolls instead of crushing units. Sandbox `#form-recipe` → **Open Dialog Card
+stack**.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core`; drop private Card
+`min-height` hacks. Optional: wrap siblings in `.fynns-unit-stack` (one body
+child) for the same scroll contract. Do **not** restyle `.fynns-dialog-body` /
+`.fynns-card` in app CSS. Authority: [`AGENTS.md`](../AGENTS.md) **Content
+density** Dialog Card stack. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: phantom PageScroll rail behind modal Dialog
+
+Symptoms when a centered `Dialog` `size="lg"` opens over a scrolling main
+canvas (`PageScroll` / shell `fynns-scroll`):
+
+- User wheel-scrolls **inside the Dialog body**; content moves but the overlay
+  scrollbar thumb **jumps**, stays at the top, or a second idle thumb appears
+- DevTools: **two** visible `.fynns-scroll-rail[data-axis="y"]` — one for
+  `.fynns-page-scroll` (or shell canvas) at `scrollTop=0`, one for
+  `.fynns-dialog-body` that tracks correctly
+- The background rail uses the page host rect (`top` ≈ shell top) while dialog
+  body starts lower (below dialog head) — reads as wrong track geometry
+
+**Cause:** overlay scrollbar portal paints **every** overflowing `.fynns-scroll`
+host. Modal scrim does not hide background hosts; both rails share the same
+end column at `--fynns-z-toast`.
+
+**Fix in core (≥ 0.5.33):** when any **modal** `.fynns-dialog-overlay` is
+`data-state="open"`, suppress overlay rails for scroll hosts **outside** that
+overlay layer. Live: sandbox `#form-recipe` Dialog + consumer edit Dialog.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core`; no app CSS. Do not
+disable `fynns-scroll` on PageScroll. Authority: [`AGENTS.md`](../AGENTS.md)
+overlay scrollbar note. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: modal Dialog scrollbar flash on enter
+
+Symptoms when a Timeline row / catalog entry opens a centered edit `Dialog`:
+
+- Overlay scrollbar thumb **fully visible** while the panel is still scaling /
+  sliding in — before the user hovers the dialog body
+- Focus trap focuses the panel immediately; `:focus-within` on
+  `.fynns-dialog-body` used to reveal the thumb on fine pointer
+
+**Cause:** overlay thumb visibility treated modal dialog body like any scroll
+host (`:focus-within` reveal) and did not wait for panel enter transition.
+
+**Fix in core (≥ 0.5.34):** suppress modal `.fynns-dialog-body` thumb until
+enter transition settles (~`--fynns-duration-base`); after that, fine pointer
+reveals on **host hover only** (not focus trap alone). Live: `#timeline` edit
+Dialog + `#form-recipe` Dialog.
+
+**Fix in the consumer:** bump only — no app CSS.
 
 ## Failure mode this treaty targets: table row action not sharing one trailing edge
 

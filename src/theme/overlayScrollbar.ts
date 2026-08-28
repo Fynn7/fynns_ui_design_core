@@ -46,6 +46,8 @@ type HostState = {
   dragging: boolean;
   allowX: boolean;
   raf: number;
+  /** Modal centered Dialog enter — hide thumb until panel transition settles. */
+  dialogEnterSuppressed: boolean;
 };
 
 const states = new WeakMap<HTMLElement, HostState>();
@@ -177,6 +179,7 @@ function clampVerticalRailToRoundedClip(
   let top = railTop;
   let bottom = railTop + railHeight;
   const railRight = railLeft + sb;
+  const hostRect = host.getBoundingClientRect();
   let el: HTMLElement | null = host.parentElement;
   while (el && el !== document.documentElement) {
     if (el.classList.contains("fynns-dialog-overlay")) break;
@@ -188,9 +191,15 @@ function clampVerticalRailToRoundedClip(
       const nearLeft = railLeft <= er.left + 1;
       const topR = nearRight ? r.tr : nearLeft ? r.tl : Math.max(r.tl, r.tr);
       const botR = nearRight ? r.br : nearLeft ? r.bl : Math.max(r.bl, r.br);
-      /* Straight vertical band of the rounded rect. */
-      top = Math.max(top, er.top + topR);
-      bottom = Math.min(bottom, er.bottom - botR);
+      const straightTop = er.top + topR;
+      const straightBottom = er.bottom - botR;
+      /* Only inset when the scroll host actually spans into the corner band. */
+      if (hostRect.top < straightTop) {
+        top = Math.max(top, straightTop);
+      }
+      if (hostRect.bottom > straightBottom) {
+        bottom = Math.min(bottom, straightBottom);
+      }
     }
     el = el.parentElement;
   }
@@ -202,6 +211,23 @@ function prefersFineHover(): boolean {
     typeof window !== "undefined" &&
     window.matchMedia("(hover: hover) and (pointer: fine)").matches
   );
+}
+
+/**
+ * When a modal overlay is open, only paint rails for scroll hosts inside that
+ * layer. Otherwise PageScroll / shell canvas rails stay visible behind Dialog
+ * and the idle thumb at scrollTop=0 reads as a jump when the dialog body scrolls.
+ */
+function shouldPaintOverlayRail(host: HTMLElement): boolean {
+  if (typeof document === "undefined") return true;
+  const modalOverlays = document.querySelectorAll<HTMLElement>(
+    '.fynns-dialog-overlay[data-state="open"]:not(.fynns-dialog-overlay--nonmodal)',
+  );
+  if (modalOverlays.length === 0) return true;
+  for (const overlay of modalOverlays) {
+    if (overlay.contains(host)) return true;
+  }
+  return false;
 }
 
 function canHostOverlay(el: Element): el is HTMLElement {
@@ -246,13 +272,41 @@ function isRailNode(state: HostState, node: EventTarget | null): boolean {
   );
 }
 
+function isModalDialogOverlay(el: Element | null): el is HTMLElement {
+  return (
+    el instanceof HTMLElement &&
+    el.classList.contains("fynns-dialog-overlay") &&
+    !el.classList.contains("fynns-dialog-overlay--nonmodal")
+  );
+}
+
+function isModalDialogBodyHost(host: HTMLElement): boolean {
+  return (
+    host.classList.contains("fynns-dialog-body") &&
+    !!host.closest(".fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)")
+  );
+}
+
+function modalDialogBodyEnterHidden(host: HTMLElement, state: HostState): boolean {
+  return isModalDialogBodyHost(host) && state.dialogEnterSuppressed;
+}
+
 function syncThumbVisibility(state: HostState, host: HTMLElement) {
-  const show =
-    !finePointer ||
-    state.hover ||
-    state.focus ||
-    state.dragging ||
-    host.matches(":focus-within");
+  const modalDialogBody = isModalDialogBodyHost(host);
+  let show: boolean;
+  if (!finePointer) {
+    show = true;
+  } else if (state.dragging) {
+    show = true;
+  } else if (modalDialogBody && state.dialogEnterSuppressed) {
+    show = false;
+  } else if (modalDialogBody) {
+    /* Focus trap lands in the panel — do not reveal on :focus-within alone. */
+    show = state.hover;
+  } else {
+    show =
+      state.hover || state.focus || host.matches(":focus-within");
+  }
   state.railY.dataset.visible = show ? "true" : "false";
   state.railX.dataset.visible = show ? "true" : "false";
 }
@@ -386,11 +440,13 @@ function updateHost(host: HTMLElement, state: HostState) {
   const sb = readScrollbarSizePx();
   const yOverflow = scrollHeight - clientHeight > 1;
   const xOverflow = state.allowX && scrollWidth - clientWidth > 1;
+  const paintRail = shouldPaintOverlayRail(host);
+  const enterHidden = modalDialogBodyEnterHidden(host, state);
 
-  state.railY.hidden = !yOverflow;
-  state.railX.hidden = !xOverflow;
+  state.railY.hidden = !paintRail || !yOverflow || enterHidden;
+  state.railX.hidden = !paintRail || !xOverflow || enterHidden;
 
-  if (yOverflow) {
+  if (paintRail && yOverflow) {
     const copyRoot = codeBlockCopyFloatRoot(host);
     let railTop = rect.top;
     let railHeight = rect.height;
@@ -428,7 +484,7 @@ function updateHost(host: HTMLElement, state: HostState) {
     state.thumbY.style.transform = `translateY(${thumbTop}px)`;
   }
 
-  if (xOverflow) {
+  if (paintRail && xOverflow) {
     const thumbW = Math.max(
       MIN_THUMB_PX,
       (clientWidth / scrollWidth) * clientWidth,
@@ -476,6 +532,7 @@ function attach(host: HTMLElement) {
     raf: 0,
     onScroll: () => scheduleUpdate(host, state),
     onEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -493,6 +550,7 @@ function attach(host: HTMLElement) {
       syncThumbVisibility(state, host);
     },
     onRailYEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -506,6 +564,7 @@ function attach(host: HTMLElement) {
       syncThumbVisibility(state, host);
     },
     onRailXEnter: () => {
+      if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
       syncThumbVisibility(state, host);
     },
@@ -520,6 +579,7 @@ function attach(host: HTMLElement) {
     },
     onRailYDown: (e) => beginDrag(host, state, "y", y.rail, y.thumb, e),
     onRailXDown: (e) => beginDrag(host, state, "x", x.rail, x.thumb, e),
+    dialogEnterSuppressed: false,
   };
 
   host.addEventListener("scroll", state.onScroll, { passive: true });
@@ -546,6 +606,9 @@ function attach(host: HTMLElement) {
   }
 
   states.set(host, state);
+  if (isModalDialogBodyHost(host) && modalDialogEnterActive) {
+    state.dialogEnterSuppressed = true;
+  }
   updateHost(host, state);
 }
 
@@ -589,6 +652,103 @@ function onViewportChange() {
   });
 }
 
+/** Dialog panel enter uses `--fynns-duration-base` (240ms) scale/slide — refresh after settle. */
+const DIALOG_ENTER_REFRESH_MS = 280;
+
+let dialogEnterReleaseTimer = 0;
+let modalDialogEnterActive = false;
+let dialogEnterTransitionCleanup: (() => void) | null = null;
+
+function forEachModalDialogBodyHost(
+  fn: (host: HTMLElement, state: HostState) => void,
+) {
+  document
+    .querySelectorAll<HTMLElement>(
+      ".fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal) .fynns-dialog-body.fynns-scroll",
+    )
+    .forEach((host) => {
+      const state = states.get(host);
+      if (state) fn(host, state);
+    });
+}
+
+function setModalDialogEnterSuppressed(suppress: boolean) {
+  forEachModalDialogBodyHost((host, state) => {
+    state.dialogEnterSuppressed = suppress;
+    if (!suppress) {
+      /* Ignore pointerenter queued while the panel was still entering. */
+      state.hover = host.matches(":hover");
+    }
+    syncThumbVisibility(state, host);
+    scheduleUpdate(host, state);
+  });
+}
+
+function releaseModalDialogEnterSuppression() {
+  if (!modalDialogEnterActive) return;
+  modalDialogEnterActive = false;
+  if (dialogEnterReleaseTimer) {
+    window.clearTimeout(dialogEnterReleaseTimer);
+    dialogEnterReleaseTimer = 0;
+  }
+  if (dialogEnterTransitionCleanup) {
+    dialogEnterTransitionCleanup();
+    dialogEnterTransitionCleanup = null;
+  }
+  setModalDialogEnterSuppressed(false);
+  onViewportChange();
+}
+
+function armModalDialogEnterSuppression(
+  overlay: HTMLElement,
+  fromOpen: boolean,
+) {
+  if (overlay.classList.contains("fynns-dialog-overlay--nonmodal")) return;
+  modalDialogEnterActive = true;
+  setModalDialogEnterSuppressed(true);
+
+  if (dialogEnterReleaseTimer) window.clearTimeout(dialogEnterReleaseTimer);
+  if (dialogEnterTransitionCleanup) {
+    dialogEnterTransitionCleanup();
+    dialogEnterTransitionCleanup = null;
+  }
+
+  const panel = overlay.querySelector(".fynns-dialog-panel");
+  if (fromOpen && panel instanceof HTMLElement) {
+    const onEnd = (e: TransitionEvent) => {
+      if (e.target !== panel) return;
+      if (e.propertyName !== "opacity" && e.propertyName !== "transform") return;
+      releaseModalDialogEnterSuppression();
+    };
+    panel.addEventListener("transitionend", onEnd);
+    dialogEnterTransitionCleanup = () =>
+      panel.removeEventListener("transitionend", onEnd);
+  }
+
+  dialogEnterReleaseTimer = window.setTimeout(
+    releaseModalDialogEnterSuppression,
+    fromOpen ? DIALOG_ENTER_REFRESH_MS : DIALOG_ENTER_REFRESH_MS + 80,
+  );
+}
+
+function clearModalDialogEnterSuppression() {
+  releaseModalDialogEnterSuppression();
+}
+
+function scheduleOverlayLayerRefresh(options?: { suppressDialogEnter?: boolean }) {
+  if (options?.suppressDialogEnter) {
+    document
+      .querySelectorAll<HTMLElement>(
+        '.fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)[data-state="open"]',
+      )
+      .forEach((overlay) => armModalDialogEnterSuppression(overlay, true));
+  }
+  requestAnimationFrame(() => {
+    requestAnimationFrame(onViewportChange);
+  });
+  window.setTimeout(onViewportChange, DIALOG_ENTER_REFRESH_MS);
+}
+
 /**
  * Start overlay scrollbar observers. Safe to call multiple times.
  * Invoked automatically from the package barrel.
@@ -601,9 +761,43 @@ export function ensureOverlayScrollbars(): void {
   scan(document);
 
   const mo = new MutationObserver((records) => {
+    let overlayLayerTouched = false;
+    let overlayOpened = false;
+    let overlayRemoved = false;
     for (const record of records) {
+      if (
+        record.type === "attributes" &&
+        record.attributeName === "data-state" &&
+        record.target instanceof Element &&
+        record.target.classList.contains("fynns-dialog-overlay")
+      ) {
+        if (record.target.getAttribute("data-state") === "open") {
+          overlayOpened = true;
+        } else {
+          overlayLayerTouched = true;
+        }
+        continue;
+      }
       record.addedNodes.forEach((node) => {
-        if (node instanceof Element) scan(node);
+        if (node instanceof Element) {
+          const overlays: HTMLElement[] = isModalDialogOverlay(node)
+            ? [node]
+            : [
+                ...node.querySelectorAll<HTMLElement>(
+                  ".fynns-dialog-overlay:not(.fynns-dialog-overlay--nonmodal)",
+                ),
+              ];
+          for (const overlay of overlays) {
+            armModalDialogEnterSuppression(overlay, false);
+          }
+          scan(node);
+          if (
+            node.matches(".fynns-dialog-overlay") ||
+            node.querySelector(".fynns-dialog-overlay")
+          ) {
+            overlayLayerTouched = true;
+          }
+        }
       });
       record.removedNodes.forEach((node) => {
         if (!(node instanceof Element)) return;
@@ -611,10 +805,28 @@ export function ensureOverlayScrollbars(): void {
         node.querySelectorAll?.(`[${HOST_ATTR}]`).forEach((el) => {
           if (el instanceof HTMLElement) detach(el);
         });
+        if (
+          node.matches(".fynns-dialog-overlay") ||
+          node.querySelector(".fynns-dialog-overlay")
+        ) {
+          overlayRemoved = true;
+          overlayLayerTouched = true;
+        }
       });
     }
+    if (overlayRemoved) clearModalDialogEnterSuppression();
+    if (overlayOpened) {
+      scheduleOverlayLayerRefresh({ suppressDialogEnter: true });
+    } else if (overlayLayerTouched) {
+      scheduleOverlayLayerRefresh();
+    }
   });
-  mo.observe(document.documentElement, { childList: true, subtree: true });
+  mo.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["data-state"],
+  });
 
   window.addEventListener("resize", onViewportChange, { passive: true });
   window.addEventListener("scroll", onViewportChange, {
