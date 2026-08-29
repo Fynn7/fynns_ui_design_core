@@ -1046,7 +1046,7 @@ Symptoms (catalog ControlRow / Card actions / List trailing strips):
 **Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.123** —
 `--fynns-layout-control-cluster-gap` is **4dp** between IconButton **boxes**.
 List short-status→first IconButton uses a separate optical
-`--fynns-list-end-actions-gap` (≥ **0.5.59**) so text ink matches glyph↔glyph —
+`--fynns-list-end-actions-gap` (≥ **0.5.62**) so text ink matches glyph↔glyph —
 do **not** force raw 4dp text→disk or invent app CSS. Live: `#list`
 status+action / `#rhythm`.
 

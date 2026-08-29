@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Sandbox #sandbox-list-status-action: short status → first IconButton ink
- * must match glyph↔glyph air inside the cluster (≥ 0.5.59 optical gap ≥ 0.5.59).
+ * must match glyph↔glyph air inside the cluster (≥ 0.5.62 optical gap ≥ 0.5.59).
  * Usage: node scripts/_audit-shots/_verify-list-status-action-gap.mjs [baseUrl]
  */
 import { chromium } from "playwright";

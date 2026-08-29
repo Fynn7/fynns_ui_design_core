@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Single source of truth for the fynns design tokens.
  *
  * These typed tables are mirrored to `:root` CSS custom properties (the
@@ -1448,7 +1448,7 @@ export const LAYOUT_TOKENS = {
    * Sibling immediately left of an IconButton (and IconButton↔IconButton) in
    * one `.fynns-control-cluster` (**4dp**). List IconButton overlay hosts
    * optically widen `--fynns-list-end-actions-gap` for short **text** meta ≥
-   * **0.5.59** (disk inset + this gap) so ink matches glyph↔glyph — token
+   * **0.5.62** (disk inset + this gap) so ink matches glyph↔glyph — token
    * default stays this 4dp alias. Live: `#rhythm` / `#sandbox-list-status-action`.
    */
   "control-cluster-gap": "0.25rem",

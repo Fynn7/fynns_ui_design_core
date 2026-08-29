@@ -1,4 +1,4 @@
-﻿import type { Locale } from "./types";
+import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -1490,7 +1490,7 @@ const en = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.59** optically spaces status→first disk so **text ink → first glyph** matches **glyph ↔ glyph** inside the cluster (not raw 4dp box gap that kisses “Current”). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
+    "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.62** optically spaces status→first disk so **text ink → first glyph** matches **glyph ↔ glyph** inside the cluster (not raw 4dp box gap that kisses “Current”). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
   "globals.listStatusActionAria": "Sample status and action list row",
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
@@ -3362,7 +3362,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.59** 按光学把状态→首盘拉开，使 **文字墨迹 → 首字形** 与簇内 **字形↔字形** 同距（不是裸 4dp 盒缝把「当前」贴死）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
+    "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.62** 按光学把状态→首盘拉开，使 **文字墨迹 → 首字形** 与簇内 **字形↔字形** 同距（不是裸 4dp 盒缝把「当前」贴死）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
   "globals.listStatusActionAria": "状态与动作列表示例",
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
