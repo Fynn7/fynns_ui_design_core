@@ -349,6 +349,9 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-select {
   position: relative;
   width: 100%;
+  /* Measure floor from Select.tsx `--fynns-select-measure-min`. `min(100%, …)`
+   * lets form rows shrink when the parent is narrower than the widest option. */
+  min-width: min(100%, var(--fynns-select-measure-min, 0px));
 }
 
 /*

@@ -66,6 +66,10 @@ const metrics = await page.evaluate(() => {
     Math.min(bb.right, sb.right) - Math.max(bb.left, sb.left),
   );
   const gap = sb.left - bb.right;
+  const hostRight = host.getBoundingClientRect().right;
+  const selectPastHost = Math.round((sb.right - hostRight) * 10) / 10;
+  const gapHostSelect = Math.round((hostRight - sb.right) * 10) / 10;
+  const padEnd = parseFloat(style.paddingInlineEnd) || 0;
   return {
     ok: true,
     position: style.position,
@@ -83,6 +87,9 @@ const metrics = await page.evaluate(() => {
     },
     gap: Math.round(gap * 10) / 10,
     overlapX: Math.round(overlapX * 10) / 10,
+    selectPastHost,
+    gapHostSelect,
+    padEnd,
   };
 });
 
@@ -100,11 +107,16 @@ const pass =
   metrics.ok &&
   metrics.position === "static" &&
   metrics.overlapX === 0 &&
-  metrics.gap >= 2;
+  metrics.gap >= 2 &&
+  metrics.selectPastHost <= 0 &&
+  metrics.gapHostSelect >= 24 &&
+  metrics.padEnd >= 24;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {
-  console.error("FAIL: inspector trailing Button/Select still overlap or overlay");
+  console.error(
+    "FAIL: inspector trailing overlap, overlay, or Select end clipped (need pad/gap ≥ radius-3xl)",
+  );
   process.exit(1);
 }
-console.log("PASS: pinned in-flow, no Button∩Select overlap");
+console.log("PASS: pinned in-flow, no Button∩Select overlap, Select clears host radius");

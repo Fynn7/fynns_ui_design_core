@@ -1491,7 +1491,7 @@ const en = {
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
   "globals.listInspectorTrailingHelp":
-    "Inspector trailing (≥ **0.5.54**): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Core pins that end cluster **in-flow** (always visible; Select hugs content) so CTA text never paints onto the kind trigger. Prefer short CTA copy; IconButton + Tooltip for path catalogs. Live host: `#sandbox-list-inspector-trailing`.",
+    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Core pins that end cluster **in-flow** (always visible) and pads the end ≥ `radius-3xl` so host `overflow: clip` does not slice the Select end curve. Prefer short CTA copy; IconButton + Tooltip for path catalogs. Live host: `#sandbox-list-inspector-trailing`.",
   "globals.listInspectorTrailingAria": "Sample inspector trailing list",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "Sample automation topic",
@@ -3348,7 +3348,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
   "globals.listInspectorTrailingHelp":
-    "检视行 trailing（≥ **0.5.54**）：`Select` 和/或 **带标签** Button 不得按路径目录 IconButton 悬停揭示几何。core 把该 end 簇 **钉在文档流**（常显；Select 内容宽），CTA 文案不得压到种类触发器上。CTA 宜短；路径目录仍用 IconButton + Tooltip。对照 `#sandbox-list-inspector-trailing`。",
+    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空）：`Select` 和/或 **带标签** Button 不得按路径目录 IconButton 悬停揭示几何。core 把该 end 簇 **钉在文档流**（常显），且 end pad ≥ `radius-3xl`，避免 host `overflow: clip` 切掉 Select 右圆角。CTA 宜短；路径目录仍用 IconButton + Tooltip。对照 `#sandbox-list-inspector-trailing`。",
   "globals.listInspectorTrailingAria": "检视行 trailing 列表示例",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "示例自动化主题",

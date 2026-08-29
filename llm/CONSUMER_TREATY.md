@@ -2114,9 +2114,12 @@ undersized pad stacks the wide CTA onto the Select shell.
 non-icon `.fynns-btn`, core **pins** trailing **in-flow** (always visible;
 normal list pad — not IconButton reserve) and forces Select / labeled Button to
 content-hug (`width: auto` / max-width caps). Path-catalog IconButton strips
-keep overlay reveal. Consumer: bump ≥ 0.5.54; keep cluster `nowrap`; prefer
-short CTA labels; prefer IconButton + Tooltip when the action is not an
-inspector control. Live: sandbox `#list` inspector trailing. Authority:
+keep overlay reveal. **≥ 0.5.55:** pinned trailing `padding-inline-end` is at
+least `--fynns-radius-3xl` so host `overflow: clip` + radius does **not** slice
+the Select’s end curve; cluster stays inside the padded box. Consumer: bump ≥
+0.5.55; keep cluster `nowrap`; prefer short CTA labels; prefer IconButton +
+Tooltip when the action is not an inspector control. Live: sandbox `#list`
+inspector trailing. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

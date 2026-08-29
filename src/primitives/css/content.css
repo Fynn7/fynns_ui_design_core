@@ -1737,6 +1737,10 @@ a.fynns-breadcrumb-link:visited {
   max-width: none;
   flex: 0 0 auto;
   flex-wrap: nowrap;
+  /* Beat `.fynns-control-cluster { min-width: 0; width: 100% }` — else the
+   * cluster shrink-wraps under Select measure min and Select paints into
+   * trailing pad (host radius clips the end curve). */
+  min-width: min-content;
 }
 
 /*
@@ -1839,7 +1843,11 @@ a.fynns-breadcrumb-link:visited {
  * Absolute + IconButton-sized reserve stacks a tonal CTA onto Select
  * (`width: 100%` Select + ~88dp pad). Pin in-flow, always visible; Select
  * hugs content. Overlay reveal stays IconButton / icon-only strips only.
- * Live: `#list` inspector trailing (≥ 0.5.54).
+ *
+ * Host keeps `overflow: clip` + `radius-3xl` for the hover wash — pinned
+ * trailing must clear that curve (`padding-inline-end` ≥ radius-3xl) or the
+ * Select’s end radius is sliced off (consumer inspector rows). Live: `#list`
+ * inspector trailing (≥ 0.5.54 pin; ≥ 0.5.55 end-radius clear).
  */
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end .fynns-select
@@ -1874,6 +1882,17 @@ a.fynns-breadcrumb-link:visited {
   opacity: 1;
   pointer-events: auto;
   transition: none;
+  /*
+   * Clear the host radius-3xl clip (stadium height-2 needs ~radius end
+   * inset — list-pad-inline alone left Select’s end curve sliced).
+   * Do **not** set min-width:0 / max-width:100% here — that circularly
+   * shrinks the cluster and lets Select paint into the pad / past the
+   * content box (clipped end radius).
+   */
+  padding-inline-end: max(
+    var(--fynns-list-pad-inline),
+    var(--fynns-radius-3xl)
+  );
 }
 
 .fynns-list-item-host--with-end:has(
@@ -1935,10 +1954,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-trailing--end .fynns-select {
-  width: auto;
-  max-width: min(12rem, 100%);
+  /* Fixed measure floor (not min(100%, …)) so cluster min-content hugs the
+   * shell — avoids Select overflowing into trailing pad / host radius clip. */
+  width: max-content;
+  min-width: var(--fynns-select-measure-min, max-content);
+  max-width: min(16rem, 70vw);
   flex: 0 0 auto;
-  min-width: 0;
 }
 
 .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon) {
