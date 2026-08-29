@@ -785,7 +785,10 @@ const en = {
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Text-start (hard):** ControlRow **label glyphs** align with Select **value** text (not shell left). FieldBlock titles stay flush with the control outer edge.",
+    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Title text-start (hard):** ControlRow **label** glyphs flush-align with FieldHeader / FieldBlock **titles** (core ≥ **0.5.58**). Select **value** text stays inset inside the shell — do not pad ControlRow labels to chase it.",
+  "globals.fieldHeaderPrefLabel": "Detail mode",
+  "globals.fieldHeaderPrefTip": "Optional longer answers. Short tip only.",
+  "globals.fieldHeaderPrefAria": "About detail mode",
   "globals.fieldHeaderProbeAlpha": "Alpha service",
   "globals.fieldHeaderProbeBeta": "Beta service",
   "globals.fieldHeaderProbeOk": "OK",
@@ -2657,7 +2660,10 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton` **`size=\"sm\"`**，当标签行 InfoHint 为 `sm`）— 不要用 `Select.trailing`。**表单尾部 chrome 列（强制）：** 标签行「i」+ 刷新 + ControlRow 探测「i」**以及** lone `.fynns-table-meta`（`-`）共用同一 trail 盒（标签「i」为 `sm` 时整列 `sm`）— 贴尾共一条竖线；禁止细 meta 贴在 32/40dp 盘下。**文字起点（强制）：** ControlRow **标签字形**与 Select **值文字**左齐（勿对齐外壳 left）。FieldBlock 标题仍与控件外缘齐平。",
+    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton` **`size=\"sm\"`**，当标签行 InfoHint 为 `sm`）— 不要用 `Select.trailing`。**表单尾部 chrome 列（强制）：** 标签行「i」+ 刷新 + ControlRow 探测「i」**以及** lone `.fynns-table-meta`（`-`）共用同一 trail 盒（标签「i」为 `sm` 时整列 `sm`）— 贴尾共一条竖线；禁止细 meta 贴在 32/40dp 盘下。**标题文字起点（强制）：** ControlRow **标签字形**与 FieldHeader / FieldBlock **标题**左齐（core ≥ **0.5.58**）。Select **值文字**仍在外壳内 inset — 勿再内缩 ControlRow 标签去追值文字。",
+  "globals.fieldHeaderPrefLabel": "详细模式",
+  "globals.fieldHeaderPrefTip": "可选更长回答。仅短提示。",
+  "globals.fieldHeaderPrefAria": "关于详细模式",
   "globals.fieldHeaderProbeAlpha": "甲服务",
   "globals.fieldHeaderProbeBeta": "乙服务",
   "globals.fieldHeaderProbeOk": "OK",

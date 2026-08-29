@@ -2025,29 +2025,28 @@ Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must s
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: form ControlRow label vs Select value text
+## Failure mode this treaty targets: form ControlRow label vs FieldHeader title
 
-Symptoms (Models / provider Card):
+Symptoms (LLM / provider Card with FieldBlocks + preference Switches):
 
-- Select shell and ControlRow **boxes** share one left edge (DevTools
-  `left` equal on `.fynns-select` and `.fynns-control-row`)
-- Select **value** text (`.fynns-select-trigger-text`) starts ~16–17dp inset
-  (capsule + field-pad + hairline); ControlRow **label** (“Ollama”) sits flush
-  at the shell edge — glyphs look skewed under the field
-- Agent “fixes” by inventing consumer `padding-left` / `margin` on
-  `.fynns-control-row__label`
+- `FieldHeader` titles (“Provider” / “Model”) sit flush at the Card body start
+- Preference / probe `ControlRow` labels (“Thinking” / status names) sit
+  ~16–17dp inset — chase Select **value** text via old 0.4.138
+  `--fynns-form-control-text-inset-inline`
+- Agent “fixes” by inventing consumer `padding-left` / negative margin on
+  `.fynns-control-row__label` or `.fynns-field-header__label`
 
-**Cause:** aligning chrome **boxes** instead of **value text**. Form hosts that
-mix `FieldBlock` + `ControlStack` need the ControlRow label on the same
-text-start column as Input / Select / Autocomplete value ink. Core ≥ **0.4.138**
-sets `--fynns-form-control-text-inset-inline` when the host `:has(.fynns-field-block):has(.fynns-control-stack)`.
+**Cause:** 0.4.138 padded ControlRow labels to match Select / Input **value**
+ink. Title glyphs (FieldHeader + ControlRow) must share one flush column;
+value ink stays inset inside the field shell.
 
-**Fix in the consumer (hard):** bump to ≥ **0.4.138**; keep FieldStack +
-ControlStack siblings (no private pad). FieldBlock titles stay flush with the
-control outer edge — do not pad those to match value text.
+**Fix in the consumer (hard):** bump to ≥ **0.5.58**; keep FieldStack +
+ControlStack siblings (no private pad). Do not reintroduce ControlRow inset
+to chase Select value text.
 
-Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md)
-**Form control text-start**. Pasteable:
+Live: sandbox `#field-header` (preference Switch + probe rows under
+FieldBlocks). Authority: [`AGENTS.md`](../AGENTS.md)
+**Form title text-start**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status icon soup in a control-cluster

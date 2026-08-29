@@ -996,6 +996,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
   const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
+  const [fieldHeaderDetailOn, setFieldHeaderDetailOn] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
@@ -4331,6 +4332,31 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   minRows={2}
                 />
               </FieldBlock>
+            </FieldStack>
+            <FieldStack>
+              <ControlStack columns={1}>
+                <ControlRow
+                  label={
+                    <>
+                      <span className="fynns-control-row__label-text">
+                        {t("globals.fieldHeaderPrefLabel")}
+                      </span>
+                      <InfoHint
+                        size="sm"
+                        content={t("globals.fieldHeaderPrefTip")}
+                        ariaLabel={t("globals.fieldHeaderPrefAria")}
+                      />
+                    </>
+                  }
+                >
+                  <Switch
+                    label=""
+                    ariaLabel={t("globals.fieldHeaderPrefLabel")}
+                    checked={fieldHeaderDetailOn}
+                    onCheckedChange={setFieldHeaderDetailOn}
+                  />
+                </ControlRow>
+              </ControlStack>
             </FieldStack>
             <ControlStack columns={1}>
               <ControlRow label={t("globals.fieldHeaderProbeAlpha")}>
