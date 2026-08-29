@@ -74,6 +74,10 @@ const metricsClosed = await page.evaluate(() => {
   const liTop = li ? Math.round(li.getBoundingClientRect().top) : null;
   const panel = select.querySelector(".fynns-search-bar-panel");
   const panelPos = panel ? getComputedStyle(panel).position : null;
+  const triggerFont = getComputedStyle(
+    select.querySelector(".fynns-select-trigger") ?? select,
+  ).fontSize;
+
   const style = getComputedStyle(trailing);
   const overlapX = Math.max(
     0,
@@ -110,6 +114,7 @@ const metricsClosed = await page.evaluate(() => {
     metaLeftSpread,
     listItemTop: liTop,
     panelPosition: panelPos,
+    triggerFontSize: triggerFont,
     btn: {
       left: Math.round(bb.left),
       right: Math.round(bb.right),
@@ -154,6 +159,10 @@ const metricsOpen = await page.evaluate(() => {
   const fieldBox = field.getBoundingClientRect();
   const panelBox = panel.getBoundingClientRect();
   const panelStyle = getComputedStyle(panel);
+  const results = panel.querySelector(".fynns-search-bar-results");
+  const triggerFont = getComputedStyle(
+    select.querySelector(".fynns-select-trigger") ?? select,
+  ).fontSize;
   return {
     ok: true,
     listItemTop: Math.round(liBox.top),
@@ -162,6 +171,11 @@ const metricsOpen = await page.evaluate(() => {
     panelTop: Math.round(panelBox.top),
     panelPosition: panelStyle.position,
     panelDisplay: panelStyle.display,
+    panelBottomRadius: panelStyle.borderBottomLeftRadius,
+    resultsBottomRadius: results
+      ? getComputedStyle(results).borderBottomLeftRadius
+      : null,
+    triggerFontSize: triggerFont,
     fieldToPanelGap: Math.round((panelBox.top - fieldBox.bottom) * 10) / 10,
     hostOverflow: getComputedStyle(host).overflow,
   };
@@ -200,7 +214,10 @@ const pass =
   metrics.metaInEnd === true &&
   metrics.metaInRow === false &&
   metrics.metaLeftSpread <= 1 &&
-  metrics.panelPosition === "absolute" &&
+  metrics.open.panelBottomRadius !== "0px" &&
+  metrics.open.resultsBottomRadius !== "0px" &&
+  parseFloat(metrics.open.triggerFontSize) <= 14 &&
+  parseFloat(metrics.triggerFontSize) <= 14 &&
   metrics.open?.ok === true &&
   metrics.open.panelPosition === "absolute" &&
   metrics.open.panelDisplay === "block" &&
