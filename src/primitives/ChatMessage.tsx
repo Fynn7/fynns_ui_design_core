@@ -49,7 +49,8 @@ export type ChatMessageProps = Omit<
   name?: ReactNode;
   /**
    * Incomplete / streaming UI cues: last-glyph color pulse (R05 — only when
-   * there is answer text), `aria-busy`, and a polite live region. Does **not**
+   * there is answer text), `aria-busy`, and optional `aria-label` while
+   * streaming. Does **not**
    * generate tokens — set `true` while the app appends `children` / `markdown`,
    * then `false` when the stream ends. No empty bubble / lone cue while
    * waiting on thinking with no answer tokens yet (including when children

@@ -139,6 +139,25 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+/** Empty checkbox square — deselect-all / unchecked state. */
+export function SquareIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+    </svg>
+  );
+}
+
+/** Checked checkbox — select-all (not bare CheckIcon confirm). */
+export function CheckSquareIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <path d="m8 12 3 3 5-6" />
+    </svg>
+  );
+}
+
 export function PlusIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

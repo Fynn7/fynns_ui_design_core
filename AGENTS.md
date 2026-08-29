@@ -45,7 +45,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 3. **Icon actions: tooltip when the glyph is not self-evident — never `title=`.**
    Use `<Tooltip content={…}>` (and an `aria-label` on the `IconButton`); the HTML
    `title` attribute is forbidden (browser-default styling breaks the system).
-   `IconButton` is a 40dp circular target (ghost / filled / tonal / outlined).
+   `IconButton` is a 40dp circular target (`ghost` / `primary` / `tonal` /
+   `default` / `elevated` / `danger` — same variants as `Button`).
    **Skip Tooltip** on chrome dismiss/clear whose glyph already means the action
    (Dialog / FullscreenDialog / Drawer / BottomSheet close X, Banner / Snackbar
    dismiss, Chip input remove, SearchBar clear) — keep `aria-label` only.
@@ -117,7 +118,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    empty track or inflate pad). NavigationDrawer keeps `--fynns-navdrawer-pad-inline`
    (10dp) only — no pad+scrollbar inflation; do not crush below ~8dp. Carousel tracks
    and SearchBar / single-line `Input` focused fields may hide bars entirely
-   (caret scroll; SearchBar also snap navigation).
+   (caret scroll; SearchBar uses caret scroll on narrow hosts — not scroll-snap).
    Vertical scroll hosts must pin `overflow-x: clip` (not bare
    `overflow: auto`): CSS overflow pairing otherwise promotes x→auto and can
    reserve *block* gutters that clip the first/last pill radii.
@@ -613,8 +614,9 @@ classes.
 
 - **Actions:** Button, IconButton, SplitButton (M3 Expressive: leading action +
   trailing `DropdownMenu`; variants `primary` / `tonal` / `default` /
-  `elevated` / `danger` (filled like primary: danger surface + on-accent ink);
-  sizes `sm` / `md` / `lg`), Fab, FabMenu / FabMenuItem
+  `elevated` / `danger` on **Button** only — SplitButton omits `danger`;
+  sizes `sm` / `md` / `lg`; **`ghost`** on Button / IconButton), Fab,
+  FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy; **autoGrow** height from
   content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
@@ -682,8 +684,8 @@ classes.
   | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (transparent overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
   | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; transparent overlay so the surface shows through | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only; chrome width is **host-relative** (`min(20rem, 100%)` — never viewport/`100vw`) so NavigationDrawer / EndAside do not spill | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message`; private `width: 20rem` / `100vw` on the busy chrome |
-  | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = `CircularProgress` `sm` | Two progress chromes in one overlay |
-  | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level / Dialog-body / Card-body layout |
+  | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = inline **`Spinner`** (Button / IconButton `loading` — sm footprint) | Two progress chromes in one overlay |
+  | Button / icon / field busy | Inline **`Spinner`** via Button / IconButton `loading` (sm footprint; not a standalone `CircularProgress` in the slot) | Page-level / Dialog-body / Card-body layout |
   | **Multi-action footer wait** (`.fynns-control-cluster` of `Button` / `IconButton`) | **At most one** `loading` spinner in the cluster — the action that is running. Siblings → `disabled` **without** a second spinner (shared `busy` boolean on every `loading` is the anti-pattern). Live: `#rhythm` end-align | Two+ sibling Buttons both `loading={true}` / both `loading={busy}` (twin rings = information redundancy) |
   | **Section wait + header / foot chrome** (FieldBlock `actions`, Card `actions`, Dialog foot while body is BusyRegion-busy) | **BusyRegion only** for the wait; chrome Buttons / IconButtons → `disabled` **without** `loading`. Live: `#busy-region` FieldBlock actions | BusyRegion (or BusyScrim) ring **and** FieldHeader / Card / foot `loading` at once (double rings = information redundancy) |
   | Zero-result catalog | `EmptyState` | Using it for loading |
@@ -1129,11 +1131,11 @@ classes.
   watches **main-column** overflow (canvas + `EndAside` floors vs the main
   track), not only the outer shell scrollWidth — also when shrink-to-fit hides
   overflow (drawer track starves main below `main-min` + `end-aside-min`, or
-  nav column ≥ main while EndAside is open).   On open, crowding is predicted from
-  **target** drawer width (`wouldClippedNavDrawerCrowd(shellEl, { endAsideOpen })`)
-  in `useLayoutEffect` **before** applying `navMode="drawer"` paint — if the open
-  width would crowd, **close** destinations (`hidden`) so they never flash as a
-  full labeled drawer then snap to an icon rail. Export is also available for
+  nav column ≥ main while EndAside is open).   On open, crowding is predicted from **target** drawer width
+  (`wouldClippedNavDrawerCrowd(shellEl, drawerWidthPx?)`) in `useLayoutEffect`
+  **before** applying `navMode="drawer"` paint — if the open width would crowd,
+  **close** destinations (`hidden`) so they never flash as a full labeled drawer
+  then snap closed. Export is also available for
   apps that open destinations themselves. It **must not** fire while the
   drawer seam is being dragged, while `EndAside` is in `data-state="closing"`,
   or while `EndAside` is mid-drag (`data-resizing`)
@@ -1401,7 +1403,7 @@ classes.
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell` decorative; **`#layouts-demo-drill-in`** interactive drawer-body swap + full-width main). Catalog list-in-drawer (not main `list-pane-width` split) is the destination-app default — see CONSUMER_TREATY **hub-split**. Group/Item `label` = **short name only** — no `· N` and no parenthetical glosses unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` chrome ↔ peers & destinations = `--fynns-navdrawer-search-gap` (**8dp**, aliases layout `control-stack-gap` — ≥ 0.4.98; wider than Item↔Item 4dp; not a 16dp kind-jump). Optional sheet `footer` = Cursor-style account chrome (`.fynns-nav-drawer-footer*`; settings IconButton end — not TopAppBar `trailing` for that role; DestinationAppShell `navFooter`). Tools under SearchBar = **one** .fynns-control-cluster of Tooltip→IconButton (horizontal) — tip-fill width:100% applies only to Tooltip wrapping NavigationDrawerItem. **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Use this shell when the drawer body must **morph** (catalog / chats drill-in) — swap `nav`, keep main full-width detail; live `#layouts-demo-drill-in`. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
   | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
-  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination footer = `.fynns-pagination-bar` (M3/MUI single row). Live `#pagination`. |
+  | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination footer = `.fynns-pagination-bar` (M3/MUI single row). Live `#pagination` / `#fab`. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |
   | FullscreenDialog | mobile-first | Full-viewport dialog. Short tasks → Dialog / ConfirmDialog. Head: **no** head|body divider / no `surface-head` strip (`content-inset` pad only). Body: **flush-start** when the first child is a keep-set bordered well — see **Flush-start overlay body**. |
@@ -1447,6 +1449,7 @@ classes.
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
   | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). **Labeled Button** feet use `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**) — same as `.fynns-dialog-foot`; IconButton / Select+refresh clusters keep `control-cluster-gap` (**4dp**). **Dialog body** foot (several labeled Buttons): same cluster as last body child — core ≥ 0.4.111 wraps inside the clipped scroll host so the first action is never clipped. **LTR button order (hard):** **Cancel / dismiss first** (leftmost in the end-aligned cluster) → optional secondary → optional **destructive** → **primary / confirm last** (rightmost). Same as `ConfirmDialog` (ghost Cancel then confirm). Never put Delete leftmost when Cancel is present (`Delete | Cancel | Save`). `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). **Busy (hard):** at most **one** `Button`/`IconButton` `loading` in the cluster; siblings `disabled` without a spinner — never bind the same `busy` to every `loading`. Live: `#timeline` edit Dialog foot; `#form-recipe` Dialog multi-action foot; `#rhythm` end-align | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon`; Dialog body `overflow-x: visible` hacks; **twin loading rings** on Probe + Start / Copy + Import; **Delete leftmost** ahead of Cancel; **4dp pill-on-pill** labeled Button feet (use core `action-cluster-gap`, not `control-cluster-gap`) |
 | **Mode drawer tools** (sort menu + primary new — no SearchBar above destinations) | One `.fynns-control-cluster.fynns-control-cluster--toolbar-end` (nowrap, trailing hug). LTR: secondary ghost tools first (sort / refresh / bulk **`ListChecksIcon`**) → **primary New/Plus `IconButton` last (rightmost)** — same primary-end rule as Dialog feet (≥ **0.5.60**). Bulk enter / multi-select → **`ListChecksIcon`** — **never** `ClipboardIcon` (copy/paste). **Section / destination help (hard ≥ 0.5.63):** at most **one** page-scope `InfoHint` in **TopAppBar `trailing`** — do **not** also park a section `InfoHint` in `--toolbar-end` (twin “i” = information redundancy). Field-level `InfoHint` on a preference `ControlRow` (hide-builtin) stays OK. Sort trigger **not** `ChevronDown`. Live: Layouts `#layouts-demo-shell` (TopAppBar InfoHint) + `#layouts-demo-navigation-drawer` mode sample | Full-width default cluster start-packed above first `NavigationDrawerItem` (reads as stray group chevron / overlap); chevron sort icon beside `NavigationDrawerGroup` expanders; **primary Plus parked mid-strip** (bulk after New); **Clipboard for「批量选择」**; **TopAppBar「页面说明」+ drawer「…说明」 twin InfoHints** |
+| **Bulk-select drawer / list rows** (multi-check catalog in mode sidebar or List) | **`Checkbox`** in `NavigationDrawerItem` `icon` or `ListItem` `leading`; **`checked` must not drive `active` / `selected`** (≥ **0.5.65**) — one open destination may keep a single `active` pill; all-selected stays default row + checkbox only (no `secondary-container` wall). Live: Layouts `#layouts-demo-navigation-drawer` third column | `active={checked}` / `selected={checked}` on every row; all-select paints a teal pill stack; using `active`/`selected` as the multi-select signal |
 | **Mode drawer preference** (hide built-in / long policy toggle in ~224px tools column) | One **`ControlRow`** + **`InfoHint` `size="sm"`** + track-only **`Switch`** (`label=""` + `ariaLabel`) — paragraph in Tooltip, **not** `ControlBlock` `description`. Live: same Layouts sample + Globals `#info-hint` | `ControlBlock` + multi-sentence `description` (~102dp tall stack above destination list) |
 | **Mode drawer SyncSideFilter** (compact `ToggleGroup` between toolbar and catalog) | **Omit option `tip`** (keep `ariaLabel` / visible labels) — ≥ 0.4.97. **`showCheck={false}`** when labels are mark glyphs (C / O) — default check slot + optical translate used to bleed into “全部” (≥ 0.4.100 also clips chips). Body sibling gap to tools / destinations = `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98 — not Item `section-gap` 4dp). Live: Layouts `#layouts-demo-navigation-drawer` | Any `tip` collides with sort/+ or EmptyState; tools↔filter crushed to 4dp `section-gap`; default `showCheck` wash bleed onto next mark |
   | Titled section shell | One `Card` (`title` / optional `icon` / `actions`) wrapping the **list or form**. `title` = **short section name only** — counts / branch / path → **body** (`.fynns-table-meta` / mono), never a title `fynns-control-cluster` of name+tally (glued `OpenSpec8`). Header `actions` = **interactive chrome only** (one horizontal `.fynns-control-cluster` of `IconButton` / `Button` / **at most one** `InfoHint` — nowrap under `.fynns-card-actions`); nested helper clusters hug + nowrap. Prefer **flat** IconButtons in `actions` (not nested clusters). **Do not** park ToggleGroup / labeled segmented controls in Card ctions (move to body ControlRow / FieldBlock; overflow secondary icons into DropdownMenu iconOnly More). Lead prefers ~40% flex-basis but **yields** (min-width: 0) so a dense IconButton strip never clips under Card overflow: hidden (≥ **0.5.57**) — long titles ellipsize. **InfoHint density (hard):** ≤1 help “i” in `actions`; `content` = **short tip** (≈1–2 sentences / ≤~120 chars preferred) — never twin InfoHints (include vs exclude) and never multi-topic essays in the bubble; longer / split topics → Card **body** `FieldHint` / `InlineAlert` / unit-stack bullets. **Form trailing chrome column (hard — not icons only):** in one strip (`.fynns-top-app-bar-trailing` / leading+trailing of one TopAppBar, `.fynns-card-actions`, one `.fynns-control-cluster` of icon chrome, **or the same destination page’s catalog `ControlRow` + List `trailing`**) **and** in one Card **body trailing chrome column** that spans components (`FieldBlock` / `FieldHeader` `actions` InfoHint, `.fynns-control-cluster--end-align` refresh `IconButton`, ControlRow trailing InfoHint **or lone `.fynns-table-meta`**) every trail cell shares the **same** box size — IconButton / icon `InfoHint` use one `size`; lone status meta (`-` / `OK` / `Fail` without a sibling tip) occupies that same trail box (core ≥ **0.4.137** centers the glyph in `--fynns-form-trail-chrome`). End-docked cells share **one vertical end edge** (same size ⇒ same left edge too). Think grid columns: Select+refresh and probe rows’ trailing cells align as one trail track — not “icons lock” while meta floats as a thin end glyph. Default page chrome / TopAppBar = **`md` (40dp)**; dense form field headers / probe rows = **`sm` (32dp)** — when the label-row InfoHint is `sm`, the Select-row refresh and ControlRow InfoHints in that Card stay `sm` (never default `md` refresh under `sm` InfoHint). Dense Card heads may use `sm` only when **every** icon in that head is `sm`. Never mix `sm` + `md` in the same strip or the same Card trailing column (e.g. InfoHint `sm` at left≈810 beside refresh `md` at left≈802). **CatalogMorph / mode-sidebar detail** (drawer `--toolbar-end` already `sm`): Card `actions` IconButtons / icon SplitButtons **must** be `size="sm"` (32dp) so head chrome matches the mode tools — default `md` (40dp) overfills the Card head (agents-hub workflows lesson ≥ **0.5.62**). Root destination pages without mode tools still prefer TopAppBar-matched Card head `md`. Live: `#card` actions strip + `#field-header` (label InfoHint + refresh + probe OK/Fail + idle `-` meta all on the `sm` trail) + `#list` / `#rhythm` catalog strip. | Card/Surface **inside** each ListItem; nested `width:100%` / wrap clusters stacking IconButtons into a ~72dp tall head; raw path/branch/count in `title` or `actions`; narrow host that leaves the lead ~one glyph wide; **two+ InfoHints** in one head; long paragraph tips; **mixed 32/40 trail cells** (icons or lone `.fynns-table-meta`) in one bar, one Card head, **or one Card body trailing column** |
@@ -1685,15 +1688,26 @@ classes.
   Sandbox Layout chrome GUI groups these under panel insets / sheet pads /
   shell size (see `SANDBOX_LAYOUT_AGENT_CATALOG` in
   `examples/sandbox/src/state/baseline.ts`).
-- **Icons (public subset):** AlertTriangle, Archive, ArrowLeft, ArrowUp, BarChart, Bot,
-  Briefcase, Check, CheckCircle, ChevronDown, ChevronRight, Clipboard, Close, Download, Eye, EyeOff, File,
-  FolderOpen, Globe, Info, LayoutGrid, ListChecks, Menu, Mic, Moon, MoreHorizontal, PanelLeft, PanelRight,
-  Pencil, Plug, Plus, Refresh, Save, Search, Settings, Sparkles, StopSquare, Sun,
-  Trash, Undo, Upload, Wrench — plus any glyph still imported by
-  Globals/Layouts/Preview.
-  **Bulk / multi-select enter** → `ListChecksIcon` (≥ **0.5.61**); `ClipboardIcon` stays
-  **copy/paste** only (Chat actions, paste tools).
-  Prefer `IconButton` + `Tooltip` over `title=`.
+- **Icons (full library — not a subset gate):** every glyph in
+  [`src/primitives/icons.tsx`](src/primitives/icons.tsx) is exported from
+  `@fynns/ui`. Consumers may use **any** of them — do **not** treat older
+  “public subset” lists as an allowlist. Missing semantic → add the glyph to
+  `icons.tsx` + barrel + sandbox `#icons` in the same change. Prefer
+  `IconButton` + `Tooltip` over `title=`. Live catalog: Globals `#icons`.
+  **Action → glyph (hard — pick by meaning, not nearest shape):**
+  | Action | Use | Avoid |
+  | --- | --- | --- |
+  | Enter bulk / multi-select | `ListChecksIcon` | `ClipboardIcon` (copy/paste) |
+  | Exit bulk / dismiss mode strip | `CloseIcon` | `ArrowLeftIcon` (nav / TopAppBar back) |
+  | Select all | `CheckSquareIcon` | `CheckIcon` (confirm / done) |
+  | Deselect all | `SquareIcon` | bare `CheckIcon` |
+  | Archive | `ArchiveIcon` | |
+  | Restore from archive | `UndoIcon` | `ArchiveIcon` (archive again) |
+  | Delete | `TrashIcon` | |
+  | Nav / mode exit back (TopAppBar) | `ArrowLeftIcon` | `CloseIcon` as destination back |
+  **Bulk row check (hard ≥ 0.5.65):** multi-select uses leading/icon **`Checkbox`**
+  only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
+  `selected`. Live: Layouts `#layouts-demo-navigation-drawer` (third column).
 
 Theme exports (`applyFynnsThemeMode`, tokens, scrollbar helpers) remain public.
 `DialogFrame` (`src/primitives/DialogFrame.tsx`), `Spinner`, floating
@@ -1723,8 +1737,8 @@ CONTEXT.md **Architecture seams**).
 5. **Consumer pattern bugs (hard):** same-task **three-way** loop — (a) constrain
    in this core (`AGENTS.md` + treaty + pasteable rule + public CSS if needed),
    (b) **update sandbox Globals / Preview / Layout demo** that teaches the fix
-   and **browser-verify in sandbox**, (c) **dispatch subagent** (or continue in
-   consumer checkout) to bump, patch props-only if needed, and **browser-verify
+   and **browser-verify in sandbox**, (c) **dispatch a subagent** into the
+   consumer checkout to bump, patch props-only if needed, and **browser-verify
    in the consumer** when the bug was reported there. Never a consumer-only patch.
    Cursor: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](.cursor/skills/constrain-then-consumer/SKILL.md).
 

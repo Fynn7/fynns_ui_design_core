@@ -69,7 +69,7 @@ Same task — **all three**, not pick-one:
 1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.
 2. **Sandbox demo** — update Globals / Preview / Layout sample that teaches the
    fix; browser-verify in sandbox (`#field-header`, `#form-recipe`, …).
-3. **Consumer** — dispatch subagent (or continue in consumer checkout): bump core,
+3. **Consumer** — dispatch a subagent into the consumer checkout: bump core,
    props-only fix, browser-verify on the reported screen.
 
 Authority: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
@@ -137,8 +137,10 @@ public API deletes are **atomic** (export + source + sandbox demo +
 
 ## Failure mode this treaty targets: squashed drawer
 
-**Prefer** `DestinationAppShell` for greenfield — it syncs Drawer↔Rail for you.
-Only hand-compose `ClippedNavShell` when you need a fully custom shell.
+**Prefer** `DestinationAppShell` for greenfield — destinations are **binary**
+(labeled resizable drawer or fully `hidden`; crowding **closes** nav, never
+densifies to icon-only rail). Only hand-compose `ClippedNavShell` when you need a
+fully custom shell (e.g. drill-in drawer-body swap — `#layouts-demo-drill-in`).
 
 Symptoms (often on **first paint** after crowding / narrow init):
 
@@ -150,10 +152,11 @@ Symptoms (often on **first paint** after crowding / narrow init):
 **Not** a healthy `NavigationRail`. Mechanism:
 
 1. `ClippedNavShell` sets `data-nav` / grid track from `navMode` only.
-2. Crowding (`onNavCrowded` / `wouldClippedNavDrawerCrowd`) or app logic sets
-   `navMode="rail"`.
-3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`
-   (optional `NavigationDrawerGroup` / `NavigationDrawerHeadline` for sections).
+2. **Legacy (≤ 0.4.83):** crowding or narrow logic set `navMode="rail"`.
+   **Current (≥ 0.4.84):** `DestinationAppShell` / correct hand-compose closes
+   to `hidden` — never rail densify.
+3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem` while
+   `navMode="rail"` (or the track is rail-width).
 4. Drawer fills the **rail-width** track → cramped horizontal chrome + scroll.
 
 Reference implementation:
@@ -169,8 +172,8 @@ Composer as canvas siblings. A catalog in that band is a scrolling
 the flex column (core: default Surface is not `min-height: 0`; unit-stack
 children do not shrink).
 
-Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
-`data-nav="rail"` still hosts `.fynns-nav-drawer`.
+Core slot shell does **not** auto-swap drawer body content. Dev builds warn when
+`data-nav="rail"` still hosts `.fynns-nav-drawer` (squashed drawer).
 
 ## Failure mode this treaty targets: icon-only rail densify (narrow)
 
@@ -1275,12 +1278,12 @@ Symptoms (Models / LLM backend Card foot, Dialog multi-action foot, Probe +
 Start / Copy + Import strips):
 
 - Two sibling `Button`s in one `.fynns-control-cluster--end-align` both show
-  a leading `CircularProgress` (`loading`) at the same time
+  a leading inline spinner (`Button` / `IconButton` `loading`) at the same time
 - Often both also share one `busy` boolean on every `loading={busy}`
 - Reads as **information redundancy** — two rings for one strip wait
 
 **Cause:** consumers treat “section busy” as “every action button paints
-busy chrome.” Core `Button` `loading` is a **per-control** slot spinner,
+busy chrome.” Core `Button` `loading` is a **per-control** inline **`Spinner`**,
 not a section-level BusyRegion. Same philosophy as Loading placement: **one**
 progress chrome per wait host.
 
@@ -1583,6 +1586,46 @@ group/row chevron language.
 trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+
+## Failure mode this treaty targets: bulk toolbar wrong glyphs
+
+Symptoms (mode drawer select mode — `ListBulkToolbar`):
+
+- 「返回菜单」 / exit select uses **`ArrowLeftIcon`** (reads as nav back)
+- 「全选」 uses bare **`CheckIcon`** (reads as confirm / done)
+- Restore uses **`ArchiveIcon`** again (same as archive)
+
+**Cause:** nearest-shape reuse without an action→glyph recipe. ArrowLeft is
+TopAppBar back; Check is confirm.
+
+**Fix in core (≥ 0.5.64):** public **`CheckSquareIcon`** / **`SquareIcon`**;
+full icon library exported (not a subset gate). Live: Globals `#icons`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Icons**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+**Fix in the consumer:** exit bulk → `CloseIcon`; select all →
+`CheckSquareIcon`; deselect all → `SquareIcon`; enter bulk →
+`ListChecksIcon`; restore → `UndoIcon`.
+
+## Failure mode this treaty targets: bulk select teal wall (checked → active)
+
+Symptoms (mode drawer / archived sidebar — bulk select all):
+
+- Every checked row paints **`NavigationDrawerItem` `--active`** /
+  **`ListItem` `--selected`** (`secondary-container` pill)
+- Select-all fills the drawer with a solid teal stack — reads as “everything
+  is the current destination”
+
+**Cause:** mapping `checked` to `active` / `selected`. Those pills mean **one
+open destination / row focus**, not multi-select membership.
+
+**Fix in core (≥ 0.5.65):** sandbox teaches **checked ≠ active** — Checkbox
+only; at most one unrelated `active` for the open detail host. Live: Layouts
+`#layouts-demo-navigation-drawer` third column.
+
+**Fix in the consumer:** `BulkSelectableNavItem` — `active={active ?? false}`
+(never `checked`); `BulkSelectableListRow` — `selected={false}` in selectMode.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
 

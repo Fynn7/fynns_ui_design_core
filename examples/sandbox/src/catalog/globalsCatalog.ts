@@ -61,6 +61,18 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["图标按钮", "icon button"],
   },
   {
+    id: "icons",
+    categoryId: "actions",
+    label: "Icons",
+    keywords: [
+      "图标库",
+      "glyphs",
+      "ListChecks",
+      "CheckSquare",
+      "icon library",
+    ],
+  },
+  {
     id: "info-hint",
     categoryId: "actions",
     label: "InfoHint",

@@ -11,7 +11,10 @@ tags: [workflow, primitives, sandbox]
 
 1. **Need?** Prefer an existing keep-set control ([`AGENTS.md`](../../AGENTS.md) catalog). Do not ship synonyms / thin wrappers (see `.cursor/rules/m3-next.mdc` skip list).
 2. **Tokens** — if a new `--fynns-*` value is required, edit `src/theme/tokens.ts` (and radius GUI rows in sandbox if adding `RADIUS_TOKENS`). Run `npm run gen:theme`.
-3. **Implement** — `src/primitives/X.tsx` + styles in `src/primitives/primitives.css` (`.fynns-*` + tokens only). Reuse existing state-layer patterns (`Button` ghost/tonal or `::before` + `--fynns-state-*`).
+3. **Implement** — `src/primitives/X.tsx` + styles in matching
+   `src/primitives/css/<domain>.css` (`.fynns-*` + tokens only; barrel
+   `primitives.css` only `@import`s). Reuse existing state-layer patterns
+   (`Button` ghost/tonal or `::before` + `--fynns-state-*`).
 4. **Export** — `src/index.ts` barrel.
 5. **Document** — update [`AGENTS.md`](../../AGENTS.md) keep-set line; Cursor rules if the public list is mirrored there.
 6. **Demo** — sandbox Globals or Preview sample in the **same** change (public API = what sandbox shows; see [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md)).

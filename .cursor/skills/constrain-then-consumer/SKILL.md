@@ -30,7 +30,7 @@ When a consumer UI is wrong (wrong primitive, density, alignment, host),
 6. **Bump + publish** `@fynn7/ui-design-core` in the same task
    (`docs/package-propagation.md`). Do not ship via a sibling Vite alias.
 7. **Consumer via subagent (hard when bug came from a consumer screen)** —
-   **dispatch a subagent** (or continue in that checkout) to `npm install` the
+   **dispatch a subagent** into the consumer checkout to `npm install` the
    new version and run **browser verification** there (not sandbox-only).
    Consumer fix = props / keep-set classes / own strings only — drop private
    restyles of `.fynns-*`. Follow `.cursor/rules/browser-verify-ui.mdc` /

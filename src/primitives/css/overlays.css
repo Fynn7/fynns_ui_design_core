@@ -98,7 +98,7 @@
   text-align: left;
   cursor: pointer;
   font: inherit;
-  font-size: var(--fynns-font-size-md);
+  font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
   appearance: none;
 }

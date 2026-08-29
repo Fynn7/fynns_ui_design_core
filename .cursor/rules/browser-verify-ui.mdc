@@ -36,7 +36,7 @@ When fixing wrong primitive / density / alignment / host reported from a consume
 
 1. **Sandbox first** — navigate to the updated Globals / Preview demo that
    teaches the fix; screenshot + measure if geometry mattered.
-2. **Consumer second** — subagent (or same agent in consumer checkout) verifies
+2. **Consumer second** — dispatch a subagent into the consumer checkout to verify
    the reported screen after `npm install` the published core version.
 
 Both are required in the same task. Invoke `/constrain-then-consumer` (see `.cursor/skills/constrain-then-consumer/SKILL.md`).

@@ -510,6 +510,15 @@ const navMode = open ? "drawer" : "hidden";
    放第二个分区「…说明」InfoHint（与顶栏 twin “i” = 信息冗余）。偏好行
    （隐藏内置）上的字段级 `InfoHint size="sm"` 仍可用。对照 `#layouts-demo-shell`
    顶栏 InfoHint + 模式样例工具条无分区 “i”。
+7a1b. **图标库（硬 ≥ 0.5.64）：** `@fynns/ui` 导出 `icons.tsx` **全部**字形 —
+   消费仓可任选，**不是**历史「public subset」白名单。按语义选：批量退出
+   `CloseIcon`、全选 `CheckSquareIcon`、取消全选 `SquareIcon`、进入批量
+   `ListChecksIcon`、恢复 `UndoIcon`（不要 Archive 当恢复）。对照 `#icons`。
+7a1c. **批量勾选行（硬 ≥ 0.5.65）：** 多选只用 leading/icon **`Checkbox`**
+   — **禁止** `checked` → `NavigationDrawerItem` `active` / `ListItem`
+   `selected`（全选不得刷成 secondary-container 一片）。至多保留**一个**
+   与勾选无关的 `active`（当前打开的目的地）。对照 Layouts
+   `#layouts-demo-navigation-drawer` 第三列。
 7a2. **模式侧栏「隐藏内置」类偏好（硬）：** 禁止在 ~224px 工具列用
    **`ControlBlock` + 长 `description`**（DevTools 常见 ~102dp 高块、Switch
    下坠）。改用 **单行** `ControlRow` + **`InfoHint size="sm"`**（政策段落进

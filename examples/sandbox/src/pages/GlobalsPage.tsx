@@ -41,6 +41,9 @@ import {
   ChatThread,
   ClipboardIcon,
   ListChecksIcon,
+  CloseIcon,
+  CheckSquareIcon,
+  SquareIcon,
   BriefcaseIcon,
   Carousel,
   CarouselItem,
@@ -147,6 +150,7 @@ import {
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
 import { TokenList } from "../components/TokenList";
 import {
   demoElementId,
@@ -1485,6 +1489,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </IconButton>
           </Tooltip>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="icons">
+          <SandboxHelp text={t("globals.iconsHelp")} />
+          <IconsLibraryDemo />
+          <SandboxHelp text={t("globals.iconsBulkRecipeHelp")} />
+          <div className="fynns-control-cluster" aria-label={t("globals.iconsBulkRecipeAria")}>
+            <Tooltip content={t("globals.iconsBulkExit")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkExit")}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkSelectAll")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkSelectAll")}>
+                <CheckSquareIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkDeselectAll")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkDeselectAll")}>
+                <SquareIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkEnter")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkEnter")}>
+                <ListChecksIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="info-hint">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>

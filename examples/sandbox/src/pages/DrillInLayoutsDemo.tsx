@@ -11,7 +11,6 @@ import {
   NavigationDrawerItem,
   PanelLeftIcon,
   SearchBar,
-  SettingsIcon,
   TopAppBar,
   Tooltip,
 } from "@fynns/ui";
@@ -22,7 +21,7 @@ import {
   NavDrawerFooterAccount,
 } from "../components/NavDrawerFooterAccount";
 
-type RootDest = "home" | "catalog" | "prefs";
+type RootDest = "home" | "catalog";
 type DrillLevel = "root" | "catalog";
 
 const CATALOG_IDS = ["alpha", "beta", "gamma"] as const;
@@ -31,13 +30,15 @@ type CatalogId = (typeof CATALOG_IDS)[number];
 /**
  * Interactive drill-in recipe: root destinations → swap drawer body to a
  * catalog list + TopAppBar leadingExtra back; main stays full-width detail
- * (no list-pane / hub-split). Live at `#layouts-demo-drill-in`.
+ * (no list-pane / hub-split). Software prefs = footer gear only (no drawer Item).
+ * Live at `#layouts-demo-drill-in`.
  */
 export function DrillInLayoutsDemo() {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
   const [level, setLevel] = useState<DrillLevel>("root");
   const [rootDest, setRootDest] = useState<RootDest>("home");
+  const [prefsOpen, setPrefsOpen] = useState(false);
   const [catalogId, setCatalogId] = useState<CatalogId | null>(null);
   const [catalogQuery, setCatalogQuery] = useState("");
 
@@ -58,6 +59,11 @@ export function DrillInLayoutsDemo() {
     gamma: t("layouts.drillCatalogGamma"),
   };
 
+  const openPrefs = () => {
+    setLevel("root");
+    setPrefsOpen(true);
+  };
+
   const navFooter = (
     <NavDrawerFooterAccount
       showLabel
@@ -65,13 +71,14 @@ export function DrillInLayoutsDemo() {
       accountName={t("nav.footerAccountName")}
       settingsLabel={t("layouts.drillPrefs")}
       settingsTip={t("layouts.drillPrefs")}
+      onSettingsClick={openPrefs}
     />
   );
 
   const title =
     level === "catalog"
       ? t("layouts.drillCatalogTitle")
-      : rootDest === "prefs"
+      : prefsOpen
         ? t("layouts.drillPrefs")
         : rootDest === "catalog"
           ? t("layouts.drillCatalogTitle")
@@ -80,6 +87,7 @@ export function DrillInLayoutsDemo() {
   const enterCatalog = () => {
     setLevel("catalog");
     setRootDest("catalog");
+    setPrefsOpen(false);
     setCatalogId(null);
   };
 
@@ -88,6 +96,7 @@ export function DrillInLayoutsDemo() {
     setCatalogQuery("");
     setCatalogId(null);
     setRootDest("home");
+    setPrefsOpen(false);
   };
 
   const rootNav = (
@@ -99,20 +108,17 @@ export function DrillInLayoutsDemo() {
       <NavigationDrawerItem
         icon={<FolderOpenIcon />}
         label={t("layouts.drillHome")}
-        active={rootDest === "home"}
-        onClick={() => setRootDest("home")}
+        active={rootDest === "home" && !prefsOpen}
+        onClick={() => {
+          setRootDest("home");
+          setPrefsOpen(false);
+        }}
       />
       <NavigationDrawerItem
         icon={<FileIcon />}
         label={t("layouts.drillCatalogTitle")}
         active={rootDest === "catalog"}
         onClick={enterCatalog}
-      />
-      <NavigationDrawerItem
-        icon={<SettingsIcon />}
-        label={t("layouts.drillPrefs")}
-        active={rootDest === "prefs"}
-        onClick={() => setRootDest("prefs")}
       />
     </NavigationDrawer>
   );
@@ -166,7 +172,7 @@ export function DrillInLayoutsDemo() {
         />
       );
     }
-  } else if (rootDest === "prefs") {
+  } else if (prefsOpen) {
     main = (
       <EmptyState
         title={t("layouts.drillPrefsEmptyTitle")}

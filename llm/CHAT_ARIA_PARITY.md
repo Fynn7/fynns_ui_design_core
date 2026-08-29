@@ -33,9 +33,9 @@ region. It uses:
 4. Composer autofocus; after send, **keep focus in the composer** and announce
    status via notify regions — do **not** move focus onto the streaming bubble
 
-`@fynns/ui` already has `role="region"` / `role="log"` / bubble `aria-live`
-while streaming. For ChatGPT parity, prefer **lifecycle notify regions** over
-token-level live updates on the bubble.
+`@fynns/ui` already has `role="region"` / `role="log"` / bubble **`aria-busy`**
+while streaming (no bubble `aria-live`). For ChatGPT parity, prefer **lifecycle
+notify regions** over token-level live updates on the bubble.
 
 ---
 
@@ -139,7 +139,7 @@ ChatGPT avoids that by **separating** visual streaming from SR notifications.
 | Piece | fynns | Parity target |
 | --- | --- | --- |
 | Streaming article | `aria-busy` + `aria-label={streamingLabel}` | Keep `aria-busy`; label = short status (“Generating response”) |
-| Bubble | `aria-live="polite"` + `aria-relevant="additions text"` **while streaming** | **Remove / off while streaming**; announce start/complete via notify |
+| Bubble | **No** `aria-live` while streaming (tokens append with live off) | Same — announce start/complete via notify |
 | Thinking disclosure (`ChatThinking`) | `aria-busy` while `streaming`; trigger `aria-expanded` / `aria-controls`; closed body `inert` | **Never** pipe thought tokens into a live region; lifecycle polite notify stays app / Chat contract |
 | Notify hosts | none | Add dual sr-only `alert` + `status` (or one polite status + optional assertive for errors) owned by `Chat` or the app |
 | Announcement text | (bubble content) | Discrete strings only, e.g. “Generating response” → “Response complete” (localize in app) |
@@ -226,7 +226,7 @@ to Dictate (ChatGPT empty-home).
 | `sendLabel` | `"Send"` | OK; optional `"Send message"` / `"Send prompt"` |
 | `stopLabel` | `"Stop generating"` | OK |
 | `dictateLabel` / `stopDictateLabel` | `"Dictate"` / `"Stop dictation"` | ChatGPT idle: **"Start dictation"** |
-| Leading attach | `"Attach"` | ChatGPT: **"Add files and more"** |
+| Leading attach | **none** (omit `leading` / pass `null`) | ChatGPT: **"Add files and more"** when the app passes a leading control |
 | Form | `aria-busy` while `busy` | Keep |
 | Primary | `IconButton` + `Tooltip` + `aria-label` | Keep (icon-only needs name) |
 
@@ -250,7 +250,7 @@ busy, IME composition must not send — see AGENTS.md **Composer keys**.
 
 Priority for code changes (this doc is the contract; implementation is separate):
 
-1. **Streaming live:** stop putting `aria-live` on the bubble while tokens append;
+1. **Streaming live:** bubble has **no** `aria-live` while tokens append;
    add Chat-owned (or documented app-owned) polite/assertive **notify** regions
    for start / complete / stopped / error.
 2. **Focus:** document + optionally ensure composer retains focus after submit
