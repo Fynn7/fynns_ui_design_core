@@ -3831,14 +3831,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </span>
               }
               trailing={
-                <Tooltip content={t("globals.listTreeOpen")}>
-                        <IconButton
-                          variant="ghost"
-                    aria-label={t("globals.listTreeOpen")}
-                  >
-                    <BotIcon />
-                  </IconButton>
-                </Tooltip>
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listTreeAdd")}>
+                    <IconButton variant="ghost" aria-label={t("globals.listTreeAdd")}>
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listTreeOpen")}>
+                    <IconButton variant="ghost" aria-label={t("globals.listTreeOpen")}>
+                      <BotIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
               }
               aria-expanded={listTreeOpen}
               onClick={() => setListTreeOpen((open) => !open)}

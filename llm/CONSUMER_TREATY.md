@@ -1627,6 +1627,31 @@ only; at most one unrelated `active` for the open detail host. Live: Layouts
 (never `checked`); `BulkSelectableListRow` — `selected={false}` in selectMode.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: expandable List `--with-end` trailing mid-gap
+
+Symptoms (project catalog `CatalogGroup` — group row + nested members):
+
+- Parent group row has **`trailing` IconButtons** (New / Import / …) and **`detail`**
+  with nested `ListItem`s
+- Hover-reveal **+ / download** disks sit **between** the parent pill and the first
+  child row — vertically centered on the **whole host** (parent + detail), not on
+  the parent band alone
+- Tooltip on **+** overlaps nested member copy
+
+**Cause:** core `--with-end` absolute trailing used `inset-block: 0` against
+`.fynns-list-item-host` while `detail` lives as a sibling under that host. Without
+`position: relative` on `.fynns-list-item-row`, the containing block was the full
+host height.
+
+**Fix in core (≥ 0.5.66):** `.fynns-list-item-row` is `position: relative` so
+`--with-end` trailing inside the row shell anchors to the **parent band only**
+(Timeline row shell already had this). Live: Globals `#list` expandable tree
+(two IconButtons on open parent row).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` — props-only `ListItem`
+`detail` + `trailing` recipe unchanged; drop any local CSS that nudges group
+actions with negative margin / `top`.
+
 ## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
 
 Symptoms (workflows / CatalogMorph mode destinations):

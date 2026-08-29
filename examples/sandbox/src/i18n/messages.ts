@@ -1620,7 +1620,7 @@ const en = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 calls",
   "globals.listTreeHelp":
-    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + decorative chevron. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
+    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + decorative chevron. **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
   "globals.listTreeAria": "Sample expandable catalog",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "Sample session",
@@ -1628,6 +1628,7 @@ const en = {
   "globals.listTreeDuration": "1m 47s",
   "globals.listTreeCalls": "4 calls",
   "globals.listTreeOpen": "Open record",
+  "globals.listTreeAdd": "Add nested record",
   "globals.listTreeTurnsAria": "Sample turns",
   "globals.listTreeTurnOverline": "2026.08.17 15:41",
   "globals.listTreeTurnHeadline":
@@ -3520,7 +3521,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 次",
   "globals.listTreeHelp":
-    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + 装饰 chevron。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
+    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + 装饰 chevron。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
   "globals.listTreeAria": "可展开目录示例",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "示例会话",
@@ -3528,6 +3529,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listTreeDuration": "1m 47s",
   "globals.listTreeCalls": "4 次",
   "globals.listTreeOpen": "打开记录",
+  "globals.listTreeAdd": "新建嵌套记录",
   "globals.listTreeTurnsAria": "示例往返",
   "globals.listTreeTurnOverline": "2026.08.17 15:41",
   "globals.listTreeTurnHeadline":

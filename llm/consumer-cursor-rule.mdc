@@ -519,6 +519,10 @@ const navMode = open ? "drawer" : "hidden";
    `selected`（全选不得刷成 secondary-container 一片）。至多保留**一个**
    与勾选无关的 `active`（当前打开的目的地）。对照 Layouts
    `#layouts-demo-navigation-drawer` 第三列。
+7a1d. **可展开 List 父行 `--with-end`（硬 ≥ 0.5.66）：** `ListItem` 同时有
+   `detail` + `trailing` IconButton 时，hover 操作锚在 **`.fynns-list-item-row`**
+   父行带 — **禁止**用负 margin / `top` 把组操作拽到嵌套子项之间的空隙。
+   对照 Globals `#list` 可展开树（父行双 IconButton）。纯 bump 即可。
 7a2. **模式侧栏「隐藏内置」类偏好（硬）：** 禁止在 ~224px 工具列用
    **`ControlBlock` + 长 `description`**（DevTools 常见 ~102dp 高块、Switch
    下坠）。改用 **单行** `ControlRow` + **`InfoHint size="sm"`**（政策段落进

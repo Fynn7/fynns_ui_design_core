@@ -2026,6 +2026,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-row {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
