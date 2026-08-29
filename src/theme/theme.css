@@ -361,7 +361,7 @@
   --fynns-list-height-1: 3.5rem;
   --fynns-list-height-2: 3.5rem;
   --fynns-list-height-3: 5.5rem;
-  --fynns-list-pad-inline: 1rem;
+  --fynns-list-pad-inline: var(--fynns-layout-strip-pad-inline);
   --fynns-list-pad-block: 0.5rem;
   --fynns-list-inset-inline: 0.5rem;
   --fynns-list-inset-block: 0.5rem;
@@ -569,6 +569,7 @@
   --fynns-layout-control-row-gap: 0.25rem;
   --fynns-layout-control-row-column-gap: 0.5rem;
   --fynns-layout-control-cluster-gap: 0.25rem;
+  --fynns-layout-action-cluster-gap: 0.5rem;
   --fynns-layout-chrome-icon-gap: 0.125rem;
   --fynns-layout-field-hint-gap: 0.5rem;
   --fynns-layout-field-header-action-row-min-height: 2rem;

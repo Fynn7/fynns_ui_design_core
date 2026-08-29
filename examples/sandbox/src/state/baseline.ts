@@ -64,6 +64,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "control-row-gap",
   "control-row-column-gap",
   "control-cluster-gap",
+  "action-cluster-gap",
   "chrome-icon-gap",
   "control-row-label",
   // panelInsets
@@ -149,6 +150,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "control-row-column-gap",
     "control-row-gap",
     "control-cluster-gap",
+    "action-cluster-gap",
     "chrome-icon-gap",
     "control-row-label",
   ],
@@ -273,6 +275,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "control-row-gap": "Toolbar rhythm · stacked label above controls",
   "control-row-column-gap": "Toolbar rhythm · horizontal label | controls",
   "control-cluster-gap": "Toolbar rhythm · siblings in one controls cluster (4dp)",
+  "action-cluster-gap":
+    "Action footers · labeled Buttons in end-align cluster / dialog foot (8dp)",
   "chrome-icon-gap":
     "Chrome icons · TopAppBar actions + NavigationRail destination gap (shared)",
   "control-row-label": "Toolbar structure · ControlRow fixed label column",

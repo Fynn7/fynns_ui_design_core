@@ -5182,14 +5182,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
           <SandboxHelp text={t("globals.codeBlockHelp")} />
           <SandboxHelp text={t("globals.codeBlockEditableHelp")} />
-          {/* Narrow host — soft-wrap single textarea + native selection (no overlay). */}
+          {/* Narrow host — soft-wrap editable (native selection). */}
           <div style={{ maxWidth: "22rem" }}>
             <CodeBlock
               variant="editable"
               label={t("globals.codeBlockSoftWrapSelLabel")}
               language="bash"
               copyAriaLabel={t("globals.codeBlockCopy")}
-              defaultValue={t("globals.codeBlockSoftWrapSelCode")}
+              defaultValue={t("globals.codeBlockSoftWrapHlSelCode")}
               aria-label={t("globals.codeBlockSoftWrapSelAria")}
               maxHeight="8rem"
             />

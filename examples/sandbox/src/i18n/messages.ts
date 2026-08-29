@@ -318,6 +318,9 @@ const en = {
   "layoutChrome.clusterGap": "Control cluster",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — siblings inside one controls cluster (e.g. EasingBar track → Replay).",
+  "layoutChrome.actionClusterGap": "Action footer",
+  "layoutChrome.actionClusterGapHint":
+    "--fynns-layout-action-cluster-gap — labeled Buttons in end-align footers / `.fynns-dialog-foot` (8dp; IconButton clusters stay on control-cluster-gap).",
   "layoutChrome.chromeIconGap": "Chrome icon gap",
   "layoutChrome.chromeIconGapHint":
     "--fynns-layout-chrome-icon-gap — TopAppBar IconButtons + NavigationRail destinations (icon-only).",
@@ -664,19 +667,25 @@ const en = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Default **soft-wrap** (`wrap`) uses a **single visible textarea** + native `::selection` (Chromium textarea vs `<pre>` wrap at different breakpoints — no dual-layer overlay). **Live token colors while typing** → `wrap={false}` (dual-layer under transparent caret). **`readOnly`** → single `<pre>` (full syntax colors + native selection).",
+    "`variant=\"editable\"` — type to re-highlight; height **autoGrow**s with content (floor `rows` default 1, soft cap `maxHeight`). Default **soft-wrap** (`wrap`): editable + highlight uses the **deferred token overlay** (live syntax colors while typing). Wrapped lines may stripe native `::selection` — use `wrap={false}` or **`readOnly`** when alignment matters. **`readOnly`** → single `<pre>` (full syntax colors + native selection).",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "Soft-wrap editable in a narrow host: long path wraps on one textarea — Ctrl+A / drag-select uses native wash (no mirror overlay). Need live token colors while editing → `wrap={false}`.",
+    "Soft-wrap editable in a narrow host: long path wraps with live token overlay — Ctrl+A / drag-select uses native wash (no mirror bands). Wrapped lines may stripe — use `wrap={false}` or `readOnly` when alignment matters.",
   "globals.codeBlockSoftWrapSelAria": "Soft-wrap selection sample",
   "globals.codeBlockSoftWrapSelCode":
     "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
+  "globals.codeBlockSoftWrapHlSelLabel": "soft-wrap-highlight-select.sh",
+  "globals.codeBlockSoftWrapHlSelHelp":
+    "Soft-wrap editable in a narrow host: live token overlay + native `::selection` (no mirror bands). Long wrapped lines may stripe — use `wrap={false}` or `readOnly` when selection alignment matters.",
+  "globals.codeBlockSoftWrapHlSelAria": "Soft-wrap highlighted selection sample",
+  "globals.codeBlockSoftWrapHlSelCode":
+    "loadvolume /Users/example/data/sample-dataset/nested-folder/sample-volume-file.dat\n",
   "globals.codeBlockFileBodyTitle": "File body (sample.md)",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
     "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "Same file body with `readOnly` — full highlight on one pre; drag-select should not show striped / misaligned wash (contrast with overlay while editing).",
+    "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` uses the live deferred token overlay (≥ 0.5.52) — use `wrap={false}` or `readOnly` when wrap/selection alignment matters.",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2152,6 +2161,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.clusterGap": "控件簇",
   "layoutChrome.clusterGapHint":
     "--fynns-layout-control-cluster-gap — 同一控件簇内兄弟（如缓动轨道 → 重放）。",
+  "layoutChrome.actionClusterGap": "动作脚栏",
+  "layoutChrome.actionClusterGapHint":
+    "--fynns-layout-action-cluster-gap — end-align 带文案 Button 脚栏 / `.fynns-dialog-foot`（8dp；IconButton 簇仍用 control-cluster-gap）。",
   "layoutChrome.chromeIconGap": "Chrome 图标间距",
   "layoutChrome.chromeIconGapHint":
     "--fynns-layout-chrome-icon-gap — TopAppBar IconButton 与 NavigationRail 目的地（仅图标）共用。",
@@ -2496,19 +2508,25 @@ const zh: Record<MessageKey, string> = {
     "Total = Input(with cache write) + Input(without cache write) + Cache read + Output",
   "globals.codeBlockEditableLabel": "editable.ts",
   "globals.codeBlockEditableHelp":
-    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认 **软换行**（`wrap`）为 **单层可见 textarea** + 原生 `::selection`（Chromium 下 textarea 与 `<pre>` 换行点不同 — 不做双层 overlay）。**编辑时 live token 色** → `wrap={false}`（透明 caret 下双层高亮）。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。",
+    "`variant=\"editable\"` — 输入即重新分词高亮；高度默认 **autoGrow**（`rows` 下限默认 1，软上限 `maxHeight`）。默认 **软换行**（`wrap`）：可编辑 + 高亮走 **deferred token overlay**（编辑时 live 语法色）。长行软换行时原生 `::selection` 可能条纹 — 对齐要求高时用 `wrap={false}` 或 **`readOnly`**。**`readOnly`** → 单层 `<pre>`（完整语法色 + 原生选区）。",
   "globals.codeBlockSoftWrapSelLabel": "soft-wrap-select.sh",
   "globals.codeBlockSoftWrapSelHelp":
-    "软换行可编辑 + 窄宿主：长路径在单层 textarea 上换行 — Ctrl+A / 拖选走原生 wash（无镜像 overlay）。编辑时要 live token 色 → `wrap={false}`。",
+    "软换行可编辑 + 窄宿主：长路径 live token overlay 换行 — Ctrl+A / 拖选走原生 wash（无镜像 band）。长行可能条纹 — 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
   "globals.codeBlockSoftWrapSelAria": "软换行选区示例",
   "globals.codeBlockSoftWrapSelCode":
     "cp /Users/example/projects/sample-app/assets/very-long-nested-folder-name/texture-atlas-v2.png /tmp/out/texture-atlas-v2.png\necho done\n",
+  "globals.codeBlockSoftWrapHlSelLabel": "soft-wrap-highlight-select.sh",
+  "globals.codeBlockSoftWrapHlSelHelp":
+    "窄宿主软换行可编辑：live token overlay + 原生 `::selection`（无镜像 band）。长行可能条纹 — 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
+  "globals.codeBlockSoftWrapHlSelAria": "软换行高亮选区示例",
+  "globals.codeBlockSoftWrapHlSelCode":
+    "loadvolume /Users/example/data/sample-dataset/nested-folder/sample-volume-file.dat\n",
   "globals.codeBlockFileBodyTitle": "文件正文（sample.md）",
   "globals.codeBlockFileBodyAria": "sample.md",
   "globals.codeBlockFileBodyHelp":
     "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "同一文件正文 + `readOnly` — 完整高亮单层 pre；拖选不应出现条纹/错位 wash（可与上方可编辑 overlay 对照）。",
+    "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 使用 live deferred token overlay（≥ 0.5.52）— 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",

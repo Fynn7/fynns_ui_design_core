@@ -1275,7 +1275,31 @@ loading; Cancel / Copy / Import disabled, no rings).
 mutually exclusive flags). Never `loading={busy}` on two cluster siblings.
 Bump / re-paste `consumer-cursor-rule.mdc`. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Loading placement **Multi-action
-footer wait**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+footer wait**.
+
+## Failure mode this treaty targets: tight labeled Button gaps in end-align footers
+
+Symptoms (Dialog body foot, Card action strip — e.g. Applications edit Dialog
+`取消 | 删除 | 保存 | 下一步`):
+
+- Adjacent pill Buttons read **kissed** / ~4dp apart (same gap as IconButton
+  strips)
+- `.fynns-dialog-foot` Confirm hosts look looser than body-foot
+  `.fynns-control-cluster--end-align` labeled Buttons
+
+**Cause:** `.fynns-control-cluster` defaulted every sibling gap to
+`control-cluster-gap` (**4dp**). Labeled action feet should match
+`.fynns-dialog-foot` (**8dp** / `action-cluster-gap`).
+
+**Fix in core (≥ **0.5.52**):** end-align clusters with labeled
+`.fynns-btn:not(.fynns-btn--icon)` and **no** `__grow` use
+`--fynns-layout-action-cluster-gap`. Select+refresh / table-map rows with
+`__grow` keep **4dp**.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core`; keep one
+`.fynns-control-cluster--end-align` — drop private `margin` / `gap` on
+`.fynns-btn`. Re-paste `consumer-cursor-rule.mdc`. Live: sandbox `#timeline`
+edit Dialog foot / `#rhythm` end-align. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 
@@ -1596,12 +1620,11 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88; soft-wrap single textarea ≥ **0.5.27** — visual-line overlay **0.5.23–0.5.26 removed**):** `readOnly` on
+**Fix in core (≥ 0.4.88; visual-line mirror bands **reverted**; live soft-wrap edit tokens **restored** in **0.5.52**):** `readOnly` on
 `variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
-native selection). Active edit + `wrap` → **single visible textarea** + native
-`::selection` (no live token overlay — dual-layer caused ghost glyphs / selection
-gaps). **Live token colors while typing** → `wrap={false}` (classic dual-layer
-`<pre>`). Live: Globals `#code-block` soft-wrap sample + file-body + readOnly pair.
+native selection). Active edit + `wrap` + highlight → **live deferred token overlay**
+(wrap/selection may stripe). Use **`wrap={false}`** or `readOnly` when alignment matters. **`wrap={false}`** → classic dual-layer `<pre>`. Live: Globals `#code-block`
+soft-wrap sample + file-body + readOnly pair.
 **Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
 `FileBodyCodeBlock`); do not patch selection in app CSS. Bump
 `@fynn7/ui-design-core`. Pasteable:
@@ -2036,6 +2059,24 @@ copy→disk breath.
 **Fix in core (≥ 0.4.115; denser alias ≥ 0.4.123):** `--fynns-list-end-actions-gap`
 aliases `--fynns-layout-control-cluster-gap` (**4dp**). Consumer: bump only —
 no app CSS. Live: sandbox `#list` path catalog / org+dates (hover a row).
+
+## Failure mode this treaty targets: List row copy cramped on the start edge
+
+Symptoms on a page-catalog `ListItem` (Applications / Experiences-style
+create-edit rows — headline + org `supportingText` + short status meta):
+
+- Headline / supporting copy sits visually tight against the **left** curve of
+  the `radius-3xl` hover pill (≈16dp inner pad felt narrow on 56dp rows)
+- Consumer adds private `padding-inline-start` on `.fynns-list-item*` or wraps
+  copy in an extra padded `div`
+
+**Cause:** legacy `--fynns-list-pad-inline: 1rem` (16dp) was one step below
+long-strip text breath on the same pill geometry.
+
+**Fix in core (≥ 0.5.36):** `--fynns-list-pad-inline` aliases
+`--fynns-layout-strip-pad-inline` (**20dp**). Trailing `--with-end` reserve
+uses the same token — end breath stays symmetric. Consumer: bump only — no app
+CSS. Live: sandbox `#list` status+action.
 
 ## Failure mode this treaty targets: Chip as table-cell status / mapping kind
 

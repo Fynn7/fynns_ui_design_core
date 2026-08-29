@@ -1,4 +1,5 @@
 import { normalizeLanguage, profileFor } from "./languages";
+import { tokenizeMarkdown } from "./markdown";
 import { tokenizeMarkup } from "./markup";
 import {
   getRegisteredHighlightLanguage,
@@ -327,6 +328,7 @@ function tokenizeWithProfile(code: string, profile: LangProfile): CodeSegment[] 
  */
 export function highlightCode(code: string, language?: string): CodeSegment[] {
   const id = normalizeLanguage(language);
+  if (id === "markdown" || id === "md") return tokenizeMarkdown(code);
   if (id === "xml" || id === "html") return tokenizeMarkup(code);
   if (id) return tokenizeWithProfile(code, profileFor(id));
   if (language) {

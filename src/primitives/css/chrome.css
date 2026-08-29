@@ -511,7 +511,7 @@
   padding-block-start: var(--fynns-space-lg);
   padding-inline: var(--fynns-layout-dialog-inset);
   padding-block-end: var(--fynns-space-lg);
-  gap: var(--fynns-space-sm);
+  gap: var(--fynns-layout-action-cluster-gap);
 }
 
 .fynns-dialog-head {
@@ -596,7 +596,7 @@
   flex: 0 0 auto;
   display: flex;
   justify-content: flex-end;
-  gap: var(--fynns-space-sm);
+  gap: var(--fynns-layout-action-cluster-gap);
   padding: 0 var(--fynns-layout-dialog-inset) var(--fynns-layout-dialog-inset);
 }
 

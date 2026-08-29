@@ -906,7 +906,12 @@ export const LIST_TOKENS = {
    */
   "height-2": "3.5rem",
   "height-3": "5.5rem",
-  "pad-inline": "1rem",
+  /**
+   * Row copy inset inside the radius-3xl pill (aliases
+   * `--fynns-layout-strip-pad-inline` / 20dp — same long-strip text breath as
+   * Banner / Snackbar; was 16dp and read cramped on 56dp catalog rows).
+   */
+  "pad-inline": "var(--fynns-layout-strip-pad-inline)",
   "pad-block": "0.5rem",
   /**
    * Outer inset on `.fynns-list` so `radius-3xl` row highlights breathe
@@ -1447,6 +1452,13 @@ export const LAYOUT_TOKENS = {
    * `chrome-icon-gap` (**2dp**). Live: `#rhythm` catalog strip / `#list`.
    */
   "control-cluster-gap": "0.25rem",
+  /**
+   * Labeled action buttons in one end-align cluster (8dp): Dialog body foot,
+   * Card action strips, `.fynns-dialog-foot` — wider than IconButton /
+   * Select+refresh clusters (`control-cluster-gap` 4dp). Live: `#timeline`
+   * edit Dialog foot / `#rhythm` end-align.
+   */
+  "action-cluster-gap": "0.5rem",
   /**
    * Gap between adjacent chrome icon targets (2dp): TopAppBar leading/trailing
    * IconButtons and NavigationRail destination indicators (icon-only).

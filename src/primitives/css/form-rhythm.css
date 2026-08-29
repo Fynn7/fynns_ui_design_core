@@ -244,6 +244,17 @@
   align-items: flex-start;
 }
 
+/*
+ * Labeled Button footers (Dialog body end-align, Card actions): match
+ * `.fynns-dialog-foot` — 8dp, not the 4dp IconButton / Select+refresh gap.
+ * Clusters with `__grow` (table map, Select+reload) keep control-cluster-gap.
+ */
+.fynns-control-cluster--end-align:has(.fynns-btn:not(.fynns-btn--icon)):not(
+    :has(.fynns-control-cluster__grow)
+  ) {
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
 .fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-textarea.fynns-control-cluster__grow {
   flex: 1 1 0%;

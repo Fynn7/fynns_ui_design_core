@@ -36,7 +36,9 @@ export type CodeLanguageId =
   | "html"
   | "bash"
   | "sh"
-  | "shell";
+  | "shell"
+  | "markdown"
+  | "md";
 
 export type LangProfile = {
   keywords: ReadonlySet<string>;
