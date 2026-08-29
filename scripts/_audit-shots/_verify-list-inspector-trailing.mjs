@@ -48,7 +48,7 @@ await page.waitForSelector("#sandbox-list-inspector-trailing", {
 });
 await page.locator("#sandbox-list-inspector-trailing").scrollIntoViewIfNeeded();
 
-const metrics = await page.evaluate(() => {
+const metricsClosed = await page.evaluate(() => {
   const list = document.querySelector("#sandbox-list-inspector-trailing");
   const hosts = [
     ...(list?.querySelectorAll(".fynns-list-item-host--with-end") ?? []),
@@ -70,6 +70,10 @@ const metrics = await page.evaluate(() => {
   const mr = meta?.getBoundingClientRect();
   const gapMetaBtn =
     mr ? Math.round((bb.left - mr.right) * 10) / 10 : null;
+  const li = host.querySelector(".fynns-list-item");
+  const liTop = li ? Math.round(li.getBoundingClientRect().top) : null;
+  const panel = select.querySelector(".fynns-search-bar-panel");
+  const panelPos = panel ? getComputedStyle(panel).position : null;
   const style = getComputedStyle(trailing);
   const overlapX = Math.max(
     0,
@@ -104,6 +108,8 @@ const metrics = await page.evaluate(() => {
     gapMetaBtn,
     gapMetaLefts,
     metaLeftSpread,
+    listItemTop: liTop,
+    panelPosition: panelPos,
     btn: {
       left: Math.round(bb.left),
       right: Math.round(bb.right),
@@ -113,6 +119,7 @@ const metrics = await page.evaluate(() => {
       left: Math.round(sb.left),
       right: Math.round(sb.right),
       w: Math.round(sb.width),
+      h: Math.round(sb.height),
     },
     gap: Math.round(gap * 10) / 10,
     overlapX: Math.round(overlapX * 10) / 10,
@@ -121,6 +128,53 @@ const metrics = await page.evaluate(() => {
     padEnd,
   };
 });
+
+await page.evaluate(() => {
+  const trigger = document.querySelector(
+    "#sandbox-list-inspector-trailing button.fynns-select-trigger",
+  );
+  if (!trigger) throw new Error("missing select trigger");
+  trigger.click();
+});
+await page.waitForTimeout(400);
+
+const metricsOpen = await page.evaluate(() => {
+  const list = document.querySelector("#sandbox-list-inspector-trailing");
+  const host = list?.querySelector(".fynns-list-item-host--with-end");
+  const li = host?.querySelector(".fynns-list-item");
+  const trailing = host?.querySelector(".fynns-list-item-trailing--end");
+  const select = trailing?.querySelector(".fynns-select");
+  const panel = select?.querySelector(".fynns-search-bar-panel");
+  const field = select?.querySelector(".fynns-search-bar-field");
+  if (!host || !li || !select || !panel || !field) {
+    return { ok: false, error: "missing open-state nodes" };
+  }
+  const liBox = li.getBoundingClientRect();
+  const selectBox = select.getBoundingClientRect();
+  const fieldBox = field.getBoundingClientRect();
+  const panelBox = panel.getBoundingClientRect();
+  const panelStyle = getComputedStyle(panel);
+  return {
+    ok: true,
+    listItemTop: Math.round(liBox.top),
+    selectHeight: Math.round(selectBox.height),
+    fieldHeight: Math.round(fieldBox.height),
+    panelTop: Math.round(panelBox.top),
+    panelPosition: panelStyle.position,
+    panelDisplay: panelStyle.display,
+    fieldToPanelGap: Math.round((panelBox.top - fieldBox.bottom) * 10) / 10,
+    hostOverflow: getComputedStyle(host).overflow,
+  };
+});
+
+const metrics = {
+  ...metricsClosed,
+  open: metricsOpen,
+  listItemTopDelta:
+    metricsClosed.listItemTop != null && metricsOpen.listItemTop != null
+      ? Math.abs(metricsOpen.listItemTop - metricsClosed.listItemTop)
+      : null,
+};
 
 await mkdir(outDir, { recursive: true });
 const shot = path.join(outDir, "list-inspector-trailing.png");
@@ -145,7 +199,14 @@ const pass =
   metrics.padEnd >= 24 &&
   metrics.metaInEnd === true &&
   metrics.metaInRow === false &&
-  metrics.metaLeftSpread <= 1;
+  metrics.metaLeftSpread <= 1 &&
+  metrics.panelPosition === "absolute" &&
+  metrics.open?.ok === true &&
+  metrics.open.panelPosition === "absolute" &&
+  metrics.open.panelDisplay === "block" &&
+  metrics.open.fieldToPanelGap <= 1 &&
+  metrics.open.selectHeight <= metrics.open.fieldHeight + 2 &&
+  metrics.listItemTopDelta <= 1;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {

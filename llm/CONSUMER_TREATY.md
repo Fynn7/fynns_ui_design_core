@@ -2333,7 +2333,10 @@ pinned end strip (before the action cluster) so sibling “Unmapped” labels
 stay glued to CTA|Select when end widths match — not a separate list-item
 right-hug that drifts. **≥ 0.5.67:** meta|CTA|Select gaps widen to **8dp**
 (`--fynns-list-inspector-end-gap` — aliases `control-stack-gap`; not 4dp
-cluster kiss). Leave `trailingMetaAlign` unset. Consumer: bump ≥ 0.5.67; keep cluster `nowrap`;
+cluster kiss). **≥ 0.5.68:** Select options dock **out of row flex** — row copy /
+gap meta / CTA stay centered on the **trigger shell** only (open flyout must
+not stretch the list row cross-axis). Leave `trailingMetaAlign` unset. Consumer:
+bump ≥ 0.5.68; keep cluster `nowrap`;
 prefer short CTA labels; prefer IconButton + Tooltip when the action is not
 an inspector control. Live: sandbox `#list` inspector trailing. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:

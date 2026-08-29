@@ -2016,6 +2016,74 @@ a.fynns-breadcrumb-link:visited {
   flex: 0 0 auto;
 }
 
+/*
+ * Inspector trailing Select flyout (≥ **0.5.68**): docked results must not grow
+ * the list row flex cross-axis. Siblings (copy, gap meta, CTA, trigger) stay
+ * centered on the **trigger shell** only — the option list is out of flow.
+ */
+.fynns-list-item-trailing--end .fynns-select.fynns-search-bar {
+  position: relative;
+  overflow: visible;
+}
+
+.fynns-list-item-trailing--end .fynns-select.fynns-search-bar .fynns-search-bar-panel {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  z-index: var(--fynns-z-dropdown);
+  display: none;
+  grid-template-rows: none;
+  min-height: 0;
+  margin: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-block-start: 0;
+  border-radius: 0 0 var(--fynns-radius-3xl) var(--fynns-radius-3xl);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-lg);
+  transition: none;
+}
+
+.fynns-list-item-trailing--end
+  .fynns-select.fynns-search-bar
+  .fynns-search-bar-panel[data-state="open"] {
+  display: block;
+}
+
+.fynns-list-item-trailing--end
+  .fynns-select.fynns-search-bar
+  .fynns-search-bar-panel[data-state="open"]
+  .fynns-expand-inner {
+  min-height: 0;
+  overflow: visible;
+}
+
+.fynns-list-item-trailing--end .fynns-select.fynns-search-bar--expanded {
+  z-index: var(--fynns-z-dropdown);
+  box-shadow: var(--fynns-shadow-lg);
+}
+
+.fynns-list-item-trailing--end
+  .fynns-select.fynns-search-bar--expanded
+  > .fynns-search-bar-field {
+  border-radius: var(--fynns-radius-3xl) var(--fynns-radius-3xl) 0 0;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  ) {
+  overflow: visible;
+  z-index: 1;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  ):hover,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  ):focus-within {
+  z-index: var(--fynns-z-dropdown);
+}
+
 .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon) {
   flex: 0 0 auto;
   max-width: min(14rem, 100%);
