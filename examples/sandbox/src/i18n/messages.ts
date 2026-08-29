@@ -685,7 +685,7 @@ const en = {
   "globals.codeBlockFileBodyHelp":
     "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` stays single textarea (no live token overlay — use `wrap={false}` for dual-layer colors while typing).",
+    "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` uses the live deferred token overlay (≥ 0.5.52) — use `wrap={false}` or `readOnly` when wrap/selection alignment matters.",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2526,7 +2526,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockFileBodyHelp":
     "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
-    "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 仍为单层 textarea（输入时无 live token overlay — 需 `wrap={false}` 才双层高亮）。",
+    "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 使用 live deferred token overlay（≥ 0.5.52）— 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",

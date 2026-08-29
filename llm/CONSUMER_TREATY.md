@@ -1291,7 +1291,7 @@ Symptoms (Dialog body foot, Card action strip — e.g. Applications edit Dialog
 `control-cluster-gap` (**4dp**). Labeled action feet should match
 `.fynns-dialog-foot` (**8dp** / `action-cluster-gap`).
 
-**Fix in core (≥ 0.5.50):** end-align clusters with labeled
+**Fix in core (≥ **0.5.52**):** end-align clusters with labeled
 `.fynns-btn:not(.fynns-btn--icon)` and **no** `__grow` use
 `--fynns-layout-action-cluster-gap`. Select+refresh / table-map rows with
 `__grow` keep **4dp**.
@@ -1620,7 +1620,7 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88; visual-line mirror bands **reverted** in **0.5.51**; live soft-wrap edit tokens **restored** in **0.5.52**):** `readOnly` on
+**Fix in core (≥ 0.4.88; visual-line mirror bands **reverted**; live soft-wrap edit tokens **restored** in **0.5.52**):** `readOnly` on
 `variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
 native selection). Active edit + `wrap` + highlight → **live deferred token overlay**
 (wrap/selection may stripe). Use **`wrap={false}`** or `readOnly` when alignment matters. **`wrap={false}`** → classic dual-layer `<pre>`. Live: Globals `#code-block`
