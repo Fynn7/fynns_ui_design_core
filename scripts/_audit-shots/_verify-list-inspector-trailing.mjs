@@ -163,6 +163,14 @@ const metricsOpen = await page.evaluate(() => {
   const triggerFont = getComputedStyle(
     select.querySelector(".fynns-select-trigger") ?? select,
   ).fontSize;
+  const nextHost = list?.querySelectorAll(".fynns-list-item-host--with-end")[1];
+  const nextHostTop = nextHost
+    ? Math.round(nextHost.getBoundingClientRect().top)
+    : null;
+  const nextRowOverlap =
+    nextHostTop != null
+      ? Math.round((selectBox.bottom - nextHostTop) * 10) / 10
+      : null;
   return {
     ok: true,
     listItemTop: Math.round(liBox.top),
@@ -178,6 +186,8 @@ const metricsOpen = await page.evaluate(() => {
     triggerFontSize: triggerFont,
     fieldToPanelGap: Math.round((panelBox.top - fieldBox.bottom) * 10) / 10,
     hostOverflow: getComputedStyle(host).overflow,
+    nextHostTop,
+    nextRowOverlap,
   };
 });
 
@@ -214,16 +224,14 @@ const pass =
   metrics.metaInEnd === true &&
   metrics.metaInRow === false &&
   metrics.metaLeftSpread <= 1 &&
-  metrics.open.panelBottomRadius !== "0px" &&
-  metrics.open.resultsBottomRadius !== "0px" &&
   parseFloat(metrics.open.triggerFontSize) <= 14 &&
   parseFloat(metrics.triggerFontSize) <= 14 &&
   metrics.open?.ok === true &&
-  metrics.open.panelPosition === "absolute" &&
-  metrics.open.panelDisplay === "block" &&
+  metrics.open.panelPosition !== "absolute" &&
+  metrics.open.selectHeight > metrics.open.fieldHeight + 8 &&
   metrics.open.fieldToPanelGap <= 1 &&
-  metrics.open.selectHeight <= metrics.open.fieldHeight + 2 &&
-  metrics.listItemTopDelta <= 1;
+  metrics.listItemTopDelta <= 1 &&
+  metrics.open.nextRowOverlap <= 4;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {

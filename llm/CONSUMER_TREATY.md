@@ -2335,10 +2335,11 @@ right-hug that drifts. **≥ 0.5.67:** meta|CTA|Select gaps widen to **8dp**
 (`--fynns-list-inspector-end-gap` — aliases `control-stack-gap`; not 4dp
 cluster kiss). **≥ 0.5.68:** Select options dock **out of row flex** — row copy /
 gap meta / CTA stay centered on the **trigger shell** only (open flyout must
-not stretch the list row cross-axis). **≥ 0.5.69:** flyout chrome matches
-**form Select** (`radius-md` continuous shell, `font-size-sm` trigger — not
-square `surface-2` slab). Leave `trailingMetaAlign` unset. Consumer:
-bump ≥ 0.5.69; keep cluster `nowrap`;
+not stretch the list row cross-axis). **≥ 0.5.70:** reuse **inline** form Select
+`search-bar--expanded` (same as `#globals-demo-select`) + host/end `flex-start`
+— not absolute flyout (0.5.68–0.5.69 overlapped sibling rows). Leave
+`trailingMetaAlign` unset. Consumer:
+bump ≥ 0.5.70; keep cluster `nowrap`;
 prefer short CTA labels; prefer IconButton + Tooltip when the action is not
 an inspector control. Live: sandbox `#list` inspector trailing. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:

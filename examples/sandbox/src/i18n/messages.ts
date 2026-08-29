@@ -1525,7 +1525,7 @@ const en = {
   "globals.listStatusActionAssist": "Assist",
   "globals.listStatusActionAssistSnack": "Opened assist sample",
   "globals.listInspectorTrailingHelp":
-    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate / ≥ **0.5.67** 8dp breath / ≥ **0.5.68** flyout out-of-flow / ≥ **0.5.69** form-density shell): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Open flyout keeps **form Select** chrome (`radius-md` continuous shell, `font-size-sm` trigger) — not a square surface-2 slab. Meta|CTA|Select gaps use **8dp** (`inspector-end-gap`). Leave `trailingMetaAlign` unset. Live host: `#sandbox-list-inspector-trailing`.",
+    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate / ≥ **0.5.67** 8dp breath / ≥ **0.5.70** inline form Select shell): same inline `.fynns-search-bar--expanded` as `#globals-demo-select` — host/end `flex-start`, not absolute flyout. Meta|CTA|Select gaps **8dp**. Leave `trailingMetaAlign` unset. Live host: `#sandbox-list-inspector-trailing`.",
   "globals.listInspectorTrailingAria": "Sample inspector trailing list",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "Sample automation topic",
@@ -3426,7 +3426,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionAssist": "协助",
   "globals.listStatusActionAssistSnack": "已打开协助示例",
   "globals.listInspectorTrailingHelp":
-    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇 / ≥ **0.5.67** 8dp / ≥ **0.5.68** 下拉脱离行高 / ≥ **0.5.69** 表单密度壳层）：展开 flyout 保持 **form Select** 连续壳（`radius-md`、`font-size-sm` 触发器）— 不是方形 surface-2 块。meta|CTA|Select **8dp**。勿设 `trailingMetaAlign`。对照 `#sandbox-list-inspector-trailing`。",
+    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇 / ≥ **0.5.67** 8dp / ≥ **0.5.70** 内联 form Select 壳）：与 `#globals-demo-select` 相同内联展开 — host/end `flex-start`，禁止 absolute flyout 叠邻行。meta|CTA|Select **8dp**。勿设 `trailingMetaAlign`。对照 `#sandbox-list-inspector-trailing`。",
   "globals.listInspectorTrailingAria": "检视行 trailing 列表示例",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "示例自动化主题",
