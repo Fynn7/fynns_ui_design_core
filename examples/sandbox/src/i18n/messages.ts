@@ -1525,7 +1525,7 @@ const en = {
   "globals.listStatusActionAssist": "Assist",
   "globals.listStatusActionAssistSnack": "Opened assist sample",
   "globals.listInspectorTrailingHelp":
-    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Core pins that end cluster **in-flow** (always visible) and pads the end ≥ `radius-3xl` so host `overflow: clip` does not slice the Select end curve. Short gap status (`trailingSupportingText`) lives **in the same end strip** (before CTA|Select) so sibling “Unmapped” labels share one column when CTA|Select widths match — not a separate list-item right-hug that drifts. Leave `trailingMetaAlign` unset (17ch floor parks short status). Prefer short CTA copy; IconButton + Tooltip for path catalogs. Live host: `#sandbox-list-inspector-trailing`.",
+    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate / ≥ **0.5.67** 8dp breath): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Core pins that end cluster **in-flow** (always visible) and pads the end ≥ `radius-3xl` so host `overflow: clip` does not slice the Select end curve. Short gap status (`trailingSupportingText`) lives **in the same end strip** (before CTA|Select). Meta|CTA|Select gaps use **8dp** (`inspector-end-gap`) — not 4dp cluster kiss. Leave `trailingMetaAlign` unset. Live host: `#sandbox-list-inspector-trailing`.",
   "globals.listInspectorTrailingAria": "Sample inspector trailing list",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "Sample automation topic",
@@ -3426,7 +3426,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionAssist": "协助",
   "globals.listStatusActionAssistSnack": "已打开协助示例",
   "globals.listInspectorTrailingHelp":
-    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇）：`Select` 和/或 **带标签** Button 不得按路径目录 IconButton 悬停揭示几何。core 把该 end 簇 **钉在文档流**（常显），且 end pad ≥ `radius-3xl`，避免 host `overflow: clip` 切掉 Select 右圆角。短缺口状态（`trailingSupportingText`）落在 **同一 end 条**（CTA|Select 前），兄弟「未映射」在 CTA|Select 等宽时共列 — 不是 list-item 内另贴右缘导致漂。不要设 `trailingMetaAlign`（17ch 会甩开短状态）。CTA 宜短；路径目录仍用 IconButton + Tooltip。对照 `#sandbox-list-inspector-trailing`。",
+    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇 / ≥ **0.5.67** 8dp 间距）：`Select` 和/或 **带标签** Button 不得按路径目录 IconButton 悬停揭示几何。缺口 meta 与 CTA|Select 同在 end 条；meta|CTA|Select 用 **8dp**（`inspector-end-gap`）— 不是 4dp 贴死。不要设 `trailingMetaAlign`。对照 `#sandbox-list-inspector-trailing`。",
   "globals.listInspectorTrailingAria": "检视行 trailing 列表示例",
   "globals.listInspectorTrailingOverline": "skill",
   "globals.listInspectorTrailingHeadlineGap": "示例自动化主题",

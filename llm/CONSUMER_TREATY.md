@@ -2313,6 +2313,8 @@ short gap meta in `trailingSupportingText`):
 - Consumer adds private `position` / `z-index` / negative margin on the cluster
 - Short gap status (“未映射” / “Unmapped”) **left edges drift** across sibling
   gap rows while Button / Select columns stay put
+- Meta | CTA | Select cells **kiss** at 4dp (`control-cluster-gap`) — reads
+  cramped vs toolbar rhythm
 
 **Cause:** `trailingIsRowAction` correctly parks Button/Select **outside** the
 row control (`--with-end`), but overlay reveal reserves only **1–2×40dp**
@@ -2329,8 +2331,9 @@ the Select’s end curve; cluster stays inside the padded box. **≥ 0.5.56:**
 gap / short status in `trailingSupportingText` is co-located **inside** the
 pinned end strip (before the action cluster) so sibling “Unmapped” labels
 stay glued to CTA|Select when end widths match — not a separate list-item
-right-hug that drifts. Leave `trailingMetaAlign` unset (17ch floors short
-status away from the CTA). Consumer: bump ≥ 0.5.56; keep cluster `nowrap`;
+right-hug that drifts. **≥ 0.5.67:** meta|CTA|Select gaps widen to **8dp**
+(`--fynns-list-inspector-end-gap` — aliases `control-stack-gap`; not 4dp
+cluster kiss). Leave `trailingMetaAlign` unset. Consumer: bump ≥ 0.5.67; keep cluster `nowrap`;
 prefer short CTA labels; prefer IconButton + Tooltip when the action is not
 an inspector control. Live: sandbox `#list` inspector trailing. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:

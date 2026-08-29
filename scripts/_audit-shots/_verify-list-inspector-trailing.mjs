@@ -57,7 +57,7 @@ const metrics = await page.evaluate(() => {
   const trailing = host?.querySelector(".fynns-list-item-trailing--end");
   const btn = trailing?.querySelector(".fynns-btn:not(.fynns-btn--icon)");
   const select = trailing?.querySelector(".fynns-select");
-  const metaInEnd = trailing?.querySelector(":scope > .fynns-list-item-trailing-text");
+  const meta = trailing?.querySelector(":scope > .fynns-list-item-trailing-text");
   const metaInRow = host?.querySelector(
     ".fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text",
   );
@@ -67,6 +67,9 @@ const metrics = await page.evaluate(() => {
   const hb = host.getBoundingClientRect();
   const bb = btn.getBoundingClientRect();
   const sb = select.getBoundingClientRect();
+  const mr = meta?.getBoundingClientRect();
+  const gapMetaBtn =
+    mr ? Math.round((bb.left - mr.right) * 10) / 10 : null;
   const style = getComputedStyle(trailing);
   const overlapX = Math.max(
     0,
@@ -96,8 +99,9 @@ const metrics = await page.evaluate(() => {
     position: style.position,
     opacity: style.opacity,
     hostWidth: Math.round(hb.width),
-    metaInEnd: Boolean(metaInEnd),
+    metaInEnd: Boolean(meta),
     metaInRow: Boolean(metaInRow),
+    gapMetaBtn,
     gapMetaLefts,
     metaLeftSpread,
     btn: {
@@ -132,7 +136,10 @@ const pass =
   metrics.ok &&
   metrics.position === "static" &&
   metrics.overlapX === 0 &&
-  metrics.gap >= 2 &&
+  metrics.gap >= 7 &&
+  metrics.gap <= 9 &&
+  metrics.gapMetaBtn >= 7 &&
+  metrics.gapMetaBtn <= 9 &&
   metrics.selectPastHost <= 0 &&
   metrics.gapHostSelect >= 24 &&
   metrics.padEnd >= 24 &&

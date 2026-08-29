@@ -941,6 +941,13 @@ export const LIST_TOKENS = {
    */
   "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
+   * Pinned inspector end strip (gap meta | labeled Button | Select). Wider
+   * than overlay IconButton `end-actions-gap` (4dp) — labeled controls use
+   * toolbar rhythm (aliases `control-stack-gap` / 8dp). ≥ **0.5.67**.
+   * Live: `#sandbox-list-inspector-trailing`.
+   */
+  "inspector-end-gap": "var(--fynns-layout-control-stack-gap)",
+  /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
    */

@@ -1776,8 +1776,8 @@ a.fynns-breadcrumb-link:visited {
  * `--fynns-list-end-actions-gap` so **text ink → first glyph** matches
  * **glyph ↔ glyph** air inside the cluster (disk inset + cluster-gap). Raw
  * 4dp box gap made “当前” kiss the first disk while sparkle↔trash looked
- * wider. Pinned Select / labeled Button hosts keep the 4dp token (meta lives
- * in the end strip — different geometry).
+ * wider. Pinned Select / labeled Button (≥ **0.5.67**) widen to
+ * `--fynns-list-inspector-end-gap` (8dp) for meta|CTA|Select cells.
  */
 .fynns-list-item-host--with-end {
   position: relative;
@@ -1896,6 +1896,20 @@ a.fynns-breadcrumb-link:visited {
     .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
   ) {
   --fynns-list-end-actions-reserve: 0px;
+  --fynns-list-end-actions-gap: var(--fynns-list-inspector-end-gap);
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  .fynns-list-item-trailing--end
+  .fynns-control-cluster,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-list-item-trailing--end
+  .fynns-control-cluster {
+  gap: var(--fynns-list-inspector-end-gap);
 }
 
 .fynns-list-item-host--with-end:has(
