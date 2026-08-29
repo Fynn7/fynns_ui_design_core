@@ -1055,6 +1055,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
+  const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
+  const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
   const formRecipeFieldProps = {
@@ -3288,6 +3290,69 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 setListCatalogEditName(t("globals.listStatusActionHeadline"));
                 setListCatalogEditOpen(true);
               }}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listInspectorTrailingHelp")} />
+          <List
+            aria-label={t("globals.listInspectorTrailingAria")}
+            id="sandbox-list-inspector-trailing"
+          >
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineGap")}
+              trailingSupportingText={t("globals.listInspectorTrailingMetaGap")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Button
+                    size="sm"
+                    variant="tonal"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      snackbar(t("globals.listInspectorTrailingCtaSnack"));
+                    }}
+                  >
+                    {t("globals.listInspectorTrailingCta")}
+                  </Button>
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindGap}
+                    onChange={setListInspectorKindGap}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
+            />
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineMapped")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindMapped}
+                    onChange={setListInspectorKindMapped}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
             />
           </List>
           <SandboxHelp text={t("globals.listRunSummaryHelp")} />

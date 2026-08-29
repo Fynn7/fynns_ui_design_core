@@ -51,6 +51,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **empty ControlRow label as action footer** /
 **twin Button loading rings in one control-cluster** /
 **BusyRegion + chrome loading stack** /
+**List trailing Select + labeled Button overlap** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -2092,6 +2093,32 @@ copy→disk breath.
 **Fix in core (≥ 0.4.115; denser alias ≥ 0.4.123):** `--fynns-list-end-actions-gap`
 aliases `--fynns-layout-control-cluster-gap` (**4dp**). Consumer: bump only —
 no app CSS. Live: sandbox `#list` path catalog / org+dates (hover a row).
+
+## Failure mode this treaty targets: List trailing Select + labeled Button overlap
+
+Symptoms on an inspector / pipeline `ListItem` whose `trailing` is a
+`.fynns-control-cluster` of a **labeled** tonal `Button` + `Select` (optional
+short gap meta in `trailingSupportingText`):
+
+- CTA label (e.g. multi-character assist copy) paints **onto** the Select
+  trigger (“技能” / kind) — siblings collide mid-row
+- Hover / focus “reveal” still uses the IconButton overlay geometry
+- Consumer adds private `position` / `z-index` / negative margin on the cluster
+
+**Cause:** `trailingIsRowAction` correctly parks Button/Select **outside** the
+row control (`--with-end`), but overlay reveal reserves only **1–2×40dp**
+IconButton disks while `Select` defaults to `width: 100%`. Absolute end +
+undersized pad stacks the wide CTA onto the Select shell.
+
+**Fix in core (≥ 0.5.54):** when the end cluster contains `.fynns-select` or a
+non-icon `.fynns-btn`, core **pins** trailing **in-flow** (always visible;
+normal list pad — not IconButton reserve) and forces Select / labeled Button to
+content-hug (`width: auto` / max-width caps). Path-catalog IconButton strips
+keep overlay reveal. Consumer: bump ≥ 0.5.54; keep cluster `nowrap`; prefer
+short CTA labels; prefer IconButton + Tooltip when the action is not an
+inspector control. Live: sandbox `#list` inspector trailing. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: List row copy cramped on the start edge
 

@@ -1834,6 +1834,118 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
+/*
+ * Wide end chrome (Select / labeled Button) — never IconButton overlay.
+ * Absolute + IconButton-sized reserve stacks a tonal CTA onto Select
+ * (`width: 100%` Select + ~88dp pad). Pin in-flow, always visible; Select
+ * hugs content. Overlay reveal stays IconButton / icon-only strips only.
+ * Live: `#list` inspector trailing (≥ 0.5.54).
+ */
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ) {
+  --fynns-list-end-actions-reserve: 0px;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  position: static;
+  inset: auto;
+  z-index: auto;
+  opacity: 1;
+  pointer-events: auto;
+  transition: none;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):hover
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):hover
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):focus-within
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):focus-within
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):hover
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):hover
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  padding-inline-end: var(--fynns-list-pad-inline);
+  transition: none;
+}
+
+.fynns-list-item-trailing--end .fynns-select {
+  width: auto;
+  max-width: min(12rem, 100%);
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon) {
+  flex: 0 0 auto;
+  max-width: min(14rem, 100%);
+}
+
 .fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
   background: transparent;
