@@ -29,6 +29,7 @@ export {
   CheckIcon,
   ChevronRightIcon,
   ClipboardIcon,
+  ListChecksIcon,
   CloseIcon,
   DownloadIcon,
   EyeIcon,

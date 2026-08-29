@@ -307,6 +307,19 @@ export function ClipboardIcon(props: IconProps) {
   );
 }
 
+/** Multi-select / bulk enter (checked lines — not Clipboard copy/paste). */
+export function ListChecksIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m3 17 2 2 4-4" />
+      <path d="m3 7 2 2 4-4" />
+      <path d="M13 6h8" />
+      <path d="M13 12h8" />
+      <path d="M13 18h8" />
+    </svg>
+  );
+}
+
 export function BotIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>

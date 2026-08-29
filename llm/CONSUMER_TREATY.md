@@ -1584,6 +1584,47 @@ trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Paste
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 
+## Failure mode this treaty targets: bulk select uses ClipboardIcon
+
+Symptoms (workflows / MCP / plugins mode sidebars — `ListBulkToolbar` enter):
+
+- 「批量选择」 / “Bulk select” `IconButton` shows a **clipboard** glyph
+- Reads as copy/paste, not multi-select / enter-select-mode
+
+**Cause:** reusing `ClipboardIcon` (Chat copy / paste tools) for catalog bulk
+enter. Keep-set had no checklist glyph until **0.5.61**.
+
+**Fix in core (≥ 0.5.61):** public **`ListChecksIcon`** (checked lines). Sandbox
+Layouts `#layouts-demo-navigation-drawer` SearchBar tools + mode sample +
+Globals `#rhythm` catalog strip teach it. Authority: [`AGENTS.md`](../AGENTS.md)
+**Mode drawer tools** / Icons. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+**Fix in the consumer:** enter-select / bulk toolbar → `ListChecksIcon`; keep
+`ClipboardIcon` only for copy/paste. Select-all in-mode may use `CheckIcon` or
+the same `ListChecksIcon` — never clipboard.
+
+## Failure mode this treaty targets: mode drawer primary New not rightmost
+
+Symptoms (workflows / multi-tool mode sidebars):
+
+- `--toolbar-end` shows ghost Refresh → **filled primary Plus** → ghost
+  bulk (`ListChecks`) — primary New sits **mid-strip**, not at the trailing edge
+- DevTools: Plus `left` between Refresh and bulk enter; users expect primary
+  create at the **end** of the cluster (same grammar as Dialog feet)
+
+**Cause:** composing secondary tools **after** the primary New in DOM order
+(e.g. `ListBulkToolbar` sibling after Plus). `--toolbar-end` only hugs end —
+it does not reorder children.
+
+**Fix in the consumer (hard ≥ 0.5.60):** LTR order inside `--toolbar-end` =
+secondary ghost chrome first (InfoHint / sort / refresh / bulk enter) →
+**primary New/Plus last**. When entering bulk/select mode, hide or keep Plus
+last — never insert tools to the right of primary New. Live: Layouts
+`#layouts-demo-navigation-drawer` mode sample (sort → refresh → bulk → New). Authority:
+[`AGENTS.md`](../AGENTS.md) **Mode drawer tools**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: mode drawer hide-builtin ControlBlock stack
 
 Symptoms (全局技能 / 全局规则 mode sidebars — `SkillsSidebar` / `MdSidebar` tools

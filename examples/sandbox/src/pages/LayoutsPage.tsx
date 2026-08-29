@@ -32,6 +32,7 @@ import {
   NavigationDrawerItem,
   PencilIcon,
   PlusIcon,
+  RefreshIcon,
   SaveIcon,
   SearchIcon,
   SearchBar,
@@ -55,6 +56,7 @@ import {
   UndoIcon,
   UploadIcon,
   ClipboardIcon,
+  ListChecksIcon,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   snackbar,
@@ -439,7 +441,7 @@ export function LayoutsPage() {
                         variant="ghost"
                         aria-label={t("globals.navDrawerToolBulk")}
                       >
-                        <ClipboardIcon />
+                        <ListChecksIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip content={t("globals.navDrawerToolArchive")}>
@@ -566,6 +568,24 @@ export function LayoutsPage() {
                           {t("globals.navDrawerModeSortUpdated")}
                         </DropdownMenuCheckboxItem>
                       </DropdownMenu>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerModeRefreshTip")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerModeRefreshTip")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolBulk")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolBulk")}
+                      >
+                        <ListChecksIcon />
+                      </IconButton>
                     </Tooltip>
                     <Tooltip content={t("globals.navDrawerModeNewTip")}>
                       <IconButton
