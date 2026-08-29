@@ -987,6 +987,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
   const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
+  const [cardModeBodySide, setCardModeBodySide] = useState<"primary" | "secondary">(
+    "primary",
+  );
   const [fieldHeaderRegion, setFieldHeaderRegion] = useState("alpha");
   const [fieldHeaderEndpoint, setFieldHeaderEndpoint] = useState(
     "https://api.example.com",
@@ -4095,6 +4098,50 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           >
             {t("globals.cardActionsStripBody")}
+          </Card>
+          <Card
+            className="sandbox-globals-card sandbox-globals-card--mode-body"
+            title={t("globals.cardModeBodyTitle")}
+            actions={
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.cardModeBodyOpen")}>
+                  <IconButton
+                    variant="ghost"
+                    aria-label={t("globals.cardModeBodyOpen")}
+                  >
+                    <FileIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardModeBodyDelete")}>
+                  <IconButton
+                    variant="danger"
+                    aria-label={t("globals.cardModeBodyDelete")}
+                  >
+                    <TrashIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            }
+          >
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.cardModeBodyCopyLabel")}>
+                <ToggleGroup
+                  ariaLabel={t("globals.cardModeBodyCopyLabel")}
+                  value={cardModeBodySide}
+                  onChange={(value) =>
+                    setCardModeBodySide(value as "primary" | "secondary")
+                  }
+                  options={[
+                    { value: "primary", label: t("globals.cardModeBodyPrimary") },
+                    {
+                      value: "secondary",
+                      label: t("globals.cardModeBodySecondary"),
+                    },
+                  ]}
+                />
+              </ControlRow>
+            </ControlStack>
+            <SandboxHelp as="span" text={t("globals.cardModeBodyHelp")} />
           </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}

@@ -1134,9 +1134,17 @@
   min-height: 8rem;
 }
 
-/* Full-row host for #card multi-action strip — auto-fit columns (~12rem)
- * would crush the title band; span the grid so lead + actions share ~28rem. */
+/* Narrow host for #card multi-action strip — proves lead yields so the
+ * end danger IconButton is never clipped by Card overflow:hidden (≥ 0.5.57).
+ * Auto-fit catalog columns (~12rem) would still crush; span the grid. */
 .sandbox-globals-card--actions-strip {
+  grid-column: 1 / -1;
+  max-width: 22rem;
+  justify-self: start;
+  width: 100%;
+}
+
+.sandbox-globals-card--mode-body {
   grid-column: 1 / -1;
   max-width: 28rem;
   justify-self: start;

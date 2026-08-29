@@ -1886,9 +1886,9 @@ cluster is not enough if nested helpers keep `wrap` / full width.
 
 **Fix in core:** nested clusters hug + nowrap; **every** cluster under
 `.fynns-card-actions` / `.fynns-collapsible-actions` (descendant) is
-`width: auto` + `flex-wrap: nowrap`. Lead / Collapsible trigger keeps
-`min-width: max(0px, 40%)` so a dense strip cannot crush the title to one
-glyph. Live: sandbox `#card` (multi-action head on a full-row ~28rem host).
+`width: auto` + `flex-wrap: nowrap`. Lead / Collapsible trigger prefers
+`flex: 1 1 40%` with **`min-width: 0`** (yield — see next failure mode). Live:
+sandbox `#card` (multi-action head on a full-row host).
 **Consumer:** prefer one **flat** outer cluster of IconButtons; action helpers
 should return a **fragment** of IconButtons (no inner cluster) when composed
 into Card `actions`. Do not park the Card in a ~12rem grid cell with five
@@ -1896,6 +1896,43 @@ IconButtons and expect a long path title to survive. Do **not** invent
 `flex-wrap: nowrap` in app CSS on `.fynns-*`. Authority: [`AGENTS.md`](../AGENTS.md)
 Card keep-set / **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Card head actions clip at the end edge
+
+Symptoms (file-catalog detail / dual-side editor Card — agents-hub):
+
+- End `IconButton` (often danger trash) is **half-cut** by the Card border;
+  DevTools: `.fynns-card-actions` wider than leftover head space; Card
+  `overflow: hidden` clips the disk
+- Head also hosts a wide `ToggleGroup` (e.g. two labeled sides) **plus** a
+  strip of file / sync / edit / delete IconButtons — strip ~500dp on a
+  content-column Card
+
+**Cause (two layers):**
+1. **Core &lt; 0.5.57:** lead hard-floored `min-width: max(0px, 40%)` while
+   `.fynns-card-actions` stayed `flex: 0 0 auto`. When chrome needed &gt; ~60%
+   of the head, the strip overflowed and `overflow: hidden` on `.fynns-card`
+   clipped the trailing disk.
+2. **Consumer pattern:** treating Card `actions` as a free toolbar for
+   **`ToggleGroup` + many IconButtons**. Keep-set `actions` is an IconButton /
+   Button / ≤1 InfoHint strip — labeled segmented mode belongs in the **body**.
+
+**Fix in core (≥ 0.5.57):** lead `flex: 1 1 40%; min-width: 0` — prefers ~40%
+but **yields** so actions stay fully painted; title ellipsizes. Actions stay
+`flex: 0 0 auto` (never crush chrome). Live: sandbox `#card` actions-strip
+(narrow host + dense icons — trash fully visible) + mode-in-body sample.
+
+**Fix in the consumer (hard):**
+1. **Move** `ToggleGroup` / labeled mode switches out of Card `actions` into
+   the Card **body** (`ControlRow` / `FieldBlock` — first unit).
+2. Keep head `actions` as one flat `.fynns-control-cluster` of IconButtons
+   (+ optional ≤1 InfoHint). If still too dense, overflow secondary actions
+   into a `DropdownMenu` `iconOnly` More — do **not** invent private
+   `overflow` / negative-margin CSS on `.fynns-card-*`.
+3. Bump `@fynn7/ui-design-core` to ≥ **0.5.57**.
+
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** titled section
+shell. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: path / branch text in Card `actions`
 

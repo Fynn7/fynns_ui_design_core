@@ -118,19 +118,21 @@
 .fynns-card-lead {
   position: relative;
   z-index: 1;
-  flex: 1 1 auto;
   align-self: stretch;
   display: flex;
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
   /*
-   * Keep a readable title band when trailing actions are dense. Bare
-   * `min-width: 0` alone lets a narrow host crush the lead to ~one glyph
-   * (sandbox `#card` actions-strip lesson). Floor ≈ two t-shirt steps of
-   * title — still allows ellipsis via `.fynns-card-title { min-width: 0 }`.
+   * Prefer a readable title band (~40% flex-basis) when the host is wide.
+   * Do **not** hard-floor `min-width: 40%`: that + `actions` `flex: 0 0 auto`
+   * + Card `overflow: hidden` clips the end IconButton (danger trash) when
+   * the strip is denser than ~60% (ToggleGroup + icons — agents-hub lesson).
+   * Yield below 40% so chrome stays fully visible; title ellipsizes via
+   * `.fynns-card-title { min-width: 0 }`. Live: sandbox `#card` actions-strip.
    */
-  min-width: max(0px, 40%);
+  flex: 1 1 40%;
+  min-width: 0;
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
@@ -287,6 +289,7 @@
 .fynns-card-actions {
   position: relative;
   z-index: 1;
+  /* Hug chrome; never shrink under the lead — title yields instead (see lead). */
   flex: 0 0 auto;
   display: flex;
   align-items: center;
