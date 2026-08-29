@@ -1584,6 +1584,27 @@ trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Paste
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 
+## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
+
+Symptoms (workflows / CatalogMorph mode destinations):
+
+- TopAppBar `trailing` shows 「页面说明」 / page-scope `InfoHint`
+- Mode drawer `--toolbar-end` **also** shows 「工作流说明」 / section `InfoHint`
+- Two help “i” disks for the same destination = **information redundancy**
+
+**Cause:** composing section essays both as shell `pageHint` and as a sibling
+in the mode tools cluster. Mode tools should stay action chrome (sort /
+refresh / bulk / New) — not a second copy of page help.
+
+**Fix in the consumer (hard ≥ 0.5.63):** keep **one** section `InfoHint` in
+**TopAppBar `trailing`** (merge drawer copy into that tip if needed). Remove
+section `InfoHint` from `--toolbar-end`. Field-level `InfoHint` on a
+preference `ControlRow` (hide-builtin) is unaffected. Live: Layouts
+`#layouts-demo-shell` TopAppBar InfoHint + `#layouts-demo-navigation-drawer`
+mode tools without a section “i”. Authority: [`AGENTS.md`](../AGENTS.md)
+**Mode drawer tools**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: bulk select uses ClipboardIcon
 
 Symptoms (workflows / MCP / plugins mode sidebars — `ListBulkToolbar` enter):

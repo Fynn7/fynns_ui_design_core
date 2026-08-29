@@ -499,12 +499,17 @@ const navMode = open ? "drawer" : "hidden";
 7a. **模式侧栏（无 SearchBar）排序 + 新建（硬）：** 工具行用
    **`fynns-control-cluster fynns-control-cluster--toolbar-end`**（nowrap、贴尾 —
    不要满宽 cluster 左对齐在第一行目的地之上）。LTR：**次要 ghost 工具在前**
-   （排序 / InfoHint / 刷新 / 批量 **`ListChecksIcon`**）→ **`variant="primary"` 新建 Plus 必须最右**
+   （排序 / 刷新 / 批量 **`ListChecksIcon`**）→ **`variant="primary"` 新建 Plus 必须最右**
    （≥ **0.5.60**；禁止 New 夹在 Refresh 与批量中间）。「批量选择」用 **`ListChecksIcon`**
    （≥ **0.5.61**）— **禁止** `ClipboardIcon`（那是复制/粘贴）。排序菜单触发用 **非 chevron**
    图标（`BarChartIcon` / `MoreHorizontalIcon` 等），禁止 `ChevronDown` 与
    `NavigationDrawerGroup` 展开 chevron 混淆。对照 Layouts `#layouts-demo-navigation-drawer`
    模式侧栏样例。
+7a1. **目的地 / 分区说明 InfoHint（硬 ≥ 0.5.63）：** 分区级帮助放 **TopAppBar
+   `trailing` 至多一个** `InfoHint`（页面说明）。**禁止**再在 mode `--toolbar-end`
+   放第二个分区「…说明」InfoHint（与顶栏 twin “i” = 信息冗余）。偏好行
+   （隐藏内置）上的字段级 `InfoHint size="sm"` 仍可用。对照 `#layouts-demo-shell`
+   顶栏 InfoHint + 模式样例工具条无分区 “i”。
 7a2. **模式侧栏「隐藏内置」类偏好（硬）：** 禁止在 ~224px 工具列用
    **`ControlBlock` + 长 `description`**（DevTools 常见 ~102dp 高块、Switch
    下坠）。改用 **单行** `ControlRow` + **`InfoHint size="sm"`**（政策段落进

@@ -189,11 +189,17 @@ export function LayoutsPage() {
                   </Tooltip>
                 }
                 trailing={
-                  <Tooltip content={t("globals.appBarSearch")}>
-                    <IconButton aria-label={t("globals.appBarSearch")}>
-                      <SearchIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <>
+                    <InfoHint
+                      ariaLabel={t("globals.shellPageHintAria")}
+                      content={t("globals.shellPageHint")}
+                    />
+                    <Tooltip content={t("globals.appBarSearch")}>
+                      <IconButton aria-label={t("globals.appBarSearch")}>
+                        <SearchIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 }
                 navFooter={
                   <NavDrawerFooterAccount
