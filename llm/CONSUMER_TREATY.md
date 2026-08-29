@@ -1275,7 +1275,31 @@ loading; Cancel / Copy / Import disabled, no rings).
 mutually exclusive flags). Never `loading={busy}` on two cluster siblings.
 Bump / re-paste `consumer-cursor-rule.mdc`. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Loading placement **Multi-action
-footer wait**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+footer wait**.
+
+## Failure mode this treaty targets: tight labeled Button gaps in end-align footers
+
+Symptoms (Dialog body foot, Card action strip — e.g. Applications edit Dialog
+`取消 | 删除 | 保存 | 下一步`):
+
+- Adjacent pill Buttons read **kissed** / ~4dp apart (same gap as IconButton
+  strips)
+- `.fynns-dialog-foot` Confirm hosts look looser than body-foot
+  `.fynns-control-cluster--end-align` labeled Buttons
+
+**Cause:** `.fynns-control-cluster` defaulted every sibling gap to
+`control-cluster-gap` (**4dp**). Labeled action feet should match
+`.fynns-dialog-foot` (**8dp** / `action-cluster-gap`).
+
+**Fix in core (≥ 0.5.50):** end-align clusters with labeled
+`.fynns-btn:not(.fynns-btn--icon)` and **no** `__grow` use
+`--fynns-layout-action-cluster-gap`. Select+refresh / table-map rows with
+`__grow` keep **4dp**.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core`; keep one
+`.fynns-control-cluster--end-align` — drop private `margin` / `gap` on
+`.fynns-btn`. Re-paste `consumer-cursor-rule.mdc`. Live: sandbox `#timeline`
+edit Dialog foot / `#rhythm` end-align. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 
@@ -1596,11 +1620,10 @@ Token `<span>`s in the highlight layer can shift **soft-wrap** breakpoints vs
 plain textarea text → `::selection` rectangles drift. View mode should not use
 the overlay at all.
 
-**Fix in core (≥ 0.4.88; soft-wrap visual-line tokens ≥ **0.5.38** for highlighted edit; plain soft-wrap single textarea when language unknown):** `readOnly` on
+**Fix in core (≥ 0.4.88; visual-line mirror bands **reverted** in **0.5.51**; live soft-wrap edit tokens **restored** in **0.5.52**):** `readOnly` on
 `variant="editable"` → **single** `.fynns-code-block-pre` (full token colors +
-native selection). Active edit + `wrap` + highlight → **visual-line token overlay**
-(`--soft-wrap-lines`). Plain soft-wrap edit (unknown language) → single visible
-textarea. **`wrap={false}`** → classic dual-layer `<pre>`. Live: Globals `#code-block`
+native selection). Active edit + `wrap` + highlight → **live deferred token overlay**
+(wrap/selection may stripe). Use **`wrap={false}`** or `readOnly` when alignment matters. **`wrap={false}`** → classic dual-layer `<pre>`. Live: Globals `#code-block`
 soft-wrap sample + file-body + readOnly pair.
 **Fix in the consumer:** pass **`readOnly`** from view/edit state (already via
 `FileBodyCodeBlock`); do not patch selection in app CSS. Bump

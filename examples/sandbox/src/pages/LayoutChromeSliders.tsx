@@ -97,6 +97,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.clusterGapHint",
     max: 24,
   },
+  "action-cluster-gap": {
+    labelKey: "layoutChrome.actionClusterGap",
+    hintKey: "layoutChrome.actionClusterGapHint",
+    max: 24,
+  },
   "chrome-icon-gap": {
     labelKey: "layoutChrome.chromeIconGap",
     hintKey: "layoutChrome.chromeIconGapHint",

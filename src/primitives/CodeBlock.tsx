@@ -517,23 +517,18 @@ export function CodeBlock(props: CodeBlockProps) {
 
   /* Trailing newline on the highlight layer only — keeps last-line height
      aligned with the textarea caret. Defer tokenization so typing stays
-     responsive while spans catch up a frame or two behind.
-     Soft-wrap + overlay: token spans can shift wrap points vs the textarea —
-     use flat mono ink until `wrap={false}` or `readOnly` (single pre layer). */
+     responsive while spans catch up a frame or two behind. */
   const highlightBase = showEditorOverlay ? deferredSource : source;
   const highlightText =
     showEditorOverlay && !highlightBase.endsWith("\n")
       ? `${highlightBase}\n`
       : highlightBase;
-  const highlightFlat = showEditorOverlay && wrap && highlighted;
   const readonlyPreBody = highlighted
     ? highlightSource(source, language, highlightProfile)
     : source;
-  const overlayBody = highlightFlat
-    ? highlightText
-    : highlighted
-      ? highlightSource(highlightText, language, highlightProfile)
-      : highlightText;
+  const overlayBody = highlighted
+    ? highlightSource(highlightText, language, highlightProfile)
+    : highlightText;
 
   const rootProps = omitKnownKeys(props, [
     "variant",
@@ -569,7 +564,6 @@ export function CodeBlock(props: CodeBlockProps) {
         "fynns-code-block",
         plain && "fynns-code-block--plain",
         editable && "fynns-code-block--editable",
-        highlightFlat && "fynns-code-block--editable-flat-highlight",
         highlighted && "fynns-code-block--highlighted",
         !wrap && "fynns-code-block--nowrap",
         headlessCopy && "fynns-code-block--copy-float",

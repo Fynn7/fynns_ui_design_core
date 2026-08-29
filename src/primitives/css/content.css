@@ -3604,34 +3604,6 @@ a.fynns-breadcrumb-link:visited {
   -webkit-text-fill-color: transparent;
 }
 
-/* Soft-wrap editable + highlight: visual-line token overlay (≥ 0.5.38).
-   Measure textarea visual rows; paint one non-wrapping row per line. */
-.fynns-code-block--soft-wrap-lines .fynns-code-block-highlight {
-  white-space: normal;
-  overflow-wrap: normal;
-}
-
-.fynns-code-block--soft-wrap-lines .fynns-code-block-visual-line {
-  display: block;
-  margin: 0;
-  padding: 0;
-  white-space: pre;
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-/* Soft-wrap editable without highlight: single visible textarea (no overlay). */
-.fynns-code-block--soft-wrap-single .fynns-code-block-input {
-  color: var(--fynns-code-fg);
-  -webkit-text-fill-color: var(--fynns-code-fg);
-}
-
-.fynns-code-block--soft-wrap-single .fynns-code-block-input::selection {
-  background: var(--fynns-color-accent-soft);
-  color: var(--fynns-code-fg);
-  -webkit-text-fill-color: var(--fynns-code-fg);
-}
-
 .fynns-code-block-highlight,
 .fynns-code-block-input {
   font-variant-ligatures: none;

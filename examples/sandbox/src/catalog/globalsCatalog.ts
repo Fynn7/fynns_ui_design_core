@@ -540,6 +540,23 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "long-flow",
+    categoryId: "rhythm",
+    label: "Long-flow FullscreenDialog",
+    keywords: [
+      "long-flow",
+      "fullscreen",
+      "workflow",
+      "pipeline",
+      "gate",
+      "card stack",
+      "catalog edit",
+      "multi-step",
+      "长流程",
+      "全屏",
+    ],
+  },
+  {
     id: "swatches",
     categoryId: "swatches",
     label: "Radius swatches",

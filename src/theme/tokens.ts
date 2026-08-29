@@ -1453,6 +1453,13 @@ export const LAYOUT_TOKENS = {
    */
   "control-cluster-gap": "0.25rem",
   /**
+   * Labeled action buttons in one end-align cluster (8dp): Dialog body foot,
+   * Card action strips, `.fynns-dialog-foot` — wider than IconButton /
+   * Select+refresh clusters (`control-cluster-gap` 4dp). Live: `#timeline`
+   * edit Dialog foot / `#rhythm` end-align.
+   */
+  "action-cluster-gap": "0.5rem",
+  /**
    * Gap between adjacent chrome icon targets (2dp): TopAppBar leading/trailing
    * IconButtons and NavigationRail destination indicators (icon-only).
    * `--fynns-appbar-actions-gap` / `--fynns-navrail-destinations-gap` alias this.
