@@ -189,11 +189,24 @@ const metricsOpen = await page.evaluate(() => {
   const triggerEl = select.querySelector(".fynns-select-trigger") ?? field;
   const triggerTop = Math.round(triggerEl.getBoundingClientRect().top);
   const metaTop = meta ? Math.round(meta.getBoundingClientRect().top) : null;
+  const metaHeight = meta ? Math.round(meta.getBoundingClientRect().height) : null;
   const btnTop = btn ? Math.round(btn.getBoundingClientRect().top) : null;
-  const bandTopDelta = Math.max(
-    metaTop != null ? Math.abs(metaTop - triggerTop) : 0,
-    btnTop != null ? Math.abs(btnTop - triggerTop) : 0,
+  const btnHeight = btn ? Math.round(btn.getBoundingClientRect().height) : null;
+  const content = li.querySelector(".fynns-list-item-content");
+  const contentTop = content
+    ? Math.round(content.getBoundingClientRect().top)
+    : null;
+  const triggerCenterY = Math.round(triggerTop + fieldBox.height / 2);
+  const bandCenterDelta = Math.max(
+    metaTop != null && metaHeight != null
+      ? Math.abs(metaTop + metaHeight / 2 - triggerCenterY)
+      : 0,
+    btnTop != null && btnHeight != null
+      ? Math.abs(btnTop + btnHeight / 2 - triggerCenterY)
+      : 0,
   );
+  const contentTopDelta =
+    contentTop != null ? Math.abs(contentTop - triggerTop) : null;
   return {
     ok: true,
     listItemTop: Math.round(liBox.top),
@@ -210,9 +223,11 @@ const metricsOpen = await page.evaluate(() => {
     fieldToPanelGap: Math.round((panelBox.top - fieldBox.bottom) * 10) / 10,
     hostOverflow: getComputedStyle(host).overflow,
     trailingAlignItems: trailingStyle.alignItems,
+    trailingDisplay: trailingStyle.display,
     nextHostTop,
     nextRowOverlap,
-    bandTopDelta,
+    bandCenterDelta,
+    contentTopDelta,
   };
 });
 
@@ -257,8 +272,10 @@ const pass =
   metrics.open.fieldToPanelGap <= 1 &&
   metrics.listItemTopDelta <= 1 &&
   metrics.open.nextRowOverlap <= 4 &&
-  metrics.open.trailingAlignItems === "flex-start" &&
-  metrics.open.bandTopDelta <= 8;
+  metrics.open.trailingDisplay === "grid" &&
+  metrics.open.bandCenterDelta <= 2 &&
+  metrics.open.contentTopDelta != null &&
+  metrics.open.contentTopDelta <= 10;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {

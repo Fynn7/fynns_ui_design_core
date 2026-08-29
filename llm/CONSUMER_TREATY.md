@@ -2343,7 +2343,9 @@ not stretch the list row cross-axis). **≥ 0.5.70:** reuse **inline** form Sele
 `search-bar--expanded` (same as `#globals-demo-select`) — not absolute flyout
 (0.5.68–0.5.69 overlapped sibling rows). **≥ 0.5.71:** pinned end strip
 `align-items: flex-start` so gap meta|CTA stay on the **trigger band** when
-expanded (not mid-panel). Leave
+expanded (not mid-panel). **≥ 0.5.72:** grid **40dp trigger-band row** pins gap
+meta; expanded height-3 copy `flex-start` to the same band (not centered in
+min-height while trailing grows). Leave
 `trailingMetaAlign` unset. Consumer:
 bump ≥ 0.5.71; keep cluster `nowrap`;
 prefer short CTA labels; prefer IconButton + Tooltip when the action is not

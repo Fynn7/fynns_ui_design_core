@@ -313,7 +313,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   — not 4dp cluster kiss); ≥ **0.5.70** reuses **inline** form Select
   `search-bar--expanded` (same as `#globals-demo-select` — not absolute flyout);
   ≥ **0.5.71** pinned end strip `align-items: flex-start` so gap meta|CTA stay on
-  the **trigger band** when expanded (not centered on full panel); host `flex-start`
+  the **trigger band** when expanded (not centered on full panel); ≥
+  **0.5.72** grid trigger-band row + expanded copy `flex-start` (height-3 copy
+  no longer centers in min-height while trailing grows). Host `flex-start`
   only while expanded. Still keep the cluster
   `nowrap` and short labels. Live:
   `#list` inspector trailing. Failure mode:

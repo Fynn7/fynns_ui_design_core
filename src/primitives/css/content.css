@@ -2017,13 +2017,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Inspector trailing Select (≥ **0.5.70** inline shell; ≥ **0.5.71** end-strip
- * flex-start): reuse `.fynns-search-bar--expanded` (same as `#globals-demo-select`)
- * — not absolute flyout. Pinned end strip uses `align-items: flex-start` so gap
- * meta does not center on the **full** expanded Select height (0.5.70 only set
- * cluster flex-start — trailing--end `center` still floated meta mid-panel).
- * Host `flex-start` only while expanded so closed multi-line rows keep copy
- * centered on the trigger band.
+ * Inspector trailing Select (≥ **0.5.70** inline shell; ≥ **0.5.71** trigger-band
+ * pin; ≥ **0.5.72** grid trigger row + copy flex-start when expanded): reuse
+ * `.fynns-search-bar--expanded` (same as `#globals-demo-select`) — not absolute
+ * flyout. Gap meta sits in a fixed **40dp trigger-band row** (grid row 1) so it
+ * does not center on the expanded panel; CTA + Select trigger share that band;
+ * expanded list-item copy flex-starts to the same band top (not centered in
+ * height-3 min-height while trailing grows).
  */
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end .fynns-select
@@ -2034,7 +2034,12 @@ a.fynns-breadcrumb-link:visited {
   )
   > .fynns-list-item-row
   > .fynns-list-item-trailing--end {
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: var(--fynns-size-icon-target) auto;
+  column-gap: var(--fynns-list-inspector-end-gap);
+  row-gap: 0;
+  align-items: start;
 }
 
 .fynns-list-item-host--with-end:has(
@@ -2055,12 +2060,51 @@ a.fynns-breadcrumb-link:visited {
   align-self: flex-start;
 }
 
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  align-items: flex-start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item
+  .fynns-list-item-content,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item
+  .fynns-list-item-content {
+  justify-content: flex-start;
+}
+
 .fynns-list-item-trailing--end:has(.fynns-select)
   > .fynns-list-item-trailing-text {
-  /* Optical center on the 40dp trigger band — not mid expanded panel. */
-  margin-block-start: calc(
-    (var(--fynns-size-icon-target) - 1lh) / 2
-  );
+  grid-column: 1;
+  grid-row: 1;
+  margin-block-start: 0;
+  align-self: center;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-control-cluster {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-control-cluster
+  > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 
 .fynns-list-item-trailing--end .fynns-control-cluster {
