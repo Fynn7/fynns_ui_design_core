@@ -2315,6 +2315,10 @@ short gap meta in `trailingSupportingText`):
   gap rows while Button / Select columns stay put
 - Meta | CTA | Select cells **kiss** at 4dp (`control-cluster-gap`) — reads
   cramped vs toolbar rhythm
+- On **multi-line** rows (overline + headline + supporting), the pinned end
+  strip (meta / CTA / Select) sits **top-aligned** with the first line while
+  copy fills 88dp+ — large vacant band under the controls (core **0.5.70**
+  host/end `flex-start` regression)
 
 **Cause:** `trailingIsRowAction` correctly parks Button/Select **outside** the
 row control (`--with-end`), but overlay reveal reserves only **1–2×40dp**
@@ -2336,12 +2340,15 @@ right-hug that drifts. **≥ 0.5.67:** meta|CTA|Select gaps widen to **8dp**
 cluster kiss). **≥ 0.5.68:** Select options dock **out of row flex** — row copy /
 gap meta / CTA stay centered on the **trigger shell** only (open flyout must
 not stretch the list row cross-axis). **≥ 0.5.70:** reuse **inline** form Select
-`search-bar--expanded` (same as `#globals-demo-select`) + host/end `flex-start`
-— not absolute flyout (0.5.68–0.5.69 overlapped sibling rows). Leave
+`search-bar--expanded` (same as `#globals-demo-select`) — not absolute flyout
+(0.5.68–0.5.69 overlapped sibling rows). **≥ 0.5.71:** pinned end strip
+`align-items: flex-start` so gap meta|CTA stay on the **trigger band** when
+expanded (not mid-panel). Leave
 `trailingMetaAlign` unset. Consumer:
-bump ≥ 0.5.70; keep cluster `nowrap`;
+bump ≥ 0.5.71; keep cluster `nowrap`;
 prefer short CTA labels; prefer IconButton + Tooltip when the action is not
-an inspector control. Live: sandbox `#list` inspector trailing. Authority:
+an inspector control. Live: sandbox `#list` inspector trailing. **Bump ≥ 0.5.71**
+when gap meta floats mid expanded panel. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

@@ -3351,6 +3351,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <ListItem
               overline={t("globals.listInspectorTrailingOverline")}
               headline={t("globals.listInspectorTrailingHeadlineGap")}
+              supportingText={t("globals.listInspectorTrailingSupportingTall")}
               trailingSupportingText={t("globals.listInspectorTrailingMetaGap")}
               trailing={
                 <div className="fynns-control-cluster">

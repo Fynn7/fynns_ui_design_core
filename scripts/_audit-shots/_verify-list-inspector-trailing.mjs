@@ -71,7 +71,15 @@ const metricsClosed = await page.evaluate(() => {
   const gapMetaBtn =
     mr ? Math.round((bb.left - mr.right) * 10) / 10 : null;
   const li = host.querySelector(".fynns-list-item");
-  const liTop = li ? Math.round(li.getBoundingClientRect().top) : null;
+  const liBox = li?.getBoundingClientRect();
+  const tb = trailing.getBoundingClientRect();
+  const liTop = li ? Math.round(liBox.top) : null;
+  const rowCenterY =
+    liBox != null ? Math.round((liBox.top + liBox.bottom) / 2) : null;
+  const endCenterY = Math.round((tb.top + tb.bottom) / 2);
+  const endCenterDelta =
+    rowCenterY != null ? Math.abs(endCenterY - rowCenterY) : null;
+  const isThreeLine = li?.classList.contains("fynns-list-item--3") ?? false;
   const panel = select.querySelector(".fynns-search-bar-panel");
   const panelPos = panel ? getComputedStyle(panel).position : null;
   const triggerFont = getComputedStyle(
@@ -113,6 +121,10 @@ const metricsClosed = await page.evaluate(() => {
     gapMetaLefts,
     metaLeftSpread,
     listItemTop: liTop,
+    isThreeLine,
+    rowCenterY,
+    endCenterY,
+    endCenterDelta,
     panelPosition: panelPos,
     triggerFontSize: triggerFont,
     btn: {
@@ -171,6 +183,17 @@ const metricsOpen = await page.evaluate(() => {
     nextHostTop != null
       ? Math.round((selectBox.bottom - nextHostTop) * 10) / 10
       : null;
+  const trailingStyle = getComputedStyle(trailing);
+  const meta = trailing.querySelector(":scope > .fynns-list-item-trailing-text");
+  const btn = trailing.querySelector(".fynns-btn:not(.fynns-btn--icon)");
+  const triggerEl = select.querySelector(".fynns-select-trigger") ?? field;
+  const triggerTop = Math.round(triggerEl.getBoundingClientRect().top);
+  const metaTop = meta ? Math.round(meta.getBoundingClientRect().top) : null;
+  const btnTop = btn ? Math.round(btn.getBoundingClientRect().top) : null;
+  const bandTopDelta = Math.max(
+    metaTop != null ? Math.abs(metaTop - triggerTop) : 0,
+    btnTop != null ? Math.abs(btnTop - triggerTop) : 0,
+  );
   return {
     ok: true,
     listItemTop: Math.round(liBox.top),
@@ -186,8 +209,10 @@ const metricsOpen = await page.evaluate(() => {
     triggerFontSize: triggerFont,
     fieldToPanelGap: Math.round((panelBox.top - fieldBox.bottom) * 10) / 10,
     hostOverflow: getComputedStyle(host).overflow,
+    trailingAlignItems: trailingStyle.alignItems,
     nextHostTop,
     nextRowOverlap,
+    bandTopDelta,
   };
 });
 
@@ -231,7 +256,9 @@ const pass =
   metrics.open.selectHeight > metrics.open.fieldHeight + 8 &&
   metrics.open.fieldToPanelGap <= 1 &&
   metrics.listItemTopDelta <= 1 &&
-  metrics.open.nextRowOverlap <= 4;
+  metrics.open.nextRowOverlap <= 4 &&
+  metrics.open.trailingAlignItems === "flex-start" &&
+  metrics.open.bandTopDelta <= 8;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {
@@ -241,5 +268,5 @@ if (!pass) {
   process.exit(1);
 }
 console.log(
-  "PASS: pinned in-flow, no Button∩Select overlap, Select clears host radius, gap meta co-located+aligned",
+  "PASS: pinned in-flow, inline Select shell, gap meta on trigger band when open",
 );

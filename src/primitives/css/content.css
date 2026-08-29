@@ -2017,24 +2017,50 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Inspector trailing Select (≥ **0.5.70**): reuse the **same inline**
- * `.fynns-search-bar--expanded` shell as form Select (`#globals-demo-select`) —
- * not an absolute flyout (0.5.68–0.5.69 overlapped sibling rows’ always-visible
- * triggers). Pin host + end strip to `flex-start` so meta|CTA|trigger stay on
- * the trigger band while the docked results stack **below** inside the shell.
+ * Inspector trailing Select (≥ **0.5.70** inline shell; ≥ **0.5.71** end-strip
+ * flex-start): reuse `.fynns-search-bar--expanded` (same as `#globals-demo-select`)
+ * — not absolute flyout. Pinned end strip uses `align-items: flex-start` so gap
+ * meta does not center on the **full** expanded Select height (0.5.70 only set
+ * cluster flex-start — trailing--end `center` still floated meta mid-panel).
+ * Host `flex-start` only while expanded so closed multi-line rows keep copy
+ * centered on the trigger band.
  */
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  align-items: flex-start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
   ) {
   align-items: flex-start;
 }
 
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-select
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
   )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
   > .fynns-list-item-trailing--end {
   align-self: flex-start;
-  align-items: flex-start;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-list-item-trailing-text {
+  /* Optical center on the 40dp trigger band — not mid expanded panel. */
+  margin-block-start: calc(
+    (var(--fynns-size-icon-target) - 1lh) / 2
+  );
 }
 
 .fynns-list-item-trailing--end .fynns-control-cluster {
