@@ -1,4 +1,4 @@
-import type { Locale } from "./types";
+﻿import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -1243,6 +1243,7 @@ const en = {
   "globals.navDrawerModeSortTip": "Sort catalog",
   "globals.navDrawerModeSortAlpha": "Name A–Z",
   "globals.navDrawerModeSortUpdated": "Last updated",
+  "globals.navDrawerModeRefreshTip": "Refresh catalog",
   "globals.navDrawerModeNewTip": "New entry",
   "globals.navDrawerModeEntryAlpha": "Sample entry A",
   "globals.navDrawerModeEntryBeta": "Sample entry B",
@@ -1489,10 +1490,12 @@ const en = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "Short status beside `--with-end` actions — leave **`trailingMetaAlign` unset** so `trailingSupportingText` stays content-width and hugs the trailing edge (status sits next to the reveal IconButton on hover). Do **not** force `trailingMetaAlign=\"start\"` here — that floors a 17ch band and parks short labels far from the action. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo) — never silent-replace `PageScroll` with a detail whose only exit is a ghost text “back”. Multi-Card long workflows may escalate to `FullscreenDialog`. See AGENTS.md Content density **Catalog row create / edit**.",
-  "globals.listStatusActionAria": "Sample status and delete list row",
+    "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.59** optically spaces status→first disk so **text ink → first glyph** matches **glyph ↔ glyph** inside the cluster (not raw 4dp box gap that kisses “Current”). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
+  "globals.listStatusActionAria": "Sample status and action list row",
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
+  "globals.listStatusActionAssist": "Assist",
+  "globals.listStatusActionAssistSnack": "Opened assist sample",
   "globals.listInspectorTrailingHelp":
     "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate): Select and/or a **labeled** Button in `trailing` must **not** use path-catalog IconButton overlay geometry. Core pins that end cluster **in-flow** (always visible) and pads the end ≥ `radius-3xl` so host `overflow: clip` does not slice the Select end curve. Short gap status (`trailingSupportingText`) lives **in the same end strip** (before CTA|Select) so sibling “Unmapped” labels share one column when CTA|Select widths match — not a separate list-item right-hug that drifts. Leave `trailingMetaAlign` unset (17ch floor parks short status). Prefer short CTA copy; IconButton + Tooltip for path catalogs. Live host: `#sandbox-list-inspector-trailing`.",
   "globals.listInspectorTrailingAria": "Sample inspector trailing list",
@@ -1662,7 +1665,7 @@ const en = {
   "globals.cardModeBodyPrimary": "Primary",
   "globals.cardModeBodySecondary": "Secondary",
   "globals.cardModeBodyHelp":
-    "Labeled mode ToggleGroup lives in the Card body (ControlRow), not in actions. Head keeps a short IconButton strip so the end chrome never clips.",
+    "Labeled mode ToggleGroup lives in the Card body (ControlRow), not in actions. CatalogMorph / mode-sidebar detail: Card actions IconButtons are size=sm (32dp) to match drawer toolbar-end — never default md (40dp) beside sm mode tools.",
   "globals.cardBody": "Card shares Collapsible chrome (border, radius-md, surface-1). Header is static — no hover layer, no chevron.",
   "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap siblings",
   "globals.cardChromePlainBody": "Child Surface owns the well.",
@@ -3117,6 +3120,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeSortTip": "目录排序",
   "globals.navDrawerModeSortAlpha": "名称 A–Z",
   "globals.navDrawerModeSortUpdated": "最近更新",
+  "globals.navDrawerModeRefreshTip": "刷新目录",
   "globals.navDrawerModeNewTip": "新建条目",
   "globals.navDrawerModeEntryAlpha": "示例条目 A",
   "globals.navDrawerModeEntryBeta": "示例条目 B",
@@ -3358,10 +3362,12 @@ const zh: Record<MessageKey, string> = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "短状态 + `--with-end` 动作 — **不要**设 `trailingMetaAlign`，让 `trailingSupportingText` 保持内容宽并贴尾（悬停揭示时状态紧挨 IconButton）。此处强制 `trailingMetaAlign=\"start\"` 会铺 17ch 空带，把短标签甩离动作。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）— 禁止静默把 `PageScroll` 换成只有 ghost「返回」文案的假详情。多 Card 长工作流可升 `FullscreenDialog`。见 AGENTS.md Content density **Catalog row create / edit**。",
-  "globals.listStatusActionAria": "状态与删除列表示例",
+    "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.59** 按光学把状态→首盘拉开，使 **文字墨迹 → 首字形** 与簇内 **字形↔字形** 同距（不是裸 4dp 盒缝把「当前」贴死）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
+  "globals.listStatusActionAria": "状态与动作列表示例",
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
+  "globals.listStatusActionAssist": "协助",
+  "globals.listStatusActionAssistSnack": "已打开协助示例",
   "globals.listInspectorTrailingHelp":
     "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇）：`Select` 和/或 **带标签** Button 不得按路径目录 IconButton 悬停揭示几何。core 把该 end 簇 **钉在文档流**（常显），且 end pad ≥ `radius-3xl`，避免 host `overflow: clip` 切掉 Select 右圆角。短缺口状态（`trailingSupportingText`）落在 **同一 end 条**（CTA|Select 前），兄弟「未映射」在 CTA|Select 等宽时共列 — 不是 list-item 内另贴右缘导致漂。不要设 `trailingMetaAlign`（17ch 会甩开短状态）。CTA 宜短；路径目录仍用 IconButton + Tooltip。对照 `#sandbox-list-inspector-trailing`。",
   "globals.listInspectorTrailingAria": "检视行 trailing 列表示例",
@@ -3530,7 +3536,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardModeBodyPrimary": "主侧",
   "globals.cardModeBodySecondary": "次侧",
   "globals.cardModeBodyHelp":
-    "带文案的模式 ToggleGroup 放在 Card 正文（ControlRow），不要进 actions。标题栏只留短 IconButton 条，尾部 chrome 不会被裁切。",
+    "带文案的模式 ToggleGroup 放在 Card 正文（ControlRow），不要进 actions。CatalogMorph / mode 详情：Card actions IconButton 一律 size=sm（32dp），与抽屉 toolbar-end 对齐 — 禁止在 sm 模式工具旁用默认 md（40dp）。",
   "globals.cardBody": "Card 与 Collapsible 同壳（描边、radius-md、surface-1）。标题栏静态 — 无悬停层、无 chevron。",
   "globals.cardChromePlainTitle": "chrome=\"plain\" · nest-gap 兄弟",
   "globals.cardChromePlainBody": "子级 Surface 自带井面。",

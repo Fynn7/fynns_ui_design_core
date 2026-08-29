@@ -40,6 +40,7 @@ import {
   ChatThinking,
   ChatThread,
   ClipboardIcon,
+  ListChecksIcon,
   BriefcaseIcon,
   Carousel,
   CarouselItem,
@@ -3270,12 +3271,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </List>
           <SandboxHelp text={t("globals.listStatusActionHelp")} />
-          <List aria-label={t("globals.listStatusActionAria")}>
+          <List
+            aria-label={t("globals.listStatusActionAria")}
+            id="sandbox-list-status-action"
+          >
             <ListItem
               headline={t("globals.listStatusActionHeadline")}
               trailingSupportingText={t("globals.listStatusActionMeta")}
               trailing={
                 <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listStatusActionAssist")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listStatusActionAssist")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        snackbar(t("globals.listStatusActionAssistSnack"));
+                      }}
+                    >
+                      <SparklesIcon />
+                    </IconButton>
+                  </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
                       variant="ghost"
@@ -4108,6 +4124,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <Tooltip content={t("globals.cardModeBodyOpen")}>
                   <IconButton
                     variant="ghost"
+                    size="sm"
                     aria-label={t("globals.cardModeBodyOpen")}
                   >
                     <FileIcon size={16} aria-hidden />
@@ -4116,6 +4133,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <Tooltip content={t("globals.cardModeBodyDelete")}>
                   <IconButton
                     variant="danger"
+                    size="sm"
                     aria-label={t("globals.cardModeBodyDelete")}
                   >
                     <TrashIcon size={16} aria-hidden />
@@ -5866,7 +5884,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogBulk")}
                 >
-                  <ClipboardIcon />
+                  <ListChecksIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogRefresh")}>

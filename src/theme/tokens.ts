@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Single source of truth for the fynns design tokens.
  *
  * These typed tables are mirrored to `:root` CSS custom properties (the
@@ -1446,10 +1446,10 @@ export const LAYOUT_TOKENS = {
   "control-row-column-gap": "0.5rem",
   /**
    * Sibling immediately left of an IconButton (and IconButton↔IconButton) in
-   * one `.fynns-control-cluster` (**4dp**). Canonical chrome density for
-   * “whatever sits before the icon” — List `--with-end` meta→disk aliases
-   * this via `--fynns-list-end-actions-gap`. Still looser than TopAppBar
-   * `chrome-icon-gap` (**2dp**). Live: `#rhythm` catalog strip / `#list`.
+   * one `.fynns-control-cluster` (**4dp**). List IconButton overlay hosts
+   * optically widen `--fynns-list-end-actions-gap` for short **text** meta ≥
+   * **0.5.59** (disk inset + this gap) so ink matches glyph↔glyph — token
+   * default stays this 4dp alias. Live: `#rhythm` / `#sandbox-list-status-action`.
    */
   "control-cluster-gap": "0.25rem",
   /**

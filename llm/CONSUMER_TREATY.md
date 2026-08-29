@@ -1039,18 +1039,35 @@ Symptoms (catalog ControlRow / Card actions / List trailing strips):
 
 - Two adjacent ghost IconButtons sit with an **8dp** air gap that reads sparse
   next to TopAppBar chrome (2dp)
-- **Or** List `trailingSupportingText` / any preceding meta sits **~10dp+**
-  from the first `--with-end` IconButton (date / 当前 / Chip left of pencil)
+- **Or** consumer invents a private meta→icon margin / navdrawer-scale gap
 
 **Cause:** pinning core &lt; **0.4.123**, or a consumer `gap` override on
-`.fynns-control-cluster` / inventing a larger meta→icon margin.
+`.fynns-control-cluster`.
 **Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.123** —
-`--fynns-layout-control-cluster-gap` is **4dp**; List
-`--fynns-list-end-actions-gap` **aliases** it (any sibling immediately left of
-an IconButton shares that rhythm). Do not invent private cluster / end-action
-gaps. TopAppBar / NavigationRail stay on `chrome-icon-gap` (**2dp**). Live:
-`#rhythm` catalog strip / `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md)
-Toolbar / unit rhythm. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+`--fynns-layout-control-cluster-gap` is **4dp** between IconButton **boxes**.
+List short-status→first IconButton uses a separate optical
+`--fynns-list-end-actions-gap` (≥ **0.5.59**) so text ink matches glyph↔glyph —
+do **not** force raw 4dp text→disk or invent app CSS. Live: `#list`
+status+action / `#rhythm`.
+
+## Failure mode this treaty targets: status kisses first List IconButton
+
+Symptoms on Applications / catalog rows (`trailingSupportingText` “当前” /
+“Current” + two `--with-end` IconButtons):
+
+- Status→first sparkle/pencil looks **tighter** than sparkle↔trash even though
+  both “should” be 4dp
+- Consumer adds private `margin` / `gap` on `.fynns-list-item-trailing*`
+
+**Cause:** measuring **box** gap (4dp meta→disk == 4dp disk→disk) while the eye
+compares **ink** (text→glyph ≈16dp vs glyph↔glyph ≈28dp because each md disk
+insets the 16dp glyph ~12dp).
+**Fix in core (≥ 0.5.59):** IconButton overlay hosts set
+`--fynns-list-end-actions-gap` to `(icon-target − icon) / 2 + control-cluster-gap`
+so text→glyph ≈ glyph↔glyph. Pinned Select / labeled Button rows keep 4dp.
+Consumer: bump only — no app CSS. Live: `#sandbox-list-status-action`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Short status + row
+action**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
 
@@ -1566,6 +1583,7 @@ group/row chevron language.
 trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+
 ## Failure mode this treaty targets: mode drawer hide-builtin ControlBlock stack
 
 Symptoms (全局技能 / 全局规则 mode sidebars — `SkillsSidebar` / `MdSidebar` tools
@@ -1917,7 +1935,7 @@ Symptoms (file-catalog detail / dual-side editor Card — agents-hub):
    **`ToggleGroup` + many IconButtons**. Keep-set `actions` is an IconButton /
    Button / ≤1 InfoHint strip — labeled segmented mode belongs in the **body**.
 
-**Fix in core (≥ 0.5.57):** lead `flex: 1 1 40%; min-width: 0` — prefers ~40%
+**Fix in core (≥ 0.5.59):** lead `flex: 1 1 40%; min-width: 0` — prefers ~40%
 but **yields** so actions stay fully painted; title ellipsizes. Actions stay
 `flex: 0 0 auto` (never crush chrome). Live: sandbox `#card` actions-strip
 (narrow host + dense icons — trash fully visible) + mode-in-body sample.
@@ -2015,14 +2033,37 @@ OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without
 3. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
    `size="sm"` on TopAppBar InfoHint when siblings are `md`.
 4. Dense Card heads may use **`sm`** only when **every** icon in that head
-   is `sm` (pass `size="sm"` on InfoHint too). Prefer matching TopAppBar
-   `md` for Card **head** actions on the same destination page.
-5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
+   is `sm` (pass `size="sm"` on InfoHint too).
+5. **CatalogMorph / mode-sidebar detail (hard ≥ 0.5.59):** when the mode
+   drawer `--toolbar-end` cluster is already `sm` (32dp), every Card
+   `actions` `IconButton` / icon `SplitButton` on that detail must also be
+   **`size="sm"`**. Default `md` (40dp) Save / Add disks look oversized next
+   to the drawer Plus and can crowd the title band. Root pages without mode
+   tools may still match TopAppBar with Card head `md`.
+6. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
    fake column alignment.
 
-Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (page chrome `md`) + **mode-body** sample (CatalogMorph-style head all `sm`); `#field-header`
 (label InfoHint + refresh + probe OK/Fail + idle `-` all on the `sm` trail). Authority:
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: mode drawer sm + Card head md
+
+Symptoms (CatalogMorph detail — workflows / file catalog):
+
+- Drawer `--toolbar-end` Plus / Refresh are `sm` (32dp); Card `actions` Save /
+  Add stay default `md` (40dp) — disks jump a step larger than the mode tools
+- Long workflow titles + several 40dp head icons crowd / overflow the Card head
+
+**Cause:** treating Card head as TopAppBar-sized chrome while the page’s mode
+drawer already densified to `sm`. Same-page icon trail must share one `size`.
+
+**Fix in the consumer (hard):** pass **`size="sm"`** on every Card `actions`
+`IconButton` / icon `SplitButton` (and any helper that defaults to `md`) under
+CatalogMorph detail. Keep the whole head strip `sm` — no mixed sizes. Bump
+docs / pasteable ≥ **0.5.59**. Live: sandbox `#card` mode-body sample.
+Authority: [`AGENTS.md`](../AGENTS.md) titled section shell. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: form ControlRow label vs FieldHeader title

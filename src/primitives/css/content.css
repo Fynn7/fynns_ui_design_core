@@ -1,4 +1,4 @@
-/* Domain: content — extracted from primitives.css */
+﻿/* Domain: content — extracted from primitives.css */
 /* ---------- DiffView ---------- */
 .fynns-diff-view {
   margin: 0;
@@ -1771,12 +1771,30 @@ a.fynns-breadcrumb-link:visited {
  * default; two (+ cluster gap) when the cluster has a second child — never
  * leave a phantom second disk that strands short `trailingSupportingText`
  * (“Current” / 当前) far from a lone trash. Live: `#list` status+action.
+ *
+ * Optical meta→disk (≥ **0.5.59**): IconButton overlay hosts override
+ * `--fynns-list-end-actions-gap` so **text ink → first glyph** matches
+ * **glyph ↔ glyph** air inside the cluster (disk inset + cluster-gap). Raw
+ * 4dp box gap made “当前” kiss the first disk while sparkle↔trash looked
+ * wider. Pinned Select / labeled Button hosts keep the 4dp token (meta lives
+ * in the end strip — different geometry).
  */
 .fynns-list-item-host--with-end {
   position: relative;
   --fynns-list-end-actions-reserve: calc(
     var(--fynns-list-end-actions-gap) + var(--fynns-size-icon-target) +
       var(--fynns-list-pad-inline)
+  );
+}
+
+.fynns-list-item-host--with-end:not(
+    :has(.fynns-list-item-trailing--end .fynns-select)
+  ):not(
+    :has(.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon))
+  ) {
+  --fynns-list-end-actions-gap: calc(
+    (var(--fynns-size-icon-target) - var(--fynns-size-icon)) / 2 +
+      var(--fynns-layout-control-cluster-gap)
   );
 }
 
