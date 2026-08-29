@@ -21,10 +21,6 @@ import {
   type CodeSegment,
   type SimpleHighlightProfile,
 } from "./codeHighlight";
-import {
-  measureVisualLineStarts,
-  visualLineSlice,
-} from "./codeBlockVisualLines";
 
 export type CodeBlockVariant = "default" | "plain" | "editable";
 
@@ -294,9 +290,7 @@ export function CodeBlock(props: CodeBlockProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const updateScrollableRef = useRef<() => void>(() => {});
-  const remeasureVisualLinesRef = useRef<(text?: string) => void>(() => {});
   const scrollSyncRafRef = useRef(0);
-  const [visualLineStarts, setVisualLineStarts] = useState<number[]>([0]);
   const maxHeightCss =
     maxHeight == null
       ? undefined
@@ -308,28 +302,6 @@ export function CodeBlock(props: CodeBlockProps) {
 
   const readOnly = editable ? props.readOnly : undefined;
   const showEditorOverlay = editable && !readOnly;
-
-  const dualLayerOverlay = showEditorOverlay && !wrap;
-  const softWrapVisualLines = showEditorOverlay && wrap && highlighted;
-  const softWrapSingle = showEditorOverlay && wrap && !highlighted;
-
-  const remeasureVisualLines = useCallback(
-    (text: string = source) => {
-      const ta = inputRef.current;
-      if (!ta || !softWrapVisualLines) {
-        return;
-      }
-      const width = ta.clientWidth;
-      if (width <= 0) {
-        requestAnimationFrame(() => remeasureVisualLinesRef.current(text));
-        return;
-      }
-      setVisualLineStarts(measureVisualLineStarts(text, width, ta));
-    },
-    [softWrapVisualLines, source],
-  );
-
-  remeasureVisualLinesRef.current = remeasureVisualLines;
 
   const syncHighlightScroll = () => {
     const input = inputRef.current;
@@ -353,7 +325,6 @@ export function CodeBlock(props: CodeBlockProps) {
     if (!el) return;
 
     let padRaf = 0;
-    let resizeRaf = 0;
     let wasScrollable = el.hasAttribute("data-scrollable");
 
     const syncHighlightPad = (scrollable: boolean) => {
@@ -400,44 +371,22 @@ export function CodeBlock(props: CodeBlockProps) {
       }
     };
 
-    const onResize = () => {
-      update();
-      if (!softWrapVisualLines) return;
-      if (resizeRaf) cancelAnimationFrame(resizeRaf);
-      resizeRaf = requestAnimationFrame(() => {
-        resizeRaf = requestAnimationFrame(() => {
-          resizeRaf = 0;
-          remeasureVisualLinesRef.current();
-          syncHighlightScroll();
-        });
-      });
-    };
-
     updateScrollableRef.current = update;
     update();
     const ro =
       typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(onResize)
+        ? new ResizeObserver(() => {
+            update();
+          })
         : null;
     ro?.observe(el);
-    if (softWrapVisualLines && inputRef.current) {
-      ro?.observe(inputRef.current);
-    }
-    const editorEl = el.parentElement;
-    if (
-      softWrapVisualLines &&
-      editorEl?.classList.contains("fynns-code-block-editor")
-    ) {
-      ro?.observe(editorEl);
-    }
     return () => {
       if (padRaf) cancelAnimationFrame(padRaf);
-      if (resizeRaf) cancelAnimationFrame(resizeRaf);
       ro?.disconnect();
       updateScrollableRef.current = () => {};
       if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
     };
-  }, [showEditorOverlay, wrap, maxHeightCss, softWrapVisualLines]);
+  }, [showEditorOverlay, wrap, maxHeightCss]);
 
   const disabled = editable ? props.disabled : undefined;
   const placeholder = editable ? props.placeholder : undefined;
@@ -481,47 +430,13 @@ export function CodeBlock(props: CodeBlockProps) {
     el.style.height = `${next}px`;
   }, [autoGrow, rows, showEditorOverlay]);
 
-  /* Soft-wrap visual rows: always remeasure after layout when source or width
-     may have changed (fill hosts, pane resize, first paint width=0). */
-  useLayoutEffect(() => {
-    if (!softWrapVisualLines || !showEditorOverlay) return;
-    let cancelled = false;
-    let outerRaf = 0;
-    let innerRaf = 0;
-    const run = () => {
-      if (cancelled) return;
-      remeasureVisualLinesRef.current(source);
-      syncHighlightScroll();
-    };
-    run();
-    outerRaf = requestAnimationFrame(() => {
-      run();
-      innerRaf = requestAnimationFrame(run);
-    });
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(outerRaf);
-      cancelAnimationFrame(innerRaf);
-    };
-  }, [source, softWrapVisualLines, showEditorOverlay]);
-
   /* Content / autoGrow / deferred highlight: resize → overflow gate → scroll lock. */
   useLayoutEffect(() => {
     if (!showEditorOverlay) return;
     syncEditableHeight();
     updateScrollableRef.current();
-    remeasureVisualLines(source);
     syncHighlightScroll();
-  }, [
-    autoGrow,
-    showEditorOverlay,
-    source,
-    deferredSource,
-    maxHeightCss,
-    syncEditableHeight,
-    remeasureVisualLines,
-    softWrapVisualLines,
-  ]);
+  }, [autoGrow, showEditorOverlay, source, deferredSource, maxHeightCss, syncEditableHeight]);
 
   const flushNotify = (next: string) => {
     if (!onChangeProp) return;
@@ -560,11 +475,6 @@ export function CodeBlock(props: CodeBlockProps) {
     /* DOM already has `next`; resize before paint (layout effect also re-runs). */
     syncEditableHeight();
     updateScrollableRef.current();
-    remeasureVisualLines(next);
-    requestAnimationFrame(() => {
-      remeasureVisualLinesRef.current(next);
-      syncHighlightScroll();
-    });
     if (!onChangeProp) return;
     /* Coalesce parent updates while typing — a controlled CodeBlock inside a
        large tree must not re-render that tree on every key. */
@@ -589,7 +499,8 @@ export function CodeBlock(props: CodeBlockProps) {
   };
 
   const onInputScroll = () => {
-    if (!highlightRef.current) return;
+    /* Sync now + one trailing frame — trackpad inertia / scroll coalescing
+       can leave the highlight layer a paint behind the caret otherwise. */
     syncHighlightScroll();
     if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
     scrollSyncRafRef.current = requestAnimationFrame(() => {
@@ -604,26 +515,25 @@ export function CodeBlock(props: CodeBlockProps) {
     };
   }, []);
 
-  /* Soft-wrap editable:
-     - **highlighted** → measure textarea visual rows + token spans per row
-       (`--soft-wrap-lines`; transparent caret over colored ink).
-     - **plain** → single visible textarea + native `::selection`
-       (`--soft-wrap-single`).
-     `wrap={false}` → classic dual-layer `<pre>` under transparent caret.
-     Defer tokenization on nowrap path only. */
-  const highlightBase = dualLayerOverlay ? deferredSource : source;
+  /* Trailing newline on the highlight layer only — keeps last-line height
+     aligned with the textarea caret. Defer tokenization so typing stays
+     responsive while spans catch up a frame or two behind.
+     Soft-wrap + overlay: token spans can shift wrap points vs the textarea —
+     use flat mono ink until `wrap={false}` or `readOnly` (single pre layer). */
+  const highlightBase = showEditorOverlay ? deferredSource : source;
   const highlightText =
-    dualLayerOverlay && !highlightBase.endsWith("\n")
+    showEditorOverlay && !highlightBase.endsWith("\n")
       ? `${highlightBase}\n`
       : highlightBase;
+  const highlightFlat = showEditorOverlay && wrap && highlighted;
   const readonlyPreBody = highlighted
     ? highlightSource(source, language, highlightProfile)
     : source;
-  const overlayBody = dualLayerOverlay
-    ? highlighted
+  const overlayBody = highlightFlat
+    ? highlightText
+    : highlighted
       ? highlightSource(highlightText, language, highlightProfile)
-      : highlightText
-    : null;
+      : highlightText;
 
   const rootProps = omitKnownKeys(props, [
     "variant",
@@ -659,8 +569,7 @@ export function CodeBlock(props: CodeBlockProps) {
         "fynns-code-block",
         plain && "fynns-code-block--plain",
         editable && "fynns-code-block--editable",
-        softWrapVisualLines && "fynns-code-block--soft-wrap-lines",
-        softWrapSingle && "fynns-code-block--soft-wrap-single",
+        highlightFlat && "fynns-code-block--editable-flat-highlight",
         highlighted && "fynns-code-block--highlighted",
         !wrap && "fynns-code-block--nowrap",
         headlessCopy && "fynns-code-block--copy-float",
@@ -679,37 +588,13 @@ export function CodeBlock(props: CodeBlockProps) {
       )}
       {showEditorOverlay ? (
         <div className="fynns-code-block-editor">
-          {dualLayerOverlay ? (
-            <pre
-              ref={highlightRef}
-              className="fynns-code-block-highlight"
-              aria-hidden
-            >
-              <code className="fynns-code-block-code">{overlayBody}</code>
-            </pre>
-          ) : null}
-          {softWrapVisualLines ? (
-            <pre
-              ref={highlightRef}
-              className="fynns-code-block-highlight"
-              aria-hidden
-            >
-              <code className="fynns-code-block-code">
-                {visualLineStarts.map((start, index) => {
-                  const end = visualLineStarts[index + 1] ?? source.length;
-                  const slice = visualLineSlice(source, start, end);
-                  return (
-                    <div
-                      key={`${start}-${index}`}
-                      className="fynns-code-block-visual-line"
-                    >
-                      {highlightSource(slice, language, highlightProfile)}
-                    </div>
-                  );
-                })}
-              </code>
-            </pre>
-          ) : null}
+          <pre
+            ref={highlightRef}
+            className="fynns-code-block-highlight"
+            aria-hidden
+          >
+            <code className="fynns-code-block-code">{overlayBody}</code>
+          </pre>
           <textarea
             ref={inputRef}
             className="fynns-code-block-input fynns-scroll"
@@ -723,7 +608,6 @@ export function CodeBlock(props: CodeBlockProps) {
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            lang="zxx"
             data-gramm="false"
             data-gramm_editor="false"
             data-enable-grammarly="false"
