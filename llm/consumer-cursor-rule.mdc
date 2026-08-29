@@ -84,6 +84,13 @@ alwaysApply: true
    `CircularProgress` / 消费仓 TaskProgressBar。**禁止**用私有居中壳（如
    `.hub-progress-block` + TaskProgressBar）冒充栏目 / 区块加载几何 — 冷启动与
    区块 busy 一律 `BusyRegion`（对照 sandbox `#busy-region` linear）。
+   **BusyRegion / BusyScrim 与 chrome loading 互斥（硬 ≥ 0.5.53）：** 同一等待宿主
+   （FieldBlock 正文 BusyRegion + 标签行 refresh、Card body BusyRegion + head
+   actions、Dialog body BusyRegion + 脚栏 Button…）**禁止**再叠 `Button` /
+   `IconButton` `loading` 第二圈。区块等待 → **只** BusyRegion；头/脚 chrome
+   仅 `disabled`、不画 `loading`。无 BusyRegion 的单控件等待 → 才用槽位
+   `loading`。对照 `#busy-region` FieldBlock actions。失败模式：
+   `llm/CONSUMER_TREATY.md` **BusyRegion + chrome loading stack**。
    **窄宿主（NavigationDrawer / EndAside）：** linear chrome 由 core 相对宿主
    收缩（≥0.4.50）— **禁止**消费仓给 `.fynns-busy-*` 写私有 `max-width` /
    `20rem` / `100vw`。失败模式：`llm/CONSUMER_TREATY.md`
@@ -368,7 +375,8 @@ actions float mid-left**。
 0.4.146）：** 同一 cluster 最多一颗 `Button`/`IconButton` `loading`；兄弟只
 `disabled`、不画第二圈 — 禁止 `loading={busy}` 绑到每一颗。条约：
 `CONSUMER_TREATY.md` **empty ControlRow label as action footer** /
-**Dialog foot Delete leftmost of Cancel** / **twin Button loading rings**。
+**Dialog foot Delete leftmost of Cancel** / **twin Button loading rings** /
+**BusyRegion + chrome loading stack**。
 
 ```tsx
 // 对 — 保持这棵树；窄窗下说明留在名称列，不要铺成通栏空行

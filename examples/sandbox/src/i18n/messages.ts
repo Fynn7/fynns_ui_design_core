@@ -556,7 +556,7 @@ const en = {
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body.",
+    "BusyRegion wraps a section: relative transparent overlay + one progress chrome + visible copy (no surface-* wash — keep the host background). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -588,6 +588,16 @@ const en = {
   "globals.busyRegionColdSessionsOpt": "10 per page",
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
+  "globals.busyRegionFieldHelp":
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (transparent overlay keeps the body mounted). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below.",
+  "globals.busyRegionFieldLabel": "Sample notice",
+  "globals.busyRegionFieldRefreshTip": "Refresh sample",
+  "globals.busyRegionFieldBusyLabel": "Refreshing sample",
+  "globals.busyRegionFieldBusyMessage": "Refreshing the sample body…",
+  "globals.busyRegionFieldBody":
+    "Sample notice body stays here when idle. Click refresh to show BusyRegion — the header glyph must not grow a second ring.",
+  "globals.busyRegionFieldStart": "Show field busy",
+  "globals.busyRegionFieldStop": "Clear field busy",
   "globals.pageScrollHelp":
     "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.58.",
   "globals.pageScrollCardTitle": "Sample catalog",
@@ -2397,7 +2407,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。",
+    "BusyRegion 包裹区块：相对定位透明遮罩 + 一个进度件 + 可见文案（禁止再铺 surface-* 洗底；露出宿主原背景）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
@@ -2429,6 +2439,16 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdSessionsOpt": "每页 10 条",
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
+  "globals.busyRegionFieldHelp":
+    "FieldBlock 正文等待 + 标签行刷新：用 BusyRegion **包住**正文 — busy 时头栏 IconButton 保持字形、仅 `disabled`、**不** 画 `loading`（透明遮罩下正文仍挂载）。禁止同一宿主叠 BusyRegion 圈与 chrome `loading` 第二圈（信息冗余）。无 BusyRegion 的单控件等待仍可用 IconButton `loading`。下方为活样例。",
+  "globals.busyRegionFieldLabel": "样例启事",
+  "globals.busyRegionFieldRefreshTip": "刷新样例",
+  "globals.busyRegionFieldBusyLabel": "正在刷新样例",
+  "globals.busyRegionFieldBusyMessage": "正在刷新样例正文…",
+  "globals.busyRegionFieldBody":
+    "空闲时正文在此。点刷新只见 BusyRegion — 头栏字形不得再长第二圈。",
+  "globals.busyRegionFieldStart": "显示字段 busy",
+  "globals.busyRegionFieldStop": "清除字段 busy",
   "globals.pageScrollHelp":
     "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.58。",
   "globals.pageScrollCardTitle": "样例目录",

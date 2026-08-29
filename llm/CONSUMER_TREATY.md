@@ -50,6 +50,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
 **twin Button loading rings in one control-cluster** /
+**BusyRegion + chrome loading stack** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -1276,6 +1277,38 @@ mutually exclusive flags). Never `loading={busy}` on two cluster siblings.
 Bump / re-paste `consumer-cursor-rule.mdc`. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules + Loading placement **Multi-action
 footer wait**.
+
+## Failure mode this treaty targets: BusyRegion + chrome loading stack
+
+Symptoms (Dialog / FieldBlock extract / refresh — e.g. notice body cold
+extract):
+
+- `BusyRegion` paints a centered `CircularProgress` (or linear) over the
+  field / section body
+- **At the same time** a FieldHeader / FieldBlock `actions` `IconButton`
+  (or Card `actions` / Dialog foot `Button`) shows `loading` with a second
+  ring
+- Two teal rings for **one** wait — reads as information redundancy
+
+**Cause:** consumers bind the same `busy` flag to both `BusyRegion busy`
+and the triggering chrome `loading={busy}`. Section wait already owns the
+progress chrome; slot `loading` is only for **per-control** waits with no
+BusyRegion / BusyScrim.
+
+**Fix (docs + sandbox ≥ 0.5.53):** pick **one** host chrome:
+- Body / section wait → `BusyRegion` (or `BusyScrim`); header / foot actions
+  → `disabled` **without** `loading`
+- Per-control wait only (no BusyRegion) → that Button / IconButton
+  `loading` alone
+
+Live: sandbox `#busy-region` FieldBlock actions sample (refresh starts
+BusyRegion over the mounted body; header IconButton stays glyph + disabled,
+no second ring).
+
+**Fix in the consumer:** when `BusyRegion` is mounted busy for that field /
+section, drop `loading` on sibling chrome (`disabled` only). Re-paste
+`consumer-cursor-rule.mdc`. Authority: [`AGENTS.md`](../AGENTS.md) Hard
+rules + Loading placement **Section wait + header / foot chrome**.
 
 ## Failure mode this treaty targets: tight labeled Button gaps in end-align footers
 
@@ -2559,6 +2592,9 @@ props-only — do **not** invent a private narrow busy CSS or `max-width` hack o
 placement**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: stacked progress chromes in BusyRegion
+
+Related (header / foot slot spinner + BusyRegion): see
+**BusyRegion + chrome loading stack**.
 
 Symptoms: overlay shows **CircularProgress + LinearProgress** (or a consumer
 `TaskProgressBar` inside `BusyRegion` `message`); the same counts appear twice
