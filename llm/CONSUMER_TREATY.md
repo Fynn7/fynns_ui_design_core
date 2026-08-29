@@ -1301,8 +1301,9 @@ BusyRegion / BusyScrim.
 - Per-control wait only (no BusyRegion) → that Button / IconButton
   `loading` alone
 
-Live: sandbox `#busy-region` field-header sample (refresh starts BusyRegion;
-header IconButton stays glyph + disabled, no second ring).
+Live: sandbox `#busy-region` FieldBlock actions sample (refresh starts
+BusyRegion over the mounted body; header IconButton stays glyph + disabled,
+no second ring).
 
 **Fix in the consumer:** when `BusyRegion` is mounted busy for that field /
 section, drop `loading` on sibling chrome (`disabled` only). Re-paste

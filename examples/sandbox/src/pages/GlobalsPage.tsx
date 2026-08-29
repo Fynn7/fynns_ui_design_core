@@ -4709,40 +4709,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.busyRegionFieldHelp")} />
-          <FieldBlock
-            label={t("globals.busyRegionFieldLabel")}
-            htmlFor="sandbox-busy-region-field-body"
-            actions={
-              <div className="fynns-control-cluster">
-                <Tooltip content={t("globals.busyRegionFieldRefreshTip")}>
-                  <IconButton
-                    size="sm"
-                    aria-label={t("globals.busyRegionFieldRefreshTip")}
-                    onClick={() => setBusyRegionFieldBusy(true)}
-                    disabled={busyRegionFieldBusy}
-                  >
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            }
-          >
-            {busyRegionFieldBusy ? (
+          <div id="sandbox-busy-region-field-sample">
+            <FieldBlock
+              label={t("globals.busyRegionFieldLabel")}
+              htmlFor="sandbox-busy-region-field-body"
+              actions={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.busyRegionFieldRefreshTip")}>
+                    <IconButton
+                      size="sm"
+                      aria-label={t("globals.busyRegionFieldRefreshTip")}
+                      onClick={() => setBusyRegionFieldBusy(true)}
+                      disabled={busyRegionFieldBusy}
+                    >
+                      <RefreshIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+            >
               <BusyRegion
-                busy
+                busy={busyRegionFieldBusy}
                 label={t("globals.busyRegionFieldBusyLabel")}
                 message={t("globals.busyRegionFieldBusyMessage")}
-              />
-            ) : (
-              <Textarea
-                id="sandbox-busy-region-field-body"
-                rows={4}
-                value={t("globals.busyRegionFieldBody")}
-                onChange={() => {}}
-                aria-label={t("globals.busyRegionFieldLabel")}
-              />
-            )}
-          </FieldBlock>
+              >
+                <Textarea
+                  id="sandbox-busy-region-field-body"
+                  rows={4}
+                  value={t("globals.busyRegionFieldBody")}
+                  onChange={() => {}}
+                  aria-label={t("globals.busyRegionFieldLabel")}
+                />
+              </BusyRegion>
+            </FieldBlock>
+          </div>
           <div className="sandbox-globals-row">
             <Button
               size="sm"

@@ -89,7 +89,7 @@ alwaysApply: true
    actions、Dialog body BusyRegion + 脚栏 Button…）**禁止**再叠 `Button` /
    `IconButton` `loading` 第二圈。区块等待 → **只** BusyRegion；头/脚 chrome
    仅 `disabled`、不画 `loading`。无 BusyRegion 的单控件等待 → 才用槽位
-   `loading`。对照 `#busy-region` field-header。失败模式：
+   `loading`。对照 `#busy-region` FieldBlock actions。失败模式：
    `llm/CONSUMER_TREATY.md` **BusyRegion + chrome loading stack**。
    **窄宿主（NavigationDrawer / EndAside）：** linear chrome 由 core 相对宿主
    收缩（≥0.4.50）— **禁止**消费仓给 `.fynns-busy-*` 写私有 `max-width` /

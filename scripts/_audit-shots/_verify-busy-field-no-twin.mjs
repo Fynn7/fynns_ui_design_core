@@ -40,10 +40,8 @@ await startBtn.click();
 await page.waitForTimeout(400);
 
 const metrics = await page.evaluate(() => {
-  const blocks = [
-    ...document.querySelectorAll("#globals-demo-busy-region .fynns-field-block"),
-  ];
-  const field = blocks[blocks.length - 1];
+  const host = document.getElementById("sandbox-busy-region-field-sample");
+  const field = host?.querySelector(".fynns-field-block");
   if (!field) return { error: "no field-block" };
   const busy = field.querySelector(".fynns-busy-region--busy");
   const regionRing = busy?.querySelector(".fynns-circular-progress");
@@ -56,6 +54,9 @@ const metrics = await page.evaluate(() => {
     headerBtn?.getAttribute("aria-disabled") === "true";
   const loadingSlots = field.querySelectorAll(".fynns-btn--loading").length;
   const rings = field.querySelectorAll(".fynns-circular-progress").length;
+  const bodyMounted = Boolean(
+    field.querySelector("#sandbox-busy-region-field-body"),
+  );
   return {
     hasBusyRegion: Boolean(busy),
     hasRegionRing: Boolean(regionRing),
@@ -63,6 +64,7 @@ const metrics = await page.evaluate(() => {
     headerDisabled: Boolean(headerDisabled),
     loadingSlots,
     rings,
+    bodyMounted,
   };
 });
 
@@ -75,8 +77,10 @@ const pass =
   metrics.hasBusyRegion &&
   metrics.hasRegionRing &&
   metrics.headerLoading === false &&
+  metrics.headerDisabled === true &&
   metrics.loadingSlots === 0 &&
-  metrics.rings === 1;
+  metrics.rings === 1 &&
+  metrics.bodyMounted === true;
 
 const report = { url: page.url(), metrics, pass, shotPath };
 await writeFile(

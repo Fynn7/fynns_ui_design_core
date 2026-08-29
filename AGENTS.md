@@ -339,7 +339,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Same information-redundancy rule: **one** progress chrome per wait.
   Section / field body wait → **BusyRegion only**; header / foot chrome stays
   `disabled` **without** `loading`. Per-control wait with **no** BusyRegion →
-  Button / IconButton `loading` alone. Live: `#busy-region` field-header
+  Button / IconButton `loading` alone. Live: `#busy-region` FieldBlock actions
   sample. Failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
   **BusyRegion + chrome loading stack**.
 - **DON'T** use a flex `.fynns-control-cluster` for multi-metric List trailing
@@ -672,7 +672,7 @@ classes.
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = `CircularProgress` `sm` | Two progress chromes in one overlay |
   | Button / icon / field busy | `CircularProgress` `sm` in that slot | Page-level / Dialog-body / Card-body layout |
   | **Multi-action footer wait** (`.fynns-control-cluster` of `Button` / `IconButton`) | **At most one** `loading` spinner in the cluster — the action that is running. Siblings → `disabled` **without** a second spinner (shared `busy` boolean on every `loading` is the anti-pattern). Live: `#rhythm` end-align | Two+ sibling Buttons both `loading={true}` / both `loading={busy}` (twin rings = information redundancy) |
-  | **Section wait + header / foot chrome** (FieldBlock `actions`, Card `actions`, Dialog foot while body is BusyRegion-busy) | **BusyRegion only** for the wait; chrome Buttons / IconButtons → `disabled` **without** `loading`. Live: `#busy-region` field-header | BusyRegion (or BusyScrim) ring **and** FieldHeader / Card / foot `loading` at once (double rings = information redundancy) |
+  | **Section wait + header / foot chrome** (FieldBlock `actions`, Card `actions`, Dialog foot while body is BusyRegion-busy) | **BusyRegion only** for the wait; chrome Buttons / IconButtons → `disabled` **without** `loading`. Live: `#busy-region` FieldBlock actions | BusyRegion (or BusyScrim) ring **and** FieldHeader / Card / foot `loading` at once (double rings = information redundancy) |
   | Zero-result catalog | `EmptyState` | Using it for loading |
   | Pane sole zero-result (DestinationAppShell canvas / FillColumn children / shell main — no sibling chrome) | `EmptyState` **`fill`** (centers title + description in the visible pane — same host contract as `BusyRegion` `fill`) | Content-sized EmptyState parked top / mid-left; private `margin: auto` / absolute centering; inventing a second empty shell |
   | Zero-result **inside** Card / List / ChatThread.empty | `EmptyState` default (no `fill`) | `fill` under a content-sized Card / unit-stack (cannot stretch) |
