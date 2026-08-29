@@ -2104,6 +2104,8 @@ short gap meta in `trailingSupportingText`):
   trigger (“技能” / kind) — siblings collide mid-row
 - Hover / focus “reveal” still uses the IconButton overlay geometry
 - Consumer adds private `position` / `z-index` / negative margin on the cluster
+- Short gap status (“未映射” / “Unmapped”) **left edges drift** across sibling
+  gap rows while Button / Select columns stay put
 
 **Cause:** `trailingIsRowAction` correctly parks Button/Select **outside** the
 row control (`--with-end`), but overlay reveal reserves only **1–2×40dp**
@@ -2116,10 +2118,14 @@ normal list pad — not IconButton reserve) and forces Select / labeled Button t
 content-hug (`width: auto` / max-width caps). Path-catalog IconButton strips
 keep overlay reveal. **≥ 0.5.55:** pinned trailing `padding-inline-end` is at
 least `--fynns-radius-3xl` so host `overflow: clip` + radius does **not** slice
-the Select’s end curve; cluster stays inside the padded box. Consumer: bump ≥
-0.5.55; keep cluster `nowrap`; prefer short CTA labels; prefer IconButton +
-Tooltip when the action is not an inspector control. Live: sandbox `#list`
-inspector trailing. Authority:
+the Select’s end curve; cluster stays inside the padded box. **≥ 0.5.56:**
+gap / short status in `trailingSupportingText` is co-located **inside** the
+pinned end strip (before the action cluster) so sibling “Unmapped” labels
+stay glued to CTA|Select when end widths match — not a separate list-item
+right-hug that drifts. Leave `trailingMetaAlign` unset (17ch floors short
+status away from the CTA). Consumer: bump ≥ 0.5.56; keep cluster `nowrap`;
+prefer short CTA labels; prefer IconButton + Tooltip when the action is not
+an inspector control. Live: sandbox `#list` inspector trailing. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

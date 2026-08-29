@@ -1712,12 +1712,29 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   flex: 0 0 auto;
   align-self: center;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-list-end-actions-gap);
   width: auto;
   height: auto;
   min-height: 0;
   margin-inline-start: 0;
   padding-inline-end: var(--fynns-list-pad-inline);
   color: var(--fynns-color-text-muted);
+}
+
+/*
+ * Gap / status meta co-located in pinned inspector end (≥ 0.5.56). Stays
+ * content-hug (do not floor 17ch here — that parks short “Unmapped” far from
+ * CTA). Date catalogs keep meta inside the row + trailingMetaAlign="start".
+ */
+.fynns-list-item-trailing--end > .fynns-list-item-trailing-text {
+  flex: 0 0 auto;
+  max-width: min(12rem, 40vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Decorative chevron / glyph only — IconButton / cluster keep their own size. */
@@ -1846,8 +1863,10 @@ a.fynns-breadcrumb-link:visited {
  *
  * Host keeps `overflow: clip` + `radius-3xl` for the hover wash — pinned
  * trailing must clear that curve (`padding-inline-end` ≥ radius-3xl) or the
- * Select’s end radius is sliced off (consumer inspector rows). Live: `#list`
- * inspector trailing (≥ 0.5.54 pin; ≥ 0.5.55 end-radius clear).
+ * Select’s end radius is sliced off (consumer inspector rows). Gap meta
+ * (`trailingSupportingText`) co-locates in this end strip ≥ **0.5.56**.
+ * Live: `#list` inspector trailing (≥ 0.5.54 pin; ≥ 0.5.55 end-radius clear;
+ * ≥ 0.5.56 meta co-locate).
  */
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end .fynns-select

@@ -1,6 +1,9 @@
 import { createElement, Fragment, type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
-import { trailingIsRowAction } from "./catalogRowGeometry";
+import {
+  trailingIsPinnedInspectorEnd,
+  trailingIsRowAction,
+} from "./catalogRowGeometry";
 
 function NamedIcon() {
   return createElement("svg");
@@ -11,6 +14,16 @@ function NamedIconButton(props: { children?: ReactNode }) {
   return createElement("button", { type: "button", ...props });
 }
 NamedIconButton.displayName = "IconButton";
+
+function NamedButton(props: { children?: ReactNode }) {
+  return createElement("button", { type: "button", ...props });
+}
+NamedButton.displayName = "Button";
+
+function NamedSelect() {
+  return createElement("div", { className: "fynns-select" });
+}
+NamedSelect.displayName = "Select";
 
 function AnonymousWrap(props: { children?: ReactNode }) {
   return createElement(Fragment, null, props.children);
@@ -45,7 +58,7 @@ describe("trailingIsRowAction", () => {
     ).toBe(true);
     expect(
       trailingIsRowAction(
-        createElement("span", { className: "fynns-btn fynns-btn--ghost" }, "x"),
+        createElement("div", { className: "fynns-btn fynns-btn--ghost" }, "x"),
       ),
     ).toBe(true);
   });
@@ -68,5 +81,49 @@ describe("trailingIsRowAction", () => {
       return createElement("div");
     }
     expect(trailingIsRowAction(createElement(Mystery))).toBe(true);
+  });
+});
+
+describe("trailingIsPinnedInspectorEnd", () => {
+  it("is false for IconButton-only trailing (overlay reveal)", () => {
+    expect(trailingIsPinnedInspectorEnd(createElement(NamedIconButton))).toBe(
+      false,
+    );
+    expect(
+      trailingIsPinnedInspectorEnd(
+        createElement(
+          "div",
+          { className: "fynns-control-cluster" },
+          createElement(NamedIconButton),
+        ),
+      ),
+    ).toBe(false);
+    expect(
+      trailingIsPinnedInspectorEnd(
+        createElement("span", {
+          className: "fynns-btn fynns-btn--icon fynns-btn--ghost",
+        }),
+      ),
+    ).toBe(false);
+  });
+
+  it("is true for Select or labeled Button (incl. inside cluster)", () => {
+    expect(trailingIsPinnedInspectorEnd(createElement(NamedSelect))).toBe(true);
+    expect(trailingIsPinnedInspectorEnd(createElement(NamedButton))).toBe(true);
+    expect(
+      trailingIsPinnedInspectorEnd(
+        createElement(
+          "div",
+          { className: "fynns-control-cluster" },
+          createElement(NamedButton, null, "Assist"),
+          createElement(NamedSelect),
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      trailingIsPinnedInspectorEnd(
+        createElement("div", { className: "fynns-btn fynns-btn--tonal" }, "Go"),
+      ),
+    ).toBe(true);
   });
 });

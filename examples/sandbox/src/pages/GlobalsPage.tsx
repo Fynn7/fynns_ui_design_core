@@ -3333,6 +3333,40 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
             <ListItem
               overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineGapB")}
+              trailingSupportingText={t("globals.listInspectorTrailingMetaGap")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Button
+                    size="sm"
+                    variant="tonal"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      snackbar(t("globals.listInspectorTrailingCtaSnack"));
+                    }}
+                  >
+                    {t("globals.listInspectorTrailingCta")}
+                  </Button>
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindGap}
+                    onChange={setListInspectorKindGap}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
+            />
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
               headline={t("globals.listInspectorTrailingHeadlineMapped")}
               trailing={
                 <div className="fynns-control-cluster">

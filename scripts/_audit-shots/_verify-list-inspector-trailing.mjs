@@ -50,10 +50,17 @@ await page.locator("#sandbox-list-inspector-trailing").scrollIntoViewIfNeeded();
 
 const metrics = await page.evaluate(() => {
   const list = document.querySelector("#sandbox-list-inspector-trailing");
-  const host = list?.querySelector(".fynns-list-item-host--with-end");
+  const hosts = [
+    ...(list?.querySelectorAll(".fynns-list-item-host--with-end") ?? []),
+  ];
+  const host = hosts[0];
   const trailing = host?.querySelector(".fynns-list-item-trailing--end");
   const btn = trailing?.querySelector(".fynns-btn:not(.fynns-btn--icon)");
   const select = trailing?.querySelector(".fynns-select");
+  const metaInEnd = trailing?.querySelector(":scope > .fynns-list-item-trailing-text");
+  const metaInRow = host?.querySelector(
+    ".fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text",
+  );
   if (!host || !trailing || !btn || !select) {
     return { ok: false, error: "missing host/btn/select" };
   }
@@ -70,11 +77,29 @@ const metrics = await page.evaluate(() => {
   const selectPastHost = Math.round((sb.right - hostRight) * 10) / 10;
   const gapHostSelect = Math.round((hostRight - sb.right) * 10) / 10;
   const padEnd = parseFloat(style.paddingInlineEnd) || 0;
+
+  const gapMetaLefts = hosts
+    .map((h) => {
+      const m = h.querySelector(
+        ".fynns-list-item-trailing--end > .fynns-list-item-trailing-text",
+      );
+      return m ? Math.round(m.getBoundingClientRect().left) : null;
+    })
+    .filter((n) => n != null);
+  const metaLeftSpread =
+    gapMetaLefts.length >= 2
+      ? Math.max(...gapMetaLefts) - Math.min(...gapMetaLefts)
+      : 0;
+
   return {
     ok: true,
     position: style.position,
     opacity: style.opacity,
     hostWidth: Math.round(hb.width),
+    metaInEnd: Boolean(metaInEnd),
+    metaInRow: Boolean(metaInRow),
+    gapMetaLefts,
+    metaLeftSpread,
     btn: {
       left: Math.round(bb.left),
       right: Math.round(bb.right),
@@ -110,13 +135,18 @@ const pass =
   metrics.gap >= 2 &&
   metrics.selectPastHost <= 0 &&
   metrics.gapHostSelect >= 24 &&
-  metrics.padEnd >= 24;
+  metrics.padEnd >= 24 &&
+  metrics.metaInEnd === true &&
+  metrics.metaInRow === false &&
+  metrics.metaLeftSpread <= 1;
 
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {
   console.error(
-    "FAIL: inspector trailing overlap, overlay, or Select end clipped (need pad/gap ≥ radius-3xl)",
+    "FAIL: inspector trailing overlap, overlay, Select clip, or gap-meta column drift",
   );
   process.exit(1);
 }
-console.log("PASS: pinned in-flow, no Button∩Select overlap, Select clears host radius");
+console.log(
+  "PASS: pinned in-flow, no Button∩Select overlap, Select clears host radius, gap meta co-located+aligned",
+);
