@@ -3229,6 +3229,53 @@ Symptoms (run / LLM history rows):
 second metric → sibling `.fynns-table-meta` or trailing-stats. Live: `#list`
 run-summary. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode: EndAside instant open / close (no width morph)
+
+Symptoms (DestinationAppShell / pipeline aside — cover letter inspector):
+
+- Toggling TopAppBar trailing aside control **pops** the right pane in/out with
+  no width morph; left `NavigationDrawer` still animates
+- DevTools: `EndAside` unmounts on close (`aside` node disappears) or first
+  open paints full `--fynns-layout-end-aside-width` with no transition
+
+**Cause:** (1) core **&lt; 0.5.84** unmounted `EndAside` after close and
+re-initialized `entered` from `open` on remount — skipped enter animation; (2)
+consumer `{open && <EndAside>}` instead of `<EndAside open={…}>`; (3) closing
+child `min-width: end-aside-min-width` fought width morph.
+
+**Fix in core (≥ **0.5.86**):** `EndAsideMorphTrack` stays mounted in
+`DestinationAppShell` while `aside` is set; width morph runs on the track
+(drawer column parity). Morph memory survives brief inner remount during
+consumer reconcile (StrictMode). `entered` starts from memory + double-rAF on
+close; transition uses `--fynns-duration-flyout`. **Consumer:** keep `aside` +
+`asideOpen` on `DestinationAppShell`; toggle `open` only — never
+`{open && <EndAside>}`. Live: Layouts `#layouts-demo-shell`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside toggle workspace BusyRegion flash
+
+Symptoms (DestinationAppShell pipeline — cover letter / skills aside toggle):
+
+- TopAppBar trailing aside `IconButton` flashes **full canvas** `BusyRegion`
+  `fill` with app-boot copy (`Loading workspace` / `正在加载工作区`) while
+  detail is already on screen
+- Flash lasts one fetch (~100–500ms) — reads like the whole app rebooted
+
+**Cause:** pipeline wrapper `useEffect` lists unstable props (`onExit` inline
+arrow, …) so **any** shell re-render from `asideOpen` / `onAsideOpenChange`
+re-runs boot fetch → `setLoading(true)` → provider returns `BusyRegion` instead
+of `children`.
+
+**Fix in consumer (props-only):** boot fetch deps = **`applicationId`** (and
+locale `t` if needed for error strings) — **`onExit` via `useRef`**, not
+`useEffect` deps. Wrap `exitPipeline` in `useCallback`. Do **not** swap
+`DestinationAppShell` `children` to workspace `BusyRegion` when `ready` is
+already true.
+
+**Core constraint (≥ **0.5.87**):** aside width morph only — never app-boot
+busy on chrome toggle. Live: Layouts `#layouts-demo-shell` `shellAsideBody`.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Related docs
 
 | Doc | Role |

@@ -491,6 +491,21 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   preview+Chat stage. Failure mode:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **canvas FillColumn megacard
   zero inset**.
+- **DON'T** conditionally mount `EndAside` with `{asideOpen && <EndAside>…}` or
+  unmount on close — toggle **`open`** only so width morph can run (core ≥
+  **0.5.86** morph track in `DestinationAppShell` — inner pane reconcile cannot
+  reset close animation; toggle **`open`** only).
+  Live: Layouts `#layouts-demo-shell`. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **EndAside instant open /
+  close**.
+- **DON'T** let **EndAside / TopAppBar aside toggle** remount the pipeline shell
+  into **`BusyRegion` `fill`** with app-boot copy (`Loading workspace` /
+  `正在加载工作区`) while detail data is already loaded — chrome `asideOpen`
+  toggles must not re-run provider boot `useEffect` (unstable `onExit` /
+  `onAsideOpenChange` deps). Keep fetch keyed on **`applicationId`** only;
+  `onExit` → ref. Live: Layouts `#layouts-demo-shell` aside toggle. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **EndAside toggle workspace
+  BusyRegion flash**.
 - **DON'T** pad chrome / destination **labels** with redundant meta unless the
   user **explicitly** asks (counts, middle-dot tallies, decorative separators,
   parenthetical glosses, product-stack footnotes).
@@ -1433,7 +1448,7 @@ classes.
   | NavigationRail | mobile-first | Vertical destinations for **intentional** phone / icon-column roots only. **Never** DestinationAppShell / ClippedNav crowding densify, and **never** the default desktop app root. Standalone Layouts demo `#layouts-demo-navigation-rail`. |
   | NavigationDrawer | adaptive | `standard` = medium+ permanent; `modal` = overlay. Destinations only. **Desktop default** inside DestinationAppShell. Optional `NavigationDrawerGroup` (collapsible; leading icon any ReactNode; collapsed + active leaf → selected pill on trigger; group body `aria-labelledby` the label) or static `NavigationDrawerHeadline`. Sheet `headline` prop = **static title only** (plain text) — **never** a back `IconButton`, bulk toolbar, or bare count row (`hub-row`); mode exit → `TopAppBar` `leading` / `leadingExtra` (Layouts `#layouts-demo-shell` decorative; **`#layouts-demo-drill-in`** interactive drawer-body swap + full-width main). Catalog list-in-drawer (not main `list-pane-width` split) is the destination-app default — see CONSUMER_TREATY **hub-split**. Group/Item `label` = **short name only** — no `· N` and no parenthetical glosses unless the user explicitly asks; unread → Item `badge` only when required. Sibling Item / Group / Headline gap = `--fynns-navdrawer-section-gap` (**4dp**, same inside Group). SearchBar / tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` chrome ↔ peers & destinations = `--fynns-navdrawer-search-gap` (**8dp**, aliases layout `control-stack-gap` — ≥ 0.4.98; wider than Item↔Item 4dp; not a 16dp kind-jump). Optional sheet `footer` = Cursor-style account chrome (`.fynns-nav-drawer-footer*`; settings IconButton end — not TopAppBar `trailing` for that role; DestinationAppShell `navFooter`). Tools under SearchBar = **one** .fynns-control-cluster of Tooltip→IconButton (horizontal) — tip-fill width:100% applies only to Tooltip wrapping NavigationDrawerItem. **Never** wrap destinations in `.fynns-unit-stack`. |
   | ClippedNavShell | adaptive | Low-level layout: full-bleed TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden`. Prefer DestinationAppShell for greenfield. Use this shell when the drawer body must **morph** (catalog / chats drill-in) — swap `nav`, keep main full-width detail; live `#layouts-demo-drill-in`. Narrow `hidden` with an empty nav slot stays **one** main row (no empty second track under main / EndAside). |
-  | EndAside | adaptive | Inspector width morph + desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
+  | EndAside | adaptive | Inspector **width morph** (≥ **0.5.86** `EndAsideMorphTrack` stays mounted in `DestinationAppShell` — drawer flyout parity; double-rAF open+close; never `{open && <EndAside>}`); desktop leading-edge resize (min/max clamp; sheet path hides handle); flex `min-width: 0` + child `max-width:100%`; main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet (`min(52dvh, 22rem)`). Not Drawer. |
   | Banner / SearchBar / SkipLink / Breadcrumb / Pagination / Fab / FabMenu | both | Chrome utilities. Pagination footer = `.fynns-pagination-bar` (M3/MUI single row). Live `#pagination` / `#fab`. |
   | Drawer | desktop-first | Modal **content** side sheet. Phone → BottomSheet. ≠ NavigationDrawer. Head: **no** head|body divider / no `surface-head` strip (single surface with body). |
   | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle identifies the sheet; header has **no** head|body divider. |

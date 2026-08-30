@@ -51,7 +51,7 @@ const en = {
     "Appearance preference for drawer chrome — not a feature catalog.",
   "layouts.shellAsideLabel": "EndAside (inspector sample)",
   "layouts.shellAsideBody":
-    "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat.",
+    "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat. Toggle via TopAppBar trailing: width morph matches drawer flyout (`--fynns-duration-flyout`); `EndAsideMorphTrack` stays mounted (≥ 0.5.86). **Chrome toggles must not** remount the shell main into `BusyRegion` / workspace boot copy — keep provider fetch effects keyed on `applicationId` only (stable `onExit` ref).",
   "layouts.fillColumnHelp":
     "FillColumn — fixed-height host: put Chat in children so the thread takes leftover height and the composer docks at the bottom. Optional header/footer stay content-sized when needed. Do not stack EmptyState / Composer as siblings of Chat (dead band). Aside bubble 100% still uses .fynns-chat-host--fill / EndAside.",
   "layouts.fillColumnEmptyTitle": "No messages yet",
@@ -2013,7 +2013,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellSettingsDensityHint": "抽屉壳层外观偏好 — 不是功能目录。",
   "layouts.shellAsideLabel": "EndAside（检查器示例）",
   "layouts.shellAsideBody":
-    "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。",
+    "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。用顶栏 trailing 切换：宽度 morph 与抽屉 flyout 同节奏（`--fynns-duration-flyout`）；`EndAsideMorphTrack` 保持挂载（≥ 0.5.86）。**禁止**因切换侧栏把主画布 remount 成 `BusyRegion` /「正在加载工作区」— 管线 Provider 的 fetch 只应依赖 `applicationId`（`onExit` 用稳定 ref）。",
   "layouts.fillColumnHelp":
     "FillColumn — 已定高宿主：Chat 放在 children，thread 吃剩余高度、composer 贴底。需要时再用可选 header/footer（内容定高）。禁止把 EmptyState / Composer 当 Chat 兄弟堆叠（会留下空白带）。aside 气泡 100% 仍用 .fynns-chat-host--fill / EndAside。",
   "layouts.fillColumnEmptyTitle": "暂无消息",

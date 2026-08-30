@@ -1,13 +1,16 @@
 import {
+  createContext,
   useCallback,
-  useEffect,
+  useContext,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
+  type RefObject,
 } from "react";
 import { readVarPx } from "./layoutMeasure";
 
@@ -18,7 +21,7 @@ export type EndAsideProps = {
   style?: CSSProperties;
   /**
    * Controlled pane width in CSS pixels (desktop flex / overlay modes).
-   * Written as a local `--fynns-layout-end-aside-width` on the aside.
+   * Written as a local `--fynns-layout-end-aside-width` on the morph track.
    */
   width?: number;
   /** Uncontrolled initial width (px). Defaults to computed token width. */
@@ -28,19 +31,46 @@ export type EndAsideProps = {
   disableResize?: boolean;
 };
 
-function endAsideTransitionMs(): number {
-  if (typeof window === "undefined") return 240;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    return 0;
+export type EndAsideMorphTrackProps = {
+  open: boolean;
+  width?: number;
+  defaultWidth?: number;
+  onWidthChange?: (widthPx: number) => void;
+  children: ReactNode;
+};
+
+type EndAsideTrackContextValue = {
+  trackRef: RefObject<HTMLDivElement | null>;
+  entered: boolean;
+  dragging: boolean;
+  setDragging: (next: boolean) => void;
+  widthPx: number | null;
+  setWidthPx: (next: number) => void;
+  controlled: boolean;
+  liveWidthRef: RefObject<number | null>;
+  paintWidth: (next: number, handle?: HTMLElement) => void;
+};
+
+const EndAsideTrackContext = createContext<EndAsideTrackContextValue | null>(
+  null,
+);
+
+/** Survives `EndAsideMorphTrack` remount during consumer reconcile (StrictMode). */
+const endAsideMorphMemory = {
+  wasVisible: false,
+};
+
+/** Clear morph memory when `DestinationAppShell` drops `aside`. */
+export function endAsideMorphMemoryReset() {
+  endAsideMorphMemory.wasVisible = false;
+}
+
+function useEndAsideTrack() {
+  const ctx = useContext(EndAsideTrackContext);
+  if (!ctx) {
+    throw new Error("EndAsidePane must render inside EndAsideMorphTrack.");
   }
-  const raw = getComputedStyle(document.documentElement)
-    .getPropertyValue("--fynns-duration-base")
-    .trim();
-  const value = Number.parseFloat(raw);
-  if (!Number.isFinite(value)) return 240;
-  if (raw.endsWith("ms")) return value;
-  if (raw.endsWith("s")) return value * 1000;
-  return 240;
+  return ctx;
 }
 
 /** Phone bottom-sheet path — horizontal resize is not applicable. */
@@ -50,54 +80,25 @@ function endAsideSheetMedia(): boolean {
 }
 
 /**
- * End-edge supporting pane with **width** open/close (no translate) so the
- * canvas | aside seam stays a hard edge. Toggle lives in the consumer’s
- * `TopAppBar` trailing (IconButton) — not inside this component.
- *
- * Place beside the canvas inside `ClippedNavShell`’s main column (flex row).
- * Soft floor tokens (`--fynns-layout-end-aside-min-width` /
- * `--fynns-layout-main-min-width`) inform preferred size and crowding probes;
- * flex CSS uses `min-width: 0` (not `min(token, 100%)` of the full row).
- * Extreme squeeze (main ≤32rem) → end-edge overlay.
- *
- * Desktop: leading-edge drag resize (parity with `ClippedNavShell` drawer
- * trailing seam). Live paint via rAF; clamp by `end-aside-min-width` /
- * `end-aside-max-width` and remaining room for `main-min-width`. Hidden on the
- * ≤56.25rem bottom-sheet path.
- *
- * **Chat dual placement:** `ChatMessage` / composer may fill this pane —
- * host = 100% of aside content (rem ceiling dropped); user bubble ceiling
- * lifts to 100% of that host (matches composer shell on long turns); composer
- * 100%. Start-edge chat hosts use `.fynns-chat-host--fill` instead. See
- * AGENTS.md Feedback → ChatMessage.
- *
- * @example
- * ```tsx
- * <div className="app-main-row">
- *   <main>…</main>
- *   <EndAside open={inspectorOpen}>{inspector}</EndAside>
- * </div>
- * ```
+ * Width-morph flex track for `EndAside` — stays mounted in `DestinationAppShell`
+ * while the inner pane may reconcile. Same grammar as `ClippedNavShell` drawer
+ * column (`0px` morph, not unmount).
  */
-export function EndAside({
+export function EndAsideMorphTrack({
   open,
-  children,
-  className,
-  style,
   width: widthProp,
   defaultWidth,
   onWidthChange,
-  disableResize = false,
-}: EndAsideProps) {
-  const asideRef = useRef<HTMLElement>(null);
+  children,
+}: EndAsideMorphTrackProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
   const onWidthChangeRef = useRef(onWidthChange);
   onWidthChangeRef.current = onWidthChange;
-  /** Live drag width — survives React clearing the style prop while `dragging`. */
   const liveWidthRef = useRef<number | null>(null);
 
-  const [rendered, setRendered] = useState(open);
-  const [entered, setEntered] = useState(open);
-  const [sheet, setSheet] = useState(endAsideSheetMedia);
+  const [entered, setEntered] = useState(() =>
+    open || (!open && endAsideMorphMemory.wasVisible),
+  );
   const [uncontrolledWidth, setUncontrolledWidth] = useState<number | null>(
     defaultWidth ?? null,
   );
@@ -106,27 +107,42 @@ export function EndAside({
   const controlled = widthProp !== undefined;
   const widthPx = controlled ? widthProp : uncontrolledWidth;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (open) {
-      setRendered(true);
-      const raf = requestAnimationFrame(() => setEntered(true));
-      return () => cancelAnimationFrame(raf);
+      endAsideMorphMemory.wasVisible = true;
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setEntered(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        if (raf2) cancelAnimationFrame(raf2);
+      };
     }
-    setEntered(false);
-    const timer = window.setTimeout(
-      () => setRendered(false),
-      endAsideTransitionMs(),
-    );
-    return () => window.clearTimeout(timer);
+    if (!endAsideMorphMemory.wasVisible) {
+      setEntered(false);
+      return;
+    }
+    /* Close: paint one frame at open width (incl. after remount) then morph. */
+    setEntered(true);
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setEntered(false);
+        endAsideMorphMemory.wasVisible = false;
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
   }, [open]);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 56.25rem)");
-    const sync = () => setSheet(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
+  useLayoutEffect(() => {
+    if (!open && !entered && trackRef.current) {
+      endAsideMorphMemory.wasVisible = false;
+    }
+  }, [open, entered]);
 
   const setWidthPx = useCallback(
     (next: number) => {
@@ -138,61 +154,129 @@ export function EndAside({
   );
 
   useLayoutEffect(() => {
-    if (controlled || uncontrolledWidth != null || !asideRef.current) return;
-    const w = readVarPx(asideRef.current, "--fynns-layout-end-aside-width");
+    if (controlled || uncontrolledWidth != null || !trackRef.current) return;
+    const w = readVarPx(trackRef.current, "--fynns-layout-end-aside-width");
     if (w > 0) setUncontrolledWidth(w);
-  }, [controlled, uncontrolledWidth, rendered]);
+  }, [controlled, uncontrolledWidth]);
 
   const paintWidth = useCallback((next: number, handle?: HTMLElement) => {
-    const aside = asideRef.current;
-    if (!aside) return;
+    const track = trackRef.current;
+    if (!track) return;
     const rounded = Math.round(next);
     liveWidthRef.current = rounded;
-    aside.style.setProperty(
-      "--fynns-layout-end-aside-width",
-      `${rounded}px`,
-    );
+    track.style.setProperty("--fynns-layout-end-aside-width", `${rounded}px`);
     if (handle) handle.setAttribute("aria-valuenow", String(rounded));
   }, []);
 
-  /*
-   * While dragging, React `style` omits the width var so setProperty owns it.
-   * A drag-start setState would otherwise wipe that inline var before paint —
-   * re-apply after commit so a bare click does not flash to the token/max width.
-   */
   useLayoutEffect(() => {
     if (!dragging || liveWidthRef.current == null) return;
     paintWidth(liveWidthRef.current);
   }, [dragging, paintWidth]);
 
+  const trackStyle: CSSProperties | undefined =
+    dragging || widthPx == null
+      ? undefined
+      : ({
+          ["--fynns-layout-end-aside-width" as string]: `${widthPx}px`,
+        } as CSSProperties);
+
+  const ctx = useMemo(
+    () => ({
+      trackRef,
+      entered,
+      dragging,
+      setDragging,
+      widthPx,
+      setWidthPx,
+      controlled,
+      liveWidthRef,
+      paintWidth,
+    }),
+    [
+      entered,
+      dragging,
+      widthPx,
+      setWidthPx,
+      controlled,
+      paintWidth,
+    ],
+  );
+
+  return (
+    <EndAsideTrackContext.Provider value={ctx}>
+      <div
+        ref={trackRef}
+        className="fynns-end-aside-track"
+        data-state={entered ? "open" : "closing"}
+        data-resizing={dragging ? "true" : undefined}
+        style={trackStyle}
+      >
+        {children}
+      </div>
+    </EndAsideTrackContext.Provider>
+  );
+}
+
+export type EndAsidePaneProps = {
+  open: boolean;
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  disableResize?: boolean;
+};
+
+/** Inner aside shell — resize handle + children. Requires `EndAsideMorphTrack`. */
+export function EndAsidePane({
+  open,
+  children,
+  className,
+  style,
+  disableResize = false,
+}: EndAsidePaneProps) {
+  const asideRef = useRef<HTMLElement>(null);
+  const {
+    trackRef,
+    entered,
+    setDragging,
+    widthPx,
+    setWidthPx,
+    controlled,
+    liveWidthRef,
+    paintWidth,
+  } = useEndAsideTrack();
+
+  const [sheet, setSheet] = useState(endAsideSheetMedia);
+
+  useLayoutEffect(() => {
+    const mq = window.matchMedia("(max-width: 56.25rem)");
+    const sync = () => setSheet(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   const clampWidth = useCallback((raw: number) => {
-    const aside = asideRef.current;
-    if (!aside) return raw;
-    const min = readVarPx(aside, "--fynns-layout-end-aside-min-width") || 192;
+    const track = trackRef.current;
+    if (!track) return raw;
+    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 192;
     const tokenMax =
-      readVarPx(aside, "--fynns-layout-end-aside-max-width") || 640;
-    const mainMin = readVarPx(aside, "--fynns-layout-main-min-width") || 160;
-    const row = aside.parentElement;
+      readVarPx(track, "--fynns-layout-end-aside-max-width") || 640;
+    const mainMin = readVarPx(track, "--fynns-layout-main-min-width") || 160;
+    const row = track.parentElement;
     const roomMax =
-      row != null
-        ? Math.max(min, row.clientWidth - mainMin)
-        : tokenMax;
+      row != null ? Math.max(min, row.clientWidth - mainMin) : tokenMax;
     const max = Math.min(tokenMax, roomMax);
     return Math.min(max, Math.max(min, raw));
-  }, []);
+  }, [trackRef]);
 
   const onResizePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (event.button !== 0) return;
-    const aside = asideRef.current;
-    if (!aside) return;
+    const track = trackRef.current;
+    if (!track) return;
     event.preventDefault();
     const handle = event.currentTarget;
     handle.setPointerCapture(event.pointerId);
-    /*
-     * Prefer the **rendered** box — flex / max-width can shrink below the
-     * preferred CSS var; using the token here jumps to “max” on click.
-     */
-    const startWidth = Math.round(aside.getBoundingClientRect().width);
+    const startWidth = Math.round(track.getBoundingClientRect().width);
     let latest = startWidth;
     liveWidthRef.current = startWidth;
     paintWidth(startWidth, handle);
@@ -201,8 +285,7 @@ export function EndAside({
     let raf = 0;
 
     const onMove = (ev: PointerEvent) => {
-      const rtl = getComputedStyle(aside).direction === "rtl";
-      /* Leading edge: drag toward start grows the pane (mirror of drawer). */
+      const rtl = getComputedStyle(track).direction === "rtl";
       const delta = rtl ? ev.clientX - originX : originX - ev.clientX;
       latest = clampWidth(startWidth + delta);
       if (raf) return;
@@ -232,46 +315,32 @@ export function EndAside({
 
   const onResizeKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const step = event.shiftKey ? 32 : 8;
-    const aside = asideRef.current;
-    const rtl = aside ? getComputedStyle(aside).direction === "rtl" : false;
+    const track = trackRef.current;
+    const rtl = track ? getComputedStyle(track).direction === "rtl" : false;
     let delta = 0;
-    /* Arrow toward the start edge grows the pane. */
     if (event.key === "ArrowLeft") delta = rtl ? -step : step;
     else if (event.key === "ArrowRight") delta = rtl ? step : -step;
     else return;
     event.preventDefault();
     const current =
-      Math.round(aside?.getBoundingClientRect().width ?? 0) ||
+      Math.round(track?.getBoundingClientRect().width ?? 0) ||
       widthPx ||
-      ((aside ? readVarPx(aside, "--fynns-layout-end-aside-width") : 0) ||
-        352);
+      ((track ? readVarPx(track, "--fynns-layout-end-aside-width") : 0) || 352);
     setWidthPx(clampWidth(current + delta));
   };
 
-  if (!rendered) return null;
-
-  const showResize = entered && !disableResize && !sheet;
-  const asideStyle: CSSProperties | undefined = (() => {
-    const base = style;
-    if (dragging || widthPx == null) return base;
-    return {
-      ...base,
-      ["--fynns-layout-end-aside-width" as string]: `${widthPx}px`,
-    };
-  })();
+  const showResize = open && entered && !disableResize && !sheet;
 
   const resizeBounds = (() => {
-    const aside = asideRef.current;
-    if (!aside || !showResize) return null;
-    const min = readVarPx(aside, "--fynns-layout-end-aside-min-width") || 192;
+    const track = trackRef.current;
+    if (!track || !showResize) return null;
+    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 192;
     const tokenMax =
-      readVarPx(aside, "--fynns-layout-end-aside-max-width") || 640;
-    const mainMin = readVarPx(aside, "--fynns-layout-main-min-width") || 160;
-    const row = aside.parentElement;
+      readVarPx(track, "--fynns-layout-end-aside-max-width") || 640;
+    const mainMin = readVarPx(track, "--fynns-layout-main-min-width") || 160;
+    const row = track.parentElement;
     const roomMax =
-      row != null
-        ? Math.max(min, row.clientWidth - mainMin)
-        : tokenMax;
+      row != null ? Math.max(min, row.clientWidth - mainMin) : tokenMax;
     return { min, max: Math.min(tokenMax, roomMax) };
   })();
 
@@ -279,11 +348,9 @@ export function EndAside({
     <aside
       ref={asideRef}
       className={["fynns-end-aside", className ?? ""].filter(Boolean).join(" ")}
-      data-state={entered ? "open" : "closing"}
-      data-resizing={dragging ? "true" : undefined}
       aria-hidden={!open || undefined}
       inert={!open ? true : undefined}
-      style={asideStyle}
+      style={style}
     >
       {showResize ? (
         <div
@@ -305,5 +372,53 @@ export function EndAside({
       ) : null}
       {children}
     </aside>
+  );
+}
+
+/**
+ * End-edge supporting pane with **width** open/close (no translate) so the
+ * canvas | aside seam stays a hard edge. Toggle lives in the consumer’s
+ * `TopAppBar` trailing (IconButton) — not inside this component.
+ *
+ * **Width morph (hard ≥ 0.5.86):** `EndAsideMorphTrack` stays mounted while
+ * `aside` is set — same grammar as `ClippedNavShell` drawer track (`0px` morph,
+ * not unmount). `DestinationAppShell` composes morph track + pane so inner
+ * reconcile does not reset the close animation. Do **not** conditionally mount
+ * `{open && <EndAside>}`.
+ *
+ * @example
+ * ```tsx
+ * <div className="app-main-row">
+ *   <main>…</main>
+ *   <EndAside open={inspectorOpen}>{inspector}</EndAside>
+ * </div>
+ * ```
+ */
+export function EndAside({
+  open,
+  children,
+  className,
+  style,
+  width: widthProp,
+  defaultWidth,
+  onWidthChange,
+  disableResize = false,
+}: EndAsideProps) {
+  return (
+    <EndAsideMorphTrack
+      open={open}
+      width={widthProp}
+      defaultWidth={defaultWidth}
+      onWidthChange={onWidthChange}
+    >
+      <EndAsidePane
+        open={open}
+        className={className}
+        style={style}
+        disableResize={disableResize}
+      >
+        {children}
+      </EndAsidePane>
+    </EndAsideMorphTrack>
   );
 }

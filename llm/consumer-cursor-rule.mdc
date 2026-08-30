@@ -423,7 +423,7 @@ destination 列在顶栏**下方**），**不是**把侧栏标签裁成竖条、
 | --- | --- | --- |
 | `nav` | 目的地：`NavigationDrawer` **或** `NavigationRail`（与 `navMode` 同步） | 页面正文、OpenWiki / 文档、表单、Chat、Preview、任意非 destination |
 | `children`（main） | 主画布 / 路由出口 | destination 列表（应在 `nav`） |
-| `aside` / `EndAside` | 检查器 / 辅助 pane | 整页主内容、平行「第二主栏」冒充侧栏 |
+| `aside` / `EndAside` | 检查器 / 辅助 pane（`<EndAside open={…}>` 常驻挂载 — 只切 `open`，禁止 `{open && <EndAside>}`）；**禁止** aside 切换触发 workspace `BusyRegion` 闪屏（管线 Provider fetch 只绑 `applicationId`；`onExit` 用 ref） | 整页主内容、平行「第二主栏」冒充侧栏 |
 | 模态 `Drawer` | 内容侧板（临时） | destination 导航（≠ `NavigationDrawer`） |
 
 `DestinationAppShell` 同构：`destinations[]` → 内部 `nav`；`children` → main；

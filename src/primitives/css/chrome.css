@@ -3191,34 +3191,49 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * takes space. Preferred size stays on flex-basis / sandbox `flex: 1 1
  * var(--fynns-layout-main-min-width)`. Extreme squeeze → overlay CQ below.
  */
-*:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
+*:has(> .fynns-end-aside-track:not([data-state="closing"])) > :not(.fynns-end-aside-track) {
   min-width: 0;
 }
 
 /* ---------- EndAside (width-morph supporting pane) ---------- */
-.fynns-end-aside {
+.fynns-end-aside-track {
   position: relative;
   flex: 0 1 auto;
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
-  /* Same flex trap as main: do not use min(token, 100%) of the full row. */
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  transition:
+    width var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
+}
+
+.fynns-end-aside-track[data-resizing="true"] {
+  transition: none;
+}
+
+.fynns-end-aside-track[data-state="closing"] {
+  width: 0;
+  max-width: 0;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.fynns-end-aside {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
-  min-height: 0;
   display: flex;
   flex-direction: column;
   /* Visible so the resize hit can straddle the start border; clip children. */
   overflow: visible;
-  transition:
-    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    min-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
-}
-
-.fynns-end-aside[data-resizing="true"] {
-  transition: none;
 }
 
 /* Leading-edge seam — hit + cue centered on the start border (Cursor). */
@@ -3261,20 +3276,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * Hide the resting hairline so only one seam paints.
  */
 .fynns-end-aside-resize:hover::before,
-.fynns-end-aside[data-resizing="true"] > .fynns-end-aside-resize::before {
+.fynns-end-aside-track[data-resizing="true"] .fynns-end-aside-resize::before {
   background: var(--fynns-color-border);
 }
 
 .fynns-end-aside:has(> .fynns-end-aside-resize:hover),
-.fynns-end-aside[data-resizing="true"] {
+.fynns-end-aside-track[data-resizing="true"] .fynns-end-aside {
   border-inline-start-color: transparent;
-}
-
-.fynns-end-aside[data-state="closing"] {
-  width: 0;
-  max-width: 0;
-  min-width: 0;
-  overflow: hidden;
 }
 
 /*
@@ -3296,14 +3304,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
 }
 
-.fynns-end-aside[data-state="closing"] > *:not(.fynns-end-aside-resize) {
+.fynns-end-aside-track[data-state="closing"] .fynns-end-aside > *:not(.fynns-end-aside-resize) {
   max-width: none;
-  min-width: var(--fynns-layout-end-aside-min-width);
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-end-aside,
-  .fynns-end-aside[data-state="closing"] {
+  .fynns-end-aside-track,
+  .fynns-end-aside-track[data-state="closing"] {
     transition: none;
   }
 }
@@ -3322,17 +3330,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  */
 @container fynns-shell-main (max-width: 32rem) {
   @media (min-width: 56.26rem) {
-    *:has(> .fynns-end-aside) {
+    *:has(> .fynns-end-aside-track) {
       position: relative;
     }
 
-    *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+    *:has(> .fynns-end-aside-track) > :not(.fynns-end-aside-track) {
       min-width: 0;
   flex: 1 1 auto;
       max-width: 100%;
     }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track {
       position: absolute;
       inset-block: 0;
       inset-inline-end: 0;
@@ -3343,13 +3351,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
       box-shadow: var(--fynns-shadow-md);
     }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track .fynns-end-aside > *:not(.fynns-end-aside-resize) {
       width: 100%;
       max-width: none;
   min-width: 0;
 }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside[data-state="closing"] {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track[data-state="closing"] {
       width: 0;
       max-width: 0;
       min-width: 0;
@@ -3405,32 +3413,35 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     overflow: hidden;
   }
 
-  .fynns-clipped-nav-shell-main:has(.fynns-end-aside) {
+  .fynns-clipped-nav-shell-main:has(.fynns-end-aside-track) {
     position: relative;
   }
 
-  .fynns-end-aside {
+  .fynns-end-aside-track {
     position: absolute;
     inset-inline: 0;
-    /* Keep sheet on the block-end edge when max-height caps size (ignore
-     * static-position top from the flex row). */
     inset-block-start: auto;
     bottom: 0;
     z-index: 3;
     width: 100%;
     max-width: none;
     min-width: 0;
-    border-inline-start: none;
-    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    /* Sheet, not a ribbon: leave canvas room but keep room for inspector rows. */
     max-height: min(52dvh, 22rem);
+    overflow: hidden;
     box-shadow: var(--fynns-shadow-md);
     transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
-  .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+  .fynns-end-aside {
+    border-inline-start: none;
+    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .fynns-end-aside-track .fynns-end-aside > *:not(.fynns-end-aside-resize) {
     width: 100%;
     max-width: none;
     min-width: 0;
@@ -3440,13 +3451,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     display: none;
   }
 
-  .fynns-end-aside[data-state="closing"] {
+  .fynns-end-aside-track[data-state="closing"] {
     width: 100%;
     max-width: none;
     max-height: 0;
     box-shadow: var(--fynns-shadow-none);
     transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 }

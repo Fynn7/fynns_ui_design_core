@@ -97,7 +97,7 @@ export function wouldClippedNavDrawerCrowd(
   const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
   const main = root.querySelector(".fynns-clipped-nav-shell-main");
   const aside = main?.querySelector(
-    ".fynns-end-aside:not([data-state='closing'])",
+    ".fynns-end-aside-track:not([data-state='closing'])",
   );
   const asideMin = aside
     ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
@@ -315,7 +315,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
         const mainW = main.clientWidth;
         const mainMin = readVarPx(root, "--fynns-layout-main-min-width");
         const aside = main.querySelector(
-          ".fynns-end-aside:not([data-state='closing'])",
+          ".fynns-end-aside-track:not([data-state='closing'])",
         );
         const asideMin = aside
           ? readVarPx(root, "--fynns-layout-end-aside-min-width")
@@ -351,7 +351,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       const main = body?.querySelector(
         ":scope > .fynns-clipped-nav-shell-main",
       );
-      if (main?.querySelector(".fynns-end-aside[data-state='closing']")) return;
+      if (main?.querySelector(".fynns-end-aside-track[data-state='closing']")) return;
       /* EndAside live-drag paints width every frame — never crowd-close mid-drag. */
       if (main?.querySelector(".fynns-end-aside[data-resizing='true']")) return;
       if (isCrowded()) onNavCrowdedRef.current?.();
@@ -426,7 +426,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
     const hasAside = !!main?.querySelector(
-      ".fynns-end-aside:not([data-state='closing'])",
+      ".fynns-end-aside-track:not([data-state='closing'])",
     );
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
@@ -523,7 +523,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const mainMin = readVarPx(root, "--fynns-layout-main-min-width") || 160;
     const main = root.querySelector(".fynns-clipped-nav-shell-main");
     const hasAside = !!main?.querySelector(
-      ".fynns-end-aside:not([data-state='closing'])",
+      ".fynns-end-aside-track:not([data-state='closing'])",
     );
     const asideMin = hasAside
       ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
