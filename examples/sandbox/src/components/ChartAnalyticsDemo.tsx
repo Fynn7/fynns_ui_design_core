@@ -271,14 +271,11 @@ export function ChartAnalyticsDemo() {
                 name="cost"
                 stroke="var(--fynns-chart-series-line)"
                 strokeWidth={2}
-                dot={{
-                  r: 3,
-                  fill: "var(--fynns-chart-series-line)",
-                  stroke: "var(--fynns-color-surface-1)",
-                  strokeWidth: 1.5,
-                }}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                dot={false}
                 activeDot={{
-                  r: 5,
+                  r: 4,
                   fill: "var(--fynns-chart-series-line)",
                   stroke: "var(--fynns-color-surface-1)",
                   strokeWidth: 2,
