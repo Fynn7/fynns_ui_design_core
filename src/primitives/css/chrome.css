@@ -225,7 +225,8 @@
 .fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
   width: 100%;
   max-width: 100%;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  /* Shrinkable controls track — max-content alone overflows narrow Card / EndAside. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
 }
 
 /* Form-host preference rows share FieldHeader label type (not toolbar caption). */
@@ -334,6 +335,117 @@
   > .fynns-control-row__controls
   > .fynns-control-cluster {
   justify-content: flex-end;
+}
+
+/*
+ * Narrow Card / EndAside (≥ 0.5.88): labeled Button clusters in ControlRow wrap
+ * inside the shrinkable controls track. IconButton-only catalog strips keep
+ * nowrap end-hug.
+ */
+.fynns-dialog-panel--centered
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-card-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-surface--padded
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)) {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
+.fynns-dialog-panel--centered
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-card-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-surface--padded
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-collapsible-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))) {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Empty label → full-width controls band (inspector Card body action rows). */
+.fynns-dialog-panel--centered
+  > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-card-body > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-surface--padded
+  > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-collapsible-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fynns-dialog-panel--centered
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-card-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-surface--padded
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls {
+  grid-column: 1;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
 }
 
 /*
@@ -1837,6 +1949,11 @@
   flex-direction: column;
   align-items: stretch;
   min-width: 0;
+}
+
+/* Open group: same 4dp between trigger ↔ body as Item↔Item inside the body. */
+.fynns-nav-drawer-group--open {
+  gap: var(--fynns-navdrawer-section-gap);
 }
 
 .fynns-nav-drawer-group-trigger {

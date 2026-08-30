@@ -161,7 +161,7 @@
 .fynns-control-row:not(.fynns-control-stack > .fynns-control-row) {
   width: 100%;
   max-width: 100%;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
 }
 
 .fynns-control-row:not(.fynns-control-stack > .fynns-control-row)

@@ -50,6 +50,13 @@ const en = {
   "layouts.shellSettingsDensityHint":
     "Appearance preference for drawer chrome — not a feature catalog.",
   "layouts.shellAsideLabel": "EndAside (inspector sample)",
+  "layouts.shellAsideCardTitle": "Sample panel",
+  "layouts.shellAsideActionGenerate": "Generate sample",
+  "layouts.shellAsideActionSave": "Save edits",
+  "layouts.shellAsideActionExportA": "Export A",
+  "layouts.shellAsideActionExportB": "Export B",
+  "layouts.shellAsideActionHint":
+    "Card body ControlRow + labeled Button cluster — wraps in narrow EndAside (≥ 0.5.88); IconButton catalog strips stay nowrap.",
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat. Toggle via TopAppBar trailing: width morph matches drawer flyout (`--fynns-duration-flyout`); `EndAsideMorphTrack` stays mounted (≥ 0.5.86). **Chrome toggles must not** remount the shell main into `BusyRegion` / workspace boot copy — keep provider fetch effects keyed on `applicationId` only (stable `onExit` ref).",
   "layouts.fillColumnHelp":
@@ -2012,6 +2019,13 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellSettingsDensity": "底栏显示账户名",
   "layouts.shellSettingsDensityHint": "抽屉壳层外观偏好 — 不是功能目录。",
   "layouts.shellAsideLabel": "EndAside（检查器示例）",
+  "layouts.shellAsideCardTitle": "示例面板",
+  "layouts.shellAsideActionGenerate": "生成示例",
+  "layouts.shellAsideActionSave": "保存编辑",
+  "layouts.shellAsideActionExportA": "导出 A",
+  "layouts.shellAsideActionExportB": "导出 B",
+  "layouts.shellAsideActionHint":
+    "Card 正文 ControlRow + 带文案 Button 条 — 窄 EndAside 内换行（≥ 0.5.88）；纯 IconButton 目录条仍 nowrap。",
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。用顶栏 trailing 切换：宽度 morph 与抽屉 flyout 同节奏（`--fynns-duration-flyout`）；`EndAsideMorphTrack` 保持挂载（≥ 0.5.86）。**禁止**因切换侧栏把主画布 remount 成 `BusyRegion` /「正在加载工作区」— 管线 Provider 的 fetch 只应依赖 `applicationId`（`onExit` 用稳定 ref）。",
   "layouts.fillColumnHelp":

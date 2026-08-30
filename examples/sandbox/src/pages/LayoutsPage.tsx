@@ -256,16 +256,29 @@ export function LayoutsPage() {
                   },
                 ]}
                 aside={
-                  <div className="sandbox-globals-shell-aside sandbox-stack">
-                    <p className="sandbox-chat-aside-label">
-                      {t("layouts.shellAsideLabel")}
-                    </p>
-                    <Surface variant="filled" padded>
+                  <PageScroll>
+                    <Card title={t("layouts.shellAsideCardTitle")}>
+                      <ControlRow label="">
+                        <div className="fynns-control-cluster">
+                          <Button size="sm" variant="primary">
+                            {t("layouts.shellAsideActionGenerate")}
+                          </Button>
+                          <Button size="sm">
+                            {t("layouts.shellAsideActionSave")}
+                          </Button>
+                          <Button size="sm" variant="tonal">
+                            {t("layouts.shellAsideActionExportA")}
+                          </Button>
+                          <Button size="sm" variant="tonal">
+                            {t("layouts.shellAsideActionExportB")}
+                          </Button>
+                        </div>
+                      </ControlRow>
                       <p className="sandbox-globals-navrail-pane-body">
-                        {t("layouts.shellAsideBody")}
+                        {t("layouts.shellAsideActionHint")}
                       </p>
-                    </Surface>
-                  </div>
+                    </Card>
+                  </PageScroll>
                 }
               >
                 <PageScroll>

@@ -3276,6 +3276,26 @@ already true.
 busy on chrome toggle. Live: Layouts `#layouts-demo-shell` `shellAsideBody`.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode: ControlRow labeled Button cluster overflow (Card / EndAside)
+
+Symptoms (inspector Card body — cover letter / export actions):
+
+- Several labeled `Button`s in one `ControlRow` `.fynns-control-cluster` spill
+  past the Card right edge; trailing actions clip under `overflow: hidden`
+- DevTools: `.fynns-control-row` grid second track is `max-content`; cluster
+  width exceeds `.fynns-card` / `.fynns-end-aside`
+
+**Cause:** form-host `ControlRow` used `1fr | max-content` — controls track cannot
+shrink below the nowrap labeled-button strip in a narrow EndAside.
+
+**Fix in core (≥ **0.5.88**):** controls track `minmax(0, max-content)`; labeled
+Button clusters **wrap** with `action-cluster-gap` (8dp); IconButton-only catalog
+strips keep nowrap end-hug. Empty `ControlRow` `label` → full-width controls band.
+
+**Consumer:** props-only — one `ControlRow` + `.fynns-control-cluster` of
+`Button`s (no private width / flex hacks). Live: Layouts `#layouts-demo-shell`
+aside Card. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Related docs
 
 | Doc | Role |

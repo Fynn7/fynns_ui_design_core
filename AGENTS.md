@@ -506,6 +506,13 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   `onExit` → ref. Live: Layouts `#layouts-demo-shell` aside toggle. Failure mode:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **EndAside toggle workspace
   BusyRegion flash**.
+- **DON'T** let standalone **`ControlRow`** labeled **`Button`** clusters overflow
+  narrow **Card** / **EndAside** hosts — the default `max-content` controls
+  column clips under `overflow: hidden`. Core ≥ **0.5.88** shrinks the controls
+  track and **wraps** `.fynns-control-cluster` (IconButton-only catalog strips
+  keep nowrap end-hug). Live: Layouts `#layouts-demo-shell` aside Card. Failure
+  mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **ControlRow labeled
+  Button cluster overflow**.
 - **DON'T** pad chrome / destination **labels** with redundant meta unless the
   user **explicitly** asks (counts, middle-dot tallies, decorative separators,
   parenthetical glosses, product-stack footnotes).
