@@ -100,7 +100,7 @@ export function wouldClippedNavDrawerCrowd(
     ".fynns-end-aside-track:not([data-state='closing'])",
   );
   const asideMin = aside
-    ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+    ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
     : 0;
   const shellW = root.clientWidth;
   if (shellW <= 0) return false;
@@ -429,7 +429,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       ".fynns-end-aside-track:not([data-state='closing'])",
     );
     const asideMin = hasAside
-      ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+      ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;
     const roomMax = Math.max(min, root.clientWidth - mainMin - asideMin);
     const max = Math.min(tokenMax, roomMax);
@@ -526,7 +526,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       ".fynns-end-aside-track:not([data-state='closing'])",
     );
     const asideMin = hasAside
-      ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 192
+      ? readVarPx(root, "--fynns-layout-end-aside-min-width") || 280
       : 0;
     const roomMax = Math.max(min, root.clientWidth - mainMin - asideMin);
     return { min, max: Math.min(tokenMax, roomMax) };

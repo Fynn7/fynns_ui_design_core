@@ -3292,6 +3292,10 @@ shrink below the nowrap labeled-button strip in a narrow EndAside.
 Button clusters **wrap** with `action-cluster-gap` (8dp); IconButton-only catalog
 strips keep nowrap end-hug. Empty `ControlRow` `label` → full-width controls band.
 
+**Also (≥ **0.5.92**):** `--fynns-layout-end-aside-min-width` floor
+`clamp(17.5rem, 32%, 22rem)` — open track + resize cannot crush below ~280px
+(end-aligned clusters clipping on the start edge).
+
 **Consumer:** props-only — one `ControlRow` + `.fynns-control-cluster` of
 `Button`s (no private width / flex hacks). Live: Layouts `#layouts-demo-shell`
 aside Card. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).

@@ -3339,6 +3339,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   pointer-events: none;
 }
 
+/* Open track: honor min clamp so inspector Card rows are not crushed (≥ 0.5.92). */
+.fynns-end-aside-track:not([data-state="closing"]) {
+  min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
+}
+
 .fynns-end-aside {
   position: relative;
   box-sizing: border-box;

@@ -168,6 +168,22 @@ export function EndAsideMorphTrack({
     if (handle) handle.setAttribute("aria-valuenow", String(rounded));
   }, []);
 
+  /** Bump painted width when open below token min clamp (inspector Card rows). */
+  useLayoutEffect(() => {
+    if (!open || !trackRef.current) return;
+    const track = trackRef.current;
+    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 280;
+    const current =
+      liveWidthRef.current ??
+      (Math.round(track.getBoundingClientRect().width) ||
+        readVarPx(track, "--fynns-layout-end-aside-width"));
+    if (current > 0 && current < min) {
+      paintWidth(min);
+      if (!controlled) setUncontrolledWidth(min);
+      onWidthChangeRef.current?.(min);
+    }
+  }, [open, controlled, paintWidth, setUncontrolledWidth]);
+
   useLayoutEffect(() => {
     if (!dragging || liveWidthRef.current == null) return;
     paintWidth(liveWidthRef.current);
@@ -258,7 +274,7 @@ export function EndAsidePane({
   const clampWidth = useCallback((raw: number) => {
     const track = trackRef.current;
     if (!track) return raw;
-    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 192;
+    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 280;
     const tokenMax =
       readVarPx(track, "--fynns-layout-end-aside-max-width") || 640;
     const mainMin = readVarPx(track, "--fynns-layout-main-min-width") || 160;
@@ -334,7 +350,7 @@ export function EndAsidePane({
   const resizeBounds = (() => {
     const track = trackRef.current;
     if (!track || !showResize) return null;
-    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 192;
+    const min = readVarPx(track, "--fynns-layout-end-aside-min-width") || 280;
     const tokenMax =
       readVarPx(track, "--fynns-layout-end-aside-max-width") || 640;
     const mainMin = readVarPx(track, "--fynns-layout-main-min-width") || 160;
