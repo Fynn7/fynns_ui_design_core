@@ -3079,7 +3079,7 @@ Symptoms (`ControlRow` morph strip — refresh + copy + labeled import CTA):
 **Cause:** legacy `Button` kept icon children beside spinner when `loading`;
 mixed clusters used only `control-cluster-gap` (4dp) before labeled pills.
 
-**Fix in core (≥ **0.5.77**):** `iconOnly` + `loading` → spinner-only in the disk
+**Fix in core (≥ **0.5.80**):** `iconOnly` + `loading` → spinner-only in the disk
 (`aria-label` feeds spinner accessible name). Mixed `.fynns-control-cluster` adds
 `margin-inline-start` on labeled `Button` so icon→pill = **8dp** while
 icon↔icon stays **4dp**.
