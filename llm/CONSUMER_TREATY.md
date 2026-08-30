@@ -2664,6 +2664,27 @@ sandbox `#chart`.
 **Fix in the consumer:** bump; markup = `__title` + `__rows` / `__row` (`__row--line`
 for USD); positioning shell may stay app-local — do not restyle `.fynns-chart-tooltip*`.
 
+## Failure mode this treaty targets: catalog morph remounts ClippedNavShell (drawer bounce)
+
+Symptoms when opening a hooked catalog morph destination (MCP, rules, skills, …)
+from the labeled destination drawer:
+
+- The nav column **bounces** or **width-morphs** once while swapping to the mode
+  sidebar — archived / chats on the same app do not
+- Feels like the drawer collapses and re-opens, or the expand group height animates
+  during the section change
+
+**Cause:** App mounts a **second** `HubShellChrome` / `ClippedNavShell` tree for
+`CatalogMorphRouter` instead of keeping one shell and swapping the `nav` slot (as
+`ArchivedSidebar` / `ChatsSidebar` do). Remount replays flyout width / layout.
+
+**Fix in the consumer:** one persistent `HubShellChrome`; morph sections supply
+`nav` + main detail only — no nested `HubShellChrome` inside
+`CatalogMorphHost`. Optional: avoid `listLoading` emptying the sidebar body on
+every morph remount (overlay refresh over existing list).
+
+Live contrast: App `archived` path vs `CatalogMorphRouter` `mcp` path.
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:
