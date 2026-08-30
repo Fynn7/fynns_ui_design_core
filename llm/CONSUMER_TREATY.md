@@ -2626,6 +2626,25 @@ IconButton trigger-band margin. **Fix in the consumer:** bump only — keep
 `.fynns-table-meta` + `__grow` id + trailing action; no local flex hacks. Live:
 sandbox `#table`; agents-hub Usage mapping column.
 
+## Failure mode this treaty targets: chart tooltip locked to series-value Y
+
+Symptoms in a combo analytics chart (stacked bars + cost line):
+
+- Hover tooltip sits on a **fixed horizontal plane** (chart top, or the active
+  line/bar Y) and does **not** move when the pointer moves up/down in the column
+- Feels stuck to the USD point / column band instead of tracking the cursor
+
+**Cause:** Recharts axis `Tooltip` defaults `coordinate.y` to the active series
+value; hand-drawn SVG tips often hardcode `top` to a layout token.
+
+**Fix in core / sandbox (≥ 0.5.81):** `#chart` sets Tooltip `position` from
+pointer coords on the chart wrapper (`onMouseMove`). Hand-drawn consumers: track
+pointer in the SVG and set tip `left`/`top` from client coords (offset above
+cursor) — never a fixed `top` only. Live: sandbox `#chart`.
+
+**Fix in the consumer:** bump / copy the pointer-follow pattern; no private tip
+Y lock.
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:

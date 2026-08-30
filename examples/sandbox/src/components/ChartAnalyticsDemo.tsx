@@ -4,7 +4,7 @@ import {
   ControlStack,
   ToggleGroup,
 } from "@fynns/ui";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type MouseEvent as ReactMouseEvent } from "react";
 import {
   Bar,
   CartesianGrid,
@@ -148,6 +148,8 @@ function useChartScales(rows: readonly ChartAnalyticsPoint[]) {
 export function ChartAnalyticsDemo() {
   const { t } = useLocale();
   const [view, setView] = useState<ChartView>("date");
+  /** Pointer in chart coords — Tooltip must follow mouse Y, not lock to series value Y. */
+  const [tipPos, setTipPos] = useState<{ x: number; y: number } | null>(null);
   const rows = view === "date" ? CHART_BY_DATE : CHART_BY_CATEGORY;
   const scales = useChartScales(rows);
 
@@ -185,6 +187,30 @@ export function ChartAnalyticsDemo() {
               }}
               barCategoryGap="28%"
               barGap={2}
+              onMouseMove={(state, event) => {
+                if (!state?.isTooltipActive) return;
+                const wrapper = (event.currentTarget as Element | null)?.closest?.(
+                  ".recharts-wrapper",
+                ) as HTMLElement | null;
+                const rect = wrapper?.getBoundingClientRect();
+                if (!rect) return;
+                const clientX =
+                  "clientX" in event
+                    ? (event as ReactMouseEvent).clientX
+                    : undefined;
+                const clientY =
+                  "clientY" in event
+                    ? (event as ReactMouseEvent).clientY
+                    : undefined;
+                if (typeof clientX !== "number" || typeof clientY !== "number") {
+                  return;
+                }
+                setTipPos({
+                  x: clientX - rect.left,
+                  y: clientY - rect.top,
+                });
+              }}
+              onMouseLeave={() => setTipPos(null)}
             >
               <CartesianGrid
                 vertical={false}
@@ -238,6 +264,9 @@ export function ChartAnalyticsDemo() {
                 cursor={{
                   fill: "color-mix(in srgb, var(--fynns-color-accent) 8%, transparent)",
                 }}
+                /* Follow pointer — default axis coord locks Y to the active series value. */
+                position={tipPos ?? undefined}
+                isAnimationActive={false}
                 content={
                   <ChartTooltip
                     inboundLabel={inboundLabel}
