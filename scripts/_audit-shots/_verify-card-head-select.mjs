@@ -1,5 +1,5 @@
 /**
- * Sandbox #card head Select + labeled Button: title/CTA pin to trigger band.
+ * Sandbox #card head Select + labeled Button: collapsed header rhythm + expanded trigger band.
  * Usage: node scripts/_audit-shots/_verify-card-head-select.mjs [baseUrl]
  */
 import { chromium } from "playwright";
@@ -47,22 +47,35 @@ const metricsClosed = await page.evaluate(() => {
   const title = host?.querySelector(".fynns-card-title");
   const field = host?.querySelector(".fynns-search-bar-field");
   const btn = host?.querySelector(".fynns-btn:not(.fynns-btn--icon)");
-  if (!host || !title || !field || !btn) {
-    return { ok: false, error: "missing head/title/field/btn" };
+  const lead = host?.querySelector(".fynns-card-lead");
+  if (!host || !title || !field || !btn || !lead) {
+    return { ok: false, error: "missing head/title/field/btn/lead" };
   }
+  const hb = host.getBoundingClientRect();
   const tb = title.getBoundingClientRect();
   const fb = field.getBoundingClientRect();
   const bb = btn.getBoundingClientRect();
   const triggerCenterY = Math.round(fb.top + fb.height / 2);
   const titleTopDelta = Math.abs(Math.round(tb.top) - Math.round(fb.top));
+  const titleCenterY = Math.round((tb.top + tb.bottom) / 2);
+  const titleBandCenterDelta = Math.abs(titleCenterY - triggerCenterY);
   const btnCenterY = Math.round((bb.top + bb.bottom) / 2);
   const bandCenterDelta = Math.abs(btnCenterY - triggerCenterY);
+  const headCenterY = Math.round((hb.top + hb.bottom) / 2);
+  const titleCenterDelta = Math.abs(titleCenterY - headCenterY);
+  const titleInsetTop = Math.round(tb.top - hb.top);
   return {
     ok: true,
     headAlign: getComputedStyle(host).alignItems,
+    headDisplay: getComputedStyle(host).display,
+    leadAlignSelf: getComputedStyle(lead).alignSelf,
+    leadPaddingBlock: getComputedStyle(lead).paddingBlock,
     titleTopDelta,
+    titleBandCenterDelta,
     bandCenterDelta,
-    headHeight: Math.round(host.getBoundingClientRect().height),
+    titleCenterDelta,
+    titleInsetTop,
+    headHeight: Math.round(hb.height),
   };
 });
 
@@ -81,38 +94,38 @@ const metricsOpen = await page.evaluate(() => {
   );
   const title = host?.querySelector(".fynns-card-title");
   const field = host?.querySelector(".fynns-search-bar-field");
-  const select = host?.querySelector(".fynns-select");
   const btn = host?.querySelector(".fynns-btn:not(.fynns-btn--icon)");
+  const lead = host?.querySelector(".fynns-card-lead");
+  const select = host?.querySelector(".fynns-select");
   const panel = select?.querySelector(".fynns-search-bar-panel");
-  if (!host || !title || !field || !select || !btn || !panel) {
+  if (!host || !title || !field || !btn || !lead || !select || !panel) {
     return { ok: false, error: "missing open-state nodes" };
   }
+  const hb = host.getBoundingClientRect();
   const tb = title.getBoundingClientRect();
   const fb = field.getBoundingClientRect();
-  const sb = select.getBoundingClientRect();
   const bb = btn.getBoundingClientRect();
-  const pb = panel.getBoundingClientRect();
+  const sb = select.getBoundingClientRect();
   const triggerCenterY = Math.round(fb.top + fb.height / 2);
   const titleTopDelta = Math.abs(Math.round(tb.top) - Math.round(fb.top));
+  const titleCenterY = Math.round((tb.top + tb.bottom) / 2);
+  const titleBandCenterDelta = Math.abs(titleCenterY - triggerCenterY);
   const btnCenterY = Math.round((bb.top + bb.bottom) / 2);
   const bandCenterDelta = Math.abs(btnCenterY - triggerCenterY);
-  const headMidY = Math.round(
-    (host.getBoundingClientRect().top + host.getBoundingClientRect().bottom) / 2,
+  const titleMidDelta = Math.abs(
+    Math.round((tb.top + tb.bottom) / 2) -
+      Math.round((hb.top + hb.bottom) / 2),
   );
-  const titleMidDelta = Math.abs(Math.round(tb.top + tb.height / 2) - headMidY);
   return {
     ok: true,
     headAlign: getComputedStyle(host).alignItems,
-    leadAlignSelf: getComputedStyle(
-      host.querySelector(".fynns-card-lead"),
-    ).alignSelf,
-    clusterAlign: getComputedStyle(
-      host.querySelector(".fynns-control-cluster"),
-    ).alignItems,
+    headDisplay: getComputedStyle(host).display,
+    leadAlignSelf: getComputedStyle(lead).alignSelf,
     titleTopDelta,
+    titleBandCenterDelta,
     bandCenterDelta,
     titleMidDelta,
-    headHeight: Math.round(host.getBoundingClientRect().height),
+    headHeight: Math.round(hb.height),
     selectHeight: Math.round(sb.height),
     fieldHeight: Math.round(fb.height),
     panelPosition: getComputedStyle(panel).position,
@@ -136,12 +149,15 @@ await browser.close();
 
 const pass =
   metrics.ok &&
-  metrics.headAlign === "flex-start" &&
-  metrics.titleTopDelta <= 4 &&
+  metrics.headAlign === "center" &&
+  metrics.headDisplay === "flex" &&
+  metrics.leadAlignSelf === "stretch" &&
+  metrics.titleCenterDelta <= 2 &&
   metrics.bandCenterDelta <= 2 &&
+  metrics.titleInsetTop >= 10 &&
   metrics.open?.ok === true &&
-  metrics.open.headAlign === "flex-start" &&
-  metrics.open.titleTopDelta <= 4 &&
+  metrics.open.headDisplay === "grid" &&
+  metrics.open.titleBandCenterDelta <= 2 &&
   metrics.open.bandCenterDelta <= 2 &&
   metrics.open.titleMidDelta > 12 &&
   metrics.open.selectHeight > metrics.open.fieldHeight + 8 &&
@@ -151,8 +167,10 @@ const pass =
 console.log(JSON.stringify(metrics, null, 2));
 if (!pass) {
   console.error(
-    "FAIL: card head title/CTA not pinned to trigger band when Select expanded",
+    "FAIL: card head collapsed rhythm or expanded trigger-band alignment",
   );
   process.exit(1);
 }
-console.log("PASS: card head Select + Button trigger-band alignment");
+console.log(
+  "PASS: collapsed header center rhythm + expanded trigger-band alignment",
+);

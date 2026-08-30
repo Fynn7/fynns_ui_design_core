@@ -317,28 +317,51 @@
 }
 
 /*
- * Card / Collapsible head + inline Select (≥ **0.5.73**): title / labeled CTA
- * align on the **40dp trigger band** — never vertically center on the expanded
- * option panel (workflow heads: Select + sm Button).
+ * Card / Collapsible head + inline expanded Select (≥ **0.5.73** trigger-band pin;
+ * ≥ **0.5.74** collapsed header rhythm): **collapsed** keeps default head
+ * `align-items: center` + lead `stretch` (shared min-height band). **Expanded**
+ * only: grid row 1 = chrome band (`40dp` + actions `space-xs`×2); title centers
+ * in that row; actions cluster grows below without pulling title mid-panel.
  */
-.fynns-card-head:has(.fynns-card-actions .fynns-select),
-.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select) {
-  align-items: flex-start;
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  ) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows:
+    minmax(
+      calc(var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs)),
+      auto
+    )
+    auto;
+  align-items: start;
+  gap: var(--fynns-space-2);
 }
 
-.fynns-card-head:has(.fynns-card-actions .fynns-select) .fynns-card-lead,
-.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select)
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+  .fynns-card-lead,
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  )
   > .fynns-collapsible-trigger {
-  align-self: flex-start;
-  padding-block: var(--fynns-space-xs);
-  min-height: var(--fynns-size-icon-target);
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  min-height: 0;
+  padding-block: 0;
   align-items: center;
 }
 
-.fynns-card-head:has(.fynns-card-actions .fynns-select) .fynns-card-actions,
-.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select)
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+  .fynns-card-actions,
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  )
   .fynns-collapsible-actions {
-  align-self: flex-start;
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
 }
 
 .fynns-card-actions:has(.fynns-select) .fynns-control-cluster,

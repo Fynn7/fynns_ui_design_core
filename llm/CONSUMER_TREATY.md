@@ -2371,7 +2371,11 @@ same class as list inspector trailing before ≥ 0.5.72.
 **Fix in core (≥ 0.5.73):** when `actions` hosts an inline expanded Select,
 head + lead + actions `flex-start`; lead pins to trigger-band height; cluster
 `align-items: flex-start` + sm labeled Button optical margin on the 40dp band;
-Card `overflow: visible` while open. Consumer: bump ≥ 0.5.73; keep
+Card `overflow: visible` while open. **≥ 0.5.74:** collapsed header restores
+default `align-items: center` + lead `stretch` (do not flex-start / pad lead
+when idle); expanded only switches to grid row 1 = chrome band so title keeps
+header inset without centering on the full dropdown. Consumer: bump ≥
+0.5.74; keep
 `Card` `actions` = `.fynns-control-cluster` of `Select` + `Button` `sm` — no
 private title/Button margins. Live: sandbox `#sandbox-card-head-select`.
 Authority: [`AGENTS.md`](../AGENTS.md) Content density **Card head Select +

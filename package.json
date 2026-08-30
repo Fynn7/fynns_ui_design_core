@@ -1,6 +1,6 @@
 {
   "name": "@fynn7/ui-design-core",
-  "version": "0.5.73",
+  "version": "0.5.74",
   "description": "Fynn's shared dark-teal UI design system: canonical --fynns-* design tokens plus self-developed React primitives (no radix, no sonner). Consumed via GitHub Packages (@fynn7/ui-design-core) + Vite alias @fynns/ui.",
   "license": "UNLICENSED",
   "private": false,
@@ -57,8 +57,10 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "globals": "^15.14.0",
+    "playwright": "^1.49.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^3.10.1",
     "typescript": "~5.7.3",
     "typescript-eslint": "^8.21.0",
     "vite": "^6.0.11"
