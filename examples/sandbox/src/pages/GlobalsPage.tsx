@@ -27,6 +27,7 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  CHART_TOKENS,
   Chat,
   ChatCitationChip,
   ChatCitations,
@@ -150,12 +151,14 @@ import {
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
 import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
 import { TokenList } from "../components/TokenList";
 import {
   demoElementId,
   findDemoById,
   type GlobalsCategoryId,
+  type GlobalsDemoEntry,
 } from "../catalog/globalsCatalog";
 import {
   loadSandboxUiSession,
@@ -396,6 +399,84 @@ function ChatStreamingAssistant({
       markdown={text || undefined}
     />
   );
+}
+
+const GLOBALS_DEMO_FOCUS_TIMEOUT_MS = 5000;
+/** Collapsible expand uses `--fynns-duration-base` (240ms) + small layout buffer. */
+const GLOBALS_DEMO_EXPAND_SETTLE_MS = 280;
+
+/**
+ * Lazily mounted category bodies may appear after Collapsible open. Poll until
+ * the demo anchor exists, wait for expand height morph, then scroll + flash.
+ */
+function focusGlobalsDemoWhenReady(
+  demoId: string,
+  entry: GlobalsDemoEntry,
+  onFlash: (id: string) => void,
+): () => void {
+  const targetId = demoElementId(demoId);
+  const deadline = performance.now() + GLOBALS_DEMO_FOCUS_TIMEOUT_MS;
+  let cancelled = false;
+
+  const scrollTo = (el: HTMLElement) => {
+    if (cancelled) return;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    el.scrollIntoView({
+      block: "start",
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+    el.setAttribute("aria-label", entry.label);
+    el.focus({ preventScroll: true });
+    onFlash(demoId);
+  };
+
+  const afterExpandSettled = (el: HTMLElement) => {
+    const expand = el.closest(".fynns-expand") as HTMLElement | null;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!expand || reduceMotion || expand.dataset.state !== "open") {
+      scrollTo(el);
+      return;
+    }
+
+    let done = false;
+    const finish = () => {
+      if (done || cancelled) return;
+      done = true;
+      expand.removeEventListener("transitionend", onTransitionEnd);
+      window.clearTimeout(fallbackTimer);
+      scrollTo(el);
+    };
+
+    const onTransitionEnd = (event: TransitionEvent) => {
+      if (event.target !== expand) return;
+      if (event.propertyName !== "grid-template-rows") return;
+      finish();
+    };
+
+    expand.addEventListener("transitionend", onTransitionEnd);
+    const fallbackTimer = window.setTimeout(finish, GLOBALS_DEMO_EXPAND_SETTLE_MS);
+  };
+
+  const poll = () => {
+    if (cancelled) return;
+    const el = document.getElementById(targetId);
+    if (el) {
+      afterExpandSettled(el);
+      return;
+    }
+    if (performance.now() < deadline) {
+      requestAnimationFrame(poll);
+    }
+  };
+
+  requestAnimationFrame(poll);
+  return () => {
+    cancelled = true;
+  };
 }
 
 /** Anchor + flash target for catalog search jump. */
@@ -1192,25 +1273,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     };
   }, [flashDemoId]);
 
+  const focusDemoCancelRef = useRef<(() => void) | null>(null);
+
+  useEffect(
+    () => () => {
+      focusDemoCancelRef.current?.();
+    },
+    [],
+  );
+
   const focusDemo = (demoId: string) => {
     const entry = findDemoById(demoId);
     if (!entry) return;
+    focusDemoCancelRef.current?.();
     setOpenCategories((prev) => ({ ...prev, [entry.categoryId]: true }));
-    // Wait for Collapsible expand (`--fynns-duration-base` = 240ms) before scroll.
-    window.setTimeout(() => {
-      const el = document.getElementById(demoElementId(demoId));
-      if (!el) return;
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      el.scrollIntoView({
-        block: "start",
-        behavior: reduceMotion ? "auto" : "smooth",
-      });
-      el.setAttribute("aria-label", entry.label);
-      el.focus({ preventScroll: true });
-      setFlashDemoId(demoId);
-    }, 250);
+    focusDemoCancelRef.current = focusGlobalsDemoWhenReady(
+      demoId,
+      entry,
+      setFlashDemoId,
+    );
   };
 
   const setCategoryOpen = (id: GlobalsCategoryId, open: boolean) => {
@@ -5440,6 +5521,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.tableHelp")} />
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="chart">
+          <ChartAnalyticsDemo />
+          <TokenList
+            group="chart"
+            title={t("globals.tokenListChart")}
+            keys={Object.keys(CHART_TOKENS)}
+          />
         </GlobalsDemo>
         <GlobalsDemo id="code-block">
         <div className="sandbox-globals-row sandbox-globals-row--stack">

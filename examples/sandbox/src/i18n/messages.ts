@@ -679,6 +679,16 @@ const en = {
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
     "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align`; missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+  "globals.chartCardTitle": "Daily volume",
+  "globals.chartViewLabel": "Chart view",
+  "globals.chartViewDate": "By date",
+  "globals.chartViewCategory": "By category",
+  "globals.chartSeriesInbound": "Inbound",
+  "globals.chartSeriesOutbound": "Outbound",
+  "globals.chartSeriesCost": "Cost (right axis)",
+  "globals.chartHelp":
+    "M3-inspired analytics preset: stacked bars on the left axis (accent + tonal stack), line on the right axis (info). Card body hosts `ToggleGroup` view switch (not Card `actions`). Horizontal grid only; axis lines off; ticks `font-size-xs` + `text-muted`; right-axis ticks match the line color. Colors from `--fynns-chart-*` tokens. Recharts lives in sandbox only — consumers copy structure + CSS, not product copy.",
+  "globals.tokenListChart": "Chart tokens",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",
@@ -2610,6 +2620,16 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
     "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+  "globals.chartCardTitle": "每日用量",
+  "globals.chartViewLabel": "图表视图",
+  "globals.chartViewDate": "按日期",
+  "globals.chartViewCategory": "按类别",
+  "globals.chartSeriesInbound": "输入",
+  "globals.chartSeriesOutbound": "输出",
+  "globals.chartSeriesCost": "等价成本（右轴）",
+  "globals.chartHelp":
+    "M3 风格分析图预设：左轴堆叠柱（accent +  tonal 堆叠），右轴折线（info）。`ToggleGroup` 视图切换放在 Card 正文 `ControlRow`（勿放进 Card `actions`）。仅水平网格；隐藏轴线；刻度用 `font-size-xs` + `text-muted`；右轴刻度与折线同色。颜色走 `--fynns-chart-*` token。Recharts 仅在 sandbox；消费者复制结构与 CSS，勿粘贴产品文案。",
+  "globals.tokenListChart": "图表 token",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
   "globals.codeBlockJsonLabel": "theme.json",

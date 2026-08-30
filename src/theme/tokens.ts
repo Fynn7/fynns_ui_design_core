@@ -426,6 +426,29 @@ export const PROGRESS_TOKENS = {
 } as const;
 
 /**
+ * Cartesian chart chrome (M3-inspired analytics preset at 16px rem).
+ * Series colors alias semantic palette; grid/axis stay subtle on dark surfaces.
+ * `--fynns-chart-<key>`.
+ */
+export const CHART_TOKENS = {
+  "series-1": "var(--fynns-color-accent)",
+  "series-2": "color-mix(in srgb, var(--fynns-color-accent) 42%, var(--fynns-color-surface-1))",
+  "series-line": "var(--fynns-color-info)",
+  "grid-stroke":
+    "color-mix(in srgb, var(--fynns-color-outline-subtle) 55%, transparent)",
+  "axis-stroke": "var(--fynns-color-border)",
+  "tick-length": "3px",
+  "bar-radius": "var(--fynns-radius-xs)",
+  "line-width": "2px",
+  "plot-min-height": "16rem",
+  "legend-gap": "var(--fynns-space-sm)",
+  "margin-top": "0.5rem",
+  "margin-right": "2.75rem",
+  "margin-bottom": "0",
+  "margin-left": "0.25rem",
+} as const;
+
+/**
  * Avatar geometry (M3 list leading avatar at 16px rem).
  * Default 40dp; sm 32dp; lg 56dp.
  * `--fynns-avatar-<key>`.
@@ -1955,6 +1978,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["chip", CHIP_TOKENS],
   ["segmented", SEGMENTED_TOKENS],
   ["progress", PROGRESS_TOKENS],
+  ["chart", CHART_TOKENS],
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["fabmenu", FABMENU_TOKENS],
