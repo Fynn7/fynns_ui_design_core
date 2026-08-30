@@ -3356,7 +3356,7 @@ Symptoms (inspector Card `ControlRow` — cover letter / skills aside):
 
 **Fix (consumer props-only):** **one** primary labeled `Button`; save / sync →
 `Tooltip` → `IconButton` `sm` (`SaveIcon`, short tip); Word / PDF / … → **one**
-`DropdownMenu` (`iconOnly` `DownloadIcon` + items, or one short export trigger).
+`DropdownMenu` (`iconOnly` `UploadIcon` + items, or one short export trigger).
 Do **not** rely on wrap alone when icons + menu fit one row.
 
 Live: Layouts `#layouts-demo-shell` aside Card (≥ **0.5.96** sample). Pasteable:
@@ -3400,6 +3400,22 @@ Symptoms (inspector Card action cluster beside one primary CTA):
 
 Live: Layouts `#layouts-demo-shell` aside Card. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: Export menu uses DownloadIcon
+
+Symptoms (export `DropdownMenu` / Tooltip `aria-label` = Export / 导出):
+
+- Trigger shows **down-arrow download** glyph while copy says export
+- Reads as “download file” not “export / write Word/PDF”
+
+**Cause:** consumer used `DownloadIcon` on an export-format menu. In this system
+**export** (outward / write file) → **`UploadIcon`**; **download** (pull/fetch)
+→ **`DownloadIcon`** — same split as Globals `#split-button` export row.
+
+**Fix (consumer props-only):** `iconOnly` export menu `trigger={<UploadIcon />}`;
+keep menu item labels (`Export Word`, …). Live: Layouts aside Card.
+
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Related docs
 

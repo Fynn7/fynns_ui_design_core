@@ -64,7 +64,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuItem,
-  DownloadIcon,
   snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
@@ -280,7 +279,7 @@ export function LayoutsPage() {
                             <DropdownMenu
                               iconOnly
                               size="sm"
-                              trigger={<DownloadIcon />}
+                              trigger={<UploadIcon />}
                               ariaLabel={t("layouts.shellAsideExportMenu")}
                             >
                               <DropdownMenuItem

@@ -60,7 +60,7 @@ const en = {
   "layouts.shellAsideActionExportBToast": "Export B started",
   "layouts.shellAsideExportMenu": "Export",
   "layouts.shellAsideActionHint":
-    "Card title names the section — ControlRow label=\"\". One primary Button; ghost sm IconButton + iconOnly DropdownMenu for save/export (≥ 0.5.98). PageScroll for tall catalogs (≥ 0.5.93).",
+    "Card title names the section — ControlRow label=\"\". Export menu trigger: UploadIcon (not DownloadIcon). Ghost sm icons (≥ 0.5.99).",
   "layouts.shellAsideScrollCardTitle": "Long inspector catalog",
   "layouts.shellAsideScrollField1": "Sample section A",
   "layouts.shellAsideScrollField2": "Sample section B",
@@ -2056,7 +2056,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellAsideActionExportBToast": "已开始导出 B",
   "layouts.shellAsideExportMenu": "导出",
   "layouts.shellAsideActionHint":
-    "分区名在 Card 标题 — ControlRow label=\"\"。一枚 primary；保存/导出用 ghost sm 图标与 iconOnly 菜单（≥ 0.5.98，勿 tonal 圆盘）。长目录 PageScroll（≥ 0.5.93）。",
+    "分区名在 Card 标题 — ControlRow label=\"\"。导出菜单用 UploadIcon（勿 DownloadIcon）。ghost sm 图标（≥ 0.5.99）。",
   "layouts.shellAsideScrollCardTitle": "长目录示例",
   "layouts.shellAsideScrollField1": "示例分区 A",
   "layouts.shellAsideScrollField2": "示例分区 B",
