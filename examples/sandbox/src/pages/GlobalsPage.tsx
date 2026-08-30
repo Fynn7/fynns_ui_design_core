@@ -1116,6 +1116,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmFooterBusy, setRhythmFooterBusy] = useState<
     null | "secondary" | "primary"
   >(null);
+  const [rhythmMorphBusy, setRhythmMorphBusy] = useState(false);
   const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
@@ -6061,6 +6062,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <PlusIcon />
                 </IconButton>
               </Tooltip>
+            </div>
+          </ControlRow>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmMorphHelp")} />
+        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+          <ControlRow label={t("globals.rhythmMorphLabel")}>
+            <div className="fynns-control-cluster">
+              <Tooltip content={t("globals.rhythmMorphRefresh")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphRefresh")}
+                  loading={rhythmMorphBusy}
+                  disabled={rhythmMorphBusy}
+                  onClick={() => {
+                    setRhythmMorphBusy(true);
+                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                  }}
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmMorphCopy")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphCopy")}
+                  disabled={rhythmMorphBusy}
+                >
+                  <ClipboardIcon />
+                </IconButton>
+              </Tooltip>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={rhythmMorphBusy}
+                onClick={() => {
+                  setRhythmMorphBusy(true);
+                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                }}
+              >
+                {t("globals.rhythmMorphAction")}
+              </Button>
             </div>
           </ControlRow>
         </Surface>

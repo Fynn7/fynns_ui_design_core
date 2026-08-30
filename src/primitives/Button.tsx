@@ -57,6 +57,10 @@ export const Button = forwardRef(function Button(
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const resolvedVariant = danger ? "danger" : variant;
+  const loadingLabel =
+    typeof rest["aria-label"] === "string" && rest["aria-label"].length > 0
+      ? rest["aria-label"]
+      : "Loading";
   const classes = [
     "fynns-btn",
     VARIANT_CLASS[resolvedVariant],
@@ -80,10 +84,14 @@ export const Button = forwardRef(function Button(
       aria-pressed={active || undefined}
     >
       {loading ? (
-        <span className="fynns-btn-loading">
-          <Spinner size="sm" label="Loading" />
-          <span className="fynns-btn-loading-label">{children}</span>
-        </span>
+        iconOnly ? (
+          <Spinner size="sm" label={loadingLabel} />
+        ) : (
+          <span className="fynns-btn-loading">
+            <Spinner size="sm" label={loadingLabel} />
+            <span className="fynns-btn-loading-label">{children}</span>
+          </span>
+        )
       ) : iconOnly ? (
         children
       ) : (

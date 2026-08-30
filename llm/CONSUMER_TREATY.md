@@ -3066,6 +3066,29 @@ split long forms into `Dialog` / `PageScroll` in `children`. Bump core; props-on
 Live: Layouts `#layouts-demo-fill-column` preview+Chat stage. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: IconButton loading spinner + glyph overlap
+
+Symptoms (`ControlRow` morph strip — refresh + copy + labeled import CTA):
+
+- `IconButton` `loading` shows spinner **on top of** the refresh glyph (two
+  16dp marks in one 32dp disk)
+- Clipboard → labeled `Button` gap reads ~4dp (kiss) instead of **8dp**
+- DevTools: `.fynns-btn--icon.fynns-btn--loading` contains both
+  `.fynns-loading-spinner-ring` and child `svg` in `.fynns-btn-loading-label`
+
+**Cause:** legacy `Button` kept icon children beside spinner when `loading`;
+mixed clusters used only `control-cluster-gap` (4dp) before labeled pills.
+
+**Fix in core (≥ **0.5.77**):** `iconOnly` + `loading` → spinner-only in the disk
+(`aria-label` feeds spinner accessible name). Mixed `.fynns-control-cluster` adds
+`margin-inline-start` on labeled `Button` so icon→pill = **8dp** while
+icon↔icon stays **4dp**.
+
+**Fix in the consumer:** bump core; keep one `.fynns-control-cluster` of
+`Tooltip` → `sm` `IconButton` + labeled `Button` — props-only. Live: sandbox
+`#rhythm` morph strip; consumer posting skills row. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
 Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /

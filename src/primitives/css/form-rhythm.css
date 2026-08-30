@@ -237,6 +237,19 @@
 }
 
 /*
+ * IconButton strip + labeled CTA (ControlRow morph, posting import, …): keep
+ * icon↔icon at control-cluster-gap (4dp); widen only before the labeled pill
+ * to action-cluster-gap (8dp) — ≥ **0.5.77**. End-align strips set gap on the
+ * whole cluster separately.
+ */
+.fynns-control-cluster:not(.fynns-control-cluster--end-align)
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
+  margin-inline-start: calc(
+    var(--fynns-layout-action-cluster-gap) - var(--fynns-layout-control-cluster-gap)
+  );
+}
+
+/*
  * Nested clusters hug content. A child with `width: 100%` inside another
  * cluster becomes a full-bleed row (Card head icon strips stack vertically —
  * BookmarkActions + SourceFileActions lesson). Outer form clusters still
