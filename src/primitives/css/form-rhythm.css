@@ -218,6 +218,15 @@
   box-sizing: border-box;
 }
 
+/* Inline expanded Select + sibling controls: pin to trigger band, not panel mid. */
+.fynns-control-cluster:has(> .fynns-select) {
+  align-items: flex-start;
+}
+
+.fynns-control-cluster:has(> .fynns-select) > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
 /*
  * Nested clusters hug content. A child with `width: 100%` inside another
  * cluster becomes a full-bleed row (Card head icon strips stack vertically —

@@ -1689,6 +1689,15 @@ const en = {
   "globals.cardActionsStripOpen": "Open file",
   "globals.cardActionsStripFolder": "Reveal folder",
   "globals.cardActionsStripDelete": "Delete",
+  "globals.cardHeadSelectTitle": "Sample revision",
+  "globals.cardHeadSelectRevisionAria": "Revision",
+  "globals.cardHeadSelectRevisionA": "Latest - sample-a1b2",
+  "globals.cardHeadSelectRevisionB": "Prior - sample-c3d4",
+  "globals.cardHeadSelectCta": "Run again",
+  "globals.cardHeadSelectBody":
+    "Expand the head Select — title and Run again stay on the 40dp trigger band (≥ 0.5.73), not centered on the option panel.",
+  "globals.cardHeadSelectHelp":
+    "Card head Select + labeled Button (≥ **0.5.73** trigger-band pin when expanded): same inline `.fynns-search-bar--expanded` as `#select` — never center title / CTA on the full dropdown. Live host: `#sandbox-card-head-select`.",
   "globals.cardModeBodyTitle": "sample-policy-notes",
   "globals.cardModeBodyOpen": "Open file",
   "globals.cardModeBodyDelete": "Delete",
@@ -3591,6 +3600,15 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionsStripOpen": "打开文件",
   "globals.cardActionsStripFolder": "打开所在文件夹",
   "globals.cardActionsStripDelete": "删除",
+  "globals.cardHeadSelectTitle": "示例修订",
+  "globals.cardHeadSelectRevisionAria": "修订版本",
+  "globals.cardHeadSelectRevisionA": "最新 - sample-a1b2",
+  "globals.cardHeadSelectRevisionB": "上一版 - sample-c3d4",
+  "globals.cardHeadSelectCta": "重新运行",
+  "globals.cardHeadSelectBody":
+    "展开标题栏 Select — 分区名与「重新运行」钉在 40dp 触发器带（≥ 0.5.73），勿相对整段选项面板居中。",
+  "globals.cardHeadSelectHelp":
+    "Card 标题栏 Select + 文案 Button（≥ **0.5.73** 展开时 trigger-band 钉住）：与 `#select` 相同内联 `.fynns-search-bar--expanded` — 禁止标题 / CTA 相对整段下拉居中。对照 `#sandbox-card-head-select`。",
   "globals.cardModeBodyTitle": "sample-policy-notes",
   "globals.cardModeBodyOpen": "打开文件",
   "globals.cardModeBodyDelete": "删除",

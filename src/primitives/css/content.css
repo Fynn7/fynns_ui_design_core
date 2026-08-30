@@ -316,6 +316,53 @@
   min-width: 0;
 }
 
+/*
+ * Card / Collapsible head + inline Select (≥ **0.5.73**): title / labeled CTA
+ * align on the **40dp trigger band** — never vertically center on the expanded
+ * option panel (workflow heads: Select + sm Button).
+ */
+.fynns-card-head:has(.fynns-card-actions .fynns-select),
+.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select) {
+  align-items: flex-start;
+}
+
+.fynns-card-head:has(.fynns-card-actions .fynns-select) .fynns-card-lead,
+.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select)
+  > .fynns-collapsible-trigger {
+  align-self: flex-start;
+  padding-block: var(--fynns-space-xs);
+  min-height: var(--fynns-size-icon-target);
+  align-items: center;
+}
+
+.fynns-card-head:has(.fynns-card-actions .fynns-select) .fynns-card-actions,
+.fynns-collapsible-head:has(.fynns-collapsible-actions .fynns-select)
+  .fynns-collapsible-actions {
+  align-self: flex-start;
+}
+
+.fynns-card-actions:has(.fynns-select) .fynns-control-cluster,
+.fynns-collapsible-actions:has(.fynns-select) .fynns-control-cluster {
+  align-items: flex-start;
+}
+
+.fynns-card-actions
+  .fynns-control-cluster:has(.fynns-select)
+  > .fynns-btn--sm:not(.fynns-btn--icon),
+.fynns-collapsible-actions
+  .fynns-control-cluster:has(.fynns-select)
+  > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+.fynns-card:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-collapsible:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  ) {
+  overflow: visible;
+  z-index: var(--fynns-z-dropdown);
+}
+
 .fynns-collapsible-body,
 .fynns-card-body {
   /* Shared block pad — breathing room under the header (`chrome="card"`).

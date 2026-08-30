@@ -2354,6 +2354,29 @@ when gap meta floats mid expanded panel. Authority:
 [`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Card head Select centers on expanded panel
+
+Symptoms on a workflow `Card` head (`title` + `actions` = `Select` + labeled
+`Button` `sm` — refine / regenerate / revision pickers):
+
+- Expanded inline Select grows the head; **section title** and **primary CTA**
+  sit mid-way down the dropdown (vertically centered on the **full** expanded
+  cluster) instead of sharing the **40dp trigger shell** row with the chevron
+- Trigger shell top ≈ 8dp below head top while title / button top ≈ 40dp+
+
+**Cause:** `.fynns-card-head` / `.fynns-card-lead` / `.fynns-card-actions` use
+`align-items: center` and stretch the lead across the tall expanded Select —
+same class as list inspector trailing before ≥ 0.5.72.
+
+**Fix in core (≥ 0.5.73):** when `actions` hosts an inline expanded Select,
+head + lead + actions `flex-start`; lead pins to trigger-band height; cluster
+`align-items: flex-start` + sm labeled Button optical margin on the 40dp band;
+Card `overflow: visible` while open. Consumer: bump ≥ 0.5.73; keep
+`Card` `actions` = `.fynns-control-cluster` of `Select` + `Button` `sm` — no
+private title/Button margins. Live: sandbox `#sandbox-card-head-select`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Card head Select +
+labeled Button**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: List row copy cramped on the start edge
 
 Symptoms on a page-catalog `ListItem` (Applications / Experiences-style

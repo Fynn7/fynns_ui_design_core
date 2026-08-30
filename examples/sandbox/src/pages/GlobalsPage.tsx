@@ -1065,6 +1065,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
+  const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
@@ -4152,6 +4153,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardActionsStripBody")}
           </Card>
+          <div id="sandbox-card-head-select">
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.cardHeadSelectTitle")}
+              actions={
+                <div className="fynns-control-cluster">
+                  <Select
+                    ariaLabel={t("globals.cardHeadSelectRevisionAria")}
+                    value={cardHeadRevision}
+                    onChange={setCardHeadRevision}
+                    options={[
+                      {
+                        value: "rev-a",
+                        label: t("globals.cardHeadSelectRevisionA"),
+                      },
+                      {
+                        value: "rev-b",
+                        label: t("globals.cardHeadSelectRevisionB"),
+                      },
+                    ]}
+                  />
+                  <Button size="sm" variant="primary" onClick={() => {}}>
+                    {t("globals.cardHeadSelectCta")}
+                  </Button>
+                </div>
+              }
+            >
+              {t("globals.cardHeadSelectBody")}
+            </Card>
+            <SandboxHelp text={t("globals.cardHeadSelectHelp")} />
+          </div>
           <Card
             className="sandbox-globals-card sandbox-globals-card--mode-body"
             title={t("globals.cardModeBodyTitle")}
