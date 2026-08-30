@@ -271,6 +271,12 @@
   padding: 0 var(--fynns-space-xl);
 }
 
+.fynns-btn--icon.fynns-btn--loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .fynns-btn--loading {
   cursor: wait;
 }

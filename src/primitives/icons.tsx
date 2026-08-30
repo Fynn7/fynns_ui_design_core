@@ -139,6 +139,25 @@ export function CheckIcon(props: IconProps) {
   );
 }
 
+/** Empty checkbox square — deselect-all / unchecked state. */
+export function SquareIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+    </svg>
+  );
+}
+
+/** Checked checkbox — select-all (not bare CheckIcon confirm). */
+export function CheckSquareIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <path d="m8 12 3 3 5-6" />
+    </svg>
+  );
+}
+
 export function PlusIcon(props: IconProps) {
   return (
     <svg {...svgProps(props)}>
@@ -303,6 +322,19 @@ export function ClipboardIcon(props: IconProps) {
     <svg {...svgProps(props)}>
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+    </svg>
+  );
+}
+
+/** Multi-select / bulk enter (checked lines — not Clipboard copy/paste). */
+export function ListChecksIcon(props: IconProps) {
+  return (
+    <svg {...svgProps(props)}>
+      <path d="m3 17 2 2 4-4" />
+      <path d="m3 7 2 2 4-4" />
+      <path d="M13 6h8" />
+      <path d="M13 12h8" />
+      <path d="M13 18h8" />
     </svg>
   );
 }

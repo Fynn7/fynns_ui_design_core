@@ -5,6 +5,10 @@ import {
   BottomAppBar,
   Button,
   Card,
+  Checkbox,
+  CloseIcon,
+  CheckSquareIcon,
+  SquareIcon,
   Chat,
   ChatComposer,
   ChatMessage,
@@ -32,6 +36,7 @@ import {
   NavigationDrawerItem,
   PencilIcon,
   PlusIcon,
+  RefreshIcon,
   SaveIcon,
   SearchIcon,
   SearchBar,
@@ -55,6 +60,7 @@ import {
   UndoIcon,
   UploadIcon,
   ClipboardIcon,
+  ListChecksIcon,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   snackbar,
@@ -69,6 +75,16 @@ import { layoutsDemoElementId } from "../catalog/layoutsCatalog";
 import { DrillInLayoutsDemo } from "./DrillInLayoutsDemo";
 
 type RailId = "home" | "search" | "charts" | "all";
+
+const BULK_DEMO_KEYS = ["bulk-a", "bulk-b", "bulk-c", "bulk-d"] as const;
+type BulkDemoKey = (typeof BULK_DEMO_KEYS)[number];
+
+const BULK_DEMO_LABELS: Record<BulkDemoKey, MessageKey> = {
+  "bulk-a": "globals.navDrawerBulkEntryA",
+  "bulk-b": "globals.navDrawerBulkEntryB",
+  "bulk-c": "globals.navDrawerBulkEntryC",
+  "bulk-d": "globals.navDrawerBulkEntryD",
+};
 
 const RAIL_PANE_BODY: Record<RailId, MessageKey> = {
   home: "globals.navRailPaneHome",
@@ -107,7 +123,7 @@ export function LayoutsPage() {
     "labeled" | "selected" | "unlabeled"
   >("labeled");
   const [drawerId, setDrawerId] = useState<
-    "inbox" | "sent" | "drafts" | "settings" | "archive" | "assist"
+    "inbox" | "sent" | "drafts" | "shared" | "archive" | "assist"
   >("inbox");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerSearchQuery, setDrawerSearchQuery] = useState("");
@@ -117,6 +133,14 @@ export function LayoutsPage() {
     "all" | "alpha" | "beta"
   >("all");
   const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
+  const [bulkDemoSelectMode, setBulkDemoSelectMode] = useState(true);
+  const [bulkDemoChecked, setBulkDemoChecked] = useState<Record<BulkDemoKey, boolean>>({
+    "bulk-a": true,
+    "bulk-b": true,
+    "bulk-c": true,
+    "bulk-d": true,
+  });
+  const bulkDemoAllSelected = BULK_DEMO_KEYS.every((key) => bulkDemoChecked[key]);
   const [shellNavOpen, setShellNavOpen] = useState(true);
   const [shellAsideOpen, setShellAsideOpen] = useState(false);
   const [shellDest, setShellDest] = useState<"home" | "search" | "long">("home");
@@ -124,6 +148,7 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [fillColumnPreviewDraft, setFillColumnPreviewDraft] = useState("");
   const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
     useState(true);
   const [shellFooterLongAccountLabel, setShellFooterLongAccountLabel] =
@@ -187,11 +212,17 @@ export function LayoutsPage() {
                   </Tooltip>
                 }
                 trailing={
-                  <Tooltip content={t("globals.appBarSearch")}>
-                    <IconButton aria-label={t("globals.appBarSearch")}>
-                      <SearchIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <>
+                    <InfoHint
+                      ariaLabel={t("globals.shellPageHintAria")}
+                      content={t("globals.shellPageHint")}
+                    />
+                    <Tooltip content={t("globals.appBarSearch")}>
+                      <IconButton aria-label={t("globals.appBarSearch")}>
+                        <SearchIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 }
                 navFooter={
                   <NavDrawerFooterAccount
@@ -343,6 +374,54 @@ export function LayoutsPage() {
               </FillColumn>
             </div>
             <SandboxHelp text={t("layouts.fillColumnHelp")} />
+            <div
+              className="sandbox-destination-canvas-stage fynns-destination-app-shell-canvas"
+            >
+              <FillColumn
+                header={
+                  <Card title={t("layouts.fillColumnPreviewTitle")} chrome="plain">
+                    <p className="sandbox-globals-navrail-pane-body">
+                      {t("layouts.fillColumnPreviewBody")}
+                    </p>
+                    <Surface variant="filled" padded>
+                      <p className="sandbox-globals-navrail-pane-body">
+                        {t("layouts.fillColumnPreviewSample")}
+                      </p>
+                    </Surface>
+                    <p className="sandbox-globals-navrail-pane-body">
+                      {t("layouts.fillColumnPreviewNote")}
+                    </p>
+                  </Card>
+                }
+              >
+                <Chat label={t("layouts.fillColumnPreviewChatLabel")}>
+                  <ChatThread
+                    empty={
+                      <EmptyState
+                        title={t("layouts.fillColumnEmptyTitle")}
+                        description={t("layouts.fillColumnEmptyBody")}
+                      />
+                    }
+                  >
+                    <ChatMessage role="user">
+                      {t("layouts.fillColumnUser1")}
+                    </ChatMessage>
+                    <ChatMessage role="assistant">
+                      {t("layouts.fillColumnAssistant1")}
+                    </ChatMessage>
+                  </ChatThread>
+                  <ChatComposer
+                    value={fillColumnPreviewDraft}
+                    onChange={setFillColumnPreviewDraft}
+                    ariaLabel={t("layouts.fillColumnComposerAria")}
+                    placeholder={t("layouts.fillColumnComposerPlaceholder")}
+                    sendLabel={t("layouts.fillColumnSend")}
+                    onSubmit={() => setFillColumnPreviewDraft("")}
+                  />
+                </Chat>
+              </FillColumn>
+            </div>
+            <SandboxHelp text={t("layouts.fillColumnPreviewHelp")} />
           </LayoutsDemo>
 
           <LayoutsDemo id="top-app-bar">
@@ -439,7 +518,7 @@ export function LayoutsPage() {
                         variant="ghost"
                         aria-label={t("globals.navDrawerToolBulk")}
                       >
-                        <ClipboardIcon />
+                        <ListChecksIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip content={t("globals.navDrawerToolArchive")}>
@@ -498,10 +577,10 @@ export function LayoutsPage() {
                     onClick={() => setDrawerId("archive")}
                   />
                   <NavigationDrawerItem
-                    icon={<SettingsIcon />}
-                    label={t("globals.navDrawerSettings")}
-                    active={drawerId === "settings"}
-                    onClick={() => setDrawerId("settings")}
+                    icon={<FileIcon />}
+                    label={t("globals.navDrawerGroupShared")}
+                    active={drawerId === "shared"}
+                    onClick={() => setDrawerId("shared")}
                   />
                 </NavigationDrawerGroup>
                 <NavigationDrawerGroup
@@ -567,6 +646,24 @@ export function LayoutsPage() {
                         </DropdownMenuCheckboxItem>
                       </DropdownMenu>
                     </Tooltip>
+                    <Tooltip content={t("globals.navDrawerModeRefreshTip")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerModeRefreshTip")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolBulk")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolBulk")}
+                      >
+                        <ListChecksIcon />
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip content={t("globals.navDrawerModeNewTip")}>
                       <IconButton
                         size="sm"
@@ -631,9 +728,140 @@ export function LayoutsPage() {
                 />
               </NavigationDrawer>
             </div>
+            <div
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "22rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerBulkAria")}
+              >
+                <div className="sandbox-navdrawer-tools">
+                  <div
+                    className="fynns-control-cluster fynns-control-cluster--toolbar-end"
+                    aria-label={t("globals.navDrawerBulkToolsAria")}
+                  >
+                    <Tooltip content={t("globals.navDrawerBulkExit")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerBulkExit")}
+                        onClick={() => setBulkDemoSelectMode(false)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                      content={
+                        bulkDemoAllSelected
+                          ? t("globals.navDrawerBulkDeselectAll")
+                          : t("globals.navDrawerBulkSelectAll")
+                      }
+                    >
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={
+                          bulkDemoAllSelected
+                            ? t("globals.navDrawerBulkDeselectAll")
+                            : t("globals.navDrawerBulkSelectAll")
+                        }
+                        onClick={() => {
+                          const next = !bulkDemoAllSelected;
+                          setBulkDemoChecked(
+                            Object.fromEntries(
+                              BULK_DEMO_KEYS.map((key) => [key, next]),
+                            ) as Record<BulkDemoKey, boolean>,
+                          );
+                        }}
+                      >
+                        {bulkDemoAllSelected ? <SquareIcon /> : <CheckSquareIcon />}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.navDrawerToolArchive")}>
+                      <IconButton
+                        size="sm"
+                        variant="ghost"
+                        aria-label={t("globals.navDrawerToolArchive")}
+                      >
+                        <ArchiveIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
+                <NavigationDrawerHeadline>
+                  {t("globals.navDrawerBulkGroup")}
+                </NavigationDrawerHeadline>
+                {bulkDemoSelectMode ? (
+                  BULK_DEMO_KEYS.map((key) => (
+                    <NavigationDrawerItem
+                      key={key}
+                      label={t(BULK_DEMO_LABELS[key])}
+                      active={false}
+                      icon={
+                        <span
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => e.stopPropagation()}
+                        >
+                          <Checkbox
+                            label={
+                              <span className="fynns-sr-only">
+                                {bulkDemoChecked[key]
+                                  ? t("globals.navDrawerBulkUncheck")
+                                  : t("globals.navDrawerBulkCheck")}
+                              </span>
+                            }
+                            checked={bulkDemoChecked[key]}
+                            onCheckedChange={() => {
+                              setBulkDemoChecked((prev) => ({
+                                ...prev,
+                                [key]: !prev[key],
+                              }));
+                            }}
+                          />
+                        </span>
+                      }
+                      onClick={() => {
+                        setBulkDemoChecked((prev) => ({
+                          ...prev,
+                          [key]: !prev[key],
+                        }));
+                      }}
+                    />
+                  ))
+                ) : (
+                  <>
+                    <NavigationDrawerItem
+                      icon={<FileIcon />}
+                      label={t("globals.navDrawerBulkEntryA")}
+                      active
+                    />
+                    <NavigationDrawerItem
+                      icon={<FileIcon />}
+                      label={t("globals.navDrawerBulkEntryB")}
+                    />
+                  </>
+                )}
+              </NavigationDrawer>
+            </div>
             </div>
             <SandboxHelp text={t("globals.navDrawerModeToolsHelp")} />
+            <SandboxHelp text={t("globals.navDrawerBulkSoftHelp")} />
             <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+              {!bulkDemoSelectMode ? (
+                <Button size="sm" onClick={() => setBulkDemoSelectMode(true)}>
+                  {t("globals.navDrawerBulkShowDemo")}
+                </Button>
+              ) : null}
               <Button size="sm" onClick={() => setDrawerOpen(true)}>
                 {t("globals.navDrawerOpen")}
               </Button>
@@ -664,11 +892,11 @@ export function LayoutsPage() {
                 }}
               />
               <NavigationDrawerItem
-                icon={<SettingsIcon />}
-                label={t("globals.navDrawerSettings")}
-                active={drawerId === "settings"}
+                icon={<FileIcon />}
+                label={t("globals.navDrawerGroupShared")}
+                active={drawerId === "shared"}
                 onClick={() => {
-                  setDrawerId("settings");
+                  setDrawerId("shared");
                   setDrawerOpen(false);
                 }}
               />

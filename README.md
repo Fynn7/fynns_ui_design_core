@@ -10,7 +10,7 @@ projects and are easy for humans and agents to reuse.
   (+ [`motionTokens.ts`](src/theme/motionTokens.ts)) → generated, committed
   [`src/theme/theme.css`](src/theme/theme.css).
 - **Components:** [`src/primitives/`](src/primitives) — public surface is sandbox
-  Globals + Preview only (see [AGENTS.md](AGENTS.md) and
+  Globals + Layouts + Preview only (see [AGENTS.md](AGENTS.md) and
   [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md)).
 - **Agent guide / API catalog:** [AGENTS.md](AGENTS.md) is the authoritative doc.
   **Frontend performance (shells / inspectors / catalogs):** [`llm/PERF.md`](llm/PERF.md).
@@ -55,7 +55,7 @@ can.
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-2. `npm install @fynn7/ui-design-core@^0.3.0 --save`
+2. `npm install @fynn7/ui-design-core@^0.5.0 --save`
 
 3. Alias in `vite.config.ts`:
 

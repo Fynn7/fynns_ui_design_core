@@ -6,6 +6,7 @@ import {
   type Ref,
 } from "react";
 import {
+  trailingIsPinnedInspectorEnd,
   trailingIsRowAction,
   type CatalogTrailingMetaAlign,
 } from "./catalogRowGeometry";
@@ -97,8 +98,11 @@ export type ListItemProps = Omit<
    * Duration units are spaced (`1m 47s`, never `1m47s`) — consumer-owned
    * strings. Cross-row **column** for mixed-length dates / timestamps →
    * parent `List` `trailingMetaAlign="start"` (column ink **start**-aligned ≥
-   * **0.5.13**); short status beside `--with-end` actions leave that prop unset
-   * so meta hugs the end.
+   * **0.5.13**); short status beside IconButton `--with-end` leave that prop
+   * unset so meta hugs the end. **Inspector** rows (Select / labeled Button
+   * trailing ≥ **0.5.56**): gap / status meta is co-located in the pinned
+   * end strip (before the action cluster) so it stays glued to CTA|Select
+   * when end widths vary — do not invent a second private status column.
    */
   trailingSupportingText?: ReactNode;
   /**
@@ -219,11 +223,20 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
     ) : null;
 
   const actionTrailing = trailing != null && trailingIsRowAction(trailing);
+  const pinnedInspectorEnd =
+    actionTrailing && trailing != null && trailingIsPinnedInspectorEnd(trailing);
+  /*
+   * Pinned inspector end (Select / labeled Button): park gap meta in the end
+   * strip so status|CTA|Select share one nowrap band. IconButton overlay keep
+   * meta inside the row (always visible; end opacity:0 until hover).
+   */
+  const endMeta = pinnedInspectorEnd ? metaTrailing : null;
+  const rowMeta = pinnedInspectorEnd ? null : metaTrailing;
   const chromeTrailing = trailing != null && !actionTrailing ? trailing : null;
   const innerTrailing =
-    metaTrailing != null || chromeTrailing != null ? (
+    rowMeta != null || chromeTrailing != null ? (
       <span className="fynns-list-item-trailing">
-        {metaTrailing}
+        {rowMeta}
         {chromeTrailing}
       </span>
     ) : null;
@@ -231,6 +244,7 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
   const endTrailing =
     actionTrailing && trailing != null ? (
       <span className="fynns-list-item-trailing fynns-list-item-trailing--end">
+        {endMeta}
         {trailing}
       </span>
     ) : null;

@@ -218,6 +218,20 @@
   --fynns-progress-circular-size: 3rem;
   --fynns-progress-circular-size-sm: 2.25rem;
   --fynns-progress-circular-size-lg: 4rem;
+  --fynns-chart-series-1: var(--fynns-color-accent);
+  --fynns-chart-series-2: color-mix(in srgb, var(--fynns-color-accent) 42%, var(--fynns-color-surface-1));
+  --fynns-chart-series-line: var(--fynns-color-info);
+  --fynns-chart-grid-stroke: color-mix(in srgb, var(--fynns-color-outline-subtle) 55%, transparent);
+  --fynns-chart-axis-stroke: var(--fynns-color-border);
+  --fynns-chart-tick-length: 3px;
+  --fynns-chart-bar-radius: var(--fynns-radius-xs);
+  --fynns-chart-line-width: 2px;
+  --fynns-chart-plot-min-height: 16rem;
+  --fynns-chart-legend-gap: var(--fynns-space-sm);
+  --fynns-chart-margin-top: 0.5rem;
+  --fynns-chart-margin-right: 2.75rem;
+  --fynns-chart-margin-bottom: 0;
+  --fynns-chart-margin-left: 0.25rem;
   --fynns-avatar-size: 2.5rem;
   --fynns-avatar-size-sm: 2rem;
   --fynns-avatar-size-lg: 3.5rem;
@@ -368,6 +382,7 @@
   --fynns-list-item-gap: var(--fynns-navdrawer-section-gap);
   --fynns-list-gap: var(--fynns-space-lg);
   --fynns-list-end-actions-gap: var(--fynns-layout-control-cluster-gap);
+  --fynns-list-inspector-end-gap: var(--fynns-layout-control-stack-gap);
   --fynns-list-icon-size: 1.25rem;
   --fynns-list-leading-width: 1.25rem;
   --fynns-list-content-gap: var(--fynns-space-xs);
@@ -532,6 +547,7 @@
   --fynns-layout-textarea-max-height: 13rem;
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
+  --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;
   --fynns-layout-content-max-width: 73.75rem;

@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import {
   useCallback,
   useEffect,
@@ -179,7 +179,12 @@ export function Select({
         shrinkInCluster
           ? undefined
           : minWidthPx != null
-            ? { minWidth: `min(100%, ${minWidthPx}px)` }
+            ? ({
+                /* Floor for closed trigger; CSS applies `min(100%, …)` in
+                 * form rows and a fixed px hug in List trailing (circular
+                 * `min(100%, …)` was crushing the shell end radius). */
+                ["--fynns-select-measure-min" as string]: `${minWidthPx}px`,
+              } as CSSProperties)
             : undefined
       }
     >

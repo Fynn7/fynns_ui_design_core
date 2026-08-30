@@ -71,5 +71,39 @@ export function trailingIsRowAction(node: ReactNode, depth = 0): boolean {
   return true;
 }
 
+/**
+ * True when `--with-end` must pin in-flow (Select / labeled Button) instead of
+ * IconButton overlay reveal. Mirrors content.css `:has(.fynns-select)` /
+ * `.fynns-btn:not(.fynns-btn--icon)`. Used so gap meta
+ * (`trailingSupportingText`) can co-locate in the end strip without hiding
+ * under IconButton opacity:0 reveal.
+ */
+export function trailingIsPinnedInspectorEnd(node: ReactNode, depth = 0): boolean {
+  if (node == null || typeof node === "boolean" || depth > 5) return false;
+  if (typeof node === "string" || typeof node === "number") return false;
+  if (Array.isArray(node)) {
+    return node.some((child) => trailingIsPinnedInspectorEnd(child, depth));
+  }
+  if (!isValidElement(node)) return false;
+
+  const className = (node.props as { className?: unknown }).className;
+  if (typeof className === "string") {
+    if (/\bfynns-select\b/.test(className)) return true;
+    if (/\bfynns-btn\b/.test(className) && !/\bfynns-btn--icon\b/.test(className)) {
+      return true;
+    }
+  }
+
+  const name = elementName(node.type);
+  if (/^Select$|Select\b/.test(name) && !/IconButton/.test(name)) return true;
+  if (/^Button$|SplitButton/.test(name)) return true;
+
+  const children = (node.props as { children?: ReactNode }).children;
+  if (children != null) {
+    return trailingIsPinnedInspectorEnd(children, depth + 1);
+  }
+  return false;
+}
+
 /** Shared min-width trailing meta column (`"start"`) for date / timestamp catalogs. */
 export type CatalogTrailingMetaAlign = "start";

@@ -51,6 +51,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **empty ControlRow label as action footer** /
 **twin Button loading rings in one control-cluster** /
 **BusyRegion + chrome loading stack** /
+**List trailing Select + labeled Button overlap** /
 **one progress chrome per busy host** /
 **bare CircularProgress as body loader** /
 **private hub progress shell vs BusyRegion linear** /
@@ -68,7 +69,7 @@ Same task — **all three**, not pick-one:
 1. **Core constraint** — token / primitive / CSS in `fynns_ui_design_core`.
 2. **Sandbox demo** — update Globals / Preview / Layout sample that teaches the
    fix; browser-verify in sandbox (`#field-header`, `#form-recipe`, …).
-3. **Consumer** — dispatch subagent (or continue in consumer checkout): bump core,
+3. **Consumer** — dispatch a subagent into the consumer checkout: bump core,
    props-only fix, browser-verify on the reported screen.
 
 Authority: `/constrain-then-consumer` → [`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
@@ -136,8 +137,10 @@ public API deletes are **atomic** (export + source + sandbox demo +
 
 ## Failure mode this treaty targets: squashed drawer
 
-**Prefer** `DestinationAppShell` for greenfield — it syncs Drawer↔Rail for you.
-Only hand-compose `ClippedNavShell` when you need a fully custom shell.
+**Prefer** `DestinationAppShell` for greenfield — destinations are **binary**
+(labeled resizable drawer or fully `hidden`; crowding **closes** nav, never
+densifies to icon-only rail). Only hand-compose `ClippedNavShell` when you need a
+fully custom shell (e.g. drill-in drawer-body swap — `#layouts-demo-drill-in`).
 
 Symptoms (often on **first paint** after crowding / narrow init):
 
@@ -149,10 +152,11 @@ Symptoms (often on **first paint** after crowding / narrow init):
 **Not** a healthy `NavigationRail`. Mechanism:
 
 1. `ClippedNavShell` sets `data-nav` / grid track from `navMode` only.
-2. Crowding (`onNavCrowded` / `wouldClippedNavDrawerCrowd`) or app logic sets
-   `navMode="rail"`.
-3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem`
-   (optional `NavigationDrawerGroup` / `NavigationDrawerHeadline` for sections).
+2. **Legacy (≤ 0.4.83):** crowding or narrow logic set `navMode="rail"`.
+   **Current (≥ 0.4.84):** `DestinationAppShell` / correct hand-compose closes
+   to `hidden` — never rail densify.
+3. Consumer keeps rendering `NavigationDrawer` + `NavigationDrawerItem` while
+   `navMode="rail"` (or the track is rail-width).
 4. Drawer fills the **rail-width** track → cramped horizontal chrome + scroll.
 
 Reference implementation:
@@ -168,8 +172,8 @@ Composer as canvas siblings. A catalog in that band is a scrolling
 the flex column (core: default Surface is not `min-height: 0`; unit-stack
 children do not shrink).
 
-Core slot shell does **not** auto-swap Drawer↔Rail. Dev builds warn when
-`data-nav="rail"` still hosts `.fynns-nav-drawer`.
+Core slot shell does **not** auto-swap drawer body content. Dev builds warn when
+`data-nav="rail"` still hosts `.fynns-nav-drawer` (squashed drawer).
 
 ## Failure mode this treaty targets: icon-only rail densify (narrow)
 
@@ -1038,18 +1042,35 @@ Symptoms (catalog ControlRow / Card actions / List trailing strips):
 
 - Two adjacent ghost IconButtons sit with an **8dp** air gap that reads sparse
   next to TopAppBar chrome (2dp)
-- **Or** List `trailingSupportingText` / any preceding meta sits **~10dp+**
-  from the first `--with-end` IconButton (date / 当前 / Chip left of pencil)
+- **Or** consumer invents a private meta→icon margin / navdrawer-scale gap
 
 **Cause:** pinning core &lt; **0.4.123**, or a consumer `gap` override on
-`.fynns-control-cluster` / inventing a larger meta→icon margin.
+`.fynns-control-cluster`.
 **Fix:** bump `@fynn7/ui-design-core` ≥ **0.4.123** —
-`--fynns-layout-control-cluster-gap` is **4dp**; List
-`--fynns-list-end-actions-gap` **aliases** it (any sibling immediately left of
-an IconButton shares that rhythm). Do not invent private cluster / end-action
-gaps. TopAppBar / NavigationRail stay on `chrome-icon-gap` (**2dp**). Live:
-`#rhythm` catalog strip / `#list` org+dates. Authority: [`AGENTS.md`](../AGENTS.md)
-Toolbar / unit rhythm. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+`--fynns-layout-control-cluster-gap` is **4dp** between IconButton **boxes**.
+List short-status→first IconButton uses a separate optical
+`--fynns-list-end-actions-gap` (≥ **0.5.62**) so text ink matches glyph↔glyph —
+do **not** force raw 4dp text→disk or invent app CSS. Live: `#list`
+status+action / `#rhythm`.
+
+## Failure mode this treaty targets: status kisses first List IconButton
+
+Symptoms on Applications / catalog rows (`trailingSupportingText` “当前” /
+“Current” + two `--with-end` IconButtons):
+
+- Status→first sparkle/pencil looks **tighter** than sparkle↔trash even though
+  both “should” be 4dp
+- Consumer adds private `margin` / `gap` on `.fynns-list-item-trailing*`
+
+**Cause:** measuring **box** gap (4dp meta→disk == 4dp disk→disk) while the eye
+compares **ink** (text→glyph ≈16dp vs glyph↔glyph ≈28dp because each md disk
+insets the 16dp glyph ~12dp).
+**Fix in core (≥ 0.5.59):** IconButton overlay hosts set
+`--fynns-list-end-actions-gap` to `(icon-target − icon) / 2 + control-cluster-gap`
+so text→glyph ≈ glyph↔glyph. Pinned Select / labeled Button rows keep 4dp.
+Consumer: bump only — no app CSS. Live: `#sandbox-list-status-action`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Short status + row
+action**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: fat Surface / Card per catalog row
 
@@ -1257,12 +1278,12 @@ Symptoms (Models / LLM backend Card foot, Dialog multi-action foot, Probe +
 Start / Copy + Import strips):
 
 - Two sibling `Button`s in one `.fynns-control-cluster--end-align` both show
-  a leading `CircularProgress` (`loading`) at the same time
+  a leading inline spinner (`Button` / `IconButton` `loading`) at the same time
 - Often both also share one `busy` boolean on every `loading={busy}`
 - Reads as **information redundancy** — two rings for one strip wait
 
 **Cause:** consumers treat “section busy” as “every action button paints
-busy chrome.” Core `Button` `loading` is a **per-control** slot spinner,
+busy chrome.” Core `Button` `loading` is a **per-control** inline **`Spinner`**,
 not a section-level BusyRegion. Same philosophy as Loading placement: **one**
 progress chrome per wait host.
 
@@ -1563,6 +1584,134 @@ group/row chevron language.
 **Fix in the consumer:** mode tools row →
 `fynns-control-cluster fynns-control-cluster--toolbar-end`; sort menu
 trigger → non-chevron icon (`BarChartIcon` / `MoreHorizontalIcon`, …). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+
+## Failure mode this treaty targets: bulk toolbar wrong glyphs
+
+Symptoms (mode drawer select mode — `ListBulkToolbar`):
+
+- 「返回菜单」 / exit select uses **`ArrowLeftIcon`** (reads as nav back)
+- 「全选」 uses bare **`CheckIcon`** (reads as confirm / done)
+- Restore uses **`ArchiveIcon`** again (same as archive)
+
+**Cause:** nearest-shape reuse without an action→glyph recipe. ArrowLeft is
+TopAppBar back; Check is confirm.
+
+**Fix in core (≥ 0.5.64):** public **`CheckSquareIcon`** / **`SquareIcon`**;
+full icon library exported (not a subset gate). Live: Globals `#icons`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Icons**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+**Fix in the consumer:** exit bulk → `CloseIcon`; select all →
+`CheckSquareIcon`; deselect all → `SquareIcon`; enter bulk →
+`ListChecksIcon`; restore → `UndoIcon`.
+
+## Failure mode this treaty targets: bulk select teal wall (checked → active)
+
+Symptoms (mode drawer / archived sidebar — bulk select all):
+
+- Every checked row paints **`NavigationDrawerItem` `--active`** /
+  **`ListItem` `--selected`** (`secondary-container` pill)
+- Select-all fills the drawer with a solid teal stack — reads as “everything
+  is the current destination”
+
+**Cause:** mapping `checked` to `active` / `selected`. Those pills mean **one
+open destination / row focus**, not multi-select membership.
+
+**Fix in core (≥ 0.5.65):** sandbox teaches **checked ≠ active** — Checkbox
+only; at most one unrelated `active` for the open detail host. Live: Layouts
+`#layouts-demo-navigation-drawer` third column.
+
+**Fix in the consumer:** `BulkSelectableNavItem` — `active={active ?? false}`
+(never `checked`); `BulkSelectableListRow` — `selected={false}` in selectMode.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: expandable List `--with-end` trailing mid-gap
+
+Symptoms (project catalog `CatalogGroup` — group row + nested members):
+
+- Parent group row has **`trailing` IconButtons** (New / Import / …) and **`detail`**
+  with nested `ListItem`s
+- Hover-reveal **+ / download** disks sit **between** the parent pill and the first
+  child row — vertically centered on the **whole host** (parent + detail), not on
+  the parent band alone
+- Tooltip on **+** overlaps nested member copy
+
+**Cause:** core `--with-end` absolute trailing used `inset-block: 0` against
+`.fynns-list-item-host` while `detail` lives as a sibling under that host. Without
+`position: relative` on `.fynns-list-item-row`, the containing block was the full
+host height.
+
+**Fix in core (≥ 0.5.66):** `.fynns-list-item-row` is `position: relative` so
+`--with-end` trailing inside the row shell anchors to the **parent band only**
+(Timeline row shell already had this). Live: Globals `#list` expandable tree
+(two IconButtons on open parent row).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` — props-only `ListItem`
+`detail` + `trailing` recipe unchanged; drop any local CSS that nudges group
+actions with negative margin / `top`.
+
+## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
+
+Symptoms (workflows / CatalogMorph mode destinations):
+
+- TopAppBar `trailing` shows 「页面说明」 / page-scope `InfoHint`
+- Mode drawer `--toolbar-end` **also** shows 「工作流说明」 / section `InfoHint`
+- Two help “i” disks for the same destination = **information redundancy**
+
+**Cause:** composing section essays both as shell `pageHint` and as a sibling
+in the mode tools cluster. Mode tools should stay action chrome (sort /
+refresh / bulk / New) — not a second copy of page help.
+
+**Fix in the consumer (hard ≥ 0.5.63):** keep **one** section `InfoHint` in
+**TopAppBar `trailing`** (merge drawer copy into that tip if needed). Remove
+section `InfoHint` from `--toolbar-end`. Field-level `InfoHint` on a
+preference `ControlRow` (hide-builtin) is unaffected. Live: Layouts
+`#layouts-demo-shell` TopAppBar InfoHint + `#layouts-demo-navigation-drawer`
+mode tools without a section “i”. Authority: [`AGENTS.md`](../AGENTS.md)
+**Mode drawer tools**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: bulk select uses ClipboardIcon
+
+Symptoms (workflows / MCP / plugins mode sidebars — `ListBulkToolbar` enter):
+
+- 「批量选择」 / “Bulk select” `IconButton` shows a **clipboard** glyph
+- Reads as copy/paste, not multi-select / enter-select-mode
+
+**Cause:** reusing `ClipboardIcon` (Chat copy / paste tools) for catalog bulk
+enter. Keep-set had no checklist glyph until **0.5.61**.
+
+**Fix in core (≥ 0.5.61):** public **`ListChecksIcon`** (checked lines). Sandbox
+Layouts `#layouts-demo-navigation-drawer` SearchBar tools + mode sample +
+Globals `#rhythm` catalog strip teach it. Authority: [`AGENTS.md`](../AGENTS.md)
+**Mode drawer tools** / Icons. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+**Fix in the consumer:** enter-select / bulk toolbar → `ListChecksIcon`; keep
+`ClipboardIcon` only for copy/paste. Select-all in-mode may use `CheckIcon` or
+the same `ListChecksIcon` — never clipboard.
+
+## Failure mode this treaty targets: mode drawer primary New not rightmost
+
+Symptoms (workflows / multi-tool mode sidebars):
+
+- `--toolbar-end` shows ghost Refresh → **filled primary Plus** → ghost
+  bulk (`ListChecks`) — primary New sits **mid-strip**, not at the trailing edge
+- DevTools: Plus `left` between Refresh and bulk enter; users expect primary
+  create at the **end** of the cluster (same grammar as Dialog feet)
+
+**Cause:** composing secondary tools **after** the primary New in DOM order
+(e.g. `ListBulkToolbar` sibling after Plus). `--toolbar-end` only hugs end —
+it does not reorder children.
+
+**Fix in the consumer (hard ≥ 0.5.60):** LTR order inside `--toolbar-end` =
+secondary ghost chrome first (InfoHint / sort / refresh / bulk enter) →
+**primary New/Plus last**. When entering bulk/select mode, hide or keep Plus
+last — never insert tools to the right of primary New. Live: Layouts
+`#layouts-demo-navigation-drawer` mode sample (sort → refresh → bulk → New). Authority:
+[`AGENTS.md`](../AGENTS.md) **Mode drawer tools**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: mode drawer hide-builtin ControlBlock stack
@@ -1885,9 +2034,9 @@ cluster is not enough if nested helpers keep `wrap` / full width.
 
 **Fix in core:** nested clusters hug + nowrap; **every** cluster under
 `.fynns-card-actions` / `.fynns-collapsible-actions` (descendant) is
-`width: auto` + `flex-wrap: nowrap`. Lead / Collapsible trigger keeps
-`min-width: max(0px, 40%)` so a dense strip cannot crush the title to one
-glyph. Live: sandbox `#card` (multi-action head on a full-row ~28rem host).
+`width: auto` + `flex-wrap: nowrap`. Lead / Collapsible trigger prefers
+`flex: 1 1 40%` with **`min-width: 0`** (yield — see next failure mode). Live:
+sandbox `#card` (multi-action head on a full-row host).
 **Consumer:** prefer one **flat** outer cluster of IconButtons; action helpers
 should return a **fragment** of IconButtons (no inner cluster) when composed
 into Card `actions`. Do not park the Card in a ~12rem grid cell with five
@@ -1895,6 +2044,43 @@ IconButtons and expect a long path title to survive. Do **not** invent
 `flex-wrap: nowrap` in app CSS on `.fynns-*`. Authority: [`AGENTS.md`](../AGENTS.md)
 Card keep-set / **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Card head actions clip at the end edge
+
+Symptoms (file-catalog detail / dual-side editor Card — agents-hub):
+
+- End `IconButton` (often danger trash) is **half-cut** by the Card border;
+  DevTools: `.fynns-card-actions` wider than leftover head space; Card
+  `overflow: hidden` clips the disk
+- Head also hosts a wide `ToggleGroup` (e.g. two labeled sides) **plus** a
+  strip of file / sync / edit / delete IconButtons — strip ~500dp on a
+  content-column Card
+
+**Cause (two layers):**
+1. **Core &lt; 0.5.57:** lead hard-floored `min-width: max(0px, 40%)` while
+   `.fynns-card-actions` stayed `flex: 0 0 auto`. When chrome needed &gt; ~60%
+   of the head, the strip overflowed and `overflow: hidden` on `.fynns-card`
+   clipped the trailing disk.
+2. **Consumer pattern:** treating Card `actions` as a free toolbar for
+   **`ToggleGroup` + many IconButtons**. Keep-set `actions` is an IconButton /
+   Button / ≤1 InfoHint strip — labeled segmented mode belongs in the **body**.
+
+**Fix in core (≥ 0.5.59):** lead `flex: 1 1 40%; min-width: 0` — prefers ~40%
+but **yields** so actions stay fully painted; title ellipsizes. Actions stay
+`flex: 0 0 auto` (never crush chrome). Live: sandbox `#card` actions-strip
+(narrow host + dense icons — trash fully visible) + mode-in-body sample.
+
+**Fix in the consumer (hard):**
+1. **Move** `ToggleGroup` / labeled mode switches out of Card `actions` into
+   the Card **body** (`ControlRow` / `FieldBlock` — first unit).
+2. Keep head `actions` as one flat `.fynns-control-cluster` of IconButtons
+   (+ optional ≤1 InfoHint). If still too dense, overflow secondary actions
+   into a `DropdownMenu` `iconOnly` More — do **not** invent private
+   `overflow` / negative-margin CSS on `.fynns-card-*`.
+3. Bump `@fynn7/ui-design-core` to ≥ **0.5.57**.
+
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** titled section
+shell. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: path / branch text in Card `actions`
 
@@ -1977,39 +2163,61 @@ OK/Fail status rows inset the trailing “i”. Lone `—` / status meta without
 3. Page chrome / TopAppBar → prefer **`md` (40dp)**; drop stray
    `size="sm"` on TopAppBar InfoHint when siblings are `md`.
 4. Dense Card heads may use **`sm`** only when **every** icon in that head
-   is `sm` (pass `size="sm"` on InfoHint too). Prefer matching TopAppBar
-   `md` for Card **head** actions on the same destination page.
-5. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
+   is `sm` (pass `size="sm"` on InfoHint too).
+5. **CatalogMorph / mode-sidebar detail (hard ≥ 0.5.59):** when the mode
+   drawer `--toolbar-end` cluster is already `sm` (32dp), every Card
+   `actions` `IconButton` / icon `SplitButton` on that detail must also be
+   **`size="sm"`**. Default `md` (40dp) Save / Add disks look oversized next
+   to the drawer Plus and can crowd the title band. Root pages without mode
+   tools may still match TopAppBar with Card head `md`.
+6. Do **not** invent private width / margin CSS on `.fynns-btn--icon` to
    fake column alignment.
 
-Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (head all `md`); `#field-header`
+Also: lone ControlRow `.fynns-table-meta` (`-` / status without InfoHint) must sit in the **same trail box** as the refresh / InfoHint (core ≥ **0.4.137** — not a thin end glyph). Live: sandbox `#card` actions strip (page chrome `md`) + **mode-body** sample (CatalogMorph-style head all `sm`); `#field-header`
 (label InfoHint + refresh + probe OK/Fail + idle `-` all on the `sm` trail). Authority:
 [`AGENTS.md`](../AGENTS.md) **Form trailing chrome column**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: form ControlRow label vs Select value text
+## Failure mode this treaty targets: mode drawer sm + Card head md
 
-Symptoms (Models / provider Card):
+Symptoms (CatalogMorph detail — workflows / file catalog):
 
-- Select shell and ControlRow **boxes** share one left edge (DevTools
-  `left` equal on `.fynns-select` and `.fynns-control-row`)
-- Select **value** text (`.fynns-select-trigger-text`) starts ~16–17dp inset
-  (capsule + field-pad + hairline); ControlRow **label** (“Ollama”) sits flush
-  at the shell edge — glyphs look skewed under the field
-- Agent “fixes” by inventing consumer `padding-left` / `margin` on
-  `.fynns-control-row__label`
+- Drawer `--toolbar-end` Plus / Refresh are `sm` (32dp); Card `actions` Save /
+  Add stay default `md` (40dp) — disks jump a step larger than the mode tools
+- Long workflow titles + several 40dp head icons crowd / overflow the Card head
 
-**Cause:** aligning chrome **boxes** instead of **value text**. Form hosts that
-mix `FieldBlock` + `ControlStack` need the ControlRow label on the same
-text-start column as Input / Select / Autocomplete value ink. Core ≥ **0.4.138**
-sets `--fynns-form-control-text-inset-inline` when the host `:has(.fynns-field-block):has(.fynns-control-stack)`.
+**Cause:** treating Card head as TopAppBar-sized chrome while the page’s mode
+drawer already densified to `sm`. Same-page icon trail must share one `size`.
 
-**Fix in the consumer (hard):** bump to ≥ **0.4.138**; keep FieldStack +
-ControlStack siblings (no private pad). FieldBlock titles stay flush with the
-control outer edge — do not pad those to match value text.
+**Fix in the consumer (hard):** pass **`size="sm"`** on every Card `actions`
+`IconButton` / icon `SplitButton` (and any helper that defaults to `md`) under
+CatalogMorph detail. Keep the whole head strip `sm` — no mixed sizes. Bump
+docs / pasteable ≥ **0.5.59**. Live: sandbox `#card` mode-body sample.
+Authority: [`AGENTS.md`](../AGENTS.md) titled section shell. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-Live: sandbox `#field-header`. Authority: [`AGENTS.md`](../AGENTS.md)
-**Form control text-start**. Pasteable:
+## Failure mode this treaty targets: form ControlRow label vs FieldHeader title
+
+Symptoms (LLM / provider Card with FieldBlocks + preference Switches):
+
+- `FieldHeader` titles (“Provider” / “Model”) sit flush at the Card body start
+- Preference / probe `ControlRow` labels (“Thinking” / status names) sit
+  ~16–17dp inset — chase Select **value** text via old 0.4.138
+  `--fynns-form-control-text-inset-inline`
+- Agent “fixes” by inventing consumer `padding-left` / negative margin on
+  `.fynns-control-row__label` or `.fynns-field-header__label`
+
+**Cause:** 0.4.138 padded ControlRow labels to match Select / Input **value**
+ink. Title glyphs (FieldHeader + ControlRow) must share one flush column;
+value ink stays inset inside the field shell.
+
+**Fix in the consumer (hard):** bump to ≥ **0.5.58**; keep FieldStack +
+ControlStack siblings (no private pad). Do not reintroduce ControlRow inset
+to chase Select value text.
+
+Live: sandbox `#field-header` (preference Switch + probe rows under
+FieldBlocks). Authority: [`AGENTS.md`](../AGENTS.md)
+**Form title text-start**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: status icon soup in a control-cluster
@@ -2092,6 +2300,103 @@ copy→disk breath.
 **Fix in core (≥ 0.4.115; denser alias ≥ 0.4.123):** `--fynns-list-end-actions-gap`
 aliases `--fynns-layout-control-cluster-gap` (**4dp**). Consumer: bump only —
 no app CSS. Live: sandbox `#list` path catalog / org+dates (hover a row).
+
+## Failure mode this treaty targets: List trailing Select + labeled Button overlap
+
+Symptoms on an inspector / pipeline `ListItem` whose `trailing` is a
+`.fynns-control-cluster` of a **labeled** tonal `Button` + `Select` (optional
+short gap meta in `trailingSupportingText`):
+
+- CTA label (e.g. multi-character assist copy) paints **onto** the Select
+  trigger (“技能” / kind) — siblings collide mid-row
+- Hover / focus “reveal” still uses the IconButton overlay geometry
+- Consumer adds private `position` / `z-index` / negative margin on the cluster
+- Short gap status (“未映射” / “Unmapped”) **left edges drift** across sibling
+  gap rows while Button / Select columns stay put
+- Meta | CTA | Select cells **kiss** at 4dp (`control-cluster-gap`) — reads
+  cramped vs toolbar rhythm
+- On **multi-line** rows (overline + headline + supporting), the pinned end
+  strip (meta / CTA / Select) sits **top-aligned** with the first line while
+  copy fills 88dp+ — large vacant band under the controls (core **0.5.70**
+  host/end `flex-start` regression)
+
+**Cause:** `trailingIsRowAction` correctly parks Button/Select **outside** the
+row control (`--with-end`), but overlay reveal reserves only **1–2×40dp**
+IconButton disks while `Select` defaults to `width: 100%`. Absolute end +
+undersized pad stacks the wide CTA onto the Select shell.
+
+**Fix in core (≥ 0.5.54):** when the end cluster contains `.fynns-select` or a
+non-icon `.fynns-btn`, core **pins** trailing **in-flow** (always visible;
+normal list pad — not IconButton reserve) and forces Select / labeled Button to
+content-hug (`width: auto` / max-width caps). Path-catalog IconButton strips
+keep overlay reveal. **≥ 0.5.55:** pinned trailing `padding-inline-end` is at
+least `--fynns-radius-3xl` so host `overflow: clip` + radius does **not** slice
+the Select’s end curve; cluster stays inside the padded box. **≥ 0.5.56:**
+gap / short status in `trailingSupportingText` is co-located **inside** the
+pinned end strip (before the action cluster) so sibling “Unmapped” labels
+stay glued to CTA|Select when end widths match — not a separate list-item
+right-hug that drifts. **≥ 0.5.67:** meta|CTA|Select gaps widen to **8dp**
+(`--fynns-list-inspector-end-gap` — aliases `control-stack-gap`; not 4dp
+cluster kiss). **≥ 0.5.68:** Select options dock **out of row flex** — row copy /
+gap meta / CTA stay centered on the **trigger shell** only (open flyout must
+not stretch the list row cross-axis). **≥ 0.5.70:** reuse **inline** form Select
+`search-bar--expanded` (same as `#globals-demo-select`) — not absolute flyout
+(0.5.68–0.5.69 overlapped sibling rows). **≥ 0.5.71:** pinned end strip
+`align-items: flex-start` so gap meta|CTA stay on the **trigger band** when
+expanded (not mid-panel). **≥ 0.5.72:** grid **40dp trigger-band row** pins gap
+meta; expanded height-3 copy `flex-start` to the same band (not centered in
+min-height while trailing grows). Leave
+`trailingMetaAlign` unset. Consumer:
+bump ≥ 0.5.71; keep cluster `nowrap`;
+prefer short CTA labels; prefer IconButton + Tooltip when the action is not
+an inspector control. Live: sandbox `#list` inspector trailing. **Bump ≥ 0.5.71**
+when gap meta floats mid expanded panel. Authority:
+[`AGENTS.md`](../AGENTS.md) Content density **Inspector row**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Card head Select centers on expanded panel
+
+Symptoms on a workflow `Card` head (`title` + `actions` = `Select` + labeled
+`Button` `sm` — refine / regenerate / revision pickers):
+
+- Expanded inline Select grows the head; **section title** and **primary CTA**
+  sit mid-way down the dropdown (vertically centered on the **full** expanded
+  cluster) instead of sharing the **40dp trigger shell** row with the chevron
+- Trigger shell top ≈ 8dp below head top while title / button top ≈ 40dp+
+
+**Cause:** `.fynns-card-head` / `.fynns-card-lead` / `.fynns-card-actions` use
+`align-items: center` and stretch the lead across the tall expanded Select —
+same class as list inspector trailing before ≥ 0.5.72.
+
+**Fix in core (≥ 0.5.73):** when `actions` hosts an inline expanded Select,
+head + lead + actions `flex-start`; lead pins to trigger-band height; cluster
+`align-items: flex-start` + sm labeled Button optical margin on the 40dp band;
+Card `overflow: visible` while open. **≥ 0.5.74:** collapsed header restores
+default `align-items: center` + lead `stretch` (do not flex-start / pad lead
+when idle); expanded only switches to grid row 1 = chrome band so title keeps
+header inset without centering on the full dropdown. Consumer: bump ≥
+0.5.74; keep
+`Card` `actions` = `.fynns-control-cluster` of `Select` + `Button` `sm` — no
+private title/Button margins. Live: sandbox `#sandbox-card-head-select`.
+Authority: [`AGENTS.md`](../AGENTS.md) Content density **Card head Select +
+labeled Button**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Card head Select↔Button 4dp kiss
+
+Symptoms on workflow `Card` `actions` (`Select` + labeled `Button` `sm`):
+
+- Version / revision picker and primary CTA (regenerate) sit **4dp** apart —
+  reads as pill-on-pill kiss; consumer measured ~5px between shells
+
+**Cause:** `.fynns-control-cluster` default `control-cluster-gap` (4dp) applied
+to Select + **labeled** Button — same as IconButton strips. List inspector
+meta|CTA|Select already widens to **8dp** (`inspector-end-gap`); Card head did
+not.
+
+**Fix in core (≥ 0.5.75):** `.fynns-control-cluster:has(> .fynns-select):has(>
+.fynns-btn:not(.fynns-btn--icon))` uses `--fynns-layout-action-cluster-gap`
+(**8dp** — dialog foot parity). Consumer: bump only. Live:
+`#sandbox-card-head-select`.
 
 ## Failure mode this treaty targets: List row copy cramped on the start edge
 
@@ -2302,6 +2607,24 @@ every row’s action shares one trailing edge. Do not invent a second
 `justify-content: space-between` layout. Live: sandbox `#table`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: table map cluster top-hugged in a tall cell
+
+Symptoms in a usage / mapping column (`TableCell` + `.fynns-control-cluster--end-align`):
+
+- `.fynns-table-meta` (kind caption) and the mono id sit **flush to the top** of
+  the cell while the row is taller (~49dp from `Button` `sm` + cell pad)
+- Left numeric columns look vertically centered; mapping copy reads “靠上 / 不居中”
+
+**Cause:** `.fynns-control-cluster--end-align` used `align-items: flex-start` for
+every host (Select trigger-band pin). Table map rows have no expanded Select —
+meta + id + action should **center on the row band**.
+
+**Fix in core (≥ 0.5.79):** end-align defaults `align-items: center`; only
+`:has(> .fynns-select.fynns-control-cluster__grow)` keeps flex-start + sm
+IconButton trigger-band margin. **Fix in the consumer:** bump only — keep
+`.fynns-table-meta` + `__grow` id + trailing action; no local flex hacks. Live:
+sandbox `#table`; agents-hub Usage mapping column.
 
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
@@ -2712,6 +3035,59 @@ the catalog list in the **nav** track and keep main full-width detail — see
 catalog recipe.
 
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **FillColumn**.
+
+## Failure mode this treaty targets: canvas FillColumn megacard zero inset
+
+Symptoms (Preview + Chat on `DestinationAppShell` main — e.g. refine / job
+workflow):
+
+- One `Card` (`chrome="plain"`) in `FillColumn` `header` is **flush** with the
+  canvas top / left / right (title kisses the shell edge; no `dialog-inset`
+  breath)
+- The Card body (switches, tabs, CodeBlock, Textarea, browser paste) fills the
+  entire well; Chat is scrolled away or `main` has ~0 height
+- DevTools: `.fynns-destination-app-shell-canvas > .fynns-fill-column >
+  .fynns-fill-column-header > .fynns-card` spans full canvas width; Card height ≈
+  viewport
+
+**Cause:** consumer mounted a **full-workflow** Card as the only `header` band
+without `PageScroll` / content-column inset and without core canvas header
+caps (legacy ≤ **0.5.75**).
+
+**Fix in core (≥ **0.5.76**):** `.fynns-destination-app-shell-canvas >
+.fynns-fill-column-header` gets `dialog-inset` breath (when not hosting
+`PageScroll`), `max-height: var(--fynns-layout-fill-column-header-max-height)`,
+and `fynns-scroll` overflow so Chat stays visible in `main`.
+
+**Fix in the consumer:** keep `FillColumn` (`header` = compact preview,
+`children` = `Chat`) — **do not** invent private canvas padding. Tall workflow
+chrome may stay in `header` Card but must respect the capped scroll band; or
+split long forms into `Dialog` / `PageScroll` in `children`. Bump core; props-only.
+Live: Layouts `#layouts-demo-fill-column` preview+Chat stage. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: IconButton loading spinner + glyph overlap
+
+Symptoms (`ControlRow` morph strip — refresh + copy + labeled import CTA):
+
+- `IconButton` `loading` shows spinner **on top of** the refresh glyph (two
+  16dp marks in one 32dp disk)
+- Clipboard → labeled `Button` gap reads ~4dp (kiss) instead of **8dp**
+- DevTools: `.fynns-btn--icon.fynns-btn--loading` contains both
+  `.fynns-loading-spinner-ring` and child `svg` in `.fynns-btn-loading-label`
+
+**Cause:** legacy `Button` kept icon children beside spinner when `loading`;
+mixed clusters used only `control-cluster-gap` (4dp) before labeled pills.
+
+**Fix in core (≥ **0.5.80**):** `iconOnly` + `loading` → spinner-only in the disk
+(`aria-label` feeds spinner accessible name). Mixed `.fynns-control-cluster` adds
+`margin-inline-start` on labeled `Button` so icon→pill = **8dp** while
+icon↔icon stays **4dp**.
+
+**Fix in the consumer:** bump core; keep one `.fynns-control-cluster` of
+`Tooltip` → `sm` `IconButton` + labeled `Button` — props-only. Live: sandbox
+`#rhythm` morph strip; consumer posting skills row. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 

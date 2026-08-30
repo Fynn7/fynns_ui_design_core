@@ -218,6 +218,37 @@
   box-sizing: border-box;
 }
 
+/* Inline expanded Select + sibling controls: pin to trigger band, not panel mid. */
+.fynns-control-cluster:has(> .fynns-select) {
+  align-items: flex-start;
+}
+
+.fynns-control-cluster:has(> .fynns-select) > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+/*
+ * Select + labeled Button (Card head regenerate, inspector CTA, …): 8dp breath —
+ * same as dialog foot / end-align labeled strips (≥ **0.5.75**). IconButton-only
+ * clusters keep control-cluster-gap (4dp).
+ */
+.fynns-control-cluster:has(> .fynns-select):has(> .fynns-btn:not(.fynns-btn--icon)) {
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
+/*
+ * IconButton strip + labeled CTA (ControlRow morph, posting import, …): keep
+ * icon↔icon at control-cluster-gap (4dp); widen only before the labeled pill
+ * to action-cluster-gap (8dp) — ≥ **0.5.80**. End-align strips set gap on the
+ * whole cluster separately.
+ */
+.fynns-control-cluster:not(.fynns-control-cluster--end-align)
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
+  margin-inline-start: calc(
+    var(--fynns-layout-action-cluster-gap) - var(--fynns-layout-control-cluster-gap)
+  );
+}
+
 /*
  * Nested clusters hug content. A child with `width: 100%` inside another
  * cluster becomes a full-bleed row (Card head icon strips stack vertically —
@@ -235,10 +266,16 @@
 
 /* Action footer / Select+row-action / table trailing action: dock to the
    trailing edge. Pure IconButton strips need no `__grow` — justify does it.
-   Leading Select / meta that must fill leftover still use `__grow`. */
+   Leading Select / meta that must fill leftover still use `__grow`. Default
+   **center** on the row band (table map meta + mono id + action); Select +
+   refresh keeps flex-start below. */
 .fynns-control-cluster--end-align {
   flex-wrap: nowrap;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow) {
   /* Docked Select lists grow the grow flex item — pin row actions to the
      trigger band (40dp), not the vertical center of trigger + results. */
   align-items: flex-start;
@@ -267,10 +304,11 @@
   flex-shrink: 0;
 }
 
-/* sm IconButton (32dp) optical center on the 40dp form control row. */
-.fynns-control-cluster--end-align
+/* sm IconButton (32dp) optical center on the 40dp Select trigger band only. */
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
-.fynns-control-cluster--end-align > .fynns-btn--sm.fynns-btn--icon {
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
+  > .fynns-btn--sm.fynns-btn--icon {
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 

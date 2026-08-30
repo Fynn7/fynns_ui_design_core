@@ -17,17 +17,23 @@ export * from "./theme/scrollbar";
 export * from "./theme/themeMode";
 export { ensureOverlayScrollbars } from "./theme/overlayScrollbar";
 
-/* Icons (public subset) */
+/* Icons — full library from `src/primitives/icons.tsx` (not a curated subset). */
 export {
+  AlertCircleIcon,
   AlertTriangleIcon,
   ArchiveIcon,
   ArrowLeftIcon,
+  ArrowUpIcon,
   BarChartIcon,
   BotIcon,
   BriefcaseIcon,
   CheckCircleIcon,
   CheckIcon,
+  CheckSquareIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
   ClipboardIcon,
   CloseIcon,
   DownloadIcon,
@@ -39,6 +45,7 @@ export {
   ICON_SIZE,
   InfoIcon,
   LayoutGridIcon,
+  ListChecksIcon,
   MenuIcon,
   MicIcon,
   MoonIcon,
@@ -46,6 +53,7 @@ export {
   PanelLeftIcon,
   PanelRightIcon,
   PencilIcon,
+  PersonIcon,
   PlusIcon,
   PlugIcon,
   RefreshIcon,
@@ -53,15 +61,15 @@ export {
   SearchIcon,
   SettingsIcon,
   SparklesIcon,
-  ArrowUpIcon,
+  SquareIcon,
   StopSquareIcon,
-  ChevronDownIcon,
   SunIcon,
   TrashIcon,
   UndoIcon,
   UploadIcon,
   WrenchIcon,
 } from "./primitives/icons";
+export type { IconProps } from "./primitives/icons";
 
 /* Primitives — named keep-list only */
 export { Button } from "./primitives/Button";

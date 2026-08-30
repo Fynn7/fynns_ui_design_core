@@ -27,6 +27,7 @@ import {
   Chip,
   ChipSet,
   CircularProgress,
+  CHART_TOKENS,
   Chat,
   ChatCitationChip,
   ChatCitations,
@@ -40,6 +41,10 @@ import {
   ChatThinking,
   ChatThread,
   ClipboardIcon,
+  ListChecksIcon,
+  CloseIcon,
+  CheckSquareIcon,
+  SquareIcon,
   BriefcaseIcon,
   Carousel,
   CarouselItem,
@@ -146,11 +151,14 @@ import {
 import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
+import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
+import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
 import { TokenList } from "../components/TokenList";
 import {
   demoElementId,
   findDemoById,
   type GlobalsCategoryId,
+  type GlobalsDemoEntry,
 } from "../catalog/globalsCatalog";
 import {
   loadSandboxUiSession,
@@ -391,6 +399,84 @@ function ChatStreamingAssistant({
       markdown={text || undefined}
     />
   );
+}
+
+const GLOBALS_DEMO_FOCUS_TIMEOUT_MS = 5000;
+/** Collapsible expand uses `--fynns-duration-base` (240ms) + small layout buffer. */
+const GLOBALS_DEMO_EXPAND_SETTLE_MS = 280;
+
+/**
+ * Lazily mounted category bodies may appear after Collapsible open. Poll until
+ * the demo anchor exists, wait for expand height morph, then scroll + flash.
+ */
+function focusGlobalsDemoWhenReady(
+  demoId: string,
+  entry: GlobalsDemoEntry,
+  onFlash: (id: string) => void,
+): () => void {
+  const targetId = demoElementId(demoId);
+  const deadline = performance.now() + GLOBALS_DEMO_FOCUS_TIMEOUT_MS;
+  let cancelled = false;
+
+  const scrollTo = (el: HTMLElement) => {
+    if (cancelled) return;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    el.scrollIntoView({
+      block: "start",
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+    el.setAttribute("aria-label", entry.label);
+    el.focus({ preventScroll: true });
+    onFlash(demoId);
+  };
+
+  const afterExpandSettled = (el: HTMLElement) => {
+    const expand = el.closest(".fynns-expand") as HTMLElement | null;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!expand || reduceMotion || expand.dataset.state !== "open") {
+      scrollTo(el);
+      return;
+    }
+
+    let done = false;
+    const finish = () => {
+      if (done || cancelled) return;
+      done = true;
+      expand.removeEventListener("transitionend", onTransitionEnd);
+      window.clearTimeout(fallbackTimer);
+      scrollTo(el);
+    };
+
+    const onTransitionEnd = (event: TransitionEvent) => {
+      if (event.target !== expand) return;
+      if (event.propertyName !== "grid-template-rows") return;
+      finish();
+    };
+
+    expand.addEventListener("transitionend", onTransitionEnd);
+    const fallbackTimer = window.setTimeout(finish, GLOBALS_DEMO_EXPAND_SETTLE_MS);
+  };
+
+  const poll = () => {
+    if (cancelled) return;
+    const el = document.getElementById(targetId);
+    if (el) {
+      afterExpandSettled(el);
+      return;
+    }
+    if (performance.now() < deadline) {
+      requestAnimationFrame(poll);
+    }
+  };
+
+  requestAnimationFrame(poll);
+  return () => {
+    cancelled = true;
+  };
 }
 
 /** Anchor + flash target for catalog search jump. */
@@ -987,12 +1073,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
   const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
+  const [cardModeBodySide, setCardModeBodySide] = useState<"primary" | "secondary">(
+    "primary",
+  );
   const [fieldHeaderRegion, setFieldHeaderRegion] = useState("alpha");
   const [fieldHeaderEndpoint, setFieldHeaderEndpoint] = useState(
     "https://api.example.com",
   );
   const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
   const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
+  const [fieldHeaderDetailOn, setFieldHeaderDetailOn] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
@@ -1026,6 +1116,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmFooterBusy, setRhythmFooterBusy] = useState<
     null | "secondary" | "primary"
   >(null);
+  const [rhythmMorphBusy, setRhythmMorphBusy] = useState(false);
   const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
@@ -1055,6 +1146,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
+  const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
+  const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
+  const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
   const formRecipeFieldProps = {
@@ -1180,25 +1274,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     };
   }, [flashDemoId]);
 
+  const focusDemoCancelRef = useRef<(() => void) | null>(null);
+
+  useEffect(
+    () => () => {
+      focusDemoCancelRef.current?.();
+    },
+    [],
+  );
+
   const focusDemo = (demoId: string) => {
     const entry = findDemoById(demoId);
     if (!entry) return;
+    focusDemoCancelRef.current?.();
     setOpenCategories((prev) => ({ ...prev, [entry.categoryId]: true }));
-    // Wait for Collapsible expand (`--fynns-duration-base` = 240ms) before scroll.
-    window.setTimeout(() => {
-      const el = document.getElementById(demoElementId(demoId));
-      if (!el) return;
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      el.scrollIntoView({
-        block: "start",
-        behavior: reduceMotion ? "auto" : "smooth",
-      });
-      el.setAttribute("aria-label", entry.label);
-      el.focus({ preventScroll: true });
-      setFlashDemoId(demoId);
-    }, 250);
+    focusDemoCancelRef.current = focusGlobalsDemoWhenReady(
+      demoId,
+      entry,
+      setFlashDemoId,
+    );
   };
 
   const setCategoryOpen = (id: GlobalsCategoryId, open: boolean) => {
@@ -1478,6 +1572,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </IconButton>
           </Tooltip>
         </div>
+        </GlobalsDemo>
+        <GlobalsDemo id="icons">
+          <SandboxHelp text={t("globals.iconsHelp")} />
+          <IconsLibraryDemo />
+          <SandboxHelp text={t("globals.iconsBulkRecipeHelp")} />
+          <div className="fynns-control-cluster" aria-label={t("globals.iconsBulkRecipeAria")}>
+            <Tooltip content={t("globals.iconsBulkExit")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkExit")}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkSelectAll")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkSelectAll")}>
+                <CheckSquareIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkDeselectAll")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkDeselectAll")}>
+                <SquareIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.iconsBulkEnter")}>
+              <IconButton size="sm" variant="ghost" aria-label={t("globals.iconsBulkEnter")}>
+                <ListChecksIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
         </GlobalsDemo>
         <GlobalsDemo id="info-hint">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
@@ -3264,12 +3385,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </List>
           <SandboxHelp text={t("globals.listStatusActionHelp")} />
-          <List aria-label={t("globals.listStatusActionAria")}>
+          <List
+            aria-label={t("globals.listStatusActionAria")}
+            id="sandbox-list-status-action"
+          >
             <ListItem
               headline={t("globals.listStatusActionHeadline")}
               trailingSupportingText={t("globals.listStatusActionMeta")}
               trailing={
                 <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listStatusActionAssist")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.listStatusActionAssist")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        snackbar(t("globals.listStatusActionAssistSnack"));
+                      }}
+                    >
+                      <SparklesIcon />
+                    </IconButton>
+                  </Tooltip>
                   <Tooltip content={t("globals.listCatalogRemove")}>
                     <IconButton
                       variant="ghost"
@@ -3288,6 +3424,104 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 setListCatalogEditName(t("globals.listStatusActionHeadline"));
                 setListCatalogEditOpen(true);
               }}
+            />
+          </List>
+          <SandboxHelp text={t("globals.listInspectorTrailingHelp")} />
+          <List
+            aria-label={t("globals.listInspectorTrailingAria")}
+            id="sandbox-list-inspector-trailing"
+          >
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineGap")}
+              supportingText={t("globals.listInspectorTrailingSupportingTall")}
+              trailingSupportingText={t("globals.listInspectorTrailingMetaGap")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Button
+                    size="sm"
+                    variant="tonal"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      snackbar(t("globals.listInspectorTrailingCtaSnack"));
+                    }}
+                  >
+                    {t("globals.listInspectorTrailingCta")}
+                  </Button>
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindGap}
+                    onChange={setListInspectorKindGap}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
+            />
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineGapB")}
+              trailingSupportingText={t("globals.listInspectorTrailingMetaGap")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Button
+                    size="sm"
+                    variant="tonal"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      snackbar(t("globals.listInspectorTrailingCtaSnack"));
+                    }}
+                  >
+                    {t("globals.listInspectorTrailingCta")}
+                  </Button>
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindGap}
+                    onChange={setListInspectorKindGap}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
+            />
+            <ListItem
+              overline={t("globals.listInspectorTrailingOverline")}
+              headline={t("globals.listInspectorTrailingHeadlineMapped")}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Select
+                    ariaLabel={t("globals.listInspectorTrailingKind")}
+                    value={listInspectorKindMapped}
+                    onChange={setListInspectorKindMapped}
+                    options={[
+                      {
+                        value: "skill",
+                        label: t("globals.listInspectorTrailingKindSkill"),
+                      },
+                      {
+                        value: "tool",
+                        label: t("globals.listInspectorTrailingKindTool"),
+                      },
+                    ]}
+                  />
+                </div>
+              }
             />
           </List>
           <SandboxHelp text={t("globals.listRunSummaryHelp")} />
@@ -3681,14 +3915,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </span>
               }
               trailing={
-                <Tooltip content={t("globals.listTreeOpen")}>
-                        <IconButton
-                          variant="ghost"
-                    aria-label={t("globals.listTreeOpen")}
-                  >
-                    <BotIcon />
-                  </IconButton>
-                </Tooltip>
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listTreeAdd")}>
+                    <IconButton variant="ghost" aria-label={t("globals.listTreeAdd")}>
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listTreeOpen")}>
+                    <IconButton variant="ghost" aria-label={t("globals.listTreeOpen")}>
+                      <BotIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
               }
               aria-expanded={listTreeOpen}
               onClick={() => setListTreeOpen((open) => !open)}
@@ -3997,6 +4235,84 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardActionsStripBody")}
           </Card>
+          <div id="sandbox-card-head-select">
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.cardHeadSelectTitle")}
+              actions={
+                <div className="fynns-control-cluster">
+                  <Select
+                    ariaLabel={t("globals.cardHeadSelectRevisionAria")}
+                    value={cardHeadRevision}
+                    onChange={setCardHeadRevision}
+                    options={[
+                      {
+                        value: "rev-a",
+                        label: t("globals.cardHeadSelectRevisionA"),
+                      },
+                      {
+                        value: "rev-b",
+                        label: t("globals.cardHeadSelectRevisionB"),
+                      },
+                    ]}
+                  />
+                  <Button size="sm" variant="primary" onClick={() => {}}>
+                    {t("globals.cardHeadSelectCta")}
+                  </Button>
+                </div>
+              }
+            >
+              {t("globals.cardHeadSelectBody")}
+            </Card>
+            <SandboxHelp text={t("globals.cardHeadSelectHelp")} />
+          </div>
+          <Card
+            className="sandbox-globals-card sandbox-globals-card--mode-body"
+            title={t("globals.cardModeBodyTitle")}
+            actions={
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.cardModeBodyOpen")}>
+                  <IconButton
+                    variant="ghost"
+                    size="sm"
+                    aria-label={t("globals.cardModeBodyOpen")}
+                  >
+                    <FileIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.cardModeBodyDelete")}>
+                  <IconButton
+                    variant="danger"
+                    size="sm"
+                    aria-label={t("globals.cardModeBodyDelete")}
+                  >
+                    <TrashIcon size={16} aria-hidden />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            }
+          >
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.cardModeBodyCopyLabel")}>
+                <ToggleGroup
+                  ariaLabel={t("globals.cardModeBodyCopyLabel")}
+                  value={cardModeBodySide}
+                  onChange={(value) =>
+                    setCardModeBodySide(value as "primary" | "secondary")
+                  }
+                  options={[
+                    { value: "primary", label: t("globals.cardModeBodyPrimary") },
+                    {
+                      value: "secondary",
+                      label: t("globals.cardModeBodySecondary"),
+                    },
+                  ]}
+                />
+              </ControlRow>
+            </ControlStack>
+            <SandboxHelp as="span" text={t("globals.cardModeBodyHelp")} />
+          </Card>
           <Card className="sandbox-globals-card" title={t("globals.cardTitlePlain")}>
             {t("globals.cardBody")}
           </Card>
@@ -4185,6 +4501,31 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   minRows={2}
                 />
               </FieldBlock>
+            </FieldStack>
+            <FieldStack>
+              <ControlStack columns={1}>
+                <ControlRow
+                  label={
+                    <>
+                      <span className="fynns-control-row__label-text">
+                        {t("globals.fieldHeaderPrefLabel")}
+                      </span>
+                      <InfoHint
+                        size="sm"
+                        content={t("globals.fieldHeaderPrefTip")}
+                        ariaLabel={t("globals.fieldHeaderPrefAria")}
+                      />
+                    </>
+                  }
+                >
+                  <Switch
+                    label=""
+                    ariaLabel={t("globals.fieldHeaderPrefLabel")}
+                    checked={fieldHeaderDetailOn}
+                    onCheckedChange={setFieldHeaderDetailOn}
+                  />
+                </ControlRow>
+              </ControlStack>
             </FieldStack>
             <ControlStack columns={1}>
               <ControlRow label={t("globals.fieldHeaderProbeAlpha")}>
@@ -5182,6 +5523,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
         </GlobalsDemo>
+        <GlobalsDemo id="chart">
+          <ChartAnalyticsDemo />
+          <TokenList
+            group="chart"
+            title={t("globals.tokenListChart")}
+            keys={Object.keys(CHART_TOKENS)}
+          />
+        </GlobalsDemo>
         <GlobalsDemo id="code-block">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <CodeBlock
@@ -5694,7 +6043,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   variant="ghost"
                   aria-label={t("globals.rhythmCatalogBulk")}
                 >
-                  <ClipboardIcon />
+                  <ListChecksIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip content={t("globals.rhythmCatalogRefresh")}>
@@ -5713,6 +6062,49 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <PlusIcon />
                 </IconButton>
               </Tooltip>
+            </div>
+          </ControlRow>
+        </Surface>
+        <SandboxHelp text={t("globals.rhythmMorphHelp")} />
+        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+          <ControlRow label={t("globals.rhythmMorphLabel")}>
+            <div className="fynns-control-cluster">
+              <Tooltip content={t("globals.rhythmMorphRefresh")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphRefresh")}
+                  loading={rhythmMorphBusy}
+                  disabled={rhythmMorphBusy}
+                  onClick={() => {
+                    setRhythmMorphBusy(true);
+                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                  }}
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip content={t("globals.rhythmMorphCopy")}>
+                <IconButton
+                  size="sm"
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphCopy")}
+                  disabled={rhythmMorphBusy}
+                >
+                  <ClipboardIcon />
+                </IconButton>
+              </Tooltip>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={rhythmMorphBusy}
+                onClick={() => {
+                  setRhythmMorphBusy(true);
+                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                }}
+              >
+                {t("globals.rhythmMorphAction")}
+              </Button>
             </div>
           </ControlRow>
         </Surface>

@@ -47,7 +47,7 @@ export function FillColumn({
   return (
     <div {...rest} className={join("fynns-fill-column", className)}>
       {header != null ? (
-        <div className="fynns-fill-column-header">{header}</div>
+        <div className="fynns-fill-column-header fynns-scroll">{header}</div>
       ) : null}
       <div className="fynns-fill-column-main">{children}</div>
       {footer != null ? (

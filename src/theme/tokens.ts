@@ -426,6 +426,29 @@ export const PROGRESS_TOKENS = {
 } as const;
 
 /**
+ * Cartesian chart chrome (M3-inspired analytics preset at 16px rem).
+ * Series colors alias semantic palette; grid/axis stay subtle on dark surfaces.
+ * `--fynns-chart-<key>`.
+ */
+export const CHART_TOKENS = {
+  "series-1": "var(--fynns-color-accent)",
+  "series-2": "color-mix(in srgb, var(--fynns-color-accent) 42%, var(--fynns-color-surface-1))",
+  "series-line": "var(--fynns-color-info)",
+  "grid-stroke":
+    "color-mix(in srgb, var(--fynns-color-outline-subtle) 55%, transparent)",
+  "axis-stroke": "var(--fynns-color-border)",
+  "tick-length": "3px",
+  "bar-radius": "var(--fynns-radius-xs)",
+  "line-width": "2px",
+  "plot-min-height": "16rem",
+  "legend-gap": "var(--fynns-space-sm)",
+  "margin-top": "0.5rem",
+  "margin-right": "2.75rem",
+  "margin-bottom": "0",
+  "margin-left": "0.25rem",
+} as const;
+
+/**
  * Avatar geometry (M3 list leading avatar at 16px rem).
  * Default 40dp; sm 32dp; lg 56dp.
  * `--fynns-avatar-<key>`.
@@ -941,6 +964,13 @@ export const LIST_TOKENS = {
    */
   "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
+   * Pinned inspector end strip (gap meta | labeled Button | Select). Wider
+   * than overlay IconButton `end-actions-gap` (4dp) — labeled controls use
+   * toolbar rhythm (aliases `control-stack-gap` / 8dp). ≥ **0.5.67**.
+   * Live: `#sandbox-list-inspector-trailing`.
+   */
+  "inspector-end-gap": "var(--fynns-layout-control-stack-gap)",
+  /**
    * Leading / trailing glyph — one step above chrome `--fynns-size-icon`
    * (20dp / `--fynns-size-icon-md`) so list icons read against Avatar `md`.
    */
@@ -1316,6 +1346,12 @@ export const LAYOUT_TOKENS = {
    */
   "list-well-max-height-sm": "12rem",
   /**
+   * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
+   * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.
+   * Same ceiling family as EndAside bottom sheet (`min(52dvh, 28rem)`).
+   */
+  "fill-column-header-max-height": "min(52dvh, 28rem)",
+  /**
    * Master–detail catalog column width (~288dp). Use as the first track of a
    * consumer list+detail grid:
    * `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr`.
@@ -1446,10 +1482,10 @@ export const LAYOUT_TOKENS = {
   "control-row-column-gap": "0.5rem",
   /**
    * Sibling immediately left of an IconButton (and IconButton↔IconButton) in
-   * one `.fynns-control-cluster` (**4dp**). Canonical chrome density for
-   * “whatever sits before the icon” — List `--with-end` meta→disk aliases
-   * this via `--fynns-list-end-actions-gap`. Still looser than TopAppBar
-   * `chrome-icon-gap` (**2dp**). Live: `#rhythm` catalog strip / `#list`.
+   * one `.fynns-control-cluster` (**4dp**). List IconButton overlay hosts
+   * optically widen `--fynns-list-end-actions-gap` for short **text** meta ≥
+   * **0.5.62** (disk inset + this gap) so ink matches glyph↔glyph — token
+   * default stays this 4dp alias. Live: `#rhythm` / `#sandbox-list-status-action`.
    */
   "control-cluster-gap": "0.25rem",
   /**
@@ -1942,6 +1978,7 @@ export const TOKEN_GROUPS: ReadonlyArray<readonly [string, Record<string, string
   ["chip", CHIP_TOKENS],
   ["segmented", SEGMENTED_TOKENS],
   ["progress", PROGRESS_TOKENS],
+  ["chart", CHART_TOKENS],
   ["avatar", AVATAR_TOKENS],
   ["fab", FAB_TOKENS],
   ["fabmenu", FABMENU_TOKENS],

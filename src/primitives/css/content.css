@@ -118,19 +118,21 @@
 .fynns-card-lead {
   position: relative;
   z-index: 1;
-  flex: 1 1 auto;
   align-self: stretch;
   display: flex;
   align-items: center;
   /* Disclose (icon/chevron) → title: a step above space-sm, under space-md. */
   gap: var(--fynns-space-3);
   /*
-   * Keep a readable title band when trailing actions are dense. Bare
-   * `min-width: 0` alone lets a narrow host crush the lead to ~one glyph
-   * (sandbox `#card` actions-strip lesson). Floor ≈ two t-shirt steps of
-   * title — still allows ellipsis via `.fynns-card-title { min-width: 0 }`.
+   * Prefer a readable title band (~40% flex-basis) when the host is wide.
+   * Do **not** hard-floor `min-width: 40%`: that + `actions` `flex: 0 0 auto`
+   * + Card `overflow: hidden` clips the end IconButton (danger trash) when
+   * the strip is denser than ~60% (ToggleGroup + icons — agents-hub lesson).
+   * Yield below 40% so chrome stays fully visible; title ellipsizes via
+   * `.fynns-card-title { min-width: 0 }`. Live: sandbox `#card` actions-strip.
    */
-  min-width: max(0px, 40%);
+  flex: 1 1 40%;
+  min-width: 0;
   /* Vertical rhythm comes from the shared head min-height + flex centering —
    * no padding-block (it fought IconButton+xs and caused variant drift). */
   padding-block: 0;
@@ -287,6 +289,7 @@
 .fynns-card-actions {
   position: relative;
   z-index: 1;
+  /* Hug chrome; never shrink under the lead — title yields instead (see lead). */
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -311,6 +314,76 @@
   flex-wrap: nowrap;
   flex: 0 0 auto;
   min-width: 0;
+}
+
+/*
+ * Card / Collapsible head + inline expanded Select (≥ **0.5.73** trigger-band pin;
+ * ≥ **0.5.74** collapsed header rhythm): **collapsed** keeps default head
+ * `align-items: center` + lead `stretch` (shared min-height band). **Expanded**
+ * only: grid row 1 = chrome band (`40dp` + actions `space-xs`×2); title centers
+ * in that row; actions cluster grows below without pulling title mid-panel.
+ */
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  ) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows:
+    minmax(
+      calc(var(--fynns-size-icon-target) + 2 * var(--fynns-space-xs)),
+      auto
+    )
+    auto;
+  align-items: start;
+  gap: var(--fynns-space-2);
+}
+
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+  .fynns-card-lead,
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-collapsible-trigger {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  min-height: 0;
+  padding-block: 0;
+  align-items: center;
+}
+
+.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+  .fynns-card-actions,
+.fynns-collapsible-head:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  )
+  .fynns-collapsible-actions {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
+}
+
+.fynns-card-actions:has(.fynns-select) .fynns-control-cluster,
+.fynns-collapsible-actions:has(.fynns-select) .fynns-control-cluster {
+  align-items: flex-start;
+}
+
+.fynns-card-actions
+  .fynns-control-cluster:has(.fynns-select)
+  > .fynns-btn--sm:not(.fynns-btn--icon),
+.fynns-collapsible-actions
+  .fynns-control-cluster:has(.fynns-select)
+  > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+.fynns-card:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-collapsible:has(
+    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+  ) {
+  overflow: visible;
+  z-index: var(--fynns-z-dropdown);
 }
 
 .fynns-collapsible-body,
@@ -1712,12 +1785,29 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   flex: 0 0 auto;
   align-self: center;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-list-end-actions-gap);
   width: auto;
   height: auto;
   min-height: 0;
   margin-inline-start: 0;
   padding-inline-end: var(--fynns-list-pad-inline);
   color: var(--fynns-color-text-muted);
+}
+
+/*
+ * Gap / status meta co-located in pinned inspector end (≥ 0.5.56). Stays
+ * content-hug (do not floor 17ch here — that parks short “Unmapped” far from
+ * CTA). Date catalogs keep meta inside the row + trailingMetaAlign="start".
+ */
+.fynns-list-item-trailing--end > .fynns-list-item-trailing-text {
+  flex: 0 0 auto;
+  max-width: min(12rem, 40vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Decorative chevron / glyph only — IconButton / cluster keep their own size. */
@@ -1737,6 +1827,10 @@ a.fynns-breadcrumb-link:visited {
   max-width: none;
   flex: 0 0 auto;
   flex-wrap: nowrap;
+  /* Beat `.fynns-control-cluster { min-width: 0; width: 100% }` — else the
+   * cluster shrink-wraps under Select measure min and Select paints into
+   * trailing pad (host radius clips the end curve). */
+  min-width: min-content;
 }
 
 /*
@@ -1747,12 +1841,30 @@ a.fynns-breadcrumb-link:visited {
  * default; two (+ cluster gap) when the cluster has a second child — never
  * leave a phantom second disk that strands short `trailingSupportingText`
  * (“Current” / 当前) far from a lone trash. Live: `#list` status+action.
+ *
+ * Optical meta→disk (≥ **0.5.62**): IconButton overlay hosts override
+ * `--fynns-list-end-actions-gap` so **text ink → first glyph** matches
+ * **glyph ↔ glyph** air inside the cluster (disk inset + cluster-gap). Raw
+ * 4dp box gap made “当前” kiss the first disk while sparkle↔trash looked
+ * wider. Pinned Select / labeled Button (≥ **0.5.67**) widen to
+ * `--fynns-list-inspector-end-gap` (8dp) for meta|CTA|Select cells.
  */
 .fynns-list-item-host--with-end {
   position: relative;
   --fynns-list-end-actions-reserve: calc(
     var(--fynns-list-end-actions-gap) + var(--fynns-size-icon-target) +
       var(--fynns-list-pad-inline)
+  );
+}
+
+.fynns-list-item-host--with-end:not(
+    :has(.fynns-list-item-trailing--end .fynns-select)
+  ):not(
+    :has(.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon))
+  ) {
+  --fynns-list-end-actions-gap: calc(
+    (var(--fynns-size-icon-target) - var(--fynns-size-icon)) / 2 +
+      var(--fynns-layout-control-cluster-gap)
   );
 }
 
@@ -1834,6 +1946,261 @@ a.fynns-breadcrumb-link:visited {
   }
 }
 
+/*
+ * Wide end chrome (Select / labeled Button) — never IconButton overlay.
+ * Absolute + IconButton-sized reserve stacks a tonal CTA onto Select
+ * (`width: 100%` Select + ~88dp pad). Pin in-flow, always visible; Select
+ * hugs content. Overlay reveal stays IconButton / icon-only strips only.
+ *
+ * Host keeps `overflow: clip` + `radius-3xl` for the hover wash — pinned
+ * trailing must clear that curve (`padding-inline-end` ≥ radius-3xl) or the
+ * Select’s end radius is sliced off (consumer inspector rows). Gap meta
+ * (`trailingSupportingText`) co-locates in this end strip ≥ **0.5.56**.
+ * Live: `#list` inspector trailing (≥ 0.5.54 pin; ≥ 0.5.55 end-radius clear;
+ * ≥ 0.5.56 meta co-locate).
+ */
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ) {
+  --fynns-list-end-actions-reserve: 0px;
+  --fynns-list-end-actions-gap: var(--fynns-list-inspector-end-gap);
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  .fynns-list-item-trailing--end
+  .fynns-control-cluster,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-list-item-trailing--end
+  .fynns-control-cluster {
+  gap: var(--fynns-list-inspector-end-gap);
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  position: static;
+  inset: auto;
+  z-index: auto;
+  opacity: 1;
+  pointer-events: auto;
+  transition: none;
+  /*
+   * Clear the host radius-3xl clip (stadium height-2 needs ~radius end
+   * inset — list-pad-inline alone left Select’s end curve sliced).
+   * Do **not** set min-width:0 / max-width:100% here — that circularly
+   * shrinks the cluster and lets Select paint into the pad / past the
+   * content box (clipped end radius).
+   */
+  padding-inline-end: max(
+    var(--fynns-list-pad-inline),
+    var(--fynns-radius-3xl)
+  );
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):hover
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):hover
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):focus-within
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):focus-within
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):hover
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):hover
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  ):focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon)
+  ):focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  padding-inline-end: var(--fynns-list-pad-inline);
+  transition: none;
+}
+
+.fynns-list-item-trailing--end .fynns-select {
+  /* Fixed measure floor (not min(100%, …)) so cluster min-content hugs the
+   * shell — avoids Select overflowing into trailing pad / host radius clip. */
+  width: max-content;
+  min-width: var(--fynns-select-measure-min, max-content);
+  max-width: min(16rem, 70vw);
+  flex: 0 0 auto;
+}
+
+/*
+ * Inspector trailing Select (≥ **0.5.70** inline shell; ≥ **0.5.71** trigger-band
+ * pin; ≥ **0.5.72** grid trigger row + copy flex-start when expanded): reuse
+ * `.fynns-search-bar--expanded` (same as `#globals-demo-select`) — not absolute
+ * flyout. Gap meta sits in a fixed **40dp trigger-band row** (grid row 1) so it
+ * does not center on the expanded panel; CTA + Select trigger share that band;
+ * expanded list-item copy flex-starts to the same band top (not centered in
+ * height-3 min-height while trailing grows).
+ */
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-select
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: var(--fynns-size-icon-target) auto;
+  column-gap: var(--fynns-list-inspector-end-gap);
+  row-gap: 0;
+  align-items: start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  ) {
+  align-items: flex-start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end {
+  align-self: flex-start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  align-items: flex-start;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item
+  .fynns-list-item-content,
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item
+  .fynns-list-item-content {
+  justify-content: flex-start;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-list-item-trailing-text {
+  grid-column: 1;
+  grid-row: 1;
+  margin-block-start: 0;
+  align-self: center;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-control-cluster {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
+}
+
+.fynns-list-item-trailing--end:has(.fynns-select)
+  > .fynns-control-cluster
+  > .fynns-btn--sm:not(.fynns-btn--icon) {
+  margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
+}
+
+.fynns-list-item-trailing--end .fynns-control-cluster {
+  flex-wrap: nowrap;
+  width: auto;
+  max-width: none;
+  align-items: flex-start;
+}
+
+.fynns-list-item-trailing--end .fynns-select .fynns-select-trigger {
+  font-size: var(--fynns-font-size-sm);
+  line-height: var(--fynns-line-height-sm);
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+  ) {
+  overflow: visible;
+  z-index: var(--fynns-z-dropdown);
+}
+
+.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon) {
+  flex: 0 0 auto;
+  max-width: min(14rem, 100%);
+}
+
 .fynns-list-item-host--with-end:not(.fynns-list-item-host--with-detail) > .fynns-list-item,
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
   background: transparent;
@@ -1853,6 +2220,7 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-row {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
