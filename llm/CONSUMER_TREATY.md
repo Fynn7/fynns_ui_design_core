@@ -2626,6 +2626,65 @@ IconButton trigger-band margin. **Fix in the consumer:** bump only — keep
 `.fynns-table-meta` + `__grow` id + trailing action; no local flex hacks. Live:
 sandbox `#table`; agents-hub Usage mapping column.
 
+## Failure mode this treaty targets: chart tooltip locked to series-value Y
+
+Symptoms in a combo analytics chart (stacked bars + cost line):
+
+- Hover tooltip sits on a **fixed horizontal plane** (chart top, or the active
+  line/bar Y) and does **not** move when the pointer moves up/down in the column
+- Feels stuck to the USD point / column band instead of tracking the cursor
+
+**Cause:** Recharts axis `Tooltip` defaults `coordinate.y` to the active series
+value; hand-drawn SVG tips often hardcode `top` to a layout token.
+
+**Fix in core / sandbox (≥ 0.5.81):** `#chart` sets Tooltip `position` from
+pointer coords on the chart wrapper (`onMouseMove`). Hand-drawn consumers: track
+pointer in the SVG and set tip `left`/`top` from client coords (offset above
+cursor) — never a fixed `top` only. Live: sandbox `#chart`.
+
+**Fix in the consumer:** bump / copy the pointer-follow pattern; no private tip
+Y lock.
+
+## Failure mode this treaty targets: chart tooltip loose unit-stack spacing
+
+Symptoms in a combo analytics hover flyout (stacked bars + cost line):
+
+- Title date/label reads **too small** (same `font-size-xs` as metric rows)
+- **Large vertical gaps** between metric rows (16dp `.fynns-unit-stack` rhythm)
+- Title **kisses the top** edge and the last row **kisses the bottom** (8dp block
+  pad + unit-stack — crushed flyout breath)
+
+**Cause:** consumer wrapped tip copy in `.fynns-unit-stack` / `.fynns-control-cluster`
+instead of the chart tooltip recipe; private `.usage-chart__tip` duplicated pad/type.
+
+**Fix in core (≥ 0.5.82):** public `.fynns-chart-tooltip` + `CHART_TOKENS`
+`tooltip-*` keys — title sm, body xs, row gap 4dp, block pad 12dp. Live:
+sandbox `#chart`.
+
+**Fix in the consumer:** bump; markup = `__title` + `__rows` / `__row` (`__row--line`
+for USD); positioning shell may stay app-local — do not restyle `.fynns-chart-tooltip*`.
+
+## Failure mode this treaty targets: catalog morph remounts ClippedNavShell (drawer bounce)
+
+Symptoms when opening a hooked catalog morph destination (MCP, rules, skills, …)
+from the labeled destination drawer:
+
+- The nav column **bounces** or **width-morphs** once while swapping to the mode
+  sidebar — archived / chats on the same app do not
+- Feels like the drawer collapses and re-opens, or the expand group height animates
+  during the section change
+
+**Cause:** App mounts a **second** `HubShellChrome` / `ClippedNavShell` tree for
+`CatalogMorphRouter` instead of keeping one shell and swapping the `nav` slot (as
+`ArchivedSidebar` / `ChatsSidebar` do). Remount replays flyout width / layout.
+
+**Fix in the consumer:** one persistent `HubShellChrome`; morph sections supply
+`nav` + main detail only — no nested `HubShellChrome` inside
+`CatalogMorphHost`. Optional: avoid `listLoading` emptying the sidebar body on
+every morph remount (overlay refresh over existing list).
+
+Live contrast: App `archived` path vs `CatalogMorphRouter` `mcp` path.
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:

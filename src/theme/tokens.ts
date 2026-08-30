@@ -446,6 +446,14 @@ export const CHART_TOKENS = {
   "margin-right": "2.75rem",
   "margin-bottom": "0",
   "margin-left": "0.25rem",
+  /** Hover flyout on combo charts — title sm / body xs; not unit-stack spacing. */
+  "tooltip-min-width": "10rem",
+  "tooltip-pad-block": "var(--fynns-space-md)",
+  "tooltip-pad-inline": "var(--fynns-space-md)",
+  "tooltip-title-size": "var(--fynns-font-size-sm)",
+  "tooltip-body-size": "var(--fynns-font-size-xs)",
+  "tooltip-title-gap": "var(--fynns-space-xs)",
+  "tooltip-row-gap": "var(--fynns-space-xs)",
 } as const;
 
 /**

@@ -232,6 +232,13 @@
   --fynns-chart-margin-right: 2.75rem;
   --fynns-chart-margin-bottom: 0;
   --fynns-chart-margin-left: 0.25rem;
+  --fynns-chart-tooltip-min-width: 10rem;
+  --fynns-chart-tooltip-pad-block: var(--fynns-space-md);
+  --fynns-chart-tooltip-pad-inline: var(--fynns-space-md);
+  --fynns-chart-tooltip-title-size: var(--fynns-font-size-sm);
+  --fynns-chart-tooltip-body-size: var(--fynns-font-size-xs);
+  --fynns-chart-tooltip-title-gap: var(--fynns-space-xs);
+  --fynns-chart-tooltip-row-gap: var(--fynns-space-xs);
   --fynns-avatar-size: 2.5rem;
   --fynns-avatar-size-sm: 2rem;
   --fynns-avatar-size-lg: 3.5rem;

@@ -687,7 +687,7 @@ const en = {
   "globals.chartSeriesOutbound": "Outbound",
   "globals.chartSeriesCost": "Cost (right axis)",
   "globals.chartHelp":
-    "M3-inspired analytics preset: stacked bars on the left axis (accent + tonal stack), line on the right axis (info). Card body hosts `ToggleGroup` view switch (not Card `actions`). Horizontal grid only; axis lines off; ticks `font-size-xs` + `text-muted`; right-axis ticks match the line color. **Line dots off by default** — single `activeDot` on hover only (dense series stay clean). **Gentle curve at turns** (`monotone` in Recharts; hand-drawn SVG: **Fritsch–Carlson monotone cubic** in data space — not Catmull-Rom; non-negative series must not dip below 0). Colors from `--fynns-chart-*` tokens. Recharts lives in sandbox only — consumers copy structure + CSS, not product copy.",
+    "M3-inspired analytics preset: stacked bars on the left axis (accent + tonal stack), line on the right axis (info). Card body hosts `ToggleGroup` view switch (not Card `actions`). Horizontal grid only; axis lines off; ticks `font-size-xs` + `text-muted`; right-axis ticks match the line color. **Line dots off by default** — single `activeDot` on hover only (dense series stay clean). **Gentle curve at turns** (`monotone` in Recharts; hand-drawn SVG: **Fritsch–Carlson monotone cubic** in data space — not Catmull-Rom; non-negative series must not dip below 0). **Tooltip follows the pointer** (pointer coords from the chart wrapper on `onMouseMove` → Tooltip `position` — not locked to the active series value Y). **Tooltip copy:** `.fynns-chart-tooltip` — title `font-size-sm`, body rows `font-size-xs` with `tooltip-row-gap` (4dp); **never** `.fynns-unit-stack` inside the flyout. Colors from `--fynns-chart-*` tokens. Recharts lives in sandbox only — consumers copy structure + CSS, not product copy.",
   "globals.tokenListChart": "Chart tokens",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
@@ -2634,7 +2634,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chartSeriesOutbound": "输出",
   "globals.chartSeriesCost": "等价成本（右轴）",
   "globals.chartHelp":
-    "M3 风格分析图预设：左轴堆叠柱（accent + tonal 堆叠），右轴折线（info）。`ToggleGroup` 视图切换放在 Card 正文 `ControlRow`（勿放进 Card `actions`）。仅水平网格；隐藏轴线；刻度用 `font-size-xs` + `text-muted`；右轴刻度与折线同色。**折线默认不画节点圆点** — 仅 hover 时显示一个 activeDot。**转折处轻微曲线**（Recharts `monotone`；自绘 SVG 用 **Fritsch–Carlson 单调三次**插值，勿用 Catmull-Rom — 非负序列不能弯到 0 以下）。颜色走 `--fynns-chart-*` token。Recharts 仅在 sandbox；消费者复制结构与 CSS，勿粘贴产品文案。",
+    "M3 风格分析图预设：左轴堆叠柱（accent + tonal 堆叠），右轴折线（info）。`ToggleGroup` 视图切换放在 Card 正文 `ControlRow`（勿放进 Card `actions`）。仅水平网格；隐藏轴线；刻度用 `font-size-xs` + `text-muted`；右轴刻度与折线同色。**折线默认不画节点圆点** — 仅 hover 时显示一个 activeDot。**转折处轻微曲线**（Recharts `monotone`；自绘 SVG 用 **Fritsch–Carlson 单调三次**插值，勿用 Catmull-Rom — 非负序列不能弯到 0 以下）。**Tooltip 跟随指针**（在 chart wrapper 上用 `onMouseMove` 取指针坐标设 Tooltip `position` — 勿锁在当前系列值的 Y）。**Tooltip 排版：** `.fynns-chart-tooltip` — 标题 `font-size-sm`、正文行 `font-size-xs`、`tooltip-row-gap`（4dp）；flyout 内**勿**用 `.fynns-unit-stack`。颜色走 `--fynns-chart-*` token。Recharts 仅在 sandbox；消费者复制结构与 CSS，勿粘贴产品文案。",
   "globals.tokenListChart": "图表 token",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
