@@ -22,7 +22,6 @@ import {
   Card,
   Surface,
   Checkbox,
-  ChevronDownIcon,
   ChevronRightIcon,
   Chip,
   ChipSet,
@@ -51,6 +50,7 @@ import {
   CodeBlock,
   DiffView,
   Collapsible,
+  Divider,
   ContextMenu,
   ContextMenuTrigger,
   CommandPalette,
@@ -62,7 +62,7 @@ import {
   TimePickerDialog,
   formatTimeValue,
   parseTimeValue,
-  Divider,
+  DownloadIcon,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuGroup,
@@ -992,6 +992,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   >("inbox");
   const [listTreeOpen, setListTreeOpen] = useState(true);
   const [listTurnOpen, setListTurnOpen] = useState(true);
+  const [listGroupOpen, setListGroupOpen] = useState(true);
   const [timelineExpand, setTimelineExpand] = useState<
     Partial<Record<"lead" | "mid" | "trail", boolean>>
   >({ lead: true });
@@ -1723,14 +1724,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <DropdownMenuCheckboxItem
                   checked={menuStarred}
                   onCheckedChange={setMenuStarred}
+                  icon={<FileIcon />}
                 >
-                  {t("globals.menuStarred")}
+                  {t("globals.menuSortName")}
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   checked={menuNotify}
                   onCheckedChange={setMenuNotify}
+                  icon={<PencilIcon />}
                 >
-                  {t("globals.menuNotify")}
+                  {t("globals.menuSortUpdated")}
                 </DropdownMenuCheckboxItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -3901,10 +3904,67 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => snackbar(t("globals.listCatalogOpenSnack"))}
             />
           </List>
+          <SandboxHelp text={t("globals.listGroupHelp")} />
+          <List aria-label={t("globals.listGroupAria")}>
+            <ListItem
+              leading={<ChevronRightIcon />}
+              headline={
+                <Tooltip content={t("globals.listGroupPath")} side="right">
+                  <span>{t("globals.listGroupHeadline")}</span>
+                </Tooltip>
+              }
+              trailingSupportingText={
+                <span className="fynns-table-meta">{t("globals.listGroupCount")}</span>
+              }
+              aria-expanded={listGroupOpen}
+              onClick={() => setListGroupOpen((open) => !open)}
+              trailing={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.listGroupAdd")}>
+                    <IconButton size="sm" variant="ghost" aria-label={t("globals.listGroupAdd")}>
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listGroupImport")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listGroupImport")}
+                    >
+                      <DownloadIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.listGroupExport")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.listGroupExport")}
+                    >
+                      <UploadIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+              detail={
+                <List aria-label={t("globals.listGroupMembersAria")}>
+                  <ListItem
+                    headline={t("globals.listGroupMemberHeadline")}
+                    supportingText={t("globals.listGroupMemberSupporting")}
+                    trailingSupportingText={
+                      <span className="fynns-control-cluster">
+                        <span className="fynns-table-meta">{t("globals.listGroupMemberKind")}</span>
+                        <span className="fynns-table-meta">{t("globals.listGroupMemberFresh")}</span>
+                      </span>
+                    }
+                  />
+                </List>
+              }
+            />
+          </List>
           <SandboxHelp text={t("globals.listTreeHelp")} />
           <List aria-label={t("globals.listTreeAria")}>
             <ListItem
-              leading={listTreeOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              leading={<ChevronRightIcon />}
               overline={t("globals.listTreeOverline")}
               headline={t("globals.listTreeHeadline")}
               supportingText={t("globals.listTreePath")}
@@ -3931,58 +3991,54 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               aria-expanded={listTreeOpen}
               onClick={() => setListTreeOpen((open) => !open)}
               detail={
-                listTreeOpen ? (
-                  <List aria-label={t("globals.listTreeTurnsAria")}>
-                    <ListItem
-                      lines={2}
-                      leading={listTurnOpen ? <ChevronDownIcon /> : <ChevronRightIcon />}
-                      overline={t("globals.listTreeTurnOverline")}
-                      headline={
-                        <Tooltip
-                          content={t("globals.listTreeTurnHeadline")}
-                          side="top"
-                          align="start"
-                        >
-                          <span>{t("globals.listTreeTurnHeadline")}</span>
-                        </Tooltip>
-                      }
-                      trailingSupportingText={t("globals.listTreeDuration")}
-                      aria-expanded={listTurnOpen}
-                      onClick={() => setListTurnOpen((open) => !open)}
-                      detail={
-                        listTurnOpen ? (
-                          <div className="fynns-table-wrap fynns-scroll">
-                            <Table>
-                              <TableHead>
-                                <TableRow>
-                                  <TableHeaderCell>{t("globals.listTreeColWhen")}</TableHeaderCell>
-                                  <TableHeaderCell>{t("globals.listTreeColModel")}</TableHeaderCell>
-                                  <TableHeaderCell align="end">
-                                    {t("globals.listTreeColTokens")}
-                                  </TableHeaderCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                <TableRow>
-                                  <TableCell>{t("globals.listTreeOverline")}</TableCell>
-                                  <TableCell>sample-model</TableCell>
-                                  <TableCell align="end">
-                                    <span className="fynns-control-cluster">
-                                      <span>12.4k</span>
-                                      <span className="fynns-table-meta">
-                                        {t("globals.listTreeEstimated")}
-                                      </span>
-                                    </span>
-                                  </TableCell>
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </div>
-                        ) : null
-                      }
-                    />
-                  </List>
-                ) : null
+                <List aria-label={t("globals.listTreeTurnsAria")}>
+                  <ListItem
+                    lines={2}
+                    leading={<ChevronRightIcon />}
+                    overline={t("globals.listTreeTurnOverline")}
+                    headline={
+                      <Tooltip
+                        content={t("globals.listTreeTurnHeadline")}
+                        side="top"
+                        align="start"
+                      >
+                        <span>{t("globals.listTreeTurnHeadline")}</span>
+                      </Tooltip>
+                    }
+                    trailingSupportingText={t("globals.listTreeDuration")}
+                    aria-expanded={listTurnOpen}
+                    onClick={() => setListTurnOpen((open) => !open)}
+                    detail={
+                      <div className="fynns-table-wrap fynns-scroll">
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableHeaderCell>{t("globals.listTreeColWhen")}</TableHeaderCell>
+                              <TableHeaderCell>{t("globals.listTreeColModel")}</TableHeaderCell>
+                              <TableHeaderCell align="end">
+                                {t("globals.listTreeColTokens")}
+                              </TableHeaderCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell>{t("globals.listTreeOverline")}</TableCell>
+                              <TableCell>sample-model</TableCell>
+                              <TableCell align="end">
+                                <span className="fynns-control-cluster">
+                                  <span>12.4k</span>
+                                  <span className="fynns-table-meta">
+                                    {t("globals.listTreeEstimated")}
+                                  </span>
+                                </span>
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    }
+                  />
+                </List>
               }
             />
           </List>

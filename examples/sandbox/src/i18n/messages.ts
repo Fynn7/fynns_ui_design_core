@@ -1238,9 +1238,11 @@ const en = {
   "globals.menuOpen": "Open",
   "globals.menuStarred": "Starred",
   "globals.menuNotify": "Notifications",
+  "globals.menuSortName": "Name",
+  "globals.menuSortUpdated": "Updated",
   "globals.menuRename": "Rename",
   "globals.menuHelp":
-    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Arrow keys move focus; Esc dismisses. Icon-only overflow in a catalog / toolbar IconButton strip → `iconOnly` (ghost sm circular — same as IconButton); never a bare labeled `.fynns-btn` beside IconButtons.",
+    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm.",
   "globals.menuIconStripTip": "Overflow (icon-only menu)",
   "globals.menuIconStripAria": "Overflow menu",
   "globals.sheetOpen": "Open bottom sheet",
@@ -1664,7 +1666,7 @@ const en = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 calls",
   "globals.listGroupHelp":
-    "Expandable project group: headline = **name only** (Tooltip path ok); enabled/total count → `trailingSupportingText` (`.fynns-table-meta`) — **never** park count at the headline tail beside `--with-end` IconButtons (overlaps hover disks). Three `sm` ghost tools use core ≥ **0.5.92** end reserve (32dp × 3 + gaps). Live: agents-hub CatalogGroup recipe.",
+    "Expandable project group: headline = **name only** (Tooltip path ok); enabled/total count → `trailingSupportingText` (`.fynns-table-meta`) — **never** park count at the headline tail beside `--with-end` IconButtons. Member rows: two-line `ListItem` — headline = display name; `supportingText` = description; kind / status marks → `trailingSupportingText` (`.fynns-control-cluster` + `.fynns-table-meta`), **not** glued in headline. Three `sm` ghost tools: core ≥ **0.5.92** end reserve.",
   "globals.listGroupAria": "Sample expandable project group",
   "globals.listGroupHeadline": "Sample workspace",
   "globals.listGroupPath": "~/Documents/sample-workspace",
@@ -1673,7 +1675,11 @@ const en = {
   "globals.listGroupImport": "Import",
   "globals.listGroupExport": "Export",
   "globals.listGroupMembersAria": "Group members",
-  "globals.listGroupMember": "Sample member",
+  "globals.listGroupMemberHeadline": "Sample rule",
+  "globals.listGroupMemberSupporting":
+    "Short description for a catalog entry in this group.",
+  "globals.listGroupMemberKind": "Builtin",
+  "globals.listGroupMemberFresh": "Synced",
   "globals.listTreeHelp":
     "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + `ChevronRight` leading (`aria-expanded` rotates + height-morphs detail via `.fynns-expand` — keep `detail` mounted, not `open ? … : null`). **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
   "globals.listTreeAria": "Sample expandable catalog",
@@ -3208,9 +3214,11 @@ const zh: Record<MessageKey, string> = {
   "globals.menuOpen": "打开",
   "globals.menuStarred": "已加星标",
   "globals.menuNotify": "通知",
+  "globals.menuSortName": "名称",
+  "globals.menuSortUpdated": "更新时间",
   "globals.menuRename": "重命名",
   "globals.menuHelp":
-    "M3 Menu（DropdownMenu）：portal 浮层，支持分组、分隔线与勾选项。方向键移动焦点，Esc 关闭。目录 / 工具条 IconButton 旁的溢出菜单 → `iconOnly`（ghost sm 圆标，与 IconButton 同几何）；禁止在 IconButton 旁用裸标注 `.fynns-btn`。",
+    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。",
   "globals.menuIconStripTip": "溢出（图标菜单）",
   "globals.menuIconStripAria": "溢出菜单",
   "globals.sheetOpen": "打开底部表单",
@@ -3629,7 +3637,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 次",
   "globals.listGroupHelp":
-    "可展开项目组：headline = **仅名称**（路径可放 Tooltip）；启用/总数 → `trailingSupportingText`（`.fynns-table-meta`）— **禁止**把计数塞在 headline 尾部与 `--with-end` IconButton 并列（会与 hover 圆盘重叠）。三枚 `sm` ghost 工具条由 core ≥ **0.5.92** 预留 end 宽度（32dp × 3 + 间距）。Live：agents-hub CatalogGroup 配方。",
+    "可展开项目组：headline = **仅名称**；启用/总数 → `trailingSupportingText`（`.fynns-table-meta`）— **禁止**计数与 `--with-end` IconButton 并列。成员行：两行 ListItem — headline 显示名；`supportingText` 说明；种类/状态标 → `trailingSupportingText`（`.fynns-control-cluster` + `.fynns-table-meta`），**不要**堆在 headline。三枚 `sm` 工具：core ≥ **0.5.92** end 预留。",
   "globals.listGroupAria": "可展开项目组示例",
   "globals.listGroupHeadline": "示例工作区",
   "globals.listGroupPath": "~/Documents/sample-workspace",
@@ -3638,7 +3646,10 @@ const zh: Record<MessageKey, string> = {
   "globals.listGroupImport": "导入",
   "globals.listGroupExport": "导出",
   "globals.listGroupMembersAria": "组成员",
-  "globals.listGroupMember": "示例成员",
+  "globals.listGroupMemberHeadline": "示例规则",
+  "globals.listGroupMemberSupporting": "组内目录条目的简短说明。",
+  "globals.listGroupMemberKind": "内置",
+  "globals.listGroupMemberFresh": "已同步",
   "globals.listTreeHelp":
     "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + `ChevronRight` leading（`aria-expanded` 旋转 chevron + `.fynns-expand` 高度 morph — `detail` 保持挂载，勿 `open ? … : null`）。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
   "globals.listTreeAria": "可展开目录示例",

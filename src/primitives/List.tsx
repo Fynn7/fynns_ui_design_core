@@ -46,7 +46,9 @@ export type ListProps = HTMLAttributes<HTMLUListElement> & {
  * JSX `children` is an alias), not a wrapper `div` around the item — and
  * **never** a `Collapsible` / `Card` as a List child (`ul > div` + flex-shrink
  * crushes bordered shells to skeleton pills). Expand via the row `onClick`;
- * keep the leading chevron decorative (`aria-hidden`).
+ * keep the leading chevron decorative (`aria-hidden`; `ChevronRight` rotates
+ * when `aria-expanded` is set). Keep `detail` mounted — core morphs with
+ * `.fynns-expand`; do not `detail={open ? … : null}`.
  * @see https://m3.material.io/components/lists/overview
  */
 export const List = forwardRef<HTMLUListElement, ListProps>(function List(
@@ -162,7 +164,9 @@ function resolveLines(
  * are not a floating island. Path / link catalogs: headline + supporting
  * path + trailing ghost actions — not a padded `Surface` per row.
  * Expandable trees: `detail` stays in this `<li>`; set `aria-expanded` on
- * the row. Long `headline` / `supportingText` ellipsize (including copy
+ * the row and **keep `detail` mounted** (core morphs via `.fynns-expand` —
+ * do not `detail={open ? … : null}`). Leading chevron stays `ChevronRight`;
+ * open state rotates via `aria-expanded`. Long `headline` / `supportingText`
  * wrapped in `Tooltip`). Do not put `Divider` between ListItem rows —
  * sibling gap + pills separate rows.
  */
@@ -183,12 +187,16 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
     className,
     hostClassName,
     onClick,
+    "aria-expanded": ariaExpanded,
     ...rest
   },
   ref,
 ) {
   const lines = resolveLines(linesProp, overline, supportingText);
   const interactive = interactiveProp ?? onClick != null;
+  const detailOpen =
+    ariaExpanded === true || ariaExpanded === "true";
+  const detailDisclosure = ariaExpanded !== undefined && ariaExpanded !== null;
   const itemClass = join(
     "fynns-list-item",
     `fynns-list-item--${lines}`,
@@ -260,6 +268,7 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
       type="button"
       className={rowClass}
       disabled={disabled}
+      aria-expanded={ariaExpanded}
       aria-current={selected ? "true" : undefined}
       onClick={onClick}
     >
@@ -273,6 +282,7 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
       ref={ref as Ref<HTMLDivElement>}
       className={rowClass}
       aria-disabled={disabled || undefined}
+      aria-expanded={ariaExpanded}
     >
       {leadingNode}
       {contentNode}
@@ -298,6 +308,23 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
     selected && "fynns-list-item-row--selected",
   );
 
+  const detailNode =
+    hasDetail && detailDisclosure ? (
+      <div
+        className="fynns-expand"
+        data-state={detailOpen ? "open" : "closed"}
+        aria-hidden={!detailOpen}
+      >
+        <div className="fynns-expand-inner">
+          <div className="fynns-list-item-detail" inert={detailOpen ? undefined : true}>
+            {nested}
+          </div>
+        </div>
+      </div>
+    ) : hasDetail ? (
+      <div className="fynns-list-item-detail">{nested}</div>
+    ) : null;
+
   return (
     <li
       className={join(
@@ -305,11 +332,12 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
         hostStateClass,
         endTrailing != null && "fynns-list-item-host--with-end",
         hasDetail && "fynns-list-item-host--with-detail",
+        detailDisclosure && "fynns-list-item-host--disclosure",
         hostClassName,
       )}
     >
       {hasDetail ? <div className={rowShellClass}>{row}</div> : row}
-      {hasDetail ? <div className="fynns-list-item-detail">{nested}</div> : null}
+      {detailNode}
     </li>
   );
 });
