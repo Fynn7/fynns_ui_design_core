@@ -1652,6 +1652,26 @@ host height.
 `detail` + `trailing` recipe unchanged; drop any local CSS that nudges group
 actions with negative margin / `top`.
 
+## Failure mode this treaty targets: expandable group count kisses `--with-end` icons
+
+Symptoms (project catalog `CatalogGroup` — `agents-hub 0/4` row):
+
+- Enabled/total count sits at the **headline tail** (`hub-group-title` flex +
+  `margin-left: auto`) beside `--with-end` hover IconButtons
+- On hover/focus the **+** disk overlaps the count (`0/4`); gap reads narrower
+  than icon↔icon inside the cluster
+- Three `sm` tools need more end reserve than the default 1–2×40dp overlay
+
+**Cause:** counts belong in `trailingSupportingText` / `.fynns-table-meta`, not
+in `headline` beside overlay actions. Core `< 0.5.92` only reserved 1–2 md disks.
+
+**Fix in core (≥ 0.5.92):** `--with-end` reserve counts 3+ IconButtons; `sm`-only
+strips use 32dp disk math. Live: Globals `#list` project group sample.
+
+**Fix in the consumer:** props-only — `headline` = name (Tooltip path ok);
+`trailingSupportingText` = count; drop headline-tail count flex. Bump core.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
 
 Symptoms (workflows / CatalogMorph mode destinations):
@@ -3299,6 +3319,26 @@ strips keep nowrap end-hug. Empty `ControlRow` `label` → full-width controls b
 **Consumer:** props-only — one `ControlRow` + `.fynns-control-cluster` of
 `Button`s (no private width / flex hacks). Live: Layouts `#layouts-demo-shell`
 aside Card. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside PageScroll no scroll
+
+Symptoms (inspector `PageScroll` in `EndAside` — cover letter / skills aside):
+
+- `.fynns-content-column` grows to full catalog height (~3000px); **no Y scrollbar**
+  on `.fynns-page-scroll`; content below the fold is unreachable
+- DevTools: `.fynns-end-aside` height ≈ content; wrapper had `overflow: hidden`
+
+**Cause:** open track did not stretch to shell main height; aside child grew with
+content; `overflow:hidden` on the PageScroll wrapper blocked the scroll host.
+
+**Fix in core (≥ **0.5.93**):** track flex column + `max-height:100%`; aside
+`height:100%`; `.fynns-end-aside > .fynns-page-scroll` gets `flex:1`
+`min-height:0` `overflow-y:auto` (pane-edge overlay rail). Consumer: wrap long
+aside catalogs in **`PageScroll`** only — no private `.hub-scroll` on a padded
+ancestor.
+
+Live: Layouts `#layouts-demo-shell` aside PageScroll. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Related docs
 

@@ -56,7 +56,13 @@ const en = {
   "layouts.shellAsideActionExportA": "Export A",
   "layouts.shellAsideActionExportB": "Export B",
   "layouts.shellAsideActionHint":
-    "Card body ControlRow + labeled Button cluster — wraps in narrow EndAside (≥ 0.5.88); IconButton catalog strips stay nowrap.",
+    "Card body ControlRow + labeled Button cluster — wraps in narrow EndAside (≥ 0.5.88); IconButton catalog strips stay nowrap. Tall catalogs scroll in PageScroll (≥ 0.5.93).",
+  "layouts.shellAsideScrollCardTitle": "Long inspector catalog",
+  "layouts.shellAsideScrollField1": "Sample section A",
+  "layouts.shellAsideScrollField2": "Sample section B",
+  "layouts.shellAsideScrollField3": "Sample section C",
+  "layouts.shellAsideScrollBody":
+    "Placeholder wells stack below the action row. PageScroll must stay pane-height with overlay Y rail — not grow to full content height.",
   "layouts.shellAsideBody":
     "Supporting pane content is caller-owned — tokens, forms, or docs — not tied to Chat. Toggle via TopAppBar trailing: width morph matches drawer flyout (`--fynns-duration-flyout`); `EndAsideMorphTrack` stays mounted (≥ 0.5.86). **Chrome toggles must not** remount the shell main into `BusyRegion` / workspace boot copy — keep provider fetch effects keyed on `applicationId` only (stable `onExit` ref).",
   "layouts.fillColumnHelp":
@@ -1657,8 +1663,19 @@ const en = {
   "globals.listStatsRow3Tokens": "1.2M",
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 calls",
+  "globals.listGroupHelp":
+    "Expandable project group: headline = **name only** (Tooltip path ok); enabled/total count → `trailingSupportingText` (`.fynns-table-meta`) — **never** park count at the headline tail beside `--with-end` IconButtons (overlaps hover disks). Three `sm` ghost tools use core ≥ **0.5.92** end reserve (32dp × 3 + gaps). Live: agents-hub CatalogGroup recipe.",
+  "globals.listGroupAria": "Sample expandable project group",
+  "globals.listGroupHeadline": "Sample workspace",
+  "globals.listGroupPath": "~/Documents/sample-workspace",
+  "globals.listGroupCount": "0/4",
+  "globals.listGroupAdd": "Add member",
+  "globals.listGroupImport": "Import",
+  "globals.listGroupExport": "Export",
+  "globals.listGroupMembersAria": "Group members",
+  "globals.listGroupMember": "Sample member",
   "globals.listTreeHelp":
-    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + decorative chevron. **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
+    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + `ChevronRight` leading (`aria-expanded` rotates + height-morphs detail via `.fynns-expand` — keep `detail` mounted, not `open ? … : null`). **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
   "globals.listTreeAria": "Sample expandable catalog",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "Sample session",
@@ -2025,7 +2042,13 @@ const zh: Record<MessageKey, string> = {
   "layouts.shellAsideActionExportA": "导出 A",
   "layouts.shellAsideActionExportB": "导出 B",
   "layouts.shellAsideActionHint":
-    "Card 正文 ControlRow + 带文案 Button 条 — 窄 EndAside 内换行（≥ 0.5.88）；纯 IconButton 目录条仍 nowrap。",
+    "Card 正文 ControlRow + 带文案 Button 条 — 窄 EndAside 内换行（≥ 0.5.88）；纯 IconButton 目录条仍 nowrap。长目录在 PageScroll 内滚动（≥ 0.5.93）。",
+  "layouts.shellAsideScrollCardTitle": "长目录示例",
+  "layouts.shellAsideScrollField1": "示例分区 A",
+  "layouts.shellAsideScrollField2": "示例分区 B",
+  "layouts.shellAsideScrollField3": "示例分区 C",
+  "layouts.shellAsideScrollBody":
+    "占位井区堆在动作行下方。PageScroll 必须保持窗格高度并绘制 overlay Y 轨 — 禁止随正文长到全高。",
   "layouts.shellAsideBody":
     "侧栏内容由调用方决定 — token、表单或文档均可，不绑定 Chat。用顶栏 trailing 切换：宽度 morph 与抽屉 flyout 同节奏（`--fynns-duration-flyout`）；`EndAsideMorphTrack` 保持挂载（≥ 0.5.86）。**禁止**因切换侧栏把主画布 remount 成 `BusyRegion` /「正在加载工作区」— 管线 Provider 的 fetch 只应依赖 `applicationId`（`onExit` 用稳定 ref）。",
   "layouts.fillColumnHelp":
@@ -3605,8 +3628,19 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatsRow3Tokens": "1.2M",
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 次",
+  "globals.listGroupHelp":
+    "可展开项目组：headline = **仅名称**（路径可放 Tooltip）；启用/总数 → `trailingSupportingText`（`.fynns-table-meta`）— **禁止**把计数塞在 headline 尾部与 `--with-end` IconButton 并列（会与 hover 圆盘重叠）。三枚 `sm` ghost 工具条由 core ≥ **0.5.92** 预留 end 宽度（32dp × 3 + 间距）。Live：agents-hub CatalogGroup 配方。",
+  "globals.listGroupAria": "可展开项目组示例",
+  "globals.listGroupHeadline": "示例工作区",
+  "globals.listGroupPath": "~/Documents/sample-workspace",
+  "globals.listGroupCount": "0/4",
+  "globals.listGroupAdd": "新建成员",
+  "globals.listGroupImport": "导入",
+  "globals.listGroupExport": "导出",
+  "globals.listGroupMembersAria": "组成员",
+  "globals.listGroupMember": "示例成员",
   "globals.listTreeHelp":
-    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + 装饰 chevron。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
+    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + `ChevronRight` leading（`aria-expanded` 旋转 chevron + `.fynns-expand` 高度 morph — `detail` 保持挂载，勿 `open ? … : null`）。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
   "globals.listTreeAria": "可展开目录示例",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "示例会话",

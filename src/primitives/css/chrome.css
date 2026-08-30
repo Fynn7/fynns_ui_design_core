@@ -3315,12 +3315,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /* ---------- EndAside (width-morph supporting pane) ---------- */
 .fynns-end-aside-track {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   flex: 0 1 auto;
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
   min-width: 0;
   min-height: 0;
+  max-height: 100%;
   overflow: hidden;
   transition:
     width var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
@@ -3350,11 +3354,14 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   width: 100%;
   min-width: 0;
   min-height: 0;
+  flex: 1 1 auto;
+  height: 100%;
+  max-height: 100%;
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   background: var(--fynns-color-surface-1);
   display: flex;
   flex-direction: column;
-  /* Visible so the resize hit can straddle the start border; clip children. */
+  /* Visible so the resize hit can straddle the start border; PageScroll owns Y scroll. */
   overflow: visible;
 }
 
@@ -3419,6 +3426,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
+}
+
+/* PageScroll is the pane-edge scroll host — never clip Y on the wrapper (≥ 0.5.93). */
+.fynns-end-aside > .fynns-page-scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
 }
 
 /* Fill hosts track the (possibly flex-shrunk) pane, not the preferred width. */

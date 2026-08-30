@@ -278,6 +278,31 @@ export function LayoutsPage() {
                         {t("layouts.shellAsideActionHint")}
                       </p>
                     </Card>
+                    <Card title={t("layouts.shellAsideScrollCardTitle")}>
+                      <FieldStack>
+                        <FieldBlock label={t("layouts.shellAsideScrollField1")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                        <FieldBlock label={t("layouts.shellAsideScrollField2")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                        <FieldBlock label={t("layouts.shellAsideScrollField3")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                      </FieldStack>
+                    </Card>
                   </PageScroll>
                 }
               >
