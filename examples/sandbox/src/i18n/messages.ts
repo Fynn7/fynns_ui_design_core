@@ -934,7 +934,7 @@ const en = {
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
   "globals.rhythmMorphHelp":
-    "ControlRow morph strip (hard ≥ 0.5.77): sm IconButtons + labeled tonal Button in one `.fynns-control-cluster`. Icon↔icon stays 4dp; last icon→labeled pill is 8dp (`action-cluster-gap`). `IconButton` `loading` shows **only** the spinner in the disk — never spinner + glyph overlap. Click refresh to demo.",
+    "ControlRow morph strip (hard ≥ 0.5.80): sm IconButtons + labeled tonal Button in one `.fynns-control-cluster`. Icon↔icon stays 4dp; last icon→labeled pill is 8dp (`action-cluster-gap`). `IconButton` `loading` shows **only** the spinner in the disk — never spinner + glyph overlap. Click refresh to demo.",
   "globals.rhythmEndAlignHelp":
     "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` ring; the sibling stays `disabled` without a second spinner. Never bind the same `busy` to every `loading`.",
   "globals.rhythmEndAlignIconHelp":
@@ -2881,7 +2881,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
   "globals.rhythmMorphHelp":
-    "ControlRow 变形条（硬 ≥ 0.5.77）：sm IconButton + 文案 tonal Button 共用一个 `.fynns-control-cluster`。图标↔图标 4dp；末颗图标→文案按钮 8dp（`action-cluster-gap`）。`IconButton` `loading` 时圆盘内 **仅** spinner — 禁止 spinner 与 glyph 叠在一起。点刷新演示。",
+    "ControlRow 变形条（硬 ≥ 0.5.80）：sm IconButton + 文案 tonal Button 共用一个 `.fynns-control-cluster`。图标↔图标 4dp；末颗图标→文案按钮 8dp（`action-cluster-gap`）。`IconButton` `loading` 时圆盘内 **仅** spinner — 禁止 spinner 与 glyph 叠在一起。点刷新演示。",
   "globals.rhythmEndAlignHelp":
     "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。**Busy（硬）：** 点任一按钮 — **最多一颗** `loading` 圈；兄弟只 `disabled`、不画第二圈。禁止 `loading={busy}` 绑到每一颗。",
   "globals.rhythmEndAlignIconHelp":
