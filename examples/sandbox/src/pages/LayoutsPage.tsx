@@ -269,11 +269,12 @@ export function LayoutsPage() {
                             <IconButton
                               size="sm"
                               aria-label={t("layouts.shellAsideActionSaveTip")}
-                              icon={<SaveIcon />}
                               onClick={() =>
                                 snackbar(t("layouts.shellAsideActionSaveToast"))
                               }
-                            />
+                            >
+                              <SaveIcon />
+                            </IconButton>
                           </Tooltip>
                           <Tooltip content={t("layouts.shellAsideExportMenu")}>
                             <DropdownMenu
