@@ -2381,6 +2381,23 @@ private title/Button margins. Live: sandbox `#sandbox-card-head-select`.
 Authority: [`AGENTS.md`](../AGENTS.md) Content density **Card head Select +
 labeled Button**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: Card head Select↔Button 4dp kiss
+
+Symptoms on workflow `Card` `actions` (`Select` + labeled `Button` `sm`):
+
+- Version / revision picker and primary CTA (regenerate) sit **4dp** apart —
+  reads as pill-on-pill kiss; consumer measured ~5px between shells
+
+**Cause:** `.fynns-control-cluster` default `control-cluster-gap` (4dp) applied
+to Select + **labeled** Button — same as IconButton strips. List inspector
+meta|CTA|Select already widens to **8dp** (`inspector-end-gap`); Card head did
+not.
+
+**Fix in core (≥ 0.5.75):** `.fynns-control-cluster:has(> .fynns-select):has(>
+.fynns-btn:not(.fynns-btn--icon))` uses `--fynns-layout-action-cluster-gap`
+(**8dp** — dialog foot parity). Consumer: bump only. Live:
+`#sandbox-card-head-select`.
+
 ## Failure mode this treaty targets: List row copy cramped on the start edge
 
 Symptoms on a page-catalog `ListItem` (Applications / Experiences-style

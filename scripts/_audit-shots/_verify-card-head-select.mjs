@@ -64,6 +64,14 @@ const metricsClosed = await page.evaluate(() => {
   const headCenterY = Math.round((hb.top + hb.bottom) / 2);
   const titleCenterDelta = Math.abs(titleCenterY - headCenterY);
   const titleInsetTop = Math.round(tb.top - hb.top);
+  const sb = host.querySelector(".fynns-select")?.getBoundingClientRect();
+  const clusterGap =
+    sb != null
+      ? Math.round((bb.left - sb.right) * 10) / 10
+      : null;
+  const clusterGapToken = getComputedStyle(
+    host.querySelector(".fynns-control-cluster"),
+  ).gap;
   return {
     ok: true,
     headAlign: getComputedStyle(host).alignItems,
@@ -75,6 +83,8 @@ const metricsClosed = await page.evaluate(() => {
     bandCenterDelta,
     titleCenterDelta,
     titleInsetTop,
+    clusterGap,
+    clusterGapToken,
     headHeight: Math.round(hb.height),
   };
 });
@@ -155,6 +165,8 @@ const pass =
   metrics.titleCenterDelta <= 2 &&
   metrics.bandCenterDelta <= 2 &&
   metrics.titleInsetTop >= 10 &&
+  metrics.clusterGap >= 7 &&
+  metrics.clusterGap <= 9 &&
   metrics.open?.ok === true &&
   metrics.open.headDisplay === "grid" &&
   metrics.open.titleBandCenterDelta <= 2 &&

@@ -228,6 +228,15 @@
 }
 
 /*
+ * Select + labeled Button (Card head regenerate, inspector CTA, …): 8dp breath —
+ * same as dialog foot / end-align labeled strips (≥ **0.5.75**). IconButton-only
+ * clusters keep control-cluster-gap (4dp).
+ */
+.fynns-control-cluster:has(> .fynns-select):has(> .fynns-btn:not(.fynns-btn--icon)) {
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
+/*
  * Nested clusters hug content. A child with `width: 100%` inside another
  * cluster becomes a full-bleed row (Card head icon strips stack vertically —
  * BookmarkActions + SourceFileActions lesson). Outer form clusters still
