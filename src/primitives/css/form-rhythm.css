@@ -253,10 +253,16 @@
 
 /* Action footer / Select+row-action / table trailing action: dock to the
    trailing edge. Pure IconButton strips need no `__grow` — justify does it.
-   Leading Select / meta that must fill leftover still use `__grow`. */
+   Leading Select / meta that must fill leftover still use `__grow`. Default
+   **center** on the row band (table map meta + mono id + action); Select +
+   refresh keeps flex-start below. */
 .fynns-control-cluster--end-align {
   flex-wrap: nowrap;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow) {
   /* Docked Select lists grow the grow flex item — pin row actions to the
      trigger band (40dp), not the vertical center of trigger + results. */
   align-items: flex-start;
@@ -285,10 +291,11 @@
   flex-shrink: 0;
 }
 
-/* sm IconButton (32dp) optical center on the 40dp form control row. */
-.fynns-control-cluster--end-align
+/* sm IconButton (32dp) optical center on the 40dp Select trigger band only. */
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
-.fynns-control-cluster--end-align > .fynns-btn--sm.fynns-btn--icon {
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
+  > .fynns-btn--sm.fynns-btn--icon {
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 

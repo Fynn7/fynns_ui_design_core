@@ -2608,6 +2608,24 @@ every row’s action shares one trailing edge. Do not invent a second
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: table map cluster top-hugged in a tall cell
+
+Symptoms in a usage / mapping column (`TableCell` + `.fynns-control-cluster--end-align`):
+
+- `.fynns-table-meta` (kind caption) and the mono id sit **flush to the top** of
+  the cell while the row is taller (~49dp from `Button` `sm` + cell pad)
+- Left numeric columns look vertically centered; mapping copy reads “靠上 / 不居中”
+
+**Cause:** `.fynns-control-cluster--end-align` used `align-items: flex-start` for
+every host (Select trigger-band pin). Table map rows have no expanded Select —
+meta + id + action should **center on the row band**.
+
+**Fix in core (≥ 0.5.79):** end-align defaults `align-items: center`; only
+`:has(> .fynns-select.fynns-control-cluster__grow)` keeps flex-start + sm
+IconButton trigger-band margin. **Fix in the consumer:** bump only — keep
+`.fynns-table-meta` + `__grow` id + trailing action; no local flex hacks. Live:
+sandbox `#table`; agents-hub Usage mapping column.
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:
