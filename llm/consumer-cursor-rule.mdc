@@ -221,9 +221,13 @@ drawer `headline` 工具条。扁平根目的地仍用 `DestinationAppShell`；�
 **主画布纵向填满：** 上方 Preview（或其它顶带）+ 下方 Chat 贴底时，用
 `FillColumn`（`header` = Preview，`children` = `Chat`，empty 放进
 `ChatThread.empty`）。**禁止**把 Preview / EmptyState / Composer 当 canvas
-兄弟堆叠（窄宽全高会出现下半空白）。aside 全宽气泡仍用
+兄弟堆叠（窄宽全高会出现下半空白）。**禁止**在 Destination 画布上用零边距
+`Card` 铺满整个井区（full-workflow megacard 当唯一 `header`）— core ≥
+**0.5.76** 为 `.fynns-destination-app-shell-canvas` 上的 `.fynns-fill-column-header`
+加 `dialog-inset` 呼吸 + 高度上限；长预览在 header 内滚，Chat 保持可见。对照
+Layouts `#layouts-demo-fill-column`。aside 全宽气泡仍用
 `.fynns-chat-host--fill` / `EndAside`。权威：`AGENTS.md` Chat Shell /
-FillColumn。
+FillColumn；`CONSUMER_TREATY.md` **canvas FillColumn megacard zero inset**。
 
 ## 表单语义分簇（FieldStack — 强推荐）
 

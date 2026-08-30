@@ -148,6 +148,7 @@ export function LayoutsPage() {
   const [navSearchQuery, setNavSearchQuery] = useState("");
   const [navSearchExpanded, setNavSearchExpanded] = useState(false);
   const [fillColumnDraft, setFillColumnDraft] = useState("");
+  const [fillColumnPreviewDraft, setFillColumnPreviewDraft] = useState("");
   const [shellFooterShowAccountLabel, setShellFooterShowAccountLabel] =
     useState(true);
   const [shellFooterLongAccountLabel, setShellFooterLongAccountLabel] =
@@ -373,6 +374,54 @@ export function LayoutsPage() {
               </FillColumn>
             </div>
             <SandboxHelp text={t("layouts.fillColumnHelp")} />
+            <div
+              className="sandbox-destination-canvas-stage fynns-destination-app-shell-canvas"
+            >
+              <FillColumn
+                header={
+                  <Card title={t("layouts.fillColumnPreviewTitle")} chrome="plain">
+                    <p className="sandbox-globals-navrail-pane-body">
+                      {t("layouts.fillColumnPreviewBody")}
+                    </p>
+                    <Surface variant="filled" padded>
+                      <p className="sandbox-globals-navrail-pane-body">
+                        {t("layouts.fillColumnPreviewSample")}
+                      </p>
+                    </Surface>
+                    <p className="sandbox-globals-navrail-pane-body">
+                      {t("layouts.fillColumnPreviewNote")}
+                    </p>
+                  </Card>
+                }
+              >
+                <Chat label={t("layouts.fillColumnPreviewChatLabel")}>
+                  <ChatThread
+                    empty={
+                      <EmptyState
+                        title={t("layouts.fillColumnEmptyTitle")}
+                        description={t("layouts.fillColumnEmptyBody")}
+                      />
+                    }
+                  >
+                    <ChatMessage role="user">
+                      {t("layouts.fillColumnUser1")}
+                    </ChatMessage>
+                    <ChatMessage role="assistant">
+                      {t("layouts.fillColumnAssistant1")}
+                    </ChatMessage>
+                  </ChatThread>
+                  <ChatComposer
+                    value={fillColumnPreviewDraft}
+                    onChange={setFillColumnPreviewDraft}
+                    ariaLabel={t("layouts.fillColumnComposerAria")}
+                    placeholder={t("layouts.fillColumnComposerPlaceholder")}
+                    sendLabel={t("layouts.fillColumnSend")}
+                    onSubmit={() => setFillColumnPreviewDraft("")}
+                  />
+                </Chat>
+              </FillColumn>
+            </div>
+            <SandboxHelp text={t("layouts.fillColumnPreviewHelp")} />
           </LayoutsDemo>
 
           <LayoutsDemo id="top-app-bar">

@@ -476,6 +476,17 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   invent a third “fake page” without chrome back. Failure mode:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **catalog edit as silent
   PageScroll replace**. Live: `#list` status+action / `#form-recipe` Dialog.
+- **DON'T** mount a **full-workflow** `Card` (switches, tabs, CodeBlock,
+  Textarea, browser paste, …) as the sole `FillColumn` `header` on
+  `DestinationAppShell` canvas with **zero inset** so it edge-to-eats the well
+  and hides Chat. `header` = compact **preview band** only; core ≥ **0.5.76**
+  pads + caps `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`
+  (`--fynns-layout-fill-column-header-max-height`); tall preview scrolls in
+  `header` (`fynns-scroll`). Long catalogs → `PageScroll` in `children` or
+  `Dialog` — not a megacard shell. Live: Layouts `#layouts-demo-fill-column`
+  preview+Chat stage. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **canvas FillColumn megacard
+  zero inset**.
 - **DON'T** pad chrome / destination **labels** with redundant meta unless the
   user **explicitly** asks (counts, middle-dot tallies, decorative separators,
   parenthetical glosses, product-stack footnotes).
@@ -1331,8 +1342,12 @@ classes.
   cell match the largest content width/height via measure),
   **FillColumn** `{ header?, children, footer? }` (vertical fill host for a
   height-resolved parent — shell main / DestinationAppShell canvas / fixed
-  stage: `header`/`footer` content-sized, `children` `flex:1` + `min-height:0`;
-  put `<Chat>` **or** pane-boot `BusyRegion` `fill` **or** **`PageScroll`**
+  stage: `header`/`footer` content-sized **preview band** (not a full-workflow
+  Card edge-to-edge on the canvas — core ≥ **0.5.76** pads + caps
+  `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`;
+  long preview scrolls in header; `children` = Chat stays visible). `children`
+  `flex:1` + `min-height:0`; put `<Chat>` **or** pane-boot `BusyRegion` `fill`
+  **or** **`PageScroll`**
   (page catalogs; wraps `.fynns-page-scroll.fynns-scroll` →
   `.fynns-content-column`) in `children` so the band absorbs leftover (Chat
   composer docks; loading ring centers; overlay Y rail sits on the **pane**

@@ -66,6 +66,16 @@ const en = {
   "layouts.fillColumnComposerPlaceholder": "Write a message…",
   "layouts.fillColumnSend": "Send",
   "layouts.fillColumnLabel": "Sample chat",
+  "layouts.fillColumnPreviewTitle": "Sample preview",
+  "layouts.fillColumnPreviewBody":
+    "Preview band above Chat on DestinationAppShell canvas — content-sized Card with dialog-inset breath (core ≥ 0.5.76), not edge-to-edge megacard.",
+  "layouts.fillColumnPreviewSample":
+    "Sample output well inside chrome=\"plain\" Card body (nest-gap).",
+  "layouts.fillColumnPreviewNote":
+    "Tall preview content scrolls inside the capped header band; Chat stays visible in main.",
+  "layouts.fillColumnPreviewChatLabel": "Sample chat below preview",
+  "layouts.fillColumnPreviewHelp":
+    "Destination canvas FillColumn — `header` = compact preview Card (never zero-margin edge-to-edge workflow shell). Core pads + caps `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`. Long preview scrolls in header; `children` = Chat. Live stage uses `fynns-destination-app-shell-canvas` class.",
   "layouts.drillHelp":
     "Drill-in (ClippedNavShell): tap Catalog → drawer body swaps to the item list (optional SearchBar); mode exit = TopAppBar back next to the nav toggle — never NavigationDrawer.headline. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + app state.",
   "layouts.drillNavAria": "Sample destinations",
@@ -424,6 +434,9 @@ const en = {
     "--fynns-layout-main-min-width — clamp(…) canvas flex-basis beside EndAside (min-width: 0).",
   "layoutChrome.roSheetMaxH": "Sheet max height (vh)",
   "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — viewport height unit.",
+  "layoutChrome.roFillColumnHeaderMax": "FillColumn header max height",
+  "layoutChrome.roFillColumnHeaderMaxHint":
+    "--fynns-layout-fill-column-header-max-height — Destination canvas preview band cap (min(52dvh, 28rem)).",
   "layoutChrome.roSheetHalfH": "Sheet half height (vh)",
   "layoutChrome.roSheetHalfHHint": "--fynns-layout-sheet-half-height — viewport height unit.",
   "layoutChrome.roTooltipMax": "Tooltip max (min())",
@@ -1998,6 +2011,16 @@ const zh: Record<MessageKey, string> = {
   "layouts.fillColumnComposerPlaceholder": "写一条消息…",
   "layouts.fillColumnSend": "发送",
   "layouts.fillColumnLabel": "示例对话",
+  "layouts.fillColumnPreviewTitle": "示例预览",
+  "layouts.fillColumnPreviewBody":
+    "DestinationAppShell 画布上 Chat 上方的预览带 — 带 dialog-inset 呼吸的定高 Card（core ≥ 0.5.76），禁止零边距铺满井区。",
+  "layouts.fillColumnPreviewSample":
+    "chrome=\"plain\" Card 正文内的示例输出井（nest-gap）。",
+  "layouts.fillColumnPreviewNote":
+    "过长预览在 capped header 内滚动；main 里的 Chat 保持可见。",
+  "layouts.fillColumnPreviewChatLabel": "预览下方的示例对话",
+  "layouts.fillColumnPreviewHelp":
+    "Destination 画布 FillColumn — `header` = 紧凑预览 Card（禁止零边距铺满 workflow 壳）。Core 在 `.fynns-destination-app-shell-canvas` 上为 `.fynns-fill-column-header` 加 inset + 上限；长预览在 header 内滚；`children` = Chat。舞台带 `fynns-destination-app-shell-canvas` 类。",
   "layouts.drillHelp":
     "钻入导航（ClippedNavShell）：点 Catalog → 侧栏 body 换成条目列表（可选 SearchBar）；退出模式 = TopAppBar 返回键（紧挨导航开关）— 禁止塞进 NavigationDrawer.headline。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + 应用状态。",
   "layouts.drillNavAria": "示例目的地",
@@ -2344,6 +2367,9 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-main-min-width — clamp(…) EndAside 旁画布 flex-basis（min-width: 0）。",
   "layoutChrome.roSheetMaxH": "Sheet 最大高度（vh）",
   "layoutChrome.roSheetMaxHHint": "--fynns-layout-sheet-max-height — 视口高度单位。",
+  "layoutChrome.roFillColumnHeaderMax": "FillColumn header 最大高度",
+  "layoutChrome.roFillColumnHeaderMaxHint":
+    "--fynns-layout-fill-column-header-max-height — Destination 画布预览带上限（min(52dvh, 28rem)）。",
   "layoutChrome.roSheetHalfH": "Sheet 半高（vh）",
   "layoutChrome.roSheetHalfHHint": "--fynns-layout-sheet-half-height — 视口高度单位。",
   "layoutChrome.roTooltipMax": "Tooltip 上限（min()）",

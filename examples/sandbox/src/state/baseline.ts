@@ -125,6 +125,7 @@ export const READONLY_LAYOUT_KEYS = [
   "field-stack-gap",
   "field-header-action-row-min-height",
   "stats-min-col-sm",
+  "fill-column-header-max-height",
 ] as const satisfies ReadonlyArray<keyof typeof LAYOUT_TOKENS>;
 
 export type ReadonlyLayoutKey = (typeof READONLY_LAYOUT_KEYS)[number];

@@ -1396,6 +1396,32 @@
 }
 
 /*
+ * Destination canvas stage — proves FillColumn preview header inset + cap on
+ * `.fynns-destination-app-shell-canvas` (not sandbox-only padding).
+ */
+.sandbox-destination-canvas-stage {
+  box-sizing: border-box;
+  width: min(100%, 40rem);
+  height: 32rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-destination-canvas-stage.fynns-destination-app-shell-canvas {
+  flex: 0 0 auto;
+}
+
+.sandbox-destination-canvas-stage > .fynns-fill-column {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/*
  * Wide × tall stage so `.fynns-content-column` max-width leaves a gutter —
  * overlay Y rail must sit on the page-scroll host edge, outside Cards.
  */

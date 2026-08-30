@@ -294,6 +294,10 @@ const READONLY_LAYOUT_META: Record<
     labelKey: "layoutChrome.roStatsMinColSm",
     hintKey: "layoutChrome.roStatsMinColSmHint",
   },
+  "fill-column-header-max-height": {
+    labelKey: "layoutChrome.roFillColumnHeaderMax",
+    hintKey: "layoutChrome.roFillColumnHeaderMaxHint",
+  },
 };
 
 const LAYOUT_SECTIONS: ReadonlyArray<{

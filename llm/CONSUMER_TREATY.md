@@ -3018,6 +3018,36 @@ catalog recipe.
 
 Authority: [`AGENTS.md`](../AGENTS.md) **Content density** / **FillColumn**.
 
+## Failure mode this treaty targets: canvas FillColumn megacard zero inset
+
+Symptoms (Preview + Chat on `DestinationAppShell` main — e.g. refine / job
+workflow):
+
+- One `Card` (`chrome="plain"`) in `FillColumn` `header` is **flush** with the
+  canvas top / left / right (title kisses the shell edge; no `dialog-inset`
+  breath)
+- The Card body (switches, tabs, CodeBlock, Textarea, browser paste) fills the
+  entire well; Chat is scrolled away or `main` has ~0 height
+- DevTools: `.fynns-destination-app-shell-canvas > .fynns-fill-column >
+  .fynns-fill-column-header > .fynns-card` spans full canvas width; Card height ≈
+  viewport
+
+**Cause:** consumer mounted a **full-workflow** Card as the only `header` band
+without `PageScroll` / content-column inset and without core canvas header
+caps (legacy ≤ **0.5.75**).
+
+**Fix in core (≥ **0.5.76**):** `.fynns-destination-app-shell-canvas >
+.fynns-fill-column-header` gets `dialog-inset` breath (when not hosting
+`PageScroll`), `max-height: var(--fynns-layout-fill-column-header-max-height)`,
+and `fynns-scroll` overflow so Chat stays visible in `main`.
+
+**Fix in the consumer:** keep `FillColumn` (`header` = compact preview,
+`children` = `Chat`) — **do not** invent private canvas padding. Tall workflow
+chrome may stay in `header` Card but must respect the capped scroll band; or
+split long forms into `Dialog` / `PageScroll` in `children`. Bump core; props-only.
+Live: Layouts `#layouts-demo-fill-column` preview+Chat stage. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
 Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /

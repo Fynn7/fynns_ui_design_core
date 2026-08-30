@@ -1323,6 +1323,12 @@ export const LAYOUT_TOKENS = {
    */
   "list-well-max-height-sm": "12rem",
   /**
+   * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
+   * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.
+   * Same ceiling family as EndAside bottom sheet (`min(52dvh, 28rem)`).
+   */
+  "fill-column-header-max-height": "min(52dvh, 28rem)",
+  /**
    * Master–detail catalog column width (~288dp). Use as the first track of a
    * consumer list+detail grid:
    * `grid-template-columns: var(--fynns-layout-list-pane-width) 1fr`.

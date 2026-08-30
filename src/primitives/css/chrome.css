@@ -3151,6 +3151,40 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * FillColumn on the destination canvas: preview `header` keeps dialog-inset
+ * breath (never edge-to-edge Card chrome) and caps tall workflow Cards so
+ * `main` (Chat / BusyRegion fill) stays visible. PageScroll in `header` owns
+ * inline breath via `.fynns-content-column` — do not double pad inline.
+ */
+.fynns-destination-app-shell-canvas > .fynns-fill-column {
+  gap: var(--fynns-layout-unit-stack-gap);
+}
+
+.fynns-destination-app-shell-canvas > .fynns-fill-column > .fynns-fill-column-header {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: var(--fynns-layout-fill-column-header-max-height);
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+.fynns-destination-app-shell-canvas
+  > .fynns-fill-column
+  > .fynns-fill-column-header:not(:has(> .fynns-page-scroll)) {
+  box-sizing: border-box;
+  padding-inline: var(--fynns-layout-dialog-inset);
+  padding-block-start: var(--fynns-layout-dialog-inset);
+}
+
+.fynns-destination-app-shell-canvas
+  > .fynns-fill-column
+  > .fynns-fill-column-header > .fynns-page-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: inherit;
+}
+
+/*
  * Soft floor for the main canvas beside an open EndAside. Use `min-width: 0`
  * (not `min(token, 100%)`): percentage min-width resolves against the **full
  * flex parent**, so `100%` claims the whole row and overflows once EndAside

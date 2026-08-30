@@ -533,6 +533,7 @@
   --fynns-layout-textarea-max-height: 13rem;
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
+  --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);
   --fynns-layout-list-pane-width: 18rem;
   --fynns-layout-nav-pane-width: 17.5rem;
   --fynns-layout-content-max-width: 73.75rem;
