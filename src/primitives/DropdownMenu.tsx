@@ -383,6 +383,8 @@ export type DropdownMenuCheckboxItemProps = Omit<
 > & {
   checked: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  /** Leading glyph beside the check column — same slot as `DropdownMenuItem` `icon`. */
+  icon?: ReactNode;
   /** Keep the menu open after toggle (default `false` for multi-select filters). */
   closeOnSelect?: boolean;
 };
@@ -390,6 +392,7 @@ export type DropdownMenuCheckboxItemProps = Omit<
 export function DropdownMenuCheckboxItem({
   checked,
   onCheckedChange,
+  icon,
   children,
   className,
   closeOnSelect = false,
@@ -421,6 +424,7 @@ export function DropdownMenuCheckboxItem({
       <span className="fynns-menu-item-leading" aria-hidden>
         {checked ? <CheckIcon size={16} /> : null}
       </span>
+      {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
       <span className="fynns-menu-item-label">{children}</span>
     </button>
   );

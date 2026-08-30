@@ -1652,6 +1652,26 @@ host height.
 `detail` + `trailing` recipe unchanged; drop any local CSS that nudges group
 actions with negative margin / `top`.
 
+## Failure mode this treaty targets: expandable group count kisses `--with-end` icons
+
+Symptoms (project catalog `CatalogGroup` — `agents-hub 0/4` row):
+
+- Enabled/total count sits at the **headline tail** (`hub-group-title` flex +
+  `margin-left: auto`) beside `--with-end` hover IconButtons
+- On hover/focus the **+** disk overlaps the count (`0/4`); gap reads narrower
+  than icon↔icon inside the cluster
+- Three `sm` tools need more end reserve than the default 1–2×40dp overlay
+
+**Cause:** counts belong in `trailingSupportingText` / `.fynns-table-meta`, not
+in `headline` beside overlay actions. Core `< 0.5.92` only reserved 1–2 md disks.
+
+**Fix in core (≥ 0.5.92):** `--with-end` reserve counts 3+ IconButtons; `sm`-only
+strips use 32dp disk math. Live: Globals `#list` project group sample.
+
+**Fix in the consumer:** props-only — `headline` = name (Tooltip path ok);
+`trailingSupportingText` = count; drop headline-tail count flex. Bump core.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: twin section InfoHint (TopAppBar + mode drawer)
 
 Symptoms (workflows / CatalogMorph mode destinations):
@@ -3228,6 +3248,158 @@ Symptoms (run / LLM history rows):
 **Fix:** bump ≥ **0.4.145**; **one metric per cell** (label in `<span>`);
 second metric → sibling `.fynns-table-meta` or trailing-stats. Live: `#list`
 run-summary. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside instant open / close (no width morph)
+
+Symptoms (DestinationAppShell / pipeline aside — cover letter inspector):
+
+- Toggling TopAppBar trailing aside control **pops** the right pane in/out with
+  no width morph; left `NavigationDrawer` still animates
+- DevTools: `EndAside` unmounts on close (`aside` node disappears) or first
+  open paints full `--fynns-layout-end-aside-width` with no transition
+
+**Cause:** (1) core **&lt; 0.5.84** unmounted `EndAside` after close and
+re-initialized `entered` from `open` on remount — skipped enter animation; (2)
+consumer `{open && <EndAside>}` instead of `<EndAside open={…}>`; (3) closing
+child `min-width: end-aside-min-width` fought width morph.
+
+**Fix in core (≥ **0.5.86**):** `EndAsideMorphTrack` stays mounted in
+`DestinationAppShell` while `aside` is set; width morph runs on the track
+(drawer column parity). Morph memory survives brief inner remount during
+consumer reconcile (StrictMode). `entered` starts from memory + double-rAF on
+close; transition uses `--fynns-duration-flyout`. **Consumer:** keep `aside` +
+`asideOpen` on `DestinationAppShell`; toggle `open` only — never
+`{open && <EndAside>}`. Live: Layouts `#layouts-demo-shell`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside toggle workspace BusyRegion flash
+
+Symptoms (DestinationAppShell pipeline — cover letter / skills aside toggle):
+
+- TopAppBar trailing aside `IconButton` flashes **full canvas** `BusyRegion`
+  `fill` with app-boot copy (`Loading workspace` / `正在加载工作区`) while
+  detail is already on screen
+- Flash lasts one fetch (~100–500ms) — reads like the whole app rebooted
+
+**Cause:** pipeline wrapper `useEffect` lists unstable props (`onExit` inline
+arrow, …) so **any** shell re-render from `asideOpen` / `onAsideOpenChange`
+re-runs boot fetch → `setLoading(true)` → provider returns `BusyRegion` instead
+of `children`.
+
+**Fix in consumer (props-only):** boot fetch deps = **`applicationId`** (and
+locale `t` if needed for error strings) — **`onExit` via `useRef`**, not
+`useEffect` deps. Wrap `exitPipeline` in `useCallback`. Do **not** swap
+`DestinationAppShell` `children` to workspace `BusyRegion` when `ready` is
+already true.
+
+**Core constraint (≥ **0.5.87**):** aside width morph only — never app-boot
+busy on chrome toggle. Live: Layouts `#layouts-demo-shell` `shellAsideBody`.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: ControlRow labeled Button cluster overflow (Card / EndAside)
+
+Symptoms (inspector Card body — cover letter / export actions):
+
+- Several labeled `Button`s in one `ControlRow` `.fynns-control-cluster` spill
+  past the Card right edge; trailing actions clip under `overflow: hidden`
+- DevTools: `.fynns-control-row` grid second track is `max-content`; cluster
+  width exceeds `.fynns-card` / `.fynns-end-aside`
+
+**Cause:** form-host `ControlRow` used `1fr | max-content` — controls track cannot
+shrink below the nowrap labeled-button strip in a narrow EndAside.
+
+**Fix in core (≥ **0.5.88**):** controls track `minmax(0, max-content)`; labeled
+Button clusters **wrap** with `action-cluster-gap` (8dp); IconButton-only catalog
+strips keep nowrap end-hug. Empty `ControlRow` `label` → full-width controls band.
+
+**Also (≥ **0.5.92**):** `--fynns-layout-end-aside-min-width` floor
+`clamp(17.5rem, 32%, 22rem)` — open track + resize cannot crush below ~280px
+(end-aligned clusters clipping on the start edge).
+
+**Consumer:** props-only — one `ControlRow` + `.fynns-control-cluster` of
+`Button`s (no private width / flex hacks). Live: Layouts `#layouts-demo-shell`
+aside Card. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside PageScroll no scroll
+
+Symptoms (inspector `PageScroll` in `EndAside` — cover letter / skills aside):
+
+- `.fynns-content-column` grows to full catalog height (~3000px); **no Y scrollbar**
+  on `.fynns-page-scroll`; content below the fold is unreachable
+- DevTools: `.fynns-end-aside` height ≈ content; wrapper had `overflow: hidden`
+
+**Cause:** open track did not stretch to shell main height; aside child grew with
+content; `overflow:hidden` on the PageScroll wrapper blocked the scroll host.
+
+**Fix in core (≥ **0.5.93**):** track flex column + `max-height:100%`; aside
+`height:100%`; `.fynns-end-aside > .fynns-page-scroll` gets `flex:1`
+`min-height:0` `overflow-y:auto` (pane-edge overlay rail). Consumer: wrap long
+aside catalogs in **`PageScroll`** only — no private `.hub-scroll` on a padded
+ancestor.
+
+Live: Layouts `#layouts-demo-shell` aside PageScroll. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside dense labeled Button strip (information redundancy)
+
+Symptoms (inspector Card `ControlRow` — cover letter / skills aside):
+
+- Primary CTA plus **three** tonal labeled `Button`s (save + export Word + export
+  PDF) stack into a **2×2 grid** in ~352px EndAside — tall action band, cramped
+  copy
+- Reads as **information redundancy** — export variants are separate top-level
+  pills instead of one menu; save duplicates long chrome on every row
+
+**Cause:** consumer treated secondary actions as full labeled `Button`s in one
+`.fynns-control-cluster` instead of compressing save to **`IconButton` +
+`Tooltip`** and merging export variants into **`DropdownMenu`**.
+
+**Fix (consumer props-only):** **one** primary labeled `Button`; save / sync →
+`Tooltip` → `IconButton` `sm` (`SaveIcon`, short tip); Word / PDF / … → **one**
+`DropdownMenu` (`iconOnly` `DownloadIcon` + items, or one short export trigger).
+Do **not** rely on wrap alone when icons + menu fit one row.
+
+Live: Layouts `#layouts-demo-shell` aside Card (≥ **0.5.96** sample). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside ControlRow label crush
+
+Symptoms (inspector `Card` body action strip — cover letter aside):
+
+- Muted `ControlRow` label (`生成与导出` / Generate & export) shows **one glyph**
+  or vanishes; DevTools: `.fynns-control-row__label` width ≈ **7px** beside a
+  wide primary `Button` + icon cluster
+- Duplicate section naming: `Card` `title` already says 求职信 / Cover letter
+
+**Cause:** visible `ControlRow` `label` beside primary + `IconButton` cluster in
+a ~249px Card body — `1fr | max-content` grid gives the label `minmax(0,1fr)`
+but controls `max-content` wins; label ellipsizes to nothing.
+
+**Fix (consumer props-only):** **`label=""`** on that `ControlRow` (core empty-label
+→ full-width controls band on `.fynns-card-body`). Keep scope on **`Card`
+`title`** + `FieldHint` — do **not** relocate the same string into the label
+column.
+
+Live: Layouts `#layouts-demo-shell` aside Card. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside icon tonal disks
+
+Symptoms (inspector Card action cluster beside one primary CTA):
+
+- Save / export **`IconButton`s** and **`DropdownMenu` `iconOnly`** triggers use
+  **`variant="tonal"`** — filled disks beside the primary pill read as duplicate
+  secondary CTAs (cover letter aside: two dark circles next to teal generate)
+
+**Cause:** consumer over-specified `tonal` on icon chrome; primary labeled
+`Button` already owns the filled emphasis.
+
+**Fix (consumer props-only):** omit `variant` on **`IconButton`** / `iconOnly`
+`DropdownMenu` (defaults **`ghost`** `sm`) — only **`primary`** / labeled
+`Button` stays filled unless the user explicitly wanted tonal icon disks.
+
+Live: Layouts `#layouts-demo-shell` aside Card. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Related docs
 

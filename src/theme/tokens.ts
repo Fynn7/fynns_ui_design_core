@@ -1564,9 +1564,11 @@ export const LAYOUT_TOKENS = {
    * the full row — that overflows beside main). When the main track is ≤32rem
    * (container query), EndAside leaves flex flow and overlays the end edge.
    * Also: `onNavCrowded` → rail when drawer + floors still overflow; ≤56.25rem
-   * viewport → bottom sheet (resize handle hidden).
+   * viewport → bottom sheet (resize handle hidden). Floor ≥ **0.5.92**:
+   * `clamp(17.5rem, 32%, 22rem)` — inspector Card labeled-button rows must not
+   * crush below ~280px (12rem min clipped end-aligned clusters).
    */
-  "end-aside-min-width": "clamp(12rem, 28%, 18rem)",
+  "end-aside-min-width": "clamp(17.5rem, 32%, 22rem)",
   /**
    * Preferred main canvas size beside `EndAside` (`flex-basis`). Shrink with
    * `min-width: 0` in CSS — never `min(token, 100%)` of the flex parent row.

@@ -1423,6 +1423,11 @@ a.fynns-breadcrumb-link:visited {
   width: var(--fynns-list-icon-size);
   height: var(--fynns-list-icon-size);
   flex: 0 0 auto;
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-list-item[aria-expanded="true"] .fynns-list-item-leading > svg {
+  transform: rotate(90deg);
 }
 
 .fynns-list-item--selected .fynns-list-item-leading {
@@ -1851,8 +1856,15 @@ a.fynns-breadcrumb-link:visited {
  */
 .fynns-list-item-host--with-end {
   position: relative;
+  --fynns-list-end-action-disk: var(--fynns-size-icon-target);
+  --fynns-list-end-action-count: 1;
   --fynns-list-end-actions-reserve: calc(
-    var(--fynns-list-end-actions-gap) + var(--fynns-size-icon-target) +
+    var(--fynns-list-end-actions-gap) +
+      (var(--fynns-list-end-action-disk) * var(--fynns-list-end-action-count)) +
+      (
+        var(--fynns-layout-control-cluster-gap) *
+        max(0, var(--fynns-list-end-action-count) - 1)
+      ) +
       var(--fynns-list-pad-inline)
   );
 }
@@ -1863,9 +1875,24 @@ a.fynns-breadcrumb-link:visited {
     :has(.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon))
   ) {
   --fynns-list-end-actions-gap: calc(
-    (var(--fynns-size-icon-target) - var(--fynns-size-icon)) / 2 +
+    (var(--fynns-list-end-action-disk) - var(--fynns-size-icon)) / 2 +
       var(--fynns-layout-control-cluster-gap)
   );
+}
+
+/* sm-only IconButton strips (32dp disks — Card / catalog group chrome). */
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-control-cluster .fynns-btn--sm.fynns-btn--icon
+  ):not(
+    :has(
+      .fynns-list-item-trailing--end
+        .fynns-control-cluster
+        .fynns-btn--icon:not(.fynns-btn--sm)
+    )
+  ):not(:has(.fynns-list-item-trailing--end .fynns-select)):not(
+    :has(.fynns-list-item-trailing--end .fynns-btn:not(.fynns-btn--icon))
+  ) {
+  --fynns-list-end-action-disk: 2rem;
 }
 
 .fynns-list-item-host--with-end:has(
@@ -1877,10 +1904,16 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end > .fynns-tooltip-trigger + .fynns-tooltip-trigger
   ) {
-  --fynns-list-end-actions-reserve: calc(
-    var(--fynns-list-end-actions-gap) + (var(--fynns-size-icon-target) * 2) +
-      var(--fynns-layout-control-cluster-gap) + var(--fynns-list-pad-inline)
-  );
+  --fynns-list-end-action-count: 2;
+}
+
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end .fynns-control-cluster > :nth-child(3)
+  ),
+.fynns-list-item-host--with-end:has(
+    .fynns-list-item-trailing--end > .fynns-tooltip-trigger + .fynns-tooltip-trigger + .fynns-tooltip-trigger
+  ) {
+  --fynns-list-end-action-count: 3;
 }
 
 .fynns-list-item-host--with-end > .fynns-list-item-trailing--end,
@@ -4077,6 +4110,14 @@ a.fynns-breadcrumb-link:visited {
 .fynns-fill-column-main > .fynns-busy-region--fill,
 .fynns-fill-column-main > .fynns-empty-state--fill,
 .fynns-fill-column-main > .fynns-page-scroll {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.fynns-end-aside > .fynns-page-scroll {
   flex: 1 1 auto;
   width: 100%;
   max-width: 100%;

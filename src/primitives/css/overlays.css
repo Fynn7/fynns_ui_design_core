@@ -150,7 +150,10 @@
 }
 
 .fynns-menu-item-label {
+  display: inline-flex;
   flex: 1 1 auto;
+  align-items: center;
+  gap: var(--fynns-space-sm);
   min-width: 0;
 }
 

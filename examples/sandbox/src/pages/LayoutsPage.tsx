@@ -63,6 +63,8 @@ import {
   ListChecksIcon,
   DropdownMenu,
   DropdownMenuCheckboxItem,
+  DropdownMenuItem,
+  DownloadIcon,
   snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
@@ -256,16 +258,79 @@ export function LayoutsPage() {
                   },
                 ]}
                 aside={
-                  <div className="sandbox-globals-shell-aside sandbox-stack">
-                    <p className="sandbox-chat-aside-label">
-                      {t("layouts.shellAsideLabel")}
-                    </p>
-                    <Surface variant="filled" padded>
+                  <PageScroll>
+                    <Card title={t("layouts.shellAsideCardTitle")}>
+                      <ControlRow label="">
+                        <div className="fynns-control-cluster">
+                          <Button size="sm" variant="primary">
+                            {t("layouts.shellAsideActionGenerate")}
+                          </Button>
+                          <Tooltip content={t("layouts.shellAsideActionSaveTip")}>
+                            <IconButton
+                              size="sm"
+                              aria-label={t("layouts.shellAsideActionSaveTip")}
+                              onClick={() =>
+                                snackbar(t("layouts.shellAsideActionSaveToast"))
+                              }
+                            >
+                              <SaveIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip content={t("layouts.shellAsideExportMenu")}>
+                            <DropdownMenu
+                              iconOnly
+                              size="sm"
+                              trigger={<DownloadIcon />}
+                              ariaLabel={t("layouts.shellAsideExportMenu")}
+                            >
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  snackbar(t("layouts.shellAsideActionExportAToast"))
+                                }
+                              >
+                                {t("layouts.shellAsideActionExportA")}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  snackbar(t("layouts.shellAsideActionExportBToast"))
+                                }
+                              >
+                                {t("layouts.shellAsideActionExportB")}
+                              </DropdownMenuItem>
+                            </DropdownMenu>
+                          </Tooltip>
+                        </div>
+                      </ControlRow>
                       <p className="sandbox-globals-navrail-pane-body">
-                        {t("layouts.shellAsideBody")}
+                        {t("layouts.shellAsideActionHint")}
                       </p>
-                    </Surface>
-                  </div>
+                    </Card>
+                    <Card title={t("layouts.shellAsideScrollCardTitle")}>
+                      <FieldStack>
+                        <FieldBlock label={t("layouts.shellAsideScrollField1")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                        <FieldBlock label={t("layouts.shellAsideScrollField2")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                        <FieldBlock label={t("layouts.shellAsideScrollField3")}>
+                          <Surface variant="filled" padded>
+                            <p className="sandbox-globals-navrail-pane-body">
+                              {t("layouts.shellAsideScrollBody")}
+                            </p>
+                          </Surface>
+                        </FieldBlock>
+                      </FieldStack>
+                    </Card>
+                  </PageScroll>
                 }
               >
                 <PageScroll>

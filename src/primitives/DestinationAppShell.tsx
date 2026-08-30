@@ -1,11 +1,12 @@
 import {
   forwardRef,
   useCallback,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from "react";
 import { ClippedNavShell } from "./ClippedNavShell";
-import { EndAside } from "./EndAside";
+import { EndAsideMorphTrack, EndAsidePane, endAsideMorphMemoryReset } from "./EndAside";
 import { IconButton } from "./IconButton";
 import { MenuIcon, PanelLeftIcon, PanelRightIcon } from "./icons";
 import {
@@ -155,6 +156,12 @@ export const DestinationAppShell = forwardRef<
     );
   }
 
+  useLayoutEffect(() => {
+    if (aside == null) {
+      endAsideMorphMemoryReset();
+    }
+  }, [aside]);
+
   const navMode = navOpen ? "drawer" : "hidden";
 
   const toggleNav = useCallback(() => {
@@ -246,15 +253,16 @@ export const DestinationAppShell = forwardRef<
       <div className="fynns-destination-app-shell-body">
         <div className="fynns-destination-app-shell-canvas fynns-scroll">{children}</div>
         {aside != null ? (
-          <EndAside
+          <EndAsideMorphTrack
             open={asideOpen}
             width={asideWidth}
             defaultWidth={defaultAsideWidth}
             onWidthChange={onAsideWidthChange}
-            disableResize={disableAsideResize}
           >
-            {aside}
-          </EndAside>
+            <EndAsidePane open={asideOpen} disableResize={disableAsideResize}>
+              {aside}
+            </EndAsidePane>
+          </EndAsideMorphTrack>
         ) : null}
       </div>
     </ClippedNavShell>

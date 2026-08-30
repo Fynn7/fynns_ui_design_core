@@ -225,7 +225,8 @@
 .fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
   width: 100%;
   max-width: 100%;
-  grid-template-columns: minmax(0, 1fr) max-content;
+  /* Shrinkable controls track — max-content alone overflows narrow Card / EndAside. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
 }
 
 /* Form-host preference rows share FieldHeader label type (not toolbar caption). */
@@ -334,6 +335,117 @@
   > .fynns-control-row__controls
   > .fynns-control-cluster {
   justify-content: flex-end;
+}
+
+/*
+ * Narrow Card / EndAside (≥ 0.5.88): labeled Button clusters in ControlRow wrap
+ * inside the shrinkable controls track. IconButton-only catalog strips keep
+ * nowrap end-hug.
+ */
+.fynns-dialog-panel--centered
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-card-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-surface--padded
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon)) {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  gap: var(--fynns-layout-action-cluster-gap);
+}
+
+.fynns-dialog-panel--centered
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-card-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-surface--padded
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))),
+.fynns-collapsible-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:not(:has(.fynns-btn:not(.fynns-btn--icon))) {
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Empty label → full-width controls band (inspector Card body action rows). */
+.fynns-dialog-panel--centered
+  > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-card-body > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-surface--padded
+  > .fynns-control-row:has(> .fynns-control-row__label:empty),
+.fynns-collapsible-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fynns-dialog-panel--centered
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-card-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-surface--padded
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-row:has(> .fynns-control-row__label:empty)
+  > .fynns-control-row__controls {
+  grid-column: 1;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
 }
 
 /*
@@ -1839,6 +1951,11 @@
   min-width: 0;
 }
 
+/* Open group: same 4dp between trigger ↔ body as Item↔Item inside the body. */
+.fynns-nav-drawer-group--open {
+  gap: var(--fynns-navdrawer-section-gap);
+}
+
 .fynns-nav-drawer-group-trigger {
   box-sizing: border-box;
   display: flex;
@@ -3191,34 +3308,61 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * takes space. Preferred size stays on flex-basis / sandbox `flex: 1 1
  * var(--fynns-layout-main-min-width)`. Extreme squeeze → overlay CQ below.
  */
-*:has(> .fynns-end-aside:not([data-state="closing"])) > :not(.fynns-end-aside) {
+*:has(> .fynns-end-aside-track:not([data-state="closing"])) > :not(.fynns-end-aside-track) {
   min-width: 0;
 }
 
 /* ---------- EndAside (width-morph supporting pane) ---------- */
-.fynns-end-aside {
+.fynns-end-aside-track {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
   flex: 0 1 auto;
   box-sizing: border-box;
   width: var(--fynns-layout-end-aside-width);
   max-width: var(--fynns-layout-end-aside-max-width);
-  /* Same flex trap as main: do not use min(token, 100%) of the full row. */
   min-width: 0;
-  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-  background: var(--fynns-color-surface-1);
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  /* Visible so the resize hit can straddle the start border; clip children. */
-  overflow: visible;
+  max-height: 100%;
+  overflow: hidden;
   transition:
-    width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    max-width var(--fynns-duration-base) var(--fynns-ease-emphasized),
-    min-width var(--fynns-duration-base) var(--fynns-ease-emphasized);
+    width var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
+    max-width var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
+    min-width var(--fynns-duration-flyout) var(--fynns-ease-emphasized);
 }
 
-.fynns-end-aside[data-resizing="true"] {
+.fynns-end-aside-track[data-resizing="true"] {
   transition: none;
+}
+
+.fynns-end-aside-track[data-state="closing"] {
+  width: 0;
+  max-width: 0;
+  min-width: 0;
+  pointer-events: none;
+}
+
+/* Open track: honor min clamp so inspector Card rows are not crushed (≥ 0.5.92). */
+.fynns-end-aside-track:not([data-state="closing"]) {
+  min-width: min(var(--fynns-layout-end-aside-min-width), 100%);
+}
+
+.fynns-end-aside {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  height: 100%;
+  max-height: 100%;
+  border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  background: var(--fynns-color-surface-1);
+  display: flex;
+  flex-direction: column;
+  /* Visible so the resize hit can straddle the start border; PageScroll owns Y scroll. */
+  overflow: visible;
 }
 
 /* Leading-edge seam — hit + cue centered on the start border (Cursor). */
@@ -3261,20 +3405,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * Hide the resting hairline so only one seam paints.
  */
 .fynns-end-aside-resize:hover::before,
-.fynns-end-aside[data-resizing="true"] > .fynns-end-aside-resize::before {
+.fynns-end-aside-track[data-resizing="true"] .fynns-end-aside-resize::before {
   background: var(--fynns-color-border);
 }
 
 .fynns-end-aside:has(> .fynns-end-aside-resize:hover),
-.fynns-end-aside[data-resizing="true"] {
+.fynns-end-aside-track[data-resizing="true"] .fynns-end-aside {
   border-inline-start-color: transparent;
-}
-
-.fynns-end-aside[data-state="closing"] {
-  width: 0;
-  max-width: 0;
-  min-width: 0;
-  overflow: hidden;
 }
 
 /*
@@ -3291,19 +3428,30 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: hidden;
 }
 
+/* PageScroll is the pane-edge scroll host — never clip Y on the wrapper (≥ 0.5.93). */
+.fynns-end-aside > .fynns-page-scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
 /* Fill hosts track the (possibly flex-shrunk) pane, not the preferred width. */
 .fynns-end-aside > .fynns-chat-host--fill {
   width: 100%;
 }
 
-.fynns-end-aside[data-state="closing"] > *:not(.fynns-end-aside-resize) {
+.fynns-end-aside-track[data-state="closing"] .fynns-end-aside > *:not(.fynns-end-aside-resize) {
   max-width: none;
-  min-width: var(--fynns-layout-end-aside-min-width);
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fynns-end-aside,
-  .fynns-end-aside[data-state="closing"] {
+  .fynns-end-aside-track,
+  .fynns-end-aside-track[data-state="closing"] {
     transition: none;
   }
 }
@@ -3322,17 +3470,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  */
 @container fynns-shell-main (max-width: 32rem) {
   @media (min-width: 56.26rem) {
-    *:has(> .fynns-end-aside) {
+    *:has(> .fynns-end-aside-track) {
       position: relative;
     }
 
-    *:has(> .fynns-end-aside) > :not(.fynns-end-aside) {
+    *:has(> .fynns-end-aside-track) > :not(.fynns-end-aside-track) {
       min-width: 0;
   flex: 1 1 auto;
       max-width: 100%;
     }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track {
       position: absolute;
       inset-block: 0;
       inset-inline-end: 0;
@@ -3343,13 +3491,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
       box-shadow: var(--fynns-shadow-md);
     }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track .fynns-end-aside > *:not(.fynns-end-aside-resize) {
       width: 100%;
       max-width: none;
   min-width: 0;
 }
 
-    *:has(> .fynns-end-aside) > .fynns-end-aside[data-state="closing"] {
+    *:has(> .fynns-end-aside-track) > .fynns-end-aside-track[data-state="closing"] {
       width: 0;
       max-width: 0;
       min-width: 0;
@@ -3405,32 +3553,35 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     overflow: hidden;
   }
 
-  .fynns-clipped-nav-shell-main:has(.fynns-end-aside) {
+  .fynns-clipped-nav-shell-main:has(.fynns-end-aside-track) {
     position: relative;
   }
 
-  .fynns-end-aside {
+  .fynns-end-aside-track {
     position: absolute;
     inset-inline: 0;
-    /* Keep sheet on the block-end edge when max-height caps size (ignore
-     * static-position top from the flex row). */
     inset-block-start: auto;
     bottom: 0;
     z-index: 3;
     width: 100%;
     max-width: none;
     min-width: 0;
-    border-inline-start: none;
-    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
-    /* Sheet, not a ribbon: leave canvas room but keep room for inspector rows. */
     max-height: min(52dvh, 22rem);
+    overflow: hidden;
     box-shadow: var(--fynns-shadow-md);
     transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 
-  .fynns-end-aside > *:not(.fynns-end-aside-resize) {
+  .fynns-end-aside {
+    border-inline-start: none;
+    border-block-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .fynns-end-aside-track .fynns-end-aside > *:not(.fynns-end-aside-resize) {
     width: 100%;
     max-width: none;
     min-width: 0;
@@ -3440,13 +3591,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     display: none;
   }
 
-  .fynns-end-aside[data-state="closing"] {
+  .fynns-end-aside-track[data-state="closing"] {
     width: 100%;
     max-width: none;
     max-height: 0;
     box-shadow: var(--fynns-shadow-none);
     transition:
-      max-height var(--fynns-duration-base) var(--fynns-ease-emphasized),
+      max-height var(--fynns-duration-flyout) var(--fynns-ease-emphasized),
       box-shadow var(--fynns-duration-fast) var(--fynns-ease-emphasized);
   }
 }
