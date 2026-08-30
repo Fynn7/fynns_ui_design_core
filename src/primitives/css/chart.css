@@ -1,0 +1,124 @@
+/**
+ * Combo analytics chart chrome (sandbox `#chart` teaches the recipe).
+ * Host `.fynns-chart` + legend + hover tooltip anatomy — not a keep-set export.
+ */
+
+.fynns-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-chart-legend-gap);
+  margin-top: var(--fynns-layout-unit-stack-gap);
+}
+
+.fynns-chart-plot {
+  width: 100%;
+  min-height: var(--fynns-chart-plot-min-height);
+  height: var(--fynns-chart-plot-min-height);
+}
+
+.fynns-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fynns-space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fynns-font-size-xs);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-chart-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+}
+
+.fynns-chart-legend__swatch {
+  flex-shrink: 0;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: var(--fynns-radius-2xs);
+}
+
+.fynns-chart-legend__swatch--bar-1 {
+  background: var(--fynns-chart-series-1);
+}
+
+.fynns-chart-legend__swatch--bar-2 {
+  background: var(--fynns-chart-series-2);
+}
+
+.fynns-chart-legend__swatch--line {
+  width: 1rem;
+  height: 2px;
+  border-radius: var(--fynns-radius-pill);
+  background: var(--fynns-chart-series-line);
+}
+
+/* Hover flyout — compact metric rows; do not wrap in `.fynns-unit-stack`. */
+.fynns-chart-tooltip {
+  min-width: var(--fynns-chart-tooltip-min-width);
+  padding-block: var(--fynns-chart-tooltip-pad-block);
+  padding-inline: var(--fynns-chart-tooltip-pad-inline);
+  border-radius: var(--fynns-radius-md);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-flyout);
+  font-size: var(--fynns-chart-tooltip-body-size);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+}
+
+.fynns-chart-tooltip__title {
+  margin: 0 0 var(--fynns-chart-tooltip-title-gap);
+  font-size: var(--fynns-chart-tooltip-title-size);
+  font-weight: var(--fynns-font-weight-medium);
+  line-height: var(--fynns-line-height-snug);
+  color: var(--fynns-color-text);
+}
+
+.fynns-chart-tooltip__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-chart-tooltip-row-gap);
+  margin: 0;
+}
+
+.fynns-chart-tooltip__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fynns-space-md);
+}
+
+.fynns-chart-tooltip__row dt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  margin: 0;
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-chart-tooltip__row dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--fynns-color-text);
+}
+
+.fynns-chart-tooltip__row--line dd {
+  color: var(--fynns-chart-series-line);
+}
+
+.fynns-chart-tooltip__row--muted dt,
+.fynns-chart-tooltip__row--muted dd {
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-chart-tooltip__swatch {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--fynns-radius-2xs);
+}

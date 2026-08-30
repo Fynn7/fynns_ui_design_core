@@ -2645,6 +2645,25 @@ cursor) — never a fixed `top` only. Live: sandbox `#chart`.
 **Fix in the consumer:** bump / copy the pointer-follow pattern; no private tip
 Y lock.
 
+## Failure mode this treaty targets: chart tooltip loose unit-stack spacing
+
+Symptoms in a combo analytics hover flyout (stacked bars + cost line):
+
+- Title date/label reads **too small** (same `font-size-xs` as metric rows)
+- **Large vertical gaps** between metric rows (16dp `.fynns-unit-stack` rhythm)
+- Title **kisses the top** edge and the last row **kisses the bottom** (8dp block
+  pad + unit-stack — crushed flyout breath)
+
+**Cause:** consumer wrapped tip copy in `.fynns-unit-stack` / `.fynns-control-cluster`
+instead of the chart tooltip recipe; private `.usage-chart__tip` duplicated pad/type.
+
+**Fix in core (≥ 0.5.82):** public `.fynns-chart-tooltip` + `CHART_TOKENS`
+`tooltip-*` keys — title sm, body xs, row gap 4dp, block pad 12dp. Live:
+sandbox `#chart`.
+
+**Fix in the consumer:** bump; markup = `__title` + `__rows` / `__row` (`__row--line`
+for USD); positioning shell may stay app-local — do not restyle `.fynns-chart-tooltip*`.
+
 ## Failure mode this treaty targets: InlineAlert + orphan List for one catalog
 
 Symptoms in a dashboard panel:

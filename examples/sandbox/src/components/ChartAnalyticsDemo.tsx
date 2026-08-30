@@ -68,8 +68,17 @@ function ChartTooltip({
         {rows.map((entry) => {
           const key = String(entry.dataKey ?? entry.name ?? "");
           const value = entry.value ?? 0;
+          const isLine = key === "cost";
           return (
-            <div key={key} className="fynns-chart-tooltip__row">
+            <div
+              key={key}
+              className={[
+                "fynns-chart-tooltip__row",
+                isLine ? "fynns-chart-tooltip__row--line" : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
               <dt>
                 <span
                   className="fynns-chart-tooltip__swatch"
