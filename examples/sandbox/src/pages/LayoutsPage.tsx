@@ -63,6 +63,8 @@ import {
   ListChecksIcon,
   DropdownMenu,
   DropdownMenuCheckboxItem,
+  DropdownMenuItem,
+  DownloadIcon,
   snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
@@ -263,15 +265,39 @@ export function LayoutsPage() {
                           <Button size="sm" variant="primary">
                             {t("layouts.shellAsideActionGenerate")}
                           </Button>
-                          <Button size="sm">
-                            {t("layouts.shellAsideActionSave")}
-                          </Button>
-                          <Button size="sm" variant="tonal">
-                            {t("layouts.shellAsideActionExportA")}
-                          </Button>
-                          <Button size="sm" variant="tonal">
-                            {t("layouts.shellAsideActionExportB")}
-                          </Button>
+                          <Tooltip content={t("layouts.shellAsideActionSaveTip")}>
+                            <IconButton
+                              size="sm"
+                              aria-label={t("layouts.shellAsideActionSaveTip")}
+                              icon={<SaveIcon />}
+                              onClick={() =>
+                                snackbar(t("layouts.shellAsideActionSaveToast"))
+                              }
+                            />
+                          </Tooltip>
+                          <Tooltip content={t("layouts.shellAsideExportMenu")}>
+                            <DropdownMenu
+                              iconOnly
+                              size="sm"
+                              trigger={<DownloadIcon />}
+                              ariaLabel={t("layouts.shellAsideExportMenu")}
+                            >
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  snackbar(t("layouts.shellAsideActionExportAToast"))
+                                }
+                              >
+                                {t("layouts.shellAsideActionExportA")}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  snackbar(t("layouts.shellAsideActionExportBToast"))
+                                }
+                              >
+                                {t("layouts.shellAsideActionExportB")}
+                              </DropdownMenuItem>
+                            </DropdownMenu>
+                          </Tooltip>
                         </div>
                       </ControlRow>
                       <p className="sandbox-globals-navrail-pane-body">

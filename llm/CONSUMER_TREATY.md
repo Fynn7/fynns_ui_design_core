@@ -3340,6 +3340,67 @@ ancestor.
 Live: Layouts `#layouts-demo-shell` aside PageScroll. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode: EndAside dense labeled Button strip (information redundancy)
+
+Symptoms (inspector Card `ControlRow` — cover letter / skills aside):
+
+- Primary CTA plus **three** tonal labeled `Button`s (save + export Word + export
+  PDF) stack into a **2×2 grid** in ~352px EndAside — tall action band, cramped
+  copy
+- Reads as **information redundancy** — export variants are separate top-level
+  pills instead of one menu; save duplicates long chrome on every row
+
+**Cause:** consumer treated secondary actions as full labeled `Button`s in one
+`.fynns-control-cluster` instead of compressing save to **`IconButton` +
+`Tooltip`** and merging export variants into **`DropdownMenu`**.
+
+**Fix (consumer props-only):** **one** primary labeled `Button`; save / sync →
+`Tooltip` → `IconButton` `sm` (`SaveIcon`, short tip); Word / PDF / … → **one**
+`DropdownMenu` (`iconOnly` `DownloadIcon` + items, or one short export trigger).
+Do **not** rely on wrap alone when icons + menu fit one row.
+
+Live: Layouts `#layouts-demo-shell` aside Card (≥ **0.5.96** sample). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside ControlRow label crush
+
+Symptoms (inspector `Card` body action strip — cover letter aside):
+
+- Muted `ControlRow` label (`生成与导出` / Generate & export) shows **one glyph**
+  or vanishes; DevTools: `.fynns-control-row__label` width ≈ **7px** beside a
+  wide primary `Button` + icon cluster
+- Duplicate section naming: `Card` `title` already says 求职信 / Cover letter
+
+**Cause:** visible `ControlRow` `label` beside primary + `IconButton` cluster in
+a ~249px Card body — `1fr | max-content` grid gives the label `minmax(0,1fr)`
+but controls `max-content` wins; label ellipsizes to nothing.
+
+**Fix (consumer props-only):** **`label=""`** on that `ControlRow` (core empty-label
+→ full-width controls band on `.fynns-card-body`). Keep scope on **`Card`
+`title`** + `FieldHint` — do **not** relocate the same string into the label
+column.
+
+Live: Layouts `#layouts-demo-shell` aside Card. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: EndAside icon tonal disks
+
+Symptoms (inspector Card action cluster beside one primary CTA):
+
+- Save / export **`IconButton`s** and **`DropdownMenu` `iconOnly`** triggers use
+  **`variant="tonal"`** — filled disks beside the primary pill read as duplicate
+  secondary CTAs (cover letter aside: two dark circles next to teal generate)
+
+**Cause:** consumer over-specified `tonal` on icon chrome; primary labeled
+`Button` already owns the filled emphasis.
+
+**Fix (consumer props-only):** omit `variant` on **`IconButton`** / `iconOnly`
+`DropdownMenu` (defaults **`ghost`** `sm`) — only **`primary`** / labeled
+`Button` stays filled unless the user explicitly wanted tonal icon disks.
+
+Live: Layouts `#layouts-demo-shell` aside Card. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Related docs
 
 | Doc | Role |

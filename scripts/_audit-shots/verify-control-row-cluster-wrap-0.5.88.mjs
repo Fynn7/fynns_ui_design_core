@@ -69,6 +69,7 @@ async function main() {
     const buttons = el.querySelectorAll(".fynns-btn:not(.fynns-btn--icon)");
     const firstBtn = buttons[0];
     const firstR = firstBtn?.getBoundingClientRect();
+    const iconButtons = el.querySelectorAll(".fynns-btn--icon");
     return {
       clusterWidth: Math.round(r.width),
       clusterHeight: Math.round(r.height),
@@ -77,7 +78,8 @@ async function main() {
       cardLeft: cardR ? Math.round(cardR.left) : null,
       cardRight: cardR ? Math.round(cardR.right) : null,
       firstButtonLeft: firstR ? Math.round(firstR.left) : null,
-      buttonCount: buttons.length,
+      labeledButtonCount: buttons.length,
+      iconButtonCount: iconButtons.length,
     };
   });
 
@@ -100,14 +102,38 @@ async function main() {
   metrics.overflowPx = overflowPx;
   metrics.startClipPx = startClipPx;
 
-  // Wrapped: taller than one 40dp button row OR no horizontal overflow past Card.
-  const wrappedOrContained =
-    geom.clusterHeight > 48 || overflowPx <= 1;
-  metrics.wrappedOrContained = wrappedOrContained;
+  // Dense aside strip: one labeled primary + icon/menu chrome on one row (≥ 0.5.96).
+  const singleRowDense =
+    geom.clusterHeight <= 48 && geom.labeledButtonCount === 1;
+  metrics.singleRowDense = singleRowDense;
+
+  const labelEl = page.locator(
+    "#layouts-demo-shell .fynns-end-aside .fynns-control-row__label",
+  ).first();
+  const labelMetrics = await labelEl.evaluate((el) => ({
+    width: Math.round(el.getBoundingClientRect().width),
+    text: (el.textContent ?? "").trim(),
+  }));
+  metrics.labelMetrics = labelMetrics;
+  metrics.labelOk = labelMetrics.text === "" || labelMetrics.width >= 48;
+
+  const ghostOk = await cluster.evaluate((el) => {
+    const icons = el.querySelectorAll(".fynns-btn--icon");
+    return [...icons].every(
+      (btn) =>
+        btn.classList.contains("fynns-btn--ghost") &&
+        !btn.classList.contains("fynns-btn--tonal"),
+    );
+  });
+  metrics.ghostIcons = ghostOk;
 
   metrics.pass =
-    geom.buttonCount >= 4 &&
-    wrappedOrContained &&
+    geom.labeledButtonCount === 1 &&
+    geom.iconButtonCount >= 2 &&
+    singleRowDense &&
+    metrics.labelOk &&
+    ghostOk &&
+    overflowPx <= 1 &&
     startClipPx <= 1 &&
     metrics.asideWidth >= metrics.minAsideFloorPx - 2 &&
     metrics.consoleErrors.length === 0;
