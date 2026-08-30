@@ -1159,13 +1159,6 @@
   width: 100%;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fynns-chart-plot .recharts-layer {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
 .sandbox-globals-swatches {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));

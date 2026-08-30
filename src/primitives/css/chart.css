@@ -122,3 +122,10 @@
   height: 0.5rem;
   border-radius: var(--fynns-radius-2xs);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-chart-plot .recharts-layer {
+    animation: none !important;
+    transition: none !important;
+  }
+}

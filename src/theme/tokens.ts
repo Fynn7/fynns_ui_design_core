@@ -453,7 +453,7 @@ export const CHART_TOKENS = {
   "tooltip-title-size": "var(--fynns-font-size-sm)",
   "tooltip-body-size": "var(--fynns-font-size-xs)",
   "tooltip-title-gap": "var(--fynns-space-xs)",
-  "tooltip-row-gap": "var(--fynns-space-2xs)",
+  "tooltip-row-gap": "var(--fynns-space-xs)",
 } as const;
 
 /**

@@ -238,7 +238,7 @@
   --fynns-chart-tooltip-title-size: var(--fynns-font-size-sm);
   --fynns-chart-tooltip-body-size: var(--fynns-font-size-xs);
   --fynns-chart-tooltip-title-gap: var(--fynns-space-xs);
-  --fynns-chart-tooltip-row-gap: var(--fynns-space-2xs);
+  --fynns-chart-tooltip-row-gap: var(--fynns-space-xs);
   --fynns-avatar-size: 2.5rem;
   --fynns-avatar-size-sm: 2rem;
   --fynns-avatar-size-lg: 3.5rem;
