@@ -2923,10 +2923,35 @@ to **autoGrow** so the well grows with content and the **page** scrolls.
 SplitPane editor, `textarea { height: 100% }`).
 
 **Fix in the consumer:** drop `autoGrow={false}` (and oversized fixed `rows`)
-on page catalogs; keep soft `maxHeight` only when a long body must not dominate
-the viewport. Do not invent app CSS height on `.fynns-code-block*`. Live:
-sandbox `#code-block` file-body Card (default autoGrow). Authority:
-[`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Suffixed file body**.
+on page catalogs; keep soft `maxHeight` / `maxRows` only when a long body must
+not dominate the viewport. Do not invent app CSS height on `.fynns-code-block*`
+or `.fynns-textarea`. Live: sandbox `#code-block` file-body Card / `#textarea`
+(default autoGrow). Authority: [`AGENTS.md`](../AGENTS.md) Hard rules + Content
+density **Suffixed file body**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: Textarea autoGrow soft-capped like ChatComposer (13rem)
+
+Symptoms (cover-letter / long prose `FieldStack` under `PageScroll`):
+
+- Each `Textarea` stops around **208px** (`13rem`) with the last line
+  half-cropped and a large empty band under the stack
+- Class still has `fynns-textarea--auto-grow`; inline `height` matches the
+  old soft cap while `scrollHeight` is larger
+
+**Cause:** core &lt; **0.5.103** used `--fynns-layout-textarea-max-height: 13rem`
+(ChatComposer density) for **all** form Textareas — PageScroll catalogs hit
+inner scroll instead of growing. Consumers may also pass a high `rows` floor
+(`rows={8}`) that pads empty wells without helping long copy past the cap.
+
+**Fix in core (≥ 0.5.103):** soft cap = `min(70dvh, 40rem)`; autoGrow remeasures
+on width change and absorbs subpixel last-line clip under the cap.
+ChatComposer keeps `composer-max-height` **13rem**.
+
+**Fix in the consumer:** keep default `autoGrow`; use small `minRows` / `rows`
+as the **empty floor only** — do not invent private `max-height: 13rem` or
+`autoGrow={false}` on page catalogs. Live: sandbox `#textarea`.
+
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: skinny form Dialog (tall FieldStack / CodeBlock)

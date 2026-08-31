@@ -307,7 +307,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (chrome=card section body block), `nest-gap` (chrome=plain / .fynns-nest surface-well nesting), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (chrome=card section body block), `nest-gap` (chrome=plain / .fynns-nest surface-well nesting), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -380,7 +380,7 @@ const en = {
     "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
   "layoutChrome.textareaMaxHeight": "Textarea max height",
   "layoutChrome.textareaMaxHeightHint":
-    "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (13rem).",
+    "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (min(70dvh, 40rem); page catalogs grow with prose).",
   "layoutChrome.listWellMaxHeight": "List well max height",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — soft cap for long in-Card Lists (20rem). Short catalogs use FillColumn page scroll — do not nest fynns-scroll on a one-row List.",
@@ -857,7 +857,7 @@ const en = {
   "globals.textareaSupporting":
     "Same border/focus/hint chrome as Input. filled/outlined are dense form variants — not M3 floating-label fields.",
   "globals.textareaHelp":
-    "Multiline form control (default UI font). Height auto-grows with text (`autoGrow`, default on). Prefer CodeBlock for read-only code. Not a full M3 Text Field (no floating label).",
+    "Multiline form control (default UI font). Height auto-grows with text (`autoGrow`, default on) up to `--fynns-layout-textarea-max-height` (`min(70dvh, 40rem)` ≥ 0.5.103) so PageScroll catalogs let the **page** scroll — not a ChatComposer-sized 13rem trap. Prefer CodeBlock for read-only code. Not a full M3 Text Field (no floating label).",
   "globals.tabsAria": "History tabs",
   "globals.tabsSingle": "Single",
   "globals.tabsBatch": "Batch",
@@ -2297,7 +2297,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（chrome=card 章节正文块向）、`nest-gap`（chrome=plain / .fynns-nest 表面井嵌套）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
+    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（chrome=card 章节正文块向）、`nest-gap`（chrome=plain / .fynns-nest 表面井嵌套）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -2370,7 +2370,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",
   "layoutChrome.textareaMaxHeight": "Textarea 最大高度",
   "layoutChrome.textareaMaxHeightHint":
-    "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（默认 13rem）。",
+    "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（min(70dvh, 40rem)；页面目录随正文长高）。",
   "layoutChrome.listWellMaxHeight": "列表井最大高度",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — Card 内长 List 软上限（20rem）。短目录用 FillColumn 页滚动——不要给单行 List 再套 fynns-scroll。",
@@ -2845,7 +2845,7 @@ const zh: Record<MessageKey, string> = {
   "globals.textareaSupporting":
     "与 Input 同边框/焦点/提示 chrome。filled/outlined 是密集表单变体，不是 M3 浮动标签字段。",
   "globals.textareaHelp":
-    "多行表单控件（默认 UI 字体）。高度默认随文字自动伸缩（`autoGrow`）。只读代码请用 CodeBlock。不是完整 M3 Text Field（无浮动标签）。",
+    "多行表单控件（默认 UI 字体）。高度默认随文字自动伸缩（`autoGrow`），软上限 `--fynns-layout-textarea-max-height`（`min(70dvh, 40rem)`，≥ 0.5.103）— PageScroll 目录让**整页**滚，不要卡在 ChatComposer 的 13rem 井里。只读代码请用 CodeBlock。不是完整 M3 Text Field（无浮动标签）。",
   "globals.tabsAria": "历史标签页",
   "globals.tabsSingle": "单次",
   "globals.tabsBatch": "批量",

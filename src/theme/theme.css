@@ -551,7 +551,7 @@
   --fynns-layout-capsule-chrome-pad-inline: 0.25rem;
   --fynns-layout-field-pad-inline: var(--fynns-space-md);
   --fynns-layout-field-pad-block: var(--fynns-space-md);
-  --fynns-layout-textarea-max-height: 13rem;
+  --fynns-layout-textarea-max-height: min(70dvh, 40rem);
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-fill-column-header-max-height: min(52dvh, 28rem);

@@ -123,11 +123,14 @@ export const Textarea = forwardRef(function Textarea(
         : null;
     // Explicit maxRows wins over the layout token soft cap.
     el.style.maxHeight = rowCap != null ? `${rowCap}px` : "";
-    const cssMax = Number.parseFloat(cs.maxHeight);
+    // Re-read after clearing / setting inline maxHeight so `min()` token
+    // caps (`min(70dvh, 40rem)`) resolve to used px.
+    const csAfter = getComputedStyle(el);
+    const cssMax = Number.parseFloat(csAfter.maxHeight);
     const tokenCap =
       Number.isFinite(cssMax) && cssMax > 0
         ? cssMax
-        : 12 * lineHeight + padY + borderY;
+        : 40 * lineHeight + padY + borderY;
     const cap = rowCap ?? tokenCap;
 
     // Empty: minRows floor only — ignore placeholder wrap scrollHeight.
@@ -137,14 +140,37 @@ export const Textarea = forwardRef(function Textarea(
     }
 
     el.style.height = "0px";
-    const contentBox = el.scrollHeight + borderY;
-    const next = Math.min(Math.max(contentBox, floor), cap);
+    let next = Math.min(Math.max(el.scrollHeight + borderY, floor), cap);
     el.style.height = `${next}px`;
+    // Absorb subpixel / last-line clip while still under the soft cap —
+    // otherwise the final glyph row can be half-cropped with no thumb.
+    if (next < cap - 0.5 && el.scrollHeight > el.clientHeight + 0.5) {
+      next = Math.min(Math.ceil(el.scrollHeight + borderY), cap);
+      el.style.height = `${next}px`;
+    }
   }, [autoGrow, maxRows, minRows]);
 
   useLayoutEffect(() => {
     resize();
   }, [resize, value, defaultValue]);
+
+  // Rewrap when the host **width** changes (aside morph, font load, column
+  // resize) — value alone does not remeasure wrapped line count. Ignore
+  // height-only notifications so setting `style.height` cannot loop.
+  useLayoutEffect(() => {
+    if (!autoGrow) return;
+    const el = localRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    let lastWidth = el.getBoundingClientRect().width;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width ?? 0;
+      if (Math.abs(w - lastWidth) < 0.5) return;
+      lastWidth = w;
+      resize();
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [autoGrow, resize]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(event);

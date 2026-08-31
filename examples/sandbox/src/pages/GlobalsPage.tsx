@@ -1093,7 +1093,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
   const [tabsId, setTabsId] = useState<"single" | "batch">("single");
   const [tabsSmId, setTabsSmId] = useState<"a" | "b" | "c">("a");
-  const [textareaValue, setTextareaValue] = useState("");
+  const [textareaValue, setTextareaValue] = useState(
+    [
+      "Sample opening — interest in the role and why this org.",
+      "",
+      "Sample body — one or two paragraphs of relevant project work, tools, and outcomes. Keep growing past a ChatComposer-sized well so PageScroll moves instead of an inner thumb.",
+      "",
+      "Sample close — availability and thanks.",
+    ].join("\n"),
+  );
   const [btnActive, setBtnActive] = useState(false);
   const [iconBtnActive, setIconBtnActive] = useState(false);
   const [switchStartOn, setSwitchStartOn] = useState(true);

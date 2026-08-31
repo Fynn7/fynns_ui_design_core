@@ -705,7 +705,8 @@ classes.
   FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (`width: 100%` by default; dense multiline; no
   floating label — not full M3 Text Field anatomy; **autoGrow** height from
-  content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`,
+  content by default — `minRows`, soft cap `--fynns-layout-textarea-max-height`
+  (`min(70dvh, 40rem)` ≥ **0.5.103** — not ChatComposer’s 13rem),
   optional `maxRows` overrides the token; `autoGrow={false}` keeps a fixed well
   + vertical resize; block pad → `--fynns-layout-field-pad-block`; default
   **`spellCheck={false}`** so multilingual / technical copy has no browser
@@ -1740,7 +1741,9 @@ classes.
   multiline copy is not flush to the top/bottom — do **not** let
   `.fynns-input--sm`’s zero block pad (32dp single-line Input) apply to
   Textarea. Default **autoGrow** (content height; soft cap
-  `--fynns-layout-textarea-max-height`). Affix → text gap uses
+  `--fynns-layout-textarea-max-height` = `min(70dvh, 40rem)` ≥ **0.5.103**
+  so PageScroll catalogs grow with prose — ChatComposer keeps its own
+  13rem). Affix → text gap uses
   `--fynns-layout-control-cluster-gap`.
   Centered Dialog /
   ConfirmDialog: head/foot/body **inline** `--fynns-layout-dialog-inset`
