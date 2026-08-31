@@ -2923,10 +2923,35 @@ to **autoGrow** so the well grows with content and the **page** scrolls.
 SplitPane editor, `textarea { height: 100% }`).
 
 **Fix in the consumer:** drop `autoGrow={false}` (and oversized fixed `rows`)
-on page catalogs; keep soft `maxHeight` only when a long body must not dominate
-the viewport. Do not invent app CSS height on `.fynns-code-block*`. Live:
-sandbox `#code-block` file-body Card (default autoGrow). Authority:
-[`AGENTS.md`](../AGENTS.md) Hard rules + Content density **Suffixed file body**.
+on page catalogs; keep soft `maxHeight` / `maxRows` only when a long body must
+not dominate the viewport. Do not invent app CSS height on `.fynns-code-block*`
+or `.fynns-textarea`. Live: sandbox `#code-block` file-body Card / `#textarea`
+(default autoGrow). Authority: [`AGENTS.md`](../AGENTS.md) Hard rules + Content
+density **Suffixed file body**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode: Textarea autoGrow soft-capped like ChatComposer (13rem)
+
+Symptoms (cover-letter / long prose `FieldStack` under `PageScroll`):
+
+- Each `Textarea` stops around **208px** (`13rem`) with the last line
+  half-cropped and a large empty band under the stack
+- Class still has `fynns-textarea--auto-grow`; inline `height` matches the
+  old soft cap while `scrollHeight` is larger
+
+**Cause:** core &lt; **0.5.103** used `--fynns-layout-textarea-max-height: 13rem`
+(ChatComposer density) for **all** form Textareas — PageScroll catalogs hit
+inner scroll instead of growing. Consumers may also pass a high `rows` floor
+(`rows={8}`) that pads empty wells without helping long copy past the cap.
+
+**Fix in core (≥ 0.5.103):** soft cap = `min(70dvh, 40rem)`; autoGrow remeasures
+on width change and absorbs subpixel last-line clip under the cap.
+ChatComposer keeps `composer-max-height` **13rem**.
+
+**Fix in the consumer:** keep default `autoGrow`; use small `minRows` / `rows`
+as the **empty floor only** — do not invent private `max-height: 13rem` or
+`autoGrow={false}` on page catalogs. Live: sandbox `#textarea`.
+
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: skinny form Dialog (tall FieldStack / CodeBlock)
@@ -3243,6 +3268,41 @@ icon↔icon stays **4dp**.
 **Fix in the consumer:** bump core; keep one `.fynns-control-cluster` of
 `Tooltip` → `sm` `IconButton` + labeled `Button` — props-only. Live: sandbox
 `#rhythm` morph strip; consumer posting skills row. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: bare ControlRow + FieldHint zero gap (PageScroll section)
+
+Symptoms (main canvas / `PageScroll` content column — posting skills, cover
+letter, CV skills):
+
+- Catalog `ControlRow` (section name + IconButton / labeled CTA strip) sits
+  **flush** against the next `FieldHint` — DevTools shows hint `top` equals
+  row `top + height` (zero gap)
+- Hint reads cramped under the tonal import / re-extract pill
+- Siblings are bare React fragments with no `.fynns-unit-stack` host
+
+**Cause:** `ControlRow` + `FieldHint` rendered as adjacent PageScroll siblings
+without a spacing host. Core does not auto-insert gap between arbitrary
+content-column children — rhythm is caller-owned.
+
+**Fix in core (≥ **0.5.104**):** sandbox `#rhythm` morph + hint stack teaches
+`.fynns-unit-stack` wrapping strip + one-line hint + body well
+(`--fynns-layout-unit-stack-gap` **16dp**). Row-level notes on padded
+toolbar strips still use **`ControlBlock` `description`** (label column).
+
+**Fix in the consumer (props-only):** wrap the section in
+`.fynns-unit-stack`:
+
+```tsx
+<div className="fynns-unit-stack">
+  <ControlRow label={…}>…</ControlRow>
+  <FieldHint>{…}</FieldHint>
+  {/* highlight stage / FieldStack / List */}
+</div>
+```
+
+Do **not** add private `margin-top` on `.fynns-field-hint`. Bump core; live:
+sandbox `#rhythm`; consumer posting pipeline / cover letter panels. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

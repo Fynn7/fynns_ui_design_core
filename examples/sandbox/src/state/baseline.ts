@@ -298,7 +298,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "field-pad-block":
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "textarea-max-height":
-    "Form field · Textarea autoGrow soft cap before inner scroll (13rem)",
+    "Form field · Textarea autoGrow soft cap before inner scroll (min(70dvh, 40rem) — page catalogs grow; ChatComposer stays 13rem)",
   "list-well-max-height":
     "List well · long in-Card List soft cap (20rem; short catalogs → page scroll, no nested fynns-scroll)",
   "list-well-max-height-sm":

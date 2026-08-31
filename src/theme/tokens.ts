@@ -1337,10 +1337,12 @@ export const LAYOUT_TOKENS = {
    */
   "field-pad-block": "var(--fynns-space-md)",
   /**
-   * Soft cap for auto-growing `Textarea` before inner scroll (13rem).
-   * Matches ChatComposer `composer-max-height` density — not a Chat token.
+   * Soft cap for auto-growing `Textarea` before inner scroll.
+   * PageScroll / Card catalogs should grow with prose and let the **page**
+   * scroll — not trap long copy in a ChatComposer-sized 13rem well.
+   * ChatComposer keeps its own `composer-max-height` (13rem).
    */
-  "textarea-max-height": "13rem",
+  "textarea-max-height": "min(70dvh, 40rem)",
   /**
    * Soft cap for a **long** in-Card catalog `List` before inner scroll (20rem).
    * Prefer FillColumn page scroll for short path / repo catalogs — do **not**
