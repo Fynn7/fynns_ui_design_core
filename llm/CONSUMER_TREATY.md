@@ -2065,6 +2065,31 @@ IconButtons and expect a long path title to survive. Do **not** invent
 Card keep-set / **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: orphan draft save/discard outside Card
+
+Symptoms on catalog detail / settings pages (MCP connection fields, model
+JSON, …):
+
+- Discard + Save (and optional “view diff”) IconButtons float as a lone
+  `.fynns-control-cluster--end-align` or `ControlRow` under `PageScroll` /
+  `.fynns-unit-stack` with **no** Card title above them naming the editable
+  subject
+- Users cannot tell what the chrome saves — reads as orphan toolbar chrome
+
+**Cause:** treating draft actions as a page-foot strip instead of Card head
+chrome. Keep-set: interactive discard/save belongs in **`Card` `actions`** of
+the Card that owns the editable body / fields.
+
+**Fix in core / sandbox (≥ 0.5.102):** living sample `#sandbox-card-draft-actions`
+under `#card` (Undo + Save in `actions` on the editable subject Card). Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** → Draft discard / save.
+
+**Fix in the consumer:** move DraftActions (or equivalent Undo/Save IconButtons)
+into that Card’s `actions` (`cluster={false}` when composing into an existing
+head cluster). Prefer a dedicated fields/body Card when the identity Card head
+is already dense. Drop the orphan end-align / ControlRow sibling. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Card head actions clip at the end edge
 
 Symptoms (file-catalog detail / dual-side editor Card — agents-hub):
@@ -2683,6 +2708,58 @@ sandbox `#chart`.
 
 **Fix in the consumer:** bump; markup = `__title` + `__rows` / `__row` (`__row--line`
 for USD); positioning shell may stay app-local — do not restyle `.fynns-chart-tooltip*`.
+
+## Failure mode this treaty targets: chart tooltip clipped at plot edge
+
+Symptoms in a pointer-following combo analytics hover flyout (stacked bars + cost line):
+
+- Hover near the **right or left edge** of the plot: tooltip is **cut off** — only
+  part of the flyout is visible; metric values on the clipped side are unreadable
+- Tip uses `transform: translate(-50%, …)` centered on the pointer while `left`
+  is only clamped as a **single anchor**, so half the box still spills past the host
+
+**Cause:** hand-drawn chart tips (e.g. `.usage-chart__tip`) center with CSS
+translate but clamp only the anchor `left`, not the full box width/height.
+
+**Fix in core (≥ 0.5.102):** public `clampChartPointerTooltipBox()` +
+`.fynns-chart-tooltip-shell` (top-left placement — no translate centering). Live:
+sandbox `#chart` help + `clampChartPointerTooltipBox` unit tests (hand-drawn
+wiring is consumer-side; Recharts `#chart` demo stays pointer-follow).
+
+**Fix in the consumer:** bump; outer shell = `.fynns-chart-tooltip-shell` with
+`left`/`top` from `clampChartPointerTooltipBox(pointer, { width, height }, tipSize)`;
+inner = `.fynns-chart-tooltip`. Drop private translate/clamp-left-only CSS.
+
+## Failure mode this treaty targets: chart tooltip edge clamp jitter
+
+Symptoms after edge clamp is wired:
+
+- Hover near the **right / left** plot edge: tooltip stays on-screen but **shakes**
+  / jumps horizontally (or vertically) as the pointer moves a few pixels inside
+  the same column
+- Feels like the flyout is fighting the clamp every frame
+
+**Cause (common):**
+
+1. `mousemove` clears the tip box / falls back to a **smaller estimate** size, then
+   `useLayoutEffect` remasures the real tip — `maxLeft` oscillates (e.g. 160 vs
+   ~182) so the clamped `left` chatters
+2. Horizontal clamp anchor is raw `pointer.x` while the tip is **category-scoped**
+   — every pixel inside the edge band recomputes center-then-clamp
+3. Subpixel `left`/`top` + `ResizeObserver` remasure feedback
+
+**Fix in core (≥ 0.5.102):** `clampChartPointerTooltipBox` returns **integer**
+`left`/`top`; docs warn against estimate↔measure thrash. Live unit tests cover
+stable right-edge band.
+
+**Fix in the consumer:**
+
+1. **Never** `setTipBox(null)` (or swap tip size) on every `mousemove`
+2. Measure tip size once per open / active category (ResizeObserver only when
+   width/height change ≥ 1px)
+3. Horizontal anchor = **active column center** (or other stable x); follow
+   pointer **Y** only
+4. Shell = `.fynns-chart-tooltip-shell` + `clampChartPointerTooltipBox`
 
 ## Failure mode this treaty targets: catalog morph remounts ClippedNavShell (drawer bounce)
 

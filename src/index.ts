@@ -398,6 +398,8 @@ export {
   overflowsBounds,
   OVERFLOW_EPSILON,
 } from "./layout/overflowBounds";
+export { clampChartPointerTooltipBox } from "./layout/clampChartPointerTooltipBox";
+export type { ChartPointerTooltipClampOptions } from "./layout/clampChartPointerTooltipBox";
 export type {
   BoundsOverflow,
   MeasureOverflowOptions,
