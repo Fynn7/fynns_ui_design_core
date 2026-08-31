@@ -6162,7 +6162,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ControlRow>
         </Surface>
         <SandboxHelp text={t("globals.rhythmMorphHelp")} />
-        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+        <div className="fynns-unit-stack sandbox-globals-rhythm-morph-stack">
           <ControlRow label={t("globals.rhythmMorphLabel")}>
             <div className="fynns-control-cluster">
               <Tooltip content={t("globals.rhythmMorphRefresh")}>
@@ -6203,7 +6203,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Button>
             </div>
           </ControlRow>
-        </Surface>
+          <FieldHint>{t("globals.rhythmMorphSectionHint")}</FieldHint>
+          <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+            {t("globals.rhythmMorphBodySample")}
+          </Surface>
+        </div>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">

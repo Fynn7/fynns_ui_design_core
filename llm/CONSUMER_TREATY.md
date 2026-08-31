@@ -3270,6 +3270,41 @@ icon↔icon stays **4dp**.
 `#rhythm` morph strip; consumer posting skills row. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: bare ControlRow + FieldHint zero gap (PageScroll section)
+
+Symptoms (main canvas / `PageScroll` content column — posting skills, cover
+letter, CV skills):
+
+- Catalog `ControlRow` (section name + IconButton / labeled CTA strip) sits
+  **flush** against the next `FieldHint` — DevTools shows hint `top` equals
+  row `top + height` (zero gap)
+- Hint reads cramped under the tonal import / re-extract pill
+- Siblings are bare React fragments with no `.fynns-unit-stack` host
+
+**Cause:** `ControlRow` + `FieldHint` rendered as adjacent PageScroll siblings
+without a spacing host. Core does not auto-insert gap between arbitrary
+content-column children — rhythm is caller-owned.
+
+**Fix in core (≥ **0.5.104**):** sandbox `#rhythm` morph + hint stack teaches
+`.fynns-unit-stack` wrapping strip + one-line hint + body well
+(`--fynns-layout-unit-stack-gap` **16dp**). Row-level notes on padded
+toolbar strips still use **`ControlBlock` `description`** (label column).
+
+**Fix in the consumer (props-only):** wrap the section in
+`.fynns-unit-stack`:
+
+```tsx
+<div className="fynns-unit-stack">
+  <ControlRow label={…}>…</ControlRow>
+  <FieldHint>{…}</FieldHint>
+  {/* highlight stage / FieldStack / List */}
+</div>
+```
+
+Do **not** add private `margin-top` on `.fynns-field-hint`. Bump core; live:
+sandbox `#rhythm`; consumer posting pipeline / cover letter panels. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
 Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /
