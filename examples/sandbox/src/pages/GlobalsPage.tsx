@@ -4291,6 +4291,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardActionsStripBody")}
           </Card>
+          <div id="sandbox-card-draft-actions">
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.cardDraftTitle")}
+              actions={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardDraftDiscard")}>
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      aria-label={t("globals.cardDraftDiscard")}
+                    >
+                      <UndoIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardDraftSave")}>
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      aria-label={t("globals.cardDraftSave")}
+                    >
+                      <SaveIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+            >
+              <FieldHint>{t("globals.cardDraftBody")}</FieldHint>
+            </Card>
+            <SandboxHelp as="span" text={t("globals.cardDraftHelp")} />
+          </div>
           <div id="sandbox-card-head-select">
             <Card
               className="sandbox-globals-card"

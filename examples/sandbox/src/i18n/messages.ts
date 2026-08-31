@@ -704,7 +704,7 @@ const en = {
   "globals.chartSeriesOutbound": "Outbound",
   "globals.chartSeriesCost": "Cost (right axis)",
   "globals.chartHelp":
-    "M3-inspired analytics preset: stacked bars on the left axis (accent + tonal stack), line on the right axis (info). Card body hosts `ToggleGroup` view switch (not Card `actions`). Horizontal grid only; axis lines off; ticks `font-size-xs` + `text-muted`; right-axis ticks match the line color. **Line dots off by default** — single `activeDot` on hover only (dense series stay clean). **Gentle curve at turns** (`monotone` in Recharts; hand-drawn SVG: **Fritsch–Carlson monotone cubic** in data space — not Catmull-Rom; non-negative series must not dip below 0). **Tooltip follows the pointer** (pointer coords from the chart wrapper on `onMouseMove` → Tooltip `position` — not locked to the active series value Y). **Tooltip copy:** `.fynns-chart-tooltip` — title `font-size-sm`, body rows `font-size-xs` with `tooltip-row-gap` (4dp); **never** `.fynns-unit-stack` inside the flyout. Colors from `--fynns-chart-*` tokens. Recharts lives in sandbox only — consumers copy structure + CSS, not product copy.",
+    "M3-inspired analytics preset: stacked bars on the left axis (accent + tonal stack), line on the right axis (info). Card body hosts `ToggleGroup` view switch (not Card `actions`). Horizontal grid only; axis lines off; ticks `font-size-xs` + `text-muted`; right-axis ticks match the line color. **Line dots off by default** — single `activeDot` on hover only (dense series stay clean). **Gentle curve at turns** (`monotone` in Recharts; hand-drawn SVG: **Fritsch–Carlson monotone cubic** in data space — not Catmull-Rom; non-negative series must not dip below 0). **Tooltip follows the pointer** (pointer coords from the chart wrapper on `onMouseMove` → Tooltip `position` — not locked to the active series value Y). **Tooltip clamp (hand-drawn):** outer `.fynns-chart-tooltip-shell` + `clampChartPointerTooltipBox()` so the full flyout stays inside the plot host near edges — never `translate(-50%)` with a naive `clamp(left)`. Keep tip size stable while moving (no estimate↔measure thrash on every `mousemove`); category tips prefer column-center X + pointer Y. **Tooltip copy:** `.fynns-chart-tooltip` — title `font-size-sm`, body rows `font-size-xs` with `tooltip-row-gap` (4dp); **never** `.fynns-unit-stack` inside the flyout. Colors from `--fynns-chart-*` tokens. Recharts lives in sandbox only — consumers copy structure + CSS, not product copy.",
   "globals.tokenListChart": "Chart tokens",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
@@ -1752,6 +1752,13 @@ const en = {
   "globals.cardActionsStripOpen": "Open file",
   "globals.cardActionsStripFolder": "Reveal folder",
   "globals.cardActionsStripDelete": "Delete",
+  "globals.cardDraftTitle": "sample-entry body",
+  "globals.cardDraftDiscard": "Discard unsaved (reload from disk)",
+  "globals.cardDraftSave": "Save",
+  "globals.cardDraftBody":
+    "Editable body / file well lives in this Card. Discard + Save IconButtons sit in Card `actions` — never a lone end-align strip under PageScroll with no Card title.",
+  "globals.cardDraftHelp":
+    "Draft chrome (discard / save / view-diff): **Card `actions`** of the Card that owns the editable subject (`chrome=\"plain\"` when nesting CodeBlock). CatalogMorph heads use `size=\"sm\"`. **Forbidden:** bare `.fynns-control-cluster--end-align` or `ControlRow` of save/discard IconButtons as a PageScroll / unit-stack sibling outside any Card — reads as floating chrome with unclear scope. Live: `#sandbox-card-draft-actions`.",
   "globals.cardHeadSelectTitle": "Sample revision",
   "globals.cardHeadSelectRevisionAria": "Revision",
   "globals.cardHeadSelectRevisionA": "Latest - sample-a1b2",
@@ -1775,7 +1782,7 @@ const en = {
   "globals.cardChromePlainNote":
     "Prose sibling — same nest-gap as the Surface above (pad + sibling gap).",
   "globals.cardChromeHelp":
-    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). **Do not** put `ToggleGroup` in actions — body `ControlRow` (live mode-in-body sample). Lead yields under dense IconButton strips (≥ 0.5.57). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
+    "Default chrome=\"card\". Header actions = interactive chrome only (IconButton / Button / **at most one** InfoHint — one nowrap strip; nested control-clusters hug). **Draft discard/save** IconButtons belong in Card `actions` of the editable subject Card (live `#sandbox-card-draft-actions`) — never a lone end-align strip outside any Card. **Do not** put `ToggleGroup` in actions — body `ControlRow` (live mode-in-body sample). Lead yields under dense IconButton strips (≥ 0.5.57). InfoHint content = short tip (≈1–2 sentences); never twin head “i” icons or essay bubbles — longer include/exclude → body FieldHint / InlineAlert. Never put path / branch / mono meta in actions — body first. Use chrome=\"plain\" when nesting surface wells / mixed body children: outer Card stays the main shell; body uses `--fynns-layout-nest-gap` for inset and sibling spacing — no split chips, no flush / negative-margin cancel.",
   "globals.cardMetaBodyTitle": "sample-repo status",
   "globals.cardMetaBodyCount": "8 catalog entries",
   "globals.cardMetaBodyBranch": "default branch: main",
@@ -2685,7 +2692,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chartSeriesOutbound": "输出",
   "globals.chartSeriesCost": "等价成本（右轴）",
   "globals.chartHelp":
-    "M3 风格分析图预设：左轴堆叠柱（accent + tonal 堆叠），右轴折线（info）。`ToggleGroup` 视图切换放在 Card 正文 `ControlRow`（勿放进 Card `actions`）。仅水平网格；隐藏轴线；刻度用 `font-size-xs` + `text-muted`；右轴刻度与折线同色。**折线默认不画节点圆点** — 仅 hover 时显示一个 activeDot。**转折处轻微曲线**（Recharts `monotone`；自绘 SVG 用 **Fritsch–Carlson 单调三次**插值，勿用 Catmull-Rom — 非负序列不能弯到 0 以下）。**Tooltip 跟随指针**（在 chart wrapper 上用 `onMouseMove` 取指针坐标设 Tooltip `position` — 勿锁在当前系列值的 Y）。**Tooltip 排版：** `.fynns-chart-tooltip` — 标题 `font-size-sm`、正文行 `font-size-xs`、`tooltip-row-gap`（4dp）；flyout 内**勿**用 `.fynns-unit-stack`。颜色走 `--fynns-chart-*` token。Recharts 仅在 sandbox；消费者复制结构与 CSS，勿粘贴产品文案。",
+    "M3 风格分析图预设：左轴堆叠柱（accent + tonal 堆叠），右轴折线（info）。`ToggleGroup` 视图切换放在 Card 正文 `ControlRow`（勿放进 Card `actions`）。仅水平网格；隐藏轴线；刻度用 `font-size-xs` + `text-muted`；右轴刻度与折线同色。**折线默认不画节点圆点** — 仅 hover 时显示一个 activeDot。**转折处轻微曲线**（Recharts `monotone`；自绘 SVG 用 **Fritsch–Carlson 单调三次**插值，勿用 Catmull-Rom — 非负序列不能弯到 0 以下）。**Tooltip 跟随指针**（在 chart wrapper 上用 `onMouseMove` 取指针坐标设 Tooltip `position` — 勿锁在当前系列值的 Y）。**Tooltip 边缘 clamp（自绘）：** 外层 `.fynns-chart-tooltip-shell` + `clampChartPointerTooltipBox()`，flyout 完整留在 plot 宿主内 — 勿 `translate(-50%)` 再 naive `clamp(left)`。移动时保持 tip 尺寸稳定（禁止每帧 estimate↔measure 抖动）；类目 tip 优先列中心 X + 指针 Y。**Tooltip 排版：** `.fynns-chart-tooltip` — 标题 `font-size-sm`、正文行 `font-size-xs`、`tooltip-row-gap`（4dp）；flyout 内**勿**用 `.fynns-unit-stack`。颜色走 `--fynns-chart-*` token。Recharts 仅在 sandbox；消费者复制结构与 CSS，勿粘贴产品文案。",
   "globals.tokenListChart": "图表 token",
   "globals.codeBlockLabel": "tokens.ts",
   "globals.codeBlockCssLabel": "hero.css",
@@ -3725,6 +3732,13 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionsStripOpen": "打开文件",
   "globals.cardActionsStripFolder": "打开所在文件夹",
   "globals.cardActionsStripDelete": "删除",
+  "globals.cardDraftTitle": "示例条目正文",
+  "globals.cardDraftDiscard": "撤回未保存（从磁盘重新加载）",
+  "globals.cardDraftSave": "保存",
+  "globals.cardDraftBody":
+    "可编辑正文 / 文件井在本 Card 内。撤回 + 保存 IconButton 放在 Card `actions` — 禁止在 PageScroll 下单独挂一条无 Card 标题的 end-align 条。",
+  "globals.cardDraftHelp":
+    "草稿 chrome（撤回 / 保存 / 查看改动）：放在**拥有可编辑主体**的 Card 的 **`actions`**（嵌套 CodeBlock 时 `chrome=\"plain\"`）。CatalogMorph 标题栏用 `size=\"sm\"`。**禁止：** 在 PageScroll / unit-stack 里用裸 `.fynns-control-cluster--end-align` 或 `ControlRow` 挂保存/撤回 IconButton 且不属于任何 Card — 读成悬浮 chrome、作用域不明。对照：`#sandbox-card-draft-actions`。",
   "globals.cardHeadSelectTitle": "示例修订",
   "globals.cardHeadSelectRevisionAria": "修订版本",
   "globals.cardHeadSelectRevisionA": "最新 - sample-a1b2",
@@ -3748,7 +3762,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromePlainNote":
     "散文兄弟节点 — 与上方 Surface 同用 nest-gap（外边距 + 兄弟间距）。",
   "globals.cardChromeHelp":
-    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
+    "默认 chrome=\"card\"。标题栏 actions = **仅交互 chrome**（IconButton / Button / **最多一个** InfoHint — 一条 nowrap 横向带；嵌套 control-cluster 会 hug）。**草稿撤回/保存** IconButton 放在可编辑主体 Card 的 `actions`（对照 `#sandbox-card-draft-actions`）— 禁止在任何 Card 外单独挂 end-align 条。禁止把 `ToggleGroup` 塞进 actions — 正文 `ControlRow`（对照正文模式样例）。Lead 在密集 IconButton 条下会让位（≥ 0.5.57）。InfoHint content = 短 tip（约 1–2 句）；禁止双「i」并排或气泡百科段 — 长纳入/排除改放正文 FieldHint / InlineAlert。禁止把路径 / 分支 / mono 元数据塞进 actions — 放正文。嵌套表面井 / 混合正文子节点时用 chrome=\"plain\"：外层 Card 仍是主壳，正文用 `--fynns-layout-nest-gap` 做缩进与兄弟间距 — 禁止拆成两个芯片，禁止贴边 / 负 margin 冲掉 nest-gap。",
   "globals.cardMetaBodyTitle": "示例仓库状态",
   "globals.cardMetaBodyCount": "8 条目录条目",
   "globals.cardMetaBodyBranch": "默认分支：main",

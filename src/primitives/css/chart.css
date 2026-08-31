@@ -11,6 +11,7 @@
 }
 
 .fynns-chart-plot {
+  position: relative;
   width: 100%;
   min-height: var(--fynns-chart-plot-min-height);
   height: var(--fynns-chart-plot-min-height);
@@ -55,6 +56,15 @@
   height: 2px;
   border-radius: var(--fynns-radius-pill);
   background: var(--fynns-chart-series-line);
+}
+
+/** Pointer-follow shell — set `left`/`top` from `clampChartPointerTooltipBox`. */
+.fynns-chart-tooltip-shell {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* Hover flyout — compact metric rows; do not wrap in `.fynns-unit-stack`. */
