@@ -2080,7 +2080,7 @@ JSON, …):
 chrome. Keep-set: interactive discard/save belongs in **`Card` `actions`** of
 the Card that owns the editable body / fields.
 
-**Fix in core / sandbox (≥ 0.5.101):** living sample `#sandbox-card-draft-actions`
+**Fix in core / sandbox (≥ 0.5.102):** living sample `#sandbox-card-draft-actions`
 under `#card` (Undo + Save in `actions` on the editable subject Card). Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density** → Draft discard / save.
 
@@ -2721,9 +2721,10 @@ Symptoms in a pointer-following combo analytics hover flyout (stacked bars + cos
 **Cause:** hand-drawn chart tips (e.g. `.usage-chart__tip`) center with CSS
 translate but clamp only the anchor `left`, not the full box width/height.
 
-**Fix in core (≥ 0.5.100):** public `clampChartPointerTooltipBox()` +
+**Fix in core (≥ 0.5.102):** public `clampChartPointerTooltipBox()` +
 `.fynns-chart-tooltip-shell` (top-left placement — no translate centering). Live:
-sandbox `#chart` help + `clampChartPointerTooltipBox` unit tests.
+sandbox `#chart` help + `clampChartPointerTooltipBox` unit tests (hand-drawn
+wiring is consumer-side; Recharts `#chart` demo stays pointer-follow).
 
 **Fix in the consumer:** bump; outer shell = `.fynns-chart-tooltip-shell` with
 `left`/`top` from `clampChartPointerTooltipBox(pointer, { width, height }, tipSize)`;

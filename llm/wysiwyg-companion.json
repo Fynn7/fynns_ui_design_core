@@ -75,6 +75,7 @@
     "isHighlightableLanguage",
     "measureContentOverflow",
     "measureOverflow",
+    "clampChartPointerTooltipBox",
     "mergeScrollSurfaceClass",
     "monacoScrollbarColors",
     "normalizeLanguage",
