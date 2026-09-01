@@ -47,6 +47,19 @@
   justify-items: start;
 }
 
+/*
+ * Block hosts (InlineAlert, List, FieldStack, unit-stack, …) are not
+ * ControlRow — without a full-width span they auto-place into the control
+ * grid and sit beside catalogs (env-check lesson; ≥ 0.5.120). Prefer
+ * `.fynns-unit-stack` for alert → list → action; this rule is the safety net.
+ */
+.fynns-control-stack > :not(.fynns-control-row) {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 100%;
+  justify-self: stretch;
+}
+
 /* Controls / Grid dissolve so switches sit on the shared tracks. */
 .fynns-control-stack > .fynns-control-row > .fynns-control-row__controls,
 .fynns-control-stack

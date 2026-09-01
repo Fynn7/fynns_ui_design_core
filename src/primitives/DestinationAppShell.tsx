@@ -62,7 +62,13 @@ export type DestinationAppShellProps = {
   expandNavLabel: string;
   /** IconButton label when destinations are open. */
   collapseNavLabel: string;
-  /** Optional drawer headline (standard / labeled mode only). */
+  /**
+   * **Omit** on greenfield apps — `TopAppBar` `title` already names the app;
+   * flat root `NavigationDrawerItem`s self-label. Passing this paints
+   * `.fynns-nav-drawer-headline` under the bar (redundant on destination
+   * shells). Live: Layouts `#layouts-demo-shell` omits it. Reserve sheet
+   * `headline` for standalone `NavigationDrawer` demos without TopAppBar.
+   */
   drawerHeadline?: ReactNode;
   /**
    * Optional `NavigationDrawer` footer (Cursor-style single account row +
