@@ -605,6 +605,14 @@ const en = {
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
     "Pane cold-start: BusyRegion fill as FillColumn children (this stage) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top). Ring centers in the visible pane on the original background (transparent overlay). Do not use EmptyState + CircularProgress as a loading shell, and do not add a private colored loading wash.",
+  "globals.busyRegionPaneLeadHint":
+    "Sample section scope note — visible only after the pane has loaded.",
+  "globals.busyRegionPaneLeadLabel": "Loading section",
+  "globals.busyRegionPaneLeadBody": "Loaded catalog body.",
+  "globals.busyRegionPaneLeadShowCold": "Simulate cold-start",
+  "globals.busyRegionPaneLeadShowReady": "Simulate loaded",
+  "globals.busyRegionPaneLeadHelp":
+    "Pane cold-start in one well: hide section FieldHint / SectionLead sub until data is ready — render only BusyRegion fill (no .fynns-unit-stack sibling hint). Never stack hint + fill busy in the same column (spinner overlaps scope copy). Failure mode: CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion.",
   "globals.busyRegionDialogOpen": "Open Dialog body load",
   "globals.busyRegionDialogTitle": "Pick an item",
   "globals.busyRegionDialogLabel": "Loading catalog",
@@ -2642,6 +2650,14 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
     "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶）。圈在可见主栏原背景上居中（透明遮罩）。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有彩色 loading 底。",
+  "globals.busyRegionPaneLeadHint":
+    "示例栏目说明 — 仅在主栏数据就绪后显示。",
+  "globals.busyRegionPaneLeadLabel": "加载栏目",
+  "globals.busyRegionPaneLeadBody": "已加载的目录正文。",
+  "globals.busyRegionPaneLeadShowCold": "模拟冷启动",
+  "globals.busyRegionPaneLeadShowReady": "模拟已加载",
+  "globals.busyRegionPaneLeadHelp":
+    "同一主栏井内冷启动：数据未就绪前隐藏栏目 FieldHint / SectionLead 副文案 — 只渲 BusyRegion fill（禁止与 hint 做 unit-stack 兄弟，圈会与说明叠字）。失败模式：CONSUMER_TREATY section FieldHint + pane cold-start BusyRegion。",
   "globals.busyRegionDialogOpen": "打开 Dialog 正文加载",
   "globals.busyRegionDialogTitle": "选择一项",
   "globals.busyRegionDialogLabel": "加载目录",

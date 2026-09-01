@@ -43,6 +43,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
+**section FieldHint + pane cold-start BusyRegion in one well** /
 **BusyRegion transparent overlay (no surface wash)** /
 **BusyRegion cold body + pager chrome siblings** /
 **BusyRegion empty cold-start overlaps SearchBar** /
@@ -3194,6 +3195,29 @@ BusyRegion--fill` “work” — that teaches the anti-pattern. Authority:
 [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement** + **FillColumn**.
 Live: sandbox `#busy-region` fill sample (FillColumn stage — not inside a
 unit-stack). Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: section FieldHint + pane cold-start BusyRegion in one well
+
+Symptoms: destination **PageScroll** / main column cold-start shows a
+section-scope `FieldHint` (or `SectionLead` `sub` — e.g. “OpenCode / Cursor
+usage read-only…”) **at the same time** as a pane-boot `BusyRegion` `fill`
+ring in the **same well**. The spinner overlaps the hint, or both compete for
+the center band — users read double chrome while nothing has loaded yet.
+
+**Cause:** consumer wraps every leaf in `.fynns-unit-stack` = `FieldHint` +
+section body **always**. Section early-return uses `BusyRegion` `fill` while
+the lead hint stays mounted as a sibling. Scope copy is for the **loaded**
+catalog — not cold-start.
+
+**Fix in the consumer:** while pane cold-start (`!data`, chunk boot, or
+equivalent), **omit** the section `FieldHint` / `SectionLead` `sub` — render
+**only** `BusyRegion` `fill` (or the Suspense fallback) as the pane body.
+After data is ready, mount hint + `.fynns-unit-stack` content. Do **not** hide
+the hint with private CSS overlap or z-index. Pattern: `useSectionPaneColdStart`
+(or equivalent) from the section shell — live agents-hub `SectionLead`.
+Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement** (pane
+cold-start row). Live: sandbox `#busy-region` pane-lead sample. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode: EmptyState parks top-left in destination canvas
 
