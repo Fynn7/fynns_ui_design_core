@@ -3438,9 +3438,6 @@ Drop `Button variant="primary"` from section-body clusters. Bump core; live:
 `#rhythm` cover-letter; consumer `CoverLetterPanel` / `CvSkillsPanel`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-Bump core; live: `#code-block` hidden-tab sample; consumer pipeline tabs with
-`hidden`. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
-
 ## Failure mode this treaty targets: CodeBlock autoGrow stuck in hidden tab
 
 Symptoms (CV skills / cover letter / pipeline mode on `PageScroll`):

@@ -29,7 +29,7 @@ export type FieldHeaderProps = HTMLAttributes<HTMLDivElement> & {
  * inside a `FieldStack`, any sibling with actions lifts every header to that
  * band so plain labels align. Prefer `FieldBlock`
  * when wrapping label + control together. Card body keeps full
- * `--fynns-layout-content-pad-block` when this (or FieldStack) is first.
+ * `--fynns-layout-content-inset` on all edges (≥ **0.5.114**).
  */
 export function FieldHeader({
   label,
@@ -78,8 +78,7 @@ export type FieldBlockProps = HTMLAttributes<HTMLDivElement> & {
  * Label→control uses `--fynns-layout-field-label-control-gap` (via
  * `.fynns-field-block__main`); optional `description` / `errorText` use
  * `--fynns-layout-field-hint-gap` (via `.fynns-field-block` /
- * `.fynns-field-hint`). First child of `Card` body also triggers the
- * denser top inset. Sibling FieldBlocks rely on Card / Collapsible body
+ * `.fynns-field-hint`). Sibling FieldBlocks rely on Card / Collapsible body
  * `unit-stack-gap` (or `.fynns-unit-stack`) — do not add ad-hoc margins.
  */
 export function FieldBlock({

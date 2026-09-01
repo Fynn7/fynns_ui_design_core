@@ -176,10 +176,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `fill`). Prefer `FieldBlock` for label-row
    IconButtons above the control. Card / Collapsible default `chrome="card"`:
    inline pad `--fynns-layout-content-inset`; body **block** pad
-   `--fynns-layout-content-pad-block`. When nesting a **surface-owning child**
+   `--fynns-layout-content-inset` (18dp — same as inline, ≥ **0.5.114**). When nesting a **surface-owning child**
    (CodeBlock, Surface, canvas, BusyRegion, …), pass **`chrome="plain"`** —
-   Collapsible/Card stays the **main** outer shell; body uses
-   **`--fynns-layout-nest-gap`** (four-side pad + column gap) so the child
+   Collapsible/Card stays the **main** outer shell; body **pad** =
+   **`content-inset`** (18dp); column **gap** =
+   **`nest-gap`** so the child
    insets as a secondary frame.    Nested CodeBlock with **no filename** → `variant="plain"` (titled
    `default` **throws** without a non-empty `label`). **`chrome="plain"` ≠
    flush** — never cancel nest-gap with negative margins, zero body pad, or

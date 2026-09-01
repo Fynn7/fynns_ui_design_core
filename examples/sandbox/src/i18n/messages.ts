@@ -198,7 +198,7 @@ const en = {
   "preview.cardChromePlainNote":
     "Plain text sibling under the Surface — same `--fynns-layout-nest-gap` as between wells.",
   "preview.cardChromePlainHelp":
-    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body uses `--fynns-layout-nest-gap` for outer pad and sibling gap (not flush). Do not cancel with negative margins.",
+    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body pad uses `--fynns-layout-content-inset`; sibling gap uses `--fynns-layout-nest-gap` (not flush). Do not cancel with negative margins.",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
@@ -307,7 +307,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (chrome=card section body block), `nest-gap` (chrome=plain / .fynns-nest surface-well nesting), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline + card body block pad ≥ 0.5.114), `content-pad-block` (Surface padded / CodeBlock pre block — not Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -362,10 +362,10 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for chrome=card Collapsible/Card body / Surface padded / CodeBlock pre (16dp default). Nesting wells use nest-gap.",
+    "--fynns-layout-content-pad-block — vertical pad for Surface padded / CodeBlock pre (16dp default). Card/Collapsible chrome=card body block pad uses content-inset (18dp) since ≥ 0.5.114. Nested wells: plain body pad = content-inset; sibling gap = nest-gap.",
   "layoutChrome.nestGap": "Nest gap (surface wells)",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — pad + column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (18dp — matches content-inset so FieldHeader labels flush with default card body). Nested surface frames; plain ≠ flush.",
+    "--fynns-layout-nest-gap — column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (18dp — matches content-inset). Plain body **pad** = content-inset; **gap** = nest-gap. Nested surface frames; plain ≠ flush.",
   "layoutChrome.dialogInset": "Dialog / Chat column inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
@@ -743,7 +743,7 @@ const en = {
   "globals.codeBlockHiddenTabHide": "Hide panel",
   "globals.codeBlockHiddenTabAria": "Hidden-tab markdown sample",
   "globals.codeBlockHiddenTabHelp":
-    "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure; live consumer CV skills tab.",
+    "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure.",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2346,7 +2346,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（chrome=card 章节正文块向）、`nest-gap`（chrome=plain / .fynns-nest 表面井嵌套）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
+    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer 行向 + card 正文块向 ≥ 0.5.114）、`content-pad-block`（Surface padded / CodeBlock pre 块向 — 非 Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -2401,10 +2401,10 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — chrome=card 的 Collapsible/Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。嵌套井用 nest-gap。",
+    "--fynns-layout-content-pad-block — Surface padded / CodeBlock 正文垂直边距（默认 16dp）。Card/Collapsible chrome=card 正文块向自 ≥ 0.5.114 起用 content-inset（18dp）。嵌套井：plain body pad = content-inset；兄弟 gap = nest-gap。",
   "layoutChrome.nestGap": "嵌套间距（表面井）",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的 pad + 纵向 gap（18dp，与 content-inset 同阶 — FieldHeader 与默认 Card 正文左缘对齐）。嵌套表面井；plain ≠ 贴边。",
+    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的列 gap（18dp，与 content-inset 同阶）。Plain body **pad** = content-inset；**gap** = nest-gap。嵌套表面井；plain ≠ 贴边。",
   "layoutChrome.dialogInset": "对话框 / Chat 列内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
@@ -2780,7 +2780,7 @@ const zh: Record<MessageKey, string> = {
   "globals.codeBlockHiddenTabHide": "隐藏面板",
   "globals.codeBlockHiddenTabAria": "Hidden 面板 markdown 示例",
   "globals.codeBlockHiddenTabHelp":
-    "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测；对照 consumer CV 技能 tab。",
+    "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
