@@ -29,6 +29,10 @@ core publish. Registry lookup requires `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`
 (`read:packages`); set `FYNNS_UI_SKIP_UPDATE_CHECK=1` in CI to silence. Manual:
 `npm run fynns-ui:check-update` in the consumer app.
 
+**Monorepo:** bump in the **app package** that owns `predev` (e.g. `apps/web`),
+not only at the git root — nested `node_modules` wins for Vite. See
+[`llm/CONSUME.md`](../llm/CONSUME.md) **Monorepo bump**.
+
 ## Local core development
 
 Edit this checkout, then **ship on the registry** — not via a sibling Vite alias.

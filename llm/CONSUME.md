@@ -161,6 +161,15 @@ Treaty failure mode + pasteable §2a:
    `.fynns-ui-update-check.json` (gitignored by the installer).
 8. `--json` structured result for agents.
 
+**Monorepo bump (hard):** `fynns-ui:check-update` runs from the **consumer app
+package** (the nearest `package.json` above `--target` / cwd — e.g.
+`apps/web`), not the git root. Vite resolves
+`node_modules/@fynn7/ui-design-core` from that package first. Installing only
+at the repo root updates a parent copy the app does not use; `npm run dev`
+will keep warning until you run `npm install @fynn7/ui-design-core@x.y.z` (or
+`npm run consume:install -- --target <app>`) **in the app package**. The notice
+names that package path and flags parent drift when detected.
+
 Flags: `--check`, `--wire-only` / `--skip-install`, `--dry-run`, `--vite`, `--tsconfig`, `--version`.
 
 ## After install
