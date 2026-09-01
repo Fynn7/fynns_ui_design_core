@@ -1089,6 +1089,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
+  const [codeBlockHiddenTabOpen, setCodeBlockHiddenTabOpen] = useState(false);
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
@@ -5718,6 +5719,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </Card>
           <SandboxHelp text={t("globals.codeBlockFileBodyReadOnlyHelp")} />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setCodeBlockHiddenTabOpen((open) => !open)}
+            >
+              {codeBlockHiddenTabOpen
+                ? t("globals.codeBlockHiddenTabHide")
+                : t("globals.codeBlockHiddenTabShow")}
+            </Button>
+          </div>
+          <div hidden={!codeBlockHiddenTabOpen} id="sandbox-code-block-hidden-tab">
+            <CodeBlock
+              variant="editable"
+              language="markdown"
+              value={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockHiddenTabAria")}
+            />
+          </div>
+          <SandboxHelp text={t("globals.codeBlockHiddenTabHelp")} />
           <CodeBlock
             wrap={false}
             label={t("globals.codeBlockNowrapLabel")}

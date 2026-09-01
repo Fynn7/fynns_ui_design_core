@@ -3438,6 +3438,32 @@ Drop `Button variant="primary"` from section-body clusters. Bump core; live:
 `#rhythm` cover-letter; consumer `CoverLetterPanel` / `CvSkillsPanel`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+Bump core; live: `#code-block` hidden-tab sample; consumer pipeline tabs with
+`hidden`. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: CodeBlock autoGrow stuck in hidden tab
+
+Symptoms (CV skills / cover letter / pipeline mode on `PageScroll`):
+
+- `CodeBlock` `variant="editable"` `autoGrow` shows **one row** (~47dp) while
+  `value` / highlight layer contain many lines of markdown
+- The host lives under a sibling panel kept mounted with HTML **`hidden`** while
+  another tab is active; switching tabs does not expand the well
+- User sees only `## Skills` (first line) with the rest clipped
+
+**Cause:** first `syncEditableHeight` ran while the panel was `display:none`
+(`scrollHeight` ≈ row floor). Height was never remeasured when the tab opened.
+Core grammar (≥ **0.5.112**): editable `ResizeObserver` remeasures autoGrow when
+the host or root gains layout width / visibility.
+
+**Fix in core (≥ **0.5.112**):** `CodeBlock` remeasures on host resize (root +
+textarea observers); sandbox `#code-block` hidden-tab toggle teaches the host.
+
+**Fix in the consumer (props-only):** keep default `autoGrow`; bump core — no
+local height CSS. Optional: prefer `visibility` + `inert` over `hidden` only if
+you cannot bump yet (not the long-term recipe). Live: `ApplicationPipelineView`
+CV skills tab. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: PageScroll brief Card
 
 Symptoms (cover-letter / pipeline step on `PageScroll`):

@@ -591,6 +591,7 @@ Sandbox：Preview → Collapsible/Card 的 chrome 开关；Globals → Containme
 | 可编辑 | `variant="editable"`；有标题则传非空 `label`，否则**省略** `label`（结束列复制） |
 | 语法高亮 | **必须**另传 `language`（或 `highlightProfile` / 已 `registerHighlightLanguage`） |
 | 全屏 / flex 填满编辑器 | **`autoGrow={false}`** + 宿主把 CodeBlock / `textarea` 拉满（默认 autoGrow 跟内容长）。**禁止**在 PageScroll / Card / Dialog 目录上用 `autoGrow={false}` + 大 `rows` 造固定井内滚动。`FullscreenDialog` 里若 CodeBlock 是正文第一个带边框井 → core **flush-start**（不要再垫一层 pad-top）；对照 `#fullscreen-flush` |
+| **HTML `hidden` 模式面板**（pipeline 兄弟 tab 保持挂载） | 默认 `autoGrow`；core ≥ **0.5.112** 在面板重新可见时重测高度 — **禁止**卡在一行 ~47dp。对照 `#code-block` hidden-tab 样本 | 在 `display:none` 下首次测量后不再长高；consumer 用私有 `min-height` / `rows` 硬撑 |
 | **PageScroll 长散文 Textarea**（求职信 / 多段笔记） | 默认 `autoGrow`；软上限 core ≥ **0.5.103** = `min(70dvh, 40rem)`（**不是** ChatComposer 的 13rem）。`minRows` / `rows` 只做空态地板 — **禁止**靠 `rows={8}` 或私有 `max-height: 13rem` 造矮井内滚。对照 `#textarea` | 正文停在 ~208px、末行半裁、栈下大片空白；把 ChatComposer 高度套到表单 Textarea |
 
 **`label` ≠ `language`（硬）：** `label` 只做标题栏文件名，**不会**根据 `.xml` / `.json` /

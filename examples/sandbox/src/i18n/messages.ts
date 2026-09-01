@@ -736,6 +736,11 @@ const en = {
     "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` uses the live deferred token overlay (≥ 0.5.52) — use `wrap={false}` or `readOnly` when wrap/selection alignment matters.",
+  "globals.codeBlockHiddenTabShow": "Show hidden-tab panel",
+  "globals.codeBlockHiddenTabHide": "Hide panel",
+  "globals.codeBlockHiddenTabAria": "Hidden-tab markdown sample",
+  "globals.codeBlockHiddenTabHelp":
+    "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure; live consumer CV skills tab.",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2756,6 +2761,11 @@ const zh: Record<MessageKey, string> = {
     "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 使用 live deferred token overlay（≥ 0.5.52）— 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
+  "globals.codeBlockHiddenTabShow": "显示 hidden 面板",
+  "globals.codeBlockHiddenTabHide": "隐藏面板",
+  "globals.codeBlockHiddenTabAria": "Hidden 面板 markdown 示例",
+  "globals.codeBlockHiddenTabHelp":
+    "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测；对照 consumer CV 技能 tab。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
