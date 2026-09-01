@@ -1390,14 +1390,14 @@ export const LAYOUT_TOKENS = {
    */
   "content-pad-block": "1rem",
   /**
-   * Space between **nested surface frames** (16dp): outer shell ↔ inner well
-   * (CodeBlock / Surface / canvas / BusyRegion), and sibling wells / meta
-   * inside a nest host. Used as four-side pad + column `gap` on
-   * `chrome="plain"` Card/Collapsible body and `.fynns-nest`. Same default as
-   * `unit-stack-gap`, but role is nest frames — not generic inspector stacks.
+   * Space between **nested surface frames** (18dp — same as `content-inset` so
+   * `FieldHeader` / field labels flush with default `chrome="card"` body copy):
+   * outer shell ↔ inner well (CodeBlock / Surface / canvas / BusyRegion), and
+   * sibling wells / meta inside a nest host. Used as four-side pad + column
+   * `gap` on `chrome="plain"` Card/Collapsible body and `.fynns-nest`.
    * `chrome="plain"` ≠ flush; never cancel with negative margins.
    */
-  "nest-gap": "1rem",
+  "nest-gap": "1.125rem",
   /**
    * Dialog shell inset (24dp): head / foot / body **inline**. Also the Chat
    * **conversation column** outer pad (`--fynns-chat-thread-pad-inline` /

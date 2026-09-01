@@ -4232,6 +4232,46 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardBody")}
             </Card>
+          <div
+            id="sandbox-card-plain-field-align"
+            className="sandbox-globals-row sandbox-globals-row--stack"
+          >
+            <Card className="sandbox-globals-card" title={t("globals.cardPlainAlignDefaultTitle")}>
+              <FieldStack>
+                <FieldBlock label={t("globals.cardPlainAlignFieldLabel")}>
+                  <Select
+                    ariaLabel={t("globals.cardPlainAlignFieldLabel")}
+                    value="a"
+                    onChange={() => {}}
+                    options={[
+                      { value: "a", label: t("globals.cardPlainAlignOptionA") },
+                      { value: "b", label: t("globals.cardPlainAlignOptionB") },
+                    ]}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+            <Card
+              className="sandbox-globals-card"
+              title={t("globals.cardPlainAlignPlainTitle")}
+              chrome="plain"
+            >
+              <FieldStack>
+                <FieldBlock label={t("globals.cardPlainAlignFieldLabel")}>
+                  <Select
+                    ariaLabel={t("globals.cardPlainAlignFieldLabel")}
+                    value="a"
+                    onChange={() => {}}
+                    options={[
+                      { value: "a", label: t("globals.cardPlainAlignOptionA") },
+                      { value: "b", label: t("globals.cardPlainAlignOptionB") },
+                    ]}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+          </div>
+          <SandboxHelp text={t("globals.cardPlainAlignHelp")} />
           <Card
             className="sandbox-globals-card"
             title={t("globals.cardHintTitle")}

@@ -362,7 +362,7 @@ const en = {
     "--fynns-layout-content-pad-block — vertical pad for chrome=card Collapsible/Card body / Surface padded / CodeBlock pre (16dp default). Nesting wells use nest-gap.",
   "layoutChrome.nestGap": "Nest gap (surface wells)",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — pad + column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (16dp). Nested surface frames; plain ≠ flush.",
+    "--fynns-layout-nest-gap — pad + column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (18dp — matches content-inset so FieldHeader labels flush with default card body). Nested surface frames; plain ≠ flush.",
   "layoutChrome.dialogInset": "Dialog / Chat column inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
@@ -1773,6 +1773,13 @@ const en = {
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
   "globals.cardHintTitle": "Export package",
+  "globals.cardPlainAlignDefaultTitle": "Default chrome",
+  "globals.cardPlainAlignPlainTitle": "Plain chrome",
+  "globals.cardPlainAlignFieldLabel": "Sample field",
+  "globals.cardPlainAlignOptionA": "Option A",
+  "globals.cardPlainAlignOptionB": "Option B",
+  "globals.cardPlainAlignHelp":
+    "**FieldHeader flush (hard ≥ 0.5.113):** `chrome=\"card\"` body pad uses `--fynns-layout-content-inset` (18dp); `chrome=\"plain\"` body pad uses `--fynns-layout-nest-gap` at the **same 18dp** so labels share one start edge — not 16dp plain offset. Measure `#sandbox-card-plain-field-align` labels.",
   "globals.cardHintAria": "Export package help",
   "globals.cardHintTip":
     "Packs managed configs only — large local DBs use Archive below.",
@@ -2389,7 +2396,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-pad-block — chrome=card 的 Collapsible/Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。嵌套井用 nest-gap。",
   "layoutChrome.nestGap": "嵌套间距（表面井）",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的 pad + 纵向 gap（默认 16dp）。嵌套表面井；plain ≠ 贴边。",
+    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的 pad + 纵向 gap（18dp，与 content-inset 同阶 — FieldHeader 与默认 Card 正文左缘对齐）。嵌套表面井；plain ≠ 贴边。",
   "layoutChrome.dialogInset": "对话框 / Chat 列内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
@@ -3791,6 +3798,13 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
   "globals.cardHintTitle": "导出包",
+  "globals.cardPlainAlignDefaultTitle": "默认 chrome",
+  "globals.cardPlainAlignPlainTitle": "Plain chrome",
+  "globals.cardPlainAlignFieldLabel": "示例字段",
+  "globals.cardPlainAlignOptionA": "选项 A",
+  "globals.cardPlainAlignOptionB": "选项 B",
+  "globals.cardPlainAlignHelp":
+    "**FieldHeader 左缘对齐（硬 ≥ 0.5.113）：** `chrome=\"card\"` 正文 pad 为 `--fynns-layout-content-inset`（18dp）；`chrome=\"plain\"` 正文 pad 为同阶 `--fynns-layout-nest-gap`（18dp），标签共用一条起始边 — 非 16dp plain 偏移。测量 `#sandbox-card-plain-field-align` 标签。",
   "globals.cardHintAria": "导出包说明",
   "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
   "globals.cardHintBodyLead":

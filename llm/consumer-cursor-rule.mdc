@@ -575,7 +575,7 @@ const navMode = open ? "drawer" : "hidden";
 | 场景 | 选用 |
 | --- | --- |
 | 正文是表单 / 文案（壳自己提供表面） | `Collapsible` / `Card` 默认 |
-| 子节点**自带**表面（CodeBlock、Surface、canvas、BusyRegion…） | **`chrome="plain"`**（外层仍是主壳；正文用 `--fynns-layout-nest-gap` 缩进成附框；嵌套 CodeBlock **无文件名**时用 `variant="plain"`；**plain ≠ 贴边**） |
+| 子节点**自带**表面（CodeBlock、Surface、canvas、BusyRegion…） | **`chrome="plain"`**（外层仍是主壳；正文 `--fynns-layout-nest-gap` **与 content-inset 同阶 18dp**，≥ **0.5.113** — FieldHeader 与默认 Card 左缘对齐；嵌套 CodeBlock **无文件名**时用 `variant="plain"`；**plain ≠ 贴边**） |
 | 不需要 title / actions | `Surface`（`padded` / `fill`） |
 | Card/Collapsible 外的嵌套井 | **`.fynns-nest`**（同 nest-gap） |
 

@@ -1732,7 +1732,8 @@ classes.
   pad `--fynns-layout-content-pad-block` (16dp) **and** stacks direct children
   with `--fynns-layout-unit-stack-gap` so FieldBlock / ControlBlock / intro
   copy do not need ad-hoc margins. Nesting a surface-owning child → **`chrome="plain"`**:
-  body pad + column gap are **`--fynns-layout-nest-gap`** (16dp) so the child
+  body pad + column gap are **`--fynns-layout-nest-gap`** (**18dp**, same step as
+  **`content-inset`**) so the child
   reads as a secondary inset frame; sibling wells / meta in that body also use
   the same gap. **plain ≠ flush** — never cancel nest-gap with negative margins
   or by zeroing `.fynns-*-body` pad. Custom hosts outside Card/Collapsible use
