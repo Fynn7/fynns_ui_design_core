@@ -1779,7 +1779,7 @@ const en = {
   "globals.cardPlainAlignOptionA": "Option A",
   "globals.cardPlainAlignOptionB": "Option B",
   "globals.cardPlainAlignHelp":
-    "**FieldHeader flush (hard ≥ 0.5.113):** `chrome=\"card\"` body pad uses `--fynns-layout-content-inset` (18dp); `chrome=\"plain\"` body pad uses `--fynns-layout-nest-gap` at the **same 18dp** so labels share one start edge — not 16dp plain offset. Measure `#sandbox-card-plain-field-align` labels.",
+    "**FieldHeader flush (hard ≥ 0.5.114):** default `chrome=\"card\"` and `chrome=\"plain\"` body pad both use `--fynns-layout-content-inset` (18dp) on **all edges** — inline + block-start — so labels share one box. Plain sibling gap stays `nest-gap`. Measure `#sandbox-card-plain-field-align`.",
   "globals.cardHintAria": "Export package help",
   "globals.cardHintTip":
     "Packs managed configs only — large local DBs use Archive below.",
@@ -3804,7 +3804,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardPlainAlignOptionA": "选项 A",
   "globals.cardPlainAlignOptionB": "选项 B",
   "globals.cardPlainAlignHelp":
-    "**FieldHeader 左缘对齐（硬 ≥ 0.5.113）：** `chrome=\"card\"` 正文 pad 为 `--fynns-layout-content-inset`（18dp）；`chrome=\"plain\"` 正文 pad 为同阶 `--fynns-layout-nest-gap`（18dp），标签共用一条起始边 — 非 16dp plain 偏移。测量 `#sandbox-card-plain-field-align` 标签。",
+    "**FieldHeader 左缘/顶缘对齐（硬 ≥ 0.5.114）：** 默认 `chrome=\"card\"` 与 `chrome=\"plain\"` 正文 pad 均为 `--fynns-layout-content-inset`（18dp，**四边**含 block-start）— 标签共用同一盒。Plain 兄弟 gap 仍为 `nest-gap`。测量 `#sandbox-card-plain-field-align`。",
   "globals.cardHintAria": "导出包说明",
   "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
   "globals.cardHintBodyLead":

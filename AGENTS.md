@@ -74,8 +74,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    that stack shares the band so plain labels align. Trailing
    actions stay on the label line (`IconButton` sm). Default `ghost`; dense
    forms may use `size="sm"`. Card / Collapsible
-   `chrome="card"` body keeps full `--fynns-layout-content-pad-block` (16dp)
-   even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
+   `chrome="card"` body keeps full `--fynns-layout-content-inset` (18dp) on all
+   edges even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
    (do not crush to `space-xs` under the head hairline). Inline stays
    `content-inset`. Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -1728,12 +1728,12 @@ classes.
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
   inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of
   heads / `chrome="card"` bodies (`chrome="card"` and `chrome="plain"` share the
-  outer shell). Collapsible / Card **`chrome="card"`** body uses shared **block**
-  pad `--fynns-layout-content-pad-block` (16dp) **and** stacks direct children
+  outer shell).   Collapsible / Card **`chrome="card"`** body uses shared **block**
+  pad `--fynns-layout-content-inset` (18dp) **and** stacks direct children
   with `--fynns-layout-unit-stack-gap` so FieldBlock / ControlBlock / intro
   copy do not need ad-hoc margins. Nesting a surface-owning child → **`chrome="plain"`**:
-  body pad + column gap are **`--fynns-layout-nest-gap`** (**18dp**, same step as
-  **`content-inset`**) so the child
+  body **pad** = **`content-inset`** (18dp); column **gap** =
+  **`nest-gap`** so the child
   reads as a secondary inset frame; sibling wells / meta in that body also use
   the same gap. **plain ≠ flush** — never cancel nest-gap with negative margins
   or by zeroing `.fynns-*-body` pad. Custom hosts outside Card/Collapsible use
