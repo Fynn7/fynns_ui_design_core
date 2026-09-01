@@ -2243,7 +2243,8 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host.fynns-list-item-host--with-detail {
   flex-direction: column;
   align-items: stretch;
-  gap: 0;
+  /* Same breath as sibling hosts — parent row must not kiss the nested List. */
+  gap: var(--fynns-list-item-gap);
 }
 
 .fynns-list-item-trailing > svg {

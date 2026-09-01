@@ -951,13 +951,13 @@ const en = {
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
   "globals.rhythmMorphHelp":
-    "PageScroll section-body (hard ≥ 0.5.110): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
+    "PageScroll section-body (hard ≥ 0.5.107): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
   "globals.rhythmMorphSectionHint":
     "Hover highlights show kind; tooltip shows the matched snippet.",
   "globals.rhythmMorphBodySample":
     "Sample posting body. Highlights and tooltips live in the consumer stage below this strip.",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow section-body strip (hard ≥ 0.5.110): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
+    "ControlRow section-body strip (hard ≥ 0.5.107): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
   "globals.rhythmCoverLetterLabel": "Sample letter",
   "globals.rhythmCoverLetterSave": "Save slots",
   "globals.rhythmCoverLetterExport": "Export",
@@ -1008,11 +1008,11 @@ const en = {
   "globals.formRecipeBriefTitle": "Sample brief (5 fields)",
   "globals.formRecipeBriefSave": "Save brief",
   "globals.formRecipeBriefField1": "Sample opening fact",
-  "globals.formRecipeBriefField1Desc": "One concrete item for the first sentence — generic placeholder.",
+  "globals.formRecipeBriefField1Desc": "One concrete item for the first sentence. Generic placeholder.",
   "globals.formRecipeBriefField2": "Sample role fit",
-  "globals.formRecipeBriefField2Desc": "One specific reason for this role — not generic motivation.",
+  "globals.formRecipeBriefField2Desc": "One specific reason for this role, not generic motivation.",
   "globals.formRecipeBriefField3": "Sample availability",
-  "globals.formRecipeBriefField3Desc": "Start date or hours — factual only.",
+  "globals.formRecipeBriefField3Desc": "Start date or hours. Factual only.",
   "globals.formRecipeBriefField4": "Sample honest gap",
   "globals.formRecipeBriefField4Desc": "One line on an unproven requirement.",
   "globals.formRecipeBriefField5": "Sample avoid",
@@ -2971,13 +2971,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
   "globals.rhythmMorphHelp":
-    "PageScroll 分区正文（硬 ≥ 0.5.110）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
+    "PageScroll 分区正文（硬 ≥ 0.5.107）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
   "globals.rhythmMorphSectionHint":
     "悬停高亮查看技能类型；tooltip 显示匹配片段。",
   "globals.rhythmMorphBodySample":
     "示例招聘正文。高亮与 tooltip 由消费仓正文区承载。",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow 分区正文条（硬 ≥ 0.5.110）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
+    "ControlRow 分区正文条（硬 ≥ 0.5.107）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
   "globals.rhythmCoverLetterLabel": "示例求职信",
   "globals.rhythmCoverLetterSave": "保存段落",
   "globals.rhythmCoverLetterExport": "导出",
@@ -3028,11 +3028,11 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeBriefTitle": "示例要点问卷（5 项）",
   "globals.formRecipeBriefSave": "保存要点",
   "globals.formRecipeBriefField1": "示例开篇事实",
-  "globals.formRecipeBriefField1Desc": "开篇第一句用的一项具体事实 — 通用占位。",
+  "globals.formRecipeBriefField1Desc": "开篇第一句用的一项具体事实，通用占位。",
   "globals.formRecipeBriefField2": "示例岗位理由",
-  "globals.formRecipeBriefField2Desc": "针对岗位的一句具体理由 — 非空泛动机。",
+  "globals.formRecipeBriefField2Desc": "针对岗位的一句具体理由，非空泛动机。",
   "globals.formRecipeBriefField3": "示例到岗信息",
-  "globals.formRecipeBriefField3Desc": "入职时间或工时 — 仅填真实信息。",
+  "globals.formRecipeBriefField3Desc": "入职时间或工时，仅填真实信息。",
   "globals.formRecipeBriefField4": "示例诚实缺口",
   "globals.formRecipeBriefField4Desc": "一行说明尚无法证明的要求。",
   "globals.formRecipeBriefField5": "示例避免强调",

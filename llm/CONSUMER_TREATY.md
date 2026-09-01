@@ -3370,13 +3370,13 @@ Symptoms (JD posting / key-points strip on `PageScroll`):
   single field or row
 
 **Cause:** consumer treated morph / posting strips like EndAside inspector or
-mode-drawer dense chrome (`sm`). Core grammar (≥ **0.5.110**): **section-body**
+mode-drawer dense chrome (`sm`). Core grammar (≥ **0.5.107**): **section-body**
 `ControlRow` on main canvas → default **`md`** IconButtons; **`sm`** only for
 field-local chrome (Card `actions` beside sm peers, EndAside, `--toolbar-end`,
 FieldBlock label-row, Select-row refresh beside sm `InfoHint`). Same destination
 page: catalog `ControlRow` + List trailing + section-body strip all **`md`**.
 
-**Fix in core (≥ **0.5.110**):** AGENTS **PageScroll section-body chrome** row +
+**Fix in core (≥ **0.5.107**):** AGENTS **PageScroll section-body chrome** row +
 sandbox `#rhythm` morph + cover-letter strips (default `md` disks).
 
 **Fix in the consumer (props-only):** omit `size="sm"` (or pass `size="md"`) on
