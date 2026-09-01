@@ -68,7 +68,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
    text is flush with the control’s outer start edge. Label→control gap is
-   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main`. Label-row
+   `--fynns-layout-field-label-control-gap` on `.fynns-field-block__main`. Label-row
    headers use `--fynns-layout-field-header-action-row-min-height` (32dp); inside
    a `FieldStack`, if **any** sibling has those actions, **every** header in
    that stack shares the band so plain labels align. Trailing
@@ -242,7 +242,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   label-row **FieldHeader** actions lift the header band to
   `field-header-action-row-min-height` (32dp); inside one **`FieldStack`**, if
   **any** sibling has those actions, **every** header in that stack shares the
-  band — label→control stays `field-hint-gap` (8dp); **Input** `trailing` for
+  band — label→control stays `field-label-control-gap` (12dp); **Input** `trailing` for
   in-field reveal; **Select + row action** → control-cluster band (not
   `Select.trailing`); **repeatable Textarea + remove rows** → same
   `.fynns-control-cluster--end-align` + `__grow` on each Textarea inside
@@ -1656,8 +1656,9 @@ classes.
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips / IconButtons in one cluster | `--fynns-layout-control-cluster-gap` (**4dp** — IconButton↔IconButton boxes). List short **text** meta → first `--with-end` IconButton uses optical `--fynns-list-end-actions-gap` (≥ **0.5.62**) |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
-  | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-hint-gap`** |
+  | Control → supporting / error hint; **also** `FieldBlock` control→`FieldHint` (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
+  | `FieldHeader` / `FieldBlock` label→control (`.fynns-field-block__main`) | **`field-label-control-gap`** (**12dp** / `space-md`) |
+  | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-label-control-gap`** |
   | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |

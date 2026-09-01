@@ -321,9 +321,12 @@ const en = {
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap (16dp) — between Card body siblings / .fynns-unit-stack (not control→hint).",
+  "layoutChrome.fieldLabelControlGap": "Field label gap",
+  "layoutChrome.fieldLabelControlGapHint":
+    "--fynns-layout-field-label-control-gap (12dp) — FieldHeader / label row → control on `.fynns-field-block__main`.",
   "layoutChrome.fieldHintGap": "Field hint",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input); also FieldBlock label→control on `.fynns-field-block__main`.",
+    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -936,6 +939,8 @@ const en = {
     "Standalone FieldHint for app-owned columns (same muted caption as Input supportingText).",
   "globals.rhythmTokenUnit":
     "Between stacked units / Card body siblings / `.fynns-unit-stack` (16dp — larger than field-hint).",
+  "globals.rhythmTokenFieldLabel":
+    "FieldHeader / label row → control (12dp): `.fynns-field-block__main` — roomier than control→hint.",
   "globals.rhythmTokenFieldHint":
     "Control → supporting/error note (8dp): Input / ControlBlock / FieldBlock description — not the same as unit-stack.",
   "globals.rhythmTokenStack":
@@ -1004,7 +1009,7 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: control + narrative = `ControlBlock`; single-row hint stays in the label column (ToggleGroup centers on name+hint — not a full-bleed next row). Sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog / padded Surface hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description use field-hint-gap (8dp); FieldBlock label→control uses field-label-control-gap (12dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
@@ -2355,9 +2360,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap（16dp）— Card body 兄弟 / .fynns-unit-stack（不是控件→说明）。",
+  "layoutChrome.fieldLabelControlGap": "字段标签间距",
+  "layoutChrome.fieldLabelControlGapHint":
+    "--fynns-layout-field-label-control-gap（12dp）— FieldHeader / 标签行 → 控件（`.fynns-field-block__main`）。",
   "layoutChrome.fieldHintGap": "字段提示",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）；FieldBlock 标签→控件亦用此 token（`.fynns-field-block__main`）。",
+    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -2968,6 +2976,8 @@ const zh: Record<MessageKey, string> = {
     "独立 FieldHint：应用自管列布局时用（与 Input supportingText 同款静音说明）。",
   "globals.rhythmTokenUnit":
     "纵向堆叠单元 / Card body 兄弟 / `.fynns-unit-stack`（16dp，大于 field-hint）。",
+  "globals.rhythmTokenFieldLabel":
+    "FieldHeader / 标签行 → 控件（12dp）：`.fynns-field-block__main` — 比控件→说明更疏。",
   "globals.rhythmTokenFieldHint":
     "控件 → supporting/error 说明（8dp）：Input / ControlBlock / FieldBlock description — 不等于 unit-stack。",
   "globals.rhythmTokenStack":

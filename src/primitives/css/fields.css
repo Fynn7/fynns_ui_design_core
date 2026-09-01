@@ -680,7 +680,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   align-items: center;
   justify-content: space-between;
   gap: var(--fynns-space-sm);
-  /* Label→control gap lives on `.fynns-field-block__main` (`field-hint-gap`). */
+  /* Label→control gap lives on `.fynns-field-block__main` (`field-label-control-gap`). */
   box-sizing: border-box;
   min-height: 0;
   min-width: 0;
@@ -720,7 +720,7 @@ input.fynns-input:focus::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   /* Label row → control (single- or multi-line prompts). */
-  gap: var(--fynns-layout-field-hint-gap);
+  gap: var(--fynns-layout-field-label-control-gap);
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
@@ -743,7 +743,7 @@ input.fynns-input:focus::-webkit-scrollbar {
  * Label→control inside the stack uses a **max header band**: when any sibling
  * FieldBlock hosts trailing FieldHeader IconButtons, every header in the
  * stack shares `field-header-action-row-min-height` — label→control stays on
- * `field-hint-gap` alone (live: sandbox `#field-header`, `#form-recipe`).
+ * `field-label-control-gap` alone (live: sandbox `#field-header`, `#form-recipe`).
  */
 .fynns-field-stack {
   display: flex;

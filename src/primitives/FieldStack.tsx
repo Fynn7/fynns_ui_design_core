@@ -31,7 +31,7 @@ export type FieldStackProps = HTMLAttributes<HTMLDivElement> & {
  * **Header band max (hard):** when **any** sibling `FieldBlock` hosts label-row
  * `FieldHeader` actions (Textarea expand / reset), **every** header in the
  * stack uses `field-header-action-row-min-height` (32dp); label→control
- * stays on `field-hint-gap` (8dp). In-field icons → `Input` / `Select`
+ * stays on `field-label-control-gap` (12dp). In-field icons → `Input` / `Select`
  * `trailing`, not label-row actions.
  *
  * **Strongly recommended between FieldStacks:** insert a horizontal `Divider`

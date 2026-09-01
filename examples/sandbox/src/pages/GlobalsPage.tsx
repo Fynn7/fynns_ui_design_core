@@ -6129,6 +6129,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
             <div>
               <dt>
+                <code>--fynns-layout-field-label-control-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenFieldLabel")}</dd>
+            </div>
+            <div>
+              <dt>
                 <code>--fynns-layout-field-hint-gap</code>
               </dt>
               <dd>{t("globals.rhythmTokenFieldHint")}</dd>

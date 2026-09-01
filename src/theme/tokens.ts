@@ -1513,9 +1513,16 @@ export const LAYOUT_TOKENS = {
    */
   "chrome-icon-gap": "0.125rem",
   /**
+   * Gap between a field label row and its control (12dp — aliases `space-md`):
+   * `FieldHeader` → Input / Select / Textarea on `.fynns-field-block__main`.
+   * Roomier than control→hint (`field-hint-gap` 8dp); still tighter than
+   * sibling FieldBlocks (`field-stack-gap` 12dp is between units, not inside).
+   */
+  "field-label-control-gap": "0.75rem",
+  /**
    * Gap between a form control and its supporting / error hint (8dp):
-   * `.fynns-field`, Otp, Autocomplete, `ControlBlock`, `FieldBlock`
-   * description. **Tighter** than `unit-stack-gap` — within-unit copy must
+   * `ControlBlock`, `FieldBlock` description / `FieldHint`, Autocomplete
+   * supporting copy. **Tighter** than `unit-stack-gap` — within-unit copy must
    * not match the gap between sibling FieldBlocks / ControlBlocks.
    */
   "field-hint-gap": "0.5rem",
@@ -1523,7 +1530,7 @@ export const LAYOUT_TOKENS = {
    * Min-height for a `FieldHeader` label row that carries trailing sm
    * `IconButton`s (32dp — sm icon-only target). When any sibling in a
    * `FieldStack` has those actions, **every** header in that stack uses this
-   * band so plain labels align; label→control stays on `field-hint-gap` alone.
+   * band so plain labels align; label→control stays on `field-label-control-gap`.
    * **M3 note:** in-field actions (reveal, refresh) belong in `Input` /
    * `Select` `trailing` inside the container — not on the label row.
    */
