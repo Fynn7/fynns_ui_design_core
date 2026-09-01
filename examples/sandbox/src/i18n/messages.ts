@@ -955,7 +955,17 @@ const en = {
   "globals.rhythmMorphSectionHint":
     "Hover highlights show kind; tooltip shows the matched snippet.",
   "globals.rhythmMorphBodySample":
-    "Sample posting body — highlights and tooltips live in the consumer stage below this strip.",
+    "Sample posting body. Highlights and tooltips live in the consumer stage below this strip.",
+  "globals.rhythmCoverLetterHelp":
+    "ControlRow chrome strip (hard ≥ 0.5.105): sm ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)**. Same primary-end grammar as Dialog feet / morph strip. Never park primary before save/export icons.",
+  "globals.rhythmCoverLetterLabel": "Sample letter",
+  "globals.rhythmCoverLetterSave": "Save slots",
+  "globals.rhythmCoverLetterExport": "Export",
+  "globals.rhythmCoverLetterExportWord": "Export Word",
+  "globals.rhythmCoverLetterExportPdf": "Export PDF",
+  "globals.rhythmCoverLetterPrompt": "Edit prompt",
+  "globals.rhythmCoverLetterRecipient": "Recipient",
+  "globals.rhythmCoverLetterGenerate": "Run sample step",
   "globals.rhythmEndAlignHelp":
     "Action footer with no visible name: one `.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`). Use `__grow` only when a leading Select / meta must fill leftover. Never `ControlRow` with empty `label=\"\"` (fake label column / mid-left island). **Busy (hard):** click either button — **at most one** `loading` ring; the sibling stays `disabled` without a second spinner. Never bind the same `busy` to every `loading`.",
   "globals.rhythmEndAlignIconHelp":
@@ -2947,7 +2957,17 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphSectionHint":
     "悬停高亮查看技能类型；tooltip 显示匹配片段。",
   "globals.rhythmMorphBodySample":
-    "示例招聘正文 — 高亮与 tooltip 由消费仓正文区承载。",
+    "示例招聘正文。高亮与 tooltip 由消费仓正文区承载。",
+  "globals.rhythmCoverLetterHelp":
+    "ControlRow 工具条（硬 ≥ 0.5.105）：先 sm ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**。与 Dialog 脚 / morph 条同一 primary-end 语法。禁止 primary 在保存/导出图标之前。",
+  "globals.rhythmCoverLetterLabel": "示例求职信",
+  "globals.rhythmCoverLetterSave": "保存段落",
+  "globals.rhythmCoverLetterExport": "导出",
+  "globals.rhythmCoverLetterExportWord": "导出 Word",
+  "globals.rhythmCoverLetterExportPdf": "导出 PDF",
+  "globals.rhythmCoverLetterPrompt": "编辑提示词",
+  "globals.rhythmCoverLetterRecipient": "收件人",
+  "globals.rhythmCoverLetterGenerate": "运行示例步骤",
   "globals.rhythmEndAlignHelp":
     "无可见名称的动作脚栏：一个 `.fynns-control-cluster--end-align`（`justify-content: flex-end` — 纯 IconButton 条不需要 `__grow`）。仅当左侧 Select / meta 要吃剩余宽度时才加 `__grow`。禁止 `ControlRow` `label=\"\"`（空标签列 / 按钮漂中左）。**Busy（硬）：** 点任一按钮 — **最多一颗** `loading` 圈；兄弟只 `disabled`、不画第二圈。禁止 `loading={busy}` 绑到每一颗。",
   "globals.rhythmEndAlignIconHelp":

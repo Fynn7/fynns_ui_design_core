@@ -108,6 +108,7 @@ import {
   Radio,
   RefreshIcon,
   MoreHorizontalIcon,
+  PersonIcon,
   SaveIcon,
   SearchIcon,
   Select,
@@ -6208,6 +6209,60 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.rhythmMorphBodySample")}
           </Surface>
         </div>
+        <SandboxHelp text={t("globals.rhythmCoverLetterHelp")} />
+        <ControlRow
+          label={t("globals.rhythmCoverLetterLabel")}
+          className="sandbox-globals-rhythm-cover-letter"
+        >
+          <div className="fynns-control-cluster">
+            <Tooltip content={t("globals.rhythmCoverLetterSave")}>
+              <IconButton size="sm" aria-label={t("globals.rhythmCoverLetterSave")}>
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterExport")}>
+              <DropdownMenu
+                iconOnly
+                size="sm"
+                trigger={<UploadIcon />}
+                ariaLabel={t("globals.rhythmCoverLetterExport")}
+              >
+                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportWord")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportPdf")}</DropdownMenuItem>
+              </DropdownMenu>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterPrompt")}>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterPrompt")}
+              >
+                <FileIcon size={16} aria-hidden />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterRecipient")}>
+              <IconButton
+                size="sm"
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterRecipient")}
+              >
+                <PersonIcon size={16} aria-hidden />
+              </IconButton>
+            </Tooltip>
+            <Button
+              size="sm"
+              variant="primary"
+              loading={rhythmMorphBusy}
+              disabled={rhythmMorphBusy}
+              onClick={() => {
+                setRhythmMorphBusy(true);
+                window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+              }}
+            >
+              {t("globals.rhythmCoverLetterGenerate")}
+            </Button>
+          </div>
+        </ControlRow>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">

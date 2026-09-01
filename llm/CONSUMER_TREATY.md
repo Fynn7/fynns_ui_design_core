@@ -3305,6 +3305,41 @@ Do **not** add private `margin-top` on `.fynns-field-hint`. Bump core; live:
 sandbox `#rhythm`; consumer posting pipeline / cover letter panels. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: ControlRow primary leftmost in mixed cluster
+
+Symptoms (cover letter / CV skills / LLM generate strips on `PageScroll`):
+
+- A labeled **`Button` `variant="primary"`** (generate / run) sits **first** in
+  `.fynns-control-row__controls > .fynns-control-cluster`, before save /
+  export / prompt `IconButton`s
+- The filled primary pill reads as the section start while secondary ghost
+  disks trail to the right — opposite Dialog foot / morph strip grammar
+
+**Cause:** consumer ordered JSX as primary → icons. Core does not reorder DOM —
+LTR primary-end is caller-owned (same rule as Dialog feet, mode drawer New,
+morph strip labeled CTA).
+
+**Fix in core (≥ **0.5.105**):** AGENTS **ControlRow chrome strip** row +
+sandbox `#rhythm` cover-letter strip (icons first → labeled primary last).
+Morph stack already teaches tonal CTA last; cover-letter strip teaches
+`primary` last beside save / export.
+
+**Fix in the consumer (props-only):** one `.fynns-control-cluster` — park all
+`sm` ghost `IconButton`s / `DropdownMenu` `iconOnly` **before** the labeled
+primary (or main tonal) `Button`:
+
+```tsx
+<div className="fynns-control-cluster">
+  <Tooltip>…<IconButton size="sm" … /></Tooltip>
+  {/* save / export / prompt icons */}
+  <Button variant="primary" …>{generateLabel}</Button>
+</div>
+```
+
+Never `primary` leftmost. Bump core; live: `#rhythm` cover-letter strip;
+consumer cover letter / CV skills panels. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
 Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /
