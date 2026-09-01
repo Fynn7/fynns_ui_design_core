@@ -951,13 +951,13 @@ const en = {
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
   "globals.rhythmMorphHelp":
-    "PageScroll section-body (hard ≥ 0.5.107): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
+    "PageScroll section-body (hard ≥ 0.5.111): when ControlRow label names the section, cluster = md ghost IconButton + Tooltip only — no labeled primary/tonal import/generate pill. Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). `IconButton` loading = spinner-only. Click refresh to demo.",
   "globals.rhythmMorphSectionHint":
     "Hover highlights show kind; tooltip shows the matched snippet.",
   "globals.rhythmMorphBodySample":
     "Sample posting body. Highlights and tooltips live in the consumer stage below this strip.",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow section-body strip (hard ≥ 0.5.107): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
+    "ControlRow section-body strip (hard ≥ 0.5.111): ControlRow label names the section → md ghost IconButtons + Tooltip only (generate/run → SparklesIcon + tip). No labeled primary pill beside save/export icons.",
   "globals.rhythmCoverLetterLabel": "Sample letter",
   "globals.rhythmCoverLetterSave": "Save slots",
   "globals.rhythmCoverLetterExport": "Export",
@@ -2971,13 +2971,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
   "globals.rhythmMorphHelp":
-    "PageScroll 分区正文（硬 ≥ 0.5.107）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
+    "PageScroll 分区正文（硬 ≥ 0.5.111）：`ControlRow` `label` 已命名分区时，cluster 仅 **md** ghost IconButton + Tooltip — 禁止 labeled primary/tonal 导入/生成药丸。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。`IconButton` loading 仅 spinner。点刷新演示。",
   "globals.rhythmMorphSectionHint":
     "悬停高亮查看技能类型；tooltip 显示匹配片段。",
   "globals.rhythmMorphBodySample":
     "示例招聘正文。高亮与 tooltip 由消费仓正文区承载。",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow 分区正文条（硬 ≥ 0.5.107）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
+    "ControlRow 分区正文条（硬 ≥ 0.5.111）：`label` 命名分区 → 仅 **md** ghost IconButton + Tooltip（生成/运行 → SparklesIcon + tip）。禁止在保存/导出旁再叠 labeled primary 药丸。",
   "globals.rhythmCoverLetterLabel": "示例求职信",
   "globals.rhythmCoverLetterSave": "保存段落",
   "globals.rhythmCoverLetterExport": "导出",

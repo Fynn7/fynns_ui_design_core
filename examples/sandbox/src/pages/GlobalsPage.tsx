@@ -6189,16 +6189,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <ClipboardIcon />
                 </IconButton>
               </Tooltip>
-              <Button
-                variant="tonal"
-                disabled={rhythmMorphBusy}
-                onClick={() => {
-                  setRhythmMorphBusy(true);
-                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-                }}
-              >
-                {t("globals.rhythmMorphAction")}
-              </Button>
+              <Tooltip content={t("globals.rhythmMorphAction")}>
+                <IconButton
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphAction")}
+                  disabled={rhythmMorphBusy}
+                  onClick={() => {
+                    setRhythmMorphBusy(true);
+                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                  }}
+                >
+                  <UploadIcon aria-hidden />
+                </IconButton>
+              </Tooltip>
             </div>
           </ControlRow>
           <FieldHint>{t("globals.rhythmMorphSectionHint")}</FieldHint>
@@ -6244,17 +6247,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <PersonIcon aria-hidden />
               </IconButton>
             </Tooltip>
-            <Button
-              variant="primary"
-              loading={rhythmMorphBusy}
-              disabled={rhythmMorphBusy}
-              onClick={() => {
-                setRhythmMorphBusy(true);
-                window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-              }}
-            >
-              {t("globals.rhythmCoverLetterGenerate")}
-            </Button>
+            <Tooltip content={t("globals.rhythmCoverLetterGenerate")}>
+              <IconButton
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterGenerate")}
+                loading={rhythmMorphBusy}
+                disabled={rhythmMorphBusy}
+                onClick={() => {
+                  setRhythmMorphBusy(true);
+                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                }}
+              >
+                <SparklesIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
           </div>
         </ControlRow>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
@@ -6580,9 +6586,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Collapsible>
               <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
                 <div className="fynns-control-cluster">
-                  <Button variant="primary">
-                    {t("globals.formRecipePageScrollGenerate")}
-                  </Button>
+                  <Tooltip content={t("globals.formRecipePageScrollGenerate")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.formRecipePageScrollGenerate")}
+                    >
+                      <SparklesIcon aria-hidden />
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </ControlRow>
               <Surface variant="outlined" padded>
