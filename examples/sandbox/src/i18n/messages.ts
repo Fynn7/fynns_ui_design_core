@@ -951,13 +951,13 @@ const en = {
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
   "globals.rhythmMorphHelp":
-    "PageScroll section-body (hard ≥ 0.5.106): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
+    "PageScroll section-body (hard ≥ 0.5.110): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
   "globals.rhythmMorphSectionHint":
     "Hover highlights show kind; tooltip shows the matched snippet.",
   "globals.rhythmMorphBodySample":
     "Sample posting body. Highlights and tooltips live in the consumer stage below this strip.",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow section-body strip (hard ≥ 0.5.106): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
+    "ControlRow section-body strip (hard ≥ 0.5.110): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
   "globals.rhythmCoverLetterLabel": "Sample letter",
   "globals.rhythmCoverLetterSave": "Save slots",
   "globals.rhythmCoverLetterExport": "Export",
@@ -1004,7 +1004,7 @@ const en = {
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
   "globals.formRecipePageScrollHelp":
-    "PageScroll long page (hard ≥ 0.5.108): optional multi-field brief → **Collapsible** (defaultOpen) as the first `.fynns-unit-stack` sibling — not a static Card that stacks ~600dp+ above the generate strip. Collapse frees the viewport for ControlRow + body below. Card stays for List catalogs and ≤2-field sections.",
+    "PageScroll long page (hard ≥ 0.5.108): optional multi-field brief → **Collapsible** (defaultOpen) as the first `.fynns-unit-stack` sibling — not a static Card that stacks ~600dp+ above the generate strip. Collapse frees the viewport for ControlRow + body below. **Default save (≥ 0.5.109):** body `.fynns-control-cluster--end-align` after `FieldStack` with default **md** ghost IconButtons — not head `actions`. Optional head `actions` only when the product wants compact title chrome → **sm only** (never md on Collapsible head). Card stays for List catalogs and ≤2-field sections.",
   "globals.formRecipeBriefTitle": "Sample brief (5 fields)",
   "globals.formRecipeBriefSave": "Save brief",
   "globals.formRecipeBriefField1": "Sample opening fact",
@@ -1702,7 +1702,7 @@ const en = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 calls",
   "globals.listGroupHelp":
-    "Expandable project group: headline = **name only** (Tooltip path ok); enabled/total count → `trailingSupportingText` (`.fynns-table-meta`) — **never** park count at the headline tail beside `--with-end` IconButtons. Member rows: two-line `ListItem` — headline = display name; `supportingText` = description; kind / status marks → `trailingSupportingText` (`.fynns-control-cluster` + `.fynns-table-meta`), **not** glued in headline. Three `sm` ghost tools: core ≥ **0.5.92** end reserve.",
+    "Expandable project group: headline = **name only** (Tooltip path ok); enabled/total count → `trailingSupportingText` (`.fynns-table-meta`) — **never** park count at the headline tail beside `--with-end` IconButtons. Member rows: two-line `ListItem` — headline = display name; `supportingText` = description; kind / status marks → `trailingSupportingText` (`.fynns-control-cluster` + `.fynns-table-meta`), **not** glued in headline. Three `sm` ghost tools: core ≥ **0.5.92** end reserve. Parent row ↔ nested members: core ≥ **0.5.110** host column `gap` = `--fynns-list-item-gap` (4dp) — parent pill must not kiss the first child.",
   "globals.listGroupAria": "Sample expandable project group",
   "globals.listGroupHeadline": "Sample workspace",
   "globals.listGroupPath": "~/Documents/sample-workspace",
@@ -1717,7 +1717,7 @@ const en = {
   "globals.listGroupMemberKind": "Builtin",
   "globals.listGroupMemberFresh": "Synced",
   "globals.listTreeHelp":
-    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + `ChevronRight` leading (`aria-expanded` rotates + height-morphs detail via `.fynns-expand` — keep `detail` mounted, not `open ? … : null`). **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
+    "Expandable catalog: ListItem detail stays in the same li (ul > li only). Timestamp / kind → overline; duration → trailingSupportingText (**space between units**: `1m 47s`, never `1m47s`); multi-metric trailing → `.fynns-list-item-trailing-stats` (or `--pair` for duration + count); expand = row click + `ChevronRight` leading (`aria-expanded` rotates + height-morphs detail via `.fynns-expand` — keep `detail` mounted, not `open ? … : null`). **Parent row ↔ nested members:** core ≥ **0.5.110** host column `gap` = `--fynns-list-item-gap` (4dp) — parent pill must not kiss the first child. **`--with-end` trailing on expandable rows** docks to the **row shell** only (≥ **0.5.66**) — hover-reveal IconButtons stay vertically centered on the parent band, not mid-gap over nested children. Nested table → .fynns-table-wrap.fynns-scroll. Long headline (Tooltip) ellipsizes; trailing IconButton shares the row highlight. **Never** put Collapsible / Card as a List child (ul > div + overflow hidden crushes groups to skeleton pills).",
   "globals.listTreeAria": "Sample expandable catalog",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "Sample session",
@@ -2971,13 +2971,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
   "globals.rhythmMorphHelp":
-    "PageScroll 分区正文（硬 ≥ 0.5.106）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
+    "PageScroll 分区正文（硬 ≥ 0.5.110）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
   "globals.rhythmMorphSectionHint":
     "悬停高亮查看技能类型；tooltip 显示匹配片段。",
   "globals.rhythmMorphBodySample":
     "示例招聘正文。高亮与 tooltip 由消费仓正文区承载。",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow 分区正文条（硬 ≥ 0.5.106）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
+    "ControlRow 分区正文条（硬 ≥ 0.5.110）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
   "globals.rhythmCoverLetterLabel": "示例求职信",
   "globals.rhythmCoverLetterSave": "保存段落",
   "globals.rhythmCoverLetterExport": "导出",
@@ -3024,7 +3024,7 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
   "globals.formRecipePageScrollHelp":
-    "PageScroll 长页（硬 ≥ 0.5.108）：可选多字段要点 → **Collapsible**（defaultOpen）作 `.fynns-unit-stack` 首兄弟 — 禁止静态 Card 在 generate 条上方堆 ~600dp+。折叠后可露出下方 ControlRow + 正文。Card 仍用于 List 与 ≤2 字段短块。",
+    "PageScroll 长页（硬 ≥ 0.5.108）：可选多字段要点 → **Collapsible**（defaultOpen）作 `.fynns-unit-stack` 首兄弟 — 禁止静态 Card 在 generate 条上方堆 ~600dp+。折叠后可露出下方 ControlRow + 正文。**默认保存（≥ 0.5.109）：** `FieldStack` 后 body `.fynns-control-cluster--end-align` + 默认 **md** ghost IconButton — 不要放 head `actions`。仅当产品明确要求标题栏紧凑 chrome 时才用 head `actions` → **仅 sm**（Collapsible head 禁止 md）。Card 仍用于 List 与 ≤2 字段短块。",
   "globals.formRecipeBriefTitle": "示例要点问卷（5 项）",
   "globals.formRecipeBriefSave": "保存要点",
   "globals.formRecipeBriefField1": "示例开篇事实",
@@ -3716,7 +3716,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatsRow3Cost": "$1.240",
   "globals.listStatsRow3Count": "108 次",
   "globals.listGroupHelp":
-    "可展开项目组：headline = **仅名称**；启用/总数 → `trailingSupportingText`（`.fynns-table-meta`）— **禁止**计数与 `--with-end` IconButton 并列。成员行：两行 ListItem — headline 显示名；`supportingText` 说明；种类/状态标 → `trailingSupportingText`（`.fynns-control-cluster` + `.fynns-table-meta`），**不要**堆在 headline。三枚 `sm` 工具：core ≥ **0.5.92** end 预留。",
+    "可展开项目组：headline = **仅名称**；启用/总数 → `trailingSupportingText`（`.fynns-table-meta`）— **禁止**计数与 `--with-end` IconButton 并列。成员行：两行 ListItem — headline 显示名；`supportingText` 说明；种类/状态标 → `trailingSupportingText`（`.fynns-control-cluster` + `.fynns-table-meta`），**不要**堆在 headline。三枚 `sm` 工具：core ≥ **0.5.92** end 预留。父行 ↔ 嵌套成员：core ≥ **0.5.110** host 列 `gap` = `--fynns-list-item-gap`（4dp）— 父 pill 不得贴住首条子行。",
   "globals.listGroupAria": "可展开项目组示例",
   "globals.listGroupHeadline": "示例工作区",
   "globals.listGroupPath": "~/Documents/sample-workspace",
@@ -3730,7 +3730,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listGroupMemberKind": "内置",
   "globals.listGroupMemberFresh": "已同步",
   "globals.listTreeHelp":
-    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + `ChevronRight` leading（`aria-expanded` 旋转 chevron + `.fynns-expand` 高度 morph — `detail` 保持挂载，勿 `open ? … : null`）。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
+    "可展开目录：ListItem detail 留在同一个 li（只能 ul > li）。时间/种类 → overline；时长 → trailingSupportingText（单位之间**有空格**：`1m 47s`，禁止 `1m47s`）；多指标 trailing → `.fynns-list-item-trailing-stats`（或 duration + count 用 `--pair`）；展开 = 行点击 + `ChevronRight` leading（`aria-expanded` 旋转 chevron + `.fynns-expand` 高度 morph — `detail` 保持挂载，勿 `open ? … : null`）。**父行 ↔ 嵌套成员：** core ≥ **0.5.110** host 列 `gap` = `--fynns-list-item-gap`（4dp）— 父 pill 不得贴住首条子行。可展开行的 **`--with-end` trailing** 仅锚在 **row shell**（≥ **0.5.66**）— hover IconButton 垂直居中于父行带，不会悬在嵌套子项之间的空隙。嵌套表 → .fynns-table-wrap.fynns-scroll。长 headline（Tooltip）由 core 画省略号；trailing IconButton 与行同一条高亮。**禁止**把 Collapsible / Card 当 List 直接子节点（ul > div + overflow hidden 会把分组压成骨架条）。",
   "globals.listTreeAria": "可展开目录示例",
   "globals.listTreeOverline": "2026.08.17 15:42",
   "globals.listTreeHeadline": "示例会话",

@@ -6543,17 +6543,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 className="sandbox-globals-form-recipe"
                 title={t("globals.formRecipeBriefTitle")}
                 defaultOpen
-                actions={
-                  <Tooltip content={t("globals.formRecipeBriefSave")}>
-                    <IconButton
-                      size="sm"
-                      variant="ghost"
-                      aria-label={t("globals.formRecipeBriefSave")}
-                    >
-                      <SaveIcon />
-                    </IconButton>
-                  </Tooltip>
-                }
               >
                 <FieldStack>
                   {(
@@ -6578,6 +6567,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </FieldBlock>
                   ))}
                 </FieldStack>
+                <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                  <Tooltip content={t("globals.formRecipeBriefSave")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.formRecipeBriefSave")}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
               </Collapsible>
               <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
                 <div className="fynns-control-cluster">
