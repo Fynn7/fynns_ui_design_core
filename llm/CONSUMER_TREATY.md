@@ -3330,14 +3330,60 @@ primary (or main tonal) `Button`:
 
 ```tsx
 <div className="fynns-control-cluster">
-  <Tooltip>…<IconButton size="sm" … /></Tooltip>
-  {/* save / export / prompt icons */}
+  <Tooltip>…<IconButton … /></Tooltip>
+  {/* save / export / prompt icons — default md on main-canvas section strips */}
   <Button variant="primary" …>{generateLabel}</Button>
 </div>
 ```
 
 Never `primary` leftmost. Bump core; live: `#rhythm` cover-letter strip;
 consumer cover letter / CV skills panels. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: section-body IconButton sm
+
+Symptoms (JD posting / key-points strip on `PageScroll`):
+
+- Re-extract / copy posting use `IconButton size="sm"` → **32×32** hover disks
+- The labeled import / tonal CTA beside them is default **md** (40dp) — size
+  mismatch reads as “tiny icons for a huge action”
+- Actions affect the **entire posting / highlight body** below the strip, not a
+  single field or row
+
+**Cause:** consumer treated morph / posting strips like EndAside inspector or
+mode-drawer dense chrome (`sm`). Core grammar (≥ **0.5.106**): **section-body**
+`ControlRow` on main canvas → default **`md`** IconButtons; **`sm`** only for
+field-local chrome (Card `actions` beside sm peers, EndAside, `--toolbar-end`,
+FieldBlock label-row, Select-row refresh beside sm `InfoHint`). Same destination
+page: catalog `ControlRow` + List trailing + section-body strip all **`md`**.
+
+**Fix in core (≥ **0.5.106**):** AGENTS **PageScroll section-body chrome** row +
+sandbox `#rhythm` morph + cover-letter strips (default `md` disks).
+
+**Fix in the consumer (props-only):** omit `size="sm"` (or pass `size="md"`) on
+section-scope `IconButton`s; do not hardcode `size={16}` on icons — inherit
+default glyph in the disk:
+
+```tsx
+<div className="fynns-control-cluster">
+  <Tooltip content={reExtractTip}>
+    <IconButton variant="ghost" aria-label={reExtractLabel} loading={busy} …>
+      <RefreshIcon />
+    </IconButton>
+  </Tooltip>
+  <Tooltip content={copyTip}>
+    <IconButton variant="ghost" aria-label={copyLabel} …>
+      <ClipboardIcon />
+    </IconButton>
+  </Tooltip>
+  <Button variant="tonal" …>{importLabel}</Button>
+</div>
+```
+
+`DropdownMenu` `iconOnly` defaults **`sm`** — pass **`size="md"`** on section-body export menus.
+
+Bump core; live: `#rhythm`; consumer posting pipeline / cover letter / CV skills
+**main-canvas** strips (not EndAside). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

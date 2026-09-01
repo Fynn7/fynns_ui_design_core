@@ -6168,7 +6168,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <div className="fynns-control-cluster">
               <Tooltip content={t("globals.rhythmMorphRefresh")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmMorphRefresh")}
                   loading={rhythmMorphBusy}
@@ -6183,7 +6182,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmMorphCopy")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmMorphCopy")}
                   disabled={rhythmMorphBusy}
@@ -6192,7 +6190,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </IconButton>
               </Tooltip>
               <Button
-                size="sm"
                 variant="tonal"
                 disabled={rhythmMorphBusy}
                 onClick={() => {
@@ -6216,14 +6213,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         >
           <div className="fynns-control-cluster">
             <Tooltip content={t("globals.rhythmCoverLetterSave")}>
-              <IconButton size="sm" aria-label={t("globals.rhythmCoverLetterSave")}>
+              <IconButton aria-label={t("globals.rhythmCoverLetterSave")}>
                 <SaveIcon />
               </IconButton>
             </Tooltip>
             <Tooltip content={t("globals.rhythmCoverLetterExport")}>
               <DropdownMenu
                 iconOnly
-                size="sm"
+                size="md"
                 trigger={<UploadIcon />}
                 ariaLabel={t("globals.rhythmCoverLetterExport")}
               >
@@ -6233,24 +6230,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Tooltip>
             <Tooltip content={t("globals.rhythmCoverLetterPrompt")}>
               <IconButton
-                size="sm"
                 variant="ghost"
                 aria-label={t("globals.rhythmCoverLetterPrompt")}
               >
-                <FileIcon size={16} aria-hidden />
+                <FileIcon aria-hidden />
               </IconButton>
             </Tooltip>
             <Tooltip content={t("globals.rhythmCoverLetterRecipient")}>
               <IconButton
-                size="sm"
                 variant="ghost"
                 aria-label={t("globals.rhythmCoverLetterRecipient")}
               >
-                <PersonIcon size={16} aria-hidden />
+                <PersonIcon aria-hidden />
               </IconButton>
             </Tooltip>
             <Button
-              size="sm"
               variant="primary"
               loading={rhythmMorphBusy}
               disabled={rhythmMorphBusy}
