@@ -1003,6 +1003,24 @@ const en = {
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
+  "globals.formRecipePageScrollHelp":
+    "PageScroll long page (hard ≥ 0.5.108): optional multi-field brief → **Collapsible** (defaultOpen) as the first `.fynns-unit-stack` sibling — not a static Card that stacks ~600dp+ above the generate strip. Collapse frees the viewport for ControlRow + body below. Card stays for List catalogs and ≤2-field sections.",
+  "globals.formRecipeBriefTitle": "Sample brief (5 fields)",
+  "globals.formRecipeBriefSave": "Save brief",
+  "globals.formRecipeBriefField1": "Sample opening fact",
+  "globals.formRecipeBriefField1Desc": "One concrete item for the first sentence — generic placeholder.",
+  "globals.formRecipeBriefField2": "Sample role fit",
+  "globals.formRecipeBriefField2Desc": "One specific reason for this role — not generic motivation.",
+  "globals.formRecipeBriefField3": "Sample availability",
+  "globals.formRecipeBriefField3Desc": "Start date or hours — factual only.",
+  "globals.formRecipeBriefField4": "Sample honest gap",
+  "globals.formRecipeBriefField4Desc": "One line on an unproven requirement.",
+  "globals.formRecipeBriefField5": "Sample avoid",
+  "globals.formRecipeBriefField5Desc": "Topics or phrases to skip.",
+  "globals.formRecipePageScrollStageLabel": "Sample letter stage",
+  "globals.formRecipePageScrollGenerate": "Run sample step",
+  "globals.formRecipePageScrollBody":
+    "Letter body wells live below the generate strip — collapse the brief to reach them faster.",
   "globals.formRecipeHostDialog":
     "Dialog host — `Dialog` `size=\"lg\"` + `showCloseButton` + the same FieldStack tree (core stretches form bodies to the size ceiling — not max-content skinny). **Also the default host for in-canvas catalog create/edit** (List stays mounted — see `#list` status+action). **Multi-Card workflow:** third button opens several Card siblings — body scrolls; Cards must not crush to head height (core ≥ 0.5.32). Body foot: one `.fynns-control-cluster--end-align` of several labeled Buttons — core wraps inside the clipped body so the first action is never clipped. Switch-only close-stack anatomy stays under Containment overlays. **File-body edit:** second button opens `CodeBlock` `variant=\"editable\"` in the same `size=\"lg\"` shell — panel must fill to the lg ceiling (not ~280px).",
   "globals.formRecipeDialogOpen": "Open Dialog form",
@@ -3005,6 +3023,24 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
   "globals.formRecipeHostCollapsible":
     "Collapsible 宿主 — 同一 FieldStack 树放进折叠壳（body 用 unit-stack-gap）。",
+  "globals.formRecipePageScrollHelp":
+    "PageScroll 长页（硬 ≥ 0.5.108）：可选多字段要点 → **Collapsible**（defaultOpen）作 `.fynns-unit-stack` 首兄弟 — 禁止静态 Card 在 generate 条上方堆 ~600dp+。折叠后可露出下方 ControlRow + 正文。Card 仍用于 List 与 ≤2 字段短块。",
+  "globals.formRecipeBriefTitle": "示例要点问卷（5 项）",
+  "globals.formRecipeBriefSave": "保存要点",
+  "globals.formRecipeBriefField1": "示例开篇事实",
+  "globals.formRecipeBriefField1Desc": "开篇第一句用的一项具体事实 — 通用占位。",
+  "globals.formRecipeBriefField2": "示例岗位理由",
+  "globals.formRecipeBriefField2Desc": "针对岗位的一句具体理由 — 非空泛动机。",
+  "globals.formRecipeBriefField3": "示例到岗信息",
+  "globals.formRecipeBriefField3Desc": "入职时间或工时 — 仅填真实信息。",
+  "globals.formRecipeBriefField4": "示例诚实缺口",
+  "globals.formRecipeBriefField4Desc": "一行说明尚无法证明的要求。",
+  "globals.formRecipeBriefField5": "示例避免强调",
+  "globals.formRecipeBriefField5Desc": "应跳过的主题或套话。",
+  "globals.formRecipePageScrollStageLabel": "示例信函阶段",
+  "globals.formRecipePageScrollGenerate": "运行示例步骤",
+  "globals.formRecipePageScrollBody":
+    "信函正文井在 generate 条下方 — 折叠要点问卷可更快到达。",
   "globals.formRecipeHostDialog":
     "Dialog 宿主 — `Dialog` `size=\"lg\"` + `showCloseButton` + 同一 FieldStack 树（core 会把表单 body 撑满 size 上限，避免 max-content 细柱）。**也是主画布目录创建/编辑的默认宿主**（List 保持挂载 — 见 `#list` status+action）。**多 Card 工作流：** 第三颗按钮打开多张 Card 兄弟 — body 滚动，Card 不得被压成仅标题高度（core ≥ 0.5.32）。Body 底栏：一条 `.fynns-control-cluster--end-align` 多枚带文案 Button — core 在裁剪 scroll 宿主内换行，首颗不会被裁切。纯 Switch 关栈解剖仍在 Containment overlays。**文件体编辑：** 第二颗按钮在同一 `size=\"lg\"` 壳内打开 `CodeBlock` `variant=\"editable\"` — panel 须撑满 lg 上限（非 ~280px）。",
   "globals.formRecipeDialogOpen": "打开 Dialog 表单",

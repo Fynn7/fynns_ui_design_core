@@ -6536,6 +6536,61 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Button>
             </div>
           </Dialog>
+          <GlobalsDemo id="form-recipe-page-scroll">
+            <SandboxHelp text={t("globals.formRecipePageScrollHelp")} />
+            <div className="sandbox-globals-form-recipe-page-scroll fynns-unit-stack">
+              <Collapsible
+                className="sandbox-globals-form-recipe"
+                title={t("globals.formRecipeBriefTitle")}
+                defaultOpen
+                actions={
+                  <Tooltip content={t("globals.formRecipeBriefSave")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.formRecipeBriefSave")}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+              >
+                <FieldStack>
+                  {(
+                    [
+                      ["globals.formRecipeBriefField1", "globals.formRecipeBriefField1Desc"],
+                      ["globals.formRecipeBriefField2", "globals.formRecipeBriefField2Desc"],
+                      ["globals.formRecipeBriefField3", "globals.formRecipeBriefField3Desc"],
+                      ["globals.formRecipeBriefField4", "globals.formRecipeBriefField4Desc"],
+                      ["globals.formRecipeBriefField5", "globals.formRecipeBriefField5Desc"],
+                    ] as const
+                  ).map(([labelKey, descKey], index) => (
+                    <FieldBlock
+                      key={labelKey}
+                      label={t(labelKey)}
+                      description={t(descKey)}
+                    >
+                      <Textarea
+                        minRows={1}
+                        aria-label={t(labelKey)}
+                        defaultValue={index === 0 ? "Sample fact line" : ""}
+                      />
+                    </FieldBlock>
+                  ))}
+                </FieldStack>
+              </Collapsible>
+              <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
+                <div className="fynns-control-cluster">
+                  <Button variant="primary">
+                    {t("globals.formRecipePageScrollGenerate")}
+                  </Button>
+                </div>
+              </ControlRow>
+              <Surface variant="outlined" padded>
+                {t("globals.formRecipePageScrollBody")}
+              </Surface>
+            </div>
+          </GlobalsDemo>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>
       </>

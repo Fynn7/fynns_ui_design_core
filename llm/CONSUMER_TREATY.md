@@ -3386,6 +3386,47 @@ Bump core; live: `#rhythm`; consumer posting pipeline / cover letter / CV skills
 **main-canvas** strips (not EndAside). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: PageScroll brief Card
+
+Symptoms (cover-letter / pipeline step on `PageScroll`):
+
+- An optional **multi-field brief** (4+ `FieldBlock`s with `description`) sits
+  in a static **`Card`** as the first `.fynns-unit-stack` sibling
+- The card body is ~600dp+ tall — generate `ControlRow` / letter `Textarea`s
+  start below the first viewport with no way to collapse the survey
+- Users must scroll past the whole questionnaire to reach the primary workflow
+
+**Cause:** consumer used **`Card`** for a preparatory **`FieldStack`** that
+should disclose. Core grammar (≥ **0.5.108**): on **PageScroll**, tall optional
+surveys → **`Collapsible`** (`defaultOpen` while filling; same `title` /
+`actions` / `FieldStack` as Card). Reserve **`Card`** for **List** wrappers
+and **short** always-visible sections (≤2 fields).
+
+**Fix in core (≥ **0.5.108**):** AGENTS **PageScroll multi-field brief** row +
+sandbox `#form-recipe-page-scroll` (Collapsible brief → `ControlRow` → body
+well in one `.fynns-unit-stack`).
+
+**Fix in the consumer (props-only):** swap `Card` → `Collapsible`:
+
+```tsx
+<div className="fynns-unit-stack">
+  <Collapsible
+    title={briefTitle}
+    defaultOpen
+    actions={saveIconButton}
+  >
+    <FieldStack>{…FieldBlocks…}</FieldStack>
+  </Collapsible>
+  <ControlRow label={mainSectionLabel}>…generate strip…</ControlRow>
+  …
+</div>
+```
+
+Use **`Textarea` `minRows={1}`** (or omit) for one-line brief fields — do not
+give one field `minRows={2}` unless it genuinely needs a taller floor. Bump
+core; live: `#form-recipe-page-scroll`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: literal backticks in Chat bubbles
 
 Symptoms: assistant/user turns show raw `` `token` `` / unrendered `**bold**` /
