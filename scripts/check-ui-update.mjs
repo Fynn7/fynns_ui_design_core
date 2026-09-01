@@ -91,10 +91,53 @@ function isLocalDependencySpec(spec) {
   return typeof spec === "string" && /^(file:|link:|workspace:)/.test(spec.trim());
 }
 
+/** Nearest-to-app installs walking up (matches Node module resolution). */
+function walkInstallChain(pkgRoot) {
+  const chain = [];
+  let dir = path.resolve(pkgRoot);
+  for (;;) {
+    const entry = path.join(dir, "node_modules", PKG_NAME, "package.json");
+    if (fs.existsSync(entry)) {
+      const installedPkg = readJson(entry);
+      chain.push({
+        hostRoot: dir,
+        installedRoot: path.dirname(entry),
+        version: installedPkg?.version ?? null,
+      });
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return chain;
+}
+
 function resolveInstalledRoot(pkgRoot) {
-  const entry = path.join(pkgRoot, "node_modules", PKG_NAME, "package.json");
-  if (fs.existsSync(entry)) return path.dirname(entry);
-  return null;
+  return walkInstallChain(pkgRoot)[0]?.installedRoot ?? null;
+}
+
+function semverRangeSatisfies(declared, version) {
+  if (!declared || !version) return false;
+  const spec = String(declared).trim();
+  const target = parseSemver(version);
+  if (!target) return false;
+  if (/^[\^~]/.test(spec)) {
+    const base = parseSemver(spec.slice(1));
+    if (!base) return false;
+    if (spec.startsWith("^")) {
+      if (target[0] !== base[0]) return false;
+      if (base[0] === 0 && target[1] !== base[1]) return false;
+      return !semverLt(version, spec.slice(1));
+    }
+    // ~x.y.z → same minor line
+    if (target[0] !== base[0] || target[1] !== base[1]) return false;
+    return !semverLt(version, spec.slice(1));
+  }
+  const exact = parseSemver(spec);
+  if (!exact) return false;
+  return (
+    exact[0] === target[0] && exact[1] === target[1] && exact[2] === target[2]
+  );
 }
 
 function readInstalledVersion(pkgRoot) {
@@ -105,25 +148,43 @@ function readInstalledVersion(pkgRoot) {
   };
   const declared = deps[PKG_NAME] ?? null;
 
-  const installedRoot = resolveInstalledRoot(pkgRoot);
-  if (!installedRoot) {
-    return { declared, installed: null, localLink: false, installedRoot: null };
+  const chain = walkInstallChain(pkgRoot);
+  const resolved = chain[0] ?? null;
+  if (!resolved) {
+    return {
+      declared,
+      installed: null,
+      localLink: false,
+      installedRoot: null,
+      installChain: chain,
+      parentNewer: null,
+    };
   }
 
-  const installedPkg = readJson(path.join(installedRoot, "package.json"));
-  const installed = installedPkg?.version ?? null;
+  const { installedRoot, version: installed, hostRoot: resolvedHost } = resolved;
+  const parentNewer =
+    chain.find(
+      (hit, i) => i > 0 && hit.version && installed && semverLt(installed, hit.version),
+    ) ?? null;
 
   let localLink = isLocalDependencySpec(declared);
   if (!localLink) {
     try {
-      const stat = fs.lstatSync(path.join(pkgRoot, "node_modules", PKG_NAME));
+      const stat = fs.lstatSync(path.join(resolvedHost, "node_modules", PKG_NAME));
       localLink = stat.isSymbolicLink();
     } catch {
       /* not a link */
     }
   }
 
-  return { declared, installed, localLink, installedRoot };
+  return {
+    declared,
+    installed,
+    localLink,
+    installedRoot,
+    installChain: chain,
+    parentNewer,
+  };
 }
 
 function readCache(pkgRoot) {
@@ -165,18 +226,42 @@ function fetchLatestRegistryVersion() {
   return latest ? { latest, reason: null } : { latest: null, reason: "empty_registry" };
 }
 
-function printNotice({ installed, latest, localLink }) {
-  const installCmd = `npm install ${PKG_NAME}@${latest}`;
+function formatPkgRootLabel(pkgRoot) {
+  const rel = path.relative(process.cwd(), pkgRoot);
+  if (!rel || rel === ".") return "this package";
+  if (!rel.startsWith("..")) return rel;
+  return pkgRoot;
+}
+
+function printNotice({ pkgRoot, installed, latest, declared, localLink, parentNewer }) {
+  const pkgLabel = formatPkgRootLabel(pkgRoot);
+  const declaredSatisfiesLatest = semverRangeSatisfies(declared, latest);
+  const installCmd = declaredSatisfiesLatest
+    ? "npm install"
+    : `npm install ${PKG_NAME}@${latest}`;
 
   const lines = [
     "",
     "┌─ @fynn7/ui-design-core update available ─────────────────────────────",
+    `│  package: ${pkgLabel}`,
     `│  installed: ${installed}  →  latest: ${latest}`,
   ];
+  if (declared && declaredSatisfiesLatest && declared !== installed) {
+    lines.push(`│  package.json already declares ${declared} — refresh node_modules`);
+  }
+  if (parentNewer) {
+    const parentLabel =
+      path.relative(pkgRoot, parentNewer.hostRoot) === ".."
+        ? path.basename(parentNewer.hostRoot)
+        : formatPkgRootLabel(parentNewer.hostRoot);
+    lines.push(
+      `│  parent ${parentLabel} has ${parentNewer.version} — nested copy here still wins for Vite`,
+    );
+  }
   if (localLink) {
     lines.push("│  (local link / file: — registry tarball may differ from sibling checkout)");
   }
-  lines.push(`│  run: ${installCmd}`);
+  lines.push(`│  run (in ${pkgLabel}): ${installCmd}`);
   lines.push("│  silence: FYNNS_UI_SKIP_UPDATE_CHECK=1");
   lines.push("└──────────────────────────────────────────────────────────────────────");
   lines.push("");
@@ -219,7 +304,8 @@ function runMainBody() {
     process.exit(0);
   }
 
-  const { declared, installed, localLink } = readInstalledVersion(pkgRoot);
+  const { declared, installed, localLink, installChain, parentNewer } =
+    readInstalledVersion(pkgRoot);
   if (!installed) {
     if (opts.json) {
       console.log(JSON.stringify({ skipped: true, reason: "not_installed", pkgRoot }, null, 2));
@@ -261,6 +347,14 @@ function runMainBody() {
           updateAvailable,
           registryReason,
           cacheFresh: !!cacheFresh,
+          installChain: installChain.map((hit) => ({
+            hostRoot: hit.hostRoot,
+            version: hit.version,
+          })),
+          parentNewer: parentNewer
+            ? { hostRoot: parentNewer.hostRoot, version: parentNewer.version }
+            : null,
+          declaredSatisfiesLatest: latest ? semverRangeSatisfies(declared, latest) : false,
         },
         null,
         2,
@@ -270,7 +364,7 @@ function runMainBody() {
   }
 
   if (updateAvailable) {
-    printNotice({ installed, latest, localLink });
+    printNotice({ pkgRoot, installed, latest, declared, localLink, parentNewer });
   }
 
   process.exit(0);
@@ -296,4 +390,6 @@ export {
   findPackageRoot,
   readInstalledVersion,
   semverLt,
+  semverRangeSatisfies,
+  walkInstallChain,
 };

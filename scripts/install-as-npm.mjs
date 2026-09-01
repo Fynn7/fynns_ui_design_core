@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
+import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
@@ -333,8 +334,8 @@ function dependencyNeedsInstall(current, version) {
   return false;
 }
 
-function ensureDependency(gitRoot, version, dryRun, log) {
-  const pkg = readConsumerPkg(gitRoot);
+function ensureDependency(pkgRoot, version, dryRun, log) {
+  const pkg = readConsumerPkg(pkgRoot);
   if (!pkg) {
     log.push({ step: "dependency", status: "fail", detail: "no package.json" });
     return false;
@@ -386,7 +387,7 @@ function ensureDependency(gitRoot, version, dryRun, log) {
   const r = spawnSync(
     "npm",
     ["install", `${PKG_NAME}@${version}`, "--save"],
-    { cwd: gitRoot, encoding: "utf8", shell: true, env },
+    { cwd: pkgRoot, encoding: "utf8", shell: true, env },
   );
   if (r.status !== 0) {
     const raw = (r.stderr || r.stdout || "").trim() || "npm install failed";
@@ -531,6 +532,7 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
   if (deps[PKG_NAME] && !fs.existsSync(entry)) {
     issues.push(`package not installed on disk (expected ${ENTRY_FROM_PKG}); run npm install`);
   }
+  checkMonorepoInstallDrift(pkgRoot, issues);
   const npmrc = path.join(pkgRoot, ".npmrc");
   if (!fs.existsSync(npmrc) || !readText(npmrc).includes("@fynn7:registry=")) {
     issues.push(`.npmrc missing @fynn7 → ${REGISTRY}`);
@@ -564,6 +566,21 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
     );
   }
   return { ok: issues.length === 0, issues };
+}
+
+function checkMonorepoInstallDrift(pkgRoot, issues) {
+  const chain = walkInstallChain(pkgRoot);
+  if (chain.length < 2) return;
+  const resolved = chain[0];
+  const parentNewer = chain.find(
+    (hit, i) =>
+      i > 0 && hit.version && resolved.version && semverLt(resolved.version, hit.version),
+  );
+  if (!parentNewer) return;
+  const parentLabel = path.basename(parentNewer.hostRoot);
+  issues.push(
+    `monorepo drift: parent (${parentLabel}) has ${PKG_NAME}@${parentNewer.version} but this package still resolves ${resolved.version} — bump with npm install in ${pkgRoot}, not only at the repo root`,
+  );
 }
 
 function main() {

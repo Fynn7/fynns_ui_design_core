@@ -78,6 +78,7 @@ alwaysApply: true
    正文 loading 壳（圈贴顶、无 `aria-busy` 区域）。**禁止**用 `EmptyState` +
    `CircularProgress` 当 loading 壳。失败模式：`llm/CONSUMER_TREATY.md`
    **BusyRegion fill nested in unit-stack / Card** /
+   **section FieldHint + pane cold-start BusyRegion in one well** /
    **BusyRegion cold body + pager chrome siblings**。
    **一宿主一进度件：** 已知百分比 / 计数 → `indicator="linear"` + `value`；
    `message` 只放状态文案（可加 `FieldHint`），**禁止**再塞 `LinearProgress` /

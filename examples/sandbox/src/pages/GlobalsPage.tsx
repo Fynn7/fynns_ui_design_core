@@ -1032,6 +1032,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
+  const [busyRegionPaneLeadCold, setBusyRegionPaneLeadCold] = useState(true);
   const [busyRegionDialogOpen, setBusyRegionDialogOpen] = useState(false);
   const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyRegionFieldBusy, setBusyRegionFieldBusy] = useState(false);
@@ -5120,6 +5121,42 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.busyRegionFillHelp")} />
+          <div id="sandbox-busy-region-pane-lead" className="sandbox-fill-column-stage">
+            <FillColumn>
+              {busyRegionPaneLeadCold ? (
+                <BusyRegion
+                  fill
+                  busy
+                  label={t("globals.busyRegionPaneLeadLabel")}
+                />
+              ) : (
+                <div className="fynns-unit-stack">
+                  <FieldHint>{t("globals.busyRegionPaneLeadHint")}</FieldHint>
+                  <Card title={t("globals.busyRegionTitle")}>
+                    <p style={{ margin: 0 }}>{t("globals.busyRegionPaneLeadBody")}</p>
+                  </Card>
+                </div>
+              )}
+            </FillColumn>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setBusyRegionPaneLeadCold(true)}
+              disabled={busyRegionPaneLeadCold}
+            >
+              {t("globals.busyRegionPaneLeadShowCold")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setBusyRegionPaneLeadCold(false)}
+              disabled={!busyRegionPaneLeadCold}
+            >
+              {t("globals.busyRegionPaneLeadShowReady")}
+            </Button>
+          </div>
+          <SandboxHelp text={t("globals.busyRegionPaneLeadHelp")} />
           <div className="sandbox-globals-row">
             <Button size="sm" onClick={() => setBusyRegionDialogOpen(true)}>
               {t("globals.busyRegionDialogOpen")}
