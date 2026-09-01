@@ -1652,6 +1652,25 @@ host height.
 `detail` + `trailing` recipe unchanged; drop any local CSS that nudges group
 actions with negative margin / `top`.
 
+## Failure mode this treaty targets: expandable parent row kisses nested member
+
+Symptoms (project catalog `CatalogGroup` — open group + first member row):
+
+- Parent group pill (chevron + name + `0/N` + `--with-end` tools) and the first
+  nested `ListItem` selected/hover pill **kiss** — no visible vertical gap
+- Rounded corners on parent and child read as one fused capsule stack
+
+**Cause:** core `< 0.5.110` set `.fynns-list-item-host--with-detail { gap: 0 }`,
+so the row shell sat flush on the `.fynns-expand` / nested `List`. Consumers
+must not patch with `margin-top` on nested `List` or negative margin on detail.
+
+**Fix in core (≥ 0.5.110):** `--with-detail` hosts use column
+`gap: var(--fynns-list-item-gap)` (same **4dp** as sibling hosts). Live: Globals
+`#list` expandable project group + tree.
+
+**Fix in the consumer:** bump only — keep `ListItem` `detail={<List>…</List>}`
+recipe; drop any local gap hacks.
+
 ## Failure mode this treaty targets: expandable group count kisses `--with-end` icons
 
 Symptoms (project catalog `CatalogGroup` — `agents-hub 0/4` row):
@@ -3303,6 +3322,183 @@ toolbar strips still use **`ControlBlock` `description`** (label column).
 
 Do **not** add private `margin-top` on `.fynns-field-hint`. Bump core; live:
 sandbox `#rhythm`; consumer posting pipeline / cover letter panels. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: ControlRow primary leftmost in mixed cluster
+
+Symptoms (cover letter / CV skills / LLM generate strips on `PageScroll`):
+
+- A labeled **`Button` `variant="primary"`** (generate / run) sits **first** in
+  `.fynns-control-row__controls > .fynns-control-cluster`, before save /
+  export / prompt `IconButton`s
+- The filled primary pill reads as the section start while secondary ghost
+  disks trail to the right — opposite Dialog foot / morph strip grammar
+
+**Cause:** consumer ordered JSX as primary → icons. Core does not reorder DOM —
+LTR primary-end is caller-owned (same rule as Dialog feet, mode drawer New,
+morph strip labeled CTA).
+
+**Fix in core (≥ **0.5.105**):** AGENTS **ControlRow chrome strip** row +
+sandbox `#rhythm` cover-letter strip (icons first → labeled primary last).
+Morph stack already teaches tonal CTA last; cover-letter strip teaches
+`primary` last beside save / export.
+
+**Fix in the consumer (props-only):** one `.fynns-control-cluster` — park all
+`sm` ghost `IconButton`s / `DropdownMenu` `iconOnly` **before** the labeled
+primary (or main tonal) `Button`:
+
+```tsx
+<div className="fynns-control-cluster">
+  <Tooltip>…<IconButton … /></Tooltip>
+  {/* save / export / prompt icons — default md on main-canvas section strips */}
+  <Button variant="primary" …>{generateLabel}</Button>
+</div>
+```
+
+Never `primary` leftmost. Bump core; live: `#rhythm` cover-letter strip;
+consumer cover letter / CV skills panels. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: section-body IconButton sm
+
+Symptoms (JD posting / key-points strip on `PageScroll`):
+
+- Re-extract / copy posting use `IconButton size="sm"` → **32×32** hover disks
+- The labeled import / tonal CTA beside them is default **md** (40dp) — size
+  mismatch reads as “tiny icons for a huge action”
+- Actions affect the **entire posting / highlight body** below the strip, not a
+  single field or row
+
+**Cause:** consumer treated morph / posting strips like EndAside inspector or
+mode-drawer dense chrome (`sm`). Core grammar (≥ **0.5.107**): **section-body**
+`ControlRow` on main canvas → default **`md`** IconButtons; **`sm`** only for
+field-local chrome (Card `actions` beside sm peers, EndAside, `--toolbar-end`,
+FieldBlock label-row, Select-row refresh beside sm `InfoHint`). Same destination
+page: catalog `ControlRow` + List trailing + section-body strip all **`md`**.
+
+**Fix in core (≥ **0.5.107**):** AGENTS **PageScroll section-body chrome** row +
+sandbox `#rhythm` morph + cover-letter strips (default `md` disks).
+
+**Fix in the consumer (props-only):** omit `size="sm"` (or pass `size="md"`) on
+section-scope `IconButton`s; do not hardcode `size={16}` on icons — inherit
+default glyph in the disk:
+
+```tsx
+<div className="fynns-control-cluster">
+  <Tooltip content={reExtractTip}>
+    <IconButton variant="ghost" aria-label={reExtractLabel} loading={busy} …>
+      <RefreshIcon />
+    </IconButton>
+  </Tooltip>
+  <Tooltip content={copyTip}>
+    <IconButton variant="ghost" aria-label={copyLabel} …>
+      <ClipboardIcon />
+    </IconButton>
+  </Tooltip>
+  <Button variant="tonal" …>{importLabel}</Button>
+</div>
+```
+
+`DropdownMenu` `iconOnly` defaults **`sm`** — pass **`size="md"`** on section-body export menus.
+
+Bump core; live: `#rhythm`; consumer posting pipeline / cover letter / CV skills
+**main-canvas** strips (not EndAside). Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: PageScroll brief Card
+
+Symptoms (cover-letter / pipeline step on `PageScroll`):
+
+- An optional **multi-field brief** (4+ `FieldBlock`s with `description`) sits
+  in a static **`Card`** as the first `.fynns-unit-stack` sibling
+- The card body is ~600dp+ tall — generate `ControlRow` / letter `Textarea`s
+  start below the first viewport with no way to collapse the survey
+- Users must scroll past the whole questionnaire to reach the primary workflow
+
+**Cause:** consumer used **`Card`** for a preparatory **`FieldStack`** that
+should disclose. Core grammar (≥ **0.5.108**): on **PageScroll**, tall optional
+surveys → **`Collapsible`** (`defaultOpen` while filling; same `title` /
+`actions` / `FieldStack` as Card). Reserve **`Card`** for **List** wrappers
+and **short** always-visible sections (≤2 fields).
+
+**Fix in core (≥ **0.5.108**):** AGENTS **PageScroll multi-field brief** row +
+sandbox `#form-recipe-page-scroll` (Collapsible brief → `ControlRow` → body
+well in one `.fynns-unit-stack`).
+
+**Fix in core (≥ **0.5.109**):** default brief save / sync → Collapsible **body**
+`.fynns-control-cluster--end-align` after `FieldStack` with **default `md`**
+ghost IconButtons — not head `actions`. Head `actions` only when explicitly
+requested → **`sm` only** (never md on Collapsible head).
+
+**Fix in the consumer (props-only):** swap `Card` → `Collapsible`:
+
+```tsx
+<div className="fynns-unit-stack">
+  <Collapsible title={briefTitle} defaultOpen>
+    <FieldStack>{…FieldBlocks…}</FieldStack>
+    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+      <Tooltip content={saveLabel}>
+        <IconButton
+          variant="ghost"
+          aria-label={saveLabel}
+          loading={saving}
+          onClick={onSave}
+        >
+          <SaveIcon />
+        </IconButton>
+      </Tooltip>
+    </div>
+  </Collapsible>
+  <ControlRow label={mainSectionLabel}>…generate strip…</ControlRow>
+  …
+</div>
+```
+
+Optional compact head chrome (product choice only):
+
+```tsx
+<Collapsible
+  title={briefTitle}
+  defaultOpen
+  actions={
+    <Tooltip content={saveLabel}>
+      <IconButton size="sm" variant="ghost" aria-label={saveLabel} …>
+        <SaveIcon />
+      </IconButton>
+    </Tooltip>
+  }
+>
+  <FieldStack>{…}</FieldStack>
+</Collapsible>
+```
+
+Use **`Textarea` `minRows={1}`** (or omit) for one-line brief fields — do not
+give one field `minRows={2}` unless it genuinely needs a taller floor. Bump
+core; live: `#form-recipe-page-scroll`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Collapsible brief save on head
+
+Symptoms (PageScroll optional multi-field brief on cover-letter / pipeline step):
+
+- Save / sync **`IconButton`** sits in **`Collapsible` head `actions`** beside
+  the chevron — reads as title-bar chrome, not form foot
+- Consumer used head placement when the default recipe is **body end-align**
+  after the `FieldStack` (same section scope as generate strips → **md** disks)
+- Or head `actions` use **default `md`** (40dp) — oversized vs Collapsible
+  title band; head must stay **`sm`** when used at all
+
+**Cause:** consumer copied **Card draft `actions`** or early `#form-recipe-page-scroll`
+(head `sm` save) as the only pattern. Core default (≥ **0.5.109**): body
+`.fynns-control-cluster--end-align` + **md** ghost IconButtons after
+`FieldStack`. Head `actions` = **optional** compact variant → **`sm` only**.
+
+**Fix in core (≥ **0.5.109**):** AGENTS **PageScroll multi-field brief** row +
+sandbox `#form-recipe-page-scroll` (body save cluster).
+
+**Fix in the consumer (props-only):** remove `actions` from `Collapsible`;
+append body cluster (see **PageScroll brief Card** fix block above). Bump
+core; live: `#form-recipe-page-scroll`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: literal backticks in Chat bubbles

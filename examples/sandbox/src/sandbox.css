@@ -1294,6 +1294,12 @@
   min-width: 0;
 }
 
+.sandbox-globals-form-recipe-page-scroll {
+  max-width: 40rem;
+  width: 100%;
+  min-width: 0;
+}
+
 .sandbox-globals-form-recipe-actions {
   display: flex;
   flex-wrap: wrap;

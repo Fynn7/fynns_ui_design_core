@@ -108,6 +108,7 @@ import {
   Radio,
   RefreshIcon,
   MoreHorizontalIcon,
+  PersonIcon,
   SaveIcon,
   SearchIcon,
   Select,
@@ -6167,7 +6168,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <div className="fynns-control-cluster">
               <Tooltip content={t("globals.rhythmMorphRefresh")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmMorphRefresh")}
                   loading={rhythmMorphBusy}
@@ -6182,7 +6182,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Tooltip>
               <Tooltip content={t("globals.rhythmMorphCopy")}>
                 <IconButton
-                  size="sm"
                   variant="ghost"
                   aria-label={t("globals.rhythmMorphCopy")}
                   disabled={rhythmMorphBusy}
@@ -6191,7 +6190,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </IconButton>
               </Tooltip>
               <Button
-                size="sm"
                 variant="tonal"
                 disabled={rhythmMorphBusy}
                 onClick={() => {
@@ -6208,6 +6206,57 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             {t("globals.rhythmMorphBodySample")}
           </Surface>
         </div>
+        <SandboxHelp text={t("globals.rhythmCoverLetterHelp")} />
+        <ControlRow
+          label={t("globals.rhythmCoverLetterLabel")}
+          className="sandbox-globals-rhythm-cover-letter"
+        >
+          <div className="fynns-control-cluster">
+            <Tooltip content={t("globals.rhythmCoverLetterSave")}>
+              <IconButton aria-label={t("globals.rhythmCoverLetterSave")}>
+                <SaveIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterExport")}>
+              <DropdownMenu
+                iconOnly
+                size="md"
+                trigger={<UploadIcon />}
+                ariaLabel={t("globals.rhythmCoverLetterExport")}
+              >
+                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportWord")}</DropdownMenuItem>
+                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportPdf")}</DropdownMenuItem>
+              </DropdownMenu>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterPrompt")}>
+              <IconButton
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterPrompt")}
+              >
+                <FileIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={t("globals.rhythmCoverLetterRecipient")}>
+              <IconButton
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterRecipient")}
+              >
+                <PersonIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="primary"
+              loading={rhythmMorphBusy}
+              disabled={rhythmMorphBusy}
+              onClick={() => {
+                setRhythmMorphBusy(true);
+                window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+              }}
+            >
+              {t("globals.rhythmCoverLetterGenerate")}
+            </Button>
+          </div>
+        </ControlRow>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">
@@ -6487,6 +6536,60 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Button>
             </div>
           </Dialog>
+          <GlobalsDemo id="form-recipe-page-scroll">
+            <SandboxHelp text={t("globals.formRecipePageScrollHelp")} />
+            <div className="sandbox-globals-form-recipe-page-scroll fynns-unit-stack">
+              <Collapsible
+                className="sandbox-globals-form-recipe"
+                title={t("globals.formRecipeBriefTitle")}
+                defaultOpen
+              >
+                <FieldStack>
+                  {(
+                    [
+                      ["globals.formRecipeBriefField1", "globals.formRecipeBriefField1Desc"],
+                      ["globals.formRecipeBriefField2", "globals.formRecipeBriefField2Desc"],
+                      ["globals.formRecipeBriefField3", "globals.formRecipeBriefField3Desc"],
+                      ["globals.formRecipeBriefField4", "globals.formRecipeBriefField4Desc"],
+                      ["globals.formRecipeBriefField5", "globals.formRecipeBriefField5Desc"],
+                    ] as const
+                  ).map(([labelKey, descKey], index) => (
+                    <FieldBlock
+                      key={labelKey}
+                      label={t(labelKey)}
+                      description={t(descKey)}
+                    >
+                      <Textarea
+                        minRows={1}
+                        aria-label={t(labelKey)}
+                        defaultValue={index === 0 ? "Sample fact line" : ""}
+                      />
+                    </FieldBlock>
+                  ))}
+                </FieldStack>
+                <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                  <Tooltip content={t("globals.formRecipeBriefSave")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.formRecipeBriefSave")}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              </Collapsible>
+              <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
+                <div className="fynns-control-cluster">
+                  <Button variant="primary">
+                    {t("globals.formRecipePageScrollGenerate")}
+                  </Button>
+                </div>
+              </ControlRow>
+              <Surface variant="outlined" padded>
+                {t("globals.formRecipePageScrollBody")}
+              </Surface>
+            </div>
+          </GlobalsDemo>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>
       </>

@@ -551,6 +551,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "form-recipe-page-scroll",
+    categoryId: "rhythm",
+    label: "PageScroll brief Collapsible",
+    keywords: [
+      "page scroll",
+      "collapsible",
+      "brief",
+      "questionnaire",
+      "survey",
+      "问卷",
+      "折叠",
+      "form-recipe",
+    ],
+  },
+  {
     id: "form-recipe",
     categoryId: "rhythm",
     label: "Inspector form recipe",
