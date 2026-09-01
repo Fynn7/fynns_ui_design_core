@@ -44,7 +44,8 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
-**BusyRegion transparent overlay (no surface wash)** /
+**BusyRegion busy copy bleeds through overlay** /
+**BusyRegion colored loading wash (surface-*)** /
 **BusyRegion cold body + pager chrome siblings** /
 **BusyRegion empty cold-start overlaps SearchBar** /
 **BusyRegion linear overflows NavigationDrawer** /
@@ -254,6 +255,38 @@ role and leaves a hollow space-between strip.
    select mode is on — never `headline`.
 
 Authority: [`AGENTS.md`](../AGENTS.md) NavigationDrawer platform row;
+pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: drawer sheet headline under TopAppBar
+
+Symptoms (greenfield `DestinationAppShell` / `ClippedNavShell` destination
+apps):
+
+- Muted `.fynns-nav-drawer-headline` band under the `TopAppBar` (e.g.
+  `drawerHeadline="管理"` while the bar already reads `Discord Music Bot`)
+- Flat root destination list (`服务` / `工具`) sits **below** a redundant
+  section title that does not name a mode or catalog the bar omits
+- Wastes ~34dp of drawer height; reads as a second app title, not navigation
+
+**Cause:** `DestinationAppShell` `drawerHeadline` maps to
+`NavigationDrawer` `headline` — M3 **sheet title-small** chrome for
+**standalone** drawers without app-bar context. When `TopAppBar` `title`
+already names the app, the sheet headline duplicates scope and fights the
+destination items.
+
+**Consumer fix (props only):**
+
+1. **Remove** `drawerHeadline` / omit `NavigationDrawer` `headline` on
+   destination shells with a titled `TopAppBar`.
+2. Name sections with **`NavigationDrawerItem` `label`** (and
+   `NavigationDrawerGroup` when the drawer needs collapsible folders) — not a
+   sheet headline above flat items.
+3. Mode / catalog titles that differ from the app bar → rename
+   `TopAppBar` `title` on mode enter, or use drill-in (`#layouts-demo-drill-in`)
+   — still **no** drawer sheet headline.
+
+Live: sandbox Layout templates **`#layouts-demo-shell`** (omits
+`drawerHeadline`). Authority: [`AGENTS.md`](../AGENTS.md) Hard rules;
 pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: main-canvas list|detail split (hub-split)
@@ -1355,6 +1388,33 @@ Symptoms (Dialog body foot, Card action strip — e.g. Applications edit Dialog
 `.fynns-control-cluster--end-align` — drop private `margin` / `gap` on
 `.fynns-btn`. Re-paste `consumer-cursor-rule.mdc`. Live: sandbox `#timeline`
 edit Dialog foot / `#rhythm` end-align. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: private labeled Button cluster gap
+
+Symptoms (Card-body `ControlRow` — service start/stop/restart, Dialog feet,
+action strips):
+
+- Adjacent **labeled** `Button` pills + optional leading `Chip` read **kissed**
+  (~4dp) — same tight rhythm as IconButton strips
+- DevTools: children sit in a **private** flex host (e.g. `dmb-control-cluster`,
+  `hub-spread`) with only `gap: var(--fynns-layout-control-cluster-gap)`
+
+**Cause:** consumers clone `.fynns-control-cluster` at **4dp** for every
+sibling. Core (≥ **0.5.80**) widens **labeled** `.fynns-btn` gaps to
+**8dp** (`action-cluster-gap`) on public `.fynns-control-cluster` and
+`.fynns-control-cluster--end-align` labeled feet (≥ **0.5.52**).
+
+**Consumer fix (props / class only):**
+
+1. Replace private clusters with **one** `.fynns-control-cluster` (add
+   `--end-align` for foot-style strips).
+2. **Delete** consumer CSS that redefines cluster `gap` at 4dp beside labeled
+   Buttons.
+3. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#rhythm` service control + end-align. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
+row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 
@@ -2819,6 +2879,28 @@ Reserve standalone `InlineAlert` for **single-line** in-panel notices with no ro
 catalog. Live: hub usage unmapped-models band. Authority: [`AGENTS.md`](../AGENTS.md)
 **Content density**. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: InlineAlert beside List in ControlStack
+
+Symptoms in a settings / env-check Card:
+
+- A warning `InlineAlert` strip sits **beside** (same row as) a `List` of config
+  rows — yellow band left, catalog right, awkward two-column band inside the Card
+- DevTools: `div.fynns-control-stack[data-columns="2"]` with `InlineAlert` and
+  `ul.fynns-list` as direct siblings auto-placed into adjacent grid cells
+
+**Cause:** `ControlStack` default `columns={2}` is for **aligned `ControlRow`**
+toolbars only. Block hosts (`InlineAlert`, `List`, `FieldStack`, `.fynns-unit-stack`)
+were nested as stack children instead of vertical siblings.
+
+**Fix in the consumer:** stack **alert → catalog → foot** in
+`.fynns-unit-stack` inside the Card body (`unit-stack-gap` 16dp). Use
+`ControlStack` only when every child is a `ControlRow` (or pass `columns={1}` as
+a narrow escape hatch). Core ≥ **0.5.120** forces non-`ControlRow` stack children
+full width, but consumers must still adopt unit-stack — do not rely on the safety
+net. Live: sandbox Globals `#env-check`. Authority: [`AGENTS.md`](../AGENTS.md)
+Hard rules **InlineAlert beside List**. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: List / FieldHeader nested inside InlineAlert
 
 Symptoms in a settings / dashboard panel:
@@ -3032,7 +3114,7 @@ sandbox `#fullscreen-flush`. Authority: [`AGENTS.md`](../AGENTS.md)
 **Flush-start overlay body**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
-## Failure mode this treaty targets: BusyRegion colored loading wash
+## Failure mode this treaty targets: BusyRegion colored loading wash (surface-*)
 
 Symptoms: pane cold-start or refresh shows a **second** solid / washed
 background under the ring (e.g. `surface-1` block that does not match
@@ -3042,15 +3124,32 @@ colored panel”.
 **Cause:** `.fynns-busy-region-overlay` used to tint with
 `color-mix(... surface-1 78% ...)`, or the consumer wrapped the ring in a
 private hub loading shell with its own background. **Fix in core:** overlay
-`background: transparent` — host / pane shows through; `BusyScrim` keeps
-`--fynns-color-overlay` for full-viewport blocks. **Fix in the consumer:**
-use `BusyRegion` / `BusyScrim` as-is; do **not** restyle
+uses `--fynns-color-overlay` scrim (same token as `BusyScrim`, scoped to the
+region) — **not** `surface-*` wash and **not** `background: transparent`
+(which lets busy copy stack on legible mono / catalog text). **Fix in the
+consumer:** use `BusyRegion` / `BusyScrim` as-is; do **not** restyle
 `.fynns-busy-region-overlay` or invent a colored `hub-*-loading` wash under
 the chrome. Bare `CircularProgress` in a tinted box is also wrong for pane
 boot — use `BusyRegion` `fill`. Authority: [`AGENTS.md`](../AGENTS.md)
 Feedback **Loading placement**. Live: sandbox `#busy-region` /
-`#busy-region` fill sample. Pasteable:
+`#busy-region` fill sample + FieldBlock refresh over `CodeBlock`. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: BusyRegion busy copy bleeds through overlay
+
+Symptoms: sectional refresh (FieldBlock + `CodeBlock` / List / table preview)
+shows spinner + busy message **directly on top of** still-legible background
+copy — mono config / catalog lines read through the message and mislead users
+(no dimming scrim).
+
+**Cause:** core ≥ 0.4.x briefly used `background: transparent` on
+`.fynns-busy-region-overlay` to avoid the old `surface-1` wash; consumer
+cannot fix with props — needs core scrim. **Fix in core:** overlay paints
+`var(--fynns-color-overlay)` (≥ **0.5.121**). **Fix in the consumer:** wrap
+only the body being refreshed in `BusyRegion`; do **not** add a private
+`.hub-*` scrim or local `opacity` on children. Live: sandbox
+`#sandbox-busy-region-field-sample`; consumer Prompt-Fabrik dataset card
+preview. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: bare CircularProgress as body loader
 

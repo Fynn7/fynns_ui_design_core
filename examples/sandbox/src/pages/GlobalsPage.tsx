@@ -1129,6 +1129,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
     null | "secondary" | "primary"
   >(null);
   const [rhythmMorphBusy, setRhythmMorphBusy] = useState(false);
+  const [rhythmServiceRunning, setRhythmServiceRunning] = useState(false);
+  const [rhythmServiceBusy, setRhythmServiceBusy] = useState(false);
   const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
@@ -2639,6 +2641,36 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <InlineAlert severity="success" message={t("globals.inlineAlertWrap")} />
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="env-check">
+        <Card title={t("globals.envCheckCardTitle")}>
+          <div className="fynns-unit-stack">
+            <InlineAlert severity="warning" message={t("globals.envCheckAlert")} />
+            <List aria-label={t("globals.envCheckListAria")}>
+              <ListItem
+                headline={t("globals.envCheckTokenHeadline")}
+                supportingText={t("globals.envCheckTokenSupporting")}
+                trailingSupportingText={t("globals.envCheckMissing")}
+              />
+              <ListItem
+                headline={t("globals.envCheckAppHeadline")}
+                supportingText={t("globals.envCheckAppSupporting")}
+                trailingSupportingText={t("globals.envCheckMissing")}
+              />
+              <ListItem
+                headline={t("globals.envCheckRegionHeadline")}
+                supportingText={t("globals.envCheckRegionSupporting")}
+                trailingSupportingText={t("globals.envCheckOk")}
+              />
+            </List>
+            <ControlRow label={t("globals.envCheckRefreshLabel")}>
+              <Button size="sm" variant="default">
+                {t("globals.envCheckRecheck")}
+              </Button>
+            </ControlRow>
+          </div>
+        </Card>
+        <SandboxHelp text={t("globals.envCheckHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="snackbar">
         <div className="sandbox-globals-row">
@@ -5228,7 +5260,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <div id="sandbox-busy-region-field-sample">
             <FieldBlock
               label={t("globals.busyRegionFieldLabel")}
-              htmlFor="sandbox-busy-region-field-body"
               actions={
                 <div className="fynns-control-cluster">
                   <Tooltip content={t("globals.busyRegionFieldRefreshTip")}>
@@ -5249,12 +5280,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 label={t("globals.busyRegionFieldBusyLabel")}
                 message={t("globals.busyRegionFieldBusyMessage")}
               >
-                <Textarea
-                  id="sandbox-busy-region-field-body"
-                  rows={4}
-                  value={t("globals.busyRegionFieldBody")}
-                  onChange={() => {}}
-                  aria-label={t("globals.busyRegionFieldLabel")}
+                <CodeBlock
+                  variant="plain"
+                  language="yaml"
+                  code={t("globals.busyRegionFieldBody")}
+                  showCopy
+                  copyAriaLabel={t("globals.busyRegionFieldCopyAria")}
+                  maxHeight="12rem"
                 />
               </BusyRegion>
             </FieldBlock>
@@ -6419,6 +6451,68 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
         </Surface>
         <SandboxHelp text={t("globals.rhythmStatusHelp")} />
+        <SandboxHelp text={t("globals.rhythmServiceHelp")} />
+        <Card className="sandbox-globals-rhythm" title={t("globals.rhythmServiceTitle")}>
+          <ControlRow
+            label={
+              rhythmServiceRunning
+                ? t("globals.rhythmServicePid")
+                : t("globals.rhythmServiceStopped")
+            }
+          >
+            <div className="fynns-control-cluster">
+              <Chip variant="assist" selected={rhythmServiceRunning}>
+                {rhythmServiceRunning
+                  ? t("globals.rhythmServiceChipRunning")
+                  : t("globals.rhythmServiceChipStopped")}
+              </Chip>
+              <Button
+                size="sm"
+                variant="primary"
+                disabled={rhythmServiceBusy || rhythmServiceRunning}
+                loading={rhythmServiceBusy && !rhythmServiceRunning}
+                onClick={() => {
+                  setRhythmServiceBusy(true);
+                  window.setTimeout(() => {
+                    setRhythmServiceRunning(true);
+                    setRhythmServiceBusy(false);
+                  }, 900);
+                }}
+              >
+                {t("globals.rhythmServiceStart")}
+              </Button>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={rhythmServiceBusy || !rhythmServiceRunning}
+                onClick={() => {
+                  setRhythmServiceBusy(true);
+                  window.setTimeout(() => {
+                    setRhythmServiceRunning(false);
+                    setRhythmServiceBusy(false);
+                  }, 900);
+                }}
+              >
+                {t("globals.rhythmServiceStop")}
+              </Button>
+              <Button
+                size="sm"
+                variant="default"
+                disabled={rhythmServiceBusy}
+                loading={rhythmServiceBusy && rhythmServiceRunning}
+                onClick={() => {
+                  setRhythmServiceBusy(true);
+                  window.setTimeout(() => {
+                    setRhythmServiceRunning(true);
+                    setRhythmServiceBusy(false);
+                  }, 900);
+                }}
+              >
+                {t("globals.rhythmServiceRestart")}
+              </Button>
+            </div>
+          </ControlRow>
+        </Card>
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
           <ControlStack columns={1}>
             <ControlRow label={t("globals.rhythmStatusBehind")}>

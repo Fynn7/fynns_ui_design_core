@@ -1027,9 +1027,9 @@
   place-items: center;
   min-width: 0;
   box-sizing: border-box;
-  /* Transparent — keep host / pane background; do not wash with surface-*.
-     Full-viewport blocking tint stays on BusyScrim (`--fynns-color-overlay`). */
-  background: transparent;
+  /* Sectional scrim — same token as BusyScrim; dims mounted children so busy
+     copy does not stack on legible mono / catalog text. Not a surface-* wash. */
+  background: var(--fynns-color-overlay);
   pointer-events: auto;
 }
 

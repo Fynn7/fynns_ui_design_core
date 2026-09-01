@@ -124,8 +124,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    reserve *block* gutters that clip the first/last pill radii.
 5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
-   blocking) / `BusyRegion` (sectional **transparent** overlay + **one**
-   progress chrome + message — host / pane background shows through; never a
+   blocking) / `BusyRegion` (sectional scrim overlay `--fynns-color-overlay` + **one**
+   progress chrome + message — sectional scrim dims mounted copy; never a
    second `surface-*` wash; **pane cold-start uses `fill`**, never
    `EmptyState` + a ring, never a ring stacked on a bar), `EmptyState`
    (**zero-result
@@ -161,7 +161,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
-   `BusyRegion` (relative **transparent** overlay over children; content is
+   `BusyRegion` (relative scrim overlay `--fynns-color-overlay` over children; content is
    `inert` while busy — no surface tint; full-viewport tint → `BusyScrim`);
    for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
    paint → then work) so the ring can start before the main thread blocks;
@@ -336,6 +336,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   Timeline default. Live: `#timeline`. Failure modes:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **Timeline row hover
   edit/delete icons** / **Dialog foot Delete leftmost of Cancel**.
+- **DON'T** park **`InlineAlert` / `Banner`** beside a **`List`** / catalog in
+  the same **row** of a multi-column **`ControlStack`** — severity strips
+  belong **above** the first catalog row (full-width sibling in
+  `.fynns-unit-stack`, or `ControlStack` with only `ControlRow` children).
+  Core ≥ **0.5.120** spans non-`ControlRow` stack children full width, but
+  consumers must still prefer **unit-stack**: alert → `List` → optional
+  `ControlRow` foot. Live: `#env-check`. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **InlineAlert beside
+  List in ControlStack**.
 - **DON'T** nest `InlineAlert` / `Banner` inside `ListItem` headline or
   supporting (panel chrome is `width: 100%` and stacks status above the title).
   Run / job history Success|title|duration → **one** single-line
@@ -359,6 +368,16 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   that control shows `loading`; siblings stay `disabled` with no spinner.
   Live: `#rhythm` end-align. Failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
   **twin Button loading rings**.
+- **DON'T** invent private `*-control-cluster` / `hub-spread` flex hosts with
+  `gap: var(--fynns-layout-control-cluster-gap)` (**4dp**) beside **labeled**
+  `Button`s — pills read kissed (~4dp). Use public
+  `.fynns-control-cluster` (core ≥ **0.5.80** widens labeled-Button siblings
+  to **8dp** / `action-cluster-gap`; end-align foot strips use
+  `.fynns-control-cluster--end-align` — same as Dialog foot). Drop consumer
+  CSS clones of the cluster. Live: `#rhythm` service control + end-align.
+  Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **private labeled Button
+  cluster gap**.
 - **DON'T** leave **`IconButton` `loading`** showing the spinner **and** the
   glyph in the same disk (spinner + refresh overlap). Core ≥ **0.5.80** renders
   spinner-only for `iconOnly` — labeled `Button` `loading` still pairs spinner +
@@ -597,6 +616,19 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
  `Name (explanation)` on Group triggers “for clarity.” Same for TopAppBar
  titles and List headlines unless the user asked for that meta. Failure mode:
  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **padded destination labels**.
+- **DON'T** pass `drawerHeadline` / `NavigationDrawer` `headline` on
+ **DestinationAppShell** or any destination **`ClippedNavShell` with
+ `TopAppBar` `title`** — the muted `.fynns-nav-drawer-headline` band stacks a
+ second title under the app bar and wastes drawer height on flat root
+ destination lists (`NavigationDrawerItem` labels already name each
+ destination). **Omit** the prop entirely — live Layouts
+ `#layouts-demo-shell`. Reserve sheet `headline` for **standalone**
+ `NavigationDrawer` anatomy demos **without** TopAppBar (sandbox Globals
+ `#globals-demo-navigation-drawer` only). For body section labels inside a
+ rich drawer, use `NavigationDrawerGroup` (collapsible) — not a sheet
+ headline + flat items. Failure mode:
+ [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **drawer sheet headline
+ under TopAppBar**.
 - **DON'T** rename tokens to non-`--fynns-*` forms. App/teaching-specific tokens
   live in the app under `--afs-*` (automata canvas) or `--dsa-*` (DSA bars,
   pointers, DSU) — never in this core.
@@ -787,8 +819,8 @@ classes.
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size?, indicator? }` /
   **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill?, indicator? }`
   (M3-style fullscreen non-dismissible scrim via **BusyScrim**, or sectional
-  **transparent** overlay + **one** progress chrome + visible message —
-  keep host / pane background; do **not** wash with `surface-*` /
+  **scrim overlay** (`--fynns-color-overlay`) + **one** progress chrome + visible message —
+  dims mounted copy under `--fynns-color-overlay`; do **not** wash with `surface-*` /
   private colored loading shells; `indicator` `"circular"` (default) |
   `"linear"` — known % / counts → `linear`, unknown wait → `circular`; never
   stack a ring on a bar; `message` is phrasing copy only — never nest
@@ -803,9 +835,9 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
-  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay stays **transparent**; **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / colored loading wash |
-  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (transparent overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
-  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; transparent overlay so the surface shows through | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay uses **`--fynns-color-overlay`** scrim; **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / `surface-*` colored wash |
+  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (scrim overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
+  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; scrim overlay dims mounted copy so busy message does not stack on legible text | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay; transparent / no-scrim overlay so mono preview bleeds through busy copy |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only; chrome width is **host-relative** (`min(20rem, 100%)` — never viewport/`100vw`) so NavigationDrawer / EndAside do not spill | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message`; private `width: 20rem` / `100vw` on the busy chrome |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = inline **`Spinner`** (Button / IconButton `loading` — sm footprint) | Two progress chromes in one overlay |
   | Button / icon / field busy | Inline **`Spinner`** via Button / IconButton `loading` (sm footprint; not a standalone `CircularProgress` in the slot) | Page-level / Dialog-body / Card-body layout |
@@ -1579,6 +1611,7 @@ classes.
   | **Narrow EndAside / inspector Card action row** (generate + save + multi-format export) | `ControlRow` **`label=""`** when **`Card` `title`** names the section — full-width controls band; **one** primary labeled `Button`; save / export → **`IconButton` + `Tooltip`** and **`DropdownMenu` `iconOnly`** — **`ghost` `sm`** (omit `variant`). Export menu trigger → **`UploadIcon`** (not `DownloadIcon`). Live: Layouts `#layouts-demo-shell` aside Card | Visible `ControlRow` label crushed; **tonal** disks; **`DownloadIcon` on Export** |
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
   | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). **Labeled Button** feet use `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**) — same as `.fynns-dialog-foot`; IconButton / Select+refresh clusters keep `control-cluster-gap` (**4dp**). **Dialog body** foot (several labeled Buttons): same cluster as last body child — core ≥ 0.4.111 wraps inside the clipped scroll host so the first action is never clipped. **LTR button order (hard):** **Cancel / dismiss first** (leftmost in the end-aligned cluster) → optional secondary → optional **destructive** → **primary / confirm last** (rightmost). Same as `ConfirmDialog` (ghost Cancel then confirm). Never put Delete leftmost when Cancel is present (`Delete | Cancel | Save`). `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). **Busy (hard):** at most **one** `Button`/`IconButton` `loading` in the cluster; siblings `disabled` without a spinner — never bind the same `busy` to every `loading`. Live: `#timeline` edit Dialog foot; `#form-recipe` Dialog multi-action foot; `#rhythm` end-align | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon`; Dialog body `overflow-x: visible` hacks; **twin loading rings** on Probe + Start / Copy + Import; **Delete leftmost** ahead of Cancel; **4dp pill-on-pill** labeled Button feet (use core `action-cluster-gap`, not `control-cluster-gap`) |
+| **Service / process control row** (status Chip + Start / Stop / Restart labeled Buttons in Card `ControlRow`) | `ControlRow` `label` = short runtime meta (PID / `Not running`) + **one** `.fynns-control-cluster` of `Chip` `assist` + labeled `Button`s `sm` — **not** a private cluster at 4dp. Core ≥ **0.5.80** widens labeled-Button gaps to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Live: `#rhythm` service control | Private `*-control-cluster` / bare flex with `control-cluster-gap` only (~4dp kissed pills); inventing `margin` on `.fynns-btn` instead of the public cluster class |
 | **Mode drawer tools** (sort menu + primary new — no SearchBar above destinations) | One `.fynns-control-cluster.fynns-control-cluster--toolbar-end` (nowrap, trailing hug). LTR: secondary ghost tools first (sort / refresh / bulk **`ListChecksIcon`**) → **primary New/Plus `IconButton` last (rightmost)** — same primary-end rule as Dialog feet (≥ **0.5.60**). Bulk enter / multi-select → **`ListChecksIcon`** — **never** `ClipboardIcon` (copy/paste). **Section / destination help (hard ≥ 0.5.63):** at most **one** page-scope `InfoHint` in **TopAppBar `trailing`** — do **not** also park a section `InfoHint` in `--toolbar-end` (twin “i” = information redundancy). Field-level `InfoHint` on a preference `ControlRow` (hide-builtin) stays OK. Sort trigger **not** `ChevronDown`. Live: Layouts `#layouts-demo-shell` (TopAppBar InfoHint) + `#layouts-demo-navigation-drawer` mode sample | Full-width default cluster start-packed above first `NavigationDrawerItem` (reads as stray group chevron / overlap); chevron sort icon beside `NavigationDrawerGroup` expanders; **primary Plus parked mid-strip** (bulk after New); **Clipboard for「批量选择」**; **TopAppBar「页面说明」+ drawer「…说明」 twin InfoHints** |
 | **Bulk-select drawer / list rows** (multi-check catalog in mode sidebar or List) | **`Checkbox`** in `NavigationDrawerItem` `icon` or `ListItem` `leading`; **`checked` must not drive `active` / `selected`** (≥ **0.5.65**) — one open destination may keep a single `active` pill; all-selected stays default row + checkbox only (no `secondary-container` wall). Live: Layouts `#layouts-demo-navigation-drawer` third column | `active={checked}` / `selected={checked}` on every row; all-select paints a teal pill stack; using `active`/`selected` as the multi-select signal |
 | **Mode drawer preference** (hide built-in / long policy toggle in ~224px tools column) | One **`ControlRow`** + **`InfoHint` `size="sm"`** + track-only **`Switch`** (`label=""` + `ariaLabel`) — paragraph in Tooltip, **not** `ControlBlock` `description`. Live: same Layouts sample + Globals `#info-hint` | `ControlBlock` + multi-sentence `description` (~102dp tall stack above destination list) |

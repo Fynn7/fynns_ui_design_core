@@ -54,9 +54,7 @@ const metrics = await page.evaluate(() => {
     headerBtn?.getAttribute("aria-disabled") === "true";
   const loadingSlots = field.querySelectorAll(".fynns-btn--loading").length;
   const rings = field.querySelectorAll(".fynns-circular-progress").length;
-  const bodyMounted = Boolean(
-    field.querySelector("#sandbox-busy-region-field-body"),
-  );
+  const bodyMounted = Boolean(field.querySelector(".fynns-code-block"));
   return {
     hasBusyRegion: Boolean(busy),
     hasRegionRing: Boolean(regionRing),
