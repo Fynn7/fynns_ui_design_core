@@ -1244,13 +1244,13 @@ NavigationDrawerItem label mid (±2px). Pasteable:
 Symptoms (Usage sessions Card / any catalog + page-size strip):
 
 - Cold load shows a spinner **on top of** a Sessions `Select` / `Pagination`
-  strip (transparent overlay covers the whole Card `unit-stack`)
+  strip (scrim overlay covers the whole Card `unit-stack`)
 - Footer chrome is interactive under the busy mask
 
 **Cause:** Card body renders `BusyRegion` (empty / no children) **and**
-Select / Pagination as **siblings** in the same stack. `BusyRegion` overlay is
-transparent and covers the region’s box — siblings painted under that box still
-show through while the ring centers on the whole stack.
+Select / Pagination as **siblings** in the same stack. `BusyRegion` scrim
+overlay covers the region’s box — siblings painted under that box are dimmed
+while the ring centers on the whole stack.
 
 **Fix in the consumer:** cold-start → render **only** `BusyRegion` (no pager
 siblings). After data: keep Sessions / page-size / `Pagination` **outside**
@@ -3148,8 +3148,8 @@ cannot fix with props — needs core scrim. **Fix in core:** overlay paints
 `var(--fynns-color-overlay)` (≥ **0.5.121**). **Fix in the consumer:** wrap
 only the body being refreshed in `BusyRegion`; do **not** add a private
 `.hub-*` scrim or local `opacity` on children. Live: sandbox
-`#sandbox-busy-region-field-sample`; consumer Prompt-Fabrik dataset card
-preview. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+`#sandbox-busy-region-field-sample`; consumer dataset card preview under
+FieldBlock refresh. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: bare CircularProgress as body loader
 

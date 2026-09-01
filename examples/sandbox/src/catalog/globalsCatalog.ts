@@ -240,6 +240,21 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["告警", "alert", "banner", "warning", "error", "提示条"],
   },
   {
+    id: "env-check",
+    categoryId: "communication",
+    label: "Env check",
+    keywords: [
+      "环境",
+      "env",
+      "config",
+      "配置",
+      "inlinealert",
+      "list",
+      "unit-stack",
+      "controlstack",
+    ],
+  },
+  {
     id: "snackbar",
     categoryId: "communication",
     label: "Snackbar",

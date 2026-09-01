@@ -47,10 +47,7 @@ const tokenOverlay = await page.evaluate(() =>
     .trim(),
 );
 
-const isTransparent =
-  overlayBg === "rgba(0, 0, 0, 0)" ||
-  overlayBg === "transparent" ||
-  overlayBg === "";
+const matchesToken = overlayBg === tokenOverlay;
 
 await mkdir(outDir, { recursive: true });
 const outPath = path.join(outDir, "busy-region-overlay-scrim.png");
@@ -58,8 +55,12 @@ await page.locator("#sandbox-busy-region-field-sample").screenshot({ path: outPa
 
 await browser.close();
 
-const pass = !isTransparent;
+const pass = matchesToken;
 console.log(
-  JSON.stringify({ pass, overlayBg, tokenOverlay, screenshot: outPath }, null, 2),
+  JSON.stringify(
+    { pass, overlayBg, tokenOverlay, matchesToken, screenshot: outPath },
+    null,
+    2,
+  ),
 );
 process.exit(pass ? 0 : 1);
