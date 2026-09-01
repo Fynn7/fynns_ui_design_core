@@ -290,6 +290,7 @@ export function CodeBlock(props: CodeBlockProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const updateScrollableRef = useRef<() => void>(() => {});
+  const syncEditableHeightRef = useRef<() => void>(() => {});
   const scrollSyncRafRef = useRef(0);
   const maxHeightCss =
     maxHeight == null
@@ -376,10 +377,18 @@ export function CodeBlock(props: CodeBlockProps) {
     const ro =
       typeof ResizeObserver !== "undefined"
         ? new ResizeObserver(() => {
+            /* Remeasure autoGrow when the host becomes visible (e.g. `hidden`
+               tab panels) or when inline size changes — first measure while
+               `display:none` sticks at the row floor (~47dp). */
+            syncEditableHeightRef.current();
             update();
           })
         : null;
     ro?.observe(el);
+    if (showEditorOverlay) {
+      const root = inputRef.current?.closest(".fynns-code-block");
+      if (root && root !== el) ro?.observe(root);
+    }
     return () => {
       if (padRaf) cancelAnimationFrame(padRaf);
       ro?.disconnect();
@@ -429,6 +438,8 @@ export function CodeBlock(props: CodeBlockProps) {
     const next = Math.min(Math.max(contentBox, floor), cap);
     el.style.height = `${next}px`;
   }, [autoGrow, rows, showEditorOverlay]);
+
+  syncEditableHeightRef.current = syncEditableHeight;
 
   /* Content / autoGrow / deferred highlight: resize → overflow gate → scroll lock. */
   useLayoutEffect(() => {

@@ -68,14 +68,14 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    **`FieldHeader`** / **`FieldBlock`** (label row + trailing `IconButton`s +
    `Tooltip` above the control — not overlaid on the textarea corner). Label
    text is flush with the control’s outer start edge. Label→control gap is
-   `--fynns-layout-field-hint-gap` on `.fynns-field-block__main`. Label-row
+   `--fynns-layout-field-label-control-gap` on `.fynns-field-block__main`. Label-row
    headers use `--fynns-layout-field-header-action-row-min-height` (32dp); inside
    a `FieldStack`, if **any** sibling has those actions, **every** header in
    that stack shares the band so plain labels align. Trailing
    actions stay on the label line (`IconButton` sm). Default `ghost`; dense
    forms may use `size="sm"`. Card / Collapsible
-   `chrome="card"` body keeps full `--fynns-layout-content-pad-block` (16dp)
-   even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
+   `chrome="card"` body keeps full `--fynns-layout-content-inset` (18dp) on all
+   edges even when `FieldStack` / `FieldBlock` / `FieldHeader` is the first child
    (do not crush to `space-xs` under the head hairline). Inline stays
    `content-inset`. Do not reinvent this with sandbox-only CSS.
    **Text underlines:** chrome path links (`Breadcrumb`) stay undecorated —
@@ -176,10 +176,11 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `fill`). Prefer `FieldBlock` for label-row
    IconButtons above the control. Card / Collapsible default `chrome="card"`:
    inline pad `--fynns-layout-content-inset`; body **block** pad
-   `--fynns-layout-content-pad-block`. When nesting a **surface-owning child**
+   `--fynns-layout-content-inset` (18dp — same as inline, ≥ **0.5.114**). When nesting a **surface-owning child**
    (CodeBlock, Surface, canvas, BusyRegion, …), pass **`chrome="plain"`** —
-   Collapsible/Card stays the **main** outer shell; body uses
-   **`--fynns-layout-nest-gap`** (four-side pad + column gap) so the child
+   Collapsible/Card stays the **main** outer shell; body **pad** =
+   **`content-inset`** (18dp); column **gap** =
+   **`nest-gap`** so the child
    insets as a secondary frame.    Nested CodeBlock with **no filename** → `variant="plain"` (titled
    `default` **throws** without a non-empty `label`). **`chrome="plain"` ≠
    flush** — never cancel nest-gap with negative margins, zero body pad, or
@@ -242,7 +243,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   label-row **FieldHeader** actions lift the header band to
   `field-header-action-row-min-height` (32dp); inside one **`FieldStack`**, if
   **any** sibling has those actions, **every** header in that stack shares the
-  band — label→control stays `field-hint-gap` (8dp); **Input** `trailing` for
+  band — label→control stays `field-label-control-gap` (12dp); **Input** `trailing` for
   in-field reveal; **Select + row action** → control-cluster band (not
   `Select.trailing`); **repeatable Textarea + remove rows** → same
   `.fynns-control-cluster--end-align` + `__grow` on each Textarea inside
@@ -373,6 +374,16 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   **`md`**. Live: `#rhythm` morph + cover-letter strips. Failure mode:
   [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **section-body IconButton
   sm**.
+- **DON'T** park labeled **`Button` `primary`/`tonal`** on **PageScroll
+  section-body** `ControlRow` when the row **`label` already names the
+  section** (cover letter / CV skills / posting morph) — the label carries
+  scope; generate/run/import/save/export belong in **`IconButton` +
+  `Tooltip`** only (dynamic model/CLI strings → **`Tooltip` `content`**, not
+  a ~150×40 text pill). **Primary-end labeled CTA** (≥ **0.5.105**) stays
+  for **Dialog feet**, **ConfirmDialog**, and action rows **without** a
+  naming section label. Live: `#rhythm` morph + cover-letter. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **section-body labeled
+  generate Button**.
 - **DON'T** stack **BusyRegion** / **BusyScrim** progress chrome with a
   sibling `Button` / `IconButton` `loading` on the **same wait host**
   (FieldBlock `actions` refresh + body BusyRegion, Card `actions` spinner +
@@ -1562,8 +1573,8 @@ classes.
   | **Multi-Card workflow in Dialog** (`size="lg"` inspector / multi-step) | Several `Card` / `Divider` / `InlineAlert` **siblings** in one `.fynns-dialog-body` — core ≥ **0.5.32** keeps direct children `flex-shrink: 0` so the **body scrolls** instead of crushing Cards to head height (`overflow: hidden` clip). Optional single `.fynns-unit-stack` wrapper is also OK. Live: `#form-recipe` **Open Dialog Card stack** | Cards ~49–69dp tall with body clipped; only title visible; private Card `min-height` / dialog-body flex hacks; mistaking it for one Card “overflow” while earlier Cards are squashed |
   | Toolbar strip (name + Switch/Toggle + note) | `ControlStack` / `ControlRow` / `ControlBlock` `description` — `#rhythm` (hint in **label column**; cluster vertically centered) | Hand-rolled flex; FieldHint as a full-bleed next row (empty band, controls sit high) |
   | **Catalog list chrome** (section name + count \| IconButton strip — e.g. `Servers (3/3)`) | Standalone `ControlRow` (fills host: label `1fr`, actions end-hug) + **one** `.fynns-control-cluster` of **`md`** `IconButton`s (overflow / sort menus → `DropdownMenu` **`iconOnly`**). **Same destination page:** match List `trailing` `size`. Live: `#rhythm` catalog strip | `ControlRow` as content-sized island (actions float mid-left); loose IconButton siblings without a cluster; private `hub-spread` / `space-between` for the same job; bare labeled `.fynns-btn` DropdownMenu beside IconButtons (48×40 pill vs 32dp circle) |
-  | **PageScroll section-body chrome** (copy / re-extract / import whole posting; morph strip beside highlight stage) | Standalone `ControlRow` + `.fynns-control-cluster` of **default `md`** ghost `IconButton`s (≥ **0.5.107** — section scope below the strip) + **one** labeled `Button` **last (rightmost)** — `tonal` / `primary` / secondary labeled CTA follow **primary-end** (≥ **0.5.105**). Icon↔icon **4dp**; icon→labeled **8dp** (≥ **0.5.80**). **`IconButton` `loading`** = spinner-only; **one** `loading` in cluster. Wrap strip + one-line `FieldHint` + body in `.fynns-unit-stack` (≥ **0.5.104**). **Same page:** match catalog `ControlRow` + List trailing **`md`**. Live: `#rhythm` morph + hint stack | **32dp `sm`** disks for copy/re-extract whole posting beside default **md** tonal import; spinner on glyph; twin loading; bare `ControlRow` + `FieldHint` siblings; primary leftmost |
-  | **ControlRow chrome strip: IconButtons + labeled primary** (cover letter / CV skills generate beside save / export / prompt) | Standalone `ControlRow` + `.fynns-control-cluster`: **default `md`** ghost `IconButton`s + **`DropdownMenu` `iconOnly` `size="md"`** **first** (≥ **0.5.107** — `iconOnly` alone defaults `sm`; section-body scope must override) → **one labeled `Button` `primary` (or main tonal CTA) last (rightmost)** (≥ **0.5.105**). Live: `#rhythm` cover-letter strip | **sm** save/export beside **md** primary; `iconOnly` export menu at default **sm**; primary **first** in cluster |
+  | **PageScroll section-body chrome** (copy / re-extract / import whole posting; morph strip beside highlight stage) | Standalone **`ControlRow`** whose **`label` names the section** + `.fynns-control-cluster` of **default `md`** ghost **`IconButton`s + `Tooltip` only** (≥ **0.5.111** — no labeled `Button` `primary`/`tonal` for import/run/generate; long copy → **`Tooltip` `content`**). Icon↔icon **4dp**. **`IconButton` `loading`** = spinner-only; **one** `loading` in cluster. Wrap strip + one-line `FieldHint` + body in `.fynns-unit-stack` (≥ **0.5.104**). **Same page:** match catalog `ControlRow` + List trailing **`md`**. Live: `#rhythm` morph + hint stack | **32dp `sm`** disks; labeled tonal/primary import pill beside md icons; spinner on glyph; twin loading; bare `ControlRow` + `FieldHint` siblings |
+  | **ControlRow section-body strip** (cover letter / CV skills generate beside save / export / prompt) | Same: **`ControlRow` `label` names the section** → cluster = **only** **default `md`** ghost **`IconButton`s / `DropdownMenu` `iconOnly` `size="md"`** + **`Tooltip`** (≥ **0.5.111**). Generate/run → **`SparklesIcon`** (or scope-appropriate glyph) + tip with model/CLI copy — **not** a visible primary pill. Live: `#rhythm` cover-letter strip | **sm** save/export beside labeled **primary** generate; **153×40** text pill when icons already carry save/export; `iconOnly` export at default **sm** |
   | **PageScroll section: catalog strip + content hint + body** | `.fynns-unit-stack` of catalog `ControlRow` + one-line `FieldHint` + content well (highlight stage / `List` / `FieldStack` / `CodeBlock`). **`unit-stack-gap` (16dp)** between strip, hint, and body. Row-level toggle note → **`ControlBlock` `description`** (label column), not a bare sibling. Live: `#rhythm` morph + hint stack | Bare `ControlRow` + sibling `FieldHint` (zero vertical gap); `FieldHint` full-bleed second row under padded toolbar strip; private `margin-top` on hint |
   | **Narrow EndAside / inspector Card action row** (generate + save + multi-format export) | `ControlRow` **`label=""`** when **`Card` `title`** names the section — full-width controls band; **one** primary labeled `Button`; save / export → **`IconButton` + `Tooltip`** and **`DropdownMenu` `iconOnly`** — **`ghost` `sm`** (omit `variant`). Export menu trigger → **`UploadIcon`** (not `DownloadIcon`). Live: Layouts `#layouts-demo-shell` aside Card | Visible `ControlRow` label crushed; **tonal** disks; **`DownloadIcon` on Export** |
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
@@ -1646,8 +1657,9 @@ classes.
   | Label above controls (narrow) | `--fynns-layout-control-row-gap` |
   | Sibling switches / chips / IconButtons in one cluster | `--fynns-layout-control-cluster-gap` (**4dp** — IconButton↔IconButton boxes). List short **text** meta → first `--with-end` IconButton uses optical `--fynns-list-end-actions-gap` (≥ **0.5.62**) |
   | TopAppBar IconButtons + NavigationRail destinations (shared) | `--fynns-layout-chrome-icon-gap` |
-  | Control → supporting / error hint; **also** `FieldBlock` label→control (`.fynns-field`, `ControlBlock`, `FieldBlock` description / `__main`, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
-  | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-hint-gap`** |
+  | Control → supporting / error hint; **also** `FieldBlock` control→`FieldHint` (`.fynns-field`, `ControlBlock`, `FieldBlock` description, Otp / Autocomplete) | `--fynns-layout-field-hint-gap` (**8dp** — tighter than unit-stack) |
+  | `FieldHeader` / `FieldBlock` label→control (`.fynns-field-block__main`) | **`field-label-control-gap`** (**12dp** / `space-md`) |
+  | `FieldHeader` label row with trailing sm IconButtons (Textarea expand / reset — not Input/Select in-field icons) | **`field-header-action-row-min-height`** (**32dp**); lone block or **any** label-row actions in a `FieldStack` → **all** headers in that stack use this band; label→control stays **`field-label-control-gap`** |
   | Consecutive related FieldBlocks inside `FieldStack` | `--fynns-layout-field-stack-gap` (**12dp**, aliases `control-stack-form-gap`); with description/error → next sibling **16dp** (`unit-stack-gap`); host a `.fynns-control-cluster` → next sibling **32dp** (`form-cluster-gap`) |
   | Sibling ControlBlocks inside `FieldStack` | visual **16dp** (`unit-stack-gap`; CSS adds the remainder over field-stack-gap) |
   | Adjacent `FieldStack` clusters (fields → switches) | `--fynns-layout-form-cluster-gap` (**32dp**) + **strongly recommend** a horizontal `Divider` between stacks |
@@ -1718,11 +1730,12 @@ classes.
   **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
   inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of
   heads / `chrome="card"` bodies (`chrome="card"` and `chrome="plain"` share the
-  outer shell). Collapsible / Card **`chrome="card"`** body uses shared **block**
-  pad `--fynns-layout-content-pad-block` (16dp) **and** stacks direct children
+  outer shell).   Collapsible / Card **`chrome="card"`** body uses shared **block**
+  pad `--fynns-layout-content-inset` (18dp) **and** stacks direct children
   with `--fynns-layout-unit-stack-gap` so FieldBlock / ControlBlock / intro
   copy do not need ad-hoc margins. Nesting a surface-owning child → **`chrome="plain"`**:
-  body pad + column gap are **`--fynns-layout-nest-gap`** (16dp) so the child
+  body **pad** = **`content-inset`** (18dp); column **gap** =
+  **`nest-gap`** so the child
   reads as a secondary inset frame; sibling wells / meta in that body also use
   the same gap. **plain ≠ flush** — never cancel nest-gap with negative margins
   or by zeroing `.fynns-*-body` pad. Custom hosts outside Card/Collapsible use

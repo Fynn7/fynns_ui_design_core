@@ -388,17 +388,16 @@
 
 .fynns-collapsible-body,
 .fynns-card-body {
-  /* Shared block pad — breathing room under the header (`chrome="card"`).
-   * Nesting surface-owning children: use `chrome="plain"` (overrides below).
-   * Sibling units (FieldBlock, ControlBlock, intro copy) share unit-stack-gap
-   * so consumers do not invent ad-hoc margins between related sections. */
+  /* Shared body pad — use content-inset on all edges so FieldHeader labels
+   * in default `chrome="card"` align with `chrome="plain"` hosts (≥ 0.5.114).
+   * Nesting surface-owning children: use `chrome="plain"` (overrides below). */
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--fynns-layout-unit-stack-gap);
-  padding-block: var(--fynns-layout-content-pad-block);
+  padding-block: var(--fynns-layout-content-inset);
   padding-inline: var(--fynns-layout-content-inset);
   font-size: var(--fynns-font-size-sm);
   font-weight: var(--fynns-font-weight-regular);
@@ -414,7 +413,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-layout-nest-gap);
-  padding: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-content-inset);
 }
 
 /*
@@ -426,7 +425,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--fynns-layout-nest-gap);
-  padding: var(--fynns-layout-nest-gap);
+  padding: var(--fynns-layout-content-inset);
   min-width: 0;
   min-height: 0;
 }

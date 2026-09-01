@@ -62,6 +62,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.unitStackGapHint",
     max: 40,
   },
+  "field-label-control-gap": {
+    labelKey: "layoutChrome.fieldLabelControlGap",
+    hintKey: "layoutChrome.fieldLabelControlGapHint",
+    max: 24,
+  },
   "field-hint-gap": {
     labelKey: "layoutChrome.fieldHintGap",
     hintKey: "layoutChrome.fieldHintGapHint",

@@ -198,7 +198,7 @@ const en = {
   "preview.cardChromePlainNote":
     "Plain text sibling under the Surface — same `--fynns-layout-nest-gap` as between wells.",
   "preview.cardChromePlainHelp":
-    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body uses `--fynns-layout-nest-gap` for outer pad and sibling gap (not flush). Do not cancel with negative margins.",
+    "When the child owns border/fill (Surface, CodeBlock, canvas), set chrome=\"plain\" on Card/Collapsible. Body pad uses `--fynns-layout-content-inset`; sibling gap uses `--fynns-layout-nest-gap` (not flush). Do not cancel with negative margins.",
   "preview.collapsibleOpen": "Expanded",
   "preview.collapsibleIcon": "Rest icon (hover → chevron)",
   "preview.collapsibleActions": "Extra header button",
@@ -307,7 +307,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline), `content-pad-block` (chrome=card section body block), `nest-gap` (chrome=plain / .fynns-nest surface-well nesting), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline + card body block pad ≥ 0.5.114), `content-pad-block` (Surface padded / CodeBlock pre block — not Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -321,9 +321,12 @@ const en = {
   "layoutChrome.unitStackGap": "Unit stack",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap (16dp) — between Card body siblings / .fynns-unit-stack (not control→hint).",
+  "layoutChrome.fieldLabelControlGap": "Field label gap",
+  "layoutChrome.fieldLabelControlGapHint":
+    "--fynns-layout-field-label-control-gap (12dp) — FieldHeader / label row → control on `.fynns-field-block__main`.",
   "layoutChrome.fieldHintGap": "Field hint",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input); also FieldBlock label→control on `.fynns-field-block__main`.",
+    "--fynns-layout-field-hint-gap (8dp) — control → supporting/error note (ControlBlock / FieldBlock / Input).",
   "layoutChrome.chromeBar": "Sandbox chrome bar",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — sandbox TopAppBar height override (sandbox only).",
@@ -359,10 +362,10 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for chrome=card Collapsible/Card body / Surface padded / CodeBlock pre (16dp default). Nesting wells use nest-gap.",
+    "--fynns-layout-content-pad-block — vertical pad for Surface padded / CodeBlock pre (16dp default). Card/Collapsible chrome=card body block pad uses content-inset (18dp) since ≥ 0.5.114. Nested wells: plain body pad = content-inset; sibling gap = nest-gap.",
   "layoutChrome.nestGap": "Nest gap (surface wells)",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — pad + column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (16dp). Nested surface frames; plain ≠ flush.",
+    "--fynns-layout-nest-gap — column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (18dp — matches content-inset). Plain body **pad** = content-inset; **gap** = nest-gap. Nested surface frames; plain ≠ flush.",
   "layoutChrome.dialogInset": "Dialog / Chat column inset",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — equal outer pad for centered Dialog / ConfirmDialog and Chat column (thread + composer outer; 24dp default).",
@@ -736,6 +739,11 @@ const en = {
     "**Suffixed file body (hard):** `.md` / `.xml` / `.py` / `.ts` / … (not `.txt`) → `CodeBlock` inside `Card` `chrome=\"plain\"`, not `Textarea`. Use `codeLanguageFromPath(path)` for `language` (`null` → Textarea OK). **Default autoGrow** on PageScroll / Card (page scrolls) — `autoGrow={false}` only for height-resolved fill hosts. **`readOnly`** for view mode (one pre layer — selection aligns). Do not use `ChatMarkdown` as the source editor for a `.md` file.",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "Same file body with `readOnly` — full **markdown** token colors on one `.fynns-code-block-pre` (built-in `language=\"markdown\"` / `codeLanguageFromPath`); drag-select uses native `::selection` without overlay stripes. Active edit + default `wrap` uses the live deferred token overlay (≥ 0.5.52) — use `wrap={false}` or `readOnly` when wrap/selection alignment matters.",
+  "globals.codeBlockHiddenTabShow": "Show hidden-tab panel",
+  "globals.codeBlockHiddenTabHide": "Hide panel",
+  "globals.codeBlockHiddenTabAria": "Hidden-tab markdown sample",
+  "globals.codeBlockHiddenTabHelp":
+    "**Hidden-tab host (hard ≥ 0.5.112):** pipeline / mode panels that keep siblings mounted with HTML `hidden` must still grow `CodeBlock` `autoGrow` when the panel opens — first measure while `display:none` sticks at one row (~47dp). Toggle Show to verify remeasure.",
   "globals.diffViewHelp":
     "DiffView — scrollable unified-diff panel (`add` / `del` / `same` / `meta`). Callers own `+` / `-` markers in `text`.",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -931,6 +939,8 @@ const en = {
     "Standalone FieldHint for app-owned columns (same muted caption as Input supportingText).",
   "globals.rhythmTokenUnit":
     "Between stacked units / Card body siblings / `.fynns-unit-stack` (16dp — larger than field-hint).",
+  "globals.rhythmTokenFieldLabel":
+    "FieldHeader / label row → control (12dp): `.fynns-field-block__main` — roomier than control→hint.",
   "globals.rhythmTokenFieldHint":
     "Control → supporting/error note (8dp): Input / ControlBlock / FieldBlock description — not the same as unit-stack.",
   "globals.rhythmTokenStack":
@@ -951,13 +961,13 @@ const en = {
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
   "globals.rhythmMorphHelp":
-    "PageScroll section-body (hard ≥ 0.5.107): default md IconButtons when the action scope is the whole section below (copy / re-extract posting). Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). Cluster: md ghost icons → labeled tonal CTA last (≥ 0.5.105); icon↔icon 4dp; icon→pill 8dp; `IconButton` loading = spinner-only. Click refresh to demo.",
+    "PageScroll section-body (hard ≥ 0.5.111): when ControlRow label names the section, cluster = md ghost IconButton + Tooltip only — no labeled primary/tonal import/generate pill. Wrap ControlRow + one-line FieldHint + body in `.fynns-unit-stack` (≥ 0.5.104). `IconButton` loading = spinner-only. Click refresh to demo.",
   "globals.rhythmMorphSectionHint":
     "Hover highlights show kind; tooltip shows the matched snippet.",
   "globals.rhythmMorphBodySample":
     "Sample posting body. Highlights and tooltips live in the consumer stage below this strip.",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow section-body strip (hard ≥ 0.5.107): default md ghost IconButtons + iconOnly menus first, labeled `Button` `primary` **last (rightmost)** (≥ 0.5.105). Same primary-end grammar as morph strip / Dialog feet. Never park primary before save/export icons.",
+    "ControlRow section-body strip (hard ≥ 0.5.111): ControlRow label names the section → md ghost IconButtons + Tooltip only (generate/run → SparklesIcon + tip). No labeled primary pill beside save/export icons.",
   "globals.rhythmCoverLetterLabel": "Sample letter",
   "globals.rhythmCoverLetterSave": "Save slots",
   "globals.rhythmCoverLetterExport": "Export",
@@ -999,7 +1009,7 @@ const en = {
   "globals.rhythmAgentHint":
     "Agents: control + narrative = `ControlBlock`; single-row hint stays in the label column (ToggleGroup centers on name+hint — not a full-bleed next row). Sibling units = Card / Collapsible body gap or `.fynns-unit-stack`; rows = `ControlStack` + `ControlRow`. Copy the Inspector form recipe (`#form-recipe`) for Card / Collapsible / Dialog / padded Surface hosts. Do not invent ad-hoc gaps. Demo copy stays generic — never paste consumer product strings into this core.",
   "globals.formRecipeLead":
-    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description and FieldBlock label→control use field-hint-gap (8dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
+    "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description use field-hint-gap (8dp); FieldBlock label→control uses field-label-control-gap (12dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
   "globals.formRecipeHostCollapsible":
     "Collapsible host — same FieldStack tree in a disclose shell (unit-stack body gap).",
@@ -1768,6 +1778,13 @@ const en = {
   "globals.cardActionTip": "Sample header action",
   "globals.cardActionAria": "Sample header action",
   "globals.cardHintTitle": "Export package",
+  "globals.cardPlainAlignDefaultTitle": "Default chrome",
+  "globals.cardPlainAlignPlainTitle": "Plain chrome",
+  "globals.cardPlainAlignFieldLabel": "Sample field",
+  "globals.cardPlainAlignOptionA": "Option A",
+  "globals.cardPlainAlignOptionB": "Option B",
+  "globals.cardPlainAlignHelp":
+    "**FieldHeader flush (hard ≥ 0.5.114):** default `chrome=\"card\"` and `chrome=\"plain\"` body pad both use `--fynns-layout-content-inset` (18dp) on **all edges** — inline + block-start — so labels share one box. Plain sibling gap stays `nest-gap`. Measure `#sandbox-card-plain-field-align`.",
   "globals.cardHintAria": "Export package help",
   "globals.cardHintTip":
     "Packs managed configs only — large local DBs use Archive below.",
@@ -2329,7 +2346,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长条边距 — `content-inset`（Card / Collapsible / Drawer 行向）、`content-pad-block`（chrome=card 章节正文块向）、`nest-gap`（chrome=plain / .fynns-nest 表面井嵌套）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
+    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer 行向 + card 正文块向 ≥ 0.5.114）、`content-pad-block`（Surface padded / CodeBlock pre 块向 — 非 Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -2343,9 +2360,12 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.unitStackGap": "单元栈",
   "layoutChrome.unitStackGapHint":
     "--fynns-layout-unit-stack-gap（16dp）— Card body 兄弟 / .fynns-unit-stack（不是控件→说明）。",
+  "layoutChrome.fieldLabelControlGap": "字段标签间距",
+  "layoutChrome.fieldLabelControlGapHint":
+    "--fynns-layout-field-label-control-gap（12dp）— FieldHeader / 标签行 → 控件（`.fynns-field-block__main`）。",
   "layoutChrome.fieldHintGap": "字段提示",
   "layoutChrome.fieldHintGapHint":
-    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）；FieldBlock 标签→控件亦用此 token（`.fynns-field-block__main`）。",
+    "--fynns-layout-field-hint-gap（8dp）— 控件 → supporting/error 说明（ControlBlock / FieldBlock / Input）。",
   "layoutChrome.chromeBar": "沙盒顶栏条高",
   "layoutChrome.chromeBarHint":
     "--sandbox-chrome-bar-height — 沙盒 TopAppBar 高度覆盖（仅沙盒）。",
@@ -2381,10 +2401,10 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — chrome=card 的 Collapsible/Card 正文 / Surface padded / CodeBlock 正文垂直边距（默认 16dp）。嵌套井用 nest-gap。",
+    "--fynns-layout-content-pad-block — Surface padded / CodeBlock 正文垂直边距（默认 16dp）。Card/Collapsible chrome=card 正文块向自 ≥ 0.5.114 起用 content-inset（18dp）。嵌套井：plain body pad = content-inset；兄弟 gap = nest-gap。",
   "layoutChrome.nestGap": "嵌套间距（表面井）",
   "layoutChrome.nestGapHint":
-    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的 pad + 纵向 gap（默认 16dp）。嵌套表面井；plain ≠ 贴边。",
+    "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的列 gap（18dp，与 content-inset 同阶）。Plain body **pad** = content-inset；**gap** = nest-gap。嵌套表面井；plain ≠ 贴边。",
   "layoutChrome.dialogInset": "对话框 / Chat 列内边距",
   "layoutChrome.dialogInsetHint":
     "--fynns-layout-dialog-inset — 居中 Dialog / ConfirmDialog 与 Chat 列外边距（thread + composer outer；默认 24dp）。",
@@ -2756,6 +2776,11 @@ const zh: Record<MessageKey, string> = {
     "**带后缀文件正文（硬）：** `.md` / `.xml` / `.py` / `.ts` / …（不含 `.txt`）→ `Card` `chrome=\"plain\"` 内用 `CodeBlock`，不要用 `Textarea`。用 `codeLanguageFromPath(path)` 取 `language`（`null` → 可用 Textarea）。**PageScroll / Card 默认 autoGrow**（整页滚动）— `autoGrow={false}` 仅用于高度已解析的 fill 宿主。**查看**用 `readOnly`（单层 pre，选区对齐）。不要用 `ChatMarkdown` 当 `.md` 源文件编辑器。",
   "globals.codeBlockFileBodyReadOnlyHelp":
     "同一文件正文 + `readOnly` — 内置 `language=\"markdown\"` / `codeLanguageFromPath` 在单层 `.fynns-code-block-pre` 上完整 **markdown** 词法色；原生 `::selection`，无 overlay 条纹。可编辑 + 默认 `wrap` 使用 live deferred token overlay（≥ 0.5.52）— 对齐要求高时用 `wrap={false}` 或 `readOnly`。",
+  "globals.codeBlockHiddenTabShow": "显示 hidden 面板",
+  "globals.codeBlockHiddenTabHide": "隐藏面板",
+  "globals.codeBlockHiddenTabAria": "Hidden 面板 markdown 示例",
+  "globals.codeBlockHiddenTabHelp":
+    "**Hidden 分区宿主（硬 ≥ 0.5.112）：** 用 HTML `hidden` 保持兄弟挂载的 pipeline / 模式面板，在打开时仍须让 `CodeBlock` `autoGrow` 撑满正文 — 首次在 `display:none` 下测量会卡在一行（~47dp）。点 Show 验证重测。",
   "globals.diffViewHelp":
     "DiffView — 可滚动 unified-diff 面板（`add` / `del` / `same` / `meta`）。`+` / `-` 标记由调用方写在 `text` 里。",
   "globals.codeBlockNowrapLabel": "nowrap.ts",
@@ -2951,6 +2976,8 @@ const zh: Record<MessageKey, string> = {
     "独立 FieldHint：应用自管列布局时用（与 Input supportingText 同款静音说明）。",
   "globals.rhythmTokenUnit":
     "纵向堆叠单元 / Card body 兄弟 / `.fynns-unit-stack`（16dp，大于 field-hint）。",
+  "globals.rhythmTokenFieldLabel":
+    "FieldHeader / 标签行 → 控件（12dp）：`.fynns-field-block__main` — 比控件→说明更疏。",
   "globals.rhythmTokenFieldHint":
     "控件 → supporting/error 说明（8dp）：Input / ControlBlock / FieldBlock description — 不等于 unit-stack。",
   "globals.rhythmTokenStack":
@@ -2971,13 +2998,13 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
   "globals.rhythmMorphHelp":
-    "PageScroll 分区正文（硬 ≥ 0.5.107）：作用域是条下整段正文（复制/重抽招聘文）时用默认 **md** IconButton。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。cluster：md ghost 图标 → 文案 tonal CTA 最右（≥ 0.5.105）；图标↔图标 4dp；末颗→文案 8dp；`IconButton` loading 仅 spinner。点刷新演示。",
+    "PageScroll 分区正文（硬 ≥ 0.5.111）：`ControlRow` `label` 已命名分区时，cluster 仅 **md** ghost IconButton + Tooltip — 禁止 labeled primary/tonal 导入/生成药丸。`ControlRow` + 一行 `FieldHint` + 正文井用 `.fynns-unit-stack`（≥ 0.5.104）。`IconButton` loading 仅 spinner。点刷新演示。",
   "globals.rhythmMorphSectionHint":
     "悬停高亮查看技能类型；tooltip 显示匹配片段。",
   "globals.rhythmMorphBodySample":
     "示例招聘正文。高亮与 tooltip 由消费仓正文区承载。",
   "globals.rhythmCoverLetterHelp":
-    "ControlRow 分区正文条（硬 ≥ 0.5.107）：先默认 **md** ghost IconButton / iconOnly 菜单，labeled `Button` `primary` **最右**（≥ 0.5.105）。与 morph 条 / Dialog 脚同一 primary-end 语法。禁止 primary 在保存/导出之前。",
+    "ControlRow 分区正文条（硬 ≥ 0.5.111）：`label` 命名分区 → 仅 **md** ghost IconButton + Tooltip（生成/运行 → SparklesIcon + tip）。禁止在保存/导出旁再叠 labeled primary 药丸。",
   "globals.rhythmCoverLetterLabel": "示例求职信",
   "globals.rhythmCoverLetterSave": "保存段落",
   "globals.rhythmCoverLetterExport": "导出",
@@ -3781,6 +3808,13 @@ const zh: Record<MessageKey, string> = {
   "globals.cardActionTip": "示例标题操作",
   "globals.cardActionAria": "示例标题操作",
   "globals.cardHintTitle": "导出包",
+  "globals.cardPlainAlignDefaultTitle": "默认 chrome",
+  "globals.cardPlainAlignPlainTitle": "Plain chrome",
+  "globals.cardPlainAlignFieldLabel": "示例字段",
+  "globals.cardPlainAlignOptionA": "选项 A",
+  "globals.cardPlainAlignOptionB": "选项 B",
+  "globals.cardPlainAlignHelp":
+    "**FieldHeader 左缘/顶缘对齐（硬 ≥ 0.5.114）：** 默认 `chrome=\"card\"` 与 `chrome=\"plain\"` 正文 pad 均为 `--fynns-layout-content-inset`（18dp，**四边**含 block-start）— 标签共用同一盒。Plain 兄弟 gap 仍为 `nest-gap`。测量 `#sandbox-card-plain-field-align`。",
   "globals.cardHintAria": "导出包说明",
   "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
   "globals.cardHintBodyLead":

@@ -57,6 +57,7 @@ export type LayoutChromeSectionId =
 export const EDITABLE_LAYOUT_KEYS = [
   // rhythm — unit-stack (between units) ≠ field-hint (control → its note)
   "unit-stack-gap",
+  "field-label-control-gap",
   "field-hint-gap",
   "control-stack-gap",
   "control-stack-form-gap",
@@ -144,6 +145,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
 > = {
   rhythm: [
     "unit-stack-gap",
+    "field-label-control-gap",
     "field-hint-gap",
     "control-stack-gap",
     "control-stack-form-gap",
@@ -266,6 +268,8 @@ export const BASE_TOKENS_HASH = hashBaseline();
 const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "unit-stack-gap":
     "Unit stack · between Card/Collapsible body siblings / .fynns-unit-stack (not control→hint)",
+  "field-label-control-gap":
+    "Field label · FieldHeader / label row → control (FieldBlock __main; 12dp / space-md)",
   "field-hint-gap":
     "Field hint · control → supporting/error note (ControlBlock / FieldBlock / Input)",
   "control-stack-gap": "Toolbar rhythm · between ControlRows",

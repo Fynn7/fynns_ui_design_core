@@ -3338,26 +3338,14 @@ Symptoms (cover letter / CV skills / LLM generate strips on `PageScroll`):
 LTR primary-end is caller-owned (same rule as Dialog feet, mode drawer New,
 morph strip labeled CTA).
 
-**Fix in core (≥ **0.5.105**):** AGENTS **ControlRow chrome strip** row +
-sandbox `#rhythm` cover-letter strip (icons first → labeled primary last).
-Morph stack already teaches tonal CTA last; cover-letter strip teaches
-`primary` last beside save / export.
+**Fix in core (≥ **0.5.105**; section-body strips superseded ≥ **0.5.111**):** AGENTS
+**Dialog foot / ConfirmDialog** primary-end. PageScroll section-body strips with
+a naming `ControlRow` `label` → **icon-only** cluster (≥ **0.5.111**) — see
+**section-body labeled generate Button** below.
 
-**Fix in the consumer (props-only):** one `.fynns-control-cluster` — park all
-`sm` ghost `IconButton`s / `DropdownMenu` `iconOnly` **before** the labeled
-primary (or main tonal) `Button`:
-
-```tsx
-<div className="fynns-control-cluster">
-  <Tooltip>…<IconButton … /></Tooltip>
-  {/* save / export / prompt icons — default md on main-canvas section strips */}
-  <Button variant="primary" …>{generateLabel}</Button>
-</div>
-```
-
-Never `primary` leftmost. Bump core; live: `#rhythm` cover-letter strip;
-consumer cover letter / CV skills panels. Pasteable:
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+**Fix in the consumer (props-only):** Dialog feet — labeled primary **last**.
+Section-body strips — drop labeled generate/import pills; use **`IconButton` +
+`Tooltip`** only.
 
 ## Failure mode this treaty targets: section-body IconButton sm
 
@@ -3395,7 +3383,11 @@ default glyph in the disk:
       <ClipboardIcon />
     </IconButton>
   </Tooltip>
-  <Button variant="tonal" …>{importLabel}</Button>
+  <Tooltip content={importLabel}>
+    <IconButton variant="ghost" aria-label={importLabel} …>
+      <UploadIcon />
+    </IconButton>
+  </Tooltip>
 </div>
 ```
 
@@ -3404,6 +3396,70 @@ default glyph in the disk:
 Bump core; live: `#rhythm`; consumer posting pipeline / cover letter / CV skills
 **main-canvas** strips (not EndAside). Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: section-body labeled generate Button
+
+Symptoms (cover letter / CV skills / posting morph on `PageScroll`):
+
+- A labeled **`Button` `variant="primary"`** or **`tonal`** (~150×40 text pill)
+  for generate/run/import sits in `.fynns-control-row__controls >
+  .fynns-control-cluster` beside save / export / prompt **`IconButton`s**
+- Copy like `Generate with Cursor CLI` / `用 {model} 生成` is visible on the
+  pill while sibling actions are already icon-only
+- The **`ControlRow` `label`** already names the section (`Cover letter`, 求职信,
+  CV skills) — the text pill duplicates scope and breaks strip density
+
+**Cause:** consumer treated LLM generate / import as a “hero” labeled CTA on
+the main canvas. Core grammar (≥ **0.5.111**): naming section label + icon
+cluster — long strings → **`Tooltip` `content`**, **`SparklesIcon`** /
+scope glyph on **`IconButton` `md`**.
+
+**Fix in core (≥ **0.5.111**):** AGENTS **PageScroll section-body** /
+**ControlRow section-body strip** rows + sandbox `#rhythm` morph + cover-letter +
+`#form-recipe-page-scroll` stage strip (icon-only clusters).
+
+**Fix in the consumer (props-only):**
+
+```tsx
+<Tooltip content={generateLabel}>
+  <IconButton
+    variant="ghost"
+    aria-label={generateLabel}
+    loading={generating}
+    disabled={chromeBusy}
+    onClick={() => void onGenerate()}
+  >
+    <SparklesIcon aria-hidden />
+  </IconButton>
+</Tooltip>
+```
+
+Drop `Button variant="primary"` from section-body clusters. Bump core; live:
+`#rhythm` cover-letter; consumer `CoverLetterPanel` / `CvSkillsPanel`. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: CodeBlock autoGrow stuck in hidden tab
+
+Symptoms (CV skills / cover letter / pipeline mode on `PageScroll`):
+
+- `CodeBlock` `variant="editable"` `autoGrow` shows **one row** (~47dp) while
+  `value` / highlight layer contain many lines of markdown
+- The host lives under a sibling panel kept mounted with HTML **`hidden`** while
+  another tab is active; switching tabs does not expand the well
+- User sees only `## Skills` (first line) with the rest clipped
+
+**Cause:** first `syncEditableHeight` ran while the panel was `display:none`
+(`scrollHeight` ≈ row floor). Height was never remeasured when the tab opened.
+Core grammar (≥ **0.5.112**): editable `ResizeObserver` remeasures autoGrow when
+the host or root gains layout width / visibility.
+
+**Fix in core (≥ **0.5.112**):** `CodeBlock` remeasures on host resize (root +
+textarea observers); sandbox `#code-block` hidden-tab toggle teaches the host.
+
+**Fix in the consumer (props-only):** keep default `autoGrow`; bump core — no
+local height CSS. Optional: prefer `visibility` + `inert` over `hidden` only if
+you cannot bump yet (not the long-term recipe). Live: `ApplicationPipelineView`
+CV skills tab. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: PageScroll brief Card
 

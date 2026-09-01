@@ -1089,6 +1089,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
   const [codeLangDialogOpen, setCodeLangDialogOpen] = useState(false);
+  const [codeBlockHiddenTabOpen, setCodeBlockHiddenTabOpen] = useState(false);
   const [codeLangDemo, setCodeLangDemo] = useState<"py" | "ts" | "cpp">("ts");
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
@@ -4231,6 +4232,46 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             {t("globals.cardBody")}
             </Card>
+          <div
+            id="sandbox-card-plain-field-align"
+            className="sandbox-globals-row sandbox-globals-row--stack"
+          >
+            <Card className="sandbox-globals-card" title={t("globals.cardPlainAlignDefaultTitle")}>
+              <FieldStack>
+                <FieldBlock label={t("globals.cardPlainAlignFieldLabel")}>
+                  <Select
+                    ariaLabel={t("globals.cardPlainAlignFieldLabel")}
+                    value="a"
+                    onChange={() => {}}
+                    options={[
+                      { value: "a", label: t("globals.cardPlainAlignOptionA") },
+                      { value: "b", label: t("globals.cardPlainAlignOptionB") },
+                    ]}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+            <Card
+              className="sandbox-globals-card"
+              title={t("globals.cardPlainAlignPlainTitle")}
+              chrome="plain"
+            >
+              <FieldStack>
+                <FieldBlock label={t("globals.cardPlainAlignFieldLabel")}>
+                  <Select
+                    ariaLabel={t("globals.cardPlainAlignFieldLabel")}
+                    value="a"
+                    onChange={() => {}}
+                    options={[
+                      { value: "a", label: t("globals.cardPlainAlignOptionA") },
+                      { value: "b", label: t("globals.cardPlainAlignOptionB") },
+                    ]}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+          </div>
+          <SandboxHelp text={t("globals.cardPlainAlignHelp")} />
           <Card
             className="sandbox-globals-card"
             title={t("globals.cardHintTitle")}
@@ -5718,6 +5759,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </Card>
           <SandboxHelp text={t("globals.codeBlockFileBodyReadOnlyHelp")} />
+          <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setCodeBlockHiddenTabOpen((open) => !open)}
+            >
+              {codeBlockHiddenTabOpen
+                ? t("globals.codeBlockHiddenTabHide")
+                : t("globals.codeBlockHiddenTabShow")}
+            </Button>
+          </div>
+          <div hidden={!codeBlockHiddenTabOpen} id="sandbox-code-block-hidden-tab">
+            <CodeBlock
+              variant="editable"
+              language="markdown"
+              value={FILE_BODY_SAMPLE_MD}
+              copyAriaLabel={t("globals.codeBlockCopy")}
+              aria-label={t("globals.codeBlockHiddenTabAria")}
+            />
+          </div>
+          <SandboxHelp text={t("globals.codeBlockHiddenTabHelp")} />
           <CodeBlock
             wrap={false}
             label={t("globals.codeBlockNowrapLabel")}
@@ -6067,6 +6129,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
             <div>
               <dt>
+                <code>--fynns-layout-field-label-control-gap</code>
+              </dt>
+              <dd>{t("globals.rhythmTokenFieldLabel")}</dd>
+            </div>
+            <div>
+              <dt>
                 <code>--fynns-layout-field-hint-gap</code>
               </dt>
               <dd>{t("globals.rhythmTokenFieldHint")}</dd>
@@ -6189,16 +6257,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <ClipboardIcon />
                 </IconButton>
               </Tooltip>
-              <Button
-                variant="tonal"
-                disabled={rhythmMorphBusy}
-                onClick={() => {
-                  setRhythmMorphBusy(true);
-                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-                }}
-              >
-                {t("globals.rhythmMorphAction")}
-              </Button>
+              <Tooltip content={t("globals.rhythmMorphAction")}>
+                <IconButton
+                  variant="ghost"
+                  aria-label={t("globals.rhythmMorphAction")}
+                  disabled={rhythmMorphBusy}
+                  onClick={() => {
+                    setRhythmMorphBusy(true);
+                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                  }}
+                >
+                  <UploadIcon aria-hidden />
+                </IconButton>
+              </Tooltip>
             </div>
           </ControlRow>
           <FieldHint>{t("globals.rhythmMorphSectionHint")}</FieldHint>
@@ -6244,17 +6315,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 <PersonIcon aria-hidden />
               </IconButton>
             </Tooltip>
-            <Button
-              variant="primary"
-              loading={rhythmMorphBusy}
-              disabled={rhythmMorphBusy}
-              onClick={() => {
-                setRhythmMorphBusy(true);
-                window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-              }}
-            >
-              {t("globals.rhythmCoverLetterGenerate")}
-            </Button>
+            <Tooltip content={t("globals.rhythmCoverLetterGenerate")}>
+              <IconButton
+                variant="ghost"
+                aria-label={t("globals.rhythmCoverLetterGenerate")}
+                loading={rhythmMorphBusy}
+                disabled={rhythmMorphBusy}
+                onClick={() => {
+                  setRhythmMorphBusy(true);
+                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
+                }}
+              >
+                <SparklesIcon aria-hidden />
+              </IconButton>
+            </Tooltip>
           </div>
         </ControlRow>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
@@ -6580,9 +6654,14 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Collapsible>
               <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
                 <div className="fynns-control-cluster">
-                  <Button variant="primary">
-                    {t("globals.formRecipePageScrollGenerate")}
-                  </Button>
+                  <Tooltip content={t("globals.formRecipePageScrollGenerate")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.formRecipePageScrollGenerate")}
+                    >
+                      <SparklesIcon aria-hidden />
+                    </IconButton>
+                  </Tooltip>
                 </div>
               </ControlRow>
               <Surface variant="outlined" padded>
