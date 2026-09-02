@@ -1,5 +1,5 @@
 /**
- * Verify overlay Y rail stays below Drawer head when outer body scrolls (≥ 0.5.133).
+ * Verify overlay Y rail stays below Drawer head when outer body scrolls (≥ 0.5.134).
  * Usage: node scripts/_audit-shots/_verify-drawer-nested-scroll-rail.mjs [baseUrl]
  */
 import { chromium } from "playwright";

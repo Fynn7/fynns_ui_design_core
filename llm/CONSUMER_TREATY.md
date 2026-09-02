@@ -54,6 +54,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion cold body + pager chrome siblings** /
 **BusyRegion empty cold-start overlaps SearchBar** /
 **BusyRegion linear overflows NavigationDrawer** /
+**overlay scrollbar paints through chrome heads** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
 **twin Button loading rings in one control-cluster** /
@@ -1568,7 +1569,7 @@ row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: labeled Button cluster gap stacked to 12dp
 
-Symptoms (Card `ControlRow` service strip — Chip + Start / Stop / Restart):
+Symptoms (Card `ControlRow` service strip — labeled Start / Stop / Restart only):
 
 - Siblings read **too wide** (~12px / 12dp) — looser than dialog feet and M3
   separate-action rhythm
@@ -2892,6 +2893,31 @@ overlay layer. Live: sandbox `#form-recipe` Dialog + consumer edit Dialog.
 **Fix in the consumer:** bump `@fynn7/ui-design-core`; no app CSS. Do not
 disable `fynns-scroll` on PageScroll. Authority: [`AGENTS.md`](../AGENTS.md)
 overlay scrollbar note. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: overlay scrollbar paints through chrome heads
+
+Symptoms (NavigationDrawer / Drawer / FullscreenDialog / shell main with nested
+CodeBlock / List scroll hosts):
+
+- Overlay Y thumb paints **over** ClippedNavShell **TopAppBar** title
+  (e.g. app name) while the nav column / drawer body scrolls
+- Same thumb paints over `.fynns-dialog-head`, Card / Collapsible heads, or
+  NavigationDrawer headlines when an outer scrollport moves an inner host
+- DevTools: rail `top` is above the chrome band’s `getBoundingClientRect().bottom`
+
+**Cause:** overlay rails live in a fixed portal at `--fynns-z-toast` (above
+modal). Ancestor `overflow` / stacking cannot clip them — geometry must clamp.
+
+**Fix in core (≥ 0.5.134):** `overlayScrollbar.ts` insets Y rails below
+overlapping overlay chrome (TopAppBar in clipped / destination shells,
+`.fynns-dialog-head`, Card / Collapsible heads, nav drawer headlines). Live:
+sandbox `#drawer-nested-scroll` (dialog head) + Layouts `#layouts-demo-shell`
+(TopAppBar).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.134**; no app
+z-index / overflow hacks on `.fynns-scroll-rail`. Authority:
+[`AGENTS.md`](../AGENTS.md) Scrollbar discipline. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: modal Dialog scrollbar flash on enter
 

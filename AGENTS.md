@@ -132,7 +132,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
 5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
    blocking) / `BusyRegion` (sectional **frosted blur** overlay + **one**
-   progress chrome + message — sectional scrim dims mounted copy; never a
+   progress chrome + message — frosted blur masks mounted copy (well hue
+   unchanged; never a dark overlay scrim); never a
    second `surface-*` wash; **pane cold-start uses `fill`**, never
    `EmptyState` + a ring, never a ring stacked on a bar), `EmptyState`
    (**zero-result
