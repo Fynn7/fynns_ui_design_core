@@ -1217,7 +1217,7 @@ classes.
   with optional leading `icon` any ReactNode + indented items; sibling Item /
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
   wrap destinations in `.fynns-unit-stack` (core remaps **only**
-  `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` — ≥ **0.5.123**;
+  `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` — ≥ **0.5.125**;
   nested Card / Collapsible `.fynns-unit-stack` keeps **16dp** `unit-stack-gap`);
   SearchBar / tools /
   SyncSideFilter `ToggleGroup` / `--toolbar-end` host as body siblings use

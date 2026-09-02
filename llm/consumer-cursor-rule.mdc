@@ -508,7 +508,7 @@ const navMode = open ? "drawer" : "hidden";
    兄弟间距 = `--fynns-navdrawer-section-gap`（**4dp**，与 Group 内叶子行相同）。
    **禁止**用 `.fynns-unit-stack`（16dp 表单/单元节奏）包一层目的地列表 — 那会让
    顶层「快捷链接 / 聊天记录」比折叠组内行疏一大截。core **仅**对
-   `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射到 `section-gap`（≥ **0.5.123**
+   `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射到 `section-gap`（≥ **0.5.125**
    — 嵌套 Card / Collapsible body 内 `.fynns-unit-stack` 保持 **16dp**），但仍应以
    目的地直接子节点为准。
    **SearchBar / 工具条 / SyncSideFilter**（destination density）作为 body 兄弟时，

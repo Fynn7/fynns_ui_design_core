@@ -1,5 +1,5 @@
 /**
- * Verify nested Card unit-stack Collapsible gap in NavigationDrawer (≥ 0.5.123).
+ * Verify nested Card unit-stack Collapsible gap in NavigationDrawer (≥ 0.5.125).
  * Usage: node scripts/_audit-shots/_verify-navdrawer-card-collapsible-gap.mjs [baseUrl]
  */
 import { chromium } from "playwright";

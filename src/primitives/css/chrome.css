@@ -1995,7 +1995,7 @@
 /*
  * Mistaken **top-level** destination wrap only — Card / Collapsible / Dialog
  * form hosts inside the drawer keep `--fynns-layout-unit-stack-gap` (16dp).
- * Descendant remap (pre-0.5.123) kissed stacked Collapsible shells (~4dp).
+ * Descendant remap (pre-0.5.125) kissed stacked Collapsible shells (~4dp).
  */
 .fynns-nav-drawer-body > .fynns-unit-stack {
   gap: var(--fynns-navdrawer-section-gap);

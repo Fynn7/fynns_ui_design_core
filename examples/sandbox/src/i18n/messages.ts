@@ -1419,7 +1419,7 @@ const en = {
   "globals.navDrawerInspectorCollapsibleB": "Sample request",
   "globals.navDrawerInspectorCollapsibleBody": "Sample collapsed body.",
   "globals.navDrawerInspectorCardHelp":
-    "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.123**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
+    "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.125**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
   "globals.shellPageHintAria": "Page help",
   "globals.shellPageHint":
     "Sample destination help — put section copy on the TopAppBar InfoHint only; do not twin another section InfoHint in the mode drawer tools strip.",

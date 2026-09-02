@@ -679,11 +679,11 @@ flush — DevTools ~**4–5px** between `.fynns-collapsible-head` rows instead o
 .fynns-unit-stack` to `--fynns-navdrawer-section-gap` (**4dp**) — including
 nested Card / Collapsible body stacks that should keep form/unit rhythm.
 
-**Fix in core (≥ 0.5.123):** remap applies to **direct** body children only —
+**Fix in core (≥ 0.5.125):** remap applies to **direct** body children only —
 `.fynns-nav-drawer-body > .fynns-unit-stack`. Nested `.fynns-card-body` /
 `.fynns-collapsible-body` `.fynns-unit-stack` keeps `unit-stack-gap` (**16dp**).
 
-**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.123**; keep the
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.125**; keep the
 Card + `unit-stack` + Collapsible tree — **no** private margin hacks on
 `.fynns-collapsible`. Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 Live: Layouts `#layouts-demo-navigation-drawer` fourth column
