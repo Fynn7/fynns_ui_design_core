@@ -1036,12 +1036,10 @@ const en = {
   "globals.rhythmStatusHelp":
     "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`-` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
   "globals.rhythmServiceHelp":
-    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **One** `.fynns-control-cluster` of labeled `Button`s `sm` only — **no** status `Chip` (information redundancy). Core ≥ **0.5.80** widens labeled-Button siblings to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Click Start / Stop to toggle the sample.",
+    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **Controls column** = one `.fynns-control-cluster` of labeled `Button`s `sm` only — **never** status in `__controls` (`Chip` reads as a sibling action pill). Core ≥ **0.5.80** labeled-Button **8dp** (`action-cluster-gap`). **At most one** `loading`. Click Start / Stop to toggle the sample.",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
-  "globals.rhythmServiceChipRunning": "Running",
-  "globals.rhythmServiceChipStopped": "Stopped",
   "globals.rhythmServiceStart": "Start",
   "globals.rhythmServiceStop": "Stop",
   "globals.rhythmServiceRestart": "Restart",
@@ -3136,12 +3134,10 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusHelp":
     "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`-`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
   "globals.rhythmServiceHelp":
-    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。cluster 仅 labeled `Button` `sm` — **禁止**状态 `Chip`（信息冗余）。Core ≥ **0.5.80** 带文案 Button **8dp**（`action-cluster-gap`）。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。**控件列** cluster 仅 labeled `Button` `sm` — **禁止**在 cluster 放状态 `Chip`（assist 与 Button 同 pill，像第四颗动作）。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",
-  "globals.rhythmServiceChipRunning": "运行中",
-  "globals.rhythmServiceChipStopped": "已停止",
   "globals.rhythmServiceStart": "启动",
   "globals.rhythmServiceStop": "停止",
   "globals.rhythmServiceRestart": "重启",

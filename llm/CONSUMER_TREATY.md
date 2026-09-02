@@ -1587,22 +1587,26 @@ Live: sandbox `#rhythm` service control.
 
 Symptoms (Card `ControlRow` service strip — Start / Stop / Restart):
 
-- The row names runtime state **twice** — e.g. label `未运行` beside Chip
-  `已停止`, or label `-` beside Chip `Stopped`, or label `PID …` beside Chip
-  `Running`
-- Reads as **information redundancy** — one status slot is enough
+- Status **`Chip`** (`Running` / `运行中`, `Stopped` / `已停止`) sits in
+  `.fynns-control-row__controls` beside labeled `Button`s — reads as a **fourth
+  action pill** (same 32dp height as `Button` `sm`)
+- The row names runtime state **twice** — e.g. label `PID …` beside Chip
+  `Running`, or label `未运行` beside Chip `已停止`
+- Reads as **information redundancy** **and** wrong column — status is not an
+  action; it belongs in **`ControlRow` `label`**, not the button cluster
 
-**Cause:** older `#rhythm` samples stacked a decorative `Chip` `assist` on the
-action cluster while `ControlRow` `label` already carried PID / not-running
-copy.
+**Cause:** stacking a decorative `Chip` `assist` on the action cluster while
+`ControlRow` `label` already carried PID / not-running copy — or using `Chip`
+as a status readout because it “looks like a tag” (it still reads as a button
+beside Start / Stop / Restart).
 
 **Consumer fix (props / strings only):**
 
 1. **Running:** `ControlRow` `label` = `PID …` only.
 2. **Stopped / idle:** `label` = `Not running` / `未运行` (or your locale word
    — **one** phrase).
-3. **Delete** the status `Chip` from the cluster — keep **only** labeled
-   `Button`s `sm` inside one public `.fynns-control-cluster`.
+3. **Delete** any status `Chip` / meta / badge from `__controls` — keep **only**
+   labeled `Button`s `sm` inside one public `.fynns-control-cluster`.
 4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
 
 Live: sandbox `#rhythm` service control (≥ **0.5.127**). Authority:
