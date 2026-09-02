@@ -4638,6 +4638,52 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 />
               </FieldBlock>
               <FieldBlock
+                id="sandbox-field-header-env-keys"
+                label={t("globals.fieldHeaderEnvTokenLabel")}
+                htmlFor="sandbox-field-header-env-token"
+                actions={
+                  <>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.fieldHeaderEnvTokenTip")}
+                      ariaLabel={t("globals.fieldHeaderEnvTokenAria")}
+                    />
+                    <Chip variant="assist">{t("globals.fieldHeaderEnvOk")}</Chip>
+                  </>
+                }
+              >
+                <Input
+                  id="sandbox-field-header-env-token"
+                  type="password"
+                  value="••••••••"
+                  readOnly
+                  aria-label={t("globals.fieldHeaderEnvTokenLabel")}
+                  autoComplete="off"
+                />
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.fieldHeaderEnvAppLabel")}
+                htmlFor="sandbox-field-header-env-app"
+                actions={
+                  <>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.fieldHeaderEnvAppTip")}
+                      ariaLabel={t("globals.fieldHeaderEnvAppAria")}
+                    />
+                    <Chip variant="input">{t("globals.fieldHeaderEnvMissing")}</Chip>
+                  </>
+                }
+              >
+                <Input
+                  id="sandbox-field-header-env-app"
+                  value=""
+                  readOnly
+                  aria-label={t("globals.fieldHeaderEnvAppLabel")}
+                  autoComplete="off"
+                />
+              </FieldBlock>
+              <FieldBlock
                 label={t("globals.fieldHeaderCatalogLabel")}
                 htmlFor="sandbox-field-header-select"
                 actions={

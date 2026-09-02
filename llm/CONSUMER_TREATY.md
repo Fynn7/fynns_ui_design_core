@@ -43,6 +43,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **NavigationDrawer Card Collapsible stack kissed** /
 **FieldHeader inline InfoHint kissed** /
+**env key FieldHint under input** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -714,6 +715,34 @@ label + inline `InfoHint` **or** move policy-only help to `FieldBlock`
 Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Live:
 `#sandbox-field-header-inline-infohint`; consumer LLM drawer mounted-card
 field. Authority: [`AGENTS.md`](../AGENTS.md) `#field-header`.
+
+## Failure mode this treaty targets: env key FieldHint under input (hint split)
+
+Symptoms (editable `.env` / secrets Card — `FieldBlock` per key):
+
+- Label row shows the key name (`DISCORD_TOKEN`, …) **and** a status `Chip`
+- A **`FieldHint`** line under the `Input` repeats portal / format policy
+  (`Bot Token…`, `Application ID`, …) that should live in a label-row
+  **`InfoHint`** Tooltip only
+- Reads as **split information** — extra vertical band under every field
+
+**Cause:** treating `FieldHint` as the default help surface for env keys
+instead of **`FieldBlock` `actions` `InfoHint` `size="sm"`** (beside optional
+status `Chip`).
+
+**Consumer fix (props only):**
+
+1. **Delete** policy `FieldHint` siblings under the `Input`.
+2. Move portal / where-to-copy copy → **`InfoHint` `size="sm"`** in
+   `FieldHeader` `actions` (may sit beside status `Chip`).
+3. Keep **`FieldHint` / `errorText`** only for validation or save errors
+   (one short line).
+4. Bump `@fynn7/ui-design-core` ≥ **0.5.129**; re-paste
+   `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** editable env key FieldBlock.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
 
