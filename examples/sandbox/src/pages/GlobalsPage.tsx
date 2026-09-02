@@ -4688,6 +4688,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   minRows={2}
                 />
               </FieldBlock>
+              <FieldBlock
+                id="sandbox-field-header-inline-infohint"
+                label={
+                  <>
+                    <span className="fynns-control-row__label-text">
+                      {t("globals.fieldHeaderMountedLabel")}
+                    </span>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.fieldHeaderMountedTip")}
+                      ariaLabel={t("globals.fieldHeaderMountedAria")}
+                    />
+                  </>
+                }
+                actions={
+                  <Tooltip content={t("globals.fieldHeaderMountedActionTip")}>
+                    <IconButton
+                      size="sm"
+                      aria-label={t("globals.fieldHeaderMountedActionTip")}
+                    >
+                      <FileIcon aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                }
+              >
+                <FieldHint>{t("globals.fieldHeaderMountedBody")}</FieldHint>
+              </FieldBlock>
             </FieldStack>
             <FieldStack>
               <ControlStack columns={1}>

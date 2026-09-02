@@ -42,6 +42,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **sparse dashboard shortcut List** /
 **NavigationDrawer destination gap ≠ unit-stack** /
 **NavigationDrawer Card Collapsible stack kissed** /
+**FieldHeader inline InfoHint kissed** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -689,6 +690,30 @@ Card + `unit-stack` + Collapsible tree — **no** private margin hacks on
 Live: Layouts `#layouts-demo-navigation-drawer` fourth column
 `#sandbox-navdrawer-card-collapsible-stack`. Authority: [`AGENTS.md`](../AGENTS.md)
 NavigationDrawer + Content density **Titled section shell**.
+
+## Failure mode this treaty targets: FieldHeader inline InfoHint kissed
+
+Symptoms: `FieldBlock` `label` carries a title + trailing `InfoHint` `size="sm"`
+(policy in Tooltip) while `actions` hosts refresh / open IconButtons — the “i”
+disk kisses the last label glyph (DevTools ~**0px** between
+`.fynns-control-row__label-text` end and `.fynns-info-hint-trigger` start).
+
+**Cause:** consumers copied the **ControlRow** label + InfoHint recipe into
+`FieldBlock` `label`, but core only painted `inline-flex` + gap on
+`.fynns-control-row__label:has(.fynns-info-hint-trigger)` — not on
+`.fynns-field-header__label`.
+
+**Fix in core (≥ 0.5.128):** mirror ControlRow breath on FieldHeader —
+`.fynns-field-header__label:has(.fynns-info-hint-trigger)` → `inline-flex` +
+`gap: var(--fynns-space-xs)` (**4dp**); Tooltip hug rules on the field header
+row so the icon disk does not stretch.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.128**; keep
+label + inline `InfoHint` **or** move policy-only help to `FieldBlock`
+`actions` when no other trailing IconButtons compete for the label row.
+Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Live:
+`#sandbox-field-header-inline-infohint`; consumer LLM drawer mounted-card
+field. Authority: [`AGENTS.md`](../AGENTS.md) `#field-header`.
 
 ## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
 

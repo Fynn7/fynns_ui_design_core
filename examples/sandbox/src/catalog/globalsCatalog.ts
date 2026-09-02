@@ -240,6 +240,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     keywords: ["告警", "alert", "banner", "warning", "error", "提示条"],
   },
   {
+    id: "sandbox-inline-alert-recovery",
+    categoryId: "communication",
+    label: "Error recovery",
+    keywords: [
+      "error",
+      "recovery",
+      "reload",
+      "render",
+      "boundary",
+      "错误",
+      "重新加载",
+      "渲染失败",
+      "inlinealert",
+    ],
+  },
+  {
     id: "env-check",
     categoryId: "communication",
     label: "Env check",

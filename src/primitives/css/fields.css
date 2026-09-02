@@ -700,6 +700,31 @@ input.fynns-input:focus::-webkit-scrollbar {
   line-height: var(--fynns-line-height-snug);
 }
 
+/* Label + inline InfoHint (policy in Tooltip) — same breath as ControlRow. */
+.fynns-field-header__label:has(.fynns-info-hint-trigger) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-field-header
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.fynns-field-header
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  > .fynns-btn--icon {
+  flex: none;
+}
+
 .fynns-field-header__actions {
   display: inline-flex;
   align-items: center;

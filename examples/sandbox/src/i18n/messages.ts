@@ -841,11 +841,17 @@ const en = {
   "globals.fieldHeaderReloadTip":
     "Reload the catalog from the endpoint. On failure, the previous cached list stays selected.",
   "globals.fieldHeaderNotesLabel": "Notes",
+  "globals.fieldHeaderMountedLabel": "Mounted preview card",
+  "globals.fieldHeaderMountedTip":
+    "Sample mount scope — long policy stays in the Tooltip, not FieldHint under the body.",
+  "globals.fieldHeaderMountedAria": "About the mounted preview card field",
+  "globals.fieldHeaderMountedActionTip": "Open sample mount editor",
+  "globals.fieldHeaderMountedBody": "Sample card body well.",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Title text-start (hard):** ControlRow **label** glyphs flush-align with FieldHeader / FieldBlock **titles** (core ≥ **0.5.58**). Select **value** text stays inset inside the shell — do not pad ControlRow labels to chase it.",
+    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint` **or** inline label + `InfoHint` beside the title (≥ **0.5.128** — `--fynns-space-xs` breath, same as ControlRow); reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Title text-start (hard):** ControlRow **label** glyphs flush-align with FieldHeader / FieldBlock **titles** (core ≥ **0.5.58**). Select **value** text stays inset inside the shell — do not pad ControlRow labels to chase it. Live: `#sandbox-field-header-inline-infohint`.",
   "globals.fieldHeaderPrefLabel": "Detail mode",
   "globals.fieldHeaderPrefTip": "Optional longer answers. Short tip only.",
   "globals.fieldHeaderPrefAria": "About detail mode",
@@ -2930,6 +2936,11 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderReloadTip":
     "从端点重载目录。失败时仍保留上次缓存列表与当前选择。",
   "globals.fieldHeaderNotesLabel": "备注",
+  "globals.fieldHeaderMountedLabel": "已挂载预览卡",
+  "globals.fieldHeaderMountedTip": "示例挂载范围 — 长策略放在 Tooltip，不要堆在正文 FieldHint。",
+  "globals.fieldHeaderMountedAria": "关于已挂载预览卡字段",
+  "globals.fieldHeaderMountedActionTip": "打开示例挂载编辑器",
+  "globals.fieldHeaderMountedBody": "示例卡片正文井。",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
