@@ -1456,6 +1456,33 @@ while the 0.5.80 labeled-Button margin bump still applied — **8+4=12dp**.
 is already action-cluster). Consumer stays on public `.fynns-control-cluster` only.
 Live: sandbox `#rhythm` service control.
 
+## Failure mode this treaty targets: service control twin stopped copy (information redundancy)
+
+Symptoms (Card `ControlRow` service strip — Chip + Start / Stop / Restart):
+
+- Stopped / idle row shows **two** state phrases for the same fact — e.g.
+  label `未运行` beside Chip `已停止`, or English `Not running` + `Stopped`
+- Reads as **information redundancy** — the label column and the assist Chip
+  both name idle/stopped; only the Chip should carry the state word when there
+  is no PID
+
+**Cause:** copying an older `#rhythm` sample that used `Not running` in the
+label while the cluster Chip also said `Stopped`; zh locales made both lines
+near-synonyms.
+
+**Consumer fix (props / strings only):**
+
+1. **Running:** `ControlRow` `label` = `PID …` (or `-` when PID unknown); Chip
+   = `Running` / `运行中`.
+2. **Stopped / idle:** `label` = ASCII **`-`** only; Chip = `Stopped` /
+   `已停止` — **delete** `未运行` / `Not running` from the label.
+3. Keep one public `.fynns-control-cluster` of Chip + labeled `Button`s `sm`.
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#rhythm` service control (≥ **0.5.126**). Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
+row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 
 Symptoms (Card-body `ControlStack` — sync / apply row beside status legend):

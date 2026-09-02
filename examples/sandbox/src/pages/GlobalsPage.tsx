@@ -6457,7 +6457,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={
               rhythmServiceRunning
                 ? t("globals.rhythmServicePid")
-                : t("globals.rhythmServiceStopped")
+                : "-"
             }
           >
             <div className="fynns-control-cluster">
