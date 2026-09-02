@@ -45,6 +45,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **FieldHeader inline InfoHint kissed** /
 **env key FieldHint under input** /
 **env key status Chip** /
+**Input trailing md IconButton in field shell** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -771,6 +772,32 @@ editable **FieldBlock** headers beside the policy `InfoHint`.
 Live: sandbox `#sandbox-field-header-env-keys`. Authority:
 [`AGENTS.md`](../AGENTS.md) **Content density** editable env key FieldBlock.
 Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Input trailing md IconButton in field shell
+
+Symptoms (password / token `Input` with in-field reveal):
+
+- `Input` `trailing` uses default **`IconButton`** (40×40dp) inside a **40dp**
+  field shell — disk fills the row height; reads oversized vs the 16dp glyph
+- DevTools: `.fynns-field-affix--trailing .fynns-btn--icon` without
+  `.fynns-btn--sm` at 40×40
+
+**Cause:** omitting `size="sm"` on in-field trailing actions (reveal password,
+clear) — default md matches shell height instead of nesting as a smaller
+control.
+
+**Consumer fix (props only):**
+
+1. **`Input` `trailing`** reveal / clear → **`IconButton` `size="sm"`** +
+   `Tooltip` + `aria-label` (skip Tooltip only on self-evident dismiss glyphs).
+2. Core ≥ **0.5.131** also caps affix disks to 32dp — still pass `size="sm"` so
+   props match sandbox `#field-header` / `#form-recipe`.
+3. Do **not** move reveal to `FieldHeader` `actions` — in-field trailing only.
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys` + `#field-header`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Field header actions** / **Content density**
+editable env key FieldBlock.
 
 ## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
 

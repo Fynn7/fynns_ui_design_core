@@ -1085,6 +1085,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
   const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
+  const [fieldHeaderEnvReveal, setFieldHeaderEnvReveal] = useState(false);
   const [fieldHeaderDetailOn, setFieldHeaderDetailOn] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -4651,11 +4652,26 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               >
                 <Input
                   id="sandbox-field-header-env-token"
-                  type="password"
+                  type={fieldHeaderEnvReveal ? "text" : "password"}
                   value="••••••••"
                   readOnly
                   aria-label={t("globals.fieldHeaderEnvTokenLabel")}
                   autoComplete="off"
+                  trailing={
+                    <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                      <IconButton
+                        size="sm"
+                        aria-label={t("globals.fieldHeaderRevealTip")}
+                        onClick={() => setFieldHeaderEnvReveal((v) => !v)}
+                      >
+                        {fieldHeaderEnvReveal ? (
+                          <EyeOffIcon aria-hidden />
+                        ) : (
+                          <EyeIcon aria-hidden />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  }
                 />
               </FieldBlock>
               <FieldBlock
