@@ -4642,14 +4642,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 label={t("globals.fieldHeaderEnvTokenLabel")}
                 htmlFor="sandbox-field-header-env-token"
                 actions={
-                  <>
-                    <InfoHint
-                      size="sm"
-                      content={t("globals.fieldHeaderEnvTokenTip")}
-                      ariaLabel={t("globals.fieldHeaderEnvTokenAria")}
-                    />
-                    <Chip variant="assist">{t("globals.fieldHeaderEnvOk")}</Chip>
-                  </>
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.fieldHeaderEnvTokenTip")}
+                    ariaLabel={t("globals.fieldHeaderEnvTokenAria")}
+                  />
                 }
               >
                 <Input
@@ -4665,14 +4662,12 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 label={t("globals.fieldHeaderEnvAppLabel")}
                 htmlFor="sandbox-field-header-env-app"
                 actions={
-                  <>
-                    <InfoHint
-                      size="sm"
-                      content={t("globals.fieldHeaderEnvAppTip")}
-                      ariaLabel={t("globals.fieldHeaderEnvAppAria")}
-                    />
-                    <Chip variant="input">{t("globals.fieldHeaderEnvMissing")}</Chip>
-                  </>
+                  <InfoHint
+                    size="sm"
+                    tone="danger"
+                    content={t("globals.fieldHeaderEnvAppTip")}
+                    ariaLabel={t("globals.fieldHeaderEnvAppAria")}
+                  />
                 }
               >
                 <Input

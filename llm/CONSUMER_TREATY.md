@@ -44,6 +44,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **NavigationDrawer Card Collapsible stack kissed** /
 **FieldHeader inline InfoHint kissed** /
 **env key FieldHint under input** /
+**env key status Chip** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -727,17 +728,44 @@ Symptoms (editable `.env` / secrets Card — `FieldBlock` per key):
 - Reads as **split information** — extra vertical band under every field
 
 **Cause:** treating `FieldHint` as the default help surface for env keys
-instead of **`FieldBlock` `actions` `InfoHint` `size="sm"`** (beside optional
-status `Chip`).
+instead of **`FieldBlock` `actions` `InfoHint` `size="sm"`**.
 
 **Consumer fix (props only):**
 
 1. **Delete** policy `FieldHint` siblings under the `Input`.
-2. Move portal / where-to-copy copy → **`InfoHint` `size="sm"`** in
-   `FieldHeader` `actions` (may sit beside status `Chip`).
+2. Move portal / where-to-copy copy → **lone** **`InfoHint` `size="sm"`** in
+   `FieldHeader` `actions` — see **env key status Chip** below (no `Chip`).
 3. Keep **`FieldHint` / `errorText`** only for validation or save errors
    (one short line).
-4. Bump `@fynn7/ui-design-core` ≥ **0.5.129**; re-paste
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** editable env key FieldBlock.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: env key status Chip (information redundancy)
+
+Symptoms (editable `.env` / secrets `FieldBlock` per key):
+
+- Label row stacks **`InfoHint` + status `Chip`** (`OK` / `Missing`, `已配置` /
+  `缺失`) for the same field
+- Reads as **information redundancy** — configured vs missing is already visible
+  from the input value **and** should not duplicate as a second chrome pill
+
+**Cause:** copying readonly env **List** trailing meta (`OK` / `Missing`) onto
+editable **FieldBlock** headers beside the policy `InfoHint`.
+
+**Consumer fix (props only):**
+
+1. **Remove** status `Chip` from every env key `FieldBlock` `actions`.
+2. Keep **one** `InfoHint` `size="sm"` with portal / format copy in `content`.
+3. **Required key empty / invalid:** `InfoHint` `tone="danger"` (red glyph —
+   same probe-row grammar); **configured or optional-empty OK:** omit `tone`
+   (default).
+4. Do **not** add `Missing` / `已配置` strings to the Tooltip unless the user
+   explicitly asked for that prose — the danger tint carries missing required
+   keys.
+5. Bump `@fynn7/ui-design-core` ≥ **0.5.130**; re-paste
    `consumer-cursor-rule.mdc`.
 
 Live: sandbox `#sandbox-field-header-env-keys`. Authority:
