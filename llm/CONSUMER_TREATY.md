@@ -41,6 +41,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **DropdownMenu bare btn in IconButton strip** /
 **sparse dashboard shortcut List** /
 **NavigationDrawer destination gap ≠ unit-stack** /
+**NavigationDrawer Card Collapsible stack kissed** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -666,6 +667,28 @@ consumer `margin` under `.hub-mode-nav-tools` / SearchBar to retune.
 **direct** body sibling (or a single tools host that contains it). Tools
 column internal gap should stay `--fynns-layout-control-stack-gap` so it
 stays in lockstep with `search-gap`.
+
+## Failure mode this treaty targets: NavigationDrawer Card Collapsible stack kissed
+
+Symptoms: inside a **NavigationDrawer** body, a **Card** that stacks two or more
+**collapsed** `Collapsible` shells (e.g. request preview sections) reads almost
+flush — DevTools ~**4–5px** between `.fynns-collapsible-head` rows instead of
+**16dp** `unit-stack-gap`.
+
+**Cause:** pre-**0.5.123** core remapped **every** `.fynns-nav-drawer-body
+.fynns-unit-stack` to `--fynns-navdrawer-section-gap` (**4dp**) — including
+nested Card / Collapsible body stacks that should keep form/unit rhythm.
+
+**Fix in core (≥ 0.5.123):** remap applies to **direct** body children only —
+`.fynns-nav-drawer-body > .fynns-unit-stack`. Nested `.fynns-card-body` /
+`.fynns-collapsible-body` `.fynns-unit-stack` keeps `unit-stack-gap` (**16dp**).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.123**; keep the
+Card + `unit-stack` + Collapsible tree — **no** private margin hacks on
+`.fynns-collapsible`. Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+Live: Layouts `#layouts-demo-navigation-drawer` fourth column
+`#sandbox-navdrawer-card-collapsible-stack`. Authority: [`AGENTS.md`](../AGENTS.md)
+NavigationDrawer + Content density **Titled section shell**.
 
 ## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
 
@@ -1415,6 +1438,23 @@ sibling. Core (≥ **0.5.80**) widens **labeled** `.fynns-btn` gaps to
 Live: sandbox `#rhythm` service control + end-align. Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
 row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: labeled Button cluster gap stacked to 12dp
+
+Symptoms (Card `ControlRow` service strip — Chip + Start / Stop / Restart):
+
+- Siblings read **too wide** (~12px / 12dp) — looser than dialog feet and M3
+  separate-action rhythm
+- DevTools: `.fynns-control-cluster` in `.fynns-card-body` shows
+  `gap: var(--fynns-layout-action-cluster-gap)` (**8dp**) **and** labeled
+  `.fynns-btn` children with `margin-inline-start: 4px` from the 0.5.80 bump
+
+**Cause:** core ≥ **0.5.88** widened form-host cluster `gap` to `action-cluster-gap`
+while the 0.5.80 labeled-Button margin bump still applied — **8+4=12dp**.
+
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.5.124** (margin suppressed when gap
+is already action-cluster). Consumer stays on public `.fynns-control-cluster` only.
+Live: sandbox `#rhythm` service control.
 
 ## Failure mode this treaty targets: ControlRow IconButton crushed to ellipse
 

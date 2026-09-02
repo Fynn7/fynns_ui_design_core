@@ -1412,6 +1412,14 @@ const en = {
   "globals.navDrawerBulkShowDemo": "Show bulk select (soft)",
   "globals.navDrawerBulkSoftHelp":
     "**Bulk select (soft, ≥ 0.5.65):** checked rows use leading `Checkbox` only — **do not** set `NavigationDrawerItem` `active` / `ListItem` `selected` from `checked`. One destination `active` pill is for the open detail host only; multi-select stays default row + checkbox. All-selected must not paint a `secondary-container` wall. Live: third column on this demo.",
+  "globals.navDrawerInspectorAria": "Sample inspector drawer with Card stack",
+  "globals.navDrawerInspectorCardTitle": "Request preview",
+  "globals.navDrawerInspectorCardHint": "Collapsed sections keep unit-stack rhythm.",
+  "globals.navDrawerInspectorCollapsibleA": "Chat request",
+  "globals.navDrawerInspectorCollapsibleB": "Sample request",
+  "globals.navDrawerInspectorCollapsibleBody": "Sample collapsed body.",
+  "globals.navDrawerInspectorCardHelp":
+    "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.123**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
   "globals.shellPageHintAria": "Page help",
   "globals.shellPageHint":
     "Sample destination help — put section copy on the TopAppBar InfoHint only; do not twin another section InfoHint in the mode drawer tools strip.",
@@ -3485,6 +3493,14 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerBulkShowDemo": "显示批量选择（柔和）",
   "globals.navDrawerBulkSoftHelp":
     "**批量选择（柔和，≥ 0.5.65）：** 勾选行仅用 leading `Checkbox` 表态 — **禁止**用 `checked` 驱动 `NavigationDrawerItem` `active` / `ListItem` `selected`。单个 `active` 胶囊只给当前打开的目的地；多选保持默认行底 + 复选框。全选不得刷成 `secondary-container` 一片。对照本页第三列。",
+  "globals.navDrawerInspectorAria": "示例检查器侧栏（Card 堆叠）",
+  "globals.navDrawerInspectorCardTitle": "请求预览",
+  "globals.navDrawerInspectorCardHint": "折叠区块保持 unit-stack 节奏。",
+  "globals.navDrawerInspectorCollapsibleA": "Chat 请求",
+  "globals.navDrawerInspectorCollapsibleB": "示例请求",
+  "globals.navDrawerInspectorCollapsibleBody": "示例折叠正文。",
+  "globals.navDrawerInspectorCardHelp":
+    "Drawer body 内 Card + `.fynns-unit-stack` 堆叠 Collapsible（≥ **0.5.123**）：嵌套 unit-stack 保持 `--fynns-layout-unit-stack-gap`（**16dp**）— core **仅**把直接子级 `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射为 `section-gap`（4dp），避免误包目的地列表。样例：`#sandbox-navdrawer-card-collapsible-stack`（第四列）。",
   "globals.shellPageHintAria": "页面说明",
   "globals.shellPageHint":
     "示例目的地说明 — 分区帮助只放在 TopAppBar 的 InfoHint；不要在模式侧栏工具条再放一个分区 InfoHint。",

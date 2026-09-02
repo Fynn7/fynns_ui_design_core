@@ -1216,7 +1216,10 @@ classes.
   Headline = static section label; Group = collapsible Cursor-style folder row
   with optional leading `icon` any ReactNode + indented items; sibling Item /
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
-  wrap destinations in `.fynns-unit-stack`; SearchBar / tools /
+  wrap destinations in `.fynns-unit-stack` (core remaps **only**
+  `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` — ≥ **0.5.123**;
+  nested Card / Collapsible `.fynns-unit-stack` keeps **16dp** `unit-stack-gap`);
+  SearchBar / tools /
   SyncSideFilter `ToggleGroup` / `--toolbar-end` host as body siblings use
   `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` / 8dp)
   between chrome peers and before destinations — never Item `section-gap`

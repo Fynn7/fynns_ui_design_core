@@ -397,6 +397,70 @@
   gap: var(--fynns-layout-action-cluster-gap);
 }
 
+/*
+ * Form hosts above already set action-cluster gap — suppress stacked 0.5.80 margin
+ * on labeled Buttons (12dp lesson; ≥ **0.5.124**).
+ */
+.fynns-dialog-panel--centered
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-card-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-card-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-surface--padded
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-surface--padded
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-collapsible-body
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-collapsible-body
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-dialog-panel--centered
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster:has(.fynns-btn:not(.fynns-btn--icon))
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
+  margin-inline-start: 0;
+}
+
 .fynns-dialog-panel--centered
   > .fynns-control-row
   > .fynns-control-row__controls
@@ -1928,7 +1992,12 @@
   flex-shrink: 0;
 }
 
-.fynns-nav-drawer-body .fynns-unit-stack {
+/*
+ * Mistaken **top-level** destination wrap only — Card / Collapsible / Dialog
+ * form hosts inside the drawer keep `--fynns-layout-unit-stack-gap` (16dp).
+ * Descendant remap (pre-0.5.123) kissed stacked Collapsible shells (~4dp).
+ */
+.fynns-nav-drawer-body > .fynns-unit-stack {
   gap: var(--fynns-navdrawer-section-gap);
 }
 
