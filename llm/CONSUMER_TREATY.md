@@ -1308,6 +1308,24 @@ fillers. Live: sandbox `#rhythm` end-align footer.
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: orphan recovery CTA left-aligned
+
+Symptoms (app `ErrorBoundary` / lazy chunk fail fallback):
+
+- After an `InlineAlert` error strip, a lone labeled **Reload** / **重新加载**
+  `Button` sits **flush start** (left) under the hint copy
+- Reads like a broken form row without a name — not the action-footer grammar
+
+**Cause:** Recovery hosts copied a bare `Button` sibling instead of the
+**action footer** recipe: full-width `.fynns-control-cluster--end-align` with
+no visible `ControlRow` label.
+
+**Fix in the consumer:** wrap the reload CTA in
+`.fynns-control-cluster.fynns-control-cluster--end-align`; stack alert + hint +
+cluster in `.fynns-unit-stack`. Live: sandbox `#sandbox-inline-alert-recovery`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** error recovery row.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Dialog foot Delete leftmost of Cancel
 
 Symptoms (Timeline / Experiences edit Dialog body end-align foot):
@@ -1456,30 +1474,29 @@ while the 0.5.80 labeled-Button margin bump still applied — **8+4=12dp**.
 is already action-cluster). Consumer stays on public `.fynns-control-cluster` only.
 Live: sandbox `#rhythm` service control.
 
-## Failure mode this treaty targets: service control twin stopped copy (information redundancy)
+## Failure mode this treaty targets: service control status Chip + label (information redundancy)
 
-Symptoms (Card `ControlRow` service strip — Chip + Start / Stop / Restart):
+Symptoms (Card `ControlRow` service strip — Start / Stop / Restart):
 
-- Stopped / idle row shows **two** state phrases for the same fact — e.g.
-  label `未运行` beside Chip `已停止`, or English `Not running` + `Stopped`
-- Reads as **information redundancy** — the label column and the assist Chip
-  both name idle/stopped; only the Chip should carry the state word when there
-  is no PID
+- The row names runtime state **twice** — e.g. label `未运行` beside Chip
+  `已停止`, or label `-` beside Chip `Stopped`, or label `PID …` beside Chip
+  `Running`
+- Reads as **information redundancy** — one status slot is enough
 
-**Cause:** copying an older `#rhythm` sample that used `Not running` in the
-label while the cluster Chip also said `Stopped`; zh locales made both lines
-near-synonyms.
+**Cause:** older `#rhythm` samples stacked a decorative `Chip` `assist` on the
+action cluster while `ControlRow` `label` already carried PID / not-running
+copy.
 
 **Consumer fix (props / strings only):**
 
-1. **Running:** `ControlRow` `label` = `PID …` (or `-` when PID unknown); Chip
-   = `Running` / `运行中`.
-2. **Stopped / idle:** `label` = ASCII **`-`** only; Chip = `Stopped` /
-   `已停止` — **delete** `未运行` / `Not running` from the label.
-3. Keep one public `.fynns-control-cluster` of Chip + labeled `Button`s `sm`.
+1. **Running:** `ControlRow` `label` = `PID …` only.
+2. **Stopped / idle:** `label` = `Not running` / `未运行` (or your locale word
+   — **one** phrase).
+3. **Delete** the status `Chip` from the cluster — keep **only** labeled
+   `Button`s `sm` inside one public `.fynns-control-cluster`.
 4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
 
-Live: sandbox `#rhythm` service control (≥ **0.5.126**). Authority:
+Live: sandbox `#rhythm` service control (≥ **0.5.127**). Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
 row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 

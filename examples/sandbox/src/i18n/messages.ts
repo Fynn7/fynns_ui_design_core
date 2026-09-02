@@ -1021,7 +1021,7 @@ const en = {
   "globals.rhythmStatusHelp":
     "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`-` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
   "globals.rhythmServiceHelp":
-    "**Service / process control (hard):** **Running:** `ControlRow` `label` = PID meta only + **one** public `.fynns-control-cluster` of `Chip` `assist` (`Running`) + labeled `Button`s `sm`. **Stopped:** `label` = `-` only — never `Not running` beside Chip `Stopped` (information redundancy). Core ≥ **0.5.80** widens labeled-Button siblings to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Click Start / Stop to toggle the sample.",
+    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **One** `.fynns-control-cluster` of labeled `Button`s `sm` only — **no** status `Chip` (information redundancy). Core ≥ **0.5.80** widens labeled-Button siblings to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Click Start / Stop to toggle the sample.",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
@@ -3108,7 +3108,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusHelp":
     "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`-`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
   "globals.rhythmServiceHelp":
-    "**服务 / 进程控制（硬）：** **运行中：** `ControlRow` `label` 仅 PID 元数据 + **一条** public `.fynns-control-cluster` 包 `Chip` `assist`（`运行中`）+ `Button` `sm`。**已停止：** `label` 仅 `-` — 禁止 label `未运行` 与 Chip `已停止` 并存（信息冗余）。Core ≥ **0.5.80** 带文案 Button **8dp**（`action-cluster-gap`）。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。cluster 仅 labeled `Button` `sm` — **禁止**状态 `Chip`（信息冗余）。Core ≥ **0.5.80** 带文案 Button **8dp**（`action-cluster-gap`）。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",

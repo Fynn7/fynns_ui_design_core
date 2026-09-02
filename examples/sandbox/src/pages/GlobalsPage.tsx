@@ -2642,6 +2642,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
         </GlobalsDemo>
+        <GlobalsDemo id="sandbox-inline-alert-recovery">
+        <div
+          id="sandbox-inline-alert-recovery-host"
+          className="fynns-unit-stack"
+          style={{ maxWidth: "40rem" }}
+        >
+          <InlineAlert severity="error" message={t("globals.inlineAlertRecoveryError")} />
+          <FieldHint>{t("globals.inlineAlertRecoveryHint")}</FieldHint>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Button variant="tonal" size="sm" type="button">
+              {t("globals.inlineAlertRecoveryReload")}
+            </Button>
+          </div>
+        </div>
+        <SandboxHelp text={t("globals.inlineAlertRecoveryHelp")} />
+        </GlobalsDemo>
         <GlobalsDemo id="env-check">
         <Card title={t("globals.envCheckCardTitle")}>
           <div className="fynns-unit-stack">
@@ -6457,15 +6473,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             label={
               rhythmServiceRunning
                 ? t("globals.rhythmServicePid")
-                : "-"
+                : t("globals.rhythmServiceStopped")
             }
           >
             <div className="fynns-control-cluster">
-              <Chip variant="assist" selected={rhythmServiceRunning}>
-                {rhythmServiceRunning
-                  ? t("globals.rhythmServiceChipRunning")
-                  : t("globals.rhythmServiceChipStopped")}
-              </Chip>
               <Button
                 size="sm"
                 variant="primary"
