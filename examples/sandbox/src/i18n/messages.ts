@@ -893,6 +893,12 @@ const en = {
     "Ready. cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
     "fynns in-panel severity (not M3): soft tonal fill. Pad/gap/icon share Banner strip tokens. Icon tinted; body on-surface. Full-width like other strips; stack with `--fynns-layout-unit-stack-gap`. M3 maps: chrome Banner and Snackbar.",
+  "globals.inlineAlertRecoveryError": "Render failed — sample module could not load.",
+  "globals.inlineAlertRecoveryHint":
+    "Refresh the page. If it persists, confirm the dev server is running.",
+  "globals.inlineAlertRecoveryReload": "Reload",
+  "globals.inlineAlertRecoveryHelp":
+    "Error / render-failure recovery host: `.fynns-unit-stack` of `InlineAlert` + one-line `FieldHint` + **end-align** labeled `Button` — not a bare start-aligned CTA. Live `#sandbox-inline-alert-recovery`. Failure mode: CONSUMER_TREATY **orphan recovery CTA left-aligned**.",
   "globals.envCheckCardTitle": "Sample configuration",
   "globals.envCheckAlert":
     "Config file not found. Copy the sample file and fill in required keys.",
@@ -2976,6 +2982,11 @@ const zh: Record<MessageKey, string> = {
     "就绪。cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
     "fynns 面板内严重度（非 M3）：轻底色。内边距/间距/图标与 Banner 条状共用 `--fynns-banner-*`。图标染色，正文 on-surface。全宽与其他条状一致；纵向用 `--fynns-layout-unit-stack-gap`。M3 对位：chrome Banner 与 Snackbar。",
+  "globals.inlineAlertRecoveryError": "渲染失败 — 示例模块未能加载。",
+  "globals.inlineAlertRecoveryHint": "请刷新页面。若仍失败，请确认开发服务器已启动。",
+  "globals.inlineAlertRecoveryReload": "重新加载",
+  "globals.inlineAlertRecoveryHelp":
+    "错误 / 渲染失败恢复宿主：`InlineAlert` + 一行 `FieldHint` + **end-align** 带文案 `Button` 的 `.fynns-unit-stack` — 禁止裸放左对齐 CTA。Live `#sandbox-inline-alert-recovery`。失败模式：CONSUMER_TREATY **orphan recovery CTA left-aligned**。",
   "globals.envCheckCardTitle": "示例配置",
   "globals.envCheckAlert": "未找到配置文件。请复制示例文件并填写必填项。",
   "globals.envCheckListAria": "必填项",
