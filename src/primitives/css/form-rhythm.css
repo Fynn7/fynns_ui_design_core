@@ -255,11 +255,24 @@
  * to action-cluster-gap (8dp) — ≥ **0.5.80**. End-align strips set gap on the
  * whole cluster separately.
  */
-.fynns-control-cluster:not(.fynns-control-cluster--end-align)
+.fynns-control-cluster:not(.fynns-control-cluster--end-align):not(
+    :has(> .fynns-select)
+  )
   > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
   margin-inline-start: calc(
     var(--fynns-layout-action-cluster-gap) - var(--fynns-layout-control-cluster-gap)
   );
+}
+
+/*
+ * When the cluster gap is already action-cluster (8dp), do not stack the 0.5.80
+ * margin bump — otherwise Card service rows / dialog feet read 12dp (≥ 0.5.124).
+ */
+.fynns-control-cluster--end-align
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child),
+.fynns-control-cluster:has(> .fynns-select)
+  > .fynns-btn:not(.fynns-btn--icon):not(:first-child) {
+  margin-inline-start: 0;
 }
 
 /*
