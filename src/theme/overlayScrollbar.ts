@@ -11,7 +11,13 @@
  *
  * Y rails are clamped to the straight vertical edge of rounded
  * `overflow: hidden|clip` ancestors (e.g. centered Dialog `radius-3xl`) so the
- * thumb does not paint through the bottom/top corner curves.
+ * thumb does not paint through the bottom/top corner curves. Rails inside a
+ * `.fynns-dialog-panel` are also inset below the panel `.fynns-dialog-head` so
+ * nested scroll hosts (e.g. CodeBlock inside a scrolling Drawer body) never
+ * paint above the title chrome — portal z-index stays above modal. The same
+ * clamp applies to shell TopAppBar, Card/Collapsible heads, and nav drawer
+ * headlines so rails never paint through higher chrome (e.g. ClippedNavShell
+ * LLM column scroll under the app bar).
  *
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
@@ -203,6 +209,90 @@ function clampVerticalRailToRoundedClip(
     }
     el = el.parentElement;
   }
+  return { top, height: Math.max(0, bottom - top) };
+}
+
+function railHorizontallyOverlaps(
+  railLeft: number,
+  railRight: number,
+  boxLeft: number,
+  boxRight: number,
+): boolean {
+  return railRight > boxLeft + 0.5 && railLeft < boxRight - 0.5;
+}
+
+/**
+ * Portal rails sit at `--fynns-z-toast` (above modal). Collect chrome bands that
+ * must occlude overlay Y rails (shell TopAppBar, dialog head, section heads).
+ */
+function overlayChromeHeadsForHost(host: HTMLElement): HTMLElement[] {
+  const heads = new Set<HTMLElement>();
+
+  const shell = host.closest(
+    ".fynns-clipped-nav-shell, .fynns-destination-app-shell",
+  );
+  if (shell instanceof HTMLElement) {
+    const bar = shell.querySelector(":scope > .fynns-top-app-bar");
+    if (bar instanceof HTMLElement) heads.add(bar);
+  }
+
+  const panel = host.closest(".fynns-dialog-panel");
+  if (panel instanceof HTMLElement) {
+    const head = panel.querySelector(":scope > .fynns-dialog-head");
+    if (head instanceof HTMLElement) heads.add(head);
+  }
+
+  let el: HTMLElement | null = host.parentElement;
+  while (el) {
+    if (el.classList.contains("fynns-card") || el.classList.contains("fynns-collapsible")) {
+      const cardHead = el.querySelector(":scope > .fynns-card-head");
+      if (cardHead instanceof HTMLElement) heads.add(cardHead);
+      const collapsibleHead = el.querySelector(":scope > .fynns-collapsible-head");
+      if (collapsibleHead instanceof HTMLElement) heads.add(collapsibleHead);
+    }
+    if (el.classList.contains("fynns-nav-drawer")) {
+      const headline = el.querySelector(":scope > .fynns-nav-drawer-headline");
+      if (headline instanceof HTMLElement) heads.add(headline);
+    }
+    el = el.parentElement;
+  }
+
+  return [...heads];
+}
+
+/**
+ * Shrink the Y rail below every overlapping overlay-chrome head so portal thumbs
+ * (z-toast) never paint through TopAppBar / dialog / Card / Collapsible titles.
+ */
+function clampVerticalRailBelowOverlayChrome(
+  host: HTMLElement,
+  railTop: number,
+  railHeight: number,
+  railLeft: number,
+  sb: number,
+): { top: number; height: number } {
+  let top = railTop;
+  const bottom = railTop + railHeight;
+  const railRight = railLeft + sb;
+
+  for (const head of overlayChromeHeadsForHost(host)) {
+    const headRect = head.getBoundingClientRect();
+    if (headRect.height < 0.5 || headRect.width < 0.5) continue;
+    if (
+      !railHorizontallyOverlaps(
+        railLeft,
+        railRight,
+        headRect.left,
+        headRect.right,
+      )
+    ) {
+      continue;
+    }
+    if (headRect.bottom > top && headRect.top < bottom) {
+      top = Math.max(top, headRect.bottom);
+    }
+  }
+
   return { top, height: Math.max(0, bottom - top) };
 }
 
@@ -453,19 +543,33 @@ function updateHost(host: HTMLElement, state: HostState) {
     let railLeft = rect.right - sb;
     if (copyRoot) {
       const rail = copyFloatVerticalRailGeometry(copyRoot, rect, sb);
-      railTop = rail.top;
-      railHeight = rail.height;
       railLeft = rail.left;
+      const belowChrome = clampVerticalRailBelowOverlayChrome(
+        host,
+        rail.top,
+        rail.height,
+        railLeft,
+        sb,
+      );
+      railTop = belowChrome.top;
+      railHeight = belowChrome.height;
     } else {
-      const clipped = clampVerticalRailToRoundedClip(
+      const rounded = clampVerticalRailToRoundedClip(
         host,
         railTop,
         railHeight,
         railLeft,
         sb,
       );
-      railTop = clipped.top;
-      railHeight = clipped.height;
+      const belowChrome = clampVerticalRailBelowOverlayChrome(
+        host,
+        rounded.top,
+        rounded.height,
+        railLeft,
+        sb,
+      );
+      railTop = belowChrome.top;
+      railHeight = belowChrome.height;
     }
 
     const thumbH = Math.max(

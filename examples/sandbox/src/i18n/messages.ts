@@ -390,6 +390,9 @@ const en = {
   "layoutChrome.listWellMaxHeightSm": "List well max height (sm)",
   "layoutChrome.listWellMaxHeightSmHint":
     "--fynns-layout-list-well-max-height-sm — denser in-Card list well (12rem). Only when the catalog can overflow.",
+  "layoutChrome.busyRegionBackdropBlur": "BusyRegion blur",
+  "layoutChrome.busyRegionBackdropBlurHint":
+    "--fynns-layout-busy-region-backdrop-blur — frosted overlay radius (transparent fill; well hue unchanged).",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -585,11 +588,11 @@ const en = {
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
-    "Section content stays mounted under a scrim overlay (`--fynns-color-overlay`) while BusyRegion is busy.",
+    "Section content stays mounted under a frosted blur overlay while BusyRegion is busy (well hue unchanged).",
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative scrim overlay (`--fynns-color-overlay`) + one progress chrome + visible copy (not a `surface-*` wash). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
+    "BusyRegion wraps a section: relative frosted blur overlay (`backdrop-filter` + transparent fill — well colors stay native) + one progress chrome + visible copy (not a `surface-*` wash or `--fynns-color-overlay` scrim). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -604,7 +607,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top). Ring centers in the visible pane under `--fynns-color-overlay` scrim. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top). Ring centers in the visible pane under frosted blur overlay. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
   "globals.busyRegionPaneLeadHint":
     "Sample section scope note — visible only after the pane has loaded.",
   "globals.busyRegionPaneLeadLabel": "Loading section",
@@ -630,7 +633,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.busyRegionFieldHelp":
-    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (scrim overlay keeps the body mounted and dims copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (frosted blur keeps the body mounted and blurs copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
   "globals.busyRegionFieldLabel": "Sample notice",
   "globals.busyRegionFieldRefreshTip": "Refresh sample",
   "globals.busyRegionFieldBusyLabel": "Refreshing sample",
@@ -788,6 +791,14 @@ const en = {
   "globals.fullscreenFlushFile": "notes.xml",
   "globals.fullscreenFlushHelp":
     "Flush-start: when the first FullscreenDialog body child is a keep-set bordered well (CodeBlock / Surface / table wrap), core drops padding-block-start so the well frame sits under the title — not an 18dp vacant band. Head chrome stays content-inset. One unpadded fill wrapper is allowed. Not Card chrome=\"plain\" flush. Authority: AGENTS.md Flush-start overlay body.",
+  "globals.drawerNestedScrollOpen": "Open drawer nested scroll",
+  "globals.drawerNestedScrollTitle": "Sample configuration",
+  "globals.drawerNestedScrollProvider": "Provider",
+  "globals.drawerNestedScrollRegion": "Region",
+  "globals.drawerNestedScrollDigest": "Digests",
+  "globals.drawerNestedScrollCard": "Mounted sample card",
+  "globals.drawerNestedScrollHelp":
+    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Live `#drawer-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -838,11 +849,24 @@ const en = {
   "globals.fieldHeaderReloadTip":
     "Reload the catalog from the endpoint. On failure, the previous cached list stays selected.",
   "globals.fieldHeaderNotesLabel": "Notes",
+  "globals.fieldHeaderMountedLabel": "Mounted preview card",
+  "globals.fieldHeaderMountedTip":
+    "Sample mount scope — long policy stays in the Tooltip, not FieldHint under the body.",
+  "globals.fieldHeaderMountedAria": "About the mounted preview card field",
+  "globals.fieldHeaderMountedActionTip": "Open sample mount editor",
+  "globals.fieldHeaderMountedBody": "Sample card body well.",
+  "globals.fieldHeaderEnvTokenLabel": "SAMPLE_TOKEN",
+  "globals.fieldHeaderEnvTokenTip":
+    "Sample API token — copy from the sample portal settings page.",
+  "globals.fieldHeaderEnvTokenAria": "About SAMPLE_TOKEN",
+  "globals.fieldHeaderEnvAppLabel": "APP_ID",
+  "globals.fieldHeaderEnvAppTip": "Application ID from the sample app registration.",
+  "globals.fieldHeaderEnvAppAria": "About APP_ID",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
   "globals.fieldHeaderSelectPlaceholder": "Choose an option",
   "globals.fieldHeaderActionTip": "Reset field",
   "globals.fieldHeaderHelp":
-    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → `FieldBlock` `actions` `InfoHint`; reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Input** reveal → `trailing`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Title text-start (hard):** ControlRow **label** glyphs flush-align with FieldHeader / FieldBlock **titles** (core ≥ **0.5.58**). Select **value** text stays inset inside the shell — do not pad ControlRow labels to chase it.",
+    "**Hint compression:** section scope → Card `actions` `InfoHint` (≤1); field policy → lone `FieldBlock` `actions` `InfoHint` **or** inline label + `InfoHint` beside the title (≥ **0.5.128** — `--fynns-space-xs` breath, same as ControlRow); reload behavior → refresh **Tooltip** — not Card-body `FieldHint` or multi-sentence `description`. **Editable env keys (hard):** label = key name; portal / format → **one** `InfoHint` `size=\"sm\"` in `FieldHeader` `actions` — **no** status `Chip` (`OK` / `Missing`). Required empty → `InfoHint` `tone=\"danger\"`; configured → default tone. Password reveal → **`Input` `trailing` `IconButton` `size=\"sm\"`** (core ≥ **0.5.131** affix cap). Live: `#sandbox-field-header-env-keys`. **Select + refresh** → `.fynns-control-cluster--end-align` (Select `fynns-control-cluster__grow` + sibling `IconButton` **`size=\"sm\"`** when label-row InfoHint is `sm`) — not `Select.trailing`. **Form trailing chrome column (hard):** label-row InfoHint + refresh + ControlRow probe InfoHints **and** lone `.fynns-table-meta` (`-`) share one trail box (`sm` when label-row InfoHint is `sm`) — end edges one vertical line; never thin meta under a 32/40dp disk. **Title text-start (hard):** ControlRow **label** glyphs flush-align with FieldHeader / FieldBlock **titles** (core ≥ **0.5.58**). Select **value** text stays inset inside the shell — do not pad ControlRow labels to chase it. Live: `#sandbox-field-header-inline-infohint`.",
   "globals.fieldHeaderPrefLabel": "Detail mode",
   "globals.fieldHeaderPrefTip": "Optional longer answers. Short tip only.",
   "globals.fieldHeaderPrefAria": "About detail mode",
@@ -890,6 +914,12 @@ const en = {
     "Ready. cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
     "fynns in-panel severity (not M3): soft tonal fill. Pad/gap/icon share Banner strip tokens. Icon tinted; body on-surface. Full-width like other strips; stack with `--fynns-layout-unit-stack-gap`. M3 maps: chrome Banner and Snackbar.",
+  "globals.inlineAlertRecoveryError": "Render failed — sample module could not load.",
+  "globals.inlineAlertRecoveryHint":
+    "Refresh the page. If it persists, confirm the dev server is running.",
+  "globals.inlineAlertRecoveryReload": "Reload",
+  "globals.inlineAlertRecoveryHelp":
+    "Error / render-failure recovery host: `.fynns-unit-stack` of `InlineAlert` + one-line `FieldHint` + **end-align** labeled `Button` — not a bare start-aligned CTA. Live `#sandbox-inline-alert-recovery`. Failure mode: CONSUMER_TREATY **orphan recovery CTA left-aligned**.",
   "globals.envCheckCardTitle": "Sample configuration",
   "globals.envCheckAlert":
     "Config file not found. Copy the sample file and fill in required keys.",
@@ -1012,12 +1042,10 @@ const en = {
   "globals.rhythmStatusHelp":
     "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`-` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
   "globals.rhythmServiceHelp":
-    "**Service / process control (hard):** `ControlRow` `label` = short runtime meta + **one** public `.fynns-control-cluster` of `Chip` `assist` + labeled `Button`s `sm` — **not** a private flex host at `control-cluster-gap` (4dp). Core ≥ **0.5.80** widens labeled-Button siblings to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Click Start / Stop to toggle the sample.",
+    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **Controls column** = one `.fynns-control-cluster` of labeled `Button`s `sm` only — **never** status in `__controls` (`Chip` reads as a sibling action pill). Core ≥ **0.5.80** labeled-Button **8dp** (`action-cluster-gap`). **At most one** `loading`. Click Start / Stop to toggle the sample.",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
-  "globals.rhythmServiceChipRunning": "Running",
-  "globals.rhythmServiceChipStopped": "Stopped",
   "globals.rhythmServiceStart": "Start",
   "globals.rhythmServiceStop": "Stop",
   "globals.rhythmServiceRestart": "Restart",
@@ -1409,6 +1437,14 @@ const en = {
   "globals.navDrawerBulkShowDemo": "Show bulk select (soft)",
   "globals.navDrawerBulkSoftHelp":
     "**Bulk select (soft, ≥ 0.5.65):** checked rows use leading `Checkbox` only — **do not** set `NavigationDrawerItem` `active` / `ListItem` `selected` from `checked`. One destination `active` pill is for the open detail host only; multi-select stays default row + checkbox. All-selected must not paint a `secondary-container` wall. Live: third column on this demo.",
+  "globals.navDrawerInspectorAria": "Sample inspector drawer with Card stack",
+  "globals.navDrawerInspectorCardTitle": "Request preview",
+  "globals.navDrawerInspectorCardHint": "Collapsed sections keep unit-stack rhythm.",
+  "globals.navDrawerInspectorCollapsibleA": "Chat request",
+  "globals.navDrawerInspectorCollapsibleB": "Sample request",
+  "globals.navDrawerInspectorCollapsibleBody": "Sample collapsed body.",
+  "globals.navDrawerInspectorCardHelp":
+    "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.125**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
   "globals.shellPageHintAria": "Page help",
   "globals.shellPageHint":
     "Sample destination help — put section copy on the TopAppBar InfoHint only; do not twin another section InfoHint in the mode drawer tools strip.",
@@ -2464,6 +2500,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.listWellMaxHeightSm": "列表井最大高度（sm）",
   "layoutChrome.listWellMaxHeightSmHint":
     "--fynns-layout-list-well-max-height-sm — 更密的 Card 内 List 井（12rem）。仅当目录确实会溢出时使用。",
+  "layoutChrome.busyRegionBackdropBlur": "BusyRegion 模糊",
+  "layoutChrome.busyRegionBackdropBlurHint":
+    "--fynns-layout-busy-region-backdrop-blur — 毛玻璃遮罩半径（透明底；井色不变）。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -2657,11 +2696,11 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
   "globals.busyRegionBody":
-    "BusyRegion 为 busy 时，区块内容仍挂载在 `--fynns-color-overlay` 遮罩下方。",
+    "BusyRegion 为 busy 时，区块内容仍挂载在毛玻璃模糊遮罩下方（井色不变）。",
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位 scrim 遮罩（`--fynns-color-overlay`）+ 一个进度件 + 可见文案（禁止 `surface-*` 洗底）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
+    "BusyRegion 包裹区块：相对定位毛玻璃模糊遮罩（`backdrop-filter` + 透明底 — 井色保持原样）+ 一个进度件 + 可见文案（禁止 `surface-*` 洗底或 `--fynns-color-overlay` 压暗）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
@@ -2676,7 +2715,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶）。圈在可见主栏 `--fynns-color-overlay` 遮罩下居中。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶）。圈在可见主栏毛玻璃模糊遮罩下居中。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
   "globals.busyRegionPaneLeadHint":
     "示例栏目说明 — 仅在主栏数据就绪后显示。",
   "globals.busyRegionPaneLeadLabel": "加载栏目",
@@ -2702,7 +2741,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
   "globals.busyRegionFieldHelp":
-    "FieldBlock 正文等待 + 标签行刷新：用 BusyRegion **包住**正文 — busy 时头栏 IconButton 保持字形、仅 `disabled`、**不** 画 `loading`（scrim 遮罩下正文仍挂载并压暗，避免 busy 文案与 mono 预览叠字）。禁止同一宿主叠 BusyRegion 圈与 chrome `loading` 第二圈（信息冗余）。无 BusyRegion 的单控件等待仍可用 IconButton `loading`。下方活样例为 `CodeBlock` 刷新。",
+    "FieldBlock 正文等待 + 标签行刷新：用 BusyRegion **包住**正文 — busy 时头栏 IconButton 保持字形、仅 `disabled`、**不** 画 `loading`（毛玻璃模糊下正文仍挂载，背后文案模糊，避免 busy 文案与 mono 预览叠字）。禁止同一宿主叠 BusyRegion 圈与 chrome `loading` 第二圈（信息冗余）。无 BusyRegion 的单控件等待仍可用 IconButton `loading`。下方活样例为 `CodeBlock` 刷新。",
   "globals.busyRegionFieldLabel": "样例启事",
   "globals.busyRegionFieldRefreshTip": "刷新样例",
   "globals.busyRegionFieldBusyLabel": "正在刷新样例",
@@ -2860,6 +2899,14 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenFlushFile": "notes.xml",
   "globals.fullscreenFlushHelp":
     "Flush-start：FullscreenDialog 正文第一个子项是 keep-set 带边框井（CodeBlock / Surface / 表包装）时，core 去掉 padding-block-start，井框贴在标题下——不要 18dp 空带。标题 chrome 仍 content-inset。允许一层无垫 fill 宿主。不是 Card chrome=\"plain\" 贴边。权威：AGENTS.md Flush-start overlay body。",
+  "globals.drawerNestedScrollOpen": "打开抽屉嵌套滚动",
+  "globals.drawerNestedScrollTitle": "示例配置",
+  "globals.drawerNestedScrollProvider": "提供商",
+  "globals.drawerNestedScrollRegion": "区域",
+  "globals.drawerNestedScrollDigest": "摘要",
+  "globals.drawerNestedScrollCard": "已挂载示例卡片",
+  "globals.drawerNestedScrollHelp":
+    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。活样例 `#drawer-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
@@ -2910,11 +2957,22 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldHeaderReloadTip":
     "从端点重载目录。失败时仍保留上次缓存列表与当前选择。",
   "globals.fieldHeaderNotesLabel": "备注",
+  "globals.fieldHeaderMountedLabel": "已挂载预览卡",
+  "globals.fieldHeaderMountedTip": "示例挂载范围 — 长策略放在 Tooltip，不要堆在正文 FieldHint。",
+  "globals.fieldHeaderMountedAria": "关于已挂载预览卡字段",
+  "globals.fieldHeaderMountedActionTip": "打开示例挂载编辑器",
+  "globals.fieldHeaderMountedBody": "示例卡片正文井。",
+  "globals.fieldHeaderEnvTokenLabel": "SAMPLE_TOKEN",
+  "globals.fieldHeaderEnvTokenTip": "示例 API 令牌 — 从示例门户设置页复制。",
+  "globals.fieldHeaderEnvTokenAria": "关于 SAMPLE_TOKEN",
+  "globals.fieldHeaderEnvAppLabel": "APP_ID",
+  "globals.fieldHeaderEnvAppTip": "示例应用注册中的应用 ID。",
+  "globals.fieldHeaderEnvAppAria": "关于 APP_ID",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
   "globals.fieldHeaderSelectPlaceholder": "选择一项",
   "globals.fieldHeaderActionTip": "重置字段",
   "globals.fieldHeaderHelp":
-    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → `FieldBlock` `actions` `InfoHint`；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**Input** reveal 用 `trailing`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton` **`size=\"sm\"`**，当标签行 InfoHint 为 `sm`）— 不要用 `Select.trailing`。**表单尾部 chrome 列（强制）：** 标签行「i」+ 刷新 + ControlRow 探测「i」**以及** lone `.fynns-table-meta`（`-`）共用同一 trail 盒（标签「i」为 `sm` 时整列 `sm`）— 贴尾共一条竖线；禁止细 meta 贴在 32/40dp 盘下。**标题文字起点（强制）：** ControlRow **标签字形**与 FieldHeader / FieldBlock **标题**左齐（core ≥ **0.5.58**）。Select **值文字**仍在外壳内 inset — 勿再内缩 ControlRow 标签去追值文字。",
+    "**提示压缩：** 分区说明 → Card `actions` `InfoHint`（≤1）；字段策略 → **唯一** `FieldBlock` `actions` `InfoHint` **或** 标题旁 inline `InfoHint`（≥ **0.5.128**）；重载行为 → 刷新 **Tooltip** — 不要用 Card-body `FieldHint` 或多句 `description`。**可编辑 env 键（硬）：** 标签 = 键名；门户/格式 → **`FieldHeader` `actions` 内唯一 `InfoHint` `size=\"sm\"`** — **禁止**状态 `Chip`（`已配置`/`缺失`）。必填未填 → `InfoHint` `tone=\"danger\"`；已填/可选留空 → 默认 tone。密码 reveal → **`Input` `trailing` `IconButton` `size=\"sm\"`**（≥ **0.5.131** affix 32dp）。Live `#sandbox-field-header-env-keys`。**Select + 刷新** 用 `.fynns-control-cluster--end-align`（Select `fynns-control-cluster__grow` + 兄弟 `IconButton` **`size=\"sm\"`**，当标签行 InfoHint 为 `sm`）— 不要用 `Select.trailing`。**表单尾部 chrome 列（强制）：** 标签行「i」+ 刷新 + ControlRow 探测「i」**以及** lone `.fynns-table-meta`（`-`）共用同一 trail 盒（标签「i」为 `sm` 时整列 `sm`）— 贴尾共一条竖线；禁止细 meta 贴在 32/40dp 盘下。**标题文字起点（强制）：** ControlRow **标签字形**与 FieldHeader / FieldBlock **标题**左齐（core ≥ **0.5.58**）。Select **值文字**仍在外壳内 inset — 勿再内缩 ControlRow 标签去追值文字。Live `#sandbox-field-header-inline-infohint`。",
   "globals.fieldHeaderPrefLabel": "详细模式",
   "globals.fieldHeaderPrefTip": "可选更长回答。仅短提示。",
   "globals.fieldHeaderPrefAria": "关于详细模式",
@@ -2962,6 +3020,11 @@ const zh: Record<MessageKey, string> = {
     "就绪。cwd: D:\\fynns_local_ws\\fynns_bachelor_thesis\\VirtualSampling\\Raycaster\\VS",
   "globals.inlineAlertHelp":
     "fynns 面板内严重度（非 M3）：轻底色。内边距/间距/图标与 Banner 条状共用 `--fynns-banner-*`。图标染色，正文 on-surface。全宽与其他条状一致；纵向用 `--fynns-layout-unit-stack-gap`。M3 对位：chrome Banner 与 Snackbar。",
+  "globals.inlineAlertRecoveryError": "渲染失败 — 示例模块未能加载。",
+  "globals.inlineAlertRecoveryHint": "请刷新页面。若仍失败，请确认开发服务器已启动。",
+  "globals.inlineAlertRecoveryReload": "重新加载",
+  "globals.inlineAlertRecoveryHelp":
+    "错误 / 渲染失败恢复宿主：`InlineAlert` + 一行 `FieldHint` + **end-align** 带文案 `Button` 的 `.fynns-unit-stack` — 禁止裸放左对齐 CTA。Live `#sandbox-inline-alert-recovery`。失败模式：CONSUMER_TREATY **orphan recovery CTA left-aligned**。",
   "globals.envCheckCardTitle": "示例配置",
   "globals.envCheckAlert": "未找到配置文件。请复制示例文件并填写必填项。",
   "globals.envCheckListAria": "必填项",
@@ -3083,12 +3146,10 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusHelp":
     "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`-`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
   "globals.rhythmServiceHelp":
-    "**服务 / 进程控制（硬）：** `ControlRow` `label` = 短运行态 + **一条** public `.fynns-control-cluster` 包 `Chip` `assist` + `Button` `sm` — **禁止**私有 flex 仅 `control-cluster-gap`（4dp）。Core ≥ **0.5.80** 把带文案 Button 间距拉到 **8dp**（`action-cluster-gap`）。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。**控件列** cluster 仅 labeled `Button` `sm` — **禁止**在 cluster 放状态 `Chip`（assist 与 Button 同 pill，像第四颗动作）。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",
-  "globals.rhythmServiceChipRunning": "运行中",
-  "globals.rhythmServiceChipStopped": "已停止",
   "globals.rhythmServiceStart": "启动",
   "globals.rhythmServiceStop": "停止",
   "globals.rhythmServiceRestart": "重启",
@@ -3479,6 +3540,14 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerBulkShowDemo": "显示批量选择（柔和）",
   "globals.navDrawerBulkSoftHelp":
     "**批量选择（柔和，≥ 0.5.65）：** 勾选行仅用 leading `Checkbox` 表态 — **禁止**用 `checked` 驱动 `NavigationDrawerItem` `active` / `ListItem` `selected`。单个 `active` 胶囊只给当前打开的目的地；多选保持默认行底 + 复选框。全选不得刷成 `secondary-container` 一片。对照本页第三列。",
+  "globals.navDrawerInspectorAria": "示例检查器侧栏（Card 堆叠）",
+  "globals.navDrawerInspectorCardTitle": "请求预览",
+  "globals.navDrawerInspectorCardHint": "折叠区块保持 unit-stack 节奏。",
+  "globals.navDrawerInspectorCollapsibleA": "Chat 请求",
+  "globals.navDrawerInspectorCollapsibleB": "示例请求",
+  "globals.navDrawerInspectorCollapsibleBody": "示例折叠正文。",
+  "globals.navDrawerInspectorCardHelp":
+    "Drawer body 内 Card + `.fynns-unit-stack` 堆叠 Collapsible（≥ **0.5.125**）：嵌套 unit-stack 保持 `--fynns-layout-unit-stack-gap`（**16dp**）— core **仅**把直接子级 `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射为 `section-gap`（4dp），避免误包目的地列表。样例：`#sandbox-navdrawer-card-collapsible-stack`（第四列）。",
   "globals.shellPageHintAria": "页面说明",
   "globals.shellPageHint":
     "示例目的地说明 — 分区帮助只放在 TopAppBar 的 InfoHint；不要在模式侧栏工具条再放一个分区 InfoHint。",

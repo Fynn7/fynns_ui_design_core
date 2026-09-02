@@ -58,7 +58,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    form/inspector rows pass `label` (plain text trigger,
    `cursor: help`, no underline / trailing icon). Not an action `IconButton`.
    **Field header actions:** **M3 in-field icons** (reveal password, refresh
-   list, clear) belong in `Input` **`trailing`** inside the field shell. **Select
+   list, clear) belong in `Input` **`trailing`** inside the field shell —
+   always **`IconButton` `size="sm"`** (32dp in the 40dp shell; core ≥
+   **0.5.131** caps affix disks even when `size` is omitted). **Select
    + chevron** also ships a dropdown indicator — do **not** stack refresh / list
    reload on `Select.trailing` (icons fight for one slot). Use **`FieldBlock` +
    `.fynns-control-cluster--end-align`**: Select with
@@ -108,7 +110,12 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `scrollTop=0` while the dialog body scrolls (phantom jump). **Modal
    `.fynns-dialog-body`:** suppress thumb until panel enter transition settles
    (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine pointer reveal on **host hover only** — not
-   `:focus-within` from the focus trap. On fine pointer + hover
+   `:focus-within` from the focus trap. **Nested scroll in Drawer / FullscreenDialog**
+   (outer `.fynns-dialog-body` + inner CodeBlock / List): Y rails clamp below
+   overlay chrome heads — `.fynns-top-app-bar`, `.fynns-dialog-head`, Card /
+   Collapsible heads, nav drawer headlines (≥ **0.5.134**) so portal thumbs
+   never paint over higher titles when an outer scrollport moves; live
+   `#drawer-nested-scroll` + Layouts `#layouts-demo-shell`. On fine pointer + hover
    (`(hover: hover) and (pointer: fine)`), overlay thumbs are **idle-transparent**
    and reveal on host `:hover` or `:focus-within` with a soft fade
    (`--fynns-duration-scrollbar` + `--fynns-ease-out`). Touch / coarse
@@ -124,8 +131,9 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    reserve *block* gutters that clip the first/last pill radii.
 5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
-   blocking) / `BusyRegion` (sectional scrim overlay `--fynns-color-overlay` + **one**
-   progress chrome + message — sectional scrim dims mounted copy; never a
+   blocking) / `BusyRegion` (sectional **frosted blur** overlay + **one**
+   progress chrome + message — frosted blur masks mounted copy (well hue
+   unchanged; never a dark overlay scrim); never a
    second `surface-*` wash; **pane cold-start uses `fill`**, never
    `EmptyState` + a ring, never a ring stacked on a bar), `EmptyState`
    (**zero-result
@@ -161,7 +169,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
-   `BusyRegion` (relative scrim overlay `--fynns-color-overlay` over children; content is
+   `BusyRegion` (relative **frosted blur** overlay over children — transparent
+   fill, well hue unchanged; content is
    `inert` while busy — no surface tint; full-viewport tint → `BusyScrim`);
    for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
    paint → then work) so the ring can start before the main thread blocks;
@@ -368,6 +377,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   that control shows `loading`; siblings stay `disabled` with no spinner.
   Live: `#rhythm` end-align. Failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
   **twin Button loading rings**.
+- **DON'T** put **runtime / service status** in `ControlRow` **`__controls`**
+  (`.fynns-control-cluster`) — **not** a `Chip`, badge, or muted span beside
+  Start / Stop / Restart. **`Chip` `assist` reads as a sibling `Button` `sm`**
+  (32dp pill) — wrong column **and** information redundancy. Status lives on
+  **`ControlRow` `label` only** (`PID …` when running; `Not running` / `未运行`
+  when stopped). The controls cluster is **labeled `Button`s only**. Live:
+  `#rhythm` service control. Failure mode:
+  [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **service control status
+  Chip + label**.
 - **DON'T** invent private `*-control-cluster` / `hub-spread` flex hosts with
   `gap: var(--fynns-layout-control-cluster-gap)` (**4dp**) beside **labeled**
   `Button`s — pills read kissed (~4dp). Use public
@@ -500,7 +518,15 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
   `size="sm"`** on the **field label row** (`FieldBlock` `actions`) or
   **Card** `actions` (≤1 per head) for field- or section-level policy.
   Reserve **`FieldHint` / `description`** for **one short line** (format,
-  validation, empty-state). Live: `#field-header`.
+  validation, empty-state). **Env / config key editors:** portal / where-to-copy
+  policy → **`InfoHint` on the label row** — never a second `FieldHint` under
+  the `Input`. **Missing required keys:** `InfoHint` `tone="danger"` only — **no**
+  status `Chip` (`已配置` / `Missing`). **In-field trailing** (password reveal):
+  **`IconButton` `size="sm"`** only — not default md in the 40dp shell. Live:
+  `#sandbox-field-header-env-keys`.
+  Failure mode: [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) **env key
+  FieldHint under input** / **env key status Chip** / **Input trailing md
+  IconButton**.
 - **DON'T** put **Settings** both as a root `NavigationDrawerItem` **and** as
   the footer gear — Cursor-style entry is **`navFooter` only**. **DON'T** park
   feature / runtime / domain panels (providers, tools, catalogs, generation
@@ -819,8 +845,9 @@ classes.
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size?, indicator? }` /
   **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill?, indicator? }`
   (M3-style fullscreen non-dismissible scrim via **BusyScrim**, or sectional
-  **scrim overlay** (`--fynns-color-overlay`) + **one** progress chrome + visible message —
-  dims mounted copy under `--fynns-color-overlay`; do **not** wash with `surface-*` /
+  **frosted blur overlay** (`backdrop-filter` + transparent fill — well colors
+  unchanged) + **one** progress chrome + visible message — do **not** tint with
+  `--fynns-color-overlay` or `surface-*` /
   private colored loading shells; `indicator` `"circular"` (default) |
   `"linear"` — known % / counts → `linear`, unknown wait → `circular`; never
   stack a ring on a bar; `message` is phrasing copy only — never nest
@@ -835,9 +862,9 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
-  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay uses **`--fynns-color-overlay`** scrim; **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / `surface-*` colored wash |
-  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (scrim overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
-  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; scrim overlay dims mounted copy so busy message does not stack on legible text | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay; transparent / no-scrim overlay so mono preview bleeds through busy copy |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay uses **frosted blur** (transparent — well hue unchanged); **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / `surface-*` colored wash |
+  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (blur overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
+  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; frosted blur overlay so busy message does not stack on legible mono / catalog text while the well keeps its native color | Unmount the section and swap in EmptyState; second `surface-*` tint or `--fynns-color-overlay` scrim under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay; transparent / no-blur overlay so mono preview bleeds through busy copy |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only; chrome width is **host-relative** (`min(20rem, 100%)` — never viewport/`100vw`) so NavigationDrawer / EndAside do not spill | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message`; private `width: 20rem` / `100vw` on the busy chrome |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = inline **`Spinner`** (Button / IconButton `loading` — sm footprint) | Two progress chromes in one overlay |
   | Button / icon / field busy | Inline **`Spinner`** via Button / IconButton `loading` (sm footprint; not a standalone `CircularProgress` in the slot) | Page-level / Dialog-body / Card-body layout |
@@ -1214,7 +1241,10 @@ classes.
   Headline = static section label; Group = collapsible Cursor-style folder row
   with optional leading `icon` any ReactNode + indented items; sibling Item /
   Group / Headline / Divider gap = `--fynns-navdrawer-section-gap` — do **not**
-  wrap destinations in `.fynns-unit-stack`; SearchBar / tools /
+  wrap destinations in `.fynns-unit-stack` (core remaps **only**
+  `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` — ≥ **0.5.125**;
+  nested Card / Collapsible `.fynns-unit-stack` keeps **16dp** `unit-stack-gap`);
+  SearchBar / tools /
   SyncSideFilter `ToggleGroup` / `--toolbar-end` host as body siblings use
   `--fynns-navdrawer-search-gap` (aliases layout `control-stack-gap` / 8dp)
   between chrome peers and before destinations — never Item `section-gap`
@@ -1600,6 +1630,7 @@ classes.
   | Table cell: mapping kind / status + optional id + trailing action | `.fynns-table-meta` (muted caption) + optional mono id in `.fynns-control-cluster--end-align`; cluster **centers on the row band** (≥ **0.5.79** — not flex-start top hug); if the middle is missing, insert `.fynns-control-cluster__grow` so the action shares one trailing edge across rows. Live: sandbox `#table` | `Chip` (`suggestion` / `filter`) as a status pill in the cell; unmapped rows leaving the action flush-start; **meta / mono id pinned to the top** of a tall cell |
   | Form / preference options | `FieldStack` (+ `Divider` on kind jumps) inside `Card` / Dialog — `#form-recipe` | Flat Card-per-field; fat Surface list of FieldBlocks |
   | Settings Card scope / field policy copy | **Compress:** Card `actions` **`InfoHint`** (≤1) for section scope; **`FieldBlock` `actions` `InfoHint`** for field policy; **Tooltip** on row **IconButton** for reload/cache behavior. **`FieldHint` / `description`** = one short line only (validation / format / empty). Live: `#field-header` | Card-body `<FieldHint>` essay before `FieldStack`; multi-sentence `FieldBlock` `description`; duplicate same copy in hint + tooltip |
+  | Editable env / config key `FieldBlock` (`.env` / secrets editor) | Label = **key name only**. Portal / format → lone **`InfoHint` `size="sm"`** in **`FieldHeader` `actions`** — **no** status `Chip` (`OK` / `Missing` / `已配置` / `缺失` = information redundancy). **Required key empty:** `InfoHint` `tone="danger"`; **configured / optional empty:** default tone. Control = `Input` only; password reveal → **`Input` `trailing`** **`IconButton` `size="sm"`** (core ≥ **0.5.131** affix cap); **`FieldHint` only** for save/validation error one-liner. Live: `#sandbox-field-header-env-keys` | `Chip` beside `InfoHint`; `FieldHint` under `Input` for portal copy; **md** 40dp reveal in field shell |
   | Select + reload / refresh beside dropdown | `FieldBlock` + `.fynns-control-cluster--end-align` + Select `className="fynns-control-cluster__grow"` + `IconButton` **`size="sm"`** when the field label row has `InfoHint` `size="sm"` (same Card trailing icon column — hover-disk **end edges** share one vertical line with FieldHeader actions and ControlRow probe InfoHints; do **not** leave refresh at default `md` 40dp). **Form title text-start (hard):** when the same Card / Dialog mixes `FieldBlock` / Select / Input with preference or probe `ControlRow`s, `ControlRow` **label** glyphs share one flush start edge with `FieldHeader` / FieldBlock **titles** (core ≥ **0.5.58** — reverses 0.4.138 ControlRow inset). Select / Input **value** text stays inset inside the shell; do **not** pad ControlRow labels to chase value ink. Reload/policy copy in **Tooltip** (action) + optional **`InfoHint` on label row** — not `FieldBlock` `description`; `#field-header` | `Select.trailing` beside chevron; **ControlRow label inset vs FieldHeader** (0.4.138 residue); `FieldBlock` label-row refresh; private `align-self`; Card-body / `FieldBlock` **FieldHint** essays for session or reload policy; **sm InfoHint + md refresh** in one Card (disks jump left/right) |
   | **Repeatable multiline rows** (bullet / highlight list in Dialog — Textarea + remove per row) | **`FieldBlock` + `FieldStack`**; each row = **one** `.fynns-control-cluster.fynns-control-cluster--end-align` with `Textarea` `className="fynns-control-cluster__grow"` + trailing `Tooltip` → `IconButton` (delete **vertically centered** on the autoGrow well — core ≥ **0.5.30**; Select + refresh stays trigger-band `flex-start`). **Add row** → `FieldBlock` `actions` on the label row (`Tooltip` → ghost `IconButton` `sm` — not a body-foot end-align strip). Default `.fynns-control-cluster` is `flex-wrap: wrap` — tall autoGrow Textarea **wraps** the IconButton to the next line without `--end-align`. Live: `#form-recipe` Highlights | Bare `.fynns-control-cluster` (remove parks under the well); delete top-pinned on multi-line wells; add `Button` parked below the stack; ListItem / `--with-end` hover chrome for static catalog rows; private margin to fake inline delete |
   | **Multi-Card workflow in Dialog** (`size="lg"` inspector / multi-step) | Several `Card` / `Divider` / `InlineAlert` **siblings** in one `.fynns-dialog-body` — core ≥ **0.5.32** keeps direct children `flex-shrink: 0` so the **body scrolls** instead of crushing Cards to head height (`overflow: hidden` clip). Optional single `.fynns-unit-stack` wrapper is also OK. Live: `#form-recipe` **Open Dialog Card stack** | Cards ~49–69dp tall with body clipped; only title visible; private Card `min-height` / dialog-body flex hacks; mistaking it for one Card “overflow” while earlier Cards are squashed |
@@ -1611,7 +1642,8 @@ classes.
   | **Narrow EndAside / inspector Card action row** (generate + save + multi-format export) | `ControlRow` **`label=""`** when **`Card` `title`** names the section — full-width controls band; **one** primary labeled `Button`; save / export → **`IconButton` + `Tooltip`** and **`DropdownMenu` `iconOnly`** — **`ghost` `sm`** (omit `variant`). Export menu trigger → **`UploadIcon`** (not `DownloadIcon`). Live: Layouts `#layouts-demo-shell` aside Card | Visible `ControlRow` label crushed; **tonal** disks; **`DownloadIcon` on Export** |
   | **Chrome locale switch** (English ↔ 中文 UI chrome) | Settings body (`navFooter` gear): `FieldBlock` + compact **`ToggleGroup`** (`showCheck={false}`; `English` / `中文`) — sandbox `LanguageSwitcher`. Live: `#layouts-demo-shell` Settings + Templates | TopAppBar `trailing` language control (`ToggleGroup` **or** `Select` / chevron); inventing a core LanguageSwitcher primitive |
   | **Action footer / end-aligned button strip** (no visible name — Import / Export / rebuild / apply) | One `.fynns-control-cluster.fynns-control-cluster--end-align` (`justify-content: flex-end` — IconButton strips need no `__grow`; add `__grow` only for a leading Select / meta filler). **Labeled Button** feet use `--fynns-layout-action-cluster-gap` (**8dp**, ≥ **0.5.52**) — same as `.fynns-dialog-foot`; IconButton / Select+refresh clusters keep `control-cluster-gap` (**4dp**). **Dialog body** foot (several labeled Buttons): same cluster as last body child — core ≥ 0.4.111 wraps inside the clipped scroll host so the first action is never clipped. **LTR button order (hard):** **Cancel / dismiss first** (leftmost in the end-aligned cluster) → optional secondary → optional **destructive** → **primary / confirm last** (rightmost). Same as `ConfirmDialog` (ghost Cancel then confirm). Never put Delete leftmost when Cancel is present (`Delete | Cancel | Save`). `Tooltip` → `IconButton` trailing strips use the same host (core ≥ 0.4.93 keeps 40dp circles). **Busy (hard):** at most **one** `Button`/`IconButton` `loading` in the cluster; siblings `disabled` without a spinner — never bind the same `busy` to every `loading`. Live: `#timeline` edit Dialog foot; `#form-recipe` Dialog multi-action foot; `#rhythm` end-align | `ControlRow` with empty `label=""` (fake label column + mid-left island); private `hub-spread` / `space-between`; `--end-align` without expecting trailing dock (core ≥ 0.4.90 pins flex-end); private width hacks on `.fynns-btn--icon`; Dialog body `overflow-x: visible` hacks; **twin loading rings** on Probe + Start / Copy + Import; **Delete leftmost** ahead of Cancel; **4dp pill-on-pill** labeled Button feet (use core `action-cluster-gap`, not `control-cluster-gap`) |
-| **Service / process control row** (status Chip + Start / Stop / Restart labeled Buttons in Card `ControlRow`) | `ControlRow` `label` = short runtime meta (PID / `Not running`) + **one** `.fynns-control-cluster` of `Chip` `assist` + labeled `Button`s `sm` — **not** a private cluster at 4dp. Core ≥ **0.5.80** widens labeled-Button gaps to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Live: `#rhythm` service control | Private `*-control-cluster` / bare flex with `control-cluster-gap` only (~4dp kissed pills); inventing `margin` on `.fynns-btn` instead of the public cluster class |
+  | **Error / render-failure recovery** (ErrorBoundary / chunk load fail — `InlineAlert` + short hint + single reload CTA) | `.fynns-unit-stack` of `InlineAlert` + one-line `FieldHint` (or short muted copy) + `.fynns-control-cluster--end-align` with one labeled `Button` / `tonal` reload — **no** visible section name, so CTA docks trailing like other action footers. Live: `#sandbox-inline-alert-recovery` | Bare `Button` sibling start-aligned under the alert; empty-label `ControlRow`; centered lone pill when end-align is the system recipe |
+| **Service / process control row** (Start / Stop / Restart labeled Buttons in Card `ControlRow`) | `ControlRow` `label` = **one** short status string only — **running:** `PID 40812`; **stopped / idle:** `Not running` / `未运行`. **Controls column** = one `.fynns-control-cluster` of labeled `Button`s `sm` **only** — **never** park status in `__controls` (`Chip` / meta / badge beside actions — `Chip` `assist` masquerades as a sibling Button pill). Core ≥ **0.5.80** widens labeled-Button gaps to **8dp** (`action-cluster-gap`). **At most one** `loading` in the cluster. Live: `#rhythm` service control | Private `*-control-cluster` at 4dp only; `margin` hacks on `.fynns-btn`; **status Chip/meta in button cluster**; **label + Chip both naming status** |
 | **Mode drawer tools** (sort menu + primary new — no SearchBar above destinations) | One `.fynns-control-cluster.fynns-control-cluster--toolbar-end` (nowrap, trailing hug). LTR: secondary ghost tools first (sort / refresh / bulk **`ListChecksIcon`**) → **primary New/Plus `IconButton` last (rightmost)** — same primary-end rule as Dialog feet (≥ **0.5.60**). Bulk enter / multi-select → **`ListChecksIcon`** — **never** `ClipboardIcon` (copy/paste). **Section / destination help (hard ≥ 0.5.63):** at most **one** page-scope `InfoHint` in **TopAppBar `trailing`** — do **not** also park a section `InfoHint` in `--toolbar-end` (twin “i” = information redundancy). Field-level `InfoHint` on a preference `ControlRow` (hide-builtin) stays OK. Sort trigger **not** `ChevronDown`. Live: Layouts `#layouts-demo-shell` (TopAppBar InfoHint) + `#layouts-demo-navigation-drawer` mode sample | Full-width default cluster start-packed above first `NavigationDrawerItem` (reads as stray group chevron / overlap); chevron sort icon beside `NavigationDrawerGroup` expanders; **primary Plus parked mid-strip** (bulk after New); **Clipboard for「批量选择」**; **TopAppBar「页面说明」+ drawer「…说明」 twin InfoHints** |
 | **Bulk-select drawer / list rows** (multi-check catalog in mode sidebar or List) | **`Checkbox`** in `NavigationDrawerItem` `icon` or `ListItem` `leading`; **`checked` must not drive `active` / `selected`** (≥ **0.5.65**) — one open destination may keep a single `active` pill; all-selected stays default row + checkbox only (no `secondary-container` wall). Live: Layouts `#layouts-demo-navigation-drawer` third column | `active={checked}` / `selected={checked}` on every row; all-select paints a teal pill stack; using `active`/`selected` as the multi-select signal |
 | **Mode drawer preference** (hide built-in / long policy toggle in ~224px tools column) | One **`ControlRow`** + **`InfoHint` `size="sm"`** + track-only **`Switch`** (`label=""` + `ariaLabel`) — paragraph in Tooltip, **not** `ControlBlock` `description`. Live: same Layouts sample + Globals `#info-hint` | `ControlBlock` + multi-sentence `description` (~102dp tall stack above destination list) |

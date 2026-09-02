@@ -41,6 +41,11 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **DropdownMenu bare btn in IconButton strip** /
 **sparse dashboard shortcut List** /
 **NavigationDrawer destination gap ≠ unit-stack** /
+**NavigationDrawer Card Collapsible stack kissed** /
+**FieldHeader inline InfoHint kissed** /
+**env key FieldHint under input** /
+**env key status Chip** /
+**Input trailing md IconButton in field shell** /
 **settings gear in TopAppBar / destination list (use navFooter)** /
 **BusyRegion fill / loading placement** / **BusyRegion fill nested in unit-stack / Card** /
 **section FieldHint + pane cold-start BusyRegion in one well** /
@@ -49,6 +54,7 @@ consume / Dialog row recipe / **CodeBlock `label` ≠ `language`** /
 **BusyRegion cold body + pager chrome siblings** /
 **BusyRegion empty cold-start overlaps SearchBar** /
 **BusyRegion linear overflows NavigationDrawer** /
+**overlay scrollbar paints through chrome heads** /
 **page-scroll host flush with Card** /
 **empty ControlRow label as action footer** /
 **twin Button loading rings in one control-cluster** /
@@ -666,6 +672,133 @@ consumer `margin` under `.hub-mode-nav-tools` / SearchBar to retune.
 **direct** body sibling (or a single tools host that contains it). Tools
 column internal gap should stay `--fynns-layout-control-stack-gap` so it
 stays in lockstep with `search-gap`.
+
+## Failure mode this treaty targets: NavigationDrawer Card Collapsible stack kissed
+
+Symptoms: inside a **NavigationDrawer** body, a **Card** that stacks two or more
+**collapsed** `Collapsible` shells (e.g. request preview sections) reads almost
+flush — DevTools ~**4–5px** between `.fynns-collapsible-head` rows instead of
+**16dp** `unit-stack-gap`.
+
+**Cause:** pre-**0.5.123** core remapped **every** `.fynns-nav-drawer-body
+.fynns-unit-stack` to `--fynns-navdrawer-section-gap` (**4dp**) — including
+nested Card / Collapsible body stacks that should keep form/unit rhythm.
+
+**Fix in core (≥ 0.5.125):** remap applies to **direct** body children only —
+`.fynns-nav-drawer-body > .fynns-unit-stack`. Nested `.fynns-card-body` /
+`.fynns-collapsible-body` `.fynns-unit-stack` keeps `unit-stack-gap` (**16dp**).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.125**; keep the
+Card + `unit-stack` + Collapsible tree — **no** private margin hacks on
+`.fynns-collapsible`. Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+Live: Layouts `#layouts-demo-navigation-drawer` fourth column
+`#sandbox-navdrawer-card-collapsible-stack`. Authority: [`AGENTS.md`](../AGENTS.md)
+NavigationDrawer + Content density **Titled section shell**.
+
+## Failure mode this treaty targets: FieldHeader inline InfoHint kissed
+
+Symptoms: `FieldBlock` `label` carries a title + trailing `InfoHint` `size="sm"`
+(policy in Tooltip) while `actions` hosts refresh / open IconButtons — the “i”
+disk kisses the last label glyph (DevTools ~**0px** between
+`.fynns-control-row__label-text` end and `.fynns-info-hint-trigger` start).
+
+**Cause:** consumers copied the **ControlRow** label + InfoHint recipe into
+`FieldBlock` `label`, but core only painted `inline-flex` + gap on
+`.fynns-control-row__label:has(.fynns-info-hint-trigger)` — not on
+`.fynns-field-header__label`.
+
+**Fix in core (≥ 0.5.128):** mirror ControlRow breath on FieldHeader —
+`.fynns-field-header__label:has(.fynns-info-hint-trigger)` → `inline-flex` +
+`gap: var(--fynns-space-xs)` (**4dp**); Tooltip hug rules on the field header
+row so the icon disk does not stretch.
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.128**; keep
+label + inline `InfoHint` **or** move policy-only help to `FieldBlock`
+`actions` when no other trailing IconButtons compete for the label row.
+Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). Live:
+`#sandbox-field-header-inline-infohint`; consumer LLM drawer mounted-card
+field. Authority: [`AGENTS.md`](../AGENTS.md) `#field-header`.
+
+## Failure mode this treaty targets: env key FieldHint under input (hint split)
+
+Symptoms (editable `.env` / secrets Card — `FieldBlock` per key):
+
+- Label row shows the key name (`DISCORD_TOKEN`, …) **and** a status `Chip`
+- A **`FieldHint`** line under the `Input` repeats portal / format policy
+  (`Bot Token…`, `Application ID`, …) that should live in a label-row
+  **`InfoHint`** Tooltip only
+- Reads as **split information** — extra vertical band under every field
+
+**Cause:** treating `FieldHint` as the default help surface for env keys
+instead of **`FieldBlock` `actions` `InfoHint` `size="sm"`**.
+
+**Consumer fix (props only):**
+
+1. **Delete** policy `FieldHint` siblings under the `Input`.
+2. Move portal / where-to-copy copy → **lone** **`InfoHint` `size="sm"`** in
+   `FieldHeader` `actions` — see **env key status Chip** below (no `Chip`).
+3. Keep **`FieldHint` / `errorText`** only for validation or save errors
+   (one short line).
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** editable env key FieldBlock.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: env key status Chip (information redundancy)
+
+Symptoms (editable `.env` / secrets `FieldBlock` per key):
+
+- Label row stacks **`InfoHint` + status `Chip`** (`OK` / `Missing`, `已配置` /
+  `缺失`) for the same field
+- Reads as **information redundancy** — configured vs missing is already visible
+  from the input value **and** should not duplicate as a second chrome pill
+
+**Cause:** copying readonly env **List** trailing meta (`OK` / `Missing`) onto
+editable **FieldBlock** headers beside the policy `InfoHint`.
+
+**Consumer fix (props only):**
+
+1. **Remove** status `Chip` from every env key `FieldBlock` `actions`.
+2. Keep **one** `InfoHint` `size="sm"` with portal / format copy in `content`.
+3. **Required key empty / invalid:** `InfoHint` `tone="danger"` (red glyph —
+   same probe-row grammar); **configured or optional-empty OK:** omit `tone`
+   (default).
+4. Do **not** add `Missing` / `已配置` strings to the Tooltip unless the user
+   explicitly asked for that prose — the danger tint carries missing required
+   keys.
+5. Bump `@fynn7/ui-design-core` ≥ **0.5.130**; re-paste
+   `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Content density** editable env key FieldBlock.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: Input trailing md IconButton in field shell
+
+Symptoms (password / token `Input` with in-field reveal):
+
+- `Input` `trailing` uses default **`IconButton`** (40×40dp) inside a **40dp**
+  field shell — disk fills the row height; reads oversized vs the 16dp glyph
+- DevTools: `.fynns-field-affix--trailing .fynns-btn--icon` without
+  `.fynns-btn--sm` at 40×40
+
+**Cause:** omitting `size="sm"` on in-field trailing actions (reveal password,
+clear) — default md matches shell height instead of nesting as a smaller
+control.
+
+**Consumer fix (props only):**
+
+1. **`Input` `trailing`** reveal / clear → **`IconButton` `size="sm"`** +
+   `Tooltip` + `aria-label` (skip Tooltip only on self-evident dismiss glyphs).
+2. Core ≥ **0.5.131** also caps affix disks to 32dp — still pass `size="sm"` so
+   props match sandbox `#field-header` / `#form-recipe`.
+3. Do **not** move reveal to `FieldHeader` `actions` — in-field trailing only.
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#sandbox-field-header-env-keys` + `#field-header`. Authority:
+[`AGENTS.md`](../AGENTS.md) **Field header actions** / **Content density**
+editable env key FieldBlock.
 
 ## Failure mode this treaty targets: mode drawer tools↔filter crushed to 4dp
 
@@ -1285,6 +1418,24 @@ fillers. Live: sandbox `#rhythm` end-align footer.
 [`AGENTS.md`](../AGENTS.md) **Content density**. Pasteable:
 [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: orphan recovery CTA left-aligned
+
+Symptoms (app `ErrorBoundary` / lazy chunk fail fallback):
+
+- After an `InlineAlert` error strip, a lone labeled **Reload** / **重新加载**
+  `Button` sits **flush start** (left) under the hint copy
+- Reads like a broken form row without a name — not the action-footer grammar
+
+**Cause:** Recovery hosts copied a bare `Button` sibling instead of the
+**action footer** recipe: full-width `.fynns-control-cluster--end-align` with
+no visible `ControlRow` label.
+
+**Fix in the consumer:** wrap the reload CTA in
+`.fynns-control-cluster.fynns-control-cluster--end-align`; stack alert + hint +
+cluster in `.fynns-unit-stack`. Live: sandbox `#sandbox-inline-alert-recovery`.
+Authority: [`AGENTS.md`](../AGENTS.md) **Content density** error recovery row.
+Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: Dialog foot Delete leftmost of Cancel
 
 Symptoms (Timeline / Experiences edit Dialog body end-align foot):
@@ -1413,6 +1564,53 @@ sibling. Core (≥ **0.5.80**) widens **labeled** `.fynns-btn` gaps to
 3. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
 
 Live: sandbox `#rhythm` service control + end-align. Authority:
+[`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
+row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
+## Failure mode this treaty targets: labeled Button cluster gap stacked to 12dp
+
+Symptoms (Card `ControlRow` service strip — labeled Start / Stop / Restart only):
+
+- Siblings read **too wide** (~12px / 12dp) — looser than dialog feet and M3
+  separate-action rhythm
+- DevTools: `.fynns-control-cluster` in `.fynns-card-body` shows
+  `gap: var(--fynns-layout-action-cluster-gap)` (**8dp**) **and** labeled
+  `.fynns-btn` children with `margin-inline-start: 4px` from the 0.5.80 bump
+
+**Cause:** core ≥ **0.5.88** widened form-host cluster `gap` to `action-cluster-gap`
+while the 0.5.80 labeled-Button margin bump still applied — **8+4=12dp**.
+
+**Fix:** bump `@fynn7/ui-design-core` ≥ **0.5.124** (margin suppressed when gap
+is already action-cluster). Consumer stays on public `.fynns-control-cluster` only.
+Live: sandbox `#rhythm` service control.
+
+## Failure mode this treaty targets: service control status Chip + label (information redundancy)
+
+Symptoms (Card `ControlRow` service strip — Start / Stop / Restart):
+
+- Status **`Chip`** (`Running` / `运行中`, `Stopped` / `已停止`) sits in
+  `.fynns-control-row__controls` beside labeled `Button`s — reads as a **fourth
+  action pill** (same 32dp height as `Button` `sm`)
+- The row names runtime state **twice** — e.g. label `PID …` beside Chip
+  `Running`, or label `未运行` beside Chip `已停止`
+- Reads as **information redundancy** **and** wrong column — status is not an
+  action; it belongs in **`ControlRow` `label`**, not the button cluster
+
+**Cause:** stacking a decorative `Chip` `assist` on the action cluster while
+`ControlRow` `label` already carried PID / not-running copy — or using `Chip`
+as a status readout because it “looks like a tag” (it still reads as a button
+beside Start / Stop / Restart).
+
+**Consumer fix (props / strings only):**
+
+1. **Running:** `ControlRow` `label` = `PID …` only.
+2. **Stopped / idle:** `label` = `Not running` / `未运行` (or your locale word
+   — **one** phrase).
+3. **Delete** any status `Chip` / meta / badge from `__controls` — keep **only**
+   labeled `Button`s `sm` inside one public `.fynns-control-cluster`.
+4. Bump `@fynn7/ui-design-core`; re-paste `consumer-cursor-rule.mdc`.
+
+Live: sandbox `#rhythm` service control (≥ **0.5.127**). Authority:
 [`AGENTS.md`](../AGENTS.md) Hard rules / **Content density** service control
 row. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
@@ -2696,6 +2894,31 @@ overlay layer. Live: sandbox `#form-recipe` Dialog + consumer edit Dialog.
 disable `fynns-scroll` on PageScroll. Authority: [`AGENTS.md`](../AGENTS.md)
 overlay scrollbar note. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
+## Failure mode this treaty targets: overlay scrollbar paints through chrome heads
+
+Symptoms (NavigationDrawer / Drawer / FullscreenDialog / shell main with nested
+CodeBlock / List scroll hosts):
+
+- Overlay Y thumb paints **over** ClippedNavShell **TopAppBar** title
+  (e.g. app name) while the nav column / drawer body scrolls
+- Same thumb paints over `.fynns-dialog-head`, Card / Collapsible heads, or
+  NavigationDrawer headlines when an outer scrollport moves an inner host
+- DevTools: rail `top` is above the chrome band’s `getBoundingClientRect().bottom`
+
+**Cause:** overlay rails live in a fixed portal at `--fynns-z-toast` (above
+modal). Ancestor `overflow` / stacking cannot clip them — geometry must clamp.
+
+**Fix in core (≥ 0.5.134):** `overlayScrollbar.ts` insets Y rails below
+overlapping overlay chrome (TopAppBar in clipped / destination shells,
+`.fynns-dialog-head`, Card / Collapsible heads, nav drawer headlines). Live:
+sandbox `#drawer-nested-scroll` (dialog head) + Layouts `#layouts-demo-shell`
+(TopAppBar).
+
+**Fix in the consumer:** bump `@fynn7/ui-design-core` ≥ **0.5.134**; no app
+z-index / overflow hacks on `.fynns-scroll-rail`. Authority:
+[`AGENTS.md`](../AGENTS.md) Scrollbar discipline. Pasteable:
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+
 ## Failure mode this treaty targets: modal Dialog scrollbar flash on enter
 
 Symptoms when a Timeline row / catalog entry opens a centered edit `Dialog`:
@@ -3140,15 +3363,19 @@ Feedback **Loading placement**. Live: sandbox `#busy-region` /
 Symptoms: sectional refresh (FieldBlock + `CodeBlock` / List / table preview)
 shows spinner + busy message **directly on top of** still-legible background
 copy — mono config / catalog lines read through the message and mislead users
-(no dimming scrim).
+(no frosted mask).
 
-**Cause:** core ≥ 0.4.x briefly used `background: transparent` on
-`.fynns-busy-region-overlay` to avoid the old `surface-1` wash; consumer
-cannot fix with props — needs core scrim. **Fix in core:** overlay paints
-`var(--fynns-color-overlay)` (≥ **0.5.121**). **Fix in the consumer:** wrap
-only the body being refreshed in `BusyRegion`; do **not** add a private
-`.hub-*` scrim or local `opacity` on children. Live: sandbox
-`#sandbox-busy-region-field-sample`; consumer dataset card preview under
+**Cause:** `.fynns-busy-region-overlay` with `background: transparent` and
+**no** `backdrop-filter` (or consumer removed blur with local CSS). Consumer
+cannot fix with props — needs core overlay. **Fix in core:** overlay uses
+**frosted blur** — `background: transparent` +
+`backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur))` (≥
+**0.5.122**). Well / CodeBlock hues stay unchanged; blur masks mounted copy.
+**Not** `--fynns-color-overlay` (that token is **BusyScrim** only). ≥ 0.5.121
+briefly tinted with a dark scrim — superseded by 0.5.122. **Fix in the
+consumer:** wrap only the body being refreshed in `BusyRegion`; do **not** add
+a private `.hub-*` scrim, `opacity` on children, or `surface-*` wash. Live:
+sandbox `#sandbox-busy-region-field-sample`; consumer dataset card preview under
 FieldBlock refresh. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: bare CircularProgress as body loader

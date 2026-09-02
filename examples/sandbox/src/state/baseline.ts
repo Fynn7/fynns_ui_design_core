@@ -80,6 +80,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "textarea-max-height",
   "list-well-max-height",
   "list-well-max-height-sm",
+  "busy-region-backdrop-blur",
   // sheetPads
   "sheet-pad-inline",
   "sheet-pad-block",
@@ -169,6 +170,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "textarea-max-height",
     "list-well-max-height",
     "list-well-max-height-sm",
+    "busy-region-backdrop-blur",
   ],
   sheetPads: ["sheet-pad-inline", "sheet-pad-block"],
   shellSize: [
@@ -307,6 +309,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "List well · long in-Card List soft cap (20rem; short catalogs → page scroll, no nested fynns-scroll)",
   "list-well-max-height-sm":
     "List well · dense in-Card List soft cap (12rem; only when the catalog can overflow)",
+  "busy-region-backdrop-blur":
+    "BusyRegion overlay · frosted blur radius (transparent fill — well hue unchanged)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",

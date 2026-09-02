@@ -8,8 +8,14 @@ examples/sandbox/dist
 
 # Local research / measurement dumps (do not commit)
 .tmp/
+.cursor-audit/
+dialog-scroll-radius/
+.ship-pr-body*.md
 scripts/_focus-verify/
 scripts/_scale-out/
+scripts/_audit-shots/*.png
+scripts/_audit-shots/*.json
+scripts/_audit-*.mjs
 scripts/_tmp-*/
 scripts/_verify-*/
 scripts/_tmp-*.json

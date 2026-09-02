@@ -172,6 +172,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.listWellMaxHeightSmHint",
     max: 480,
   },
+  "busy-region-backdrop-blur": {
+    labelKey: "layoutChrome.busyRegionBackdropBlur",
+    hintKey: "layoutChrome.busyRegionBackdropBlurHint",
+    max: 24,
+  },
   "sheet-pad-inline": {
     labelKey: "layoutChrome.sheetPadInline",
     hintKey: "layoutChrome.sheetPadInlineHint",

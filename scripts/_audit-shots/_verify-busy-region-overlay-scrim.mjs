@@ -1,5 +1,6 @@
 /**
- * Verify BusyRegion overlay paints --fynns-color-overlay scrim (≥ 0.5.121).
+ * Verify BusyRegion overlay uses frosted blur (≥ 0.5.122) — transparent fill,
+ * no --fynns-color-overlay tint.
  * Usage: node scripts/_audit-shots/_verify-busy-region-overlay-scrim.mjs [baseUrl]
  */
 import { chromium } from "playwright";
@@ -36,18 +37,29 @@ await page.waitForSelector("#sandbox-busy-region-field-sample", { timeout: 30000
 await page.getByRole("button", { name: /Show field busy|显示字段 busy/ }).click();
 await page.waitForSelector(".fynns-busy-region--busy .fynns-busy-region-overlay");
 
-const overlayBg = await page.$eval(
+const overlayStyle = await page.$eval(
   ".fynns-busy-region--busy .fynns-busy-region-overlay",
-  (el) => getComputedStyle(el).backgroundColor,
+  (el) => {
+    const s = getComputedStyle(el);
+    return {
+      backgroundColor: s.backgroundColor,
+      backdropFilter: s.backdropFilter || s.webkitBackdropFilter || "",
+    };
+  },
 );
 
-const tokenOverlay = await page.evaluate(() =>
+const tokenBlur = await page.evaluate(() =>
   getComputedStyle(document.documentElement)
-    .getPropertyValue("--fynns-color-overlay")
+    .getPropertyValue("--fynns-layout-busy-region-backdrop-blur")
     .trim(),
 );
 
-const matchesToken = overlayBg === tokenOverlay;
+const isTransparent =
+  overlayStyle.backgroundColor === "rgba(0, 0, 0, 0)" ||
+  overlayStyle.backgroundColor === "transparent";
+const hasBlur = /blur\(/i.test(overlayStyle.backdropFilter);
+const blurMatchesToken =
+  tokenBlur.length > 0 && overlayStyle.backdropFilter.includes(tokenBlur);
 
 await mkdir(outDir, { recursive: true });
 const outPath = path.join(outDir, "busy-region-overlay-scrim.png");
@@ -55,10 +67,18 @@ await page.locator("#sandbox-busy-region-field-sample").screenshot({ path: outPa
 
 await browser.close();
 
-const pass = matchesToken;
+const pass = isTransparent && hasBlur && blurMatchesToken;
 console.log(
   JSON.stringify(
-    { pass, overlayBg, tokenOverlay, matchesToken, screenshot: outPath },
+    {
+      pass,
+      overlayStyle,
+      tokenBlur,
+      isTransparent,
+      hasBlur,
+      blurMatchesToken,
+      screenshot: outPath,
+    },
     null,
     2,
   ),

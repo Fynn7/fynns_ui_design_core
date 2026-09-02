@@ -68,6 +68,19 @@
   color: var(--fynns-color-text-muted);
 }
 
+/*
+ * In-field affix IconButtons (password reveal, clear, …): shell min-height is
+ * 40dp (`--fynns-size-icon-target`); default md 40dp disk fills the row.
+ * Always paint sm (32dp) — matches label-row FieldHeader actions.
+ */
+.fynns-field-affix .fynns-btn--icon {
+  width: var(--fynns-layout-field-header-action-row-min-height);
+  min-width: var(--fynns-layout-field-header-action-row-min-height);
+  height: var(--fynns-layout-field-header-action-row-min-height);
+  min-height: var(--fynns-layout-field-header-action-row-min-height);
+  padding: 0;
+}
+
 .fynns-field-hint {
   margin: 0;
   font-size: var(--fynns-font-size-caption);
@@ -698,6 +711,31 @@ input.fynns-input:focus::-webkit-scrollbar {
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-sm);
   line-height: var(--fynns-line-height-snug);
+}
+
+/* Label + inline InfoHint (policy in Tooltip) — same breath as ControlRow. */
+.fynns-field-header__label:has(.fynns-info-hint-trigger) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fynns-space-xs);
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.fynns-field-header
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon) {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.fynns-field-header
+  .fynns-tooltip-trigger:has(.fynns-info-hint-trigger--icon)
+  > .fynns-btn--icon {
+  flex: none;
 }
 
 .fynns-field-header__actions {

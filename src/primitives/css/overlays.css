@@ -1027,9 +1027,11 @@
   place-items: center;
   min-width: 0;
   box-sizing: border-box;
-  /* Sectional scrim — same token as BusyScrim; dims mounted children so busy
-     copy does not stack on legible mono / catalog text. Not a surface-* wash. */
-  background: var(--fynns-color-overlay);
+  /* Frosted mask — blur mounted copy; do not tint the well (`--fynns-color-overlay`
+     is BusyScrim only). Token: `--fynns-layout-busy-region-backdrop-blur`. */
+  background: transparent;
+  -webkit-backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur));
+  backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur));
   pointer-events: auto;
 }
 

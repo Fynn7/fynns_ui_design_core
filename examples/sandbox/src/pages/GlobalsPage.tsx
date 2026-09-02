@@ -311,6 +311,25 @@ const FULLSCREEN_FLUSH_XML = [
   "</notes>",
 ].join("\n");
 
+/** Drawer body scroll + nested CodeBlock — overlay rail must stay below panel head. */
+const DRAWER_NESTED_SCROLL_JSON = [
+  "{",
+  '  "trStructure": "flat",',
+  '  "densityNotes": "Prefer compact rows in narrow hosts.",',
+  '  "sizeNotes": "Sample volume metadata for teaching scroll clamp.",',
+  '  "region": "EU",',
+  '  "digests": "Daily",',
+  '  "contact": "sample@example.com",',
+  "  \"sections\": [",
+  '    { "id": "alpha", "label": "Sample block A" },',
+  '    { "id": "beta", "label": "Sample block B" },',
+  '    { "id": "gamma", "label": "Sample block C" },',
+  '    { "id": "delta", "label": "Sample block D" },',
+  '    { "id": "epsilon", "label": "Sample block E" }',
+  "  ]",
+  "}",
+].join("\n");
+
 /** Suffixed file-body Card demo — generic placeholders only (not consumer copy). */
 const FILE_BODY_SAMPLE_PATH = "sample.md";
 const FILE_BODY_SAMPLE_MD = [
@@ -1028,6 +1047,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [dropBusy, setDropBusy] = useState(false);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
+  const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
@@ -1085,6 +1105,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   );
   const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
   const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
+  const [fieldHeaderEnvReveal, setFieldHeaderEnvReveal] = useState(false);
   const [fieldHeaderDetailOn, setFieldHeaderDetailOn] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -2641,6 +2662,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <InlineAlert severity="success" message={t("globals.inlineAlertWrap")} />
         </div>
         <SandboxHelp text={t("globals.inlineAlertHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="sandbox-inline-alert-recovery">
+        <div
+          id="sandbox-inline-alert-recovery-host"
+          className="fynns-unit-stack"
+          style={{ maxWidth: "40rem" }}
+        >
+          <InlineAlert severity="error" message={t("globals.inlineAlertRecoveryError")} />
+          <FieldHint>{t("globals.inlineAlertRecoveryHint")}</FieldHint>
+          <div className="fynns-control-cluster fynns-control-cluster--end-align">
+            <Button variant="tonal" size="sm" type="button">
+              {t("globals.inlineAlertRecoveryReload")}
+            </Button>
+          </div>
+        </div>
+        <SandboxHelp text={t("globals.inlineAlertRecoveryHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="env-check">
         <Card title={t("globals.envCheckCardTitle")}>
@@ -4622,6 +4659,62 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 />
               </FieldBlock>
               <FieldBlock
+                id="sandbox-field-header-env-keys"
+                label={t("globals.fieldHeaderEnvTokenLabel")}
+                htmlFor="sandbox-field-header-env-token"
+                actions={
+                  <InfoHint
+                    size="sm"
+                    content={t("globals.fieldHeaderEnvTokenTip")}
+                    ariaLabel={t("globals.fieldHeaderEnvTokenAria")}
+                  />
+                }
+              >
+                <Input
+                  id="sandbox-field-header-env-token"
+                  type={fieldHeaderEnvReveal ? "text" : "password"}
+                  value="••••••••"
+                  readOnly
+                  aria-label={t("globals.fieldHeaderEnvTokenLabel")}
+                  autoComplete="off"
+                  trailing={
+                    <Tooltip content={t("globals.fieldHeaderRevealTip")}>
+                      <IconButton
+                        size="sm"
+                        aria-label={t("globals.fieldHeaderRevealTip")}
+                        onClick={() => setFieldHeaderEnvReveal((v) => !v)}
+                      >
+                        {fieldHeaderEnvReveal ? (
+                          <EyeOffIcon aria-hidden />
+                        ) : (
+                          <EyeIcon aria-hidden />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  }
+                />
+              </FieldBlock>
+              <FieldBlock
+                label={t("globals.fieldHeaderEnvAppLabel")}
+                htmlFor="sandbox-field-header-env-app"
+                actions={
+                  <InfoHint
+                    size="sm"
+                    tone="danger"
+                    content={t("globals.fieldHeaderEnvAppTip")}
+                    ariaLabel={t("globals.fieldHeaderEnvAppAria")}
+                  />
+                }
+              >
+                <Input
+                  id="sandbox-field-header-env-app"
+                  value=""
+                  readOnly
+                  aria-label={t("globals.fieldHeaderEnvAppLabel")}
+                  autoComplete="off"
+                />
+              </FieldBlock>
+              <FieldBlock
                 label={t("globals.fieldHeaderCatalogLabel")}
                 htmlFor="sandbox-field-header-select"
                 actions={
@@ -4671,6 +4764,33 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   aria-label={t("globals.fieldHeaderNotesLabel")}
                   minRows={2}
                 />
+              </FieldBlock>
+              <FieldBlock
+                id="sandbox-field-header-inline-infohint"
+                label={
+                  <>
+                    <span className="fynns-control-row__label-text">
+                      {t("globals.fieldHeaderMountedLabel")}
+                    </span>
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.fieldHeaderMountedTip")}
+                      ariaLabel={t("globals.fieldHeaderMountedAria")}
+                    />
+                  </>
+                }
+                actions={
+                  <Tooltip content={t("globals.fieldHeaderMountedActionTip")}>
+                    <IconButton
+                      size="sm"
+                      aria-label={t("globals.fieldHeaderMountedActionTip")}
+                    >
+                      <FileIcon aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                }
+              >
+                <FieldHint>{t("globals.fieldHeaderMountedBody")}</FieldHint>
               </FieldBlock>
             </FieldStack>
             <FieldStack>
@@ -5018,6 +5138,59 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </FullscreenDialog>
         <SandboxHelp text={t("globals.fullscreenFlushHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="drawer-nested-scroll">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDrawerNestedScrollOpen(true)}>
+            {t("globals.drawerNestedScrollOpen")}
+          </Button>
+        </div>
+        <Drawer
+          open={drawerNestedScrollOpen}
+          onClose={() => setDrawerNestedScrollOpen(false)}
+          side="left"
+          title={t("globals.drawerNestedScrollTitle")}
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <div className="fynns-unit-stack">
+            <FieldBlock label={t("globals.drawerNestedScrollProvider")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollProvider")}
+                options={["Sample provider", "Alternate provider"]}
+                value="Sample provider"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.drawerNestedScrollRegion")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollRegion")}
+                options={["EU", "Americas", "Asia Pacific"]}
+                value="EU"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.drawerNestedScrollDigest")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollDigest")}
+                options={["Daily", "Weekly", "Monthly"]}
+                value="Daily"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <Divider />
+            <FieldBlock label={t("globals.drawerNestedScrollCard")}>
+              <CodeBlock
+                variant="plain"
+                language="json"
+                wrap
+                maxHeight="12rem"
+                copyAriaLabel={t("globals.codeBlockCopy")}
+                code={DRAWER_NESTED_SCROLL_JSON}
+              />
+            </FieldBlock>
+          </div>
+        </Drawer>
+        <SandboxHelp text={t("globals.drawerNestedScrollHelp")} />
         </GlobalsDemo>
       </>
         )}
@@ -6461,11 +6634,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             }
           >
             <div className="fynns-control-cluster">
-              <Chip variant="assist" selected={rhythmServiceRunning}>
-                {rhythmServiceRunning
-                  ? t("globals.rhythmServiceChipRunning")
-                  : t("globals.rhythmServiceChipStopped")}
-              </Chip>
               <Button
                 size="sm"
                 variant="primary"

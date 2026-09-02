@@ -5,7 +5,9 @@ import {
   BottomAppBar,
   Button,
   Card,
+  Collapsible,
   Checkbox,
+  FieldHint,
   CloseIcon,
   CheckSquareIcon,
   SquareIcon,
@@ -917,8 +919,51 @@ export function LayoutsPage() {
                 )}
               </NavigationDrawer>
             </div>
+            <div
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "22rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerInspectorAria")}
+              >
+                <div id="sandbox-navdrawer-card-collapsible-stack">
+                  <Card title={t("globals.navDrawerInspectorCardTitle")}>
+                    <FieldHint>{t("globals.navDrawerInspectorCardHint")}</FieldHint>
+                    <div className="fynns-unit-stack">
+                      <Collapsible
+                        title={t("globals.navDrawerInspectorCollapsibleA")}
+                        defaultOpen={false}
+                      >
+                        <FieldHint>
+                          {t("globals.navDrawerInspectorCollapsibleBody")}
+                        </FieldHint>
+                      </Collapsible>
+                      <Collapsible
+                        title={t("globals.navDrawerInspectorCollapsibleB")}
+                        defaultOpen={false}
+                      >
+                        <FieldHint>
+                          {t("globals.navDrawerInspectorCollapsibleBody")}
+                        </FieldHint>
+                      </Collapsible>
+                    </div>
+                  </Card>
+                </div>
+              </NavigationDrawer>
+            </div>
             </div>
             <SandboxHelp text={t("globals.navDrawerModeToolsHelp")} />
+            <SandboxHelp text={t("globals.navDrawerInspectorCardHelp")} />
             <SandboxHelp text={t("globals.navDrawerBulkSoftHelp")} />
             <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
               {!bulkDemoSelectMode ? (
