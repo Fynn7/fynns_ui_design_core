@@ -311,6 +311,25 @@ const FULLSCREEN_FLUSH_XML = [
   "</notes>",
 ].join("\n");
 
+/** Drawer body scroll + nested CodeBlock — overlay rail must stay below panel head. */
+const DRAWER_NESTED_SCROLL_JSON = [
+  "{",
+  '  "trStructure": "flat",',
+  '  "densityNotes": "Prefer compact rows in narrow hosts.",',
+  '  "sizeNotes": "Sample volume metadata for teaching scroll clamp.",',
+  '  "region": "EU",',
+  '  "digests": "Daily",',
+  '  "contact": "sample@example.com",',
+  "  \"sections\": [",
+  '    { "id": "alpha", "label": "Sample block A" },',
+  '    { "id": "beta", "label": "Sample block B" },',
+  '    { "id": "gamma", "label": "Sample block C" },',
+  '    { "id": "delta", "label": "Sample block D" },',
+  '    { "id": "epsilon", "label": "Sample block E" }',
+  "  ]",
+  "}",
+].join("\n");
+
 /** Suffixed file-body Card demo — generic placeholders only (not consumer copy). */
 const FILE_BODY_SAMPLE_PATH = "sample.md";
 const FILE_BODY_SAMPLE_MD = [
@@ -1028,6 +1047,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [dropBusy, setDropBusy] = useState(false);
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
+  const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
@@ -5118,6 +5138,59 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           />
         </FullscreenDialog>
         <SandboxHelp text={t("globals.fullscreenFlushHelp")} />
+        </GlobalsDemo>
+        <GlobalsDemo id="drawer-nested-scroll">
+        <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
+          <Button size="sm" onClick={() => setDrawerNestedScrollOpen(true)}>
+            {t("globals.drawerNestedScrollOpen")}
+          </Button>
+        </div>
+        <Drawer
+          open={drawerNestedScrollOpen}
+          onClose={() => setDrawerNestedScrollOpen(false)}
+          side="left"
+          title={t("globals.drawerNestedScrollTitle")}
+          closeAriaLabel={t("globals.dialogClose")}
+        >
+          <div className="fynns-unit-stack">
+            <FieldBlock label={t("globals.drawerNestedScrollProvider")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollProvider")}
+                options={["Sample provider", "Alternate provider"]}
+                value="Sample provider"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.drawerNestedScrollRegion")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollRegion")}
+                options={["EU", "Americas", "Asia Pacific"]}
+                value="EU"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <FieldBlock label={t("globals.drawerNestedScrollDigest")}>
+              <Select
+                ariaLabel={t("globals.drawerNestedScrollDigest")}
+                options={["Daily", "Weekly", "Monthly"]}
+                value="Daily"
+                onChange={() => {}}
+              />
+            </FieldBlock>
+            <Divider />
+            <FieldBlock label={t("globals.drawerNestedScrollCard")}>
+              <CodeBlock
+                variant="plain"
+                language="json"
+                wrap
+                maxHeight="12rem"
+                copyAriaLabel={t("globals.codeBlockCopy")}
+                code={DRAWER_NESTED_SCROLL_JSON}
+              />
+            </FieldBlock>
+          </div>
+        </Drawer>
+        <SandboxHelp text={t("globals.drawerNestedScrollHelp")} />
         </GlobalsDemo>
       </>
         )}

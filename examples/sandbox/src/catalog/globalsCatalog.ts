@@ -409,6 +409,22 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     ],
   },
   {
+    id: "drawer-nested-scroll",
+    categoryId: "containment",
+    label: "Drawer nested scroll rail",
+    keywords: [
+      "drawer",
+      "scrollbar",
+      "overlay",
+      "codeblock",
+      "nested",
+      "head",
+      "title",
+      "抽屉",
+      "滚动条",
+    ],
+  },
+  {
     id: "empty-state",
     categoryId: "patterns",
     label: "EmptyState",

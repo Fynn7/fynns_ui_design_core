@@ -791,6 +791,14 @@ const en = {
   "globals.fullscreenFlushFile": "notes.xml",
   "globals.fullscreenFlushHelp":
     "Flush-start: when the first FullscreenDialog body child is a keep-set bordered well (CodeBlock / Surface / table wrap), core drops padding-block-start so the well frame sits under the title — not an 18dp vacant band. Head chrome stays content-inset. One unpadded fill wrapper is allowed. Not Card chrome=\"plain\" flush. Authority: AGENTS.md Flush-start overlay body.",
+  "globals.drawerNestedScrollOpen": "Open drawer nested scroll",
+  "globals.drawerNestedScrollTitle": "Sample configuration",
+  "globals.drawerNestedScrollProvider": "Provider",
+  "globals.drawerNestedScrollRegion": "Region",
+  "globals.drawerNestedScrollDigest": "Digests",
+  "globals.drawerNestedScrollCard": "Mounted sample card",
+  "globals.drawerNestedScrollHelp":
+    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Live `#drawer-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -2893,6 +2901,14 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenFlushFile": "notes.xml",
   "globals.fullscreenFlushHelp":
     "Flush-start：FullscreenDialog 正文第一个子项是 keep-set 带边框井（CodeBlock / Surface / 表包装）时，core 去掉 padding-block-start，井框贴在标题下——不要 18dp 空带。标题 chrome 仍 content-inset。允许一层无垫 fill 宿主。不是 Card chrome=\"plain\" 贴边。权威：AGENTS.md Flush-start overlay body。",
+  "globals.drawerNestedScrollOpen": "打开抽屉嵌套滚动",
+  "globals.drawerNestedScrollTitle": "示例配置",
+  "globals.drawerNestedScrollProvider": "提供商",
+  "globals.drawerNestedScrollRegion": "区域",
+  "globals.drawerNestedScrollDigest": "摘要",
+  "globals.drawerNestedScrollCard": "已挂载示例卡片",
+  "globals.drawerNestedScrollHelp":
+    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。活样例 `#drawer-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
