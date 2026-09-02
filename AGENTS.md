@@ -124,7 +124,7 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    reserve *block* gutters that clip the first/last pill radii.
 5.    **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate widgets), `BusyScrim` (fullscreen
-   blocking) / `BusyRegion` (sectional scrim overlay `--fynns-color-overlay` + **one**
+   blocking) / `BusyRegion` (sectional **frosted blur** overlay + **one**
    progress chrome + message — sectional scrim dims mounted copy; never a
    second `surface-*` wash; **pane cold-start uses `fill`**, never
    `EmptyState` + a ring, never a ring stacked on a bar), `EmptyState`
@@ -161,7 +161,8 @@ them; only genuinely app-specific deviations belong in a consumer's own doc.
    `ConfirmDialog` / `Drawer` / `FullscreenDialog` / `BottomSheet` /
    `NavigationDrawer`; blocking / sectional busy: `BusyScrim` (full-viewport
    non-dismissible scrim + focus trap + `CircularProgress` + message) or
-   `BusyRegion` (relative scrim overlay `--fynns-color-overlay` over children; content is
+   `BusyRegion` (relative **frosted blur** overlay over children — transparent
+   fill, well hue unchanged; content is
    `inert` while busy — no surface tint; full-viewport tint → `BusyScrim`);
    for heavy boots use **`runBusyTask` / `useBusyTask`** (show busy →
    paint → then work) so the ring can start before the main thread blocks;
@@ -819,8 +820,9 @@ classes.
   CircularProgress, **BusyScrim** `{ open, label, message?, value?, size?, indicator? }` /
   **BusyRegion** `{ busy, label, children?, message?, value?, size?, fill?, indicator? }`
   (M3-style fullscreen non-dismissible scrim via **BusyScrim**, or sectional
-  **scrim overlay** (`--fynns-color-overlay`) + **one** progress chrome + visible message —
-  dims mounted copy under `--fynns-color-overlay`; do **not** wash with `surface-*` /
+  **frosted blur overlay** (`backdrop-filter` + transparent fill — well colors
+  unchanged) + **one** progress chrome + visible message — do **not** tint with
+  `--fynns-color-overlay` or `surface-*` /
   private colored loading shells; `indicator` `"circular"` (default) |
   `"linear"` — known % / counts → `linear`, unknown wait → `circular`; never
   stack a ring on a bar; `message` is phrasing copy only — never nest
@@ -835,9 +837,9 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + `CircularProgress`; revived `BlockingLoadingOverlay` |
-  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay uses **`--fynns-color-overlay`** scrim; **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / `surface-*` colored wash |
-  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (scrim overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
-  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; scrim overlay dims mounted copy so busy message does not stack on legible text | Unmount the section and swap in EmptyState; second `surface-*` tint under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay; transparent / no-scrim overlay so mono preview bleeds through busy copy |
+  | Pane / section cold-start (no content yet) | `BusyRegion` `fill` `busy` as `FillColumn` `children` (or shell main / canvas flex child); omit children; overlay uses **frosted blur** (transparent — well hue unchanged); **hide** section-scope `FieldHint` / `SectionLead` `sub` until data is ready — cold-start is **one** host, not hint + busy in the same well | Nesting `fill` under App-level `.fynns-unit-stack` / `Card` / `List` / Dialog body (content-sized → ring parks at top); **`.fynns-unit-stack` of section `FieldHint` + pane cold-start `BusyRegion` `fill`** (spinner overlaps / doubles copy in one well — hint must not paint while loading); `EmptyState` as a loading shell; bare `CircularProgress` (md default) as the body; private `SectionLoading` / `surface-*` colored wash |
+  | Dialog / Card / section **body** load (catalog, table, detail list — no content yet) | `BusyRegion` `busy` (+ `fill` when the host height is resolved); **BusyRegion only** — do **not** also render pager chrome (`Select` / `Pagination` / Sessions strip) as siblings under the empty overlay; **NavigationDrawer:** `SearchBar` / tools stay **siblings above** BusyRegion — empty cold-start without `fill` paints chrome **in flow** (never absolute over a 0-height box that spills onto SearchBar) | Bare `CircularProgress` (default md) as the Dialog/`unit-stack`/Card body; inventing hub loading CSS; Card `unit-stack` with empty `BusyRegion` **plus** Sessions `Select` / `Pagination` siblings (blur overlay covers the footer; spinner sits on the Select); wrapping drawer `SearchBar` inside `BusyRegion` |
+  | Refresh over existing surface | `BusyRegion` wrapping **only** the List / table / surface being refreshed (fill optional if that host already has height); keep pager / Sessions chrome **outside** the busy wrapper; frosted blur overlay so busy message does not stack on legible mono / catalog text while the well keeps its native color | Unmount the section and swap in EmptyState; second `surface-*` tint or `--fynns-color-overlay` scrim under the ring; wrapping the whole Card (List + Select + Pagination) so chrome flickers under the overlay; transparent / no-blur overlay so mono preview bleeds through busy copy |
   | Known-progress long task (scan / upload / copy) | Same host: `indicator="linear"` + `value` in `[0,1]`; `message` = status copy only; chrome width is **host-relative** (`min(20rem, 100%)` — never viewport/`100vw`) so NavigationDrawer / EndAside do not spill | Stack `CircularProgress` with `LinearProgress`; nest a bar / ring in `message`; private `width: 20rem` / `100vw` on the busy chrome |
   | Unknown-duration wait | Default `indicator="circular"`; button / icon / field slot = inline **`Spinner`** (Button / IconButton `loading` — sm footprint) | Two progress chromes in one overlay |
   | Button / icon / field busy | Inline **`Spinner`** via Button / IconButton `loading` (sm footprint; not a standalone `CircularProgress` in the slot) | Page-level / Dialog-body / Card-body layout |

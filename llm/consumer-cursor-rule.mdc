@@ -90,11 +90,13 @@ alwaysApply: true
    actions、Dialog body BusyRegion + 脚栏 Button…）**禁止**再叠 `Button` /
    `IconButton` `loading` 第二圈。区块等待 → **只** BusyRegion；头/脚 chrome
    仅 `disabled`、不画 `loading`。无 BusyRegion 的单控件等待 → 才用槽位
-   `loading`。**BusyRegion 遮罩（硬 ≥ 0.5.121）：** `.fynns-busy-region-overlay`
-   使用 `--fynns-color-overlay` scrim — 禁止透明遮罩或 consumer 私有 scrim CSS
-   （避免 busy 文案与 mono 预览叠字）。对照 `#busy-region` FieldBlock +
-   `CodeBlock` 刷新样例。失败模式：`llm/CONSUMER_TREATY.md` **BusyRegion busy
-   copy bleeds through overlay** / **BusyRegion + chrome loading stack**。
+   `loading`。**BusyRegion 遮罩（硬 ≥ 0.5.122）：** `.fynns-busy-region-overlay`
+   = 透明底 + `backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur))`
+   — 井色不变、背后文案模糊；**禁止** `--fynns-color-overlay` 压暗（那是
+   BusyScrim）、禁止裸透明、禁止 consumer 私有 scrim / blur CSS（避免 busy 文案与
+   mono 预览叠字）。对照 `#busy-region` FieldBlock + `CodeBlock` 刷新样例。失败模式：
+   `llm/CONSUMER_TREATY.md` **BusyRegion busy copy bleeds through overlay** /
+   **BusyRegion + chrome loading stack**。
    **窄宿主（NavigationDrawer / EndAside）：** linear chrome 由 core 相对宿主
    收缩（≥0.4.50）— **禁止**消费仓给 `.fynns-busy-*` 写私有 `max-width` /
    `20rem` / `100vw`。失败模式：`llm/CONSUMER_TREATY.md`

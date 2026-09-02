@@ -3140,15 +3140,19 @@ Feedback **Loading placement**. Live: sandbox `#busy-region` /
 Symptoms: sectional refresh (FieldBlock + `CodeBlock` / List / table preview)
 shows spinner + busy message **directly on top of** still-legible background
 copy — mono config / catalog lines read through the message and mislead users
-(no dimming scrim).
+(no frosted mask).
 
-**Cause:** core ≥ 0.4.x briefly used `background: transparent` on
-`.fynns-busy-region-overlay` to avoid the old `surface-1` wash; consumer
-cannot fix with props — needs core scrim. **Fix in core:** overlay paints
-`var(--fynns-color-overlay)` (≥ **0.5.121**). **Fix in the consumer:** wrap
-only the body being refreshed in `BusyRegion`; do **not** add a private
-`.hub-*` scrim or local `opacity` on children. Live: sandbox
-`#sandbox-busy-region-field-sample`; consumer dataset card preview under
+**Cause:** `.fynns-busy-region-overlay` with `background: transparent` and
+**no** `backdrop-filter` (or consumer removed blur with local CSS). Consumer
+cannot fix with props — needs core overlay. **Fix in core:** overlay uses
+**frosted blur** — `background: transparent` +
+`backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur))` (≥
+**0.5.122**). Well / CodeBlock hues stay unchanged; blur masks mounted copy.
+**Not** `--fynns-color-overlay` (that token is **BusyScrim** only). ≥ 0.5.121
+briefly tinted with a dark scrim — superseded by 0.5.122. **Fix in the
+consumer:** wrap only the body being refreshed in `BusyRegion`; do **not** add
+a private `.hub-*` scrim, `opacity` on children, or `surface-*` wash. Live:
+sandbox `#sandbox-busy-region-field-sample`; consumer dataset card preview under
 FieldBlock refresh. Pasteable: [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
 
 ## Failure mode this treaty targets: bare CircularProgress as body loader
