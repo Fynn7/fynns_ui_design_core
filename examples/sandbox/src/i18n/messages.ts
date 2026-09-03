@@ -1424,7 +1424,7 @@ const en = {
   "globals.navDrawerModeSideAlphaTip": "Side A",
   "globals.navDrawerModeSideBetaTip": "Side B",
   "globals.navDrawerModeToolsHelp":
-    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch`. Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** (mark-glyph labels). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / Layouts mode sample.",
+    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** (mark-glyph labels). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / Layouts `#layouts-demo-navigation-drawer`.",
   "globals.navDrawerBulkAria": "Sample bulk-select sidebar (soft checked rows)",
   "globals.navDrawerBulkToolsAria": "Sample bulk-select toolbar",
   "globals.navDrawerBulkGroup": "Sample group",
@@ -3530,7 +3530,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeSideAlphaTip": "A 侧",
   "globals.navDrawerModeSideBetaTip": "B 侧",
   "globals.navDrawerModeToolsHelp":
-    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch`。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`**（标记字形标签）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / Layouts 模式样例。",
+    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`**（标记字形标签）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / Layouts `#layouts-demo-navigation-drawer`。",
   "globals.navDrawerBulkAria": "示例批量选择侧栏（柔和勾选行）",
   "globals.navDrawerBulkToolsAria": "示例批量选择工具条",
   "globals.navDrawerBulkGroup": "示例分组",
