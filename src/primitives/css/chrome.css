@@ -1944,8 +1944,27 @@
 .fynns-nav-drawer-body > .fynns-search-bar,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar),
 .fynns-nav-drawer-body > .fynns-toggle-group,
-.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) {
+.fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > .fynns-control-row,
+.fynns-nav-drawer-body > *:has(> .fynns-control-row) {
   flex-shrink: 0;
+}
+
+/*
+ * Mode preference ControlRow (≥ 0.5.137): share Item content inset
+ * (`--fynns-navdrawer-item-pad-inline-*`), not flush on body `pad-inline`
+ * (10dp) alone — otherwise preference labels (Hide built-in) read glued to
+ * the sheet edge while destination glyphs sit on item-pad. Matches bare
+ * Item labels (no leading icon). Tools wrappers that host a direct
+ * ControlRow get the same pad; Card / Collapsible form hosts keep their own
+ * content-inset (ControlRow is not a direct child). Live:
+ * `#layouts-demo-navigation-drawer`.
+ */
+.fynns-nav-drawer-body > .fynns-control-row,
+.fynns-nav-drawer-body > *:has(> .fynns-control-row) > .fynns-control-row {
+  box-sizing: border-box;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
 }
 
 /*

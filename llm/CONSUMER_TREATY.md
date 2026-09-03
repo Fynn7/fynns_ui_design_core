@@ -134,6 +134,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | bulk select uses ClipboardIcon | AGENTS forms / FieldStack | `#layouts-demo-navigation-drawer` |
 | mode drawer primary New not rightmost | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer hide-builtin ControlBlock stack | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
+| mode drawer preference ControlRow flush on pad-inline | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` |
 | SyncSideFilter tooltip covers chrome or list | AGENTS Content density / List | `—` |
 | SyncSideFilter / ToggleGroup segment wash bleed | AGENTS Hard rules | `#toggle-group` |
 | CodeBlock editable selection stripes | AGENTS CodeBlock | `#code-block` |

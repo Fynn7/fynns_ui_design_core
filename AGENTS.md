@@ -704,7 +704,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
 | Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
-| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch | `#info-hint` / Layouts | ControlBlock multi-sentence description |
+| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}` for marks | Layouts mode sample | tip collisions; 4dp tools↔filter |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
