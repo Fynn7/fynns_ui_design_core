@@ -23,11 +23,12 @@ Read by role; do not duplicate specs across files — follow the links.
 | Design system | [`AGENTS.md`](../AGENTS.md) | Tokens, keep-set, UX rules |
 | Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts — avoid jank |
 | Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
-| Consume install | [`llm/CONSUME.md`](CONSUME.md) | Submodule + Vite alias install |
+| Consume install | [`llm/CONSUME.md`](CONSUME.md) | GitHub Packages + Vite alias |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check contract |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](BREAKING_PURGE.md) | Deleted / restored public APIs |
 | Short-prompt rule | [`llm/opencode-fynns-ui-consume.md`](opencode-fynns-ui-consume.md) | Always open CONSUME on short UI prompts |
-| Submodule propagation | [`docs/submodule-propagation.md`](../docs/submodule-propagation.md) | Pin bumps across consumers |
+| Package propagation | [`docs/package-propagation.md`](../docs/package-propagation.md) | Publish / version bumps |
+| Submodule propagation (archived) | [`docs/submodule-propagation.md`](../docs/submodule-propagation.md) | Legacy git-submodule pin bumps only |
 | OpenWiki index | [`openwiki/index.md`](../openwiki/index.md) | In-package agent wiki hub |
 | OpenWiki quickstart | [`openwiki/quickstart.md`](../openwiki/quickstart.md) | Start coding in this package |
 | OpenWiki architecture | [`openwiki/architecture/overview.md`](../openwiki/architecture/overview.md) | Package structure |

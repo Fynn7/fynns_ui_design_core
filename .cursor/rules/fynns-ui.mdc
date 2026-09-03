@@ -8,7 +8,7 @@ alwaysApply: true
 # fynns UI design system (pointer)
 
 Authority: [`AGENTS.md`](../../AGENTS.md). Install / consume:
-[`llm/CONSUME.md`](../../llm/CONSUME.md). Treaty / failure modes:
+[`llm/CONSUME.md`](../../llm/CONSUME.md). Treaty **slug index** (no essays):
 [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md). Pasteable consumer
 rule: [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 Purge / migration: [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md).

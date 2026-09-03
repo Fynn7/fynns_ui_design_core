@@ -9,14 +9,15 @@ Machine contract: [`consume.json`](consume.json).
 **Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
 
 **Pasteable consumer treaty** (drop into any app’s `.cursor/rules/` so agents
-obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). **Default app chrome:**
+obey without opening this file): pasteable rule
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) + slug index
+[`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). **Default app chrome:**
 `DestinationAppShell` (sandbox Layout templates). If composing
 `ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
 children (never a rail-width track hosting a labeled drawer); `nav` =
 destinations only (never wiki / page body / Chat). “Clipped” = M3 chrome
 topology, not text clipping — see [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
-failure modes **squashed drawer** + **wrong shell slot**.
+index slugs **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
@@ -86,7 +87,7 @@ failure modes **squashed drawer** + **wrong shell slot**.
     `message` is copy only (never nest a bar or ring). Full-app block →
     `BusyScrim`. Inline widget busy → `CircularProgress` `sm` only.
     Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
-    Live: sandbox `#busy-region`. Failure mode: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
+    Live: sandbox `#busy-region`. Index: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
     **BusyRegion fill nested in unit-stack / Card**.
 
 ## Agent checklist (greenfield / short prompt)
@@ -138,9 +139,9 @@ shells inherit it. Do **not** commit a literal token into the repo `.npmrc`.
 **Consumer agents (hard):** on install / bump failure (`E401`, wrong-registry
 `E404`, “token provided”), **self-debug with the checklist above** before
 claiming the package is missing or pointing Vite at a sibling core checkout.
-Treaty failure mode + pasteable §2a:
+Treaty index + pasteable install auth guidance:
 [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **GitHub Packages install auth** /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **安装与 API** §2.
 
 ## What the script does
 

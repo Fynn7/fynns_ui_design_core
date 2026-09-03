@@ -7,7 +7,7 @@ description: Index of agent-facing documentation for @fynns/ui-design-core.
 
 # @fynns/ui-design-core OpenWiki
 
-Documentation for coding agents working in this design-system package.
+Thin navigation layer. **Do not restate** AGENTS.md here.
 
 ## Start
 
@@ -18,13 +18,14 @@ Documentation for coding agents working in this design-system package.
 
 ## User brief
 
-- [INSTRUCTIONS.md](./INSTRUCTIONS.md) — scope and priorities (authoritative brief for regenerations)
+- [INSTRUCTIONS.md](./INSTRUCTIONS.md) — scope and priorities for regenerations
 
-## Product authority outside this wiki
+## Product authority (outside this wiki)
 
-- [AGENTS.md](../AGENTS.md) — design language + keep-set catalog
-- [llm/CONSUME.md](../llm/CONSUME.md) — consumer install contract
-- [llm/PERF.md](../llm/PERF.md) — shell / inspector / catalog performance rules
-- [llm/AGENT_INTERFACES.md](../llm/AGENT_INTERFACES.md) — consumer-agent doc + custom highlight APIs
+- [AGENTS.md](../AGENTS.md) — design language + keep-set + Hard rules
+- [llm/CONSUME.md](../llm/CONSUME.md) — install contract
+- [llm/CONSUMER_TREATY.md](../llm/CONSUMER_TREATY.md) — failure-mode slug index
+- [llm/PERF.md](../llm/PERF.md) — shell / inspector performance
 - [llm/BREAKING_PURGE.md](../llm/BREAKING_PURGE.md) — public API migration
+- [docs/package-propagation.md](../docs/package-propagation.md) — publish / version bumps
 - [README.md](../README.md) — repo entry

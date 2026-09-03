@@ -7,42 +7,33 @@ tags: [fynns-ui, quickstart, design-system]
 
 # @fynns/ui-design-core quickstart
 
-Dark-teal design system: canonical `--fynns-*` tokens + self-developed React primitives. Consumed as **source** via GitHub Packages (`@fynn7/ui-design-core`) + Vite alias `@fynns/ui`.
+Dark-teal design system: `--fynns-*` tokens + self-developed React primitives.
+Consumed as **source** via GitHub Packages (`@fynn7/ui-design-core`) + Vite alias
+`@fynns/ui`.
 
 ## Start here (authority — do not restate)
 
 | Need | Doc |
 |------|-----|
-| Design language, hard rules, keep-set catalog | [`AGENTS.md`](../AGENTS.md) |
-| Install into a consumer app | [`llm/CONSUME.md`](../llm/CONSUME.md) + [`llm/consume.json`](../llm/consume.json) |
+| Design language, Hard rules, keep-set | [`AGENTS.md`](../AGENTS.md) |
+| Install into a consumer | [`llm/CONSUME.md`](../llm/CONSUME.md) |
+| Failure-mode slug index | [`llm/CONSUMER_TREATY.md`](../llm/CONSUMER_TREATY.md) |
 | Deleted APIs → replacements | [`llm/BREAKING_PURGE.md`](../llm/BREAKING_PURGE.md) |
-| Package publish / version bumps | [`docs/package-propagation.md`](../docs/package-propagation.md) |
-| Live public surface | `examples/sandbox/` Globals + Preview |
+| Publish / bumps | [`docs/package-propagation.md`](../docs/package-propagation.md) |
+| Live public surface | `npm run sandbox` → Globals + Preview |
 
-## Local package scripts
-
-```bash
-npm run gen:theme    # tokens.ts → theme.css
-npm run typecheck
-npm run lint
-npm run sandbox      # aesthetic / Globals playground
-```
-
-Consume into another app (from this checkout):
+## Local scripts
 
 ```bash
+npm run gen:theme
+npm run check
+npm run sandbox
 npm run consume:install -- --target ../my-app --json
-npm run consume:check -- --target ../my-app --json
 ```
-
-## OpenWiki on this machine (via Agents Hub)
-
-Updates go through **Agents Hub → OpenWiki** (thin wrap: `openwiki code --update --print` + Cursor Agent CLI `auto` bridge). Brief: [`INSTRUCTIONS.md`](./INSTRUCTIONS.md).
-
-> Note: `cursor-api-proxy` runs Cursor in **ask** mode; OpenWiki’s tool-calling write loop may stall. This wiki tree is **seeded** for agents; refresh surgically when code changes, or re-run update when a write-capable provider is available.
 
 ## See also
 
 - [Architecture overview](./architecture/overview.md)
 - [Add a primitive](./workflows/add-primitive.md)
 - [Consume into apps](./operations/consume.md)
+- Brief: [`INSTRUCTIONS.md`](./INSTRUCTIONS.md)
