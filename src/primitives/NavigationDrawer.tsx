@@ -13,6 +13,7 @@ import {
 } from "react";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { syncScrollEdgeFade } from "./scrollEdgeFade";
 
 /** True when any nested destination (or nested group) reports `active`. */
 function hasActiveDestination(node: ReactNode): boolean {
@@ -27,21 +28,6 @@ function hasActiveDestination(node: ReactNode): boolean {
     if (props.children != null) found = hasActiveDestination(props.children);
   });
   return found;
-}
-
-/**
- * Cursor-style scroll-edge fade: soft mask when more content is past the
- * top / bottom edge (no hairline divider into the footer). Observes the
- * drawer **body** only — never the ClippedNavShell root (see llm/PERF.md).
- */
-function syncNavDrawerBodyFade(el: HTMLElement) {
-  const max = Math.max(0, el.scrollHeight - el.clientHeight);
-  const canDown = max > 1 && el.scrollTop < max - 1;
-  const canUp = max > 1 && el.scrollTop > 1;
-  if (canDown) el.setAttribute("data-fade-bottom", "");
-  else el.removeAttribute("data-fade-bottom");
-  if (canUp) el.setAttribute("data-fade-top", "");
-  else el.removeAttribute("data-fade-top");
 }
 
 /**
@@ -140,10 +126,10 @@ function DrawerSheet({
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         raf = 0;
-        syncNavDrawerBodyFade(el);
+        syncScrollEdgeFade(el);
       });
     };
-    syncNavDrawerBodyFade(el);
+    syncScrollEdgeFade(el);
     el.addEventListener("scroll", sync, { passive: true });
     const ro = new ResizeObserver(sync);
     ro.observe(el);

@@ -1,6 +1,7 @@
 import { createElement, Fragment, type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 import {
+  partitionCatalogTrailing,
   trailingIsPinnedInspectorEnd,
   trailingIsRowAction,
 } from "./catalogRowGeometry";
@@ -125,5 +126,55 @@ describe("trailingIsPinnedInspectorEnd", () => {
         createElement("div", { className: "fynns-btn fynns-btn--tonal" }, "Go"),
       ),
     ).toBe(true);
+  });
+});
+
+describe("partitionCatalogTrailing", () => {
+  it("parks IconButton outside the row and keeps meta in-row", () => {
+    const trailing = createElement(NamedIconButton);
+    const part = partitionCatalogTrailing({
+      trailing,
+      hasTrailingSupportingText: true,
+      pinInspectorMeta: true,
+    });
+    expect(part.withEnd).toBe(true);
+    expect(part.placeMetaInRow).toBe(true);
+    expect(part.placeMetaInEnd).toBe(false);
+    expect(part.endAction).toBe(trailing);
+    expect(part.chromeTrailing).toBeNull();
+  });
+
+  it("co-locates meta with pinned inspector Select when pinInspectorMeta", () => {
+    const trailing = createElement(NamedSelect);
+    const part = partitionCatalogTrailing({
+      trailing,
+      hasTrailingSupportingText: true,
+      pinInspectorMeta: true,
+    });
+    expect(part.placeMetaInEnd).toBe(true);
+    expect(part.placeMetaInRow).toBe(false);
+    expect(part.endAction).toBe(trailing);
+  });
+
+  it("Timeline-style: never pins meta to end even for Select", () => {
+    const trailing = createElement(NamedSelect);
+    const part = partitionCatalogTrailing({
+      trailing,
+      hasTrailingSupportingText: true,
+    });
+    expect(part.placeMetaInEnd).toBe(false);
+    expect(part.placeMetaInRow).toBe(true);
+    expect(part.withEnd).toBe(true);
+  });
+
+  it("keeps decorative trailing as chrome", () => {
+    const trailing = createElement(NamedIcon);
+    const part = partitionCatalogTrailing({
+      trailing,
+      hasTrailingSupportingText: false,
+    });
+    expect(part.withEnd).toBe(false);
+    expect(part.chromeTrailing).toBe(trailing);
+    expect(part.endAction).toBeNull();
   });
 });

@@ -98,7 +98,11 @@ belong in a consumer’s own doc.
    dialog head, Card / Collapsible heads, nav headlines ≥ **0.5.134**) — live
    `#drawer-nested-scroll` + Layouts `#layouts-demo-shell`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
-   Textarea / input hosts hide the native bar only (no overlay rail). Do **not**
+   **Scroll-edge fade (≥ 0.5.135):** capped CodeBlock / Textarea /
+   NavigationDrawer body soft-mask top+bottom when content overflows
+   (`data-fade-top` / `data-fade-bottom`, length
+   `--fynns-layout-scroll-edge-fade-length`) — not a hard clip. Textarea /
+   input hosts hide the native bar only (no overlay rail). Do **not**
    use `scrollbar-gutter: stable` / `both-edges`. NavigationDrawer keeps
    `--fynns-navdrawer-pad-inline` (10dp) only. Vertical scroll hosts must pin
    `overflow-x: clip` (not bare `overflow: auto`).

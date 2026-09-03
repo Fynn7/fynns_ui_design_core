@@ -485,7 +485,7 @@
   --fynns-navdrawer-search-gap: var(--fynns-layout-control-stack-gap);
   --fynns-navdrawer-badge-dot: 0.375rem;
   --fynns-navdrawer-group-item-pad-inline-start: 2rem;
-  --fynns-navdrawer-body-fade-length: 1.5rem;
+  --fynns-navdrawer-body-fade-length: var(--fynns-layout-scroll-edge-fade-length);
   --fynns-command-max-width: var(--fynns-layout-dialog-max-width-md);
   --fynns-command-list-max-height: 20rem;
   --fynns-command-pad-inline: var(--fynns-layout-content-inset);
@@ -552,6 +552,7 @@
   --fynns-layout-field-pad-inline: var(--fynns-space-md);
   --fynns-layout-field-pad-block: var(--fynns-space-md);
   --fynns-layout-textarea-max-height: min(70dvh, 40rem);
+  --fynns-layout-scroll-edge-fade-length: 1.5rem;
   --fynns-layout-list-well-max-height: 20rem;
   --fynns-layout-list-well-max-height-sm: 12rem;
   --fynns-layout-busy-region-backdrop-blur: 8px;
@@ -902,6 +903,71 @@ button {
   .fynns-scroll-rail[data-visible="true"][data-dragging] .fynns-scroll-thumb {
     background-color: var(--fynns-scrollbar-thumb-active);
   }
+}
+
+/*
+ * Soft scroll-edge fade (Cursor-style): when more content sits past the top /
+ * bottom of a capped CodeBlock / Textarea / NavigationDrawer body, mask the
+ * overflowing edge instead of a hard clip. Attrs from syncScrollEdgeFade.
+ * Overlay thumbs stay in the portal (unaffected by host mask).
+ */
+.fynns-code-block-pre[data-fade-bottom],
+.fynns-code-block-input[data-fade-bottom],
+.fynns-code-block-highlight[data-fade-bottom],
+.fynns-textarea[data-fade-bottom],
+.fynns-nav-drawer-body[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-code-block-pre[data-fade-top],
+.fynns-code-block-input[data-fade-top],
+.fynns-code-block-highlight[data-fade-top],
+.fynns-textarea[data-fade-top],
+.fynns-nav-drawer-body[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-code-block-pre[data-fade-top][data-fade-bottom],
+.fynns-code-block-input[data-fade-top][data-fade-bottom],
+.fynns-code-block-highlight[data-fade-top][data-fade-bottom],
+.fynns-textarea[data-fade-top][data-fade-bottom],
+.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
 }
 
 .fynns-sr-only {

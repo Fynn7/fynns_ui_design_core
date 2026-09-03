@@ -63,11 +63,23 @@ function clampFloatingSize(size: FloatingSize, maxWidth: number): FloatingSize {
   return { width: maxWidth, height: size.height };
 }
 
+export type FloatingBoxOpts = {
+  side?: Side;
+  align?: Align;
+  offset?: number;
+  /**
+   * Restrict collision flip to these sides (order still prefers `side` then
+   * opposite). FabMenu passes `["top","bottom"]` so a tall stack never parks
+   * left/right of the FAB.
+   */
+  sides?: Side[];
+};
+
 /** Top-left viewport coordinates for the floating box (no CSS transform). */
 export function resolveFloatingBox(
   anchorRect: DOMRect,
   floatingSize: FloatingSize | null,
-  opts: { side?: Side; align?: Align; offset?: number } = {},
+  opts: FloatingBoxOpts = {},
 ): FloatingBoxPosition {
   const vw = window.innerWidth;
   const maxWidth = viewportFloatMaxWidth(vw);
@@ -282,12 +294,15 @@ export function shiftIntoViewport(
   return { top: point.top + dy, left: point.left + dx };
 }
 
-function sideCandidates(preferred: Side): Side[] {
+function sideCandidates(preferred: Side, allowed?: Side[]): Side[] {
   const opposite = OPPOSITE_SIDE[preferred];
   const rest = (["top", "bottom", "left", "right"] as Side[]).filter(
     (s) => s !== preferred && s !== opposite,
   );
-  return [preferred, opposite, ...rest];
+  const ordered = [preferred, opposite, ...rest];
+  if (!allowed || allowed.length === 0) return ordered;
+  const filtered = ordered.filter((s) => allowed.includes(s));
+  return filtered.length > 0 ? filtered : [preferred];
 }
 
 /**
@@ -322,9 +337,9 @@ function alignCandidates(
 export function resolveAnchoredPosition(
   anchorRect: DOMRect,
   floatingSize: FloatingSize | null,
-  opts: { side?: Side; align?: Align; offset?: number } = {},
+  opts: FloatingBoxOpts = {},
 ): AnchoredPosition {
-  const { side: preferred = "bottom", align = "center", offset = 6 } = opts;
+  const { side: preferred = "bottom", align = "center", offset = 6, sides } = opts;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const maxWidth = viewportFloatMaxWidth(vw);
@@ -333,7 +348,7 @@ export function resolveAnchoredPosition(
   type Candidate = AnchoredPosition & { score: number };
   let best: Candidate | null = null;
 
-  for (const trySide of sideCandidates(preferred)) {
+  for (const trySide of sideCandidates(preferred, sides)) {
     const aligns = alignCandidates(anchorRect, vw, vh, trySide, align, size, offset);
     for (const tryAlign of aligns) {
       const point = anchorPoint(anchorRect, trySide, tryAlign, offset);
@@ -426,9 +441,29 @@ export function useFloatingBoxPosition(
   anchorEl: HTMLElement | null,
   floatingEl: HTMLElement | null,
   open: boolean,
-  opts: { side?: Side; align?: Align; offset?: number } = {},
+  opts: FloatingBoxOpts & {
+    /**
+     * `controlChild` (default) — prefer the visible child control (Tooltip /
+     * Menu triggers). `element` — measure `anchorEl` itself (FabMenu toggle).
+     */
+    anchorMode?: "controlChild" | "element";
+    /**
+     * When the portal has not measured yet: use {@link estimatedFloatSize}
+     * (default, Tooltip / Menu) or a zero box so flip waits on real height
+     * (FabMenu — matches the old `height > 0` guard).
+     */
+    estimateWhenUnmeasured?: boolean;
+  } = {},
 ): FloatingBoxPosition | null {
-  const { side = "bottom", align = "center", offset = 6 } = opts;
+  const {
+    side = "bottom",
+    align = "center",
+    offset = 6,
+    sides,
+    anchorMode = "controlChild",
+    estimateWhenUnmeasured = true,
+  } = opts;
+  const sidesKey = sides?.join(",") ?? "";
   const [box, setBox] = useState<FloatingBoxPosition | null>(null);
 
   useLayoutEffect(() => {
@@ -436,12 +471,40 @@ export function useFloatingBoxPosition(
       setBox(null);
       return;
     }
+    const allowedSides = sidesKey
+      ? (sidesKey.split(",") as Side[])
+      : undefined;
     const compute = () => {
-      const rect = anchorTargetRect(anchorEl);
+      const rect =
+        anchorMode === "element"
+          ? anchorEl.getBoundingClientRect()
+          : anchorTargetRect(anchorEl);
       const w = floatingEl?.offsetWidth ?? 0;
       const h = floatingEl?.offsetHeight ?? 0;
-      const floatingSize = w > 0 && h > 0 ? { width: w, height: h } : null;
-      setBox(resolveFloatingBox(rect, floatingSize, { side, align, offset }));
+      const floatingSize =
+        w > 0 && h > 0
+          ? { width: w, height: h }
+          : estimateWhenUnmeasured
+            ? null
+            : { width: 0, height: 0 };
+      const next = resolveFloatingBox(rect, floatingSize, {
+        side,
+        align,
+        offset,
+        sides: allowedSides,
+      });
+      // Stable identity when geometry is unchanged — consumers (FabMenu enter
+      // effect) key off `pos` and must not thrash on ResizeObserver noise.
+      setBox((prev) =>
+        prev &&
+        prev.top === next.top &&
+        prev.left === next.left &&
+        prev.side === next.side &&
+        prev.align === next.align &&
+        prev.maxWidth === next.maxWidth
+          ? prev
+          : next,
+      );
     };
     compute();
     const ro =
@@ -456,7 +519,17 @@ export function useFloatingBoxPosition(
       window.removeEventListener("scroll", compute, true);
       window.removeEventListener("resize", compute);
     };
-  }, [anchorEl, floatingEl, open, side, align, offset]);
+  }, [
+    anchorEl,
+    floatingEl,
+    open,
+    side,
+    align,
+    offset,
+    sidesKey,
+    anchorMode,
+    estimateWhenUnmeasured,
+  ]);
 
   return box;
 }

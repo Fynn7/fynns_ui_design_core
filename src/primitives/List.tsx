@@ -6,8 +6,7 @@ import {
   type Ref,
 } from "react";
 import {
-  trailingIsPinnedInspectorEnd,
-  trailingIsRowAction,
+  partitionCatalogTrailing,
   type CatalogTrailingMetaAlign,
 } from "./catalogRowGeometry";
 
@@ -230,17 +229,14 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
       <span className="fynns-list-item-trailing-text">{trailingSupportingText}</span>
     ) : null;
 
-  const actionTrailing = trailing != null && trailingIsRowAction(trailing);
-  const pinnedInspectorEnd =
-    actionTrailing && trailing != null && trailingIsPinnedInspectorEnd(trailing);
-  /*
-   * Pinned inspector end (Select / labeled Button): park gap meta in the end
-   * strip so status|CTA|Select share one nowrap band. IconButton overlay keep
-   * meta inside the row (always visible; end opacity:0 until hover).
-   */
-  const endMeta = pinnedInspectorEnd ? metaTrailing : null;
-  const rowMeta = pinnedInspectorEnd ? null : metaTrailing;
-  const chromeTrailing = trailing != null && !actionTrailing ? trailing : null;
+  const partition = partitionCatalogTrailing({
+    trailing,
+    hasTrailingSupportingText: trailingSupportingText != null,
+    pinInspectorMeta: true,
+  });
+  const endMeta = partition.placeMetaInEnd ? metaTrailing : null;
+  const rowMeta = partition.placeMetaInRow ? metaTrailing : null;
+  const chromeTrailing = partition.chromeTrailing;
   const innerTrailing =
     rowMeta != null || chromeTrailing != null ? (
       <span className="fynns-list-item-trailing">
@@ -250,10 +246,10 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
     ) : null;
 
   const endTrailing =
-    actionTrailing && trailing != null ? (
+    partition.endAction != null ? (
       <span className="fynns-list-item-trailing fynns-list-item-trailing--end">
         {endMeta}
-        {trailing}
+        {partition.endAction}
       </span>
     ) : null;
 

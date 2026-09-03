@@ -78,6 +78,7 @@ export const EDITABLE_LAYOUT_KEYS = [
   "field-pad-inline",
   "field-pad-block",
   "textarea-max-height",
+  "scroll-edge-fade-length",
   "list-well-max-height",
   "list-well-max-height-sm",
   "busy-region-backdrop-blur",
@@ -107,7 +108,6 @@ export const EDITABLE_NAVDRAWER_KEYS = [
   "width",
   "min-width",
   "max-width",
-  "body-fade-length",
 ] as const satisfies ReadonlyArray<keyof typeof NAVDRAWER_TOKENS>;
 
 export type EditableNavdrawerKey = (typeof EDITABLE_NAVDRAWER_KEYS)[number];
@@ -168,6 +168,7 @@ export const EDITABLE_LAYOUT_BY_SECTION: Record<
     "field-pad-inline",
     "field-pad-block",
     "textarea-max-height",
+    "scroll-edge-fade-length",
     "list-well-max-height",
     "list-well-max-height-sm",
     "busy-region-backdrop-blur",
@@ -305,6 +306,8 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "textarea-max-height":
     "Form field · Textarea autoGrow soft cap before inner scroll (min(70dvh, 40rem) — page catalogs grow; ChatComposer stays 13rem)",
+  "scroll-edge-fade-length":
+    "Scroll-edge fade · CodeBlock / Textarea / NavigationDrawer body soft mask (data-fade-top/bottom)",
   "list-well-max-height":
     "List well · long in-Card List soft cap (20rem; short catalogs → page scroll, no nested fynns-scroll)",
   "list-well-max-height-sm":
@@ -332,8 +335,6 @@ const NAVDRAWER_KEY_ROLES: Record<EditableNavdrawerKey, string> = {
   width: "NavigationDrawer preferred width (absolute rem)",
   "min-width": "ClippedNavShell drawer resize floor (absolute rem — no %)",
   "max-width": "ClippedNavShell drawer resize cap (absolute rem — no %)",
-  "body-fade-length":
-    "NavigationDrawer body scroll-edge mask fade length (data-fade-top/bottom)",
 };
 
 /**

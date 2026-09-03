@@ -54,8 +54,9 @@ Module names that keep Core navigable — **not** public Consumer APIs.
 | Seam | Role | Avoid |
 | --- | --- | --- |
 | **Overlay frame** | Shared presence (`DialogFrame`) | copy-paste presence per overlay |
-| **Floating placement** | Flyout geometry (`floatingBox`) | revived public Popover |
+| **Floating placement** | Flyout geometry (`floatingBox`; Tooltip / DropdownMenu / FabMenu adapters) | revived public Popover; private Fab flip/clamp |
 | **Form rhythm sheet** | Field/Control gaps (`form-rhythm.css`) | empty TSX for CSS-only hosts |
 | **Destination geometry** | Crowding lengths without probes (`layoutMeasure` / `PERF.md`) | probes under shell MutationObserver |
-| **Status-tree timing** | ChatActivity open/settle policy | timing only in untested effects |
-| **Catalog row geometry** | Trailing-action vs decorative (`catalogRowGeometry`) | List ticks as fake Timeline |
+| **Status-tree timing** | `chatActivityPolicy` / `chatThinkingPolicy` (+ `displayThinkingOpen` paint path). Activity has no post-stream auto-collapse; Thinking does. | render+effect both writing open; pin clear after paint; untested React effect timing |
+| **Catalog row geometry** | Trailing action vs decorative + meta partition (`catalogRowGeometry`) | List ticks as fake Timeline; duplicated `--with-end` assembly |
+| **Chat block host** | Stack vs stream-opaque tables (`chatBlockHost`) | diverging CodeBlock/Surface lists; ChatMarkdown treated opaque for R05 |

@@ -7,6 +7,8 @@ import {
   useState,
 } from "react";
 import {
+  displayThinkingOpen,
+  resetThinkingPinsOnStreamStart,
   resolveThinkingLabel,
   resolveThinkingOpen,
 } from "./chatThinkingPolicy";
@@ -130,33 +132,30 @@ export function ChatThinking({
 
     const wasStreaming = wasStreamingRef.current;
     const prev = policyRef.current;
-    let userPinnedClosedNext = prev.userPinnedClosed;
-    let userPinnedOpenNext = prev.userPinnedOpen;
-    let didAutoNext = prev.didAutoCollapse;
-    const internalNext = prev.internalOpen;
-
-    if (streaming && !wasStreaming) {
-      userPinnedClosedNext = false;
-      userPinnedOpenNext = false;
-      didAutoNext = false;
-    }
+    const pins = resetThinkingPinsOnStreamStart({
+      streaming,
+      wasStreaming,
+      userPinnedClosed: prev.userPinnedClosed,
+      userPinnedOpen: prev.userPinnedOpen,
+      didAutoCollapse: prev.didAutoCollapse,
+    });
 
     const result = resolveThinkingOpen({
       streaming,
-      internalOpen: internalNext,
-      userPinnedClosed: userPinnedClosedNext,
-      userPinnedOpen: userPinnedOpenNext,
-      didAutoCollapse: didAutoNext,
+      internalOpen: prev.internalOpen,
+      userPinnedClosed: pins.userPinnedClosed,
+      userPinnedOpen: pins.userPinnedOpen,
+      didAutoCollapse: pins.didAutoCollapse,
       wasStreaming,
     });
 
     wasStreamingRef.current = streaming;
 
-    if (userPinnedClosedNext !== prev.userPinnedClosed) {
-      setUserPinnedClosed(userPinnedClosedNext);
+    if (pins.userPinnedClosed !== prev.userPinnedClosed) {
+      setUserPinnedClosed(pins.userPinnedClosed);
     }
-    if (userPinnedOpenNext !== prev.userPinnedOpen) {
-      setUserPinnedOpen(userPinnedOpenNext);
+    if (pins.userPinnedOpen !== prev.userPinnedOpen) {
+      setUserPinnedOpen(pins.userPinnedOpen);
     }
     if (result.didAutoCollapse !== prev.didAutoCollapse) {
       setDidAutoCollapse(result.didAutoCollapse);
@@ -166,11 +165,13 @@ export function ChatThinking({
     }
   }, [streaming, isControlled]);
 
-  const isOpen = isControlled
-    ? Boolean(open)
-    : streaming && !userPinnedClosed
-      ? true
-      : internalOpen;
+  const isOpen = displayThinkingOpen({
+    streaming,
+    open: isControlled ? open : undefined,
+    internalOpen,
+    userPinnedClosed,
+    wasStreaming: wasStreamingRef.current,
+  });
 
   const setOpen = (next: boolean) => {
     if (!isControlled) {
