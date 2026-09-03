@@ -211,13 +211,13 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   value → land it in this core package first, then consume.
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
-  the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
-  so nested surfaces inset; plain ≠ flush). **FullscreenDialog flush-start:**
-  first body child a bordered well (`CodeBlock` / `Surface` / table wrap) →
-  core drops `padding-block-start` (one unpadded fill wrapper allowed). Do not
-  add consumer pad-top. See AGENTS.md **Flush-start overlay body** /
-  `#fullscreen-flush`. Outside Card/Collapsible use
-  `.fynns-nest`. Centered Dialog head/foot/inline **and**
+  the outer shell; **`plain` body pad = `content-inset`, column gap =
+  `--fynns-layout-nest-gap`** — nested surfaces inset; plain ≠ flush).
+  **FullscreenDialog flush-start:** first body child a bordered well
+  (`CodeBlock` / `Surface` / table wrap) → core drops `padding-block-start`
+  (one unpadded fill wrapper allowed). Do not add consumer pad-top. See
+  AGENTS.md **Inset decision tree** / `#fullscreen-flush`. Outside
+  Card/Collapsible use `.fynns-nest`. Centered Dialog head/foot/inline **and**
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
@@ -228,7 +228,8 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   `ControlRow` label + Switch visible label on the same row; do **not** add a
   second padding wrapper or toolbar `max-content` stack (Switch tracks must
   share the **CloseIcon glyph** end edge, not the 40dp hit box). Authority:
-  [`AGENTS.md`](../AGENTS.md) **Dismissible Dialog + ControlStack**. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
+  [`AGENTS.md`](../AGENTS.md) keep-set **Dialog** + **Inset decision tree**.
+  Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
   Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
   text edge still lands at strip via glyph-inset math) →
   `--fynns-layout-strip-pad-inline`. Expanded shell pad =
@@ -244,7 +245,7 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
-  containment (`chrome="plain"` = outer shell + nest-gap child).
+  containment (`chrome="plain"` = content-inset pad + nest-gap child).
   **Control + related note:** wrap in `ControlBlock` (`description` /
   `errorText`). On a single ControlRow the hint docks in the **label column**;
   ToggleGroup / cluster vertically centers on name + hint — not a full-bleed
