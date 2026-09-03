@@ -196,7 +196,7 @@ export const Textarea = forwardRef(function Textarea(
       ro?.disconnect();
       clearScrollEdgeFade(el);
     };
-  }, [autoGrow, maxRows, minRows, value, defaultValue]);
+  }, [autoGrow, maxRows, minRows]);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(event);
