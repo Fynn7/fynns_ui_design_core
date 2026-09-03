@@ -1730,53 +1730,9 @@
  * Cursor: when destinations overflow the scrollport, soft-fade the edge that
  * still has more content (into the account footer / top) — not a hard clip
  * + hairline. Attrs set by NavigationDrawer sync (scroll / ResizeObserver).
+ * Mask rules live in theme.css (gen-theme BASE) next to CodeBlock / Textarea
+ * edge fade (\--fynns-layout-scroll-edge-fade-length\).
  */
-.fynns-nav-drawer-body[data-fade-bottom] {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
-    transparent 100%
-  );
-}
-
-.fynns-nav-drawer-body[data-fade-top] {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-navdrawer-body-fade-length),
-    #000 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-navdrawer-body-fade-length),
-    #000 100%
-  );
-}
-
-.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-navdrawer-body-fade-length),
-    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    #000 var(--fynns-navdrawer-body-fade-length),
-    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
-    transparent 100%
-  );
-}
 
 /*
  * Cursor-style sheet footer under the destination scroll body — single account

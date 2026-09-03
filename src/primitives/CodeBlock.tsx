@@ -15,6 +15,11 @@ import { IconButton } from "./IconButton";
 import { Tooltip } from "./Tooltip";
 import { ClipboardIcon } from "./icons";
 import {
+  clearScrollEdgeFade,
+  copyScrollEdgeFadeAttrs,
+  syncScrollEdgeFade,
+} from "./scrollEdgeFade";
+import {
   highlightCode,
   highlightWithProfile,
   isHighlightableLanguage,
@@ -312,6 +317,13 @@ export function CodeBlock(props: CodeBlockProps) {
     pre.scrollLeft = input.scrollLeft;
   };
 
+  const syncEdgeFade = (el: HTMLElement) => {
+    syncScrollEdgeFade(el);
+    if (showEditorOverlay && highlightRef.current) {
+      copyScrollEdgeFadeAttrs(el, highlightRef.current);
+    }
+  };
+
   /* Opt into overflow auto only when content actually exceeds the host.
      Default CSS keeps overflow hidden so sub-pixel / trailing-newline
      noise cannot paint a nearly-full thumb over empty pad.
@@ -319,6 +331,8 @@ export function CodeBlock(props: CodeBlockProps) {
      long lines still get classic pre scroll (x and/or y).
      When a vertical thumb appears, pad the highlight layer by the
      scrollbar width so transparent caret/ink stay column-locked.
+     Overflow edges use soft mask fade (`data-fade-top` / `data-fade-bottom`)
+     — same grammar as NavigationDrawer body.
      ResizeObserver stays mounted across keystrokes — content changes call
      `updateScrollableRef` without reconnecting observers every paint. */
   useLayoutEffect(() => {
@@ -354,9 +368,15 @@ export function CodeBlock(props: CodeBlockProps) {
         padRaf = requestAnimationFrame(() => {
           padRaf = 0;
           syncHighlightPad(true);
+          syncEdgeFade(el);
         });
+        syncEdgeFade(el);
       } else {
         el.removeAttribute("data-scrollable");
+        clearScrollEdgeFade(el);
+        if (showEditorOverlay && highlightRef.current) {
+          clearScrollEdgeFade(highlightRef.current);
+        }
         /* Only clear scroll when leaving the scrollable state — avoids
            resetting mid-edit near the overflow threshold every key. */
         if (wasScrollable) {
@@ -374,6 +394,8 @@ export function CodeBlock(props: CodeBlockProps) {
 
     updateScrollableRef.current = update;
     update();
+    const onScroll = () => syncEdgeFade(el);
+    el.addEventListener("scroll", onScroll, { passive: true });
     const ro =
       typeof ResizeObserver !== "undefined"
         ? new ResizeObserver(() => {
@@ -391,9 +413,14 @@ export function CodeBlock(props: CodeBlockProps) {
     }
     return () => {
       if (padRaf) cancelAnimationFrame(padRaf);
+      el.removeEventListener("scroll", onScroll);
       ro?.disconnect();
       updateScrollableRef.current = () => {};
-      if (highlightRef.current) highlightRef.current.style.paddingInlineEnd = "";
+      clearScrollEdgeFade(el);
+      if (highlightRef.current) {
+        highlightRef.current.style.paddingInlineEnd = "";
+        clearScrollEdgeFade(highlightRef.current);
+      }
     };
   }, [showEditorOverlay, wrap, maxHeightCss]);
 
@@ -513,10 +540,14 @@ export function CodeBlock(props: CodeBlockProps) {
     /* Sync now + one trailing frame — trackpad inertia / scroll coalescing
        can leave the highlight layer a paint behind the caret otherwise. */
     syncHighlightScroll();
+    const input = inputRef.current;
+    if (input) syncEdgeFade(input);
     if (scrollSyncRafRef.current) cancelAnimationFrame(scrollSyncRafRef.current);
     scrollSyncRafRef.current = requestAnimationFrame(() => {
       scrollSyncRafRef.current = 0;
       syncHighlightScroll();
+      const el = inputRef.current;
+      if (el) syncEdgeFade(el);
     });
   };
 

@@ -5,6 +5,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
+import { isChatStreamOpaqueHost } from "./chatBlockHost";
 
 /** Class on the last streamed glyph (R05 color pulse). */
 export const CHAT_STREAM_TAIL_CLASS = "fynns-chat-message-stream-tail";
@@ -29,32 +30,7 @@ export function splitLastGlyph(
 }
 
 function isOpaqueBlockHost(el: ReactElement): boolean {
-  const type = el.type;
-  const name =
-    (typeof type === "function" || (typeof type === "object" && type != null)
-      ? String(
-          ("displayName" in type && type.displayName) ||
-            ("name" in type && type.name) ||
-            "",
-        )
-      : "") || "";
-  if (
-    /^(CodeBlock|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
-      name,
-    )
-  ) {
-    return true;
-  }
-  const className = (el.props as { className?: unknown }).className;
-  if (typeof className === "string") {
-    return /\bfynns-(code-block|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
-      className,
-    );
-  }
-  if (typeof type === "string") {
-    return /^(pre|table|hr|img|video|iframe|svg)$/i.test(type);
-  }
-  return false;
+  return isChatStreamOpaqueHost(el);
 }
 
 /**

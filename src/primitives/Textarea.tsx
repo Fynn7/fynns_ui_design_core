@@ -11,6 +11,10 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
+import {
+  clearScrollEdgeFade,
+  syncScrollEdgeFade,
+} from "./scrollEdgeFade";
 
 export type TextareaSize = "sm" | "md";
 export type TextareaVariant = "filled" | "outlined";
@@ -136,6 +140,7 @@ export const Textarea = forwardRef(function Textarea(
     // Empty: minRows floor only — ignore placeholder wrap scrollHeight.
     if (!el.value) {
       el.style.height = `${floor}px`;
+      syncScrollEdgeFade(el);
       return;
     }
 
@@ -148,6 +153,7 @@ export const Textarea = forwardRef(function Textarea(
       next = Math.min(Math.ceil(el.scrollHeight + borderY), cap);
       el.style.height = `${next}px`;
     }
+    syncScrollEdgeFade(el);
   }, [autoGrow, maxRows, minRows]);
 
   useLayoutEffect(() => {
@@ -172,10 +178,37 @@ export const Textarea = forwardRef(function Textarea(
     return () => ro.disconnect();
   }, [autoGrow, resize]);
 
+  /* Soft edge fade when the well is capped and content scrolls inside
+     (autoGrow soft max / maxRows / fixed height). Same attrs as CodeBlock. */
+  useLayoutEffect(() => {
+    const el = localRef.current;
+    if (!el) return;
+    const sync = () => syncScrollEdgeFade(el);
+    sync();
+    el.addEventListener("scroll", sync, { passive: true });
+    const ro =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(sync)
+        : null;
+    ro?.observe(el);
+    return () => {
+      el.removeEventListener("scroll", sync);
+      ro?.disconnect();
+      clearScrollEdgeFade(el);
+    };
+  }, [autoGrow, maxRows, minRows]);
+
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(event);
     // Uncontrolled: DOM already has the new value; measure now.
     if (value === undefined) resize();
+    else {
+      /* Controlled: value effect remeasures; fade after this paint's height. */
+      requestAnimationFrame(() => {
+        const node = localRef.current;
+        if (node) syncScrollEdgeFade(node);
+      });
+    }
   };
 
   const control = (

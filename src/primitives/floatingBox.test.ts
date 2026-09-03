@@ -177,4 +177,45 @@ describe("resolveAnchoredPosition", () => {
     const placed = { width: Math.min(size.width, box.maxWidth), height: size.height };
     assertFloatingBoxInViewport(box, placed);
   });
+
+  it("flips FabMenu-style top stack to bottom when the viewport has no room above", () => {
+    const anchor = new DOMRect(400, 20, 56, 56);
+    const size = { width: 160, height: 180 };
+    const box = resolveFloatingBox(anchor, size, {
+      side: "top",
+      align: "end",
+      offset: 12,
+    });
+    expect(box.side).toBe("bottom");
+    assertFloatingBoxInViewport(box, size);
+  });
+
+  it("keeps FabMenu stacks on top/bottom when sides is restricted (no left/right)", () => {
+    const anchor = new DOMRect(200, 120, 56, 56);
+    const size = { width: 160, height: 250 };
+    const prevH = window.innerHeight;
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 300 });
+    try {
+      const box = resolveFloatingBox(anchor, size, {
+        side: "top",
+        align: "end",
+        offset: 12,
+        sides: ["top", "bottom"],
+      });
+      expect(box.side === "top" || box.side === "bottom").toBe(true);
+    } finally {
+      Object.defineProperty(window, "innerHeight", { configurable: true, value: prevH });
+    }
+  });
+
+  it("does not flip FabMenu on zero-size pre-measure (preferred top)", () => {
+    const anchor = new DOMRect(400, 20, 56, 56);
+    const box = resolveFloatingBox(anchor, { width: 0, height: 0 }, {
+      side: "top",
+      align: "end",
+      offset: 12,
+      sides: ["top", "bottom"],
+    });
+    expect(box.side).toBe("top");
+  });
 });

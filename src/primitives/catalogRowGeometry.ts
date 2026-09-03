@@ -5,8 +5,9 @@ import { isValidElement, type ReactNode } from "react";
  *
  * Decides whether `trailing` stays **outside** the interactive row control
  * (`--with-end` / end sibling) so IconButton / clusters never nest inside a
- * `<button>`. Skins stay separate (List pill vs Timeline rail) — this module
- * owns only the nesting / action-vs-decorative decision.
+ * `<button>`. Also partitions meta vs chrome vs end action for skins.
+ * Skins stay separate (List pill vs Timeline rail) — this module owns only
+ * the nesting / action-vs-decorative / meta-band decision.
  *
  * Internal seam — not a public Consumer API.
  */
@@ -107,3 +108,44 @@ export function trailingIsPinnedInspectorEnd(node: ReactNode, depth = 0): boolea
 
 /** Shared min-width trailing meta column (`"start"`) for date / timestamp catalogs. */
 export type CatalogTrailingMetaAlign = "start";
+
+export type CatalogTrailingPartition = {
+  /** Park trailing outside the row control (`--with-end`). */
+  withEnd: boolean;
+  /** List inspector Select/CTA: park supporting meta in the end strip. */
+  placeMetaInEnd: boolean;
+  /** Supporting meta stays inside the row (default / Timeline). */
+  placeMetaInRow: boolean;
+  /** Decorative trailing that stays inside the row control. */
+  chromeTrailing: ReactNode | null;
+  /** Action trailing rendered in the end sibling. */
+  endAction: ReactNode | null;
+};
+
+/**
+ * Partition catalog trailing into row chrome vs end action / meta bands.
+ * List passes `pinInspectorMeta: true`; Timeline omits it.
+ */
+export function partitionCatalogTrailing(opts: {
+  trailing?: ReactNode;
+  hasTrailingSupportingText: boolean;
+  /** When true, co-locate supporting meta with pinned inspector end. */
+  pinInspectorMeta?: boolean;
+}): CatalogTrailingPartition {
+  const trailing = opts.trailing;
+  const actionTrailing = trailing != null && trailingIsRowAction(trailing);
+  const pinnedInspectorEnd =
+    Boolean(opts.pinInspectorMeta) &&
+    actionTrailing &&
+    trailing != null &&
+    trailingIsPinnedInspectorEnd(trailing);
+  const hasMeta = opts.hasTrailingSupportingText;
+
+  return {
+    withEnd: actionTrailing,
+    placeMetaInEnd: Boolean(pinnedInspectorEnd && hasMeta),
+    placeMetaInRow: Boolean(hasMeta && !pinnedInspectorEnd),
+    chromeTrailing: trailing != null && !actionTrailing ? trailing : null,
+    endAction: actionTrailing && trailing != null ? trailing : null,
+  };
+}

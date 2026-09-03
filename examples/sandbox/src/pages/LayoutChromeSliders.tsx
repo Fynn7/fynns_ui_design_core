@@ -162,6 +162,11 @@ const LAYOUT_ROW_META: Record<
     hintKey: "layoutChrome.textareaMaxHeightHint",
     max: 480,
   },
+  "scroll-edge-fade-length": {
+    labelKey: "layoutChrome.scrollEdgeFadeLength",
+    hintKey: "layoutChrome.scrollEdgeFadeLengthHint",
+    max: 64,
+  },
   "list-well-max-height": {
     labelKey: "layoutChrome.listWellMaxHeight",
     hintKey: "layoutChrome.listWellMaxHeightHint",
@@ -252,11 +257,6 @@ const NAVDRAWER_ROW_META: Record<
     labelKey: "layoutChrome.navdrawerMaxWidth",
     hintKey: "layoutChrome.navdrawerMaxWidthHint",
     max: 560,
-  },
-  "body-fade-length": {
-    labelKey: "layoutChrome.navdrawerBodyFadeLength",
-    hintKey: "layoutChrome.navdrawerBodyFadeLengthHint",
-    max: 64,
   },
 };
 

@@ -226,6 +226,117 @@ button {
   }
 }
 
+/*
+ * Soft scroll-edge fade (Cursor-style): when more content sits past the top /
+ * bottom of a capped CodeBlock / Textarea / NavigationDrawer body, mask the
+ * overflowing edge instead of a hard clip. Attrs from syncScrollEdgeFade.
+ * Overlay thumbs stay in the portal (unaffected by host mask).
+ * CodeBlock/Textarea read layout token; NavDrawer reads navdrawer alias so
+ * overriding --fynns-navdrawer-body-fade-length still applies.
+ */
+.fynns-code-block-pre[data-fade-bottom],
+.fynns-code-block-input[data-fade-bottom],
+.fynns-code-block-highlight[data-fade-bottom],
+.fynns-textarea[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-code-block-pre[data-fade-top],
+.fynns-code-block-input[data-fade-top],
+.fynns-code-block-highlight[data-fade-top],
+.fynns-textarea[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 100%
+  );
+}
+
+.fynns-code-block-pre[data-fade-top][data-fade-bottom],
+.fynns-code-block-input[data-fade-top][data-fade-bottom],
+.fynns-code-block-highlight[data-fade-top][data-fade-bottom],
+.fynns-textarea[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-layout-scroll-edge-fade-length),
+    #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+    transparent 100%
+  );
+}
+
+.fynns-nav-drawer-body[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 var(--fynns-navdrawer-body-fade-length),
+    #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
+    transparent 100%
+  );
+}
+
 .fynns-sr-only {
   position: absolute;
   width: 1px;

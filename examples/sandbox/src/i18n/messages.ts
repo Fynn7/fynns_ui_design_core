@@ -384,6 +384,9 @@ const en = {
   "layoutChrome.textareaMaxHeight": "Textarea max height",
   "layoutChrome.textareaMaxHeightHint":
     "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (min(70dvh, 40rem); page catalogs grow with prose).",
+  "layoutChrome.scrollEdgeFadeLength": "Scroll-edge fade",
+  "layoutChrome.scrollEdgeFadeLengthHint":
+    "--fynns-layout-scroll-edge-fade-length — soft mask on overflowing CodeBlock / Textarea / NavigationDrawer body (data-fade-top/bottom).",
   "layoutChrome.listWellMaxHeight": "List well max height",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — soft cap for long in-Card Lists (20rem). Short catalogs use FillColumn page scroll — do not nest fynns-scroll on a one-row List.",
@@ -440,9 +443,6 @@ const en = {
   "layoutChrome.navdrawerMaxWidth": "Nav drawer max",
   "layoutChrome.navdrawerMaxWidthHint":
     "--fynns-navdrawer-max-width — resize cap (absolute rem).",
-  "layoutChrome.navdrawerBodyFadeLength": "Nav drawer body fade",
-  "layoutChrome.navdrawerBodyFadeLengthHint":
-    "--fynns-navdrawer-body-fade-length — scroll-edge mask fade when body overflows into the account footer.",
   "layoutChrome.readonlyHelp":
     "Complex layout units (vh / min() / clamp() / var aliases) — visible only; edit in tokens.ts if needed.",
   "layoutChrome.specialReadonly": "Read-only layout tokens",
@@ -2494,6 +2494,9 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.textareaMaxHeight": "Textarea 最大高度",
   "layoutChrome.textareaMaxHeightHint":
     "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（min(70dvh, 40rem)；页面目录随正文长高）。",
+  "layoutChrome.scrollEdgeFadeLength": "滚动边缘渐隐",
+  "layoutChrome.scrollEdgeFadeLengthHint":
+    "--fynns-layout-scroll-edge-fade-length — CodeBlock / Textarea / NavigationDrawer 正文溢出时的软遮罩（data-fade-top/bottom）。",
   "layoutChrome.listWellMaxHeight": "列表井最大高度",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — Card 内长 List 软上限（20rem）。短目录用 FillColumn 页滚动——不要给单行 List 再套 fynns-scroll。",
@@ -2550,9 +2553,6 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.navdrawerMaxWidth": "导航抽屉最大宽度",
   "layoutChrome.navdrawerMaxWidthHint":
     "--fynns-navdrawer-max-width — 拖拽缩放上限（绝对 rem）。",
-  "layoutChrome.navdrawerBodyFadeLength": "导航抽屉正文渐隐",
-  "layoutChrome.navdrawerBodyFadeLengthHint":
-    "--fynns-navdrawer-body-fade-length — body 溢出至账户脚时的滚动边缘 mask 渐隐长度。",
   "layoutChrome.readonlyHelp":
     "复杂 layout 单位（vh / min() / clamp() / var 别名）— 只读可见；需要时在 tokens.ts 手改。",
   "layoutChrome.specialReadonly": "只读 layout token",

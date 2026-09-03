@@ -1262,8 +1262,9 @@ export const NAVDRAWER_TOKENS = {
   /**
    * Scroll-edge mask fade length on `.fynns-nav-drawer-body` when
    * `data-fade-top` / `data-fade-bottom` (soft edge into account footer).
+   * Aliases shared layout `scroll-edge-fade-length` (CodeBlock / Textarea too).
    */
-  "body-fade-length": "1.5rem",
+  "body-fade-length": "var(--fynns-layout-scroll-edge-fade-length)",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */
@@ -1343,6 +1344,11 @@ export const LAYOUT_TOKENS = {
    * ChatComposer keeps its own `composer-max-height` (13rem).
    */
   "textarea-max-height": "min(70dvh, 40rem)",
+  /**
+   * Soft mask length for scroll-edge fade (`data-fade-top` / `data-fade-bottom`)
+   * on CodeBlock / Textarea / NavigationDrawer body — not a hard clip.
+   */
+  "scroll-edge-fade-length": "1.5rem",
   /**
    * Soft cap for a **long** in-Card catalog `List` before inner scroll (20rem).
    * Prefer FillColumn page scroll for short path / repo catalogs — do **not**

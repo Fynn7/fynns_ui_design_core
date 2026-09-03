@@ -14,6 +14,7 @@ import {
 } from "./ChatCitation";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { applyStreamingTail } from "./chatStreamingTail";
+import { isChatStackBlock } from "./chatBlockHost";
 import { RefreshIcon } from "./icons";
 
 export type ChatMessageRole = "user" | "assistant" | "system";
@@ -121,41 +122,6 @@ function hasRenderableBody(children: ReactNode): boolean {
   });
 }
 
-/**
- * Block answer units that must stack with body-stack-gap against prose.
- * Inline marks (`code`, `span`, `a`, …) stay inside a single prose run.
- */
-function isBlockBodyChild(child: ReactNode): boolean {
-  if (!isValidElement(child)) return false;
-  const type = child.type;
-  if (typeof type === "string") {
-    return /^(div|p|pre|ul|ol|li|table|thead|tbody|tr|td|th|section|article|aside|header|footer|blockquote|hr|h[1-6]|figure|figcaption)$/i.test(
-      type,
-    );
-  }
-  const name =
-    (typeof type === "function" || (typeof type === "object" && type != null)
-      ? String(
-          ("displayName" in type && type.displayName) ||
-            ("name" in type && type.name) ||
-            "",
-        )
-      : "") || "";
-  if (
-    /^(CodeBlock|ChatMarkdown|BusyRegion|Surface|Table|Carousel|EmptyState|ChatCitations|LinearProgress|CircularProgress)$/i.test(
-      name,
-    )
-  ) {
-    return true;
-  }
-  const className = (child.props as { className?: unknown }).className;
-  if (typeof className === "string") {
-    return /\bfynns-(code-block|chat-markdown|surface|table|carousel|empty-state|busy-region|chat-citations)\b/.test(
-      className,
-    );
-  }
-  return false;
-}
 
 /**
  * Promote bare text / inline runs to `.fynns-chat-message-prose` so they stack
@@ -197,7 +163,7 @@ function renderBodyChildren(
       inlineBuf.push(child);
       return;
     }
-    if (isBlockBodyChild(child)) {
+    if (isChatStackBlock(child)) {
       flushInline();
       out.push(child);
       return;

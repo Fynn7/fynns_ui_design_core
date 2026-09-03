@@ -73,6 +73,67 @@ export type ResolveThinkingOpenResult = {
 };
 
 /**
+ * Clear pins when a new streaming cycle starts (idle → streaming).
+ * Pure — ChatThinking applies the result into React state.
+ */
+export function resetThinkingPinsOnStreamStart(input: {
+  streaming: boolean;
+  wasStreaming: boolean;
+  userPinnedClosed: boolean;
+  userPinnedOpen: boolean;
+  didAutoCollapse: boolean;
+}): {
+  userPinnedClosed: boolean;
+  userPinnedOpen: boolean;
+  didAutoCollapse: boolean;
+} {
+  if (input.streaming && !input.wasStreaming) {
+    return {
+      userPinnedClosed: false,
+      userPinnedOpen: false,
+      didAutoCollapse: false,
+    };
+  }
+  return {
+    userPinnedClosed: input.userPinnedClosed,
+    userPinnedOpen: input.userPinnedOpen,
+    didAutoCollapse: input.didAutoCollapse,
+  };
+}
+
+/**
+ * Steady-state open for render (no streaming→done edge).
+ * Effect owns auto-collapse via {@link resolveThinkingOpen}; render must not
+ * reimplement that edge. Pass `wasStreaming` so idle→streaming pin clear is
+ * applied **before paint** (avoids one closed-while-streaming frame).
+ */
+export function displayThinkingOpen(input: {
+  streaming: boolean;
+  open?: boolean;
+  internalOpen: boolean;
+  userPinnedClosed: boolean;
+  /** Previous `streaming`; omit / true = no cycle-start pin clear. */
+  wasStreaming?: boolean;
+}): boolean {
+  const pins = resetThinkingPinsOnStreamStart({
+    streaming: input.streaming,
+    wasStreaming: input.wasStreaming ?? true,
+    userPinnedClosed: input.userPinnedClosed,
+    userPinnedOpen: false,
+    didAutoCollapse: true,
+  });
+  return resolveThinkingOpen({
+    streaming: input.streaming,
+    open: input.open,
+    internalOpen: input.internalOpen,
+    userPinnedClosed: pins.userPinnedClosed,
+    userPinnedOpen: false,
+    didAutoCollapse: true,
+    wasStreaming: false,
+  }).open;
+}
+
+/**
  * Open policy:
  * - controlled `open` always wins
  * - streaming → force open unless `userPinnedClosed` (trigger stays

@@ -11,12 +11,12 @@ import {
   isValidElement,
   useEffect,
   useId,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { Fab, type FabVariant } from "./Fab";
+import { useFloatingBoxPosition, type Side } from "./floatingBox";
 import { CloseIcon, PlusIcon } from "./icons";
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -30,6 +30,8 @@ const FABMENU_STAGGER_EXIT_MS = 25;
 const FABMENU_MAX_ITEMS = 6;
 /** Matches `--fynns-fabmenu-gap` at 16px rem (`0.75rem`). */
 const FABMENU_GAP_PX = 12;
+/** FabMenu stays a vertical M3 stack — never left/right of the toggle. */
+const FABMENU_SIDES: Side[] = ["top", "bottom"];
 
 function fabMenuExitMs(itemCount: number): number {
   const n = Math.max(1, Math.min(itemCount, FABMENU_MAX_ITEMS));
@@ -48,55 +50,6 @@ function menuItemButtons(root: HTMLElement | null): HTMLButtonElement[] {
   return Array.from(
     root.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)'),
   );
-}
-
-/** Place the menu stack above the toggle; flip below if it would leave the viewport. */
-function useFabMenuBox(
-  anchorEl: HTMLElement | null,
-  floatingEl: HTMLElement | null,
-  open: boolean,
-  align: "start" | "end",
-  gapPx: number,
-): { top: number; left: number } | null {
-  const [box, setBox] = useState<{ top: number; left: number } | null>(null);
-
-  useLayoutEffect(() => {
-    if (!open || !anchorEl) {
-      setBox(null);
-      return;
-    }
-    const margin = 8;
-    const compute = () => {
-      const anchor = anchorEl.getBoundingClientRect();
-      const width = floatingEl?.offsetWidth ?? 0;
-      const height = floatingEl?.offsetHeight ?? 0;
-      let top = anchor.top - height - gapPx;
-      if (height > 0 && top < margin) {
-        top = anchor.bottom + gapPx;
-      }
-      let left = align === "end" ? anchor.right - width : anchor.left;
-      if (width > 0) {
-        left = Math.min(left, window.innerWidth - width - margin);
-        left = Math.max(margin, left);
-      }
-      setBox({ top, left });
-    };
-    compute();
-    const ro =
-      floatingEl && typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(compute)
-        : null;
-    if (floatingEl) ro?.observe(floatingEl);
-    window.addEventListener("scroll", compute, true);
-    window.addEventListener("resize", compute);
-    return () => {
-      ro?.disconnect();
-      window.removeEventListener("scroll", compute, true);
-      window.removeEventListener("resize", compute);
-    };
-  }, [anchorEl, floatingEl, open, align, gapPx]);
-
-  return box;
 }
 
 export type FabMenuItemProps = {
@@ -225,12 +178,20 @@ export function FabMenu({
     return () => clearTimeout(timer);
   }, [expanded, itemCount]);
 
-  const pos = useFabMenuBox(
+  const pos = useFloatingBoxPosition(
     toggleRef.current,
     itemsEl,
     rendered,
-    align,
-    FABMENU_GAP_PX,
+    {
+      side: "top",
+      align,
+      offset: FABMENU_GAP_PX,
+      anchorMode: "element",
+      // M3 FAB stack stays vertical; never park left/right of the toggle.
+      sides: FABMENU_SIDES,
+      // Wait for measured height before flipping (old useFabMenuBox guard).
+      estimateWhenUnmeasured: false,
+    },
   );
 
   // Wait until the portal is measured/positioned, then paint `closed` for a

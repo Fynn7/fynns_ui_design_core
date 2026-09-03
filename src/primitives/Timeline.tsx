@@ -10,7 +10,7 @@ import {
   type Ref,
 } from "react";
 import {
-  trailingIsRowAction,
+  partitionCatalogTrailing,
   type CatalogTrailingMetaAlign,
 } from "./catalogRowGeometry";
 
@@ -200,20 +200,24 @@ export const TimelineItem = forwardRef<
       </span>
     ) : null;
 
-  const actionTrailing = trailing != null && trailingIsRowAction(trailing);
-  const chromeTrailing = trailing != null && !actionTrailing ? trailing : null;
+  const partition = partitionCatalogTrailing({
+    trailing,
+    hasTrailingSupportingText: trailingSupportingText != null,
+  });
+  const rowMeta = partition.placeMetaInRow ? metaTrailing : null;
+  const chromeTrailing = partition.chromeTrailing;
   const innerTrailing =
-    metaTrailing != null || chromeTrailing != null ? (
+    rowMeta != null || chromeTrailing != null ? (
       <span className="fynns-timeline-item-trailing">
-        {metaTrailing}
+        {rowMeta}
         {chromeTrailing}
       </span>
     ) : null;
 
   const endTrailing =
-    actionTrailing && trailing != null ? (
+    partition.endAction != null ? (
       <span className="fynns-timeline-item-trailing fynns-timeline-item-trailing--end">
-        {trailing}
+        {partition.endAction}
       </span>
     ) : null;
 
