@@ -35,7 +35,7 @@ alwaysApply: true
 | 场景 | 用 | 禁止 |
 | --- | --- | --- |
 | 全屏阻塞 | `BusyScrim` | EmptyState + 圈 |
-| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell 直接子级） | `fill` 塞进 unit-stack / Card；FieldHint + busy 同井 |
+| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell，或 PageScroll → content-column；≥ **0.5.136** 滚口 min-height + 薄包装透传） | `fill` 塞进 unit-stack / Card；FieldHint + busy 同井；PageScroll 内 fill 高度链断 → BusyStack 贴顶溢出 |
 | Dialog/Card 正文加载 | `BusyRegion`（定高才 `fill`） | 裸 `CircularProgress`；busy 内叠 Select/Pagination |
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
@@ -50,6 +50,10 @@ alwaysApply: true
   “Clipped” = M3 拓扑，不是文字裁切。
 - Settings：**仅** `navFooter` 齿轮；Settings 体 = 软件偏好（语言/外观/账号）。
   功能配置走独立目的地。语言开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。
+- 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
+  `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
+  **0.5.137** 对齐 Item `item-pad-inline`（勿消费仓私有 padding）。对照
+  `#layouts-demo-navigation-drawer`。
 - `EndAside`：只切 `open` — **禁止** `{open && <EndAside>}`；toggle 勿触发
   workspace `BusyRegion` boot。窄检查器：一个主 CTA + IconButton/菜单，勿堆三条
   labeled Button。对照 `#layouts-demo-shell`。

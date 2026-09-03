@@ -4171,6 +4171,17 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
+ * PageScroll catalogs: grow the content column to at least the scrollport so
+ * pane-fill BusyRegion / EmptyState can stretch and center BusyStack. Without
+ * this, `flex: 1` on a scroll child collapses to content height, absolute
+ * overlay hosts paint ~0–stack-tall boxes, and BusyStack overflows / parks
+ * under TopAppBar (consumer PageScroll + SectionLead cold-start).
+ */
+.fynns-page-scroll > .fynns-content-column {
+  min-height: 100%;
+}
+
+/*
  * Destination catalog chrome: first child is a standalone ControlRow
  * (section name + IconButton strip). Drop pad-block-start to the
  * NavigationDrawer body band so that ControlRow label shares the active
@@ -4190,8 +4201,36 @@ a.fynns-breadcrumb-link:visited {
   align-self: stretch;
 }
 
+/*
+ * Thin section wrappers (SectionLead body, locale provider, Suspense) that
+ * host only a pane-fill BusyRegion / EmptyState must pass the height chain —
+ * otherwise `--fill` is not a direct `.fynns-content-column` child and the
+ * overlay collapses (BusyStack top-parks / overflows).
+ */
+.fynns-content-column > *:has(> .fynns-busy-region--fill),
+.fynns-content-column > *:has(> .fynns-empty-state--fill) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+}
+
+.fynns-content-column > *:has(> .fynns-busy-region--fill) > .fynns-busy-region--fill,
+.fynns-content-column > *:has(> .fynns-empty-state--fill) > .fynns-empty-state--fill {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-self: stretch;
+  width: 100%;
+}
+
 /* Catalog Cards / unit stacks under a content column: do not flex-shrink
  * (shrink + Card overflow:hidden clips charts / tables). */
-.fynns-content-column > :not(.fynns-busy-region--fill):not(.fynns-empty-state--fill):not(.fynns-fill-column) {
+.fynns-content-column
+  > :not(.fynns-busy-region--fill):not(.fynns-empty-state--fill):not(.fynns-fill-column):not(
+    :has(> .fynns-busy-region--fill)
+  ):not(:has(> .fynns-empty-state--fill)) {
   flex-shrink: 0;
 }
