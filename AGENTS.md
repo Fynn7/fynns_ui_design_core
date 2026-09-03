@@ -108,9 +108,10 @@ belong in a consumer’s own doc.
    `overflow-x: clip` (not bare `overflow: auto`).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
-   `BusyRegion` (sectional **frosted blur** overlay + **one** progress chrome +
+   `BusyRegion` (sectional **soft frosted blur** overlay + **one** progress chrome +
    message — well hue unchanged; never a dark overlay scrim; never a second
-   `surface-*` wash; **pane cold-start uses `fill`**, never `EmptyState` + a
+   `surface-*` wash; light blur radius so busy does not read as a glitchy frame;
+   **pane cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
    only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
    (+ root `<SnackbarHost />`). Do **not** use deleted Toast APIs or the removed
@@ -139,7 +140,7 @@ belong in a consumer’s own doc.
    EndAside; toggle = open↔closed). Overlays via `Dialog` / `ConfirmDialog` /
    `Drawer` / `FullscreenDialog` / `BottomSheet` / `NavigationDrawer`. Blocking /
    sectional busy: `BusyScrim` (full-viewport non-dismissible) or `BusyRegion`
-   (relative frosted blur — content `inert` while busy; no surface tint;
+   (relative soft frosted blur — content `inert` while busy; no surface tint;
    full-viewport tint → `BusyScrim`). Heavy boots use **`runBusyTask` /
    `useBusyTask`** (show busy → paint → then work). Do not revive
    `BlockingLoadingOverlay` or purged `Panel` / `PanelCard`.
@@ -490,7 +491,7 @@ classes.
   FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (frosted blur; `indicator` `circular`|`linear`; never stack
+  indicator? }` (soft frosted blur; `indicator` `circular`|`linear`; never stack
   ring on bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint

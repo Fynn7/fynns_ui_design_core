@@ -313,7 +313,7 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "list-well-max-height-sm":
     "List well · dense in-Card List soft cap (12rem; only when the catalog can overflow)",
   "busy-region-backdrop-blur":
-    "BusyRegion overlay · frosted blur radius (transparent fill — well hue unchanged)",
+    "BusyRegion overlay · soft blur radius (transparent fill — well hue unchanged; keep light)",
   "sheet-pad-inline": "Sheet pad · BottomSheet horizontal (M3 ≠ content-inset)",
   "sheet-pad-block": "Sheet pad · BottomSheet vertical (M3 ≠ content-inset)",
   "drawer-width": "Shell size · content Drawer width",

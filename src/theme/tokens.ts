@@ -1362,11 +1362,12 @@ export const LAYOUT_TOKENS = {
    */
   "list-well-max-height-sm": "12rem",
   /**
-   * BusyRegion sectional overlay frosted blur — mounted copy keeps its native
-   * color; blur prevents busy message stacking on legible mono / catalog text.
+   * BusyRegion sectional overlay soft blur — mounted copy keeps its native
+   * color; a light radius softens mono / catalog text under the busy message
+   * without reading as a corrupted / glitchy frame (heavy blur → that risk).
    * Not `--fynns-color-overlay` tint (full-viewport → BusyScrim).
    */
-  "busy-region-backdrop-blur": "8px",
+  "busy-region-backdrop-blur": "3px",
   /**
    * Soft cap for `FillColumn` `header` on `DestinationAppShell` canvas when the
    * preview band hosts a Card / PageScroll — keeps Chat visible in `main`.
