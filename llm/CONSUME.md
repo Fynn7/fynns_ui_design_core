@@ -9,14 +9,15 @@ Machine contract: [`consume.json`](consume.json).
 **Short user prompts:** humans often say only “use `@fynns/ui` / build a Collapsible page”. Treat this file as mandatory before writing UI code — do **not** wait for a long task doc.
 
 **Pasteable consumer treaty** (drop into any app’s `.cursor/rules/` so agents
-obey without opening this file): [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc). **Default app chrome:**
+obey without opening this file): pasteable rule
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) + slug index
+[`CONSUMER_TREATY.md`](CONSUMER_TREATY.md). **Default app chrome:**
 `DestinationAppShell` (sandbox Layout templates). If composing
 `ClippedNavShell` slots: `navMode` must stay in sync with Drawer vs Rail
 children (never a rail-width track hosting a labeled drawer); `nav` =
 destinations only (never wiki / page body / Chat). “Clipped” = M3 chrome
 topology, not text clipping — see [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
-failure modes **squashed drawer** + **wrong shell slot**.
+index slugs **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
@@ -86,7 +87,7 @@ failure modes **squashed drawer** + **wrong shell slot**.
     `message` is copy only (never nest a bar or ring). Full-app block →
     `BusyScrim`. Inline widget busy → `CircularProgress` `sm` only.
     Authority: [`AGENTS.md`](../AGENTS.md) Feedback **Loading placement**.
-    Live: sandbox `#busy-region`. Failure mode: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
+    Live: sandbox `#busy-region`. Index: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md)
     **BusyRegion fill nested in unit-stack / Card**.
 
 ## Agent checklist (greenfield / short prompt)
@@ -138,9 +139,9 @@ shells inherit it. Do **not** commit a literal token into the repo `.npmrc`.
 **Consumer agents (hard):** on install / bump failure (`E401`, wrong-registry
 `E404`, “token provided”), **self-debug with the checklist above** before
 claiming the package is missing or pointing Vite at a sibling core checkout.
-Treaty failure mode + pasteable §2a:
+Treaty index + pasteable install auth guidance:
 [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **GitHub Packages install auth** /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc).
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **安装与 API** §2.
 
 ## What the script does
 
@@ -210,13 +211,13 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   value → land it in this core package first, then consume.
 - Shell insets: Collapsible / Drawer / Card / Fullscreen →
   `--fynns-layout-content-inset` (`chrome="card"` and `chrome="plain"` share
-  the outer shell; **`plain` body uses `--fynns-layout-nest-gap`** — pad + gap —
-  so nested surfaces inset; plain ≠ flush). **FullscreenDialog flush-start:**
-  first body child a bordered well (`CodeBlock` / `Surface` / table wrap) →
-  core drops `padding-block-start` (one unpadded fill wrapper allowed). Do not
-  add consumer pad-top. See AGENTS.md **Flush-start overlay body** /
-  `#fullscreen-flush`. Outside Card/Collapsible use
-  `.fynns-nest`. Centered Dialog head/foot/inline **and**
+  the outer shell; **`plain` body pad = `content-inset`, column gap =
+  `--fynns-layout-nest-gap`** — nested surfaces inset; plain ≠ flush).
+  **FullscreenDialog flush-start:** first body child a bordered well
+  (`CodeBlock` / `Surface` / table wrap) → core drops `padding-block-start`
+  (one unpadded fill wrapper allowed). Do not add consumer pad-top. See
+  AGENTS.md **Inset decision tree** / `#fullscreen-flush`. Outside
+  Card/Collapsible use `.fynns-nest`. Centered Dialog head/foot/inline **and**
   Chat conversation column (thread + composer outer) →
   `--fynns-layout-dialog-inset` (via `--fynns-chat-thread-pad-inline`;
   composer inset aliases the thread token). Dialog body block also uses
@@ -227,7 +228,8 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   `ControlRow` label + Switch visible label on the same row; do **not** add a
   second padding wrapper or toolbar `max-content` stack (Switch tracks must
   share the **CloseIcon glyph** end edge, not the 40dp hit box). Authority:
-  [`AGENTS.md`](../AGENTS.md) **Dismissible Dialog + ControlStack**. Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
+  [`AGENTS.md`](../AGENTS.md) keep-set **Dialog** + **Inset decision tree**.
+  Long-strip / `radius-3xl` **text** (Banner, InlineAlert,
   Snackbar, ChatComposer collapsed text-only start; expanded ChatComposer
   text edge still lands at strip via glyph-inset math) →
   `--fynns-layout-strip-pad-inline`. Expanded shell pad =
@@ -243,7 +245,7 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested
-  containment (`chrome="plain"` = outer shell + nest-gap child).
+  containment (`chrome="plain"` = content-inset pad + nest-gap child).
   **Control + related note:** wrap in `ControlBlock` (`description` /
   `errorText`). On a single ControlRow the hint docks in the **label column**;
   ToggleGroup / cluster vertically centers on name + hint — not a full-bleed

@@ -13,7 +13,9 @@ When a consumer UI is wrong (wrong primitive, density, alignment, host),
 **do not** only patch the app. Same-task loop — **all three** are hard:
 
 1. **Core constraint** — `AGENTS.md` (catalog / Content density / Hard rules).
-2. **Failure mode** — `llm/CONSUMER_TREATY.md` (symptoms / cause / consumer fix).
+2. **Failure mode index** — `llm/CONSUMER_TREATY.md` (slug → AGENTS + sandbox
+   `#anchor`). Do not reintroduce long treaty essays; fix the rule in AGENTS /
+   core CSS, then add/update the index row if the slug is new.
 3. **Pasteable** — `llm/consumer-cursor-rule.mdc`, then **re-paste** into the
    consumer `.cursor/rules/fynns-ui-consumer.mdc` (installer does not overwrite).
 4. **Public recipe in core** if CSS is needed (e.g. `.fynns-table-meta`,
@@ -22,24 +24,16 @@ When a consumer UI is wrong (wrong primitive, density, alignment, host),
 5. **Sandbox living sample (hard)** — update **Globals / Preview / Layout
    templates** in the **same task** so the fixed pattern is visible and
    teachable. Pick the closest `#…` demo (e.g. `#field-header`, `#form-recipe`,
-   `#list`, `#rhythm`) or extend it; add a new catalog row only when no host
-   fits. The sample must **show the corrected geometry/hosts** — never leave a
-   demo that still teaches the anti-pattern (Chip-in-`#table` lesson). Run
-   **browser verification in sandbox** (`.cursor/rules/browser-verify-ui.mdc`)
-   before publish — not CSS-only reasoning.
+   `#list`, `#rhythm`) or extend it. Run **browser verification in sandbox**
+   (`.cursor/rules/browser-verify-ui.mdc`) before publish.
 6. **Bump + publish** `@fynn7/ui-design-core` in the same task
    (`docs/package-propagation.md`). Do not ship via a sibling Vite alias.
 7. **Consumer via subagent (hard when bug came from a consumer screen)** —
    **dispatch a subagent** into the consumer checkout to `npm install` the
    new version and run **browser verification** there (not sandbox-only).
-   Consumer fix = props / keep-set classes / own strings only — drop private
-   restyles of `.fynns-*`. Follow `.cursor/rules/browser-verify-ui.mdc` /
-   verifying-in-browser in the consumer repo.
+   Consumer fix = props / keep-set classes / own strings only.
 
 **Do not** report done with only (1) core CSS or (7) consumer patch — (5)
 sandbox demo + browser proof in **both** repos when the bug was consumer-reported.
-
-Consumer-only AGENTS bullets are allowed **after** the core recipe + sandbox
-sample exist, and must **link** here — not restate the spec.
 
 Generic placeholders in sandbox (see `no-consumer-content.mdc`).

@@ -13,6 +13,7 @@ dialog-scroll-radius/
 .ship-pr-body*.md
 scripts/_focus-verify/
 scripts/_scale-out/
+# leftover local dumps from deleted one-shot verifiers
 scripts/_audit-shots/*.png
 scripts/_audit-shots/*.json
 scripts/_audit-*.mjs

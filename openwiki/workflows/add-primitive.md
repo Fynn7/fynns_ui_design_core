@@ -19,6 +19,7 @@ tags: [workflow, primitives, sandbox]
 5. **Document** — update [`AGENTS.md`](../../AGENTS.md) keep-set line; Cursor rules if the public list is mirrored there.
 6. **Demo** — sandbox Globals or Preview sample in the **same** change (public API = what sandbox shows; see [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md)).
 7. **Verify** — `npm run typecheck`; browser-verify rendered UI (workspace rule `browser-verify-ui`).
+8. **Bump + publish (hard)** — consumer-visible change is a new GitHub Packages version in the **same task**: [`docs/package-propagation.md`](../../docs/package-propagation.md). Do not ship via a sibling Vite alias.
 
 ## Permanent skips
 
@@ -28,4 +29,4 @@ Do **not** implement: TimePicker dial / clock face, LoadingIndicator, ButtonGrou
 
 - `src/primitives/`, `src/index.ts`, `src/theme/tokens.ts`
 - `examples/sandbox/src/pages/GlobalsPage.tsx` (+ Preview canvases)
-- `AGENTS.md`, `llm/BREAKING_PURGE.md`
+- `AGENTS.md`, `llm/BREAKING_PURGE.md`, `docs/package-propagation.md`

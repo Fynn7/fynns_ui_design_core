@@ -10,10 +10,9 @@ alwaysApply: false
 # Timeline catalog (hard gate)
 
 Authority: [`AGENTS.md`](../../AGENTS.md) Content density **Chronological
-timeline**; [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
+timeline**; slug index [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
 pasteable [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
-Consumer-reported pattern bugs → `/constrain-then-consumer`
-([`.cursor/skills/constrain-then-consumer/SKILL.md`](../skills/constrain-then-consumer/SKILL.md)).
+Consumer-reported pattern bugs → `/constrain-then-consumer`.
 
 ## Do
 

@@ -235,7 +235,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     squashedDrawerWarnedRef.current = true;
     console.warn(
       '[ClippedNavShell] navMode="rail" but nav still renders NavigationDrawer. ' +
-        "Swap to NavigationRail / NavigationRailItem (see llm/CONSUMER_TREATY.md). " +
+        "Swap to NavigationRail / NavigationRailItem (see llm/CONSUMER_TREATY.md index: squashed drawer). " +
         "Leaving a labeled drawer in the rail track produces a squashed column and unexpected scrollbars.",
     );
   }, [navMode, phase]);
