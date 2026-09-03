@@ -198,6 +198,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | LinearProgress end-stop / “dotted” bar | AGENTS Busy/Loading | `#progress` |
 | private hub progress shell for section loads | AGENTS Busy/Loading | `#busy-region` |
 | BusyRegion fill nested in unit-stack / Card | AGENTS Busy/Loading | `#busy-region` |
+| BusyRegion fill BusyStack top overflow in PageScroll | AGENTS Busy/Loading | `#sandbox-busy-region-page-scroll-fill` |
 | section FieldHint + pane cold-start BusyRegion in one well | AGENTS Busy/Loading | `#busy-region` |
 | EmptyState parks top-left in destination canvas | AGENTS shells / Hard rules | `#empty-state` |
 | master–detail / content max-width token missing | AGENTS Hard rules | `#layouts-demo-drill-in` |

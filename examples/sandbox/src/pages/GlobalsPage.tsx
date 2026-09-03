@@ -5362,6 +5362,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.busyRegionPaneLeadHelp")} />
+          <SandboxHelp text={t("globals.busyRegionPageScrollFillHelp")} />
+          <div id="sandbox-busy-region-page-scroll-fill" className="sandbox-page-scroll-stage">
+            <FillColumn>
+              <PageScroll>
+                {/* Thin section wrapper (SectionLead cold-start): must pass height chain. */}
+                <div data-sandbox-section-lead="">
+                  <BusyRegion
+                    fill
+                    busy
+                    label={t("globals.busyRegionPageScrollFillLabel")}
+                  />
+                </div>
+              </PageScroll>
+            </FillColumn>
+          </div>
           <div className="sandbox-globals-row">
             <Button size="sm" onClick={() => setBusyRegionDialogOpen(true)}>
               {t("globals.busyRegionDialogOpen")}

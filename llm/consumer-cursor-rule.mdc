@@ -35,7 +35,7 @@ alwaysApply: true
 | 场景 | 用 | 禁止 |
 | --- | --- | --- |
 | 全屏阻塞 | `BusyScrim` | EmptyState + 圈 |
-| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell 直接子级） | `fill` 塞进 unit-stack / Card；FieldHint + busy 同井 |
+| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell，或 PageScroll → content-column；≥ **0.5.136** 滚口 min-height + 薄包装透传） | `fill` 塞进 unit-stack / Card；FieldHint + busy 同井；PageScroll 内 fill 高度链断 → BusyStack 贴顶溢出 |
 | Dialog/Card 正文加载 | `BusyRegion`（定高才 `fill`） | 裸 `CircularProgress`；busy 内叠 Select/Pagination |
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
