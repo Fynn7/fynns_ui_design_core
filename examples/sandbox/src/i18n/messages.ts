@@ -1500,7 +1500,7 @@ const en = {
   "globals.bannerDismiss": "Dismiss banner",
   "globals.bannerShow": "Show banner",
   "globals.bannerHelp":
-    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
+    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
   "globals.snackbarIndefiniteBtn": "Indefinite snackbar",
@@ -3606,7 +3606,7 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerDismiss": "关闭横幅",
   "globals.bannerShow": "显示横幅",
   "globals.bannerHelp":
-    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
+    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
   "globals.snackbarIndefiniteBtn": "不自动关闭",

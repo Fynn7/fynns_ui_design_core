@@ -262,6 +262,10 @@ belong in a consumer’s own doc.
   `leading`. Live `#timeline`.
 - **DON'T** park `InlineAlert`/`Banner` beside a List in the same ControlStack
   row — severity **above** catalog (unit-stack). Live `#env-check`.
+- **DON'T** top-align `Banner` leading icon or dismiss X against multi-line
+  `supportingText` — the strip row is cross-axis **center** (icon | body |
+  trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
+  sibling `IconButton` outside the strip. Live `#banner`.
 - **DON'T** put two+ `loading` spinners in one `.fynns-control-cluster`; leave
   `IconButton` `loading` showing spinner **and** glyph (core ≥ **0.5.80** =
   spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
@@ -364,6 +368,7 @@ the consumer only calls the new API. Install / pin rules:
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
+| Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
@@ -700,6 +705,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |
 | Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel |
+| Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
 | Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints |
