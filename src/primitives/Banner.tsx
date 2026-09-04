@@ -29,6 +29,10 @@ export type BannerProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
 
 /**
  * M3 Banner — full-width strip for persistent messages under a TopAppBar.
+ * Row cross-aligns **center** (leading icon, body, trailing actions/dismiss)
+ * so multi-line `supportingText` never top-pins the icon or dismiss X.
+ * Pass `onDismiss` for the in-strip close control — do not place a sibling
+ * `IconButton` outside the rounded host.
  * For in-panel severity use `InlineAlert` (soft tonal fill; fynns utility, not M3).
  * @see https://m3.material.io/components/banners/overview
  */

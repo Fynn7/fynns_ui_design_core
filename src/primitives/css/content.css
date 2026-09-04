@@ -1116,11 +1116,18 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /* ---------- Banner (M3 full-width strip) ---------- */
+/*
+ * One horizontal row: icon | body (text + supporting) | trailing (actions +
+ * dismiss). Cross-axis **center** so multi-line supportingText never top-pins
+ * the leading icon or dismiss X — do not use flex-start + align-self hacks.
+ * Dismiss stays **inside** this strip (onDismiss) — never a sibling IconButton
+ * outside the rounded host.
+ */
 .fynns-banner {
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--fynns-banner-gap);
   width: 100%;
   min-height: var(--fynns-banner-min-height);
@@ -1145,7 +1152,6 @@ a.fynns-breadcrumb-link:visited {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  align-self: center;
   width: var(--fynns-banner-icon-size);
   height: var(--fynns-banner-icon-size);
   color: inherit;
@@ -1161,8 +1167,8 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: var(--fynns-space-2xs);
-  padding-block: 0.125rem;
 }
 
 .fynns-banner-text {
@@ -1187,7 +1193,6 @@ a.fynns-breadcrumb-link:visited {
   flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
-  align-self: center;
   gap: var(--fynns-banner-actions-gap);
   margin-inline-start: auto;
 }

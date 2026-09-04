@@ -395,7 +395,7 @@ const en = {
     "--fynns-layout-list-well-max-height-sm — denser in-Card list well (12rem). Only when the catalog can overflow.",
   "layoutChrome.busyRegionBackdropBlur": "BusyRegion blur",
   "layoutChrome.busyRegionBackdropBlurHint":
-    "--fynns-layout-busy-region-backdrop-blur — frosted overlay radius (transparent fill; well hue unchanged).",
+    "--fynns-layout-busy-region-backdrop-blur — soft overlay blur (default 3px; transparent fill; well hue unchanged; keep light).",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -588,11 +588,11 @@ const en = {
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
-    "Section content stays mounted under a frosted blur overlay while BusyRegion is busy (well hue unchanged).",
+    "Section content stays mounted under a soft blur overlay while BusyRegion is busy (well hue unchanged).",
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative frosted blur overlay (`backdrop-filter` + transparent fill — well colors stay native) + one progress chrome + visible copy (not a `surface-*` wash or `--fynns-color-overlay` scrim). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
+    "BusyRegion wraps a section: relative soft blur overlay (`backdrop-filter` + transparent fill — well colors stay native; default radius light so busy does not read as a glitchy frame) + one progress chrome + visible copy (not a `surface-*` wash or `--fynns-color-overlay` scrim). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -607,7 +607,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Ring centers in the visible pane under frosted blur overlay. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Ring centers in the visible pane under soft blur overlay. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
@@ -636,7 +636,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.busyRegionFieldHelp":
-    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (frosted blur keeps the body mounted and blurs copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur keeps the body mounted and lightly softens copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
   "globals.busyRegionFieldLabel": "Sample notice",
   "globals.busyRegionFieldRefreshTip": "Refresh sample",
   "globals.busyRegionFieldBusyLabel": "Refreshing sample",
@@ -1500,7 +1500,7 @@ const en = {
   "globals.bannerDismiss": "Dismiss banner",
   "globals.bannerShow": "Show banner",
   "globals.bannerHelp":
-    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
+    "M3 Banner: full-width strip under TopAppBar (message + actions + dismiss). Multi-line supportingText: leading icon and dismiss X stay vertically **centered** on the row (core `align-items: center`) — use `onDismiss` inside the strip, never a sibling close outside the rounded host. For in-panel severity use InlineAlert (soft tonal fill; fynns utility, not M3).",
   "globals.snackbarShortBtn": "Short snackbar",
   "globals.snackbarUndoBtn": "Snackbar with Undo",
   "globals.snackbarIndefiniteBtn": "Indefinite snackbar",
@@ -2508,7 +2508,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-list-well-max-height-sm — 更密的 Card 内 List 井（12rem）。仅当目录确实会溢出时使用。",
   "layoutChrome.busyRegionBackdropBlur": "BusyRegion 模糊",
   "layoutChrome.busyRegionBackdropBlurHint":
-    "--fynns-layout-busy-region-backdrop-blur — 毛玻璃遮罩半径（透明底；井色不变）。",
+    "--fynns-layout-busy-region-backdrop-blur — 轻模糊遮罩（默认 3px；透明底；井色不变；勿加重到失真）。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -3606,7 +3606,7 @@ const zh: Record<MessageKey, string> = {
   "globals.bannerDismiss": "关闭横幅",
   "globals.bannerShow": "显示横幅",
   "globals.bannerHelp":
-    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
+    "M3 Banner：顶栏下全宽条（文案 + 操作 + 关闭）。多行 supportingText 时 leading 图标与 dismiss X 相对整行垂直居中（core `align-items: center`）— 用条内 `onDismiss`，勿在圆角条外再放关闭。面板内严重度请用 InlineAlert（轻底色；fynns 工具，非 M3）。",
   "globals.snackbarShortBtn": "短时 Snackbar",
   "globals.snackbarUndoBtn": "带 Undo 的 Snackbar",
   "globals.snackbarIndefiniteBtn": "不自动关闭",

@@ -57,12 +57,14 @@ visual rollback (unpublished CSS disappears). Temporary `file:` / `npm link`
 is iteration-only — never the ship path. There is **no** `consume:sync` /
 `consume:watch`.
 
-## Legacy submodule bump workflows
+## Legacy submodule bump workflows (removed)
 
-[`.github/workflows/propagate-ui-bump.yml`](../.github/workflows/propagate-ui-bump.yml)
-and [`.github/workflows/bump-submodule-reusable.yml`](../.github/workflows/bump-submodule-reusable.yml)
-target the **old git-submodule** consume path. Do not use them for new apps.
-Remove consumer `repository_dispatch` handlers once each app is on npm.
+The old git-submodule propagate workflows
+(`propagate-ui-bump.yml`, `bump-submodule-reusable.yml`) and
+`.github/ui-consumers.json` were **removed**. Consumers install
+`@fynn7/ui-design-core` from GitHub Packages and bump with `npm install`
+(see above). If a consumer still has a `repository_dispatch` handler for
+submodule bumps, delete it once that app is on npm.
 
 ## Registry
 

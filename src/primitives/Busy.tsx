@@ -201,13 +201,14 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
 };
 
 /**
- * Sectional busy wrapper: children stay mounted under a **frosted blur** overlay
- * (`backdrop-filter` + transparent fill — well colors unchanged; not
- * `--fynns-color-overlay` tint or `surface-*` wash). Sets `aria-busy` on the
- * region while active. Overlay uses `place-items: center` — the chrome sits in
- * the region's box, so a content-sized host leaves it stuck at the top of a
- * tall pane. **Empty cold-start without `fill`:** chrome is in normal flow
- * (not absolute) so it cannot paint over previous siblings such as a
+ * Sectional busy wrapper: children stay mounted under a **soft frosted blur**
+ * overlay (`backdrop-filter` + transparent fill — well colors unchanged; not
+ * `--fynns-color-overlay` tint or `surface-*` wash). Keep the blur radius light
+ * so busy does not read as a glitchy frame. Sets `aria-busy` on the region
+ * while active. Overlay uses `place-items: center` — the chrome sits in the
+ * region's box, so a content-sized host leaves it stuck at the top of a tall
+ * pane. **Empty cold-start without `fill`:** chrome is in normal flow (not
+ * absolute) so it cannot paint over previous siblings such as a
  * NavigationDrawer `SearchBar`. Full-viewport blocking → `BusyScrim`.
  */
 export function BusyRegion({

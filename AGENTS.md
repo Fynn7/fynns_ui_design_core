@@ -108,9 +108,10 @@ belong in a consumer’s own doc.
    `overflow-x: clip` (not bare `overflow: auto`).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
-   `BusyRegion` (sectional **frosted blur** overlay + **one** progress chrome +
+   `BusyRegion` (sectional **soft frosted blur** overlay + **one** progress chrome +
    message — well hue unchanged; never a dark overlay scrim; never a second
-   `surface-*` wash; **pane cold-start uses `fill`**, never `EmptyState` + a
+   `surface-*` wash; light blur radius so busy does not read as a glitchy frame;
+   **pane cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
    only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
    (+ root `<SnackbarHost />`). Do **not** use deleted Toast APIs or the removed
@@ -139,7 +140,7 @@ belong in a consumer’s own doc.
    EndAside; toggle = open↔closed). Overlays via `Dialog` / `ConfirmDialog` /
    `Drawer` / `FullscreenDialog` / `BottomSheet` / `NavigationDrawer`. Blocking /
    sectional busy: `BusyScrim` (full-viewport non-dismissible) or `BusyRegion`
-   (relative frosted blur — content `inert` while busy; no surface tint;
+   (relative soft frosted blur — content `inert` while busy; no surface tint;
    full-viewport tint → `BusyScrim`). Heavy boots use **`runBusyTask` /
    `useBusyTask`** (show busy → paint → then work). Do not revive
    `BlockingLoadingOverlay` or purged `Panel` / `PanelCard`.
@@ -262,6 +263,10 @@ belong in a consumer’s own doc.
   `leading`. Live `#timeline`.
 - **DON'T** park `InlineAlert`/`Banner` beside a List in the same ControlStack
   row — severity **above** catalog (unit-stack). Live `#env-check`.
+- **DON'T** top-align `Banner` leading icon or dismiss X against multi-line
+  `supportingText` — the strip row is cross-axis **center** (icon | body |
+  trailing). Dismiss only via `onDismiss` **inside** the rounded host — never a
+  sibling `IconButton` outside the strip. Live `#banner`.
 - **DON'T** put two+ `loading` spinners in one `.fynns-control-cluster`; leave
   `IconButton` `loading` showing spinner **and** glyph (core ≥ **0.5.80** =
   spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
@@ -364,6 +369,7 @@ the consumer only calls the new API. Install / pin rules:
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
+| Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
@@ -485,7 +491,7 @@ classes.
   FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (frosted blur; `indicator` `circular`|`linear`; never stack
+  indicator? }` (soft frosted blur; `indicator` `circular`|`linear`; never stack
   ring on bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
@@ -700,6 +706,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |
 | Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel |
+| Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
 | Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints |
@@ -899,7 +906,11 @@ only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
    Preview switches** for optional anatomy (`icon`, `actions`, …) — do not
    stack every combo in Components. Do not expand the public barrel without
    that demo (see `llm/BREAKING_PURGE.md`).
-3. Keep `npm run typecheck` and `npm run lint` green.
+3. Keep `npm run typecheck`, `npm run lint`, and `npm run check` green.
+   `check` includes unit (`test:unit` / Vitest) and sandbox treaty e2e
+   (`test:e2e` / Playwright on `:5174`). New CONSUMER_TREATY / Hard-rule
+   regressions belong under [`e2e/treaty/`](e2e/treaty/) (DOM / geometry /
+   interaction — not pixel screenshots).
 4. **Bump + publish (hard):** every landed change consumers should see is a
    new GitHub Packages version in the **same task**. Authority:
    [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**

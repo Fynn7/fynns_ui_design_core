@@ -1027,8 +1027,10 @@
   place-items: center;
   min-width: 0;
   box-sizing: border-box;
-  /* Frosted mask — blur mounted copy; do not tint the well (`--fynns-color-overlay`
-     is BusyScrim only). Token: `--fynns-layout-busy-region-backdrop-blur`. */
+  /* Soft frosted mask — light blur on mounted copy (keep soft so busy does not
+     read as a glitchy/corrupted frame). Do not tint the well
+     (`--fynns-color-overlay` is BusyScrim only). Token:
+     `--fynns-layout-busy-region-backdrop-blur`. */
   background: transparent;
   -webkit-backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur));
   backdrop-filter: blur(var(--fynns-layout-busy-region-backdrop-blur));

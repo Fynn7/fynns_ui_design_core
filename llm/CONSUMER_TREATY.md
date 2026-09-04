@@ -107,6 +107,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | BusyRegion cold body + pager chrome siblings | AGENTS Busy/Loading | `#busy-region` |
 | empty ControlRow label as action footer | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | orphan recovery CTA left-aligned | AGENTS Hard rules | `#sandbox-inline-alert-recovery` |
+| Banner icon/dismiss top-pinned vs multi-line | AGENTS Hard rules / Content density | `#banner` |
+| Banner dismiss as sibling IconButton outside strip | AGENTS Hard rules / Content density | `#banner` |
 | Dialog foot Delete leftmost of Cancel | AGENTS Dialog / overlays | `#timeline` |
 | twin Button loading rings in one control-cluster | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | BusyRegion + chrome loading stack | AGENTS Busy/Loading | `#busy-region` |

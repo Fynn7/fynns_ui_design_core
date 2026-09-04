@@ -88,15 +88,18 @@ alwaysApply: true
 14. **env key FieldHint / status Chip / Input trailing md** — 门户文案用标签行
     `InfoHint`；缺 key → `tone="danger"`；reveal = `IconButton` `sm`。
 15. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
-16. **EndAside instant open / close / BusyRegion flash** — 切 `open`；fetch
+16. **Banner icon/dismiss top-pinned** — 多行 `supportingText` 时 icon 与
+    dismiss X 须相对整行垂直居中；只用 `onDismiss`（X 在圆角条内），勿在条外
+    再放一颗关闭。对照 `#banner`。
+17. **EndAside instant open / close / BusyRegion flash** — 切 `open`；fetch
     勿绑 `asideOpen`。
-17. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
+18. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
     `label=""`；一主 CTA；图标 ghost；导出用 `UploadIcon` 菜单。
-18. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
+19. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
     → `Collapsible`；默认 body 端对齐 `md` 保存，勿 head `md`。
-19. **Textarea for a suffixed file body / fixed-height on page scroll** —
+20. **Textarea for a suffixed file body / fixed-height on page scroll** —
     有扩展名 → `CodeBlock`；页内默认 autoGrow。
-20. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
+21. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
 
 ## 表单与密度（短）
 
