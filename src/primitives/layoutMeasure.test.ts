@@ -11,6 +11,13 @@ function makeHost(fontSizePx: number, widthPx: number): Element {
     clientWidth: widthPx,
     getBoundingClientRect: () => ({ width: widthPx }),
   } as HostStub;
+  if (!Object.getOwnPropertyDescriptor(globalThis, "getComputedStyle")) {
+    Object.defineProperty(globalThis, "getComputedStyle", {
+      value: () => ({ fontSize: "16px" }),
+      configurable: true,
+      writable: true,
+    });
+  }
   vi.spyOn(globalThis, "getComputedStyle").mockImplementation(
     () => ({ fontSize: `${fontSizePx}px` }) as CSSStyleDeclaration,
   );

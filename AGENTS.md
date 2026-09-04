@@ -906,7 +906,11 @@ only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
    Preview switches** for optional anatomy (`icon`, `actions`, …) — do not
    stack every combo in Components. Do not expand the public barrel without
    that demo (see `llm/BREAKING_PURGE.md`).
-3. Keep `npm run typecheck` and `npm run lint` green.
+3. Keep `npm run typecheck`, `npm run lint`, and `npm run check` green.
+   `check` includes unit (`test:unit` / Vitest) and sandbox treaty e2e
+   (`test:e2e` / Playwright on `:5174`). New CONSUMER_TREATY / Hard-rule
+   regressions belong under [`e2e/treaty/`](e2e/treaty/) (DOM / geometry /
+   interaction — not pixel screenshots).
 4. **Bump + publish (hard):** every landed change consumers should see is a
    new GitHub Packages version in the **same task**. Authority:
    [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**

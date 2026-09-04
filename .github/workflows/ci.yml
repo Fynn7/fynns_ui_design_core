@@ -19,7 +19,5 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm run check:wysiwyg
-      - run: npm run check:perf-sandbox
-      - run: npm run check:no-consumer
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check

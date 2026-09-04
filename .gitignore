@@ -6,6 +6,12 @@ dist
 examples/sandbox/dist
 *.tgz
 
+# Playwright / Vitest artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
 # Local research / measurement dumps (do not commit)
 .tmp/
 .cursor-audit/
