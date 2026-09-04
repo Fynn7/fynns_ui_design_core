@@ -1,6 +1,7 @@
 /**
  * CONSUMER_TREATY slug: `repeatable Textarea remove wraps below row`
- * AGENTS: end-align cluster + __grow Textarea; delete stays beside the well.
+ * AGENTS: end-align cluster + __grow Textarea; delete stays beside the well
+ * (cluster `align-items: center` — delete mid may sit mid-well, not top).
  * Sandbox: #form-recipe → #globals-demo-form-recipe
  */
 import { test, expect } from "@playwright/test";
@@ -14,12 +15,18 @@ const SLUG = "repeatable Textarea remove wraps below row";
 
 test.beforeEach(async ({ page }) => {
   await resetSandboxSession(page);
+  await page.setViewportSize({ width: 1400, height: 900 });
 });
 
-test(`${SLUG}: remove stays on same row as Textarea`, async ({ page }) => {
+test(`${SLUG}: remove stays beside Textarea (not wrapped under)`, async ({
+  page,
+}) => {
   await openGlobalsDemo(page, "form-recipe", "Inspector form recipe");
   const demo = globalsDemo(page, "form-recipe");
-  const row = demo.locator(".fynns-control-cluster--end-align").filter({
+
+  // Prefer the Card host sample (first FieldStack highlights row).
+  const card = demo.locator(".fynns-card").first();
+  const row = card.locator(".fynns-control-cluster--end-align").filter({
     has: page.getByRole("button", { name: "Remove row" }),
   }).first();
 
@@ -34,10 +41,15 @@ test(`${SLUG}: remove stays on same row as Textarea`, async ({ page }) => {
   expect(tBox, SLUG).not.toBeNull();
   expect(rBox, SLUG).not.toBeNull();
 
-  const topDelta = Math.abs(rBox!.y - tBox!.y);
-  expect(topDelta, `${SLUG}: delete top-aligned with Textarea`).toBeLessThan(24);
   expect(
-    rBox!.y,
-    `${SLUG}: delete must not sit below the Textarea block`,
-  ).toBeLessThan(tBox!.y + tBox!.height * 0.5);
+    rBox!.x,
+    `${SLUG}: delete must sit to the end side of the Textarea`,
+  ).toBeGreaterThan(tBox!.x + tBox!.width * 0.4);
+
+  const removeBottom = rBox!.y + rBox!.height;
+  const textareaBottom = tBox!.y + tBox!.height;
+  expect(
+    rBox!.y < textareaBottom && removeBottom > tBox!.y,
+    `${SLUG}: delete must vertically overlap the Textarea (not wrap under)`,
+  ).toBe(true);
 });
