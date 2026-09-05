@@ -32,6 +32,14 @@ export type CardProps = {
  * head/body rhythm) but is **not** a disclosure: no head hover layer, no
  * chevron, no open/close. One-shot API — do not assemble head/body by hand.
  *
+ * **Width (hard ≥ 0.5.141 / 0.5.142):** Card is `width: 100%` / `align-self: stretch` of
+ * its parent. On PageScroll destination canvases the parent is
+ * `.fynns-content-column` (or a full-width `.fynns-unit-stack` / BusyRegion).
+ * A section ControlRow (e.g. tool ToggleGroup) and sibling Cards must share
+ * that column’s **right edge** — do **not** wrap Cards in
+ * `sheet-max-width` (BottomSheet), `chat-max-width` (Chat host only), or
+ * `dialog-max-width*` (Dialog panels). Live: sandbox `#page-scroll`.
+ *
  * Pass `chrome="plain"` when nesting a surface-owning child (outer shell stays;
  * body uses `--fynns-layout-nest-gap`). Do not cancel nest-gap with negative
  * margins. `chrome="plain"` ≠ flush.

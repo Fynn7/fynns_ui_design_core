@@ -103,6 +103,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | fat Surface / Card per catalog row | AGENTS Content density / List | `—` |
 | ListItem trailing IconButtons stacked vertically | AGENTS shells / Hard rules | `#list` |
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
+| PageScroll Card sheet-max-width under ControlRow | AGENTS Hard rules / Card | `#page-scroll` |
+| PageScroll form Card chat-max-width column | AGENTS Hard rules / Card | `#page-scroll` |
 | catalog ControlRow sinks below drawer labels | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | BusyRegion cold body + pager chrome siblings | AGENTS Busy/Loading | `#busy-region` |
 | empty ControlRow label as action footer | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -136,9 +138,11 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | bulk select uses ClipboardIcon | AGENTS forms / FieldStack | `#layouts-demo-navigation-drawer` |
 | mode drawer primary New not rightmost | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer hide-builtin ControlBlock stack | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
+| mode drawer toolbar Plus ≠ Switch end | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer preference ControlRow flush on pad-inline | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` |
 | SyncSideFilter tooltip covers chrome or list | AGENTS Content density / List | `—` |
 | SyncSideFilter / ToggleGroup segment wash bleed | AGENTS Hard rules | `#toggle-group` |
+| SyncSideFilter long labels crush / flush pad | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` / `#toggle-group` |
 | CodeBlock editable selection stripes | AGENTS CodeBlock | `#code-block` |
 | Collapsible inside List (skeleton crush) | AGENTS Content density / List | `#list` |
 | nested short List well + invented list-well token | AGENTS Content density / List | `#list` |

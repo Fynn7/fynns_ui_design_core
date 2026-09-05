@@ -647,11 +647,16 @@ const en = {
   "globals.busyRegionFieldStart": "Show field busy",
   "globals.busyRegionFieldStop": "Clear field busy",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column. Tokens ≥ 0.4.58.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. Tokens ≥ 0.4.58.",
+  "globals.pageScrollToolLabel": "Tool",
+  "globals.pageScrollToolAria": "Sample tool mode",
+  "globals.pageScrollToolA": "Mode A",
+  "globals.pageScrollToolB": "Mode B",
+  "globals.pageScrollToolC": "Mode C",
   "globals.pageScrollCardTitle": "Sample catalog",
   "globals.pageScrollCardTitle2": "Next section",
   "globals.pageScrollCardBody":
-    "Scroll this stage — the overlay thumb tracks the wide page-scroll host, not the Card edge.",
+    "Scroll this stage — the overlay thumb tracks the wide page-scroll host, not the Card edge. Card right edge must align with the tool ToggleGroup above (no sheet-max-width cap).",
   "globals.pageScrollListAria": "Sample page-scroll catalog",
   "globals.splitPaneHelp":
     "In-content resizable two panes (editor | preview, list | detail). Not EndAside / drawer shell chrome — those own destination / inspector tracks. Drag or arrow-key the separator; live size is `--fynns-split-size`. Host must resolve height (stage / FillColumn child).",
@@ -1424,7 +1429,7 @@ const en = {
   "globals.navDrawerModeSideAlphaTip": "Side A",
   "globals.navDrawerModeSideBetaTip": "Side B",
   "globals.navDrawerModeToolsHelp":
-    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** (mark-glyph labels). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / Layouts `#layouts-demo-navigation-drawer`.",
+    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Primary Plus and Switch track share one **trailing** edge (core ≥ **0.5.143** pads `--toolbar-end` with the same item-pad-end). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** + **short** visible labels (All / marks — core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp; do not crush long product names into equal columns). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`.",
   "globals.navDrawerBulkAria": "Sample bulk-select sidebar (soft checked rows)",
   "globals.navDrawerBulkToolsAria": "Sample bulk-select toolbar",
   "globals.navDrawerBulkGroup": "Sample group",
@@ -2063,6 +2068,13 @@ const en = {
   "globals.radioInvalid": "Invalid radio",
   "globals.segmentedCompactAria": "Compact view mode",
   "globals.segmentedCompactHelp": "ToggleGroup `size=\"compact\"` + `showCheck={false}` + option icons.",
+  "globals.segmentedNarrowAria": "Narrow fullWidth sample filter",
+  "globals.segmentedNarrowAll": "All",
+  "globals.segmentedNarrowAlpha": "Sample region Alpha",
+  "globals.segmentedNarrowBeta": "Sample region Beta",
+  "globals.segmentedNarrowGamma": "Sample region Gamma long",
+  "globals.segmentedNarrowHelp":
+    "Narrow `fullWidth` `compact` (≥ **0.5.140**): equal columns shrink (`min-width: 0`); long labels **ellipsis**; compact pad **12dp** (was 8dp). Mode SyncSideFilter should still use **short** visible labels + omit `tip` — do not rely on ellipsis for four product names. Live also: `#layouts-demo-navigation-drawer`.",
   "globals.segmentedGrid": "Grid",
   "globals.segmentedList": "List",
   "globals.selectDisabledAria": "Disabled select",
@@ -2758,11 +2770,16 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFieldStart": "显示字段 busy",
   "globals.busyRegionFieldStop": "清除字段 busy",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内。令牌 ≥ 0.4.58。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。令牌 ≥ 0.4.58。",
+  "globals.pageScrollToolLabel": "工具",
+  "globals.pageScrollToolAria": "样例工具模式",
+  "globals.pageScrollToolA": "模式 A",
+  "globals.pageScrollToolB": "模式 B",
+  "globals.pageScrollToolC": "模式 C",
   "globals.pageScrollCardTitle": "样例目录",
   "globals.pageScrollCardTitle2": "下一分区",
   "globals.pageScrollCardBody":
-    "滚动本舞台 — overlay 拇指跟宽页滚宿主，不跟 Card 右缘。",
+    "滚动本舞台 — overlay 拇指跟宽页滚宿主，不跟 Card 右缘。Card 右端须与上方工具 ToggleGroup 对齐（勿套 sheet-max-width）。",
   "globals.pageScrollListAria": "页滚目录样例",
   "globals.splitPaneHelp":
     "内容区内可拖分栏（编辑器 | 预览、列表 | 详情）。不是 EndAside / 抽屉壳层 — 那些管 destination / 检查器轨。拖动手柄或聚焦后用方向键；实时尺寸为 `--fynns-split-size`。宿主需定高（舞台 / FillColumn 子级）。",
@@ -3530,7 +3547,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeSideAlphaTip": "A 侧",
   "globals.navDrawerModeSideBetaTip": "B 侧",
   "globals.navDrawerModeToolsHelp":
-    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`**（标记字形标签）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / Layouts `#layouts-demo-navigation-drawer`。",
+    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。主新建 Plus 与 Switch 轨道**共用右端**（core ≥ **0.5.143** 给 `--toolbar-end` 同套 item-pad-end）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`** + **短**可见标签（全部 / 标记字形 — core ≥ **0.5.140** fullWidth 可收缩 + 省略号 + compact pad 12dp；禁止把长产品名塞进等分列）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`。",
   "globals.navDrawerBulkAria": "示例批量选择侧栏（柔和勾选行）",
   "globals.navDrawerBulkToolsAria": "示例批量选择工具条",
   "globals.navDrawerBulkGroup": "示例分组",
@@ -4162,6 +4179,13 @@ const zh: Record<MessageKey, string> = {
   "globals.radioInvalid": "无效单选",
   "globals.segmentedCompactAria": "紧凑视图模式",
   "globals.segmentedCompactHelp": "ToggleGroup `size=\"compact\"` + `showCheck={false}` + 选项图标。",
+  "globals.segmentedNarrowAria": "窄 fullWidth 示例筛选",
+  "globals.segmentedNarrowAll": "全部",
+  "globals.segmentedNarrowAlpha": "示例区域 Alpha",
+  "globals.segmentedNarrowBeta": "示例区域 Beta",
+  "globals.segmentedNarrowGamma": "示例区域 Gamma 较长",
+  "globals.segmentedNarrowHelp":
+    "窄 `fullWidth` `compact`（≥ **0.5.140**）：等分列可收缩（`min-width: 0`）；长标签 **省略号**；compact pad **12dp**（原 8dp）。模式 SyncSideFilter 仍应用**短**可见标签 + 省略 `tip` — 勿依赖省略号硬塞四个产品名。对照 `#layouts-demo-navigation-drawer`。",
   "globals.segmentedGrid": "网格",
   "globals.segmentedList": "列表",
   "globals.selectDisabledAria": "禁用选择器",

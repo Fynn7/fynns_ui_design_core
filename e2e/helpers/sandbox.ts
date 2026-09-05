@@ -50,7 +50,10 @@ export async function openGlobalsDemo(
 
   const demo = page.locator(`#globals-demo-${demoId}`);
   await expect(demo).toBeVisible({ timeout: 15_000 });
-  await demo.scrollIntoViewIfNeeded();
+  // Category Collapsible can remount while the flash settles — retry scroll.
+  await expect(async () => {
+    await demo.scrollIntoViewIfNeeded();
+  }).toPass({ timeout: 10_000 });
 }
 
 /** Layout templates demos are always mounted — switch page and scroll. */

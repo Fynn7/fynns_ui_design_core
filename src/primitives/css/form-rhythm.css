@@ -698,6 +698,17 @@
   width: 100%;
 }
 
+/*
+ * Equal columns must shrink: `min-width: max-content` on segments (hug for
+ * content-sized groups) fights `1fr` and clips long SyncSideFilter labels
+ * into the neighbor / stadium end (≥ **0.5.140**). Live:
+ * `#layouts-demo-navigation-drawer` / `#toggle-group` narrow fullWidth.
+ */
+.fynns-toggle-group--full .fynns-toggle-group__segment,
+.fynns-toggle-group--full .fynns-toggle-chip {
+  min-width: 0;
+}
+
 .fynns-toggle-group--compact {
   height: var(--fynns-segmented-height-compact);
 }
@@ -893,6 +904,14 @@
 
 .fynns-toggle-chip-label {
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-toggle-group--full .fynns-toggle-chip-content {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fynns-toggle-chip:focus-visible {

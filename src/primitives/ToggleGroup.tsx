@@ -71,6 +71,9 @@ export type ToggleGroupProps<V extends string> =
  * hidden` clips that translate so it cannot bleed into the neighbor segment).
  * When the **label itself** is a mark glyph (SyncSideFilter C/O), pass
  * `showCheck={false}` — do not reserve an empty leading slot beside the mark.
+ * Narrow `fullWidth` hosts (≥ **0.5.140**): segments shrink (`min-width: 0`)
+ * and labels ellipsize — still prefer **short** visible labels; do not rely
+ * on ellipsis for four long product names.
  *
  * Default: single-select (`radiogroup` / `radio`, arrows select).
  * `multiple`: multi-select (`group` / `aria-pressed`, Space toggles, arrows

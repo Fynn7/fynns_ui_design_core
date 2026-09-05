@@ -36,20 +36,23 @@ test(`${SLUG}: remove stays beside Textarea (not wrapped under)`, async ({
   await expect(textarea).toBeVisible();
   await expect(remove).toBeVisible();
 
-  const tBox = await textarea.boundingBox();
-  const rBox = await remove.boundingBox();
-  expect(tBox, SLUG).not.toBeNull();
-  expect(rBox, SLUG).not.toBeNull();
+  // Parallel e2e workers share one sandbox — wait until geometry settles.
+  await expect(async () => {
+    const tBox = await textarea.boundingBox();
+    const rBox = await remove.boundingBox();
+    expect(tBox, SLUG).not.toBeNull();
+    expect(rBox, SLUG).not.toBeNull();
 
-  expect(
-    rBox!.x,
-    `${SLUG}: delete must sit to the end side of the Textarea`,
-  ).toBeGreaterThan(tBox!.x + tBox!.width * 0.4);
+    expect(
+      rBox!.x,
+      `${SLUG}: delete must sit to the end side of the Textarea`,
+    ).toBeGreaterThan(tBox!.x + tBox!.width * 0.4);
 
-  const removeBottom = rBox!.y + rBox!.height;
-  const textareaBottom = tBox!.y + tBox!.height;
-  expect(
-    rBox!.y < textareaBottom && removeBottom > tBox!.y,
-    `${SLUG}: delete must vertically overlap the Textarea (not wrap under)`,
-  ).toBe(true);
+    const removeBottom = rBox!.y + rBox!.height;
+    const textareaBottom = tBox!.y + tBox!.height;
+    expect(
+      rBox!.y < textareaBottom && removeBottom > tBox!.y,
+      `${SLUG}: delete must vertically overlap the Textarea (not wrap under)`,
+    ).toBe(true);
+  }).toPass({ timeout: 10_000 });
 });
