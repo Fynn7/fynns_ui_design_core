@@ -719,6 +719,10 @@ const en = {
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
     "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+  "globals.tableRevealCaption": "Sample catalog (reveal)",
+  "globals.tableRevealMore": "Show more",
+  "globals.tableRevealHelp":
+    "Long Card / PageScroll data Tables (≥ **0.5.144**): `useRevealMore` (default **10** / step **10**) + `RevealMore` foot **outside** `.fynns-table-wrap` — slice rows in the app; foot is **tonal** **md** Button (≥ **0.5.147** tonal; size **md** ≥ **0.5.149**, centered; `Show more` default; pass locale). Do **not** dump every row at once; short tables / Dialogs / true `Pagination` stay exempt. `resetKey` on filter change; polling `total` growth must not bounce the window. Live below.",
   "globals.chartCardTitle": "Daily volume",
   "globals.chartViewLabel": "Chart view",
   "globals.chartViewDate": "By date",
@@ -1012,7 +1016,7 @@ const en = {
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmSurfaceHelp":
-    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
+    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow. **Do not** put a sibling FieldHint that only lists the ToggleGroup option labels (information redundancy — failure mode: CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels).",
   "globals.rhythmCatalogHelp":
     "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). Do not leave a content-sized island with actions mid-left.",
   "globals.rhythmCatalogLabel": "Servers (3/3)",
@@ -1050,7 +1054,7 @@ const en = {
   "globals.rhythmStatusHelp":
     "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`-` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
   "globals.rhythmServiceHelp":
-    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **Controls column** = one `.fynns-control-cluster` of labeled `Button`s `sm` only — **never** status in `__controls` (`Chip` reads as a sibling action pill). Core ≥ **0.5.80** labeled-Button **8dp** (`action-cluster-gap`). **At most one** `loading`. Click Start / Stop to toggle the sample.",
+    "**Service / process / CLI probe (hard):** `ControlRow` `label` = one short status only (running: PID; stopped: Not running; installed: Available / Not installed). **Controls** = labeled `Button`s `sm` only — **never** a status `Chip` in `__controls`, and **never** park the tool/CLI name on `label` when the install Button already names it. Failure detail → row **`InfoHint`**, not a sibling `FieldHint` essay (`tool：error…`). Failure mode: CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint. Core ≥ **0.5.80** labeled-Button **8dp**. **At most one** `loading`. Click Start / Stop to toggle the sample.",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
@@ -1660,7 +1664,16 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Selected / hover = one host radius-3xl pill (same secondary-container as NavigationDrawerItem). No Divider between ListItems — `--fynns-list-item-gap` (4dp) + pills. No start tick / inset rail for kind — leading icon + trailingSupportingText. Leading→copy `--fynns-list-gap` (16dp); three-line stack `--fynns-list-content-gap-3` (8dp). Decorative chevron lives in the row hit; IconButton trailing stays a sibling but lights the same host wash. Path catalogs = one List of ListItems — never a padded Surface/Card per entry. See AGENTS.md Content density.",
+    "M3 content List / ListItem (1–3 lines). Selected / hover = one host radius-3xl pill (same secondary-container as NavigationDrawerItem). No Divider between ListItems — `--fynns-list-item-gap` (4dp) + pills. No start tick / inset rail for kind — leading icon + trailingSupportingText. Leading→copy `--fynns-list-gap` (16dp); three-line stack `--fynns-list-content-gap-3` (8dp). Decorative chevron lives in the row hit; IconButton trailing stays a sibling but lights the same host wash. Path catalogs = one List of ListItems — never a padded Surface/Card per entry. Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` with **5** / step **5** (`REVEAL_MORE_LIST_DEFAULT_*`) + `RevealMore` after the List — live `#list` reveal sample. See AGENTS.md Content density.",
+  "globals.listRevealCaption": "Sample list (reveal)",
+  "globals.listRevealAria": "Sample catalog entries",
+  "globals.listRevealHint":
+    "These entries are unmatched. Map each to a catalog id, or mark as local / free.",
+  "globals.listRevealMap": "Map",
+  "globals.listRevealMapSnack": "Map action (sample)",
+  "globals.listRevealMore": "Show more",
+  "globals.listRevealHelp":
+    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling) — taller ListItems need a lower window than Tables (10/10). Slice in the app; pass locale (`更多` / `Show more`). Short lists / Dialog / true `Pagination` exempt. Live below.",
   "globals.listHostToneHelp":
     "Catalog kind = leading icon + trailingSupportingText (or .fynns-table-meta). No start tick, inset rail, or extra host wash — selected is the radius-3xl pill only. Never wrap ListItem in a div. Headline uses UI font (not mono).",
   "globals.listHostToneAria": "Sample list with kind via icon and trailing meta",
@@ -2842,6 +2855,10 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
     "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+  "globals.tableRevealCaption": "示例目录（渐进披露）",
+  "globals.tableRevealMore": "更多",
+  "globals.tableRevealHelp":
+    "Card / PageScroll 内长数据表（≥ **0.5.144**）：`useRevealMore`（默认 **10** / 每次 **10**）+ 脚 `RevealMore` 放在 `.fynns-table-wrap` **外** — 行由 app `slice`；脚为 **tonal** **md** Button（≥ **0.5.147** tonal；**0.5.149** 恢复 md，居中；默认 `Show more`，本地化由 app 传入）。**禁止**一次铺开全部行；短表 / Dialog / 真分页 `Pagination` 豁免。换筛选用 `resetKey`；轮询只涨 `total` 勿弹回已展开窗口。见下方样例。",
   "globals.chartCardTitle": "每日用量",
   "globals.chartViewLabel": "图表视图",
   "globals.chartViewDate": "按日期",
@@ -3131,7 +3148,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmSurfaceHelp":
-    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
+    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。**禁止**再放一条只复述 ToggleGroup 选项名的兄弟 FieldHint（信息冗余 — 失败模式：CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels）。",
   "globals.rhythmCatalogHelp":
     "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。不要留内容宽小岛、按钮停在标签旁。",
   "globals.rhythmCatalogLabel": "服务器（3/3）",
@@ -3169,7 +3186,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmStatusHelp":
     "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`-`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
   "globals.rhythmServiceHelp":
-    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。**控件列** cluster 仅 labeled `Button` `sm` — **禁止**在 cluster 放状态 `Chip`（assist 与 Button 同 pill，像第四颗动作）。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+    "**服务 / 进程 / CLI 探测（硬）：** `ControlRow` `label` 仅短状态（运行：PID；停止：未运行；安装：可用 / 未安装）。**控件列** 仅 labeled `Button` `sm` — **禁止** cluster 内状态 `Chip`，也**禁止**在安装 Button 已点名工具时把工具名再当 `label`。失败详情 → 行内 **`InfoHint`**，勿兄弟 `FieldHint` 长文（`tool：error…`）。失败模式：CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",
@@ -3774,7 +3791,16 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。选中/悬停 = host 上一块 radius-3xl pill（secondary-container，与 NavigationDrawerItem 一致）。ListItem 之间不要 Divider — `--fynns-list-item-gap`（4dp）+ pill。种类不要左边竖标/inset 轨 — leading 图标 + trailingSupportingText。图标→文案 `--fynns-list-gap`（16dp）；三行栈 `--fynns-list-content-gap-3`（8dp）。装饰 chevron 并入主行点击；IconButton trailing 仍是兄弟，但点亮同一 host wash。路径目录 = 一个 List 多行 ListItem — 禁止每条外包加垫 Surface/Card。见 AGENTS.md Content density。",
+    "M3 内容列表 List / ListItem（1–3 行）。选中/悬停 = host 上一块 radius-3xl pill（secondary-container，与 NavigationDrawerItem 一致）。ListItem 之间不要 Divider — `--fynns-list-item-gap`（4dp）+ pill。种类不要左边竖标/inset 轨 — leading 图标 + trailingSupportingText。图标→文案 `--fynns-list-gap`（16dp）；三行栈 `--fynns-list-content-gap-3`（8dp）。装饰 chevron 并入主行点击；IconButton trailing 仍是兄弟，但点亮同一 host wash。路径目录 = 一个 List 多行 ListItem — 禁止每条外包加垫 Surface/Card。长 Card / PageScroll List（≥ **0.5.145**）：`useRevealMore` 用 **5** / 每次 **5**（`REVEAL_MORE_LIST_DEFAULT_*`）+ `RevealMore` 放在 List 后 — 见 `#list` 渐进样例。见 AGENTS.md Content density。",
+  "globals.listRevealCaption": "示例列表（渐进披露）",
+  "globals.listRevealAria": "示例目录条目",
+  "globals.listRevealHint":
+    "这些条目尚未匹配。请映射到目录 id，或标记为本机/免费。",
+  "globals.listRevealMap": "映射",
+  "globals.listRevealMapSnack": "映射操作（示例）",
+  "globals.listRevealMore": "更多",
+  "globals.listRevealHelp":
+    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ 脚 `RevealMore` 放在 List **后**（unit-stack 兄弟）— ListItem 更高，窗口低于 Table（10/10）。行由 app `slice`；文案本地化（`更多` / `Show more`）。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
   "globals.listHostToneHelp":
     "目录种类 = leading 图标 + trailingSupportingText（或 .fynns-table-meta）。不要左边竖标、inset 轨或额外 host 洗底——选中只靠 radius-3xl pill。禁止用 div 包 ListItem。headline 用 UI 字族（勿 mono）。",
   "globals.listHostToneAria": "用图标和尾部文案表达种类的列表示例",

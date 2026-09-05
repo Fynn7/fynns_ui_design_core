@@ -85,34 +85,47 @@ alwaysApply: true
 10. **section-body IconButton sm / labeled generate Button** — PageScroll 段级
     动作 = 默认 `md` ghost IconButton + Tooltip；勿 `sm` 盘或 labeled primary
     生成 pill。对照 `#rhythm`。
-11. **service control status Chip + label** — 状态只在 `ControlRow` `label`；
-    控件簇只有 labeled Button。
-12. **private labeled Button cluster gap** — 用公共 `.fynns-control-cluster`
+11. **service control status Chip + label / CLI probe FieldHint** — 状态只在
+    `ControlRow` `label`（`可用`/`未安装`）；控件簇只有 labeled Button（+ 可选
+    路径 meta）；禁止工具名当 label + 状态 Chip + 下方 `FieldHint` 复述
+    `tool：error` — 详情用行内 `InfoHint`。对照 `#rhythm` service。
+12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
+    section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
+    TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
+13. **private labeled Button cluster gap** — 用公共 `.fynns-control-cluster`
     （labeled 间距 8dp），勿私有 4dp 克隆。
-13. **Select refresh crammed beside chevron** — Select + refresh →
+14. **Select refresh crammed beside chevron** — Select + refresh →
     `.fynns-control-cluster--end-align` + `__grow`，勿 `Select.trailing`。
-14. **env key FieldHint / status Chip / Input trailing md** — 门户文案用标签行
+15. **env key FieldHint / status Chip / Input trailing md** — 门户文案用标签行
     `InfoHint`；缺 key → `tone="danger"`；reveal = `IconButton` `sm`。
-15. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
-16. **Banner icon/dismiss top-pinned** — 多行 `supportingText` 时 icon 与
+16. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
+17. **Banner icon/dismiss top-pinned** — 多行 `supportingText` 时 icon 与
     dismiss X 须相对整行垂直居中；只用 `onDismiss`（X 在圆角条内），勿在条外
     再放一颗关闭。对照 `#banner`。
-17. **EndAside instant open / close / BusyRegion flash** — 切 `open`；fetch
+18. **EndAside instant open / close / BusyRegion flash** — 切 `open`；fetch
     勿绑 `asideOpen`。
-18. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
+19. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
     `label=""`；一主 CTA；图标 ghost；导出用 `UploadIcon` 菜单。
-19. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
+20. **PageScroll brief Card / Collapsible brief save on head** — 多字段 brief
     → `Collapsible`；默认 body 端对齐 `md` 保存，勿 head `md`。
-20. **Textarea for a suffixed file body / fixed-height on page scroll** —
+21. **Textarea for a suffixed file body / fixed-height on page scroll** —
     有扩展名 → `CodeBlock`；页内默认 autoGrow。
-21. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
-22. **PageScroll Card sheet/chat/dialog-max under ControlRow** — 目的地
+22. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
+23. **PageScroll Card sheet/chat/dialog-max under ControlRow** — 目的地
     PageScroll 上 Card **铺满** `.fynns-content-column`（core ≥ **0.5.141**/
     **0.5.142**）。禁止给 `hub-col` / BusyRegion 子树套
     `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列）、
     `dialog-max-width*`（仅 Dialog）或私有 rem `maxWidth`；工具条 ControlRow +
     ToggleGroup 与下方 Card **右端对齐**；无工具条的表单页同样铺满内容列。
     对照 `#page-scroll`。
+24. **long Table dumps all rows** — Card / PageScroll 数据表可 >10 行时用
+    `useRevealMore` + `RevealMore`（默认 10/10，≥ **0.5.144**）：app `slice`；
+    脚在 `.fynns-table-wrap` **外**；默认 **tonal** **md**（≥ **0.5.147** tonal；
+    **0.5.149** 恢复 md）；文案本地化（`更多`）。短表 / Dialog / 真 `Pagination`
+    豁免。对照 `#table`。
+25. **long List dumps all rows** — Card / PageScroll List 可 >5 条时同机制，
+    但传 `REVEAL_MORE_LIST_DEFAULT_*`（**5**/5，≥ **0.5.145**）：脚在 List
+    **后**；短列表 / Dialog / 真分页豁免。对照 `#list`。
 
 ## 表单与密度（短）
 
@@ -124,6 +137,8 @@ alwaysApply: true
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
 - PageScroll 分区 Card：勿用 `sheet-max-width` / `chat-max-width` / dialog-max
   收窄；与上方 ControlRow 同列宽（或铺满 content-column）。
+- 长数据 Table：`useRevealMore` + `RevealMore`（10/10），勿一次铺开。对照 `#table`。
+- 长 List：`useRevealMore` + `RevealMore`（**5**/5），勿一次铺开。对照 `#list`。
 
 ## Chat（短）
 

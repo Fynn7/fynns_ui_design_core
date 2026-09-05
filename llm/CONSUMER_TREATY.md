@@ -118,6 +118,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | private labeled Button cluster gap | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | AGENTS forms / FieldStack | `#rhythm` |
+| CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
+| FieldHint restates ToggleGroup / Tabs labels (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
@@ -148,6 +150,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | nested short List well + invented list-well token | AGENTS Content density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | AGENTS forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | AGENTS Card / Collapsible | `#table` |
+| long Table dumps all rows | AGENTS Hard rules / Content density | `#table` |
+| long List dumps all rows | AGENTS Hard rules / Content density | `#list` |
 | List tree wrapped in divs / buttons in leading | AGENTS Content density / List | `#list` |
 | ListItem kind via wrapping div / start rail | AGENTS shells / Hard rules | `#list` |
 | builtin ListItem looks like a square / chip island | AGENTS Content density / List | `#list` |

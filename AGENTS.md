@@ -275,7 +275,13 @@ belong in a consumer’s own doc.
 - **DON'T** put service status in ControlRow `__controls` (Chip/badge/meta) —
   status on **`label` only**; controls = labeled Buttons only; use public
   `.fynns-control-cluster` (**8dp** labeled-Button gap ≥ **0.5.80**), not
-  private `*-control-cluster` at 4dp. Live `#rhythm` service control.
+  private `*-control-cluster` at 4dp. Same for **CLI / tool install probes**
+  inside a Status Card: do **not** put the tool name on `label` while a status
+  Chip says `OK`/`未安装` and an install Button already names the tool —
+  **information redundancy**. `label` = short status (`可用` / `未安装` /
+  `Not running`); install / repair = labeled Button; path may stay as plain
+  meta text; failure detail → **`InfoHint`** on the row — **never** a sibling
+  `FieldHint` that repeats `tool：error…`. Live `#rhythm` service control.
 - **DON'T** use `IconButton` `sm` or labeled `Button` `primary`/`tonal` on
   PageScroll **section-body** ControlRows when the row `label` already names
   the section — default **md** ghost IconButton + Tooltip only; primary-end
@@ -308,6 +314,19 @@ belong in a consumer’s own doc.
   **right edge**; even without a sibling ControlRow, destination Cards fill
   `.fynns-content-column` (do not invent a reading-width column). Live
   `#page-scroll`. ≥ **0.5.142** names chat/dialog misuse explicitly.
+- **DON'T** dump every row of a Card / PageScroll **data Table** when the
+  catalog can grow past ~10 rows — use `useRevealMore` + `RevealMore` (default
+  **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
+  **md** labeled Button (≥ **0.5.147** tonal; size back to **md** ≥ **0.5.149**),
+  centered **outside** `.fynns-table-wrap`; pass locale (`更多` / `Show more`).
+  Short tables, Dialog-hosted tables, and true page `Pagination` are exempt. Do
+  not bounce an expanded window when polling only grows `total` — use `resetKey`
+  for filter / source identity. Live `#table`.
+- **DON'T** dump every item of a Card / PageScroll **List** catalog when it can
+  grow past ~5 rows — same `useRevealMore` + `RevealMore`, but pass
+  `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
+  because ListItems are taller: foot **after** the List (unit-stack sibling);
+  short lists / Dialog / `Pagination` exempt. Live `#list`.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
   placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
@@ -316,6 +335,12 @@ belong in a consumer’s own doc.
   one short line. Env keys: InfoHint on label row (danger when required empty);
   no status Chip; Input trailing reveal = `sm` only. Live `#rhythm` /
   `#sandbox-field-header-env-keys`.
+- **DON'T** put a page/section `FieldHint` (or section-lead copy) that only
+  restates visible **ToggleGroup** / **Tabs** option labels (“A / B / C; three
+  tabs”) — **information redundancy**. The control already names the modes;
+  TopAppBar `InfoHint` may keep a short **scope** tip that does **not** list
+  those labels. Live `#rhythm` (Surface + ToggleGroup — no sibling FieldHint
+  naming Catalog / Mirror).
 - **DON'T** put Settings both as root NavigationDrawerItem **and** footer gear
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
@@ -619,7 +644,10 @@ classes.
   head actions = interactive chrome only), Surface (untitled well; `fill` only
   when parent height-resolved), Carousel, Divider, Table (host
   `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
-  `.fynns-table-meta` never Chip), DiffView, CodeBlock (titled `default`
+  `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
+  Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
+  List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;
+  foot outside wrap / after List), DiffView, CodeBlock (titled `default`
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;
@@ -703,6 +731,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |
 | App destinations | NavigationDrawer / Rail / Bar / DestinationAppShell | `#layouts-demo-shell` | List/Card as app root nav |
 | Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card | `#table` | Surface + FieldHeader fake head |
+| Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
+| Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |
@@ -719,7 +749,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel |
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
-| Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
+| Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
 | Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk; Plus end = preference Switch end (item-pad ≥ **0.5.143**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus flush on body pad while Switch on item-pad |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
@@ -737,6 +767,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Table / list pager | `.fynns-pagination-bar` single row | `#pagination` | Two-row wrap; Select grown to crush discs |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
 | Multi-status / probe strip | ControlRow + short OK/Fail + InfoHint | `#rhythm` status | FieldHint diagnostic essays |
+| Mode ToggleGroup / Tabs strip | ControlRow + ToggleGroup alone (or ControlBlock description that is **not** the option list) | `#rhythm` Surface | FieldHint / section lead listing the same option labels |
 | Named readiness / tip status | Same ControlRow pattern | `#rhythm` | Lone tip glyph as only cluster child |
 | Suffixed file body | CodeBlock editable + language; autoGrow | `#code-block` | Textarea for real extensions; fixed-height on page |
 | Plain note / `.txt` | Textarea (autoGrow) | — | CodeBlock on extensionless notes |

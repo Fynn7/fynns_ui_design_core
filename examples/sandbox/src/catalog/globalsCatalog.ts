@@ -331,7 +331,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "list",
     categoryId: "containment",
     label: "List",
-    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline"],
+    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline", "reveal", "更多", "show more"],
   },
   {
     id: "timeline",
@@ -520,7 +520,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "table",
     categoryId: "patterns",
     label: "Table",
-    keywords: ["表格", "table"],
+    keywords: ["表格", "table", "reveal", "更多", "show more"],
   },
   {
     id: "chart",

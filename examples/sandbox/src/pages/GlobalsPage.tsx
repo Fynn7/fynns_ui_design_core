@@ -126,6 +126,12 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
+  RevealMore,
+  useRevealMore,
+  REVEAL_MORE_DEFAULT_INITIAL,
+  REVEAL_MORE_DEFAULT_STEP,
+  REVEAL_MORE_LIST_DEFAULT_INITIAL,
+  REVEAL_MORE_LIST_DEFAULT_STEP,
   ToggleGroup,
   Tooltip,
   TrashIcon,
@@ -907,6 +913,122 @@ function GlobalsCategory({
         <div className="sandbox-globals-section-body">{children()}</div>
       ) : null}
     </Collapsible>
+  );
+}
+
+/** Live demo of `useRevealMore` + `RevealMore` on a long data Table. */
+const TABLE_REVEAL_ROWS = Array.from({ length: 24 }, (_, i) => {
+  const n = i + 1;
+  const id = String(n).padStart(2, "0");
+  return {
+    name: `sample/catalog-item-${id}`,
+    status: n % 3 === 0 ? "Draft" : "Ready",
+    qty: String(n * 3),
+    cache: n % 4 === 0 ? "—" : `${n * 12}k`,
+    total: `${n * 3}`,
+  };
+});
+
+function TableRevealMoreDemo() {
+  const { t } = useLocale();
+  const { visible, canRevealMore, revealMore } = useRevealMore({
+    total: TABLE_REVEAL_ROWS.length,
+    initial: REVEAL_MORE_DEFAULT_INITIAL,
+    step: REVEAL_MORE_DEFAULT_STEP,
+  });
+  const rows = TABLE_REVEAL_ROWS.slice(0, visible);
+
+  return (
+    <Card title={t("globals.tableRevealCaption")} chrome="plain">
+      <div className="fynns-table-wrap fynns-scroll">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+              <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColQty")}
+              </TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColCache")}
+              </TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColTotal")}
+              </TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.status}</TableCell>
+                <TableCell align="end">{row.qty}</TableCell>
+                <TableCell align="end">{row.cache}</TableCell>
+                <TableCell align="end">{row.total}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <RevealMore
+        canRevealMore={canRevealMore}
+        onRevealMore={revealMore}
+        label={t("globals.tableRevealMore")}
+      />
+    </Card>
+  );
+}
+
+const LIST_REVEAL_ITEMS = Array.from({ length: 12 }, (_, i) => {
+  const n = i + 1;
+  const id = String(n).padStart(2, "0");
+  return {
+    id: `list-reveal-${id}`,
+    headline: `sample/catalog-entry-${id}`,
+    supporting: n % 3 === 0 ? "Needs review" : "Unmatched",
+  };
+});
+
+/** Live demo of `useRevealMore` + `RevealMore` on a long List (5/5). */
+function ListRevealMoreDemo() {
+  const { t } = useLocale();
+  const { visible, canRevealMore, revealMore } = useRevealMore({
+    total: LIST_REVEAL_ITEMS.length,
+    initial: REVEAL_MORE_LIST_DEFAULT_INITIAL,
+    step: REVEAL_MORE_LIST_DEFAULT_STEP,
+  });
+  const items = LIST_REVEAL_ITEMS.slice(0, visible);
+
+  return (
+    <Card title={t("globals.listRevealCaption")}>
+      <div className="fynns-unit-stack">
+        <FieldHint>{t("globals.listRevealHint")}</FieldHint>
+        <List aria-label={t("globals.listRevealAria")}>
+          {items.map((item) => (
+            <ListItem
+              key={item.id}
+              interactive={false}
+              headline={item.headline}
+              supportingText={item.supporting}
+              trailing={
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => snackbar(t("globals.listRevealMapSnack"))}
+                >
+                  {t("globals.listRevealMap")}
+                </Button>
+              }
+            />
+          ))}
+        </List>
+        <RevealMore
+          canRevealMore={canRevealMore}
+          onRevealMore={revealMore}
+          label={t("globals.listRevealMore")}
+        />
+      </div>
+    </Card>
   );
 }
 
@@ -4143,6 +4265,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
             />
           </List>
+          <SandboxHelp text={t("globals.listRevealHelp")} />
+          <ListRevealMoreDemo />
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
         </GlobalsDemo>
@@ -5957,7 +6081,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Table>
           </div>
           </Card>
+          <TableRevealMoreDemo />
           <SandboxHelp text={t("globals.tableHelp")} />
+          <SandboxHelp text={t("globals.tableRevealHelp")} />
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
         </GlobalsDemo>

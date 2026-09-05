@@ -538,6 +538,22 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
 }
 
+/* ---------- RevealMore (table / catalog progressive foot) ---------- */
+/*
+ * Place as a Card / `.fynns-unit-stack` sibling **outside** `.fynns-table-wrap`
+ * (not inside the horizontal scroll host). Default tonal + lg Button, centered;
+ * core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
+ */
+.fynns-reveal-more {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
 /* ---------- Pagination ---------- */
 .fynns-pagination {
   box-sizing: border-box;
