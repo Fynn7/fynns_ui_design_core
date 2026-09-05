@@ -994,8 +994,13 @@
 }
 
 .fynns-busy-region-content {
+  /* Stretch with the region so nested Card / unit-stack columns share the
+   * same inline band as sibling ControlRows (do not shrink-wrap to a
+   * sheet-max-width child). ≥ 0.5.141 */
+  width: 100%;
   min-width: 0;
   max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Stretch to a height-resolved flex parent so the overlay can center. */

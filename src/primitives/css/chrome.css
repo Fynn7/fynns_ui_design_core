@@ -1968,6 +1968,24 @@
 }
 
 /*
+ * Mode `--toolbar-end` strip (≥ **0.5.143**): same Item `item-pad-inline`
+ * as the preference ControlRow below so primary Plus (sm) and Switch track
+ * share one **trailing** edge (grid-like tools column). Without this, Plus
+ * hugs body `pad-inline` only while Switch sits on item-pad-end (~16dp
+ * further in). Cluster stays full-width + `justify-content: flex-end`.
+ * Live: `#layouts-demo-navigation-drawer`.
+ */
+.fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end,
+.fynns-nav-drawer-body
+  > *:has(> .fynns-control-cluster--toolbar-end)
+  > .fynns-control-cluster--toolbar-end {
+  box-sizing: border-box;
+  width: 100%;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+}
+
+/*
  * Mistaken **top-level** destination wrap only — Card / Collapsible / Dialog
  * form hosts inside the drawer keep `--fynns-layout-unit-stack-gap` (16dp).
  * Descendant remap (pre-0.5.125) kissed stacked Collapsible shells (~4dp).

@@ -1436,12 +1436,14 @@
 }
 
 /*
- * Wide × tall stage so `.fynns-content-column` max-width leaves a gutter —
- * overlay Y rail must sit on the page-scroll host edge, outside Cards.
+ * Wide × tall stage so `.fynns-content-column` sits under the page-scroll
+ * host edge (overlay Y rail outside Cards) while the column itself stays
+ * **wider than** `--fynns-layout-sheet-max-width` (40rem) — teaches Card
+ * stretch vs a wrongly capped sheet column (≥ 0.5.141).
  */
 .sandbox-page-scroll-stage {
   box-sizing: border-box;
-  width: min(100%, 48rem);
+  width: min(100%, 56rem);
   height: 22rem;
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
@@ -1458,9 +1460,9 @@
 }
 
 .sandbox-page-scroll-stage .fynns-content-column {
-  /* Soft ceiling below the stage so the gutter is visible in the demo.
-   * Inline + block pad come from keep-set `.fynns-content-column` (dialog-inset). */
-  max-width: min(22rem, 100%);
+  /* Soft ceiling below the stage so a gutter remains for the rail demo,
+   * but still above sheet-max (40rem) so Cards must not look 640dp-capped. */
+  max-width: min(44rem, 100%);
 }
 
 .sandbox-split-stage {

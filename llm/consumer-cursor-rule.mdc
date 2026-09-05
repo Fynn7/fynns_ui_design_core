@@ -52,8 +52,14 @@ alwaysApply: true
   功能配置走独立目的地。语言开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。
 - 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
   `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
-  **0.5.137** 对齐 Item `item-pad-inline`（勿消费仓私有 padding）。对照
-  `#layouts-demo-navigation-drawer`。
+  **0.5.137** 对齐 Item `item-pad-inline`；`--toolbar-end` 主新建 Plus 与
+  Switch 轨道**右端对齐**（core ≥ **0.5.143** 同套 item-pad；勿消费仓私有
+  padding）。对照 `#layouts-demo-navigation-drawer`。
+- 模式侧栏 SyncSideFilter：`ToggleGroup` `compact` `fullWidth` +
+  **`showCheck={false}`** + **省略 option `tip`**；可见标签用**短**名
+  （全部 / 标记字形）— **禁止**等分列塞长产品名（core ≥ **0.5.140** 会
+  ellipsis + 12dp compact pad，仍应短标签）。对照
+  `#layouts-demo-navigation-drawer` / `#toggle-group`。
 - `EndAside`：只切 `open` — **禁止** `{open && <EndAside>}`；toggle 勿触发
   workspace `BusyRegion` boot。窄检查器：一个主 CTA + IconButton/菜单，勿堆三条
   labeled Button。对照 `#layouts-demo-shell`。
@@ -100,6 +106,13 @@ alwaysApply: true
 20. **Textarea for a suffixed file body / fixed-height on page scroll** —
     有扩展名 → `CodeBlock`；页内默认 autoGrow。
 21. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
+22. **PageScroll Card sheet/chat/dialog-max under ControlRow** — 目的地
+    PageScroll 上 Card **铺满** `.fynns-content-column`（core ≥ **0.5.141**/
+    **0.5.142**）。禁止给 `hub-col` / BusyRegion 子树套
+    `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列）、
+    `dialog-max-width*`（仅 Dialog）或私有 rem `maxWidth`；工具条 ControlRow +
+    ToggleGroup 与下方 Card **右端对齐**；无工具条的表单页同样铺满内容列。
+    对照 `#page-scroll`。
 
 ## 表单与密度（短）
 
@@ -109,6 +122,8 @@ alwaysApply: true
 - List 目录 kind → **leading 图标** + meta；禁止 start tick / 包 `div` /
   Chip 当状态。多指标 trailing → `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
+- PageScroll 分区 Card：勿用 `sheet-max-width` / `chat-max-width` / dialog-max
+  收窄；与上方 ControlRow 同列宽（或铺满 content-column）。
 
 ## Chat（短）
 

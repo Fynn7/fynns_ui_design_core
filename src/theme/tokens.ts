@@ -407,7 +407,12 @@ export const SEGMENTED_TOKENS = {
   "height-compact": "2rem",
   "icon-size": "1.125rem",
   "pad-inline": "0.75rem",
-  "pad-inline-compact": "0.5rem",
+  /**
+   * Compact chip inline pad — same 12dp as default (≥ **0.5.140**). Was 8dp
+   * and made SyncSideFilter “All” read glued to the stadium start curve in
+   * narrow NavigationDrawer hosts. Live: `#layouts-demo-navigation-drawer`.
+   */
+  "pad-inline-compact": "0.75rem",
   gap: "0.5rem",
   outline: "1px",
 } as const;
@@ -1420,7 +1425,12 @@ export const LAYOUT_TOKENS = {
    * or rem literals so nested Card / chat column stay symmetric.
    */
   "dialog-inset": "1.5rem",
-  /** Bottom sheet — M3 max width 640dp. */
+  /**
+   * BottomSheet panel only — M3 max width 640dp. **Never** apply to
+   * PageScroll / destination-canvas Card columns or `hub-col` wrappers
+   * under a full-bleed section ControlRow (Cards already `width: 100%` of
+   * `.fynns-content-column`). Live `#page-scroll`. ≥ 0.5.141
+   */
   "sheet-max-width": "40rem",
   /** Near-fullscreen height (leaves a peek of the page above). */
   "sheet-max-height": "90vh",
@@ -1601,6 +1611,8 @@ export const LAYOUT_TOKENS = {
    * Chat thread + composer column ceiling when Chat fills ClippedNavShell main
    * (ChatGPT `max-w-3xl`). Keep in sync with `--fynns-chatmessage-max-width`.
    * EndAside / `.fynns-chat-host--fill` children ignore this (100% of pane).
+   * **Never** apply to PageScroll destination form / Card `hub-col` stacks
+   * (≥ **0.5.142** — those fill `.fynns-content-column`). Live `#page-scroll`.
    */
   "chat-max-width": "48rem",
   /**

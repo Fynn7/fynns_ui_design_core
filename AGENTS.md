@@ -297,6 +297,17 @@ belong in a consumer’s own doc.
   `@radix-ui/*` / `sonner` / purged Toast/Popover/Panel APIs. Don't drop a
   sandbox demo while the symbol stays exported (or reverse) — atomic
   unexport+delete+demo+BREAKING_PURGE; `npm run check:wysiwyg`.
+- **DON'T** cap PageScroll / destination-canvas Card / form stacks with
+  layout max tokens that belong elsewhere — especially
+  `--fynns-layout-sheet-max-width` (BottomSheet **only**, 40rem / 640dp),
+  `--fynns-layout-chat-max-width` (**Chat** main column **only**, 48rem),
+  `--fynns-layout-dialog-max-width*` (centered Dialog panels), or private
+  rem/`maxWidth` on a `hub-col` / unit wrapper. Card / Collapsible already
+  stretch (`width: 100%`, `align-self: stretch` ≥ **0.5.141**); BusyRegion
+  content stretches with them. Section ControlRow + Cards share one
+  **right edge**; even without a sibling ControlRow, destination Cards fill
+  `.fynns-content-column` (do not invent a reading-width column). Live
+  `#page-scroll`. ≥ **0.5.142** names chat/dialog misuse explicitly.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
   placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
@@ -709,13 +720,13 @@ rules such as timeline-catalog). Live index: `#list`.
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
-| Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints |
+| Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk; Plus end = preference Switch end (item-pad ≥ **0.5.143**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus flush on body pad while Switch on item-pad |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
-| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only |
-| Mode SyncSideFilter | Omit option `tip`; `showCheck={false}` for marks | Layouts mode sample | tip collisions; 4dp tools↔filter |
+| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
+| Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
-| Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size | `#card` / `#field-header` | Mixed sm/md trail; path/count in title |
+| Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band grammar; 8dp action gap | `#sandbox-card-head-select` | Title/CTA centered on expanded Select |
 | Untitled well / preview | `Surface` | — | Surface as List-row substitute |
 | In-content editor\|preview | `SplitPane` | `#split-pane` | Hand-rolled resize; EndAside inside Card |

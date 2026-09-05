@@ -40,8 +40,13 @@
 .fynns-collapsible,
 .fynns-card {
   box-sizing: border-box;
+  /* Fill the parent column — never invent a private rem / sheet-max-width
+   * ceiling on PageScroll destination Cards (≥ 0.5.141). Parent width comes
+   * from `.fynns-content-column` (or a shared unit-stack), so a section
+   * ControlRow + ToggleGroup and sibling Cards share one right edge. */
   width: 100%;
   max-width: 100%;
+  align-self: stretch;
   /* Flex/grid parents (EndAside open, nested demos): shrink below content min. */
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);

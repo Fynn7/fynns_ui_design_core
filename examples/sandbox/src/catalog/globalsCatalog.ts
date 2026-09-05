@@ -195,7 +195,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "toggle-group",
     categoryId: "selection",
     label: "ToggleGroup",
-    keywords: ["分段", "segmented", "segment", "分段按钮"],
+    keywords: ["分段", "segmented", "segment", "分段按钮", "ellipsis", "fullWidth", "SyncSideFilter"],
   },
   {
     id: "slider",
@@ -449,6 +449,11 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "overlay",
       "FillColumn",
       "catalog",
+      "sheet-max-width",
+      "Card",
+      "ToggleGroup",
+      "右端对齐",
+      "width",
     ],
   },
   {

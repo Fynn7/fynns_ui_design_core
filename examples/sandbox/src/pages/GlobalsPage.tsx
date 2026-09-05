@@ -1030,6 +1030,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [carouselHeroIndex, setCarouselHeroIndex] = useState(0);
   const [segment, setSegment] = useState<"day" | "week" | "month">("week");
   const [segmentCompact, setSegmentCompact] = useState<"list" | "grid">("list");
+  const [segmentNarrow, setSegmentNarrow] = useState<"all" | "alpha" | "beta" | "gamma">(
+    "all",
+  );
   const [styleMarks, setStyleMarks] = useState<Array<"bold" | "italic">>(["bold"]);
   const [sliderValue, setSliderValue] = useState(40);
   const [autoValue, setAutoValue] = useState("");
@@ -1135,6 +1138,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [splitOrientation, setSplitOrientation] = useState<
     "horizontal" | "vertical"
   >("horizontal");
+  const [pageScrollTool, setPageScrollTool] = useState("a");
   const [treeSelectedId, setTreeSelectedId] = useState<string | null>(
     "src/components/Tree.tsx",
   );
@@ -2325,6 +2329,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             ]}
           />
           <SandboxHelp text={t("globals.segmentedCompactHelp")} />
+          <div style={{ width: "min(100%, 14rem)" }}>
+            <ToggleGroup
+              size="compact"
+              fullWidth
+              showCheck={false}
+              ariaLabel={t("globals.segmentedNarrowAria")}
+              value={segmentNarrow}
+              onChange={setSegmentNarrow}
+              options={[
+                { value: "all", label: t("globals.segmentedNarrowAll") },
+                { value: "alpha", label: t("globals.segmentedNarrowAlpha") },
+                { value: "beta", label: t("globals.segmentedNarrowBeta") },
+                { value: "gamma", label: t("globals.segmentedNarrowGamma") },
+              ]}
+            />
+          </div>
+          <SandboxHelp text={t("globals.segmentedNarrowHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="slider">
@@ -5504,6 +5525,28 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <div className="sandbox-page-scroll-stage">
             <FillColumn>
               <PageScroll>
+                  <ControlRow label={t("globals.pageScrollToolLabel")}>
+                    <ToggleGroup
+                      showCheck={false}
+                      ariaLabel={t("globals.pageScrollToolAria")}
+                      value={pageScrollTool}
+                      onChange={setPageScrollTool}
+                      options={[
+                        {
+                          value: "a",
+                          label: t("globals.pageScrollToolA"),
+                        },
+                        {
+                          value: "b",
+                          label: t("globals.pageScrollToolB"),
+                        },
+                        {
+                          value: "c",
+                          label: t("globals.pageScrollToolC"),
+                        },
+                      ]}
+                    />
+                  </ControlRow>
                   <Card title={t("globals.pageScrollCardTitle")}>
                     <List aria-label={t("globals.pageScrollListAria")}>
                       <ListItem
