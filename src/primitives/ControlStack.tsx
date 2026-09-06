@@ -10,6 +10,8 @@ export type ControlStackGap =
   | "2xl"
   | "3xl";
 
+export type ControlStackControlsAlign = "end" | "start";
+
 export type ControlStackProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Number of shared control columns after the label column (X).
@@ -19,6 +21,19 @@ export type ControlStackProps = HTMLAttributes<HTMLDivElement> & {
    * @default 2
    */
   columns?: number;
+  /**
+   * Form-host (Card / Dialog / padded Surface) packing of control cells.
+   * - `end` (default when omitted) — preference / Switch / action rows: shared
+   *   track + `.fynns-control-cluster` hug the **trailing** edge (AGENTS
+   *   form-host end-hug; cluster default flex-end ≥ **0.5.158**).
+   * - `start` — probe / path / outcome meta: cells share a **start** edge so
+   *   sibling rows read as a value grid (≥ **0.5.154**). Pair with `columns`
+   *   equal to the cell count; do **not** wrap unequal cells in one
+   *   `.fynns-control-cluster` when you need cross-row column alignment.
+   *   Start packing is **opt-in only** — never the default for Buttons /
+   *   action clusters.
+   */
+  controlsAlign?: ControlStackControlsAlign;
   /**
    * Gap between rows (and columns when applicable).
    * Omit to use the semantic toolbar rhythm token
@@ -40,6 +55,7 @@ export type ControlStackProps = HTMLAttributes<HTMLDivElement> & {
  */
 export function ControlStack({
   columns = 2,
+  controlsAlign,
   gap,
   className,
   style,
@@ -55,8 +71,15 @@ export function ControlStack({
 
   return (
     <div
-      className={["fynns-control-stack", className ?? ""].filter(Boolean).join(" ")}
+      className={[
+        "fynns-control-stack",
+        controlsAlign === "start" ? "fynns-control-stack--controls-start" : "",
+        className ?? "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-columns={cols}
+      {...(controlsAlign ? { "data-controls-align": controlsAlign } : null)}
       style={stackStyle}
       {...rest}
     >

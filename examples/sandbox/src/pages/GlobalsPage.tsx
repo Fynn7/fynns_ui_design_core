@@ -126,6 +126,12 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
+  RevealMore,
+  useRevealMore,
+  REVEAL_MORE_DEFAULT_INITIAL,
+  REVEAL_MORE_DEFAULT_STEP,
+  REVEAL_MORE_LIST_DEFAULT_INITIAL,
+  REVEAL_MORE_LIST_DEFAULT_STEP,
   ToggleGroup,
   Tooltip,
   TrashIcon,
@@ -149,7 +155,7 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
@@ -215,6 +221,187 @@ function ChatDemoActions({
         </DropdownMenuItem>
       </DropdownMenu>
     </>
+  );
+}
+
+type ChatStarterItem = { id: string; label: string; prompt: string };
+
+function ChatStarterSurfaceButton({
+  item,
+  onSelect,
+  className,
+  tabIndex,
+  "aria-hidden": ariaHidden,
+}: {
+  item: ChatStarterItem;
+  onSelect: (prompt: string) => void;
+  className?: string;
+  tabIndex?: number;
+  "aria-hidden"?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      className={["sandbox-chat-starter", className].filter(Boolean).join(" ")}
+      onClick={() => onSelect(item.prompt)}
+      tabIndex={tabIndex}
+      aria-hidden={ariaHidden}
+    >
+      <Surface variant="soft" padded interactive>
+        <span className="sandbox-chat-starter-label">{item.label}</span>
+        <span className="sandbox-chat-starter-prompt">{item.prompt}</span>
+      </Surface>
+    </button>
+  );
+}
+
+/**
+ * Empty-thread starter: full-width `Surface` soft well (app-owned rotate).
+ * M3 Shared Axis Y (forward): incoming rises ~40% + fade (slow / ease-out);
+ * outgoing absolute overlay exits up + fade (base / emphasized). Incoming
+ * stays in-flow — no dual-absolute collapse or track transform snap-back.
+ */
+function ChatEmptySurfaceStarters({
+  items,
+  ariaLabel,
+  onSelect,
+}: {
+  items: ReadonlyArray<ChatStarterItem>;
+  ariaLabel: string;
+  onSelect: (prompt: string) => void;
+}) {
+  const [index, setIndex] = useState(0);
+  const [outgoing, setOutgoing] = useState<ChatStarterItem | null>(null);
+  const [phase, setPhase] = useState<"idle" | "prepare" | "run">("idle");
+  const [paused, setPaused] = useState(false);
+  const inRef = useRef<HTMLDivElement | null>(null);
+  const regionRef = useRef<HTMLDivElement | null>(null);
+  const indexRef = useRef(0);
+  const phaseRef = useRef(phase);
+  const reduceMotionRef = useRef(false);
+  const n = items.length;
+  indexRef.current = index;
+  phaseRef.current = phase;
+
+  useEffect(() => {
+    reduceMotionRef.current =
+      typeof window !== "undefined" &&
+      !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  const advance = useCallback(() => {
+    if (n < 2 || phaseRef.current !== "idle") return;
+    const from = indexRef.current;
+    const to = (from + 1) % n;
+    const fromItem = items[from]!;
+    if (reduceMotionRef.current) {
+      setIndex(to);
+      return;
+    }
+    setOutgoing(fromItem);
+    setIndex(to);
+    setPhase("prepare");
+  }, [n, items]);
+
+  useLayoutEffect(() => {
+    if (phase !== "prepare" || !outgoing) return;
+    // Paint rest pose (out covering in at opacity 0 / ty 40%), then run.
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setPhase("run");
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [phase, outgoing]);
+
+  const finishSlide = useCallback(() => {
+    setOutgoing(null);
+    setPhase("idle");
+  }, []);
+
+  useEffect(() => {
+    if (n < 2 || paused) return;
+    const id = window.setInterval(() => {
+      advance();
+    }, 2800);
+    return () => window.clearInterval(id);
+  }, [n, paused, advance]);
+
+  useEffect(() => {
+    const el = regionRef.current;
+    if (!el) return;
+    const onAdvance = () => advance();
+    el.addEventListener("sandbox-chat-starter-advance", onAdvance);
+    return () => el.removeEventListener("sandbox-chat-starter-advance", onAdvance);
+  }, [advance]);
+
+  if (n === 0) return null;
+  const active = items[((index % n) + n) % n]!;
+  const sliding = phase !== "idle" && outgoing != null;
+
+  return (
+    <div
+      ref={regionRef}
+      className="sandbox-chat-starters"
+      role="region"
+      aria-label={ariaLabel}
+      aria-live="polite"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          setPaused(false);
+        }
+      }}
+    >
+      <div
+        className={
+          sliding
+            ? "sandbox-chat-starters-viewport sandbox-chat-starters-viewport--sliding"
+            : "sandbox-chat-starters-viewport"
+        }
+      >
+        {sliding && outgoing ? (
+          <div
+            className={
+              phase === "run"
+                ? "sandbox-chat-starters-layer sandbox-chat-starters-layer--out sandbox-chat-starters-layer--out-run"
+                : "sandbox-chat-starters-layer sandbox-chat-starters-layer--out"
+            }
+            onTransitionEnd={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (e.propertyName !== "transform") return;
+              if (phaseRef.current !== "run") return;
+              finishSlide();
+            }}
+          >
+            <ChatStarterSurfaceButton
+              item={outgoing}
+              onSelect={onSelect}
+              tabIndex={-1}
+              aria-hidden
+            />
+          </div>
+        ) : null}
+        <div
+          ref={inRef}
+          className={
+            sliding
+              ? phase === "run"
+                ? "sandbox-chat-starters-layer sandbox-chat-starters-layer--in sandbox-chat-starters-layer--in-run"
+                : "sandbox-chat-starters-layer sandbox-chat-starters-layer--in"
+              : "sandbox-chat-starters-layer sandbox-chat-starters-layer--solo"
+          }
+        >
+          <ChatStarterSurfaceButton item={active} onSelect={onSelect} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -910,6 +1097,122 @@ function GlobalsCategory({
   );
 }
 
+/** Live demo of `useRevealMore` + `RevealMore` on a long data Table. */
+const TABLE_REVEAL_ROWS = Array.from({ length: 24 }, (_, i) => {
+  const n = i + 1;
+  const id = String(n).padStart(2, "0");
+  return {
+    name: `sample/catalog-item-${id}`,
+    status: n % 3 === 0 ? "Draft" : "Ready",
+    qty: String(n * 3),
+    cache: n % 4 === 0 ? "—" : `${n * 12}k`,
+    total: `${n * 3}`,
+  };
+});
+
+function TableRevealMoreDemo() {
+  const { t } = useLocale();
+  const { visible, canRevealMore, revealMore } = useRevealMore({
+    total: TABLE_REVEAL_ROWS.length,
+    initial: REVEAL_MORE_DEFAULT_INITIAL,
+    step: REVEAL_MORE_DEFAULT_STEP,
+  });
+  const rows = TABLE_REVEAL_ROWS.slice(0, visible);
+
+  return (
+    <Card title={t("globals.tableRevealCaption")} chrome="plain">
+      <div className="fynns-table-wrap fynns-scroll">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+              <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColQty")}
+              </TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColCache")}
+              </TableHeaderCell>
+              <TableHeaderCell align="end">
+                {t("globals.tableColTotal")}
+              </TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.status}</TableCell>
+                <TableCell align="end">{row.qty}</TableCell>
+                <TableCell align="end">{row.cache}</TableCell>
+                <TableCell align="end">{row.total}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <RevealMore
+        canRevealMore={canRevealMore}
+        onRevealMore={revealMore}
+        label={t("globals.tableRevealMore")}
+      />
+    </Card>
+  );
+}
+
+const LIST_REVEAL_ITEMS = Array.from({ length: 12 }, (_, i) => {
+  const n = i + 1;
+  const id = String(n).padStart(2, "0");
+  return {
+    id: `list-reveal-${id}`,
+    headline: `sample/catalog-entry-${id}`,
+    supporting: n % 3 === 0 ? "Needs review" : "Unmatched",
+  };
+});
+
+/** Live demo of `useRevealMore` + `RevealMore` on a long List (5/5). */
+function ListRevealMoreDemo() {
+  const { t } = useLocale();
+  const { visible, canRevealMore, revealMore } = useRevealMore({
+    total: LIST_REVEAL_ITEMS.length,
+    initial: REVEAL_MORE_LIST_DEFAULT_INITIAL,
+    step: REVEAL_MORE_LIST_DEFAULT_STEP,
+  });
+  const items = LIST_REVEAL_ITEMS.slice(0, visible);
+
+  return (
+    <Card title={t("globals.listRevealCaption")}>
+      <div className="fynns-unit-stack">
+        <FieldHint>{t("globals.listRevealHint")}</FieldHint>
+        <List aria-label={t("globals.listRevealAria")}>
+          {items.map((item) => (
+            <ListItem
+              key={item.id}
+              interactive={false}
+              headline={item.headline}
+              supportingText={item.supporting}
+              trailing={
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => snackbar(t("globals.listRevealMapSnack"))}
+                >
+                  {t("globals.listRevealMap")}
+                </Button>
+              }
+            />
+          ))}
+        </List>
+        <RevealMore
+          canRevealMore={canRevealMore}
+          onRevealMore={revealMore}
+          label={t("globals.listRevealMore")}
+        />
+      </div>
+    </Card>
+  );
+}
+
 /** Live demo of `useOverflowBounds` (content ellipsis + bounds vs parent). */
 function OverflowBoundsDemo() {
   const { t } = useLocale();
@@ -1068,6 +1371,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatStreaming, setChatStreaming] = useState(false);
   const [chatStreamEpoch, setChatStreamEpoch] = useState(0);
   const [chatFailed, setChatFailed] = useState(true);
+  const [chatThreadMode, setChatThreadMode] = useState<"empty" | "populated">(
+    "populated",
+  );
   const [chatDraft, setChatDraft] = useState("");
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -1185,6 +1491,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
+  const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
@@ -2777,8 +3084,79 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="chat">
         <div className="sandbox-globals-row sandbox-chat-dual">
           <div className="sandbox-chat-main">
+            <ToggleGroup
+              size="compact"
+              showCheck={false}
+              ariaLabel={t("globals.chatThreadModeAria")}
+              value={chatThreadMode}
+              onChange={(v) =>
+                setChatThreadMode(v === "empty" ? "empty" : "populated")
+              }
+              options={[
+                {
+                  value: "empty",
+                  label: t("globals.chatThreadModeEmpty"),
+                },
+                {
+                  value: "populated",
+                  label: t("globals.chatThreadModePopulated"),
+                },
+              ]}
+            />
             <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
-              <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
+              <ChatThread
+                empty={
+                  <div className="fynns-unit-stack sandbox-chat-empty">
+                    <EmptyState
+                      title={t("globals.chatEmpty")}
+                      description={t("globals.chatEmptyBody")}
+                    />
+                    <ChatEmptySurfaceStarters
+                      ariaLabel={t("globals.chatStarterAria")}
+                      items={[
+                        {
+                          id: "summarize",
+                          label: t("globals.chatStarter1Label"),
+                          prompt: t("globals.chatStarter1Prompt"),
+                        },
+                        {
+                          id: "outline",
+                          label: t("globals.chatStarter2Label"),
+                          prompt: t("globals.chatStarter2Prompt"),
+                        },
+                        {
+                          id: "rewrite",
+                          label: t("globals.chatStarter3Label"),
+                          prompt: t("globals.chatStarter3Prompt"),
+                        },
+                        {
+                          id: "checklist",
+                          label: t("globals.chatStarter4Label"),
+                          prompt: t("globals.chatStarter4Prompt"),
+                        },
+                        {
+                          id: "compare",
+                          label: t("globals.chatStarter5Label"),
+                          prompt: t("globals.chatStarter5Prompt"),
+                        },
+                        {
+                          id: "explain",
+                          label: t("globals.chatStarter6Label"),
+                          prompt: t("globals.chatStarter6Prompt"),
+                        },
+                      ]}
+                      onSelect={(prompt) => {
+                        snackbar(t("globals.chatStarterSent", { prompt }), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        });
+                        setChatThreadMode("populated");
+                      }}
+                    />
+                  </div>
+                }
+              >
+                {chatThreadMode === "populated" ? (
+                  <>
                 <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
                 <ChatMessage
                   role="user"
@@ -2898,6 +3276,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   {chatFailed ? undefined : t("globals.chatRetrySuccess")}
                 </ChatMessage>
+                  </>
+                ) : null}
               </ChatThread>
               <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
               <ChatComposer
@@ -2910,6 +3290,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 onSubmit={() => {
                   startChatStream();
                   setChatDraft("");
+                  setChatThreadMode("populated");
                 }}
                 sendLabel={t("globals.chatSend")}
                 stopLabel={t("globals.chatStop")}
@@ -3898,38 +4279,90 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </List>
           </Card>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
-          <List aria-label={t("globals.listCatalogStaticAria")}>
-            <ListItem
-              interactive={false}
-              lines={2}
-              overline={t("globals.listCatalogStaticOrigin")}
-              headline={t("globals.listCatalogStaticFile")}
-              supportingText={t("globals.listCatalogStaticPath")}
-              trailingSupportingText={
-                <span className="fynns-table-meta">{t("globals.listCatalogStaticKind")}</span>
-              }
-              trailing={
-                <div className="fynns-control-cluster">
-                  <Tooltip content={t("globals.listCatalogOpen")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.listCatalogOpen")}
-                    >
-                      <FileIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.listCatalogFolder")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.listCatalogFolder")}
-                    >
-                      <FolderOpenIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              }
-            />
-          </List>
+          <div id="sandbox-list-repo-path-actions">
+            <List aria-label={t("globals.listCatalogStaticAria")}>
+              <ListItem
+                interactive={false}
+                lines={3}
+                overline={t("globals.listRepoPathOverline")}
+                headline={t("globals.listRepoPathName")}
+                supportingText={t("globals.listRepoPathPath")}
+                leading={
+                  <Checkbox
+                    label=""
+                    aria-label={t("globals.listRepoPathEnable")}
+                    checked={listRepoPathEnabled}
+                    onCheckedChange={setListRepoPathEnabled}
+                  />
+                }
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listRepoPathMeta")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listRepoPathRefresh")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listRepoPathRefresh")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogRemove")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogRemove")}
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+              <ListItem
+                interactive={false}
+                lines={2}
+                overline={t("globals.listCatalogStaticOrigin")}
+                headline={t("globals.listCatalogStaticFile")}
+                supportingText={t("globals.listCatalogStaticPath")}
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listCatalogStaticKind")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FileIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+            </List>
+          </div>
           <SandboxHelp text={t("globals.listStatsHelp")} />
           <List aria-label={t("globals.listStatsAria")}>
             <ListItem
@@ -4143,6 +4576,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               }
             />
           </List>
+          <SandboxHelp text={t("globals.listRevealHelp")} />
+          <ListRevealMoreDemo />
         </div>
         <SandboxHelp text={t("globals.listHelp")} />
         </GlobalsDemo>
@@ -4598,6 +5033,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Surface>
             <Surface variant="elevated" padded style={{ minWidth: "8rem" }}>
               <SandboxHelp as="span" text={t("globals.surfaceElevated")} />
+            </Surface>
+            <Surface variant="soft" padded style={{ minWidth: "8rem" }}>
+              <SandboxHelp as="span" text={t("globals.surfaceSoft")} />
+            </Surface>
+            <Surface
+              variant="soft"
+              padded
+              interactive
+              role="button"
+              tabIndex={0}
+              style={{ minWidth: "8rem" }}
+              aria-label={t("globals.surfaceInteractiveAria")}
+            >
+              <SandboxHelp as="span" text={t("globals.surfaceInteractive")} />
             </Surface>
           </div>
           <div className="sandbox-surface-fill-host">
@@ -5957,7 +6406,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Table>
           </div>
           </Card>
+          <TableRevealMoreDemo />
           <SandboxHelp text={t("globals.tableHelp")} />
+          <SandboxHelp text={t("globals.tableRevealHelp")} />
           <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
         </GlobalsDemo>
@@ -6739,39 +7190,79 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </ControlRow>
         </Card>
+        <SandboxHelp text={t("globals.rhythmActionEndHelp")} />
+        <div id="sandbox-rhythm-action-end">
+          <Card
+            className="sandbox-globals-rhythm"
+            title={t("globals.rhythmActionEndTitle")}
+          >
+            {/* ControlStack + long meta — label must stay ≥ control-row-label
+                (never a 2px “就绪” sliver). Failure mode: CONSUMER_TREATY
+                ControlRow label crushed to 2px. */}
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.rhythmActionEndReady")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.rhythmActionEndMetaReady")}
+                  </span>
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.rhythmActionEndPending")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.rhythmActionEndMetaPending")}
+                  </span>
+                  <Button size="sm" variant="tonal">
+                    {t("globals.rhythmActionEndConfigure")}
+                  </Button>
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.rhythmActionEndReady")}>
+                <div className="fynns-control-cluster">
+                  <Button size="sm" variant="default">
+                    {t("globals.rhythmActionEndRefresh")}
+                  </Button>
+                </div>
+              </ControlRow>
+            </ControlStack>
+          </Card>
+        </div>
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
-          <ControlStack columns={1}>
+          <ControlStack columns={2} controlsAlign="start">
             <ControlRow label={t("globals.rhythmStatusBehind")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
-                <InfoHint
-                  size="sm"
-                  tone="danger"
-                  content={t("globals.rhythmStatusBehindTip")}
-                  ariaLabel={t("globals.rhythmStatusBehindTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status" data-tone="danger">
+                <AlertTriangleIcon aria-hidden />
+                {t("globals.rhythmStatusFail")}
+              </span>
+              <InfoHint
+                size="sm"
+                tone="danger"
+                content={t("globals.rhythmStatusBehindTip")}
+                ariaLabel={t("globals.rhythmStatusBehindTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusCi")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
-                <InfoHint
-                  size="sm"
-                  tone="danger"
-                  content={t("globals.rhythmStatusCiTip")}
-                  ariaLabel={t("globals.rhythmStatusCiTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status" data-tone="danger">
+                <AlertTriangleIcon aria-hidden />
+                {t("globals.rhythmStatusFail")}
+              </span>
+              <InfoHint
+                size="sm"
+                tone="danger"
+                content={t("globals.rhythmStatusCiTip")}
+                ariaLabel={t("globals.rhythmStatusCiTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusProtection")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
-                <InfoHint
-                  size="sm"
-                  content={t("globals.rhythmStatusProtectionTip")}
-                  ariaLabel={t("globals.rhythmStatusProtectionTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status">
+                <CheckCircleIcon aria-hidden />
+                {t("globals.rhythmStatusOk")}
+              </span>
+              <InfoHint
+                size="sm"
+                content={t("globals.rhythmStatusProtectionTip")}
+                ariaLabel={t("globals.rhythmStatusProtectionTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusLocal")}>
               <span
@@ -6782,14 +7273,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </span>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusReady")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
-                <InfoHint
-                  size="sm"
-                  content={t("globals.rhythmStatusReadyTip")}
-                  ariaLabel={t("globals.rhythmStatusReadyTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status">
+                <CheckCircleIcon aria-hidden />
+                {t("globals.rhythmStatusOk")}
+              </span>
+              <InfoHint
+                size="sm"
+                content={t("globals.rhythmStatusReadyTip")}
+                ariaLabel={t("globals.rhythmStatusReadyTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmSyncNow")}>
               <Tooltip content={t("globals.rhythmSyncNowTip")}>
@@ -6803,6 +7295,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlRow>
           </ControlStack>
         </Card>
+        <SandboxHelp text={t("globals.rhythmProbeKindsHelp")} />
+        <div id="sandbox-rhythm-probe-kinds">
+          <Card
+            className="sandbox-globals-rhythm"
+            title={t("globals.rhythmProbeKindsTitle")}
+          >
+            <div className="fynns-unit-stack">
+              <ControlStack columns={1} controlsAlign="start">
+                <ControlRow label={t("globals.rhythmProbeAvailable")}>
+                  <span className="fynns-table-meta">{t("globals.rhythmProbePath")}</span>
+                </ControlRow>
+              </ControlStack>
+              <Divider />
+              <ControlStack columns={3} controlsAlign="start">
+                <ControlRow label={t("globals.rhythmProbeBackend")}>
+                  <span className="fynns-list-item-status">
+                    <CheckCircleIcon aria-hidden />
+                    {t("globals.rhythmProbeRuntimeOk")}
+                  </span>
+                  <span className="fynns-list-item-status" data-tone="danger">
+                    <AlertTriangleIcon aria-hidden />
+                    {t("globals.rhythmProbeEndpointFail")}
+                  </span>
+                  <span className="fynns-table-meta">{t("globals.rhythmProbeModelMeta")}</span>
+                </ControlRow>
+              </ControlStack>
+            </div>
+          </Card>
+        </div>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

@@ -118,10 +118,18 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | private labeled Button cluster gap | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | AGENTS forms / FieldStack | `#rhythm` |
+| CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
+| ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#rhythm` |
+| ControlRow label crushed to 2px / hairline sliver | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
+| outcome Chip as status (suggestion/assist / StatusChip fake Badge) | AGENTS Hard rules / Content density | `#list` / `#rhythm` status |
+| List path catalog Switch+Chip+danger disk soup | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
+| ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | AGENTS Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
+| FieldHint restates ToggleGroup / Tabs labels (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
+| Pagination Select expands bar (in-flow stretch) | AGENTS Content density / Hard rules | `#pagination` |
 | KPI stat grid stacks full-width (undefined layout token) | AGENTS Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |
@@ -148,6 +156,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | nested short List well + invented list-well token | AGENTS Content density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | AGENTS forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | AGENTS Card / Collapsible | `#table` |
+| long Table dumps all rows | AGENTS Hard rules / Content density | `#table` |
+| long List dumps all rows | AGENTS Hard rules / Content density | `#list` |
 | List tree wrapped in divs / buttons in leading | AGENTS Content density / List | `#list` |
 | ListItem kind via wrapping div / start rail | AGENTS shells / Hard rules | `#list` |
 | builtin ListItem looks like a square / chip island | AGENTS Content density / List | `#list` |
@@ -220,6 +230,10 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Collapsible brief save on head | AGENTS Card / Collapsible | `#form-recipe-page-scroll` |
 | literal backticks in Chat bubbles | AGENTS Chat / llm/CHAT_* | `—` |
 | ChatComposer field↔Send tighter than glyph↔field | AGENTS Chat / llm/CHAT_* | `#chat` |
+| empty-thread Chip / revived ChatStarterPrompts | AGENTS Chat / Content density | `#chat` |
+| empty-thread starter ≠ composer-shell edges | AGENTS Chat / Content density | `#chat` |
+| empty-thread starter rotate no slide | AGENTS Chat / Content density | `#chat` |
+| Surface padded uneven / rem inset | AGENTS Surface / Content density | `#surface` / `#chat` |
 | List run history stacked vertically | AGENTS Content density / List | `#list` |
 | jammed headline list meta (overflow clip) | AGENTS Content density / List | `#list` |
 | EndAside instant open / close (no width morph) | AGENTS shells / Hard rules | `#layouts-demo-shell` |

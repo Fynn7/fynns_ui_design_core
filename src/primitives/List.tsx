@@ -77,9 +77,12 @@ export type ListItemProps = Omit<
   /** Small label above the headline (forces three-line height when present). */
   overline?: ReactNode;
   /**
-   * Leading icon, avatar, or image. Always `aria-hidden` — do **not** put
-   * buttons here (expand chevrons are decorative; the row `onClick` +
-   * `aria-expanded` owns disclosure).
+   * Leading icon, avatar, image, or enable **`Checkbox`** (path/repo catalogs ≥
+   * **0.5.168**). Decorative glyphs should set `aria-hidden` on themselves —
+   * this slot is **not** force-hidden (Checkbox / other controls must stay in
+   * the a11y tree). Expand chevrons stay decorative; disclosure is still row
+   * `onClick` + `aria-expanded`. **`Checkbox` leading requires
+   * `interactive={false}`** — never nest an input inside the row `button`.
    */
   leading?: ReactNode;
   /**
@@ -207,9 +210,7 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
 
   const leadingNode =
     leading != null ? (
-      <span className="fynns-list-item-leading" aria-hidden>
-        {leading}
-      </span>
+      <span className="fynns-list-item-leading">{leading}</span>
     ) : null;
 
   const contentNode = (

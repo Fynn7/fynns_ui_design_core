@@ -221,6 +221,15 @@ belong in a consumer’s own doc.
 - **DON'T** wrap each path/link/bookmark in its own padded `Surface`/`Card` —
   one `List` of `ListItem`s (trailing ghost **md** IconButtons; not under text;
   not a filled danger disk). See **Content density**.
+- **DON'T** invent path/repo List trailing soup — **no** `Switch` + IconButtons
+  in one end cluster, **no** `IconButton` `danger` filled disk on the row
+  (delete = ghost **md** + `ConfirmDialog`), **no** `Chip` / consumer
+  `CatalogBadges` in the headline for kind/status. Overline / path /
+  `trailingSupportingText` / `.fynns-table-meta` for status; enable-for-batch
+  → leading **`Checkbox`** (not Switch mid-cluster). Same-size **md** disks
+  share one horizontal baseline. Live `#sandbox-list-repo-path-actions` /
+  `#list` catalog. Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger
+  disk soup.
 - **DON'T** paint List catalog kind with start tick / inset rail / `::before` /
   second `hostClassName` wash — leading icon + `trailingSupportingText` /
   `.fynns-table-meta`; selected = host `radius-3xl` pill only; never
@@ -275,7 +284,41 @@ belong in a consumer’s own doc.
 - **DON'T** put service status in ControlRow `__controls` (Chip/badge/meta) —
   status on **`label` only**; controls = labeled Buttons only; use public
   `.fynns-control-cluster` (**8dp** labeled-Button gap ≥ **0.5.80**), not
-  private `*-control-cluster` at 4dp. Live `#rhythm` service control.
+  private `*-control-cluster` at 4dp. Same for **CLI / tool install probes**
+  inside a Status Card: do **not** put the tool name on `label` while a status
+  Chip says `OK`/`未安装` and an install Button already names the tool —
+  **information redundancy**. `label` = short status (`可用` / `未安装` /
+  `Not running`); install / repair = labeled Button; path may stay as plain
+  meta text; failure detail → **`InfoHint`** on the row — **never** a sibling
+  `FieldHint` that repeats `tool：error…`. Live `#rhythm` service control.
+- **DON'T** left-pack ControlRow / `.fynns-control-cluster` **Buttons** (or
+  action+meta strips) under the label — clusters **default end-pack**
+  (`justify-content: flex-end`, ≥ **0.5.158**). Start packing is **opt-in
+  only**: ControlStack `controlsAlign="start"` (probe value grids) or
+  `.fynns-control-cluster--start-align`. Never invent consumer `justify-content:
+  flex-start` / `margin-inline-start: auto` to “fix” left-parked CTAs. Live
+  `#rhythm` service / `#sandbox-rhythm-action-end`.
+- **DON'T** crush ControlRow `__label` to a hairline / 2px sliver — form-host
+  + standalone label tracks floor at `--fynns-layout-control-row-label`
+  (**7.5rem**, ≥ **0.5.159**); long path meta / Button clusters shrink in the
+  controls track (`minmax(0, max-content)`), never steal the label column to
+  `0`. Live `#sandbox-rhythm-action-end`.
+- **DON'T** paint success / fail / OK / ready **outcome signals** as `Chip`
+  (`assist` / `filter` / `input` / `suggestion`) or a consumer `StatusChip`
+  wrapper around Chip — use **`.fynns-list-item-status`** (default success
+  wash; `data-tone="danger"` for fail) with optional leading glyph
+  (`CheckCircleIcon` / `AlertTriangleIcon`). Neutral muted captions stay
+  `.fynns-table-meta`. Live `#list` run-summary + `#rhythm` status.
+- **DON'T** dump install / CLI availability (path meta) and backend /
+  runtime readiness (outcome marks + model meta) into **one** Card-body
+  `ControlStack` — different kinds → adjacent stacks + horizontal `Divider`
+  (≥ **0.5.154**). Probe / path / outcome stacks use
+  `ControlStack` `controlsAlign="start"` + `columns` = cell count; pass each
+  cell as a **direct** ControlRow child (subgrid). **Never** wrap unequal
+  path + marks + `FieldHint` in one `.fynns-control-cluster` under
+  `columns={1}` (form-host end-hug misaligns value starts). Model / route
+  strings → `.fynns-table-meta`, not FieldHint. Preference Switch stacks keep
+  default end-hug. Live `#sandbox-rhythm-probe-kinds` / `#rhythm` status.
 - **DON'T** use `IconButton` `sm` or labeled `Button` `primary`/`tonal` on
   PageScroll **section-body** ControlRows when the row `label` already names
   the section — default **md** ghost IconButton + Tooltip only; primary-end
@@ -308,6 +351,19 @@ belong in a consumer’s own doc.
   **right edge**; even without a sibling ControlRow, destination Cards fill
   `.fynns-content-column` (do not invent a reading-width column). Live
   `#page-scroll`. ≥ **0.5.142** names chat/dialog misuse explicitly.
+- **DON'T** dump every row of a Card / PageScroll **data Table** when the
+  catalog can grow past ~10 rows — use `useRevealMore` + `RevealMore` (default
+  **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
+  **md** labeled Button (≥ **0.5.147** tonal; size back to **md** ≥ **0.5.149**),
+  centered **outside** `.fynns-table-wrap`; pass locale (`更多` / `Show more`).
+  Short tables, Dialog-hosted tables, and true page `Pagination` are exempt. Do
+  not bounce an expanded window when polling only grows `total` — use `resetKey`
+  for filter / source identity. Live `#table`.
+- **DON'T** dump every item of a Card / PageScroll **List** catalog when it can
+  grow past ~5 rows — same `useRevealMore` + `RevealMore`, but pass
+  `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
+  because ListItems are taller: foot **after** the List (unit-stack sibling);
+  short lists / Dialog / `Pagination` exempt. Live `#list`.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
   placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
@@ -316,6 +372,12 @@ belong in a consumer’s own doc.
   one short line. Env keys: InfoHint on label row (danger when required empty);
   no status Chip; Input trailing reveal = `sm` only. Live `#rhythm` /
   `#sandbox-field-header-env-keys`.
+- **DON'T** put a page/section `FieldHint` (or section-lead copy) that only
+  restates visible **ToggleGroup** / **Tabs** option labels (“A / B / C; three
+  tabs”) — **information redundancy**. The control already names the modes;
+  TopAppBar `InfoHint` may keep a short **scope** tip that does **not** list
+  those labels. Live `#rhythm` (Surface + ToggleGroup — no sibling FieldHint
+  naming Catalog / Mirror).
 - **DON'T** put Settings both as root NavigationDrawerItem **and** footer gear
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
@@ -377,9 +439,11 @@ the consumer only calls the new API. Install / pin rules:
 | Topic | Anchor |
 | --- | --- |
 | Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header` |
-| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action` |
+| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
+| Probe kind split / start-align meta | `#sandbox-rhythm-probe-kinds` |
+| Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` |
 | Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region` |
 | CodeBlock file body | `#code-block` |
@@ -539,7 +603,19 @@ classes.
     `children` = Chat or pane-boot `BusyRegion` `fill`). Only `ChatThread`
     scrolls (`role="log"` + `fynns-scroll`); composer docks at root; scroll-to-
     bottom = 32dp elevated IconButton (not Fab). `empty` prefers `EmptyState`;
-    starter prompts = `Chip`/`ChipSet` **inside** `empty` (above composer).
+    empty-thread starter prompts = app-owned full-width clickable
+    **`Surface` `variant="soft"` `padded` `interactive`** rows inside
+    `ChatThread.empty`
+    (unit-stack under EmptyState; **outer** edges = `.fynns-chat-composer-shell`
+    — stay inside `.fynns-chat-thread-inner` pad; **never** negative-margin
+    breakout that flush-aligns with `form.fynns-chat-composer`; **inner** pad =
+    equal `--fynns-layout-content-inset` all edges — never rem/`px` or mixed
+    block/inline; wrap with text). App-owned rotate: **M3 Shared Axis Y** —
+    incoming in-flow rises ~40% + fade (`--fynns-duration-slow` /
+    `--fynns-ease-out`); outgoing absolute overlay exits up + fade
+    (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
+    instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
+    use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
   - **Main vs aside:** **main** = column ceiling `--fynns-layout-chat-max-width`
     (**48rem**); user bubble **70%** of host (`radius-22`,
     `--fynns-color-chat-user-bubble`); composer **100%** of same host
@@ -593,7 +669,9 @@ classes.
   `.fynns-unit-stack`; SearchBar/tools ↔ destinations =
   `--fynns-navdrawer-search-gap` **8dp**; Item↔Item =
   `--fynns-navdrawer-section-gap` **4dp**), SkipLink, Breadcrumb, Pagination
-  (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows)
+  (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows;
+  rows-per-page Select expands as an **overlay** ≥ **0.5.151** — never stretch
+  the bar with in-flow `.fynns-search-bar--expanded`)
 - **App shells:** **`DestinationAppShell`** (default greenfield — declarative
   `destinations[]` / `title` / optional `leadingExtra` / `trailing` /
   `navFooter` / `children` / optional `aside`). Destinations are **binary**:
@@ -616,10 +694,15 @@ classes.
   overlay reveal for path catalogs; expandable trees = row `onClick` +
   decorative chevron + `detail` — keep mounted, do not `open ? … : null`),
   Card / Collapsible (`chrome="card"`|`"plain"` — plain = nest-gap, **≠ flush**;
-  head actions = interactive chrome only), Surface (untitled well; `fill` only
-  when parent height-resolved), Carousel, Divider, Table (host
+  head actions = interactive chrome only), Surface (untitled well;
+  `outlined`|`filled`|`elevated`|`soft` — soft = surface-2, same paint as Banner
+  default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**
+  (inset focus ring ≥ **0.5.168**); `fill` only when parent height-resolved), Carousel, Divider, Table (host
   `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
-  `.fynns-table-meta` never Chip), DiffView, CodeBlock (titled `default`
+  `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
+  Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
+  List pass **5**/step **5** via `REVEAL_MORE_LIST_DEFAULT_*` ≥ **0.5.145**;
+  foot outside wrap / after List), DiffView, CodeBlock (titled `default`
   **requires** non-empty `label`; else `variant="plain"`; `label` ≠ `language`
   — always pass matching `language` / `codeLanguageFromPath`; editable
   autoGrow default on PageScroll; soft-wrap live highlight ≥ **0.5.52**;
@@ -691,18 +774,22 @@ rules such as timeline-catalog). Live index: `#list`.
 
 | Data shape | Use | Sandbox | Forbidden (one line) |
 | --- | --- | --- | --- |
-| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md` |
+| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing |
+| Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
 | Title + org + date range | Org in `supportingText`; dates in `trailingSupportingText` + `trailingMetaAlign="start"` (start-ink ≥ **0.5.13**) | `#list` org+dates / `#timeline` | Glue org·dates; private `text-align`/width on trailing meta |
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign` | `#list` status+action | `trailingMetaAlign="start"` on status+action |
 | Inspector Select ± CTA | In-flow end strip; inline Select; trigger-band | `#list` inspector trailing | Absolute flyout; 4dp kiss; meta mid expanded panel |
-| Status + identity + duration | Single-line cluster + `.fynns-list-item-status`; one metric/cell | `#list` run-summary | InlineAlert in headline; latency+tokens in one meta |
+| Status + identity + duration | Single-line cluster + `.fynns-list-item-status`; one metric/cell | `#list` run-summary | InlineAlert in headline; latency+tokens in one meta; Chip as Success/Failed |
+| Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
 | Dashboard shortcut links | One Card wrapping one path List | `#list` shortcut Card | Button cluster + empty headline-only rows |
 | Catalog kind (builtin) | Leading icon + meta; host pill selected | `#list` kind | Start tick / inset rail / Chip as kind |
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |
 | App destinations | NavigationDrawer / Rail / Bar / DestinationAppShell | `#layouts-demo-shell` | List/Card as app root nav |
 | Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card | `#table` | Surface + FieldHeader fake head |
+| Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
+| Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |
@@ -716,10 +803,10 @@ rules such as timeline-catalog). Live index: `#list`.
 | Section strip + hint + body | `.fynns-unit-stack` (16dp) | `#rhythm` morph + hint | Bare ControlRow + sibling FieldHint (0 gap) |
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |
-| Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading | `#rhythm` / `#timeline` foot | Empty-label ControlRow; Delete leftmost of Cancel |
+| Action footer / end-align strip | `--end-align`; Cancel…→primary; one loading; cluster **default end** (≥ **0.5.158**) | `#rhythm` / `#timeline` foot / `#sandbox-rhythm-action-end` | Empty-label ControlRow; Delete leftmost of Cancel; left-pack Buttons under label |
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
-| Service / process control | Label = status only; labeled Buttons in cluster | `#rhythm` service | Status Chip in `__controls` |
+| Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
 | Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk; Plus end = preference Switch end (item-pad ≥ **0.5.143**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus flush on body pad while Switch on item-pad |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
@@ -728,15 +815,18 @@ rules such as timeline-catalog). Live index: `#list`.
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band grammar; 8dp action gap | `#sandbox-card-head-select` | Title/CTA centered on expanded Select |
-| Untitled well / preview | `Surface` | — | Surface as List-row substitute |
+| Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |
+| Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` **`interactive`** in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout; large-button state layer) | `#chat` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad; static soft without hover |
 | In-content editor\|preview | `SplitPane` | `#split-pane` | Hand-rolled resize; EndAside inside Card |
 | File / settings hierarchy | `Tree` / `TreeItem` | `#tree` | NavDrawer for file trees; HubTreeDisclosure |
 | Chronological timeline | Timeline flat|detail; edit in Dialog | `#timeline` | Lettered A/B/C shells; rail hover edit icons |
 | Empty catalog | EmptyState (`fill` if sole pane) | `#empty-state` | EmptyState as loading shell |
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
-| Table / list pager | `.fynns-pagination-bar` single row | `#pagination` | Two-row wrap; Select grown to crush discs |
+| Table / list pager | `.fynns-pagination-bar` single row; rows-per-page Select overlays **up** (≥ **0.5.152**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; clipped / invisible expand; H-rail through controls |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
-| Multi-status / probe strip | ControlRow + short OK/Fail + InfoHint | `#rhythm` status | FieldHint diagnostic essays |
+| Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#rhythm` status | Cluster+end-hug misalign; Chip as status; FieldHint essays |
+| Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | `#sandbox-rhythm-probe-kinds` | One stack mixing Available + Backend; path/chips/hint in one cluster |
+| Mode ToggleGroup / Tabs strip | ControlRow + ToggleGroup alone (or ControlBlock description that is **not** the option list) | `#rhythm` Surface | FieldHint / section lead listing the same option labels |
 | Named readiness / tip status | Same ControlRow pattern | `#rhythm` | Lone tip glyph as only cluster child |
 | Suffixed file body | CodeBlock editable + language; autoGrow | `#code-block` | Textarea for real extensions; fixed-height on page |
 | Plain note / `.txt` | Textarea (autoGrow) | — | CodeBlock on extensionless notes |
@@ -840,14 +930,20 @@ stays in the **label column**; controls vertically center on name + hint. Form
 hosts (Card body, padded Surface, centered Dialog, Collapsible body **direct**
 ControlStack/ControlBlock): ControlStack is label-fill (`1fr`) + end-hug
 controls (`max-content`) so Switch tracks share one trailing edge; form-host
-row gap = `control-stack-form-gap` (**12dp**). Toolbar stacks outside those
+row gap = `control-stack-form-gap` (**12dp**). Probe / path / outcome meta
+stacks opt in with `controlsAlign="start"` (≥ **0.5.154**) so value cells
+share a start edge — live `#sandbox-rhythm-probe-kinds`. **Action / Button
+clusters stay end by default** (≥ **0.5.158**) — start packing is never the
+default for CTAs. Toolbar stacks outside those
 hosts keep `control-stack-gap` (**8dp**). Live `#rhythm` + `#form-recipe`.
 
 **Inset decision tree:** Panel shells (Collapsible, Drawer, Card): equal outer
 inset via `--fynns-layout-content-inset` (18dp) on the **inline** edges of heads
 / `chrome="card"` bodies. Collapsible / Card `chrome="card"` body also uses
 `content-inset` for **block** pad and stacks direct children with
-`unit-stack-gap`. Nested surface-owning child → **`chrome="plain"`**: body pad =
+`unit-stack-gap`. **`Surface` `padded`** (≥ **0.5.157**): equal `content-inset`
+on **all** edges — same as Card body; never mix `content-pad-block` or rem/`px`.
+Nested surface-owning child → **`chrome="plain"`**: body pad =
 `content-inset`; column gap = `nest-gap` so the child reads as a secondary inset
 frame — **plain ≠ flush** (never cancel with negative margins, zero body pad, or
 restyling `.fynns-*`). Custom hosts outside Card/Collapsible → **`.fynns-nest`**

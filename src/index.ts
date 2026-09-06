@@ -203,7 +203,7 @@ export type { ChipProps, ChipSetProps, ChipVariant } from "./primitives/Chip";
 export { ControlRow } from "./primitives/ControlRow";
 export type { ControlRowProps } from "./primitives/ControlRow";
 export { ControlStack } from "./primitives/ControlStack";
-export type { ControlStackProps } from "./primitives/ControlStack";
+export type { ControlStackProps, ControlStackControlsAlign } from "./primitives/ControlStack";
 export { ControlBlock } from "./primitives/ControlBlock";
 export type { ControlBlockProps } from "./primitives/ControlBlock";
 export { FieldHint } from "./primitives/FieldHint";
@@ -427,6 +427,19 @@ export type {
   TableProps,
   TableRowProps,
 } from "./primitives/Table";
+export { RevealMore } from "./primitives/RevealMore";
+export type { RevealMoreProps } from "./primitives/RevealMore";
+export {
+  REVEAL_MORE_DEFAULT_INITIAL,
+  REVEAL_MORE_DEFAULT_STEP,
+  REVEAL_MORE_LIST_DEFAULT_INITIAL,
+  REVEAL_MORE_LIST_DEFAULT_STEP,
+  useRevealMore,
+} from "./primitives/useRevealMore";
+export type {
+  UseRevealMoreOptions,
+  UseRevealMoreResult,
+} from "./primitives/useRevealMore";
 export { CodeBlock } from "./primitives/CodeBlock";
 export type {
   CodeBlockProps,

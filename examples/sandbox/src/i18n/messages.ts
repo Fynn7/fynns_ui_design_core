@@ -307,7 +307,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer inline + card body block pad ≥ 0.5.114), `content-pad-block` (Surface padded / CodeBlock pre block — not Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer / Surface `padded` / card body — equal all edges ≥ 0.5.114 / Surface ≥ **0.5.157**), `content-pad-block` (CodeBlock pre block — not Surface/Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -362,7 +362,7 @@ const en = {
     "--fynns-layout-content-inset — equal **inline** pad for Card / Collapsible / Drawer (18dp default).",
   "layoutChrome.contentPadBlock": "Panel pad (block)",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — vertical pad for Surface padded / CodeBlock pre (16dp default). Card/Collapsible chrome=card body block pad uses content-inset (18dp) since ≥ 0.5.114. Nested wells: plain body pad = content-inset; sibling gap = nest-gap.",
+    "--fynns-layout-content-pad-block — vertical pad for CodeBlock pre (16dp default). Surface `padded` and Card/Collapsible chrome=card body use equal `content-inset` (18dp) on all edges (Surface ≥ **0.5.157**). Nested wells: plain body pad = content-inset; sibling gap = nest-gap.",
   "layoutChrome.nestGap": "Nest gap (surface wells)",
   "layoutChrome.nestGapHint":
     "--fynns-layout-nest-gap — column gap for chrome=\"plain\" Card/Collapsible body and `.fynns-nest` (18dp — matches content-inset). Plain body **pad** = content-inset; **gap** = nest-gap. Nested surface frames; plain ≠ flush.",
@@ -537,7 +537,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (rows-per-page Select + range start, `Pagination` end). Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager. **Open the rows-per-page Select:** results **overlay upward** (≥ **0.5.151**/ **0.5.152**) with Select `overflow: visible` — bar stays trigger-band height; overlay H-rail sits in `--fynns-scrollbar-size` block-end pad (not through controls). Failure mode: CONSUMER_TREATY Pagination Select expands bar.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -719,6 +719,10 @@ const en = {
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
     "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+  "globals.tableRevealCaption": "Sample catalog (reveal)",
+  "globals.tableRevealMore": "Show more",
+  "globals.tableRevealHelp":
+    "Long Card / PageScroll data Tables (≥ **0.5.144**): `useRevealMore` (default **10** / step **10**) + `RevealMore` foot **outside** `.fynns-table-wrap` — slice rows in the app; foot is **tonal** **md** Button (≥ **0.5.147** tonal; size **md** ≥ **0.5.149**, centered; `Show more` default; pass locale). Do **not** dump every row at once; short tables / Dialogs / true `Pagination` stay exempt. `resetKey` on filter change; polling `total` growth must not bounce the window. Live below.",
   "globals.chartCardTitle": "Daily volume",
   "globals.chartViewLabel": "Chart view",
   "globals.chartViewDate": "By date",
@@ -836,7 +840,7 @@ const en = {
   "globals.nestedSectionHelp":
     "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
-    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Default unpadded; `padded` uses content-inset / content-pad-block. Prefer Card when you need a static title / icon / actions head.",
+    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Variants: `outlined` / `filled` / `elevated` / `soft` (surface-2, same paint as Banner default). Default unpadded; `padded` = equal `--fynns-layout-content-inset` on all edges (never rem/`px` or mixed block/inline). `interactive` = M3 state-layer hover/press (large-button grammar; works under a parent `button`). Prefer Card when you need a static title / icon / actions head. Empty-thread chat starters: full-width soft `Surface` `padded` `interactive` in `ChatThread.empty` (live `#chat`).",
   "globals.fieldHeaderProviderLabel": "Region",
   "globals.fieldHeaderRegionAlpha": "Alpha",
   "globals.fieldHeaderRegionBeta": "Beta",
@@ -1012,7 +1016,7 @@ const en = {
   "globals.rhythmTokenRow": "Label above controls when the row stacks (narrow).",
   "globals.rhythmTokenCluster": "Sibling switches / chips inside one controls cluster.",
   "globals.rhythmSurfaceHelp":
-    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow.",
+    "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow. **Do not** put a sibling FieldHint that only lists the ToggleGroup option labels (information redundancy — failure mode: CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels).",
   "globals.rhythmCatalogHelp":
     "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). Do not leave a content-sized island with actions mid-left.",
   "globals.rhythmCatalogLabel": "Servers (3/3)",
@@ -1048,9 +1052,29 @@ const en = {
   "globals.rhythmEndAlignSecondary": "Secondary",
   "globals.rhythmEndAlignPrimary": "Primary action",
   "globals.rhythmStatusHelp":
-    "**Multi-status / probe (hard):** short `ControlRow` label + short `OK`/`Fail`/`-` visible — put long reasons / installed lists / proxy URLs in **`InfoHint`**, not a `.fynns-unit-stack` of `FieldHint` essays (`Name: Fail — …`). Cluster wraps status + InfoHint (≥2 siblings). Do **not** flatten labels + icons into one Card-body cluster, and do **not** park a lone tip glyph in a full-bleed cluster.",
+    "**Multi-status / probe (hard):** same-kind outcome rows → `ControlStack` `controlsAlign=\"start\"` + `columns` = cell count (status | InfoHint). Pass status + InfoHint as **direct** ControlRow children so subgrid columns share start edges — **never** wrap unequal path / marks / hints in one `.fynns-control-cluster` inside `columns={1}` (form-host end-hug then misaligns cell starts). Marks = **`.fynns-list-item-status`**. Long reasons → InfoHint, not FieldHint. Failure mode: CONSUMER_TREATY ControlStack probe meta end-hug / kind mix. Live `#rhythm` status + `#sandbox-rhythm-probe-kinds`.",
+  "globals.rhythmProbeKindsHelp":
+    "**Probe kind split (hard ≥ 0.5.154):** install / CLI availability (path meta) and backend / runtime readiness (outcome marks + model meta) are **different kinds** — adjacent `ControlStack`s + horizontal `Divider`, not one flat stack with “Available” then “Backend” labels. Each stack: `controlsAlign=\"start\"`; multi-cell rows set `columns` to the cell count (no single cluster dumping path + chips + FieldHint). Model / route strings → `.fynns-table-meta`, not FieldHint. Failure mode: CONSUMER_TREATY ControlStack probe meta end-hug / kind mix.",
+  "globals.rhythmProbeKindsTitle": "Sample tool probes",
+  "globals.rhythmProbeAvailable": "Available",
+  "globals.rhythmProbePath": "/usr/local/bin/sample-tool",
+  "globals.rhythmProbeBackend": "Backend",
+  "globals.rhythmProbeRuntimeOk": "Local runtime",
+  "globals.rhythmProbeEndpointFail": "Endpoint not ready",
+  "globals.rhythmProbeModelMeta": "compatible / sample-model:7b",
   "globals.rhythmServiceHelp":
-    "**Service / process control (hard):** `ControlRow` `label` = one status string only (running: PID; stopped: Not running). **Controls column** = one `.fynns-control-cluster` of labeled `Button`s `sm` only — **never** status in `__controls` (`Chip` reads as a sibling action pill). Core ≥ **0.5.80** labeled-Button **8dp** (`action-cluster-gap`). **At most one** `loading`. Click Start / Stop to toggle the sample.",
+    "**Service / process / CLI probe (hard):** `ControlRow` `label` = one short status only (running: PID; stopped: Not running; installed: Available / Not installed). **Controls** = labeled `Button`s `sm` only — **never** a status `Chip` in `__controls`, and **never** park the tool/CLI name on `label` when the install Button already names it. Failure detail → row **`InfoHint`**, not a sibling `FieldHint` essay (`tool：error…`). Failure mode: CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint. Core ≥ **0.5.80** labeled-Button **8dp**. **At most one** `loading`. Click Start / Stop to toggle the sample.",
+  "globals.rhythmActionEndHelp":
+    "**Action cluster end-pack + label floor (hard ≥ 0.5.158 / **0.5.159**):** `.fynns-control-cluster` defaults to trailing-edge pack. **ControlStack** + long path meta must keep `ControlRow` `label` readable (≥ `--fynns-layout-control-row-label`) — never a 2px hairline sliver. Status on `label` (not a `Chip`). Start packing opt-in only. Failure modes: CONSUMER_TREATY left-packed Buttons; ControlRow label crushed to 2px. Live `#sandbox-rhythm-action-end`.",
+  "globals.rhythmActionEndTitle": "Setup checks",
+  "globals.rhythmActionEndReady": "Ready",
+  "globals.rhythmActionEndPending": "Needs setup",
+  "globals.rhythmActionEndMetaReady":
+    "sample-tool 2026.08.30 /usr/local/bin/sample-tool/very/long/path/that/must/not/crush/the/status/label/column",
+  "globals.rhythmActionEndMetaPending":
+    "prefs.json missing required keys — region, account, and sample-provider endpoint",
+  "globals.rhythmActionEndConfigure": "Configure",
+  "globals.rhythmActionEndRefresh": "Refresh checks",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
@@ -1522,6 +1546,31 @@ const en = {
   "globals.chatSystem": "This is a demo thread — no model is connected.",
   "globals.chatLabel": "Chat",
   "globals.chatEmpty": "What can I help with?",
+  "globals.chatEmptyBody":
+    "Start a new thread below, or pick a starter prompt under the empty title.",
+  "globals.chatThreadModeAria": "Chat thread demo mode",
+  "globals.chatThreadModeEmpty": "Empty",
+  "globals.chatThreadModePopulated": "Populated",
+  "globals.chatStarterAria": "Starter prompts",
+  "globals.chatStarter1Label": "Summarize this note",
+  "globals.chatStarter1Prompt":
+    "Summarize the note in three short bullets. Keep names and dates.",
+  "globals.chatStarter2Label": "Draft an outline",
+  "globals.chatStarter2Prompt":
+    "Draft a short outline with a title and three section headings.",
+  "globals.chatStarter3Label": "Rewrite more clearly",
+  "globals.chatStarter3Prompt":
+    "Rewrite the draft so it is clearer and more concise, without changing the meaning.",
+  "globals.chatStarter4Label": "Make a checklist",
+  "globals.chatStarter4Prompt":
+    "Turn the plan into a checklist of concrete next steps.",
+  "globals.chatStarter5Label": "Compare two options",
+  "globals.chatStarter5Prompt":
+    "Compare option A and option B in a short table of pros and cons.",
+  "globals.chatStarter6Label": "Explain simply",
+  "globals.chatStarter6Prompt":
+    "Explain the idea in plain language for someone new to the topic.",
+  "globals.chatStarterSent": "Sent starter: {prompt}",
   "globals.chatUserBody":
     "Summarize the ChatMessage `streaming` prop in one sentence, then note that user bubbles cap at 70% of the row while short replies still shrink to fit.",
   "globals.chatAssistantMarkdown":
@@ -1580,7 +1629,7 @@ const en = {
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage** / **ChatMarkdown**. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. Prefer `ChatMessage markdown` / `<ChatMarkdown>` for LLM turns (L2 GFM subset: fenced → `CodeBlock`, plain ul/ol, inline pills). Direct body siblings use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `actions` = Copy + Regenerate + More `IconButton`/`DropdownMenu` (hover reveal; **consumer wires LLM rerun** — sandbox snackbar is demo only). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage** / **ChatMarkdown**. Empty thread: slim `EmptyState` + full-width clickable `Surface` `variant=\"soft\"` in `empty` (message-bar width; wrap; app owns rotate with vertical silk slide via `--fynns-duration-slow` / `--fynns-ease-emphasized`, or instant under reduced-motion; send). Do **not** use Chip or revived `ChatStarterPrompts`. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. Prefer `ChatMessage markdown` / `<ChatMarkdown>` for LLM turns (L2 GFM subset: fenced → `CodeBlock`, plain ul/ol, inline pills). Direct body siblings use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `actions` = Copy + Regenerate + More `IconButton`/`DropdownMenu` (hover reveal; **consumer wires LLM rerun** — sandbox snackbar is demo only). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatCitationsAnatomyHelp":
     "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
   "globals.thinkingStreaming": "Thinking",
@@ -1660,7 +1709,16 @@ const en = {
   "globals.listStatic": "Preferences",
   "globals.listStaticSupporting": "Non-interactive row (no onClick)",
   "globals.listHelp":
-    "M3 content List / ListItem (1–3 lines). Selected / hover = one host radius-3xl pill (same secondary-container as NavigationDrawerItem). No Divider between ListItems — `--fynns-list-item-gap` (4dp) + pills. No start tick / inset rail for kind — leading icon + trailingSupportingText. Leading→copy `--fynns-list-gap` (16dp); three-line stack `--fynns-list-content-gap-3` (8dp). Decorative chevron lives in the row hit; IconButton trailing stays a sibling but lights the same host wash. Path catalogs = one List of ListItems — never a padded Surface/Card per entry. See AGENTS.md Content density.",
+    "M3 content List / ListItem (1–3 lines). Selected / hover = one host radius-3xl pill (same secondary-container as NavigationDrawerItem). No Divider between ListItems — `--fynns-list-item-gap` (4dp) + pills. No start tick / inset rail for kind — leading icon + trailingSupportingText. Leading→copy `--fynns-list-gap` (16dp); three-line stack `--fynns-list-content-gap-3` (8dp). Decorative chevron lives in the row hit; IconButton trailing stays a sibling but lights the same host wash. Path catalogs = one List of ListItems — never a padded Surface/Card per entry. Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` with **5** / step **5** (`REVEAL_MORE_LIST_DEFAULT_*`) + `RevealMore` after the List — live `#list` reveal sample. See AGENTS.md Content density.",
+  "globals.listRevealCaption": "Sample list (reveal)",
+  "globals.listRevealAria": "Sample catalog entries",
+  "globals.listRevealHint":
+    "These entries are unmatched. Map each to a catalog id, or mark as local / free.",
+  "globals.listRevealMap": "Map",
+  "globals.listRevealMapSnack": "Map action (sample)",
+  "globals.listRevealMore": "Show more",
+  "globals.listRevealHelp":
+    "Long Card / PageScroll Lists (≥ **0.5.145**): `useRevealMore` (**5** / step **5**) + `RevealMore` **after** the List (unit-stack sibling) — taller ListItems need a lower window than Tables (10/10). Slice in the app; pass locale (`更多` / `Show more`). Short lists / Dialog / true `Pagination` exempt. Live below.",
   "globals.listHostToneHelp":
     "Catalog kind = leading icon + trailingSupportingText (or .fynns-table-meta). No start tick, inset rail, or extra host wash — selected is the radius-3xl pill only. Never wrap ListItem in a div. Headline uses UI font (not mono).",
   "globals.listHostToneAria": "Sample list with kind via icon and trailing meta",
@@ -1709,7 +1767,7 @@ const en = {
   "globals.listInspectorTrailingKindSkill": "Skill",
   "globals.listInspectorTrailingKindTool": "Tool",
   "globals.listRunSummaryHelp":
-    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of `.fynns-list-item-status` + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (start-ink + ellipsis ≥ 0.5.13 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`.",
+    "Run / job history on **one** line — `headline` = `.fynns-control-cluster` of **`.fynns-list-item-status`** (Success / Failed wash — **not** `Chip`) + identity (`__grow`) + duration `.fynns-table-meta`; cluster gap **8dp** (≥ 0.4.142); **one metric per** `.fynns-table-meta` (wrap the label in `<span>` for ellipsis ≥ 0.4.145) — fixed elapse+icon track + **start** align (≥ 0.4.143); **do not** jam latency+tokens into one cell (hard clip). Second metric → **sibling** `.fynns-table-meta` (tokens track) or `.fynns-list-item-trailing-stats`. Timestamp → `trailingSupportingText` on **`List` `trailingMetaAlign=\"start\"`** (start-ink + ellipsis ≥ 0.5.13 / 0.4.145). No `InlineAlert` / `lines={2}` / row `Divider` / private meta `text-align`. Failure mode: CONSUMER_TREATY outcome Chip as status.",
   "globals.listRunSummaryAria": "Sample run summary list",
   "globals.listRunSummaryOk": "Success",
   "globals.listRunSummaryFail": "Failed",
@@ -1749,8 +1807,14 @@ const en = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "Sample path catalog",
   "globals.listCatalogStaticHelp":
-    "Static catalog row (interactive={false}) still keeps open/folder IconButtons on the end sibling — horizontal nowrap cluster, not a vertical 16dp crush. Status stays in overline / .fynns-table-meta — not a Chip beside the path.",
+    "**Path / repo catalog (hard ≥ 0.5.168):** `interactive={false}` still parks end actions on the trailing sibling — one `.fynns-control-cluster` of ghost **md** IconButtons (same 40dp baseline). Status = overline; kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **never** Chip / consumer badge soup in the headline. Enable-for-batch = leading **`Checkbox`** — **never** Switch jammed beside IconButtons. Delete = ghost + ConfirmDialog — **never** `IconButton` `danger` filled disk. Failure mode: CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup. Live `#sandbox-list-repo-path-actions`.",
   "globals.listCatalogStaticAria": "Sample static path catalog with end actions",
+  "globals.listRepoPathOverline": "Not run yet",
+  "globals.listRepoPathName": "sample-repo",
+  "globals.listRepoPathPath": "~/Documents/sample-repo",
+  "globals.listRepoPathMeta": "Has wiki",
+  "globals.listRepoPathEnable": "Include in batch",
+  "globals.listRepoPathRefresh": "Refresh",
   "globals.listCatalogStaticFile": "readme.md",
   "globals.listCatalogStaticPath": "~/Documents/sample-project/readme.md",
   "globals.listCatalogStaticOrigin": "Not built",
@@ -2091,6 +2155,9 @@ const en = {
   "globals.surfaceFillLabel": "fill — stretches parent height",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
+  "globals.surfaceSoft": "soft (surface-2)",
+  "globals.surfaceInteractive": "soft + interactive (hover)",
+  "globals.surfaceInteractiveAria": "Interactive soft surface sample",
   "globals.switchLabelStart": "Switch · label start",
   "globals.tabsSmA": "Alpha",
   "globals.tabsSmAria": "Small tabs with disabled tab",
@@ -2432,7 +2499,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer 行向 + card 正文块向 ≥ 0.5.114）、`content-pad-block`（Surface padded / CodeBlock pre 块向 — 非 Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
+    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer / Surface `padded` / card 正文 — 四边等距 ≥ 0.5.114 / Surface ≥ **0.5.157**）、`content-pad-block`（CodeBlock pre 块向 — 非 Surface/Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -2487,7 +2554,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-content-inset — Card / Collapsible / Drawer 行向等距（默认 18dp）。",
   "layoutChrome.contentPadBlock": "面板内边距（块向）",
   "layoutChrome.contentPadBlockHint":
-    "--fynns-layout-content-pad-block — Surface padded / CodeBlock 正文垂直边距（默认 16dp）。Card/Collapsible chrome=card 正文块向自 ≥ 0.5.114 起用 content-inset（18dp）。嵌套井：plain body pad = content-inset；兄弟 gap = nest-gap。",
+    "--fynns-layout-content-pad-block — CodeBlock 正文垂直边距（默认 16dp）。Surface `padded` 与 Card/Collapsible chrome=card 正文用四边等距 `content-inset`（18dp；Surface ≥ **0.5.157**）。嵌套井：plain body pad = content-inset；兄弟 gap = nest-gap。",
   "layoutChrome.nestGap": "嵌套间距（表面井）",
   "layoutChrome.nestGapHint":
     "--fynns-layout-nest-gap — chrome=\"plain\" Card/Collapsible 正文与 `.fynns-nest` 的列 gap（18dp，与 content-inset 同阶）。Plain body **pad** = content-inset；**gap** = nest-gap。嵌套表面井；plain ≠ 贴边。",
@@ -2660,7 +2727,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：每页 Select + 范围文案；结束：`Pagination`）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。**打开每页条数 Select：** 结果 **向上 overlay**（≥ **0.5.151**/ **0.5.152**），Select `overflow: visible` — 条带保持 trigger-band；横向 overlay 轨落在 `--fynns-scrollbar-size` 底垫带（不切穿控件）。失败模式：CONSUMER_TREATY Pagination Select expands bar。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -2842,6 +2909,10 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
     "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+  "globals.tableRevealCaption": "示例目录（渐进披露）",
+  "globals.tableRevealMore": "更多",
+  "globals.tableRevealHelp":
+    "Card / PageScroll 内长数据表（≥ **0.5.144**）：`useRevealMore`（默认 **10** / 每次 **10**）+ 脚 `RevealMore` 放在 `.fynns-table-wrap` **外** — 行由 app `slice`；脚为 **tonal** **md** Button（≥ **0.5.147** tonal；**0.5.149** 恢复 md，居中；默认 `Show more`，本地化由 app 传入）。**禁止**一次铺开全部行；短表 / Dialog / 真分页 `Pagination` 豁免。换筛选用 `resetKey`；轮询只涨 `total` 勿弹回已展开窗口。见下方样例。",
   "globals.chartCardTitle": "每日用量",
   "globals.chartViewLabel": "图表视图",
   "globals.chartViewDate": "按日期",
@@ -2959,7 +3030,7 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedSectionHelp":
     "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
-    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。默认无内边距；`padded` 使用 content-inset / content-pad-block。需要静态 title / icon / actions 头时用 Card。",
+    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。变体：`outlined` / `filled` / `elevated` / `soft`（surface-2，与 Banner default 同色）。默认无内边距；`padded` = 四边等距 `--fynns-layout-content-inset`（勿 rem/`px` 或块/行向混用）。`interactive` = M3 state-layer hover/press（大按钮语法；可包在父级 `button` 下）。需要静态 title / icon / actions 头时用 Card。空线程示例 prompt：在 `ChatThread.empty` 用满宽 soft `Surface` `padded` `interactive`（对照 `#chat`）。",
   "globals.fieldHeaderProviderLabel": "地区",
   "globals.fieldHeaderRegionAlpha": "甲",
   "globals.fieldHeaderRegionBeta": "乙",
@@ -3131,7 +3202,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmTokenRow": "窄屏竖排时：标签在上、控件在下。",
   "globals.rhythmTokenCluster": "同一控件簇内并列的开关 / 芯片。",
   "globals.rhythmSurfaceHelp":
-    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。",
+    "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。**禁止**再放一条只复述 ToggleGroup 选项名的兄弟 FieldHint（信息冗余 — 失败模式：CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels）。",
   "globals.rhythmCatalogHelp":
     "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。不要留内容宽小岛、按钮停在标签旁。",
   "globals.rhythmCatalogLabel": "服务器（3/3）",
@@ -3167,9 +3238,29 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmEndAlignSecondary": "次要",
   "globals.rhythmEndAlignPrimary": "主要操作",
   "globals.rhythmStatusHelp":
-    "**多状态 / 探测（硬）：** `ControlRow` 可见文案只保留短名 + 短 `OK`/`Fail`/`-`；长原因 / 已装列表 / 代理 URL 进 **`InfoHint`**，禁止 `.fynns-unit-stack` 堆 `FieldHint` 长文（`Name: Fail — …`）。Cluster 包「状态 + InfoHint」（≥2 兄弟）。**不要**把标签和 icon 摊进同一个 Card 正文 cluster，也**不要**把单独 tip 字形塞进通栏 cluster（空带）。",
+    "**多状态 / 探测（硬）：** 同种结果行 → `ControlStack` `controlsAlign=\"start\"` + `columns` = 单元格数（状态 | InfoHint）。状态与 InfoHint 作 ControlRow **直接子级**，让 subgrid 列共享起始边 — **禁止**在 `columns={1}` 里用一个 `.fynns-control-cluster` 混塞异宽 path / 结果标 / hint（form-host end-hug 会对不齐）。结果标 = **`.fynns-list-item-status`**。长原因 → InfoHint，勿 FieldHint。失败模式：CONSUMER_TREATY ControlStack probe meta end-hug / kind mix。对照 `#rhythm` status + `#sandbox-rhythm-probe-kinds`。",
+  "globals.rhythmProbeKindsHelp":
+    "**探测种类拆分（硬 ≥ 0.5.154）：** 安装 / CLI 可用性（路径 meta）与后端 / 运行时就绪（结果标 + 模型 meta）是 **不同种类** — 相邻 `ControlStack` + 水平 `Divider`，勿一个扁平栈里先「可用」再「后端」。每栈：`controlsAlign=\"start\"`；多单元格行设 `columns` 为格数（勿单 cluster 塞 path + chips + FieldHint）。模型 / 路由文案 → `.fynns-table-meta`，勿 FieldHint。失败模式：CONSUMER_TREATY ControlStack probe meta end-hug / kind mix。",
+  "globals.rhythmProbeKindsTitle": "示例工具探测",
+  "globals.rhythmProbeAvailable": "可用",
+  "globals.rhythmProbePath": "/usr/local/bin/sample-tool",
+  "globals.rhythmProbeBackend": "后端",
+  "globals.rhythmProbeRuntimeOk": "本机运行时",
+  "globals.rhythmProbeEndpointFail": "端点未就绪",
+  "globals.rhythmProbeModelMeta": "compatible / sample-model:7b",
   "globals.rhythmServiceHelp":
-    "**服务 / 进程控制（硬）：** `ControlRow` `label` 仅一条状态（运行：PID；停止：未运行）。**控件列** cluster 仅 labeled `Button` `sm` — **禁止**在 cluster 放状态 `Chip`（assist 与 Button 同 pill，像第四颗动作）。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+    "**服务 / 进程 / CLI 探测（硬）：** `ControlRow` `label` 仅短状态（运行：PID；停止：未运行；安装：可用 / 未安装）。**控件列** 仅 labeled `Button` `sm` — **禁止** cluster 内状态 `Chip`，也**禁止**在安装 Button 已点名工具时把工具名再当 `label`。失败详情 → 行内 **`InfoHint`**，勿兄弟 `FieldHint` 长文（`tool：error…`）。失败模式：CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
+  "globals.rhythmActionEndHelp":
+    "**动作簇右齐 + label 地板（硬 ≥ 0.5.158 / **0.5.159**）：** `.fynns-control-cluster` 默认贴尾缘。**ControlStack** + 长路径 meta 须保持 `ControlRow` `label` 可读（≥ `--fynns-layout-control-row-label`）— 禁止压成 2px 发丝。状态在 `label`（勿 `Chip`）。左齐仅 opt-in。失败模式：CONSUMER_TREATY left-packed Buttons；ControlRow label crushed to 2px。对照 `#sandbox-rhythm-action-end`。",
+  "globals.rhythmActionEndTitle": "环境检查",
+  "globals.rhythmActionEndReady": "就绪",
+  "globals.rhythmActionEndPending": "待处理",
+  "globals.rhythmActionEndMetaReady":
+    "sample-tool 2026.08.30 /usr/local/bin/sample-tool/very/long/path/that/must/not/crush/the/status/label/column",
+  "globals.rhythmActionEndMetaPending":
+    "prefs.json 缺少必填项 — region、account 与 sample-provider 端点",
+  "globals.rhythmActionEndConfigure": "去配置",
+  "globals.rhythmActionEndRefresh": "刷新检查",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",
@@ -3640,6 +3731,24 @@ const zh: Record<MessageKey, string> = {
   "globals.chatSystem": "演示会话 — 未连接任何模型。",
   "globals.chatLabel": "聊天",
   "globals.chatEmpty": "有什么可以帮你？",
+  "globals.chatEmptyBody": "在下方开始新对话，或点选空态标题下的示例 prompt。",
+  "globals.chatThreadModeAria": "聊天线程演示模式",
+  "globals.chatThreadModeEmpty": "空态",
+  "globals.chatThreadModePopulated": "有消息",
+  "globals.chatStarterAria": "示例 prompt",
+  "globals.chatStarter1Label": "总结这条笔记",
+  "globals.chatStarter1Prompt": "用三条短要点总结这条笔记，保留人名与日期。",
+  "globals.chatStarter2Label": "起草大纲",
+  "globals.chatStarter2Prompt": "起草一份短大纲：一个标题和三个小节标题。",
+  "globals.chatStarter3Label": "改写得更清楚",
+  "globals.chatStarter3Prompt": "改写草稿，使表述更清楚简洁，不改变原意。",
+  "globals.chatStarter4Label": "做成清单",
+  "globals.chatStarter4Prompt": "把计划改成可执行的下一步清单。",
+  "globals.chatStarter5Label": "对比两个选项",
+  "globals.chatStarter5Prompt": "用简短优缺点表对比选项 A 与选项 B。",
+  "globals.chatStarter6Label": "通俗解释",
+  "globals.chatStarter6Prompt": "用通俗语言向新人解释这个想法。",
+  "globals.chatStarterSent": "已发送示例：{prompt}",
   "globals.chatUserBody":
     "用一句话概括 ChatMessage 的 `streaming` 属性，并说明用户气泡最大为行宽的 70%，短回复仍会收缩贴合内容。",
   "globals.chatAssistantMarkdown":
@@ -3697,7 +3806,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage** / **ChatMarkdown**。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。LLM 回合优先 `ChatMessage markdown` / `<ChatMarkdown>`（L2 GFM 子集：围栏 → `CodeBlock`、普通 ul/ol、行内药丸）。正文直接子节点用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`actions` = 复制 + 重新生成 + 更多 `IconButton`/`DropdownMenu`（悬停显现；**消费仓自行接 LLM 重跑** — 沙盒 snackbar 仅演示）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage** / **ChatMarkdown**。空线程：精简 `EmptyState` + 满宽可点 `Surface` `variant=\"soft\"` 放在 `empty`（与输入栏同宽；随文换行；轮播用纵向丝滑 slide：`--fynns-duration-slow` / `--fynns-ease-emphasized`，reduced-motion 瞬时换；发送由应用自管）。勿用 Chip，勿复活 `ChatStarterPrompts`。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。LLM 回合优先 `ChatMessage markdown` / `<ChatMarkdown>`（L2 GFM 子集：围栏 → `CodeBlock`、普通 ul/ol、行内药丸）。正文直接子节点用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`actions` = 复制 + 重新生成 + 更多 `IconButton`/`DropdownMenu`（悬停显现；**消费仓自行接 LLM 重跑** — 沙盒 snackbar 仅演示）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
   "globals.thinkingStreaming": "思考中",
@@ -3774,7 +3883,16 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatic": "偏好设置",
   "globals.listStaticSupporting": "静态行（无 onClick）",
   "globals.listHelp":
-    "M3 内容列表 List / ListItem（1–3 行）。选中/悬停 = host 上一块 radius-3xl pill（secondary-container，与 NavigationDrawerItem 一致）。ListItem 之间不要 Divider — `--fynns-list-item-gap`（4dp）+ pill。种类不要左边竖标/inset 轨 — leading 图标 + trailingSupportingText。图标→文案 `--fynns-list-gap`（16dp）；三行栈 `--fynns-list-content-gap-3`（8dp）。装饰 chevron 并入主行点击；IconButton trailing 仍是兄弟，但点亮同一 host wash。路径目录 = 一个 List 多行 ListItem — 禁止每条外包加垫 Surface/Card。见 AGENTS.md Content density。",
+    "M3 内容列表 List / ListItem（1–3 行）。选中/悬停 = host 上一块 radius-3xl pill（secondary-container，与 NavigationDrawerItem 一致）。ListItem 之间不要 Divider — `--fynns-list-item-gap`（4dp）+ pill。种类不要左边竖标/inset 轨 — leading 图标 + trailingSupportingText。图标→文案 `--fynns-list-gap`（16dp）；三行栈 `--fynns-list-content-gap-3`（8dp）。装饰 chevron 并入主行点击；IconButton trailing 仍是兄弟，但点亮同一 host wash。路径目录 = 一个 List 多行 ListItem — 禁止每条外包加垫 Surface/Card。长 Card / PageScroll List（≥ **0.5.145**）：`useRevealMore` 用 **5** / 每次 **5**（`REVEAL_MORE_LIST_DEFAULT_*`）+ `RevealMore` 放在 List 后 — 见 `#list` 渐进样例。见 AGENTS.md Content density。",
+  "globals.listRevealCaption": "示例列表（渐进披露）",
+  "globals.listRevealAria": "示例目录条目",
+  "globals.listRevealHint":
+    "这些条目尚未匹配。请映射到目录 id，或标记为本机/免费。",
+  "globals.listRevealMap": "映射",
+  "globals.listRevealMapSnack": "映射操作（示例）",
+  "globals.listRevealMore": "更多",
+  "globals.listRevealHelp":
+    "Card / PageScroll 内长 List（≥ **0.5.145**）：`useRevealMore`（**5** / 每次 **5**）+ 脚 `RevealMore` 放在 List **后**（unit-stack 兄弟）— ListItem 更高，窗口低于 Table（10/10）。行由 app `slice`；文案本地化（`更多` / `Show more`）。短列表 / Dialog / 真 `Pagination` 豁免。见下方样例。",
   "globals.listHostToneHelp":
     "目录种类 = leading 图标 + trailingSupportingText（或 .fynns-table-meta）。不要左边竖标、inset 轨或额外 host 洗底——选中只靠 radius-3xl pill。禁止用 div 包 ListItem。headline 用 UI 字族（勿 mono）。",
   "globals.listHostToneAria": "用图标和尾部文案表达种类的列表示例",
@@ -3822,7 +3940,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listInspectorTrailingKindSkill": "技能",
   "globals.listInspectorTrailingKindTool": "工具",
   "globals.listRunSummaryHelp":
-    "运行 / 任务历史 **单行**：status + 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内左齐 + 省略 ≥ 0.5.13 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。",
+    "运行 / 任务历史 **单行**： **`.fynns-list-item-status`**（成功绿 / 失败红 — **禁止** `Chip`）+ 身份 + 耗时；簇间距 **8dp**（≥ 0.4.142）；**每个** `.fynns-table-meta` 只放 **一个** 指标（标签包 `<span>` 才能省略号 ≥ 0.4.145）— 固定 elapse+icon 轨 + **左对齐**（≥ 0.4.143）；**禁止**把 latency+tokens 塞进同一格（硬裁切）。第二指标 → **兄弟** `.fynns-table-meta`（tokens 轨）或 `.fynns-list-item-trailing-stats`。时间戳 → `trailingSupportingText` + **`List` `trailingMetaAlign=\"start\"`**（列内左齐 + 省略 ≥ 0.5.13 / 0.4.145）。禁止 InlineAlert / lines={2} / 行间 Divider / 私有 meta text-align。失败模式：CONSUMER_TREATY outcome Chip as status。",
   "globals.listRunSummaryAria": "运行摘要列表示例",
   "globals.listRunSummaryOk": "成功",
   "globals.listRunSummaryFail": "失败",
@@ -3862,8 +3980,14 @@ const zh: Record<MessageKey, string> = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
-    "静态目录行（interactive={false}）仍把打开/文件夹 IconButton 放在 end 兄弟槽——横向 nowrap 簇，不是 16dp 纵向压扁。状态放 overline / .fynns-table-meta——不要用 Chip 贴在路径旁。",
+    "**路径 / 仓目录（硬 ≥ 0.5.168）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 = overline；kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。失败模式：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup。对照 `#sandbox-list-repo-path-actions`。",
   "globals.listCatalogStaticAria": "带 end 操作的静态路径目录示例",
+  "globals.listRepoPathOverline": "尚未运行",
+  "globals.listRepoPathName": "sample-repo",
+  "globals.listRepoPathPath": "~/Documents/sample-repo",
+  "globals.listRepoPathMeta": "有 wiki",
+  "globals.listRepoPathEnable": "参与批量",
+  "globals.listRepoPathRefresh": "刷新",
   "globals.listCatalogStaticFile": "readme.md",
   "globals.listCatalogStaticPath": "~/Documents/sample-project/readme.md",
   "globals.listCatalogStaticOrigin": "未构建",
@@ -4200,6 +4324,9 @@ const zh: Record<MessageKey, string> = {
   "globals.surfaceFillLabel": "fill — 撑满父高度",
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
+  "globals.surfaceSoft": "soft（surface-2）",
+  "globals.surfaceInteractive": "soft + interactive（悬停）",
+  "globals.surfaceInteractiveAria": "可交互 soft Surface 示例",
   "globals.switchLabelStart": "Switch · 标签在前",
   "globals.tabsSmA": "甲",
   "globals.tabsSmAria": "小号标签（含禁用项）",

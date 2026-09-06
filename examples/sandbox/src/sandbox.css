@@ -907,6 +907,136 @@
   gap: var(--fynns-layout-field-hint-gap);
 }
 
+/* Empty-thread starter: full-width clickable Surface soft (app-owned). */
+.sandbox-chat-empty {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-chat-starters {
+  /*
+   * Stay inside `.fynns-chat-thread-inner` pad.
+   * That pad aliases `--fynns-chat-composer-inset-inline`, so starter
+   * Surface edges == `.fynns-chat-composer-shell` (not the form outer).
+   * Never negative-margin break out — that flush-aligns with the form
+   * and looks like “0 margin” vs the shell.
+   */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: 0;
+  box-sizing: border-box;
+}
+
+.sandbox-chat-starters-viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-chat-starters-layer {
+  width: 100%;
+}
+
+/*
+ * M3 Shared Axis Y (forward) + fade — same fixed slot content swap.
+ * Travel ≈ 40% of the card (not 8–12dp micro-nudge) so the rotate reads.
+ * Enter: longer decelerate; exit: shorter (M3 enter vs exit).
+ * Incoming stays in-flow (stable height); outgoing absolute overlay.
+ */
+.sandbox-chat-starters-layer--solo,
+.sandbox-chat-starters-layer--in {
+  position: relative;
+}
+
+.sandbox-chat-starters-layer--in {
+  opacity: 0;
+  transform: translate3d(0, 40%, 0);
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-slow);
+  transition-timing-function: var(--fynns-ease-out);
+  transition-delay: 0ms;
+}
+
+.sandbox-chat-starters-layer--in-run {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.sandbox-chat-starters-layer--out {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-base);
+  transition-timing-function: var(--fynns-ease-emphasized);
+  transition-delay: 0ms;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.sandbox-chat-starters-layer--out-run {
+  opacity: 0;
+  transform: translate3d(0, -40%, 0);
+}
+
+.sandbox-chat-starter {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: start;
+  color: inherit;
+  font: inherit;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+/* Large-button silhouette — match composer shell roundness. */
+.sandbox-chat-starter .fynns-surface {
+  border-radius: var(--fynns-radius-3xl);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-chat-starters-layer--out,
+  .sandbox-chat-starters-layer--in {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+.sandbox-chat-starter:focus-visible {
+  outline: none;
+}
+
+/* Focus ring: core `Surface interactive` under :focus-visible parent. */
+
+.sandbox-chat-starter-label {
+  display: block;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.sandbox-chat-starter-prompt {
+  display: block;
+  margin-block-start: var(--fynns-space-2xs);
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 /* Chat dual placement — main rem-capped column + aside fill host. */
 .sandbox-chat-dual {
   align-items: stretch;
