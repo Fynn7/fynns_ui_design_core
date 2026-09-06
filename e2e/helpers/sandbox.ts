@@ -52,8 +52,9 @@ export async function openGlobalsDemo(
   await expect(demo).toBeVisible({ timeout: 15_000 });
   // Category Collapsible can remount while the flash settles — retry scroll.
   await expect(async () => {
+    await expect(demo).toBeAttached();
     await demo.scrollIntoViewIfNeeded();
-  }).toPass({ timeout: 10_000 });
+  }).toPass({ timeout: 15_000 });
 }
 
 /** Layout templates demos are always mounted — switch page and scroll. */
