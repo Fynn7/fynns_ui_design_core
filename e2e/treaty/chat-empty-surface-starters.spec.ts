@@ -34,6 +34,7 @@ test(`${SLUG}: soft Surface left/right ≈ composer-shell`, async ({ page }) => 
 
   // Large-button grammar: idle transparent state layer → hover opacity 1
   // (parent button drives `:hover > .fynns-surface--interactive::before`).
+  await page.mouse.move(0, 0);
   await expect
     .poll(async () =>
       soft.evaluate((el) => getComputedStyle(el, "::before").opacity),
@@ -45,6 +46,7 @@ test(`${SLUG}: soft Surface left/right ≈ composer-shell`, async ({ page }) => 
       soft.evaluate((el) => getComputedStyle(el, "::before").opacity),
     )
     .toBe("1");
+  await page.mouse.move(0, 0);
 
   // Keyboard: Tab from Empty radio → starter button :focus-visible → inset ring
   // (Playwright element.focus() does not set :focus-visible).
