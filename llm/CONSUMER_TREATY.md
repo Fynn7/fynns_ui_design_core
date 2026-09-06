@@ -122,6 +122,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#rhythm` |
 | ControlRow label crushed to 2px / hairline sliver | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
 | outcome Chip as status (suggestion/assist / StatusChip fake Badge) | AGENTS Hard rules / Content density | `#list` / `#rhythm` status |
+| List path catalog Switch+Chip+danger disk soup | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | AGENTS Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |

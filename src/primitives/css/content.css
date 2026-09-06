@@ -541,7 +541,7 @@ a.fynns-breadcrumb-link:visited {
 /* ---------- RevealMore (table / catalog progressive foot) ---------- */
 /*
  * Place as a Card / `.fynns-unit-stack` sibling **outside** `.fynns-table-wrap`
- * (not inside the horizontal scroll host). Default tonal + lg Button, centered;
+ * (not inside the horizontal scroll host). Default tonal + md Button, centered;
  * core hides the host when `canRevealMore` is false. Live: `#table` / `#list`.
  */
 .fynns-reveal-more {
@@ -4206,8 +4206,14 @@ a.fynns-breadcrumb-link:visited {
   opacity: 1;
 }
 
+/*
+ * Inset ring — `.fynns-surface` uses `overflow: hidden`, so an outer
+ * box-shadow is clipped (Timeline interactive uses the same inset grammar).
+ * Covers Surface-as-button and Surface nested under a focused parent.
+ */
+.fynns-surface--interactive:focus-visible,
 :is(button, a, [role="button"]):focus-visible > .fynns-surface--interactive {
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 @media (hover: none) {

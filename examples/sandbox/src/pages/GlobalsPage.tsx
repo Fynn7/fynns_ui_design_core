@@ -1491,6 +1491,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
+  const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
@@ -4278,38 +4279,90 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </List>
           </Card>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
-          <List aria-label={t("globals.listCatalogStaticAria")}>
-            <ListItem
-              interactive={false}
-              lines={2}
-              overline={t("globals.listCatalogStaticOrigin")}
-              headline={t("globals.listCatalogStaticFile")}
-              supportingText={t("globals.listCatalogStaticPath")}
-              trailingSupportingText={
-                <span className="fynns-table-meta">{t("globals.listCatalogStaticKind")}</span>
-              }
-              trailing={
-                <div className="fynns-control-cluster">
-                  <Tooltip content={t("globals.listCatalogOpen")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.listCatalogOpen")}
-                    >
-                      <FileIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip content={t("globals.listCatalogFolder")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.listCatalogFolder")}
-                    >
-                      <FolderOpenIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              }
-            />
-          </List>
+          <div id="sandbox-list-repo-path-actions">
+            <List aria-label={t("globals.listCatalogStaticAria")}>
+              <ListItem
+                interactive={false}
+                lines={3}
+                overline={t("globals.listRepoPathOverline")}
+                headline={t("globals.listRepoPathName")}
+                supportingText={t("globals.listRepoPathPath")}
+                leading={
+                  <Checkbox
+                    label=""
+                    aria-label={t("globals.listRepoPathEnable")}
+                    checked={listRepoPathEnabled}
+                    onCheckedChange={setListRepoPathEnabled}
+                  />
+                }
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listRepoPathMeta")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listRepoPathRefresh")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listRepoPathRefresh")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogRemove")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogRemove")}
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+              <ListItem
+                interactive={false}
+                lines={2}
+                overline={t("globals.listCatalogStaticOrigin")}
+                headline={t("globals.listCatalogStaticFile")}
+                supportingText={t("globals.listCatalogStaticPath")}
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listCatalogStaticKind")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listCatalogOpen")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogOpen")}
+                      >
+                        <FileIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+            </List>
+          </div>
           <SandboxHelp text={t("globals.listStatsHelp")} />
           <List aria-label={t("globals.listStatsAria")}>
             <ListItem

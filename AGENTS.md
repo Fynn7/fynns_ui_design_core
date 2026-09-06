@@ -221,6 +221,15 @@ belong in a consumer’s own doc.
 - **DON'T** wrap each path/link/bookmark in its own padded `Surface`/`Card` —
   one `List` of `ListItem`s (trailing ghost **md** IconButtons; not under text;
   not a filled danger disk). See **Content density**.
+- **DON'T** invent path/repo List trailing soup — **no** `Switch` + IconButtons
+  in one end cluster, **no** `IconButton` `danger` filled disk on the row
+  (delete = ghost **md** + `ConfirmDialog`), **no** `Chip` / consumer
+  `CatalogBadges` in the headline for kind/status. Overline / path /
+  `trailingSupportingText` / `.fynns-table-meta` for status; enable-for-batch
+  → leading **`Checkbox`** (not Switch mid-cluster). Same-size **md** disks
+  share one horizontal baseline. Live `#sandbox-list-repo-path-actions` /
+  `#list` catalog. Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger
+  disk soup.
 - **DON'T** paint List catalog kind with start tick / inset rail / `::before` /
   second `hostClassName` wash — leading icon + `trailingSupportingText` /
   `.fynns-table-meta`; selected = host `radius-3xl` pill only; never
@@ -430,7 +439,7 @@ the consumer only calls the new API. Install / pin rules:
 | Topic | Anchor |
 | --- | --- |
 | Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header` |
-| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action` |
+| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
 | Probe kind split / start-align meta | `#sandbox-rhythm-probe-kinds` |
@@ -687,8 +696,8 @@ classes.
   Card / Collapsible (`chrome="card"`|`"plain"` — plain = nest-gap, **≠ flush**;
   head actions = interactive chrome only), Surface (untitled well;
   `outlined`|`filled`|`elevated`|`soft` — soft = surface-2, same paint as Banner
-  default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**;
-  `fill` only when parent height-resolved), Carousel, Divider, Table (host
+  default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**
+  (inset focus ring ≥ **0.5.168**); `fill` only when parent height-resolved), Carousel, Divider, Table (host
   `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
@@ -765,7 +774,8 @@ rules such as timeline-catalog). Live index: `#list`.
 
 | Data shape | Use | Sandbox | Forbidden (one line) |
 | --- | --- | --- | --- |
-| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md` |
+| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing |
+| Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
 | Title + org + date range | Org in `supportingText`; dates in `trailingSupportingText` + `trailingMetaAlign="start"` (start-ink ≥ **0.5.13**) | `#list` org+dates / `#timeline` | Glue org·dates; private `text-align`/width on trailing meta |
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign` | `#list` status+action | `trailingMetaAlign="start"` on status+action |

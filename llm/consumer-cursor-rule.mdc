@@ -146,6 +146,12 @@ alwaysApply: true
     + `Divider`；探测栈 `controlsAlign="start"` + `columns`=格数；禁止
     `columns={1}` 单 cluster 混 path / 结果标 / FieldHint。对照
     `#sandbox-rhythm-probe-kinds`。
+29. **List path catalog Switch+Chip+danger disk soup** — 路径/仓目录行：
+    trailing **仅** ghost **md** IconButton 簇；启用 → leading `Checkbox`；
+    状态/kind → overline / `trailingSupportingText` / `.fynns-table-meta`；
+    禁止 headline 里 `Chip` / 自造 `CatalogBadges`；禁止 `IconButton`
+    `danger` 实心盘（删 = ghost + `ConfirmDialog`）。对照
+    `#sandbox-list-repo-path-actions`。
 
 ## 表单与密度（短）
 

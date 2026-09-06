@@ -46,6 +46,20 @@ test(`${SLUG}: soft Surface left/right ≈ composer-shell`, async ({ page }) => 
     )
     .toBe("1");
 
+  // Keyboard: Tab from Empty radio → starter button :focus-visible → inset ring
+  // (Playwright element.focus() does not set :focus-visible).
+  const starterBtn = demo.locator(
+    ".sandbox-chat-starters .sandbox-chat-starters-layer--solo .sandbox-chat-starter",
+  );
+  await demo.getByRole("radio", { name: "Empty" }).focus();
+  await page.keyboard.press("Tab");
+  await expect(starterBtn).toBeFocused();
+  await expect
+    .poll(async () =>
+      soft.evaluate((el) => getComputedStyle(el).boxShadow),
+    )
+    .toMatch(/inset/i);
+
   const form = demo.locator(".sandbox-chat-main .fynns-chat-composer");
   await expect(form).toBeVisible();
 
