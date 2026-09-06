@@ -224,6 +224,65 @@ function ChatDemoActions({
   );
 }
 
+/** Empty-thread starter: full-width `Surface` soft well (app-owned rotate). */
+function ChatEmptySurfaceStarters({
+  items,
+  ariaLabel,
+  onSelect,
+}: {
+  items: ReadonlyArray<{ id: string; label: string; prompt: string }>;
+  ariaLabel: string;
+  onSelect: (prompt: string) => void;
+}) {
+  const [offset, setOffset] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const n = items.length;
+
+  useEffect(() => {
+    if (n < 2 || paused) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+    const id = window.setInterval(() => {
+      setOffset((o) => (o + 1) % n);
+    }, 5500);
+    return () => window.clearInterval(id);
+  }, [n, paused]);
+
+  if (n === 0) return null;
+  const item = items[((offset % n) + n) % n]!;
+
+  return (
+    <div
+      className="sandbox-chat-starters"
+      role="region"
+      aria-label={ariaLabel}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          setPaused(false);
+        }
+      }}
+    >
+      <button
+        type="button"
+        className="sandbox-chat-starter"
+        onClick={() => onSelect(item.prompt)}
+      >
+        <Surface variant="soft" padded>
+          <span className="sandbox-chat-starter-label">{item.label}</span>
+          <span className="sandbox-chat-starter-prompt">{item.prompt}</span>
+        </Surface>
+      </button>
+    </div>
+  );
+}
+
 const SWATCH_KEYS = [
   { key: "xs", usesKey: "globals.swatchXsUses" },
   { key: "sm", usesKey: "globals.swatchSmUses" },
@@ -1190,6 +1249,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [chatStreaming, setChatStreaming] = useState(false);
   const [chatStreamEpoch, setChatStreamEpoch] = useState(0);
   const [chatFailed, setChatFailed] = useState(true);
+  const [chatThreadMode, setChatThreadMode] = useState<"empty" | "populated">(
+    "populated",
+  );
   const [chatDraft, setChatDraft] = useState("");
   const [chatComposerMultiDraft, setChatComposerMultiDraft] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -2899,8 +2961,79 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="chat">
         <div className="sandbox-globals-row sandbox-chat-dual">
           <div className="sandbox-chat-main">
+            <ToggleGroup
+              size="compact"
+              showCheck={false}
+              ariaLabel={t("globals.chatThreadModeAria")}
+              value={chatThreadMode}
+              onChange={(v) =>
+                setChatThreadMode(v === "empty" ? "empty" : "populated")
+              }
+              options={[
+                {
+                  value: "empty",
+                  label: t("globals.chatThreadModeEmpty"),
+                },
+                {
+                  value: "populated",
+                  label: t("globals.chatThreadModePopulated"),
+                },
+              ]}
+            />
             <Chat label={t("globals.chatLabel")} className="sandbox-chat-frame">
-              <ChatThread empty={<EmptyState title={t("globals.chatEmpty")} />}>
+              <ChatThread
+                empty={
+                  <div className="fynns-unit-stack sandbox-chat-empty">
+                    <EmptyState
+                      title={t("globals.chatEmpty")}
+                      description={t("globals.chatEmptyBody")}
+                    />
+                    <ChatEmptySurfaceStarters
+                      ariaLabel={t("globals.chatStarterAria")}
+                      items={[
+                        {
+                          id: "summarize",
+                          label: t("globals.chatStarter1Label"),
+                          prompt: t("globals.chatStarter1Prompt"),
+                        },
+                        {
+                          id: "outline",
+                          label: t("globals.chatStarter2Label"),
+                          prompt: t("globals.chatStarter2Prompt"),
+                        },
+                        {
+                          id: "rewrite",
+                          label: t("globals.chatStarter3Label"),
+                          prompt: t("globals.chatStarter3Prompt"),
+                        },
+                        {
+                          id: "checklist",
+                          label: t("globals.chatStarter4Label"),
+                          prompt: t("globals.chatStarter4Prompt"),
+                        },
+                        {
+                          id: "compare",
+                          label: t("globals.chatStarter5Label"),
+                          prompt: t("globals.chatStarter5Prompt"),
+                        },
+                        {
+                          id: "explain",
+                          label: t("globals.chatStarter6Label"),
+                          prompt: t("globals.chatStarter6Prompt"),
+                        },
+                      ]}
+                      onSelect={(prompt) => {
+                        snackbar(t("globals.chatStarterSent", { prompt }), {
+                          dismissAriaLabel: t("globals.snackbarDismiss"),
+                        });
+                        setChatThreadMode("populated");
+                      }}
+                    />
+                  </div>
+                }
+              >
+                {chatThreadMode === "populated" ? (
+                  <>
                 <ChatMessage role="system">{t("globals.chatSystem")}</ChatMessage>
                 <ChatMessage
                   role="user"
@@ -3020,6 +3153,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 >
                   {chatFailed ? undefined : t("globals.chatRetrySuccess")}
                 </ChatMessage>
+                  </>
+                ) : null}
               </ChatThread>
               <ChatScrollToBottom label={t("globals.chatScrollBottom")} />
               <ChatComposer
@@ -3032,6 +3167,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 onSubmit={() => {
                   startChatStream();
                   setChatDraft("");
+                  setChatThreadMode("populated");
                 }}
                 sendLabel={t("globals.chatSend")}
                 stopLabel={t("globals.chatStop")}
@@ -4722,6 +4858,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Surface>
             <Surface variant="elevated" padded style={{ minWidth: "8rem" }}>
               <SandboxHelp as="span" text={t("globals.surfaceElevated")} />
+            </Surface>
+            <Surface variant="soft" padded style={{ minWidth: "8rem" }}>
+              <SandboxHelp as="span" text={t("globals.surfaceSoft")} />
             </Surface>
           </div>
           <div className="sandbox-surface-fill-host">
@@ -6865,39 +7004,79 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </div>
           </ControlRow>
         </Card>
+        <SandboxHelp text={t("globals.rhythmActionEndHelp")} />
+        <div id="sandbox-rhythm-action-end">
+          <Card
+            className="sandbox-globals-rhythm"
+            title={t("globals.rhythmActionEndTitle")}
+          >
+            {/* ControlStack + long meta — label must stay ≥ control-row-label
+                (never a 2px “就绪” sliver). Failure mode: CONSUMER_TREATY
+                ControlRow label crushed to 2px. */}
+            <ControlStack columns={1}>
+              <ControlRow label={t("globals.rhythmActionEndReady")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.rhythmActionEndMetaReady")}
+                  </span>
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.rhythmActionEndPending")}>
+                <div className="fynns-control-cluster">
+                  <span className="fynns-table-meta">
+                    {t("globals.rhythmActionEndMetaPending")}
+                  </span>
+                  <Button size="sm" variant="tonal">
+                    {t("globals.rhythmActionEndConfigure")}
+                  </Button>
+                </div>
+              </ControlRow>
+              <ControlRow label={t("globals.rhythmActionEndReady")}>
+                <div className="fynns-control-cluster">
+                  <Button size="sm" variant="default">
+                    {t("globals.rhythmActionEndRefresh")}
+                  </Button>
+                </div>
+              </ControlRow>
+            </ControlStack>
+          </Card>
+        </div>
         <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
-          <ControlStack columns={1}>
+          <ControlStack columns={2} controlsAlign="start">
             <ControlRow label={t("globals.rhythmStatusBehind")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
-                <InfoHint
-                  size="sm"
-                  tone="danger"
-                  content={t("globals.rhythmStatusBehindTip")}
-                  ariaLabel={t("globals.rhythmStatusBehindTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status" data-tone="danger">
+                <AlertTriangleIcon aria-hidden />
+                {t("globals.rhythmStatusFail")}
+              </span>
+              <InfoHint
+                size="sm"
+                tone="danger"
+                content={t("globals.rhythmStatusBehindTip")}
+                ariaLabel={t("globals.rhythmStatusBehindTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusCi")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusFail")}</span>
-                <InfoHint
-                  size="sm"
-                  tone="danger"
-                  content={t("globals.rhythmStatusCiTip")}
-                  ariaLabel={t("globals.rhythmStatusCiTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status" data-tone="danger">
+                <AlertTriangleIcon aria-hidden />
+                {t("globals.rhythmStatusFail")}
+              </span>
+              <InfoHint
+                size="sm"
+                tone="danger"
+                content={t("globals.rhythmStatusCiTip")}
+                ariaLabel={t("globals.rhythmStatusCiTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusProtection")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
-                <InfoHint
-                  size="sm"
-                  content={t("globals.rhythmStatusProtectionTip")}
-                  ariaLabel={t("globals.rhythmStatusProtectionTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status">
+                <CheckCircleIcon aria-hidden />
+                {t("globals.rhythmStatusOk")}
+              </span>
+              <InfoHint
+                size="sm"
+                content={t("globals.rhythmStatusProtectionTip")}
+                ariaLabel={t("globals.rhythmStatusProtectionTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusLocal")}>
               <span
@@ -6908,14 +7087,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </span>
             </ControlRow>
             <ControlRow label={t("globals.rhythmStatusReady")}>
-              <div className="fynns-control-cluster">
-                <span className="fynns-table-meta">{t("globals.rhythmStatusOk")}</span>
-                <InfoHint
-                  size="sm"
-                  content={t("globals.rhythmStatusReadyTip")}
-                  ariaLabel={t("globals.rhythmStatusReadyTip")}
-                />
-              </div>
+              <span className="fynns-list-item-status">
+                <CheckCircleIcon aria-hidden />
+                {t("globals.rhythmStatusOk")}
+              </span>
+              <InfoHint
+                size="sm"
+                content={t("globals.rhythmStatusReadyTip")}
+                ariaLabel={t("globals.rhythmStatusReadyTip")}
+              />
             </ControlRow>
             <ControlRow label={t("globals.rhythmSyncNow")}>
               <Tooltip content={t("globals.rhythmSyncNowTip")}>
@@ -6929,6 +7109,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </ControlRow>
           </ControlStack>
         </Card>
+        <SandboxHelp text={t("globals.rhythmProbeKindsHelp")} />
+        <div id="sandbox-rhythm-probe-kinds">
+          <Card
+            className="sandbox-globals-rhythm"
+            title={t("globals.rhythmProbeKindsTitle")}
+          >
+            <div className="fynns-unit-stack">
+              <ControlStack columns={1} controlsAlign="start">
+                <ControlRow label={t("globals.rhythmProbeAvailable")}>
+                  <span className="fynns-table-meta">{t("globals.rhythmProbePath")}</span>
+                </ControlRow>
+              </ControlStack>
+              <Divider />
+              <ControlStack columns={3} controlsAlign="start">
+                <ControlRow label={t("globals.rhythmProbeBackend")}>
+                  <span className="fynns-list-item-status">
+                    <CheckCircleIcon aria-hidden />
+                    {t("globals.rhythmProbeRuntimeOk")}
+                  </span>
+                  <span className="fynns-list-item-status" data-tone="danger">
+                    <AlertTriangleIcon aria-hidden />
+                    {t("globals.rhythmProbeEndpointFail")}
+                  </span>
+                  <span className="fynns-table-meta">{t("globals.rhythmProbeModelMeta")}</span>
+                </ControlRow>
+              </ControlStack>
+            </div>
+          </Card>
+        </div>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm" equalCells>
           <Button size="sm">{t("globals.rhythmGridA")}</Button>

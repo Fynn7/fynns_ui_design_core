@@ -1401,9 +1401,9 @@ export const LAYOUT_TOKENS = {
    */
   "content-max-width": "73.75rem",
   /**
-   * Vertical pad under section chrome before the first control (16dp):
-   * Collapsible / Card `chrome="card"` body, Surface `padded`, CodeBlock pre.
-   * Larger than `--fynns-space-sm` so headers don’t sit on Inputs.
+   * Vertical pad under section chrome / CodeBlock pre (16dp). **Not** Surface
+   * `padded` or Card body — those use equal `content-inset` (18dp) on all
+   * edges. Larger than `--fynns-space-sm` so headers don’t sit on Inputs.
    * Nesting surface wells (`chrome="plain"`, `.fynns-nest`) use `nest-gap`.
    */
   "content-pad-block": "1rem",

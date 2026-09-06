@@ -15,7 +15,8 @@ export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
  * control edge. **Standalone** (catalog “Name (n/m)” chrome, etc.) fills the
  * host: label `1fr`, controls `max-content` end-hug — same as form-host
  * Card / Dialog rows. Prefer one `.fynns-control-cluster` for the action
- * strip.
+ * strip — clusters **default end-pack** (≥ **0.5.158**); start only when the
+ * product explicitly opts in (`controlsAlign="start"` / `--start-align`).
  */
 export function ControlRow({ label, children, className, ...rest }: ControlRowProps) {
   return (

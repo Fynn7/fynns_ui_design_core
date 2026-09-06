@@ -89,6 +89,14 @@ alwaysApply: true
     `ControlRow` `label`（`可用`/`未安装`）；控件簇只有 labeled Button（+ 可选
     路径 meta）；禁止工具名当 label + 状态 Chip + 下方 `FieldHint` 复述
     `tool：error` — 详情用行内 `InfoHint`。对照 `#rhythm` service。
+11b. **ControlRow / control-cluster Buttons left-packed** — `.fynns-control-cluster`
+    **默认右齐**（≥ **0.5.158**）。禁止把 labeled Button / meta+CTA 贴在 label
+    下左侧；仅当产品明确要求时用 `controlsAlign="start"` 或
+    `.fynns-control-cluster--start-align`。对照 `#sandbox-rhythm-action-end` /
+    `#rhythm`。
+11c. **ControlRow label crushed to 2px sliver** — form-host / standalone label
+    轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；长 path meta
+    在控件轨收缩，禁止把「就绪」等压成发丝。对照 `#sandbox-rhythm-action-end`。
 12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
     section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
     TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
@@ -126,6 +134,18 @@ alwaysApply: true
 25. **long List dumps all rows** — Card / PageScroll List 可 >5 条时同机制，
     但传 `REVEAL_MORE_LIST_DEFAULT_*`（**5**/5，≥ **0.5.145**）：脚在 List
     **后**；短列表 / Dialog / 真分页豁免。对照 `#list`。
+26. **Pagination Select expands bar** — `.fynns-pagination-bar` 内每页 Select
+    展开须 **向上 overlay**（core ≥ **0.5.151**/ **0.5.152**），Select
+    `overflow: visible`；底垫 `--fynns-scrollbar-size` 避免 H-rail 切穿控件。
+    对照 `#pagination`。
+27. **outcome Chip as status** — success / fail / OK / ready 结果信号用
+    **`.fynns-list-item-status`**（默认绿；失败 `data-tone="danger"`）+ 可选
+    `CheckCircleIcon` / `AlertTriangleIcon` — **禁止** `Chip` 任意 variant 或
+    消费仓 `StatusChip` 冒充 Badge。对照 `#list` run-summary / `#rhythm` status。
+28. **ControlStack probe meta end-hug / kind mix** — 安装可用性与后端就绪分栈
+    + `Divider`；探测栈 `controlsAlign="start"` + `columns`=格数；禁止
+    `columns={1}` 单 cluster 混 path / 结果标 / FieldHint。对照
+    `#sandbox-rhythm-probe-kinds`。
 
 ## 表单与密度（短）
 
@@ -133,7 +153,8 @@ alwaysApply: true
 - 工具条：`ControlStack` / `ControlRow` / `.fynns-control-cluster` /
   `ControlBlock` `description`（hint 在标签列）。对照 `#rhythm`。
 - List 目录 kind → **leading 图标** + meta；禁止 start tick / 包 `div` /
-  Chip 当状态。多指标 trailing → `.fynns-list-item-trailing-stats`。
+  Chip 当状态。结果标 → `.fynns-list-item-status`。多指标 trailing →
+  `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
 - PageScroll 分区 Card：勿用 `sheet-max-width` / `chat-max-width` / dialog-max
   收窄；与上方 ControlRow 同列宽（或铺满 content-column）。
@@ -144,6 +165,11 @@ alwaysApply: true
 
 主栏气泡列宽 / composer 布局权威：`llm/CHAT_COMPOSER_LAYOUT.md`。
 ARIA：`llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
+空线程示例 prompt：在 `ChatThread.empty` 用满宽可点 `Surface`
+`variant="soft"` `padded`（外缘 = `.fynns-chat-composer-shell`，留在
+`.fynns-chat-thread-inner` pad 内，勿负 margin 顶出对齐 form；内边距四边等距
+`content-inset`；勿 rem/`px` / 勿 Chip / 勿复活 `ChatStarterPrompts`）。
+对照 `#chat`。
 勿在消费仓用私有 CSS「修」body stack gap。
 
 ## 性能

@@ -280,7 +280,16 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "chat",
     categoryId: "communication",
     label: "Chat",
-    keywords: ["聊天", "chat", "composer", "message", "对话"],
+    keywords: [
+      "聊天",
+      "chat",
+      "composer",
+      "message",
+      "对话",
+      "starter",
+      "prompt",
+      "示例",
+    ],
   },
   {
     id: "thinking",
@@ -362,7 +371,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "surface",
     categoryId: "containment",
     label: "Surface",
-    keywords: ["表面", "surface"],
+    keywords: ["表面", "surface", "soft", "surface-2"],
   },
   {
     id: "field-header",
@@ -600,6 +609,9 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "layout",
       "end-align",
       "footer",
+      "action-end",
+      "right-align",
+      "右齐",
     ],
   },
   {

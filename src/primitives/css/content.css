@@ -587,6 +587,34 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   overflow-x: auto;
   overflow-y: clip;
+  /*
+   * Overlay H-rail paints at `host.bottom - --fynns-scrollbar-size` and would
+   * otherwise cut through Select / FieldHint / page discs. Reserve that band
+   * under the trigger row (≥ **0.5.152**).
+   */
+  padding-block-end: var(--fynns-scrollbar-size);
+}
+
+/*
+ * Rows-per-page Select must not grow the pager band when expanded (≥ **0.5.151**).
+ * Form / List inspector keep in-flow `.fynns-search-bar--expanded`; the pager is a
+ * single M3/MUI trigger-band row — docked results overlay instead of stretching
+ * FieldHint + page discs mid-band (CONSUMER_TREATY Pagination Select expands bar).
+ *
+ * Panel opens **upward** (footer grammar) and the Select shell must
+ * `overflow: visible` — SearchBar's default `overflow: hidden` otherwise clips
+ * the absolute list so chevron flips with no visible options (≥ **0.5.152**).
+ */
+.fynns-pagination-bar:has(> .fynns-pagination-bar__start > .fynns-select[data-expanded="true"]) {
+  overflow-x: visible;
+  overflow-y: visible;
+  z-index: var(--fynns-z-dropdown);
+}
+
+.fynns-card:has(.fynns-pagination-bar .fynns-select[data-expanded="true"]),
+.fynns-card-body:has(.fynns-pagination-bar .fynns-select[data-expanded="true"]) {
+  overflow: visible;
+  z-index: var(--fynns-z-dropdown);
 }
 
 .fynns-pagination-bar__start {
@@ -600,9 +628,38 @@ a.fynns-breadcrumb-link:visited {
 
 /* Select is width:100% by default — hug content in the pager meta row. */
 .fynns-pagination-bar__start > .fynns-select {
+  position: relative;
   width: auto;
   max-width: none;
   flex: 0 0 auto;
+  align-self: center;
+}
+
+.fynns-pagination-bar__start > .fynns-select.fynns-search-bar--expanded {
+  overflow: visible;
+}
+
+.fynns-pagination-bar__start > .fynns-select > .fynns-search-bar-panel {
+  position: absolute;
+  inset-inline-start: 0;
+  top: auto;
+  bottom: 100%;
+  z-index: var(--fynns-z-dropdown);
+  min-width: 100%;
+  width: max-content;
+  max-width: min(100vw, 20rem);
+  margin-block-end: calc(-1 * var(--fynns-border-hairline));
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md) var(--fynns-radius-md) 0 0;
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-md);
+}
+
+.fynns-pagination-bar__start
+  > .fynns-select.fynns-search-bar--expanded
+  > .fynns-search-bar-field {
+  /* Closed capsule while the list flies out — avoid a second joined-shell hairline. */
+  border-block-end-color: transparent;
 }
 
 /* FieldHint is block by default — keep range copy on the same meta line. */
@@ -1586,7 +1643,11 @@ a.fynns-breadcrumb-link:visited {
   white-space: nowrap;
 }
 
-/* Compact Success/Failed mark in List headline — not InlineAlert / Banner. */
+/*
+ * Compact Success / Failed / OK / Fail outcome mark (List headline, ControlRow
+ * probe cluster, …). Not InlineAlert / Banner / Chip — consumers must not paint
+ * readiness with `Chip` `suggestion`/`assist` (CONSUMER_TREATY outcome Chip).
+ */
 .fynns-list-item-status {
   display: inline-flex;
   align-items: center;
@@ -4076,6 +4137,11 @@ a.fynns-breadcrumb-link:visited {
   border-color: transparent;
 }
 
+.fynns-surface--soft {
+  background: var(--fynns-color-surface-2);
+  border-color: transparent;
+}
+
 .fynns-surface--elevated {
   background: var(--fynns-color-surface-1);
   border-color: transparent;
@@ -4089,8 +4155,9 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-surface--padded {
-  padding-block: var(--fynns-layout-content-pad-block);
-  padding-inline: var(--fynns-layout-content-inset);
+  /* Equal inset all edges — same grammar as Card / Collapsible chrome=card body.
+   * Do not mix content-pad-block (16dp) on block with content-inset (18dp) inline. */
+  padding: var(--fynns-layout-content-inset);
 }
 
 .fynns-surface--fill > * {

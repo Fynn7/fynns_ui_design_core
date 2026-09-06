@@ -4,7 +4,7 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
-export type SurfaceVariant = "outlined" | "filled" | "elevated";
+export type SurfaceVariant = "outlined" | "filled" | "elevated" | "soft";
 
 export type SurfaceProps = HTMLAttributes<HTMLDivElement> & {
   /** @default "outlined" */
@@ -25,6 +25,10 @@ export type SurfaceProps = HTMLAttributes<HTMLDivElement> & {
  * Generic bordered / tonal well for any children (iframe, forms, BusyRegion, …).
  * No title/actions head — prefer `Card` when you need a static title / icon / actions row.
  * Not a revival of purged `Panel` / `Pane`.
+ *
+ * - `outlined` — app-bg + outline
+ * - `filled` / `elevated` — surface-1 well (elevated adds shadow)
+ * - `soft` — surface-2 well (same paint as Banner `default` strip; untitled)
  */
 export function Surface({
   variant = "outlined",

@@ -203,7 +203,7 @@ export type { ChipProps, ChipSetProps, ChipVariant } from "./primitives/Chip";
 export { ControlRow } from "./primitives/ControlRow";
 export type { ControlRowProps } from "./primitives/ControlRow";
 export { ControlStack } from "./primitives/ControlStack";
-export type { ControlStackProps } from "./primitives/ControlStack";
+export type { ControlStackProps, ControlStackControlsAlign } from "./primitives/ControlStack";
 export { ControlBlock } from "./primitives/ControlBlock";
 export type { ControlBlockProps } from "./primitives/ControlBlock";
 export { FieldHint } from "./primitives/FieldHint";

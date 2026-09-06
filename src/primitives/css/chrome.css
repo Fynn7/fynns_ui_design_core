@@ -213,9 +213,15 @@
   width: 100%;
   max-width: 100%;
   gap: var(--fynns-layout-control-stack-form-gap);
+  /*
+   * Label floor ≥ control-row-label (7.5rem) — never `minmax(0, 1fr)` alone.
+   * Long meta / Button clusters in a bare `max-content` track used to inflate
+   * past the Card and crush the label to ~0–2px (SetupReady “就绪” sliver,
+   * ≥ **0.5.159**). Controls stay shrinkable so path meta ellipsis + end-pack.
+   */
   grid-template-columns:
-    minmax(0, 1fr)
-    repeat(var(--fynns-control-stack-cols, 2), max-content);
+    minmax(var(--fynns-layout-control-row-label), 1fr)
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, max-content));
 }
 
 .fynns-dialog-panel--centered .fynns-control-row,
@@ -225,8 +231,26 @@
 .fynns-collapsible-body > .fynns-control-block > .fynns-control-row {
   width: 100%;
   max-width: 100%;
-  /* Shrinkable controls track — max-content alone overflows narrow Card / EndAside. */
-  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
+  /* Same label floor as form-host ControlStack (≥ **0.5.159**). */
+  grid-template-columns:
+    minmax(var(--fynns-layout-control-row-label), 1fr) minmax(0, max-content);
+}
+
+/*
+ * Keep ControlStack subgrid (≥ **0.5.154**): the form-host 2-column ControlRow
+ * rule above must not override `.fynns-control-stack > .fynns-control-row`
+ * `subgrid` — otherwise `columns={N}` cells wrap into the label track
+ * (path / outcome marks misalign).
+ */
+.fynns-dialog-panel--centered .fynns-control-stack > .fynns-control-row,
+.fynns-card-body .fynns-control-stack > .fynns-control-row,
+.fynns-surface--padded .fynns-control-stack > .fynns-control-row,
+.fynns-collapsible-body > .fynns-control-stack > .fynns-control-row,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack
+  > .fynns-control-row {
+  grid-template-columns: subgrid;
 }
 
 /* Form-host preference rows share FieldHeader label type (not toolbar caption). */
@@ -335,6 +359,127 @@
   > .fynns-control-row__controls
   > .fynns-control-cluster {
   justify-content: flex-end;
+}
+
+/*
+ * Probe / path / outcome meta (≥ **0.5.154**): form-host end-hug packs unequal
+ * clusters to the trailing edge so path vs status+hint cells do not share a
+ * start column. `controlsAlign="start"` flips packing — subgrid cells align
+ * start-to-start (true value grid). Preference Switch stacks keep default end.
+ *
+ * Also pin a **fixed label track** (toolbar token) — label `1fr` + several
+ * `max-content` control columns would crush “Backend” / “Available” when the
+ * value cells are wide.
+ */
+.fynns-dialog-panel--centered .fynns-control-stack[data-controls-align="start"],
+.fynns-card-body .fynns-control-stack[data-controls-align="start"],
+.fynns-surface--padded .fynns-control-stack[data-controls-align="start"],
+.fynns-collapsible-body > .fynns-control-stack[data-controls-align="start"],
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"] {
+  grid-template-columns:
+    var(--fynns-layout-control-row-label)
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, max-content));
+}
+
+.fynns-dialog-panel--centered .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls,
+.fynns-card-body .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls,
+.fynns-surface--padded .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]
+  .fynns-control-row__controls {
+  justify-self: start;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]
+  .fynns-grid
+  > *,
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]
+  .fynns-grid
+  > *,
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]
+  .fynns-grid
+  > *,
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]
+  .fynns-grid
+  > *,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]
+  .fynns-grid
+  > * {
+  justify-self: start;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster {
+  justify-content: flex-start;
 }
 
 /*

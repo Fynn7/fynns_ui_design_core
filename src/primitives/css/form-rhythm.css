@@ -77,6 +77,11 @@
   /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
 }
 
+/* Label cell floor — override the shared min-width:0 above (≥ **0.5.159**). */
+.fynns-control-stack > .fynns-control-row > .fynns-control-row__label {
+  min-width: min(100%, var(--fynns-layout-control-row-label));
+}
+
 /*
  * Value Buttons in a ControlStack track: hug label width (pill follows text)
  * until the track edge, then shrink + ellipsis via `.fynns-btn-label`.
@@ -174,7 +179,9 @@
 .fynns-control-row:not(.fynns-control-stack > .fynns-control-row) {
   width: 100%;
   max-width: 100%;
-  grid-template-columns: minmax(0, 1fr) minmax(0, max-content);
+  /* Label floor (≥ **0.5.159**) — never crush status / name to a 2px sliver. */
+  grid-template-columns:
+    minmax(var(--fynns-layout-control-row-label), 1fr) minmax(0, max-content);
 }
 
 .fynns-control-row:not(.fynns-control-stack > .fynns-control-row)
@@ -184,7 +191,8 @@
 }
 
 .fynns-control-row__label {
-  min-width: 0;
+  /* Floor ≥ control-row-label — never bare `min-width: 0` (≥ **0.5.159**). */
+  min-width: min(100%, var(--fynns-layout-control-row-label));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -213,22 +221,34 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  /* Default end-pack (≥ **0.5.158**): actions hug the trailing edge. Start
+     only via ControlStack `controlsAlign="start"` or `--start-align`. */
+  justify-content: flex-end;
   gap: var(--fynns-layout-control-cluster-gap);
   min-width: min-content;
   overflow: visible;
 }
 
 /* Sibling switches / chips in one ControlRow when ControlStack would otherwise
-   place each child on its own shared column (narrow hosts overflow). */
+   place each child on its own shared column (narrow hosts overflow).
+   Default **end** (≥ **0.5.158**) — wide Chip+meta+Button clusters used to
+   start-pack and park the first control under the label. Opt into start with
+   `.fynns-control-cluster--start-align` or ControlStack `controlsAlign="start"`. */
 .fynns-control-cluster {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--fynns-layout-control-cluster-gap);
   min-width: 0;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/* Explicit start pack — probe value grids / rare LTR reading strips. */
+.fynns-control-cluster--start-align {
+  justify-content: flex-start;
 }
 
 /* Inline expanded Select + sibling controls: pin to trigger band, not panel mid. */
@@ -443,6 +463,8 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: stretch;
+  /* Column list: pack from the top (not end — that would float radios down). */
+  justify-content: flex-start;
   /* Tighter than horizontal cluster gap (8dp) — choice rows read as one list. */
   gap: var(--fynns-space-xs);
 }

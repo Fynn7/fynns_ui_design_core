@@ -907,6 +907,65 @@
   gap: var(--fynns-layout-field-hint-gap);
 }
 
+/* Empty-thread starter: full-width clickable Surface soft (app-owned). */
+.sandbox-chat-empty {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-chat-starters {
+  /*
+   * Stay inside `.fynns-chat-thread-inner` pad.
+   * That pad aliases `--fynns-chat-composer-inset-inline`, so starter
+   * Surface edges == `.fynns-chat-composer-shell` (not the form outer).
+   * Never negative-margin break out — that flush-aligns with the form
+   * and looks like “0 margin” vs the shell.
+   */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: 0;
+  box-sizing: border-box;
+}
+
+.sandbox-chat-starter {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: start;
+  color: inherit;
+  font: inherit;
+}
+
+.sandbox-chat-starter:focus-visible {
+  outline: none;
+}
+
+.sandbox-chat-starter:focus-visible .fynns-surface {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+.sandbox-chat-starter-label {
+  display: block;
+  font-size: var(--fynns-font-size-sm);
+  font-weight: var(--fynns-font-weight-medium);
+  color: var(--fynns-color-text);
+}
+
+.sandbox-chat-starter-prompt {
+  display: block;
+  margin-block-start: var(--fynns-space-2xs);
+  font-size: var(--fynns-font-size-sm);
+  color: var(--fynns-color-text-muted);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 /* Chat dual placement — main rem-capped column + aside fill host. */
 .sandbox-chat-dual {
   align-items: stretch;
