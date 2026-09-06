@@ -166,9 +166,13 @@ alwaysApply: true
 主栏气泡列宽 / composer 布局权威：`llm/CHAT_COMPOSER_LAYOUT.md`。
 ARIA：`llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
 空线程示例 prompt：在 `ChatThread.empty` 用满宽可点 `Surface`
-`variant="soft"` `padded`（外缘 = `.fynns-chat-composer-shell`，留在
+`variant="soft"` `padded` `interactive`（外缘 = `.fynns-chat-composer-shell`，留在
 `.fynns-chat-thread-inner` pad 内，勿负 margin 顶出对齐 form；内边距四边等距
-`content-inset`；勿 rem/`px` / 勿 Chip / 勿复活 `ChatStarterPrompts`）。
+`content-inset`；轮播：**M3 Shared Axis Y**（入场 in-flow 上移≈40% + fade /
+`--fynns-duration-slow` + `--fynns-ease-out`；出场绝对层上移≈40% + fade /
+`--fynns-duration-base`；勿 <12dp 微移；reduced-motion 瞬时换）；
+`interactive` = 大按钮 state-layer hover/press；勿 rem/`px` / 勿 Chip /
+勿复活 `ChatStarterPrompts`）。
 对照 `#chat`。
 勿在消费仓用私有 CSS「修」body stack gap。
 

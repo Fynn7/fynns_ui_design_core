@@ -155,7 +155,7 @@ import {
   SparklesIcon,
   useOverflowBounds,
 } from "@fynns/ui";
-import { useEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useCallback, type ReactNode } from "react";
 import { useLocale, type MessageKey, type TranslateFn } from "../i18n";
 import { SandboxHelp } from "../components/SandboxHelp";
 import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
@@ -224,42 +224,132 @@ function ChatDemoActions({
   );
 }
 
-/** Empty-thread starter: full-width `Surface` soft well (app-owned rotate). */
+type ChatStarterItem = { id: string; label: string; prompt: string };
+
+function ChatStarterSurfaceButton({
+  item,
+  onSelect,
+  className,
+  tabIndex,
+  "aria-hidden": ariaHidden,
+}: {
+  item: ChatStarterItem;
+  onSelect: (prompt: string) => void;
+  className?: string;
+  tabIndex?: number;
+  "aria-hidden"?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      className={["sandbox-chat-starter", className].filter(Boolean).join(" ")}
+      onClick={() => onSelect(item.prompt)}
+      tabIndex={tabIndex}
+      aria-hidden={ariaHidden}
+    >
+      <Surface variant="soft" padded interactive>
+        <span className="sandbox-chat-starter-label">{item.label}</span>
+        <span className="sandbox-chat-starter-prompt">{item.prompt}</span>
+      </Surface>
+    </button>
+  );
+}
+
+/**
+ * Empty-thread starter: full-width `Surface` soft well (app-owned rotate).
+ * M3 Shared Axis Y (forward): incoming rises ~40% + fade (slow / ease-out);
+ * outgoing absolute overlay exits up + fade (base / emphasized). Incoming
+ * stays in-flow — no dual-absolute collapse or track transform snap-back.
+ */
 function ChatEmptySurfaceStarters({
   items,
   ariaLabel,
   onSelect,
 }: {
-  items: ReadonlyArray<{ id: string; label: string; prompt: string }>;
+  items: ReadonlyArray<ChatStarterItem>;
   ariaLabel: string;
   onSelect: (prompt: string) => void;
 }) {
-  const [offset, setOffset] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [outgoing, setOutgoing] = useState<ChatStarterItem | null>(null);
+  const [phase, setPhase] = useState<"idle" | "prepare" | "run">("idle");
   const [paused, setPaused] = useState(false);
+  const inRef = useRef<HTMLDivElement | null>(null);
+  const regionRef = useRef<HTMLDivElement | null>(null);
+  const indexRef = useRef(0);
+  const phaseRef = useRef(phase);
+  const reduceMotionRef = useRef(false);
   const n = items.length;
+  indexRef.current = index;
+  phaseRef.current = phase;
+
+  useEffect(() => {
+    reduceMotionRef.current =
+      typeof window !== "undefined" &&
+      !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  const advance = useCallback(() => {
+    if (n < 2 || phaseRef.current !== "idle") return;
+    const from = indexRef.current;
+    const to = (from + 1) % n;
+    const fromItem = items[from]!;
+    if (reduceMotionRef.current) {
+      setIndex(to);
+      return;
+    }
+    setOutgoing(fromItem);
+    setIndex(to);
+    setPhase("prepare");
+  }, [n, items]);
+
+  useLayoutEffect(() => {
+    if (phase !== "prepare" || !outgoing) return;
+    // Paint rest pose (out covering in at opacity 0 / ty 40%), then run.
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setPhase("run");
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [phase, outgoing]);
+
+  const finishSlide = useCallback(() => {
+    setOutgoing(null);
+    setPhase("idle");
+  }, []);
 
   useEffect(() => {
     if (n < 2 || paused) return;
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
     const id = window.setInterval(() => {
-      setOffset((o) => (o + 1) % n);
-    }, 5500);
+      advance();
+    }, 2800);
     return () => window.clearInterval(id);
-  }, [n, paused]);
+  }, [n, paused, advance]);
+
+  useEffect(() => {
+    const el = regionRef.current;
+    if (!el) return;
+    const onAdvance = () => advance();
+    el.addEventListener("sandbox-chat-starter-advance", onAdvance);
+    return () => el.removeEventListener("sandbox-chat-starter-advance", onAdvance);
+  }, [advance]);
 
   if (n === 0) return null;
-  const item = items[((offset % n) + n) % n]!;
+  const active = items[((index % n) + n) % n]!;
+  const sliding = phase !== "idle" && outgoing != null;
 
   return (
     <div
+      ref={regionRef}
       className="sandbox-chat-starters"
       role="region"
       aria-label={ariaLabel}
+      aria-live="polite"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -269,16 +359,48 @@ function ChatEmptySurfaceStarters({
         }
       }}
     >
-      <button
-        type="button"
-        className="sandbox-chat-starter"
-        onClick={() => onSelect(item.prompt)}
+      <div
+        className={
+          sliding
+            ? "sandbox-chat-starters-viewport sandbox-chat-starters-viewport--sliding"
+            : "sandbox-chat-starters-viewport"
+        }
       >
-        <Surface variant="soft" padded>
-          <span className="sandbox-chat-starter-label">{item.label}</span>
-          <span className="sandbox-chat-starter-prompt">{item.prompt}</span>
-        </Surface>
-      </button>
+        {sliding && outgoing ? (
+          <div
+            className={
+              phase === "run"
+                ? "sandbox-chat-starters-layer sandbox-chat-starters-layer--out sandbox-chat-starters-layer--out-run"
+                : "sandbox-chat-starters-layer sandbox-chat-starters-layer--out"
+            }
+            onTransitionEnd={(e) => {
+              if (e.target !== e.currentTarget) return;
+              if (e.propertyName !== "transform") return;
+              if (phaseRef.current !== "run") return;
+              finishSlide();
+            }}
+          >
+            <ChatStarterSurfaceButton
+              item={outgoing}
+              onSelect={onSelect}
+              tabIndex={-1}
+              aria-hidden
+            />
+          </div>
+        ) : null}
+        <div
+          ref={inRef}
+          className={
+            sliding
+              ? phase === "run"
+                ? "sandbox-chat-starters-layer sandbox-chat-starters-layer--in sandbox-chat-starters-layer--in-run"
+                : "sandbox-chat-starters-layer sandbox-chat-starters-layer--in"
+              : "sandbox-chat-starters-layer sandbox-chat-starters-layer--solo"
+          }
+        >
+          <ChatStarterSurfaceButton item={active} onSelect={onSelect} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -4861,6 +4983,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Surface>
             <Surface variant="soft" padded style={{ minWidth: "8rem" }}>
               <SandboxHelp as="span" text={t("globals.surfaceSoft")} />
+            </Surface>
+            <Surface
+              variant="soft"
+              padded
+              interactive
+              role="button"
+              tabIndex={0}
+              style={{ minWidth: "8rem" }}
+              aria-label={t("globals.surfaceInteractiveAria")}
+            >
+              <SandboxHelp as="span" text={t("globals.surfaceInteractive")} />
             </Surface>
           </div>
           <div className="sandbox-surface-fill-host">

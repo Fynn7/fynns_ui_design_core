@@ -4160,6 +4160,63 @@ a.fynns-breadcrumb-link:visited {
   padding: var(--fynns-layout-content-inset);
 }
 
+/*
+ * Large clickable well (empty-thread soft starters, …). M3 state layer via
+ * opacity — same grammar as `.fynns-btn::before` (no color-mix interpolation).
+ * Parent `button` / `a` / `[role="button"]` hover/active also drives the layer.
+ */
+.fynns-surface--interactive {
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.fynns-surface--interactive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-surface--interactive > * {
+  position: relative;
+  z-index: 1;
+}
+
+.fynns-surface--interactive:hover::before,
+:is(button, a, [role="button"]):hover > .fynns-surface--interactive::before {
+  opacity: 1;
+}
+
+.fynns-surface--interactive:active::before,
+:is(button, a, [role="button"]):active > .fynns-surface--interactive::before {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+  opacity: 1;
+}
+
+:is(button, a, [role="button"]):focus-visible > .fynns-surface--interactive {
+  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
+}
+
+@media (hover: none) {
+  .fynns-surface--interactive:hover::before,
+  :is(button, a, [role="button"]):hover > .fynns-surface--interactive::before {
+    opacity: 0;
+  }
+}
+
 .fynns-surface--fill > * {
   min-height: 0;
   min-width: 0;

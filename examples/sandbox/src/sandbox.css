@@ -929,6 +929,64 @@
   box-sizing: border-box;
 }
 
+.sandbox-chat-starters-viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.sandbox-chat-starters-layer {
+  width: 100%;
+}
+
+/*
+ * M3 Shared Axis Y (forward) + fade — same fixed slot content swap.
+ * Travel ≈ 40% of the card (not 8–12dp micro-nudge) so the rotate reads.
+ * Enter: longer decelerate; exit: shorter (M3 enter vs exit).
+ * Incoming stays in-flow (stable height); outgoing absolute overlay.
+ */
+.sandbox-chat-starters-layer--solo,
+.sandbox-chat-starters-layer--in {
+  position: relative;
+}
+
+.sandbox-chat-starters-layer--in {
+  opacity: 0;
+  transform: translate3d(0, 40%, 0);
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-slow);
+  transition-timing-function: var(--fynns-ease-out);
+  transition-delay: 0ms;
+}
+
+.sandbox-chat-starters-layer--in-run {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.sandbox-chat-starters-layer--out {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-base);
+  transition-timing-function: var(--fynns-ease-emphasized);
+  transition-delay: 0ms;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.sandbox-chat-starters-layer--out-run {
+  opacity: 0;
+  transform: translate3d(0, -40%, 0);
+}
+
 .sandbox-chat-starter {
   display: block;
   width: 100%;
@@ -940,15 +998,28 @@
   text-align: start;
   color: inherit;
   font: inherit;
+  border-radius: var(--fynns-radius-3xl);
+}
+
+/* Large-button silhouette — match composer shell roundness. */
+.sandbox-chat-starter .fynns-surface {
+  border-radius: var(--fynns-radius-3xl);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-chat-starters-layer--out,
+  .sandbox-chat-starters-layer--in {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 .sandbox-chat-starter:focus-visible {
   outline: none;
 }
 
-.sandbox-chat-starter:focus-visible .fynns-surface {
-  box-shadow: 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
-}
+/* Focus ring: core `Surface interactive` under :focus-visible parent. */
 
 .sandbox-chat-starter-label {
   display: block;

@@ -595,13 +595,18 @@ classes.
     scrolls (`role="log"` + `fynns-scroll`); composer docks at root; scroll-to-
     bottom = 32dp elevated IconButton (not Fab). `empty` prefers `EmptyState`;
     empty-thread starter prompts = app-owned full-width clickable
-    **`Surface` `variant="soft"` `padded`** rows inside `ChatThread.empty`
+    **`Surface` `variant="soft"` `padded` `interactive`** rows inside
+    `ChatThread.empty`
     (unit-stack under EmptyState; **outer** edges = `.fynns-chat-composer-shell`
     — stay inside `.fynns-chat-thread-inner` pad; **never** negative-margin
     breakout that flush-aligns with `form.fynns-chat-composer`; **inner** pad =
     equal `--fynns-layout-content-inset` all edges — never rem/`px` or mixed
-    block/inline; wrap with text). Do **not** use `Chip`/`ChipSet` or a
-    dedicated starter primitive. Live `#chat` Empty.
+    block/inline; wrap with text). App-owned rotate: **M3 Shared Axis Y** —
+    incoming in-flow rises ~40% + fade (`--fynns-duration-slow` /
+    `--fynns-ease-out`); outgoing absolute overlay exits up + fade
+    (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
+    instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
+    use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
   - **Main vs aside:** **main** = column ceiling `--fynns-layout-chat-max-width`
     (**48rem**); user bubble **70%** of host (`radius-22`,
     `--fynns-color-chat-user-bubble`); composer **100%** of same host
@@ -682,7 +687,8 @@ classes.
   Card / Collapsible (`chrome="card"`|`"plain"` — plain = nest-gap, **≠ flush**;
   head actions = interactive chrome only), Surface (untitled well;
   `outlined`|`filled`|`elevated`|`soft` — soft = surface-2, same paint as Banner
-  default; `fill` only when parent height-resolved), Carousel, Divider, Table (host
+  default; `interactive` = M3 state-layer large-button hover/press ≥ **0.5.167**;
+  `fill` only when parent height-resolved), Carousel, Divider, Table (host
   `.fynns-table-wrap.fynns-scroll`; nowrap + max-content; cell status =
   `.fynns-table-meta` never Chip), **`RevealMore` + `useRevealMore`** (long
   Card / PageScroll catalogs — Table default **10**/step **10** ≥ **0.5.144**;
@@ -800,7 +806,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band grammar; 8dp action gap | `#sandbox-card-head-select` | Title/CTA centered on expanded Select |
 | Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |
-| Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout) | `#chat` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad |
+| Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` **`interactive`** in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout; large-button state layer) | `#chat` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad; static soft without hover |
 | In-content editor\|preview | `SplitPane` | `#split-pane` | Hand-rolled resize; EndAside inside Card |
 | File / settings hierarchy | `Tree` / `TreeItem` | `#tree` | NavDrawer for file trees; HubTreeDisclosure |
 | Chronological timeline | Timeline flat|detail; edit in Dialog | `#timeline` | Lettered A/B/C shells; rail hover edit icons |

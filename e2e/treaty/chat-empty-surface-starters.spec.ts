@@ -24,10 +24,27 @@ test(`${SLUG}: soft Surface left/right ≈ composer-shell`, async ({ page }) => 
 
   await demo.getByRole("radio", { name: "Empty" }).click();
 
-  const soft = demo.locator(".sandbox-chat-starters .fynns-surface--soft");
+  const soft = demo.locator(
+    ".sandbox-chat-starters .sandbox-chat-starters-layer--solo .fynns-surface--soft",
+  );
+  await expect(soft).toHaveClass(/fynns-surface--interactive/);
   const shell = demo.locator(".sandbox-chat-main .fynns-chat-composer-shell");
   await expect(soft).toBeVisible();
   await expect(shell).toBeVisible();
+
+  // Large-button grammar: idle transparent state layer → hover opacity 1
+  // (parent button drives `:hover > .fynns-surface--interactive::before`).
+  await expect
+    .poll(async () =>
+      soft.evaluate((el) => getComputedStyle(el, "::before").opacity),
+    )
+    .toBe("0");
+  await soft.hover();
+  await expect
+    .poll(async () =>
+      soft.evaluate((el) => getComputedStyle(el, "::before").opacity),
+    )
+    .toBe("1");
 
   const form = demo.locator(".sandbox-chat-main .fynns-chat-composer");
   await expect(form).toBeVisible();
@@ -60,8 +77,54 @@ test(`empty-thread Chip / revived ChatStarterPrompts: click → Populated`, asyn
   await demo.getByRole("radio", { name: "Empty" }).click();
 
   const starters = demo.locator(".sandbox-chat-starters");
-  await expect(starters.locator(".fynns-surface--soft")).toHaveCount(1);
+  await expect(starters.locator(".sandbox-chat-starters-viewport")).toBeVisible();
+  await expect(starters.locator(".sandbox-chat-starters-layer--solo")).toBeVisible();
+  await expect(
+    starters.locator(".sandbox-chat-starters-layer--solo .fynns-surface--soft"),
+  ).toHaveCount(1);
   await starters.getByRole("button").click();
   await expect(demo.getByRole("radio", { name: "Populated" })).toBeChecked();
   await expect(starters).toHaveCount(0);
+});
+
+test(`empty-thread starter rotate: vertical slide then settle`, async ({
+  page,
+}) => {
+  await openGlobalsDemo(page, "chat", "chat");
+  const demo = globalsDemo(page, "chat");
+  await demo.getByRole("radio", { name: "Empty" }).click();
+
+  const starters = demo.locator(".sandbox-chat-starters");
+  const label = starters.locator(
+    ".sandbox-chat-starter:not([aria-hidden]) .sandbox-chat-starter-label",
+  );
+  await expect(label).toBeVisible();
+  const before = (await label.textContent())?.trim() ?? "";
+
+  await starters.evaluate((el) => {
+    el.dispatchEvent(new Event("sandbox-chat-starter-advance"));
+  });
+
+  // Mid-slide: outgoing overlay is present.
+  await expect(
+    starters.locator(".sandbox-chat-starters-layer--out"),
+  ).toBeVisible({ timeout: 1_000 });
+
+  await expect(async () => {
+    const after = (await label.textContent())?.trim() ?? "";
+    expect(after).not.toBe(before);
+  }).toPass({ timeout: 3_000 });
+
+  // After settle: solo layer only, no outgoing overlay.
+  await expect(async () => {
+    await expect(starters.locator(".sandbox-chat-starters-layer--out")).toHaveCount(
+      0,
+    );
+    await expect(
+      starters.locator(".sandbox-chat-starters-layer--solo"),
+    ).toBeVisible();
+    await expect(
+      starters.locator(".sandbox-chat-starters-layer--solo .fynns-surface--soft"),
+    ).toHaveCount(1);
+  }).toPass({ timeout: 5_000 });
 });

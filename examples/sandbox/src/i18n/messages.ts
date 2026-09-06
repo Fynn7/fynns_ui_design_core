@@ -840,7 +840,7 @@ const en = {
   "globals.nestedSectionHelp":
     "Nested section recipe (host-agnostic): Card (static head + body) + FieldBlock + full-width Textarea. Use on a page, in Dialog, Drawer, etc. — agents choose the host. Prefer Surface for title-less wells.",
   "globals.surfaceHelp":
-    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Variants: `outlined` / `filled` / `elevated` / `soft` (surface-2, same paint as Banner default). Default unpadded; `padded` = equal `--fynns-layout-content-inset` on all edges (never rem/`px` or mixed block/inline). Prefer Card when you need a static title / icon / actions head. Empty-thread chat starters: full-width soft `Surface` `padded` in `ChatThread.empty` (live `#chat`).",
+    "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Variants: `outlined` / `filled` / `elevated` / `soft` (surface-2, same paint as Banner default). Default unpadded; `padded` = equal `--fynns-layout-content-inset` on all edges (never rem/`px` or mixed block/inline). `interactive` = M3 state-layer hover/press (large-button grammar; works under a parent `button`). Prefer Card when you need a static title / icon / actions head. Empty-thread chat starters: full-width soft `Surface` `padded` `interactive` in `ChatThread.empty` (live `#chat`).",
   "globals.fieldHeaderProviderLabel": "Region",
   "globals.fieldHeaderRegionAlpha": "Alpha",
   "globals.fieldHeaderRegionBeta": "Beta",
@@ -1629,7 +1629,7 @@ const en = {
   "globals.chatScrollBottom": "Scroll to bottom",
   "globals.shellChatEcho": "Echo: {msg}",
   "globals.chatHelp":
-    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage** / **ChatMarkdown**. Empty thread: slim `EmptyState` + full-width clickable `Surface` `variant=\"soft\"` in `empty` (message-bar width; wrap; app owns rotate / send). Do **not** use Chip or revived `ChatStarterPrompts`. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. Prefer `ChatMessage markdown` / `<ChatMarkdown>` for LLM turns (L2 GFM subset: fenced → `CodeBlock`, plain ul/ol, inline pills). Direct body siblings use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `actions` = Copy + Regenerate + More `IconButton`/`DropdownMenu` (hover reveal; **consumer wires LLM rerun** — sandbox snackbar is demo only). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
+    "**Chat** shell (`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`) + **ChatMessage** / **ChatMarkdown**. Empty thread: slim `EmptyState` + full-width clickable `Surface` `variant=\"soft\"` in `empty` (message-bar width; wrap; app owns rotate with vertical silk slide via `--fynns-duration-slow` / `--fynns-ease-emphasized`, or instant under reduced-motion; send). Do **not** use Chip or revived `ChatStarterPrompts`. Dual placement: **main** = 48rem host (`--fynns-layout-chat-max-width`), user bubble **70%**; **aside** (EndAside / `.fynns-chat-host--fill`) = 100% pane, user bubble ceiling **100%** so long turns share the composer shell edges (short shrinks; `radius-22`; composer `radius-3xl`; `--fynns-color-chat-user-bubble`); composer **100%**. Thread pad + composer inset share dialog-inset (composer aliases thread token) so bubble end and composer shell end align (equal L/R). Soft floor `min(--fynns-layout-chat-min-width, 100%)` — no window lock. `system` = centered muted notice. Stick-to-bottom + scroll FAB. Enter sends / Shift+Enter newline → expanded bottom toolbar (leading start, Send end); **CJK IME Enter while composing confirms only (does not send)** — ChatGPT parity. Multiline layout: `llm/CHAT_COMPOSER_LAYOUT.md`. Prefer `ChatMessage markdown` / `<ChatMarkdown>` for LLM turns (L2 GFM subset: fenced → `CodeBlock`, plain ul/ol, inline pills). Direct body siblings use `--fynns-chatmessage-body-stack-gap` (aliases `unit-stack-gap`). `streaming` = caret only. `thinking` / `ChatThinking` = reasoning disclosure above the answer. `error` + `onRetry` = ChatGPT failed-generation footer (danger copy + Regenerate). `actions` = Copy + Regenerate + More `IconButton`/`DropdownMenu` (hover reveal; **consumer wires LLM rerun** — sandbox snackbar is demo only). `citations` = browsing source chips under assistant turns (hover preview; click opens; +N expands footnote cards).",
   "globals.chatCitationsAnatomyHelp":
     "Direct imports: inline `ChatCitationChip` + standalone `ChatCitations` (not only via `ChatMessage.citations`). Same publisher-first chip + footnote expand.",
   "globals.thinkingStreaming": "Thinking",
@@ -2150,6 +2150,8 @@ const en = {
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
   "globals.surfaceSoft": "soft (surface-2)",
+  "globals.surfaceInteractive": "soft + interactive (hover)",
+  "globals.surfaceInteractiveAria": "Interactive soft surface sample",
   "globals.switchLabelStart": "Switch · label start",
   "globals.tabsSmA": "Alpha",
   "globals.tabsSmAria": "Small tabs with disabled tab",
@@ -3022,7 +3024,7 @@ const zh: Record<MessageKey, string> = {
   "globals.nestedSectionHelp":
     "嵌套分区配方（宿主无关）：Card（静态头 + 正文）+ FieldBlock + 满宽 Textarea。可放在页面、Dialog、Drawer 等 — 由 agent 自选宿主。无标题的井用 Surface。",
   "globals.surfaceHelp":
-    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。变体：`outlined` / `filled` / `elevated` / `soft`（surface-2，与 Banner default 同色）。默认无内边距；`padded` = 四边等距 `--fynns-layout-content-inset`（勿 rem/`px` 或块/行向混用）。需要静态 title / icon / actions 头时用 Card。空线程示例 prompt：在 `ChatThread.empty` 用满宽 soft `Surface` `padded`（对照 `#chat`）。",
+    "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。变体：`outlined` / `filled` / `elevated` / `soft`（surface-2，与 Banner default 同色）。默认无内边距；`padded` = 四边等距 `--fynns-layout-content-inset`（勿 rem/`px` 或块/行向混用）。`interactive` = M3 state-layer hover/press（大按钮语法；可包在父级 `button` 下）。需要静态 title / icon / actions 头时用 Card。空线程示例 prompt：在 `ChatThread.empty` 用满宽 soft `Surface` `padded` `interactive`（对照 `#chat`）。",
   "globals.fieldHeaderProviderLabel": "地区",
   "globals.fieldHeaderRegionAlpha": "甲",
   "globals.fieldHeaderRegionBeta": "乙",
@@ -3798,7 +3800,7 @@ const zh: Record<MessageKey, string> = {
   "globals.chatScrollBottom": "滚到最新",
   "globals.shellChatEcho": "回显：{msg}",
   "globals.chatHelp":
-    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage** / **ChatMarkdown**。空线程：精简 `EmptyState` + 满宽可点 `Surface` `variant=\"soft\"` 放在 `empty`（与输入栏同宽；随文换行；轮播 / 发送由应用自管）。勿用 Chip，勿复活 `ChatStarterPrompts`。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。LLM 回合优先 `ChatMessage markdown` / `<ChatMarkdown>`（L2 GFM 子集：围栏 → `CodeBlock`、普通 ul/ol、行内药丸）。正文直接子节点用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`actions` = 复制 + 重新生成 + 更多 `IconButton`/`DropdownMenu`（悬停显现；**消费仓自行接 LLM 重跑** — 沙盒 snackbar 仅演示）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
+    "**Chat** 壳（`Chat` + `ChatThread` + `ChatComposer` + `ChatScrollToBottom`）+ **ChatMessage** / **ChatMarkdown**。空线程：精简 `EmptyState` + 满宽可点 `Surface` `variant=\"soft\"` 放在 `empty`（与输入栏同宽；随文换行；轮播用纵向丝滑 slide：`--fynns-duration-slow` / `--fynns-ease-emphasized`，reduced-motion 瞬时换；发送由应用自管）。勿用 Chip，勿复活 `ChatStarterPrompts`。双位置：**主栏** = 48rem 宿主（`--fynns-layout-chat-max-width`），用户气泡 **70%**；**侧栏**（EndAside / `.fynns-chat-host--fill`）= 窗格 100%，用户气泡上限 **100%** 使长回合与 composer 壳同缘（短文收缩；`radius-22`；composer `radius-3xl`；`--fynns-color-chat-user-bubble`）；composer **100%**。thread pad 与 composer inset 共用 dialog-inset（composer 别名 thread token），气泡右缘与 composer 壳右缘对齐（左右等距）。软底 `min(--fynns-layout-chat-min-width, 100%)` — 不锁窗口。`system` = 居中弱化提示。贴底跟随 + 滚底钮。Enter 发送 / Shift+Enter 换行 → 展开底栏（leading 左、Send 右）；**CJK 输入法合成中按 Enter 只上屏、不发送** — ChatGPT 对齐。多行布局：`llm/CHAT_COMPOSER_LAYOUT.md`。LLM 回合优先 `ChatMessage markdown` / `<ChatMarkdown>`（L2 GFM 子集：围栏 → `CodeBlock`、普通 ul/ol、行内药丸）。正文直接子节点用 `--fynns-chatmessage-body-stack-gap`（alias `unit-stack-gap`）。行内 `code` = ChatGPT 药丸（`--fynns-color-chat-inline-code-bg`、radius-xs、`.15rem`/`.3rem` pad）。`streaming` 仅光标。`thinking` / `ChatThinking` = 答案上方的推理披露。`error` + `onRetry` = ChatGPT 式失败生成页脚（危险色文案 + 重新生成）。`actions` = 复制 + 重新生成 + 更多 `IconButton`/`DropdownMenu`（悬停显现；**消费仓自行接 LLM 重跑** — 沙盒 snackbar 仅演示）。`citations` = 助手回合下来源 chips（悬停预览；点击打开；+N 展开脚注卡片）。",
   "globals.chatCitationsAnatomyHelp":
     "直接导入：行内 `ChatCitationChip` + 独立 `ChatCitations`（不只通过 `ChatMessage.citations`）。同样是发布方优先 chip + 脚注展开。",
   "globals.thinkingStreaming": "思考中",
@@ -4311,6 +4313,8 @@ const zh: Record<MessageKey, string> = {
   "globals.surfaceFilled": "filled",
   "globals.surfaceOutlined": "outlined",
   "globals.surfaceSoft": "soft（surface-2）",
+  "globals.surfaceInteractive": "soft + interactive（悬停）",
+  "globals.surfaceInteractiveAria": "可交互 soft Surface 示例",
   "globals.switchLabelStart": "Switch · 标签在前",
   "globals.tabsSmA": "甲",
   "globals.tabsSmAria": "小号标签（含禁用项）",

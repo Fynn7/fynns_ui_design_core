@@ -231,6 +231,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | ChatComposer field↔Send tighter than glyph↔field | AGENTS Chat / llm/CHAT_* | `#chat` |
 | empty-thread Chip / revived ChatStarterPrompts | AGENTS Chat / Content density | `#chat` |
 | empty-thread starter ≠ composer-shell edges | AGENTS Chat / Content density | `#chat` |
+| empty-thread starter rotate no slide | AGENTS Chat / Content density | `#chat` |
 | Surface padded uneven / rem inset | AGENTS Surface / Content density | `#surface` / `#chat` |
 | List run history stacked vertically | AGENTS Content density / List | `#list` |
 | jammed headline list meta (overflow clip) | AGENTS Content density / List | `#list` |
