@@ -340,7 +340,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "list",
     categoryId: "containment",
     label: "List",
-    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline", "reveal", "更多", "show more"],
+    keywords: ["列表", "list", "listitem", "path", "catalog", "bookmark", "links", "密度", "tree", "overline", "reveal", "更多", "show more", "wiki", "repo", "checkbox", "sandbox-list-repo-path-actions"],
   },
   {
     id: "timeline",
