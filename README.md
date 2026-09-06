@@ -24,8 +24,8 @@ is public).
 
 **Zero-token (preferred for apps like CV Generator):** clone this repo next to the
 consumer (`../fynns_ui_design_core`, usually `dev`) and `file:`-link it. No
-`NODE_AUTH_TOKEN`. CV Generator `npm run setup` auto-clones the sibling when
-missing.
+`NODE_AUTH_TOKEN`. CV Generator first `npm run dev` (or optional `npm run setup`)
+auto-clones the sibling when missing.
 
 ```bash
 git clone https://github.com/Fynn7/fynns_ui_design_core.git
