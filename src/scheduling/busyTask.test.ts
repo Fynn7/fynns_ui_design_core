@@ -69,6 +69,26 @@ describe("runBusyTask", () => {
     expect(setBusy.mock.calls.map((c) => c[0])).toEqual([true, false]);
   });
 
+  it("task-thrown AbortError is reject, not abort", async () => {
+    const setBusy = vi.fn();
+    const onError = vi.fn();
+    const boom =
+      typeof DOMException !== "undefined"
+        ? new DOMException("task abort-shaped", "AbortError")
+        : Object.assign(new Error("task abort-shaped"), { name: "AbortError" });
+    await expect(
+      runBusyTask(
+        setBusy,
+        async () => {
+          throw boom;
+        },
+        { onError },
+      ),
+    ).rejects.toBe(boom);
+    expect(onError).toHaveBeenCalledWith(boom, { reason: "reject" });
+    expect(setBusy.mock.calls.map((c) => c[0])).toEqual([true, false]);
+  });
+
   it("generation: stale finally does not clear newer busy", async () => {
     const setBusy = vi.fn();
     let releaseA: (() => void) | undefined;

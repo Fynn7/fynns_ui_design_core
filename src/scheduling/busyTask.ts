@@ -249,10 +249,13 @@ export async function runBusyTask<T>(
       options?.onError?.(err, { reason: failReason });
       throw err;
     }
-    if (internal.signal.aborted || isAbortError(error)) {
+    // Only classify abort when *our* controller aborted. A task that throws
+    // AbortError while the gate is still active is a normal reject.
+    if (internal.signal.aborted) {
       failReason = "abort";
-      options?.onError?.(error, { reason: failReason });
-      throw error;
+      const err = isAbortError(error) ? error : makeAbortError(internal.signal.reason);
+      options?.onError?.(err, { reason: failReason });
+      throw err;
     }
     options?.onError?.(error, { reason: failReason });
     throw error;
