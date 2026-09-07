@@ -120,6 +120,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | ConfirmDialog blockCloseWhileLoading trap | AGENTS Dialog / ConfirmDialog | `#sandbox-confirm-loading-trap` |
 | ChatComposer busy without onStop | AGENTS Chat | `#sandbox-chat-busy-no-stop` |
 | Empty data shown as BusyRegion | AGENTS Busy/Loading | `#busy-region` |
+| pane cold-start hang without error surface | AGENTS Busy/Loading | `#sandbox-pane-load-error` |
 | snackbar used as AppError / ErrorCode bus | AGENTS feedback (boundary) | `#snackbar` |
 | tight labeled Button gaps in end-align footers | AGENTS Toolbar / unit rhythm | `#timeline` |
 | private labeled Button cluster gap | AGENTS Toolbar / unit rhythm | `#rhythm` |

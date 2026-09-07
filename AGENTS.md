@@ -477,7 +477,7 @@ the consumer only calls the new API. Install / pin rules:
 | Probe kind split / start-align meta | `#sandbox-rhythm-probe-kinds` |
 | Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` |
 | Banner strip + dismiss center | `#banner` |
-| Busy / loading | `#busy-region` |
+| Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
@@ -618,6 +618,7 @@ classes.
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
   | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |
+  | Pane cold-start fail | Clear busy → `InlineAlert` + short FieldHint + end-align Retry (≥ **0.5.178**) | Permanent `fill`; EmptyState as load-fail shell; silent empty |
   | Confirm while loading | `ConfirmDialog` `onAbort` → `useLoadingTask().abort()` (≥ **0.5.177**) | `blockCloseWhileLoading` with no abort — Cancel/Esc trap forever |
   | Chat generate busy | Pair `ChatComposer` `busy` with `onStop` | `busy` without `onStop` (Send locked / Esc dead) |
 
@@ -870,6 +871,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | File / settings hierarchy | `Tree` / `TreeItem` | `#tree` | NavDrawer for file trees; HubTreeDisclosure |
 | Chronological timeline | Timeline flat|detail; edit in Dialog | `#timeline` | Lettered A/B/C shells; rail hover edit icons |
 | Empty catalog | EmptyState (`fill` if sole pane) | `#empty-state` | EmptyState as loading shell |
+| Pane cold-start fail / hang | Clear busy → InlineAlert + hint + end-align Retry | `#sandbox-pane-load-error` | Permanent fill; EmptyState as load-fail; silent empty |
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
 | Table / list pager | `.fynns-pagination-bar` single row; rows-per-page Select overlays **up** (≥ **0.5.152**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; clipped / invisible expand; H-rail through controls |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
