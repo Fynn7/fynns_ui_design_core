@@ -83,6 +83,13 @@ export const COLOR_TOKENS = {
   /** Keyboard ring fill — keep faint (fields use quiet border-mix instead). */
   focus: "rgba(45, 212, 191, 0.22)",
   overlay: "rgba(0, 0, 0, 0.48)",
+  /**
+   * BusyRegion sectional overlay wash — light gray so mounted copy reads as
+   * disabled under the busy chrome. Paired with
+   * `--fynns-layout-busy-region-backdrop-blur`. Not `--fynns-color-overlay`
+   * (full-viewport BusyScrim only — too dark for sectional wells).
+   */
+  "busy-region-mask": "rgba(0, 0, 0, 0.20)",
   /** Legacy toast surface; kept for backward compatibility. */
   "toast-surface": "#062126",
   "control-surface": "rgba(255, 255, 255, 0.02)",
@@ -1367,10 +1374,9 @@ export const LAYOUT_TOKENS = {
    */
   "list-well-max-height-sm": "12rem",
   /**
-   * BusyRegion sectional overlay soft blur — mounted copy keeps its native
-   * color; a light radius softens mono / catalog text under the busy message
-   * without reading as a corrupted / glitchy frame (heavy blur → that risk).
-   * Not `--fynns-color-overlay` tint (full-viewport → BusyScrim).
+   * BusyRegion sectional overlay soft blur — paired with
+   * `--fynns-color-busy-region-mask`. Keep the radius light so busy does not
+   * read as a corrupted / glitchy frame (heavy blur → that risk).
    */
   "busy-region-backdrop-blur": "3px",
   /**
@@ -1928,6 +1934,7 @@ export const LIGHT_THEME_OVERRIDES: ReadonlyArray<
       info: "#2563eb",
       focus: "rgba(13, 148, 136, 0.2)",
       overlay: "rgba(0, 0, 0, 0.32)",
+      "busy-region-mask": "rgba(0, 0, 0, 0.12)",
       "toast-surface": "#ffffff",
       "control-surface": "rgba(0, 0, 0, 0.02)",
       "control-surface-hover": "rgba(0, 0, 0, 0.04)",
