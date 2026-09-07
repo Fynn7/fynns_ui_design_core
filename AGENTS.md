@@ -622,6 +622,19 @@ classes.
   | Confirm while loading | `ConfirmDialog` `onAbort` → `useLoadingTask().abort()` (≥ **0.5.177**) | `blockCloseWhileLoading` with no abort — Cancel/Esc trap forever |
   | Chat generate busy | Pair `ChatComposer` `busy` with `onStop` | `busy` without `onStop` (Send locked / Esc dead) |
 
+  **Error surface pick (hard — consumer AppError maps here; core has no ErrorCode):**
+
+  | Scene | Use | Do **not** |
+  | --- | --- | --- |
+  | Pane / Card recoverable fail | `InlineAlert` + short hint + end-align Retry | EmptyState as 500 shell; snackbar alone (vanishes) |
+  | Persistent app announcement | `Banner` + actions / dismiss | InlineAlert in TopAppBar; snackbar |
+  | Instant op result / light fail | `snackbar` (± one action) | Whole-page EmptyState; Banner |
+  | Chat generate fail | `ChatMessage` `error` + `onRetry` | Duplicate the same line as InlineAlert |
+  | Zero-result catalog | `EmptyState` | EmptyState as loading or as API-fail shell |
+  | Field validation | `errorText` / FieldHint error | InlineAlert wrapping one Input |
+  | Probe OK/Fail | `.fynns-list-item-status` ± InfoHint danger | Chip / InlineAlert inside List headline |
+  | Machine `code` | Consumer `AppError { code, message, … }` → map to the row above | Put ErrorCode / AppError on core `snackbar` API |
+
   **paint-before-work:** `afterNextPaint` / `yieldToMain` /
   `runBusyTask(setBusy, task, options?)` / `useBusyTask()` /
   `runLoadingTask` / `useLoadingTask` (≥ **0.5.177**) — `flushSync` busy on →
