@@ -1,7 +1,14 @@
 /**
- * Pure helpers for ChatThinking labels and open/close policy.
- * UI-only — no LLM / transport.
+ * Pure helpers for ChatThinking labels + thin open adapters.
+ * Disclosure open locality lives in {@link ./statusTreeOpen} /
+ * {@link ./useStatusTreeOpen} — do not reassemble render+effect open here.
  */
+
+import {
+  reduceStatusTreeStreaming,
+  statusTreeOpenFromState,
+  type StatusTreeOpenState,
+} from "./statusTreeOpen";
 
 export type ThinkingLabelLabels = {
   /** While `streaming`. Default `"Thinking"`. */
@@ -72,9 +79,21 @@ export type ResolveThinkingOpenResult = {
   didAutoCollapse: boolean;
 };
 
+function stateFromResolveInput(
+  input: ResolveThinkingOpenInput,
+): StatusTreeOpenState {
+  return {
+    internalOpen: input.internalOpen,
+    userPinnedClosed: input.userPinnedClosed,
+    userPinnedOpen: input.userPinnedOpen,
+    didAutoCollapse: input.didAutoCollapse,
+    wasStreaming: input.wasStreaming,
+  };
+}
+
 /**
  * Clear pins when a new streaming cycle starts (idle → streaming).
- * Pure — ChatThinking applies the result into React state.
+ * Prefer {@link reduceStatusTreeStreaming} for new call sites.
  */
 export function resetThinkingPinsOnStreamStart(input: {
   streaming: boolean;
@@ -87,25 +106,33 @@ export function resetThinkingPinsOnStreamStart(input: {
   userPinnedOpen: boolean;
   didAutoCollapse: boolean;
 } {
-  if (input.streaming && !input.wasStreaming) {
+  if (!(input.streaming && !input.wasStreaming)) {
     return {
-      userPinnedClosed: false,
-      userPinnedOpen: false,
-      didAutoCollapse: false,
+      userPinnedClosed: input.userPinnedClosed,
+      userPinnedOpen: input.userPinnedOpen,
+      didAutoCollapse: input.didAutoCollapse,
     };
   }
+  const next = reduceStatusTreeStreaming(
+    {
+      internalOpen: false,
+      userPinnedClosed: input.userPinnedClosed,
+      userPinnedOpen: input.userPinnedOpen,
+      didAutoCollapse: input.didAutoCollapse,
+      wasStreaming: input.wasStreaming,
+    },
+    { mode: "thinking", streaming: input.streaming },
+  );
   return {
-    userPinnedClosed: input.userPinnedClosed,
-    userPinnedOpen: input.userPinnedOpen,
-    didAutoCollapse: input.didAutoCollapse,
+    userPinnedClosed: next.userPinnedClosed,
+    userPinnedOpen: next.userPinnedOpen,
+    didAutoCollapse: next.didAutoCollapse,
   };
 }
 
 /**
- * Steady-state open for render (no streaming→done edge).
- * Effect owns auto-collapse via {@link resolveThinkingOpen}; render must not
- * reimplement that edge. Pass `wasStreaming` so idle→streaming pin clear is
- * applied **before paint** (avoids one closed-while-streaming frame).
+ * Steady-state open for paint without committing auto-collapse.
+ * Prefer {@link useStatusTreeOpen} — kept for unit tests of the display path.
  */
 export function displayThinkingOpen(input: {
   streaming: boolean;
@@ -115,31 +142,30 @@ export function displayThinkingOpen(input: {
   /** Previous `streaming`; omit / true = no cycle-start pin clear. */
   wasStreaming?: boolean;
 }): boolean {
-  const pins = resetThinkingPinsOnStreamStart({
-    streaming: input.streaming,
-    wasStreaming: input.wasStreaming ?? true,
+  let state: StatusTreeOpenState = {
+    internalOpen: input.internalOpen,
     userPinnedClosed: input.userPinnedClosed,
     userPinnedOpen: false,
+    // Display path never commits streaming→done auto-collapse.
     didAutoCollapse: true,
-  });
-  return resolveThinkingOpen({
+    wasStreaming: input.wasStreaming ?? true,
+  };
+  // Only idle→streaming pin clear for paint; reducer owns auto-collapse.
+  if (input.streaming && !state.wasStreaming) {
+    state = reduceStatusTreeStreaming(state, {
+      mode: "thinking",
+      streaming: true,
+    });
+  }
+  return statusTreeOpenFromState(state, {
+    mode: "thinking",
     streaming: input.streaming,
     open: input.open,
-    internalOpen: input.internalOpen,
-    userPinnedClosed: pins.userPinnedClosed,
-    userPinnedOpen: false,
-    didAutoCollapse: true,
-    wasStreaming: false,
-  }).open;
+  });
 }
 
 /**
- * Open policy:
- * - controlled `open` always wins
- * - streaming → force open unless `userPinnedClosed` (trigger stays
- *   enabled; pin is cleared when a new streaming cycle starts)
- * - streaming→done → auto-collapse once unless `userPinnedOpen`
- * - otherwise keep `internalOpen`
+ * Open policy snapshot (legacy pure entry). Prefer {@link useStatusTreeOpen}.
  */
 export function resolveThinkingOpen(
   input: ResolveThinkingOpenInput,
@@ -148,20 +174,26 @@ export function resolveThinkingOpen(
     return { open: input.open, didAutoCollapse: input.didAutoCollapse };
   }
 
-  if (input.streaming) {
-    if (input.userPinnedClosed) {
-      return { open: false, didAutoCollapse: false };
-    }
-    return { open: true, didAutoCollapse: false };
+  const state = stateFromResolveInput(input);
+  if (input.streaming === input.wasStreaming) {
+    return {
+      open: statusTreeOpenFromState(state, {
+        mode: "thinking",
+        streaming: input.streaming,
+      }),
+      didAutoCollapse: state.didAutoCollapse,
+    };
   }
 
-  // Edge: just finished streaming → auto-collapse once.
-  if (input.wasStreaming && !input.didAutoCollapse && !input.userPinnedOpen) {
-    return { open: false, didAutoCollapse: true };
-  }
-
+  const next = reduceStatusTreeStreaming(state, {
+    mode: "thinking",
+    streaming: input.streaming,
+  });
   return {
-    open: input.internalOpen,
-    didAutoCollapse: input.didAutoCollapse,
+    open: statusTreeOpenFromState(next, {
+      mode: "thinking",
+      streaming: input.streaming,
+    }),
+    didAutoCollapse: next.didAutoCollapse,
   };
 }

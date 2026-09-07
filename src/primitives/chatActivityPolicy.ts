@@ -1,7 +1,10 @@
 /**
- * Pure helpers for ChatActivity Status-tree open policy and streaming
- * settle timing (min-busy hold / complete / queue). UI-only — no LLM.
+ * Pure helpers for ChatActivity Status-tree streaming settle timing
+ * (min-busy hold / complete / queue). Disclosure open locality lives in
+ * {@link ./statusTreeOpen} / {@link ./useStatusTreeOpen}. UI-only — no LLM.
  */
+
+import { statusTreeOpenFromState } from "./statusTreeOpen";
 
 export type ChatActivityStepStatus = "pending" | "active" | "done";
 
@@ -18,16 +21,25 @@ export type ResolveActivityOpenInput = {
 };
 
 /**
- * Open policy (unlike ChatThinking, completed trees keep last open —
- * no post-stream auto-collapse):
- * - controlled `open` always wins
- * - streaming → force open unless `userPinnedClosed`
- * - otherwise keep `internalOpen`
+ * Open policy snapshot (legacy pure entry). Prefer {@link useStatusTreeOpen}.
+ * Unlike ChatThinking, completed trees keep last open — no post-stream
+ * auto-collapse.
  */
 export function resolveActivityOpen(input: ResolveActivityOpenInput): boolean {
-  if (input.open !== undefined) return Boolean(input.open);
-  if (input.streaming && !input.userPinnedClosed) return true;
-  return input.internalOpen;
+  return statusTreeOpenFromState(
+    {
+      internalOpen: input.internalOpen,
+      userPinnedClosed: input.userPinnedClosed,
+      userPinnedOpen: false,
+      didAutoCollapse: false,
+      wasStreaming: input.streaming,
+    },
+    {
+      mode: "activity",
+      streaming: input.streaming,
+      open: input.open,
+    },
+  );
 }
 
 export type PredictStepSettleInput = {

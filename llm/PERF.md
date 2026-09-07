@@ -89,4 +89,5 @@ fixes ship.
   CONTEXT.md **Destination geometry**)
 - Architecture seams (overlay / floating / CSS domains / status-tree policy):
   CONTEXT.md **Architecture seams** — `DialogFrame.tsx`, `floatingBox.tsx`,
-  `src/primitives/css/*` (barrel `@import`), `chatActivityPolicy.ts`
+  `src/primitives/css/*` (barrel `@import`), `statusTreeOpen.ts` /
+  `chatActivityPolicy.ts`
