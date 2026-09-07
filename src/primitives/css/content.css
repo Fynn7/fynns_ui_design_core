@@ -1307,6 +1307,19 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
+ * Cap + `fynns-scroll` catalog wells (Card body / hub list-well): overlay Y
+ * rail paints at `host.rect.right − scrollbar-size`. Reserve that band on the
+ * list end so idle `trailingSupportingText` / `.fynns-table-meta` never kiss
+ * the thumb — same gut as `.fynns-page-scroll`. Do **not** use
+ * `scrollbar-gutter`. Live: `#sandbox-list-repo-path-actions`.
+ */
+.fynns-list.fynns-scroll {
+  padding-inline-end: calc(
+    var(--fynns-list-inset-inline) + var(--fynns-scrollbar-size)
+  );
+}
+
+/*
  * Rows must not flex-shrink inside a height-capped / scrolling List.
  * Mistaken non-`li` children (e.g. Collapsible — illegal `ul > div`) also
  * keep intrinsic height so overflow:hidden shells do not paint ~19px
@@ -2030,6 +2043,27 @@ a.fynns-breadcrumb-link:visited {
   /* Idle: full-bleed copy. Reveal: clear under the measured end cluster. */
   padding-inline-end: var(--fynns-space-xs);
   transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+/*
+ * Row-meta + `--with-end`: do **not** crush idle pad to `space-xs` — that
+ * parks `.fynns-table-meta` / kind labels against the scroll rail (or card
+ * edge). Keep strip `list-pad-inline` until hover expands for IconButtons.
+ * ≥ **0.5.171**. Live: `#sandbox-list-repo-path-actions`.
+ */
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text
+  )
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item-row
+      > .fynns-list-item
+      > .fynns-list-item-trailing
+      > .fynns-list-item-trailing-text
+  )
+  > .fynns-list-item-row
+  > .fynns-list-item {
+  padding-inline-end: var(--fynns-list-pad-inline);
 }
 
 .fynns-list-item-host--with-end:hover > .fynns-list-item,

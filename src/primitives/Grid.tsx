@@ -106,6 +106,11 @@ function applyEqualTracks(
  * - both fixed → explicit `repeat` tracks on each axis.
  * - both unbounded → dense auto-fill of `max-content` columns, rows grow.
  * - `equalCells` → every cell matches the largest content box (measured).
+ *
+ * **Cross-axis (hard ≥ 0.5.172):** default `align-items: start` — do **not**
+ * vertically center short FieldBlocks when a sibling Select expands in-flow.
+ * Labels in a FieldStack→Grid row must share one top edge. `equalCells` still
+ * stretches. Live: `#sandbox-field-stack-grid-select`.
  */
 export function Grid({
   x = "unbounded",

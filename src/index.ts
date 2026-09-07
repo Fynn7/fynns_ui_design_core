@@ -259,9 +259,18 @@ export {
   afterNextPaint,
   yieldToMain,
   runBusyTask,
+  runLoadingTask,
   useBusyTask,
+  useLoadingTask,
 } from "./scheduling/busyTask";
-export type { UseBusyTaskResult } from "./scheduling/busyTask";
+export type {
+  BusyTaskConcurrency,
+  BusyTaskContext,
+  BusyTaskFailReason,
+  RunBusyTaskOptions,
+  UseBusyTaskResult,
+  UseLoadingTaskResult,
+} from "./scheduling/busyTask";
 export { BadgedBox } from "./primitives/BadgedBox";
 export type { BadgedBoxProps } from "./primitives/BadgedBox";
 export { Avatar } from "./primitives/Avatar";

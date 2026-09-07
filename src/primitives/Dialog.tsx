@@ -167,6 +167,12 @@ export type ConfirmDialogProps = {
   confirmDisabled?: boolean;
   loading?: boolean;
   blockCloseWhileLoading?: boolean;
+  /**
+   * While `loading` + `blockCloseWhileLoading`, Cancel / Esc call this instead
+   * of no-op — wire to `useLoadingTask().abort()` so the trap can clear.
+   * Does not close the dialog by itself; clear `loading` after abort settles.
+   */
+  onAbort?: () => void;
   /** When false, scrim click does not dismiss (use Cancel instead). */
   scrimDismiss?: boolean;
   confirmIcon?: ReactNode;
@@ -186,13 +192,17 @@ export function ConfirmDialog({
   confirmDisabled = false,
   loading = false,
   blockCloseWhileLoading = true,
+  onAbort,
   scrimDismiss = true,
   confirmIcon,
 }: ConfirmDialogProps) {
   const titleId = useId();
   const closeBlocked = loading && blockCloseWhileLoading;
   const cancel = () => {
-    if (closeBlocked) return;
+    if (closeBlocked) {
+      onAbort?.();
+      return;
+    }
     if (onCancel) onCancel();
     else onOpenChange(false);
   };
@@ -212,7 +222,7 @@ export function ConfirmDialog({
       {description ? <p className="fynns-dialog-description">{description}</p> : null}
       {children ? <div className="fynns-dialog-body fynns-scroll">{children}</div> : null}
       <div className="fynns-dialog-foot">
-        <Button variant="ghost" onClick={cancel} disabled={closeBlocked}>
+        <Button variant="ghost" onClick={cancel} disabled={closeBlocked && !onAbort}>
           {cancelLabel}
         </Button>
         <Button
