@@ -114,6 +114,13 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Dialog foot Delete leftmost of Cancel | AGENTS Dialog / overlays | `#timeline` |
 | twin Button loading rings in one control-cluster | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | BusyRegion + chrome loading stack | AGENTS Busy/Loading | `#busy-region` |
+| runBusyTask hang forever (no timeout/signal) | AGENTS paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |
+| overlapping runBusyTask clears busy early | AGENTS paint-before-work | `#sandbox-busy-task-generation` |
+| Button loading hung without runLoadingTask | AGENTS Loading placement | `#sandbox-button-loading-task` |
+| ConfirmDialog blockCloseWhileLoading trap | AGENTS Dialog / ConfirmDialog | `#sandbox-confirm-loading-trap` |
+| ChatComposer busy without onStop | AGENTS Chat | `#sandbox-chat-busy-no-stop` |
+| Empty data shown as BusyRegion | AGENTS Busy/Loading | `#busy-region` |
+| snackbar used as AppError / ErrorCode bus | AGENTS feedback (boundary) | `#snackbar` |
 | tight labeled Button gaps in end-align footers | AGENTS Toolbar / unit rhythm | `#timeline` |
 | private labeled Button cluster gap | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -121,8 +128,10 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
 | ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#rhythm` |
 | ControlRow label crushed to 2px / hairline sliver | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
+| path meta paints over ControlRow label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
 | outcome Chip as status (suggestion/assist / StatusChip fake Badge) | AGENTS Hard rules / Content density | `#list` / `#rhythm` status |
 | List path catalog Switch+Chip+danger disk soup | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
+| List scroll-well trailing meta kisses overlay rail | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | AGENTS Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -182,6 +191,9 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Chip as table-cell status / mapping kind | AGENTS Hard rules | `#table` |
 | Select refresh crammed beside chevron | AGENTS forms / FieldStack | `#field-header` |
 | Select row-action IconButton drifts when open | AGENTS forms / FieldStack | `#field-header` |
+| FieldStack Grid vertically centers short FieldBlock beside expanded Select | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
+| Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
+| Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | AGENTS shells / Hard rules | `#form-recipe` |

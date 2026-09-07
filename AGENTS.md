@@ -230,6 +230,12 @@ belong in a consumer’s own doc.
   share one horizontal baseline. Live `#sandbox-list-repo-path-actions` /
   `#list` catalog. Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger
   disk soup.
+- **DON'T** let capped `List.fynns-scroll` wells park `trailingSupportingText` /
+  `.fynns-table-meta` against the overlay Y rail — core ≥ **0.5.171** reserves
+  `--fynns-scrollbar-size` on the list end (PageScroll parity) and keeps
+  `--with-end` idle pad at `list-pad-inline` when row meta is present (not
+  `space-xs` crush). Live `#sandbox-list-repo-path-actions`. Failure:
+  CONSUMER_TREATY List scroll-well trailing meta kisses overlay rail.
 - **DON'T** paint List catalog kind with start tick / inset rail / `::before` /
   second `hostClassName` wash — leading icon + `trailingSupportingText` /
   `.fynns-table-meta`; selected = host `radius-3xl` pill only; never
@@ -302,7 +308,11 @@ belong in a consumer’s own doc.
   + standalone label tracks floor at `--fynns-layout-control-row-label`
   (**7.5rem**, ≥ **0.5.159**); long path meta / Button clusters shrink in the
   controls track (`minmax(0, max-content)`), never steal the label column to
-  `0`. Live `#sandbox-rhythm-action-end`.
+  `0`. **Also (≥ **0.5.175**):** `.fynns-control-cluster > .fynns-table-meta`
+  shrinks + ellipsis — never let end-pack nowrap path **overflow left** and
+  paint over the status label (looks like a crushed “就绪” even when the
+  track is 120px). Full path → `InfoHint` / Tooltip when users need the
+  untruncated string. Live `#sandbox-rhythm-action-end`.
 - **DON'T** paint success / fail / OK / ready **outcome signals** as `Chip`
   (`assist` / `filter` / `input` / `suggestion`) or a consumer `StatusChip`
   wrapper around Chip — use **`.fynns-list-item-status`** (default success
@@ -325,6 +335,28 @@ belong in a consumer’s own doc.
   labeled CTA stays for Dialog feet / unlabeled action rows. Same page:
   catalog ControlRow + List trailing + section strip share **md**. Live
   `#rhythm` morph + cover-letter.
+- **DON'T** put sibling FieldBlocks in a `Grid` that vertically **centers** when
+  one Select expands in-flow — core ≥ **0.5.172** defaults `.fynns-grid` to
+  `align-items: start` so labels share one top edge (Hub Inspector agent | cwd
+  failure). Prefer FieldStack→Grid for multi-column fields; do **not** invent
+  consumer `align-items: center` on `.fynns-grid`. Live
+  `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
+  vertically centers short FieldBlock beside expanded Select.
+- **DON'T** paint self-evident Card chrome / densified form-cluster actions as
+  **labeled** ghost `Button`s (e.g. visible `Copy Prompt` / `Save defaults`
+  next to a folder IconButton or Select row) — **information redundancy**.
+  Use **`IconButton` + `Tooltip`** (+ `aria-label`): copy → `ClipboardIcon`;
+  save defaults / draft save → `SaveIcon`; open folder → `FolderOpenIcon`.
+  Keep **labeled** Buttons for primary workflow CTAs that need a verb on the
+  face (`Validate` / `Deliver` / Dialog feet). Live
+  `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions`. Failure:
+  CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip.
+- **DON'T** put `variant="primary"` (filled) **leading** a multi-control
+  `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
+  strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
+  (end-edge), same grammar as Cancel…→primary / mode-drawer Plus last. Failure:
+  CONSUMER_TREATY Card head primary IconButton leftmost in control-cluster.
+  Live `#sandbox-card-head-primary-end`.
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /
@@ -438,7 +470,7 @@ the consumer only calls the new API. Install / pin rules:
 
 | Topic | Anchor |
 | --- | --- |
-| Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header` |
+| Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header`, `#sandbox-field-stack-grid-select` |
 | List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
@@ -446,9 +478,10 @@ the consumer only calls the new API. Install / pin rules:
 | Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` |
 | Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region` |
+| Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
-| Card head Select / draft actions | `#sandbox-card-head-select`, `#sandbox-card-draft-actions` |
+| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
 | Command chrome proportion | `#command-palette` |
@@ -580,17 +613,31 @@ classes.
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; second surface tint; wrap whole Card |
   | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
-  | Button/icon slot | Inline Spinner via `loading` | Page-level CircularProgress in the slot |
+  | Button/icon slot | Inline Spinner via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
   | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` rings |
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
+  | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |
+  | Confirm while loading | `ConfirmDialog` `onAbort` → `useLoadingTask().abort()` (≥ **0.5.177**) | `blockCloseWhileLoading` with no abort — Cancel/Esc trap forever |
+  | Chat generate busy | Pair `ChatComposer` `busy` with `onStop` | `busy` without `onStop` (Send locked / Esc dead) |
 
   **paint-before-work:** `afterNextPaint` / `yieldToMain` /
-  `runBusyTask(setBusy, task)` / `useBusyTask()` — `flushSync` busy on → wait one
-  paint → then run the async task so `CircularProgress` can start spinning. Does
-  **not** keep the ring smooth through long sync / WASM compile on the main
-  thread (use a Worker or `yieldToMain` slices for that). Prefer over
-  `setBusy(true)` then immediately blocking work.
+  `runBusyTask(setBusy, task, options?)` / `useBusyTask()` /
+  `runLoadingTask` / `useLoadingTask` (≥ **0.5.177**) — `flushSync` busy on →
+  wait one paint → then run the async task so `CircularProgress` can start
+  spinning. Does **not** keep the ring smooth through long sync / WASM compile
+  on the main thread (use a Worker or `yieldToMain` slices for that). Prefer
+  over `setBusy(true)` then immediately blocking work.
+  **Hang guards (≥ 0.5.177):** pass `timeoutMs` and/or `signal` so timeout /
+  abort **race** the task and clear busy even when the task ignores
+  `ctx.signal`. `onError(err, { reason })` observes (`reject` | `timeout` |
+  `abort`) before rethrow — map to snackbar / InlineAlert in the **consumer**
+  (do **not** put AppError / ErrorCode on core snackbar). Concurrent runs:
+  default `concurrency: "generation"` (stale `finally` must not clear a newer
+  busy); `"refcount"` for nested; `"exclusive"` aborts the previous
+  controller. Live `#busy-paint` / `#sandbox-busy-task-timeout` /
+  `#sandbox-busy-task-abort` / `#sandbox-busy-task-generation` /
+  `#sandbox-button-loading-task` / `#sandbox-confirm-loading-trap`.
 
   **Chat:** `Chat` / `ChatThread` / `ChatComposer` / `ChatScrollToBottom` /
   `ChatMessage` (`user`|`assistant`|`system`; prefer `markdown` /
@@ -774,8 +821,8 @@ rules such as timeline-catalog). Live index: `#list`.
 
 | Data shape | Use | Sandbox | Forbidden (one line) |
 | --- | --- | --- | --- |
-| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing |
-| Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete |
+| Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing; meta kissing scroll rail |
+| Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only; capped wells = `List` + `fynns-scroll` + `list-well-max-height*` | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete; private end pad to “fix” scrollbar kiss |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
 | Title + org + date range | Org in `supportingText`; dates in `trailingSupportingText` + `trailingMetaAlign="start"` (start-ink ≥ **0.5.13**) | `#list` org+dates / `#timeline` | Glue org·dates; private `text-align`/width on trailing meta |
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign` | `#list` status+action | `trailingMetaAlign="start"` on status+action |
@@ -812,6 +859,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
+| Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
+| Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band grammar; 8dp action gap | `#sandbox-card-head-select` | Title/CTA centered on expanded Select |
@@ -923,6 +972,10 @@ do not leave every FieldBlock / ControlBlock as a flat Card-body sibling.
   `errorText`). Never a loose muted `<p>` under ControlStack.
 - **Copy the tree** from sandbox `#form-recipe` (same FieldStack body under
   Card, Collapsible, and dismissible Dialog).
+- **Multi-column FieldBlocks** → `FieldStack` → `Grid` `x={2}` (or more). Core
+  Grid is **top**-aligned (`align-items: start` ≥ **0.5.172**) so an expanded
+  in-flow Select does not mid-park the sibling FieldBlock. Live
+  `#sandbox-field-stack-grid-select`.
 
 **Recipe (hard):** Switch (or other labeled row) **and** its narrative are
 **one unit** → wrap in `ControlBlock`. On a **single** ControlRow, `description`
@@ -995,6 +1048,8 @@ over `title=`. Live catalog: Globals `#icons`.
 | Nav / mode exit back (TopAppBar) | `ArrowLeftIcon` | `CloseIcon` as destination back |
 | Export (write file / format menu — Word, PDF, …) | `UploadIcon` | `DownloadIcon` (pull/download semantics) |
 | Download (fetch / pull from remote) | `DownloadIcon` | `UploadIcon` for export menus |
+| Copy to clipboard | `ClipboardIcon` (+ Tooltip) | Labeled ghost `Button` “Copy …” in Card chrome |
+| Save defaults / draft save (icon chrome) | `SaveIcon` (+ Tooltip) | Labeled ghost `Button` “Save defaults” mid Select cluster |
 
 **Bulk row check (hard ≥ 0.5.65):** multi-select uses leading/icon **`Checkbox`**
 only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
@@ -1022,13 +1077,14 @@ only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
    new GitHub Packages version in the **same task**. Authority:
    [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
    ship via a consumer Vite alias to this checkout.
-5. **Consumer pattern bugs (hard):** same-task **three-way** loop — (a) constrain
-   in this core (`AGENTS.md` + treaty + pasteable rule + public CSS if needed),
+5. **Consumer pattern bugs (hard):** same-task loop — (a) constrain in this
+   core (`AGENTS.md` + treaty + pasteable rule + public CSS if needed),
    (b) **update sandbox Globals / Preview / Layout demo** that teaches the fix
    and **browser-verify in sandbox**, (c) **dispatch a subagent** into the
-   consumer checkout to bump, patch props-only if needed, and **browser-verify
-   in the consumer** when the bug was reported there. Never a consumer-only
-   patch. Cursor: `/constrain-then-consumer` →
+   reporting consumer to bump, patch props-only if needed, and **browser-verify
+   there**, (d) **fleet-scan every local `@fynn7/ui-design-core` consumer** with
+   parallel Task subagents for the **same failure class**, fix all hits, and
+   re-verify. Never a consumer-only patch. Cursor: `/constrain-then-consumer` →
    [`.cursor/skills/constrain-then-consumer/SKILL.md`](.cursor/skills/constrain-then-consumer/SKILL.md).
 
 <!-- OPENWIKI:START -->

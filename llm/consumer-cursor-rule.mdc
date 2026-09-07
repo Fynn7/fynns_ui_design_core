@@ -39,8 +39,10 @@ alwaysApply: true
 | Dialog/Card 正文加载 | `BusyRegion`（定高才 `fill`） | 裸 `CircularProgress`；busy 内叠 Select/Pagination |
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
+| Hang / 超时 | `runBusyTask`/`runLoadingTask` + **`timeoutMs`/`signal`/`onError`**（≥ **0.5.177**）→ **先清 busy** 再错误表面 | 永久 BusyRegion/Scrim/`loading`；空数据当 loading |
+| 错误表面 | 瞬时 → `snackbar`；面板恢复 → `InlineAlert`；生成失败 → `ChatMessage.error`+`onRetry` | 用 snackbar 代替面板恢复；AppError 码塞进 `@fynns/ui` |
 
-对照 sandbox `#busy-region`。
+对照 sandbox `#busy-region` / `#busy-paint` / `#sandbox-busy-task-timeout`。
 
 ## Shell（硬）
 
@@ -82,6 +84,11 @@ alwaysApply: true
 8. **Dialog foot Delete leftmost** — Cancel 在左，主确认在右。
 9. **twin Button loading rings / BusyRegion + chrome loading** — 一簇最多一圈；
    BusyRegion 等待时 chrome 只 `disabled`。
+9b. **runBusyTask hang / Confirm trap / empty-as-busy** — 长任务用
+   `timeoutMs`/`signal`/`onError`（≥ **0.5.177**）；Button/Confirm 用
+   `runLoadingTask` + Confirm `onAbort`；禁止空数据当永久 BusyRegion；
+   `ChatComposer` `busy` 必须配对 `onStop`。对照 `#sandbox-busy-task-timeout`
+   / `#sandbox-confirm-loading-trap`。
 10. **section-body IconButton sm / labeled generate Button** — PageScroll 段级
     动作 = 默认 `md` ghost IconButton + Tooltip；勿 `sm` 盘或 labeled primary
     生成 pill。对照 `#rhythm`。
@@ -95,8 +102,11 @@ alwaysApply: true
     `.fynns-control-cluster--start-align`。对照 `#sandbox-rhythm-action-end` /
     `#rhythm`。
 11c. **ControlRow label crushed to 2px sliver** — form-host / standalone label
-    轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；长 path meta
-    在控件轨收缩，禁止把「就绪」等压成发丝。对照 `#sandbox-rhythm-action-end`。
+    轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；簇内长 path
+    `.fynns-table-meta` 收缩 + 省略（≥ **0.5.175**），禁止 end-pack nowrap
+    向左溢出盖住「就绪」。完整路径用 `InfoHint`。对照 `#sandbox-rhythm-action-end`。
+11d. **path meta paints over ControlRow label** — 同上；窄 Card 内 WinGet /
+    长 exe 路径最易复现。对照 `#sandbox-rhythm-action-end`。
 12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
     section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
     TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
@@ -152,6 +162,25 @@ alwaysApply: true
     禁止 headline 里 `Chip` / 自造 `CatalogBadges`；禁止 `IconButton`
     `danger` 实心盘（删 = ghost + `ConfirmDialog`）。对照
     `#sandbox-list-repo-path-actions`。
+30. **List scroll-well trailing meta kisses overlay rail** — 高度封顶的
+    `List` + `fynns-scroll`：禁止 `trailingSupportingText` / `.fynns-table-meta`
+    贴 overlay Y 轨。core ≥ **0.5.171** 在 list end 预留 `--fynns-scrollbar-size`
+   ；有行内 meta 时 `--with-end` idle 保持 `list-pad-inline`。勿自造消费仓
+    end pad。对照 `#sandbox-list-repo-path-actions`。
+31. **FieldStack Grid vertically centers short FieldBlock beside expanded Select** —
+    FieldStack→`Grid` 多列 FieldBlock：core ≥ **0.5.172** `.fynns-grid`
+    `align-items: start`；禁止消费仓把 Grid 改回 `center`（一侧 Select 展开后
+    矮列垂直居中、标签错层）。对照 `#sandbox-field-stack-grid-select`。
+32. **Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip** —
+    Card `actions` / densified Select 旁簇：自明动作（复制、保存默认、开文件夹）
+    用 `IconButton` + `Tooltip`（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）；
+    禁止 labeled ghost「复制 Prompt」「保存默认」信息冗余。主流程动词 CTA
+    （Validate / Deliver）仍可用 labeled Button。对照
+    `#sandbox-card-chrome-icon-actions`。
+33. **Card head primary IconButton leftmost in control-cluster** — Card /
+    Collapsible `actions` 多盘簇：`variant="primary"` 必须 **LTR 末位**（贴尾）；
+    次要 ghost/tonal 在前。禁止主色盘排在下载/开文件夹等 ghost 左侧。对照
+    `#sandbox-card-head-primary-end`。
 
 ## 表单与密度（短）
 

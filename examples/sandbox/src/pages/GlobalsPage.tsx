@@ -13,9 +13,11 @@ import {
   Button,
   BotIcon,
   useBusyTask,
+  useLoadingTask,
   afterNextPaint,
   yieldToMain,
   runBusyTask,
+  runLoadingTask,
   registerHighlightLanguage,
   codeLanguageFromPath,
   Pagination,
@@ -1368,6 +1370,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const busyPaintGood = useBusyTask();
   const [busyYield, setBusyYield] = useState(false);
   const [busyRunDirect, setBusyRunDirect] = useState(false);
+  const [busyTaskHang, setBusyTaskHang] = useState(false);
+  const [busyTaskTimeoutNote, setBusyTaskTimeoutNote] = useState<string | null>(null);
+  const busyTaskAbort = useBusyTask();
+  const [busyTaskAbortNote, setBusyTaskAbortNote] = useState<string | null>(null);
+  const [buttonLoadingDirect, setButtonLoadingDirect] = useState(false);
+  const [buttonLoadingNote, setButtonLoadingNote] = useState<string | null>(null);
+  const confirmTrapLoading = useLoadingTask();
+  const [confirmTrapOpen, setConfirmTrapOpen] = useState(false);
+  const [confirmTrapNote, setConfirmTrapNote] = useState<string | null>(null);
+  const [chatBusyNoStop, setChatBusyNoStop] = useState(false);
   const [chatStreaming, setChatStreaming] = useState(false);
   const [chatStreamEpoch, setChatStreamEpoch] = useState(0);
   const [chatFailed, setChatFailed] = useState(true);
@@ -1489,11 +1501,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeDialogOpen, setFormRecipeDialogOpen] = useState(false);
   const [formRecipeStackDialogOpen, setFormRecipeStackDialogOpen] = useState(false);
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
+  const [formGridAgent, setFormGridAgent] = useState("build");
+  const [formGridProject, setFormGridProject] = useState("sample-project");
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
   const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
+  const [cardChromeType, setCardChromeType] = useState("flat");
+  const [cardChromeQuality, setCardChromeQuality] = useState("fast");
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
@@ -4280,7 +4296,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Card>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
           <div id="sandbox-list-repo-path-actions">
-            <List aria-label={t("globals.listCatalogStaticAria")}>
+            <List
+              className="fynns-scroll"
+              aria-label={t("globals.listCatalogStaticAria")}
+              style={{
+                maxHeight: "var(--fynns-layout-list-well-max-height-sm)",
+              }}
+            >
               <ListItem
                 interactive={false}
                 lines={3}
@@ -4298,6 +4320,102 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 trailingSupportingText={
                   <span className="fynns-table-meta">
                     {t("globals.listRepoPathMeta")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listRepoPathRefresh")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listRepoPathRefresh")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogRemove")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogRemove")}
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+              <ListItem
+                interactive={false}
+                lines={3}
+                overline={t("globals.listRepoPathOverline")}
+                headline={t("globals.listRepoPathName2")}
+                supportingText={t("globals.listRepoPathPath2")}
+                leading={
+                  <Checkbox
+                    label=""
+                    aria-label={t("globals.listRepoPathEnable")}
+                    checked={false}
+                    onCheckedChange={() => {}}
+                  />
+                }
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listRepoPathMeta2")}
+                  </span>
+                }
+                trailing={
+                  <div className="fynns-control-cluster">
+                    <Tooltip content={t("globals.listRepoPathRefresh")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listRepoPathRefresh")}
+                      >
+                        <RefreshIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogFolder")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogFolder")}
+                      >
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip content={t("globals.listCatalogRemove")}>
+                      <IconButton
+                        variant="ghost"
+                        aria-label={t("globals.listCatalogRemove")}
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+              />
+              <ListItem
+                interactive={false}
+                lines={3}
+                overline={t("globals.listRepoPathOverline")}
+                headline={t("globals.listRepoPathName3")}
+                supportingText={t("globals.listRepoPathPath3")}
+                leading={
+                  <Checkbox
+                    label=""
+                    aria-label={t("globals.listRepoPathEnable")}
+                    checked
+                    onCheckedChange={() => {}}
+                  />
+                }
+                trailingSupportingText={
+                  <span className="fynns-table-meta">
+                    {t("globals.listRepoPathMeta3")}
                   </span>
                 }
                 trailing={
@@ -4874,6 +4992,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               title={t("globals.cardDraftTitle")}
               actions={
                 <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardDraftCopy")}>
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      aria-label={t("globals.cardDraftCopy")}
+                    >
+                      <ClipboardIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
                   <Tooltip content={t("globals.cardDraftDiscard")}>
                     <IconButton
                       variant="ghost"
@@ -4898,6 +5025,114 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <FieldHint>{t("globals.cardDraftBody")}</FieldHint>
             </Card>
             <SandboxHelp as="span" text={t("globals.cardDraftHelp")} />
+          </div>
+          <div id="sandbox-card-chrome-icon-actions">
+            <SandboxHelp text={t("globals.cardChromeIconHelp")} />
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.cardChromeIconTitle")}
+              actions={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardChromeIconCopy")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.cardChromeIconCopy")}
+                    >
+                      <ClipboardIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardChromeIconFolder")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.cardChromeIconFolder")}
+                    >
+                      <FolderOpenIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+            >
+              <FieldStack>
+                <div className="fynns-control-cluster">
+                  <Select
+                    ariaLabel={t("globals.cardChromeIconTypeAria")}
+                    value={cardChromeType}
+                    onChange={setCardChromeType}
+                    options={[
+                      {
+                        value: "flat",
+                        label: t("globals.cardChromeIconTypeFlat"),
+                      },
+                      {
+                        value: "tree",
+                        label: t("globals.cardChromeIconTypeTree"),
+                      },
+                    ]}
+                  />
+                  <Select
+                    ariaLabel={t("globals.cardChromeIconQualityAria")}
+                    value={cardChromeQuality}
+                    onChange={setCardChromeQuality}
+                    options={[
+                      {
+                        value: "fast",
+                        label: t("globals.cardChromeIconQualityFast"),
+                      },
+                      {
+                        value: "high",
+                        label: t("globals.cardChromeIconQualityHigh"),
+                      },
+                    ]}
+                  />
+                  <Tooltip content={t("globals.cardChromeIconSaveDefaults")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.cardChromeIconSaveDefaults")}
+                    >
+                      <SaveIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              </FieldStack>
+            </Card>
+          </div>
+          <div id="sandbox-card-head-primary-end">
+            <SandboxHelp text={t("globals.cardHeadPrimaryHelp")} />
+            <Card
+              className="sandbox-globals-card"
+              title={t("globals.cardHeadPrimaryTitle")}
+              actions={
+                <div className="fynns-control-cluster">
+                  <Tooltip content={t("globals.cardHeadPrimaryDownload")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.cardHeadPrimaryDownload")}
+                    >
+                      <DownloadIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardHeadPrimaryFolder")}>
+                    <IconButton
+                      variant="ghost"
+                      aria-label={t("globals.cardHeadPrimaryFolder")}
+                    >
+                      <FolderOpenIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.cardHeadPrimaryPack")}>
+                    <IconButton
+                      variant="primary"
+                      aria-label={t("globals.cardHeadPrimaryPack")}
+                    >
+                      <ArchiveIcon size={16} aria-hidden />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              }
+            >
+              <FieldHint>{t("globals.cardHeadPrimaryBody")}</FieldHint>
+            </Card>
           </div>
           <div id="sandbox-card-head-select">
             <Card
@@ -6217,17 +6452,201 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               {t("globals.busyPaintRunDirect")}
             </Button>
           </div>
+          <SandboxHelp text={t("globals.busyPaintHelp")} />
+          <SandboxHelp text={t("globals.busyPaintYieldHelp")} />
+          <div className="fynns-unit-stack" style={{ width: "100%" }}>
+            <div id="sandbox-busy-task-timeout" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={busyTaskHang}
+                onClick={() => {
+                  setBusyTaskTimeoutNote(null);
+                  void runBusyTask(
+                    setBusyTaskHang,
+                    () => new Promise(() => {}),
+                    {
+                      timeoutMs: 800,
+                      onError: (_err, meta) => {
+                        setBusyTaskTimeoutNote(t("globals.busyTaskTimeoutNote", { reason: meta.reason }));
+                      },
+                    },
+                  ).catch(() => {});
+                }}
+              >
+                {t("globals.busyTaskTimeout")}
+              </Button>
+              {busyTaskTimeoutNote ? (
+                <span className="fynns-table-meta">{busyTaskTimeoutNote}</span>
+              ) : null}
+            </div>
+            <SandboxHelp text={t("globals.busyTaskTimeoutHelp")} />
+            <div id="sandbox-busy-task-abort" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="tonal"
+                disabled={busyTaskAbort.busy}
+                onClick={() => {
+                  setBusyTaskAbortNote(null);
+                  void busyTaskAbort
+                    .run(
+                      t("globals.busyPaintLabel"),
+                      () => new Promise(() => {}),
+                      {
+                        onError: (_err, meta) => {
+                          setBusyTaskAbortNote(t("globals.busyTaskAbortNote", { reason: meta.reason }));
+                        },
+                      },
+                    )
+                    .catch(() => {});
+                }}
+              >
+                {t("globals.busyTaskAbortStart")}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={!busyTaskAbort.busy}
+                onClick={() => busyTaskAbort.abort()}
+              >
+                {t("globals.busyTaskAbortStop")}
+              </Button>
+              {busyTaskAbortNote ? (
+                <span className="fynns-table-meta">{busyTaskAbortNote}</span>
+              ) : null}
+            </div>
+            <SandboxHelp text={t("globals.busyTaskAbortHelp")} />
+            <div id="sandbox-busy-task-generation" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="tonal"
+                onClick={() => {
+                  void busyPaintGood
+                    .run(t("globals.busyPaintLabel"), async () => {
+                      await new Promise((r) => setTimeout(r, 1200));
+                    })
+                    .catch(() => {});
+                }}
+              >
+                {t("globals.busyTaskGeneration")}
+              </Button>
+              <span className="fynns-table-meta">
+                {t("globals.busyTaskGenerationMeta", {
+                  generation: String(busyPaintGood.generation),
+                  busy: busyPaintGood.busy ? "true" : "false",
+                })}
+              </span>
+            </div>
+            <SandboxHelp text={t("globals.busyTaskGenerationHelp")} />
+            <div id="sandbox-button-loading-task" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                loading={buttonLoadingDirect}
+                onClick={() => {
+                  setButtonLoadingNote(null);
+                  void runLoadingTask(
+                    setButtonLoadingDirect,
+                    () => new Promise(() => {}),
+                    {
+                      timeoutMs: 800,
+                      onError: (_err, meta) => {
+                        setButtonLoadingNote(t("globals.buttonLoadingTaskNote", { reason: meta.reason }));
+                      },
+                    },
+                  ).catch(() => {});
+                }}
+              >
+                {t("globals.buttonLoadingTask")}
+              </Button>
+              {buttonLoadingNote ? (
+                <span className="fynns-table-meta">{buttonLoadingNote}</span>
+              ) : null}
+            </div>
+            <SandboxHelp text={t("globals.buttonLoadingTaskHelp")} />
+            <div id="sandbox-confirm-loading-trap" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="tonal"
+                onClick={() => {
+                  setConfirmTrapNote(null);
+                  setConfirmTrapOpen(true);
+                }}
+              >
+                {t("globals.confirmTrapOpen")}
+              </Button>
+              {confirmTrapNote ? (
+                <span className="fynns-table-meta">{confirmTrapNote}</span>
+              ) : null}
+            </div>
+            <ConfirmDialog
+              open={confirmTrapOpen}
+              onOpenChange={setConfirmTrapOpen}
+              title={t("globals.confirmTrapTitle")}
+              description={t("globals.confirmTrapDescription")}
+              confirmLabel={t("globals.confirmTrapConfirm")}
+              cancelLabel={t("globals.confirmTrapCancel")}
+              loading={confirmTrapLoading.loading}
+              onAbort={() => confirmTrapLoading.abort()}
+              onConfirm={() => {
+                void confirmTrapLoading
+                  .run(
+                    () => new Promise(() => {}),
+                    {
+                      timeoutMs: 5000,
+                      onError: (_err, meta) => {
+                        setConfirmTrapNote(t("globals.confirmTrapNote", { reason: meta.reason }));
+                        setConfirmTrapOpen(false);
+                      },
+                    },
+                  )
+                  .catch(() => {});
+              }}
+            />
+            <SandboxHelp text={t("globals.confirmTrapHelp")} />
+            <div id="sandbox-chat-busy-no-stop" className="sandbox-globals-row" style={{ flexWrap: "wrap", gap: "var(--fynns-space-sm)" }}>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setChatBusyNoStop((v) => !v)}
+              >
+                {chatBusyNoStop ? t("globals.chatBusyNoStopOff") : t("globals.chatBusyNoStopOn")}
+              </Button>
+            </div>
+            <div style={{ width: "min(24rem, 100%)", height: "12rem" }}>
+              <Chat>
+                <ChatThread aria-label={t("globals.chatBusyNoStopAria")}>
+                  <ChatMessage role="assistant">{t("globals.chatBusyNoStopMessage")}</ChatMessage>
+                </ChatThread>
+                <ChatComposer
+                  value=""
+                  onChange={() => {}}
+                  onSubmit={() => {}}
+                  busy={chatBusyNoStop}
+                  ariaLabel={t("globals.chatBusyNoStopAria")}
+                  placeholder={t("globals.chatBusyNoStopPlaceholder")}
+                />
+              </Chat>
+            </div>
+            <SandboxHelp text={t("globals.chatBusyNoStopHelp")} />
+          </div>
           <BusyScrim
-            open={busyPaintBad || busyPaintGood.busy || busyYield || busyRunDirect}
+            open={
+              busyPaintBad ||
+              busyPaintGood.busy ||
+              busyYield ||
+              busyRunDirect ||
+              busyTaskHang ||
+              busyTaskAbort.busy
+            }
             label={
               busyPaintGood.busy
                 ? (busyPaintGood.label ?? t("globals.busyPaintLabel"))
-                : t("globals.busyPaintLabel")
+                : busyTaskAbort.busy
+                  ? (busyTaskAbort.label ?? t("globals.busyPaintLabel"))
+                  : t("globals.busyPaintLabel")
             }
             message={t("globals.busyPaintMessage")}
           />
-          <SandboxHelp text={t("globals.busyPaintHelp")} />
-          <SandboxHelp text={t("globals.busyPaintYieldHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="stepper">
@@ -7203,6 +7622,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <ControlRow label={t("globals.rhythmActionEndReady")}>
                 <div className="fynns-control-cluster">
                   <span className="fynns-table-meta">
+                    {t("globals.rhythmActionEndMetaReadyTitle")}
+                  </span>
+                  <span className="fynns-table-meta">
                     {t("globals.rhythmActionEndMetaReady")}
                   </span>
                 </div>
@@ -7336,6 +7758,85 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
         <GlobalsDemo id="form-recipe">
           <SandboxHelp text={t("globals.formRecipeLead")} />
+          <div id="sandbox-field-stack-grid-select">
+            <SandboxHelp text={t("globals.formGridSelectHelp")} />
+            <Surface variant="outlined" padded>
+              <FieldStack>
+                <Grid
+                  x={2}
+                  y="unbounded"
+                  style={{ gap: "var(--fynns-layout-field-stack-gap)" }}
+                >
+                  <FieldBlock
+                    label={t("globals.formGridAgentLabel")}
+                    htmlFor="sandbox-form-grid-agent"
+                  >
+                    <Select
+                      id="sandbox-form-grid-agent"
+                      ariaLabel={t("globals.formGridAgentLabel")}
+                      value={formGridAgent}
+                      options={[
+                        {
+                          value: "build",
+                          label: t("globals.formGridAgentBuild"),
+                        },
+                        {
+                          value: "plan",
+                          label: t("globals.formGridAgentPlan"),
+                        },
+                      ]}
+                      onChange={setFormGridAgent}
+                    />
+                  </FieldBlock>
+                  <FieldBlock
+                    label={t("globals.formGridProjectLabel")}
+                    htmlFor="sandbox-form-grid-project"
+                  >
+                    <Select
+                      id="sandbox-form-grid-project"
+                      ariaLabel={t("globals.formGridProjectLabel")}
+                      value={formGridProject}
+                      options={[
+                        {
+                          value: "sample-project",
+                          label: t("globals.formGridProjectA"),
+                        },
+                        {
+                          value: "sample-notes",
+                          label: t("globals.formGridProjectB"),
+                        },
+                        {
+                          value: "sample-tools",
+                          label: t("globals.formGridProjectC"),
+                        },
+                        {
+                          value: "sample-lab",
+                          label: t("globals.formGridProjectD"),
+                        },
+                        {
+                          value: "sample-docs",
+                          label: t("globals.formGridProjectE"),
+                        },
+                        {
+                          value: "sample-bench",
+                          label: t("globals.formGridProjectF"),
+                        },
+                        {
+                          value: "sample-game",
+                          label: t("globals.formGridProjectG"),
+                        },
+                        {
+                          value: "sample-thesis",
+                          label: t("globals.formGridProjectH"),
+                        },
+                      ]}
+                      onChange={setFormGridProject}
+                    />
+                  </FieldBlock>
+                </Grid>
+              </FieldStack>
+            </Surface>
+          </div>
           <div className="sandbox-globals-form-recipe-hosts">
             <SandboxHelp text={t("globals.formRecipeHostCard")} />
             <Card
