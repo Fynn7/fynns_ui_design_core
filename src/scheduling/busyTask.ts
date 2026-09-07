@@ -179,6 +179,13 @@ function raceWithAbort<T>(taskPromise: Promise<T>, signal: AbortSignal, timedOut
  * clears per `concurrency`). Without them, a never-settling Promise leaves
  * busy forever — treat that as a consumer bug. Timeout races the task even when
  * the task ignores `ctx.signal`.
+ *
+ * **Concurrency identity:** pass a **stable** `setBusy` (e.g. `useState` setter
+ * or a `useCallback` wrapper). An inline `(b) => setX(b)` each call breaks
+ * WeakMap generation / exclusive / refcount sharing for that host.
+ *
+ * `timeoutMs` starts after `afterNextPaint` (total hang ≈ paint wait + timeout).
+ * Do not mix `concurrency` modes on the same `setBusy` identity.
  */
 export async function runBusyTask<T>(
   setBusy: (busy: boolean) => void,
