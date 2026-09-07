@@ -1,17 +1,10 @@
 import {
   type HTMLAttributes,
   type ReactNode,
-  useEffect,
   useId,
-  useRef,
-  useState,
 } from "react";
-import {
-  displayThinkingOpen,
-  resetThinkingPinsOnStreamStart,
-  resolveThinkingLabel,
-  resolveThinkingOpen,
-} from "./chatThinkingPolicy";
+import { resolveThinkingLabel } from "./chatThinkingPolicy";
+import { useStatusTreeOpen } from "./useStatusTreeOpen";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
 
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
@@ -98,22 +91,13 @@ export function ChatThinking({
   ...rest
 }: ChatThinkingProps) {
   const bodyId = useId();
-  const isControlled = open !== undefined;
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const [userPinnedClosed, setUserPinnedClosed] = useState(false);
-  const [userPinnedOpen, setUserPinnedOpen] = useState(false);
-  const [didAutoCollapse, setDidAutoCollapse] = useState(false);
-  const wasStreamingRef = useRef(streaming);
-  const policyRef = useRef({
-    internalOpen: defaultOpen,
-    userPinnedClosed: false,
-    userPinnedOpen: false,
-    didAutoCollapse: false,
+  const { open: isOpen, setOpen } = useStatusTreeOpen({
+    mode: "thinking",
+    streaming,
+    open,
+    defaultOpen,
+    onOpenChange,
   });
-  policyRef.current.internalOpen = internalOpen;
-  policyRef.current.userPinnedClosed = userPinnedClosed;
-  policyRef.current.userPinnedOpen = userPinnedOpen;
-  policyRef.current.didAutoCollapse = didAutoCollapse;
 
   const hasBody = children != null && children !== "";
   const resolvedLabel = resolveThinkingLabel({
@@ -123,70 +107,6 @@ export function ChatThinking({
     label,
     durationLabel,
   });
-
-  useEffect(() => {
-    if (isControlled) {
-      wasStreamingRef.current = streaming;
-      return;
-    }
-
-    const wasStreaming = wasStreamingRef.current;
-    const prev = policyRef.current;
-    const pins = resetThinkingPinsOnStreamStart({
-      streaming,
-      wasStreaming,
-      userPinnedClosed: prev.userPinnedClosed,
-      userPinnedOpen: prev.userPinnedOpen,
-      didAutoCollapse: prev.didAutoCollapse,
-    });
-
-    const result = resolveThinkingOpen({
-      streaming,
-      internalOpen: prev.internalOpen,
-      userPinnedClosed: pins.userPinnedClosed,
-      userPinnedOpen: pins.userPinnedOpen,
-      didAutoCollapse: pins.didAutoCollapse,
-      wasStreaming,
-    });
-
-    wasStreamingRef.current = streaming;
-
-    if (pins.userPinnedClosed !== prev.userPinnedClosed) {
-      setUserPinnedClosed(pins.userPinnedClosed);
-    }
-    if (pins.userPinnedOpen !== prev.userPinnedOpen) {
-      setUserPinnedOpen(pins.userPinnedOpen);
-    }
-    if (result.didAutoCollapse !== prev.didAutoCollapse) {
-      setDidAutoCollapse(result.didAutoCollapse);
-    }
-    if (result.open !== prev.internalOpen) {
-      setInternalOpen(result.open);
-    }
-  }, [streaming, isControlled]);
-
-  const isOpen = displayThinkingOpen({
-    streaming,
-    open: isControlled ? open : undefined,
-    internalOpen,
-    userPinnedClosed,
-    wasStreaming: wasStreamingRef.current,
-  });
-
-  const setOpen = (next: boolean) => {
-    if (!isControlled) {
-      setInternalOpen(next);
-      if (streaming) {
-        setUserPinnedClosed(!next);
-        if (next) setUserPinnedOpen(false);
-      } else {
-        setUserPinnedOpen(next);
-        setUserPinnedClosed(false);
-        if (next) setDidAutoCollapse(true);
-      }
-    }
-    onOpenChange?.(next);
-  };
 
   const toggle = () => setOpen(!isOpen);
 
@@ -277,4 +197,3 @@ export function ChatThinking({
     </div>
   );
 }
-

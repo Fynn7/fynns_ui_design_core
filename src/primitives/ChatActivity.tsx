@@ -19,9 +19,9 @@ import {
   anyPriorIndex,
   initialStepMotion,
   predictStepSettle,
-  resolveActivityOpen,
   type ChatActivityStepStatus,
 } from "./chatActivityPolicy";
+import { useStatusTreeOpen } from "./useStatusTreeOpen";
 
 export type { ChatActivityStepStatus };
 
@@ -233,47 +233,18 @@ export function ChatActivityStep({
   const streamingRef = useRef(stream.streaming);
   streamingRef.current = stream.streaming;
   const completeTimerRef = useRef<number | null>(null);
-  const [holding, setHolding] = useState(
-    () =>
-      initialStepMotion({
-        streaming: stream.streaming,
-        status,
-        priorWillHold: stream.priorWillHold,
-        priorWillComplete: stream.priorWillComplete,
-        prefersReducedMotion: prefersReducedMotion(),
-      }).holding,
-  );
+  const initialMotion = initialStepMotion({
+    streaming: stream.streaming,
+    status,
+    priorWillHold: stream.priorWillHold,
+    priorWillComplete: stream.priorWillComplete,
+    prefersReducedMotion: prefersReducedMotion(),
+  });
+  const [holding, setHolding] = useState(initialMotion.holding);
   const [completing, setCompleting] = useState(false);
-  const [queued, setQueued] = useState(
-    () =>
-      initialStepMotion({
-        streaming: stream.streaming,
-        status,
-        priorWillHold: stream.priorWillHold,
-        priorWillComplete: stream.priorWillComplete,
-        prefersReducedMotion: prefersReducedMotion(),
-      }).queued,
-  );
-  const [entering, setEntering] = useState(
-    () =>
-      initialStepMotion({
-        streaming: stream.streaming,
-        status,
-        priorWillHold: stream.priorWillHold,
-        priorWillComplete: stream.priorWillComplete,
-        prefersReducedMotion: prefersReducedMotion(),
-      }).entering,
-  );
-  const [expandOpen, setExpandOpen] = useState(
-    () =>
-      initialStepMotion({
-        streaming: stream.streaming,
-        status,
-        priorWillHold: stream.priorWillHold,
-        priorWillComplete: stream.priorWillComplete,
-        prefersReducedMotion: prefersReducedMotion(),
-      }).expandOpen,
-  );
+  const [queued, setQueued] = useState(initialMotion.queued);
+  const [entering, setEntering] = useState(initialMotion.entering);
+  const [expandOpen, setExpandOpen] = useState(initialMotion.expandOpen);
   const enterPlayedRef = useRef(false);
   const enteringRef = useRef(false);
   enteringRef.current = entering;
@@ -577,12 +548,18 @@ export function ChatActivity({
 }: ChatActivityProps) {
   const bodyId = useId();
   const stepsRef = useRef<HTMLDivElement>(null);
-  const isControlled = open !== undefined;
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const [userPinnedClosed, setUserPinnedClosed] = useState(false);
-  const [streamCycle, setStreamCycle] = useState(0);
+  const {
+    open: isOpen,
+    setOpen,
+    streamCycle,
+  } = useStatusTreeOpen({
+    mode: "activity",
+    streaming,
+    open,
+    defaultOpen,
+    onOpenChange,
+  });
   const [holds, setHolds] = useState<ReadonlySet<number>>(() => new Set());
-  const wasStreamingRef = useRef(streaming);
   const prevKeysRef = useRef<Set<string>>(new Set());
   const prevStatusByKeyRef = useRef<Map<string, ChatActivityStepStatus>>(
     new Map(),
@@ -624,24 +601,6 @@ export function ChatActivity({
     });
     prevStatusByKeyRef.current = next;
   }, [childKeys.join("\u0001")]);
-
-  useEffect(() => {
-    if (streaming && !wasStreamingRef.current) {
-      setStreamCycle((n) => n + 1);
-      if (!isControlled) {
-        setUserPinnedClosed(false);
-        setInternalOpen(true);
-      }
-    }
-    wasStreamingRef.current = streaming;
-  }, [streaming, isControlled]);
-
-  const isOpen = resolveActivityOpen({
-    streaming,
-    open,
-    internalOpen,
-    userPinnedClosed,
-  });
 
   /*
    * Form-like list rhythm: natural height per open step-row → take max →
@@ -702,14 +661,6 @@ export function ChatActivity({
       delete root.dataset.equalMeasuring;
     };
   }, [isOpen, childKeys.join("\u0001"), streaming]);
-
-  const setOpen = (next: boolean) => {
-    if (!isControlled) {
-      setInternalOpen(next);
-      if (streaming) setUserPinnedClosed(!next);
-    }
-    onOpenChange?.(next);
-  };
 
   const labelKey =
     typeof label === "string" || typeof label === "number"

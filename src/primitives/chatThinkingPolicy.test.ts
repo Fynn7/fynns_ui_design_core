@@ -215,7 +215,7 @@ describe("displayThinkingOpen", () => {
     ).toBe(true);
   });
 
-  it("does not auto-collapse on streaming→done (effect owns that edge)", () => {
+  it("does not auto-collapse on streaming→done (reducer/hook owns that edge)", () => {
     expect(
       displayThinkingOpen({
         streaming: false,
