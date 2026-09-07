@@ -45,6 +45,8 @@ export function useStatusTreeOpen(
   );
   const [streamCycle, setStreamCycle] = useState(0);
 
+  // Adjust during render (React restarts before paint) so pin clear /
+  // auto-collapse land in the same frame — not a post-paint effect.
   if (streaming !== state.wasStreaming) {
     const edgeIntoStreaming = streaming && !state.wasStreaming;
     setState((prev) =>

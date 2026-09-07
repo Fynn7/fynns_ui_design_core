@@ -63,10 +63,8 @@ export function statusTreeOpenFromState(
   },
 ): boolean {
   if (input.open !== undefined) return Boolean(input.open);
+  // Force-open while streaming unless pinned; pin keeps last internalOpen (false).
   if (input.streaming && !state.userPinnedClosed) return true;
-  if (input.mode === "thinking" && input.streaming && state.userPinnedClosed) {
-    return false;
-  }
   return state.internalOpen;
 }
 
@@ -93,33 +91,30 @@ export function reduceStatusTreeStreaming(
 
   let next: StatusTreeOpenState = { ...state, wasStreaming: streaming };
 
-  // idle → streaming: clear pins; activity also force-opens.
+  // idle → streaming: clear pins and force-open (both modes).
   if (streaming && !state.wasStreaming) {
-    next = {
+    return {
       ...next,
       userPinnedClosed: false,
       userPinnedOpen: false,
       didAutoCollapse: false,
+      internalOpen: true,
     };
-    if (mode === "activity") {
-      next.internalOpen = true;
-    } else {
-      // thinking: force open unless somehow still pinned (cleared above)
-      next.internalOpen = true;
-    }
-    return next;
   }
 
-  // streaming → done
-  if (!streaming && state.wasStreaming) {
-    if (mode === "thinking" && !next.didAutoCollapse && !next.userPinnedOpen) {
-      return {
-        ...next,
-        internalOpen: false,
-        didAutoCollapse: true,
-      };
-    }
-    return next;
+  // streaming → done (thinking auto-collapses once; activity keeps last open)
+  if (
+    !streaming &&
+    state.wasStreaming &&
+    mode === "thinking" &&
+    !next.didAutoCollapse &&
+    !next.userPinnedOpen
+  ) {
+    return {
+      ...next,
+      internalOpen: false,
+      didAutoCollapse: true,
+    };
   }
 
   return next;
