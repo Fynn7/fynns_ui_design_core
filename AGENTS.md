@@ -108,9 +108,10 @@ belong in a consumer’s own doc.
    `overflow-x: clip` (not bare `overflow: auto`).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
-   `BusyRegion` (sectional **soft frosted blur** overlay + **one** progress chrome +
-   message — well hue unchanged; never a dark overlay scrim; never a second
-   `surface-*` wash; light blur radius so busy does not read as a glitchy frame;
+   `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
+   `--fynns-color-busy-region-mask` + **one** progress chrome + message —
+   never `--fynns-color-overlay` / BusyScrim; never a consumer `surface-*`
+   wash; keep blur radius light so busy does not read as a glitchy frame;
    **pane cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
    only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
@@ -140,7 +141,8 @@ belong in a consumer’s own doc.
    EndAside; toggle = open↔closed). Overlays via `Dialog` / `ConfirmDialog` /
    `Drawer` / `FullscreenDialog` / `BottomSheet` / `NavigationDrawer`. Blocking /
    sectional busy: `BusyScrim` (full-viewport non-dismissible) or `BusyRegion`
-   (relative soft frosted blur — content `inert` while busy; no surface tint;
+   (relative soft frosted blur + `--fynns-color-busy-region-mask` — content
+   `inert` while busy; never consumer `surface-*` wash or BusyScrim overlay;
    full-viewport tint → `BusyScrim`). Heavy boots use **`runBusyTask` /
    `useBusyTask`** (show busy → paint → then work). Do not revive
    `BlockingLoadingOverlay` or purged `Panel` / `PanelCard`.
@@ -529,7 +531,8 @@ Color tokens (`--fynns-color-*`):
   `#e2f0ed`, `text-muted` `#7a9e98`.
 - Semantic: `success` `#4ade80`, `warning` `#fbbf24`, `danger` `#f87171`,
   `danger-border`, `info` `#60a5fa`.
-- Misc: `overlay`, `toggle-track`, `toggle-track-hover`, `scrollbar-thumb*`
+- Misc: `overlay`, `busy-region-mask` (BusyRegion sectional wash — not
+  BusyScrim `overlay`), `toggle-track`, `toggle-track-hover`, `scrollbar-thumb*`
   (also under the `scrollbar` group).
 - State layers (`--fynns-state-*`): `hover` 8%, `focus` 10%, `pressed` 12%,
   `dragged` 16% — used via `color-mix(...)` for interactive overlays.
@@ -599,7 +602,8 @@ classes.
   FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (soft frosted blur; `indicator` `circular`|`linear`; never stack
+  indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask`;
+  `indicator` `circular`|`linear`; never stack
   ring on bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
@@ -611,7 +615,7 @@ classes.
   | Full-app block | `BusyScrim` | `EmptyState` + ring; revived `BlockingLoadingOverlay` |
   | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
-  | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; second surface tint; wrap whole Card |
+  | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |
   | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
   | Button/icon slot | Inline Spinner via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
   | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` rings |

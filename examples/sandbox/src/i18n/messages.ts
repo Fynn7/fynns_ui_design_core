@@ -395,7 +395,7 @@ const en = {
     "--fynns-layout-list-well-max-height-sm — denser in-Card list well (12rem). Only when the catalog can overflow.",
   "layoutChrome.busyRegionBackdropBlur": "BusyRegion blur",
   "layoutChrome.busyRegionBackdropBlurHint":
-    "--fynns-layout-busy-region-backdrop-blur — soft overlay blur (default 3px; transparent fill; well hue unchanged; keep light).",
+    "--fynns-layout-busy-region-backdrop-blur — soft overlay blur (default 3px; paired with `--fynns-color-busy-region-mask`; keep light).",
   "layoutChrome.sheetPadInline": "Sheet pad inline",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet horizontal content pad (M3 24dp).",
@@ -588,11 +588,11 @@ const en = {
   "globals.busyRegionTitle": "Section",
   "globals.busyRegionMessage": "Refreshing this block…",
   "globals.busyRegionBody":
-    "Section content stays mounted under a soft blur overlay while BusyRegion is busy (well hue unchanged).",
+    "Section content stays mounted under a soft blur + gray mask overlay while BusyRegion is busy.",
   "globals.busyRegionStart": "Show busy",
   "globals.busyRegionStop": "Clear busy",
   "globals.busyRegionHelp":
-    "BusyRegion wraps a section: relative soft blur overlay (`backdrop-filter` + transparent fill — well colors stay native; default radius light so busy does not read as a glitchy frame) + one progress chrome + visible copy (not a `surface-*` wash or `--fynns-color-overlay` scrim). Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
+    "BusyRegion wraps a section: relative soft blur + tokenized gray mask (`backdrop-filter` + `--fynns-color-busy-region-mask` — not a consumer `surface-*` wash or `--fynns-color-overlay` BusyScrim; default blur radius light so busy does not read as a glitchy frame) + one progress chrome + visible copy. Default indicator is circular; known % uses indicator=linear (this determinate sample). message is phrasing only — never nest LinearProgress or CircularProgress, and never invent a private centered progress shell (hub-progress-block) for section loads. aria-busy on the root. Overlay centers in the region's box — a content-sized host parks the chrome at the top of leftover canvas. Full-viewport tint → BusyScrim. Dialog / Card / section body load → BusyRegion (fill when height-resolved) — never a bare default-md CircularProgress as the body. FieldBlock / Card header chrome while BusyRegion is busy → disabled without loading (see FieldBlock actions sample below).",
   "globals.busyRegionNarrowHelp":
     "Narrow host (NavigationDrawer / EndAside width): linear BusyStack must shrink to the host — never a fixed 20rem / 100vw bar that spills past the drawer seam. Live sample below.",
   "globals.busyRegionNarrowLabel": "Scanning samples",
@@ -607,7 +607,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Ring centers in the visible pane under soft blur overlay. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Ring centers in the visible pane under soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
@@ -638,7 +638,7 @@ const en = {
   "globals.busyRegionDialogHelp":
     "Dialog / section body load: put BusyRegion in the body (add fill when the host height is resolved — see fill sample above). Never park a bare default-md CircularProgress in the Dialog or unit-stack. CircularProgress sm stays for IconButton / Button slots only.",
   "globals.busyRegionColdHelp":
-    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (transparent mask covers the footer; spinner sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
+    "Card / section body cold-start: render BusyRegion only — do not also paint Sessions Select / Pagination as siblings under the empty overlay (mask covers the footer; spinner sits on the Select). After data loads, keep pager chrome outside BusyRegion and wrap only the List / table on refresh.",
   "globals.busyRegionColdTitle": "Sessions catalog",
   "globals.busyRegionColdLabel": "Loading sessions",
   "globals.busyRegionColdMessage": "Fetching the catalog…",
@@ -648,7 +648,7 @@ const en = {
   "globals.busyRegionColdShow": "Show cold busy",
   "globals.busyRegionColdClear": "Show loaded catalog",
   "globals.busyRegionFieldHelp":
-    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur keeps the body mounted and lightly softens copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
+    "FieldBlock body wait + label-row refresh: wrap the body in BusyRegion — while busy the header IconButton stays the glyph and is `disabled` **without** `loading` (soft blur + gray mask keep the body mounted and de-emphasize copy so busy message does not stack on mono preview). Never stack BusyRegion ring with a chrome `loading` spinner on the same host (information redundancy). Per-control wait with no BusyRegion may still use IconButton `loading` alone. Live sample below uses `CodeBlock` under refresh.",
   "globals.busyRegionFieldLabel": "Sample notice",
   "globals.busyRegionFieldRefreshTip": "Refresh sample",
   "globals.busyRegionFieldBusyLabel": "Refreshing sample",
@@ -2674,7 +2674,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-list-well-max-height-sm — 更密的 Card 内 List 井（12rem）。仅当目录确实会溢出时使用。",
   "layoutChrome.busyRegionBackdropBlur": "BusyRegion 模糊",
   "layoutChrome.busyRegionBackdropBlurHint":
-    "--fynns-layout-busy-region-backdrop-blur — 轻模糊遮罩（默认 3px；透明底；井色不变；勿加重到失真）。",
+    "--fynns-layout-busy-region-backdrop-blur — 轻模糊（默认 3px；配合 `--fynns-color-busy-region-mask`；勿加重到失真）。",
   "layoutChrome.sheetPadInline": "Sheet 行向边距",
   "layoutChrome.sheetPadInlineHint":
     "--fynns-layout-sheet-pad-inline — BottomSheet 水平内容边距（M3 24dp）。",
@@ -2865,11 +2865,11 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionTitle": "区块",
   "globals.busyRegionMessage": "正在刷新此区域…",
   "globals.busyRegionBody":
-    "BusyRegion 为 busy 时，区块内容仍挂载在毛玻璃模糊遮罩下方（井色不变）。",
+    "BusyRegion 为 busy 时，区块内容仍挂载在轻模糊 + 浅灰 mask 遮罩下方。",
   "globals.busyRegionStart": "显示 busy",
   "globals.busyRegionStop": "清除 busy",
   "globals.busyRegionHelp":
-    "BusyRegion 包裹区块：相对定位毛玻璃模糊遮罩（`backdrop-filter` + 透明底 — 井色保持原样）+ 一个进度件 + 可见文案（禁止 `surface-*` 洗底或 `--fynns-color-overlay` 压暗）。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
+    "BusyRegion 包裹区块：相对定位轻模糊 + token 浅灰 mask（`backdrop-filter` + `--fynns-color-busy-region-mask` — 禁止消费仓 `surface-*` 洗底或复用 `--fynns-color-overlay` BusyScrim；默认模糊半径保持轻量）+ 一个进度件 + 可见文案。默认圈；已知进度用 indicator=linear（下方确定进度样例）。message 只放文案，禁止再塞 LinearProgress / CircularProgress，也禁止私有居中进度壳（hub-progress-block）冒充区块加载。根节点设 aria-busy。遮罩在区域盒子内居中 — 内容定高宿主会把指示器留在剩余主栏顶部。全屏染色 → BusyScrim。Dialog / Card / section 正文加载 → BusyRegion（已定高用 fill）— 禁止裸默认 md CircularProgress 当正文壳。BusyRegion busy 时 FieldBlock / Card 头栏 chrome 仅 disabled、不画 loading（见下方 FieldBlock actions 样例）。",
   "globals.busyRegionNarrowHelp":
     "窄宿主（NavigationDrawer / EndAside 宽）：linear BusyStack 必须随宿主收缩 — 禁止固定 20rem / 100vw 进度条溢出抽屉缝。下方为活样例。",
   "globals.busyRegionNarrowLabel": "扫描样例",
@@ -2884,7 +2884,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。圈在可见主栏毛玻璃模糊遮罩下居中。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。圈在可见主栏轻模糊 + 浅灰 mask 下居中。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
@@ -2915,7 +2915,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionDialogHelp":
     "Dialog / section 正文加载：正文里放 BusyRegion（宿主已定高再加 fill — 见上方 fill 样例）。禁止把裸默认 md CircularProgress 塞进 Dialog 或 unit-stack。CircularProgress sm 仅用于 IconButton / Button 槽。",
   "globals.busyRegionColdHelp":
-    "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（透明遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
+    "Card / section 正文冷启动：只渲 BusyRegion — 禁止再并行渲 Sessions Select / Pagination 等脚栏兄弟（mask 遮罩会盖住脚栏，圈叠在 Select 上）。有数据后：脚栏留在 BusyRegion 外，翻页 / 刷新只包 List / 表。",
   "globals.busyRegionColdTitle": "会话目录",
   "globals.busyRegionColdLabel": "加载会话",
   "globals.busyRegionColdMessage": "正在拉取目录…",
@@ -2925,7 +2925,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionColdShow": "显示冷启动 busy",
   "globals.busyRegionColdClear": "显示已加载目录",
   "globals.busyRegionFieldHelp":
-    "FieldBlock 正文等待 + 标签行刷新：用 BusyRegion **包住**正文 — busy 时头栏 IconButton 保持字形、仅 `disabled`、**不** 画 `loading`（毛玻璃模糊下正文仍挂载，背后文案模糊，避免 busy 文案与 mono 预览叠字）。禁止同一宿主叠 BusyRegion 圈与 chrome `loading` 第二圈（信息冗余）。无 BusyRegion 的单控件等待仍可用 IconButton `loading`。下方活样例为 `CodeBlock` 刷新。",
+    "FieldBlock 正文等待 + 标签行刷新：用 BusyRegion **包住**正文 — busy 时头栏 IconButton 保持字形、仅 `disabled`、**不** 画 `loading`（轻模糊 + 浅灰 mask 下正文仍挂载，背后文案变灰变糊，避免 busy 文案与 mono 预览叠字）。禁止同一宿主叠 BusyRegion 圈与 chrome `loading` 第二圈（信息冗余）。无 BusyRegion 的单控件等待仍可用 IconButton `loading`。下方活样例为 `CodeBlock` 刷新。",
   "globals.busyRegionFieldLabel": "样例启事",
   "globals.busyRegionFieldRefreshTip": "刷新样例",
   "globals.busyRegionFieldBusyLabel": "正在刷新样例",

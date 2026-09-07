@@ -43,6 +43,7 @@
   --fynns-color-info: #60a5fa;
   --fynns-color-focus: rgba(45, 212, 191, 0.22);
   --fynns-color-overlay: rgba(0, 0, 0, 0.48);
+  --fynns-color-busy-region-mask: rgba(0, 0, 0, 0.20);
   --fynns-color-toast-surface: #062126;
   --fynns-color-control-surface: rgba(255, 255, 255, 0.02);
   --fynns-color-control-surface-hover: rgba(255, 255, 255, 0.05);
@@ -676,6 +677,7 @@
   --fynns-color-info: #2563eb;
   --fynns-color-focus: rgba(13, 148, 136, 0.2);
   --fynns-color-overlay: rgba(0, 0, 0, 0.32);
+  --fynns-color-busy-region-mask: rgba(0, 0, 0, 0.12);
   --fynns-color-toast-surface: #ffffff;
   --fynns-color-control-surface: rgba(0, 0, 0, 0.02);
   --fynns-color-control-surface-hover: rgba(0, 0, 0, 0.04);

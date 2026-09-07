@@ -222,7 +222,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | skinny form Dialog (tall FieldStack / CodeBlock) | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body end-align footer clipped | AGENTS shells / Hard rules | `#form-recipe` |
 | vacant band under FullscreenDialog title | AGENTS Dialog / overlays | `#fullscreen-flush` |
-| BusyRegion colored loading wash (surface-*) | AGENTS Busy/Loading | `#busy-region` |
+| BusyRegion colored loading wash (consumer surface-*) | AGENTS Busy/Loading | `#busy-region` |
 | BusyRegion busy copy bleeds through overlay | AGENTS Busy/Loading | `#sandbox-busy-region-field-sample` |
 | bare CircularProgress as body loader | AGENTS Busy/Loading | `#busy-region` |
 | BusyRegion empty cold-start overlaps SearchBar | AGENTS Busy/Loading | `#busy-region` |
