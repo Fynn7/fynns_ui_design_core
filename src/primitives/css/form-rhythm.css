@@ -77,9 +77,10 @@
   /* ToggleGroup keeps its own overflow:hidden for radius clipping. */
 }
 
-/* Label cell floor — override the shared min-width:0 above (≥ **0.5.159**). */
+/* Label cell floor — override the shared min-width:0 above (≥ **0.5.159**).
+ * Absolute token floor — never `min(100%, …)` (100% of a crushed track = 2px). */
 .fynns-control-stack > .fynns-control-row > .fynns-control-row__label {
-  min-width: min(100%, var(--fynns-layout-control-row-label));
+  min-width: var(--fynns-layout-control-row-label);
 }
 
 /*
@@ -191,8 +192,9 @@
 }
 
 .fynns-control-row__label {
-  /* Floor ≥ control-row-label — never bare `min-width: 0` (≥ **0.5.159**). */
-  min-width: min(100%, var(--fynns-layout-control-row-label));
+  /* Floor ≥ control-row-label — never bare `min-width: 0` / `min(100%, …)`
+   * (≥ **0.5.159** / **0.5.175**). */
+  min-width: var(--fynns-layout-control-row-label);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -244,6 +246,22 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/*
+ * Path / title meta inside end-pack clusters (≥ **0.5.175**): bare
+ * `.fynns-table-meta` is `flex: 0 0 auto` + nowrap for List/table cells.
+ * In a narrow ControlStack track that intrinsic width overflows **left**
+ * under `justify-content: flex-end` and paints over the status label
+ * (“就绪” reads as a crushed sliver even when the label track is 7.5rem).
+ * Allow shrink + ellipsis — full path → InfoHint / Tooltip when needed.
+ */
+.fynns-control-cluster > .fynns-table-meta {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Explicit start pack — probe value grids / rare LTR reading strips. */
@@ -527,9 +545,15 @@
 }
 
 /* ---------- Grid ---------- */
+/*
+ * Default **start** on the block axis (≥ **0.5.172**). `center` vertically
+ * mid-parked short FieldBlocks when a sibling Select expands in-flow (Hub
+ * Inspector agent | cwd) — labels no longer share one top edge. `equalCells`
+ * still uses `stretch`. Live: `#sandbox-field-stack-grid-select`.
+ */
 .fynns-grid {
   display: grid;
-  align-items: center;
+  align-items: start;
   justify-content: start;
   width: max-content;
   max-width: 100%;

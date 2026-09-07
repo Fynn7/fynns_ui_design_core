@@ -46,10 +46,13 @@ export async function openGlobalsDemo(
 
   const result = page.locator(`#globals-search-result-${demoId}`);
   await expect(result).toBeVisible();
-  await result.click();
-
   const demo = page.locator(`#globals-demo-${demoId}`);
-  await expect(demo).toBeVisible({ timeout: 15_000 });
+  // Parallel treaty workers share :5174 — category Collapsible can collapse
+  // under a sibling nav; retry jump until the demo host is visible.
+  await expect(async () => {
+    await result.click();
+    await expect(demo).toBeVisible({ timeout: 5_000 });
+  }).toPass({ timeout: 30_000 });
   // Category Collapsible can remount while the flash settles — retry scroll.
   await expect(async () => {
     await expect(demo).toBeAttached();
