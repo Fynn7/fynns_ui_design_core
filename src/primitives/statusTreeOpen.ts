@@ -63,8 +63,9 @@ export function statusTreeOpenFromState(
   },
 ): boolean {
   if (input.open !== undefined) return Boolean(input.open);
-  // Force-open while streaming unless pinned; pin keeps last internalOpen (false).
-  if (input.streaming && !state.userPinnedClosed) return true;
+  // While streaming, pin alone decides (force-open unless pinned closed).
+  if (input.streaming) return !state.userPinnedClosed;
+  void input.mode;
   return state.internalOpen;
 }
 
