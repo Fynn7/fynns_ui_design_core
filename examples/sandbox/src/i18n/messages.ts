@@ -611,6 +611,18 @@ const en = {
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
+  "globals.paneLoadErrorHelp":
+    "Pane cold-start that times out or fails (≥ **0.5.178**): leave BusyRegion `fill` only while the fetch is in flight; on hang/fail **clear busy** and show InlineAlert + short FieldHint + end-align Retry — never permanent fill, never EmptyState as the load-fail shell, never silent empty. Pair with `runBusyTask` / fetch `timeoutMs` / `AbortSignal`. Live `#sandbox-pane-load-error`. Failure: CONSUMER_TREATY **pane cold-start hang without error surface**.",
+  "globals.paneLoadErrorBusyLabel": "Loading pane",
+  "globals.paneLoadErrorBusyMessage": "Fetching the catalog…",
+  "globals.paneLoadErrorAlert": "Could not load this pane.",
+  "globals.paneLoadErrorHint": "Timed out or the server did not respond. Retry when ready.",
+  "globals.paneLoadErrorRetry": "Retry",
+  "globals.paneLoadErrorReadyTitle": "Sample catalog",
+  "globals.paneLoadErrorReadyBody": "Loaded. Busy cleared.",
+  "globals.paneLoadErrorShowCold": "Simulate pane hang",
+  "globals.paneLoadErrorShowFail": "Simulate pane fail",
+  "globals.paneLoadErrorShowReady": "Simulate pane loaded",
   "globals.busyRegionPaneLeadHint":
     "Sample section scope note — visible only after the pane has loaded.",
   "globals.busyRegionPaneLeadLabel": "Loading section",
@@ -2876,6 +2888,18 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
+  "globals.paneLoadErrorHelp":
+    "栏目冷启动超时/失败（≥ **0.5.178**）：仅在请求进行中保留 BusyRegion `fill`；挂起或失败时**先清 busy**，再画 InlineAlert + 短 FieldHint + 末端对齐 Retry — 禁止永久 fill、禁止用 EmptyState 当加载失败壳、禁止静默空态。与 `runBusyTask` / 请求 `timeoutMs` / `AbortSignal` 配对。对照 `#sandbox-pane-load-error`。失败模式：CONSUMER_TREATY **pane cold-start hang without error surface**。",
+  "globals.paneLoadErrorBusyLabel": "加载栏目",
+  "globals.paneLoadErrorBusyMessage": "正在拉取目录…",
+  "globals.paneLoadErrorAlert": "无法加载此栏目。",
+  "globals.paneLoadErrorHint": "超时或服务无响应。就绪后可重试。",
+  "globals.paneLoadErrorRetry": "重试",
+  "globals.paneLoadErrorReadyTitle": "示例目录",
+  "globals.paneLoadErrorReadyBody": "已加载。Busy 已清除。",
+  "globals.paneLoadErrorShowCold": "模拟栏目挂起",
+  "globals.paneLoadErrorShowFail": "模拟栏目失败",
+  "globals.paneLoadErrorShowReady": "模拟栏目已加载",
   "globals.busyRegionPaneLeadHint":
     "示例栏目说明 — 仅在主栏数据就绪后显示。",
   "globals.busyRegionPaneLeadLabel": "加载栏目",
