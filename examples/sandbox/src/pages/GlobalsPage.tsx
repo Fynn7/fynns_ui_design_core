@@ -1361,6 +1361,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
   const [busyRegionFill, setBusyRegionFill] = useState(true);
   const [busyRegionPaneLeadCold, setBusyRegionPaneLeadCold] = useState(true);
+  /** Pane cold → timeout/fail → retry teaching host (`#sandbox-pane-load-error`). */
+  const [paneLoadPhase, setPaneLoadPhase] = useState<"cold" | "error" | "ready">(
+    "ready",
+  );
   const [busyRegionDialogOpen, setBusyRegionDialogOpen] = useState(false);
   const [busyRegionColdBody, setBusyRegionColdBody] = useState(true);
   const [busyRegionFieldBusy, setBusyRegionFieldBusy] = useState(false);
@@ -6081,6 +6085,66 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 </div>
               </PageScroll>
             </FillColumn>
+          </div>
+          <SandboxHelp text={t("globals.paneLoadErrorHelp")} />
+          <div id="sandbox-pane-load-error" className="sandbox-fill-column-stage">
+            <FillColumn>
+              {paneLoadPhase === "cold" ? (
+                <BusyRegion
+                  fill
+                  busy
+                  label={t("globals.paneLoadErrorBusyLabel")}
+                  message={t("globals.paneLoadErrorBusyMessage")}
+                />
+              ) : paneLoadPhase === "error" ? (
+                <div className="fynns-unit-stack">
+                  <InlineAlert
+                    severity="error"
+                    message={t("globals.paneLoadErrorAlert")}
+                  />
+                  <FieldHint>{t("globals.paneLoadErrorHint")}</FieldHint>
+                  <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                    <Button
+                      variant="tonal"
+                      size="sm"
+                      type="button"
+                      onClick={() => setPaneLoadPhase("cold")}
+                    >
+                      {t("globals.paneLoadErrorRetry")}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Card title={t("globals.paneLoadErrorReadyTitle")}>
+                  <FieldHint>{t("globals.paneLoadErrorReadyBody")}</FieldHint>
+                </Card>
+              )}
+            </FillColumn>
+          </div>
+          <div className="sandbox-globals-row">
+            <Button
+              size="sm"
+              onClick={() => setPaneLoadPhase("cold")}
+              disabled={paneLoadPhase === "cold"}
+            >
+              {t("globals.paneLoadErrorShowCold")}
+            </Button>
+            <Button
+              size="sm"
+              variant="tonal"
+              onClick={() => setPaneLoadPhase("error")}
+              disabled={paneLoadPhase === "error"}
+            >
+              {t("globals.paneLoadErrorShowFail")}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setPaneLoadPhase("ready")}
+              disabled={paneLoadPhase === "ready"}
+            >
+              {t("globals.paneLoadErrorShowReady")}
+            </Button>
           </div>
           <div className="sandbox-globals-row">
             <Button size="sm" onClick={() => setBusyRegionDialogOpen(true)}>
