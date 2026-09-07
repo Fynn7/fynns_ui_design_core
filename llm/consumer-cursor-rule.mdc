@@ -40,9 +40,10 @@ alwaysApply: true
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
 | Hang / 超时 | `runBusyTask`/`runLoadingTask` + **`timeoutMs`/`signal`/`onError`**（≥ **0.5.177**）→ **先清 busy** 再错误表面 | 永久 BusyRegion/Scrim/`loading`；空数据当 loading |
+| 栏目冷启动失败 | 清 busy → `InlineAlert` + 短 hint + 末端 Retry（≥ **0.5.178**） | 永久 fill；EmptyState 当加载失败壳；静默空态 |
 | 错误表面 | 瞬时 → `snackbar`；面板恢复 → `InlineAlert`；生成失败 → `ChatMessage.error`+`onRetry` | 用 snackbar 代替面板恢复；AppError 码塞进 `@fynns/ui` |
 
-对照 sandbox `#busy-region` / `#busy-paint` / `#sandbox-busy-task-timeout`。
+对照 sandbox `#busy-region` / `#sandbox-pane-load-error` / `#busy-paint` / `#sandbox-busy-task-timeout`。
 
 ## Shell（硬）
 
@@ -87,6 +88,7 @@ alwaysApply: true
 9b. **runBusyTask hang / Confirm trap / empty-as-busy** — 长任务用
    `timeoutMs`/`signal`/`onError`（≥ **0.5.177**）；Button/Confirm 用
    `runLoadingTask` + Confirm `onAbort`；禁止空数据当永久 BusyRegion；
+   栏目冷启动失败 → `#sandbox-pane-load-error`（≥ **0.5.178**）；
    `ChatComposer` `busy` 必须配对 `onStop`。对照 `#sandbox-busy-task-timeout`
    / `#sandbox-confirm-loading-trap`。
 10. **section-body IconButton sm / labeled generate Button** — PageScroll 段级
