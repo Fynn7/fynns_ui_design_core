@@ -119,6 +119,9 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Button loading hung without runLoadingTask | AGENTS Loading placement | `#sandbox-button-loading-task` |
 | ConfirmDialog blockCloseWhileLoading trap | AGENTS Dialog / ConfirmDialog | `#sandbox-confirm-loading-trap` |
 | ChatComposer busy without onStop | AGENTS Chat | `#sandbox-chat-busy-no-stop` |
+| Chat streaming/busy never cleared after stop/error | AGENTS Chat / Loading placement | `#chat` / `#sandbox-chat-busy-no-stop` |
+| BusyRegion / BusyScrim stuck busy (no timeout / no error exit) | AGENTS Busy/Loading | `#sandbox-pane-load-error` / `#sandbox-busy-task-timeout` |
+| opaque error without stable code | AGENTS Error surface pick | `#sandbox-inline-alert-recovery` / `#sandbox-pane-load-error` |
 | Empty data shown as BusyRegion | AGENTS Busy/Loading | `#busy-region` |
 | pane cold-start hang without error surface | AGENTS Busy/Loading | `#sandbox-pane-load-error` |
 | snackbar used as AppError / ErrorCode bus | AGENTS feedback (boundary) | `#snackbar` |

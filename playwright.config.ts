@@ -10,9 +10,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  // Shared sandbox on :5174 — keep workers modest so treaty navigations
-  // do not stomp each other's layout measurements.
-  workers: process.env.CI ? 2 : 3,
+  // Shared sandbox on :5174 — one worker so treaty navigations / BusyScrim /
+  // Dialog state cannot stomp sibling workers' layout measurements.
+  workers: 1,
   reporter: process.env.CI ? "github" : "list",
   timeout: 60_000,
   expect: { timeout: 10_000 },
