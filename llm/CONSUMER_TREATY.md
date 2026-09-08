@@ -55,6 +55,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | GitHub Packages install auth (E401 / empty NODE_AUTH_TOKEN) | CONSUME.md | `—` |
 | sandbox-only aesthetics | AGENTS Hard rules / check:wysiwyg | `—` |
 | squashed drawer | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
+| drill-in / mode sidebar hard-swap (no navKey morph) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | icon-only rail densify (narrow) | AGENTS shells / Hard rules | `#layouts-demo-navigation-rail` |
 | stacked drawer ribbon (narrow) | AGENTS shells / Hard rules | `—` |
 | drawer headline toolbar | AGENTS shells / Hard rules | `#layouts-demo-shell` |
@@ -105,6 +106,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
 | PageScroll Card sheet-max-width under ControlRow | AGENTS Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | AGENTS Hard rules / Card | `#page-scroll` |
+| PageScroll content-column soft reading-width gutters | AGENTS Hard rules / Card | `#page-scroll` |
+| FullscreenDialog settings column sheet-max / content-sized | AGENTS Hard rules / overlays | `#overlays` |
 | catalog ControlRow sinks below drawer labels | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | BusyRegion cold body + pager chrome siblings | AGENTS Busy/Loading | `#busy-region` |
 | empty ControlRow label as action footer | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -169,6 +172,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | nested short List well + invented list-well token | AGENTS Content density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | AGENTS forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | AGENTS Card / Collapsible | `#table` |
+| wide Table wheel scrolls PageScroll (no wheel→X) | AGENTS Scrollbar / Content density | `#table` |
 | long Table dumps all rows | AGENTS Hard rules / Content density | `#table` |
 | long List dumps all rows | AGENTS Hard rules / Content density | `#list` |
 | List tree wrapped in divs / buttons in leading | AGENTS Content density / List | `#list` |

@@ -1,4 +1,4 @@
-# AGENTS.md — @fynns/ui-design-core
+﻿# AGENTS.md — @fynns/ui-design-core
 
 Authoritative guide for humans and AI agents working with the fynns UI design
 system. This is the **single source of truth** for the design language; other
@@ -98,7 +98,15 @@ belong in a consumer’s own doc.
    dialog head, Card / Collapsible heads, nav headlines ≥ **0.5.134**) — live
    `#drawer-nested-scroll` + Layouts `#layouts-demo-shell`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
-   **Scroll-edge fade (≥ 0.5.135):** capped CodeBlock / Textarea /
+   **Wheel → horizontal (≥ 0.5.184 / trap at edge ≥ **0.5.186**):**
+   `.fynns-scroll` hosts with horizontal overflow map a dominant vertical wheel
+   to `scrollLeft` when the host can no longer scroll on Y (wide
+   `.fynns-table-wrap` pans columns instead of driving PageScroll). Default
+   **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
+   stays on that host even at the left/right edge (no PageScroll chaining mid
+   hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
+   fade (≥ 0.5.135):**
+   capped CodeBlock / Textarea /
    NavigationDrawer body soft-mask top+bottom when content overflows
    (`data-fade-top` / `data-fade-bottom`, length
    `--fynns-layout-scroll-edge-fade-length`) — not a hard clip. Textarea /
@@ -359,6 +367,16 @@ belong in a consumer’s own doc.
   (end-edge), same grammar as Cancel…→primary / mode-drawer Plus last. Failure:
   CONSUMER_TREATY Card head primary IconButton leftmost in control-cluster.
   Live `#sandbox-card-head-primary-end`.
+- **DON'T** invent a consumer `wheel` / `onWheel` remapper on
+  `.fynns-table-wrap` so vertical scrolling pans columns — core ≥ **0.5.184**
+  maps vertical wheel → `scrollLeft` when the host has H overflow and cannot
+  scroll further on Y (default on; opt out `data-fynns-wheel-x="off"`; edge
+  trap ≥ **0.5.186** so slide-back does not yank PageScroll). Live `#table`.
+  Failure: CONSUMER_TREATY wide Table wheel scrolls PageScroll.
+- **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
+  for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
+  so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
+  not close→swap→open). Live `#layouts-demo-drill-in`.
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /
@@ -383,8 +401,14 @@ belong in a consumer’s own doc.
   stretch (`width: 100%`, `align-self: stretch` ≥ **0.5.141**); BusyRegion
   content stretches with them. Section ControlRow + Cards share one
   **right edge**; even without a sibling ControlRow, destination Cards fill
-  `.fynns-content-column` (do not invent a reading-width column). Live
-  `#page-scroll`. ≥ **0.5.142** names chat/dialog misuse explicitly.
+  `.fynns-content-column`. **`.fynns-content-column` itself fills the
+  PageScroll pane** (inset pad only; `--fynns-layout-content-max-width`
+  default **`none`** ≥ **0.5.186** — do **not** revive a soft ~1180dp
+  reading strip or invent a centered reading-width column). **FullscreenDialog**
+  body direct children also stretch inline (≥ **0.5.186**) — never leave a
+  sheet-max / content-sized settings column with dead gutters. Live
+  `#page-scroll` / `#overlays`. ≥ **0.5.142** names chat/dialog misuse
+  explicitly.
 - **DON'T** dump every row of a Card / PageScroll **data Table** when the
   catalog can grow past ~10 rows — use `useRevealMore` + `RevealMore` (default
   **10** / step **10**, ≥ **0.5.144**): slice in the app; foot = **tonal**
@@ -743,7 +767,10 @@ classes.
   open labeled resizable drawer **or** fully `hidden` — **no** icon-only
   `NavigationRail` densify (`onNavCrowded` **closes**). Flat root destinations
   only — drill-in / dynamic drawer body → hand-compose `ClippedNavShell`
-  (`#layouts-demo-drill-in`). Low-level **`ClippedNavShell`**: full-bleed
+  (`#layouts-demo-drill-in`) and pass **`navKey`** + **`navDirection`**
+  (root vs mode / catalog identity; `"back"` on mode exit) so the drawer
+  body runs **Shared Axis X** (short slide + fade) while track **width stays
+  open** — do **not** hard-swap `nav` or close→reopen the track. Low-level **`ClippedNavShell`**: full-bleed
   TopAppBar + `nav | main`; `navMode` `drawer`|`rail`|`hidden` must match the
   `nav` slot (shell never auto-swaps). Drawer seam resizable (rAF live width;
   commit on pointerup). Crowding watches main-column overflow too; predict
@@ -822,7 +849,7 @@ on that page are parts — not a desktop greenfield root.
 | NavigationBar | mobile-first | Bottom destinations (phone) |
 | NavigationRail | mobile-first | Intentional phone/icon root only — never DestinationAppShell densify |
 | NavigationDrawer | adaptive | Desktop default inside DestinationAppShell; Group (collapsible) or Headline; sheet `headline` = static title only (never back/bulk row); Group/Item short labels; SearchBar↔dest = `navdrawer-search-gap` (8dp); optional `footer` account+settings |
-| ClippedNavShell | adaptive | Low-level TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden` must match `nav` slot; prefer DestinationAppShell; use for drill-in (`#layouts-demo-drill-in`) |
+| ClippedNavShell | adaptive | Low-level TopAppBar + nav\|main; `drawer`\|`rail`\|`hidden` must match `nav` slot; drill-in / mode body → `navKey` + `navDirection` Shared Axis X (`#layouts-demo-drill-in`); prefer DestinationAppShell for flat roots |
 | EndAside | adaptive | Width morph (≥ **0.5.86**); desktop resize; main ≤32rem → overlay; ≤56.25rem → bottom sheet |
 | Drawer | desktop-first | Modal **content** side sheet (~400dp). Phone → BottomSheet. ≠ NavigationDrawer |
 | BottomSheet | mobile-first | Bottom content sheet. Desktop → Drawer. Drag handle; no header\|body divider |
@@ -854,7 +881,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Catalog kind (builtin) | Leading icon + meta; host pill selected | `#list` kind | Start tick / inset rail / Chip as kind |
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |
 | App destinations | NavigationDrawer / Rail / Bar / DestinationAppShell | `#layouts-demo-shell` | List/Card as app root nav |
-| Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card | `#table` | Surface + FieldHeader fake head |
+| Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card; wheel→X default (≥ **0.5.184**) | `#table` | Surface + FieldHeader fake head; invent consumer wheel remappers |
 | Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
 | Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |

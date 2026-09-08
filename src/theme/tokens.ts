@@ -1400,12 +1400,15 @@ export const LAYOUT_TOKENS = {
    */
   "nav-pane-width": "17.5rem",
   /**
-   * Soft max width for page canvas content under the shell (~1180dp). Pair with
-   * `.fynns-content-column` (`margin-inline: auto`) **inside** `.fynns-page-scroll`
-   * — never put this max-width on the scroll host itself (overlay Y rail would
-   * flush with Card edges). **Must exist** when referenced.
+   * Page canvas content column under the shell. **Default `none`** (≥ **0.5.186**)
+   * so `.fynns-content-column` **fills** `.fynns-page-scroll` (inset pad only) —
+   * do **not** revive a soft reading-width ceiling that parks Cards in a centered
+   * 1180dp strip while the pane stays wide. Pair with content-column **inside**
+   * page-scroll — never put a max-width on the scroll host itself (overlay Y
+   * rail would flush with Card edges). Optional consumer reading width = local
+   * wrapper, not this default. **Must exist** when referenced.
    */
-  "content-max-width": "73.75rem",
+  "content-max-width": "none",
   /**
    * Vertical pad under section chrome / CodeBlock pre (16dp). **Not** Surface
    * `padded` or Card body — those use equal `content-inset` (18dp) on all

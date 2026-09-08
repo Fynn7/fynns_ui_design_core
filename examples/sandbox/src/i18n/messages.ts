@@ -1,4 +1,4 @@
-import type { Locale } from "./types";
+﻿import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -94,7 +94,7 @@ const en = {
   "layouts.fillColumnPreviewHelp":
     "Destination canvas FillColumn — `header` = compact preview Card (never zero-margin edge-to-edge workflow shell). Core pads + caps `.fynns-fill-column-header` on `.fynns-destination-app-shell-canvas`. Long preview scrolls in header; `children` = Chat. Live stage uses `fynns-destination-app-shell-canvas` class.",
   "layouts.drillHelp":
-    "Drill-in (ClippedNavShell): tap Catalog → drawer body swaps to the item list (optional SearchBar); mode exit = TopAppBar back next to the nav toggle — never NavigationDrawer.headline. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + app state.",
+    "Drill-in (ClippedNavShell): tap Catalog → pass `navKey` + `navDirection` so the drawer body Shared-Axis-X slides (short travel + fade; track width stays open — not close→swap→open); mode exit = TopAppBar back with `navDirection=\"back\"`. Do not hard-swap drawer content while open. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + `navKey` + app state.",
   "layouts.drillNavAria": "Sample destinations",
   "layouts.drillCatalogNavAria": "Catalog items",
   "layouts.drillHome": "Home",
@@ -659,7 +659,7 @@ const en = {
   "globals.busyRegionFieldStart": "Show field busy",
   "globals.busyRegionFieldStop": "Clear field busy",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. Tokens ≥ 0.4.58.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). The content column **fills the page-scroll pane** (inset only; `--fynns-layout-content-max-width` default **`none`** ≥ **0.5.186** — no soft ~1180dp gutters). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. Tokens ≥ 0.4.58.",
   "globals.pageScrollToolLabel": "Tool",
   "globals.pageScrollToolAria": "Sample tool mode",
   "globals.pageScrollToolA": "Mode A",
@@ -731,6 +731,9 @@ const en = {
   "globals.tableMapAction": "Map",
   "globals.tableHelp":
     "Titled tables: `Card` `title` + `.fynns-table-wrap.fynns-scroll` (`chrome=\"plain\"` when the wrap is the nested well). Table + Head / Body / Row / HeaderCell / Cell / Caption. Cells stay nowrap; wide tables scroll horizontally (do not crush columns / CJK headers). Mapping kind / status in a cell is `.fynns-table-meta` (muted caption), **not** `Chip`. Kind + optional id + trailing action: `.fynns-control-cluster--end-align` (**centers on the row band** ≥ 0.5.79); missing middle → `.fynns-control-cluster__grow` so the action shares one trailing edge.",
+  "globals.tableWheelX": "Wheel → horizontal",
+  "globals.tableWheelXHelp":
+    "Wide `.fynns-table-wrap.fynns-scroll` (≥ **0.5.184**): when the host has horizontal overflow and cannot scroll further on Y, a vertical mouse wheel pans `scrollLeft` instead of driving the outer PageScroll. Default **on** (core). Opt out with `data-fynns-wheel-x=\"off\"` — toggle below. While H overflows, wheel stays trapped on the wrap even at the left/right edge (≥ **0.5.186**) so slide-back does not yank the page thumb. First Card is width-capped (H-only) so the wheel remap is easy to feel.",
   "globals.tableRevealCaption": "Sample catalog (reveal)",
   "globals.tableRevealMore": "Show more",
   "globals.tableRevealHelp":
@@ -807,7 +810,16 @@ const en = {
   "globals.fullscreenOpen": "Open fullscreen dialog",
   "globals.fullscreenTitle": "Fullscreen dialog",
   "globals.fullscreenBody":
-    "Full-viewport panel: close IconButton + title + optional actions, scrollable body.",
+    "Full-viewport panel: close IconButton + title + optional actions, scrollable body. Direct body children **stretch inline** (≥ **0.5.186**) — Card / preference stacks fill the pane; never sheet-max or a content-sized settings column with dead gutters.",
+  "globals.fullscreenCardAppearance": "Appearance",
+  "globals.fullscreenCardLocale": "Language",
+  "globals.fullscreenLocaleAria": "Sample locale",
+  "globals.fullscreenLocaleEn": "English",
+  "globals.fullscreenLocaleZh": "中文",
+  "globals.fullscreenCardPath": "Paths",
+  "globals.fullscreenPathLabel": "Sample scan root",
+  "globals.fullscreenPathPlaceholder": "/sample/projects",
+  "globals.fullscreenPathSave": "Save",
   "globals.fullscreenDone": "Done",
   "globals.fullscreenClose": "Close",
   "globals.fullscreenFlushOpen": "Open fullscreen with CodeBlock",
@@ -2274,8 +2286,9 @@ const en = {
   "globals.dropzoneDisabled": "Disabled dropzone",
   "globals.dropzoneAccept": "Images only (accept)",
   "globals.dropzoneAcceptHint": "accept=\"image/*\"",
+  "globals.tableStickyCaption": "Sticky header (height-capped)",
   "globals.tableStickyHelp":
-    "Table stickyHeader inside a fixed-height scroll host (demo also caps width so H-scroll appears).",
+    "Table stickyHeader inside a fixed-height scroll host (demo also caps width so H-scroll appears). Host Y room is preferred over wheel→X until the wrap cannot scroll further vertically.",
   "globals.paginationMd": "Pagination size md",
   "globals.appBarMdTitle": "Medium top app bar",
   "globals.appBarLgTitle": "Large top app bar",
@@ -2385,7 +2398,7 @@ const zh: Record<MessageKey, string> = {
   "layouts.fillColumnPreviewHelp":
     "Destination 画布 FillColumn — `header` = 紧凑预览 Card（禁止零边距铺满 workflow 壳）。Core 在 `.fynns-destination-app-shell-canvas` 上为 `.fynns-fill-column-header` 加 inset + 上限；长预览在 header 内滚；`children` = Chat。舞台带 `fynns-destination-app-shell-canvas` 类。",
   "layouts.drillHelp":
-    "钻入导航（ClippedNavShell）：点 Catalog → 侧栏 body 换成条目列表（可选 SearchBar）；退出模式 = TopAppBar 返回键（紧挨导航开关）— 禁止塞进 NavigationDrawer.headline。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + 应用状态。",
+    "钻入导航（ClippedNavShell）：点 Catalog → 传 `navKey` + `navDirection`，侧栏 body 做 Shared Axis X（短位移 + 淡入淡出；轨宽保持打开 — 禁止关轨再开）；退出模式 = TopAppBar 返回 + `navDirection=\"back\"` — 禁止塞进 NavigationDrawer.headline。禁止在打开态硬切侧栏内容。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + `navKey` + 应用状态。",
   "layouts.drillNavAria": "示例目的地",
   "layouts.drillCatalogNavAria": "目录条目",
   "layouts.drillHome": "主页",
@@ -2936,7 +2949,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFieldStart": "显示字段 busy",
   "globals.busyRegionFieldStop": "清除字段 busy",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。令牌 ≥ 0.4.58。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。内容列**铺满页滚窗格**（仅 inset；`--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止 ~1180dp 居中阅读条留白）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。令牌 ≥ 0.4.58。",
   "globals.pageScrollToolLabel": "工具",
   "globals.pageScrollToolAria": "样例工具模式",
   "globals.pageScrollToolA": "模式 A",
@@ -3008,6 +3021,9 @@ const zh: Record<MessageKey, string> = {
   "globals.tableMapAction": "映射",
   "globals.tableHelp":
     "带标题表格：`Card` `title` + `.fynns-table-wrap.fynns-scroll`（wrap 作为嵌套井时 `chrome=\"plain\"`）。Table + Head / Body / Row / HeaderCell / Cell / Caption。单元格 nowrap；宽表横向滚动（勿挤扁列 / 勿让中文表头逐字竖排）。单元格里的映射来源/状态用 `.fynns-table-meta`（muted 文案），**禁止** `Chip`。种类 + 可选 id + 行尾操作：`.fynns-control-cluster--end-align`（**整行高度内竖直居中** ≥ 0.5.79）；中间缺内容时插 `.fynns-control-cluster__grow`，让操作跨行右对齐。",
+  "globals.tableWheelX": "滚轮 → 横向",
+  "globals.tableWheelXHelp":
+    "宽 `.fynns-table-wrap.fynns-scroll`（≥ **0.5.184**）：宿主有横向溢出且 Y 方向已无法继续滚动时，纵向鼠标滚轮改为推动 `scrollLeft`，而不是带动外层 PageScroll。默认 **开启**（core）。关闭：`data-fynns-wheel-x=\"off\"` — 见下方开关。只要仍有横向溢出，滚轮留在 wrap 上（含左右边缘，≥ **0.5.186**），滑回起点时不会拽动页面滚动条。首张 Card 仅限宽（纯横向溢出），便于感受滚轮映射。",
   "globals.tableRevealCaption": "示例目录（渐进披露）",
   "globals.tableRevealMore": "更多",
   "globals.tableRevealHelp":
@@ -3084,7 +3100,16 @@ const zh: Record<MessageKey, string> = {
   "globals.fullscreenOpen": "打开全屏对话框",
   "globals.fullscreenTitle": "全屏对话框",
   "globals.fullscreenBody":
-    "全视口面板：关闭 IconButton + 标题 + 可选操作，正文可滚动。",
+    "全视口面板：关闭 IconButton + 标题 + 可选操作，正文可滚动。正文直接子项**横向铺满**（≥ **0.5.186**）— Card / 偏好栈铺满窗格；禁止 sheet-max 或内容宽设置列留下空白。",
+  "globals.fullscreenCardAppearance": "外观",
+  "globals.fullscreenCardLocale": "语言",
+  "globals.fullscreenLocaleAria": "样例语言",
+  "globals.fullscreenLocaleEn": "English",
+  "globals.fullscreenLocaleZh": "中文",
+  "globals.fullscreenCardPath": "路径",
+  "globals.fullscreenPathLabel": "样例扫描根",
+  "globals.fullscreenPathPlaceholder": "/sample/projects",
+  "globals.fullscreenPathSave": "保存",
   "globals.fullscreenDone": "完成",
   "globals.fullscreenClose": "关闭",
   "globals.fullscreenFlushOpen": "打开全屏（CodeBlock 顶天）",
@@ -4530,8 +4555,9 @@ const zh: Record<MessageKey, string> = {
   "globals.dropzoneDisabled": "禁用拖放区",
   "globals.dropzoneAccept": "仅图片（accept）",
   "globals.dropzoneAcceptHint": "accept=\"image/*\"",
+  "globals.tableStickyCaption": "粘性表头（限高）",
   "globals.tableStickyHelp":
-    "固定高度滚动容器内的 stickyHeader 表格（样例同时限宽以露出横向滚动）。",
+    "固定高度滚动容器内的 stickyHeader 表格（样例同时限宽以露出横向滚动）。宿主仍有 Y 余量时优先纵向滚动；Y 到顶后再走滚轮 → 横向。",
   "globals.paginationMd": "分页 size md",
   "globals.appBarMdTitle": "中等顶栏",
   "globals.appBarLgTitle": "大号顶栏",

@@ -1,4 +1,4 @@
----
+﻿---
 description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
 alwaysApply: true
 ---
@@ -78,6 +78,10 @@ alwaysApply: true
    `drawerHeadline`。
 4. **hub-split / catalog edit as silent PageScroll** — 列表保持挂载；编辑 →
    `Dialog` `size="lg"` + `showCloseButton`（长流程才 FullscreenDialog）。
+4b. **drill-in / mode sidebar hard-swap** — 根目的地 ↔ 模式目录侧栏换 body 时
+   必须给 `ClippedNavShell` 传 **`navKey`** + **`navDirection`**（≥ **0.5.183**），
+   定宽列内 Shared Axis X（短滑 + fade）；退出用 `"back"`。禁止硬切，也禁止
+   关轨再开冒充钻入。对照 `#layouts-demo-drill-in`。
 5. **fat Surface / Card per catalog row** — 路径/书签 → 一个 `List` of
    `ListItem`。对照 `#list`。
 6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
@@ -134,11 +138,14 @@ alwaysApply: true
 22. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
 23. **PageScroll Card sheet/chat/dialog-max under ControlRow** — 目的地
     PageScroll 上 Card **铺满** `.fynns-content-column`（core ≥ **0.5.141**/
-    **0.5.142**）。禁止给 `hub-col` / BusyRegion 子树套
+    **0.5.142**）；内容列本身 **铺满** 页滚窗格（inset 除外；
+    `--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止
+    复活 ~1180dp 居中阅读条）。禁止给 `hub-col` / BusyRegion 子树套
     `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列）、
     `dialog-max-width*`（仅 Dialog）或私有 rem `maxWidth`；工具条 ControlRow +
     ToggleGroup 与下方 Card **右端对齐**；无工具条的表单页同样铺满内容列。
-    对照 `#page-scroll`。
+    FullscreenDialog 正文直接子项亦 **横向铺满**（≥ **0.5.186**）。
+    对照 `#page-scroll` / `#overlays`。
 24. **long Table dumps all rows** — Card / PageScroll 数据表可 >10 行时用
     `useRevealMore` + `RevealMore`（默认 10/10，≥ **0.5.144**）：app `slice`；
     脚在 `.fynns-table-wrap` **外**；默认 **tonal** **md**（≥ **0.5.147** tonal；
@@ -195,8 +202,12 @@ alwaysApply: true
   `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
 - PageScroll 分区 Card：勿用 `sheet-max-width` / `chat-max-width` / dialog-max
-  收窄；与上方 ControlRow 同列宽（或铺满 content-column）。
+  收窄；内容列铺满页滚（≥ **0.5.186**）；与上方 ControlRow 同列宽。
+  FullscreenDialog 设置栈亦横向铺满，勿 sheet-max / 内容宽列。
 - 长数据 Table：`useRevealMore` + `RevealMore`（10/10），勿一次铺开。对照 `#table`。
+  宽表横向溢出：core ≥ **0.5.184** 默认纵向滚轮 → `scrollLeft`（边缘仍拦截，≥
+  **0.5.186**）；勿自造 wheel 劫持。关闭：`data-fynns-wheel-x="off"`。对照
+  `#table`。
 - 长 List：`useRevealMore` + `RevealMore`（**5**/5），勿一次铺开。对照 `#list`。
 
 ## Chat（短）

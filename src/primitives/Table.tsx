@@ -21,7 +21,9 @@ export type TableProps = HTMLAttributes<HTMLTableElement> & {
  *
  * Host inside `.fynns-table-wrap.fynns-scroll`: cells stay `nowrap` and the
  * table grows past the wrap (`width: max-content; min-width: 100%`) so dense
- * columns scroll horizontally instead of crushing / CJK-shattering.
+ * columns scroll horizontally instead of crushing / CJK-shattering. Overlay
+ * scrollbars map vertical wheel → `scrollLeft` when the wrap has H overflow
+ * and cannot scroll further on Y (edge trap; opt out: `data-fynns-wheel-x="off"`).
  */
 export function Table({
   stickyHeader = false,

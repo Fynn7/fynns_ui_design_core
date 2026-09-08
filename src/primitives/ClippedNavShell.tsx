@@ -61,6 +61,20 @@ export type ClippedNavShellProps = {
   onDrawerWidthChange?: (widthPx: number) => void;
   /** Disable the drawer trailing-edge resize handle. Default `false`. */
   disableDrawerResize?: boolean;
+  /**
+   * Identity of the current `nav` body (root destinations vs mode / drill-in
+   * catalog, search preview, …). When this changes while the destination
+   * track is **open**, the shell runs an **in-column Shared Axis X** swap
+   * (short horizontal slide + staggered fade) — track **width stays open**.
+   * Pass `navDirection="back"` when exiting a mode (TopAppBar ←). Omit
+   * `navKey` to hard-swap with no motion. Live: `#layouts-demo-drill-in`.
+   */
+  navKey?: string;
+  /**
+   * Direction for the `navKey` Shared Axis X swap. Default `"forward"`
+   * (deeper / enter mode). Use `"back"` when returning to root destinations.
+   */
+  navDirection?: "forward" | "back";
 };
 
 function readFlyoutMs(el: Element | null): number {
@@ -72,6 +86,25 @@ function readFlyoutMs(el: Element | null): number {
   if (raw.endsWith("s")) return Math.max(0, (Number.parseFloat(raw) || 0.32) * 1000);
   return 320;
 }
+
+/** Shared Axis X content swap — prefers `--fynns-duration-slow`, else 360ms. */
+function readNavAxisMs(el: Element | null): number {
+  if (!el || typeof window === "undefined") return 360;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return 0;
+  const raw = getComputedStyle(el).getPropertyValue("--fynns-duration-slow").trim();
+  if (!raw) return 360;
+  if (raw.endsWith("ms")) return Math.max(0, Number.parseFloat(raw) || 360);
+  if (raw.endsWith("s")) return Math.max(0, (Number.parseFloat(raw) || 0.36) * 1000);
+  return 360;
+}
+
+export type ClippedNavShellNavDirection = "forward" | "back";
+
+type NavAxisSwap = {
+  direction: ClippedNavShellNavDirection;
+  outgoing: ReactNode;
+  toKey: string;
+};
 
 /**
  * Whether a **target** labeled-drawer width would starve main / EndAside floors
@@ -121,19 +154,25 @@ export function wouldClippedNavDrawerCrowd(
  * only owns layout. Open/close **width-morphs** the destination track (same
  * idea as `EndAside`): keep two grid columns and animate the nav track to
  * `0px`; the shell holds the last `nav` node until the flyout duration ends so
- * consumers may pass `null` when `navMode="hidden"`. In `drawer` mode the
- * nav|main seam is draggable (paints `--fynns-navdrawer-width` live via rAF,
- * commits on pointerup; clamped by navdrawer min/max and remaining room for
- * main / EndAside mins). `onNavCrowded` uses target drawer width (see
- * `wouldClippedNavDrawerCrowd`) in `useLayoutEffect` so opening never paints a
- * full drawer then snaps closed; also skips while resizing or while an
- * `EndAside` is closing. Crowding → consumer **closes** destinations
- * (`hidden`) — not densify to icon-only rail.
+ * consumers may pass `null` when `navMode="hidden"`. Pass `navKey` when the
+ * drawer **body** identity changes (root ↔ drill-in / mode catalog) so the
+ * column runs **Shared Axis X** (short slide + staggered fade) while **width
+ * stays open** — not close→swap→open. Use `navDirection="back"` on mode exit.
+ * In `drawer` mode the nav|main seam is draggable (paints
+ * `--fynns-navdrawer-width` live via rAF, commits on pointerup; clamped by
+ * navdrawer min/max and remaining room for main / EndAside mins).
+ * `onNavCrowded` uses target drawer width (see `wouldClippedNavDrawerCrowd`)
+ * in `useLayoutEffect` so opening never paints a full drawer then snaps
+ * closed; also skips while resizing or while an `EndAside` is closing.
+ * Crowding → consumer **closes** destinations (`hidden`) — not densify to
+ * icon-only rail.
  *
  * @example
  * ```tsx
  * <ClippedNavShell
  *   navMode={open ? "drawer" : "hidden"}
+ *   navKey={level}
+ *   navDirection={level === "root" ? "back" : "forward"}
  *   onNavCrowded={() => setOpen(false)}
  *   topBar={<TopAppBar leading={…} title="App" trailing={…} />}
  *   nav={open ? <NavigationDrawer>…</NavigationDrawer> : null}
@@ -146,6 +185,8 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
   function ClippedNavShell(
     {
       navMode,
+      navKey,
+      navDirection = "forward",
       topBar,
       nav,
       children,
@@ -172,10 +213,42 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
    * effect runs. After `--fynns-duration-flyout`, phase → closed and unmounts.
    */
   const lastNavRef = useRef(nav);
-  if (nav != null) lastNavRef.current = nav;
+  const committedNavKeyRef = useRef(navKey);
+  const navDirectionRef = useRef(navDirection);
+  navDirectionRef.current = navDirection;
+  const [axisSwap, setAxisSwap] = useState<NavAxisSwap | null>(null);
+  const [axisPhase, setAxisPhase] = useState<"idle" | "prepare" | "run">("idle");
   const [phase, setPhase] = useState<"open" | "closing" | "closed">(
     navMode === "hidden" ? "closed" : "open",
   );
+
+  const keyMismatch =
+    navKey !== undefined && committedNavKeyRef.current !== navKey;
+  let activeAxis = axisSwap;
+  if (keyMismatch && axisSwap == null) {
+    if (navMode !== "hidden" && phase === "open") {
+      const reduce =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        committedNavKeyRef.current = navKey;
+      } else {
+        activeAxis = {
+          direction: navDirectionRef.current,
+          outgoing: lastNavRef.current,
+          toKey: navKey,
+        };
+        setAxisSwap(activeAxis);
+        setAxisPhase("prepare");
+      }
+    } else {
+      committedNavKeyRef.current = navKey;
+    }
+  }
+
+  if (nav != null && activeAxis == null) {
+    lastNavRef.current = nav;
+  }
 
   if (navMode !== "hidden" && phase !== "open") {
     setPhase("open");
@@ -203,6 +276,29 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const timer = window.setTimeout(() => setPhase("closed"), ms);
     return () => window.clearTimeout(timer);
   }, [phase]);
+
+  useLayoutEffect(() => {
+    if (axisPhase !== "prepare" || !axisSwap) return;
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setAxisPhase("run"));
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [axisPhase, axisSwap]);
+
+  useEffect(() => {
+    if (axisPhase !== "run" || !axisSwap) return;
+    const ms = readNavAxisMs(rootRef.current);
+    const timer = window.setTimeout(() => {
+      committedNavKeyRef.current = axisSwap.toKey;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+    }, ms);
+    return () => window.clearTimeout(timer);
+  }, [axisPhase, axisSwap]);
 
   /**
    * Dev-only: `navMode` only sizes the grid track — consumers must swap
@@ -324,7 +420,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
         if (floor > 0 && mainW + 1 < floor) return true;
 
         const navCol = body.querySelector(
-          ":scope > .fynns-clipped-nav-shell-nav > .fynns-nav-drawer, :scope > .fynns-clipped-nav-shell-nav > .fynns-nav-rail",
+          ":scope > .fynns-clipped-nav-shell-nav .fynns-nav-drawer, :scope > .fynns-clipped-nav-shell-nav .fynns-nav-rail",
         );
         const navW = navCol?.getBoundingClientRect().width ?? 0;
         if (aside && navW > 0 && mainW > 0 && navW >= mainW) return true;
@@ -348,6 +444,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
        * which falsely trips scrollWidth/floor checks and closes the labeled
        * drawer when the user only meant to hide the inspector. */
       if (root.getAttribute("data-drawer-resizing") === "true") return;
+      /* Shared Axis X stacks outgoing+incoming layers — never crowd-close
+       * mid-swap (looks like close→swap→open if onNavCrowded fires). */
+      if (root.getAttribute("data-nav-axis")) return;
       const main = body?.querySelector(
         ":scope > .fynns-clipped-nav-shell-main",
       );
@@ -532,11 +631,18 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     return { min, max: Math.min(tokenMax, roomMax) };
   })();
 
+  /* Same-render start: state `axisPhase` may still be idle until commit. */
+  const effectiveAxisPhase: "idle" | "prepare" | "run" =
+    activeAxis != null && axisSwap == null ? "prepare" : axisPhase;
+  const axisRun = effectiveAxisPhase === "run";
+
   return (
     <div
       ref={rootRef}
       className={["fynns-clipped-nav-shell", className ?? ""].filter(Boolean).join(" ")}
       data-nav={navMode}
+      data-nav-axis={activeAxis ? activeAxis.direction : undefined}
+      data-nav-axis-phase={activeAxis ? effectiveAxisPhase : undefined}
       data-drawer-resizing={dragging ? "true" : undefined}
       style={rootStyle}
     >
@@ -548,7 +654,43 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
           aria-hidden={navMode === "hidden" || undefined}
           {...(navMode === "hidden" ? ({ inert: true } as { inert: boolean }) : {})}
         >
-          {renderedNav}
+          {activeAxis && renderedNav != null ? (
+            <div
+              className="fynns-clipped-nav-shell-nav-axis"
+              data-direction={activeAxis.direction}
+              data-phase={effectiveAxisPhase}
+            >
+              <div
+                className={[
+                  "fynns-clipped-nav-shell-nav-axis-layer",
+                  "fynns-clipped-nav-shell-nav-axis-layer--out",
+                  axisRun
+                    ? "fynns-clipped-nav-shell-nav-axis-layer--out-run"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                aria-hidden
+              >
+                {activeAxis.outgoing}
+              </div>
+              <div
+                className={[
+                  "fynns-clipped-nav-shell-nav-axis-layer",
+                  "fynns-clipped-nav-shell-nav-axis-layer--in",
+                  axisRun
+                    ? "fynns-clipped-nav-shell-nav-axis-layer--in-run"
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
+                {renderedNav}
+              </div>
+            </div>
+          ) : (
+            renderedNav
+          )}
         </div>
         <div className="fynns-clipped-nav-shell-main">{children}</div>
         {showResize ? (

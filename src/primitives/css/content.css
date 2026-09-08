@@ -1,4 +1,4 @@
-/* Domain: content — extracted from primitives.css */
+﻿/* Domain: content — extracted from primitives.css */
 /* ---------- DiffView ---------- */
 .fynns-diff-view {
   margin: 0;
@@ -3732,7 +3732,9 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Two-axis scroll host (AGENTS: narrow = horizontal scroll, not reflow).
  * Do **not** pin overflow-x: clip here — that rule is for vertical-only
- * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs.
+ * scroll hosts. Pair with `.fynns-scroll` for overlay thumbs. Vertical wheel
+ * pans horizontally when H overflows and Y cannot consume (≥ 0.5.184;
+ * edge trap ≥ 0.5.186; `data-fynns-wheel-x="off"` to opt out).
  */
 .fynns-table-wrap {
   overflow: auto;
@@ -4347,10 +4349,13 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
+  /* Fill the page-scroll pane (≥ 0.5.186). Token default is `none` — never a
+   * soft ~1180dp reading strip that leaves dead gutters on wide shells. */
   width: 100%;
   max-width: var(--fynns-layout-content-max-width);
-  margin-inline: auto;
+  margin-inline: 0;
   min-width: 0;
+  align-self: stretch;
   gap: var(--fynns-layout-unit-stack-gap);
   box-sizing: border-box;
   /* Pane breath lives here — not on an ancestor of `.fynns-page-scroll`.

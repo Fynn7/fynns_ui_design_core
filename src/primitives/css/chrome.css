@@ -914,13 +914,27 @@
   padding: var(--fynns-layout-content-inset);
 }
 
-/* Direct dialog-body siblings stay content-sized — same contract as
- * `.fynns-unit-stack > *` / `.fynns-list > *`. Without this, height-capped
- * centered panels (`max-height: min(90vh, 48rem)`) flex-shrink Card /
- * Collapsible shells (`overflow: hidden`) into ~head-height pills instead of
- * scrolling the body. */
+/* Direct dialog-body siblings stay content-sized on the **block** axis —
+ * same contract as `.fynns-unit-stack > *` / `.fynns-list > *`. Without this,
+ * height-capped centered panels (`max-height: min(90vh, 48rem)`) flex-shrink
+ * Card / Collapsible shells (`overflow: hidden`) into ~head-height pills
+ * instead of scrolling the body. */
 .fynns-dialog-body > * {
   flex-shrink: 0;
+}
+
+/*
+ * FullscreenDialog body: stretch **inline** so Card / unit / hub-col stacks
+ * fill the viewport (≥ **0.5.186**). Cross-axis stretch alone is not enough
+ * when a consumer column sizes to max-content / sheet-max. Keep flex-shrink:0
+ * from the rule above so tall Cards still scroll the body.
+ */
+.fynns-dialog--fullscreen > .fynns-dialog-body > * {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  align-self: stretch;
+  box-sizing: border-box;
 }
 
 /*
@@ -3357,14 +3371,98 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   overflow: hidden;
 }
 
+/*
+ * In-column Shared Axis X (navKey drill-in) — fixed track width; ~30dp slide +
+ * staggered fade-through. Forward = leftward; back = rightward. Not drawer
+ * enter/exit and not width collapse.
+ */
+.fynns-clipped-nav-shell-nav-axis {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  --fynns-nav-axis-slide: 1.875rem;
+}
+
+.fynns-clipped-nav-shell-nav-axis-layer {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
+}
+
+.fynns-clipped-nav-shell-nav-axis-layer--in {
+  position: relative;
+  z-index: 0;
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-slow);
+  transition-timing-function: var(--fynns-ease-emphasized);
+}
+
+.fynns-clipped-nav-shell-nav-axis-layer--out {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-property: opacity, transform;
+  transition-duration: var(--fynns-duration-base), var(--fynns-duration-slow);
+  transition-timing-function: var(--fynns-ease-emphasized);
+}
+
+.fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--in {
+  transform: translate3d(var(--fynns-nav-axis-slide), 0, 0);
+}
+
+.fynns-clipped-nav-shell-nav-axis[data-direction="back"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--in {
+  transform: translate3d(calc(-1 * var(--fynns-nav-axis-slide)), 0, 0);
+}
+
+.fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--in-run,
+.fynns-clipped-nav-shell-nav-axis[data-direction="back"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--in-run {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
+  opacity: 0;
+  transform: translate3d(calc(-1 * var(--fynns-nav-axis-slide)), 0, 0);
+}
+
+.fynns-clipped-nav-shell-nav-axis[data-direction="back"]
+  > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
+  opacity: 0;
+  transform: translate3d(var(--fynns-nav-axis-slide), 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-clipped-nav-shell-nav-axis-layer--in,
+  .fynns-clipped-nav-shell-nav-axis-layer--out {
+    transition: none;
+  }
+}
+
 .fynns-clipped-nav-shell[data-nav="hidden"]
   > .fynns-clipped-nav-shell-body
   > .fynns-clipped-nav-shell-nav
-  > .fynns-nav-drawer,
+  .fynns-nav-drawer,
 .fynns-clipped-nav-shell[data-nav="hidden"]
   > .fynns-clipped-nav-shell-body
   > .fynns-clipped-nav-shell-nav
-  > .fynns-nav-rail {
+  .fynns-nav-rail {
   pointer-events: none;
   border-inline-end-color: transparent;
 }
@@ -3377,7 +3475,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /* Permanent destinations clipped under the top bar. */
 .fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-rail {
   flex: 1 1 auto;
   height: 100%;
   min-height: 0;
@@ -3391,13 +3491,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * Column width is owned by the body grid track. Fill the track — strip the
  * drawer/rail’s own width/min/max so they cannot fight resize or the close morph.
  */
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-drawer {
   width: 100%;
   max-width: none;
   padding-block-start: 0;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body {
+.fynns-clipped-nav-shell-nav > .fynns-nav-drawer .fynns-nav-drawer-body,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-drawer .fynns-nav-drawer-body {
   padding-block-start: var(--fynns-navdrawer-body-pad-block-start);
 }
 
@@ -3408,14 +3510,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * stacked vertically inside column tools (archived sidebar lesson).
  */
 .fynns-clipped-nav-shell-nav
-  > .fynns-nav-drawer
+  .fynns-nav-drawer
   .fynns-nav-drawer-body
   .fynns-tooltip-trigger:has(.fynns-nav-drawer-item) {
   display: block;
   width: 100%;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-rail {
   width: 100%;
   max-width: none;
   height: 100%;
@@ -3424,11 +3527,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   padding-block-start: var(--fynns-navrail-destinations-pad-block-start);
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-nav-rail-destinations {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-nav-rail-destinations,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-rail .fynns-nav-rail-destinations {
   flex: 1 1 auto;
 }
 
-.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger {
+.fynns-clipped-nav-shell-nav > .fynns-nav-rail .fynns-tooltip-trigger,
+.fynns-clipped-nav-shell-nav-axis-layer > .fynns-nav-rail .fynns-tooltip-trigger {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -3741,11 +3846,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-drawer,
+    .fynns-nav-drawer,
   .fynns-clipped-nav-shell[data-nav="hidden"]
     > .fynns-clipped-nav-shell-body
     > .fynns-clipped-nav-shell-nav
-    > .fynns-nav-rail {
+    .fynns-nav-rail {
     pointer-events: none;
     border-inline-end-color: transparent;
   }

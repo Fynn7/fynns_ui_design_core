@@ -1356,6 +1356,8 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [fullscreenFlushOpen, setFullscreenFlushOpen] = useState(false);
   const [drawerNestedScrollOpen, setDrawerNestedScrollOpen] = useState(false);
+  const [fullscreenLocale, setFullscreenLocale] = useState("zh");
+  const [fullscreenPath, setFullscreenPath] = useState("");
   const [fullscreenFlushXml, setFullscreenFlushXml] = useState(FULLSCREEN_FLUSH_XML);
   const [busyRegion, setBusyRegion] = useState(false);
   const [busyRegionDeterminate, setBusyRegionDeterminate] = useState(false);
@@ -1510,6 +1512,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
   const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
+  const [tableWheelX, setTableWheelX] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [cardChromeType, setCardChromeType] = useState("flat");
@@ -5815,7 +5818,43 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           }
         >
-          <p style={{ margin: 0 }}>{t("globals.fullscreenBody")}</p>
+          <div className="fynns-unit-stack">
+            <SandboxHelp text={t("globals.fullscreenBody")} />
+            <Card title={t("globals.fullscreenCardAppearance")}>
+              <FieldStack>
+                <FieldBlock label={t("globals.fullscreenCardLocale")}>
+                  <ToggleGroup
+                    ariaLabel={t("globals.fullscreenLocaleAria")}
+                    value={fullscreenLocale}
+                    onChange={setFullscreenLocale}
+                    options={[
+                      { value: "en", label: t("globals.fullscreenLocaleEn") },
+                      { value: "zh", label: t("globals.fullscreenLocaleZh") },
+                    ]}
+                    size="compact"
+                    showCheck={false}
+                  />
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+            <Card title={t("globals.fullscreenCardPath")}>
+              <FieldStack>
+                <FieldBlock label={t("globals.fullscreenPathLabel")}>
+                  <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                    <div className="fynns-control-cluster__grow">
+                      <Input
+                        value={fullscreenPath}
+                        onChange={(e) => setFullscreenPath(e.target.value)}
+                        placeholder={t("globals.fullscreenPathPlaceholder")}
+                        aria-label={t("globals.fullscreenPathLabel")}
+                      />
+                    </div>
+                    <Button type="button">{t("globals.fullscreenPathSave")}</Button>
+                  </div>
+                </FieldBlock>
+              </FieldStack>
+            </Card>
+          </div>
         </FullscreenDialog>
         <SandboxHelp text={t("globals.overlayHelp")} />
         </GlobalsDemo>
@@ -6807,8 +6846,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <GlobalsDemo id="table">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <Card title={t("globals.tableCaption")} chrome="plain">
-          <div className="fynns-table-wrap fynns-scroll sandbox-table-sticky">
-            <Table stickyHeader>
+          <div
+            className="fynns-table-wrap fynns-scroll sandbox-table-h-scroll"
+            data-fynns-wheel-x={tableWheelX ? undefined : "off"}
+          >
+            <Table>
               <TableCaption>{t("globals.tableCaption")}</TableCaption>
               <TableHead>
                 <TableRow>
@@ -6889,10 +6931,48 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Table>
           </div>
           </Card>
+          <Switch
+            labelSide="end"
+            label={t("globals.tableWheelX")}
+            checked={tableWheelX}
+            onCheckedChange={setTableWheelX}
+          />
+          <SandboxHelp text={t("globals.tableWheelXHelp")} />
+          <Card title={t("globals.tableStickyCaption")} chrome="plain">
+          <div className="fynns-table-wrap fynns-scroll sandbox-table-sticky">
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableHeaderCell>{t("globals.tableColName")}</TableHeaderCell>
+                  <TableHeaderCell>{t("globals.tableColStatus")}</TableHeaderCell>
+                  <TableHeaderCell align="end">
+                    {t("globals.tableColQty")}
+                  </TableHeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {[
+                  "sample/ink-bench-16k",
+                  "sample/surface-kit-agent",
+                  "sample/focus-ring",
+                  "sample/token-ladder",
+                  "sample/radius-22",
+                  "sample/busy-region",
+                ].map((name, i) => (
+                  <TableRow key={name}>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>{i % 2 === 0 ? "Ready" : "Draft"}</TableCell>
+                    <TableCell align="end">{(i + 1) * 4}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          </Card>
+          <SandboxHelp text={t("globals.tableStickyHelp")} />
           <TableRevealMoreDemo />
           <SandboxHelp text={t("globals.tableHelp")} />
           <SandboxHelp text={t("globals.tableRevealHelp")} />
-          <SandboxHelp text={t("globals.tableStickyHelp")} />
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="chart">
