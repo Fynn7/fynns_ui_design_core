@@ -1,6 +1,6 @@
 /**
  * CONSUMER_TREATY slug: `BusyRegion empty cold-start mask island (贴图色块)`
- * AGENTS: empty BusyRegion cold-start drops frosted wash (≥ 0.5.190).
+ * AGENTS: empty BusyRegion cold-start drops frosted wash (≥ 0.5.191).
  * Sandbox: #busy-region → #sandbox-busy-region-empty-no-mask
  */
 import { test, expect } from "@playwright/test";

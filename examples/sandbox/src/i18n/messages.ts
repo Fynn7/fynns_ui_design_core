@@ -1,4 +1,4 @@
-﻿import type { Locale } from "./types";
+import type { Locale } from "./types";
 
 /**
  * Flat message catalog for the aesthetic sandbox chrome.
@@ -599,7 +599,7 @@ const en = {
   "globals.busyRegionNarrowLabel": "Scanning samples",
   "globals.busyRegionNarrowMessage": "Scanning sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the ring must not overlap the SearchBar. Empty cold-start (≥ **0.5.190**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
+    "NavigationDrawer cold-start: SearchBar / tools stay **siblings above** BusyRegion (never wrap Search inside BusyRegion). Empty BusyRegion without fill paints chrome in normal flow — the ring must not overlap the SearchBar. Empty cold-start (≥ **0.5.191**) drops frosted mask so BusyStack is not a floating surface island on bare app-bg (no 贴图色块). Live `#sandbox-busy-region-empty-no-mask`.",
   "globals.busyRegionDrawerSearchPh": "Search name / description…",
   "globals.busyRegionDrawerSearchAria": "Search catalog",
   "globals.busyRegionDrawerBusyLabel": "Loading…",
@@ -608,7 +608,7 @@ const en = {
   "globals.busyRegionFillStart": "Show fill busy",
   "globals.busyRegionFillStop": "Clear fill busy",
   "globals.busyRegionFillHelp":
-    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Empty fill (≥ **0.5.190**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
+    "Pane cold-start: BusyRegion fill as FillColumn children (this stage) **or** PageScroll → `.fynns-content-column` (live `#sandbox-busy-region-page-scroll-fill`, ≥ **0.5.136**) — not nested under .fynns-unit-stack, Card, List, or Dialog unit-stack (those hosts are content-sized; fill cannot stretch and the ring parks at the top / overflows the overlay). Empty fill (≥ **0.5.191**) centers BusyStack **without** frosted mask island on bare app-bg; refresh-over-content keeps soft blur + gray mask. Do not use EmptyState + CircularProgress as a loading shell, and do not add a private `surface-*` colored loading wash.",
   "globals.busyRegionPageScrollFillLabel": "Loading section",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll pane cold-start (≥ **0.5.136**): `.fynns-page-scroll` → `.fynns-content-column` (min-height fills the scrollport) → optional thin section wrapper → `BusyRegion` `fill`. BusyStack must **center** in the visible column — not park under TopAppBar or overflow a collapsed absolute overlay. Live host `#sandbox-busy-region-page-scroll-fill`. Failure mode: CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**.",
@@ -2890,7 +2890,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionNarrowLabel": "扫描样例",
   "globals.busyRegionNarrowMessage": "正在扫描 sample-files… 24/16099",
   "globals.busyRegionDrawerHelp":
-    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 圈不得叠在 SearchBar 上。空冷启动（≥ **0.5.190**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
+    "NavigationDrawer 冷启动：SearchBar / 工具条是 BusyRegion 的**上方兄弟**（禁止把 Search 包进 BusyRegion）。无 children 且无 fill 时 chrome 走正常文档流 — 圈不得叠在 SearchBar 上。空冷启动（≥ **0.5.191**）关掉 frosted mask，BusyStack 不再是裸 app-bg 上的浮空色块（贴图色块）。对照 `#sandbox-busy-region-empty-no-mask`。",
   "globals.busyRegionDrawerSearchPh": "搜索名称 / 描述…",
   "globals.busyRegionDrawerSearchAria": "搜索目录",
   "globals.busyRegionDrawerBusyLabel": "加载中…",
@@ -2899,7 +2899,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFillStart": "显示 fill busy",
   "globals.busyRegionFillStop": "清除 fill busy",
   "globals.busyRegionFillHelp":
-    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.190**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
+    "栏目冷启动：BusyRegion fill 作为 FillColumn children（本舞台）**或** PageScroll → `.fynns-content-column`（对照 `#sandbox-busy-region-page-scroll-fill`，≥ **0.5.136**）— 禁止再塞进 .fynns-unit-stack / Card / List / Dialog unit-stack（内容定高，fill 拉不开，圈会贴顶 / 溢出遮罩）。空 fill（≥ **0.5.191**）在裸 app-bg 上居中 BusyStack **且无** frosted mask 色块；刷新已有内容时仍用轻模糊 + 浅灰 mask。禁止 EmptyState + CircularProgress 当 loading 壳，也禁止私有 `surface-*` 彩色 loading 底。",
   "globals.busyRegionPageScrollFillLabel": "加载栏目",
   "globals.busyRegionPageScrollFillHelp":
     "PageScroll 栏目冷启动（≥ **0.5.136**）：`.fynns-page-scroll` → `.fynns-content-column`（min-height 铺满滚口）→ 可选薄栏目包装 → `BusyRegion` `fill`。BusyStack 必须在可见列内**居中** — 禁止贴 TopAppBar 或溢出塌缩的 absolute 遮罩。对照 `#sandbox-busy-region-page-scroll-fill`。失败模式：CONSUMER_TREATY **BusyRegion fill BusyStack top overflow in PageScroll**。",
