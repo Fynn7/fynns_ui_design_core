@@ -106,3 +106,89 @@ test(`${SLUG}: navKey change keeps track width and runs Shared Axis X`, async ({
     `${SLUG}: at most one Y overlay rail on the drawer edge (got ${ghost.drawerRailCount})`,
   ).toBeLessThanOrEqual(1);
 });
+
+test(`${SLUG}: Back run phase hides outgoing instantly (no ghost catalog / dual rails)`, async ({
+  page,
+}) => {
+  await openLayoutsDemo(page, "drill-in");
+  const demo = layoutsDemo(page, "drill-in");
+  const shell = demo.locator(".fynns-clipped-nav-shell");
+  const navCol = shell.locator(":scope > .fynns-clipped-nav-shell-body > .fynns-clipped-nav-shell-nav");
+
+  await demo.getByRole("button", { name: "Catalog" }).click();
+  await expect
+    .poll(async () => shell.getAttribute("data-nav-axis"))
+    .toBeNull();
+  await expect(
+    demo.getByRole("navigation", { name: "Catalog items" }),
+  ).toBeVisible();
+
+  /* Stretch motion so we can sample the run phase. */
+  await page.evaluate(() => {
+    document.documentElement.style.setProperty("--fynns-duration-slow", "1200ms");
+    document.documentElement.style.setProperty("--fynns-duration-base", "1200ms");
+  });
+
+  const midPromise = navCol.evaluate(async (el) => {
+    const samples: Array<{
+      phase: string | null;
+      outOp: number | null;
+      outVis: string | null;
+      bothText: boolean;
+      nearRails: number;
+    }> = [];
+    const end = performance.now() + 900;
+    while (performance.now() < end) {
+      const shellEl = el.closest(".fynns-clipped-nav-shell");
+      const phase = shellEl?.getAttribute("data-nav-axis-phase");
+      const out = el.querySelector(".fynns-clipped-nav-shell-nav-axis-layer--out");
+      const text = el.textContent ?? "";
+      const navRect = el.getBoundingClientRect();
+      const nearRails = [...document.querySelectorAll(".fynns-scroll-rail[data-axis='y']:not([hidden])")].filter(
+        (r) => {
+          const rr = r.getBoundingClientRect();
+          return Math.abs(rr.right - navRect.right) < 12 || Math.abs(rr.left - navRect.right) < 12;
+        },
+      ).length;
+      samples.push({
+        phase,
+        outOp: out ? Number.parseFloat(getComputedStyle(out).opacity) : null,
+        outVis: out ? getComputedStyle(out).visibility : null,
+        bothText: /Catalog items|alpha|beta|gamma/i.test(text) && /Sample destinations/i.test(text),
+        nearRails,
+      });
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    }
+    return samples;
+  });
+
+  await demo.getByRole("button", { name: "Back to destinations" }).click();
+  const samples = await midPromise;
+
+  await page.evaluate(() => {
+    document.documentElement.style.removeProperty("--fynns-duration-slow");
+    document.documentElement.style.removeProperty("--fynns-duration-base");
+  });
+
+  await expect
+    .poll(async () => shell.getAttribute("data-nav-axis"))
+    .toBeNull();
+
+  const morphSamples = samples.filter(
+    (s) => (s.phase === "prepare" || s.phase === "run") && s.outOp != null,
+  );
+  expect(morphSamples.length, `${SLUG}: expected prepare/run samples`).toBeGreaterThan(0);
+  for (const s of morphSamples) {
+    expect(s.outOp, `${SLUG}: outgoing must be opacity 0 in ${s.phase}`).toBeLessThanOrEqual(0.05);
+    expect(s.outVis, `${SLUG}: outgoing must be visibility hidden in ${s.phase}`).toBe("hidden");
+    expect(s.nearRails, `${SLUG}: at most one drawer-edge Y rail mid-morph`).toBeLessThanOrEqual(1);
+  }
+  /* Outgoing is hidden from prepare — both catalogs must not stay legible. */
+  const late = morphSamples.filter((s) => s.phase === "run").slice(
+    Math.floor(morphSamples.filter((s) => s.phase === "run").length / 3),
+  );
+  expect(
+    late.some((s) => s.bothText),
+    `${SLUG}: root+catalog must not both stay legible after out hide`,
+  ).toBe(false);
+});

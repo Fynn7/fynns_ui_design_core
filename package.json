@@ -1,6 +1,6 @@
 {
   "name": "@fynn7/ui-design-core",
-  "version": "0.5.193",
+  "version": "0.5.200",
   "description": "Fynn's shared dark-teal UI design system: canonical --fynns-* design tokens plus self-developed React primitives (no radix, no sonner). Day-to-day: sibling file: (@fynn7/ui-design-core) + Vite alias @fynns/ui; optional GitHub Packages for publishers.",
   "license": "UNLICENSED",
   "private": false,

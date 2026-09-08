@@ -11,6 +11,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+import { refreshOverlayScrollbars } from "../theme/overlayScrollbar";
 import { readRemPx, readVarPx } from "./layoutMeasure";
 
 export type ClippedNavShellNavMode = "drawer" | "rail" | "hidden";
@@ -284,17 +285,37 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     setAxisPhase("prepare");
   }, [navKey, navMode, phase, axisSwap, nav]);
 
+  /* Prepare → run after a paint so `--in` start transform is committed.
+   * Outgoing is hidden on bare `--out` (CSS) from the first prepare paint —
+   * do not wait for `--out-run` or a visible prepare frame (brief dual flash). */
   useLayoutEffect(() => {
     if (axisPhase !== "prepare" || !axisSwap) return;
-    void rootRef.current?.offsetWidth;
-    setAxisPhase("run");
+    let cancelled = false;
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        if (cancelled) return;
+        setAxisPhase((cur) => (cur === "prepare" ? "run" : cur));
+      });
+    });
+    const failsafe = window.setTimeout(() => {
+      if (cancelled) return;
+      setAxisPhase((cur) => (cur === "prepare" ? "run" : cur));
+    }, 48);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      window.clearTimeout(failsafe);
+    };
   }, [axisPhase, axisSwap]);
 
-  useEffect(() => {
-    if (axisPhase !== "prepare" || !axisSwap) return;
-    const timer = window.setTimeout(() => setAxisPhase("run"), 32);
-    return () => window.clearTimeout(timer);
-  }, [axisPhase, axisSwap]);
+  useLayoutEffect(() => {
+    if (!axisSwap) return;
+    /* Outgoing hosts must drop portal rails as soon as `--out` exists
+     * (before the prepare paint reaches the screen). */
+    refreshOverlayScrollbars();
+  }, [axisSwap, axisPhase]);
 
   useEffect(() => {
     if (axisPhase !== "run" || !axisSwap) return;
@@ -307,22 +328,25 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
       committedNavKeyRef.current = toKey;
       setAxisSwap(null);
       setAxisPhase("idle");
+      refreshOverlayScrollbars();
     };
-    const outLayer = rootRef.current?.querySelector(
-      ".fynns-clipped-nav-shell-nav-axis-layer--out",
+    /* Outgoing no longer transitions — finish when incoming opacity/transform
+     * settles, with a hard cap so a stalled transition cannot leave two drawers. */
+    const inLayer = rootRef.current?.querySelector(
+      ".fynns-clipped-nav-shell-nav-axis-layer--in",
     );
     const onTransitionEnd = (event: Event) => {
       if (!(event instanceof TransitionEvent)) return;
-      if (event.target !== outLayer) return;
+      if (event.target !== inLayer) return;
       if (event.propertyName !== "opacity" && event.propertyName !== "transform") {
         return;
       }
       finish();
     };
-    outLayer?.addEventListener("transitionend", onTransitionEnd);
-    const timer = window.setTimeout(finish, Math.max(ms + 80, 120));
+    inLayer?.addEventListener("transitionend", onTransitionEnd);
+    const timer = window.setTimeout(finish, Math.max(Math.min(ms + 80, 520), 120));
     return () => {
-      outLayer?.removeEventListener("transitionend", onTransitionEnd);
+      inLayer?.removeEventListener("transitionend", onTransitionEnd);
       window.clearTimeout(timer);
     };
   }, [axisPhase, axisSwap]);
@@ -712,9 +736,9 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
                 className={[
                   "fynns-clipped-nav-shell-nav-axis-layer",
                   "fynns-clipped-nav-shell-nav-axis-layer--out",
-                  axisRun
-                    ? "fynns-clipped-nav-shell-nav-axis-layer--out-run"
-                    : "",
+                  /* Always mark run-hide while out is mounted (prepare + run).
+                   * Bare `--out` CSS already hides; class keeps e2e / probes stable. */
+                  "fynns-clipped-nav-shell-nav-axis-layer--out-run",
                 ]
                   .filter(Boolean)
                   .join(" ")}
