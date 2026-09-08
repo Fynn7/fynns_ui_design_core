@@ -3,7 +3,7 @@
  * + `Pagination Select overlay square abutting corners`
  * AGENTS: `.fynns-pagination-bar` rows-per-page Select expands as upward overlay
  * (≥ 0.5.151 / 0.5.152) — visible options; H-rail in block-end pad, not through
- * controls. ≥ 0.5.191: floating full-radius capsule (never square abutting edge).
+ * controls. ≥ 0.5.193: floating full-radius capsule (never square abutting edge).
  * Sandbox: #pagination
  */
 import { test, expect } from "@playwright/test";
@@ -53,14 +53,16 @@ test(`${SLUG}: open Select shows options upward; H-rail clears controls`, async 
         br: s.borderBottomRightRadius,
         bl: s.borderBottomLeftRadius,
         marginEnd: s.marginBottom,
+        overflow: s.overflow,
       };
     });
-    // Floating capsule — all corners rounded (not md md 0 0).
+    // Floating capsule — all corners rounded AND children clipped (overflow hidden).
     for (const key of ["tl", "tr", "br", "bl"] as const) {
       const px = parseFloat(radii[key]);
       expect(px, `${key} radius`).toBeGreaterThan(8);
     }
     expect(parseFloat(radii.marginEnd)).toBeGreaterThan(0);
+    expect(radii.overflow).toBe("hidden");
   }).toPass({ timeout: 5_000 });
 
   await expect(async () => {
