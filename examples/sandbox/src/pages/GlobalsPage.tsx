@@ -7273,6 +7273,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <Card title={t("globals.paginationCardTitle")}>
               <div className="fynns-pagination-bar fynns-scroll">
                 <div className="fynns-pagination-bar__start">
+                  <span className="fynns-table-meta">
+                    {t("globals.paginationPageSizeLabel")}
+                  </span>
                   <Select
                     ariaLabel={t("globals.paginationPageSizeAria")}
                     value={pageSize}

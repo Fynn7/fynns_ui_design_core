@@ -377,6 +377,16 @@ belong in a consumer’s own doc.
   scroll further on Y (default on; opt out `data-fynns-wheel-x="off"`; edge
   trap ≥ **0.5.186** so slide-back does not yank PageScroll). Live `#table`.
   Failure: CONSUMER_TREATY wide Table wheel scrolls PageScroll.
+- **DON'T** square the abutting corners of a Pagination rows-per-page Select
+  overlay (or invent consumer `border-radius` / joined-shell CSS on
+  `.fynns-search-bar-panel`) — core ≥ **0.5.191** paints a floating
+  `--fynns-radius-3xl` capsule with a small gap above the trigger. Live
+  `#pagination`. Failure: CONSUMER_TREATY Pagination Select overlay square
+  abutting corners.
+- **DON'T** bake the page-size noun into every Select option (`Rows: 10`,
+  `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
+  sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:
+  CONSUMER_TREATY Pagination Select option repeats noun.
 - **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
   for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
   so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
@@ -766,7 +776,11 @@ classes.
   `--fynns-navdrawer-section-gap` **4dp**), SkipLink, Breadcrumb, Pagination
   (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows;
   rows-per-page Select expands as an **overlay** ≥ **0.5.151** — never stretch
-  the bar with in-flow `.fynns-search-bar--expanded`)
+  the bar with in-flow `.fynns-search-bar--expanded`; upward panel is a
+  **floating capsule** ≥ **0.5.191** — full `--fynns-radius-3xl` on **all**
+  corners + small gap above the trigger, never square the abutting edge;
+  options = **digits only** + sibling `.fynns-table-meta` noun — never
+  `Rows: N` / `Sessions: N` / `每页 N 行` in every option)
 - **App shells:** **`DestinationAppShell`** (default greenfield — declarative
   `destinations[]` / `title` / optional `leadingExtra` / `trailing` /
   `navFooter` / `children` / optional `aside`). Destinations are **binary**:
@@ -925,7 +939,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Empty catalog | EmptyState (`fill` if sole pane) | `#empty-state` | EmptyState as loading shell |
 | Pane cold-start fail / hang | Clear busy → InlineAlert + hint + end-align Retry | `#sandbox-pane-load-error` | Permanent fill; EmptyState as load-fail; silent empty |
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
-| Table / list pager | `.fynns-pagination-bar` single row; rows-per-page Select overlays **up** (≥ **0.5.152**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; clipped / invisible expand; H-rail through controls |
+| Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only Select; overlays **up** as floating full-radius capsule (≥ **0.5.152** / **0.5.191**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; clipped / invisible expand; H-rail through controls; square abutting corners; `Sessions: N` / `每页 N 行` in every option |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
 | Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#rhythm` status | Cluster+end-hug misalign; Chip as status; FieldHint essays |
 | Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | `#sandbox-rhythm-probe-kinds` | One stack mixing Available + Backend; path/chips/hint in one cluster |
