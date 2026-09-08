@@ -1043,6 +1043,20 @@
 }
 
 /*
+ * Empty cold-start (no mounted children): frost mask is for de-emphasizing
+ * *existing* copy under busy — not a floating surface card on bare app-bg.
+ * Drop wash + blur so BusyStack alone paints (no content-sized “贴图色块”).
+ * Refresh-over-content (non-empty) keeps `.fynns-busy-region-overlay` mask.
+ */
+.fynns-busy-region--busy
+  > .fynns-busy-region-content:empty
+  + .fynns-busy-region-overlay {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/*
  * Cold-start without `fill`: empty content + absolute overlay → region height 0,
  * so BusyStack paints outside the box and overlaps prior siblings (SearchBar /
  * tools in NavigationDrawer). Keep chrome in normal flow instead.

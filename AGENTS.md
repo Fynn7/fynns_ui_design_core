@@ -121,7 +121,9 @@ belong in a consumer’s own doc.
    `--fynns-color-busy-region-mask` + **one** progress chrome + message —
    never `--fynns-color-overlay` / BusyScrim; never a consumer `surface-*`
    wash; keep blur radius light so busy does not read as a glitchy frame;
-   **pane cold-start uses `fill`**, never `EmptyState` + a
+   **empty cold-start** (no children) drops the wash so BusyStack is not a
+   floating surface island on bare `app-bg` — ≥ **0.5.190**; **pane
+   cold-start uses `fill`**, never `EmptyState` + a
    ring, never a ring stacked on a bar), `EmptyState` (**zero-result catalogs
    only**), `Banner` / `InlineAlert` / `BadgedBox`, and imperative `snackbar`
    (+ root `<SnackbarHost />`). Do **not** use deleted Toast APIs or the removed
@@ -150,9 +152,10 @@ belong in a consumer’s own doc.
    EndAside; toggle = open↔closed). Overlays via `Dialog` / `ConfirmDialog` /
    `Drawer` / `FullscreenDialog` / `BottomSheet` / `NavigationDrawer`. Blocking /
    sectional busy: `BusyScrim` (full-viewport non-dismissible) or `BusyRegion`
-   (relative soft frosted blur + `--fynns-color-busy-region-mask` — content
-   `inert` while busy; never consumer `surface-*` wash or BusyScrim overlay;
-   full-viewport tint → `BusyScrim`). Heavy boots use **`runBusyTask` /
+   (relative soft frosted blur + `--fynns-color-busy-region-mask` when
+   children are mounted — empty cold-start ≥ **0.5.190** = chrome only, no
+   mask island; content `inert` while busy; never consumer `surface-*` wash
+   or BusyScrim overlay; full-viewport tint → `BusyScrim`). Heavy boots use **`runBusyTask` /
    `useBusyTask`** (show busy → paint → then work). Do not revive
    `BlockingLoadingOverlay` or purged `Panel` / `PanelCard`.
    **Nested containment** (host → section → field): any `surface-1`+ host may
@@ -628,8 +631,9 @@ classes.
   FieldStack / CodeBlock inside), BadgedBox, LinearProgress / CircularProgress,
   BusyScrim `{ open, label, message?, value?, size?, indicator? }` /
   BusyRegion `{ busy, label, children?, message?, value?, size?, fill?,
-  indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask`;
-  `indicator` `circular`|`linear`; never stack
+  indicator? }` (soft frosted blur + `--fynns-color-busy-region-mask` when
+  children are mounted; empty cold-start ≥ **0.5.190** = chrome only — no
+  content-sized mask island; `indicator` `circular`|`linear`; never stack
   ring on bar; `fill` for height-resolved cold-start), EmptyState,
   **Chat** family (see below), Snackbar (`snackbar()` + `<SnackbarHost />`),
   Tooltip, InfoHint
@@ -639,7 +643,7 @@ classes.
   | Scene | Use | Do **not** |
   | --- | --- | --- |
   | Full-app block | `BusyScrim` | `EmptyState` + ring; revived `BlockingLoadingOverlay` |
-  | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain |
+  | Pane cold-start | `BusyRegion` `fill` as FillColumn/shell child **or** PageScroll → `.fynns-content-column` (direct / thin section wrapper hosting only the fill — core ≥ **0.5.136** stretches scrollport + pass-through wrappers so BusyStack centers, does not overflow a collapsed overlay); hide section FieldHint until ready; empty host ≥ **0.5.190** paints chrome without frosted mask island | Nest under content-sized unit-stack/Card; EmptyState as loading; FieldHint + busy in one well; bare `fill` inside PageScroll without the content-column height chain; empty BusyRegion painting a content-sized mask “贴图色块” (fixed in core ≥ **0.5.190**) |
   | Dialog/Card body load | `BusyRegion` (+ `fill` if height resolved); no pager siblings under empty overlay; drawer SearchBar **above** BusyRegion | Bare CircularProgress as body; wrap List+Select+Pagination so chrome flickers |
   | Refresh over existing | BusyRegion around List/table only | Unmount → EmptyState; consumer `surface-*` wash; wrap whole Card |
   | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |

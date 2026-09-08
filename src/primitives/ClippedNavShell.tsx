@@ -222,31 +222,13 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     navMode === "hidden" ? "closed" : "open",
   );
 
-  const keyMismatch =
-    navKey !== undefined && committedNavKeyRef.current !== navKey;
-  let activeAxis = axisSwap;
-  if (keyMismatch && axisSwap == null) {
-    if (navMode !== "hidden" && phase === "open") {
-      const reduce =
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduce) {
-        committedNavKeyRef.current = navKey;
-      } else {
-        activeAxis = {
-          direction: navDirectionRef.current,
-          outgoing: lastNavRef.current,
-          toKey: navKey,
-        };
-        setAxisSwap(activeAxis);
-        setAxisPhase("prepare");
-      }
-    } else {
-      committedNavKeyRef.current = navKey;
-    }
-  }
-
-  if (nav != null && activeAxis == null) {
+  /* Keep last open nav for close morph + Shared Axis outgoing. Skip while a
+   * navKey change is pending so layout can still read the previous body. */
+  if (
+    nav != null &&
+    axisSwap == null &&
+    (navKey === undefined || committedNavKeyRef.current === navKey)
+  ) {
     lastNavRef.current = nav;
   }
 
@@ -256,12 +238,106 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     setPhase("closing");
   }
 
+  /**
+   * Drive Shared Axis off props in layout — not setState-during-render.
+   * Render-time setAxisSwap fought parent re-renders / Strict and could leave
+   * phase stuck on prepare/run with both drawers painted (Back ghost).
+   */
+  useLayoutEffect(() => {
+    if (navKey === undefined) return;
+    if (committedNavKeyRef.current === navKey) return;
+
+    if (navMode === "hidden" || phase !== "open") {
+      committedNavKeyRef.current = navKey;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+      return;
+    }
+
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      committedNavKeyRef.current = navKey;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+      return;
+    }
+
+    /* Mid-morph retarget: snap to latest body (no second cross-fade). */
+    if (axisSwap != null && axisSwap.toKey !== navKey) {
+      committedNavKeyRef.current = navKey;
+      if (nav != null) lastNavRef.current = nav;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+      return;
+    }
+
+    if (axisSwap != null) return;
+
+    const outgoing = lastNavRef.current;
+    setAxisSwap({
+      direction: navDirectionRef.current,
+      outgoing,
+      toKey: navKey,
+    });
+    setAxisPhase("prepare");
+  }, [navKey, navMode, phase, axisSwap, nav]);
+
+  useLayoutEffect(() => {
+    if (axisPhase !== "prepare" || !axisSwap) return;
+    void rootRef.current?.offsetWidth;
+    setAxisPhase("run");
+  }, [axisPhase, axisSwap]);
+
+  useEffect(() => {
+    if (axisPhase !== "prepare" || !axisSwap) return;
+    const timer = window.setTimeout(() => setAxisPhase("run"), 32);
+    return () => window.clearTimeout(timer);
+  }, [axisPhase, axisSwap]);
+
+  useEffect(() => {
+    if (axisPhase !== "run" || !axisSwap) return;
+    const ms = readNavAxisMs(rootRef.current);
+    const toKey = axisSwap.toKey;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      committedNavKeyRef.current = toKey;
+      setAxisSwap(null);
+      setAxisPhase("idle");
+    };
+    const outLayer = rootRef.current?.querySelector(
+      ".fynns-clipped-nav-shell-nav-axis-layer--out",
+    );
+    const onTransitionEnd = (event: Event) => {
+      if (!(event instanceof TransitionEvent)) return;
+      if (event.target !== outLayer) return;
+      if (event.propertyName !== "opacity" && event.propertyName !== "transform") {
+        return;
+      }
+      finish();
+    };
+    outLayer?.addEventListener("transitionend", onTransitionEnd);
+    const timer = window.setTimeout(finish, Math.max(ms + 80, 120));
+    return () => {
+      outLayer?.removeEventListener("transitionend", onTransitionEnd);
+      window.clearTimeout(timer);
+    };
+  }, [axisPhase, axisSwap]);
+
   const renderedNav =
     phase === "closed"
       ? null
       : navMode !== "hidden"
         ? nav
         : lastNavRef.current;
+
+  const activeAxis = axisSwap;
+  const axisRun = axisPhase === "run";
+  const effectiveAxisPhase: "idle" | "prepare" | "run" =
+    activeAxis != null ? (axisPhase === "idle" ? "prepare" : axisPhase) : "idle";
 
   const [uncontrolledWidth, setUncontrolledWidth] = useState<number | null>(
     defaultDrawerWidth ?? null,
@@ -276,29 +352,6 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const timer = window.setTimeout(() => setPhase("closed"), ms);
     return () => window.clearTimeout(timer);
   }, [phase]);
-
-  useLayoutEffect(() => {
-    if (axisPhase !== "prepare" || !axisSwap) return;
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => setAxisPhase("run"));
-    });
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, [axisPhase, axisSwap]);
-
-  useEffect(() => {
-    if (axisPhase !== "run" || !axisSwap) return;
-    const ms = readNavAxisMs(rootRef.current);
-    const timer = window.setTimeout(() => {
-      committedNavKeyRef.current = axisSwap.toKey;
-      setAxisSwap(null);
-      setAxisPhase("idle");
-    }, ms);
-    return () => window.clearTimeout(timer);
-  }, [axisPhase, axisSwap]);
 
   /**
    * Dev-only: `navMode` only sizes the grid track — consumers must swap
@@ -630,11 +683,6 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
     const roomMax = Math.max(min, root.clientWidth - mainMin - asideMin);
     return { min, max: Math.min(tokenMax, roomMax) };
   })();
-
-  /* Same-render start: state `axisPhase` may still be idle until commit. */
-  const effectiveAxisPhase: "idle" | "prepare" | "run" =
-    activeAxis != null && axisSwap == null ? "prepare" : axisPhase;
-  const axisRun = effectiveAxisPhase === "run";
 
   return (
     <div

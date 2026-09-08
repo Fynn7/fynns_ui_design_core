@@ -229,6 +229,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Dialog body end-align footer clipped | AGENTS shells / Hard rules | `#form-recipe` |
 | vacant band under FullscreenDialog title | AGENTS Dialog / overlays | `#fullscreen-flush` |
 | BusyRegion colored loading wash (consumer surface-*) | AGENTS Busy/Loading | `#busy-region` |
+| BusyRegion empty cold-start mask island (贴图色块) | AGENTS Busy/Loading | `#sandbox-busy-region-empty-no-mask` |
 | BusyRegion busy copy bleeds through overlay | AGENTS Busy/Loading | `#sandbox-busy-region-field-sample` |
 | bare CircularProgress as body loader | AGENTS Busy/Loading | `#busy-region` |
 | BusyRegion empty cold-start overlaps SearchBar | AGENTS Busy/Loading | `#busy-region` |

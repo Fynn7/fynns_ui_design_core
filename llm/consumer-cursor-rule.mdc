@@ -45,7 +45,7 @@ alwaysApply: true
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
 | Hang / 超时 | `runBusyTask`/`runLoadingTask` + **`timeoutMs`/`signal`/`onError`**（≥ **0.5.177**）→ **先清 busy** 再错误表面 | 永久 BusyRegion/Scrim/`loading`；空数据当 loading |
-| BusyRegion 遮罩 | core `--fynns-color-busy-region-mask` + 轻 blur（≥ **0.5.181**） | 消费仓私造 `surface-*` / 深色 scrim；复用 BusyScrim `--fynns-color-overlay` |
+| BusyRegion 遮罩 | core `--fynns-color-busy-region-mask` + 轻 blur（≥ **0.5.181**）；**空冷启动**无 children → 无 wash（≥ **0.5.190**，只画圈+文案） | 消费仓私造 `surface-*` / 深色 scrim；复用 BusyScrim `--fynns-color-overlay`；空 BusyRegion 内容定高「贴图色块」 |
 | 栏目冷启动失败 | 清 busy → `InlineAlert` + 短 hint + 末端 Retry（≥ **0.5.178**） | 永久 fill；EmptyState 当加载失败壳；静默空态 |
 | 错误表面 | 瞬时 → `snackbar`；面板恢复 → `InlineAlert`+Retry；生成失败 → `ChatMessage.error`+`onRetry`；机器码留消费方 `AppError { code, message }` 再映射表面 | 用 snackbar 代替面板恢复；EmptyState 当 500；AppError 码塞进 `@fynns/ui`；只有笼统「失败」无 code/detail |
 

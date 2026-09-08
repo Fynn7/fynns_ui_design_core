@@ -82,4 +82,27 @@ test(`${SLUG}: navKey change keeps track width and runs Shared Axis X`, async ({
   await expect(
     demo.getByRole("navigation", { name: "Sample destinations" }),
   ).toBeVisible();
+
+  /* No lasting Shared Axis ghost: one drawer, no out layer, no catalog label. */
+  await expect(navCol.locator(".fynns-clipped-nav-shell-nav-axis")).toHaveCount(0);
+  await expect(navCol.locator(".fynns-nav-drawer")).toHaveCount(1);
+  await expect(demo.getByRole("navigation", { name: "Catalog items" })).toHaveCount(0);
+  const ghost = await navCol.evaluate((el) => {
+    const text = el.textContent ?? "";
+    const yRails = [...document.querySelectorAll(".fynns-scroll-rail[data-axis='y']:not([hidden])")];
+    const navRect = el.getBoundingClientRect();
+    const drawerRails = yRails.filter((r) => {
+      const rr = r.getBoundingClientRect();
+      return Math.abs(rr.right - navRect.right) < 8 || Math.abs(rr.left - navRect.right) < 8;
+    });
+    return {
+      hasCatalog: /Catalog items|alpha|beta|gamma/i.test(text) && /Sample destinations/i.test(text),
+      drawerRailCount: drawerRails.length,
+    };
+  });
+  expect(ghost.hasCatalog, `${SLUG}: root+catalog text must not both remain`).toBe(false);
+  expect(
+    ghost.drawerRailCount,
+    `${SLUG}: at most one Y overlay rail on the drawer edge (got ${ghost.drawerRailCount})`,
+  ).toBeLessThanOrEqual(1);
 });

@@ -6035,7 +6035,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </div>
           <SandboxHelp text={t("globals.busyRegionDrawerHelp")} />
-          <div className="sandbox-busy-narrow sandbox-busy-drawer-tools">
+          <div
+            id="sandbox-busy-region-empty-no-mask"
+            className="sandbox-busy-narrow sandbox-busy-drawer-tools"
+          >
             <SearchBar
               density="destination"
               placeholder={t("globals.busyRegionDrawerSearchPh")}

@@ -3395,11 +3395,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-height: 0;
   height: 100%;
   flex: 1 1 auto;
+  /* Opaque layer fill so the incoming surface occludes outgoing text once it
+   * reaches opacity 1 — avoids “ghost catalog under root” if out lags. */
+  background: var(--fynns-color-surface-1);
 }
 
 .fynns-clipped-nav-shell-nav-axis-layer--in {
   position: relative;
-  z-index: 0;
+  /* Incoming on top: as it fades in it covers outgoing even if out opacity
+   * stalls mid-morph (previous out-on-top left a lasting double-image). */
+  z-index: 1;
   opacity: 0;
   transition-property: opacity, transform;
   transition-duration: var(--fynns-duration-slow);
@@ -3409,12 +3414,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-clipped-nav-shell-nav-axis-layer--out {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition-property: opacity, transform;
-  transition-duration: var(--fynns-duration-base), var(--fynns-duration-slow);
+  transition-property: opacity, transform, visibility;
+  transition-duration: var(--fynns-duration-base), var(--fynns-duration-slow),
+    0s;
   transition-timing-function: var(--fynns-ease-emphasized);
 }
 
@@ -3439,12 +3445,17 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 .fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
   > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
   opacity: 0;
+  visibility: hidden;
+  /* Delay visibility until opacity has settled (base duration). */
+  transition-delay: 0s, 0s, var(--fynns-duration-base);
   transform: translate3d(calc(-1 * var(--fynns-nav-axis-slide)), 0, 0);
 }
 
 .fynns-clipped-nav-shell-nav-axis[data-direction="back"]
   > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
   opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s, 0s, var(--fynns-duration-base);
   transform: translate3d(var(--fynns-nav-axis-slide), 0, 0);
 }
 

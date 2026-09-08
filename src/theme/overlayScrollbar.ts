@@ -318,9 +318,16 @@ function prefersFineHover(): boolean {
  * When a modal overlay is open, only paint rails for scroll hosts inside that
  * layer. Otherwise PageScroll / shell canvas rails stay visible behind Dialog
  * and the idle thumb at scrollTop=0 reads as a jump when the dialog body scrolls.
+ *
+ * ClippedNavShell Shared Axis **outgoing** layer: hide rails — the layer
+ * translates + fades, and a portal Y rail at the shifted edge reads as a
+ * second/ghost scrollbar beside the incoming drawer (slide-back failure).
  */
 function shouldPaintOverlayRail(host: HTMLElement): boolean {
   if (typeof document === "undefined") return true;
+  if (host.closest(".fynns-clipped-nav-shell-nav-axis-layer--out")) {
+    return false;
+  }
   const modalOverlays = document.querySelectorAll<HTMLElement>(
     '.fynns-dialog-overlay[data-state="open"]:not(.fynns-dialog-overlay--nonmodal)',
   );
