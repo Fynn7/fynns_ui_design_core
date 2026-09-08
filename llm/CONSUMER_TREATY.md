@@ -57,7 +57,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | sandbox-only aesthetics | AGENTS Hard rules / check:wysiwyg | `—` |
 | squashed drawer | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | drill-in / mode sidebar hard-swap (no navKey morph) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
-| drill-in Back Shared Axis ghost (out layer / double Y rail) | AGENTS shells / Hard rules (≥ **0.5.189**) | `#layouts-demo-drill-in` |
+| drill-in Back Shared Axis ghost (out layer / double Y rail) | AGENTS shells / Hard rules (≥ **0.5.198**; prepare-frame flash ≥ **0.5.201**–**0.5.203**) | `#layouts-demo-drill-in` |
 | icon-only rail densify (narrow) | AGENTS shells / Hard rules | `#layouts-demo-navigation-rail` |
 | stacked drawer ribbon (narrow) | AGENTS shells / Hard rules | `—` |
 | drawer headline toolbar | AGENTS shells / Hard rules | `#layouts-demo-shell` |
@@ -147,9 +147,11 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
-| Pagination Select expands bar (in-flow stretch) | AGENTS Content density / Hard rules | `#pagination` |
-| Pagination Select overlay square abutting corners | AGENTS Hard rules / Content density | `#pagination` |
+| Pagination Select invents absolute overlay | AGENTS Hard rules / Content density | `#pagination` / `#select` |
+| Pagination Select siblings center on expanded height | AGENTS Hard rules / Content density | `#pagination` |
+| Pagination bar gaps crushed to 4dp | AGENTS Hard rules / Content density | `#pagination` |
 | Pagination Select option repeats noun | AGENTS Hard rules / Content density | `#pagination` |
+| consumer restyles keep-set chrome radius | AGENTS Hard rules / Consumer apps | `#select` / `#menu` |
 | KPI stat grid stacks full-width (undefined layout token) | AGENTS Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |

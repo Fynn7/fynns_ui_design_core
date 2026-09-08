@@ -31,11 +31,15 @@
  */
 
 const HOST_ATTR = "data-fynns-overlay-scroll";
+/** Ties portal rails to a host across Vite HMR / dual-bundle loads. */
+const HOST_ID_ATTR = "data-fynns-scroll-host";
 /** Opt out of vertical-wheel → horizontal pan (`"off"`). Default enabled. */
 const WHEEL_X_ATTR = "data-fynns-wheel-x";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
 const MIN_THUMB_PX = 24;
+/** Element-bound state so a second module instance does not double-attach. */
+const BOUND_STATE = "__fynnsOverlayScroll";
 
 type Axis = "y" | "x";
 
@@ -71,6 +75,19 @@ const states = new WeakMap<HTMLElement, HostState>();
 let started = false;
 let finePointer = false;
 let portal: HTMLDivElement | null = null;
+
+/** Cross-bundle / HMR singleton (module locals alone still race two portals). */
+const GLOBAL_PORTAL = "__fynnsOverlayScrollPortal";
+const GLOBAL_STARTED = "__fynnsOverlayScrollStarted";
+
+type OverlayGlobals = {
+  [GLOBAL_PORTAL]?: HTMLDivElement;
+  [GLOBAL_STARTED]?: boolean;
+};
+
+function overlayGlobals(): OverlayGlobals {
+  return globalThis as unknown as OverlayGlobals;
+}
 
 function readScrollbarSizePx(): number {
   if (typeof document === "undefined") return 10;
@@ -319,13 +336,15 @@ function prefersFineHover(): boolean {
  * layer. Otherwise PageScroll / shell canvas rails stay visible behind Dialog
  * and the idle thumb at scrollTop=0 reads as a jump when the dialog body scrolls.
  *
- * ClippedNavShell Shared Axis **outgoing** layer: hide rails — the layer
- * translates + fades, and a portal Y rail at the shifted edge reads as a
- * second/ghost scrollbar beside the incoming drawer (slide-back failure).
+ * ClippedNavShell Shared Axis: portal Y rails escape axis `overflow: hidden`.
+ * Suppress rails for **any** host under the axis for the whole morph — not only
+ * `--out`. Incoming `--in` during prepare is opacity 0 but still translated
+ * (~30dp); painting its rail at the offset edge reads as a brief twin-Y flash
+ * on Back (≥ 0.5.201).
  */
 function shouldPaintOverlayRail(host: HTMLElement): boolean {
   if (typeof document === "undefined") return true;
-  if (host.closest(".fynns-clipped-nav-shell-nav-axis-layer--out")) {
+  if (host.closest(".fynns-clipped-nav-shell-nav-axis")) {
     return false;
   }
   const modalOverlays = document.querySelectorAll<HTMLElement>(
@@ -336,6 +355,24 @@ function shouldPaintOverlayRail(host: HTMLElement): boolean {
     if (overlay.contains(host)) return true;
   }
   return false;
+}
+
+/** Reposition / hide portal rails after overlay or Shared Axis layer changes.
+ * Synchronous — do not rAF-defer (one paint with stale rails = Back Y flash).
+ * Also scan so newly mounted axis hosts attach with paint suppressed before paint. */
+export function refreshOverlayScrollbars(): void {
+  if (typeof document === "undefined") return;
+  ensurePortal();
+  scan(document);
+  document.querySelectorAll<HTMLElement>(`[${HOST_ATTR}]`).forEach((host) => {
+    const state = states.get(host) ?? getBoundState(host);
+    if (!state) return;
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = 0;
+    }
+    updateHost(host, state);
+  });
 }
 
 function canHostOverlay(el: Element): el is HTMLElement {
@@ -424,12 +461,65 @@ function handleWheelAxisX(
 }
 
 function ensurePortal(): HTMLDivElement {
-  if (portal && portal.isConnected) return portal;
+  const g = overlayGlobals();
+  if (portal && portal.isConnected) {
+    g[GLOBAL_PORTAL] = portal;
+    return portal;
+  }
+  if (g[GLOBAL_PORTAL]?.isConnected) {
+    portal = g[GLOBAL_PORTAL]!;
+    return portal;
+  }
+  /* Vite HMR / dual `@fynns/ui` graphs used to append a second portal — two Y
+   * thumbs park on the same PageScroll edge (right-edge 滚动条重影). */
+  const existing = [
+    ...document.querySelectorAll<HTMLDivElement>(".fynns-scroll-overlay-portal"),
+  ];
+  if (existing.length > 0) {
+    portal = existing[0]!;
+    for (let i = 1; i < existing.length; i++) {
+      existing[i]!.remove();
+    }
+    g[GLOBAL_PORTAL] = portal;
+    return portal;
+  }
   portal = document.createElement("div");
   portal.className = "fynns-scroll-overlay-portal";
   portal.setAttribute("aria-hidden", "true");
   document.body.appendChild(portal);
+  /* Re-check after append: a racing importer may have added another. */
+  const raced = [
+    ...document.querySelectorAll<HTMLDivElement>(".fynns-scroll-overlay-portal"),
+  ];
+  portal = raced[0]!;
+  for (let i = 1; i < raced.length; i++) {
+    raced[i]!.remove();
+  }
+  g[GLOBAL_PORTAL] = portal;
   return portal;
+}
+
+type BoundHostState = HostState & { hostId: string };
+
+function getBoundState(host: HTMLElement): BoundHostState | undefined {
+  return (host as unknown as Record<string, BoundHostState | undefined>)[
+    BOUND_STATE
+  ];
+}
+
+function setBoundState(host: HTMLElement, state: BoundHostState | undefined) {
+  (host as unknown as Record<string, BoundHostState | undefined>)[BOUND_STATE] =
+    state;
+}
+
+function newHostId(): string {
+  return `h${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function removeRailsForHostId(hostId: string) {
+  document
+    .querySelectorAll(`.${RAIL_CLASS}[${HOST_ID_ATTR}="${hostId}"]`)
+    .forEach((el) => el.remove());
 }
 
 function makeRail(axis: Axis): { rail: HTMLDivElement; thumb: HTMLDivElement } {
@@ -697,16 +787,30 @@ function updateHost(host: HTMLElement, state: HostState) {
 }
 
 function attach(host: HTMLElement) {
+  const bound = getBoundState(host);
+  if (bound) {
+    /* Adopt rails owned by a previous module instance (HMR / dual import). */
+    states.set(host, bound);
+    return;
+  }
   if (states.has(host)) return;
   if (!canHostOverlay(host)) return;
 
   /* Drop in-host rails from the older abspos impl / HMR half-state. */
   host.querySelectorAll(`.${RAIL_CLASS}`).forEach((el) => el.remove());
 
+  /* Stale attr from a dead instance whose WeakMap entry is gone. */
+  const staleId = host.getAttribute(HOST_ID_ATTR);
+  if (staleId) removeRailsForHostId(staleId);
+
+  const hostId = newHostId();
   host.setAttribute(HOST_ATTR, "");
+  host.setAttribute(HOST_ID_ATTR, hostId);
   const root = ensurePortal();
   const y = makeRail("y");
   const x = makeRail("x");
+  y.rail.setAttribute(HOST_ID_ATTR, hostId);
+  x.rail.setAttribute(HOST_ID_ATTR, hostId);
   root.appendChild(y.rail);
   root.appendChild(x.rail);
 
@@ -800,6 +904,9 @@ function attach(host: HTMLElement) {
   }
 
   states.set(host, state);
+  const boundState: BoundHostState = state as BoundHostState;
+  boundState.hostId = hostId;
+  setBoundState(host, boundState);
   if (isModalDialogBodyHost(host) && modalDialogEnterActive) {
     state.dialogEnterSuppressed = true;
   }
@@ -807,7 +914,7 @@ function attach(host: HTMLElement) {
 }
 
 function detach(host: HTMLElement) {
-  const state = states.get(host);
+  const state = states.get(host) ?? getBoundState(host);
   if (!state) return;
   if (state.raf) cancelAnimationFrame(state.raf);
   host.removeEventListener("scroll", state.onScroll);
@@ -826,9 +933,15 @@ function detach(host: HTMLElement) {
   state.mo?.disconnect();
   state.railY.remove();
   state.railX.remove();
+  const hostId =
+    ("hostId" in state && typeof state.hostId === "string" && state.hostId) ||
+    host.getAttribute(HOST_ID_ATTR);
+  if (hostId) removeRailsForHostId(hostId);
   host.removeAttribute(HOST_ATTR);
+  host.removeAttribute(HOST_ID_ATTR);
   host.classList.remove("fynns-scroll--overlay-host");
   states.delete(host);
+  setBoundState(host, undefined);
 }
 
 function scan(root: ParentNode) {
@@ -949,11 +1062,23 @@ function scheduleOverlayLayerRefresh(options?: { suppressDialogEnter?: boolean }
  * Invoked automatically from the package barrel.
  */
 export function ensureOverlayScrollbars(): void {
-  if (started || typeof document === "undefined") return;
+  if (typeof document === "undefined") return;
+  /* Always collapse duplicate portals (even if this module already started). */
+  ensurePortal();
+  if (started) {
+    scan(document);
+    return;
+  }
   started = true;
   finePointer = prefersFineHover();
 
+  const g = overlayGlobals();
+  const listenersAlready = Boolean(g[GLOBAL_STARTED]);
+  g[GLOBAL_STARTED] = true;
+
   scan(document);
+
+  if (listenersAlready) return;
 
   const mo = new MutationObserver((records) => {
     let overlayLayerTouched = false;

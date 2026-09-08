@@ -537,7 +537,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (start: visible page-size noun as `.fynns-table-meta` + numeral-only Select + range; end: `Pagination`). Select **options are digits only** (`10` / `50` / `100`) — never bake `Rows: N` / `Sessions: N` / `每页 N 行` into every option (information redundancy; CONSUMER_TREATY Pagination Select option repeats noun). Noun once via sibling meta + `ariaLabel`. Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager. **Open the rows-per-page Select:** results **overlay upward** as a floating full-radius capsule (≥ **0.5.151**/ **0.5.152**/ **0.5.193**) with Select `overflow: visible` — bar stays trigger-band height; panel keeps `--fynns-radius-3xl` on **all** corners + small gap (never square abutting corners); overlay H-rail sits in `--fynns-scrollbar-size` block-end pad (not through controls). Failure modes: CONSUMER_TREATY Pagination Select expands bar / overlay square abutting corners / option repeats noun.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (start: visible page-size noun as `.fynns-table-meta` + numeral-only **stock** Select + range; end: `Pagination`). Select **options are digits only** (`10` / `50` / `100`) — never bake `Rows: N` / `Sessions: N` / `每页 N 行` into every option (information redundancy; CONSUMER_TREATY Pagination Select option repeats noun). Noun once via sibling meta + `ariaLabel`. Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager. **Open the rows-per-page Select:** same Keep-set anatomy as Globals `#select` — in-flow `.fynns-search-bar--expanded` joined capsule (trigger + divider + results). core ≥ **0.5.194** — **never** invent an absolute upward flyout / detached panel (retired 0.5.151–0.5.193 fork). **Expanded (≥ 0.5.197):** noun + range + page discs optically center **only** on the 40dp Select shell — never mid of the full joined height (CONSUMER_TREATY Pagination Select siblings center on expanded height). **Gaps (≥ 0.5.202):** noun|Select|range = **8dp** (`action-cluster-gap`); start↔end discs = **16dp** (`unit-stack-gap`) — never IconButton-tight **4dp** (CONSUMER_TREATY Pagination bar gaps crushed to 4dp). Overlay H-rail sits in `--fynns-scrollbar-size` block-end pad. Failure modes: CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -2210,7 +2210,7 @@ const en = {
   "globals.segmentedList": "List",
   "globals.selectDisabledAria": "Disabled select",
   "globals.selectHelp":
-    "Select supports string or `{ value, label, disabled? }` options. No native supporting/error props — use Autocomplete for field hints.",
+    "Stock Keep-set Select — in-flow `.fynns-search-bar--expanded` **joined capsule** (trigger band + hairline + results; full shell radius). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-search-bar-panel` radius, padding, shadow, overflow, or invent absolute flyouts — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay. Live authority for pager rows-per-page too (`#pagination`).",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -2828,7 +2828,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：`.fynns-table-meta` 名词 + **仅数字** Select + 范围文案；结束：`Pagination`）。禁止把 `每页 N 行` / `Sessions: N` 写进每个 option（信息冗余；CONSUMER_TREATY Pagination Select option repeats noun）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。**打开每页条数 Select：** 结果 **向上浮动 overlay**（≥ **0.5.151**/ **0.5.152**/ **0.5.193**），四角 `--fynns-radius-3xl` + 与 trigger 小间距（禁止贴合方角）；Select `overflow: visible` — 条带保持 trigger-band；横向 overlay 轨落在 `--fynns-scrollbar-size` 底垫带（不切穿控件）。失败模式：CONSUMER_TREATY Pagination Select expands bar / overlay square abutting corners / option repeats noun。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：`.fynns-table-meta` 名词 + **仅数字** stock Select + 范围文案；结束：`Pagination`）。禁止把 `每页 N 行` / `Sessions: N` 写进每个 option（信息冗余；CONSUMER_TREATY Pagination Select option repeats noun）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。**打开每页条数 Select：** 与 Globals `#select` 同一 Keep-set 解剖 — 内联 `.fynns-search-bar--expanded` 连体胶囊（trigger + 分隔线 + 选项）。core ≥ **0.5.194** — **禁止** 自建向上 absolute flyout / 分体面板（已废止 0.5.151–0.5.193 分叉）。**展开（≥ 0.5.197）：** 名词 + 范围 + 页码圆片仅与 40dp Select **shell** 竖直居中 — 禁止对整块连体高度居中（CONSUMER_TREATY Pagination Select siblings center on expanded height）。**间距（≥ 0.5.202）：** 名词|Select|范围 = **8dp**；start↔页码 = **16dp** — 禁止 IconButton 的 **4dp** 挤死（CONSUMER_TREATY Pagination bar gaps crushed to 4dp）。横向 overlay 轨落在 `--fynns-scrollbar-size` 底垫带。失败模式：CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -4481,7 +4481,8 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedGrid": "网格",
   "globals.segmentedList": "列表",
   "globals.selectDisabledAria": "禁用选择器",
-  "globals.selectHelp": "Select 支持字符串或 `{ value, label, disabled? }` 选项。无原生 supporting/error — 字段提示用 Autocomplete。",
+  "globals.selectHelp":
+    "Stock Keep-set Select — 内联 `.fynns-search-bar--expanded` **连体胶囊**（trigger + 分隔线 + 选项；整壳圆角）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-search-bar-panel` 圆角 / padding / shadow / overflow，也禁止自建 absolute flyout — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay。分页每页条数也以本解剖为准（`#pagination`）。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",

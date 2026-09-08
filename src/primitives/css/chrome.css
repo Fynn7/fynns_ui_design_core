@@ -3416,12 +3416,15 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition-property: opacity, transform, visibility;
-  transition-duration: var(--fynns-duration-base), var(--fynns-duration-slow),
-    0s;
-  transition-timing-function: var(--fynns-ease-emphasized);
+  /* Outgoing does **not** cross-fade and must not paint even one prepare
+   * frame. Portal overlay Y rails escape axis `overflow: hidden`; a visible
+   * `--out` during double-rAF prepare→run read as a brief dual catalog /
+   * twin Y flash on Back (≥ 0.5.201 — hide on bare `--out`, not only
+   * `--out-run`). Incoming still uses prepare→run for transform commit. */
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
 }
 
 .fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
@@ -3442,21 +3445,16 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   transform: translate3d(0, 0, 0);
 }
 
+/* Keep `--out-run` as an explicit alias of the bare `--out` hide (belt +
+ * suspenders if a host ever mounts out without the base opacity rule). */
+.fynns-clipped-nav-shell-nav-axis-layer--out.fynns-clipped-nav-shell-nav-axis-layer--out-run,
 .fynns-clipped-nav-shell-nav-axis[data-direction="forward"]
-  > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
-  opacity: 0;
-  visibility: hidden;
-  /* Delay visibility until opacity has settled (base duration). */
-  transition-delay: 0s, 0s, var(--fynns-duration-base);
-  transform: translate3d(calc(-1 * var(--fynns-nav-axis-slide)), 0, 0);
-}
-
+  > .fynns-clipped-nav-shell-nav-axis-layer--out-run,
 .fynns-clipped-nav-shell-nav-axis[data-direction="back"]
   > .fynns-clipped-nav-shell-nav-axis-layer--out-run {
   opacity: 0;
   visibility: hidden;
-  transition-delay: 0s, 0s, var(--fynns-duration-base);
-  transform: translate3d(var(--fynns-nav-axis-slide), 0, 0);
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

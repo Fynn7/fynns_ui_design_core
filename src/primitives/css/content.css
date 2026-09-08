@@ -580,9 +580,21 @@ a.fynns-breadcrumb-link:visited {
   box-sizing: border-box;
   display: flex;
   flex-wrap: nowrap;
-  align-items: center;
+  /*
+   * Always flex-start (≥ **0.5.197**): in-flow expanded Select grows the start
+   * cluster — never let `__end` discs (or the bar cross-axis) center on
+   * trigger+results height. Collapsed Select ≈ 40dp so start/end still share
+   * one trigger band.
+   */
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--fynns-layout-control-cluster-gap);
+  /*
+   * Start cluster ↔ page discs: **unit-stack** (16dp, ≥ **0.5.202**) — never
+   * IconButton-tight `control-cluster-gap` (4dp). Packed narrow bars still
+   * need readable breath between range copy and discs.
+   * Failure: CONSUMER_TREATY Pagination bar gaps crushed to 4dp.
+   */
+  gap: var(--fynns-layout-unit-stack-gap);
   width: 100%;
   min-width: 0;
   overflow-x: auto;
@@ -596,85 +608,55 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Rows-per-page Select must not grow the pager band when expanded (≥ **0.5.151**).
- * Form / List inspector keep in-flow `.fynns-search-bar--expanded`; the pager is a
- * single M3/MUI trigger-band row — docked results overlay instead of stretching
- * FieldHint + page discs mid-band (CONSUMER_TREATY Pagination Select expands bar).
+ * Rows-per-page Select stays the **stock** Keep-set Select (≥ **0.5.194**):
+ * in-flow `.fynns-search-bar--expanded` joined capsule (trigger band + divider +
+ * results) — same anatomy as Globals `#select`. Do **not** invent an absolute
+ * upward flyout / detached panel (that was the 0.5.151–0.5.193 fork and caused
+ * square abutting corners + a second “component” that is not in sandbox).
  *
- * Panel opens **upward** (footer grammar) and the Select shell must
- * `overflow: visible` — SearchBar's default `overflow: hidden` otherwise clips
- * the absolute list so chevron flips with no visible options (≥ **0.5.152**).
+ * Open Select may grow the pager start cluster — that is correct Select
+ * grammar. Page discs stay on `__end`; bar stays nowrap + H-scroll.
+ * Failure: CONSUMER_TREATY Pagination Select invents absolute overlay.
  *
- * Overlay is a **floating flyout** (≥ **0.5.193**): full capsule radius on **all**
- * corners + a small gap above the trigger — never square the abutting edge
- * (`md md 0 0` + negative hairline join left sharp corners over the pill).
- * Failure: CONSUMER_TREATY Pagination Select overlay square abutting corners.
+ * Trigger-band siblings (≥ **0.5.197**): noun `.fynns-table-meta` + range
+ * `.fynns-field-hint` optically center only on the **40dp Select shell** —
+ * never `align-items: center` against the full expanded joined capsule.
+ * Same grammar as List inspector / Card-head expanded Select. Failure:
+ * CONSUMER_TREATY Pagination Select siblings center on expanded height.
+ *
+ * Horizontal breath (≥ **0.5.202**): noun | Select | range use
+ * `--fynns-layout-action-cluster-gap` (**8dp**) — not IconButton
+ * `control-cluster-gap` (4dp). Do not invent consumer gap overrides.
  */
-.fynns-pagination-bar:has(> .fynns-pagination-bar__start > .fynns-select[data-expanded="true"]) {
-  overflow-x: visible;
-  overflow-y: visible;
-  z-index: var(--fynns-z-dropdown);
-}
-
-.fynns-card:has(.fynns-pagination-bar .fynns-select[data-expanded="true"]),
-.fynns-card-body:has(.fynns-pagination-bar .fynns-select[data-expanded="true"]) {
-  overflow: visible;
-  z-index: var(--fynns-z-dropdown);
-}
-
 .fynns-pagination-bar__start {
   display: inline-flex;
   flex: 0 0 auto;
   flex-wrap: nowrap;
-  align-items: center;
-  gap: var(--fynns-layout-control-cluster-gap);
+  align-items: flex-start;
+  gap: var(--fynns-layout-action-cluster-gap);
   min-width: max-content;
 }
 
 /* Select is width:100% by default — hug content in the pager meta row. */
 .fynns-pagination-bar__start > .fynns-select {
-  position: relative;
   width: auto;
   max-width: none;
   flex: 0 0 auto;
-  align-self: center;
+  align-self: flex-start;
 }
 
-.fynns-pagination-bar__start > .fynns-select.fynns-search-bar--expanded {
-  overflow: visible;
-}
-
-.fynns-pagination-bar__start > .fynns-select > .fynns-search-bar-panel {
-  position: absolute;
-  inset-inline-start: 0;
-  top: auto;
-  bottom: 100%;
-  z-index: var(--fynns-z-dropdown);
-  min-width: 100%;
-  width: max-content;
-  max-width: min(100vw, 20rem);
-  margin-block-end: var(--fynns-space-2xs);
-  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-3xl);
-  /* Clip `.fynns-expand-inner` (overflow:hidden, radius 0) so option paint
-   * cannot square-overpaint the capsule corners (visual square abutting edge). */
-  overflow: hidden;
-  background: var(--fynns-color-surface-2);
-  box-shadow: var(--fynns-shadow-md);
-}
-
-.fynns-pagination-bar__start
-  > .fynns-select.fynns-search-bar--expanded
-  > .fynns-search-bar-field {
-  /* Floating overlay — keep the trigger as a closed capsule (no in-shell divider). */
-  border-block-end-color: transparent;
-}
-
-/* FieldHint is block by default — keep range copy on the same meta line. */
+/*
+ * Noun + range: fixed **40dp** trigger-band row (inline-flex + center) so text
+ * stays mid-shell when Select expands in-flow — not mid of trigger+panel.
+ */
+.fynns-pagination-bar__start > .fynns-table-meta,
 .fynns-pagination-bar__start > .fynns-field-hint {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
+  min-height: var(--fynns-size-icon-target);
   flex: 0 0 auto;
+  align-self: flex-start;
   white-space: nowrap;
 }
 
@@ -682,6 +664,8 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
+  /* Match Select shell band so discs share the collapsed/expanded trigger top. */
+  min-height: var(--fynns-size-icon-target);
   margin-inline-start: auto;
 }
 

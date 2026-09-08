@@ -1,4 +1,4 @@
----
+﻿---
 description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
 alwaysApply: true
 ---
@@ -31,6 +31,13 @@ alwaysApply: true
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
    `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新 sibling / bump。
+4b. **Keep-set 铬细节禁止自改（硬 — ≥ 0.5.195）**：禁止在消费仓「修」Select /
+   SearchBar / Autocomplete / DropdownMenu 的 **圆角 / padding / shadow /
+   overflow / 展开方位**（含 `.fynns-select` / `.fynns-search-bar` /
+   `.fynns-search-bar-panel` / `.fynns-menu` 的任何 `border-radius` 覆写、绝对
+   定位分体面板、半壳拼接）。对照 sandbox `#select` / `#menu`；看起来不对 →
+   **只**在 `fynns_ui_design_core` 约束 + 发布。失败模式：CONSUMER_TREATY
+   consumer restyles keep-set chrome radius。
 5. 样式只用 `var(--fynns-*)`。正文/chrome 继承 `--fynns-font-ui`；代码
    `--fynns-font-mono`；**禁止**主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
@@ -86,7 +93,9 @@ alwaysApply: true
 4b. **drill-in / mode sidebar hard-swap** — 根目的地 ↔ 模式目录侧栏换 body 时
    必须给 `ClippedNavShell` 传 **`navKey`** + **`navDirection`**（≥ **0.5.183**），
    定宽列内 Shared Axis X（短滑 + fade）；退出用 `"back"`。禁止硬切，也禁止
-   关轨再开冒充钻入。对照 `#layouts-demo-drill-in`。
+   关轨再开冒充钻入。≥ **0.5.198** 出层立即隐藏；≥ **0.5.201** 从 prepare
+   首帧起隐藏；≥ **0.5.202** morph 全程不给 nav-axis 内宿主画 portal Y 轨
+   （避免 incoming 透明位移帧闪轨）。对照 `#layouts-demo-drill-in`。
 5. **fat Surface / Card per catalog row** — 路径/书签 → 一个 `List` of
    `ListItem`。对照 `#list`。
 6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
@@ -159,18 +168,26 @@ alwaysApply: true
 25. **long List dumps all rows** — Card / PageScroll List 可 >5 条时同机制，
     但传 `REVEAL_MORE_LIST_DEFAULT_*`（**5**/5，≥ **0.5.145**）：脚在 List
     **后**；短列表 / Dialog / 真分页豁免。对照 `#list`。
-26. **Pagination Select expands bar** — `.fynns-pagination-bar` 内每页 Select
-    展开须 **向上 overlay**（core ≥ **0.5.151**/ **0.5.152**），Select
-    `overflow: visible`；底垫 `--fynns-scrollbar-size` 避免 H-rail 切穿控件。
-    对照 `#pagination`。
-26b. **Pagination Select overlay square abutting corners** — 向上 overlay 面板
-    须 **四角** `--fynns-radius-3xl` + 与 trigger 小间距（≥ **0.5.193**）；
-    panel `overflow: hidden` 裁切内部 expand-inner；
-    **禁止** `md md 0 0` / 负 hairline 拼接半壳，也禁止消费仓覆写
-    `.fynns-search-bar-panel` 圆角。对照 `#pagination`。
+26. **Pagination Select invents absolute overlay** — `.fynns-pagination-bar`
+    内每页 Select 必须是 **stock** Keep-set Select：内联
+    `.fynns-search-bar--expanded` 连体胶囊（与 `#select` 同解剖）。core ≥
+    **0.5.194** 已删除向上 absolute flyout。**禁止** 自建
+    `position:absolute; bottom:100%` 分体面板。对照 `#pagination` / `#select`。
+26b. **Pagination Select siblings center on expanded height** — 展开后名词
+    `.fynns-table-meta` / 范围 `FieldHint` / 页码 discs **仅**与 Select
+    **shell（40dp）** 竖直居中；core ≥ **0.5.197** 已把 `__start` 钉到
+    trigger-band。**禁止** 消费仓给 `__start` 写 `align-items: center` 让旁侧
+    对整块连体高度居中。对照 `#pagination`。
+26b2. **Pagination bar gaps crushed to 4dp** — 名词|Select|范围用
+    `action-cluster-gap`（**8dp**）；start↔页码 discs 用 `unit-stack-gap`
+    （**16dp**，≥ **0.5.202**）。**禁止** 消费仓把 `.fynns-pagination-bar` /
+    `__start` 压回 IconButton 的 4dp `control-cluster-gap`。对照 `#pagination`。
 26c. **Pagination Select option repeats noun** — options 仅数字（`10`/`50`/
     `100`）；名词一次放 sibling `.fynns-table-meta` + `ariaLabel` — **禁止**
     `Sessions: N` / `Rows: N` / `每页 N 行` 写进每个 option。对照 `#pagination`。
+26d. **consumer restyles keep-set chrome radius** — **禁止**消费仓自改 Select /
+    SearchBar / Menu 等 keep-set 圆角与展开铬（≥ **0.5.195**）。对照 `#select`
+    / `#menu`。
 27. **outcome Chip as status** — success / fail / OK / ready 结果信号用
     **`.fynns-list-item-status`**（默认绿；失败 `data-tone="danger"`）+ 可选
     `CheckCircleIcon` / `AlertTriangleIcon` — **禁止** `Chip` 任意 variant 或
