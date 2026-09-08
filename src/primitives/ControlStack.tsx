@@ -30,8 +30,9 @@ export type ControlStackProps = HTMLAttributes<HTMLDivElement> & {
    *   sibling rows read as a value grid (≥ **0.5.154**). Pair with `columns`
    *   equal to the cell count; do **not** wrap unequal cells in one
    *   `.fynns-control-cluster` when you need cross-row column alignment.
-   *   Start packing is **opt-in only** — never the default for Buttons /
-   *   action clusters.
+   *   Start packing is **opt-in only** — **never** for labeled Buttons /
+   *   install / service CTAs (core ≥ **0.5.205** end-packs those anyway when
+   *   a labeled `.fynns-btn` is present; still omit `start` on CTA stacks).
    */
   controlsAlign?: ControlStackControlsAlign;
   /**

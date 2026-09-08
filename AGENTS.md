@@ -252,6 +252,15 @@ belong in a consumer’s own doc.
   `--with-end` idle pad at `list-pad-inline` when row meta is present (not
   `space-xs` crush). Live `#sandbox-list-repo-path-actions`. Failure:
   CONSUMER_TREATY List scroll-well trailing meta kisses overlay rail.
+- **DON'T** let in-row `trailingSupportingText` (short status / kind / Builtin)
+  sit under revealed `--with-end` IconButtons — core ≥ **0.5.207** gates the
+  idle `list-pad-inline` rule with `:not(:hover):not(:focus-within)` and
+  mirrors `:has(meta)` on coarse so hover / always-visible reserve can clear
+  the disks (0.5.171 `:has` was stronger than bare `:hover` and locked pad at
+  20dp while icons painted over “Builtin”). Do not invent consumer
+  `z-index` / meta margin. Live `#sandbox-list-recipe-catalog` /
+  `#sandbox-list-status-action`. Failure: CONSUMER_TREATY List
+  trailingSupportingText underlaps --with-end IconButtons.
 - **DON'T** paint List catalog kind with start tick / inset rail / `::before` /
   second `hostClassName` wash — leading icon + `trailingSupportingText` /
   `.fynns-table-meta`; selected = host `radius-3xl` pill only; never
@@ -316,10 +325,16 @@ belong in a consumer’s own doc.
 - **DON'T** left-pack ControlRow / `.fynns-control-cluster` **Buttons** (or
   action+meta strips) under the label — clusters **default end-pack**
   (`justify-content: flex-end`, ≥ **0.5.158**). Start packing is **opt-in
-  only**: ControlStack `controlsAlign="start"` (probe value grids) or
-  `.fynns-control-cluster--start-align`. Never invent consumer `justify-content:
-  flex-start` / `margin-inline-start: auto` to “fix” left-parked CTAs. Live
-  `#rhythm` service / `#sandbox-rhythm-action-end`.
+  only**: ControlStack `controlsAlign="start"` (probe / path / outcome **meta**
+  value grids — `.fynns-list-item-status` / path / InfoHint) or
+  `.fynns-control-cluster--start-align`. **Never** put labeled install /
+  service / Configure Buttons under `controlsAlign="start"` (that freezes the
+  label track and parks CTAs under the label with a dead trailing gutter —
+  Archify / RepoTools failure). Core ≥ **0.5.205** restores end-pack when a
+  labeled `.fynns-btn` is present under `start`, but CTA stacks should still
+  omit `start`. Never invent consumer `justify-content: flex-start` /
+  `margin-inline-start: auto` to “fix” left-parked CTAs. Live `#rhythm`
+  service / `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end`.
 - **DON'T** crush ControlRow `__label` to a hairline / 2px sliver — form-host
   + standalone label tracks floor at `--fynns-layout-control-row-label`
   (**7.5rem**, ≥ **0.5.159**); long path meta / Button clusters shrink in the
@@ -476,6 +491,17 @@ belong in a consumer’s own doc.
   one short line. Env keys: InfoHint on label row (danger when required empty);
   no status Chip; Input trailing reveal = `sm` only. Live `#rhythm` /
   `#sandbox-field-header-env-keys`.
+- **DON'T** paint **named recipe / preset / pack catalogs** as a grid of fat
+  Cards each dumping description + evidence + `id:` as stacked `FieldHint`s
+  plus a `ChipSet` tag soup in `actions` — that is Path-catalog fat-Card
+  failure. Host = **one** `Card` (or section) wrapping **one** `List` of
+  `ListItem`s: short one-line `supportingText`; kind/source in
+  `trailingSupportingText` / `.fynns-table-meta` (not Chip); long copy + id →
+  Preview `Dialog` / row `InfoHint`; row actions = ghost **md** IconButtons
+  (+ Tooltip) or one labeled primary CTA. Do **not** also restack the same
+  essay as a page `FieldHint` under a Card that repeats the TopAppBar title.
+  Live `#sandbox-list-recipe-catalog` / `#list`. Failure: CONSUMER_TREATY
+  recipe catalog fat Card FieldHint essays.
 - **DON'T** put a page/section `FieldHint` (or section-lead copy) that only
   restates visible **ToggleGroup** / **Tabs** option labels (“A / B / C; three
   tabs”) — **information redundancy**. The control already names the modes;
@@ -550,11 +576,11 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 | Topic | Anchor |
 | --- | --- |
 | Form / FieldStack / Dialog | `#form-recipe`, `#form-recipe-page-scroll`, `#field-header`, `#sandbox-field-stack-grid-select` |
-| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions` |
+| List catalogs / density | `#list`, `#page-scroll`, `#sandbox-list-status-action`, `#sandbox-list-repo-path-actions`, `#sandbox-list-recipe-catalog` |
 | Timeline | `#timeline` |
 | Toolbar / ControlRow / service | `#rhythm` |
 | Probe kind split / start-align meta | `#sandbox-rhythm-probe-kinds` |
-| Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` |
+| Action cluster end-pack (meta + Button) | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` |
 | Banner strip + dismiss center | `#banner` |
 | Busy / loading | `#busy-region`, `#sandbox-pane-load-error` |
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
@@ -931,12 +957,13 @@ rules such as timeline-catalog). Live index: `#list`.
 | Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only; capped wells = `List` + `fynns-scroll` + `list-well-max-height*` | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete; private end pad to “fix” scrollbar kiss |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
 | Title + org + date range | Org in `supportingText`; dates in `trailingSupportingText` + `trailingMetaAlign="start"` (start-ink ≥ **0.5.13**) | `#list` org+dates / `#timeline` | Glue org·dates; private `text-align`/width on trailing meta |
-| Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign` | `#list` status+action | `trailingMetaAlign="start"` on status+action |
+| Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign`; hover reserve clears meta (≥ **0.5.207**) | `#list` status+action / `#sandbox-list-recipe-catalog` | `trailingMetaAlign="start"` on status+action; meta under IconButtons |
 | Inspector Select ± CTA | In-flow end strip; inline Select; trigger-band | `#list` inspector trailing | Absolute flyout; 4dp kiss; meta mid expanded panel |
 | Status + identity + duration | Single-line cluster + `.fynns-list-item-status`; one metric/cell | `#list` run-summary | InlineAlert in headline; latency+tokens in one meta; Chip as Success/Failed |
 | Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
 | Dashboard shortcut links | One Card wrapping one path List | `#list` shortcut Card | Button cluster + empty headline-only rows |
+| Named recipe / preset / pack catalog | One Card + `List` / `ListItem`; one-line `supportingText`; kind in meta; long copy / id → Dialog or InfoHint; end IconButtons | `#sandbox-list-recipe-catalog` / `#list` | Fat Card per recipe + stacked FieldHint essays + ChipSet tag soup; section FieldHint restating TopAppBar |
 | Catalog kind (builtin) | Leading icon + meta; host pill selected | `#list` kind | Start tick / inset rail / Chip as kind |
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |
 | App destinations | NavigationDrawer / Rail / Bar / DestinationAppShell | `#layouts-demo-shell` | List/Card as app root nav |

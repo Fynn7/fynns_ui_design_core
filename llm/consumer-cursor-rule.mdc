@@ -96,8 +96,10 @@ alwaysApply: true
    关轨再开冒充钻入。≥ **0.5.198** 出层立即隐藏；≥ **0.5.201** 从 prepare
    首帧起隐藏；≥ **0.5.202** morph 全程不给 nav-axis 内宿主画 portal Y 轨
    （避免 incoming 透明位移帧闪轨）。对照 `#layouts-demo-drill-in`。
-5. **fat Surface / Card per catalog row** — 路径/书签 → 一个 `List` of
-   `ListItem`。对照 `#list`。
+5. **fat Surface / Card per catalog row** — 路径/书签/配方/预设 → 一个 `List` of
+   `ListItem`（短 `supportingText`；长文 / id → Dialog 或 `InfoHint`）。禁止每项
+   一张胖 Card + 多段 `FieldHint` 长文 + `ChipSet` 标签汤。对照 `#list` /
+   `#sandbox-list-recipe-catalog`。
 6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
 7. **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏
    Cancel → Delete → Save；勿 rail `--with-end` 铅笔/垃圾桶。对照 `#timeline`。
@@ -119,9 +121,9 @@ alwaysApply: true
     `tool：error` — 详情用行内 `InfoHint`。对照 `#rhythm` service。
 11b. **ControlRow / control-cluster Buttons left-packed** — `.fynns-control-cluster`
     **默认右齐**（≥ **0.5.158**）。禁止把 labeled Button / meta+CTA 贴在 label
-    下左侧；仅当产品明确要求时用 `controlsAlign="start"` 或
-    `.fynns-control-cluster--start-align`。对照 `#sandbox-rhythm-action-end` /
-    `#rhythm`。
+    下左侧。`controlsAlign="start"` **仅**用于探测 / path / 结果标值网格（勿
+    给安装 / 服务 CTA 栈加 `start` — ≥ **0.5.205** 即使误加也会右齐）。对照
+    `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm`。
 11c. **ControlRow label crushed to 2px sliver** — form-host / standalone label
     轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；簇内长 path
     `.fynns-table-meta` 收缩 + 省略（≥ **0.5.175**），禁止 end-pack nowrap
@@ -207,6 +209,11 @@ alwaysApply: true
     贴 overlay Y 轨。core ≥ **0.5.171** 在 list end 预留 `--fynns-scrollbar-size`
    ；有行内 meta 时 `--with-end` idle 保持 `list-pad-inline`。勿自造消费仓
     end pad。对照 `#sandbox-list-repo-path-actions`。
+30b. **List trailingSupportingText underlaps --with-end IconButtons** — 短
+    status / kind（Builtin / Current）+ `--with-end` IconButton：悬停 / 触控
+    显盘时 meta 不得压在下载/预览盘下。core ≥ **0.5.207** 修正 idle
+    `:has(meta)` specificity。禁止消费仓 `z-index` / meta margin「修」。
+    对照 `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
 31. **FieldStack Grid vertically centers short FieldBlock beside expanded Select** —
     FieldStack→`Grid` 多列 FieldBlock：core ≥ **0.5.172** `.fynns-grid`
     `align-items: start`；禁止消费仓把 Grid 改回 `center`（一侧 Select 展开后

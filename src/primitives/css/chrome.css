@@ -483,6 +483,150 @@
 }
 
 /*
+ * Labeled Button CTAs never start-pack (≥ **0.5.205**).
+ * `controlsAlign="start"` is for probe / path / outcome meta value grids only.
+ * Misplacing an install / service Button under start fixed the label track to
+ * `control-row-label` (no `1fr`) so max-content cells sat under the label with
+ * a dead trailing gutter. When the stack hosts any labeled `.fynns-btn` (not
+ * icon-only), restore the form-host `1fr` label track + end-pack children so
+ * CTAs hug the trailing edge even if the consumer forgot to drop `start`.
+ */
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  ),
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  ),
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  ),
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  ),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  ) {
+  grid-template-columns:
+    minmax(var(--fynns-layout-control-row-label), 1fr)
+    repeat(var(--fynns-control-stack-cols, 2), minmax(0, max-content));
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-grid
+  > *,
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-grid
+  > *,
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-grid
+  > *,
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-grid
+  > *,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > :not(.fynns-grid),
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  .fynns-grid
+  > * {
+  justify-self: end;
+}
+
+.fynns-dialog-panel--centered
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-card-body
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-surface--padded
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster,
+.fynns-collapsible-body
+  > .fynns-control-block
+  .fynns-control-stack[data-controls-align="start"]:has(
+    .fynns-btn:not(.fynns-btn--icon)
+  )
+  > .fynns-control-row
+  > .fynns-control-row__controls
+  > .fynns-control-cluster {
+  justify-content: flex-end;
+}
+
+/*
  * Narrow Card / EndAside (≥ 0.5.88): labeled Button clusters in ControlRow wrap
  * inside the shrinkable controls track. IconButton-only catalog strips keep
  * nowrap end-hug.

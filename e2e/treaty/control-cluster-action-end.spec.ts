@@ -60,6 +60,38 @@ test(`${SLUG_END}: meta+Button cluster end-packs (not under label)`, async ({
   }).toPass({ timeout: 10_000 });
 });
 
+test(`${SLUG_END}: install CTA under misused controlsAlign=start still end-packs`, async ({
+  page,
+}) => {
+  await openGlobalsDemo(page, "rhythm", "Toolbar rhythm");
+  const demo = globalsDemo(page, "rhythm");
+  const host = demo.locator("#sandbox-rhythm-install-cta-end");
+  await expect(host).toBeVisible();
+  await host.scrollIntoViewIfNeeded();
+
+  const row = host.locator(".fynns-control-row").first();
+  const label = row.locator(".fynns-control-row__label");
+  const button = row.getByRole("button", { name: /Install sample tool|安装示例工具/ });
+  await expect(button).toBeVisible();
+
+  await expect(async () => {
+    const labelBox = await label.boundingBox();
+    const buttonBox = await button.boundingBox();
+    const rowBox = await row.boundingBox();
+    expect(labelBox).toBeTruthy();
+    expect(buttonBox).toBeTruthy();
+    expect(rowBox).toBeTruthy();
+    if (!labelBox || !buttonBox || !rowBox) return;
+
+    expect(buttonBox.x).toBeGreaterThan(labelBox.x + labelBox.width);
+    const rowMid = rowBox.x + rowBox.width / 2;
+    expect(buttonBox.x + buttonBox.width).toBeGreaterThan(rowMid);
+    expect(rowBox.x + rowBox.width - (buttonBox.x + buttonBox.width)).toBeLessThan(
+      48,
+    );
+  }).toPass({ timeout: 10_000 });
+});
+
 test(`${SLUG_LABEL}: Ready label stays ≥ control-row-label with long meta`, async ({
   page,
 }) => {

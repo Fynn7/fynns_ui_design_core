@@ -1357,7 +1357,10 @@ a.fynns-breadcrumb-link:visited {
   width: 100%;
   min-height: var(--fynns-list-height-1);
   padding-block: var(--fynns-list-pad-block);
-  padding-inline: var(--fynns-list-pad-inline);
+  /* Longhands (not `padding-inline` shorthand) so `--with-end` can override
+   * only the end edge without a later shorthand reset wiping reserve. */
+  padding-inline-start: var(--fynns-list-pad-inline);
+  padding-inline-end: var(--fynns-list-pad-inline);
   border: 0;
   /* Long-strip row highlight (NavigationDrawerItem / Select / menu). */
   border-radius: var(--fynns-radius-3xl);
@@ -2026,7 +2029,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host--with-end:focus-within
   > .fynns-list-item-row
   > .fynns-list-item-trailing--end {
-  opacity: 1;
+  opacity: 1 !important;
   pointer-events: auto;
 }
 
@@ -2040,19 +2043,28 @@ a.fynns-breadcrumb-link:visited {
 /*
  * Row-meta + `--with-end`: do **not** crush idle pad to `space-xs` — that
  * parks `.fynns-table-meta` / kind labels against the scroll rail (or card
- * edge). Keep strip `list-pad-inline` until hover expands for IconButtons.
- * ≥ **0.5.171**. Live: `#sandbox-list-repo-path-actions`.
+ * edge). Keep strip `list-pad-inline` until hover / focus expands for
+ * IconButtons. ≥ **0.5.171**.
+ *
+ * Specificity gate (≥ **0.5.207**): `:has(…trailing-text)` is stronger than
+ * bare `:hover` / coarse reserve. (1) Gate idle with
+ * `:not(:hover):not(:focus-within)`. (2) Re-state reserve under the same
+ * `:has(meta)` chain on `:hover` / `:focus-within`. (3) Mirror `:has` inside
+ * the coarse media query. Without that, absolute end IconButtons paint over
+ * in-row `trailingSupportingText` (“Builtin” / “Current”).
+ * Live: `#sandbox-list-status-action` / `#sandbox-list-recipe-catalog` /
+ * `#sandbox-list-repo-path-actions`.
  */
 .fynns-list-item-host--with-end:has(
     > .fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text
-  )
+  ):not(:hover):not(:focus-within)
   > .fynns-list-item,
 .fynns-list-item-host--with-end:has(
     > .fynns-list-item-row
       > .fynns-list-item
       > .fynns-list-item-trailing
       > .fynns-list-item-trailing-text
-  )
+  ):not(:hover):not(:focus-within)
   > .fynns-list-item-row
   > .fynns-list-item {
   padding-inline-end: var(--fynns-list-pad-inline);
@@ -2063,8 +2075,35 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item,
 .fynns-list-item-host--with-end:focus-within
   > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text
+  ):hover
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text
+  ):focus-within
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item-row
+      > .fynns-list-item
+      > .fynns-list-item-trailing
+      > .fynns-list-item-trailing-text
+  ):hover
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has(
+    > .fynns-list-item-row
+      > .fynns-list-item
+      > .fynns-list-item-trailing
+      > .fynns-list-item-trailing-text
+  ):focus-within
+  > .fynns-list-item-row
   > .fynns-list-item {
-  padding-inline-end: var(--fynns-list-end-actions-reserve);
+  /* !important: beat duplicate/old `:has(meta)` idle pad (≥ 0.5.171) if HMR
+   * stacks a copy without `:not(:hover)` — otherwise IconButtons paint over
+   * in-row kind/status meta. */
+  padding-inline-end: var(--fynns-list-end-actions-reserve) !important;
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -2076,8 +2115,20 @@ a.fynns-breadcrumb-link:visited {
   }
 
   .fynns-list-item-host--with-end > .fynns-list-item,
-  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
-    padding-inline-end: var(--fynns-list-end-actions-reserve);
+  .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item,
+  .fynns-list-item-host--with-end:has(
+      > .fynns-list-item > .fynns-list-item-trailing > .fynns-list-item-trailing-text
+    )
+    > .fynns-list-item,
+  .fynns-list-item-host--with-end:has(
+      > .fynns-list-item-row
+        > .fynns-list-item
+        > .fynns-list-item-trailing
+        > .fynns-list-item-trailing-text
+    )
+    > .fynns-list-item-row
+    > .fynns-list-item {
+    padding-inline-end: var(--fynns-list-end-actions-reserve) !important;
     transition: none;
   }
 }
