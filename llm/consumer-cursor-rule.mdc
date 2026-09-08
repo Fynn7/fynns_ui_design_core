@@ -164,7 +164,8 @@ alwaysApply: true
     `overflow: visible`；底垫 `--fynns-scrollbar-size` 避免 H-rail 切穿控件。
     对照 `#pagination`。
 26b. **Pagination Select overlay square abutting corners** — 向上 overlay 面板
-    须 **四角** `--fynns-radius-3xl` + 与 trigger 小间距（≥ **0.5.191**）；
+    须 **四角** `--fynns-radius-3xl` + 与 trigger 小间距（≥ **0.5.193**）；
+    panel `overflow: hidden` 裁切内部 expand-inner；
     **禁止** `md md 0 0` / 负 hairline 拼接半壳，也禁止消费仓覆写
     `.fynns-search-bar-panel` 圆角。对照 `#pagination`。
 26c. **Pagination Select option repeats noun** — options 仅数字（`10`/`50`/

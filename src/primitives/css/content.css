@@ -605,7 +605,7 @@ a.fynns-breadcrumb-link:visited {
  * `overflow: visible` — SearchBar's default `overflow: hidden` otherwise clips
  * the absolute list so chevron flips with no visible options (≥ **0.5.152**).
  *
- * Overlay is a **floating flyout** (≥ **0.5.191**): full capsule radius on **all**
+ * Overlay is a **floating flyout** (≥ **0.5.193**): full capsule radius on **all**
  * corners + a small gap above the trigger — never square the abutting edge
  * (`md md 0 0` + negative hairline join left sharp corners over the pill).
  * Failure: CONSUMER_TREATY Pagination Select overlay square abutting corners.
@@ -656,6 +656,9 @@ a.fynns-breadcrumb-link:visited {
   margin-block-end: var(--fynns-space-2xs);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-3xl);
+  /* Clip `.fynns-expand-inner` (overflow:hidden, radius 0) so option paint
+   * cannot square-overpaint the capsule corners (visual square abutting edge). */
+  overflow: hidden;
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-md);
 }
