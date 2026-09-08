@@ -1090,7 +1090,7 @@ const en = {
   "globals.rhythmServiceHelp":
     "**Service / process / CLI probe (hard):** `ControlRow` `label` = one short status only (running: PID; stopped: Not running; installed: Available / Not installed). **Controls** = labeled `Button`s `sm` only — **never** a status `Chip` in `__controls`, and **never** park the tool/CLI name on `label` when the install Button already names it. Failure detail → row **`InfoHint`**, not a sibling `FieldHint` essay (`tool：error…`). Failure mode: CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint. Core ≥ **0.5.80** labeled-Button **8dp**. **At most one** `loading`. Click Start / Stop to toggle the sample.",
   "globals.rhythmActionEndHelp":
-    "**Action cluster end-pack + label floor (hard ≥ 0.5.158 / **0.5.159** / **0.5.175**):** `.fynns-control-cluster` defaults to trailing-edge pack. Label track floors at `--fynns-layout-control-row-label`. Long nowrap `.fynns-table-meta` in the cluster **shrinks + ellipsis** — never overflows left over the status label. Status on `label` (not a `Chip`). Start packing opt-in only. Failure modes: CONSUMER_TREATY left-packed Buttons; ControlRow label crushed to 2px; path meta paints over label. Live `#sandbox-rhythm-action-end`.",
+    "**Action cluster end-pack + label floor (hard ≥ 0.5.158 / **0.5.159** / **0.5.175** / CTA-under-start ≥ **0.5.205**):** `.fynns-control-cluster` defaults to trailing-edge pack. Label track floors at `--fynns-layout-control-row-label`. Long nowrap `.fynns-table-meta` in the cluster **shrinks + ellipsis** — never overflows left over the status label. Status on `label` (not a `Chip`). `controlsAlign=\"start\"` is for probe meta only — **never** for install / Configure Buttons (core ≥ **0.5.205** still end-packs labeled Buttons if `start` is misused). Failure modes: CONSUMER_TREATY left-packed Buttons; ControlRow label crushed to 2px; path meta paints over label. Live `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end`.",
   "globals.rhythmActionEndTitle": "Setup checks",
   "globals.rhythmActionEndReady": "Ready",
   "globals.rhythmActionEndPending": "Needs setup",
@@ -1101,6 +1101,12 @@ const en = {
     "prefs.json missing required keys - region, account, and sample-provider endpoint",
   "globals.rhythmActionEndConfigure": "Configure",
   "globals.rhythmActionEndRefresh": "Refresh checks",
+  "globals.rhythmInstallCtaEndHelp":
+    "**Install CTA never under `controlsAlign=\"start\"` (hard ≥ **0.5.205**):** service / CLI install rows use default end-pack (omit `start`) — `label` = short status, controls = labeled Button ± InfoHint. The anti-demo below **misuses** `start` on purpose; core still parks the install Button on the trailing edge. Do not invent consumer `margin-inline-start: auto`. Failure mode: CONSUMER_TREATY left-packed Buttons. Live `#sandbox-rhythm-install-cta-end`.",
+  "globals.rhythmInstallCtaEndTitle": "Sample tool install",
+  "globals.rhythmInstallCtaEndNotInstalled": "Not installed",
+  "globals.rhythmInstallCtaEndInstall": "Install sample tool",
+  "globals.rhythmInstallCtaEndHint": "Run the installer once, then refresh the probe.",
   "globals.rhythmServiceTitle": "Sample service",
   "globals.rhythmServiceStopped": "Not running",
   "globals.rhythmServicePid": "PID 40812",
@@ -1785,7 +1791,7 @@ const en = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.62** optically spaces status→first disk so **text ink → first glyph** matches **glyph ↔ glyph** inside the cluster (not raw 4dp box gap that kisses “Current”). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
+    "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.62** optically spaces status→first disk; ≥ **0.5.207** ensures hover/coarse **reserve** actually expands (idle `:has(meta)` must not win over reveal). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
   "globals.listStatusActionAria": "Sample status and action list row",
   "globals.listStatusActionHeadline": "Untitled project",
   "globals.listStatusActionMeta": "Current",
@@ -1832,6 +1838,24 @@ const en = {
     "Path / link / repo catalog recipe — one List; row actions in trailing (ghost **md** default, horizontal nowrap cluster). **`--with-end` overlay reveal:** idle copy full-bleed (balanced L/R breath); hover / focus-within shows trailing; touch always visible. Reveal clears copy→first action with `--fynns-list-end-actions-gap` (4dp = control-cluster-gap, ≥ 0.4.123) — ellipsis must not kiss the first IconButton disk. Trailing stays on the end sibling even when interactive={false}. **Same destination page:** catalog ControlRow strip + List trailing share one IconButton size (md). Status / freshness → overline or trailingSupportingText / .fynns-table-meta — **not** Chip pills in the headline. Headline = display name (UI font); path on supportingText may be mono. Do not tip-fill / tip-grow the headline Tooltip. **Scroll:** FillColumn page host + fynns-scroll — do **not** nest a short List scrollport inside Card. Long catalogs only: List + fynns-scroll + max-height var(--fynns-layout-list-well-max-height) or -sm (shipped tokens — never invent the name).",
   "globals.listShortcutCardHelp":
     "Dashboard / overview shortcuts — **no** ShortcutPanel. One Card (`actions` = refresh IconButton) + **one** dense **two-line** List: leading kind glyph + headline + real path `supportingText` + trailing open. **Never** `overline` on path/shortcut rows (forces height-3 / ~88dp and reads as vacant vertical band — kind is the leading icon). Live: this Card under #list (≥ 0.4.107 height-2 = 56dp).",
+  "globals.listRecipeCatalogHelp":
+    "**Named recipe / preset / pack catalog (hard):** one Card wrapping **one** `List` — short one-line `supportingText`; kind/source in `trailingSupportingText` (not `ChipSet` soup); long description / id / evidence → Preview `Dialog` or row `InfoHint`. Row actions = ghost **md** IconButtons (+ Tooltip). Hover / coarse must clear kind meta from those disks (core ≥ **0.5.207**). **Forbidden:** fat Card per recipe with stacked `FieldHint` essays + head `ChipSet` tags; meta under IconButtons; page FieldHint that restacks the TopAppBar tip. Failure: CONSUMER_TREATY recipe catalog fat Card FieldHint essays / List trailingSupportingText underlaps --with-end IconButtons. Live `#sandbox-list-recipe-catalog`.",
+  "globals.listRecipeCatalogTitle": "Sample recipes",
+  "globals.listRecipeCatalogAria": "Sample recipe catalog",
+  "globals.listRecipeCatalogPreview": "Preview",
+  "globals.listRecipeCatalogExport": "Export",
+  "globals.listRecipeCatalogDialogTitle": "Recipe detail",
+  "globals.listRecipeCatalogDialogClose": "Close",
+  "globals.listRecipeA": "Compact local pack",
+  "globals.listRecipeASupporting": "One-line summary for the catalog row",
+  "globals.listRecipeAMeta": "Builtin",
+  "globals.listRecipeADetail":
+    "Long copy belongs in the Preview Dialog (or InfoHint) — never stacked as Card-body FieldHints. Sample id: compact-local.",
+  "globals.listRecipeB": "Wide review pack",
+  "globals.listRecipeBSupporting": "Short blurb only — keep the List dense",
+  "globals.listRecipeBMeta": "Custom",
+  "globals.listRecipeBDetail":
+    "Evidence and tags stay out of the catalog face. Sample id: wide-review.",
   "globals.listShortcutCardTitle": "Shortcuts",
   "globals.listShortcutCardAria": "Sample shortcut links",
   "globals.listShortcutCardRefresh": "Refresh links",
@@ -3377,7 +3401,7 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmServiceHelp":
     "**服务 / 进程 / CLI 探测（硬）：** `ControlRow` `label` 仅短状态（运行：PID；停止：未运行；安装：可用 / 未安装）。**控件列** 仅 labeled `Button` `sm` — **禁止** cluster 内状态 `Chip`，也**禁止**在安装 Button 已点名工具时把工具名再当 `label`。失败详情 → 行内 **`InfoHint`**，勿兄弟 `FieldHint` 长文（`tool：error…`）。失败模式：CONSUMER_TREATY CLI/tool probe name label + status Chip + FieldHint。Core ≥ **0.5.80** 带文案 Button **8dp**。同一 cluster **最多一颗** `loading`。点启动 / 停止切换样例。",
   "globals.rhythmActionEndHelp":
-    "**动作簇右齐 + label 地板（硬 ≥ 0.5.158 / **0.5.159** / **0.5.175**）：** `.fynns-control-cluster` 默认贴尾缘。label 轨地板 `--fynns-layout-control-row-label`。簇内长 nowrap `.fynns-table-meta` **收缩 + 省略** — 禁止向左溢出盖住状态 label。状态在 `label`（勿 `Chip`）。左齐仅 opt-in。失败模式：CONSUMER_TREATY left-packed Buttons；ControlRow label crushed to 2px；path meta paints over label。对照 `#sandbox-rhythm-action-end`。",
+    "**动作簇右齐 + label 地板（硬 ≥ 0.5.158 / **0.5.159** / **0.5.175** / CTA 误用 start ≥ **0.5.205**）：** `.fynns-control-cluster` 默认贴尾缘。label 轨地板 `--fynns-layout-control-row-label`。簇内长 nowrap `.fynns-table-meta` **收缩 + 省略** — 禁止向左溢出盖住状态 label。状态在 `label`（勿 `Chip`）。`controlsAlign=\"start\"` 仅探测 meta — **禁止**给安装 / 配置 Button 加 `start`（≥ **0.5.205** 误加仍会右齐）。失败模式：CONSUMER_TREATY left-packed Buttons；ControlRow label crushed to 2px；path meta paints over label。对照 `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end`。",
   "globals.rhythmActionEndTitle": "环境检查",
   "globals.rhythmActionEndReady": "就绪",
   "globals.rhythmActionEndPending": "待处理",
@@ -3388,6 +3412,12 @@ const zh: Record<MessageKey, string> = {
     "prefs.json 缺少必填项 - region、account 与 sample-provider 端点",
   "globals.rhythmActionEndConfigure": "去配置",
   "globals.rhythmActionEndRefresh": "刷新检查",
+  "globals.rhythmInstallCtaEndHelp":
+    "**安装 CTA 禁止 `controlsAlign=\"start\"`（硬 ≥ **0.5.205**）：** 服务 / CLI 安装行用默认右齐（省略 `start`）— `label` = 短状态，控件 = labeled Button ± InfoHint。下方反例故意误用 `start`；core 仍把安装 Button 贴尾缘。勿 invent 消费仓 `margin-inline-start: auto`。失败模式：CONSUMER_TREATY left-packed Buttons。对照 `#sandbox-rhythm-install-cta-end`。",
+  "globals.rhythmInstallCtaEndTitle": "示例工具安装",
+  "globals.rhythmInstallCtaEndNotInstalled": "未安装",
+  "globals.rhythmInstallCtaEndInstall": "安装示例工具",
+  "globals.rhythmInstallCtaEndHint": "先运行一次安装器，再刷新探测。",
   "globals.rhythmServiceTitle": "示例服务",
   "globals.rhythmServiceStopped": "未运行",
   "globals.rhythmServicePid": "PID 40812",
@@ -4059,7 +4089,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
   "globals.listStatusActionHelp":
-    "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.62** 按光学把状态→首盘拉开，使 **文字墨迹 → 首字形** 与簇内 **字形↔字形** 同距（不是裸 4dp 盒缝把「当前」贴死）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
+    "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.62** 光学拉开状态→首盘；≥ **0.5.207** 保证悬停/触控 **reserve** 真能展开（idle `:has(meta)` 不得压过显盘）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
   "globals.listStatusActionAria": "状态与动作列表示例",
   "globals.listStatusActionHeadline": "未命名项目",
   "globals.listStatusActionMeta": "当前",
@@ -4106,6 +4136,24 @@ const zh: Record<MessageKey, string> = {
     "路径 / 链接 / 仓库目录配方 — 一个 List；行操作放 trailing（ghost **md** 默认，横向 nowrap 簇）。**`--with-end` 悬停揭示：** 空闲时文案铺满行宽（左右边距更均衡）；悬停/聚焦内显示 trailing；触摸端常显。揭示时文案→首颗动作盘间距 `--fynns-list-end-actions-gap`（4dp = control-cluster-gap，≥ 0.4.123）— 省略号不得贴住首颗 IconButton。即使 interactive={false}，trailing 仍在 end 兄弟槽。**同页** catalog ControlRow 与 List trailing **同一 size**（md）。状态 / 新鲜度 → overline 或 trailingSupportingText / .fynns-table-meta——**禁止** headline 里塞 Chip 状态 pill。headline = 显示名（UI 字族）；路径放 supportingText 才可用 mono。禁止 tip-fill / tip-grow 包 headline Tooltip。**滚动：** FillColumn 主槽 + fynns-scroll——**不要**在 Card 里再套短 List 滚动井。仅长目录：List + fynns-scroll + max-height `var(--fynns-layout-list-well-max-height)` 或 `-sm`（已发布 token——禁止自造变量名）。",
   "globals.listShortcutCardHelp":
     "概览 / 仪表盘快捷入口——**没有** ShortcutPanel。一个 Card（`actions` = 刷新 IconButton）+ **一个** 密实 **两行** List：leading 类型 glyph + headline + 真实路径 supportingText + trailing 打开。路径/快捷行 **禁止** `overline`（会强制 height-3 / ~88dp，读成纵向空旷——种类只用 leading 图标）。对照 #list 本 Card（≥ 0.4.107 的 height-2 = 56dp）。",
+  "globals.listRecipeCatalogHelp":
+    "**命名配方 / 预设 / 打包目录（硬）：** 一个 Card 包 **一个** `List` — 短一行 `supportingText`；种类/来源用 `trailingSupportingText`（勿 `ChipSet` 汤）；长描述 / id / 证据 → Preview `Dialog` 或行内 `InfoHint`。行操作 = ghost **md** IconButton（+ Tooltip）。悬停 / 触控显盘须让开 kind meta（core ≥ **0.5.207**）。**禁止：** 每配方一张胖 Card + 叠 `FieldHint` 长文 + 头 `ChipSet` 标签；meta 压在 IconButton 下；栏目 FieldHint 再复述顶栏说明。失败：CONSUMER_TREATY recipe catalog fat Card FieldHint essays / List trailingSupportingText underlaps --with-end IconButtons。对照 `#sandbox-list-recipe-catalog`。",
+  "globals.listRecipeCatalogTitle": "示例配方",
+  "globals.listRecipeCatalogAria": "示例配方目录",
+  "globals.listRecipeCatalogPreview": "预览",
+  "globals.listRecipeCatalogExport": "导出",
+  "globals.listRecipeCatalogDialogTitle": "配方详情",
+  "globals.listRecipeCatalogDialogClose": "关闭",
+  "globals.listRecipeA": "紧凑本机包",
+  "globals.listRecipeASupporting": "目录行只用一行摘要",
+  "globals.listRecipeAMeta": "内置",
+  "globals.listRecipeADetail":
+    "长文放在 Preview Dialog（或 InfoHint）— 禁止叠成 Card 体 FieldHint。示例 id: compact-local。",
+  "globals.listRecipeB": "宽审查包",
+  "globals.listRecipeBSupporting": "短 blurb 即可 — 保持 List 密",
+  "globals.listRecipeBMeta": "自定义",
+  "globals.listRecipeBDetail":
+    "证据与标签不要上目录脸。示例 id: wide-review。",
   "globals.listShortcutCardTitle": "快捷入口",
   "globals.listShortcutCardAria": "快捷链接示例",
   "globals.listShortcutCardRefresh": "刷新链接",

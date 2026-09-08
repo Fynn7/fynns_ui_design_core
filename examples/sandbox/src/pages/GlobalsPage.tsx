@@ -1511,6 +1511,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formGridProject, setFormGridProject] = useState("sample-project");
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
+  const [listRecipeDetail, setListRecipeDetail] = useState<null | "a" | "b">(null);
   const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
   const [tableWheelX, setTableWheelX] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
@@ -4301,6 +4302,99 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               />
             </List>
           </Card>
+          <SandboxHelp text={t("globals.listRecipeCatalogHelp")} />
+          <div id="sandbox-list-recipe-catalog">
+            <Card title={t("globals.listRecipeCatalogTitle")}>
+              <List aria-label={t("globals.listRecipeCatalogAria")}>
+                <ListItem
+                  headline={t("globals.listRecipeA")}
+                  supportingText={t("globals.listRecipeASupporting")}
+                  trailingSupportingText={t("globals.listRecipeAMeta")}
+                  leading={<SparklesIcon />}
+                  trailing={
+                    <div className="fynns-control-cluster">
+                      <Tooltip content={t("globals.listRecipeCatalogPreview")}>
+                        <IconButton
+                          variant="ghost"
+                          aria-label={t("globals.listRecipeCatalogPreview")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setListRecipeDetail("a");
+                          }}
+                        >
+                          <EyeIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip content={t("globals.listRecipeCatalogExport")}>
+                        <IconButton
+                          variant="ghost"
+                          aria-label={t("globals.listRecipeCatalogExport")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            snackbar(t("globals.listRecipeCatalogExport"));
+                          }}
+                        >
+                          <UploadIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  }
+                  onClick={() => setListRecipeDetail("a")}
+                />
+                <ListItem
+                  headline={t("globals.listRecipeB")}
+                  supportingText={t("globals.listRecipeBSupporting")}
+                  trailingSupportingText={t("globals.listRecipeBMeta")}
+                  leading={<ClipboardIcon />}
+                  trailing={
+                    <div className="fynns-control-cluster">
+                      <Tooltip content={t("globals.listRecipeCatalogPreview")}>
+                        <IconButton
+                          variant="ghost"
+                          aria-label={t("globals.listRecipeCatalogPreview")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setListRecipeDetail("b");
+                          }}
+                        >
+                          <EyeIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip content={t("globals.listRecipeCatalogExport")}>
+                        <IconButton
+                          variant="ghost"
+                          aria-label={t("globals.listRecipeCatalogExport")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            snackbar(t("globals.listRecipeCatalogExport"));
+                          }}
+                        >
+                          <UploadIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  }
+                  onClick={() => setListRecipeDetail("b")}
+                />
+              </List>
+            </Card>
+            <Dialog
+              open={listRecipeDetail != null}
+              onOpenChange={(open) => {
+                if (!open) setListRecipeDetail(null);
+              }}
+              title={t("globals.listRecipeCatalogDialogTitle")}
+              size="lg"
+              showCloseButton
+              closeAriaLabel={t("globals.listRecipeCatalogDialogClose")}
+            >
+              <FieldHint>
+                {listRecipeDetail === "b"
+                  ? t("globals.listRecipeBDetail")
+                  : t("globals.listRecipeADetail")}
+              </FieldHint>
+            </Dialog>
+          </div>
           <SandboxHelp text={t("globals.listCatalogStaticHelp")} />
           <div id="sandbox-list-repo-path-actions">
             <List
@@ -7795,6 +7889,29 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     {t("globals.rhythmActionEndRefresh")}
                   </Button>
                 </div>
+              </ControlRow>
+            </ControlStack>
+          </Card>
+        </div>
+        <SandboxHelp text={t("globals.rhythmInstallCtaEndHelp")} />
+        <div id="sandbox-rhythm-install-cta-end">
+          <Card
+            className="sandbox-globals-rhythm"
+            title={t("globals.rhythmInstallCtaEndTitle")}
+          >
+            {/* Anti-demo: controlsAlign=start + labeled install Button — core
+                ≥ 0.5.205 still end-packs. Prefer omitting start on CTA stacks.
+                Failure mode: CONSUMER_TREATY left-packed Buttons. */}
+            <ControlStack columns={2} controlsAlign="start">
+              <ControlRow label={t("globals.rhythmInstallCtaEndNotInstalled")}>
+                <Button size="sm" variant="ghost">
+                  {t("globals.rhythmInstallCtaEndInstall")}
+                </Button>
+                <InfoHint
+                  size="sm"
+                  content={t("globals.rhythmInstallCtaEndHint")}
+                  ariaLabel={t("globals.rhythmInstallCtaEndHint")}
+                />
               </ControlRow>
             </ControlStack>
           </Card>

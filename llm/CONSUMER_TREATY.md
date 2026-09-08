@@ -103,7 +103,9 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | status meta far from --with-end action | AGENTS Hard rules | `#list` |
 | loose IconButton pair in control-cluster | AGENTS Toolbar / unit rhythm | `#list` |
 | status kisses first List IconButton | AGENTS Content density / List | `#sandbox-list-status-action` |
-| fat Surface / Card per catalog row | AGENTS Content density / List | `—` |
+| List trailingSupportingText underlaps --with-end IconButtons | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
+| fat Surface / Card per catalog row | AGENTS Content density / List | `#list` / `#page-scroll` |
+| recipe catalog fat Card FieldHint essays / ChipSet tag soup | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#list` |
 | ListItem trailing IconButtons stacked vertically | AGENTS shells / Hard rules | `#list` |
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
 | PageScroll Card sheet-max-width under ControlRow | AGENTS Hard rules / Card | `#page-scroll` |
@@ -135,7 +137,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | AGENTS forms / FieldStack | `#rhythm` |
 | CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
-| ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#rhythm` |
+| ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm` |
 | ControlRow label crushed to 2px / hairline sliver | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
 | path meta paints over ControlRow label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
 | outcome Chip as status (suggestion/assist / StatusChip fake Badge) | AGENTS Hard rules / Content density | `#list` / `#rhythm` status |
