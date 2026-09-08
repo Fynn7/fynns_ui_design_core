@@ -336,19 +336,15 @@ function prefersFineHover(): boolean {
  * layer. Otherwise PageScroll / shell canvas rails stay visible behind Dialog
  * and the idle thumb at scrollTop=0 reads as a jump when the dialog body scrolls.
  *
- * ClippedNavShell Shared Axis **outgoing** layer: hide rails — the layer
- * translates + fades, and a portal Y rail at the shifted edge reads as a
- * second/ghost scrollbar beside the incoming drawer (slide-back failure).
+ * ClippedNavShell Shared Axis: portal Y rails escape axis `overflow: hidden`.
+ * Suppress rails for **any** host under the axis for the whole morph — not only
+ * `--out`. Incoming `--in` during prepare is opacity 0 but still translated
+ * (~30dp); painting its rail at the offset edge reads as a brief twin-Y flash
+ * on Back (≥ 0.5.201).
  */
 function shouldPaintOverlayRail(host: HTMLElement): boolean {
   if (typeof document === "undefined") return true;
-  /* Shared Axis outgoing (and any non-incoming axis host): portal rails escape
-   * the axis `overflow: hidden` clip and read as a second Y thumb on Back. */
-  if (host.closest(".fynns-clipped-nav-shell-nav-axis-layer--out")) {
-    return false;
-  }
-  const axis = host.closest(".fynns-clipped-nav-shell-nav-axis");
-  if (axis && !host.closest(".fynns-clipped-nav-shell-nav-axis-layer--in")) {
+  if (host.closest(".fynns-clipped-nav-shell-nav-axis")) {
     return false;
   }
   const modalOverlays = document.querySelectorAll<HTMLElement>(
@@ -361,10 +357,22 @@ function shouldPaintOverlayRail(host: HTMLElement): boolean {
   return false;
 }
 
-/** Reposition / hide portal rails after overlay or Shared Axis layer changes. */
+/** Reposition / hide portal rails after overlay or Shared Axis layer changes.
+ * Synchronous — do not rAF-defer (one paint with stale rails = Back Y flash).
+ * Also scan so newly mounted axis hosts attach with paint suppressed before paint. */
 export function refreshOverlayScrollbars(): void {
   if (typeof document === "undefined") return;
-  onViewportChange();
+  ensurePortal();
+  scan(document);
+  document.querySelectorAll<HTMLElement>(`[${HOST_ATTR}]`).forEach((host) => {
+    const state = states.get(host) ?? getBoundState(host);
+    if (!state) return;
+    if (state.raf) {
+      cancelAnimationFrame(state.raf);
+      state.raf = 0;
+    }
+    updateHost(host, state);
+  });
 }
 
 function canHostOverlay(el: Element): el is HTMLElement {

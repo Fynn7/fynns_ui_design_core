@@ -588,7 +588,13 @@ a.fynns-breadcrumb-link:visited {
    */
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--fynns-layout-control-cluster-gap);
+  /*
+   * Start cluster ↔ page discs: **unit-stack** (16dp, ≥ **0.5.202**) — never
+   * IconButton-tight `control-cluster-gap` (4dp). Packed narrow bars still
+   * need readable breath between range copy and discs.
+   * Failure: CONSUMER_TREATY Pagination bar gaps crushed to 4dp.
+   */
+  gap: var(--fynns-layout-unit-stack-gap);
   width: 100%;
   min-width: 0;
   overflow-x: auto;
@@ -617,13 +623,17 @@ a.fynns-breadcrumb-link:visited {
  * never `align-items: center` against the full expanded joined capsule.
  * Same grammar as List inspector / Card-head expanded Select. Failure:
  * CONSUMER_TREATY Pagination Select siblings center on expanded height.
+ *
+ * Horizontal breath (≥ **0.5.202**): noun | Select | range use
+ * `--fynns-layout-action-cluster-gap` (**8dp**) — not IconButton
+ * `control-cluster-gap` (4dp). Do not invent consumer gap overrides.
  */
 .fynns-pagination-bar__start {
   display: inline-flex;
   flex: 0 0 auto;
   flex-wrap: nowrap;
   align-items: flex-start;
-  gap: var(--fynns-layout-control-cluster-gap);
+  gap: var(--fynns-layout-action-cluster-gap);
   min-width: max-content;
 }
 

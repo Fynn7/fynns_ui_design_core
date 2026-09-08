@@ -2,11 +2,13 @@
  * CONSUMER_TREATY slugs:
  * - `Pagination Select invents absolute overlay`
  * - `Pagination Select siblings center on expanded height`
+ * - `Pagination bar gaps crushed to 4dp`
  * AGENTS: pager rows-per-page Select is the **stock** Keep-set Select —
  * in-flow `.fynns-search-bar--expanded` joined capsule like Globals `#select`.
  * ≥ 0.5.194: no absolute upward flyout / detached panel.
  * ≥ 0.5.197: noun / range / discs optically center on the 40dp Select shell
  * only — not mid of the expanded joined capsule.
+ * ≥ 0.5.202: noun|Select|range = 8dp; start↔end = 16dp (not 4dp).
  * Sandbox: #pagination (+ anatomy reference #select)
  */
 import { test, expect } from "@playwright/test";
@@ -18,6 +20,7 @@ import {
 
 const SLUG_OVERLAY = "Pagination Select invents absolute overlay";
 const SLUG_SIBLINGS = "Pagination Select siblings center on expanded height";
+const SLUG_GAPS = "Pagination bar gaps crushed to 4dp";
 
 test.beforeEach(async ({ page }) => {
   await resetSandboxSession(page);
@@ -152,5 +155,63 @@ test(`${SLUG_SIBLINGS}: noun + range center on Select shell only when expanded`,
     expect(geometry.hintDeltaShell).toBeLessThan(6);
     expect(geometry.metaDeltaExpanded).toBeGreaterThan(20);
     expect(geometry.hintDeltaExpanded).toBeGreaterThan(20);
+  }).toPass({ timeout: 10_000 });
+});
+
+test(`${SLUG_GAPS}: noun|Select|range ≥8dp and start↔end ≥16dp`, async ({
+  page,
+}) => {
+  await openGlobalsDemo(page, "pagination", "pagination");
+  const demo = globalsDemo(page, "pagination");
+  await expect(demo).toBeVisible();
+
+  // Prefer the Catalog Card bar (has noun + Select + range + discs).
+  const bar = demo.locator(".fynns-pagination-bar").filter({
+    has: page.locator(".fynns-pagination-bar__start > .fynns-table-meta"),
+  }).first();
+  await bar.scrollIntoViewIfNeeded();
+
+  await expect(async () => {
+    const geometry = await bar.evaluate((el) => {
+      const host = el as HTMLElement;
+      const start = host.querySelector(
+        ":scope > .fynns-pagination-bar__start",
+      ) as HTMLElement | null;
+      const end = host.querySelector(
+        ":scope > .fynns-pagination-bar__end",
+      ) as HTMLElement | null;
+      const meta = start?.querySelector(
+        ":scope > .fynns-table-meta",
+      ) as HTMLElement | null;
+      const select = start?.querySelector(
+        ":scope > .fynns-select",
+      ) as HTMLElement | null;
+      const hint = start?.querySelector(
+        ":scope > .fynns-field-hint",
+      ) as HTMLElement | null;
+      if (!start || !end || !meta || !select || !hint) return null;
+      const mb = meta.getBoundingClientRect();
+      const sb = select.getBoundingClientRect();
+      const hb = hint.getBoundingClientRect();
+      const eb = end.getBoundingClientRect();
+      const startBox = start.getBoundingClientRect();
+      return {
+        metaToSelect: Math.round(sb.left - mb.right),
+        selectToHint: Math.round(hb.left - sb.right),
+        // Prefer flex gap token (stable) — geometry can be space-between large.
+        startGapPx: parseFloat(getComputedStyle(start).columnGap || getComputedStyle(start).gap) || 0,
+        barGapPx: parseFloat(getComputedStyle(host).columnGap || getComputedStyle(host).gap) || 0,
+        startEndGap: Math.round(eb.left - startBox.right),
+      };
+    });
+    expect(geometry).toBeTruthy();
+    if (!geometry) return;
+
+    expect(geometry.metaToSelect).toBeGreaterThanOrEqual(7);
+    expect(geometry.selectToHint).toBeGreaterThanOrEqual(7);
+    expect(geometry.startGapPx).toBeGreaterThanOrEqual(7);
+    expect(geometry.barGapPx).toBeGreaterThanOrEqual(15);
+    // Packed narrow or wide space-between: end starts after start cluster + bar gap.
+    expect(geometry.startEndGap).toBeGreaterThanOrEqual(15);
   }).toPass({ timeout: 10_000 });
 });

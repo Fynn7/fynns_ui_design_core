@@ -93,8 +93,9 @@ alwaysApply: true
 4b. **drill-in / mode sidebar hard-swap** — 根目的地 ↔ 模式目录侧栏换 body 时
    必须给 `ClippedNavShell` 传 **`navKey`** + **`navDirection`**（≥ **0.5.183**），
    定宽列内 Shared Axis X（短滑 + fade）；退出用 `"back"`。禁止硬切，也禁止
-   关轨再开冒充钻入。≥ **0.5.198** 出层在 run 时立即隐藏（避免幽灵目录 / 双 Y 轨）。
-   对照 `#layouts-demo-drill-in`。
+   关轨再开冒充钻入。≥ **0.5.198** 出层立即隐藏；≥ **0.5.201** 从 prepare
+   首帧起隐藏；≥ **0.5.202** morph 全程不给 nav-axis 内宿主画 portal Y 轨
+   （避免 incoming 透明位移帧闪轨）。对照 `#layouts-demo-drill-in`。
 5. **fat Surface / Card per catalog row** — 路径/书签 → 一个 `List` of
    `ListItem`。对照 `#list`。
 6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
@@ -177,6 +178,10 @@ alwaysApply: true
     **shell（40dp）** 竖直居中；core ≥ **0.5.197** 已把 `__start` 钉到
     trigger-band。**禁止** 消费仓给 `__start` 写 `align-items: center` 让旁侧
     对整块连体高度居中。对照 `#pagination`。
+26b2. **Pagination bar gaps crushed to 4dp** — 名词|Select|范围用
+    `action-cluster-gap`（**8dp**）；start↔页码 discs 用 `unit-stack-gap`
+    （**16dp**，≥ **0.5.202**）。**禁止** 消费仓把 `.fynns-pagination-bar` /
+    `__start` 压回 IconButton 的 4dp `control-cluster-gap`。对照 `#pagination`。
 26c. **Pagination Select option repeats noun** — options 仅数字（`10`/`50`/
     `100`）；名词一次放 sibling `.fynns-table-meta` + `ariaLabel` — **禁止**
     `Sessions: N` / `Rows: N` / `每页 N 行` 写进每个 option。对照 `#pagination`。

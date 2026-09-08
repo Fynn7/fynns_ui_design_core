@@ -395,6 +395,13 @@ belong in a consumer’s own doc.
   consumer `align-items: center` on `__start` to “fix” collapsed rhythm.
   Live `#pagination`. Failure: CONSUMER_TREATY Pagination Select siblings
   center on expanded height.
+- **DON'T** crush Pagination bar horizontal breath to IconButton
+  `control-cluster-gap` (**4dp**) — noun | Select | range use
+  `--fynns-layout-action-cluster-gap` (**8dp**); start cluster ↔ `__end`
+  discs use `--fynns-layout-unit-stack-gap` (**16dp**, ≥ **0.5.202**). Never
+  invent consumer `gap: 4px` / `gap: var(--fynns-layout-control-cluster-gap)`
+  on `.fynns-pagination-bar` / `__start`. Live `#pagination`. Failure:
+  CONSUMER_TREATY Pagination bar gaps crushed to 4dp.
 - **DON'T** (any consumer) locally restyle keep-set **chrome anatomy** —
   especially Select / SearchBar / Autocomplete / DropdownMenu **border-radius**,
   padding, shadow, overflow, or expand placement (no `.hub-*` / app CSS that
@@ -411,9 +418,11 @@ belong in a consumer’s own doc.
   so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
   not close→swap→open).   Core ≥ **0.5.198** finishes the morph without leaving
   an outgoing catalog / second Y rail ghost on Back; ≥ **0.5.201** hides
-  `--out` on the first prepare paint (not only `--out-run`) so Back does not
-  flash a dual catalog / twin Y for 1–2 frames; portal rails refresh. Live
-  `#layouts-demo-drill-in`.
+  `--out` on the first prepare paint (not only `--out-run`); ≥ **0.5.202**
+  suppresses portal overlay rails for **every** host under the nav-axis for
+  the whole morph, and `refreshOverlayScrollbars` updates **synchronously**
+  (no rAF defer — stale rails for one paint = Back Y flash). Live
+  `#layouts-demo-drill-in`. (≥ **0.5.202**/ **0.5.203**)
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /
@@ -807,6 +816,7 @@ classes.
   rows-per-page Select is the **stock** Keep-set Select — in-flow
   `.fynns-search-bar--expanded` joined capsule like `#select` (≥ **0.5.194**);
   expanded siblings pin to the **40dp shell** only (≥ **0.5.197**);
+  noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**);
   never invent an absolute upward flyout; options = **digits only** + sibling
   `.fynns-table-meta` noun — never `Rows: N` / `Sessions: N` / `每页 N 行` in
   every option)
@@ -968,7 +978,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Empty catalog | EmptyState (`fill` if sole pane) | `#empty-state` | EmptyState as loading shell |
 | Pane cold-start fail / hang | Clear busy → InlineAlert + hint + end-align Retry | `#sandbox-pane-load-error` | Permanent fill; EmptyState as load-fail; silent empty |
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
-| Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only **stock** Select (in-flow joined capsule like `#select`, ≥ **0.5.194**); open Select → siblings center on **40dp shell only** (≥ **0.5.197**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; invent absolute upward flyout / detached panel; `Sessions: N` / `每页 N 行` in every option; meta/hint mid of expanded capsule |
+| Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only **stock** Select (in-flow joined capsule like `#select`, ≥ **0.5.194**); open Select → siblings center on **40dp shell only** (≥ **0.5.197**); noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; invent absolute upward flyout / detached panel; `Sessions: N` / `每页 N 行` in every option; meta/hint mid of expanded capsule; IconButton-tight **4dp** gaps |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
 | Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#rhythm` status | Cluster+end-hug misalign; Chip as status; FieldHint essays |
 | Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | `#sandbox-rhythm-probe-kinds` | One stack mixing Available + Backend; path/chips/hint in one cluster |
