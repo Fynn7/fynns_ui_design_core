@@ -52,10 +52,12 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 
 | slug | where | sandbox |
 | --- | --- | --- |
-| GitHub Packages install auth (E401 / empty NODE_AUTH_TOKEN) | CONSUME.md | `—` |
+| zero-token sibling consume (no NODE_AUTH_TOKEN) | CONSUME.md | `—` |
+| leftover Packages `.npmrc` auth → E401 on clone | CONSUME.md | `—` |
 | sandbox-only aesthetics | AGENTS Hard rules / check:wysiwyg | `—` |
 | squashed drawer | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | drill-in / mode sidebar hard-swap (no navKey morph) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
+| drill-in Back Shared Axis ghost (out layer / double Y rail) | AGENTS shells / Hard rules (≥ **0.5.189**) | `#layouts-demo-drill-in` |
 | icon-only rail densify (narrow) | AGENTS shells / Hard rules | `#layouts-demo-navigation-rail` |
 | stacked drawer ribbon (narrow) | AGENTS shells / Hard rules | `—` |
 | drawer headline toolbar | AGENTS shells / Hard rules | `#layouts-demo-shell` |

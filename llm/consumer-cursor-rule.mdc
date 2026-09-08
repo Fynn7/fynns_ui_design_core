@@ -16,16 +16,21 @@ alwaysApply: true
 
 ## 安装与 API
 
-1. **GitHub Packages + 源码别名**：依赖 **`@fynn7/ui-design-core`**；Vite/tsconfig
-   **`@fynns/ui`** → `node_modules/@fynn7/ui-design-core/src/index.ts`。`.npmrc`
-   映射 `@fynn7` → `https://npm.pkg.github.com`。**禁止** git submodule 日常消费。
-2. **UI 工作前核安装**：core 仓
-   `npm run consume:check -- --target <消费仓根>`。认证：
-   `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`（`read:packages`）。E401 时先查空 token /
-   scope / 用户级 `.npmrc` 被盖掉 — 见 `llm/CONSUME.md` Auth troubleshooting。
+1. **零 token 日常消费（默认）**：依赖 **`@fynn7/ui-design-core`** 来自同级公开仓
+   `../fynns_ui_design_core` 的 **`file:`** 链接；Vite/tsconfig **`@fynns/ui`** →
+   `node_modules/@fynn7/ui-design-core/src/index.ts`。首跑 setup/dev 应自动 clone
+   sibling。**禁止**要求 `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` / `gh` packages 登录才能
+   `npm install` / `npm run dev`。**.npmrc 禁止**提交
+   `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`（空展开 → E401）；sibling
+   模式用 `@fynn7:registry=https://registry.npmjs.org`。**禁止** git submodule 日常消费。
+2. **UI 工作前核安装**：确保 sibling 存在且 `file:` 已链；core
+   `node scripts/ensure-sibling-ui-core.mjs --target <消费仓包根> --install --npmrc`
+   与/或 `npm run consume:check -- --target <消费仓根>`。E401 → 你还在走可选的
+   GitHub Packages 路径或残留 auth `.npmrc` — 切回 sibling（Packages npm **即使
+   public 也要 token**，所以日常不用它）。见 `llm/CONSUME.md`。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
-   `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再 bump。
+   `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新 sibling / bump。
 5. 样式只用 `var(--fynns-*)`。正文/chrome 继承 `--fynns-font-ui`；代码
    `--fynns-font-mono`；**禁止**主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。

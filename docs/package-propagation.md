@@ -1,76 +1,72 @@
-# UI package propagation (npm / GitHub Packages)
+# UI package propagation (sibling file: + optional GitHub Packages)
 
 This document is the single source of truth for how `fynns_ui_design_core`
-reaches consumer apps after the **npm consume model** (GitHub Packages).
+reaches consumer apps.
 
 **Install contract:** [`llm/CONSUME.md`](../llm/CONSUME.md).
 
 ## Model
 
-1. This repo publishes **`@fynn7/ui-design-core`** to
+1. This **git repo is public**. Day-to-day consumers use a **sibling checkout**
+   `../fynns_ui_design_core` + `package.json` dependency
+   `@fynn7/ui-design-core` via **`file:`**, with Vite/tsconfig alias
+   **`@fynns/ui`** → `node_modules/@fynn7/ui-design-core/src/index.ts`.
+   **No** `NODE_AUTH_TOKEN` / packages login for clone → install → dev.
+   Helper: [`scripts/ensure-sibling-ui-core.mjs`](../scripts/ensure-sibling-ui-core.mjs).
+   Reference consumer: CV Generator `scripts/ensure-node.mjs`.
+2. This repo **also** publishes **`@fynn7/ui-design-core`** to
    `https://npm.pkg.github.com` (workflow
-   [`.github/workflows/publish-package.yml`](../.github/workflows/publish-package.yml)
-   on GitHub Release / `workflow_dispatch`).
-2. Consumers depend on that package in `package.json`, authenticate via
-   `.npmrc` + `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` (`read:packages`), and keep the
-   Vite/tsconfig alias **`@fynns/ui`** →
-   `node_modules/@fynn7/ui-design-core/src/index.ts`.
-3. Version bumps in consumers: Dependabot (npm) or manual
-   `npm install @fynn7/ui-design-core@x.y.z`. There is **no** local
-   `consume:sync` / `consume:watch` worktree mirror.
+   [`.github/workflows/publish-package.yml`](../.github/workflows/publish-package.yml))
+   for **publishers / optional bump workflows**. GitHub Packages npm **always**
+   needs a token (even when package visibility is public) — do **not** make
+   that the onboarding path for people cloning a consumer.
+3. Consumer `.npmrc` for sibling mode (commit this — **no** auth line):
+
+```
+# Zero-token sibling consume
+@fynn7:registry=https://registry.npmjs.org
+```
+
+Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
 
 ## Update notices (consumer dev/build)
 
-`npm run consume:install` wires **`fynns-ui:check-update`** into consumer
-`predev` / `prebuild` / `prepreview` / `postinstall`. When GitHub Packages has
-a newer semver than the installed tarball, `npm run dev` (and build/preview)
-prints a one-line upgrade hint — that is the intended reminder loop after each
-core publish. Registry lookup requires `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`
-(`read:packages`); set `FYNNS_UI_SKIP_UPDATE_CHECK=1` in CI to silence. Manual:
-`npm run fynns-ui:check-update` in the consumer app.
+`npm run consume:install` may wire **`fynns-ui:check-update`** into consumer
+`predev` / `prebuild` / `prepreview` / `postinstall`. On sibling/`file:` the
+registry lookup skips quietly without a token. Optional Packages lookup needs
+`NODE_AUTH_TOKEN` / `GITHUB_TOKEN`. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`.
 
-**Monorepo:** bump in the **app package** that owns `predev` (e.g. `apps/web`),
-not only at the git root — nested `node_modules` wins for Vite. See
-[`llm/CONSUME.md`](../llm/CONSUME.md) **Monorepo bump**.
+**Monorepo:** bump / link in the **app package** that owns `predev` (e.g.
+`apps/web`), not only at the git root — nested `node_modules` wins for Vite.
+See [`llm/CONSUME.md`](../llm/CONSUME.md) **Monorepo bump**.
 
 ## Local core development
 
-Edit this checkout, then **ship on the registry** — not via a sibling Vite alias.
+Edit this checkout (the sibling consumers already link). After landed
+consumer-visible changes:
 
-**Agent ship rule (hard):** after every landed change consumers should see
-(primitive, CSS, token, keep-set docs):
-
-1. Bump `package.json` semver in the **same task** (`patch` for fixes /
-   geometry; `minor` for new public API).
-2. Commit, then publish `@fynn7/ui-design-core` to GitHub Packages
-   (`npm publish --access restricted`, or GitHub Release /
-   `workflow_dispatch` on
-   [`.github/workflows/publish-package.yml`](../.github/workflows/publish-package.yml)).
-3. Consumers stay on
-   `node_modules/@fynn7/ui-design-core/src/index.ts`. Bump their dependency
-   (`npm install @fynn7/ui-design-core@x.y.z`) when they should pick it up.
-
-Do **not** deliver by pointing a consumer Vite alias at
-`../../fynns_ui_design_core`. Committing that path is machine-specific; restoring
-the npm alias on commit reloads the **last published** tarball and looks like a
-visual rollback (unpublished CSS disappears). Temporary `file:` / `npm link`
-is iteration-only — never the ship path. There is **no** `consume:sync` /
-`consume:watch`.
+1. Bump `package.json` semver in the **same task** when you also publish.
+2. Consumers on sibling pick up changes via `git pull` in
+   `../fynns_ui_design_core` (or their ensure script). Optional: publish to
+   GitHub Packages for Packages-based workflows.
+3. Do **not** leave Vite pointing at a sibling path while `dependencies` still
+   resolve a registry tarball — keep `file:` and alias both on
+   `node_modules/@fynn7/ui-design-core/...`.
 
 ## Legacy submodule bump workflows (removed)
 
 The old git-submodule propagate workflows
 (`propagate-ui-bump.yml`, `bump-submodule-reusable.yml`) and
-`.github/ui-consumers.json` were **removed**. Consumers install
-`@fynn7/ui-design-core` from GitHub Packages and bump with `npm install`
-(see above). If a consumer still has a `repository_dispatch` handler for
-submodule bumps, delete it once that app is on npm.
+`.github/ui-consumers.json` were **removed**. Day-to-day = sibling `file:`.
+If a consumer still has a `repository_dispatch` handler for submodule bumps,
+delete it.
 
-## Registry
-
-Consumer `.npmrc`:
+## Optional Packages registry (publishers only)
 
 ```
 @fynn7:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
+
+Requires `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` with `read:packages` /
+`write:packages` as appropriate. Not part of consumer onboarding.

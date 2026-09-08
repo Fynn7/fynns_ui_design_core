@@ -1,4 +1,4 @@
-# LLM / agent: consume `@fynns/ui` via GitHub Packages
+# LLM / agent: consume `@fynns/ui` (zero-token sibling)
 
 **Single source of truth for *installing* this design system into any app repo.**  
 Design language & component catalog remain in [`AGENTS.md`](../AGENTS.md).  
@@ -21,31 +21,42 @@ index slugs **squashed drawer** + **wrong shell slot**.
 
 ## Hard rules
 
-1. **npm package + Vite/tsconfig source alias** — install
-   **`@fynn7/ui-design-core`** from **GitHub Packages**
-   (`https://npm.pkg.github.com`). Do **not** add this design system as a git
-   submodule for day-to-day use.
-2. **Do** add `@fynn7/ui-design-core` to consumer `package.json` `dependencies`.
-   Do **not** depend on obsolete registry names `@fynns/ui` /
+1. **Zero-token day-to-day (default)** — this git repo is **public**. Consumers
+   depend on **`@fynn7/ui-design-core`** via a **sibling checkout**
+   `../fynns_ui_design_core` + `file:` link (Vite/tsconfig alias
+   **`@fynns/ui`** → `node_modules/@fynn7/ui-design-core/src/index.ts`).
+   **No** `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` / `gh` packages login for clone →
+   `npm install` → `npm run dev`. Auto-clone the sibling on first setup/dev
+   (reference: CV Generator `scripts/ensure-node.mjs`; core helper
+   `scripts/ensure-sibling-ui-core.mjs`). Do **not** use a git submodule.
+   Do **not** commit
+   `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}` in consumer `.npmrc`
+   (empty expansion → E401). Prefer a safe `.npmrc` that keeps `@fynn7` off
+   GitHub Packages while on sibling (`@fynn7:registry=https://registry.npmjs.org`).
+2. **Do** add `@fynn7/ui-design-core` to consumer `package.json` `dependencies`
+   (usually `file:../../fynns_ui_design_core` or absolute `file:` URL after
+   ensure). Do **not** depend on obsolete registry names `@fynns/ui` /
    `@fynns/ui-design-core` (not the published package id).
 3. Alias name is **`@fynns/ui`** →
    `node_modules/@fynn7/ui-design-core/src/index.ts` (Vite `resolve.alias` +
    tsconfig `paths`). App code keeps `import { … } from "@fynns/ui"`.
 4. Vite must **`dedupe: ["react", "react-dom"]`**.
 5. Do not edit `node_modules/@fynn7/ui-design-core` for consumer features —
-   change this core repo, **bump + publish in the same task**, then bump the
-   consumer dependency. Authority:
+   change this core repo, then refresh the sibling (`git pull` / ensure script)
+   or bump. Authority:
    [`docs/package-propagation.md`](../docs/package-propagation.md).
-   Do **not** point the consumer Vite alias at a sibling core checkout as
-   delivery. Local `file:` / `npm link` is iteration-only.
-5a. **Install freshness (mandatory before UI work):** run
-    `node scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --check`
-    (or `npm run consume:check -- --target <CONSUMER_ROOT>`). Fails when the
-    dependency / `.npmrc` / `@fynns/ui` alias is missing, or a legacy
-    submodule tree is still present. Auth: `NODE_AUTH_TOKEN` or
-    `GITHUB_TOKEN` with `read:packages`. Re-paste
-    [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) after treaty updates
-    (installer does not overwrite an existing rule file).
+   **Do** use sibling `file:` for day-to-day. Do **not** point *only* the Vite
+   alias at a sibling while `package.json` still resolves a registry tarball
+   (inconsistent / looks like rollback). Optional GitHub Packages
+   (`npm.pkg.github.com`) is for **publishers / bump workflows only** and still
+   needs a packages token — never require it for “anyone clones the consumer”.
+5a. **Install freshness (mandatory before UI work):** ensure sibling exists and
+    `file:` links; run
+    `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc`
+    and/or `npm run consume:check -- --target <CONSUMER_ROOT>`. Fails when the
+    dependency / alias is missing, or a legacy submodule tree remains.
+    Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) after
+    treaty updates (installer does not overwrite an existing rule file).
 6. **TypeScript:** consumer `compilerOptions.target` and `lib` must be **ES2022** (or later).
 7. **Do not** import deleted symbols — [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
    Transient feedback: `snackbar` + `SnackbarHost`. Modals: `Dialog` /
@@ -97,74 +108,79 @@ index slugs **squashed drawer** + **wrong shell slot**.
 ## Agent checklist (greenfield / short prompt)
 
 1. Read this file + `consume.json`.
-2. Ensure GitHub Packages auth (`.npmrc` + `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`).
-3. `npm run consume:install -- --target <CONSUMER_ROOT>`.
+2. **No packages token.** Ensure sibling `../fynns_ui_design_core` (public HTTPS
+   clone) + safe `.npmrc` (no `_authToken=${NODE_AUTH_TOKEN}`).
+3. `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc`
+   (or wire the same into consumer `setup` / first `dev`).
 4. `npm run consume:check -- --target <CONSUMER_ROOT>` until exit 0; remove leftover submodule trees.
 5. Scaffold React + Vite + TS; `lib`/`target` ES2022+.
 6. Default chrome: `DestinationAppShell` unless the user names another template.
 7. Playground / inspector / shell → [`PERF.md`](PERF.md).
 8. `npm install` → `npm run build` exit 0.
 
-## One-shot install
+## One-shot install (zero-token)
 
 ```bash
-npm run consume:install -- --target ../my-app --json
+# from a core checkout (or after cloning core anywhere)
+node scripts/ensure-sibling-ui-core.mjs --target ../my-app --install --npmrc --json
+npm run consume:install -- --target ../my-app --sibling --json   # wire alias + rule
 npm run consume:check -- --target ../my-app --json
 ```
 
-Bootstrap without a local core checkout:
+Bootstrap for a fresh machine (no PAT):
 
 ```bash
-git clone --depth 1 https://github.com/Fynn7/fynns_ui_design_core.git /tmp/fynns_ui_design_core
-export NODE_AUTH_TOKEN=...   # PAT with read:packages
-node /tmp/fynns_ui_design_core/scripts/install-as-npm.mjs --target <CONSUMER_ROOT> --json
+git clone https://github.com/Fynn7/my-consumer.git
+git clone --depth 1 --branch dev https://github.com/Fynn7/fynns_ui_design_core.git ../fynns_ui_design_core
+# or let the consumer's setup / ensure script clone the sibling automatically
+cd my-consumer && npm install && npm run dev
 ```
 
-Consumer `.npmrc`:
+Consumer **safe** `.npmrc` (sibling mode — commit this shape):
+
+```
+# Zero-token sibling consume: do not point @fynn7 at npm.pkg.github.com.
+@fynn7:registry=https://registry.npmjs.org
+```
+
+**Do not** commit:
 
 ```
 @fynn7:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 ```
 
-**Auth troubleshooting (E401):** GitHub Packages still requires a token even when
-the package visibility is public. The consumer `.npmrc` line expands
-`${NODE_AUTH_TOKEN}` at install time — if that env var is **unset/empty**, npm
-sends an empty credential and **overrides** a working user-level
-`~/.npmrc` token, which surfaces as:
+**If you still see E401:** you are on the optional Packages path (or a leftover
+`.npmrc` / user `~/.npmrc` with empty `${NODE_AUTH_TOKEN}`). Switch back to
+sibling `file:` + safe `.npmrc`. GitHub Packages npm **always** needs a token
+even when the package is public — that is why day-to-day consume is sibling,
+not Packages. Optional Packages bump for publishers only:
+[`docs/package-propagation.md`](../docs/package-propagation.md).
 
-`401 Unauthorized … User cannot be authenticated with the token provided.`
+Treaty: [`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **zero-token sibling consume** /
+[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **安装与 API**.
 
-Fix: set `NODE_AUTH_TOKEN` (or `GITHUB_TOKEN`) to a credential with
-`read:packages` (a classic PAT, or `gh auth token` after `gh auth login` with
-packages scope). On Windows, a **User** environment variable is enough so new
-shells inherit it. Do **not** commit a literal token into the repo `.npmrc`.
+## What the scripts do
 
-**Consumer agents (hard):** on install / bump failure (`E401`, wrong-registry
-`E404`, “token provided”), **self-debug with the checklist above** before
-claiming the package is missing or pointing Vite at a sibling core checkout.
-Treaty index + pasteable install auth guidance:
-[`CONSUMER_TREATY.md`](CONSUMER_TREATY.md) **GitHub Packages install auth** /
-[`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) **安装与 API** §2.
+**`ensure-sibling-ui-core.mjs`:** clone/update
+`<consumer-git-root>/../fynns_ui_design_core` over public HTTPS; optional
+`--install` (`file:`) + `--npmrc` (safe scope). **No token.**
 
-## What the script does
+**`install-as-npm.mjs` (wire + optional Packages):**
 
 1. Resolves the nearest `package.json` above `--target` (so monorepo apps
    like `agents-hub/gui` or `tools/gsc-live-preview` work) and the git root
    (for the Cursor consumer rule).
-2. Ensures `.npmrc` for `@fynn7` → GitHub Packages.
-3. `npm install @fynn7/ui-design-core@^<core version>` (unless `--skip-install`).
-4. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.
-5. Wires tsconfig `paths`.
-6. Writes `.cursor/rules/fynns-ui-consumer.mdc` if missing (from `consumer-cursor-rule.mdc`).
-7. Wires **`fynns-ui:check-update`** into consumer
-   `predev` / `prebuild` / `prepreview` / `postinstall` so `npm run dev` (and
-   install/build) prints a notice when GitHub Packages has a newer
-   `@fynn7/ui-design-core`. Registry lookup needs `NODE_AUTH_TOKEN` /
-   `GITHUB_TOKEN` (`read:packages`); without auth the check is skipped
-   quietly. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`. Cache:
-   `.fynns-ui-update-check.json` (gitignored by the installer).
-8. `--json` structured result for agents.
+2. Default **`--sibling`**: safe `.npmrc` + prefer `file:` sibling (no token).
+   Opt-in **`--packages`**: GitHub Packages install (needs token — publishers).
+3. Wires Vite `@fynns/ui` → `node_modules/@fynn7/ui-design-core/src/index.ts` + React dedupe.
+4. Wires tsconfig `paths`.
+5. Writes `.cursor/rules/fynns-ui-consumer.mdc` if missing (from `consumer-cursor-rule.mdc`).
+6. Wires **`fynns-ui:check-update`** into consumer
+   `predev` / `prebuild` / `prepreview` / `postinstall`. On sibling/`file:`
+   the registry lookup is skipped quietly without a token. Silence:
+   `FYNNS_UI_SKIP_UPDATE_CHECK=1`. Cache: `.fynns-ui-update-check.json`.
+7. `--json` structured result for agents.
 
 **Monorepo bump (hard):** `fynns-ui:check-update` runs from the **consumer app
 package** (the nearest `package.json` above `--target` / cwd — e.g.

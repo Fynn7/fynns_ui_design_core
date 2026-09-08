@@ -8,15 +8,16 @@ repos should link here, not duplicate it.
 
 A dark-teal design system: canonical `--fynns-*` CSS tokens + self-developed,
 dependency-free React primitives. Consumed as source via the `@fynns/ui` alias
-into **`@fynn7/ui-design-core`** (GitHub Packages).
+into **`@fynn7/ui-design-core`**.
 
-**Installing into a consumer repo (npm + Vite alias):** follow
-[`llm/CONSUME.md`](llm/CONSUME.md) and run
-`npm run consume:install -- --target <consumer-root>`
-(`scripts/install-as-npm.mjs`). Machine contract: [`llm/consume.json`](llm/consume.json).
-Add `@fynn7/ui-design-core` to the consumer’s `package.json` dependencies
-(registry: `https://npm.pkg.github.com`). Do **not** use a git submodule for
-day-to-day consume. Publish / bumps:
+**Installing into a consumer repo (zero-token sibling + Vite alias):** follow
+[`llm/CONSUME.md`](llm/CONSUME.md). Day-to-day = public sibling checkout
+`../fynns_ui_design_core` + `file:` link — **no** `NODE_AUTH_TOKEN` /
+GitHub Packages login. Helper:
+`scripts/ensure-sibling-ui-core.mjs` / `npm run consume:install -- --target
+<consumer-root> --sibling`. Machine contract:
+[`llm/consume.json`](llm/consume.json). Do **not** use a git submodule for
+day-to-day consume. Publish / optional Packages bumps:
 [`docs/package-propagation.md`](docs/package-propagation.md).
 **Public API purge / migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
 **Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
@@ -376,7 +377,8 @@ belong in a consumer’s own doc.
 - **DON'T** hard-swap `ClippedNavShell` `nav` while `navMode` stays `"drawer"`
   for root ↔ drill-in / mode catalog — pass **`navKey`** + **`navDirection`**
   so the body Shared-Axis-X slides (core ≥ **0.5.183**; width stays open —
-  not close→swap→open). Live `#layouts-demo-drill-in`.
+  not close→swap→open). Core ≥ **0.5.189** finishes the morph without leaving
+  an outgoing catalog / second Y rail ghost on Back. Live `#layouts-demo-drill-in`.
 - **DON'T** invent shell/column/chat insets as raw `rem`/`px` or private CSS
   vars — reuse `--fynns-layout-*` (see **Inset decision tree**). Don't ship
   broken chrome type/row proportion (see **Chrome type & row proportion** /

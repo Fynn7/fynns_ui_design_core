@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 /**
- * Install @fynn7/ui-design-core from GitHub Packages into a consumer and wire
- * Vite/tsconfig `@fynns/ui` → package source entry.
+ * Wire @fynn7/ui-design-core into a consumer (Vite/tsconfig `@fynns/ui`).
  *
- * Canonical consume model: npm dependency + source alias (GitHub Packages).
- * Do NOT use git submodule for day-to-day consumption.
+ * Default day-to-day: **--sibling** (zero-token). Prefer public sibling
+ * `../fynns_ui_design_core` + `file:` via ensure-sibling-ui-core.mjs.
+ * Opt-in **--packages**: install from GitHub Packages (needs NODE_AUTH_TOKEN).
  *
  * Usage:
- *   node scripts/install-as-npm.mjs --target <consumer-root> [options]
- *   npm run consume:install -- --target ../my-app
+ *   node scripts/install-as-npm.mjs --target <consumer-root> [--sibling|--packages]
+ *   npm run consume:install -- --target ../my-app --sibling
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
 
@@ -20,6 +20,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = path.resolve(__dirname, "..");
 const PKG_NAME = "@fynn7/ui-design-core";
 const REGISTRY = "https://npm.pkg.github.com";
+const SIBLING_DIRNAME = "fynns_ui_design_core";
 /** Import alias kept for apps; resolves into the published package src. */
 const ALIAS = "@fynns/ui";
 const ENTRY_FROM_PKG = "node_modules/@fynn7/ui-design-core/src/index.ts";
@@ -28,28 +29,35 @@ const UPDATE_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
 const UPDATE_CACHE_FILE = ".fynns-ui-update-check.json";
 
+const SAFE_NPMRC =
+  "# Zero-token sibling consume: do not point @fynn7 at npm.pkg.github.com.\n" +
+  "# (User-level .npmrc with empty NODE_AUTH_TOKEN would otherwise break install.)\n" +
+  "@fynn7:registry=https://registry.npmjs.org\n" +
+  "# Optional Packages publish/bump only — needs NODE_AUTH_TOKEN / GITHUB_TOKEN:\n" +
+  "# @fynn7:registry=https://npm.pkg.github.com\n" +
+  "# //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}\n";
+
 function usage() {
   return `Usage: node scripts/install-as-npm.mjs --target <dir> [options]
 
-Install ${PKG_NAME} from GitHub Packages and wire ${ALIAS} → ${ENTRY_FROM_PKG}.
+Wire ${ALIAS} → ${ENTRY_FROM_PKG}. Default mode: --sibling (zero-token).
 
 Options:
   --target <dir>     Consumer repo (or path inside it). Default: cwd
-  --version <ver>    Semver range to install (default: read from this core package.json)
+  --sibling          Zero-token: safe .npmrc; prefer file: sibling (default)
+  --packages         Install from GitHub Packages (needs NODE_AUTH_TOKEN)
+  --version <ver>    Semver range for --packages (default: core package.json)
   --vite <file>      Vite config to wire
   --tsconfig <file>  tsconfig to wire
   --vite-from <dir>  Directory that contains vite.config.*
   --skip-install     Only wire configs / .npmrc (dependency already present)
   --wire-only        Same as --skip-install
-  --check            Validate dep + alias + .npmrc; exit 1 if incomplete
+  --check            Validate dep + alias; exit 1 if incomplete
   --dry-run          Print actions without writing
   --json             JSON summary on stdout
   -h, --help         Show help
 
-Auth: set NODE_AUTH_TOKEN or GITHUB_TOKEN (read:packages) for install/publish.
-Consumer .npmrc:
-  @fynn7:registry=${REGISTRY}
-  //npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}
+Day-to-day: no NODE_AUTH_TOKEN. See llm/CONSUME.md + scripts/ensure-sibling-ui-core.mjs.
 `;
 }
 
@@ -66,6 +74,8 @@ function parseArgs(argv) {
     dryRun: false,
     json: false,
     help: false,
+    sibling: true,
+    packages: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -86,7 +96,13 @@ function parseArgs(argv) {
     } else if (a === "--check") out.check = true;
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--json") out.json = true;
-    else throw new Error(`Unknown argument: ${a}\n${usage()}`);
+    else if (a === "--sibling") {
+      out.sibling = true;
+      out.packages = false;
+    } else if (a === "--packages") {
+      out.packages = true;
+      out.sibling = false;
+    } else throw new Error(`Unknown argument: ${a}\n${usage()}`);
   }
   return out;
 }
@@ -287,8 +303,26 @@ function wireTsconfig(tsconfigFile, entryRel, dryRun, log) {
   });
 }
 
-function ensureNpmrc(gitRoot, dryRun, log) {
-  const npmrcPath = path.join(gitRoot, ".npmrc");
+function ensureNpmrc(pkgRoot, dryRun, log, { packages = false } = {}) {
+  const npmrcPath = path.join(pkgRoot, ".npmrc");
+  if (!packages) {
+    const current = fs.existsSync(npmrcPath) ? readText(npmrcPath) : "";
+    const pointsAtPackages = /npm\.pkg\.github\.com/.test(current);
+    const hasEmptyAuth = /_authToken=\$\{NODE_AUTH_TOKEN\}/.test(current);
+    const alreadySafe = current.includes("@fynn7:registry=https://registry.npmjs.org");
+    if (alreadySafe && !pointsAtPackages && !hasEmptyAuth) {
+      log.push({ step: "npmrc", status: "ok", file: npmrcPath });
+      return;
+    }
+    writeText(npmrcPath, SAFE_NPMRC, dryRun);
+    log.push({
+      step: "npmrc",
+      status: dryRun ? "dry-run" : "written-safe",
+      file: npmrcPath,
+      detail: "zero-token sibling (no Packages auth line)",
+    });
+    return;
+  }
   const wantScope = `@fynn7:registry=${REGISTRY}`;
   const wantAuth = "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}";
   let text = fs.existsSync(npmrcPath) ? readText(npmrcPath) : "";
@@ -303,10 +337,59 @@ function ensureNpmrc(gitRoot, dryRun, log) {
   }
   if (changed) {
     writeText(npmrcPath, text.endsWith("\n") ? text : `${text}\n`, dryRun);
-    log.push({ step: "npmrc", status: dryRun ? "dry-run" : "patched", file: npmrcPath });
+    log.push({ step: "npmrc", status: dryRun ? "dry-run" : "patched-packages", file: npmrcPath });
   } else {
     log.push({ step: "npmrc", status: "ok", file: npmrcPath });
   }
+}
+
+function siblingPath(gitRoot) {
+  return path.resolve(gitRoot, "..", SIBLING_DIRNAME);
+}
+
+function ensureSiblingDependency(pkgRoot, gitRoot, dryRun, log) {
+  const sibling = siblingPath(gitRoot);
+  const siblingPkg = path.join(sibling, "package.json");
+  if (!fs.existsSync(siblingPkg)) {
+    // Prefer this CORE_ROOT when install runs from a core checkout that IS the sibling.
+    const coreAsSibling = path.resolve(CORE_ROOT) === path.resolve(sibling);
+    if (!coreAsSibling || !fs.existsSync(path.join(CORE_ROOT, "package.json"))) {
+      log.push({
+        step: "dependency",
+        status: "fail",
+        detail:
+          `missing sibling ${sibling}. Run: node scripts/ensure-sibling-ui-core.mjs --target ${pkgRoot} --install --npmrc ` +
+          `(public HTTPS clone — no NODE_AUTH_TOKEN).`,
+      });
+      return false;
+    }
+  }
+  const targetDir = fs.existsSync(siblingPkg) ? sibling : CORE_ROOT;
+  const fileUrl = pathToFileURL(path.resolve(targetDir)).href;
+  if (dryRun) {
+    log.push({
+      step: "dependency",
+      status: "dry-run",
+      detail: `would npm install ${PKG_NAME}@${fileUrl}`,
+    });
+    return true;
+  }
+  const r = spawnSync(
+    "npm",
+    ["install", `${PKG_NAME}@${fileUrl}`, "--save"],
+    { cwd: pkgRoot, encoding: "utf8", shell: true, env: process.env },
+  );
+  if (r.status !== 0) {
+    const raw = (r.stderr || r.stdout || "").trim() || "npm install failed";
+    log.push({ step: "dependency", status: "fail", detail: raw });
+    return false;
+  }
+  log.push({
+    step: "dependency",
+    status: "installed",
+    detail: `${PKG_NAME}@file:${targetDir} (zero-token sibling)`,
+  });
+  return true;
 }
 
 function readConsumerPkg(gitRoot) {
@@ -521,21 +604,31 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
     );
   }
   if (deps[PKG_NAME] && isLocalDependencySpec(deps[PKG_NAME])) {
-    issues.push(
-      `${PKG_NAME} uses local ${deps[PKG_NAME]} — run npm run consume:install -- --target <app> --version x.y.z for registry pin`,
-    );
+    // file: / link: is the day-to-day zero-token path — OK
+  } else if (deps[PKG_NAME] && !isLocalDependencySpec(deps[PKG_NAME])) {
+    // registry pin still valid for optional Packages workflows
   }
   if (deps["@fynns/ui"] || deps["@fynns/ui-design-core"]) {
     issues.push("remove obsolete @fynns/ui / @fynns/ui-design-core package names; use @fynn7/ui-design-core");
   }
   const entry = path.join(pkgRoot, ENTRY_FROM_PKG);
   if (deps[PKG_NAME] && !fs.existsSync(entry)) {
-    issues.push(`package not installed on disk (expected ${ENTRY_FROM_PKG}); run npm install`);
+    issues.push(`package not installed on disk (expected ${ENTRY_FROM_PKG}); run npm install / ensure-sibling`);
   }
   checkMonorepoInstallDrift(pkgRoot, issues);
   const npmrc = path.join(pkgRoot, ".npmrc");
-  if (!fs.existsSync(npmrc) || !readText(npmrc).includes("@fynn7:registry=")) {
-    issues.push(`.npmrc missing @fynn7 → ${REGISTRY}`);
+  if (fs.existsSync(npmrc)) {
+    const npmrcText = readText(npmrc);
+    if (/_authToken=\$\{NODE_AUTH_TOKEN\}/.test(npmrcText) && !process.env.NODE_AUTH_TOKEN?.trim()) {
+      issues.push(
+        `.npmrc has _authToken=\${NODE_AUTH_TOKEN} — empty env causes E401; switch to zero-token sibling .npmrc (see llm/CONSUME.md)`,
+      );
+    }
+    if (!npmrcText.includes("@fynn7:registry=")) {
+      issues.push(`.npmrc missing @fynn7 registry scope`);
+    }
+  } else {
+    issues.push(`.npmrc missing — write safe zero-token sibling scope (see llm/CONSUME.md)`);
   }
   if (viteFile) {
     const t = readText(viteFile);
@@ -633,9 +726,11 @@ function main() {
     process.exit(result.ok ? 0 : 1);
   }
 
-  ensureNpmrc(pkgRoot, opts.dryRun, log);
+  ensureNpmrc(pkgRoot, opts.dryRun, log, { packages: opts.packages });
   if (!opts.skipInstall && !opts.wireOnly) {
-    const ok = ensureDependency(pkgRoot, version, opts.dryRun, log);
+    const ok = opts.packages
+      ? ensureDependency(pkgRoot, version, opts.dryRun, log)
+      : ensureSiblingDependency(pkgRoot, gitRoot, opts.dryRun, log);
     if (!ok) {
       if (opts.json) console.log(JSON.stringify({ ok: false, log }, null, 2));
       process.exit(1);
