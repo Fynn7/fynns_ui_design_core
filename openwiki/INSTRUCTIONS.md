@@ -2,15 +2,16 @@
 
 ## Purpose
 Agent-facing wiki for this design-system package: canonical `--fynns-*` tokens +
-self-developed React primitives, consumed as **source** via GitHub Packages
-(`@fynn7/ui-design-core`) + Vite alias `@fynns/ui`.
+self-developed React primitives, consumed as **source** via zero-token sibling
+`file:` (`@fynn7/ui-design-core`) + Vite alias `@fynns/ui` (optional GitHub
+Packages for publishers only).
 
 ## Authoritative sources (do not duplicate — link)
 1. `AGENTS.md` — design language, Hard rules, keep-set catalog.
 2. `llm/CONSUME.md` + `llm/consume.json` — install / consume contract.
 3. `llm/CONSUMER_TREATY.md` — failure-mode **slug index** (details in AGENTS).
 4. `llm/BREAKING_PURGE.md` — public API purge / migration.
-5. `docs/package-propagation.md` — GitHub Packages publish / bumps.
+5. `docs/package-propagation.md` — sibling consume + optional Packages publish / bumps.
 6. Sandbox Globals + Preview (`examples/sandbox/`) — live public surface.
 
 ## Priorities (high → low)

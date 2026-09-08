@@ -21,7 +21,9 @@ Publish: [`docs/package-propagation.md`](../../docs/package-propagation.md).
 - Style with `var(--fynns-*)` only — never hardcode hex/rgba or invent shell
   insets / private radius vars.
 - Consumers are **props-only** — no local `.fynns-*` restyles; missing capability
-  lands in this core first, then bump + publish.
+  lands in this core first, then refresh sibling / optional publish.
+- Day-to-day consume = **zero-token sibling `file:`** (`llm/CONSUME.md`) — no
+  `NODE_AUTH_TOKEN` for clone→install→dev.
 - Sandbox Globals/Preview = consumer default; keep `SANDBOX_DEFAULT_OVERRIDES`
   empty; demo ↔ barrel stay atomic (`npm run check:wysiwyg`).
 - No consumer product copy in core/sandbox — see `no-consumer-content` rule +

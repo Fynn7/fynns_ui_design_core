@@ -23,7 +23,7 @@ Read by role; do not duplicate specs across files — follow the links.
 | Design system | [`AGENTS.md`](../AGENTS.md) | Tokens, keep-set, UX rules |
 | Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts — avoid jank |
 | Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
-| Consume install | [`llm/CONSUME.md`](CONSUME.md) | GitHub Packages + Vite alias |
+| Consume install | [`llm/CONSUME.md`](CONSUME.md) | Zero-token sibling `file:` + Vite alias |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check contract |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](BREAKING_PURGE.md) | Deleted / restored public APIs |
 | Short-prompt rule | [`llm/opencode-fynns-ui-consume.md`](opencode-fynns-ui-consume.md) | Always open CONSUME on short UI prompts |

@@ -209,6 +209,8 @@ export type BusyRegionProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> &
  * glitchy frame. Sets `aria-busy` on the region while active. Overlay uses
  * `place-items: center` — the chrome sits in the region's box, so a
  * content-sized host leaves it stuck at the top of a tall pane. **Empty
+ * cold-start** (no children): overlay wash + blur are **off** so BusyStack is
+ * not a floating surface island on bare `app-bg` (≥ **0.5.191**). **Empty
  * cold-start without `fill`:** chrome is in normal flow (not absolute) so it
  * cannot paint over previous siblings such as a NavigationDrawer `SearchBar`.
  * Full-viewport blocking → `BusyScrim`.

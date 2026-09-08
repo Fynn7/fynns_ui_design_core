@@ -52,9 +52,12 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 
 | slug | where | sandbox |
 | --- | --- | --- |
-| GitHub Packages install auth (E401 / empty NODE_AUTH_TOKEN) | CONSUME.md | `—` |
+| zero-token sibling consume (no NODE_AUTH_TOKEN) | CONSUME.md | `—` |
+| leftover Packages `.npmrc` auth → E401 on clone | CONSUME.md | `—` |
 | sandbox-only aesthetics | AGENTS Hard rules / check:wysiwyg | `—` |
 | squashed drawer | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
+| drill-in / mode sidebar hard-swap (no navKey morph) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
+| drill-in Back Shared Axis ghost (out layer / double Y rail) | AGENTS shells / Hard rules (≥ **0.5.189**) | `#layouts-demo-drill-in` |
 | icon-only rail densify (narrow) | AGENTS shells / Hard rules | `#layouts-demo-navigation-rail` |
 | stacked drawer ribbon (narrow) | AGENTS shells / Hard rules | `—` |
 | drawer headline toolbar | AGENTS shells / Hard rules | `#layouts-demo-shell` |
@@ -105,6 +108,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
 | PageScroll Card sheet-max-width under ControlRow | AGENTS Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | AGENTS Hard rules / Card | `#page-scroll` |
+| PageScroll content-column soft reading-width gutters | AGENTS Hard rules / Card | `#page-scroll` |
+| FullscreenDialog settings column sheet-max / content-sized | AGENTS Hard rules / overlays | `#overlays` |
 | catalog ControlRow sinks below drawer labels | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | BusyRegion cold body + pager chrome siblings | AGENTS Busy/Loading | `#busy-region` |
 | empty ControlRow label as action footer | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -143,6 +148,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
 | Pagination Select expands bar (in-flow stretch) | AGENTS Content density / Hard rules | `#pagination` |
+| Pagination Select overlay square abutting corners | AGENTS Hard rules / Content density | `#pagination` |
+| Pagination Select option repeats noun | AGENTS Hard rules / Content density | `#pagination` |
 | KPI stat grid stacks full-width (undefined layout token) | AGENTS Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |
@@ -169,6 +176,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | nested short List well + invented list-well token | AGENTS Content density / List | `#list` |
 | tiny InfoHint in TopAppBar / toolbar chrome | AGENTS forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | AGENTS Card / Collapsible | `#table` |
+| wide Table wheel scrolls PageScroll (no wheel→X) | AGENTS Scrollbar / Content density | `#table` |
 | long Table dumps all rows | AGENTS Hard rules / Content density | `#table` |
 | long List dumps all rows | AGENTS Hard rules / Content density | `#list` |
 | List tree wrapped in divs / buttons in leading | AGENTS Content density / List | `#list` |
@@ -223,6 +231,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Dialog body end-align footer clipped | AGENTS shells / Hard rules | `#form-recipe` |
 | vacant band under FullscreenDialog title | AGENTS Dialog / overlays | `#fullscreen-flush` |
 | BusyRegion colored loading wash (consumer surface-*) | AGENTS Busy/Loading | `#busy-region` |
+| BusyRegion empty cold-start mask island (贴图色块) | AGENTS Busy/Loading | `#sandbox-busy-region-empty-no-mask` |
 | BusyRegion busy copy bleeds through overlay | AGENTS Busy/Loading | `#sandbox-busy-region-field-sample` |
 | bare CircularProgress as body loader | AGENTS Busy/Loading | `#busy-region` |
 | BusyRegion empty cold-start overlaps SearchBar | AGENTS Busy/Loading | `#busy-region` |
@@ -265,7 +274,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) | Install GitHub Packages + hard consume rules |
+| [`CONSUME.md`](CONSUME.md) | Install zero-token sibling `file:` + hard consume rules |
 | [`consume.json`](consume.json) | Machine contract |
 | [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Custom highlight + CodeBlock language |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |

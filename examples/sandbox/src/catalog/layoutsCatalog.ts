@@ -34,6 +34,8 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     id: "drill-in",
     label: "Drill-in nav",
     keywords: [
+      "navKey",
+      "close swap open",
       "钻入",
       "drill",
       "drill-in",

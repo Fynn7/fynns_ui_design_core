@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
   "name": "fynns-ui-consume",
-  "title": "Install @fynns/ui via GitHub Packages (LLM contract)",
-  "description": "Machine-readable API for agents: add @fynn7/ui-design-core from GitHub Packages and wire Vite/tsconfig alias @fynns/ui. Do not use git submodule for day-to-day consume. Short user prompts still require reading this contract before UI work.",
+  "title": "Install @fynns/ui via zero-token sibling file: (LLM contract)",
+  "description": "Machine-readable API for agents: link @fynn7/ui-design-core from public sibling ../fynns_ui_design_core (file:) and wire Vite/tsconfig alias @fynns/ui. No NODE_AUTH_TOKEN for day-to-day. Optional GitHub Packages is publishers-only. Do not use git submodule. Short user prompts still require reading this contract before UI work.",
   "docs": {
     "human": "llm/CONSUME.md",
     "designSystem": "AGENTS.md",
@@ -25,13 +25,13 @@
     "Content density: path/link/bookmark catalogs = one List of ListItems (headline + supportingText path + trailing ghost md IconButtons). Never one padded Surface/Card per entry; never put row actions under the text or as a filled danger disk. Interactive ListItem trailing is outside the row button. Table/list pager: `.fynns-pagination-bar` (M3/MUI single footer row — Select + range start, nowrap Pagination end) — never vertical Select-then-pager stack, never grow Select to crush page discs. Live: sandbox #list + #pagination. See AGENTS.md Content density + llm/CONSUMER_TREATY.md Pagination crushed or stacked off-spec.",
     "WYSIWYG / surface sync: sandbox Globals/Preview/Layouts resting look is the consumer default; never restyle .fynns-* in the app. SANDBOX_DEFAULT_OVERRIDES must stay empty. Core: never sandbox-only drop of an exported symbol — atomic delete (unexport+source+demo+BREAKING_PURGE). npm run check:wysiwyg.",
     "Loading placement: pane cold-start = BusyRegion fill in a height-resolved host (FillColumn children / shell main). Do not use EmptyState + CircularProgress as a loading shell. Full-app block = BusyScrim. Inline = CircularProgress sm. See AGENTS.md Loading placement.",
-    "Consume as GitHub Packages npm dependency @fynn7/ui-design-core + Vite source alias @fynns/ui → node_modules/@fynn7/ui-design-core/src/index.ts.",
-    "DO add @fynn7/ui-design-core to package.json dependencies. Do NOT depend on @fynns/ui or @fynns/ui-design-core as registry package names. Do NOT use git submodule for day-to-day consume.",
-    "NEVER publish-install from the public npmjs registry for this package — registry is https://npm.pkg.github.com (@fynn7 scope).",
+    "Day-to-day consume: public sibling ../fynns_ui_design_core + file: dependency @fynn7/ui-design-core + Vite source alias @fynns/ui → node_modules/@fynn7/ui-design-core/src/index.ts. NO NODE_AUTH_TOKEN / gh packages login required.",
+    "DO add @fynn7/ui-design-core to package.json dependencies (file: sibling). Do NOT depend on @fynns/ui or @fynns/ui-design-core as registry package names. Do NOT use git submodule for day-to-day consume. Do NOT commit _authToken=${NODE_AUTH_TOKEN} in consumer .npmrc.",
+    "Do NOT require GitHub Packages for consumer onboarding — Packages npm always needs a token even when public. Optional --packages path is publishers/bump only.",
     "Keep resolve.dedupe [react, react-dom] so package source shares the app React instance.",
-    "Do not modify files inside node_modules/@fynn7/ui-design-core for consumer features (bump package version / file: link instead). There is no consume:sync / consume:watch worktree mirror.",
-    "Before any @fynns/ui UI work: run consume --check (dependency + .npmrc + alias; fails if legacy submodule tree remains). Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
-    "On npm install / consume:install / bump of @fynn7/ui-design-core failing with E401 or npmjs E404: consumer agents MUST self-debug GitHub Packages auth before blaming core — empty ${NODE_AUTH_TOKEN} overrides user ~/.npmrc; need @fynn7 registry scope + read:packages token (or CI secret). See llm/CONSUME.md Auth troubleshooting + llm/CONSUMER_TREATY.md GitHub Packages install auth + llm/consumer-cursor-rule.mdc 安装与 API §2.",
+    "Do not modify files inside node_modules/@fynn7/ui-design-core for consumer features (refresh sibling / bump instead). There is no consume:sync / consume:watch worktree mirror.",
+    "Before any @fynns/ui UI work: ensure sibling + file: link (scripts/ensure-sibling-ui-core.mjs) and consume --check (dependency + alias; fails if legacy submodule tree remains). Re-paste consumer-cursor-rule.mdc when the treaty updates (installer does not overwrite).",
+    "On E401: leftover Packages .npmrc / empty NODE_AUTH_TOKEN — switch to sibling file: + safe @fynn7→registry.npmjs.org .npmrc. See llm/CONSUME.md + llm/CONSUMER_TREATY.md zero-token sibling consume + llm/consumer-cursor-rule.mdc 安装与 API.",
     "Consumer tsconfig compilerOptions.target and lib must be ES2022 or later (tsc follows @fynns/ui into design-system sources; ES2020 fails on APIs such as String.replaceAll).",
     "Update notices: consume:install wires fynns-ui:check-update into predev/prebuild/prepreview/postinstall so npm run dev/build reminds when GitHub Packages has a newer @fynn7/ui-design-core. Silence with FYNNS_UI_SKIP_UPDATE_CHECK=1. Monorepo: bump in the app package that owns predev (e.g. apps/web), not only at the git root — nested node_modules wins for Vite.",
     "Do not import purged symbols (toast/Toaster/Popover/UnitStack/…). Dialog/Drawer/Textarea/Tabs/InlineAlert are restored — see llm/BREAKING_PURGE.md. Use snackbar + SnackbarHost for transient feedback.",
@@ -48,21 +48,37 @@
   ],
   "defaults": {
     "packageName": "@fynn7/ui-design-core",
-    "registry": "https://npm.pkg.github.com",
+    "mode": "sibling-file",
+    "siblingDir": "../fynns_ui_design_core",
+    "optionalPackagesRegistry": "https://npm.pkg.github.com",
     "alias": "@fynns/ui",
-    "entry": "node_modules/@fynn7/ui-design-core/src/index.ts"
+    "entry": "node_modules/@fynn7/ui-design-core/src/index.ts",
+    "tokenRequired": false
   },
   "commands": {
+    "ensureSibling": {
+      "description": "Clone/link public sibling ../fynns_ui_design_core and optionally npm install file: (zero-token).",
+      "argv": [
+        "node",
+        "scripts/ensure-sibling-ui-core.mjs",
+        "--target",
+        "<CONSUMER_ROOT>",
+        "--install",
+        "--npmrc",
+        "--json"
+      ]
+    },
     "install": {
-      "description": "Add @fynn7/ui-design-core (GitHub Packages), ensure .npmrc, wire Vite + tsconfig @fynns/ui. Requires NODE_AUTH_TOKEN or GITHUB_TOKEN with read:packages.",
+      "description": "Default --sibling: safe .npmrc + wire Vite/tsconfig @fynns/ui (no token). Opt-in --packages for GitHub Packages (token).",
       "argv": [
         "node",
         "scripts/install-as-npm.mjs",
         "--target",
         "<CONSUMER_ROOT>",
+        "--sibling",
         "--json"
       ],
-      "npm": "npm run consume:install -- --target <CONSUMER_ROOT> --json"
+      "npm": "npm run consume:install -- --target <CONSUMER_ROOT> --sibling --json"
     },
     "check": {
       "description": "Validate dependency + .npmrc + @fynns/ui alias + no leftover submodule tree (exit 1 if incomplete).",
@@ -95,20 +111,21 @@
       }
     },
     "publish": {
-      "description": "After every landed consumer-visible change: bump package.json semver in the same task, then publish @fynn7/ui-design-core to GitHub Packages. Never deliver via sibling Vite alias. See docs/package-propagation.md.",
+      "description": "Optional: bump + publish to GitHub Packages for Packages workflows. Day-to-day consumers refresh sibling file:. See docs/package-propagation.md.",
       "npm": "npm publish",
       "workflow": ".github/workflows/publish-package.yml"
     }
   },
   "successCriteria": [
-    "package.json depends on @fynn7/ui-design-core",
-    ".npmrc maps @fynn7 to https://npm.pkg.github.com",
+    "package.json depends on @fynn7/ui-design-core (prefer file: sibling)",
+    ".npmrc uses safe zero-token @fynn7 scope (no empty _authToken=${NODE_AUTH_TOKEN})",
     "node_modules/@fynn7/ui-design-core/src/index.ts exists after npm install",
     "vite.config.* has resolve.alias[\"@fynns/ui\"] pointing at that entry",
     "vite resolve.dedupe includes react and react-dom",
     "tsconfig paths map @fynns/ui to the same entry (when a tsconfig exists)",
     "tsconfig target/lib are ES2022+ when the consumer runs tsc against @fynns/ui",
     "no packages/fynns_ui_design_core (or gui/…) git submodule left as the alias target",
+    "clone → npm install → npm run dev needs no NODE_AUTH_TOKEN / gh packages login",
     "import { Collapsible } from \"@fynns/ui\" typechecks / builds in the consumer",
     "no imports of purged symbols listed in llm/BREAKING_PURGE.md"
   ],

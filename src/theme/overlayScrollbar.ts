@@ -19,10 +19,20 @@
  * headlines so rails never paint through higher chrome (e.g. ClippedNavShell
  * LLM column scroll under the app bar).
  *
+ * **Wheel → X (≥ 0.5.184):** when a host has horizontal overflow and can no
+ * longer consume the wheel on Y, a dominant vertical wheel delta maps to
+ * `scrollLeft` (so wide `.fynns-table-wrap` wells pan columns instead of
+ * scrolling the outer PageScroll). Default **on**; opt out with
+ * `data-fynns-wheel-x="off"`. Vertical wheel stays trapped on that host while
+ * H overflows — including at the left/right edge — so “slide back” does not
+ * yank the PageScroll thumb (≥ **0.5.186**). Live sandbox `#table`.
+ *
  * Auto-starts when `@fynns/ui` is imported. Idempotent.
  */
 
 const HOST_ATTR = "data-fynns-overlay-scroll";
+/** Opt out of vertical-wheel → horizontal pan (`"off"`). Default enabled. */
+const WHEEL_X_ATTR = "data-fynns-wheel-x";
 const RAIL_CLASS = "fynns-scroll-rail";
 const THUMB_CLASS = "fynns-scroll-thumb";
 const MIN_THUMB_PX = 24;
@@ -37,6 +47,7 @@ type HostState = {
   ro: ResizeObserver | null;
   mo: MutationObserver | null;
   onScroll: () => void;
+  onWheel: (e: WheelEvent) => void;
   onEnter: () => void;
   onLeave: (e: PointerEvent) => void;
   onFocusIn: () => void;
@@ -307,9 +318,16 @@ function prefersFineHover(): boolean {
  * When a modal overlay is open, only paint rails for scroll hosts inside that
  * layer. Otherwise PageScroll / shell canvas rails stay visible behind Dialog
  * and the idle thumb at scrollTop=0 reads as a jump when the dialog body scrolls.
+ *
+ * ClippedNavShell Shared Axis **outgoing** layer: hide rails — the layer
+ * translates + fades, and a portal Y rail at the shifted edge reads as a
+ * second/ghost scrollbar beside the incoming drawer (slide-back failure).
  */
 function shouldPaintOverlayRail(host: HTMLElement): boolean {
   if (typeof document === "undefined") return true;
+  if (host.closest(".fynns-clipped-nav-shell-nav-axis-layer--out")) {
+    return false;
+  }
   const modalOverlays = document.querySelectorAll<HTMLElement>(
     '.fynns-dialog-overlay[data-state="open"]:not(.fynns-dialog-overlay--nonmodal)',
   );
@@ -333,6 +351,76 @@ function canHostOverlay(el: Element): el is HTMLElement {
 function allowsHorizontalOverlay(host: HTMLElement): boolean {
   const { overflowX } = getComputedStyle(host);
   return overflowX === "auto" || overflowX === "scroll" || overflowX === "overlay";
+}
+
+function wheelAxisXEnabled(host: HTMLElement): boolean {
+  return host.getAttribute(WHEEL_X_ATTR) !== "off";
+}
+
+function normalizeWheelDeltaPx(
+  e: WheelEvent,
+  primary: number,
+  host: HTMLElement,
+  axis: Axis,
+): number {
+  let d = primary;
+  if (e.deltaMode === 1) {
+    /* DOM_DELTA_LINE */
+    d *= 16;
+  } else if (e.deltaMode === 2) {
+    /* DOM_DELTA_PAGE */
+    d *= axis === "y" ? host.clientHeight : host.clientWidth;
+  }
+  return d;
+}
+
+function hasOverflow(host: HTMLElement, axis: Axis): boolean {
+  if (axis === "y") return host.scrollHeight - host.clientHeight > 1;
+  return host.scrollWidth - host.clientWidth > 1;
+}
+
+function canScrollFurther(host: HTMLElement, axis: Axis, delta: number): boolean {
+  if (delta === 0 || !hasOverflow(host, axis)) return false;
+  if (axis === "y") {
+    const max = host.scrollHeight - host.clientHeight;
+    if (delta < 0) return host.scrollTop > 0.5;
+    return host.scrollTop < max - 0.5;
+  }
+  const max = host.scrollWidth - host.clientWidth;
+  if (delta < 0) return host.scrollLeft > 0.5;
+  return host.scrollLeft < max - 0.5;
+}
+
+/**
+ * When the host has H overflow and Y cannot consume this wheel, map a dominant
+ * vertical delta onto `scrollLeft` so wide tables pan instead of driving the
+ * outer PageScroll. Default **on**; opt out `data-fynns-wheel-x="off"`.
+ *
+ * While the pointer is over an H-overflow host, vertical wheel stays trapped on
+ * that axis even at the left/right edge (no page-scroll chaining mid-gesture —
+ * chaining made the outer PageScroll thumb jump when “sliding back” to start).
+ */
+function handleWheelAxisX(
+  host: HTMLElement,
+  state: HostState,
+  e: WheelEvent,
+): void {
+  if (e.ctrlKey || e.defaultPrevented) return;
+  if (!wheelAxisXEnabled(host)) return;
+  if (!state.allowX) return;
+  if (!hasOverflow(host, "x")) return;
+
+  const dy = normalizeWheelDeltaPx(e, e.deltaY, host, "y");
+  const dx = normalizeWheelDeltaPx(e, e.deltaX, host, "x");
+  /* Trackpad already gesturing horizontally — leave alone. */
+  if (Math.abs(dx) > Math.abs(dy)) return;
+  if (dy === 0) return;
+  /* Prefer host Y while it can still move. */
+  if (canScrollFurther(host, "y", dy)) return;
+
+  e.preventDefault();
+  host.scrollLeft += dy;
+  scheduleUpdate(host, state);
 }
 
 function ensurePortal(): HTMLDivElement {
@@ -635,6 +723,7 @@ function attach(host: HTMLElement) {
     allowX: allowsHorizontalOverlay(host),
     raf: 0,
     onScroll: () => scheduleUpdate(host, state),
+    onWheel: (e) => handleWheelAxisX(host, state, e),
     onEnter: () => {
       if (modalDialogBodyEnterHidden(host, state)) return;
       state.hover = true;
@@ -687,6 +776,7 @@ function attach(host: HTMLElement) {
   };
 
   host.addEventListener("scroll", state.onScroll, { passive: true });
+  host.addEventListener("wheel", state.onWheel, { passive: false });
   host.addEventListener("pointerenter", state.onEnter);
   host.addEventListener("pointerleave", state.onLeave);
   host.addEventListener("focusin", state.onFocusIn);
@@ -721,6 +811,7 @@ function detach(host: HTMLElement) {
   if (!state) return;
   if (state.raf) cancelAnimationFrame(state.raf);
   host.removeEventListener("scroll", state.onScroll);
+  host.removeEventListener("wheel", state.onWheel);
   host.removeEventListener("pointerenter", state.onEnter);
   host.removeEventListener("pointerleave", state.onLeave);
   host.removeEventListener("focusin", state.onFocusIn);

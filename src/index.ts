@@ -286,6 +286,7 @@ export type { TopAppBarProps } from "./primitives/TopAppBar";
 export { ClippedNavShell, wouldClippedNavDrawerCrowd } from "./primitives/ClippedNavShell";
 export type {
   ClippedNavShellNavMode,
+  ClippedNavShellNavDirection,
   ClippedNavShellProps,
 } from "./primitives/ClippedNavShell";
 export { DestinationAppShell } from "./primitives/DestinationAppShell";

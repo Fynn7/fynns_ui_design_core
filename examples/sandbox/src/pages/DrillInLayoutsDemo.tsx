@@ -30,13 +30,18 @@ type CatalogId = (typeof CATALOG_IDS)[number];
 /**
  * Interactive drill-in recipe: root destinations → swap drawer body to a
  * catalog list + TopAppBar leadingExtra back; main stays full-width detail
- * (no list-pane / hub-split). Software prefs = footer gear only (no drawer Item).
+ * (no list-pane / hub-split). Pass `navKey` + `navDirection` so
+ * `ClippedNavShell` runs in-column Shared Axis X (track width stays open —
+ * not close→swap→open). Software prefs = footer gear only (no drawer Item).
  * Live at `#layouts-demo-drill-in`.
  */
 export function DrillInLayoutsDemo() {
   const { t } = useLocale();
   const [navOpen, setNavOpen] = useState(true);
   const [level, setLevel] = useState<DrillLevel>("root");
+  const [navDirection, setNavDirection] = useState<"forward" | "back">(
+    "forward",
+  );
   const [rootDest, setRootDest] = useState<RootDest>("home");
   const [prefsOpen, setPrefsOpen] = useState(false);
   const [catalogId, setCatalogId] = useState<CatalogId | null>(null);
@@ -85,6 +90,7 @@ export function DrillInLayoutsDemo() {
           : t("layouts.drillHome");
 
   const enterCatalog = () => {
+    setNavDirection("forward");
     setLevel("catalog");
     setRootDest("catalog");
     setPrefsOpen(false);
@@ -92,6 +98,7 @@ export function DrillInLayoutsDemo() {
   };
 
   const exitCatalog = () => {
+    setNavDirection("back");
     setLevel("root");
     setCatalogQuery("");
     setCatalogId(null);
@@ -195,6 +202,8 @@ export function DrillInLayoutsDemo() {
       <div className="sandbox-globals-clipped-shell">
         <ClippedNavShell
           navMode={navOpen ? "drawer" : "hidden"}
+          navKey={level}
+          navDirection={navDirection}
           onNavCrowded={() => setNavOpen(false)}
           topBar={
             <TopAppBar
