@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Guard: Pagination rows-per-page Select must stay stock Keep-set Select.
  * Fail if absolute upward overlay CSS is reintroduced under .fynns-pagination-bar.
  * Slug: Pagination Select invents absolute overlay (≥ 0.5.194).

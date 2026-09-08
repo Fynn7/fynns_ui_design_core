@@ -743,6 +743,7 @@ export const ClippedNavShell = forwardRef<HTMLDivElement, ClippedNavShellProps>(
                   .filter(Boolean)
                   .join(" ")}
                 aria-hidden
+                {...({ inert: true } as { inert: boolean })}
               >
                 {activeAxis.outgoing}
               </div>

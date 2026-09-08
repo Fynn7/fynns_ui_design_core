@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CONSUMER_TREATY slugs:
  * - `Pagination Select invents absolute overlay`
  * - `Pagination Select siblings center on expanded height`
