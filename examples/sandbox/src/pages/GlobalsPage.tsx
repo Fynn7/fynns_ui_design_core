@@ -4334,7 +4334,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                             snackbar(t("globals.listRecipeCatalogExport"));
                           }}
                         >
-                          <DownloadIcon />
+                          <UploadIcon />
                         </IconButton>
                       </Tooltip>
                     </div>
@@ -4369,7 +4369,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                             snackbar(t("globals.listRecipeCatalogExport"));
                           }}
                         >
-                          <DownloadIcon />
+                          <UploadIcon />
                         </IconButton>
                       </Tooltip>
                     </div>
