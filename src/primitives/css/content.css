@@ -1,4 +1,4 @@
-﻿/* Domain: content — extracted from primitives.css */
+/* Domain: content — extracted from primitives.css */
 /* ---------- DiffView ---------- */
 .fynns-diff-view {
   margin: 0;
@@ -604,6 +604,11 @@ a.fynns-breadcrumb-link:visited {
  * Panel opens **upward** (footer grammar) and the Select shell must
  * `overflow: visible` — SearchBar's default `overflow: hidden` otherwise clips
  * the absolute list so chevron flips with no visible options (≥ **0.5.152**).
+ *
+ * Overlay is a **floating flyout** (≥ **0.5.191**): full capsule radius on **all**
+ * corners + a small gap above the trigger — never square the abutting edge
+ * (`md md 0 0` + negative hairline join left sharp corners over the pill).
+ * Failure: CONSUMER_TREATY Pagination Select overlay square abutting corners.
  */
 .fynns-pagination-bar:has(> .fynns-pagination-bar__start > .fynns-select[data-expanded="true"]) {
   overflow-x: visible;
@@ -648,9 +653,9 @@ a.fynns-breadcrumb-link:visited {
   min-width: 100%;
   width: max-content;
   max-width: min(100vw, 20rem);
-  margin-block-end: calc(-1 * var(--fynns-border-hairline));
+  margin-block-end: var(--fynns-space-2xs);
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
-  border-radius: var(--fynns-radius-md) var(--fynns-radius-md) 0 0;
+  border-radius: var(--fynns-radius-3xl);
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-md);
 }
@@ -658,7 +663,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-pagination-bar__start
   > .fynns-select.fynns-search-bar--expanded
   > .fynns-search-bar-field {
-  /* Closed capsule while the list flies out — avoid a second joined-shell hairline. */
+  /* Floating overlay — keep the trigger as a closed capsule (no in-shell divider). */
   border-block-end-color: transparent;
 }
 

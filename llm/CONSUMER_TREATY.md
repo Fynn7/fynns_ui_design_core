@@ -148,6 +148,8 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
 | Pagination Select expands bar (in-flow stretch) | AGENTS Content density / Hard rules | `#pagination` |
+| Pagination Select overlay square abutting corners | AGENTS Hard rules / Content density | `#pagination` |
+| Pagination Select option repeats noun | AGENTS Hard rules / Content density | `#pagination` |
 | KPI stat grid stacks full-width (undefined layout token) | AGENTS Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |
@@ -272,7 +274,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) | Install GitHub Packages + hard consume rules |
+| [`CONSUME.md`](CONSUME.md) | Install zero-token sibling `file:` + hard consume rules |
 | [`consume.json`](consume.json) | Machine contract |
 | [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Custom highlight + CodeBlock language |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |

@@ -33,7 +33,7 @@
     {
       "path": "llm/CONSUME.md",
       "role": "consume-install",
-      "summary": "Install @fynns/ui via GitHub Packages (@fynn7/ui-design-core) + Vite alias (human contract)."
+      "summary": "Install @fynns/ui via zero-token sibling file: (@fynn7/ui-design-core) + Vite alias (human contract)."
     },
     {
       "path": "llm/consume.json",
@@ -53,7 +53,7 @@
     {
       "path": "docs/package-propagation.md",
       "role": "package-propagation",
-      "summary": "How @fynn7/ui-design-core publishes and bumps on GitHub Packages."
+      "summary": "How @fynn7/ui-design-core reaches consumers (sibling file: day-to-day; optional GitHub Packages for publishers)."
     },
     {
       "path": "docs/submodule-propagation.md",

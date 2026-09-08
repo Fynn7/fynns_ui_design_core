@@ -303,23 +303,46 @@ function wireTsconfig(tsconfigFile, entryRel, dryRun, log) {
   });
 }
 
+function patchSafeSiblingNpmrc(text) {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .filter((line) => {
+      const t = line.trim();
+      if (!t) return true;
+      if (/^@fynn7:registry=/i.test(t)) return false;
+      if (/^\/\/npm\.pkg\.github\.com\/:_authToken=/i.test(t)) return false;
+      return true;
+    });
+  while (lines.length && lines[lines.length - 1] === "") lines.pop();
+  const body = lines.join("\n").trimEnd();
+  const scope = "@fynn7:registry=https://registry.npmjs.org";
+  const hint =
+    "# Zero-token sibling: @fynn7 off GitHub Packages (empty NODE_AUTH_TOKEN would E401).";
+  const next = body ? `${body}\n${hint}\n${scope}\n` : SAFE_NPMRC;
+  return next.endsWith("\n") ? next : `${next}\n`;
+}
+
 function ensureNpmrc(pkgRoot, dryRun, log, { packages = false } = {}) {
   const npmrcPath = path.join(pkgRoot, ".npmrc");
   if (!packages) {
     const current = fs.existsSync(npmrcPath) ? readText(npmrcPath) : "";
     const pointsAtPackages = /npm\.pkg\.github\.com/.test(current);
     const hasEmptyAuth = /_authToken=\$\{NODE_AUTH_TOKEN\}/.test(current);
-    const alreadySafe = current.includes("@fynn7:registry=https://registry.npmjs.org");
-    if (alreadySafe && !pointsAtPackages && !hasEmptyAuth) {
+    const alreadySafe =
+      /@fynn7:registry=https:\/\/registry\.npmjs\.org/i.test(current) &&
+      !pointsAtPackages &&
+      !hasEmptyAuth;
+    if (alreadySafe) {
       log.push({ step: "npmrc", status: "ok", file: npmrcPath });
       return;
     }
-    writeText(npmrcPath, SAFE_NPMRC, dryRun);
+    const next = current.trim() ? patchSafeSiblingNpmrc(current) : SAFE_NPMRC;
+    writeText(npmrcPath, next, dryRun);
     log.push({
       step: "npmrc",
-      status: dryRun ? "dry-run" : "written-safe",
+      status: dryRun ? "dry-run" : "patched-safe",
       file: npmrcPath,
-      detail: "zero-token sibling (no Packages auth line)",
+      detail: "zero-token sibling (patch; preserve unrelated .npmrc lines)",
     });
     return;
   }

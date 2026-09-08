@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Overlay scrollbars for `.fynns-scroll`.
  *
  * Classic Windows / forced-WebKit bars steal content width and squeeze trailing

@@ -125,7 +125,8 @@ function siblingReady(dir) {
   return fs.existsSync(path.join(dir, "package.json"));
 }
 
-function resolveCloneUrl(gitRoot) {
+function resolveCloneUrlCandidates(gitRoot) {
+  const urls = [CANONICAL_GIT_URL];
   try {
     const r = run("git", ["remote", "get-url", "origin"], gitRoot, {
       allowFail: true,
@@ -133,12 +134,18 @@ function resolveCloneUrl(gitRoot) {
     });
     const origin = String(r.stdout ?? "").trim();
     if (origin && /github\.com/.test(origin)) {
-      return origin.replace(/[^/:]+(\.git)?$/, `${SIBLING_DIRNAME}$1`);
+      const rewritten = origin.replace(/[^/:]+(\.git)?$/, `${SIBLING_DIRNAME}$1`);
+      if (
+        rewritten &&
+        rewritten.replace(/\.git$/i, "") !== CANONICAL_GIT_URL.replace(/\.git$/i, "")
+      ) {
+        urls.push(rewritten);
+      }
     }
   } catch {
-    /* fall through */
+    /* keep canonical only */
   }
-  return CANONICAL_GIT_URL;
+  return urls;
 }
 
 function ensureSiblingCheckout(gitRoot, ref, log) {
@@ -152,14 +159,44 @@ function ensureSiblingCheckout(gitRoot, ref, log) {
       `${dir} exists but has no package.json — move it aside and retry.`,
     );
   }
-  const url = resolveCloneUrl(gitRoot);
-  log.push({ step: "clone", status: "start", url, ref, path: dir });
-  run("git", ["clone", "--branch", ref, "--depth", "1", url, dir], gitRoot);
-  if (!siblingReady(dir)) {
-    throw new Error(`Clone finished but ${dir}/package.json missing`);
+  const urls = resolveCloneUrlCandidates(gitRoot);
+  let lastErr = "";
+  for (const url of urls) {
+    log.push({ step: "clone", status: "start", url, ref, path: dir });
+    try {
+      run("git", ["clone", "--branch", ref, "--depth", "1", url, dir], gitRoot);
+      if (siblingReady(dir)) {
+        log.push({ step: "clone", status: "ok", path: dir, url });
+        return dir;
+      }
+      lastErr = `Clone finished but ${dir}/package.json missing`;
+    } catch (err) {
+      lastErr = String(err?.message || err);
+      if (fs.existsSync(dir)) {
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    }
   }
-  log.push({ step: "clone", status: "ok", path: dir });
-  return dir;
+  throw new Error(lastErr || `Failed to clone ${SIBLING_DIRNAME}`);
+}
+
+function patchSafeSiblingNpmrc(text) {
+  const lines = String(text || "")
+    .split(/\r?\n/)
+    .filter((line) => {
+      const t = line.trim();
+      if (!t) return true;
+      if (/^@fynn7:registry=/i.test(t)) return false;
+      if (/^\/\/npm\.pkg\.github\.com\/:_authToken=/i.test(t)) return false;
+      return true;
+    });
+  while (lines.length && lines[lines.length - 1] === "") lines.pop();
+  const body = lines.join("\n").trimEnd();
+  const scope = "@fynn7:registry=https://registry.npmjs.org";
+  const hint =
+    "# Zero-token sibling: @fynn7 off GitHub Packages (empty NODE_AUTH_TOKEN would E401).";
+  const next = body ? `${body}\n${hint}\n${scope}\n` : SAFE_NPMRC;
+  return next.endsWith("\n") ? next : `${next}\n`;
 }
 
 function writeSafeNpmrc(pkgRoot, dryWrite, log) {
@@ -167,13 +204,17 @@ function writeSafeNpmrc(pkgRoot, dryWrite, log) {
   const current = fs.existsSync(npmrcPath) ? fs.readFileSync(npmrcPath, "utf8") : "";
   const pointsAtPackages = /npm\.pkg\.github\.com/.test(current);
   const hasEmptyAuth = /_authToken=\$\{NODE_AUTH_TOKEN\}/.test(current);
-  const alreadySafe = current.includes("@fynn7:registry=https://registry.npmjs.org");
-  if (alreadySafe && !pointsAtPackages && !hasEmptyAuth) {
+  const alreadySafe =
+    /@fynn7:registry=https:\/\/registry\.npmjs\.org/i.test(current) &&
+    !pointsAtPackages &&
+    !hasEmptyAuth;
+  if (alreadySafe) {
     log.push({ step: "npmrc", status: "ok", file: npmrcPath });
     return;
   }
-  if (!dryWrite) fs.writeFileSync(npmrcPath, SAFE_NPMRC, "utf8");
-  log.push({ step: "npmrc", status: "written", file: npmrcPath });
+  const next = current.trim() ? patchSafeSiblingNpmrc(current) : SAFE_NPMRC;
+  if (!dryWrite) fs.writeFileSync(npmrcPath, next, "utf8");
+  log.push({ step: "npmrc", status: "patched", file: npmrcPath });
 }
 
 function installFromSibling(pkgRoot, sibling, log) {
