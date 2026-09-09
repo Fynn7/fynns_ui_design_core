@@ -1398,8 +1398,23 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item--interactive:focus-visible {
-  outline: var(--fynns-focus-ring-width) solid var(--fynns-color-focus);
-  outline-offset: calc(-1 * var(--fynns-focus-ring-offset-control));
+  /* Ring lives on the host — see host `:has(:focus-visible)` below. */
+  outline: none;
+}
+
+/*
+ * Keyboard focus on the row button. Host already uses `overflow: clip` +
+ * `radius-3xl` for the selected/hover wash; a child `outline` is clipped at
+ * the corners and visually cracked when absolute `--with-end` IconButtons
+ * (z-index above the button) reveal on `:focus-within`. Inset box-shadow on
+ * the host matches Surface / Timeline. Live `#sandbox-list-recipe-catalog` /
+ * `#sandbox-list-status-action`.
+ */
+.fynns-list-item-host:has(> .fynns-list-item--interactive:focus-visible),
+.fynns-list-item-host:has(
+  > .fynns-list-item-row > .fynns-list-item--interactive:focus-visible
+) {
+  box-shadow: inset 0 0 0 var(--fynns-focus-ring-width) var(--fynns-color-focus);
 }
 
 .fynns-list-item--selected {

@@ -261,6 +261,15 @@ belong in a consumer’s own doc.
   `z-index` / meta margin. Live `#sandbox-list-recipe-catalog` /
   `#sandbox-list-status-action`. Failure: CONSUMER_TREATY List
   trailingSupportingText underlaps --with-end IconButtons.
+- **DON'T** paint ListItem `:focus-visible` as a child `outline` on the row
+  button — host uses `overflow: clip` + `radius-3xl`, and absolute
+  `--with-end` IconButtons sit above the button on `:focus-within`, so the
+  ring cracks at corners / under end disks. Core ≥ **0.5.218** paints an
+  **inset** `box-shadow` on the host via `:has(> .fynns-list-item:focus-visible)`
+  (Surface / Timeline grammar). Do not invent consumer `outline` /
+  `box-shadow` on `.fynns-list-item`. Live `#sandbox-list-recipe-catalog` /
+  `#sandbox-list-status-action`. Failure: CONSUMER_TREATY ListItem Tab focus
+  ring cracked by --with-end overlay.
 - **DON'T** paint List catalog kind with start tick / inset rail / `::before` /
   second `hostClassName` wash — leading icon + `trailingSupportingText` /
   `.fynns-table-meta`; selected = host `radius-3xl` pill only; never

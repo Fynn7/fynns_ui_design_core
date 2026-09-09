@@ -236,6 +236,11 @@ alwaysApply: true
     显盘时 meta 不得压在下载/预览盘下。core ≥ **0.5.207** 修正 idle
     `:has(meta)` specificity。禁止消费仓 `z-index` / meta margin「修」。
     对照 `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
+30c. **ListItem Tab focus ring cracked by --with-end overlay** — Tab 聚焦
+    List 行时 focus 环不得裂开 / 被 end IconButton 打断。core ≥ **0.5.218**
+    在 host 上画 inset `box-shadow`（非 button `outline`）。禁止消费仓自造
+    `.fynns-list-item` outline / shadow「修」。对照
+    `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
 31. **FieldStack Grid vertically centers short FieldBlock beside expanded Select** —
     FieldStack→`Grid` 多列 FieldBlock：core ≥ **0.5.172** `.fynns-grid`
     `align-items: start`；禁止消费仓把 Grid 改回 `center`（一侧 Select 展开后
