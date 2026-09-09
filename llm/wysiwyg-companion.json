@@ -72,6 +72,7 @@
     "getRegisteredHighlightLanguage",
     "highlightCode",
     "highlightWithProfile",
+    "initialsFromName",
     "isHighlightableLanguage",
     "measureContentOverflow",
     "measureOverflow",

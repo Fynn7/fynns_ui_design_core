@@ -66,6 +66,9 @@ alwaysApply: true
   “Clipped” = M3 拓扑，不是文字裁切。
 - Settings：**仅** `navFooter` 齿轮；Settings 体 = 软件偏好（语言/外观/账号）。
   功能配置走独立目的地。语言开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。
+  Footer `Avatar` 的 `name` = **可见**账户标签全文（多词首尾字母大写缩写 ≥
+  **0.5.214**）— **禁止**另传截断名（标签 `Agents Hub` 却 `name="Hub"` →
+  `HU`）。对照 `#layouts-demo-shell` / `#avatar`。
 - 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
   `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
   **0.5.137** 对齐 Item `item-pad-inline`；`--toolbar-end` 主新建 Plus 与
@@ -76,6 +79,11 @@ alwaysApply: true
   （全部 / 标记字形）— **禁止**等分列塞长产品名（core ≥ **0.5.140** 会
   ellipsis + 12dp compact pad，仍应短标签）。对照
   `#layouts-demo-navigation-drawer` / `#toggle-group`。
+- 模式侧栏目录加载失败：目的地换成**短** `InlineAlert` + `InfoHint`
+  `tone="danger"`（长诊断：端口 / 日志路径）+ **末端对齐** Retry（≥
+  **0.5.215**）— **禁止**把完整后端长文塞进 `InlineAlert.message`。对照
+  `#sandbox-navdrawer-mode-catalog-fail`。主画布栏目冷启动仍用
+  `#sandbox-pane-load-error`。
 - `EndAside`：只切 `open` — **禁止** `{open && <EndAside>}`；toggle 勿触发
   workspace `BusyRegion` boot。窄检查器：一个主 CTA + IconButton/菜单，勿堆三条
   labeled Button。对照 `#layouts-demo-shell`。

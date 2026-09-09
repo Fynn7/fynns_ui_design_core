@@ -4,10 +4,13 @@ import type { ReactNode } from "react";
 export type NavDrawerFooterAccountProps = {
   /** When false, only Avatar/initial + settings (identity in Tooltip on avatar). */
   showLabel?: boolean;
-  /** Primary line (email / display name). */
+  /**
+   * Visible account / workspace line **and** Avatar initials source
+   * (multi-word → first+last initials, ≥ 0.5.214). Do **not** pass a separate
+   * truncated name for initials while this label stays full — Failure:
+   * CONSUMER_TREATY NavDrawer footer Avatar initials ignore visible label.
+   */
   accountLabel: string;
-  /** Derives Avatar initials when no image. */
-  accountName?: string;
   settingsLabel: string;
   settingsTip?: ReactNode;
   onSettingsClick?: () => void;
@@ -17,13 +20,12 @@ export type NavDrawerFooterAccountProps = {
 export function NavDrawerFooterAccount({
   showLabel = true,
   accountLabel,
-  accountName,
   settingsLabel,
   settingsTip,
   onSettingsClick,
 }: NavDrawerFooterAccountProps) {
   const avatar = (
-    <Avatar size="sm" name={accountName ?? accountLabel} alt={accountLabel} />
+    <Avatar size="sm" name={accountLabel} alt={accountLabel} />
   );
 
   return (

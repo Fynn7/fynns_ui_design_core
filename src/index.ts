@@ -273,7 +273,7 @@ export type {
 } from "./scheduling/busyTask";
 export { BadgedBox } from "./primitives/BadgedBox";
 export type { BadgedBoxProps } from "./primitives/BadgedBox";
-export { Avatar } from "./primitives/Avatar";
+export { Avatar, initialsFromName } from "./primitives/Avatar";
 export type { AvatarProps, AvatarSize } from "./primitives/Avatar";
 export { AvatarGroup } from "./primitives/AvatarGroup";
 export type { AvatarGroupProps } from "./primitives/AvatarGroup";

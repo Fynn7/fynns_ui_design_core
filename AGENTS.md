@@ -526,6 +526,22 @@ belong in a consumer’s own doc.
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
   `#layouts-demo-shell`.
+- **DON'T** drive NavigationDrawer footer `Avatar` initials from a **truncated**
+  `name` while the visible `.fynns-nav-drawer-footer-account-label` stays the
+  full string (`Hub` → `HU` while label reads `Agents Hub`) — pass the **same**
+  visible label into Avatar `name` (multi-word → first+last initials,
+  uppercased ≥ **0.5.214**: `Agents Hub` → `AH`). Sandbox recipe
+  `NavDrawerFooterAccount` has no separate initials prop. Live
+  `#layouts-demo-shell` / `#avatar`. Failure: CONSUMER_TREATY NavDrawer footer
+  Avatar initials ignore visible label.
+- **DON'T** paste a long diagnostic essay into mode / drill-in
+  `NavigationDrawer` `InlineAlert.message` (backend timeout, ports, log paths)
+  — keep a **short** status line; park detail on `InfoHint` `tone="danger"`;
+  Retry = end-align labeled Button (toolbar Refresh may also clear). Prefer
+  this over main-canvas Banner for catalog-host failures. Live
+  `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer`.
+  Main pane cold-start remains `#sandbox-pane-load-error`. Failure:
+  CONSUMER_TREATY mode drawer InlineAlert essay.
 - **DON'T** turn an in-canvas catalog into a silent full-canvas detail
   PageScroll replace — keep List/Timeline mounted; edit → `Dialog` `size="lg"`
   (+ `FullscreenDialog` only for multi-Card long workflows). Drill-in is
@@ -603,6 +619,7 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 | Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
+| Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | Command chrome proportion | `#command-palette` |
 | Flush-start overlay | `#fullscreen-flush` |
 | Split / Tree / Chart / Table | `#split-pane`, `#tree`, `#chart`, `#table` |
@@ -1005,6 +1022,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
+| Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
 | Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
