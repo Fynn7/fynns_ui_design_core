@@ -710,6 +710,10 @@ function GlobalsDemo({ id, children }: { id: string; children: ReactNode }) {
 function FormRecipeFields({
   idPrefix,
   t,
+  gridAgent,
+  onGridAgentChange,
+  gridProject,
+  onGridProjectChange,
   region,
   onRegionChange,
   displayName,
@@ -745,6 +749,10 @@ function FormRecipeFields({
 }: {
   idPrefix: string;
   t: TranslateFn;
+  gridAgent: string;
+  onGridAgentChange: (value: string) => void;
+  gridProject: string;
+  onGridProjectChange: (value: string) => void;
   region: string;
   onRegionChange: (value: string) => void;
   displayName: string;
@@ -778,6 +786,8 @@ function FormRecipeFields({
   experimental: boolean;
   onExperimentalChange: (value: boolean) => void;
 }) {
+  const agentId = `${idPrefix}-grid-agent`;
+  const projectId = `${idPrefix}-grid-project`;
   const regionId = `${idPrefix}-region`;
   const nameId = `${idPrefix}-display-name`;
   const emailId = `${idPrefix}-email`;
@@ -801,6 +811,80 @@ function FormRecipeFields({
     <>
       <FieldHint>{t("globals.formRecipeIntro")}</FieldHint>
       <FieldStack>
+        {/*
+          Multi-column FieldBlocks: only this recipe — FieldStack → Grid x={N}
+          fill (core ≥ 0.5.211). Never equalCells / max-content hug / private 1fr.
+          Live treaty host: `#sandbox-field-stack-grid-select` (Card below).
+        */}
+        <Grid
+          x={2}
+          y="unbounded"
+          style={{ gap: "var(--fynns-layout-field-stack-gap)" }}
+        >
+          <FieldBlock label={t("globals.formGridAgentLabel")} htmlFor={agentId}>
+            <Select
+              id={agentId}
+              ariaLabel={t("globals.formGridAgentLabel")}
+              value={gridAgent}
+              options={[
+                {
+                  value: "build",
+                  label: t("globals.formGridAgentBuild"),
+                },
+                {
+                  value: "plan",
+                  label: t("globals.formGridAgentPlan"),
+                },
+              ]}
+              onChange={onGridAgentChange}
+            />
+          </FieldBlock>
+          <FieldBlock
+            label={t("globals.formGridProjectLabel")}
+            htmlFor={projectId}
+          >
+            <Select
+              id={projectId}
+              ariaLabel={t("globals.formGridProjectLabel")}
+              value={gridProject}
+              options={[
+                {
+                  value: "sample-workspace",
+                  label: t("globals.formGridProjectA"),
+                },
+                {
+                  value: "sample-notes",
+                  label: t("globals.formGridProjectB"),
+                },
+                {
+                  value: "sample-catalog",
+                  label: t("globals.formGridProjectC"),
+                },
+                {
+                  value: "sample-core",
+                  label: t("globals.formGridProjectD"),
+                },
+                {
+                  value: "sample-thesis-lab",
+                  label: t("globals.formGridProjectE"),
+                },
+                {
+                  value: "console-game-2d",
+                  label: t("globals.formGridProjectF"),
+                },
+                {
+                  value: "sample-game",
+                  label: t("globals.formGridProjectG"),
+                },
+                {
+                  value: "sample-thesis",
+                  label: t("globals.formGridProjectH"),
+                },
+              ]}
+              onChange={onGridProjectChange}
+            />
+          </FieldBlock>
+        </Grid>
         <FieldBlock
           label={t("globals.formRecipeRegion")}
           htmlFor={regionId}
@@ -1508,7 +1592,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formRecipeStackDialogOpen, setFormRecipeStackDialogOpen] = useState(false);
   const [formRecipeFileDialogOpen, setFormRecipeFileDialogOpen] = useState(false);
   const [formGridAgent, setFormGridAgent] = useState("build");
-  const [formGridProject, setFormGridProject] = useState("sample-project");
+  const [formGridProject, setFormGridProject] = useState("sample-workspace");
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
   const [listRecipeDetail, setListRecipeDetail] = useState<null | "a" | "b">(null);
@@ -1523,6 +1607,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [timelineEditName, setTimelineEditName] = useState("");
   const formRecipeFieldProps = {
     t,
+    gridAgent: formGridAgent,
+    onGridAgentChange: setFormGridAgent,
+    gridProject: formGridProject,
+    onGridProjectChange: setFormGridProject,
     region: formRegion,
     onRegionChange: setFormRegion,
     displayName: formDisplayName,
@@ -2275,19 +2363,30 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Select
             ariaLabel={t("globals.selectAria")}
             value="one"
-            options={["one", "two", "three"]}
+            options={[
+              "one",
+              "two",
+              "sample-project-with-a-long-catalog-name",
+            ]}
             onChange={() => {}}
           />
-            <Select
-              ariaLabel={t("globals.selectObjectAria")}
-              value={selectObjValue}
-              options={[
-                { value: "teal", label: t("globals.autocompleteOptTeal") },
-                { value: "cyan", label: t("globals.autocompleteOptCyan") },
-                { value: "blue", label: t("globals.autocompleteOptBlue"), disabled: true },
-              ]}
-              onChange={setSelectObjValue}
-            />
+            <div className="sandbox-select-narrow-host">
+              <Select
+                className="fynns-control-cluster__grow"
+                ariaLabel={t("globals.selectObjectAria")}
+                value={selectObjValue}
+                options={[
+                  { value: "teal", label: t("globals.autocompleteOptTeal") },
+                  { value: "cyan", label: t("globals.autocompleteOptCyan") },
+                  { value: "blue", label: t("globals.autocompleteOptBlue"), disabled: true },
+                  {
+                    value: "long",
+                    label: t("globals.selectLongOption"),
+                  },
+                ]}
+                onChange={setSelectObjValue}
+              />
+            </div>
             <Select
               disabled
               ariaLabel={t("globals.selectDisabledAria")}
@@ -8014,7 +8113,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </Card>
         </div>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
-        <Grid x={2} y={2} gap="sm" equalCells>
+        <Grid x={2} y={2} gap="sm">
           <Button size="sm">{t("globals.rhythmGridA")}</Button>
           <Button size="sm" variant="tonal">{t("globals.rhythmGridB")}</Button>
           <Button size="sm" variant="ghost">{t("globals.rhythmGridC")}</Button>
@@ -8025,93 +8124,17 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
 
         <GlobalsDemo id="form-recipe">
           <SandboxHelp text={t("globals.formRecipeLead")} />
-          <div id="sandbox-field-stack-grid-select">
-            <SandboxHelp text={t("globals.formGridSelectHelp")} />
-            <Surface variant="outlined" padded>
-              <FieldStack>
-                <Grid
-                  x={2}
-                  y="unbounded"
-                  style={{ gap: "var(--fynns-layout-field-stack-gap)" }}
-                >
-                  <FieldBlock
-                    label={t("globals.formGridAgentLabel")}
-                    htmlFor="sandbox-form-grid-agent"
-                  >
-                    <Select
-                      id="sandbox-form-grid-agent"
-                      ariaLabel={t("globals.formGridAgentLabel")}
-                      value={formGridAgent}
-                      options={[
-                        {
-                          value: "build",
-                          label: t("globals.formGridAgentBuild"),
-                        },
-                        {
-                          value: "plan",
-                          label: t("globals.formGridAgentPlan"),
-                        },
-                      ]}
-                      onChange={setFormGridAgent}
-                    />
-                  </FieldBlock>
-                  <FieldBlock
-                    label={t("globals.formGridProjectLabel")}
-                    htmlFor="sandbox-form-grid-project"
-                  >
-                    <Select
-                      id="sandbox-form-grid-project"
-                      ariaLabel={t("globals.formGridProjectLabel")}
-                      value={formGridProject}
-                      options={[
-                        {
-                          value: "sample-project",
-                          label: t("globals.formGridProjectA"),
-                        },
-                        {
-                          value: "sample-notes",
-                          label: t("globals.formGridProjectB"),
-                        },
-                        {
-                          value: "sample-tools",
-                          label: t("globals.formGridProjectC"),
-                        },
-                        {
-                          value: "sample-lab",
-                          label: t("globals.formGridProjectD"),
-                        },
-                        {
-                          value: "sample-docs",
-                          label: t("globals.formGridProjectE"),
-                        },
-                        {
-                          value: "sample-bench",
-                          label: t("globals.formGridProjectF"),
-                        },
-                        {
-                          value: "sample-game",
-                          label: t("globals.formGridProjectG"),
-                        },
-                        {
-                          value: "sample-thesis",
-                          label: t("globals.formGridProjectH"),
-                        },
-                      ]}
-                      onChange={setFormGridProject}
-                    />
-                  </FieldBlock>
-                </Grid>
-              </FieldStack>
-            </Surface>
-          </div>
+          <SandboxHelp text={t("globals.formGridSelectHelp")} />
           <div className="sandbox-globals-form-recipe-hosts">
             <SandboxHelp text={t("globals.formRecipeHostCard")} />
-            <Card
-              className="sandbox-globals-form-recipe"
-              title={t("globals.formRecipeTitle")}
-            >
-              <FormRecipeFields idPrefix="sandbox-form-card" {...formRecipeFieldProps} />
-            </Card>
+            <div id="sandbox-field-stack-grid-select">
+              <Card
+                className="sandbox-globals-form-recipe"
+                title={t("globals.formRecipeTitle")}
+              >
+                <FormRecipeFields idPrefix="sandbox-form-card" {...formRecipeFieldProps} />
+              </Card>
+            </div>
             <SandboxHelp text={t("globals.formRecipeHostCollapsible")} />
             <Collapsible
               className="sandbox-globals-form-recipe"

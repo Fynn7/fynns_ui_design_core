@@ -1,7 +1,7 @@
 /**
  * Guard: Pagination rows-per-page Select must stay stock Keep-set Select.
  * Fail if absolute upward overlay CSS is reintroduced under .fynns-pagination-bar.
- * Slug: Pagination Select invents absolute overlay (≥ 0.5.194).
+ * Slug: Pagination Select invents absolute overlay (≥ 0.5.208 portaled menu).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -25,7 +25,7 @@ const banned = [
 for (const re of banned) {
   if (re.test(slice)) {
     console.error(
-      "check:pagination-select: FORBIDDEN absolute upward overlay CSS under .fynns-pagination-bar (use stock #select joined capsule).",
+      "check:pagination-select: FORBIDDEN absolute upward overlay CSS under .fynns-pagination-bar (use stock #select portaled .fynns-select-menu).",
     );
     process.exit(1);
   }

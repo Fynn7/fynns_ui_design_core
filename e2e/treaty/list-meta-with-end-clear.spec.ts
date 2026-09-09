@@ -28,12 +28,16 @@ test(`${SLUG}: hover reserve clears Builtin meta from IconButtons`, async ({
 
   const row = host.locator(".fynns-list-item-host--with-end").first();
   await expect(row).toBeVisible();
-  const box = await row.boundingBox();
-  expect(box).toBeTruthy();
 
   await expect(async () => {
-    // Keep the pointer on the row — do not rely on a one-shot hover().
-    await page.mouse.move(box!.x + Math.min(80, box!.width / 3), box!.y + box!.height / 2);
+    // Re-measure each pass — catalog layout can shift after mount/search jump.
+    const box = await row.boundingBox();
+    expect(box).toBeTruthy();
+    await row.hover();
+    await page.mouse.move(
+      box!.x + Math.min(80, box!.width / 3),
+      box!.y + box!.height / 2,
+    );
     const gap = await row.evaluate((hostEl) => {
       const meta = hostEl.querySelector(".fynns-list-item-trailing-text");
       const firstIcon = hostEl.querySelector(

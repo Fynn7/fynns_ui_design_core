@@ -3238,19 +3238,30 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   min-width: auto;
 }
 
-.fynns-select.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within,
+.fynns-select.fynns-search-bar:focus-within,
 .fynns-autocomplete.fynns-search-bar:not(.fynns-search-bar--expanded):focus-within {
   box-shadow: none;
 }
 
-.fynns-select.fynns-search-bar--expanded,
+/*
+ * Select (≥ **0.5.208**): M3 Exposed Dropdown — field stays flat; list is a
+ * portaled temporary surface (`.fynns-select-menu`). Autocomplete keeps the
+ * docked SearchBar joined capsule (`.fynns-search-bar--expanded`).
+ */
+.fynns-select.fynns-search-bar.fynns-select--open:focus-within {
+  box-shadow: none;
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-accent) var(--fynns-focus-border-mix),
+    var(--fynns-color-border)
+  );
+}
+
 .fynns-autocomplete.fynns-search-bar--expanded {
   /* Docked results: light elevation only (still not the chrome 56dp field). */
   box-shadow: var(--fynns-shadow-md);
 }
 
-/* Beat `.fynns-autocomplete.fynns-search-bar { border-color }` (same 0,2,0, later). */
-.fynns-select.fynns-search-bar--expanded:focus-within,
 .fynns-autocomplete.fynns-search-bar--expanded:focus-within {
   box-shadow: var(--fynns-shadow-md);
   border-color: color-mix(
@@ -3258,6 +3269,73 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
     var(--fynns-color-accent) var(--fynns-focus-border-mix),
     var(--fynns-color-border)
   );
+}
+
+/*
+ * Portaled Select listbox — independent elevated surface (M3 Menu Level-2
+ * grammar via flyout shadow). Not in-flow. Width: max-content (≥ trigger via
+ * JS `minWidth`); viewport `maxWidth` from floatingBox. Options nowrap so
+ * long labels widen the panel instead of ellipsizing to the shell.
+ * z = `--fynns-z-modal-flyout` (≥ **0.5.213**) so menus clear Dialog /
+ * Drawer overlays (`--fynns-z-modal`); page Autocomplete panels stay on
+ * `--fynns-z-dropdown`.
+ */
+.fynns-select-menu {
+  position: fixed;
+  z-index: var(--fynns-z-modal-flyout);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-searchbar-results-gap);
+  width: max-content;
+  max-height: var(--fynns-searchbar-results-max-height);
+  padding-block: var(--fynns-searchbar-results-pad-block-start)
+    var(--fynns-searchbar-results-pad-block-end);
+  padding-inline: var(--fynns-searchbar-results-pad-inline);
+  overflow-x: clip;
+  overflow-y: auto;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  background: var(--fynns-color-surface-2);
+  box-shadow: var(--fynns-shadow-flyout);
+  transform-origin: top center;
+}
+
+.fynns-select-menu .fynns-select-option {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fynns-select-menu[data-side="top"] {
+  transform-origin: bottom center;
+}
+
+.fynns-select-menu[data-state="open"] {
+  animation: fynns-flyout-enter var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-select-menu[data-side="top"][data-state="open"] {
+  animation-name: fynns-flyout-enter-top;
+}
+
+.fynns-select-menu[data-state="closing"] {
+  pointer-events: none;
+  animation: fynns-flyout-exit var(--fynns-duration-flyout) var(--fynns-ease-out)
+    both;
+}
+
+.fynns-select-menu[data-side="top"][data-state="closing"] {
+  animation-name: fynns-flyout-exit-top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-select-menu,
+  .fynns-select-menu[data-state="open"],
+  .fynns-select-menu[data-state="closing"] {
+    animation: none;
+  }
 }
 
 /* Reaffirm after denser Autocomplete rules (same 0,3,0 source order). */

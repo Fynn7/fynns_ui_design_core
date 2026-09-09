@@ -208,6 +208,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Select refresh crammed beside chevron | AGENTS forms / FieldStack | `#field-header` |
 | Select row-action IconButton drifts when open | AGENTS forms / FieldStack | `#field-header` |
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
+| FieldStack Grid hugs max-content leaving dead gutter in form Surface | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
 | Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |

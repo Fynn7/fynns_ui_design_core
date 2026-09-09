@@ -362,15 +362,20 @@ input.fynns-input:focus::-webkit-scrollbar {
 .fynns-select {
   position: relative;
   width: 100%;
-  /* Measure floor from Select.tsx `--fynns-select-measure-min`. `min(100%, …)`
-   * lets form rows shrink when the parent is narrower than the widest option. */
-  min-width: min(100%, var(--fynns-select-measure-min, 0px));
+  /*
+   * Option-measure floor from Select.tsx `--fynns-select-measure-min`.
+   * Must be an absolute length — **not** `min(100%, …)` (≥ **0.5.210**).
+   * Percentage mins resolve as indefinite under Grid `max-content` tracks and
+   * crushed FieldBlock shells to the selected-label width while the portaled
+   * menu still grew to the widest option (agents-hub Project cwd mismatch).
+   * Cluster `__grow` clears the var in JS + sets `min-width: 0` in form-rhythm.
+   */
+  min-width: var(--fynns-select-measure-min, 0px);
 }
 
 /*
  * Hidden probe rows: reuse Select shell classes so pad / chevron / hairline
- * match the closed trigger. `min-width: min(100%, …)` floors to the widest
- * option without value flicker on content-sized hosts.
+ * match the closed trigger. Floor = widest option (+ placeholder).
  */
 .fynns-select-measure {
   position: absolute;
