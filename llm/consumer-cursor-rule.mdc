@@ -238,7 +238,8 @@ alwaysApply: true
     对照 `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
 30c. **ListItem Tab focus ring cracked by --with-end overlay** — Tab 聚焦
     List 行时 focus 环不得裂开 / 被 end IconButton 打断。core ≥ **0.5.218**
-    在 host 上画 inset `box-shadow`（非 button `outline`）。禁止消费仓自造
+    在 flat host 上画 inset `box-shadow`；with-detail ≥ **0.5.219** 画在
+    `.fynns-list-item-row`（非外包 detail 的 host）。禁止消费仓自造
     `.fynns-list-item` outline / shadow「修」。对照
     `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
 31. **FieldStack Grid vertically centers short FieldBlock beside expanded Select** —
