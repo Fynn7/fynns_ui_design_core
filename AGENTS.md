@@ -313,6 +313,14 @@ belong in a consumer’s own doc.
   spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
   on the same wait host — **one** progress chrome per wait. Live `#rhythm`
   end-align / `#busy-region`.
+- **DON'T** swap `IconButton` children for a nested `CircularProgress` while
+  busy — use the stock **`loading`** prop (Spinner; iconOnly = spinner-only).
+  Nesting `CircularProgress` on `variant="primary"` / `danger` paints an
+  accent ring on an accent fill (looks like a blank disk — core ≥ **0.5.217**
+  retints nested rings to `currentColor` as a safety net, but the API is still
+  `loading`). Live `#icon-button` / `#sandbox-iconbutton-primary-loading`.
+  Failure: CONSUMER_TREATY IconButton busy swaps CircularProgress instead of
+  loading.
 - **DON'T** put service status in ControlRow `__controls` (Chip/badge/meta) —
   status on **`label` only**; controls = labeled Buttons only; use public
   `.fynns-control-cluster` (**8dp** labeled-Button gap ≥ **0.5.80**), not
@@ -409,12 +417,23 @@ belong in a consumer’s own doc.
   (or any consumer CSS that docks `.fynns-search-bar-panel` with
   `position:absolute; bottom:100%`, or restyles `.fynns-select-menu`) — use the
   **stock** Keep-set Select: 40dp shell + **portaled** `.fynns-select-menu`
-  (≥ **0.5.208** — M3 Exposed Dropdown; menu **min-width = trigger**, grows with
-  option labels ≥ **0.5.209**; trigger `--fynns-select-measure-min` absolute
+  (≥ **0.5.208** — M3 Exposed Dropdown; menu **min-width = option-measure
+  floor** (same as closed trigger floor) ≥ **0.5.216** — may be **narrower**
+  than a full-width form trigger; still grows past a narrow trigger for long
+  labels (`width: max-content`) ≥ **0.5.209**;
+  trigger `--fynns-select-measure-min` absolute
   floor ≥ **0.5.210** — never `min(100%, …)` crush under Grid; retires both the
   0.5.151–0.5.193 upward panel fork and the 0.5.194–0.5.207 in-flow joined
-  capsule). Live `#pagination` / `#sandbox-field-stack-grid-select`. Failure:
-  CONSUMER_TREATY Pagination Select invents absolute overlay.
+  capsule). Live `#select` / `#sandbox-select-wide-short` / `#pagination` /
+  `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY Pagination
+  Select invents absolute overlay / Select menu stretched to full-width
+  trigger for short options.
+- **DON'T** stretch a portaled `.fynns-select-menu` to a full-width form
+  trigger when option labels are short — core ≥ **0.5.216** floors the menu
+  on the **option-measure** (not the stretched shell); may be **narrower**
+  than the field. Do **not** invent consumer `min-width` / `width: 100%` on
+  the menu. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select
+  menu stretched to full-width trigger for short options.
 - **DON'T** let Pagination bar siblings (`.fynns-table-meta` noun, range
   `FieldHint`, `__end` page discs) invent `align-items: center` on `__start`
   — core ≥ **0.5.197** pins `.fynns-pagination-bar` / `__start` to

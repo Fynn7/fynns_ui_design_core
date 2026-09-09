@@ -786,6 +786,21 @@ a.fynns-breadcrumb-link:visited {
   border-top-color: currentColor;
 }
 
+/*
+ * Same trap for nested CircularProgress (consumer anti-pattern: swap IconButton
+ * children instead of `loading`). Prefer `loading` — Spinner is the chrome glyph.
+ * ≥ **0.5.217**: on-accent / on-danger stroke so the ring is not accent-on-accent.
+ */
+.fynns-btn--primary .fynns-circular-progress,
+.fynns-btn--danger .fynns-circular-progress {
+  color: currentColor;
+}
+
+.fynns-btn--primary .fynns-circular-progress-track,
+.fynns-btn--danger .fynns-circular-progress-track {
+  stroke: color-mix(in srgb, currentColor 25%, transparent);
+}
+
 @keyframes fynns-spin {
   to {
     transform: rotate(360deg);

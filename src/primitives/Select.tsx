@@ -65,9 +65,12 @@ function flyoutExitMs(): number {
  *
  * Trigger width floors to the widest option (or placeholder) so switching
  * values does not resize the control when the host is content-sized — and so
- * the shell stays aligned with the portaled menu (≥ **0.5.210** absolute
+ * the shell stays aligned under Grid / form fill (≥ **0.5.210** absolute
  * `--fynns-select-measure-min`, not `min(100%, …)`).
- * Open menu: **min-width = trigger**, grows with option labels (viewport-capped).
+ * Open menu: **min-width = option-measure floor** (same as closed trigger
+ * floor) — **not** the stretched full-width shell (≥ **0.5.216**); still grows
+ * past a narrow trigger when labels are long (`width: max-content`,
+ * viewport-capped).
  * @see https://m3.material.io/components/menus/overview
  * @see https://developer.android.com/reference/kotlin/androidx/compose/material3/ExposedDropdownMenuBox.composable
  */
@@ -94,8 +97,6 @@ export function Select({
   const [mounted, setMounted] = useState(false);
   const [presenting, setPresenting] = useState(false);
   const [minWidthPx, setMinWidthPx] = useState<number | null>(null);
-  /** Floor for the portaled menu — grows with option content (`width: max-content`). */
-  const [menuMinWidthPx, setMenuMinWidthPx] = useState<number | null>(null);
   const listId = useId();
   const isDisabled = disabled || normalized.length === 0;
   /** In a FieldBlock control band the cluster is one flex row — no content min-width floor. */
@@ -133,27 +134,6 @@ export function Select({
     }
     if (max > 0) setMinWidthPx(max);
   }, [options, placeholder, shrinkInCluster]);
-
-  useLayoutEffect(() => {
-    if (!open) return;
-    const shell = shellRef.current ?? rootRef.current;
-    if (!shell) return;
-    const syncMinWidth = () => {
-      const w = shell.getBoundingClientRect().width;
-      if (w > 0) setMenuMinWidthPx(w);
-    };
-    syncMinWidth();
-    const ro =
-      typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(syncMinWidth)
-        : null;
-    ro?.observe(shell);
-    window.addEventListener("resize", syncMinWidth);
-    return () => {
-      ro?.disconnect();
-      window.removeEventListener("resize", syncMinWidth);
-    };
-  }, [open]);
 
   useEffect(() => {
     if (open) {
@@ -264,11 +244,13 @@ export function Select({
                 ? ({
                     top: displayPos.top,
                     left: displayPos.left,
-                    /* min = trigger; width grows with labels (CSS max-content).
-                     * Cap only at the floating viewport ceiling — never lock to
-                     * the shell width (narrow FieldBlock / EndAside hosts). */
-                    ...(menuMinWidthPx != null
-                      ? { minWidth: `${menuMinWidthPx}px` }
+                    /* Floor = option-measure (`minWidthPx`), **not** the
+                     * stretched full-width shell. Wide form fields with short
+                     * labels no longer leave a dead empty strip (≥ **0.5.216**).
+                     * Long labels still grow past a narrow trigger via CSS
+                     * `width: max-content`. */
+                    ...(minWidthPx != null && !shrinkInCluster
+                      ? { minWidth: `${minWidthPx}px` }
                       : null),
                     ...(displayPos.maxWidth
                       ? { maxWidth: `${displayPos.maxWidth}px` }
