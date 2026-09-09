@@ -105,6 +105,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | loose IconButton pair in control-cluster | AGENTS Toolbar / unit rhythm | `#list` |
 | status kisses first List IconButton | AGENTS Content density / List | `#sandbox-list-status-action` |
 | List trailingSupportingText underlaps --with-end IconButtons | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
+| ListItem Tab focus ring cracked by --with-end overlay | AGENTS Hard rules / List | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
 | fat Surface / Card per catalog row | AGENTS Content density / List | `#list` / `#page-scroll` |
 | recipe catalog fat Card FieldHint essays / ChipSet tag soup | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#list` |
 | ListItem trailing IconButtons stacked vertically | AGENTS shells / Hard rules | `#list` |
