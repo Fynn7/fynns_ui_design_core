@@ -46,8 +46,10 @@ function applyNaturalTracks(
   x: GridAxis,
   y: GridAxis,
 ) {
+  /* Fixed X → equal fill tracks (form FieldStack agent|cwd). Unbounded /
+   * column-auto-flow still hug max-content. Live: `#sandbox-field-stack-grid-select`. */
   if (xFixed && !yFixed) {
-    style.gridTemplateColumns = `repeat(${x}, max-content)`;
+    style.gridTemplateColumns = `repeat(${x}, minmax(0, 1fr))`;
     style.gridAutoFlow = "row";
     style.gridAutoRows = "auto";
   } else if (yFixed && !xFixed) {
@@ -55,7 +57,7 @@ function applyNaturalTracks(
     style.gridAutoFlow = "column";
     style.gridAutoColumns = "max-content";
   } else if (xFixed && yFixed) {
-    style.gridTemplateColumns = `repeat(${x}, max-content)`;
+    style.gridTemplateColumns = `repeat(${x}, minmax(0, 1fr))`;
     style.gridTemplateRows = `repeat(${y}, auto)`;
     style.gridAutoFlow = "row";
   } else {
@@ -101,16 +103,26 @@ function applyEqualTracks(
 
 /**
  * X×Y layout grid. Axes may be fixed or `"unbounded"`:
- * - `x={2} y="unbounded"` → always 2 columns; more items add rows (Y grows).
- * - `x="unbounded" y={2}` → always 2 rows; more items add columns (X grows).
- * - both fixed → explicit `repeat` tracks on each axis.
+ * - `x={2} y="unbounded"` → always 2 **equal fill** columns (`minmax(0,1fr)`);
+ *   more items add rows (Y grows). Host width **100%** of the form parent.
+ * - `x="unbounded" y={2}` → always 2 rows; more items add columns (X grows,
+ *   `max-content` hug).
+ * - both fixed → equal fill columns + explicit row tracks.
  * - both unbounded → dense auto-fill of `max-content` columns, rows grow.
  * - `equalCells` → every cell matches the largest content box (measured).
  *
  * **Cross-axis (hard ≥ 0.5.172):** default `align-items: start` — do **not**
- * vertically center short FieldBlocks when a sibling Select expands in-flow.
+ * vertically center short FieldBlocks when a sibling Select opens its
+ * portaled menu (host height stays on the field).
  * Labels in a FieldStack→Grid row must share one top edge. `equalCells` still
- * stretches. Live: `#sandbox-field-stack-grid-select`.
+ * stretches.
+ *
+ * **Inline fill (hard ≥ 0.5.211):** fixed-`x` grids fill the parent — do **not**
+ * hug `max-content` and leave a dead gutter beside a wide Surface / Card
+ * (Hub Inspector agent | cwd). Select `width: 100%` + measure floor still
+ * apply. Form FieldBlocks use **only** this recipe — never `equalCells` for
+ * multi-column fields (`equalCells` is for measured tile catalogs). Live:
+ * `#form-recipe` / `#sandbox-field-stack-grid-select`.
  */
 export function Grid({
   x = "unbounded",

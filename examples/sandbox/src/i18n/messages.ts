@@ -537,7 +537,7 @@ const en = {
   "globals.breadcrumbPage": "Radius",
   "globals.paginationAria": "Sample pagination",
   "globals.paginationHelp":
-    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (start: visible page-size noun as `.fynns-table-meta` + numeral-only **stock** Select + range; end: `Pagination`). Select **options are digits only** (`10` / `50` / `100`) — never bake `Rows: N` / `Sessions: N` / `每页 N 行` into every option (information redundancy; CONSUMER_TREATY Pagination Select option repeats noun). Noun once via sibling meta + `ariaLabel`. Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager. **Open the rows-per-page Select:** same Keep-set anatomy as Globals `#select` — in-flow `.fynns-search-bar--expanded` joined capsule (trigger + divider + results). core ≥ **0.5.194** — **never** invent an absolute upward flyout / detached panel (retired 0.5.151–0.5.193 fork). **Expanded (≥ 0.5.197):** noun + range + page discs optically center **only** on the 40dp Select shell — never mid of the full joined height (CONSUMER_TREATY Pagination Select siblings center on expanded height). **Gaps (≥ 0.5.202):** noun|Select|range = **8dp** (`action-cluster-gap`); start↔end discs = **16dp** (`unit-stack-gap`) — never IconButton-tight **4dp** (CONSUMER_TREATY Pagination bar gaps crushed to 4dp). Overlay H-rail sits in `--fynns-scrollbar-size` block-end pad. Failure modes: CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun.",
+    "List/table pager footer — M3 data-table / MUI TablePagination: one `.fynns-pagination-bar fynns-scroll` row (start: visible page-size noun as `.fynns-table-meta` + numeral-only **stock** Select + range; end: `Pagination`). Select **options are digits only** (`10` / `50` / `100`) — never bake `Rows: N` / `Sessions: N` / `每页 N 行` into every option (information redundancy; CONSUMER_TREATY Pagination Select option repeats noun). Noun once via sibling meta + `ariaLabel`. Page discs stay nowrap; **never** wrap start/end onto two rows when narrow — the bar scrolls inline. Do not invent a private space-between that grows Select and crushes the pager. **Open the rows-per-page Select:** same Keep-set anatomy as Globals `#select` — 40dp shell + portaled `.fynns-select-menu` (M3 Exposed Dropdown, ≥ **0.5.208**). **Never** invent `position:absolute; bottom:100%` on `.fynns-search-bar-panel` or restyle keep-set menu chrome. **Shell band (≥ 0.5.197):** noun + range + page discs share the 40dp Select shell (menu does not grow the host). **Gaps (≥ 0.5.202):** noun|Select|range = **8dp** (`action-cluster-gap`); start↔end discs = **16dp** (`unit-stack-gap`) — never IconButton-tight **4dp** (CONSUMER_TREATY Pagination bar gaps crushed to 4dp). Overlay H-rail sits in `--fynns-scrollbar-size` block-end pad. Failure modes: CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun.",
   "globals.paginationPrev": "Previous page",
   "globals.paginationNext": "Next page",
   "globals.paginationPage": "Page {n}",
@@ -1138,17 +1138,17 @@ const en = {
   "globals.formRecipeLead":
     "Canonical inspector / settings form tree (same body under Card, Collapsible, and dismissible Dialog): intro FieldHint → `FieldStack` of text FieldBlocks → `FieldStack` of choice FieldBlocks (Radio single-select, Checkbox multi-select, Slider) → `FieldStack` of ControlBlocks (Switch + note) → optional consent Checkbox / InlineAlert / actions. Inside a FieldStack: plain FieldBlocks keep field-stack-gap (12dp); FieldBlock + description/error (no choice cluster) opens the next sibling to unit-stack-gap (16dp); FieldBlocks hosting a `.fynns-control-cluster` open to form-cluster-gap (32dp); ControlBlocks open to unit-stack-gap (16dp). Adjacent FieldStacks use form-cluster-gap (32dp) **plus a horizontal Divider** on kind jumps; other host siblings use unit-stack-gap (16dp). ControlBlock / FieldBlock description use field-hint-gap (8dp); FieldBlock label→control uses field-label-control-gap (12dp). Copy this tree into consumers — do not invent subtitle classes. Sample fields are generic sandbox placeholders (not any consumer app).",
   "globals.formGridSelectHelp":
-    "**FieldStack → Grid FieldBlocks (hard ≥ 0.5.172):** multi-column fields use `FieldStack` + `Grid` `x={2}`. `.fynns-grid` is **top**-aligned (`align-items: start`) — when one Select expands in-flow, the short sibling stays at the top so labels share one edge. Do **not** restore `align-items: center` in the consumer. Failure: CONSUMER_TREATY FieldStack Grid vertically centers short FieldBlock beside expanded Select. Live `#sandbox-field-stack-grid-select`.",
+    "**FieldStack → Grid FieldBlocks (hard ≥ 0.5.172 / trigger floor ≥ **0.5.210** / fill ≥ **0.5.211**):** multi-column fields use **only** `FieldStack` + `Grid` `x={2}` (or more) — the same tree under Card / Collapsible / Dialog (`#form-recipe`). `.fynns-grid` is **top**-aligned and **fills** the parent with equal `minmax(0, 1fr)` tracks. Select `width: 100%`; measure is a floor only. **Forbidden variants for form FieldBlocks:** `equalCells`, `max-content` hug, consumer `width`/`1fr` patches, `align-items: center`. `equalCells` stays for measured **tile** catalogs only (`#code-block` tokens). Failure: CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface. Live `#sandbox-field-stack-grid-select`.",
   "globals.formGridAgentLabel": "Agent",
   "globals.formGridAgentBuild": "build (built-in)",
   "globals.formGridAgentPlan": "plan (built-in)",
   "globals.formGridProjectLabel": "Project (cwd)",
-  "globals.formGridProjectA": "sample-project",
-  "globals.formGridProjectB": "sample-notes",
-  "globals.formGridProjectC": "sample-tools",
-  "globals.formGridProjectD": "sample-lab",
-  "globals.formGridProjectE": "sample-docs",
-  "globals.formGridProjectF": "sample-bench",
+  "globals.formGridProjectA": "sample-workspace",
+  "globals.formGridProjectB": "S4",
+  "globals.formGridProjectC": "sample-catalog-generator",
+  "globals.formGridProjectD": "ui-design-core-sample",
+  "globals.formGridProjectE": "sample-bachelor-thesis",
+  "globals.formGridProjectF": "console-game-2d",
   "globals.formGridProjectG": "sample-game",
   "globals.formGridProjectH": "sample-thesis",
   "globals.formRecipeHostCard": "Card host — inline section on a page / inspector.",
@@ -1280,11 +1280,12 @@ const en = {
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
   "globals.selectAria": "Sample select",
+  "globals.selectLongOption": "sample-workspace-with-a-long-catalog-name",
   "globals.autocompleteAria": "Sample autocomplete",
   "globals.autocompletePlaceholder": "Filter colors…",
   "globals.autocompleteEmpty": "No matches",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — click/type to open, filter, then pick. Same docked shell as Select.",
+    "M3 Autocomplete — click/type to open, filter, then pick. Keeps SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Select uses a portaled `.fynns-select-menu` ≥ **0.5.208**).",
   "globals.autocompleteSelected": "Selected: {value}",
   "globals.autocompleteOptTeal": "Teal",
   "globals.autocompleteOptCyan": "Cyan",
@@ -1798,7 +1799,7 @@ const en = {
   "globals.listStatusActionAssist": "Assist",
   "globals.listStatusActionAssistSnack": "Opened assist sample",
   "globals.listInspectorTrailingHelp":
-    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate / ≥ **0.5.67** 8dp breath / ≥ **0.5.70** inline form Select shell / ≥ **0.5.71** end strip flex-start on trigger band): same inline `.fynns-search-bar--expanded` as `#globals-demo-select` — not absolute flyout. Meta|CTA|Select gaps **8dp**. Leave `trailingMetaAlign` unset. Live host: `#sandbox-list-inspector-trailing`.",
+    "Inspector trailing (≥ **0.5.54** pin / ≥ **0.5.55** end-radius clear / ≥ **0.5.56** gap meta co-locate / ≥ **0.5.67** 8dp breath / ≥ **0.5.70** form Select shell / ≥ **0.5.208** portaled `.fynns-select-menu` / ≥ **0.5.71** end strip flex-start on trigger band): same Keep-set Select as `#globals-demo-select`. Meta|CTA|Select gaps **8dp**. Leave `trailingMetaAlign` unset. Live host: `#sandbox-list-inspector-trailing`.",
   "globals.listInspectorTrailingSupportingTall":
     "Sample supporting copy for a three-line inspector row. The pinned meta|CTA|Select band centers on the full row cross-axis.",
   "globals.listInspectorTrailingAria": "Sample inspector trailing list",
@@ -2050,7 +2051,7 @@ const en = {
   "globals.cardHeadSelectBody":
     "Expand the head Select — title and Run again stay on the 40dp trigger band (≥ 0.5.73), not centered on the option panel.",
   "globals.cardHeadSelectHelp":
-    "Card head Select + labeled Button (≥ **0.5.73** trigger-band pin when expanded): same inline `.fynns-search-bar--expanded` as `#select` — never center title / CTA on the full dropdown. Live host: `#sandbox-card-head-select`.",
+    "Card head Select + labeled Button (≥ **0.5.73** trigger-band pin): same Keep-set Select as `#select` (portaled menu ≥ **0.5.208**) — never center title / CTA on a tall dropdown host. Live host: `#sandbox-card-head-select`.",
   "globals.cardModeBodyTitle": "sample-policy-notes",
   "globals.cardModeBodyOpen": "Open file",
   "globals.cardModeBodyDelete": "Delete",
@@ -2234,7 +2235,7 @@ const en = {
   "globals.segmentedList": "List",
   "globals.selectDisabledAria": "Disabled select",
   "globals.selectHelp":
-    "Stock Keep-set Select — in-flow `.fynns-search-bar--expanded` **joined capsule** (trigger band + hairline + results; full shell radius). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-search-bar-panel` radius, padding, shadow, overflow, or invent absolute flyouts — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay. Live authority for pager rows-per-page too (`#pagination`).",
+    "Stock Keep-set Select — M3 Exposed Dropdown: 40dp outlined shell + **portaled** `.fynns-select-menu` (temporary elevated surface; trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = trigger**, grows with labels, viewport-capped ≥ **0.5.209**). Field stays in-flow — **not** SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Autocomplete keeps that). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-select-menu` radius, padding, shadow, overflow, or invent private absolute docks — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay. Live authority for pager rows-per-page too (`#pagination`).",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -2324,7 +2325,8 @@ const en = {
   "globals.navLabelVisibilityAria": "Label visibility",
   "globals.navRailLabelHelp": "NavigationRail labelVisibility: labeled / selected / unlabeled.",
   "globals.navBarLabelHelp": "NavigationBar labelVisibility: labeled / selected / unlabeled.",
-  "globals.rhythmGridHelp": "Grid with fixed x={2} / y={2} in the rhythm section.",
+  "globals.rhythmGridHelp":
+    "Fixed `Grid` `x={2}` fills the parent with equal `1fr` tracks (same default as FieldStack→Grid form columns ≥ **0.5.211**). Do **not** use `equalCells` for form FieldBlocks — that prop is for measured tile catalogs only (e.g. `#code-block` tokens).",
   "globals.rhythmGridA": "A",
   "globals.rhythmGridB": "B",
   "globals.rhythmGridC": "C",
@@ -2852,7 +2854,7 @@ const zh: Record<MessageKey, string> = {
   "globals.breadcrumbPage": "圆角",
   "globals.paginationAria": "示例分页",
   "globals.paginationHelp":
-    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：`.fynns-table-meta` 名词 + **仅数字** stock Select + 范围文案；结束：`Pagination`）。禁止把 `每页 N 行` / `Sessions: N` 写进每个 option（信息冗余；CONSUMER_TREATY Pagination Select option repeats noun）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。**打开每页条数 Select：** 与 Globals `#select` 同一 Keep-set 解剖 — 内联 `.fynns-search-bar--expanded` 连体胶囊（trigger + 分隔线 + 选项）。core ≥ **0.5.194** — **禁止** 自建向上 absolute flyout / 分体面板（已废止 0.5.151–0.5.193 分叉）。**展开（≥ 0.5.197）：** 名词 + 范围 + 页码圆片仅与 40dp Select **shell** 竖直居中 — 禁止对整块连体高度居中（CONSUMER_TREATY Pagination Select siblings center on expanded height）。**间距（≥ 0.5.202）：** 名词|Select|范围 = **8dp**；start↔页码 = **16dp** — 禁止 IconButton 的 **4dp** 挤死（CONSUMER_TREATY Pagination bar gaps crushed to 4dp）。横向 overlay 轨落在 `--fynns-scrollbar-size` 底垫带。失败模式：CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun。",
+    "列表/表格分页脚栏 — 对齐 M3 data-table / MUI TablePagination：一行 `.fynns-pagination-bar fynns-scroll`（起始：`.fynns-table-meta` 名词 + **仅数字** stock Select + 范围文案；结束：`Pagination`）。禁止把 `每页 N 行` / `Sessions: N` 写进每个 option（信息冗余；CONSUMER_TREATY Pagination Select option repeats noun）。页码圆片不换行；窄宿主也**禁止**上下两行 — 条带横向滚动。禁止把 Select 拉成 1fr 挤碎页码条。**打开每页条数 Select：** 与 Globals `#select` 同一 Keep-set 解剖 — 40dp shell + 门户 `.fynns-select-menu`（M3 Exposed Dropdown，≥ **0.5.208**）。**禁止** 自建 `position:absolute; bottom:100%` 对接 `.fynns-search-bar-panel` 或覆写 keep-set 菜单铬。**Shell 带（≥ 0.5.197）：** 名词 + 范围 + 页码与 40dp Select shell 同带（菜单不撑高宿主）。**间距（≥ 0.5.202）：** 名词|Select|范围 = **8dp**；start↔页码 = **16dp** — 禁止 IconButton 的 **4dp** 挤死（CONSUMER_TREATY Pagination bar gaps crushed to 4dp）。横向 overlay 轨落在 `--fynns-scrollbar-size` 底垫带。失败模式：CONSUMER_TREATY Pagination Select invents absolute overlay / siblings center on expanded height / bar gaps crushed to 4dp / option repeats noun。",
   "globals.paginationPrev": "上一页",
   "globals.paginationNext": "下一页",
   "globals.paginationPage": "第 {n} 页",
@@ -3449,17 +3451,17 @@ const zh: Record<MessageKey, string> = {
   "globals.formRecipeLead":
     "检查器 / 设置表单权威树（同一 body 套在 Card、Collapsible、可关闭 Dialog）：intro FieldHint → `FieldStack`（文本 FieldBlock）→ `FieldStack`（选择 FieldBlock：Radio 单选、Checkbox 多选、Slider）→ `FieldStack`（ControlBlock 开关簇）→ 可选同意 Checkbox / InlineAlert / 底栏。FieldStack 内：普通 FieldBlock 用 field-stack-gap（12dp）；仅有 description/error（无选择簇）→ 下一兄弟 unit-stack-gap（16dp）；含 `.fynns-control-cluster` → 下一兄弟 form-cluster-gap（32dp）；ControlBlock 兄弟 unit-stack-gap（16dp）。相邻 FieldStack 用 form-cluster-gap（32dp）**并在种类切换处加水平 Divider**；其它宿主兄弟用 unit-stack-gap（16dp）。ControlBlock / FieldBlock description 与 FieldBlock 标签→控件用 field-hint-gap（8dp）。消费仓照抄此树，不要自造 subtitle 类。字段为通用沙盒占位（不是任何消费仓产品）。",
   "globals.formGridSelectHelp":
-    "**FieldStack → Grid FieldBlock（硬 ≥ 0.5.172）：** 多列表单用 `FieldStack` + `Grid` `x={2}`。`.fynns-grid` **顶对齐**（`align-items: start`）— 一侧 Select 内联展开时，矮列仍贴顶，标签共一线。禁止消费仓把 Grid 改回 `center`。失败：CONSUMER_TREATY FieldStack Grid vertically centers short FieldBlock beside expanded Select。对照 `#sandbox-field-stack-grid-select`。",
+    "**FieldStack → Grid FieldBlock（硬 ≥ 0.5.172 / 触发器地板 ≥ **0.5.210** / 铺满 ≥ **0.5.211**）：** 多列表单**只**用 `FieldStack` + `Grid` `x={2}`（或更多）— 与 Card / Collapsible / Dialog 同一棵树（`#form-recipe`）。`.fynns-grid` **顶对齐**并 **铺满**父级（等分 `minmax(0, 1fr)`）。Select `width: 100%`；measure 仅作地板。**表单 FieldBlock 禁止变式：** `equalCells`、`max-content` 短岛、消费仓 `width`/`1fr`、`align-items: center`。`equalCells` 仅用于测量瓷砖目录（`#code-block` tokens）。失败：CONSUMER_TREATY FieldStack Grid vertically centers… / FieldStack Grid hugs max-content leaving dead gutter in form Surface。对照 `#sandbox-field-stack-grid-select`。",
   "globals.formGridAgentLabel": "代理",
   "globals.formGridAgentBuild": "build（内置）",
   "globals.formGridAgentPlan": "plan（内置）",
   "globals.formGridProjectLabel": "项目（cwd）",
-  "globals.formGridProjectA": "sample-project",
-  "globals.formGridProjectB": "sample-notes",
-  "globals.formGridProjectC": "sample-tools",
-  "globals.formGridProjectD": "sample-lab",
-  "globals.formGridProjectE": "sample-docs",
-  "globals.formGridProjectF": "sample-bench",
+  "globals.formGridProjectA": "sample-workspace",
+  "globals.formGridProjectB": "S4",
+  "globals.formGridProjectC": "sample-catalog-generator",
+  "globals.formGridProjectD": "ui-design-core-sample",
+  "globals.formGridProjectE": "sample-bachelor-thesis",
+  "globals.formGridProjectF": "console-game-2d",
   "globals.formGridProjectG": "sample-game",
   "globals.formGridProjectH": "sample-thesis",
   "globals.formRecipeHostCard": "Card 宿主 — 页面 / 检查器内联分区。",
@@ -3590,11 +3592,12 @@ const zh: Record<MessageKey, string> = {
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
   "globals.selectAria": "示例选择",
+  "globals.selectLongOption": "示例工作区-带较长目录名的项目",
   "globals.autocompleteAria": "示例自动完成",
   "globals.autocompletePlaceholder": "筛选颜色…",
   "globals.autocompleteEmpty": "无匹配",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — 点击/输入展开，筛选后点选。与 Select 同一 docked 壳。",
+    "M3 Autocomplete — 点击/输入展开，筛选后点选。仍用 SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Select ≥ **0.5.208** 改为门户 `.fynns-select-menu`）。",
   "globals.autocompleteSelected": "已选：{value}",
   "globals.autocompleteOptTeal": "青绿",
   "globals.autocompleteOptCyan": "青色",
@@ -4096,7 +4099,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listStatusActionAssist": "协助",
   "globals.listStatusActionAssistSnack": "已打开协助示例",
   "globals.listInspectorTrailingHelp":
-    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇 / ≥ **0.5.67** 8dp / ≥ **0.5.70** 内联 form Select 壳 / ≥ **0.5.71** end 条 flex-start 钉触发器带）：与 `#globals-demo-select` 相同内联展开 — 禁止 absolute flyout。展开时缺口 meta 勿居中于整列选项。meta|CTA|Select **8dp**。勿设 `trailingMetaAlign`。对照 `#sandbox-list-inspector-trailing`。",
+    "检视行 trailing（≥ **0.5.54** 钉住 / ≥ **0.5.55** 端圆角净空 / ≥ **0.5.56** 缺口 meta 同簇 / ≥ **0.5.67** 8dp / ≥ **0.5.70** form Select 壳 / ≥ **0.5.208** 门户 `.fynns-select-menu` / ≥ **0.5.71** end 条 flex-start 钉触发器带）：与 `#globals-demo-select` 同一 Keep-set Select。meta|CTA|Select **8dp**。勿设 `trailingMetaAlign`。对照 `#sandbox-list-inspector-trailing`。",
   "globals.listInspectorTrailingSupportingTall":
     "三行检视行 supporting 示例。钉住的 meta|CTA|Select 带在整行 cross-axis 上垂直居中。",
   "globals.listInspectorTrailingAria": "检视行 trailing 列表示例",
@@ -4346,7 +4349,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardHeadSelectBody":
     "展开标题栏 Select — 分区名与「重新运行」钉在 40dp 触发器带（≥ 0.5.73），勿相对整段选项面板居中。",
   "globals.cardHeadSelectHelp":
-    "Card 标题栏 Select + 文案 Button（≥ **0.5.73** 展开时 trigger-band 钉住）：与 `#select` 相同内联 `.fynns-search-bar--expanded` — 禁止标题 / CTA 相对整段下拉居中。对照 `#sandbox-card-head-select`。",
+    "Card 标题栏 Select + 文案 Button（≥ **0.5.73** trigger-band）：与 `#select` 同一 Keep-set Select（门户菜单 ≥ **0.5.208**）— 禁止标题 / CTA 相对整段下拉居中。对照 `#sandbox-card-head-select`。",
   "globals.cardModeBodyTitle": "sample-policy-notes",
   "globals.cardModeBodyOpen": "打开文件",
   "globals.cardModeBodyDelete": "删除",
@@ -4530,7 +4533,7 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedList": "列表",
   "globals.selectDisabledAria": "禁用选择器",
   "globals.selectHelp":
-    "Stock Keep-set Select — 内联 `.fynns-search-bar--expanded` **连体胶囊**（trigger + 分隔线 + 选项；整壳圆角）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-search-bar-panel` 圆角 / padding / shadow / overflow，也禁止自建 absolute flyout — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay。分页每页条数也以本解剖为准（`#pagination`）。",
+    "Stock Keep-set Select — M3 Exposed Dropdown：40dp outlined shell + **门户** `.fynns-select-menu`（临时 elevated 表面；触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = 触发器**、随文案变宽、视口封顶 ≥ **0.5.209**）。字段留在文档流 — **不是** SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Autocomplete 仍用连体）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-select-menu` 圆角 / padding / shadow / overflow，也禁止自建私有 absolute dock — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay。分页每页条数也以本解剖为准（`#pagination`）。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",
@@ -4619,7 +4622,8 @@ const zh: Record<MessageKey, string> = {
   "globals.navLabelVisibilityAria": "标签可见性",
   "globals.navRailLabelHelp": "NavigationRail labelVisibility：labeled / selected / unlabeled。",
   "globals.navBarLabelHelp": "NavigationBar labelVisibility：labeled / selected / unlabeled。",
-  "globals.rhythmGridHelp": "节奏区固定 x={2} / y={2} 的 Grid。",
+  "globals.rhythmGridHelp":
+    "固定 `Grid` `x={2}` 铺满父级、等分 `1fr`（与 FieldStack→Grid 表单列同一默认 ≥ **0.5.211**）。表单 FieldBlock **不要**用 `equalCells` — 该 prop 仅用于测量瓷砖目录（如 `#code-block` tokens）。",
   "globals.rhythmGridA": "甲",
   "globals.rhythmGridB": "乙",
   "globals.rhythmGridC": "丙",

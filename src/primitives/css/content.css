@@ -581,10 +581,9 @@ a.fynns-breadcrumb-link:visited {
   display: flex;
   flex-wrap: nowrap;
   /*
-   * Always flex-start (≥ **0.5.197**): in-flow expanded Select grows the start
-   * cluster — never let `__end` discs (or the bar cross-axis) center on
-   * trigger+results height. Collapsed Select ≈ 40dp so start/end still share
-   * one trigger band.
+   * Always flex-start (≥ **0.5.197**; Select float ≥ **0.5.208**): keep the
+   * pager on the 40dp trigger band. Stock Select no longer grows in-flow, but
+   * flex-start still prevents consumer `align-items: center` regressions.
    */
   align-items: flex-start;
   justify-content: space-between;
@@ -608,21 +607,18 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Rows-per-page Select stays the **stock** Keep-set Select (≥ **0.5.194**):
- * in-flow `.fynns-search-bar--expanded` joined capsule (trigger band + divider +
- * results) — same anatomy as Globals `#select`. Do **not** invent an absolute
- * upward flyout / detached panel (that was the 0.5.151–0.5.193 fork and caused
- * square abutting corners + a second “component” that is not in sandbox).
- *
- * Open Select may grow the pager start cluster — that is correct Select
- * grammar. Page discs stay on `__end`; bar stays nowrap + H-scroll.
+ * Rows-per-page Select = **stock** Keep-set Select (≥ **0.5.208**): M3 Exposed
+ * Dropdown — 40dp shell stays in-flow; options are a **portaled**
+ * `.fynns-select-menu` (same as Globals `#select`). Do **not** invent a private
+ * `position:absolute; bottom:100%` dock on `.fynns-search-bar-panel` or restyle
+ * the keep-set menu radius / placement. (0.5.151–0.5.193 upward panel fork and
+ * 0.5.194–0.5.207 in-flow joined capsule are both retired for Select.)
  * Failure: CONSUMER_TREATY Pagination Select invents absolute overlay.
  *
  * Trigger-band siblings (≥ **0.5.197**): noun `.fynns-table-meta` + range
- * `.fynns-field-hint` optically center only on the **40dp Select shell** —
- * never `align-items: center` against the full expanded joined capsule.
- * Same grammar as List inspector / Card-head expanded Select. Failure:
- * CONSUMER_TREATY Pagination Select siblings center on expanded height.
+ * `.fynns-field-hint` share the **40dp Select shell** band — never invent
+ * consumer `align-items: center` on `__start`. Failure: CONSUMER_TREATY
+ * Pagination Select siblings center on expanded height.
  *
  * Horizontal breath (≥ **0.5.202**): noun | Select | range use
  * `--fynns-layout-action-cluster-gap` (**8dp**) — not IconButton
@@ -647,7 +643,7 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Noun + range: fixed **40dp** trigger-band row (inline-flex + center) so text
- * stays mid-shell when Select expands in-flow — not mid of trigger+panel.
+ * stays mid-shell with the Select field (menu is portaled ≥ **0.5.208**).
  */
 .fynns-pagination-bar__start > .fynns-table-meta,
 .fynns-pagination-bar__start > .fynns-field-hint {

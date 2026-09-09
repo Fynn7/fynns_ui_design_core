@@ -4,10 +4,10 @@
  * - `Pagination Select siblings center on expanded height`
  * - `Pagination bar gaps crushed to 4dp`
  * AGENTS: pager rows-per-page Select is the **stock** Keep-set Select —
- * in-flow `.fynns-search-bar--expanded` joined capsule like Globals `#select`.
- * ≥ 0.5.194: no absolute upward flyout / detached panel.
- * ≥ 0.5.197: noun / range / discs optically center on the 40dp Select shell
- * only — not mid of the expanded joined capsule.
+ * M3 Exposed Dropdown: 40dp shell in-flow + portaled `.fynns-select-menu`
+ * (same as Globals `#select`, ≥ **0.5.208**).
+ * Do **not** invent a private `bottom:100%` dock on `.fynns-search-bar-panel`.
+ * ≥ 0.5.197 / 0.5.208: noun / range / discs share the 40dp Select shell band.
  * ≥ 0.5.202: noun|Select|range = 8dp; start↔end = 16dp (not 4dp).
  * Sandbox: #pagination (+ anatomy reference #select)
  */
@@ -27,7 +27,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 });
 });
 
-test(`${SLUG_OVERLAY}: open Select is joined in-flow capsule (not absolute flyout)`, async ({
+test(`${SLUG_OVERLAY}: open Select portals listbox (not in-flow joined capsule)`, async ({
   page,
 }) => {
   await openGlobalsDemo(page, "pagination", "pagination");
@@ -42,60 +42,71 @@ test(`${SLUG_OVERLAY}: open Select is joined in-flow capsule (not absolute flyou
   const trigger = select.locator("button.fynns-select-trigger").first();
   await trigger.click();
   await expect(select).toHaveAttribute("data-expanded", "true");
-  await expect(select).toHaveClass(/fynns-search-bar--expanded/);
+  await expect(select).toHaveClass(/fynns-select--open/);
+  await expect(select).not.toHaveClass(/fynns-search-bar--expanded/);
 
-  const option = select.getByRole("option").first();
+  const option = page.locator(".fynns-select-menu[role='listbox'] [role='option']").first();
   await expect(option).toBeVisible();
 
-  const panel = select.locator("> .fynns-search-bar-panel").first();
-  await expect(panel).toBeVisible();
+  const menu = page.locator(".fynns-select-menu[role='listbox']").first();
+  await expect(menu).toBeVisible();
 
   await expect(async () => {
     const geometry = await select.evaluate((el) => {
       const host = el as HTMLElement;
-      const panelEl = host.querySelector(
-        ":scope > .fynns-search-bar-panel",
-      ) as HTMLElement | null;
       const field = host.querySelector(
         ":scope > .fynns-search-bar-field",
       ) as HTMLElement | null;
-      if (!panelEl || !field) return null;
+      const inFlowPanel = host.querySelector(
+        ":scope > .fynns-search-bar-panel",
+      ) as HTMLElement | null;
+      const menuEl = document.querySelector(
+        ".fynns-select-menu[role='listbox']",
+      ) as HTMLElement | null;
+      if (!field || !menuEl) return null;
       const hs = getComputedStyle(host);
-      const ps = getComputedStyle(panelEl);
+      const ms = getComputedStyle(menuEl);
       const hb = host.getBoundingClientRect();
       const fb = field.getBoundingClientRect();
-      const pb = panelEl.getBoundingClientRect();
+      const mb = menuEl.getBoundingClientRect();
       return {
-        hostRadius: hs.borderRadius,
+        hostHeight: hb.height,
+        fieldHeight: fb.height,
+        menuPosition: ms.position,
+        menuInBody: menuEl.parentElement === document.body,
+        hasInFlowPanel: Boolean(inFlowPanel),
         hostOverflow: hs.overflow,
-        panelPosition: ps.position,
-        panelBottom: ps.bottom,
-        // Joined shell: field above results inside the same host box.
-        fieldAbovePanel: fb.bottom <= pb.top + 2,
-        panelInsideHost:
-          pb.top >= hb.top - 1 &&
-          pb.bottom <= hb.bottom + 1 &&
-          pb.left >= hb.left - 1 &&
-          pb.right <= hb.right + 1,
+        // Portaled: menu is not contained inside the host box.
+        menuInsideHost:
+          mb.top >= hb.top - 1 &&
+          mb.bottom <= hb.bottom + 1 &&
+          mb.left >= hb.left - 1 &&
+          mb.right <= hb.right + 1,
+        menuBelowOrAboveField:
+          Math.abs(mb.top - fb.bottom) < 24 || Math.abs(fb.top - mb.bottom) < 24,
+        // Digit-only options: menu hugs ≈ shell (≥ trigger; not locked narrower).
+        menuAtLeastField: mb.width + 1 >= fb.width,
+        widthDelta: Math.abs(mb.width - fb.width),
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
 
-    // Stock SearchBar/Select shell — not absolute upward docking.
-    expect(geometry.panelPosition).not.toBe("absolute");
-    expect(geometry.panelBottom).not.toBe("100%");
-    expect(geometry.fieldAbovePanel).toBe(true);
-    expect(geometry.panelInsideHost).toBe(true);
-
-    const radii = geometry.hostRadius.split(/\s+/).map(parseFloat);
-    for (const px of radii) {
-      expect(px).toBeGreaterThan(8);
-    }
+    expect(geometry.hasInFlowPanel).toBe(false);
+    expect(geometry.menuInBody).toBe(true);
+    expect(geometry.menuPosition).toBe("fixed");
+    expect(geometry.menuInsideHost).toBe(false);
+    // Shell stays ~40dp — does not grow into a joined capsule.
+    expect(geometry.hostHeight).toBeLessThan(56);
+    expect(geometry.fieldHeight).toBeGreaterThan(36);
+    expect(geometry.fieldHeight).toBeLessThan(48);
+    expect(geometry.menuBelowOrAboveField).toBe(true);
+    expect(geometry.menuAtLeastField).toBe(true);
+    expect(geometry.widthDelta).toBeLessThan(8);
   }).toPass({ timeout: 10_000 });
 });
 
-test(`${SLUG_SIBLINGS}: noun + range center on Select shell only when expanded`, async ({
+test(`${SLUG_SIBLINGS}: noun + range stay on Select shell band when open`, async ({
   page,
 }) => {
   await openGlobalsDemo(page, "pagination", "pagination");
@@ -134,27 +145,22 @@ test(`${SLUG_SIBLINGS}: noun + range center on Select shell only when expanded`,
       const shellMid = sb.top + sb.height / 2;
       const metaMid = mb.top + mb.height / 2;
       const hintMid = hb.top + hb.height / 2;
-      const expandedMid = selectBox.top + selectBox.height / 2;
       return {
         shellHeight: sb.height,
         selectHeight: selectBox.height,
         metaDeltaShell: Math.abs(metaMid - shellMid),
         hintDeltaShell: Math.abs(hintMid - shellMid),
-        metaDeltaExpanded: Math.abs(metaMid - expandedMid),
-        hintDeltaExpanded: Math.abs(hintMid - expandedMid),
         startAlignItems: getComputedStyle(host).alignItems,
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
 
-    expect(geometry.selectHeight).toBeGreaterThan(geometry.shellHeight + 40);
+    // Portaled menu: host height stays on the shell band.
+    expect(geometry.selectHeight).toBeLessThan(geometry.shellHeight + 8);
     expect(geometry.startAlignItems).toMatch(/flex-start|start/);
-    // Must track the 40dp shell — not the mid of the tall joined capsule.
     expect(geometry.metaDeltaShell).toBeLessThan(6);
     expect(geometry.hintDeltaShell).toBeLessThan(6);
-    expect(geometry.metaDeltaExpanded).toBeGreaterThan(20);
-    expect(geometry.hintDeltaExpanded).toBeGreaterThan(20);
   }).toPass({ timeout: 10_000 });
 });
 
@@ -198,7 +204,6 @@ test(`${SLUG_GAPS}: noun|Select|range ≥8dp and start↔end ≥16dp`, async ({
       return {
         metaToSelect: Math.round(sb.left - mb.right),
         selectToHint: Math.round(hb.left - sb.right),
-        // Prefer flex gap token (stable) — geometry can be space-between large.
         startGapPx: parseFloat(getComputedStyle(start).columnGap || getComputedStyle(start).gap) || 0,
         barGapPx: parseFloat(getComputedStyle(host).columnGap || getComputedStyle(host).gap) || 0,
         startEndGap: Math.round(eb.left - startBox.right),
@@ -211,7 +216,6 @@ test(`${SLUG_GAPS}: noun|Select|range ≥8dp and start↔end ≥16dp`, async ({
     expect(geometry.selectToHint).toBeGreaterThanOrEqual(7);
     expect(geometry.startGapPx).toBeGreaterThanOrEqual(7);
     expect(geometry.barGapPx).toBeGreaterThanOrEqual(15);
-    // Packed narrow or wide space-between: end starts after start cluster + bar gap.
     expect(geometry.startEndGap).toBeGreaterThanOrEqual(15);
   }).toPass({ timeout: 10_000 });
 });

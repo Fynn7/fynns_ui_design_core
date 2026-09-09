@@ -550,6 +550,11 @@
  * mid-parked short FieldBlocks when a sibling Select expands in-flow (Hub
  * Inspector agent | cwd) — labels no longer share one top edge. `equalCells`
  * still uses `stretch`. Live: `#sandbox-field-stack-grid-select`.
+ *
+ * Fixed-`x` (≥ **0.5.211**): host **fills** the parent (`width: 100%`) with
+ * equal `minmax(0, 1fr)` tracks — not `max-content` hug that left a dead
+ * gutter in wide Surfaces (Hub Inspector agent | cwd). Unbounded X still
+ * hugs. Select measure floor remains a min only. Live same anchor.
  */
 .fynns-grid {
   display: grid;
@@ -566,6 +571,18 @@
   min-width: min-content;
   max-width: none;
   overflow: visible;
+}
+
+/* Fixed column count: fill form hosts (FieldStack → Grid x={2}). */
+.fynns-grid:not([data-x="unbounded"]) {
+  width: 100%;
+  max-width: 100%;
+  justify-content: stretch;
+}
+
+.fynns-grid:not([data-x="unbounded"]) > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* equalCells: stretch every cell to the measured max box */

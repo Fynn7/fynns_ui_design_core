@@ -171,15 +171,18 @@ alwaysApply: true
     但传 `REVEAL_MORE_LIST_DEFAULT_*`（**5**/5，≥ **0.5.145**）：脚在 List
     **后**；短列表 / Dialog / 真分页豁免。对照 `#list`。
 26. **Pagination Select invents absolute overlay** — `.fynns-pagination-bar`
-    内每页 Select 必须是 **stock** Keep-set Select：内联
-    `.fynns-search-bar--expanded` 连体胶囊（与 `#select` 同解剖）。core ≥
-    **0.5.194** 已删除向上 absolute flyout。**禁止** 自建
-    `position:absolute; bottom:100%` 分体面板。对照 `#pagination` / `#select`。
-26b. **Pagination Select siblings center on expanded height** — 展开后名词
-    `.fynns-table-meta` / 范围 `FieldHint` / 页码 discs **仅**与 Select
-    **shell（40dp）** 竖直居中；core ≥ **0.5.197** 已把 `__start` 钉到
-    trigger-band。**禁止** 消费仓给 `__start` 写 `align-items: center` 让旁侧
-    对整块连体高度居中。对照 `#pagination`。
+    内每页 Select 必须是 **stock** Keep-set Select：40dp shell + 门户
+    `.fynns-select-menu`（与 `#select` 同解剖，≥ **0.5.208** 门户；≥
+    **0.5.209** 菜单 **min-width = 触发器**、随选项文案变宽；≥ **0.5.210**
+    触发器 `--fynns-select-measure-min` 绝对地板，禁止 `min(100%, …)` 压扁）。
+    **禁止** 自建 `position:absolute; bottom:100%` 对接
+    `.fynns-search-bar-panel`，也禁止覆写 `.fynns-select-menu` 圆角 / 展开位置。
+    对照 `#pagination` / `#select`。
+26b. **Pagination Select siblings center on expanded height** — 名词
+    `.fynns-table-meta` / 范围 `FieldHint` / 页码 discs 与 Select **shell
+    （40dp）** 同带；core ≥ **0.5.197** 钉 `__start` 到 trigger-band；≥
+    **0.5.208** 菜单已门户化、不再撑高宿主。**禁止** 消费仓给 `__start` 写
+    `align-items: center`。对照 `#pagination`。
 26b2. **Pagination bar gaps crushed to 4dp** — 名词|Select|范围用
     `action-cluster-gap`（**8dp**）；start↔页码 discs 用 `unit-stack-gap`
     （**16dp**，≥ **0.5.202**）。**禁止** 消费仓把 `.fynns-pagination-bar` /
@@ -218,6 +221,12 @@ alwaysApply: true
     FieldStack→`Grid` 多列 FieldBlock：core ≥ **0.5.172** `.fynns-grid`
     `align-items: start`；禁止消费仓把 Grid 改回 `center`（一侧 Select 展开后
     矮列垂直居中、标签错层）。对照 `#sandbox-field-stack-grid-select`。
+31b. **FieldStack Grid hugs max-content leaving dead gutter in form Surface** —
+    FieldStack→`Grid` `x={N}`：core ≥ **0.5.211** 固定列数铺满父级（等分
+    `minmax(0, 1fr)`），Select `width: 100%`，measure 只做地板。禁止消费仓
+    自造 `width:100%` / `1fr`「修」短岛 + 宽 Surface 死边。表单 FieldBlock
+    **不要**用 `equalCells` 或其他变式 — 对照 `#form-recipe` /
+    `#sandbox-field-stack-grid-select`。
 32. **Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip** —
     Card `actions` / densified Select 旁簇：自明动作（复制、保存默认、开文件夹）
     用 `IconButton` + `Tooltip`（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）；

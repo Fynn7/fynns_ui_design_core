@@ -7,8 +7,13 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDownIcon } from "./icons";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
+import { useFloatingBoxPosition } from "./floatingBox";
+
+/** Keep in sync with `--fynns-duration-flyout` / DropdownMenu `FLYOUT_TRANSITION_MS`. */
+const FLYOUT_TRANSITION_MS = 160;
 
 export type SelectOption = {
   value: string;
@@ -38,20 +43,33 @@ function normalize(option: string | SelectOption): SelectOption {
   return typeof option === "string" ? { value: option } : option;
 }
 
+function flyoutExitMs(): number {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return 0;
+  }
+  return FLYOUT_TRANSITION_MS;
+}
+
 /**
- * Dropdown that reuses SearchBar's docked results shell (`.fynns-expand` +
- * `.fynns-search-bar-results`), but **form density** matches Input (40dp /
- * `--fynns-size-icon-target`, outlined surface) — not chrome SearchBar 56dp.
- * Differences: no SearchIcon / leading slot; trailing chevron instead of clear.
+ * M3 Exposed Dropdown / Select — form-density field (40dp outlined shell) +
+ * **portaled** elevated listbox (temporary surface). Trigger stays in-flow;
+ * the menu does **not** push layout (not SearchBar’s docked joined capsule).
+ * Autocomplete / SearchBar keep the Google-style docked shell.
  * Auxiliary row actions (refresh / reload) belong in a sibling
  * `.fynns-control-cluster--end-align` band — not `trailing` beside chevron
- * (see AGENTS.md / sandbox `#field-header`). Core pins the sibling action to
- * the 40dp trigger row when the docked list expands — not the list midpoint.
+ * (see AGENTS.md / sandbox `#field-header`).
  * Replaces native `<select>`.
  *
  * Trigger width floors to the widest option (or placeholder) so switching
- * values does not resize the control when the host is content-sized.
+ * values does not resize the control when the host is content-sized — and so
+ * the shell stays aligned with the portaled menu (≥ **0.5.210** absolute
+ * `--fynns-select-measure-min`, not `min(100%, …)`).
+ * Open menu: **min-width = trigger**, grows with option labels (viewport-capped).
  * @see https://m3.material.io/components/menus/overview
+ * @see https://developer.android.com/reference/kotlin/androidx/compose/material3/ExposedDropdownMenuBox.composable
  */
 export function Select({
   value,
@@ -70,14 +88,36 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(() => Math.max(0, selectedIndex));
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
+  const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [presenting, setPresenting] = useState(false);
   const [minWidthPx, setMinWidthPx] = useState<number | null>(null);
+  /** Floor for the portaled menu — grows with option content (`width: max-content`). */
+  const [menuMinWidthPx, setMenuMinWidthPx] = useState<number | null>(null);
   const listId = useId();
   const isDisabled = disabled || normalized.length === 0;
   /** In a FieldBlock control band the cluster is one flex row — no content min-width floor. */
   const shrinkInCluster =
     typeof className === "string" &&
     className.split(/\s+/).includes("fynns-control-cluster__grow");
+
+  const pos = useFloatingBoxPosition(
+    shellRef.current ?? rootRef.current,
+    menuEl,
+    open,
+    {
+      side: "bottom",
+      align: "start",
+      offset: 4,
+      anchorMode: "element",
+      estimateWhenUnmeasured: true,
+    },
+  );
+  const lastPosRef = useRef(pos);
+  if (pos) lastPosRef.current = pos;
+  const displayPos = pos ?? lastPosRef.current;
 
   /** Remeasure when options / placeholder change (not on every selected value). */
   useLayoutEffect(() => {
@@ -94,6 +134,39 @@ export function Select({
     if (max > 0) setMinWidthPx(max);
   }, [options, placeholder, shrinkInCluster]);
 
+  useLayoutEffect(() => {
+    if (!open) return;
+    const shell = shellRef.current ?? rootRef.current;
+    if (!shell) return;
+    const syncMinWidth = () => {
+      const w = shell.getBoundingClientRect().width;
+      if (w > 0) setMenuMinWidthPx(w);
+    };
+    syncMinWidth();
+    const ro =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(syncMinWidth)
+        : null;
+    ro?.observe(shell);
+    window.addEventListener("resize", syncMinWidth);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", syncMinWidth);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      setPresenting(true);
+      return;
+    }
+    if (!mounted) return;
+    setPresenting(false);
+    const timer = setTimeout(() => setMounted(false), flyoutExitMs());
+    return () => clearTimeout(timer);
+  }, [open, mounted]);
+
   const pick = useCallback(
     (nextValue: string) => {
       onChange(nextValue);
@@ -108,19 +181,24 @@ export function Select({
     setOpen((wasOpen) => !wasOpen);
   }, [isDisabled]);
 
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
     const onPointerDown = (event: MouseEvent) => {
       const target = event.target as Node;
       if (rootRef.current?.contains(target)) return;
+      if (menuEl?.contains(target)) return;
       setOpen(false);
     };
     const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        setOpen(false);
-        triggerRef.current?.focus();
+        close();
       }
     };
     document.addEventListener("mousedown", onPointerDown);
@@ -129,7 +207,7 @@ export function Select({
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open, selectedIndex]);
+  }, [open, selectedIndex, menuEl, close]);
 
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (isDisabled) return;
@@ -163,13 +241,78 @@ export function Select({
     ...normalized.map((o) => o.label ?? o.value),
   ];
 
+  const menuSide = displayPos?.side === "top" ? "top" : "bottom";
+
+  const listbox =
+    mounted && typeof document !== "undefined" && normalized.length > 0
+      ? createPortal(
+          <div
+            ref={setMenuEl}
+            id={listId}
+            role="listbox"
+            aria-label={ariaLabel}
+            aria-hidden={!presenting}
+            {...(!presenting ? { inert: true } : {})}
+            data-side={menuSide}
+            data-state={presenting ? "open" : "closing"}
+            className={join(
+              "fynns-select-menu",
+              mergeScrollSurfaceClass("fynns-select-list"),
+            )}
+            style={
+              displayPos
+                ? ({
+                    top: displayPos.top,
+                    left: displayPos.left,
+                    /* min = trigger; width grows with labels (CSS max-content).
+                     * Cap only at the floating viewport ceiling — never lock to
+                     * the shell width (narrow FieldBlock / EndAside hosts). */
+                    ...(menuMinWidthPx != null
+                      ? { minWidth: `${menuMinWidthPx}px` }
+                      : null),
+                    ...(displayPos.maxWidth
+                      ? { maxWidth: `${displayPos.maxWidth}px` }
+                      : null),
+                  } as CSSProperties)
+                : undefined
+            }
+          >
+            {normalized.map((option, index) => {
+              const selected = option.value === value;
+              const active = index === activeIndex;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  disabled={option.disabled}
+                  tabIndex={presenting ? undefined : -1}
+                  className={join(
+                    "fynns-search-bar-result",
+                    "fynns-select-option",
+                    (active || selected) && "fynns-search-bar-result--active",
+                  )}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  onClick={() => !option.disabled && pick(option.value)}
+                >
+                  {option.label ?? option.value}
+                </button>
+              );
+            })}
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
     <div
       ref={rootRef}
       className={join(
         "fynns-select",
         "fynns-search-bar",
-        open && "fynns-search-bar--expanded",
+        open && "fynns-select--open",
         isDisabled && "fynns-search-bar--disabled",
         isDisabled && "fynns-select--disabled",
         className,
@@ -180,9 +323,8 @@ export function Select({
           ? undefined
           : minWidthPx != null
             ? ({
-                /* Floor for closed trigger; CSS applies `min(100%, …)` in
-                 * form rows and a fixed px hug in List trailing (circular
-                 * `min(100%, …)` was crushing the shell end radius). */
+                /* Floor for closed trigger + open shell. Absolute px — CSS must
+                 * not wrap with `min(100%, …)` (crushes under Grid max-content). */
                 ["--fynns-select-measure-min" as string]: `${minWidthPx}px`,
               } as CSSProperties)
             : undefined
@@ -211,7 +353,7 @@ export function Select({
           </div>
         ))}
       </div>
-      <div className="fynns-search-bar-field fynns-select-shell">
+      <div ref={shellRef} className="fynns-search-bar-field fynns-select-shell">
         <button
           ref={triggerRef}
           id={id}
@@ -254,49 +396,7 @@ export function Select({
           </span>
         </span>
       </div>
-      {normalized.length > 0 ? (
-        <div
-          className="fynns-expand fynns-search-bar-panel"
-          data-state={open ? "open" : "closed"}
-        >
-          <div className="fynns-expand-inner">
-            <div
-              id={listId}
-              role="listbox"
-              aria-label={ariaLabel}
-              aria-hidden={!open}
-              inert={open ? undefined : true}
-              className={mergeScrollSurfaceClass(
-                "fynns-search-bar-results fynns-select-list",
-              )}
-            >
-              {normalized.map((option, index) => {
-                const selected = option.value === value;
-                const active = index === activeIndex;
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    role="option"
-                    aria-selected={selected}
-                    disabled={option.disabled}
-                    tabIndex={open ? undefined : -1}
-                    className={join(
-                      "fynns-search-bar-result",
-                      (active || selected) && "fynns-search-bar-result--active",
-                    )}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onClick={() => !option.disabled && pick(option.value)}
-                  >
-                    {option.label ?? option.value}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {listbox}
     </div>
   );
 }

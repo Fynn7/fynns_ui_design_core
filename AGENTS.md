@@ -284,12 +284,13 @@ belong in a consumer’s own doc.
   in-flow (always visible; Select content-hug); ≥ **0.5.55** clears host
   `radius-3xl` clip on the end; ≥ **0.5.56** co-locates gap `trailingSupportingText`
   in that end strip; ≥ **0.5.67** widens meta|CTA|Select gaps to **8dp**
-  (`inspector-end-gap`); ≥ **0.5.70** reuses inline form Select
-  `search-bar--expanded` (not absolute flyout); ≥ **0.5.71**/72 pins
-  meta|CTA on the **trigger band** when expanded. Leave `trailingMetaAlign`
-  unset. Card/Collapsible head Select + labeled Button uses the same
-  trigger-band grammar (≥ **0.5.73**/74; gap **8dp** ≥ **0.5.75**). Live
-  `#list` inspector trailing / `#sandbox-card-head-select`.
+  (`inspector-end-gap`); ≥ **0.5.70** reuses form Select shell; ≥ **0.5.208**
+  Select options are a **portaled** `.fynns-select-menu` (field stays 40dp —
+  not in-flow joined capsule); ≥ **0.5.71**/72 pins meta|CTA on the **trigger
+  band**. Leave `trailingMetaAlign` unset. Card/Collapsible head Select +
+  labeled Button uses the same trigger-band grammar (≥ **0.5.73**/74; gap
+  **8dp** ≥ **0.5.75**). Live `#list` inspector trailing /
+  `#sandbox-card-head-select`.
 - **DON'T** use a flex `.fynns-control-cluster` for multi-metric List trailing
   that must **column-align across sibling rows** — use
   `.fynns-list-item-trailing-stats` (fixed grid; `--pair` for two metrics).
@@ -373,6 +374,16 @@ belong in a consumer’s own doc.
   consumer `align-items: center` on `.fynns-grid`. Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   vertically centers short FieldBlock beside expanded Select.
+- **DON'T** leave FieldStack→`Grid` `x={N}` hugging `max-content` in a wide
+  form Surface / Card (short island + dead gutter) — core ≥ **0.5.211** fixed-`x`
+  grids fill the parent with equal `minmax(0, 1fr)` tracks; Select stays
+  `width: 100%` with measure as a **floor** only. Do **not** invent consumer
+  `width: 100%` / `1fr` patches on `.fynns-grid`. Do **not** use `equalCells`
+  (or other Grid variants) for form FieldBlocks — sandbox `#form-recipe` /
+  `#sandbox-field-stack-grid-select` teach **only** fixed-`x` fill; `equalCells`
+  is for measured tile catalogs (`#code-block` tokens). Live
+  `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
+  hugs max-content leaving dead gutter in form Surface.
 - **DON'T** paint self-evident Card chrome / densified form-cluster actions as
   **labeled** ghost `Button`s (e.g. visible `Copy Prompt` / `Save defaults`
   next to a folder IconButton or Select row) — **information redundancy**.
@@ -394,22 +405,24 @@ belong in a consumer’s own doc.
   scroll further on Y (default on; opt out `data-fynns-wheel-x="off"`; edge
   trap ≥ **0.5.186** so slide-back does not yank PageScroll). Live `#table`.
   Failure: CONSUMER_TREATY wide Table wheel scrolls PageScroll.
-- **DON'T** invent an absolute upward flyout / detached panel for Pagination
-  rows-per-page Select (or any consumer CSS that docks `.fynns-search-bar-panel`
-  with `position:absolute; bottom:100%`) — use the **stock** Keep-set Select
-  in-flow `.fynns-search-bar--expanded` joined capsule (same as `#select`).
-  Core ≥ **0.5.194** removed that fork. Live `#pagination`. Failure:
+- **DON'T** invent a private absolute dock for Pagination rows-per-page Select
+  (or any consumer CSS that docks `.fynns-search-bar-panel` with
+  `position:absolute; bottom:100%`, or restyles `.fynns-select-menu`) — use the
+  **stock** Keep-set Select: 40dp shell + **portaled** `.fynns-select-menu`
+  (≥ **0.5.208** — M3 Exposed Dropdown; menu **min-width = trigger**, grows with
+  option labels ≥ **0.5.209**; trigger `--fynns-select-measure-min` absolute
+  floor ≥ **0.5.210** — never `min(100%, …)` crush under Grid; retires both the
+  0.5.151–0.5.193 upward panel fork and the 0.5.194–0.5.207 in-flow joined
+  capsule). Live `#pagination` / `#sandbox-field-stack-grid-select`. Failure:
   CONSUMER_TREATY Pagination Select invents absolute overlay.
 - **DON'T** let Pagination bar siblings (`.fynns-table-meta` noun, range
-  `FieldHint`, `__end` page discs) vertically **center on the full expanded
-  Select height** — core ≥ **0.5.197** pins `.fynns-pagination-bar` /
-  `__start` to `align-items: flex-start` and gives noun/range a **40dp**
-  (`--fynns-size-icon-target`) trigger-band min-height so they optically
-  center **only** on `.fynns-select-shell` / `.fynns-search-bar-field` (same
-  grammar as List inspector / Card-head expanded Select). Never invent
-  consumer `align-items: center` on `__start` to “fix” collapsed rhythm.
-  Live `#pagination`. Failure: CONSUMER_TREATY Pagination Select siblings
-  center on expanded height.
+  `FieldHint`, `__end` page discs) invent `align-items: center` on `__start`
+  — core ≥ **0.5.197** pins `.fynns-pagination-bar` / `__start` to
+  `align-items: flex-start` and gives noun/range a **40dp**
+  (`--fynns-size-icon-target`) trigger-band min-height so they share the
+  Select **shell** band (menu is portaled ≥ **0.5.208** and does not grow the
+  host). Live `#pagination`. Failure: CONSUMER_TREATY Pagination Select
+  siblings center on expanded height.
 - **DON'T** crush Pagination bar horizontal breath to IconButton
   `control-cluster-gap` (**4dp**) — noun | Select | range use
   `--fynns-layout-action-cluster-gap` (**8dp**); start cluster ↔ `__end`
@@ -420,8 +433,9 @@ belong in a consumer’s own doc.
 - **DON'T** (any consumer) locally restyle keep-set **chrome anatomy** —
   especially Select / SearchBar / Autocomplete / DropdownMenu **border-radius**,
   padding, shadow, overflow, or expand placement (no `.hub-*` / app CSS that
-  targets `.fynns-select`, `.fynns-search-bar`, `.fynns-search-bar-panel`,
-  `.fynns-menu`). Props + strings only; missing capability → core first.
+  targets `.fynns-select`, `.fynns-select-menu`, `.fynns-search-bar`,
+  `.fynns-search-bar-panel`, `.fynns-menu`). Props + strings only; missing
+  capability → core first.
   Live `#select` / `#menu`. Failure: CONSUMER_TREATY consumer restyles keep-set
   chrome radius.
 - **DON'T** bake the page-size noun into every Select option (`Rows: 10`,
@@ -559,7 +573,7 @@ or invent parallel variants in the consumer. **Hard — chrome anatomy:** never
 “fix” Select / SearchBar / DropdownMenu / Autocomplete **radius**, padding,
 shadow, overflow, or expand placement in the consumer (no
 `.fynns-select { border-radius… }`, no absolute dock of
-`.fynns-search-bar-panel`, no private joined/half-shell CSS). Wrong look →
+`.fynns-search-bar-panel` / `.fynns-select-menu`, no private joined/half-shell CSS). Wrong look →
 constrain in **this** core + sandbox `#select` / `#menu` first — never
 self-author keep-set chrome in agents-hub or any sibling app. **Do not** edit
 `node_modules/@fynn7/ui-design-core` for app features (bump the package version
@@ -839,11 +853,11 @@ classes.
   `--fynns-navdrawer-search-gap` **8dp**; Item↔Item =
   `--fynns-navdrawer-section-gap` **4dp**), SkipLink, Breadcrumb, Pagination
   (`.fynns-pagination-bar` = single M3/MUI footer row — never wrap to two rows;
-  rows-per-page Select is the **stock** Keep-set Select — in-flow
-  `.fynns-search-bar--expanded` joined capsule like `#select` (≥ **0.5.194**);
-  expanded siblings pin to the **40dp shell** only (≥ **0.5.197**);
-  noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**);
-  never invent an absolute upward flyout; options = **digits only** + sibling
+  rows-per-page Select is the **stock** Keep-set Select — 40dp shell +
+  portaled `.fynns-select-menu` like `#select` (≥ **0.5.208**); siblings share
+  the **40dp shell** band (≥ **0.5.197**); noun|Select|range gap **8dp** /
+  start↔end **16dp** (≥ **0.5.202**); never invent a private absolute dock or
+  restyle keep-set menu chrome; options = **digits only** + sibling
   `.fynns-table-meta` noun — never `Rows: N` / `Sessions: N` / `每页 N 行` in
   every option)
 - **App shells:** **`DestinationAppShell`** (default greenfield — declarative
@@ -1005,7 +1019,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Empty catalog | EmptyState (`fill` if sole pane) | `#empty-state` | EmptyState as loading shell |
 | Pane cold-start fail / hang | Clear busy → InlineAlert + hint + end-align Retry | `#sandbox-pane-load-error` | Permanent fill; EmptyState as load-fail; silent empty |
 | Pane / section wait | `BusyRegion` (`fill` if height-resolved — FillColumn **or** PageScroll content-column ≥ **0.5.136**); one progress chrome | `#busy-region` / `#sandbox-busy-region-page-scroll-fill` | EmptyState+ring; `fill` in unit-stack/Card; FieldHint + busy in one well; BusyRegion + chrome `loading`; fill overlay collapsed → BusyStack top overflow |
-| Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only **stock** Select (in-flow joined capsule like `#select`, ≥ **0.5.194**); open Select → siblings center on **40dp shell only** (≥ **0.5.197**); noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; invent absolute upward flyout / detached panel; `Sessions: N` / `每页 N 行` in every option; meta/hint mid of expanded capsule; IconButton-tight **4dp** gaps |
+| Table / list pager | `.fynns-pagination-bar` single row; noun = `.fynns-table-meta` + digit-only **stock** Select (40dp shell + portaled `.fynns-select-menu` like `#select`, ≥ **0.5.208**); siblings share **40dp shell** band (≥ **0.5.197**); noun|Select|range gap **8dp** / start↔end **16dp** (≥ **0.5.202**); H-rail in scrollbar pad | `#pagination` | Two-row wrap; Select grown to crush discs; invent private absolute dock / restyle `.fynns-select-menu`; `Sessions: N` / `每页 N 行` in every option; IconButton-tight **4dp** gaps |
 | Time-series / combo chart | Card + ControlRow ToggleGroup + `.fynns-chart`; line = gentle **monotone** (not Catmull-Rom); hover tip follows pointer via `.fynns-chart-tooltip` + `clampChartPointerTooltipBox()` | `#chart` | Idle dense line dots; locked tooltip Y; tip clipped/jitter at edge; unit-stack inside tip; consumer hex |
 | Multi-status / probe strip | `ControlStack` `controlsAlign="start"` + `columns` = cells; `.fynns-list-item-status` + InfoHint as direct children | `#rhythm` status | Cluster+end-hug misalign; Chip as status; FieldHint essays |
 | Install path vs backend readiness | Adjacent `ControlStack`s + Divider; start-align; model → `.fynns-table-meta` | `#sandbox-rhythm-probe-kinds` | One stack mixing Available + Backend; path/chips/hint in one cluster |
@@ -1108,8 +1122,10 @@ do not leave every FieldBlock / ControlBlock as a flat Card-body sibling.
   Card, Collapsible, and dismissible Dialog).
 - **Multi-column FieldBlocks** → `FieldStack` → `Grid` `x={2}` (or more). Core
   Grid is **top**-aligned (`align-items: start` ≥ **0.5.172**) so an expanded
-  in-flow Select does not mid-park the sibling FieldBlock. Live
-  `#sandbox-field-stack-grid-select`.
+  in-flow Select does not mid-park the sibling FieldBlock. Fixed-`x` fills the
+  parent with equal `1fr` tracks (≥ **0.5.211**) — not a `max-content` island.
+  **No other variant** for this recipe (`equalCells` / hug / private CSS).
+  Live `#form-recipe` / `#sandbox-field-stack-grid-select`.
 
 **Recipe (hard):** Switch (or other labeled row) **and** its narrative are
 **one unit** → wrap in `ControlBlock`. On a **single** ControlRow, `description`
