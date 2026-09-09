@@ -235,7 +235,6 @@ export function LayoutsPage() {
                         ? t("nav.footerAccountLabelLong")
                         : t("nav.footerAccountLabel")
                     }
-                    accountName={t("nav.footerAccountName")}
                     settingsLabel={t("globals.appBarSettings")}
                     settingsTip={t("globals.appBarSettings")}
                     onSettingsClick={() => setShellSettingsOpen(true)}

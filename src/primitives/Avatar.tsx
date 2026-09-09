@@ -24,9 +24,15 @@ export type AvatarProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
   /** Accessible name. Required when using `src` or when there is no visible text. */
   alt?: string;
   /**
-   * Display name used to derive initials (up to 2 letters) when there is no
-   * image / custom child.
-   */
+ * Display name used to derive initials (up to 2 letters) when there is no
+ * image / custom child. **Multi-word (≥ 0.5.214):** first letter of the
+ * **first** word + first letter of the **last** word, uppercased (`Agents Hub`
+ * → `AH`). Single word → up to two letters uppercased (`Ada` → `AD`).
+ * NavigationDrawer footer account rows: pass the **same** string as the
+ * visible `.fynns-nav-drawer-footer-account-label` — never a truncated
+ * fragment (`Hub` while the label reads `Agents Hub`). Live
+ * `#layouts-demo-shell`.
+ */
   name?: string;
   /** Custom content (icon, etc.). Wins over initials; loses to a loaded image. */
   children?: ReactNode;
@@ -37,16 +43,19 @@ export type AvatarProps = Omit<HTMLAttributes<HTMLSpanElement>, "children"> & {
   size?: AvatarSize;
 };
 
-function initialsFromName(name: string): string {
+/** Visible-label initials for Avatar (exported for unit / treaty checks). */
+export function initialsFromName(name: string): string {
   const parts = name
     .trim()
     .split(/\s+/)
     .filter(Boolean);
   if (parts.length === 0) return "";
   if (parts.length === 1) {
-    return parts[0]!.slice(0, 2);
+    return parts[0]!.slice(0, 2).toLocaleUpperCase();
   }
-  return `${parts[0]![0] ?? ""}${parts[parts.length - 1]![0] ?? ""}`;
+  const a = parts[0]![0] ?? "";
+  const b = parts[parts.length - 1]![0] ?? "";
+  return `${a}${b}`.toLocaleUpperCase();
 }
 
 const ICON_SIZE: Record<AvatarSize, number> = {

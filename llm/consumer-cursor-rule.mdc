@@ -66,6 +66,9 @@ alwaysApply: true
   “Clipped” = M3 拓扑，不是文字裁切。
 - Settings：**仅** `navFooter` 齿轮；Settings 体 = 软件偏好（语言/外观/账号）。
   功能配置走独立目的地。语言开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。
+  Footer `Avatar` 的 `name` = **可见**账户标签全文（多词首尾字母大写缩写 ≥
+  **0.5.214**）— **禁止**另传截断名（标签 `Agents Hub` 却 `name="Hub"` →
+  `HU`）。对照 `#layouts-demo-shell` / `#avatar`。
 - 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
   `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
   **0.5.137** 对齐 Item `item-pad-inline`；`--toolbar-end` 主新建 Plus 与

@@ -526,6 +526,14 @@ belong in a consumer’s own doc.
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
   `#layouts-demo-shell`.
+- **DON'T** drive NavigationDrawer footer `Avatar` initials from a **truncated**
+  `name` while the visible `.fynns-nav-drawer-footer-account-label` stays the
+  full string (`Hub` → `HU` while label reads `Agents Hub`) — pass the **same**
+  visible label into Avatar `name` (multi-word → first+last initials,
+  uppercased ≥ **0.5.214**: `Agents Hub` → `AH`). Sandbox recipe
+  `NavDrawerFooterAccount` has no separate initials prop. Live
+  `#layouts-demo-shell` / `#avatar`. Failure: CONSUMER_TREATY NavDrawer footer
+  Avatar initials ignore visible label.
 - **DON'T** turn an in-canvas catalog into a silent full-canvas detail
   PageScroll replace — keep List/Timeline mounted; edit → `Dialog` `size="lg"`
   (+ `FullscreenDialog` only for multi-Card long workflows). Drill-in is

@@ -245,7 +245,6 @@ export function SandboxShell() {
     <NavDrawerFooterAccount
       showLabel
       accountLabel={t("nav.footerAccountLabel")}
-      accountName={t("nav.footerAccountName")}
       settingsLabel={t("nav.templates")}
       settingsTip={t("nav.templatesTip")}
       onSettingsClick={() => setPage("templates")}

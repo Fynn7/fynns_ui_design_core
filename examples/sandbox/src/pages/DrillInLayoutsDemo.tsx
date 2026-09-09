@@ -73,7 +73,6 @@ export function DrillInLayoutsDemo() {
     <NavDrawerFooterAccount
       showLabel
       accountLabel={t("nav.footerAccountLabel")}
-      accountName={t("nav.footerAccountName")}
       settingsLabel={t("layouts.drillPrefs")}
       settingsTip={t("layouts.drillPrefs")}
       onSettingsClick={openPrefs}

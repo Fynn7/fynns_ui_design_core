@@ -3835,6 +3835,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             alt={t("globals.avatarBroken")}
           />
         </div>
+        <SandboxHelp text={t("globals.avatarInitialsHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="badged-box">
         <div className="sandbox-globals-row" style={{ alignItems: "center" }}>

@@ -74,6 +74,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | drawer footer middle still packed (flex-grow) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | drawer footer Avatar/gear flush to sheet edge | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | short account label always fades | AGENTS Hard rules | `#layouts-demo-shell` |
+| NavDrawer footer Avatar initials ignore visible label | AGENTS Hard rules | `#layouts-demo-shell` / `#avatar` |
 | feature panels parked in Settings | AGENTS Hard rules | `#layouts-demo-shell` |
 | NavigationDrawer Search↔Item vacant band | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawer Card Collapsible stack kissed | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |

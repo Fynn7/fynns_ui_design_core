@@ -20,7 +20,6 @@ const en = {
   "nav.footerAccountLabel": "Sample user",
   "nav.footerAccountLabelLong":
     "Sample user with a long display name that should fade at the end",
-  "nav.footerAccountName": "Sample User",
   "nav.footerShowAccountLabel": "Show account name in drawer footer",
   "nav.footerShowLongAccountLabel": "Use long account name (truncation fade)",
   "nav.playgroundHint":
@@ -1406,6 +1405,8 @@ const en = {
   "globals.avatarFallback": "Anonymous user",
   "globals.avatarImage": "Ada Lovelace (image)",
   "globals.avatarBroken": "Broken image falls back to initials",
+  "globals.avatarInitialsHelp":
+    "Initials from name: multi-word = first + last letters uppercased (Ada Lovelace → AL). Drawer footer Avatar name must match the visible account label — see Layouts #layouts-demo-shell.",
   "globals.fabTip": "Create",
   "globals.fabExtended": "Create item",
   "globals.fabSecondary": "Secondary FAB",
@@ -2353,7 +2354,6 @@ const zh: Record<MessageKey, string> = {
   "nav.footerAccountLabel": "示例用户",
   "nav.footerAccountLabelLong":
     "示例用户的超长显示名称用于验证截断端侧渐隐",
-  "nav.footerAccountName": "示例用户",
   "nav.footerShowAccountLabel": "在侧栏底栏显示账户名",
   "nav.footerShowLongAccountLabel": "使用长账户名（截断渐隐）",
   "nav.playgroundHint":
@@ -3718,6 +3718,8 @@ const zh: Record<MessageKey, string> = {
   "globals.avatarFallback": "匿名用户",
   "globals.avatarImage": "Ada Lovelace（图片）",
   "globals.avatarBroken": "坏链回退到首字母",
+  "globals.avatarInitialsHelp":
+    "缩写取自 name：多词取首尾字母并大写（Ada Lovelace → AL）。侧栏底栏 Avatar 的 name 须与可见账户标签一致 — 见 Layouts #layouts-demo-shell。",
   "globals.fabTip": "创建",
   "globals.fabExtended": "新建条目",
   "globals.fabSecondary": "次要 FAB",
