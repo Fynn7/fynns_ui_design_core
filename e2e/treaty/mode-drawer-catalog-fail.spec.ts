@@ -29,8 +29,9 @@ test(`${SLUG}: short alert; detail on InfoHint`, async ({ page }) => {
   await expect(alert).toHaveText("Catalog failed to load");
 
   // Long diagnostic must not live in the alert body.
-  await expect(alert).not.toContainText("connection refused");
+  await expect(alert).not.toContainText("Connection refused");
   await expect(alert).not.toContainText("hot reload");
+  await expect(alert).not.toContainText("server log");
 
   await expect(fail.locator(".fynns-info-hint-trigger")).toBeVisible();
   await expect(

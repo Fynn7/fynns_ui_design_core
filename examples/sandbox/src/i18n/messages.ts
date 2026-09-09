@@ -1502,7 +1502,7 @@ const en = {
   "globals.navDrawerModeSideBetaTip": "Side B",
   "globals.navDrawerModeCatalogFailAlert": "Catalog failed to load",
   "globals.navDrawerModeCatalogFailDetail":
-    "Sample detail for agents: connection refused, busy port, or a long request interrupted by hot reload. Keep this text out of the InlineAlert body — park it on InfoHint tone=danger. Live log paths stay in the tip, not the narrow drawer essay.",
+    "Connection refused, busy port, or a long request interrupted by hot reload. Check the local server log for the full stack.",
   "globals.navDrawerModeCatalogFailDetailAria": "Catalog load failure detail",
   "globals.navDrawerModeCatalogFailRetry": "Retry",
   "globals.navDrawerModeCatalogFailShow": "Show mode catalog load fail",
@@ -3823,7 +3823,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeSideBetaTip": "B 侧",
   "globals.navDrawerModeCatalogFailAlert": "目录加载失败",
   "globals.navDrawerModeCatalogFailDetail":
-    "示例详情：无法连接本地后端、端口占用，或长请求被热重启打断。长诊断放在 InfoHint tone=danger，不要塞进 InlineAlert 正文。日志路径留在 tip，不进窄抽屉长文。",
+    "无法连接、端口占用，或长请求被热重启打断。完整堆栈见本机服务日志。",
   "globals.navDrawerModeCatalogFailDetailAria": "目录加载失败详情",
   "globals.navDrawerModeCatalogFailRetry": "重试",
   "globals.navDrawerModeCatalogFailShow": "显示模式侧栏目录加载失败",
