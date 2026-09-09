@@ -172,6 +172,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | mode drawer primary New not rightmost | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer hide-builtin ControlBlock stack | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar Plus ≠ Switch end | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
+| mode drawer InlineAlert essay | AGENTS Hard rules / Content density | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | mode drawer preference ControlRow flush on pad-inline | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` |
 | SyncSideFilter tooltip covers chrome or list | AGENTS Content density / List | `—` |
 | SyncSideFilter / ToggleGroup segment wash bleed | AGENTS Hard rules | `#toggle-group` |

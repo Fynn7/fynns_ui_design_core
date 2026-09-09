@@ -24,6 +24,8 @@ import {
   FillColumn,
   FolderOpenIcon,
   IconButton,
+  InfoHint,
+  InlineAlert,
   LayoutGridIcon,
   MenuIcon,
   NavigationRail,
@@ -50,7 +52,6 @@ import {
   Surface,
   Switch,
   ControlRow,
-  InfoHint,
   List,
   ListItem,
   PageScroll,
@@ -136,6 +137,7 @@ export function LayoutsPage() {
     "all" | "alpha" | "beta"
   >("all");
   const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
+  const [modeDrawerCatalogFail, setModeDrawerCatalogFail] = useState(true);
   const [bulkDemoSelectMode, setBulkDemoSelectMode] = useState(true);
   const [bulkDemoChecked, setBulkDemoChecked] = useState<Record<BulkDemoKey, boolean>>({
     "bulk-a": true,
@@ -716,6 +718,7 @@ export function LayoutsPage() {
                         size="sm"
                         variant="ghost"
                         aria-label={t("globals.navDrawerModeRefreshTip")}
+                        onClick={() => setModeDrawerCatalogFail(false)}
                       >
                         <RefreshIcon />
                       </IconButton>
@@ -779,18 +782,47 @@ export function LayoutsPage() {
                     },
                   ]}
                 />
-                <NavigationDrawerItem
-                  icon={<FileIcon />}
-                  label={t("globals.navDrawerModeEntryAlpha")}
-                  active={modeDrawerEntry === "alpha"}
-                  onClick={() => setModeDrawerEntry("alpha")}
-                />
-                <NavigationDrawerItem
-                  icon={<FileIcon />}
-                  label={t("globals.navDrawerModeEntryBeta")}
-                  active={modeDrawerEntry === "beta"}
-                  onClick={() => setModeDrawerEntry("beta")}
-                />
+                {modeDrawerCatalogFail ? (
+                  <div id="sandbox-navdrawer-mode-catalog-fail">
+                    <div className="fynns-unit-stack">
+                      <InlineAlert
+                        severity="error"
+                        message={t("globals.navDrawerModeCatalogFailAlert")}
+                      />
+                      <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                        <InfoHint
+                          size="sm"
+                          tone="danger"
+                          content={t("globals.navDrawerModeCatalogFailDetail")}
+                          ariaLabel={t("globals.navDrawerModeCatalogFailDetailAria")}
+                        />
+                        <Button
+                          variant="tonal"
+                          size="sm"
+                          type="button"
+                          onClick={() => setModeDrawerCatalogFail(false)}
+                        >
+                          {t("globals.navDrawerModeCatalogFailRetry")}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <NavigationDrawerItem
+                      icon={<FileIcon />}
+                      label={t("globals.navDrawerModeEntryAlpha")}
+                      active={modeDrawerEntry === "alpha"}
+                      onClick={() => setModeDrawerEntry("alpha")}
+                    />
+                    <NavigationDrawerItem
+                      icon={<FileIcon />}
+                      label={t("globals.navDrawerModeEntryBeta")}
+                      active={modeDrawerEntry === "beta"}
+                      onClick={() => setModeDrawerEntry("beta")}
+                    />
+                  </>
+                )}
               </NavigationDrawer>
             </div>
             <div
@@ -962,6 +994,7 @@ export function LayoutsPage() {
             </div>
             </div>
             <SandboxHelp text={t("globals.navDrawerModeToolsHelp")} />
+            <SandboxHelp text={t("globals.navDrawerModeCatalogFailHelp")} />
             <SandboxHelp text={t("globals.navDrawerInspectorCardHelp")} />
             <SandboxHelp text={t("globals.navDrawerBulkSoftHelp")} />
             <div className="sandbox-globals-row" style={{ alignItems: "center" }}>
@@ -970,6 +1003,13 @@ export function LayoutsPage() {
                   {t("globals.navDrawerBulkShowDemo")}
                 </Button>
               ) : null}
+              <Button
+                size="sm"
+                variant={modeDrawerCatalogFail ? "ghost" : "tonal"}
+                onClick={() => setModeDrawerCatalogFail(true)}
+              >
+                {t("globals.navDrawerModeCatalogFailShow")}
+              </Button>
               <Button size="sm" onClick={() => setDrawerOpen(true)}>
                 {t("globals.navDrawerOpen")}
               </Button>

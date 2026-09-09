@@ -1500,6 +1500,14 @@ const en = {
   "globals.navDrawerModeSideAllTip": "All",
   "globals.navDrawerModeSideAlphaTip": "Side A",
   "globals.navDrawerModeSideBetaTip": "Side B",
+  "globals.navDrawerModeCatalogFailAlert": "Catalog failed to load",
+  "globals.navDrawerModeCatalogFailDetail":
+    "Sample detail for agents: connection refused, busy port, or a long request interrupted by hot reload. Keep this text out of the InlineAlert body — park it on InfoHint tone=danger. Live log paths stay in the tip, not the narrow drawer essay.",
+  "globals.navDrawerModeCatalogFailDetailAria": "Catalog load failure detail",
+  "globals.navDrawerModeCatalogFailRetry": "Retry",
+  "globals.navDrawerModeCatalogFailShow": "Show mode catalog load fail",
+  "globals.navDrawerModeCatalogFailHelp":
+    "Mode drawer catalog load fail (≥ **0.5.215**): keep tools / SyncSideFilter; replace destinations with **short** `InlineAlert` + `InfoHint` `tone=\"danger\"` (long diagnostic) + **end-align** Retry — never paste the full backend essay into `InlineAlert.message`. Toolbar Refresh may clear the fail. Live `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer`. Main-canvas pane cold-start stays `#sandbox-pane-load-error`. Failure: CONSUMER_TREATY mode drawer InlineAlert essay.",
   "globals.navDrawerModeToolsHelp":
     "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Primary Plus and Switch track share one **trailing** edge (core ≥ **0.5.143** pads `--toolbar-end` with the same item-pad-end). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** + **short** visible labels (All / marks — core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp; do not crush long product names into equal columns). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`.",
   "globals.navDrawerBulkAria": "Sample bulk-select sidebar (soft checked rows)",
@@ -3813,6 +3821,14 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeSideAllTip": "全部",
   "globals.navDrawerModeSideAlphaTip": "A 侧",
   "globals.navDrawerModeSideBetaTip": "B 侧",
+  "globals.navDrawerModeCatalogFailAlert": "目录加载失败",
+  "globals.navDrawerModeCatalogFailDetail":
+    "示例详情：无法连接本地后端、端口占用，或长请求被热重启打断。长诊断放在 InfoHint tone=danger，不要塞进 InlineAlert 正文。日志路径留在 tip，不进窄抽屉长文。",
+  "globals.navDrawerModeCatalogFailDetailAria": "目录加载失败详情",
+  "globals.navDrawerModeCatalogFailRetry": "重试",
+  "globals.navDrawerModeCatalogFailShow": "显示模式侧栏目录加载失败",
+  "globals.navDrawerModeCatalogFailHelp":
+    "模式侧栏目录加载失败（≥ **0.5.215**）：保留工具条 / SyncSideFilter；目的地换成**短** `InlineAlert` + `InfoHint` `tone=\"danger\"`（长诊断）+ **末端对齐** Retry — 禁止把完整后端长文塞进 `InlineAlert.message`。工具条 Refresh 可清除失败态。对照 `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer`。主画布栏目冷启动仍用 `#sandbox-pane-load-error`。失败模式：CONSUMER_TREATY mode drawer InlineAlert essay。",
   "globals.navDrawerModeToolsHelp":
     "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。主新建 Plus 与 Switch 轨道**共用右端**（core ≥ **0.5.143** 给 `--toolbar-end` 同套 item-pad-end）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`** + **短**可见标签（全部 / 标记字形 — core ≥ **0.5.140** fullWidth 可收缩 + 省略号 + compact pad 12dp；禁止把长产品名塞进等分列）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`。",
   "globals.navDrawerBulkAria": "示例批量选择侧栏（柔和勾选行）",
