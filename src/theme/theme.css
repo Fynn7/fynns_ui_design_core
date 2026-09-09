@@ -165,6 +165,7 @@
   --fynns-z-sticky: 45;
   --fynns-z-popover: 50;
   --fynns-z-modal: 60;
+  --fynns-z-modal-flyout: 65;
   --fynns-z-toast: 70;
   --fynns-z-tooltip: 8000;
   --fynns-duration-instant: 1ms;

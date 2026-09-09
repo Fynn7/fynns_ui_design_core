@@ -8,10 +8,12 @@
 /*
  * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
  * state layers never kiss the outer edge.
+ * Portaled to body — use `--fynns-z-modal-flyout` (≥ **0.5.213**) so open
+ * menus clear Dialog / Drawer overlays (same as `.fynns-select-menu`).
  */
 .fynns-menu {
   position: fixed;
-  z-index: var(--fynns-z-dropdown);
+  z-index: var(--fynns-z-modal-flyout);
   box-sizing: border-box;
   min-width: 12rem;
   max-width: min(20rem, calc(100vw - 1rem));

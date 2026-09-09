@@ -3276,10 +3276,13 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  * grammar via flyout shadow). Not in-flow. Width: max-content (≥ trigger via
  * JS `minWidth`); viewport `maxWidth` from floatingBox. Options nowrap so
  * long labels widen the panel instead of ellipsizing to the shell.
+ * z = `--fynns-z-modal-flyout` (≥ **0.5.213**) so menus clear Dialog /
+ * Drawer overlays (`--fynns-z-modal`); page Autocomplete panels stay on
+ * `--fynns-z-dropdown`.
  */
 .fynns-select-menu {
   position: fixed;
-  z-index: var(--fynns-z-dropdown);
+  z-index: var(--fynns-z-modal-flyout);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

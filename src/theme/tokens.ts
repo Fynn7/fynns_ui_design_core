@@ -339,7 +339,7 @@ export const LETTER_SPACING_TOKENS = {
 
 /** Z-index layers. `--fynns-z-<key>`. */
 export const Z_TOKENS = {
-  /** Open menus / Select / Autocomplete / SearchBar results. */
+  /** Open menus / Select / Autocomplete / SearchBar results (page chrome). */
   dropdown: "40",
   /**
    * Sticky chrome inside a scroll host (e.g. catalog SearchBar). Must sit
@@ -349,6 +349,12 @@ export const Z_TOKENS = {
   sticky: "45",
   popover: "50",
   modal: "60",
+  /**
+   * Portaled Select / DropdownMenu temporary surfaces that must clear an open
+   * Dialog / Drawer / FullscreenDialog (`modal`). Between modal and toast so
+   * Snackbar stays on top. ≥ **0.5.213**.
+   */
+  "modal-flyout": "65",
   toast: "70",
   tooltip: "8000",
 } as const;

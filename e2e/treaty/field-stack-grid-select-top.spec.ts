@@ -152,3 +152,54 @@ test(`${SLUG_ALIGN} + ${SLUG_FILL}: top-align + fill Card body`, async ({
 
   await expect(card).toBeVisible();
 });
+
+test(`Select menu under Dialog overlay: Project Select options above modal`, async ({
+  page,
+}) => {
+  await openGlobalsDemo(page, "form-recipe", "form");
+  const demo = globalsDemo(page, "form-recipe");
+  await demo.getByRole("button", { name: "Open Dialog form" }).click();
+  const dialog = page.locator(".fynns-dialog-overlay");
+  await expect(dialog).toBeVisible();
+
+  const projectBlock = dialog.locator(".fynns-field-block").filter({
+    has: page.getByText("Project (cwd)", { exact: true }),
+  });
+  const trigger = projectBlock.locator("button.fynns-select-trigger");
+  await trigger.click();
+
+  const menu = page.locator(".fynns-select-menu[role='listbox']");
+  await expect(menu).toBeVisible({ timeout: 10_000 });
+  await expect(
+    menu.getByRole("option", { name: "sample-thesis" }),
+  ).toBeVisible();
+
+  await expect(async () => {
+    const stack = await page.evaluate(() => {
+      const menuEl = document.querySelector(
+        ".fynns-select-menu[role='listbox']",
+      ) as HTMLElement | null;
+      const overlay = document.querySelector(
+        ".fynns-dialog-overlay",
+      ) as HTMLElement | null;
+      if (!menuEl || !overlay) return null;
+      const mz = parseFloat(getComputedStyle(menuEl).zIndex);
+      const oz = parseFloat(getComputedStyle(overlay).zIndex);
+      const box = menuEl.getBoundingClientRect();
+      const top = document.elementFromPoint(
+        box.left + box.width / 2,
+        box.top + Math.min(24, box.height / 2),
+      );
+      return {
+        menuZ: mz,
+        overlayZ: oz,
+        above: mz > oz,
+        hitMenu: !!(top && top.closest(".fynns-select-menu")),
+      };
+    });
+    expect(stack).toBeTruthy();
+    if (!stack) return;
+    expect(stack.above).toBe(true);
+    expect(stack.hitMenu).toBe(true);
+  }).toPass({ timeout: 5_000 });
+});
