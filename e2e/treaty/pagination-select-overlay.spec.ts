@@ -84,7 +84,7 @@ test(`${SLUG_OVERLAY}: open Select portals listbox (not in-flow joined capsule)`
           mb.right <= hb.right + 1,
         menuBelowOrAboveField:
           Math.abs(mb.top - fb.bottom) < 24 || Math.abs(fb.top - mb.bottom) < 24,
-        // Digit-only options: menu hugs ≈ shell (≥ trigger; not locked narrower).
+        // Digit-only options: menu floor = option-measure ≈ content-sized shell.
         menuAtLeastField: mb.width + 1 >= fb.width,
         widthDelta: Math.abs(mb.width - fb.width),
       };

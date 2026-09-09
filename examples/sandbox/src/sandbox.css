@@ -908,6 +908,14 @@
   max-width: 10rem;
 }
 
+/* Teach Select menu hug (≥ 0.5.216): wide field + short options — menu narrower. */
+.sandbox-select-wide-host {
+  width: 100%;
+  max-width: 36rem;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 /* ChatThinking activity gallery — denser than unit siblings. */
 .sandbox-globals-thinking-actions {
   gap: var(--fynns-layout-field-hint-gap);

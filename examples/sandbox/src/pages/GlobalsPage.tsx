@@ -1427,6 +1427,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [autoValue, setAutoValue] = useState("");
   const [autoObjValue, setAutoObjValue] = useState("");
   const [selectObjValue, setSelectObjValue] = useState("teal");
+  const [selectWideShortValue, setSelectWideShortValue] = useState("low");
   const [otpValue, setOtpValue] = useState("");
   const [otpShortValue, setOtpShortValue] = useState("");
   const [numberValue, setNumberValue] = useState(8);
@@ -2015,6 +2016,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               <PlusIcon />
             </IconButton>
           </Tooltip>
+          <div id="sandbox-iconbutton-primary-loading">
+            <Tooltip content={t("globals.iconBtnPrimaryLoading")}>
+              <IconButton
+                variant="primary"
+                loading
+                aria-label={t("globals.iconBtnPrimaryLoading")}
+              >
+                <PlusIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+          <SandboxHelp text={t("globals.iconBtnPrimaryLoadingHelp")} />
           <Tooltip content={t("globals.iconBtnDisabled")}>
             <IconButton disabled aria-label={t("globals.iconBtnDisabled")}>
               <PlusIcon />
@@ -2386,6 +2399,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ]}
                 onChange={setSelectObjValue}
               />
+            </div>
+            <div
+              id="sandbox-select-wide-short"
+              className="sandbox-select-wide-host"
+            >
+              <Select
+                ariaLabel={t("globals.selectWideShortAria")}
+                value={selectWideShortValue}
+                options={[
+                  {
+                    value: "low",
+                    label: t("globals.selectWideShortOptLow"),
+                  },
+                  {
+                    value: "medium",
+                    label: t("globals.selectWideShortOptMed"),
+                  },
+                ]}
+                onChange={setSelectWideShortValue}
+              />
+              <SandboxHelp text={t("globals.selectWideShortHelp")} />
             </div>
             <Select
               disabled

@@ -118,14 +118,17 @@ test(`${SLUG_ALIGN} + ${SLUG_FILL}: top-align + fill Card body`, async ({
         fieldW: fw,
         menuW: mw,
         fieldAtLeastMeasure: fw + 1 >= measurePx,
-        menuAtLeastField: mw + 1 >= fw,
+        /* ≥ 0.5.216: menu floors on option-measure, not stretched Grid field. */
+        menuNearMeasure: Math.abs(mw - measurePx) < 8,
+        menuNarrowerThanField: mw + 24 < fw,
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
     expect(geometry.measurePx).toBeGreaterThan(120);
     expect(geometry.fieldAtLeastMeasure).toBe(true);
-    expect(geometry.menuAtLeastField).toBe(true);
+    expect(geometry.menuNearMeasure).toBe(true);
+    expect(geometry.menuNarrowerThanField).toBe(true);
     expect(geometry.fieldW).toBeGreaterThan(geometry.measurePx + 40);
   }).toPass({ timeout: 10_000 });
 
