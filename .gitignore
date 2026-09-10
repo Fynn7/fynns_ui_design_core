@@ -6,6 +6,13 @@ dist
 examples/sandbox/dist
 *.tgz
 
+# Local LLM repomix dumps (configs stay tracked)
+repomix-local-llm.md
+repomix-scheduling.md
+repomix-primitives-compress.md
+repomix-output.*
+repomix-core-essentials.*
+
 # Playwright / Vitest artifacts
 test-results/
 playwright-report/

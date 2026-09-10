@@ -34,7 +34,7 @@ Preview / Layout demos teach **primitive anatomy** — not any consumer product.
 - **UI shell only:** generic placeholders that could belong to any app
   (`Sample role`, `Sample org`, `Project preferences`, `Compact`,
   `Digests`, `Region`, `sample@example.com`, …)
-- Default primitive labels stay **English or German** (AGENTS.md Language)
+- Default primitive labels stay **English or German** (DESIGN_SYSTEM Language)
 - Consumers copy **structure** from `#form-recipe` / `#timeline` / AGENTS
   recipes and supply **their own** strings in the consumer repo
 
@@ -42,7 +42,7 @@ Preview / Layout demos teach **primitive anatomy** — not any consumer product.
 
 - Cursor rule: this file (alwaysApply)
 - Timeline host gate: [`.cursor/rules/timeline-catalog.mdc`](timeline-catalog.mdc) (on-demand)
-- AGENTS.md Hard rules (**DON'T** paste consumer content / lettered shells)
+- AGENTS.md / docs/DESIGN_SYSTEM.md Hard rules (**DON'T** paste consumer content / lettered shells)
 - CI / local: `npm run check:no-consumer` (denylist scan of sandbox + demo paths)
 
 If a demo could pass for a real consumer screen after removing chrome labels,

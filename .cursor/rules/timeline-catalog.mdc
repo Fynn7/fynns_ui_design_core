@@ -9,7 +9,7 @@ alwaysApply: false
 
 # Timeline catalog (hard gate)
 
-Authority: [`AGENTS.md`](../../AGENTS.md) Content density **Chronological
+Authority: [`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md) Content density **Chronological
 timeline**; slug index [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md);
 pasteable [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 Consumer-reported pattern bugs → `/constrain-then-consumer`.
@@ -72,6 +72,6 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`.
 ## Gate
 
 - This rule (on-demand / Timeline globs — not alwaysApply)
-- AGENTS Hard rules + Content density row
+- DESIGN_SYSTEM Hard rules + Content density row
 - `npm run check:no-consumer` (lettered-shell + consumer-product denylist)
 - Dual-end browser verify when the bug was consumer-reported

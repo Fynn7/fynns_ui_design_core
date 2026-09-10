@@ -2247,12 +2247,12 @@ const en = {
   "globals.segmentedList": "List",
   "globals.selectDisabledAria": "Disabled select",
   "globals.selectHelp":
-    "Stock Keep-set Select — M3 Exposed Dropdown: 40dp outlined shell + **portaled** `.fynns-select-menu` (temporary elevated surface; trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = same option-measure floor** — may be narrower than a full-width form field ≥ **0.5.216**; still grows past a narrow trigger for long labels ≥ **0.5.209**, viewport-capped). Field stays in-flow — **not** SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Autocomplete keeps that). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-select-menu` radius, padding, shadow, overflow, or invent private absolute docks — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu stretched to full-width trigger for short options. Live authority for pager rows-per-page too (`#pagination`). Wide-field short options: `#sandbox-select-wide-short`.",
+    "Stock Keep-set Select — M3 Exposed Dropdown: 40dp outlined shell + **portaled** `.fynns-select-menu` (temporary elevated surface; trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = max(option-measure, live shell width)** — matches a full-width form field ≥ **0.5.220**; still grows past a narrow trigger for long labels ≥ **0.5.209**, viewport-capped). Field stays in-flow — **not** SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Autocomplete keeps that). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-select-menu` radius, padding, shadow, overflow, or invent private absolute docks — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu narrower than stretched trigger. Live authority for pager rows-per-page too (`#pagination`). Wide-field short options: `#sandbox-select-wide-short`.",
   "globals.selectWideShortAria": "Select with short options in a wide host",
   "globals.selectWideShortOptLow": "low (daily)",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "Wide form host + short options (≥ **0.5.216**): portaled menu floors on option-measure — do **not** stretch the menu to the full-width trigger. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu stretched to full-width trigger for short options.",
+    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger.",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -4562,12 +4562,12 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedList": "列表",
   "globals.selectDisabledAria": "禁用选择器",
   "globals.selectHelp":
-    "Stock Keep-set Select — M3 Exposed Dropdown：40dp outlined shell + **门户** `.fynns-select-menu`（临时 elevated 表面；触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = 同一 option-measure 地板** — 可比全宽表单字段更窄 ≥ **0.5.216**；长标签仍可宽于窄触发器 ≥ **0.5.209**，视口封顶）。字段留在文档流 — **不是** SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Autocomplete 仍用连体）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-select-menu` 圆角 / padding / shadow / overflow，也禁止自建私有 absolute dock — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu stretched to full-width trigger for short options。分页每页条数也以本解剖为准（`#pagination`）。宽宿主短选项：`#sandbox-select-wide-short`。",
+    "Stock Keep-set Select — M3 Exposed Dropdown：40dp outlined shell + **门户** `.fynns-select-menu`（临时 elevated 表面；触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = max(option-measure, live shell 宽)** — 对齐全宽表单字段 ≥ **0.5.220**；长标签仍可宽于窄触发器 ≥ **0.5.209**，视口封顶）。字段留在文档流 — **不是** SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Autocomplete 仍用连体）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-select-menu` 圆角 / padding / shadow / overflow，也禁止自建私有 absolute dock — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu narrower than stretched trigger。分页每页条数也以本解剖为准（`#pagination`）。宽宿主短选项：`#sandbox-select-wide-short`。",
   "globals.selectWideShortAria": "宽宿主中的短选项选择器",
   "globals.selectWideShortOptLow": "low（日常）",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "宽表单宿主 + 短选项（≥ **0.5.216**）：门户菜单地板 = option-measure — **禁止**把菜单拉成与全宽触发器同宽。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu stretched to full-width trigger for short options。",
+    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",

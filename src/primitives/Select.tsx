@@ -60,17 +60,17 @@ function flyoutExitMs(): number {
  * Autocomplete / SearchBar keep the Google-style docked shell.
  * Auxiliary row actions (refresh / reload) belong in a sibling
  * `.fynns-control-cluster--end-align` band — not `trailing` beside chevron
- * (see AGENTS.md / sandbox `#field-header`).
+ * (see docs/DESIGN_SYSTEM.md / sandbox `#field-header`).
  * Replaces native `<select>`.
  *
  * Trigger width floors to the widest option (or placeholder) so switching
  * values does not resize the control when the host is content-sized — and so
  * the shell stays aligned under Grid / form fill (≥ **0.5.210** absolute
  * `--fynns-select-measure-min`, not `min(100%, …)`).
- * Open menu: **min-width = option-measure floor** (same as closed trigger
- * floor) — **not** the stretched full-width shell (≥ **0.5.216**); still grows
- * past a narrow trigger when labels are long (`width: max-content`,
- * viewport-capped).
+ * Open menu: **min-width = max(option-measure floor, trigger shell width)**
+ * (≥ **0.5.220** — M3 Exposed Dropdown matches the field; retires the
+ * 0.5.216 “hug short labels under a wide shell” chip). Still grows past a
+ * narrow trigger when labels are long (`width: max-content`, viewport-capped).
  * @see https://m3.material.io/components/menus/overview
  * @see https://developer.android.com/reference/kotlin/androidx/compose/material3/ExposedDropdownMenuBox.composable
  */
@@ -97,6 +97,7 @@ export function Select({
   const [mounted, setMounted] = useState(false);
   const [presenting, setPresenting] = useState(false);
   const [minWidthPx, setMinWidthPx] = useState<number | null>(null);
+  const [shellWidthPx, setShellWidthPx] = useState<number | null>(null);
   const listId = useId();
   const isDisabled = disabled || normalized.length === 0;
   /** In a FieldBlock control band the cluster is one flex row — no content min-width floor. */
@@ -134,6 +135,45 @@ export function Select({
     }
     if (max > 0) setMinWidthPx(max);
   }, [options, placeholder, shrinkInCluster]);
+
+  /** While open, track the live shell width so the menu matches a stretched field. */
+  useLayoutEffect(() => {
+    if (shrinkInCluster) {
+      setShellWidthPx(null);
+      return;
+    }
+    /* Keep last shell width through the exit animation (`open` false but still
+     * `mounted`) so the menu does not flash to option-measure chip width. */
+    if (!open) return;
+    const shell = shellRef.current;
+    if (!shell) return;
+    const sync = () => {
+      const w = shell.getBoundingClientRect().width;
+      if (w > 0) setShellWidthPx(w);
+    };
+    sync();
+    const ro =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(sync) : null;
+    ro?.observe(shell);
+    window.addEventListener("resize", sync);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", sync);
+    };
+  }, [open, shrinkInCluster]);
+
+  useEffect(() => {
+    if (!mounted) setShellWidthPx(null);
+  }, [mounted]);
+
+  const menuMinWidthPx = (() => {
+    if (shrinkInCluster) return null;
+    const parts = [minWidthPx, shellWidthPx].filter(
+      (n): n is number => n != null && n > 0,
+    );
+    if (parts.length === 0) return null;
+    return Math.max(...parts);
+  })();
 
   useEffect(() => {
     if (open) {
@@ -244,13 +284,13 @@ export function Select({
                 ? ({
                     top: displayPos.top,
                     left: displayPos.left,
-                    /* Floor = option-measure (`minWidthPx`), **not** the
-                     * stretched full-width shell. Wide form fields with short
-                     * labels no longer leave a dead empty strip (≥ **0.5.216**).
-                     * Long labels still grow past a narrow trigger via CSS
+                    /* Floor = max(option-measure, live shell width) so a
+                     * stretched FieldBlock does not spawn a short-label
+                     * floating chip under the trigger (≥ **0.5.220**). Long
+                     * labels still grow past a narrow trigger via CSS
                      * `width: max-content`. */
-                    ...(minWidthPx != null && !shrinkInCluster
-                      ? { minWidth: `${minWidthPx}px` }
+                    ...(menuMinWidthPx != null
+                      ? { minWidth: `${menuMinWidthPx}px` }
                       : null),
                     ...(displayPos.maxWidth
                       ? { maxWidth: `${displayPos.maxWidth}px` }

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-primitives-compress.md",
+    "style": "markdown",
+    "compress": true,
+    "removeEmptyLines": true,
+    "removeComments": false,
+    "topFilesLength": 20
+  },
+  "include": [
+    "AGENTS.md",
+    "src/primitives/**/*.tsx",
+    "src/primitives/**/*.ts"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.css",
+      "src/primitives/css/**",
+      "src/primitives/icons.tsx",
+      "docs/**",
+      "llm/**"
+    ]
+  }
+}

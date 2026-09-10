@@ -3274,10 +3274,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 /*
  * Portaled Select listbox — independent elevated surface (M3 Menu Level-2
  * grammar via flyout shadow). Not in-flow. Width: max-content with JS
- * min-width = option-measure floor (same as closed trigger floor — **not**
- * the stretched full-width shell ≥ **0.5.216**). Still grows past a narrow
- * trigger for long labels. Viewport `maxWidth` from floatingBox. Options
- * nowrap so long labels widen the panel instead of ellipsizing to the shell.
+ * min-width = max(option-measure floor, live trigger shell width) so a
+ * stretched FieldBlock matches the Exposed Dropdown field (≥ **0.5.220**;
+ * retires 0.5.216 short-label chip). Still grows past a narrow trigger for
+ * long labels. Viewport `maxWidth` from floatingBox. Options nowrap so long
+ * labels widen the panel instead of ellipsizing to the shell.
  * z = `--fynns-z-modal-flyout` (≥ **0.5.213**) so menus clear Dialog /
  * Drawer overlays (`--fynns-z-modal`); page Autocomplete panels stay on
  * `--fynns-z-dropdown`.

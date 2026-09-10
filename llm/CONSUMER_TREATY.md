@@ -47,14 +47,14 @@ Never consumer-only; never core-only without a living sandbox sample.
 ## Failure mode index
 
 Slug text matches former `## Failure mode …` headings (bookmark-stable).
-Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
+Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic column) + sandbox
 `#anchor`. Do **not** reintroduce long essays here.
 
 | slug | where | sandbox |
 | --- | --- | --- |
 | zero-token sibling consume (no NODE_AUTH_TOKEN) | CONSUME.md | `—` |
 | leftover Packages `.npmrc` auth → E401 on clone | CONSUME.md | `—` |
-| sandbox-only aesthetics | AGENTS Hard rules / check:wysiwyg | `—` |
+| sandbox-only aesthetics | DESIGN_SYSTEM Hard rules / check:wysiwyg | `—` |
 | squashed drawer | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | drill-in / mode sidebar hard-swap (no navKey morph) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | drill-in Back Shared Axis ghost (out layer / double Y rail) | AGENTS shells / Hard rules (≥ **0.5.198**; prepare-frame flash ≥ **0.5.201**–**0.5.203**) | `#layouts-demo-drill-in` |
@@ -65,7 +65,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | main-canvas list\|detail split (hub-split) | AGENTS shells / Hard rules | `#layouts-demo-drill-in` |
 | Card title count glued (OpenSpec8) | AGENTS Card / Collapsible | `#card` |
 | padded destination labels | AGENTS shells / Hard rules | `—` |
-| crushed command / menu chrome proportion | AGENTS Hard rules | `#command-palette` |
+| crushed command / menu chrome proportion | DESIGN_SYSTEM Hard rules | `#command-palette` |
 | wrong shell slot / “Clipped” misread | AGENTS shells / Hard rules | `—` |
 | settings gear in TopAppBar / destination list | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | footer settings gear md disk / asymmetric inset | AGENTS shells / Hard rules | `#layouts-demo-shell` |
@@ -73,9 +73,9 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | drawer footer Avatar↔label packed tight | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | drawer footer middle still packed (flex-grow) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | drawer footer Avatar/gear flush to sheet edge | AGENTS shells / Hard rules | `#layouts-demo-shell` |
-| short account label always fades | AGENTS Hard rules | `#layouts-demo-shell` |
-| NavDrawer footer Avatar initials ignore visible label | AGENTS Hard rules | `#layouts-demo-shell` / `#avatar` |
-| feature panels parked in Settings | AGENTS Hard rules | `#layouts-demo-shell` |
+| short account label always fades | DESIGN_SYSTEM Hard rules | `#layouts-demo-shell` |
+| NavDrawer footer Avatar initials ignore visible label | DESIGN_SYSTEM Hard rules | `#layouts-demo-shell` / `#avatar` |
+| feature panels parked in Settings | DESIGN_SYSTEM Hard rules | `#layouts-demo-shell` |
 | NavigationDrawer Search↔Item vacant band | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawer Card Collapsible stack kissed | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#sandbox-field-header-inline-infohint` |
@@ -84,7 +84,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Input trailing md IconButton in field shell | AGENTS shells / Hard rules | `#field-header` |
 | mode drawer tools↔filter crushed to 4dp | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | ad-hoc Surface / inspector row chaos | AGENTS Card / Collapsible | `#info-hint` |
-| diagnostic prose wall (probe / connection) | AGENTS Hard rules | `#rhythm` |
+| diagnostic prose wall (probe / connection) | DESIGN_SYSTEM Hard rules | `#rhythm` |
 | settings Card FieldHint wall (hint compression) | AGENTS Card / Collapsible | `#field-header` |
 | language control in TopAppBar | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | Select language pill in TopAppBar | AGENTS shells / Hard rules | `—` |
@@ -101,25 +101,25 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | UI · — punctuation in chrome | AGENTS Language / Hard rules | `#list` |
 | trailingSupportingText right-hug drift | AGENTS shells / Hard rules | `#list` |
 | trailing meta end-ink (staggered date starts) | AGENTS shells / Hard rules | `#timeline` |
-| status meta far from --with-end action | AGENTS Hard rules | `#list` |
+| status meta far from --with-end action | DESIGN_SYSTEM Hard rules | `#list` |
 | loose IconButton pair in control-cluster | AGENTS Toolbar / unit rhythm | `#list` |
 | status kisses first List IconButton | AGENTS Content density / List | `#sandbox-list-status-action` |
-| List trailingSupportingText underlaps --with-end IconButtons | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
-| ListItem Tab focus ring cracked by --with-end overlay | AGENTS Hard rules / List | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
+| List trailingSupportingText underlaps --with-end IconButtons | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
+| ListItem Tab focus ring cracked by --with-end overlay | DESIGN_SYSTEM Hard rules / List | `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action` |
 | fat Surface / Card per catalog row | AGENTS Content density / List | `#list` / `#page-scroll` |
-| recipe catalog fat Card FieldHint essays / ChipSet tag soup | AGENTS Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#list` |
+| recipe catalog fat Card FieldHint essays / ChipSet tag soup | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#list` |
 | ListItem trailing IconButtons stacked vertically | AGENTS shells / Hard rules | `#list` |
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
-| PageScroll Card sheet-max-width under ControlRow | AGENTS Hard rules / Card | `#page-scroll` |
-| PageScroll form Card chat-max-width column | AGENTS Hard rules / Card | `#page-scroll` |
-| PageScroll content-column soft reading-width gutters | AGENTS Hard rules / Card | `#page-scroll` |
-| FullscreenDialog settings column sheet-max / content-sized | AGENTS Hard rules / overlays | `#overlays` |
+| PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
+| PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
+| PageScroll content-column soft reading-width gutters | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
+| FullscreenDialog settings column sheet-max / content-sized | DESIGN_SYSTEM Hard rules / overlays | `#overlays` |
 | catalog ControlRow sinks below drawer labels | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | BusyRegion cold body + pager chrome siblings | AGENTS Busy/Loading | `#busy-region` |
 | empty ControlRow label as action footer | AGENTS Toolbar / unit rhythm | `#rhythm` |
-| orphan recovery CTA left-aligned | AGENTS Hard rules | `#sandbox-inline-alert-recovery` |
-| Banner icon/dismiss top-pinned vs multi-line | AGENTS Hard rules / Content density | `#banner` |
-| Banner dismiss as sibling IconButton outside strip | AGENTS Hard rules / Content density | `#banner` |
+| orphan recovery CTA left-aligned | DESIGN_SYSTEM Hard rules | `#sandbox-inline-alert-recovery` |
+| Banner icon/dismiss top-pinned vs multi-line | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
+| Banner dismiss as sibling IconButton outside strip | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
 | Dialog foot Delete leftmost of Cancel | AGENTS Dialog / overlays | `#timeline` |
 | twin Button loading rings in one control-cluster | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | BusyRegion + chrome loading stack | AGENTS Busy/Loading | `#busy-region` |
@@ -138,46 +138,46 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | private labeled Button cluster gap | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | labeled Button cluster gap stacked to 12dp | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | service control status Chip + label (information redundancy) | AGENTS forms / FieldStack | `#rhythm` |
-| CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
-| ControlRow / control-cluster Buttons left-packed under label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm` |
-| ControlRow label crushed to 2px / hairline sliver | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
-| path meta paints over ControlRow label | AGENTS Hard rules / Content density | `#sandbox-rhythm-action-end` |
-| outcome Chip as status (suggestion/assist / StatusChip fake Badge) | AGENTS Hard rules / Content density | `#list` / `#rhythm` status |
-| List path catalog Switch+Chip+danger disk soup | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
-| List scroll-well trailing meta kisses overlay rail | AGENTS Hard rules / Content density | `#sandbox-list-repo-path-actions` |
-| ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | AGENTS Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
-| FieldHint restates ToggleGroup / Tabs labels (information redundancy) | AGENTS Hard rules / Content density | `#rhythm` |
+| CLI/tool probe: name label + status Chip + FieldHint essay (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
+| ControlRow / control-cluster Buttons left-packed under label | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` / `#sandbox-rhythm-install-cta-end` / `#rhythm` |
+| ControlRow label crushed to 2px / hairline sliver | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` |
+| path meta paints over ControlRow label | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-action-end` |
+| outcome Chip as status (suggestion/assist / StatusChip fake Badge) | DESIGN_SYSTEM Hard rules / Content density | `#list` / `#rhythm` status |
+| List path catalog Switch+Chip+danger disk soup | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` / `#list` |
+| List scroll-well trailing meta kisses overlay rail | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
+| ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
+| FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
-| Pagination Select invents absolute overlay | AGENTS Hard rules / Content density | `#pagination` / `#select` |
-| Select menu stretched to full-width trigger for short options | AGENTS Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
-| Pagination Select siblings center on expanded height | AGENTS Hard rules / Content density | `#pagination` |
-| Pagination bar gaps crushed to 4dp | AGENTS Hard rules / Content density | `#pagination` |
-| Pagination Select option repeats noun | AGENTS Hard rules / Content density | `#pagination` |
-| consumer restyles keep-set chrome radius | AGENTS Hard rules / Consumer apps | `#select` / `#menu` |
-| KPI stat grid stacks full-width (undefined layout token) | AGENTS Hard rules | `—` |
+| Pagination Select invents absolute overlay | DESIGN_SYSTEM Hard rules / Content density | `#pagination` / `#select` |
+| Select menu narrower than stretched trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
+| Pagination Select siblings center on expanded height | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
+| Pagination bar gaps crushed to 4dp | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
+| Pagination Select option repeats noun | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
+| consumer restyles keep-set chrome radius | DESIGN_SYSTEM Hard rules / Consumer apps | `#select` / `#menu` |
+| KPI stat grid stacks full-width (undefined layout token) | DESIGN_SYSTEM Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |
 | ListItem zero-gap pill fuse | AGENTS Content density / List | `#list` |
 | Divider between contained ListItems | AGENTS Content density / List | `#list` |
 | Drawer tip-fill stretches IconButton toolbars | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer sort+new cluster start-packed | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
-| bulk toolbar wrong glyphs | AGENTS Hard rules | `#icons` |
+| bulk toolbar wrong glyphs | DESIGN_SYSTEM Hard rules | `#icons` |
 | bulk select teal wall (checked → active) | AGENTS forms / FieldStack | `#layouts-demo-navigation-drawer` |
 | expandable List `--with-end` trailing mid-gap | AGENTS shells / Hard rules | `#list` |
-| expandable parent row kisses nested member | AGENTS Hard rules | `#list` |
-| expandable group count kisses `--with-end` icons | AGENTS Hard rules | `#list` |
+| expandable parent row kisses nested member | DESIGN_SYSTEM Hard rules | `#list` |
+| expandable group count kisses `--with-end` icons | DESIGN_SYSTEM Hard rules | `#list` |
 | twin section InfoHint (TopAppBar + mode drawer) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | bulk select uses ClipboardIcon | AGENTS forms / FieldStack | `#layouts-demo-navigation-drawer` |
 | mode drawer primary New not rightmost | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer hide-builtin ControlBlock stack | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar Plus ≠ Switch end | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
-| mode drawer InlineAlert essay | AGENTS Hard rules / Content density | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
+| mode drawer InlineAlert essay | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | mode drawer preference ControlRow flush on pad-inline | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` |
 | SyncSideFilter tooltip covers chrome or list | AGENTS Content density / List | `—` |
-| SyncSideFilter / ToggleGroup segment wash bleed | AGENTS Hard rules | `#toggle-group` |
+| SyncSideFilter / ToggleGroup segment wash bleed | DESIGN_SYSTEM Hard rules | `#toggle-group` |
 | SyncSideFilter long labels crush / flush pad | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` / `#toggle-group` |
 | CodeBlock editable selection stripes | AGENTS CodeBlock | `#code-block` |
 | Collapsible inside List (skeleton crush) | AGENTS Content density / List | `#list` |
@@ -185,13 +185,13 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | tiny InfoHint in TopAppBar / toolbar chrome | AGENTS forms / FieldStack | `—` |
 | Surface + FieldHeader as titled table shell | AGENTS Card / Collapsible | `#table` |
 | wide Table wheel scrolls PageScroll (no wheel→X) | AGENTS Scrollbar / Content density | `#table` |
-| long Table dumps all rows | AGENTS Hard rules / Content density | `#table` |
-| long List dumps all rows | AGENTS Hard rules / Content density | `#list` |
+| long Table dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#table` |
+| long List dumps all rows | DESIGN_SYSTEM Hard rules / Content density | `#list` |
 | List tree wrapped in divs / buttons in leading | AGENTS Content density / List | `#list` |
 | ListItem kind via wrapping div / start rail | AGENTS shells / Hard rules | `#list` |
 | builtin ListItem looks like a square / chip island | AGENTS Content density / List | `#list` |
 | List icon↔copy / three-line stack crushed | AGENTS Content density / List | `#list` |
-| duration meta glued (`1m47s`) | AGENTS Hard rules | `#list` |
+| duration meta glued (`1m47s`) | DESIGN_SYSTEM Hard rules | `#list` |
 | List trailing stats drift across rows | AGENTS shells / Hard rules | `#list` |
 | Card head actions wrap into a tall stack | AGENTS Card / Collapsible | `#card` |
 | orphan draft save/discard outside Card | AGENTS Card / Collapsible | `#sandbox-card-draft-actions` |
@@ -208,7 +208,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Card head Select centers on expanded panel | AGENTS Card / Collapsible | `#sandbox-card-head-select` |
 | Card head Select↔Button 4dp kiss | AGENTS Card / Collapsible | `#sandbox-card-head-select` |
 | List row copy cramped on the start edge | AGENTS Content density / List | `#list` |
-| Chip as table-cell status / mapping kind | AGENTS Hard rules | `#table` |
+| Chip as table-cell status / mapping kind | DESIGN_SYSTEM Hard rules | `#table` |
 | Select refresh crammed beside chevron | AGENTS forms / FieldStack | `#field-header` |
 | Select row-action IconButton drifts when open | AGENTS forms / FieldStack | `#field-header` |
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
@@ -218,10 +218,10 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | AGENTS shells / Hard rules | `#form-recipe` |
-| overlay scrollbar paints through chrome heads | AGENTS Hard rules | `#drawer-nested-scroll` |
+| overlay scrollbar paints through chrome heads | DESIGN_SYSTEM Hard rules | `#drawer-nested-scroll` |
 | modal Dialog scrollbar flash on enter | AGENTS Dialog / overlays | `#timeline` |
 | table row action not sharing one trailing edge | AGENTS shells / Hard rules | `#table` |
-| table map cluster top-hugged in a tall cell | AGENTS Hard rules | `#table` |
+| table map cluster top-hugged in a tall cell | DESIGN_SYSTEM Hard rules | `#table` |
 | chart tooltip locked to series-value Y | AGENTS chart recipe | `#chart` |
 | chart tooltip loose unit-stack spacing | AGENTS chart recipe | `#chart` |
 | chart tooltip clipped at plot edge | AGENTS shells / Hard rules | `#chart` |
@@ -252,10 +252,10 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | BusyRegion fill BusyStack top overflow in PageScroll | AGENTS Busy/Loading | `#sandbox-busy-region-page-scroll-fill` |
 | section FieldHint + pane cold-start BusyRegion in one well | AGENTS Busy/Loading | `#busy-region` |
 | EmptyState parks top-left in destination canvas | AGENTS shells / Hard rules | `#empty-state` |
-| master–detail / content max-width token missing | AGENTS Hard rules | `#layouts-demo-drill-in` |
+| master–detail / content max-width token missing | DESIGN_SYSTEM Hard rules | `#layouts-demo-drill-in` |
 | canvas FillColumn megacard zero inset | AGENTS shells / Hard rules | `#layouts-demo-fill-column` |
 | IconButton loading spinner + glyph overlap | AGENTS Toolbar / unit rhythm | `#rhythm` |
-| IconButton busy swaps CircularProgress instead of loading | AGENTS Hard rules / Busy | `#icon-button` / `#sandbox-iconbutton-primary-loading` |
+| IconButton busy swaps CircularProgress instead of loading | DESIGN_SYSTEM Hard rules / Busy | `#icon-button` / `#sandbox-iconbutton-primary-loading` |
 | bare ControlRow + FieldHint zero gap (PageScroll section) | AGENTS forms / FieldStack | `#rhythm` |
 | ControlRow primary leftmost in mixed cluster | AGENTS Toolbar / unit rhythm | `—` |
 | section-body IconButton sm | AGENTS Toolbar / unit rhythm | `#rhythm` |
@@ -278,7 +278,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | EndAside dense labeled Button strip (information redundancy) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside ControlRow label crush | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside icon tonal disks | AGENTS shells / Hard rules | `#layouts-demo-shell` |
-| Export menu uses DownloadIcon | AGENTS Hard rules | `#split-button` |
+| Export menu uses DownloadIcon | DESIGN_SYSTEM Hard rules | `#split-button` |
 
 ## Related docs
 

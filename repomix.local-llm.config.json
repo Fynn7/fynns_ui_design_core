@@ -1,0 +1,34 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-local-llm.md",
+    "style": "markdown",
+    "compress": true,
+    "removeEmptyLines": true,
+    "removeComments": false,
+    "topFilesLength": 15
+  },
+  "include": [
+    "AGENTS.md",
+    "package.json",
+    "src/index.ts",
+    "src/layout/**/*.ts",
+    "src/layout/**/*.tsx",
+    "src/scheduling/**/*.ts"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "src/theme/tokens.ts",
+      "llm/**",
+      "docs/**",
+      "openwiki/**",
+      "examples/**",
+      "e2e/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.css"
+    ]
+  }
+}

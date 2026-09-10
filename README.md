@@ -11,7 +11,7 @@ is public).
 
 | Need | Doc |
 | --- | --- |
-| Design language, Hard rules, keep-set | [`AGENTS.md`](AGENTS.md) |
+| Design language, Hard rules, keep-set | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)（OpenCode 常驻用精简 [`AGENTS.md`](AGENTS.md)；本地小模型见 [`llm/LOCAL_LLM.md`](llm/LOCAL_LLM.md)） |
 | Install / consume | [`llm/CONSUME.md`](llm/CONSUME.md) |
 | Consumer pasteable rule + failure index | [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc), [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md) |

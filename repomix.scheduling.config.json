@@ -1,0 +1,24 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-scheduling.md",
+    "style": "markdown",
+    "compress": true,
+    "removeEmptyLines": true,
+    "removeComments": false,
+    "topFilesLength": 10
+  },
+  "include": [
+    "AGENTS.md",
+    "src/scheduling/**/*.ts"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "**/*.test.ts",
+      "docs/**",
+      "llm/**"
+    ]
+  }
+}

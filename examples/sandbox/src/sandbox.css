@@ -908,7 +908,7 @@
   max-width: 10rem;
 }
 
-/* Teach Select menu hug (≥ 0.5.216): wide field + short options — menu narrower. */
+/* Teach Select menu match (≥ 0.5.220): wide field + short options — menu ≈ shell. */
 .sandbox-select-wide-host {
   width: 100%;
   max-width: 36rem;

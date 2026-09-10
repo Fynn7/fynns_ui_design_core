@@ -118,17 +118,17 @@ test(`${SLUG_ALIGN} + ${SLUG_FILL}: top-align + fill Card body`, async ({
         fieldW: fw,
         menuW: mw,
         fieldAtLeastMeasure: fw + 1 >= measurePx,
-        /* ≥ 0.5.216: menu floors on option-measure, not stretched Grid field. */
-        menuNearMeasure: Math.abs(mw - measurePx) < 8,
-        menuNarrowerThanField: mw + 24 < fw,
+        /* ≥ 0.5.220: menu matches stretched Grid field (not a short-label chip). */
+        menuMatchesField: Math.abs(mw - fw) < 8,
+        menuAtLeastMeasure: mw + 1 >= measurePx,
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
     expect(geometry.measurePx).toBeGreaterThan(120);
     expect(geometry.fieldAtLeastMeasure).toBe(true);
-    expect(geometry.menuNearMeasure).toBe(true);
-    expect(geometry.menuNarrowerThanField).toBe(true);
+    expect(geometry.menuMatchesField).toBe(true);
+    expect(geometry.menuAtLeastMeasure).toBe(true);
     expect(geometry.fieldW).toBeGreaterThan(geometry.measurePx + 40);
   }).toPass({ timeout: 10_000 });
 
