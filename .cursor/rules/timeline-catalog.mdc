@@ -72,6 +72,6 @@ Consumer-reported pattern bugs → `/constrain-then-consumer`.
 ## Gate
 
 - This rule (on-demand / Timeline globs — not alwaysApply)
-- AGENTS Hard rules + Content density row
+- DESIGN_SYSTEM Hard rules + Content density row
 - `npm run check:no-consumer` (lettered-shell + consumer-product denylist)
 - Dual-end browser verify when the bug was consumer-reported

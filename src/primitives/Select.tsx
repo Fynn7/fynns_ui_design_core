@@ -60,7 +60,7 @@ function flyoutExitMs(): number {
  * Autocomplete / SearchBar keep the Google-style docked shell.
  * Auxiliary row actions (refresh / reload) belong in a sibling
  * `.fynns-control-cluster--end-align` band — not `trailing` beside chevron
- * (see AGENTS.md / sandbox `#field-header`).
+ * (see docs/DESIGN_SYSTEM.md / sandbox `#field-header`).
  * Replaces native `<select>`.
  *
  * Trigger width floors to the widest option (or placeholder) so switching
