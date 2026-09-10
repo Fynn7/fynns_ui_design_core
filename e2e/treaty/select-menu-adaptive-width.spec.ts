@@ -1,7 +1,7 @@
 /**
  * Select portaled menu:
  * - ≥ **0.5.209**: grows past a narrow trigger for long option labels
- * - ≥ **0.5.216**: hugs short labels under a wide full-width field
+ * - ≥ **0.5.220**: matches a stretched full-width field (not a short-label chip)
  * Sandbox: #select / #sandbox-select-wide-short
  */
 import { test, expect } from "@playwright/test";
@@ -62,7 +62,9 @@ test("Select menu grows past narrow trigger for long option labels", async ({
   }).toPass({ timeout: 10_000 });
 });
 
-test("Select menu hugs short options under a wide field", async ({ page }) => {
+test("Select menu matches stretched wide field for short options", async ({
+  page,
+}) => {
   await openGlobalsDemo(page, "select", "select");
   const demo = globalsDemo(page, "select");
   await expect(demo).toBeVisible();
@@ -88,12 +90,12 @@ test("Select menu hugs short options under a wide field", async ({ page }) => {
       return {
         fieldWidth: fb.width,
         menuWidth: mb.width,
-        menuNarrowerThanField: mb.width + 24 < fb.width,
+        menuMatchesField: Math.abs(mb.width - fb.width) < 8,
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
     expect(geometry.fieldWidth).toBeGreaterThan(280);
-    expect(geometry.menuNarrowerThanField).toBe(true);
+    expect(geometry.menuMatchesField).toBe(true);
   }).toPass({ timeout: 10_000 });
 });

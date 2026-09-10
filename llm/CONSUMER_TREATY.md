@@ -152,7 +152,7 @@ Details → **AGENTS.md Hard rules** (or the AGENTS / topic column) + sandbox
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
 | Pagination Select invents absolute overlay | AGENTS Hard rules / Content density | `#pagination` / `#select` |
-| Select menu stretched to full-width trigger for short options | AGENTS Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
+| Select menu narrower than stretched trigger | AGENTS Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
 | Pagination Select siblings center on expanded height | AGENTS Hard rules / Content density | `#pagination` |
 | Pagination bar gaps crushed to 4dp | AGENTS Hard rules / Content density | `#pagination` |
 | Pagination Select option repeats noun | AGENTS Hard rules / Content density | `#pagination` |
