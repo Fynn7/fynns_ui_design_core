@@ -7,7 +7,7 @@ alwaysApply: true
 
 本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节在
 `@fynn7/ui-design-core`（`AGENTS.md`、`llm/CONSUME.md`、`llm/PERF.md`）。
-失败模式 slug 索引：`llm/CONSUMER_TREATY.md`（长文已迁出；细节在 AGENTS Hard rules + sandbox）。
+失败模式 slug 索引：`llm/CONSUMER_TREATY.md`（长文已迁出；细节在 `docs/DESIGN_SYSTEM.md` Hard rules + sandbox）。
 
 **可见 UI 标点（硬）：** 强烈不推荐中间点 **`·`** 与破折号 **`—`**（装饰性
 **`–`** 当字段粘合符同禁）。组织 → `supportingText`，日期 →

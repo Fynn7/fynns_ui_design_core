@@ -1,13 +1,14 @@
 ---
 description: >-
   @fynns/ui keep-set — tokens only, props-only consumers, publish+sandbox;
-  full catalog lives in AGENTS.md (read on demand, do not duplicate here).
+  full catalog lives in docs/DESIGN_SYSTEM.md (read on demand, do not duplicate here).
 alwaysApply: true
 ---
 
 # fynns UI design system (pointer)
 
-Authority: [`AGENTS.md`](../../AGENTS.md). Install / consume:
+Authority: slim [`AGENTS.md`](../../AGENTS.md) + full SoT
+[`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md). Install / consume:
 [`llm/CONSUME.md`](../../llm/CONSUME.md). Treaty **slug index** (no essays):
 [`llm/CONSUMER_TREATY.md`](../../llm/CONSUMER_TREATY.md). Pasteable consumer
 rule: [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
@@ -33,8 +34,8 @@ Publish: [`docs/package-propagation.md`](../../docs/package-propagation.md).
 - Destination apps: prefer `DestinationAppShell`; inspector = `EndAside`;
   blocking/sectional busy = `BusyScrim` / `BusyRegion` (+ `runBusyTask`).
 - Dense chrome lists / Timeline / 「下一个」 → use the matching **on-demand**
-  rules (`chrome-proportion`, `timeline-catalog`, `m3-next`) or read AGENTS
-  sections — do not re-paste catalogs into this file.
+  rules (`chrome-proportion`, `timeline-catalog`, `m3-next`) or read
+  DESIGN_SYSTEM sections — do not re-paste catalogs into this file.
 
-When unsure about a primitive or density recipe: **Read `AGENTS.md`** (Content
-density / Hard rules) rather than guessing from memory.
+When unsure about a primitive or density recipe: **Read `docs/DESIGN_SYSTEM.md`**
+(Content density / Hard rules) rather than guessing from memory.

@@ -13,17 +13,17 @@ dependency-free React primitives. Consumed as source via the `@fynns/ui` alias
 into **`@fynn7/ui-design-core`**.
 
 **Installing into a consumer repo (zero-token sibling + Vite alias):** follow
-[`llm/CONSUME.md`](llm/CONSUME.md). Day-to-day = public sibling checkout
+[`llm/CONSUME.md`](../llm/CONSUME.md). Day-to-day = public sibling checkout
 `../fynns_ui_design_core` + `file:` link — **no** `NODE_AUTH_TOKEN` /
 GitHub Packages login. Helper:
 `scripts/ensure-sibling-ui-core.mjs` / `npm run consume:install -- --target
 <consumer-root> --sibling`. Machine contract:
-[`llm/consume.json`](llm/consume.json). Do **not** use a git submodule for
+[`llm/consume.json`](../llm/consume.json). Do **not** use a git submodule for
 day-to-day consume. Publish / optional Packages bumps:
-[`docs/package-propagation.md`](docs/package-propagation.md).
-**Public API purge / migration:** [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md).
+[`docs/package-propagation.md`](package-propagation.md).
+**Public API purge / migration:** [`llm/BREAKING_PURGE.md`](../llm/BREAKING_PURGE.md).
 **Short prompts:** still start from `llm/CONSUME.md` (OpenCode rule template:
-[`llm/opencode-fynns-ui-consume.md`](llm/opencode-fynns-ui-consume.md)) — do not
+[`llm/opencode-fynns-ui-consume.md`](../llm/opencode-fynns-ui-consume.md)) — do not
 expect a long task brief.
 
 ## Design philosophy & UX principles
@@ -199,11 +199,11 @@ belong in a consumer’s own doc.
     **Sandbox / core demos must stay product-agnostic:** never paste consumer
     app copy into Globals, Preview, Layout templates, or primitive defaults —
     invent generic placeholders (see Hard rules /
-    [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc)).
+    [`.cursor/rules/no-consumer-content.mdc`](../.cursor/rules/no-consumer-content.mdc)).
 11. **Performance discipline.** Dense inspectors, live token drafts, catalog
     pages, and `ClippedNavShell` crowding checks must not thrash the main thread
     (observer↔probe loops, tip forests, per-tick history). Authoritative rules:
-    [`llm/PERF.md`](llm/PERF.md). Agents building playgrounds / shells / token
+    [`llm/PERF.md`](../llm/PERF.md). Agents building playgrounds / shells / token
     GUIs **must** read that file before coding.
 
 ## Hard rules (Do / Don't)
@@ -213,7 +213,7 @@ belong in a consumer’s own doc.
 - **DO** style with `--fynns-*` tokens only: `var(--fynns-color-accent)`,
   `var(--fynns-space-3)`, `var(--fynns-radius-md)`, `var(--fynns-shadow-lg)`,
   `var(--fynns-duration-fast)`, etc. Missing value →
-  [`src/theme/tokens.ts`](src/theme/tokens.ts) + `npm run gen:theme`.
+  [`src/theme/tokens.ts`](../src/theme/tokens.ts) + `npm run gen:theme`.
 - **DO** group inspector / settings / Dialog form options with **`FieldStack`**
   by **semantic kind** (identity fields together, radio/checkbox choices
   together, preference switches together, …) — not one flat list of FieldBlocks
@@ -496,7 +496,7 @@ belong in a consumer’s own doc.
   stack gap with consumer CSS (`--fynns-chatmessage-body-stack-gap` **16dp**).
 - **DON'T** reintroduce measure probes under `ClippedNavShell` /
   MutationObserver hosts; default-open dense sandbox inspectors full of
-  InfoHint/Slider — see [`llm/PERF.md`](llm/PERF.md). Don't reintroduce
+  InfoHint/Slider — see [`llm/PERF.md`](../llm/PERF.md). Don't reintroduce
   `@radix-ui/*` / `sonner` / purged Toast/Popover/Panel APIs. Don't drop a
   sandbox demo while the symbol stays exported (or reverse) — atomic
   unexport+delete+demo+BREAKING_PURGE; `npm run check:wysiwyg`.
@@ -531,7 +531,7 @@ belong in a consumer’s own doc.
   because ListItems are taller: foot **after** the List (unit-stack sibling);
   short lists / Dialog / `Pagination` exempt. Live `#list`.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
-  placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](.cursor/rules/no-consumer-content.mdc).
+  placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](../.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
   short status + `InfoHint` on the ControlRow. Settings Card policy: compress
   to Tooltip / label-row `InfoHint` `sm` (≤1 per head); `FieldHint` =
@@ -611,7 +611,7 @@ belong in a consumer’s own doc.
   autoGrow; `autoGrow={false}` only for height-resolved fill hosts); set main
   app chrome to `--fynns-font-serif`. Live `#form-recipe` / `#code-block`.
 
-**Consumer failure-mode slug index:** [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md)
+**Consumer failure-mode slug index:** [`llm/CONSUMER_TREATY.md`](../llm/CONSUMER_TREATY.md)
 (details live in this file’s Hard rules + Content density + sandbox demos — do
 not reintroduce long treaty essays).
 
@@ -630,8 +630,8 @@ or use a temporary `file:` / `npm link`). If the keep-set cannot meet the
 requirement after exploring `AGENTS.md` + sandbox Globals, **stop and tell the
 user explicitly** that the work must land in `fynns_ui_design_core` first, then
 the consumer only calls the new API. Install / pin rules:
-[`llm/CONSUME.md`](llm/CONSUME.md). Pasteable always-on consumer rule:
-[`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc).
+[`llm/CONSUME.md`](../llm/CONSUME.md). Pasteable always-on consumer rule:
+[`llm/consumer-cursor-rule.mdc`](../llm/consumer-cursor-rule.mdc).
 Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 
 **High-traffic sandbox anchors (start here):**
@@ -660,9 +660,9 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 
 ## Tokens
 
-Source of truth: [`src/theme/tokens.ts`](src/theme/tokens.ts) +
-[`src/theme/motionTokens.ts`](src/theme/motionTokens.ts). Generated CSS:
-[`src/theme/theme.css`](src/theme/theme.css) (`:root { --fynns-* }` + light
+Source of truth: [`src/theme/tokens.ts`](../src/theme/tokens.ts) +
+[`src/theme/motionTokens.ts`](../src/theme/motionTokens.ts). Generated CSS:
+[`src/theme/theme.css`](../src/theme/theme.css) (`:root { --fynns-* }` + light
 override + reset + scrollbar + reduced-motion). Naming: `--fynns-<group>-<key>`
 (the `misc` group has no sub-prefix).
 
@@ -704,7 +704,7 @@ Color tokens (`--fynns-color-*`):
 - State layers (`--fynns-state-*`): `hover` 8%, `focus` 10%, `pressed` 12%,
   `dragged` 16% — used via `color-mix(...)` for interactive overlays.
 - Elevation lookups (TS only, not CSS vars): `ELEVATION_TOKENS`. M3 reference
-  mirror: [`llm/m3-draft-tokens.md`](llm/m3-draft-tokens.md).
+  mirror: [`llm/m3-draft-tokens.md`](../llm/m3-draft-tokens.md).
 
 Spacing: prefer t-shirt keys `--fynns-space-{2xs,xs,sm,md,lg,xl,2xl,3xl}`;
 legacy numeric keys (`--fynns-space-1` …) remain as aliases. Standard chrome
@@ -738,7 +738,7 @@ operator, module, constant, constant-named, escape, invalid). Distilled from
 cpptools VS dark/light TextMate themes — readable CodeBlock ink, not a full VS
 Code grammar. Zero-dep tokenizer in `src/primitives/codeHighlight/`; no
 Shiki/Prism. **Consumer custom languages:** see
-[`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md)
+[`llm/AGENT_INTERFACES.md`](../llm/AGENT_INTERFACES.md)
 (`SimpleHighlightProfile` / `registerHighlightLanguage`).
 
 For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
@@ -747,7 +747,7 @@ For the exhaustive list, read `theme.css` (generated) or `tokens.ts` (typed).
 
 **Breaking surface:** only symbols demoed in sandbox Globals + Layouts + Preview
 are public. Removed APIs and migration table:
-[`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md). **Surface sync:**
+[`llm/BREAKING_PURGE.md`](../llm/BREAKING_PURGE.md). **Surface sync:**
 `npm run check:wysiwyg` — every barrel value needs a demo (or companion);
 Removed-table names must not be exported; never companion-park
 `src/primitives/<Name>.tsx`. Import from `@fynns/ui`. Components emit `.fynns-*`
@@ -863,7 +863,7 @@ classes.
     full-width text above toolbar — **do not auto-collapse a non-empty draft**
     (narrow hosts can hit update-depth loops). Cap:
     `--fynns-chat-composer-max-height` (13rem). Layout authority:
-    [`llm/CHAT_COMPOSER_LAYOUT.md`](llm/CHAT_COMPOSER_LAYOUT.md).
+    [`llm/CHAT_COMPOSER_LAYOUT.md`](../llm/CHAT_COMPOSER_LAYOUT.md).
   - **Message extras:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
@@ -874,8 +874,8 @@ classes.
     `actions`: IconButton + Tooltip for Copy / Regenerate + More menu.
     Body sibling stack gap **16dp** from core — bare strings promoted to
     `.fynns-chat-message-prose`; do **not** patch with consumer CSS. ARIA:
-    [`llm/CHAT_ARIA_PARITY.md`](llm/CHAT_ARIA_PARITY.md). User edit UX (not in
-    core yet): [`llm/CHAT_USER_EDIT_UX.md`](llm/CHAT_USER_EDIT_UX.md). Live
+    [`llm/CHAT_ARIA_PARITY.md`](../llm/CHAT_ARIA_PARITY.md). User edit UX (not in
+    core yet): [`llm/CHAT_USER_EDIT_UX.md`](../llm/CHAT_USER_EDIT_UX.md). Live
     `#activity` / `#thinking`.
 - **Overlay / sheets:** Dialog / DialogShell / ConfirmDialog / FullscreenDialog
   (M3 basic + full-screen only). `ConfirmDialog` = title + supporting + foot
@@ -925,7 +925,7 @@ classes.
   commit on pointerup). Crowding watches main-column overflow too; predict
   before open paint; must **not** fire while drawer/EndAside mid-drag or
   EndAside closing. Length reads without measure probes under MutationObserver
-  ([`llm/PERF.md`](llm/PERF.md)). **`EndAside`:** width morph (≥ **0.5.86**
+  ([`llm/PERF.md`](../llm/PERF.md)). **`EndAside`:** width morph (≥ **0.5.86**
   track stays mounted — toggle `open` only); desktop leading-edge resize;
   main ≤32rem → end-edge overlay; ≤56.25rem → bottom sheet
   `min(52dvh, 22rem)`. Live `#layouts-demo-shell`.
@@ -957,7 +957,7 @@ classes.
   scroll + inner `.fynns-content-column`), SplitPane (in-content resize — not
   EndAside), Tree / TreeItem (`role=tree` — not nav destinations), Timeline /
   TimelineItem (flat + detail only — see
-  [`.cursor/rules/timeline-catalog.mdc`](.cursor/rules/timeline-catalog.mdc)),
+  [`.cursor/rules/timeline-catalog.mdc`](../.cursor/rules/timeline-catalog.mdc)),
   `measureOverflow` / `overflowsBounds` / `measureContentOverflow` /
   `useOverflowBounds`
 
@@ -1083,7 +1083,7 @@ rules such as timeline-catalog). Live index: `#list`.
 command palettes, menus, pickers, and similar **dense chrome lists** (live
 reference: sandbox `#command-palette` vs Cursor Actions). Form / Card rhythm
 stays under **Toolbar / unit rhythm** below. Also
-[`.cursor/rules/chrome-proportion.mdc`](.cursor/rules/chrome-proportion.mdc).
+[`.cursor/rules/chrome-proportion.mdc`](../.cursor/rules/chrome-proportion.mdc).
 
 1. **Row model first.** Before CSS, name the **primary** row shape from the
    product reference (Cursor / ChatGPT / M3):
@@ -1128,7 +1128,7 @@ become a full-bleed next row (empty band to the right of the timestamp,
 controls look top-heavy). Do **not** stuff the timestamp into `ControlRow`
 `label`. Padded `Surface` is a **form host** (same label-fill + end-hug as Card
 body). Live: Globals `#rhythm`. Pasteable recipe:
-[`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc).
+[`llm/consumer-cursor-rule.mdc`](../llm/consumer-cursor-rule.mdc).
 
 | Role | Token / host |
 | --- | --- |
@@ -1230,7 +1230,7 @@ no header|body divider (handle is enough). Do not invent rem literals for shell
 via `SANDBOX_LAYOUT_AGENT_CATALOG` in `examples/sandbox/src/state/baseline.ts`.
 
 **Icons (full library — not a subset gate):** every glyph in
-[`src/primitives/icons.tsx`](src/primitives/icons.tsx) is exported from
+[`src/primitives/icons.tsx`](../src/primitives/icons.tsx) is exported from
 `@fynns/ui`. Consumers may use **any** of them — do **not** treat older “public
 subset” lists as an allowlist. Missing semantic → add the glyph to `icons.tsx` +
 barrel + sandbox `#icons` in the same change. Prefer `IconButton` + `Tooltip`
@@ -1276,7 +1276,7 @@ only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
    interaction — not pixel screenshots).
 4. **Bump + publish (hard):** every landed change consumers should see is a
    new GitHub Packages version in the **same task**. Authority:
-   [`docs/package-propagation.md`](docs/package-propagation.md). Do **not**
+   [`docs/package-propagation.md`](package-propagation.md). Do **not**
    ship via a consumer Vite alias to this checkout.
 5. **Consumer pattern bugs (hard):** same-task loop —    (a) constrain in this
    core (`docs/DESIGN_SYSTEM.md` + treaty + pasteable rule + public CSS if needed),
@@ -1286,7 +1286,7 @@ only — never map `checked` → `NavigationDrawerItem` `active` or `ListItem`
    there**, (d) **fleet-scan every local `@fynn7/ui-design-core` consumer** with
    parallel Task subagents for the **same failure class**, fix all hits, and
    re-verify. Never a consumer-only patch. Cursor: `/constrain-then-consumer` →
-   [`.cursor/skills/constrain-then-consumer/SKILL.md`](.cursor/skills/constrain-then-consumer/SKILL.md).
+   [`.cursor/skills/constrain-then-consumer/SKILL.md`](../.cursor/skills/constrain-then-consumer/SKILL.md).
 
 <!-- OPENWIKI:START -->
 

@@ -138,10 +138,13 @@ export function Select({
 
   /** While open, track the live shell width so the menu matches a stretched field. */
   useLayoutEffect(() => {
-    if (!open || shrinkInCluster) {
+    if (shrinkInCluster) {
       setShellWidthPx(null);
       return;
     }
+    /* Keep last shell width through the exit animation (`open` false but still
+     * `mounted`) so the menu does not flash to option-measure chip width. */
+    if (!open) return;
     const shell = shellRef.current;
     if (!shell) return;
     const sync = () => {
@@ -158,6 +161,10 @@ export function Select({
       window.removeEventListener("resize", sync);
     };
   }, [open, shrinkInCluster]);
+
+  useEffect(() => {
+    if (!mounted) setShellWidthPx(null);
+  }, [mounted]);
 
   const menuMinWidthPx = (() => {
     if (shrinkInCluster) return null;
