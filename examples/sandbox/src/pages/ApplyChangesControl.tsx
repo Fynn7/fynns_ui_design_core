@@ -54,8 +54,8 @@ export function ApplyChangesControl() {
 
   const closeReview = () => {
     if (phase === "applying") return;
+    // Keep last diffs through DialogFrame exit (~240ms); openReview replaces.
     setPhase("idle");
-    setFiles([]);
   };
 
   const confirmApply = async () => {
@@ -69,8 +69,8 @@ export function ApplyChangesControl() {
         return;
       }
       reset();
+      // Keep files through exit; next openReview replaces the list.
       setPhase("idle");
-      setFiles([]);
       if (result.skipped.length > 0) {
         notify(
           t("apply.toastPartial", {

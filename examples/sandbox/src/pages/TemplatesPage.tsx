@@ -118,9 +118,8 @@ export function TemplatesPage({ theme, onThemeChange }: TemplatesPageProps) {
       name,
       description: saveDescription,
     });
+    // Keep name/description through FullscreenDialog exit; next open resets.
     setSaveOpen(false);
-    setSaveName("");
-    setSaveDescription("");
     refresh();
     snackbar(t("templates.toastSaved", { name }), {
       dismissAriaLabel: t("globals.snackbarDismiss"),

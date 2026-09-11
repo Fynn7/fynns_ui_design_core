@@ -1596,7 +1596,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [formGridProject, setFormGridProject] = useState("sample-workspace");
   const [listCatalogEditOpen, setListCatalogEditOpen] = useState(false);
   const [listCatalogEditName, setListCatalogEditName] = useState("");
-  const [listRecipeDetail, setListRecipeDetail] = useState<null | "a" | "b">(null);
+  /** Last previewed recipe — keep through DialogFrame exit (~240ms). */
+  const [listRecipeDetail, setListRecipeDetail] = useState<"a" | "b">("a");
+  const [listRecipeOpen, setListRecipeOpen] = useState(false);
   const [listRepoPathEnabled, setListRepoPathEnabled] = useState(true);
   const [tableWheelX, setTableWheelX] = useState(true);
   const [listInspectorKindGap, setListInspectorKindGap] = useState("skill");
@@ -4454,6 +4456,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setListRecipeDetail("a");
+                            setListRecipeOpen(true);
                           }}
                         >
                           <EyeIcon />
@@ -4473,7 +4476,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       </Tooltip>
                     </div>
                   }
-                  onClick={() => setListRecipeDetail("a")}
+                  onClick={() => {
+                    setListRecipeDetail("a");
+                    setListRecipeOpen(true);
+                  }}
                 />
                 <ListItem
                   headline={t("globals.listRecipeB")}
@@ -4489,6 +4495,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                           onClick={(e) => {
                             e.stopPropagation();
                             setListRecipeDetail("b");
+                            setListRecipeOpen(true);
                           }}
                         >
                           <EyeIcon />
@@ -4508,15 +4515,16 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       </Tooltip>
                     </div>
                   }
-                  onClick={() => setListRecipeDetail("b")}
+                  onClick={() => {
+                    setListRecipeDetail("b");
+                    setListRecipeOpen(true);
+                  }}
                 />
               </List>
             </Card>
             <Dialog
-              open={listRecipeDetail != null}
-              onOpenChange={(open) => {
-                if (!open) setListRecipeDetail(null);
-              }}
+              open={listRecipeOpen}
+              onOpenChange={setListRecipeOpen}
               title={t("globals.listRecipeCatalogDialogTitle")}
               size="lg"
               showCloseButton

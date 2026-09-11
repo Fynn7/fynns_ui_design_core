@@ -112,6 +112,10 @@ alwaysApply: true
 7. **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏
    Cancel → Delete → Save；勿 rail `--with-end` 铅笔/垃圾桶。对照 `#timeline`。
 8. **Dialog foot Delete leftmost** — Cancel 在左，主确认在右。
+8a. **Dialog exit clears title/body (flash)** — 勿在 `open→false` 同一拍清空
+    title/body；`DialogFrame` 退出约 240ms 仍绘 props，内容保留到下次打开。
+    禁止把 Confirm 标题当 Dialog 标题 fallback。对照
+    `#sandbox-list-recipe-catalog`。
 9. **twin Button loading rings / BusyRegion + chrome loading** — 一簇最多一圈；
    BusyRegion 等待时 chrome 只 `disabled`。
 9a. **IconButton busy swaps CircularProgress instead of loading** — IconButton

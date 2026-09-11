@@ -121,6 +121,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Banner icon/dismiss top-pinned vs multi-line | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
 | Banner dismiss as sibling IconButton outside strip | DESIGN_SYSTEM Hard rules / Content density | `#banner` |
 | Dialog foot Delete leftmost of Cancel | AGENTS Dialog / overlays | `#timeline` |
+| Dialog exit clears title/body (flash) | DESIGN_SYSTEM Hard rules / overlays | `#sandbox-list-recipe-catalog` |
 | twin Button loading rings in one control-cluster | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | BusyRegion + chrome loading stack | AGENTS Busy/Loading | `#busy-region` |
 | runBusyTask hang forever (no timeout/signal) | AGENTS paint-before-work | `#sandbox-busy-task-timeout` / `#busy-paint` |
