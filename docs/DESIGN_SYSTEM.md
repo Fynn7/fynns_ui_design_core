@@ -584,6 +584,11 @@ belong in a consumer’s own doc.
   end-align **md** save; head actions **sm** only if product asks) — not
   static Card. Live `#form-recipe` / `#form-recipe-page-scroll` /
   `#layouts-demo-fill-column`.
+- **DON'T** clear `Dialog` / `ConfirmDialog` title/body source state in the
+  same tick as `open→false` — `DialogFrame` exit (~240ms) still paints props;
+  keep content until the next open. Never reuse a Confirm title as a Dialog
+  title fallback (exit flash / wrong head). Live `#sandbox-list-recipe-catalog`.
+  Failure: CONSUMER_TREATY Dialog exit clears title/body (flash).
 - **DON'T** (EndAside*): conditionally mount `{asideOpen && <EndAside>}` —
   toggle **`open` only** so width morph can run (core ≥ **0.5.86** morph track
   stays mounted in DestinationAppShell — never unmount on close). Don't remount

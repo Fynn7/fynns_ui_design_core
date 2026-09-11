@@ -58,6 +58,10 @@ export function DialogShell({
  * High-level dialog with a standard head (title + actions + close) and a body
  * slot. Focus trap, scroll lock, Esc + scrim dismiss are built in via
  * `DialogFrame`.
+ *
+ * Keep `title` / body source state until the next open — do not clear them in
+ * the same tick as `open→false` (`DialogFrame` exit still paints props ~240ms).
+ * Never reuse a ConfirmDialog title as this Dialog’s title fallback.
  */
 export type DialogProps = {
   open: boolean;
@@ -152,6 +156,10 @@ export function Dialog({
  * Cancel + Confirm. Dismiss via Cancel, Esc, or scrim (no close X — M3 basic
  * dialog anatomy). `danger` styles Confirm destructively; `loading` blocks
  * dismiss when `blockCloseWhileLoading` (default).
+ *
+ * Keep `title` / description / children until the next open — clearing them on
+ * the same tick as `open→false` flashes empty content during exit. Do not
+ * reuse this title as a `Dialog` title fallback.
  */
 export type ConfirmDialogProps = {
   open: boolean;
