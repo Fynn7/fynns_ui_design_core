@@ -908,8 +908,13 @@
   max-width: 10rem;
 }
 
-/* Teach Select menu match (≥ 0.5.220): wide field + short options — menu ≈ shell. */
+/* Teach Select menu match (≥ 0.5.220): wide field + short options — menu ≈ shell.
+ * Control → teaching/supporting copy uses field-hint-gap (8dp) — never flush
+ * under the shell (≥ **0.5.230**). */
 .sandbox-select-wide-host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-field-hint-gap);
   width: 100%;
   max-width: 36rem;
   min-width: 0;
@@ -1280,6 +1285,39 @@
 
 .sandbox-globals-card {
   min-height: 8rem;
+}
+
+/*
+ * Card catalog teach hosts: SandboxHelp ↔ Card shell uses unit-stack-gap
+ * (16dp) — roomier than control→FieldHint field-hint-gap (8dp); never flush
+ * 0–8dp (≥ **0.5.233**). Chrome IconButton strips need a readable title band —
+ * span full grid + cap width (same recipe as actions-strip).
+ */
+#sandbox-card-draft-actions,
+#sandbox-card-chrome-icon-actions,
+#sandbox-card-head-primary-end {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  max-width: 22rem;
+  justify-self: start;
+  width: 100%;
+}
+
+/*
+ * table-meta ellipsis teach host (≥ **0.5.231**): force a narrow Card so
+ * keep-set `.fynns-table-meta` must show `…` (not hard-clip). No SandboxHelp
+ * sibling — do not share the Card↔help gap rule above.
+ */
+#sandbox-card-table-meta-ellipsis {
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 10rem;
+  justify-self: start;
+  width: 100%;
 }
 
 /* Narrow host for #card multi-action strip — proves lead yields so the

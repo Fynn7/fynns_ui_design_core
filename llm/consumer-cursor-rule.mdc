@@ -163,6 +163,11 @@ alwaysApply: true
     轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；簇内长 path
     `.fynns-table-meta` 收缩 + 省略（≥ **0.5.175**），禁止 end-pack nowrap
     向左溢出盖住「就绪」。完整路径用 `InfoHint`。对照 `#sandbox-rhythm-action-end`。
+11c2. **table-meta overflows without ellipsis** — keep-set `.fynns-table-meta`
+    单行省略（≥ **0.5.231**：`overflow: hidden` + `text-overflow: ellipsis` +
+    `min-width: 0` / `max-width: 100%`）。Card / unit-stack / 窄宿主必须显示
+    `…`，禁止硬裁切无省略号；长文案用 Tooltip / InfoHint / FieldHint。**禁止**
+    消费仓覆写去掉 ellipsis。对照 `#sandbox-card-table-meta-ellipsis`。
 11d. **path meta paints over ControlRow label** — 同上；窄 Card 内 WinGet /
     长 exe 路径最易复现。对照 `#sandbox-rhythm-action-end`。
 12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
@@ -219,6 +224,17 @@ alwaysApply: true
     门户菜单地板 = max(option-measure, live shell 宽)（≥ **0.5.220**）；
     **禁止** 消费仓把 `.fynns-select-menu` 压成短标签芯片（或覆写
     `min-width` / `width` 破坏与触发器对齐）。对照 `#sandbox-select-wide-short`。
+26a2. **Select supporting copy kisses trigger** — 控件 → supporting / 教学
+    文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）；优先
+    `FieldBlock` + `FieldHint` / `ControlBlock` `description`。**禁止**在
+    拉伸 Select（或其它表单控件）下贴 0–4dp 的 muted `<p>`。对照
+    `#sandbox-select-wide-short`。
+26a3. **Card teaching help kisses shell** — Card 壳 ↔ 上方/下方 teaching /
+    muted helper 用 `--fynns-layout-unit-stack-gap`（**16dp**，≥ **0.5.233**）；
+    **不要**把 control→hint 的 `field-hint-gap`（8dp）套在整卡教学带上。
+    **禁止** Card 与 `<p>` / SandboxHelp 作无 gap / ≤8dp 的 block 兄弟。对照
+    `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` /
+    `#sandbox-card-head-primary-end`。
 26b. **Pagination Select siblings center on expanded height** — 名词
     `.fynns-table-meta` / 范围 `FieldHint` / 页码 discs 与 Select **shell
     （40dp）** 同带；core ≥ **0.5.197** 钉 `__start` 到 trigger-band；≥

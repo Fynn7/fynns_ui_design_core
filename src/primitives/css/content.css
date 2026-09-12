@@ -3892,9 +3892,19 @@ a.fynns-breadcrumb-link:visited {
   word-break: keep-all;
 }
 
-/* Table-cell status / mapping kind — muted caption, not Chip. */
+/* Table-cell status / mapping kind — muted caption, not Chip.
+ * Single-line + ellipsis when the host is narrow (≥ **0.5.231**). Bare
+ * `flex: 0 0 auto` used to keep intrinsic width and paint past Card /
+ * unit-stack edges (hard-clipped by Card `overflow: hidden` with no “…”).
+ * Prefer short metrics; long copy → Tooltip / InfoHint / FieldHint. */
 .fynns-table-meta {
-  flex: 0 0 auto;
+  display: block;
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--fynns-color-text-muted);
   font-size: var(--fynns-font-size-xs);
   white-space: nowrap;

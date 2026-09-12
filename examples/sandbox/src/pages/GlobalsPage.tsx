@@ -5162,21 +5162,23 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Card>
           </div>
           <SandboxHelp text={t("globals.cardPlainAlignHelp")} />
-          <Card
-            className="sandbox-globals-card"
-            title={t("globals.cardHintTitle")}
-            actions={
-              <InfoHint
-                content={t("globals.cardHintTip")}
-                ariaLabel={t("globals.cardHintAria")}
-              />
-            }
-          >
-            <div className="fynns-unit-stack">
-              <FieldHint>{t("globals.cardHintBodyLead")}</FieldHint>
-              <span className="fynns-table-meta">{t("globals.cardHintBodyMeta")}</span>
-            </div>
-          </Card>
+          <div id="sandbox-card-table-meta-ellipsis">
+            <Card
+              className="sandbox-globals-card"
+              title={t("globals.cardHintTitle")}
+              actions={
+                <InfoHint
+                  content={t("globals.cardHintTip")}
+                  ariaLabel={t("globals.cardHintAria")}
+                />
+              }
+            >
+              <div className="fynns-unit-stack">
+                <FieldHint>{t("globals.cardHintBodyLead")}</FieldHint>
+                <span className="fynns-table-meta">{t("globals.cardHintBodyMeta")}</span>
+              </div>
+            </Card>
+          </div>
           <Card
             className="sandbox-globals-card sandbox-globals-card--actions-strip"
             title={t("globals.cardActionsStripTitle")}

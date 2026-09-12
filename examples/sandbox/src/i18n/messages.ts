@@ -2017,7 +2017,7 @@ const en = {
     "Packs managed configs only — large local DBs use Archive below.",
   "globals.cardHintBodyLead":
     "Longer include / exclude detail belongs in the body (FieldHint), not a second head “i”.",
-  "globals.cardHintBodyMeta": "One InfoHint in actions · short tip · detail in body",
+  "globals.cardHintBodyMeta": "sample-org / sample-repo / long-branch-name-that-should-ellipsis-in-narrow-card",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
     "Header actions stay one horizontal .fynns-control-cluster (flat IconButtons + at most one InfoHint). Lead prefers ~40% but yields so the end danger disk stays fully visible on a narrow host (≥ 0.5.57). Never park ToggleGroup in the head — see mode-in-body sample. All icon chrome shares size md (40dp hover).",
@@ -2256,7 +2256,7 @@ const en = {
   "globals.selectWideShortOptLow": "low (daily)",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger.",
+    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Control → supporting / teaching copy under the shell uses `--fynns-layout-field-hint-gap` (**8dp**, ≥ **0.5.230**) — do **not** park a muted `<p>` flush (0–4dp) under a stretched Select. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger.",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -4336,7 +4336,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
   "globals.cardHintBodyLead":
     "更长的纳入 / 排除说明放正文（FieldHint），不要再叠第二个标题「i」。",
-  "globals.cardHintBodyMeta": "标题最多一个 InfoHint · tip 要短 · 细节在正文",
+  "globals.cardHintBodyMeta": "sample-org / sample-repo / long-branch-name-that-should-ellipsis-in-narrow-card",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
     "标题操作区保持一条横向 .fynns-control-cluster（扁平 IconButton + 最多一个 InfoHint）。Lead 偏好约 40% 但会让位，窄宿主上尾部危险盘仍完整可见（≥ 0.5.57）。禁止把 ToggleGroup 塞进标题栏 — 见正文模式样例。同一条带内所有图标 chrome 共用 size md（40dp hover）。",
@@ -4575,7 +4575,7 @@ const zh: Record<MessageKey, string> = {
   "globals.selectWideShortOptLow": "low（日常）",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger。",
+    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。控件 → 下方 supporting / 教学文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）— **禁止**在拉伸 Select 下贴一条 0–4dp 的 muted `<p>`。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",
