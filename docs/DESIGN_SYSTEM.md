@@ -385,6 +385,14 @@ belong in a consumer’s own doc.
   paint over the status label (looks like a crushed “就绪” even when the
   track is 120px). Full path → `InfoHint` / Tooltip when users need the
   untruncated string. Live `#sandbox-rhythm-action-end`.
+- **DON'T** let `.fynns-table-meta` hard-clip past a Card / unit-stack /
+  narrow host **without** `…` — core ≥ **0.5.231** applies
+  `overflow: hidden` + `text-overflow: ellipsis` + `min-width: 0` /
+  `max-width: 100%` on the keep-set class (not only inside ControlCluster).
+  Prefer short metrics; long copy → Tooltip / InfoHint / FieldHint. Do **not**
+  invent consumer `white-space: normal` / remove ellipsis on `.fynns-table-meta`.
+  Live `#sandbox-card-table-meta-ellipsis`. Failure: CONSUMER_TREATY
+  table-meta overflows without ellipsis.
 - **DON'T** paint success / fail / OK / ready **outcome signals** as `Chip`
   (`assist` / `filter` / `input` / `suggestion`) or a consumer `StatusChip`
   wrapper around Chip — use **`.fynns-list-item-status`** (default success
@@ -468,6 +476,19 @@ belong in a consumer’s own doc.
   **max(option-measure, live shell width)**. Do **not** invent consumer
   `min-width` / `width` overrides on the menu. Live `#sandbox-select-wide-short`.
   Failure: CONSUMER_TREATY Select menu narrower than stretched trigger.
+- **DON'T** park supporting / muted helper copy **flush** under a Select (or
+  other form control) at 0–4dp — control → hint uses
+  `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`
+  (or `ControlBlock` `description`). Live `#sandbox-select-wide-short` (≥
+  **0.5.230**). Failure: CONSUMER_TREATY Select supporting copy kisses trigger.
+- **DON'T** park teaching / muted helper copy **tight** against a Card shell
+  (help above or below at ≤**field-hint-gap** / **8dp**) — Card shell ↔
+  teaching essay uses `--fynns-layout-unit-stack-gap` (**16dp**, ≥ **0.5.233**).
+  Prefer a `unit-stack` / flex column host with that gap; do **not** leave bare
+  Card + `<p>` as block siblings with no gap, and do **not** reuse control→hint
+  **8dp** for a full Card chrome band. Live `#sandbox-card-draft-actions`
+  / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end`.
+  Failure: CONSUMER_TREATY Card teaching help kisses shell.
 - **DON'T** let Pagination bar siblings (`.fynns-table-meta` noun, range
   `FieldHint`, `__end` page discs) invent `align-items: center` on `__start`
   — core ≥ **0.5.197** pins `.fynns-pagination-bar` / `__start` to

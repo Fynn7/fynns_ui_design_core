@@ -249,12 +249,9 @@
 }
 
 /*
- * Path / title meta inside end-pack clusters (≥ **0.5.175**): bare
- * `.fynns-table-meta` is `flex: 0 0 auto` + nowrap for List/table cells.
- * In a narrow ControlStack track that intrinsic width overflows **left**
- * under `justify-content: flex-end` and paints over the status label
- * (“就绪” reads as a crushed sliver even when the label track is 7.5rem).
- * Allow shrink + ellipsis — full path → InfoHint / Tooltip when needed.
+ * Path / title meta inside end-pack clusters (≥ **0.5.175**; base ellipsis
+ * ≥ **0.5.231**): reinforce shrink so nowrap end-pack never overflows left
+ * over the ControlRow label. Full path → InfoHint / Tooltip when needed.
  */
 .fynns-control-cluster > .fynns-table-meta {
   flex: 0 1 auto;

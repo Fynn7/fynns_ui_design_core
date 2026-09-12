@@ -2256,7 +2256,7 @@ const en = {
   "globals.selectWideShortOptLow": "low (daily)",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger.",
+    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Control → supporting / teaching copy under the shell uses `--fynns-layout-field-hint-gap` (**8dp**, ≥ **0.5.230**) — do **not** park a muted `<p>` flush (0–4dp) under a stretched Select. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger.",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -4575,7 +4575,7 @@ const zh: Record<MessageKey, string> = {
   "globals.selectWideShortOptLow": "low（日常）",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger。",
+    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。控件 → 下方 supporting / 教学文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）— **禁止**在拉伸 Select 下贴一条 0–4dp 的 muted `<p>`。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",

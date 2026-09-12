@@ -158,6 +158,9 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
 | Pagination Select invents absolute overlay | DESIGN_SYSTEM Hard rules / Content density | `#pagination` / `#select` |
 | Select menu narrower than stretched trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
+| Select supporting copy kisses trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` |
+| Card teaching help kisses shell | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end` |
+| table-meta overflows without ellipsis | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-table-meta-ellipsis` |
 | Pagination Select siblings center on expanded height | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | Pagination bar gaps crushed to 4dp | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | Pagination Select option repeats noun | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
