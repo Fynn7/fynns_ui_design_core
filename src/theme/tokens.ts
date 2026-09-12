@@ -636,12 +636,13 @@ export const SEARCHBAR_TOKENS = {
   "line-height": "1.5",
   "results-max-height": "20rem",
   /**
-   * Inset around suggestion rows: shell and result row highlights both use
-   * `--fynns-radius-3xl` (same long-strip chrome as NavigationDrawer items);
-   * pad keeps hover off the outer capsule edge.
+   * Inset around suggestion / Select option rows: shell and row highlights
+   * both use `--fynns-radius-3xl`; pad keeps hover off the outer edge.
+   * Block start/end match (≥ **0.5.229**) so portaled `.fynns-select-menu`
+   * and docked SearchBar results read as one even inset.
    */
   "results-pad-block-start": "0.5rem",
-  "results-pad-block-end": "0.75rem",
+  "results-pad-block-end": "0.5rem",
   "results-pad-inline": "0.5rem",
   "results-gap": "0.125rem",
 } as const;
@@ -1018,11 +1019,12 @@ export const LIST_TOKENS = {
    */
   "content-gap-3": "var(--fynns-space-sm)",
   /**
-   * Opt-in via `List` `trailingMetaAlign="start"`. Floor for a full
-   * `YYYY-MM - YYYY-MM` range so sibling rows share one meta **column**
-   * (box start edges align). Copy is **end**-aligned inside (≥ 0.4.148).
-   * Default List (prop omitted) keeps content-width meta hugged to the
-   * trailing edge — short status next to `--with-end` actions.
+   * Opt-in via `List` `trailingMetaAlign="start"`. **Fixed** column width for
+   * a full `YYYY-MM - YYYY-MM` range so sibling rows share one meta **grid**
+   * (box + glyph **start** edges align — start-ink ≥ **0.5.13**; fixed not
+   * bare min-width ≥ **0.5.223**). Dates only in this slot — status/kind →
+   * `overline`. Default List (prop omitted) keeps content-width meta hugged
+   * to the trailing edge — short status next to `--with-end` actions.
    * Live: sandbox `#list` org+dates / status+action.
    */
   "trailing-meta-min-width": "17ch",

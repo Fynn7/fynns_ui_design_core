@@ -269,7 +269,7 @@
   justify-content: flex-start;
 }
 
-/* Inline expanded Select + sibling controls: pin to trigger band, not panel mid. */
+/* Select + sibling controls: pin to 40dp shell band (menu is portaled ≥ 0.5.208). */
 .fynns-control-cluster:has(> .fynns-select) {
   align-items: flex-start;
 }
@@ -340,8 +340,7 @@
 }
 
 .fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow) {
-  /* Docked Select lists grow the grow flex item — pin row actions to the
-     trigger band (40dp), not the vertical center of trigger + results. */
+  /* Pin row actions to the 40dp Select shell band (menu portaled ≥ 0.5.208). */
   align-items: flex-start;
 }
 
@@ -547,9 +546,11 @@
 /* ---------- Grid ---------- */
 /*
  * Default **start** on the block axis (≥ **0.5.172**). `center` vertically
- * mid-parked short FieldBlocks when a sibling Select expands in-flow (Hub
- * Inspector agent | cwd) — labels no longer share one top edge. `equalCells`
- * still uses `stretch`. Live: `#sandbox-field-stack-grid-select`.
+ * mid-parked short FieldBlocks when a sibling grows taller (historical in-flow
+ * Select / docked Autocomplete; consumer `align-items: center` still fails the
+ * treaty) — labels must share one top edge. `equalCells` still uses `stretch`.
+ * Select menu is portaled (≥ **0.5.208**); shell stays 40dp. Live:
+ * `#sandbox-field-stack-grid-select`.
  *
  * Fixed-`x` (≥ **0.5.211**): host **fills** the parent (`width: 100%`) with
  * equal `minmax(0, 1fr)` tracks — not `max-content` hug that left a dead

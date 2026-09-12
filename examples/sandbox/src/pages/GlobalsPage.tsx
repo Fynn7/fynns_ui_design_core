@@ -3973,6 +3973,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           >
             <ListItem
               headline={t("globals.listOrgDatesHeadline")}
+              overline={t("globals.listOrgDatesStatus")}
               supportingText={t("globals.listOrgDatesOrg")}
               trailingSupportingText={t("globals.listOrgDatesRange")}
               leading={<BriefcaseIcon />}
@@ -3992,6 +3993,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
             <ListItem
               headline={t("globals.listOrgDatesHeadlineShort")}
+              overline={t("globals.listOrgDatesStatusB")}
               supportingText={t("globals.listOrgDatesOrgB")}
               trailingSupportingText={t("globals.listOrgDatesRangeShort")}
               leading={<BriefcaseIcon />}
@@ -4011,6 +4013,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
             <ListItem
               headline={t("globals.listOrgDatesHeadlineC")}
+              overline={t("globals.listOrgDatesStatusC")}
               supportingText={t("globals.listOrgDatesOrgC")}
               trailingSupportingText={t("globals.listOrgDatesRangeC")}
               leading={<ClipboardIcon />}

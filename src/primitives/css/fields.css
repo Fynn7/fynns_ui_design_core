@@ -467,7 +467,8 @@ input.fynns-input:focus::-webkit-scrollbar {
   transform: rotate(180deg);
 }
 
-/* Results are `.fynns-search-bar-results` — no separate flyout skin. */
+/* Select listbox skin is portaled `.fynns-select-menu` (≥ 0.5.208); this class
+ * is shared option-row grammar (SearchBar results + menu options). */
 .fynns-select-list {
   list-style: none;
   margin: 0;

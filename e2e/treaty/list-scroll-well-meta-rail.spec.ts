@@ -48,3 +48,50 @@ test(`${SLUG}: trailing meta clears overlay Y rail band`, async ({ page }) => {
     expect(gap).toBeGreaterThanOrEqual(10);
   }).toPass({ timeout: 10_000 });
 });
+
+test(`${SLUG}: capped well scrolls — rows do not paint over next help`, async ({
+  page,
+}) => {
+  await openGlobalsDemo(page, "list", "List");
+  const demo = globalsDemo(page, "list");
+  const host = demo.locator("#sandbox-list-repo-path-actions");
+  await host.scrollIntoViewIfNeeded();
+  const list = host.locator("ul.fynns-list.fynns-scroll");
+  const help = demo.locator(".sandbox-help").filter({
+    hasText: /trailing-stats|trailing 元数据/,
+  });
+
+  const metrics = await list.evaluate((ul) => {
+    const cs = getComputedStyle(ul);
+    return {
+      overflowY: cs.overflowY,
+      maxHeight: cs.maxHeight,
+      scrollHeight: ul.scrollHeight,
+      clientHeight: ul.clientHeight,
+    };
+  });
+  expect(["auto", "scroll", "overlay"]).toContain(metrics.overflowY);
+  expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight + 1);
+
+  await expect(help.first()).toBeVisible();
+  const overlap = await page.evaluate(() => {
+    const ul = document.querySelector(
+      "#sandbox-list-repo-path-actions ul.fynns-list.fynns-scroll",
+    );
+    const help = [...document.querySelectorAll(".sandbox-help")].find((el) =>
+      /trailing-stats|trailing 元数据/.test(el.textContent || ""),
+    );
+    if (!ul || !help) return -1;
+    const hosts = [...ul.querySelectorAll(".fynns-list-item-host")];
+    const helpBox = help.getBoundingClientRect();
+    let max = 0;
+    for (const h of hosts) {
+      const r = h.getBoundingClientRect();
+      const top = Math.max(r.top, helpBox.top);
+      const bottom = Math.min(r.bottom, helpBox.bottom);
+      if (bottom > top) max = Math.max(max, bottom - top);
+    }
+    return Math.round(max);
+  });
+  expect(overlap).toBeLessThanOrEqual(1);
+});

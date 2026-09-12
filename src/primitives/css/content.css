@@ -322,15 +322,25 @@
 }
 
 /*
- * Card / Collapsible head + inline expanded Select (≥ **0.5.73** trigger-band pin;
- * ≥ **0.5.74** collapsed header rhythm): **collapsed** keeps default head
- * `align-items: center` + lead `stretch` (shared min-height band). **Expanded**
- * only: grid row 1 = chrome band (`40dp` + actions `space-xs`×2); title centers
- * in that row; actions cluster grows below without pulling title mid-panel.
+ * Card / Collapsible head + **docked** SearchBar / Autocomplete expand
+ * (≥ **0.5.73** trigger-band; ≥ **0.5.74** collapsed rhythm; ≥ **0.5.227**
+ * exclude Select): collapsed keeps `align-items: center`. Expanded **in-flow**
+ * panel only: grid row 1 = chrome band; title centers in that row; actions
+ * grow below without pulling title mid-panel.
+ *
+ * Select also sets `data-expanded` on `.fynns-search-bar`, but its menu is
+ * **portaled** (`.fynns-select-menu` ≥ **0.5.208**) — bare
+ * `.fynns-search-bar[data-expanded]` yanked the head to grid/`align-items:
+ * start` and set card `overflow: visible` (same class as list trailing ≥
+ * **0.5.226**). Gate with `:not(.fynns-select)`. Live: `#sandbox-card-head-select`.
  */
-.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-card-head:has(
+    .fynns-card-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
+  ),
 .fynns-collapsible-head:has(
-    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+    .fynns-collapsible-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   ) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -344,10 +354,14 @@
   gap: var(--fynns-space-2);
 }
 
-.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+.fynns-card-head:has(
+    .fynns-card-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
+  )
   .fynns-card-lead,
 .fynns-collapsible-head:has(
-    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+    .fynns-collapsible-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-collapsible-trigger {
   grid-column: 1;
@@ -358,10 +372,14 @@
   align-items: center;
 }
 
-.fynns-card-head:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"])
+.fynns-card-head:has(
+    .fynns-card-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
+  )
   .fynns-card-actions,
 .fynns-collapsible-head:has(
-    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+    .fynns-collapsible-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   .fynns-collapsible-actions {
   grid-column: 2;
@@ -383,9 +401,13 @@
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
 
-.fynns-card:has(.fynns-card-actions .fynns-search-bar[data-expanded="true"]),
+.fynns-card:has(
+    .fynns-card-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
+  ),
 .fynns-collapsible:has(
-    .fynns-collapsible-actions .fynns-search-bar[data-expanded="true"]
+    .fynns-collapsible-actions
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   ) {
   overflow: visible;
   z-index: var(--fynns-z-dropdown);
@@ -1314,9 +1336,17 @@ a.fynns-breadcrumb-link:visited {
  * rail paints at `host.rect.right − scrollbar-size`. Reserve that band on the
  * list end so idle `trailingSupportingText` / `.fynns-table-meta` never kiss
  * the thumb — same gut as `.fynns-page-scroll`. Do **not** use
- * `scrollbar-gutter`. Live: `#sandbox-list-repo-path-actions`.
+ * `scrollbar-gutter`.
+ *
+ * Base `.fynns-list` sets `overflow-x: clip` only — CSS leaves `overflow-y`
+ * as `visible`, so `max-height: list-well-max-height*` still **paints** tall
+ * rows over the next SandboxHelp / List (layout box stays capped). Force
+ * `overflow-y: auto` on scroll wells (≥ **0.5.224**) so overflow scrolls
+ * inside the well. Live: `#sandbox-list-repo-path-actions`.
  */
 .fynns-list.fynns-scroll {
+  overflow-x: clip;
+  overflow-y: auto;
   padding-inline-end: calc(
     var(--fynns-list-inset-inline) + var(--fynns-scrollbar-size)
   );
@@ -1779,8 +1809,10 @@ a.fynns-breadcrumb-link:visited {
 
 /*
  * Opt-in date / kind / timestamp column: List trailingMetaAlign="start"
- * floors a shared min-width so sibling rows share one meta **column**
- * (box **and** glyph start edges align — **start-ink** ≥ **0.5.13**).
+ * floors a **fixed** meta column so sibling rows share one grid band
+ * (box **and** glyph start edges align — **start-ink** ≥ **0.5.13**;
+ * fixed width not bare min-width ≥ **0.5.223** — content longer than the
+ * token used to grow the box and restagger starts while end-hugged).
  * End-ink inside the band (≥ 0.4.148) staggered short dates (`2026-04`)
  * far right of long ranges and fought Timeline catalogs without row
  * actions. `--with-end` actions still dock at the row end; do not use
@@ -1788,12 +1820,17 @@ a.fynns-breadcrumb-link:visited {
  * Default (no data attr) = content-width meta hugged to the trailing
  * edge — short status (“Current”) stays next to actions. Exclude
  * trailing-stats (fixed tracks of their own — start-aligned cells).
+ * Put **dates only** in this slot — status / kind → `overline` (never glue
+ * `Done, 2025-10 - 2026-03` into trailing). Live: `#list` org+dates.
  */
 .fynns-list[data-trailing-meta-align="start"]
   .fynns-list-item-trailing:has(> .fynns-list-item-trailing-text):not(
     :has(.fynns-list-item-trailing-stats)
   ) {
+  flex: 0 0 var(--fynns-list-trailing-meta-min-width);
+  width: var(--fynns-list-trailing-meta-min-width);
   min-width: var(--fynns-list-trailing-meta-min-width);
+  max-width: var(--fynns-list-trailing-meta-min-width);
   justify-content: flex-start;
 }
 
@@ -2295,7 +2332,9 @@ a.fynns-breadcrumb-link:visited {
   ):focus-within
   > .fynns-list-item-row
   > .fynns-list-item {
-  padding-inline-end: var(--fynns-list-pad-inline);
+  /* !important: beat generic `--with-end:focus-within` reserve (0px for
+   * pinned Select/CTA) so open Select does not collapse copy pad. */
+  padding-inline-end: var(--fynns-list-pad-inline) !important;
   transition: none;
 }
 
@@ -2309,13 +2348,12 @@ a.fynns-breadcrumb-link:visited {
 }
 
 /*
- * Inspector trailing Select (≥ **0.5.70** inline shell; ≥ **0.5.71** trigger-band
- * pin; ≥ **0.5.72** grid trigger row + copy flex-start when expanded): reuse
- * `.fynns-search-bar--expanded` (same as `#globals-demo-select`) — not absolute
- * flyout. Gap meta sits in a fixed **40dp trigger-band row** (grid row 1) so it
- * does not center on the expanded panel; CTA + Select trigger share that band;
- * expanded list-item copy flex-starts to the same band top (not centered in
- * height-3 min-height while trailing grows).
+ * Inspector trailing Select (≥ **0.5.70** pin; ≥ **0.5.71** trigger-band;
+ * ≥ **0.5.208** portaled menu): gap meta + CTA + Select share a **40dp**
+ * trigger-band grid row. Host stays `align-items: center` while open — the
+ * listbox is portaled (`.fynns-select-menu`), so trailing height must not
+ * jump. Do **not** treat Select `data-expanded` like Autocomplete’s docked
+ * SearchBar grow (≥ **0.5.226**). Live: `#sandbox-list-inspector-trailing`.
  */
 .fynns-list-item-host--with-end:has(
     .fynns-list-item-trailing--end .fynns-select
@@ -2334,18 +2372,28 @@ a.fynns-breadcrumb-link:visited {
   align-items: start;
 }
 
+/*
+ * Docked SearchBar / Autocomplete expand in list trailing (in-flow grow).
+ * Select also sets `data-expanded` + shares `.fynns-search-bar`, but its
+ * menu is portaled — matching bare `.fynns-search-bar[data-expanded]` here
+ * yanked the host to `flex-start` and slid meta|CTA|Select to the top of
+ * height-3 rows. Gate with `:not(.fynns-select)` (≥ **0.5.226** / **0.5.227**).
+ */
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   ) {
   align-items: flex-start;
 }
 
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item-trailing--end,
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item-row
   > .fynns-list-item-trailing--end {
@@ -2353,11 +2401,13 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item,
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item-row
   > .fynns-list-item {
@@ -2365,12 +2415,14 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item
   .fynns-list-item-content,
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   )
   > .fynns-list-item-row
   > .fynns-list-item
@@ -2412,7 +2464,8 @@ a.fynns-breadcrumb-link:visited {
 }
 
 .fynns-list-item-host--with-end:has(
-    .fynns-list-item-trailing--end .fynns-search-bar[data-expanded="true"]
+    .fynns-list-item-trailing--end
+      .fynns-search-bar[data-expanded="true"]:not(.fynns-select)
   ) {
   overflow: visible;
   z-index: var(--fynns-z-dropdown);
