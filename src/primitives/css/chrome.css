@@ -2592,8 +2592,10 @@
  * `--fynns-navdrawer-item-height` (**40dp**). Default IconButton md is also
  * 40dp — hover wash would kiss the pill block edges. Trailing actions are
  * always **sm** (**32dp**) so the state layer stays one t-shirt step inside
- * the parent (`space-xs` / 4dp clear top + bottom). Live:
- * `#layouts-demo-navigation-drawer` mode entries.
+ * the parent (`space-xs` / 4dp clear top + bottom). Inline-end clear (≥
+ * **0.5.234**): same `space-xs` so the hover circle never tangents the
+ * stadium end curve (pill outer still aligns with `--toolbar-end` Plus).
+ * Live: `#layouts-demo-navigation-drawer` mode entries.
  */
 .fynns-nav-drawer-item-host {
   box-sizing: border-box;
@@ -2609,10 +2611,17 @@
 .fynns-nav-drawer-item-host--with-end {
   /* Always sm (32dp) — never md 40dp inside a 40dp pill. */
   --fynns-navdrawer-end-action-disk: 2rem;
-  /* End flush with pill outer (≥ **0.5.228**) — no item-pad-end in reserve. */
+  /*
+   * End clear (≥ **0.5.234**): hover disk must **not** share the pill outer
+   * edge — a 32dp circle flush to a stadium end is tangent (forbidden).
+   * Pill outer still aligns with `--toolbar-end` Plus / Switch (≥ **0.5.228**);
+   * only the IconButton state layer insets by `space-xs` (4dp).
+   */
+  --fynns-navdrawer-end-action-clear: var(--fynns-space-xs);
   --fynns-navdrawer-end-actions-reserve: calc(
     var(--fynns-layout-control-cluster-gap) +
-      var(--fynns-navdrawer-end-action-disk)
+      var(--fynns-navdrawer-end-action-disk) +
+      var(--fynns-navdrawer-end-action-clear)
   );
 }
 
@@ -2623,8 +2632,8 @@
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  /* Flush to pill outer — same trailing edge as `--toolbar-end` Plus. */
-  padding-inline-end: 0;
+  /* Clear pill outer so hover wash ≠ stadium end curve (≥ **0.5.234**). */
+  padding-inline-end: var(--fynns-navdrawer-end-action-clear);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);

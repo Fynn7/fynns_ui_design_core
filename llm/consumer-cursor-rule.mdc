@@ -121,9 +121,10 @@ alwaysApply: true
 7b. **NavigationDrawerItem badge IconButton always visible** — 模式 / 会话行
    删除用 `NavigationDrawerItem` **`trailing`** ghost **sm** IconButton（+
    Tooltip；≥ **0.5.225** 核心把 trailing 盘钳到 **32dp**，禁止默认 md 40dp
-   与 40dp 目的地 pill 上下相切）；List `--with-end` 叠层揭示（≥ **0.5.221**）。
-   **禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。对照
-   `#layouts-demo-navigation-drawer`。
+   与 40dp 目的地 pill 上下相切；≥ **0.5.234** 再留 **`space-xs`（4dp）**
+   inline-end，禁止 hover 圆与 stadium 端缘相切）。List `--with-end` 叠层揭示
+   （≥ **0.5.221**）。**禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。
+   对照 `#layouts-demo-navigation-drawer`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照
