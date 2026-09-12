@@ -1490,6 +1490,7 @@ const en = {
   "globals.navDrawerModeNewTip": "New entry",
   "globals.navDrawerModeEntryAlpha": "Sample entry A",
   "globals.navDrawerModeEntryBeta": "Sample entry B",
+  "globals.navDrawerModeEntryDelete": "Delete entry",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -1509,7 +1510,7 @@ const en = {
   "globals.navDrawerModeCatalogFailHelp":
     "Mode drawer catalog load fail (≥ **0.5.215**): keep tools / SyncSideFilter; replace destinations with **short** `InlineAlert` + `InfoHint` `tone=\"danger\"` (long diagnostic) + **end-align** Retry — never paste the full backend essay into `InlineAlert.message`. Toolbar Refresh may clear the fail. Live `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer`. Main-canvas pane cold-start stays `#sandbox-pane-load-error`. Failure: CONSUMER_TREATY mode drawer InlineAlert essay.",
   "globals.navDrawerModeToolsHelp":
-    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Primary Plus and Switch track share one **trailing** edge (core ≥ **0.5.143** pads `--toolbar-end` with the same item-pad-end). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** + **short** visible labels (All / marks — core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp; do not crush long product names into equal columns). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`.",
+    "Mode sidebar (no SearchBar): sort + refresh + bulk (`ListChecksIcon`) + primary New → one `.fynns-control-cluster--toolbar-end` (trailing hug; non-chevron sort; Plus rightmost) as a **direct** drawer-body sibling (≥ **0.5.222** — bare cluster opens `--fynns-navdrawer-search-gap` **8dp** before the next sibling; do **not** crush to Item `section-gap` 4dp or invent a consumer tools wrapper just for spacing). **Section help** → one TopAppBar `trailing` `InfoHint` only (≥ 0.5.63) — do **not** twin a section “i” in `--toolbar-end`. Preference toggles with long policy copy → **one-row** `ControlRow` + `InfoHint size=\"sm\"` + track-only `Switch` — label/track share Item `item-pad-inline` (core ≥ **0.5.137**; not flush on body `pad-inline` 10dp alone). Primary Plus, Switch track, and destination Item **pill outer** share one **trailing** edge (core ≥ **0.5.228** — do **not** re-apply item-pad-end on `--toolbar-end` / ControlRow). Compact SyncSideFilter `ToggleGroup` as a body sibling → **omit option `tip`** + **`showCheck={false}`** + **short** visible labels (All / marks — core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp; do not crush long product names into equal columns). Tools / filter / destinations open with `--fynns-navdrawer-search-gap` (**8dp**, ≥ 0.4.98) — not Item `section-gap` 4dp. **Row delete / session actions (≥ **0.5.221**; disk clamp ≥ **0.5.225**):** `NavigationDrawerItem` `trailing` ghost **sm** `IconButton` (+ Tooltip; core clamps to **32dp** inside the **40dp** destination pill — never default **md** 40dp kissing the pill edges) — List `--with-end` overlay reveal (idle hidden on fine pointer; hover / focus-within; coarse always on). **Never** park delete in `badge` (counts / marks only; nesting a button inside the destination button is invalid). Live: `#layouts-demo-shell` TopAppBar InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`.",
   "globals.navDrawerBulkAria": "Sample bulk-select sidebar (soft checked rows)",
   "globals.navDrawerBulkToolsAria": "Sample bulk-select toolbar",
   "globals.navDrawerBulkGroup": "Sample group",
@@ -1788,18 +1789,21 @@ const en = {
   "globals.listHostTonePlainSupporting": "App-owned row — same host as neighbors",
   "globals.listHostTonePlainMeta": "Custom",
   "globals.listOrgDatesHelp":
-    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a shared min-width column (box **and** glyph **start** edges align — **start-ink** ≥ **0.5.13**; not 0.4.148 end-ink). **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
+    "Title + organization + date range — **org under the title**, dates on **`trailingSupportingText`**. Pass **`List` `trailingMetaAlign=\"start\"`** for a **fixed** meta column (box **and** glyph **start** edges align — **start-ink** ≥ **0.5.13**; fixed width ≥ **0.5.223** — not content-width end-hug). Status / kind → **`overline`** — **never** glue `Done, 2025-10 - 2026-03` into trailing. **Never** glue `Org · 2025-10 – 2026-03` into `supportingText`. Ranges use ASCII hyphen (`2025-10 - 2026-03`) — no `·` / `–` / `—` in chrome. See AGENTS.md Language **UI punctuation**.",
   "globals.listOrgDatesAria": "Sample organization and date-range list rows",
   "globals.listOrgDatesHeadline":
     "Business intelligence intern, sample corp",
   "globals.listOrgDatesOrg": "Acme",
   "globals.listOrgDatesRange": "2025-10 - 2026-03",
+  "globals.listOrgDatesStatus": "Done",
   "globals.listOrgDatesHeadlineShort": "Research assistant",
   "globals.listOrgDatesOrgB": "Northwind",
   "globals.listOrgDatesRangeShort": "2023-03",
+  "globals.listOrgDatesStatusB": "Done",
   "globals.listOrgDatesHeadlineC": "Campus tutor",
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
+  "globals.listOrgDatesStatusC": "Done",
   "globals.listStatusActionHelp":
     "Short status beside `--with-end` IconButtons — leave **`trailingMetaAlign` unset**. Core ≥ **0.5.62** optically spaces status→first disk; ≥ **0.5.207** ensures hover/coarse **reserve** actually expands (idle `:has(meta)` must not win over reveal). Do **not** invent private meta margins. **Create / edit / open the row:** keep this List mounted and open **`Dialog` `size=\"lg\"` + `showCloseButton`** (this demo). Live: `#sandbox-list-status-action`.",
   "globals.listStatusActionAria": "Sample status and action list row",
@@ -1881,7 +1885,7 @@ const en = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "Sample path catalog",
   "globals.listCatalogStaticHelp":
-    "**Path / repo catalog (hard ≥ 0.5.168; scroll rail ≥ 0.5.171):** `interactive={false}` still parks end actions on the trailing sibling — one `.fynns-control-cluster` of ghost **md** IconButtons (same 40dp baseline). Status = overline; kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **never** Chip / consumer badge soup in the headline. Enable-for-batch = leading **`Checkbox`** — **never** Switch jammed beside IconButtons. Delete = ghost + ConfirmDialog — **never** `IconButton` `danger` filled disk. Capped wells: `List` + `fynns-scroll` + `list-well-max-height*` — meta must clear the overlay Y rail (core reserves `--fynns-scrollbar-size`; do not invent consumer end pad). Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail. Live `#sandbox-list-repo-path-actions`.",
+    "**Path / repo catalog (hard ≥ 0.5.168; scroll rail ≥ 0.5.171; spill ≥ **0.5.224**):** `interactive={false}` still parks end actions on the trailing sibling — one `.fynns-control-cluster` of ghost **md** IconButtons (same 40dp baseline). Status = overline; kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **never** Chip / consumer badge soup in the headline. Enable-for-batch = leading **`Checkbox`** — **never** Switch jammed beside IconButtons. Delete = ghost + ConfirmDialog — **never** `IconButton` `danger` filled disk. Capped wells: `List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto** (rows must not paint over the next help) + meta clears the overlay Y rail (core reserves `--fynns-scrollbar-size`; do not invent consumer end pad). Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings. Live `#sandbox-list-repo-path-actions`.",
   "globals.listCatalogStaticAria": "Sample static path catalog with end actions",
   "globals.listRepoPathOverline": "Not run yet",
   "globals.listRepoPathName": "sample-repo",
@@ -3819,6 +3823,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeNewTip": "新建条目",
   "globals.navDrawerModeEntryAlpha": "示例条目 A",
   "globals.navDrawerModeEntryBeta": "示例条目 B",
+  "globals.navDrawerModeEntryDelete": "删除条目",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3838,7 +3843,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeCatalogFailHelp":
     "模式侧栏目录加载失败（≥ **0.5.215**）：保留工具条 / SyncSideFilter；目的地换成**短** `InlineAlert` + `InfoHint` `tone=\"danger\"`（长诊断）+ **末端对齐** Retry — 禁止把完整后端长文塞进 `InlineAlert.message`。工具条 Refresh 可清除失败态。对照 `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer`。主画布栏目冷启动仍用 `#sandbox-pane-load-error`。失败模式：CONSUMER_TREATY mode drawer InlineAlert essay。",
   "globals.navDrawerModeToolsHelp":
-    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。主新建 Plus 与 Switch 轨道**共用右端**（core ≥ **0.5.143** 给 `--toolbar-end` 同套 item-pad-end）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`** + **短**可见标签（全部 / 标记字形 — core ≥ **0.5.140** fullWidth 可收缩 + 省略号 + compact pad 12dp；禁止把长产品名塞进等分列）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`。",
+    "模式侧栏（无 SearchBar）：排序 + 刷新 + 批量（`ListChecksIcon`）+ 主新建 → `.fynns-control-cluster--toolbar-end`（贴尾；排序用非 chevron；Plus 最右）作 drawer body **直接子**（≥ **0.5.222** — 裸 cluster 与下一兄弟开 `--fynns-navdrawer-search-gap` **8dp**；禁止压成 Item `section-gap` 4dp，也勿仅为间距再包消费仓 tools 壳）。**分区说明** → 仅 TopAppBar `trailing` 一个 `InfoHint`（≥ 0.5.63）— 禁止再在 `--toolbar-end` 放第二个分区「i」。带长说明的偏好开关 → **单行** `ControlRow` + `InfoHint size=\"sm\"` + 仅轨道的 `Switch` — 标签/轨道与 Item `item-pad-inline-start` 对齐（core ≥ **0.5.137**；勿仅贴 body `pad-inline` 10dp）。主新建 Plus、Switch 轨道与目的地 Item **pill 外缘**共用右端（core ≥ **0.5.228** — 禁止再给 `--toolbar-end` / ControlRow 套 item-pad-end）。SyncSideFilter `ToggleGroup` 作 body 兄弟 → **省略 option `tip`** + **`showCheck={false}`** + **短**可见标签（全部 / 标记字形 — core ≥ **0.5.140** fullWidth 可收缩 + 省略号 + compact pad 12dp；禁止把长产品名塞进等分列）。工具条 / 筛选 / 目的地之间用 `--fynns-navdrawer-search-gap`（**8dp**，≥ 0.4.98）— 禁止压成 Item 的 `section-gap` 4dp。**行删除 / 会话动作（≥ **0.5.221**；盘钳制 ≥ **0.5.225**）：** `NavigationDrawerItem` `trailing` ghost **sm** `IconButton`（+ Tooltip；核心把盘钳到 **32dp**，禁止默认 **md** 40dp 与 40dp 目的地 pill 上下相切）— List `--with-end` 叠层揭示（精细指针空闲隐藏；hover / focus-within 显示；触控常显）。**禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点；按钮嵌套进目的地 `<button>` 非法）。对照 `#layouts-demo-shell` 顶栏 InfoHint + Globals `#info-hint` / `#toggle-group` / Layouts `#layouts-demo-navigation-drawer`。",
   "globals.navDrawerBulkAria": "示例批量选择侧栏（柔和勾选行）",
   "globals.navDrawerBulkToolsAria": "示例批量选择工具条",
   "globals.navDrawerBulkGroup": "示例分组",
@@ -4106,17 +4111,20 @@ const zh: Record<MessageKey, string> = {
   "globals.listHostTonePlainSupporting": "应用自有行——与邻行同一宿主",
   "globals.listHostTonePlainMeta": "自定义",
   "globals.listOrgDatesHelp":
-    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（共享 min-width 列；盒与墨迹**左齐** ≥ 0.5.13 — 非 0.4.148 列内右齐）。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
+    "标题 + 组织 + 日期区间 — **组织名留在标题下**，日期放 **`trailingSupportingText`**。日期目录传 **`List` `trailingMetaAlign=\"start\"`**（**固定** meta 列；盒与墨迹**左齐** ≥ 0.5.13；固定列宽 ≥ **0.5.223** — 非内容宽右贴）。状态 / kind → **`overline`** — **禁止**把 `已完成, 2025-10 - 2026-03` 粘进 trailing。**禁止**把 `组织 · 2025-10 – 2026-03` 粘进 `supportingText`。区间用 ASCII 连字符（`2025-10 - 2026-03`）— 可见 chrome **不要** `·` / `–` / `—`。见 AGENTS.md Language **UI punctuation**。",
   "globals.listOrgDatesAria": "组织与日期区间列表示例",
   "globals.listOrgDatesHeadline": "商业智能实习生，示例公司",
   "globals.listOrgDatesOrg": "Acme",
   "globals.listOrgDatesRange": "2025-10 - 2026-03",
+  "globals.listOrgDatesStatus": "已完成",
   "globals.listOrgDatesHeadlineShort": "研究助理",
   "globals.listOrgDatesOrgB": "Northwind",
   "globals.listOrgDatesRangeShort": "2023-03",
+  "globals.listOrgDatesStatusB": "已完成",
   "globals.listOrgDatesHeadlineC": "校园辅导",
   "globals.listOrgDatesOrgC": "Contoso",
   "globals.listOrgDatesRangeC": "2024-01 - 2025-03",
+  "globals.listOrgDatesStatusC": "已完成",
   "globals.listStatusActionHelp":
     "短状态 + `--with-end` IconButton — **不要**设 `trailingMetaAlign`。core ≥ **0.5.62** 光学拉开状态→首盘；≥ **0.5.207** 保证悬停/触控 **reserve** 真能展开（idle `:has(meta)` 不得压过显盘）。禁止私有 meta margin。**创建 / 编辑 / 打开行：** List 保持挂载，打开 **`Dialog` `size=\"lg\"` + `showCloseButton`**（本 demo）。对照 `#sandbox-list-status-action`。",
   "globals.listStatusActionAria": "状态与动作列表示例",
@@ -4198,7 +4206,7 @@ const zh: Record<MessageKey, string> = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
-    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 = overline；kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail。对照 `#sandbox-list-repo-path-actions`。",
+    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 = overline；kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings。对照 `#sandbox-list-repo-path-actions`。",
   "globals.listCatalogStaticAria": "带 end 操作的静态路径目录示例",
   "globals.listRepoPathOverline": "尚未运行",
   "globals.listRepoPathName": "sample-repo",

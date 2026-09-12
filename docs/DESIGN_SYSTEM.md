@@ -254,6 +254,12 @@ belong in a consumer’s own doc.
   `--with-end` idle pad at `list-pad-inline` when row meta is present (not
   `space-xs` crush). Live `#sandbox-list-repo-path-actions`. Failure:
   CONSUMER_TREATY List scroll-well trailing meta kisses overlay rail.
+- **DON'T** let capped `List.fynns-scroll` + `list-well-max-height*` **paint**
+  overflowing rows over the next help / List — base List only set
+  `overflow-x: clip`, so `overflow-y` stayed `visible` and the layout box
+  stayed short while ink spilled. Core ≥ **0.5.224** forces `overflow-y: auto`
+  on scroll wells. Live `#sandbox-list-repo-path-actions`. Failure:
+  CONSUMER_TREATY List scroll-well overflow-y spill overlaps siblings.
 - **DON'T** let in-row `trailingSupportingText` (short status / kind / Builtin)
   sit under revealed `--with-end` IconButtons — core ≥ **0.5.207** gates the
   idle `list-pad-inline` rule with `:not(:hover):not(:focus-within)` and
@@ -283,10 +289,17 @@ belong in a consumer’s own doc.
   (`1m 47s`, never `1m47s`). Live `#list`.
 - **DON'T** glue org + dates in one `supportingText` with `·` / `–` / `—` —
   org under title; dates → `trailingSupportingText` + `trailingMetaAlign="start"`
-  on mixed-length date catalogs (core **start**-aligns glyphs in the shared
-  min-width column ≥ **0.5.13**). **Do not** invent private CSS `text-align` /
-  width on trailing meta when you meant that shared column. Same: no `·` / `—`
-  in visible chrome strings. Live `#list` org+dates.
+  on mixed-length date catalogs (core **start**-aligns glyphs in a **fixed**
+  meta column ≥ **0.5.13** / fixed width ≥ **0.5.223** — not content-width
+  end-hug). **Do not** invent private CSS `text-align` / width on trailing meta
+  when you meant that shared column. **Do not** glue status into the date
+  trailing (`Done, 2025-10 - 2026-03`) — status / kind → `overline`; dates only
+  in trailing so the 17ch grid stays honest. Same: no `·` / `—` in visible
+  chrome strings. Live `#list` org+dates.
+- **DON'T** omit `trailingMetaAlign="start"` on experience / job / history Lists
+  whose `trailingSupportingText` is a date or timestamp catalog — default
+  content-width end-hug **staggers** short vs long starts (no grid). Failure:
+  CONSUMER_TREATY trailingSupportingText right-hug drift / trailing meta end-ink.
 - **DON'T** put `trailingMetaAlign="start"` on short-status + `--with-end`
   catalogs (parks status far from IconButton) — leave unset. Live `#list`
   status+action.
@@ -300,10 +313,15 @@ belong in a consumer’s own doc.
   (`inspector-end-gap`); ≥ **0.5.70** reuses form Select shell; ≥ **0.5.208**
   Select options are a **portaled** `.fynns-select-menu` (field stays 40dp —
   not in-flow joined capsule); ≥ **0.5.71**/72 pins meta|CTA on the **trigger
-  band**. Leave `trailingMetaAlign` unset. Card/Collapsible head Select +
+  band**; ≥ **0.5.226** opening Select must **not** switch the host to
+  `align-items: flex-start` (docked SearchBar/Autocomplete expand only —
+  Select `data-expanded` must not yank meta|CTA|Select to the top of height-3
+  rows). Leave `trailingMetaAlign` unset. Card/Collapsible head Select +
   labeled Button uses the same trigger-band grammar (≥ **0.5.73**/74; gap
-  **8dp** ≥ **0.5.75**). Live `#list` inspector trailing /
-  `#sandbox-card-head-select`.
+  **8dp** ≥ **0.5.75**); ≥ **0.5.227** Card/Collapsible head must **not**
+  switch to expanded grid / `overflow: visible` when Select opens (same
+  `:not(.fynns-select)` gate). Live `#list` inspector trailing /
+  `#sandbox-list-inspector-trailing` / `#sandbox-card-head-select`.
 - **DON'T** use a flex `.fynns-control-cluster` for multi-metric List trailing
   that must **column-align across sibling rows** — use
   `.fynns-list-item-trailing-stats` (fixed grid; `--pair` for two metrics).
@@ -389,10 +407,11 @@ belong in a consumer’s own doc.
   catalog ControlRow + List trailing + section strip share **md**. Live
   `#rhythm` morph + cover-letter.
 - **DON'T** put sibling FieldBlocks in a `Grid` that vertically **centers** when
-  one Select expands in-flow — core ≥ **0.5.172** defaults `.fynns-grid` to
+  a sibling cell grows taller — core ≥ **0.5.172** defaults `.fynns-grid` to
   `align-items: start` so labels share one top edge (Hub Inspector agent | cwd
-  failure). Prefer FieldStack→Grid for multi-column fields; do **not** invent
-  consumer `align-items: center` on `.fynns-grid`. Live
+  failure). Select menu is **portaled** (≥ **0.5.208**); shell stays 40dp — do
+  **not** invent consumer `align-items: center` on `.fynns-grid` (still fails if
+  Autocomplete/SearchBar docks or any cell grows). Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   vertically centers short FieldBlock beside expanded Select.
 - **DON'T** leave FieldStack→`Grid` `x={N}` hugging `max-content` in a wide
@@ -559,6 +578,26 @@ belong in a consumer’s own doc.
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
   `#layouts-demo-shell`.
+- **DON'T** park mode / session delete (or other row `IconButton`s) on
+  `NavigationDrawerItem` `badge` — `badge` is **counts / marks only**. Row
+  actions use `trailing` ghost **sm** `IconButton` (List `--with-end` overlay
+  reveal ≥ **0.5.221**; disk clamp ≥ **0.5.225**: destination pill is **40dp**,
+  so trailing actions stay **32dp** — never default **md** / 40dp, which would
+  kiss the pill block edges). Idle-hidden on fine pointer; hover /
+  focus-within; coarse always visible; action is a **sibling** of the
+  destination button — never nested. Live `#layouts-demo-navigation-drawer`.
+  Failure: CONSUMER_TREATY NavigationDrawerItem badge IconButton always visible.
+- **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
+  `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
+  outer** — Plus / Switch / `--with-end` disks share the **pill trailing edge**
+  (body content edge; ≥ **0.5.228**). Live `#layouts-demo-navigation-drawer`.
+  Failure: CONSUMER_TREATY mode drawer Plus ≠ Item pill end.
+- **DON'T** let bare mode `--toolbar-end` / preference `ControlRow` as **direct**
+  drawer-body children open only Item `section-gap` (**4dp**) before the next
+  sibling — chrome ↔ destinations / filter must use `--fynns-navdrawer-search-gap`
+  (**8dp**, ≥ **0.5.222**). Do **not** invent a consumer tools wrapper solely to
+  fake that gap. Live `#layouts-demo-navigation-drawer`. Failure: CONSUMER_TREATY
+  mode drawer tools↔filter crushed to 4dp.
 - **DON'T** drive NavigationDrawer footer `Avatar` initials from a **truncated**
   `name` while the visible `.fynns-nav-drawer-footer-account-label` stays the
   full string (`Hub` → `HU` while label reads `Agents Hub`) — pass the **same**
@@ -1025,9 +1064,9 @@ rules such as timeline-catalog). Live index: `#list`.
 | Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing; meta kissing scroll rail |
 | Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only; capped wells = `List` + `fynns-scroll` + `list-well-max-height*` | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete; private end pad to “fix” scrollbar kiss |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
-| Title + org + date range | Org in `supportingText`; dates in `trailingSupportingText` + `trailingMetaAlign="start"` (start-ink ≥ **0.5.13**) | `#list` org+dates / `#timeline` | Glue org·dates; private `text-align`/width on trailing meta |
+| Title + org + date range | Org in `supportingText`; **status/kind → `overline`**; dates **only** in `trailingSupportingText` + `trailingMetaAlign="start"` (fixed start-ink column ≥ **0.5.223**) | `#list` org+dates / `#timeline` | Glue org·dates; status glued into date trailing; omit `trailingMetaAlign`; private `text-align`/width on trailing meta |
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign`; hover reserve clears meta (≥ **0.5.207**) | `#list` status+action / `#sandbox-list-recipe-catalog` | `trailingMetaAlign="start"` on status+action; meta under IconButtons |
-| Inspector Select ± CTA | In-flow end strip; inline Select; trigger-band | `#list` inspector trailing | Absolute flyout; 4dp kiss; meta mid expanded panel |
+| Inspector Select ± CTA | In-flow end strip; portaled menu; trigger-band; open keeps host cross-axis center (≥ **0.5.226**) | `#list` / `#sandbox-list-inspector-trailing` | Absolute flyout; 4dp kiss; open Select yanking trailing to flex-start |
 | Status + identity + duration | Single-line cluster + `.fynns-list-item-status`; one metric/cell | `#list` run-summary | InlineAlert in headline; latency+tokens in one meta; Chip as Success/Failed |
 | Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
@@ -1056,9 +1095,10 @@ rules such as timeline-catalog). Live index: `#list`.
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
-| Mode drawer tools | `--toolbar-end`; primary Plus last; ListChecksIcon bulk; Plus end = preference Switch end (item-pad ≥ **0.5.143**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus flush on body pad while Switch on item-pad |
+| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp |
+| Mode / session row delete | `NavigationDrawerItem` `trailing` ghost **sm** IconButton (32dp; core clamps ≥ **0.5.225**); `--with-end` overlay (≥ **0.5.221**) | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash; nested button inside Item; default **md** 40dp disk kissing the 40dp pill |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
-| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label inset = Item `item-pad-inline` (core ≥ **0.5.137**); Switch end aligns with `--toolbar-end` Plus (≥ **0.5.143**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch short of Plus |
+| Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
@@ -1066,7 +1106,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
-| Card head Select + Button | Trigger-band grammar; 8dp action gap | `#sandbox-card-head-select` | Title/CTA centered on expanded Select |
+| Card head Select + Button | Trigger-band; 8dp gap; open Select keeps head center (≥ **0.5.227**) | `#sandbox-card-head-select` | Title/CTA yanked by Select `data-expanded` grid |
 | Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |
 | Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` **`interactive`** in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout; large-button state layer) | `#chat` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad; static soft without hover |
 | In-content editor\|preview | `SplitPane` | `#split-pane` | Hand-rolled resize; EndAside inside Card |
@@ -1177,11 +1217,12 @@ do not leave every FieldBlock / ControlBlock as a flat Card-body sibling.
 - **Copy the tree** from sandbox `#form-recipe` (same FieldStack body under
   Card, Collapsible, and dismissible Dialog).
 - **Multi-column FieldBlocks** → `FieldStack` → `Grid` `x={2}` (or more). Core
-  Grid is **top**-aligned (`align-items: start` ≥ **0.5.172**) so an expanded
-  in-flow Select does not mid-park the sibling FieldBlock. Fixed-`x` fills the
-  parent with equal `1fr` tracks (≥ **0.5.211**) — not a `max-content` island.
-  **No other variant** for this recipe (`equalCells` / hug / private CSS).
-  Live `#form-recipe` / `#sandbox-field-stack-grid-select`.
+  Grid is **top**-aligned (`align-items: start` ≥ **0.5.172**) so a taller
+  sibling (or consumer `center` override) does not mid-park a short FieldBlock.
+  Select shell stays 40dp with a **portaled** menu (≥ **0.5.208**). Fixed-`x`
+  fills the parent with equal `1fr` tracks (≥ **0.5.211**) — not a
+  `max-content` island. **No other variant** for this recipe (`equalCells` /
+  hug / private CSS). Live `#form-recipe` / `#sandbox-field-stack-grid-select`.
 
 **Recipe (hard):** Switch (or other labeled row) **and** its narrative are
 **one unit** → wrap in `ControlBlock`. On a **single** ControlRow, `description`

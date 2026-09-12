@@ -11,6 +11,7 @@ import {
   type HTMLAttributes,
   type ReactNode,
 } from "react";
+import { trailingIsRowAction } from "./catalogRowGeometry";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
@@ -84,7 +85,9 @@ export type NavigationDrawerProps = {
    * tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` host as a body
    * sibling uses `--fynns-navdrawer-search-gap` (aliases layout
    * `control-stack-gap` — 8dp; chrome band peers + chrome↔destinations;
-   * wider than Item↔Item, not a 16dp kind-jump).
+   * wider than Item↔Item, not a 16dp kind-jump). Bare
+   * `.fynns-control-cluster--toolbar-end` / `.fynns-control-row` as **direct**
+   * children are covered (≥ **0.5.222**) — not only `:has()` wrappers.
    * Do **not** wrap destinations in `.fynns-unit-stack`.
    */
   children?: ReactNode;
@@ -398,15 +401,27 @@ export type NavigationDrawerItemProps = Omit<
   /** Selected / current destination. */
   active?: boolean;
   /**
-   * Trailing badge — number/string, `true` for a bare mark, or a custom node.
-   * Counts fold into the accessible name when set.
+   * Trailing badge — count / mark only (`number` / `string` / `true` for a
+   * bare dot, or a decorative non-action node). Counts fold into the
+   * accessible name when set. **Never** put `IconButton` / delete chrome
+   * here — use `trailing` (List `--with-end` overlay reveal). Misplaced
+   * action nodes in `badge` are promoted to `trailing` so they never nest
+   * inside the row `<button>` or stay idle-visible on fine pointer.
    */
   badge?: number | string | true | ReactNode;
+  /**
+   * Trailing row action (`IconButton` / `Tooltip`+`IconButton`). Sibling of
+   * the destination button (never nested). Fine pointer: idle-transparent,
+   * reveal on host `:hover` / `:focus-within`. Coarse / no-hover: always
+   * visible. Live: Layouts `#layouts-demo-navigation-drawer` mode entries.
+   */
+  trailing?: ReactNode;
 };
 
 /**
- * Single navigation drawer destination — icon + label + optional trailing
- * badge, with a full-width pill active indicator (`secondary-container`).
+ * Single navigation drawer destination — icon + label + optional count badge
+ * and/or hover-reveal trailing action, with a full-width pill active
+ * indicator (`secondary-container`).
  */
 export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
   {
@@ -414,6 +429,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     label,
     active = false,
     badge,
+    trailing,
     className,
     type = "button",
     "aria-label": ariaLabel,
@@ -423,15 +439,27 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
 ) {
   const labelId = useId();
 
+  const badgeIsAction =
+    badge != null &&
+    badge !== true &&
+    typeof badge !== "number" &&
+    typeof badge !== "string" &&
+    trailingIsRowAction(badge);
+  const endAction = trailing ?? (badgeIsAction ? badge : null);
+
   let badgeNode: ReactNode = null;
-  if (badge === true) {
-    badgeNode = <span className="fynns-nav-drawer-badge fynns-nav-drawer-badge--mark" />;
-  } else if (typeof badge === "number" || typeof badge === "string") {
-    badgeNode = (
-      <span className="fynns-nav-drawer-badge">{String(badge)}</span>
-    );
-  } else if (badge != null) {
-    badgeNode = badge;
+  if (!badgeIsAction) {
+    if (badge === true) {
+      badgeNode = (
+        <span className="fynns-nav-drawer-badge fynns-nav-drawer-badge--mark" />
+      );
+    } else if (typeof badge === "number" || typeof badge === "string") {
+      badgeNode = (
+        <span className="fynns-nav-drawer-badge">{String(badge)}</span>
+      );
+    } else if (badge != null) {
+      badgeNode = badge;
+    }
   }
 
   const badgeCountText =
@@ -448,7 +476,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     .filter(Boolean)
     .join(" ");
 
-  return (
+  const item = (
     <button
       {...rest}
       ref={ref}
@@ -468,5 +496,24 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
       </span>
       {badgeNode}
     </button>
+  );
+
+  if (endAction == null) return item;
+
+  const hostClass = [
+    "fynns-nav-drawer-item-host",
+    "fynns-nav-drawer-item-host--with-end",
+    active ? "fynns-nav-drawer-item-host--active" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={hostClass}>
+      {item}
+      <span className="fynns-nav-drawer-item-trailing fynns-nav-drawer-item-trailing--end">
+        {endAction}
+      </span>
+    </div>
   );
 });

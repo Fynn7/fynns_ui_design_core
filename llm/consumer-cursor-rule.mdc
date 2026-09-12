@@ -71,9 +71,12 @@ alwaysApply: true
   `HU`）。对照 `#layouts-demo-shell` / `#avatar`。
 - 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
   `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
-  **0.5.137** 对齐 Item `item-pad-inline`；`--toolbar-end` 主新建 Plus 与
-  Switch 轨道**右端对齐**（core ≥ **0.5.143** 同套 item-pad；勿消费仓私有
-  padding）。对照 `#layouts-demo-navigation-drawer`。
+  **0.5.137** 对齐 Item `item-pad-inline-start`；`--toolbar-end` 主新建 Plus、
+  Switch 轨道与目的地 **Item pill 外缘**共右端（≥ **0.5.228** — **禁止**再给
+  toolbar / ControlRow 套 `item-pad-end` 把 Plus 缩进 16dp）。`--toolbar-end` /
+  偏好 `ControlRow` 作 drawer body **直接子**时与下一兄弟的间距是 `search-gap`
+  **8dp**（≥ **0.5.222**）— **禁止**压成 Item `section-gap` 4dp，也勿仅为间距
+  再包一层消费仓 tools 壳。对照 `#layouts-demo-navigation-drawer`。
 - 模式侧栏 SyncSideFilter：`ToggleGroup` `compact` `fullWidth` +
   **`showCheck={false}`** + **省略 option `tip`**；可见标签用**短**名
   （全部 / 标记字形）— **禁止**等分列塞长产品名（core ≥ **0.5.140** 会
@@ -109,8 +112,22 @@ alwaysApply: true
    一张胖 Card + 多段 `FieldHint` 长文 + `ChipSet` 标签汤。对照 `#list` /
    `#sandbox-list-recipe-catalog`。
 6. **org · dates glued / UI · — punctuation** — 槽位分开；禁用 `·`/`—` 粘合。
+6b. **trailingSupportingText right-hug drift** — 日期 / 时间戳目录必须
+   `List` / `Timeline` **`trailingMetaAlign="start"`**（固定列 start-ink ≥
+   **0.5.223**）。状态 / kind → `overline`；**禁止**把 `已完成, 2025-10 - 2026-03`
+   粘进 trailing。对照 `#list` org+dates / `#timeline`。
 7. **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏
    Cancel → Delete → Save；勿 rail `--with-end` 铅笔/垃圾桶。对照 `#timeline`。
+7b. **NavigationDrawerItem badge IconButton always visible** — 模式 / 会话行
+   删除用 `NavigationDrawerItem` **`trailing`** ghost **sm** IconButton（+
+   Tooltip；≥ **0.5.225** 核心把 trailing 盘钳到 **32dp**，禁止默认 md 40dp
+   与 40dp 目的地 pill 上下相切）；List `--with-end` 叠层揭示（≥ **0.5.221**）。
+   **禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。对照
+   `#layouts-demo-navigation-drawer`。
+7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
+   偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
+   **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照
+   `#layouts-demo-navigation-drawer`。
 8. **Dialog foot Delete leftmost** — Cancel 在左，主确认在右。
 8a. **Dialog exit clears title/body (flash)** — 勿在 `open→false` 同一拍清空
     title/body；`DialogFrame` 退出约 240ms 仍绘 props，内容保留到下次打开。
@@ -236,6 +253,11 @@ alwaysApply: true
     贴 overlay Y 轨。core ≥ **0.5.171** 在 list end 预留 `--fynns-scrollbar-size`
    ；有行内 meta 时 `--with-end` idle 保持 `list-pad-inline`。勿自造消费仓
     end pad。对照 `#sandbox-list-repo-path-actions`。
+30a. **List scroll-well overflow-y spill overlaps siblings** — 封顶
+    `List` + `fynns-scroll` + `list-well-max-height*`：禁止行画出井外盖住下一段
+    说明 / 下一 List。core ≥ **0.5.224** `overflow-y: auto`（仅 clip X 时 Y 仍
+    为 visible）。勿靠消费仓 `overflow:hidden` 外包「修」。对照
+    `#sandbox-list-repo-path-actions`。
 30b. **List trailingSupportingText underlaps --with-end IconButtons** — 短
     status / kind（Builtin / Current）+ `--with-end` IconButton：悬停 / 触控
     显盘时 meta 不得压在下载/预览盘下。core ≥ **0.5.207** 修正 idle
