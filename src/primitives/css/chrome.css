@@ -2264,29 +2264,30 @@
 }
 
 /*
- * Mode preference ControlRow (≥ 0.5.137): share Item content inset
- * (`--fynns-navdrawer-item-pad-inline-*`), not flush on body `pad-inline`
- * (10dp) alone — otherwise preference labels (Hide built-in) read glued to
- * the sheet edge while destination glyphs sit on item-pad. Matches bare
- * Item labels (no leading icon). Tools wrappers that host a direct
- * ControlRow get the same pad; Card / Collapsible form hosts keep their own
- * content-inset (ControlRow is not a direct child). Live:
- * `#layouts-demo-navigation-drawer`.
+ * Mode preference ControlRow (≥ 0.5.137 start; **end flush ≥ 0.5.228**):
+ * label uses Item `item-pad-inline-start` so “Hide built-in” matches
+ * destination glyphs — not flush on body `pad-inline` (10dp) alone.
+ * **Trailing** pad is **0** so the Switch track shares the destination
+ * **pill outer** edge with `--toolbar-end` Plus (0.5.143 wrongly used
+ * item-pad-end and inset both ~16dp inside the pill). Tools wrappers that
+ * host a direct ControlRow get the same pad; Card / Collapsible form hosts
+ * keep their own content-inset. Live: `#layouts-demo-navigation-drawer`.
  */
 .fynns-nav-drawer-body > .fynns-control-row,
 .fynns-nav-drawer-body > *:has(> .fynns-control-row) > .fynns-control-row {
   box-sizing: border-box;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
-  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  padding-inline-end: 0;
 }
 
 /*
- * Mode `--toolbar-end` strip (≥ **0.5.143**): same Item `item-pad-inline`
- * as the preference ControlRow below so primary Plus (sm) and Switch track
- * share one **trailing** edge (grid-like tools column). Without this, Plus
- * hugs body `pad-inline` only while Switch sits on item-pad-end (~16dp
- * further in). Cluster stays full-width + `justify-content: flex-end`.
- * Live: `#layouts-demo-navigation-drawer`.
+ * Mode `--toolbar-end` strip (≥ **0.5.143** start; **end flush ≥ 0.5.228**):
+ * start inset matches Item labels; **trailing** edge is the destination
+ * **pill outer** (body content edge) — same as primary Plus, preference
+ * Switch, and Item `--with-end` disks. Do **not** re-apply
+ * `item-pad-inline-end` here (that inset Plus ~16dp short of the pill).
+ * Cluster stays full-width + `justify-content: flex-end`. Live:
+ * `#layouts-demo-navigation-drawer`.
  */
 .fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end,
 .fynns-nav-drawer-body
@@ -2295,7 +2296,7 @@
   box-sizing: border-box;
   width: 100%;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
-  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  padding-inline-end: 0;
 }
 
 /*
@@ -2608,10 +2609,10 @@
 .fynns-nav-drawer-item-host--with-end {
   /* Always sm (32dp) — never md 40dp inside a 40dp pill. */
   --fynns-navdrawer-end-action-disk: 2rem;
+  /* End flush with pill outer (≥ **0.5.228**) — no item-pad-end in reserve. */
   --fynns-navdrawer-end-actions-reserve: calc(
     var(--fynns-layout-control-cluster-gap) +
-      var(--fynns-navdrawer-end-action-disk) +
-      var(--fynns-navdrawer-item-pad-inline-end)
+      var(--fynns-navdrawer-end-action-disk)
   );
 }
 
@@ -2622,7 +2623,8 @@
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  /* Flush to pill outer — same trailing edge as `--toolbar-end` Plus. */
+  padding-inline-end: 0;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);

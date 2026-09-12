@@ -179,6 +179,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | mode drawer primary New not rightmost | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer hide-builtin ControlBlock stack | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar Plus ≠ Switch end | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
+| mode drawer Plus ≠ Item pill end | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer InlineAlert essay | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
 | mode drawer preference ControlRow flush on pad-inline | AGENTS Content density / shells | `#layouts-demo-navigation-drawer` |
 | SyncSideFilter tooltip covers chrome or list | AGENTS Content density / List | `—` |
