@@ -21,6 +21,14 @@ test(`${SLUG}: short alert; detail on InfoHint`, async ({ page }) => {
   const demo = layoutsDemo(page, "navigation-drawer");
   await expect(demo).toBeVisible();
 
+  // Mode drawer defaults to live destinations so `--with-end` delete is
+  // visible; opt into the catalog-fail teaching sample via the show control.
+  await demo
+    .getByRole("button", {
+      name: /Show mode catalog load fail|显示模式侧栏目录加载失败/,
+    })
+    .click();
+
   const fail = demo.locator("#sandbox-navdrawer-mode-catalog-fail");
   await expect(fail).toBeVisible();
 

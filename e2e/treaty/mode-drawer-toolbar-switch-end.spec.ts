@@ -17,6 +17,7 @@ import {
 
 const SLUG = "mode drawer toolbar Plus ≠ Switch end";
 const PILL_SLUG = "mode drawer Plus ≠ Item pill end";
+const DISK_SLUG = "NavigationDrawerItem badge IconButton always visible";
 const GAP_SLUG = "mode drawer tools↔filter crushed to 4dp";
 
 test.beforeEach(async ({ page }) => {
@@ -90,8 +91,75 @@ test(`${PILL_SLUG}: Plus right ≈ destination Item pill right`, async ({
     });
     expect(metrics, PILL_SLUG).not.toBeNull();
     expect(
+      metrics!.toolsPadEnd,
+      `${PILL_SLUG}: --toolbar-end must flush end (got toolsPadEnd=${metrics!.toolsPadEnd})`,
+    ).toBe("0px");
+    expect(
       metrics!.delta,
       `${PILL_SLUG}: Plus right vs Item pill right (got Δ=${metrics!.delta}; toolsPadEnd=${metrics!.toolsPadEnd})`,
+    ).toBeLessThanOrEqual(2);
+  }).toPass({ timeout: 10_000 });
+});
+
+test(`${DISK_SLUG}: trailing delete disk 32dp inside 40dp pill`, async ({
+  page,
+}) => {
+  await openLayoutsDemo(page, "navigation-drawer");
+  const demo = layoutsDemo(page, "navigation-drawer");
+  await expect(demo).toBeVisible();
+
+  await expect(async () => {
+    const metrics = await demo.evaluate((host) => {
+      const mode = [...host.querySelectorAll(".fynns-nav-drawer")].find((el) =>
+        /mode|模式/i.test(el.getAttribute("aria-label") ?? ""),
+      );
+      if (!mode) return null;
+      const hostEl = mode.querySelector(".fynns-nav-drawer-item-host--with-end");
+      const pill = hostEl?.querySelector(
+        ":scope > .fynns-nav-drawer-item",
+      ) as HTMLElement | null;
+      const trail = hostEl?.querySelector(
+        ".fynns-nav-drawer-item-trailing--end",
+      ) as HTMLElement | null;
+      const del = trail?.querySelector(".fynns-btn--icon") as HTMLElement | null;
+      if (!pill || !trail || !del) return null;
+      trail.style.opacity = "1";
+      trail.style.pointerEvents = "auto";
+      const ir = pill.getBoundingClientRect();
+      const dr = del.getBoundingClientRect();
+      return {
+        pillH: ir.height,
+        diskH: dr.height,
+        diskW: dr.width,
+        clearTop: dr.top - ir.top,
+        clearBottom: ir.bottom - dr.bottom,
+        deltaEnd: Math.abs(dr.right - ir.right),
+      };
+    });
+    expect(metrics, DISK_SLUG).not.toBeNull();
+    expect(
+      metrics!.pillH,
+      `${DISK_SLUG}: destination pill height (got ${metrics!.pillH})`,
+    ).toBeGreaterThanOrEqual(39.5);
+    expect(metrics!.pillH).toBeLessThanOrEqual(40.5);
+    expect(
+      metrics!.diskH,
+      `${DISK_SLUG}: trailing disk height (got ${metrics!.diskH})`,
+    ).toBeGreaterThanOrEqual(31.5);
+    expect(metrics!.diskH).toBeLessThanOrEqual(32.5);
+    expect(metrics!.diskW).toBeGreaterThanOrEqual(31.5);
+    expect(metrics!.diskW).toBeLessThanOrEqual(32.5);
+    expect(
+      metrics!.clearTop,
+      `${DISK_SLUG}: disk must clear pill top (got ${metrics!.clearTop})`,
+    ).toBeGreaterThanOrEqual(3.5);
+    expect(
+      metrics!.clearBottom,
+      `${DISK_SLUG}: disk must clear pill bottom (got ${metrics!.clearBottom})`,
+    ).toBeGreaterThanOrEqual(3.5);
+    expect(
+      metrics!.deltaEnd,
+      `${DISK_SLUG}: disk right ≈ pill outer (got Δ=${metrics!.deltaEnd})`,
     ).toBeLessThanOrEqual(2);
   }).toPass({ timeout: 10_000 });
 });
