@@ -4,6 +4,11 @@
  * Item **pill outer** share one trailing edge (≥ **0.5.228**; supersedes
  * 0.5.143 item-pad-end inset). Sandbox: #layouts-demo-navigation-drawer.
  *
+ * Also asserts trailing delete disk is **32dp** inside the **40dp**
+ * destination pill with ≥4dp clear on top/bottom/end (≥ **0.5.225** size;
+ * ≥ **0.5.234** inline-end — hover wash must not tangent the stadium end).
+ * Slug: NavigationDrawerItem badge IconButton always visible.
+ *
  * Also asserts bare `--toolbar-end` (body direct child) opens
  * `--fynns-navdrawer-search-gap` (8dp) before the next sibling — not
  * section-gap 4dp (≥ **0.5.222**). Slug: mode drawer tools↔filter crushed to 4dp.
@@ -133,7 +138,7 @@ test(`${DISK_SLUG}: trailing delete disk 32dp inside 40dp pill`, async ({
         diskW: dr.width,
         clearTop: dr.top - ir.top,
         clearBottom: ir.bottom - dr.bottom,
-        deltaEnd: Math.abs(dr.right - ir.right),
+        clearEnd: ir.right - dr.right,
       };
     });
     expect(metrics, DISK_SLUG).not.toBeNull();
@@ -158,9 +163,9 @@ test(`${DISK_SLUG}: trailing delete disk 32dp inside 40dp pill`, async ({
       `${DISK_SLUG}: disk must clear pill bottom (got ${metrics!.clearBottom})`,
     ).toBeGreaterThanOrEqual(3.5);
     expect(
-      metrics!.deltaEnd,
-      `${DISK_SLUG}: disk right ≈ pill outer (got Δ=${metrics!.deltaEnd})`,
-    ).toBeLessThanOrEqual(2);
+      metrics!.clearEnd,
+      `${DISK_SLUG}: disk must clear pill end (got ${metrics!.clearEnd})`,
+    ).toBeGreaterThanOrEqual(3.5);
   }).toPass({ timeout: 10_000 });
 });
 
