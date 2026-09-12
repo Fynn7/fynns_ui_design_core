@@ -137,7 +137,7 @@ export function LayoutsPage() {
     "all" | "alpha" | "beta"
   >("all");
   const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
-  const [modeDrawerCatalogFail, setModeDrawerCatalogFail] = useState(true);
+  const [modeDrawerCatalogFail, setModeDrawerCatalogFail] = useState(false);
   const [bulkDemoSelectMode, setBulkDemoSelectMode] = useState(true);
   const [bulkDemoChecked, setBulkDemoChecked] = useState<Record<BulkDemoKey, boolean>>({
     "bulk-a": true,
@@ -681,83 +681,81 @@ export function LayoutsPage() {
                 variant="standard"
                 ariaLabel={t("globals.navDrawerModeAria")}
               >
-                <div className="sandbox-navdrawer-tools">
-                  <div
-                    className="fynns-control-cluster fynns-control-cluster--toolbar-end"
-                    aria-label={t("globals.navDrawerModeToolsAria")}
-                  >
-                    <Tooltip content={t("globals.navDrawerModeSortTip")}>
-                      <DropdownMenu
-                        iconOnly
-                        ariaLabel={t("globals.navDrawerModeSortTip")}
-                        align="end"
-                        trigger={<BarChartIcon size={16} />}
+                <div
+                  className="fynns-control-cluster fynns-control-cluster--toolbar-end"
+                  aria-label={t("globals.navDrawerModeToolsAria")}
+                >
+                  <Tooltip content={t("globals.navDrawerModeSortTip")}>
+                    <DropdownMenu
+                      iconOnly
+                      ariaLabel={t("globals.navDrawerModeSortTip")}
+                      align="end"
+                      trigger={<BarChartIcon size={16} />}
+                    >
+                      <DropdownMenuCheckboxItem
+                        checked={modeDrawerSort === "alphabet"}
+                        closeOnSelect
+                        onCheckedChange={(checked) => {
+                          if (checked) setModeDrawerSort("alphabet");
+                        }}
                       >
-                        <DropdownMenuCheckboxItem
-                          checked={modeDrawerSort === "alphabet"}
-                          closeOnSelect
-                          onCheckedChange={(checked) => {
-                            if (checked) setModeDrawerSort("alphabet");
-                          }}
-                        >
-                          {t("globals.navDrawerModeSortAlpha")}
-                        </DropdownMenuCheckboxItem>
-                        <DropdownMenuCheckboxItem
-                          checked={modeDrawerSort === "updated"}
-                          closeOnSelect
-                          onCheckedChange={(checked) => {
-                            if (checked) setModeDrawerSort("updated");
-                          }}
-                        >
-                          {t("globals.navDrawerModeSortUpdated")}
-                        </DropdownMenuCheckboxItem>
-                      </DropdownMenu>
-                    </Tooltip>
-                    <Tooltip content={t("globals.navDrawerModeRefreshTip")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
-                        aria-label={t("globals.navDrawerModeRefreshTip")}
-                        onClick={() => setModeDrawerCatalogFail(false)}
+                        {t("globals.navDrawerModeSortAlpha")}
+                      </DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={modeDrawerSort === "updated"}
+                        closeOnSelect
+                        onCheckedChange={(checked) => {
+                          if (checked) setModeDrawerSort("updated");
+                        }}
                       >
-                        <RefreshIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip content={t("globals.navDrawerToolBulk")}>
-                      <IconButton
-                        size="sm"
-                        variant="ghost"
-                        aria-label={t("globals.navDrawerToolBulk")}
-                      >
-                        <ListChecksIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip content={t("globals.navDrawerModeNewTip")}>
-                      <IconButton
-                        size="sm"
-                        variant="primary"
-                        aria-label={t("globals.navDrawerModeNewTip")}
-                      >
-                        <PlusIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <ControlRow label={t("globals.navDrawerModeHideBuiltin")}>
-                    <div className="fynns-control-cluster">
-                      <InfoHint
-                        size="sm"
-                        content={t("globals.navDrawerModeHideBuiltinHint")}
-                        ariaLabel={t("globals.navDrawerModeHideBuiltinHintAria")}
-                      />
-                      <Switch
-                        label=""
-                        ariaLabel={t("globals.navDrawerModeHideBuiltinAria")}
-                        checked={modeDrawerHideBuiltin}
-                        onCheckedChange={setModeDrawerHideBuiltin}
-                      />
-                    </div>
-                  </ControlRow>
+                        {t("globals.navDrawerModeSortUpdated")}
+                      </DropdownMenuCheckboxItem>
+                    </DropdownMenu>
+                  </Tooltip>
+                  <Tooltip content={t("globals.navDrawerModeRefreshTip")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.navDrawerModeRefreshTip")}
+                      onClick={() => setModeDrawerCatalogFail(false)}
+                    >
+                      <RefreshIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.navDrawerToolBulk")}>
+                    <IconButton
+                      size="sm"
+                      variant="ghost"
+                      aria-label={t("globals.navDrawerToolBulk")}
+                    >
+                      <ListChecksIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip content={t("globals.navDrawerModeNewTip")}>
+                    <IconButton
+                      size="sm"
+                      variant="primary"
+                      aria-label={t("globals.navDrawerModeNewTip")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
                 </div>
+                <ControlRow label={t("globals.navDrawerModeHideBuiltin")}>
+                  <div className="fynns-control-cluster">
+                    <InfoHint
+                      size="sm"
+                      content={t("globals.navDrawerModeHideBuiltinHint")}
+                      ariaLabel={t("globals.navDrawerModeHideBuiltinHintAria")}
+                    />
+                    <Switch
+                      label=""
+                      ariaLabel={t("globals.navDrawerModeHideBuiltinAria")}
+                      checked={modeDrawerHideBuiltin}
+                      onCheckedChange={setModeDrawerHideBuiltin}
+                    />
+                  </div>
+                </ControlRow>
                 <ToggleGroup
                   size="compact"
                   fullWidth
@@ -814,12 +812,40 @@ export function LayoutsPage() {
                       label={t("globals.navDrawerModeEntryAlpha")}
                       active={modeDrawerEntry === "alpha"}
                       onClick={() => setModeDrawerEntry("alpha")}
+                      trailing={
+                        <Tooltip content={t("globals.navDrawerModeEntryDelete")}>
+                          <IconButton
+                            size="sm"
+                            variant="ghost"
+                            aria-label={t("globals.navDrawerModeEntryDelete")}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                            }}
+                          >
+                            <TrashIcon />
+                          </IconButton>
+                        </Tooltip>
+                      }
                     />
                     <NavigationDrawerItem
                       icon={<FileIcon />}
                       label={t("globals.navDrawerModeEntryBeta")}
                       active={modeDrawerEntry === "beta"}
                       onClick={() => setModeDrawerEntry("beta")}
+                      trailing={
+                        <Tooltip content={t("globals.navDrawerModeEntryDelete")}>
+                          <IconButton
+                            size="sm"
+                            variant="ghost"
+                            aria-label={t("globals.navDrawerModeEntryDelete")}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                            }}
+                          >
+                            <TrashIcon />
+                          </IconButton>
+                        </Tooltip>
+                      }
                     />
                   </>
                 )}

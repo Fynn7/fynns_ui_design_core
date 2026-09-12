@@ -2205,6 +2205,7 @@
   > *
   + :is(
     .fynns-nav-drawer-item,
+    .fynns-nav-drawer-item-host,
     .fynns-nav-drawer-group,
     .fynns-nav-drawer-section-headline,
     .fynns-divider,
@@ -2226,8 +2227,12 @@
  * Search ↔ Item, tools column ↔ SyncSideFilter `ToggleGroup`, and
  * toolbar-end host ↔ filter / destinations share one step — wider than
  * Item↔Item `section-gap` (4dp), never the old 16dp kind-jump. Covers
- * bare SearchBar / ToggleGroup or a tools wrapper that hosts SearchBar,
- * `--toolbar-end`, or a preference `ControlRow`.
+ * bare SearchBar / ToggleGroup, a **direct** `.fynns-control-cluster--toolbar-end`
+ * (chat session tools — ≥ **0.5.222**), or a tools wrapper that hosts
+ * SearchBar / `--toolbar-end` / preference `ControlRow`.
+ * `:has(.fynns-control-cluster--toolbar-end)` only matches **ancestors** of
+ * the cluster — bare toolbar-end as a body child needs the explicit class
+ * selectors or tools↔Item collapses to section-gap 4dp.
  */
 .fynns-nav-drawer-body > .fynns-search-bar + *,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar) + *,
@@ -2235,8 +2240,12 @@
 .fynns-nav-drawer-body > * + *:has(.fynns-search-bar),
 .fynns-nav-drawer-body > .fynns-toggle-group + *,
 .fynns-nav-drawer-body > * + .fynns-toggle-group,
+.fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end + *,
+.fynns-nav-drawer-body > * + .fynns-control-cluster--toolbar-end,
 .fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) + *,
 .fynns-nav-drawer-body > * + *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > .fynns-control-row + *,
+.fynns-nav-drawer-body > * + .fynns-control-row,
 .fynns-nav-drawer-body > *:has(> .fynns-control-row) + *,
 .fynns-nav-drawer-body > * + *:has(> .fynns-control-row) {
   margin-block-start: var(--fynns-navdrawer-search-gap);
@@ -2247,6 +2256,7 @@
 .fynns-nav-drawer-body > .fynns-search-bar,
 .fynns-nav-drawer-body > *:has(.fynns-search-bar),
 .fynns-nav-drawer-body > .fynns-toggle-group,
+.fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end,
 .fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end),
 .fynns-nav-drawer-body > .fynns-control-row,
 .fynns-nav-drawer-body > *:has(> .fynns-control-row) {
@@ -2570,8 +2580,129 @@
   background: var(--fynns-color-danger);
 }
 
+/*
+ * Mode / session row actions (`trailing` IconButton) — List `--with-end`
+ * overlay reveal parity (≥ **0.5.221**). Idle: full-bleed label. Fine
+ * pointer: reveal on host hover / focus-within. Coarse / no-hover: always
+ * visible. Host owns the row so actions never nest inside the destination
+ * `<button>`.
+ *
+ * Disk size hard gate (≥ **0.5.225**): destination pill is
+ * `--fynns-navdrawer-item-height` (**40dp**). Default IconButton md is also
+ * 40dp — hover wash would kiss the pill block edges. Trailing actions are
+ * always **sm** (**32dp**) so the state layer stays one t-shirt step inside
+ * the parent (`space-xs` / 4dp clear top + bottom). Live:
+ * `#layouts-demo-navigation-drawer` mode entries.
+ */
+.fynns-nav-drawer-item-host {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-item-host--with-end {
+  /* Always sm (32dp) — never md 40dp inside a 40dp pill. */
+  --fynns-navdrawer-end-action-disk: 2rem;
+  --fynns-navdrawer-end-actions-reserve: calc(
+    var(--fynns-layout-control-cluster-gap) +
+      var(--fynns-navdrawer-end-action-disk) +
+      var(--fynns-navdrawer-item-pad-inline-end)
+  );
+}
+
+.fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item-trailing--end {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block: 0;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+/* Clamp any IconButton (incl. default md) to sm disk — consumer size prop
+ * cannot reintroduce a tangent hover circle on the 40dp destination pill. */
+.fynns-nav-drawer-item-trailing--end .fynns-btn--icon {
+  width: var(--fynns-navdrawer-end-action-disk);
+  height: var(--fynns-navdrawer-end-action-disk);
+  min-width: var(--fynns-navdrawer-end-action-disk);
+  min-height: var(--fynns-navdrawer-end-action-disk);
+  padding: 0;
+}
+
+.fynns-nav-drawer-item-trailing--end .fynns-btn--icon svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-nav-drawer-item-host--with-end:hover > .fynns-nav-drawer-item-trailing--end,
+.fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item-trailing--end {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item {
+  padding-inline-end: var(--fynns-space-xs);
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+}
+
+.fynns-nav-drawer-item-host--with-end:hover > .fynns-nav-drawer-item,
+.fynns-nav-drawer-item-host--with-end:focus-within > .fynns-nav-drawer-item {
+  padding-inline-end: var(--fynns-navdrawer-end-actions-reserve);
+}
+
+/* Hovering the absolute trailing sibling must still light the destination pill. */
+.fynns-nav-drawer-item-host--with-end:hover
+  > .fynns-nav-drawer-item:not(:disabled):not(.fynns-nav-drawer-item--active),
+.fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item:not(:disabled):not(.fynns-nav-drawer-item--active) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  color: var(--fynns-color-text);
+}
+
+.fynns-nav-drawer-item-host--with-end:hover
+  > .fynns-nav-drawer-item--active:not(:disabled),
+.fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item--active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-on-secondary-container) var(--fynns-state-hover),
+    var(--fynns-color-secondary-container)
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item-trailing--end {
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+
+  .fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item {
+    padding-inline-end: var(--fynns-navdrawer-end-actions-reserve);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fynns-nav-drawer-item,
+  .fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item,
+  .fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item-trailing--end,
   .fynns-nav-drawer-group-trigger,
   .fynns-nav-drawer-group-chevron {
     transition: none;
