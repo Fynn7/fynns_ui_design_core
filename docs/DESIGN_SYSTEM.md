@@ -312,7 +312,8 @@ belong in a consumer’s own doc.
   in that end strip; ≥ **0.5.67** widens meta|CTA|Select gaps to **8dp**
   (`inspector-end-gap`); ≥ **0.5.70** reuses form Select shell; ≥ **0.5.208**
   Select options are a **portaled** `.fynns-select-menu` (field stays 40dp —
-  not in-flow joined capsule); ≥ **0.5.71**/72 pins meta|CTA on the **trigger
+  not in-flow joined capsule; ≥ **0.5.229** equal block pad start/end so the
+  last option’s bottom inset matches the first option’s top); ≥ **0.5.71**/72 pins meta|CTA on the **trigger
   band**; ≥ **0.5.226** opening Select must **not** switch the host to
   `align-items: flex-start` (docked SearchBar/Autocomplete expand only —
   Select `data-expanded` must not yank meta|CTA|Select to the top of height-3

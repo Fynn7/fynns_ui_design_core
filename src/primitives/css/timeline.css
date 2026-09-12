@@ -293,7 +293,10 @@
 
 .fynns-timeline[data-trailing-meta-align="start"]
   .fynns-timeline-item-trailing:has(> .fynns-timeline-item-trailing-text) {
+  flex: 0 0 var(--fynns-timeline-trailing-meta-min-width);
+  width: var(--fynns-timeline-trailing-meta-min-width);
   min-width: var(--fynns-timeline-trailing-meta-min-width);
+  max-width: var(--fynns-timeline-trailing-meta-min-width);
   justify-content: flex-start;
 }
 

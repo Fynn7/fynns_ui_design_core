@@ -3425,6 +3425,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   gap: var(--fynns-searchbar-results-gap);
   width: max-content;
   max-height: var(--fynns-searchbar-results-max-height);
+  /* Equal block inset (≥ **0.5.229**) — former 0.75rem end left a thicker
+   * gap under the last option than above the first. */
   padding-block: var(--fynns-searchbar-results-pad-block-start)
     var(--fynns-searchbar-results-pad-block-end);
   padding-inline: var(--fynns-searchbar-results-pad-inline);
