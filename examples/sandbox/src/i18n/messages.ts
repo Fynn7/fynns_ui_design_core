@@ -2017,7 +2017,7 @@ const en = {
     "Packs managed configs only — large local DBs use Archive below.",
   "globals.cardHintBodyLead":
     "Longer include / exclude detail belongs in the body (FieldHint), not a second head “i”.",
-  "globals.cardHintBodyMeta": "One InfoHint in actions · short tip · detail in body",
+  "globals.cardHintBodyMeta": "sample-org / sample-repo / long-branch-name-that-should-ellipsis-in-narrow-card",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
     "Header actions stay one horizontal .fynns-control-cluster (flat IconButtons + at most one InfoHint). Lead prefers ~40% but yields so the end danger disk stays fully visible on a narrow host (≥ 0.5.57). Never park ToggleGroup in the head — see mode-in-body sample. All icon chrome shares size md (40dp hover).",
@@ -4336,7 +4336,7 @@ const zh: Record<MessageKey, string> = {
   "globals.cardHintTip": "仅打包受管配置；大体量本机库请用下方归档。",
   "globals.cardHintBodyLead":
     "更长的纳入 / 排除说明放正文（FieldHint），不要再叠第二个标题「i」。",
-  "globals.cardHintBodyMeta": "标题最多一个 InfoHint · tip 要短 · 细节在正文",
+  "globals.cardHintBodyMeta": "sample-org / sample-repo / long-branch-name-that-should-ellipsis-in-narrow-card",
   "globals.cardActionsStripTitle": "sample-entry/CONFIG.md",
   "globals.cardActionsStripBody":
     "标题操作区保持一条横向 .fynns-control-cluster（扁平 IconButton + 最多一个 InfoHint）。Lead 偏好约 40% 但会让位，窄宿主上尾部危险盘仍完整可见（≥ 0.5.57）。禁止把 ToggleGroup 塞进标题栏 — 见正文模式样例。同一条带内所有图标 chrome 共用 size md（40dp hover）。",

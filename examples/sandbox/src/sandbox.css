@@ -1295,20 +1295,27 @@
  */
 #sandbox-card-draft-actions,
 #sandbox-card-chrome-icon-actions,
-#sandbox-card-head-primary-end,
-#sandbox-card-table-meta-ellipsis {
+#sandbox-card-head-primary-end {
   display: flex;
   flex-direction: column;
   gap: var(--fynns-layout-unit-stack-gap);
   min-width: 0;
   box-sizing: border-box;
-}
-
-#sandbox-card-draft-actions,
-#sandbox-card-chrome-icon-actions,
-#sandbox-card-head-primary-end {
   grid-column: 1 / -1;
   max-width: 22rem;
+  justify-self: start;
+  width: 100%;
+}
+
+/*
+ * table-meta ellipsis teach host (≥ **0.5.231**): force a narrow Card so
+ * keep-set `.fynns-table-meta` must show `…` (not hard-clip). No SandboxHelp
+ * sibling — do not share the Card↔help gap rule above.
+ */
+#sandbox-card-table-meta-ellipsis {
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 10rem;
   justify-self: start;
   width: 100%;
 }
