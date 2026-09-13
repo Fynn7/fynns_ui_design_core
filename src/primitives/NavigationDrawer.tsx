@@ -561,6 +561,7 @@ export type NavigationDrawerNewChatProps = Omit<
  * drawers. Direct `NavigationDrawer` body child (search-gap peer to Items).
  * Leading Plus + label; optional `trailing` More. Do **not** replace with
  * `--toolbar-end` icon-only Plus for chat history chrome (≥ **0.5.256**).
+ * Trigger is **ghost** (no border; Item-like wash ≥ **0.5.257**).
  * Mode **catalog** sidebars (sort/refresh/bulk) still use `--toolbar-end`.
  * Live: `#sandbox-navdrawer-session-chrome`.
  */

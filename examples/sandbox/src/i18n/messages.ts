@@ -1532,7 +1532,7 @@ const en = {
   "globals.navDrawerSessionNew": "New chat",
   "globals.navDrawerSessionEntry": "Sample session",
   "globals.navDrawerSessionToolbarHelp":
-    "Session chrome (≥ 0.5.256): NavigationDrawerNewChat = full-width labeled New chat (ChatGPT). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
+    "Session chrome (≥ 0.5.257): NavigationDrawerNewChat = full-width labeled New chat, ghost (no border; Item-like hover wash). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3918,7 +3918,7 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSessionNew": "新会话",
   "globals.navDrawerSessionEntry": "示例会话",
   "globals.navDrawerSessionToolbarHelp":
-    "会话顶栏（≥ 0.5.256）：NavigationDrawerNewChat = ChatGPT 式满宽带文案新建。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
+    "会话顶栏（≥ 0.5.257）：NavigationDrawerNewChat = 满宽带文案新建，ghost（无描边；悬停同 Item wash）。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":

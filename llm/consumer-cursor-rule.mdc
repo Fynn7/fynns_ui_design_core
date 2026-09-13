@@ -151,11 +151,12 @@ alwaysApply: true
    （信息冗余）。可在 More 旁放 1–2 个高频快捷（Rename / Pin）。勿写消费仓
    私有渐显 CSS。对照 `#layouts-demo-navigation-drawer`。
 7b3. **mode drawer toolbar trash+new twin** — 会话 / 历史用
-   **`NavigationDrawerNewChat`**（满宽带文案 New chat，≥ **0.5.256**）；可选
-   `trailing` More 放全部删除 `tone="danger"`。**禁止** ghost Trash 与 Plus
-   并排；**禁止**历史侧栏再用 icon-only `--toolbar-end` 冒充 ChatGPT。目录
-   sort/refresh/bulk-select 仍用 `--toolbar-end` + Plus。对照
-   `#sandbox-navdrawer-session-chrome` / `#layouts-demo-navigation-drawer`。
+   **`NavigationDrawerNewChat`**（满宽带文案 New chat，**ghost 无描边**，≥
+   **0.5.256** / **0.5.257**）；可选 `trailing` More 放全部删除
+   `tone="danger"`。**禁止** ghost Trash 与 Plus 并排；**禁止**历史侧栏再用
+   icon-only `--toolbar-end` 冒充 ChatGPT。目录 sort/refresh/bulk-select 仍用
+   `--toolbar-end` + Plus。对照 `#sandbox-navdrawer-session-chrome` /
+   `#layouts-demo-navigation-drawer`。
 7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
    keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
