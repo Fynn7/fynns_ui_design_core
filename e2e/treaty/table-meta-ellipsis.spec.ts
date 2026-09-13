@@ -31,7 +31,12 @@ test(`${SLUG}: Card body table-meta ellipsizes when squeezed`, async ({
 
   await expect(async () => {
     const metrics = await meta.evaluate((el) => {
-      const cs = getComputedStyle(el);
+      // OverflowTip (≥ 0.5.240) clips on `.fynns-overflow-tip-label`; bare
+      // text still clips on `.fynns-table-meta` itself.
+      const clip =
+        (el.querySelector(".fynns-overflow-tip-label") as HTMLElement | null) ??
+        el;
+      const cs = getComputedStyle(clip);
       const r = el.getBoundingClientRect();
       const cardEl = el.closest(".fynns-card");
       const cr = cardEl?.getBoundingClientRect();
@@ -39,11 +44,11 @@ test(`${SLUG}: Card body table-meta ellipsizes when squeezed`, async ({
         overflow: cs.overflow,
         textOverflow: cs.textOverflow,
         whiteSpace: cs.whiteSpace,
-        scrollW: Math.round(el.scrollWidth),
-        clientW: Math.round(el.clientWidth),
+        scrollW: Math.round(clip.scrollWidth),
+        clientW: Math.round(clip.clientWidth),
         metaRight: +r.right.toFixed(2),
         cardRight: cr ? +cr.right.toFixed(2) : null,
-        endsWithEllipsisVisual: el.scrollWidth > el.clientWidth + 1,
+        endsWithEllipsisVisual: clip.scrollWidth > clip.clientWidth + 1,
       };
     });
     expect(metrics.overflow).toMatch(/hidden|clip/);
