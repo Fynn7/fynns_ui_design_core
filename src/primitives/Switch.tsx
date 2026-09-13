@@ -1,5 +1,6 @@
 import type { ForwardedRef, ReactNode } from "react";
 import { forwardRef, useId } from "react";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 /**
  * Switch (toggle) primitive. Self-implemented `<button role="switch">` with
@@ -53,9 +54,14 @@ export const Switch = forwardRef(function Switch(
     .join(" ");
   const state = checked ? "checked" : "unchecked";
 
+  const labelTip = overflowTipText(label);
   const labelEl = (
     <span id={resolvedLabelId} className="fynns-switch-label">
-      {label}
+      {labelSide === "end" && labelTip != null ? (
+        <OverflowTip content={labelTip}>{label}</OverflowTip>
+      ) : (
+        label
+      )}
     </span>
   );
   const trackEl = (

@@ -1,6 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { Button } from "./Button";
 import { ChevronRightIcon } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type BreadcrumbItemData = {
   label: ReactNode;
@@ -27,11 +28,18 @@ function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
 }
 
+function crumbLabel(label: ReactNode): ReactNode {
+  const tip = overflowTipText(label);
+  if (tip == null) return label;
+  return <OverflowTip content={tip}>{label}</OverflowTip>;
+}
+
 /**
  * Path trail for hierarchical pages (Home › Section › Page).
  * Not an M3 catalog component, but high-frequency app chrome — use instead of
  * hand-rolled separators + links. Ancestor crumbs reuse `Button` `ghost` `sm`
- * (stadium + state-layer). Last item (or `current`) is non-interactive.
+ * (stadium + state-layer) or an `<a>` with the same btn chrome + `OverflowTip`
+ * for string labels. Last item (or `current`) is non-interactive.
  */
 export function Breadcrumb({
   items,
@@ -56,6 +64,7 @@ export function Breadcrumb({
       <ol className="fynns-breadcrumb-list">
         {items.map((item, index) => {
           const isCurrent = index === currentIndex;
+          const labelNode = crumbLabel(item.label);
           return (
             <li key={index} className="fynns-breadcrumb-item">
               {index > 0 ? (
@@ -65,14 +74,14 @@ export function Breadcrumb({
               ) : null}
               {isCurrent ? (
                 <span className="fynns-breadcrumb-current" aria-current="page">
-                  {item.label}
+                  {labelNode}
                 </span>
               ) : item.href != null ? (
                 <a
                   className="fynns-btn fynns-btn--ghost fynns-btn--sm fynns-breadcrumb-link"
                   href={item.href}
                 >
-                  {item.label}
+                  <span className="fynns-btn-label">{labelNode}</span>
                 </a>
               ) : item.onClick != null ? (
                 <Button
@@ -84,7 +93,7 @@ export function Breadcrumb({
                   {item.label}
                 </Button>
               ) : (
-                <span className="fynns-breadcrumb-current">{item.label}</span>
+                <span className="fynns-breadcrumb-current">{labelNode}</span>
               )}
             </li>
           );

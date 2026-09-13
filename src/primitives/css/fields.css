@@ -27,6 +27,23 @@
   );
 }
 
+/*
+ * Affix chrome owns that edge (password reveal, leading glyph, …) — drop the
+ * text field-pad so disks sit on capsule-chrome like SearchBar / NumberInput
+ * steppers (≥ 0.5.237). Clip hover wash to the shell radius.
+ * !important: beat consumer `.hub-*` / app padding|margin “贴边” overrides
+ * (same anti-misuse hardness as List idle-pad locks).
+ */
+.fynns-field-shell:has(.fynns-field-affix--trailing) {
+  padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline) !important;
+  overflow: hidden;
+}
+
+.fynns-field-shell:has(.fynns-field-affix--leading) {
+  padding-inline-start: var(--fynns-layout-capsule-chrome-pad-inline) !important;
+  overflow: hidden;
+}
+
 .fynns-field-shell--sm {
   min-height: 2rem;
   height: 2rem;
@@ -65,13 +82,16 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  /* Lock: consumer negative margin must not pull disks past capsule-chrome. */
+  margin: 0 !important;
   color: var(--fynns-color-text-muted);
 }
 
 /*
  * In-field affix IconButtons (password reveal, clear, …): shell min-height is
  * 40dp (`--fynns-size-icon-target`); default md 40dp disk fills the row.
- * Always paint sm (32dp) — matches label-row FieldHeader actions.
+ * Always paint sm (32dp) — matches label-row FieldHeader actions / toolbar-end
+ * clamp (≥ 0.5.131 / 0.5.235 pattern).
  */
 .fynns-field-affix .fynns-btn--icon {
   width: var(--fynns-layout-field-header-action-row-min-height);
@@ -79,6 +99,11 @@
   height: var(--fynns-layout-field-header-action-row-min-height);
   min-height: var(--fynns-layout-field-header-action-row-min-height);
   padding: 0;
+}
+
+.fynns-field-affix .fynns-btn--icon svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 .fynns-field-hint {
@@ -96,6 +121,8 @@
 .fynns-number-input-shell {
   /* Steppers own the end edge — keep start pad, tighten end to capsule. */
   padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline);
+  /* Clip stepper hover/press wash to the shell radius (end capsule curve). */
+  overflow: hidden;
 }
 
 .fynns-number-input-shell .fynns-number-input {
@@ -113,7 +140,11 @@
   flex-direction: column;
   align-self: stretch;
   width: var(--fynns-size-icon);
-  margin-block: var(--fynns-space-2xs);
+  /* Inset from capsule curve so hover wash stays inside the outer stroke. */
+  margin-block: var(--fynns-space-xs);
+  margin-inline-end: var(--fynns-space-xs);
+  border-radius: var(--fynns-radius-xs);
+  overflow: hidden;
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
@@ -128,7 +159,8 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--fynns-radius-xs);
+  /* Square corners — parent steppers clip + radius owns the hover silhouette. */
+  border-radius: 0;
   background: transparent;
   color: var(--fynns-color-text-muted);
   cursor: pointer;
@@ -359,10 +391,16 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
-.fynns-select {
+/*
+ * Select shares `.fynns-search-bar` chrome, which defaults to `width: 100%`.
+ * Dual-class selectors beat that so content-sized Select wins (≥ **0.5.244**).
+ */
+.fynns-select.fynns-search-bar {
   position: relative;
-  width: 100%;
   /*
+   * Default content width — hug the option-measure floor.
+   * Stretch only via `--full`, FieldBlock host, or cluster `__grow`.
+   *
    * Option-measure floor from Select.tsx `--fynns-select-measure-min`.
    * Must be an absolute length — **not** `min(100%, …)` (≥ **0.5.210**).
    * Percentage mins resolve as indefinite under Grid `max-content` tracks and
@@ -370,7 +408,30 @@ input.fynns-input:focus::-webkit-scrollbar {
    * menu still grew to the widest option (agents-hub Project cwd mismatch).
    * Cluster `__grow` clears the var in JS + sets `min-width: 0` in form-rhythm.
    */
+  width: max-content;
+  max-width: 100%;
   min-width: var(--fynns-select-measure-min, 0px);
+  box-sizing: border-box;
+}
+
+.fynns-select.fynns-search-bar.fynns-select--full {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Form FieldBlock host: Select fills the control band (recipe opt-in —
+ * no `fullWidth` prop required on every FieldBlock call site).
+ */
+.fynns-field-block .fynns-select.fynns-search-bar {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Explicit cluster stretch — fill leftover flex space. */
+.fynns-select.fynns-search-bar.fynns-control-cluster__grow {
+  width: 100%;
+  max-width: 100%;
 }
 
 /*

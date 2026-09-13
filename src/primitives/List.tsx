@@ -9,6 +9,7 @@ import {
   partitionCatalogTrailing,
   type CatalogTrailingMetaAlign,
 } from "./catalogRowGeometry";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -168,9 +169,13 @@ function resolveLines(
  * Expandable trees: `detail` stays in this `<li>`; set `aria-expanded` on
  * the row and **keep `detail` mounted** (core morphs via `.fynns-expand` —
  * do not `detail={open ? … : null}`). Leading chevron stays `ChevronRight`;
- * open state rotates via `aria-expanded`. Long `headline` / `supportingText`
- * wrapped in `Tooltip`). Do not put `Divider` between ListItem rows —
- * sibling gap + pills separate rows.
+ * open state rotates via `aria-expanded`. String `headline` /
+ * `supportingText` / `trailingSupportingText` / `overline` use `OverflowTip`
+ * (ellipsis + Tooltip when clipped — never `title=`). Prefer OverflowTip over
+ * a permanent Tooltip so tips stay disabled when the line fits. Control-cluster
+ * / `__grow` / `.fynns-table-meta` compositions stay caller-owned — wrap those
+ * string cells in OverflowTip at the call site. Do not put `Divider` between
+ * ListItem rows — sibling gap + pills separate rows.
  */
 export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemProps>(function ListItem(
   {
@@ -213,21 +218,52 @@ export const ListItem = forwardRef<HTMLButtonElement | HTMLDivElement, ListItemP
       <span className="fynns-list-item-leading">{leading}</span>
     ) : null;
 
+  const headlineTip = overflowTipText(headline);
+  const supportingTip = overflowTipText(supportingText);
+  const trailingTextTip = overflowTipText(trailingSupportingText);
+  const overlineTip = overflowTipText(overline);
+
   const contentNode = (
     <span className="fynns-list-item-content">
       {overline != null ? (
-        <span className="fynns-list-item-overline">{overline}</span>
+        <span className="fynns-list-item-overline">
+          {overlineTip != null ? (
+            <OverflowTip content={overlineTip}>{overline}</OverflowTip>
+          ) : (
+            overline
+          )}
+        </span>
       ) : null}
-      <span className="fynns-list-item-headline">{headline}</span>
+      <span className="fynns-list-item-headline">
+        {headlineTip != null ? (
+          <OverflowTip content={headlineTip}>{headline}</OverflowTip>
+        ) : (
+          headline
+        )}
+      </span>
       {supportingText != null ? (
-        <span className="fynns-list-item-supporting">{supportingText}</span>
+        <span className="fynns-list-item-supporting">
+          {supportingTip != null ? (
+            <OverflowTip content={supportingTip}>{supportingText}</OverflowTip>
+          ) : (
+            supportingText
+          )}
+        </span>
       ) : null}
     </span>
   );
 
   const metaTrailing =
     trailingSupportingText != null ? (
-      <span className="fynns-list-item-trailing-text">{trailingSupportingText}</span>
+      <span className="fynns-list-item-trailing-text">
+        {trailingTextTip != null ? (
+          <OverflowTip content={trailingTextTip}>
+            {trailingSupportingText}
+          </OverflowTip>
+        ) : (
+          trailingSupportingText
+        )}
+      </span>
     ) : null;
 
   const partition = partitionCatalogTrailing({

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { CollapsibleChrome } from "./Collapsible";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type CardProps = {
   /** Header title in the static lead row (same role as Collapsible `title`). */
@@ -58,6 +59,7 @@ export type CardProps = {
  */
 export function Card({ title, icon, actions, chrome = "card", className, children }: CardProps) {
   const plain = chrome === "plain";
+  const titleTip = overflowTipText(title);
   return (
     <div
       className={["fynns-card", plain ? "fynns-card--plain" : "", className ?? ""]
@@ -71,7 +73,13 @@ export function Card({ title, icon, actions, chrome = "card", className, childre
               <span className="fynns-card-icon">{icon}</span>
             </span>
           ) : null}
-          <span className="fynns-card-title">{title}</span>
+          <span className="fynns-card-title">
+            {titleTip != null ? (
+              <OverflowTip content={titleTip}>{title}</OverflowTip>
+            ) : (
+              title
+            )}
+          </span>
         </div>
         {actions ? <div className="fynns-card-actions">{actions}</div> : null}
       </div>

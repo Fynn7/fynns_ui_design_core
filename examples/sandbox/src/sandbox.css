@@ -902,8 +902,10 @@
   box-sizing: border-box;
 }
 
-/* Teach Select menu adaptive width (≥ 0.5.209): trigger capped, menu grows. */
+/* Teach Select menu = shell (≥ 0.5.238): narrow host; long labels ellipsize. */
 .sandbox-select-narrow-host {
+  /* Cap host; Select uses `__grow` (clears measure floor + fills host) so long
+   * options ellipsize — `fullWidth` alone keeps measure min and can overflow. */
   width: 100%;
   max-width: 10rem;
 }
@@ -1318,6 +1320,23 @@
   max-width: 10rem;
   justify-self: start;
   width: 100%;
+}
+
+/*
+ * Run-summary OverflowTip teach (≥ **0.5.241**): narrow list so long model
+ * `__grow` must ellipsize + tip full text.
+ */
+#sandbox-list-run-summary-narrow {
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 22rem;
+  justify-self: start;
+  width: 100%;
+}
+
+/* Keep `__grow` from collapsing to 0 under long sibling meta cells. */
+#sandbox-list-run-summary-narrow .fynns-control-cluster__grow {
+  min-width: 8rem;
 }
 
 /* Narrow host for #card multi-action strip — proves lead yields so the

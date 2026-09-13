@@ -12,6 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import { IconButton } from "./IconButton";
+import { OverflowTip } from "./OverflowTip";
 import { Tooltip } from "./Tooltip";
 import { ClipboardIcon } from "./icons";
 import {
@@ -616,7 +617,9 @@ export function CodeBlock(props: CodeBlockProps) {
     >
       {showHead ? (
         <div className="fynns-code-block-head">
-          <span className="fynns-code-block-label">{label}</span>
+          <span className="fynns-code-block-label">
+            <OverflowTip content={label}>{label}</OverflowTip>
+          </span>
           {copyControl}
         </div>
       ) : (

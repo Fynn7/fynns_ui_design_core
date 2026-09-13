@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ButtonHTMLAttributes,
@@ -16,6 +17,7 @@ import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
 import { CheckIcon } from "./icons";
 import { useFloatingBoxPosition, type Align } from "./floatingBox";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 type MenuContextValue = {
   close: () => void;
@@ -196,11 +198,19 @@ export type DropdownMenuProps = {
    * look when omitted; `iconOnly` defaults to `ghost`.
    */
   variant?: ButtonVariant;
+  /**
+   * Pin portaled menu **width = live trigger** (Select ≥ **0.5.238** parity).
+   * Long item labels ellipsize inside. Defaults **on** when the root sits under
+   * `.fynns-field-block` (form FieldBlock replacement) and **off** for toolbar /
+   * `iconOnly` menus. Pass explicitly to force either way (≥ **0.5.239**).
+   */
+  matchTriggerWidth?: boolean;
 };
 
 /**
  * M3 Menu — trigger + portaled surface (groups, separators, checkbox items).
  * Outside-click / Escape dismiss; arrow keys move between items.
+ * Form FieldBlock hosts auto-match menu width to the trigger (≥ **0.5.239**).
  * @see https://m3.material.io/components/menus/overview
  */
 export function DropdownMenu({
@@ -216,6 +226,7 @@ export function DropdownMenu({
   iconOnly = false,
   size,
   variant,
+  matchTriggerWidth: matchTriggerWidthProp,
 }: DropdownMenuProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const open = openProp ?? uncontrolledOpen;
@@ -230,6 +241,8 @@ export function DropdownMenu({
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [menuEl, setMenuEl] = useState<HTMLDivElement | null>(null);
+  const [triggerWidthPx, setTriggerWidthPx] = useState<number | null>(null);
+  const [inFieldBlock, setInFieldBlock] = useState(false);
   const menuId = useId();
   const floatingAlign: Align = align === "end" ? "end" : "start";
   const pos = useFloatingBoxPosition(triggerRef.current, menuEl, open, {
@@ -241,6 +254,37 @@ export function DropdownMenu({
   const lastPosRef = useRef(pos);
   if (pos) lastPosRef.current = pos;
   const displayPos = pos ?? lastPosRef.current;
+
+  const setRootRef = useCallback((el: HTMLDivElement | null) => {
+    rootRef.current = el;
+    setInFieldBlock(Boolean(el?.closest(".fynns-field-block")));
+  }, []);
+
+  const matchTriggerWidth =
+    matchTriggerWidthProp ?? (!iconOnly && inFieldBlock);
+
+  useLayoutEffect(() => {
+    if (!matchTriggerWidth || !open) return;
+    const triggerEl = triggerRef.current;
+    if (!triggerEl) return;
+    const sync = () => {
+      const w = triggerEl.getBoundingClientRect().width;
+      if (w > 0) setTriggerWidthPx(w);
+    };
+    sync();
+    const ro =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(sync) : null;
+    ro?.observe(triggerEl);
+    window.addEventListener("resize", sync);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", sync);
+    };
+  }, [matchTriggerWidth, open]);
+
+  useEffect(() => {
+    if (!open && !menuEl) setTriggerWidthPx(null);
+  }, [open, menuEl]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -279,11 +323,33 @@ export function DropdownMenu({
 
   const resolvedSize = size ?? (iconOnly ? "sm" : "md");
   const resolvedVariant = variant ?? (iconOnly ? "ghost" : undefined);
+  const triggerTip = !iconOnly ? overflowTipText(trigger) : null;
+
+  const menuStyle: CSSProperties = displayPos
+    ? { top: displayPos.top, left: displayPos.left }
+    : { top: 0, left: 0, visibility: "hidden" as const };
+  if (matchTriggerWidth && triggerWidthPx != null) {
+    menuStyle.width = `${triggerWidthPx}px`;
+    menuStyle.minWidth = `${triggerWidthPx}px`;
+    menuStyle.maxWidth = `${triggerWidthPx}px`;
+  }
+
+  const triggerBody =
+    triggerTip != null ? (
+      <OverflowTip content={triggerTip}>{trigger}</OverflowTip>
+    ) : (
+      trigger
+    );
 
   return (
     <div
-      ref={rootRef}
-      className={join("fynns-menu-root", className)}
+      ref={setRootRef}
+      className={join(
+        "fynns-menu-root",
+        matchTriggerWidth && "fynns-menu-root--match-trigger",
+        className,
+      )}
+      data-match-trigger={matchTriggerWidth ? "true" : undefined}
     >
       {iconOnly ? (
         <Button
@@ -322,7 +388,7 @@ export function DropdownMenu({
           onClick={() => setOpen(!open)}
           onKeyDown={onTriggerKeyDown}
         >
-          {trigger}
+          {triggerBody}
         </button>
       )}
       <MenuSurface
@@ -330,14 +396,13 @@ export function DropdownMenu({
         onClose={close}
         id={menuId}
         ariaLabel={ariaLabel}
-        className={`fynns-menu--${align}`}
+        className={join(
+          `fynns-menu--${align}`,
+          matchTriggerWidth && "fynns-menu--match-trigger",
+        )}
         dataSide={displayPos?.side ?? "bottom"}
         onPanelElement={setMenuEl}
-        style={
-          displayPos
-            ? { top: displayPos.top, left: displayPos.left }
-            : { top: 0, left: 0, visibility: "hidden" as const }
-        }
+        style={menuStyle}
       >
         {children}
       </MenuSurface>
@@ -360,6 +425,7 @@ export function DropdownMenuItem({
   ...rest
 }: DropdownMenuItemProps) {
   const ctx = useMenuContext(true);
+  const tip = overflowTipText(children);
   return (
     <button
       {...rest}
@@ -372,7 +438,9 @@ export function DropdownMenuItem({
       }}
     >
       {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
-      <span className="fynns-menu-item-label">{children}</span>
+      <span className="fynns-menu-item-label">
+        {tip != null ? <OverflowTip content={tip}>{children}</OverflowTip> : children}
+      </span>
     </button>
   );
 }
@@ -401,6 +469,7 @@ export function DropdownMenuCheckboxItem({
   ...rest
 }: DropdownMenuCheckboxItemProps) {
   const ctx = useMenuContext(true);
+  const tip = overflowTipText(children);
   return (
     <button
       {...rest}
@@ -425,7 +494,9 @@ export function DropdownMenuCheckboxItem({
         {checked ? <CheckIcon size={16} /> : null}
       </span>
       {icon ? <span className="fynns-menu-item-icon">{icon}</span> : null}
-      <span className="fynns-menu-item-label">{children}</span>
+      <span className="fynns-menu-item-label">
+        {tip != null ? <OverflowTip content={tip}>{children}</OverflowTip> : children}
+      </span>
     </button>
   );
 }

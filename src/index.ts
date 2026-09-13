@@ -47,6 +47,7 @@ export {
   LayoutGridIcon,
   ListChecksIcon,
   MenuIcon,
+  MessageSquareIcon,
   MicIcon,
   MoonIcon,
   MoreHorizontalIcon,
@@ -157,6 +158,11 @@ export type {
 } from "./primitives/ContextMenu";
 export { Tooltip } from "./primitives/Tooltip";
 export type { TooltipProps } from "./primitives/Tooltip";
+export { OverflowTip, overflowTipText } from "./primitives/OverflowTip";
+export type {
+  OverflowTipAxis,
+  OverflowTipProps,
+} from "./primitives/OverflowTip";
 export { InfoHint } from "./primitives/InfoHint";
 export type { InfoHintProps, InfoHintTone } from "./primitives/InfoHint";
 export { snackbar, SnackbarHost } from "./primitives/Snackbar";

@@ -13,6 +13,7 @@ import {
   partitionCatalogTrailing,
   type CatalogTrailingMetaAlign,
 } from "./catalogRowGeometry";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -163,6 +164,10 @@ export const TimelineItem = forwardRef<
     </span>
   );
 
+  const headlineTip = overflowTipText(headline);
+  const supportingTip = overflowTipText(supportingText);
+  const trailingTextTip = overflowTipText(trailingSupportingText);
+
   const contentNode = (
     <span className="fynns-timeline-item-content">
       {expandable ? (
@@ -185,9 +190,21 @@ export const TimelineItem = forwardRef<
         </span>
       ) : null}
       <span className="fynns-timeline-item-copy">
-        <span className="fynns-timeline-item-headline">{headline}</span>
+        <span className="fynns-timeline-item-headline">
+          {headlineTip != null ? (
+            <OverflowTip content={headlineTip}>{headline}</OverflowTip>
+          ) : (
+            headline
+          )}
+        </span>
         {supportingText != null ? (
-          <span className="fynns-timeline-item-supporting">{supportingText}</span>
+          <span className="fynns-timeline-item-supporting">
+            {supportingTip != null ? (
+              <OverflowTip content={supportingTip}>{supportingText}</OverflowTip>
+            ) : (
+              supportingText
+            )}
+          </span>
         ) : null}
       </span>
     </span>
@@ -196,7 +213,13 @@ export const TimelineItem = forwardRef<
   const metaTrailing =
     trailingSupportingText != null ? (
       <span className="fynns-timeline-item-trailing-text">
-        {trailingSupportingText}
+        {trailingTextTip != null ? (
+          <OverflowTip content={trailingTextTip}>
+            {trailingSupportingText}
+          </OverflowTip>
+        ) : (
+          trailingSupportingText
+        )}
       </span>
     ) : null;
 

@@ -37,6 +37,11 @@ export type TooltipProps = {
    * Use for tooltips that contain buttons or other interactive content.
    */
   interactive?: boolean;
+  /**
+   * When true, never open (keeps the same trigger wrapper for layout — used by
+   * `OverflowTip` so ellipsis measure does not thrash).
+   */
+  disabled?: boolean;
   /** Single trigger element / content. Wrapped in an inline anchor. */
   children: ReactNode;
   /** Class for the inline trigger wrapper. */
@@ -68,6 +73,7 @@ export function Tooltip({
   side = "top",
   align = "center",
   interactive = false,
+  disabled = false,
   children,
   className,
 }: TooltipProps) {
@@ -103,6 +109,7 @@ export function Tooltip({
 
   /** Open immediately (focus, warm consecutive hover, interactive re-enter, or after show delay). */
   const showNow = () => {
+    if (disabled) return;
     clearTimers();
     setOpen(true);
   };
@@ -112,6 +119,7 @@ export function Tooltip({
    * (another tip is open or closed within the skip window) — then open now.
    */
   const scheduleShow = () => {
+    if (disabled) return;
     clearHideTimer();
     if (open) return;
     if (isTooltipWarm()) {
@@ -121,6 +129,7 @@ export function Tooltip({
     if (showTimerRef.current) return;
     showTimerRef.current = setTimeout(() => {
       showTimerRef.current = null;
+      if (disabled) return;
       setOpen(true);
     }, SHOW_DELAY_MS);
   };
@@ -144,6 +153,23 @@ export function Tooltip({
       setOpen(false);
     }, INTERACTIVE_HIDE_DELAY_MS);
   };
+
+  useEffect(() => {
+    if (disabled && open) hideNow();
+  }, [disabled, open]);
+
+  /**
+   * OverflowTip flips `disabled` after measure. If the pointer is already
+   * over the trigger when overflow becomes true, there is no second
+   * mouseenter — re-arm show while `:hover`.
+   */
+  useEffect(() => {
+    if (disabled || open) return;
+    const el = anchorRef.current;
+    if (!el || typeof el.matches !== "function") return;
+    if (!el.matches(":hover")) return;
+    scheduleShow();
+  }, [disabled, open]);
 
   useEffect(() => () => clearTimers(), []);
 

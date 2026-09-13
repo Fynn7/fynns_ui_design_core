@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type TopAppBarSize = "sm" | "md" | "lg";
 
@@ -42,6 +43,13 @@ export function TopAppBar({
   ...rest
 }: TopAppBarProps) {
   const stacked = size === "md" || size === "lg";
+  const titleTip = title != null ? overflowTipText(title) : null;
+  const titleNode =
+    title == null ? null : titleTip != null ? (
+      <OverflowTip content={titleTip}>{title}</OverflowTip>
+    ) : (
+      title
+    );
   const rootClass = [
     "fynns-top-app-bar",
     `fynns-top-app-bar--${size}`,
@@ -57,8 +65,8 @@ export function TopAppBar({
         {leading != null ? (
           <div className="fynns-top-app-bar-leading">{leading}</div>
         ) : null}
-        {!stacked && title != null ? (
-          <h1 className="fynns-top-app-bar-title">{title}</h1>
+        {!stacked && titleNode != null ? (
+          <h1 className="fynns-top-app-bar-title">{titleNode}</h1>
         ) : null}
         {stacked ? (
           <div className="fynns-top-app-bar-spacer" aria-hidden />
@@ -67,8 +75,8 @@ export function TopAppBar({
           <div className="fynns-top-app-bar-trailing">{trailing}</div>
         ) : null}
       </div>
-      {stacked && title != null ? (
-        <h1 className="fynns-top-app-bar-title">{title}</h1>
+      {stacked && titleNode != null ? (
+        <h1 className="fynns-top-app-bar-title">{titleNode}</h1>
       ) : null}
     </header>
   );

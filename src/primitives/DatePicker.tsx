@@ -13,6 +13,7 @@ import { DialogFrame } from "./DialogFrame";
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "./icons";
 import { Tooltip } from "./Tooltip";
+import { OverflowTip } from "./OverflowTip";
 
 /** Calendar day as ISO `YYYY-MM-DD` (date-only, local). */
 export type DateValue = string;
@@ -435,7 +436,9 @@ export function DatePicker({
     >
       <div className="fynns-datepicker-header">
         <h2 id={headingId} className="fynns-datepicker-title">
-          {months[monthIndex]} {year}
+          <OverflowTip content={`${months[monthIndex]} ${year}`}>
+            {months[monthIndex]} {year}
+          </OverflowTip>
         </h2>
         <div className="fynns-datepicker-nav">
           <Tooltip content={prevLabel}>
@@ -996,7 +999,9 @@ export function DateRangePicker({
     >
       <div className="fynns-datepicker-header">
         <h2 id={headingId} className="fynns-datepicker-title">
-          {months[monthIndex]} {year}
+          <OverflowTip content={`${months[monthIndex]} ${year}`}>
+            {months[monthIndex]} {year}
+          </OverflowTip>
         </h2>
         <div className="fynns-datepicker-nav">
           <Tooltip content={prevLabel}>

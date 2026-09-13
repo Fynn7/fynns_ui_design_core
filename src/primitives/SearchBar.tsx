@@ -12,6 +12,7 @@ import {
 import { CloseIcon, SearchIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { observeInputEllipsisRefresh } from "./inputEllipsis";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 function assignRef<T>(ref: ForwardedRef<T>, value: T | null) {
   if (typeof ref === "function") ref(value);
@@ -247,10 +248,12 @@ export const SearchBarResult = forwardRef(function SearchBarResult(
     active = false,
     className,
     type = "button",
+    children,
     ...rest
   }: SearchBarResultProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
+  const tip = overflowTipText(children);
   return (
     <button
       {...rest}
@@ -263,6 +266,8 @@ export const SearchBarResult = forwardRef(function SearchBarResult(
       ]
         .filter(Boolean)
         .join(" ")}
-    />
+    >
+      {tip != null ? <OverflowTip content={tip}>{children}</OverflowTip> : children}
+    </button>
   );
 });

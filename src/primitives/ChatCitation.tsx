@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { GlobeIcon } from "./icons";
+import { OverflowTip } from "./OverflowTip";
 import { Tooltip } from "./Tooltip";
 
 function join(...parts: Array<string | false | null | undefined>) {
@@ -107,7 +108,11 @@ export function ChatCitationChip({
       onClick={handleClick}
     >
       <CitationFavicon favicon={citation.favicon} />
-      <span className="fynns-chat-citation-chip-label">{citation.publisher}</span>
+      <span className="fynns-chat-citation-chip-label">
+        <OverflowTip content={citation.publisher}>
+          {citation.publisher}
+        </OverflowTip>
+      </span>
     </button>
   );
 
@@ -219,16 +224,22 @@ export function ChatCitations({
                 <CitationFavicon favicon={citation.favicon} />
                 <span className="fynns-chat-citation-card-body">
                   <span className="fynns-chat-citation-card-publisher">
-                    {citation.publisher}
+                    <OverflowTip content={citation.publisher}>
+                      {citation.publisher}
+                    </OverflowTip>
                   </span>
                   {citation.title ? (
                     <span className="fynns-chat-citation-card-title">
-                      {citation.title}
+                      <OverflowTip content={citation.title}>
+                        {citation.title}
+                      </OverflowTip>
                     </span>
                   ) : null}
                   {citation.snippet ? (
                     <span className="fynns-chat-citation-card-snippet">
-                      {citation.snippet}
+                      <OverflowTip content={citation.snippet} overflowAxis="y">
+                        {citation.snippet}
+                      </OverflowTip>
                     </span>
                   ) : null}
                 </span>

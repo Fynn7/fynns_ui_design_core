@@ -5,6 +5,7 @@ import { DURATION_TOKENS } from "../theme/motionTokens";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import { CloseIcon } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type SnackbarDuration = "short" | "long" | "indefinite";
 
@@ -201,6 +202,7 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
     item.action?.onClick();
     store.dismiss(item.id);
   };
+  const messageTip = overflowTipText(item.message);
 
   return createPortal(
     <div
@@ -212,7 +214,15 @@ export function SnackbarHost({ className }: SnackbarHostProps) {
         aria-live="polite"
         data-state={open ? "open" : "closed"}
       >
-        <div className="fynns-snackbar__message">{item.message}</div>
+        <div className="fynns-snackbar__message">
+          {messageTip != null ? (
+            <OverflowTip content={messageTip} overflowAxis="y">
+              {item.message}
+            </OverflowTip>
+          ) : (
+            item.message
+          )}
+        </div>
         {item.action || item.dismissible ? (
           <div className="fynns-snackbar__trailing">
             {item.action ? (

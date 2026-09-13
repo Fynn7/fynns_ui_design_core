@@ -624,8 +624,8 @@ export const SEARCHBAR_TOKENS = {
   height: "var(--fynns-layout-bar-height)",
   /**
    * Capsule edge chrome next to icons — layout `capsule-chrome-pad-inline`.
-   * Dense form `Input` / `.fynns-field-shell` use layout `field-pad-inline`
-   * (`space-md`) — do not share this key with form fields.
+   * Same token as Input field-shell **affix-owned** edges (≥ **0.5.237**).
+   * Text-only form edges still compose capsule + `field-pad-inline`.
    */
   "pad-inline": "var(--fynns-layout-capsule-chrome-pad-inline)",
   "icon-slot": "3rem",
@@ -1335,11 +1335,11 @@ export const LAYOUT_TOKENS = {
    */
   "strip-pad-inline": "1.25rem",
   /**
-   * Outer chrome pad when IconButtons sit at a `radius-3xl` capsule edge
-   * (SearchBar — ChatGPT-style flush ~4dp). Not for ChatComposer shell
-   * (use `--fynns-chat-composer-pad-*`). Not for text-only Banner strips —
-   * use `strip-pad-inline`. Not for dense form `Input` shells — use
-   * `field-pad-inline`.
+   * Outer chrome pad when IconButtons sit at a capsule / field-shell edge
+   * (SearchBar flush ~4dp; Input affix-owned edges ≥ **0.5.237**). Not for
+   * ChatComposer shell (use `--fynns-chat-composer-pad-*`). Not for text-only
+   * Banner strips — use `strip-pad-inline`. Text-only Input edges still compose
+   * this with `field-pad-inline` (see field-shell CSS).
    */
   "capsule-chrome-pad-inline": "0.25rem",
   /**
@@ -1347,7 +1347,9 @@ export const LAYOUT_TOKENS = {
    * compose this with `capsule-chrome-pad-inline` for Select-matching text
    * start — see primitives.css). Default = `space-md` (12dp). Do **not**
    * reuse `capsule-chrome-pad-inline` alone here — that 4dp token is for
-   * SearchBar IconButton flush; Input CSS adds it on top of this step.
+   * SearchBar / field-affix IconButton flush; Input CSS adds it on top of this
+   * step for **text** edges. When `.fynns-field-affix--leading|trailing` owns an
+   * edge (≥ **0.5.237**), that side drops to capsule-chrome only.
    */
   "field-pad-inline": "var(--fynns-space-md)",
   /**

@@ -31,23 +31,30 @@ test(`${SLUG}: host paints inset focus ring; row button has no outline`, async (
   await expect(item).toBeVisible();
 
   // Programmatic focus() does not set :focus-visible — Tab from a prior control.
-  await item.evaluate((btn) => {
-    const focusables = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      ),
-    ).filter((el) => {
-      const s = getComputedStyle(el);
-      return (
-        s.visibility !== "hidden" &&
-        s.display !== "none" &&
-        !(el as HTMLButtonElement).disabled
-      );
+  // Retry once: CI can lose the first Tab if the prior control is still settling.
+  const tabOntoItem = async () => {
+    await item.evaluate((btn) => {
+      const focusables = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => {
+        const s = getComputedStyle(el);
+        return (
+          s.visibility !== "hidden" &&
+          s.display !== "none" &&
+          !(el as HTMLButtonElement).disabled
+        );
+      });
+      const idx = focusables.indexOf(btn as HTMLElement);
+      if (idx > 0) focusables[idx - 1]!.focus();
     });
-    const idx = focusables.indexOf(btn as HTMLElement);
-    if (idx > 0) focusables[idx - 1]!.focus();
-  });
-  await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+  };
+  await tabOntoItem();
+  if (!(await item.evaluate((el) => el === document.activeElement))) {
+    await tabOntoItem();
+  }
   await expect(item).toBeFocused();
 
   await expect(async () => {

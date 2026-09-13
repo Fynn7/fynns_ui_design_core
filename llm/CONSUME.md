@@ -256,12 +256,14 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
   strip − glyph-inset; textarea pad = glyph-inset (optical + / Send glyphs —
   see [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)).
   Capsule chrome next to IconButtons
-  (SearchBar only — not ChatComposer shell) →
+  (SearchBar + Input affix-owned field-shell edges ≥ **0.5.237** — not
+  ChatComposer shell) →
   `--fynns-layout-capsule-chrome-pad-inline`. ChatComposer collapsed shell →
   `--fynns-chat-composer-pad-inline` / `pad-block` (see
   [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md)). Dense form `Input` /
-  field-shell → `capsule-chrome-pad-inline` + `field-pad-inline` (Select text
-  start parity); `Textarea` also uses
+  field-shell **text** edges → `capsule-chrome-pad-inline` + `field-pad-inline`
+  (Select text start parity); affix-owned edges → capsule-chrome only
+  (≥ **0.5.237**). `Textarea` also uses
   `--fynns-layout-field-pad-block` (not Input’s sm zero block pad) and
   auto-grows by default (`--fynns-layout-textarea-max-height` soft cap). See
   AGENTS.md **Inset decision tree** / **Toolbar / unit rhythm** / nested

@@ -306,7 +306,7 @@ const en = {
   "layoutChrome.rhythmHelp":
     "Toolbar & unit rhythm — gaps between stacked units / ControlRows, plus the ControlRow label column. Apply writes `--fynns-layout-*`. Prefer `.sandbox-stack` / `ControlStack` + `ControlRow`.",
   "layoutChrome.panelInsetsHelp":
-    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer / Surface `padded` / card body — equal all edges ≥ 0.5.114 / Surface ≥ **0.5.157**), `content-pad-block` (CodeBlock pre block — not Surface/Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar only), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
+    "Panel & long-strip insets — `content-inset` (Card / Collapsible / Drawer / Surface `padded` / card body — equal all edges ≥ 0.5.114 / Surface ≥ **0.5.157**), `content-pad-block` (CodeBlock pre block — not Surface/Card body), `nest-gap` (chrome=plain column gap / .fynns-nest sibling gap), `dialog-inset` (centered Dialog + Chat column outer), `strip-pad-inline` (Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge — radius-3xl), `capsule-chrome-pad-inline` (SearchBar IconButtons + Input affix-owned edges ≥ **0.5.237**), ChatComposer shell pad via `--fynns-chat-composer-pad-*`, `field-pad-inline` (Input / field-shell **text** edges; compose with capsule), `field-pad-block` (Textarea), `textarea-max-height` (Textarea autoGrow cap — `min(70dvh, 40rem)`), `list-well-max-height` / `-sm` (long in-Card List soft caps). Not for BottomSheet.",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet content pads — M3 keeps inline ≠ block. Do not force these onto `content-inset`.",
   "layoutChrome.shellSizeHelp":
@@ -373,10 +373,10 @@ const en = {
     "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer collapsed text-only start + expanded text edge (20dp; radius-3xl; shell pad = strip − glyph-inset). Not Chat column outer (dialog-inset). Prefer over ad-hoc rem.",
   "layoutChrome.capsuleChromePadInline": "Capsule chrome pad",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar next to IconButtons (4dp). ChatComposer shell uses `--fynns-chat-composer-pad-*` (6dp), not this key.",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar next to IconButtons (4dp); Input affix-owned shell edges (≥ **0.5.237**). ChatComposer shell uses `--fynns-chat-composer-pad-*` (6dp), not this key.",
   "layoutChrome.fieldPadInline": "Form field pad",
   "layoutChrome.fieldPadInlineHint":
-    "--fynns-layout-field-pad-inline — 12dp step; Input / field-shell compose capsule-chrome-pad-inline + this for Select text-start parity.",
+    "--fynns-layout-field-pad-inline — 12dp step; Input / field-shell **text** edges compose capsule-chrome-pad-inline + this (Select text-start parity). Affix-owned edges drop the text step — capsule-chrome only.",
   "layoutChrome.fieldPadBlock": "Form field pad (block)",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea vertical pad (12dp). Do not apply Input sm’s zero block pad to multiline.",
@@ -573,7 +573,7 @@ const en = {
   "globals.passwordShow": "Show password",
   "globals.passwordHide": "Hide password",
   "globals.passwordHelp":
-    "Compose Input `trailing` with EyeIcon / EyeOffIcon — not a separate primitive.",
+    "Compose Input `trailing` with EyeIcon / EyeOffIcon — not a separate primitive. Affix-owned shell edge (≥ **0.5.237**): `--fynns-layout-capsule-chrome-pad-inline` (**4dp**) only — same flush as SearchBar / NumberInput steppers; do **not** leave the eye on full text `capsule + field-pad` (**16dp**) or invent consumer negative margin / private end pad. Contrast: plain `#input` keeps **16dp** text pad. Failure: CONSUMER_TREATY Input trailing affix far from shell edge.",
   "globals.emptyTitle": "No projects yet",
   "globals.emptyDescription": "Create a project to see it listed here.",
   "globals.emptyAction": "Create project",
@@ -1278,6 +1278,8 @@ const en = {
     "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. **`tone=\"danger\"`** tints the “i” for Fail / error detail beside short `OK`/`Fail` status rows (probe strips — live `#rhythm`). Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
+  "globals.inputHelp":
+    "Plain Input keeps text `capsule + field-pad` (**16dp**). When `leading` / `trailing` owns an edge (≥ **0.5.237**), that side drops to `--fynns-layout-capsule-chrome-pad-inline` (**4dp**) — SearchBar / NumberInput stepper flush. Do **not** invent consumer end pad / negative margin. Live contrast: this demo (plain + leading) vs `#password` (trailing eye). Failure: CONSUMER_TREATY Input trailing affix far from shell edge.",
   "globals.selectAria": "Sample select",
   "globals.selectLongOption": "sample-workspace-with-a-long-catalog-name",
   "globals.autocompleteAria": "Sample autocomplete",
@@ -1433,7 +1435,11 @@ const en = {
   "globals.menuSortUpdated": "Updated",
   "globals.menuRename": "Rename",
   "globals.menuHelp":
-    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm.",
+    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; long labels ellipsize; Select 0.5.238 parity). Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
+  "globals.menuFieldMatchLabel": "Sample discrete pick",
+  "globals.menuFieldMatchAria": "Sample field menu",
+  "globals.menuFieldMatchHelp":
+    "FieldBlock + DropdownMenu (≥ **0.5.239**): portaled menu **width = live trigger** (same as Select ≥ **0.5.238**). Narrow host + long item → ellipsis — do **not** leave a menu wider than the field. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.",
   "globals.menuIconStripTip": "Overflow (icon-only menu)",
   "globals.menuIconStripAria": "Overflow menu",
   "globals.sheetOpen": "Open bottom sheet",
@@ -1835,7 +1841,8 @@ const en = {
   "globals.listRunSummaryFail": "Failed",
   "globals.listRunSummaryModel": "sample-model-flash",
   "globals.listRunSummaryModelB": "sample-model-pro",
-  "globals.listRunSummaryModelOverflow": "sample-model-long-overflow",
+  "globals.listRunSummaryModelOverflow":
+    "sample-model-long-overflow-with-extra-directory-and-variant-suffix",
   "globals.listRunSummaryDuration": "1m 47s",
   "globals.listRunSummaryDurationB": "12s",
   "globals.listRunSummaryDurationOverflow": "999h 59m 59s",
@@ -2255,12 +2262,12 @@ const en = {
   "globals.selectDeprecatedAlert":
     "Deprecated (≥ 0.5.236): Select is kept for anatomy + Pagination carve-out only — strongly discouraged for new UI. Prefer DropdownMenu (#menu) for discrete picks. Do not start new consumer screens on Select (pager rows-per-page may keep stock Select until a Menu-based recipe lands).",
   "globals.selectHelp":
-    "DEPRECATED anatomy (≥ **0.5.236**) — still live for chrome teaching + Pagination `.fynns-pagination-bar` carve-out, but **strongly discouraged** for new product UI. Prefer **DropdownMenu** (`#menu`). Historical stock: M3 Exposed Dropdown — 40dp outlined shell + **portaled** `.fynns-select-menu` (trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = max(option-measure, live shell width)** ≥ **0.5.220**). Field stays in-flow — **not** SearchBar’s docked joined capsule. **Consumers must not** restyle keep-set chrome. Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar. Wide-field short options: `#sandbox-select-wide-short`.",
+    "DEPRECATED anatomy (≥ **0.5.236**) — still live for chrome teaching + Pagination `.fynns-pagination-bar` carve-out, but **strongly discouraged** for new product UI. Prefer **DropdownMenu** (`#menu`). Historical stock: M3 Exposed Dropdown — 40dp outlined shell + **portaled** `.fynns-select-menu`. Default **content width** (≥ **0.5.244**) = `--fynns-select-measure-min` (widest option); stretch only with `fullWidth`, `.fynns-field-block`, or `.fynns-control-cluster__grow`. Menu **width = live shell** ≥ **0.5.238**; truncated options use `OverflowTip` ≥ **0.5.240**. **Consumers must not** restyle keep-set chrome. Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar / Select stretched without fullWidth / Select menu wider than narrow trigger / truncated option lacks ellipsis Tooltip.",
   "globals.selectWideShortAria": "Select with short options in a wide host",
   "globals.selectWideShortOptLow": "low (daily)",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "Wide form host + short options (≥ **0.5.220**): portaled menu matches the stretched trigger (max of option-measure and shell width) — do **not** leave a short-label floating chip. Control → supporting / teaching copy under the shell uses `--fynns-layout-field-hint-gap` (**8dp**, ≥ **0.5.230**) — do **not** park a muted `<p>` flush (0–4dp) under a stretched Select. Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger.",
+    "Explicit stretch (`fullWidth`) + short options (≥ **0.5.244** / ≥ **0.5.238**): portaled menu **width = live shell** — do **not** leave a short-label floating chip. Bare Select stays content-sized; form FieldBlock hosts stretch without the prop. Control → supporting copy uses `--fynns-layout-field-hint-gap` (**8dp**, ≥ **0.5.230**). Live `#sandbox-select-wide-short`. Failure: CONSUMER_TREATY Select stretched without fullWidth / Select menu narrower than stretched trigger / Select supporting copy kisses trigger.",
   "globals.selectObjectAria": "Select with object options",
   "globals.skipLinkTeach": "Skip to content (always visible sample)",
   "globals.skipLinkTeachHelp":
@@ -2650,7 +2657,7 @@ const zh: Record<MessageKey, string> = {
   "layoutChrome.rhythmHelp":
     "工具栏与单元节奏 — 单元 / ControlRow 之间的 gap，以及 ControlRow 标签列宽。Apply 写入 `--fynns-layout-*`。优先 `.sandbox-stack` / `ControlStack` + `ControlRow`。",
   "layoutChrome.panelInsetsHelp":
-    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer / Surface `padded` / card 正文 — 四边等距 ≥ 0.5.114 / Surface ≥ **0.5.157**）、`content-pad-block`（CodeBlock pre 块向 — 非 Surface/Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（仅 SearchBar）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
+    "面板与长-strip 边距 — `content-inset`（Card / Collapsible / Drawer / Surface `padded` / card 正文 — 四边等距 ≥ 0.5.114 / Surface ≥ **0.5.157**）、`content-pad-block`（CodeBlock pre 块向 — 非 Surface/Card body）、`nest-gap`（chrome=plain 列 gap / .fynns-nest 兄弟 gap）、`dialog-inset`（居中 Dialog + Chat 列外边距）、`strip-pad-inline`（Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边，radius-3xl）、`capsule-chrome-pad-inline`（SearchBar IconButton + Input affix 占用边 ≥ **0.5.237**）、ChatComposer 壳距用 `--fynns-chat-composer-pad-*`、`field-pad-inline`（Input / field-shell **文案**边；与 capsule 相加）、`field-pad-block`（Textarea）、`textarea-max-height`（Textarea autoGrow 上限 — `min(70dvh, 40rem)`）、`list-well-max-height` / `-sm`（Card 内长 List 软上限）。BottomSheet 不用这组。",
   "layoutChrome.sheetPadsHelp":
     "BottomSheet 内容边距 — M3 保持行向 ≠ 块向。不要并进 `content-inset`。",
   "layoutChrome.shellSizeHelp":
@@ -2717,10 +2724,10 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-strip-pad-inline — Banner / InlineAlert / Snackbar / ChatComposer 塌缩无 leading 文案起点 + 展开文案边（默认 20dp；radius-3xl；壳距 = strip − glyph-inset）。非 Chat 列外边距（dialog-inset）。禁止自造 rem。",
   "layoutChrome.capsuleChromePadInline": "胶囊 chrome 边距",
   "layoutChrome.capsuleChromePadInlineHint":
-    "--fynns-layout-capsule-chrome-pad-inline — SearchBar 贴 IconButton（默认 4dp）。ChatComposer 壳距用 `--fynns-chat-composer-pad-*`（6dp），不用本 key。",
+    "--fynns-layout-capsule-chrome-pad-inline — SearchBar 贴 IconButton（默认 4dp）；Input affix 占用壳边（≥ **0.5.237**）。ChatComposer 壳距用 `--fynns-chat-composer-pad-*`（6dp），不用本 key。",
   "layoutChrome.fieldPadInline": "表单字段边距",
   "layoutChrome.fieldPadInlineHint":
-    "--fynns-layout-field-pad-inline — 12dp 步进；Input / field-shell 与 capsule-chrome-pad-inline 相加以对齐 Select 文案起点。",
+    "--fynns-layout-field-pad-inline — 12dp 步进；Input / field-shell **文案**边与 capsule-chrome-pad-inline 相加以对齐 Select 文案起点。affix 占用边去掉文案步进 — 仅 capsule-chrome。",
   "layoutChrome.fieldPadBlock": "表单字段边距（块向）",
   "layoutChrome.fieldPadBlockHint":
     "--fynns-layout-field-pad-block — Textarea 垂直内边距（默认 12dp）。不要把 Input sm 的零块向 pad 套到多行。",
@@ -2915,7 +2922,7 @@ const zh: Record<MessageKey, string> = {
   "globals.passwordShow": "显示密码",
   "globals.passwordHide": "隐藏密码",
   "globals.passwordHelp":
-    "用 Input 的 `trailing` 组合 EyeIcon / EyeOffIcon —— 不是单独原语。",
+    "用 Input 的 `trailing` 组合 EyeIcon / EyeOffIcon —— 不是单独原语。affix 占用的壳边（≥ **0.5.237**）：仅 `--fynns-layout-capsule-chrome-pad-inline`（**4dp**）— 与 SearchBar / NumberInput 步进器同 flush；**禁止**把眼睛留在全文案 `capsule + field-pad`（**16dp**）上，也禁止消费侧负 margin / 私有 end pad。对照：无 affix 的 `#input` 仍保持 **16dp** 文案边距。失败模式：CONSUMER_TREATY Input trailing affix far from shell edge。",
   "globals.emptyTitle": "还没有项目",
   "globals.emptyDescription": "创建项目后会显示在这里。",
   "globals.emptyAction": "创建项目",
@@ -3615,6 +3622,8 @@ const zh: Record<MessageKey, string> = {
     "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。**`tone=\"danger\"`** 将 “i” 染红，用于短 `OK`/`Fail` 状态行旁的 Fail / 错误详情（探测条 — 见 `#rhythm`）。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
+  "globals.inputHelp":
+    "无 affix 的 Input 保持文案 `capsule + field-pad`（**16dp**）。当 `leading` / `trailing` 占用一边（≥ **0.5.237**），该侧收成 `--fynns-layout-capsule-chrome-pad-inline`（**4dp**）— 与 SearchBar / NumberInput 步进器同 flush。**禁止**消费侧自造 end pad / 负 margin。活对照：本样例（plain + leading）与 `#password`（trailing 眼睛）。失败模式：CONSUMER_TREATY Input trailing affix far from shell edge。",
   "globals.selectAria": "示例选择",
   "globals.selectLongOption": "示例工作区-带较长目录名的项目",
   "globals.autocompleteAria": "示例自动完成",
@@ -3770,7 +3779,11 @@ const zh: Record<MessageKey, string> = {
   "globals.menuSortUpdated": "更新时间",
   "globals.menuRename": "重命名",
   "globals.menuHelp":
-    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。",
+    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；长标签省略；对齐 Select 0.5.238）。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
+  "globals.menuFieldMatchLabel": "示例离散选择",
+  "globals.menuFieldMatchAria": "示例字段菜单",
+  "globals.menuFieldMatchHelp":
+    "FieldBlock + DropdownMenu（≥ **0.5.239**）：门户菜单 **width = live trigger**（同 Select ≥ **0.5.238**）。窄宿主 + 长项 → 省略号 — **禁止**菜单宽于字段。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger。",
   "globals.menuIconStripTip": "溢出（图标菜单）",
   "globals.menuIconStripAria": "溢出菜单",
   "globals.sheetOpen": "打开底部表单",
@@ -4160,7 +4173,8 @@ const zh: Record<MessageKey, string> = {
   "globals.listRunSummaryFail": "失败",
   "globals.listRunSummaryModel": "sample-model-flash",
   "globals.listRunSummaryModelB": "sample-model-pro",
-  "globals.listRunSummaryModelOverflow": "sample-model-long-overflow",
+  "globals.listRunSummaryModelOverflow":
+    "sample-model-long-overflow-with-extra-directory-and-variant-suffix",
   "globals.listRunSummaryDuration": "1m 47s",
   "globals.listRunSummaryDurationB": "12s",
   "globals.listRunSummaryDurationOverflow": "999h 59m 59s",
@@ -4578,12 +4592,12 @@ const zh: Record<MessageKey, string> = {
   "globals.selectDeprecatedAlert":
     "已废弃（≥ 0.5.236）：Select 仅保留解剖 + Pagination 例外 — 强烈不建议用于新 UI。离散选项请改用 DropdownMenu（#menu）。禁止在新消费屏继续用 Select（分页每页条数可暂留 stock Select，直至 Menu 版 pager 配方落地）。",
   "globals.selectHelp":
-    "已废弃解剖（≥ **0.5.236**）— 仍保留铬教学 + Pagination `.fynns-pagination-bar` 例外，但**强烈不建议**用于新产品 UI。优先 **DropdownMenu**（`#menu`）。历史 stock：M3 Exposed Dropdown — 40dp outlined shell + **门户** `.fynns-select-menu`（触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = max(option-measure, live shell 宽)** ≥ **0.5.220**）。字段留在文档流 — **不是** SearchBar 连体胶囊。**消费仓禁止**覆写 keep-set 铬。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar。宽宿主短选项：`#sandbox-select-wide-short`。",
+    "已废弃解剖（≥ **0.5.236**）— 仍保留铬教学 + Pagination `.fynns-pagination-bar` 例外，但**强烈不建议**用于新产品 UI。优先 **DropdownMenu**（`#menu`）。历史 stock：M3 Exposed Dropdown — 40dp outlined shell + **门户** `.fynns-select-menu`。默认 **内容宽**（≥ **0.5.244**）= `--fynns-select-measure-min`（最宽选项）；铺满仅用 `fullWidth`、`.fynns-field-block` 或 `.fynns-control-cluster__grow`。菜单 **width = live shell** ≥ **0.5.238**；溢出选项用 `OverflowTip` ≥ **0.5.240**。**消费仓禁止**覆写 keep-set 铬。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar / Select stretched without fullWidth / Select menu wider than narrow trigger / truncated option lacks ellipsis Tooltip。",
   "globals.selectWideShortAria": "宽宿主中的短选项选择器",
   "globals.selectWideShortOptLow": "low（日常）",
   "globals.selectWideShortOptMed": "medium",
   "globals.selectWideShortHelp":
-    "宽表单宿主 + 短选项（≥ **0.5.220**）：门户菜单对齐拉伸触发器（max(option-measure, shell 宽)）— **禁止**留下短标签浮芯片。控件 → 下方 supporting / 教学文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）— **禁止**在拉伸 Select 下贴一条 0–4dp 的 muted `<p>`。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select menu narrower than stretched trigger / Select supporting copy kisses trigger。",
+    "显式拉伸（`fullWidth`）+ 短选项（≥ **0.5.244** / ≥ **0.5.238**）：门户菜单 **width = live shell** — **禁止**留下短标签浮芯片。裸 Select 保持内容宽；表单 FieldBlock 宿主无需 prop 即铺满。控件 → 下方 supporting 文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）。对照 `#sandbox-select-wide-short`。失败模式：CONSUMER_TREATY Select stretched without fullWidth / Select menu narrower than stretched trigger / Select supporting copy kisses trigger。",
   "globals.selectObjectAria": "对象选项选择器",
   "globals.skipLinkTeach": "跳到内容（常显教学样例）",
   "globals.skipLinkTeachHelp": "教学样例：沙盒 CSS 强制显示 SkipLink。页面顶部真实 SkipLink 仍仅在 focus-visible 时露出。",
