@@ -1,4 +1,4 @@
----
+﻿---
 description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
 alwaysApply: true
 ---
@@ -132,12 +132,18 @@ alwaysApply: true
 7. **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏
    Cancel → Delete → Save；勿 rail `--with-end` 铅笔/垃圾桶。对照 `#timeline`。
 7b. **NavigationDrawerItem badge IconButton always visible** — 模式 / 会话行
-   删除用 `NavigationDrawerItem` **`trailing`** ghost **sm** IconButton（+
-   Tooltip；≥ **0.5.225** 核心把 trailing 盘钳到 **32dp**，禁止默认 md 40dp
-   与 40dp 目的地 pill 上下相切；≥ **0.5.234** 再留 **`space-xs`（4dp）**
-   inline-end，禁止 hover 圆与 stadium 端缘相切）。List `--with-end` 叠层揭示
-   （≥ **0.5.221**）。**禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。
-   对照 `#layouts-demo-navigation-drawer`。
+   动作用 `NavigationDrawerItem` **`trailing`** ghost **sm** IconButton /
+   `DropdownMenu` `iconOnly`（+ Tooltip；≥ **0.5.225** 核心把 trailing 盘钳到
+   **32dp**；≥ **0.5.234** 再留 **`space-xs`（4dp）** inline-end）。List
+   `--with-end` 叠层揭示（≥ **0.5.221**）；≥ **0.5.245** 用
+   `--fynns-navdrawer-actions-reveal`（slow）渐显，禁止 `duration-fast` 闪现。
+   **禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。对照
+   `#layouts-demo-navigation-drawer`。
+7b2. **NavigationDrawerItem always-visible trash / no more-menu** — 行尾优先
+   **More（`…`）** + `DropdownMenu`（icon+文案、`DropdownMenuSeparator`、删除
+   `tone="danger"`）；破坏性 / 次要操作进菜单，勿把垃圾桶当唯一 hover 动作
+   （信息冗余）。可在 More 旁放 1–2 个高频快捷（Rename / Pin）。勿写消费仓
+   私有渐显 CSS。对照 `#layouts-demo-navigation-drawer`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照

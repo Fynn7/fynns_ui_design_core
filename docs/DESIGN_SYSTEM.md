@@ -1,4 +1,4 @@
-# Design system（完整 SoT）
+﻿# Design system（完整 SoT）
 
 > 本文由原根目录胖 `AGENTS.md` 迁出。OpenCode **常驻**只加载根目录精简 [`AGENTS.md`](../AGENTS.md)；需要完整 Hard rules / 组件目录时再 Read 本文件。其它仓应 **链接** 本文或 `llm/CONSUME.md`，勿整份复制。
 
@@ -668,15 +668,28 @@ belong in a consumer’s own doc.
   `#layouts-demo-shell`.
 - **DON'T** park mode / session delete (or other row `IconButton`s) on
   `NavigationDrawerItem` `badge` — `badge` is **counts / marks only**. Row
-  actions use `trailing` ghost **sm** `IconButton` (List `--with-end` overlay
-  reveal ≥ **0.5.221**; disk clamp ≥ **0.5.225**: destination pill is **40dp**,
-  so trailing actions stay **32dp** — never default **md** / 40dp, which would
-  kiss the pill **block** edges; ≥ **0.5.234** also keeps ≥ **`space-xs`**
-  (**4dp**) clear on the **inline-end** so the hover circle never tangents the
-  stadium end curve). Idle-hidden on fine pointer; hover / focus-within;
+  actions use `trailing` ghost **sm** `IconButton` / `DropdownMenu` `iconOnly`
+  (List `--with-end` overlay reveal ≥ **0.5.221**; disk clamp ≥ **0.5.225**:
+  destination pill is **40dp**, so trailing actions stay **32dp** — never
+  default **md** / 40dp; ≥ **0.5.234** also keeps ≥ **`space-xs`** (**4dp**)
+  clear on the **inline-end**; ≥ **0.5.245** fades with
+  `--fynns-navdrawer-actions-reveal` / `--fynns-duration-slow` — **not**
+  `duration-fast` snap; 1/2/3 disks auto-reserve; menu-open
+  `:has([aria-expanded="true"])` keeps trailing visible while a portaled
+  More menu is open). Idle-hidden on fine pointer; hover / focus-within;
   coarse always visible; action is a **sibling** of the destination button —
   never nested. Live `#layouts-demo-navigation-drawer`. Failure:
   CONSUMER_TREATY NavigationDrawerItem badge IconButton always visible.
+- **DON'T** leave a mode / session **trash** (or other destructive) IconButton
+  as the only always-on-hover row action when a **More (`…`)** menu can hold
+  it — **information redundancy** / ChatGPT-style chrome: prefer
+  `MoreHorizontalIcon` + `DropdownMenu` `iconOnly` for secondary / destructive
+  ops; optional 1–2 high-frequency shortcuts (Rename / Pin) may sit beside
+  More. Menu rows = **icon + label**; section with `DropdownMenuSeparator`;
+  delete = `DropdownMenuItem` `tone="danger"`. Do **not** invent consumer CSS
+  for the fade. Live `#layouts-demo-navigation-drawer` (More-only /
+  Rename+More / Pin+Rename+More). Failure: CONSUMER_TREATY
+  NavigationDrawerItem always-visible trash / no more-menu.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body
@@ -1195,7 +1208,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
 | Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp; default **md** 40dp toolbar disks |
-| Mode / session row delete | `NavigationDrawerItem` `trailing` ghost **sm** IconButton (32dp; core clamps ≥ **0.5.225**; end clear ≥ **0.5.234**); `--with-end` overlay (≥ **0.5.221**) | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash; nested button inside Item; default **md** 40dp disk kissing the 40dp pill; hover disk tangent to stadium end |
+| Mode / session row actions | `NavigationDrawerItem` `trailing` ghost **sm** (32dp; clamp ≥ **0.5.225**; end clear ≥ **0.5.234**); idle-hidden + **slow** fade (`actions-reveal` ≥ **0.5.245**); prefer **More (`…`)** + `DropdownMenu` (icon+label, separator, `tone="danger"` delete); optional Rename/Pin beside More; 1/2/3 disk reserve | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash as sole trailing; nested button inside Item; md 40dp disk; `duration-fast` snap fade; consumer private opacity CSS |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |

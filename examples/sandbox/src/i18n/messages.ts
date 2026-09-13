@@ -1434,6 +1434,7 @@ const en = {
   "globals.menuSortName": "Name",
   "globals.menuSortUpdated": "Updated",
   "globals.menuRename": "Rename",
+  "globals.menuDelete": "Delete",
   "globals.menuHelp":
     "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; long labels ellipsize; Select 0.5.238 parity). Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
   "globals.menuFieldMatchLabel": "Sample discrete pick",
@@ -1498,7 +1499,17 @@ const en = {
   "globals.navDrawerModeNewTip": "New entry",
   "globals.navDrawerModeEntryAlpha": "Sample entry A",
   "globals.navDrawerModeEntryBeta": "Sample entry B",
+  "globals.navDrawerModeEntryGamma": "Sample entry C",
   "globals.navDrawerModeEntryDelete": "Delete entry",
+  "globals.navDrawerModeEntryMore": "More actions",
+  "globals.navDrawerModeEntryRename": "Rename",
+  "globals.navDrawerModeEntryPin": "Pin",
+  "globals.navDrawerModeEntryShare": "Share",
+  "globals.navDrawerModeEntrySettings": "Settings",
+  "globals.navDrawerModeEntryHome": "Open home",
+  "globals.navDrawerModeEntryPinMenu": "Pin entry",
+  "globals.navDrawerModeTrailingHelp":
+    "Row trailing: idle-hidden; hover fades in (slow). Prefer More (…) — put delete in the menu (danger). Live recipes: More-only / Rename+More / Pin+Rename+More.",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3778,6 +3789,7 @@ const zh: Record<MessageKey, string> = {
   "globals.menuSortName": "名称",
   "globals.menuSortUpdated": "更新时间",
   "globals.menuRename": "重命名",
+  "globals.menuDelete": "删除",
   "globals.menuHelp":
     "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；长标签省略；对齐 Select 0.5.238）。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
   "globals.menuFieldMatchLabel": "示例离散选择",
@@ -3842,7 +3854,17 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeNewTip": "新建条目",
   "globals.navDrawerModeEntryAlpha": "示例条目 A",
   "globals.navDrawerModeEntryBeta": "示例条目 B",
+  "globals.navDrawerModeEntryGamma": "示例条目 C",
   "globals.navDrawerModeEntryDelete": "删除条目",
+  "globals.navDrawerModeEntryMore": "更多操作",
+  "globals.navDrawerModeEntryRename": "重命名",
+  "globals.navDrawerModeEntryPin": "置顶",
+  "globals.navDrawerModeEntryShare": "分享",
+  "globals.navDrawerModeEntrySettings": "设置",
+  "globals.navDrawerModeEntryHome": "打开主页",
+  "globals.navDrawerModeEntryPinMenu": "置顶条目",
+  "globals.navDrawerModeTrailingHelp":
+    "行尾：未悬停隐藏；悬停慢速渐显。优先「更多 (…)」——删除进菜单（danger）。活示例：仅 More / 重命名+More / 置顶+重命名+More。",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":

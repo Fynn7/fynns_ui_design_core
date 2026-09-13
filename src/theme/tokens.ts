@@ -991,6 +991,13 @@ export const LIST_TOKENS = {
    */
   "end-actions-gap": "var(--fynns-layout-control-cluster-gap)",
   /**
+   * `--with-end` overlay trailing opacity fade (idle → hover / focus-within).
+   * Aliases `--fynns-duration-slow` (360ms) — same family as ChatMessage
+   * `actions-reveal`. Do **not** use `duration-fast` (140ms reads as snap).
+   * Live: `#list` / `#layouts-demo-navigation-drawer`.
+   */
+  "actions-reveal": "var(--fynns-duration-slow)",
+  /**
    * Pinned inspector end strip (gap meta | labeled Button | Select). Wider
    * than overlay IconButton `end-actions-gap` (4dp) — labeled controls use
    * toolbar rhythm (aliases `control-stack-gap` / 8dp). ≥ **0.5.67**.
@@ -1285,6 +1292,13 @@ export const NAVDRAWER_TOKENS = {
    * Aliases shared layout `scroll-edge-fade-length` (CodeBlock / Textarea too).
    */
   "body-fade-length": "var(--fynns-layout-scroll-edge-fade-length)",
+  /**
+   * NavigationDrawerItem `trailing` overlay opacity fade (idle → hover /
+   * focus-within / menu-open). Aliases `--fynns-duration-slow` (360ms) —
+   * ChatGPT-style perceptible reveal; same family as ChatMessage /
+   * List `actions-reveal`. Live: `#layouts-demo-navigation-drawer`.
+   */
+  "actions-reveal": "var(--fynns-duration-slow)",
 } as const;
 
 /** Focus ring geometry + quiet field border tint. `--fynns-focus-<key>`. */
