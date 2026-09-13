@@ -690,6 +690,14 @@ belong in a consumer’s own doc.
   for the fade. Live `#layouts-demo-navigation-drawer` (More-only /
   Rename+More / Pin+Rename+More). Failure: CONSUMER_TREATY
   NavigationDrawerItem always-visible trash / no more-menu.
+- **DON'T** park an always-visible ghost **Trash** next to primary **New**
+  (Plus) on session / history `--toolbar-end` — ChatGPT-style chrome keeps
+  **New** as the only primary create affordance; bulk delete belongs in a
+  toolbar `MoreHorizontalIcon` `DropdownMenu` (`tone="danger"`) or is omitted
+  (≥ **0.5.246**). Catalog tools may still show sort / refresh / bulk-select
+  beside New — **not** a lone trash twin. Live `#layouts-demo-navigation-drawer`
+  (session chrome sample). Failure: CONSUMER_TREATY mode drawer toolbar
+  trash+new twin.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body
@@ -1207,7 +1215,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
-| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp; default **md** 40dp toolbar disks |
+| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk / sort / refresh OK; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228**); chrome↔next = search-gap **8dp** (≥ **0.5.222**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad; tools↔Item crushed to 4dp; default **md** 40dp toolbar disks |
+| Session / history drawer chrome | `--toolbar-end` = optional **More (`…`)** (bulk delete `tone="danger"`) + **primary New** only (≥ **0.5.246**) — ChatGPT New-chat parity | `#layouts-demo-navigation-drawer` session sample | Always-visible Trash + Plus twin; delete-all as equal ghost disk beside New |
 | Mode / session row actions | `NavigationDrawerItem` `trailing` ghost **sm** (32dp; clamp ≥ **0.5.225**; end clear ≥ **0.5.234**); idle-hidden + **slow** fade (`actions-reveal` ≥ **0.5.245**); prefer **More (`…`)** + `DropdownMenu` (icon+label, separator, `tone="danger"` delete); optional Rename/Pin beside More; 1/2/3 disk reserve | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash as sole trailing; nested button inside Item; md 40dp disk; `duration-fast` snap fade; consumer private opacity CSS |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |

@@ -144,6 +144,11 @@ alwaysApply: true
    `tone="danger"`）；破坏性 / 次要操作进菜单，勿把垃圾桶当唯一 hover 动作
    （信息冗余）。可在 More 旁放 1–2 个高频快捷（Rename / Pin）。勿写消费仓
    私有渐显 CSS。对照 `#layouts-demo-navigation-drawer`。
+7b3. **mode drawer toolbar trash+new twin** — 会话 / 历史 `--toolbar-end` **只
+   常显** primary **新建** Plus；**禁止** ghost Trash「全部删除」与 Plus 并排
+   （ChatGPT New-chat）。全删 → 顶栏 `MoreHorizontalIcon` 菜单
+   `tone="danger"`（或省略入口）。目录 sort/refresh/bulk-select 仍可与 New
+   共存。对照 `#layouts-demo-navigation-drawer` session chrome。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照

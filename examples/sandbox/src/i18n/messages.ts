@@ -1510,6 +1510,14 @@ const en = {
   "globals.navDrawerModeEntryPinMenu": "Pin entry",
   "globals.navDrawerModeTrailingHelp":
     "Row trailing: idle-hidden; hover fades in (slow). Prefer More (…) — put delete in the menu (danger). Live recipes: More-only / Rename+More / Pin+Rename+More.",
+  "globals.navDrawerSessionAria": "Sample session sidebar",
+  "globals.navDrawerSessionToolsAria": "Sample session sidebar tools",
+  "globals.navDrawerSessionMore": "More session actions",
+  "globals.navDrawerSessionDeleteAll": "Delete all sessions",
+  "globals.navDrawerSessionNew": "New session",
+  "globals.navDrawerSessionEntry": "Sample session",
+  "globals.navDrawerSessionToolbarHelp":
+    "Session chrome: keep primary New visible; put Delete all in toolbar More (danger) — never Trash+Plus twin (ChatGPT New-chat).",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3865,6 +3873,14 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeEntryPinMenu": "置顶条目",
   "globals.navDrawerModeTrailingHelp":
     "行尾：未悬停隐藏；悬停慢速渐显。优先「更多 (…)」——删除进菜单（danger）。活示例：仅 More / 重命名+More / 置顶+重命名+More。",
+  "globals.navDrawerSessionAria": "示例会话侧栏",
+  "globals.navDrawerSessionToolsAria": "示例会话侧栏工具",
+  "globals.navDrawerSessionMore": "更多会话操作",
+  "globals.navDrawerSessionDeleteAll": "删除全部会话",
+  "globals.navDrawerSessionNew": "新建会话",
+  "globals.navDrawerSessionEntry": "示例会话",
+  "globals.navDrawerSessionToolbarHelp":
+    "会话顶栏：只常显新建；全部删除进 More（danger）——禁止 Trash+Plus 双盘（对齐 ChatGPT New-chat）。",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":

@@ -988,6 +988,72 @@ export function LayoutsPage() {
             </div>
             <SandboxHelp text={t("globals.navDrawerModeTrailingHelp")} />
             <div
+              id="sandbox-navdrawer-session-chrome"
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "14rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerSessionAria")}
+              >
+                <div
+                  className="fynns-control-cluster fynns-control-cluster--toolbar-end"
+                  aria-label={t("globals.navDrawerSessionToolsAria")}
+                >
+                  <DropdownMenu
+                    trigger={<MoreHorizontalIcon />}
+                    ariaLabel={t("globals.navDrawerSessionMore")}
+                    align="end"
+                    iconOnly
+                    size="sm"
+                    variant="ghost"
+                  >
+                    <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                      {t("globals.navDrawerSessionDeleteAll")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                  <Tooltip content={t("globals.navDrawerSessionNew")}>
+                    <IconButton
+                      size="sm"
+                      variant="primary"
+                      aria-label={t("globals.navDrawerSessionNew")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+                <NavigationDrawerItem
+                  icon={<FileIcon />}
+                  label={t("globals.navDrawerSessionEntry")}
+                  active
+                  trailing={
+                    <DropdownMenu
+                      trigger={<MoreHorizontalIcon />}
+                      ariaLabel={t("globals.navDrawerModeEntryMore")}
+                      align="end"
+                      iconOnly
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                        {t("globals.navDrawerModeEntryDelete")}
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  }
+                />
+              </NavigationDrawer>
+            </div>
+            <SandboxHelp text={t("globals.navDrawerSessionToolbarHelp")} />
+            <div
               className="sandbox-globals-navdrawer"
               style={{
                 display: "flex",
