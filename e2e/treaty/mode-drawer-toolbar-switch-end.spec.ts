@@ -123,20 +123,44 @@ test(`${TOOL_SM_SLUG}: toolbar-end IconButtons are 32dp sm`, async ({
         /mode|模式/i.test(el.getAttribute("aria-label") ?? ""),
       );
       if (!mode) return null;
-      const icons = [
-        ...mode.querySelectorAll(
-          ".fynns-control-cluster--toolbar-end .fynns-btn--icon",
-        ),
+      const cluster = mode.querySelector(
+        ".fynns-control-cluster--toolbar-end",
+      ) as HTMLElement | null;
+      if (!cluster) return null;
+      const live = [
+        ...cluster.querySelectorAll(".fynns-btn--icon"),
       ] as HTMLElement[];
-      if (icons.length === 0) return null;
-      return icons.map((el) => {
+      if (live.length === 0) return null;
+
+      // Live demo geometry (props often already sm).
+      const liveSizes = live.map((el) => {
         const r = el.getBoundingClientRect();
-        return { h: +r.height.toFixed(2), w: +r.width.toFixed(2) };
+        return { h: +r.height.toFixed(2), w: +r.width.toFixed(2), via: "live" };
       });
+
+      // Prove core clamp: inject a loud md IconButton (omitted-size / md path).
+      const probe = document.createElement("button");
+      probe.type = "button";
+      probe.className =
+        "fynns-btn fynns-btn--primary fynns-btn--md fynns-btn--icon";
+      probe.setAttribute("aria-hidden", "true");
+      probe.tabIndex = -1;
+      cluster.appendChild(probe);
+      const pr = probe.getBoundingClientRect();
+      const probeSize = {
+        h: +pr.height.toFixed(2),
+        w: +pr.width.toFixed(2),
+        via: "injected-md",
+      };
+      probe.remove();
+      return [...liveSizes, probeSize];
     });
     expect(metrics, TOOL_SM_SLUG).not.toBeNull();
     for (const m of metrics!) {
-      expect(m.h).toBeGreaterThanOrEqual(31.5);
+      expect(
+        m.h,
+        `${TOOL_SM_SLUG}: ${m.via} height (got ${m.h})`,
+      ).toBeGreaterThanOrEqual(31.5);
       expect(m.h).toBeLessThanOrEqual(32.5);
       expect(m.w).toBeGreaterThanOrEqual(31.5);
       expect(m.w).toBeLessThanOrEqual(32.5);
