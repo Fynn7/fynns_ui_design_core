@@ -211,6 +211,35 @@ function isGitWorkTreeClean(dir) {
   return (r.status ?? 1) === 0 && !String(r.stdout ?? "").trim();
 }
 
+function gitRevParse(dir, rev) {
+  const r = run("git", ["rev-parse", rev], dir, { allowFail: true, quiet: true });
+  if ((r.status ?? 1) !== 0) return null;
+  return String(r.stdout ?? "").trim() || null;
+}
+
+function gitRevListCount(dir, range) {
+  const r = run("git", ["rev-list", "--count", range], dir, { allowFail: true, quiet: true });
+  if ((r.status ?? 1) !== 0) return null;
+  const n = Number.parseInt(String(r.stdout ?? "").trim(), 10);
+  return Number.isFinite(n) ? n : null;
+}
+
+function readVersionAtRev(dir, rev) {
+  const r = run("git", ["show", `${rev}:package.json`], dir, { allowFail: true, quiet: true });
+  if ((r.status ?? 1) !== 0) return null;
+  try {
+    return JSON.parse(String(r.stdout ?? "").replace(/^\uFEFF/, ""))?.version ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fast-forward a clean sibling to origin/<ref>.
+ * Prefers `merge --ff-only`. Only falls back to `reset --hard` when the remote
+ * package.json semver is strictly newer (stale shallow clones that cannot FF)
+ * — never discards a tip that is ahead/equal by version with unique commits.
+ */
 function updateSiblingCheckout(dir, ref, log) {
   if (process.env.FYNNS_UI_SKIP_SIBLING_SYNC === "1") {
     log.push({ step: "update", status: "skipped", reason: "FYNNS_UI_SKIP_SIBLING_SYNC=1", path: dir });
@@ -230,11 +259,53 @@ function updateSiblingCheckout(dir, ref, log) {
   }
   log.push({ step: "update", status: "start", path: dir, ref });
   run("git", ["fetch", "--depth", "1", "origin", ref], dir);
-  // Hard-reset to FETCH_HEAD (worktree is clean). Prefer this over
-  // `checkout -B <ref>` so a second worktree can update while the primary
-  // checkout already holds branch <ref>.
+
+  const head = gitRevParse(dir, "HEAD");
+  const tip = gitRevParse(dir, "FETCH_HEAD");
+  if (!head || !tip) {
+    throw new Error(`${dir}: could not resolve HEAD/FETCH_HEAD after fetch of origin/${ref}`);
+  }
+  if (head === tip) {
+    log.push({ step: "update", status: "ok", path: dir, ref, detail: "already at FETCH_HEAD" });
+    return { skipped: false };
+  }
+
+  const ff = run("git", ["merge", "--ff-only", "FETCH_HEAD"], dir, { allowFail: true, quiet: true });
+  if ((ff.status ?? 1) === 0) {
+    log.push({ step: "update", status: "ok", path: dir, ref, detail: "ff-only merge" });
+    return { skipped: false };
+  }
+
+  const ahead = gitRevListCount(dir, "FETCH_HEAD..HEAD");
+  const localVer = readSiblingVersion(dir);
+  const remoteVer = readVersionAtRev(dir, "FETCH_HEAD");
+  const remoteNewer =
+    Boolean(localVer && remoteVer && !versionAtLeast(localVer, remoteVer) && localVer !== remoteVer);
+
+  if (ahead != null && ahead > 0 && !remoteNewer) {
+    throw new Error(
+      `${dir} has ${ahead} local commit(s) not on origin/${ref}; refusing to discard them.\n` +
+        `Push/merge that tip, move the checkout aside, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.`,
+    );
+  }
+
+  if (!remoteNewer) {
+    throw new Error(
+      `${dir} cannot fast-forward to origin/${ref} (diverged or shallow history).\n` +
+        `Manual: git -C "${dir}" pull --ff-only   or move the checkout aside and re-clone.\n` +
+        `Skip auto-sync while editing core: FYNNS_UI_SKIP_SIBLING_SYNC=1`,
+    );
+  }
+
+  // Stale shallow sibling: remote package.json is strictly newer — safe upgrade path.
   run("git", ["reset", "--hard", "FETCH_HEAD"], dir);
-  log.push({ step: "update", status: "ok", path: dir, ref });
+  log.push({
+    step: "update",
+    status: "ok",
+    path: dir,
+    ref,
+    detail: `reset --hard (remote ${remoteVer} > local ${localVer})`,
+  });
   return { skipped: false };
 }
 

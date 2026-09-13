@@ -62,9 +62,12 @@ index slugs **squashed drawer** + **wrong shell slot**.
     `check-ui-exports`) into consumer `predev` / `prebuild` / `prepreview` /
     `postinstall`. Clean sibling worktrees **fast-forward** to
     `origin/dev` (or `FYNNS_UI_CORE_REF`) via `git fetch` +
-    `git reset --hard FETCH_HEAD` so new barrel symbols (icons, etc.)
+    `git merge --ff-only` (or, only when remote `package.json` semver is
+    strictly newer — e.g. stale shallow clones — `git reset --hard FETCH_HEAD`)
+    so new barrel symbols (icons, etc.)
     land before Vite starts — prevents blank-page
-    `does not provide an export named …`. Dirty sibling → hard fail (fix or
+    `does not provide an export named …`. Dirty sibling or local tip ahead
+    without a newer remote semver → hard fail (fix or
     `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core locally; export check
     still runs). Optional floor: consumer `package.json`
     `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a
@@ -73,7 +76,7 @@ index slugs **squashed drawer** + **wrong shell slot**.
     **Bootstrap note:** if a colleague’s sibling tip is older than the
     `--update` / `check-ui-exports` scripts, consumer wrappers
     (CV / agents-hub `scripts/fynns-ui-gate.mjs`) fall back to local
-    `fetch`+`reset --hard` once, then re-run the gate — do not leave
+    `fetch`+ff/`reset` once, then re-run the gate — do not leave
     `predev` calling only an ancient ensure-sibling with unknown flags.
 6. **TypeScript:** consumer `compilerOptions.target` and `lib` must be **ES2022** (or later).
 7. **Do not** import deleted symbols — [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
