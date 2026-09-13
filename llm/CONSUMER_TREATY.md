@@ -235,6 +235,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
 | FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
+| FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
 | Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |

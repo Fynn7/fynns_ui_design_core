@@ -387,7 +387,9 @@
 }
 
 .fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow,
-.fynns-control-cluster--end-align > .fynns-textarea.fynns-control-cluster__grow {
+.fynns-control-cluster--end-align > .fynns-textarea.fynns-control-cluster__grow,
+.fynns-control-cluster--end-align > .fynns-field.fynns-control-cluster__grow,
+.fynns-control-cluster--end-align > .fynns-input.fynns-control-cluster__grow {
   flex: 1 1 0%;
   min-width: 0;
   width: auto;
@@ -444,6 +446,25 @@
   > .fynns-btn--icon {
   align-self: center;
   margin-block-start: 0;
+}
+
+/* Input / field shell + row action (secret Save key ≥ 0.5.252): one nowrap
+   row — grow field fills leftover; Save IconButton shares the 40dp band.
+   Put supportingText / FieldHint outside the cluster, not under the Input. */
+.fynns-control-cluster--end-align:has(> .fynns-field.fynns-control-cluster__grow),
+.fynns-control-cluster--end-align:has(> .fynns-input.fynns-control-cluster__grow) {
+  align-items: center;
+}
+
+.fynns-control-cluster--end-align:has(> .fynns-field.fynns-control-cluster__grow)
+  > .fynns-field.fynns-control-cluster__grow
+  > .fynns-field-shell,
+.fynns-control-cluster--end-align:has(> .fynns-field.fynns-control-cluster__grow)
+  > .fynns-field.fynns-control-cluster__grow
+  > .fynns-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .fynns-control-cluster--end-align

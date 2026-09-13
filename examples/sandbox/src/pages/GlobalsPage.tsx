@@ -5489,8 +5489,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               <FieldStack>
                 <FieldBlock label={t("globals.fieldSaveIconLabel")}>
-                  <div className="fynns-unit-stack">
+                  <div className="fynns-control-cluster fynns-control-cluster--end-align">
                     <Input
+                      className="fynns-control-cluster__grow"
                       type={sampleTokenVisible ? "text" : "password"}
                       value={sampleToken}
                       onChange={(event) => setSampleToken(event.target.value)}
@@ -5525,24 +5526,22 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                         </Tooltip>
                       }
                     />
-                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                      <Tooltip content={t("globals.fieldSaveIconSave")}>
-                        <IconButton
-                          variant="tonal"
-                          loading={sampleTokenSaving}
-                          disabled={!sampleToken.trim()}
-                          aria-label={t("globals.fieldSaveIconSave")}
-                          onClick={() => {
-                            setSampleTokenSaving(true);
-                            window.setTimeout(() => {
-                              setSampleTokenSaving(false);
-                            }, 700);
-                          }}
-                        >
-                          <SaveIcon size={16} aria-hidden />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
+                    <Tooltip content={t("globals.fieldSaveIconSave")}>
+                      <IconButton
+                        variant="tonal"
+                        loading={sampleTokenSaving}
+                        disabled={!sampleToken.trim()}
+                        aria-label={t("globals.fieldSaveIconSave")}
+                        onClick={() => {
+                          setSampleTokenSaving(true);
+                          window.setTimeout(() => {
+                            setSampleTokenSaving(false);
+                          }, 700);
+                        }}
+                      >
+                        <SaveIcon size={16} aria-hidden />
+                      </IconButton>
+                    </Tooltip>
                   </div>
                 </FieldBlock>
               </FieldStack>

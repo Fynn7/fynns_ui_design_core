@@ -28,6 +28,11 @@ function join(...parts: Array<string | false | null | undefined>) {
  * hard clip); focused allows caret scroll with a hidden scrollbar — same
  * contract as SearchBar / Autocomplete text fields.
  *
+ * With `leading` / `trailing` / hint chrome, `className` lands on the outer
+ * `.fynns-field` host (so `--end-align` + `fynns-control-cluster__grow` works
+ * for secret Save-key rows ≥ **0.5.252**). Without chrome, `className` stays
+ * on the bare `<input>`.
+ *
  * Default `spellCheck={false}` — multilingual / technical copy must not show
  * browser red squiggles; pass `spellCheck` to opt in.
  */
@@ -77,7 +82,13 @@ export const Input = forwardRef(function Input(
   if (!needsShell) return input;
 
   return (
-    <div className={join("fynns-field", isInvalid && "fynns-field--invalid")}>
+    <div
+      className={join(
+        "fynns-field",
+        isInvalid && "fynns-field--invalid",
+        className,
+      )}
+    >
       {leading || trailing ? (
         <div
           className={join(
@@ -88,7 +99,21 @@ export const Input = forwardRef(function Input(
           )}
         >
           {leading ? <span className="fynns-field-affix fynns-field-affix--leading">{leading}</span> : null}
-          {input}
+          <input
+            {...rest}
+            id={inputId}
+            ref={ref}
+            spellCheck={spellCheck}
+            aria-invalid={isInvalid || undefined}
+            aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
+            className={join(
+              "fynns-input",
+              size === "sm" && "fynns-input--sm",
+              variant === "filled" && "fynns-input--filled",
+              isInvalid && "fynns-input--invalid",
+              "fynns-input--in-shell",
+            )}
+          />
           {trailing ? <span className="fynns-field-affix fynns-field-affix--trailing">{trailing}</span> : null}
         </div>
       ) : (

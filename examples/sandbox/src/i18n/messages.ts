@@ -2095,7 +2095,7 @@ const en = {
   "globals.fieldSaveIconHide": "Hide plaintext",
   "globals.fieldSaveIconSave": "Save token",
   "globals.fieldSaveIconHelp":
-    "**FieldBlock secret save (hard ≥ 0.5.248):** under FieldBlock / `unit-stack` + `.fynns-control-cluster--end-align`, self-evident Save key / Save token = **`IconButton` + `Tooltip` + `SaveIcon`** (busy → `loading`) — not labeled ghost **or** tonal `Button` text (`Save key`). Keep labeled Buttons for primary workflow verbs. Failure: CONSUMER_TREATY FieldBlock labeled Save key instead of IconButton+Tooltip. Live `#sandbox-field-save-icon`.",
+    "**FieldBlock secret save (hard ≥ 0.5.248 / same-row ≥ **0.5.252**):** one `.fynns-control-cluster--end-align` — `Input` `className=\"fynns-control-cluster__grow\"` (+ optional reveal `trailing` sm) **then** `IconButton` + `Tooltip` + `SaveIcon` on the **same row**. Busy → `loading`. Not labeled ghost/tonal text; not a `unit-stack` sibling under the field. Failure: CONSUMER_TREATY FieldBlock Save IconButton wraps under Input. Live `#sandbox-field-save-icon`.",
   "globals.cardHeadPrimaryTitle": "Pack and export",
   "globals.cardHeadPrimaryPack": "Pack into local history",
   "globals.cardHeadPrimaryDownload": "Download result",
@@ -4464,7 +4464,7 @@ const zh: Record<MessageKey, string> = {
   "globals.fieldSaveIconHide": "隐藏明文",
   "globals.fieldSaveIconSave": "保存令牌",
   "globals.fieldSaveIconHelp":
-    "**FieldBlock 密钥保存（硬 ≥ 0.5.248）：** FieldBlock / `unit-stack` + `.fynns-control-cluster--end-align` 下自明「Save key / Save token / 保存密钥」= **`IconButton` + `Tooltip` + `SaveIcon`**（忙碌用 `loading`）— 禁止 labeled ghost **或** tonal 文案药丸。主流程动词 CTA 仍可用 labeled Button。失败：CONSUMER_TREATY FieldBlock labeled Save key instead of IconButton+Tooltip。对照 `#sandbox-field-save-icon`。",
+    "**FieldBlock 密钥保存（硬 ≥ 0.5.248 / 同行 ≥ **0.5.252**）：** 一条 `.fynns-control-cluster--end-align` — `Input` `className=\"fynns-control-cluster__grow\"`（可选 reveal `trailing` sm）**再**同行 `IconButton` + `Tooltip` + `SaveIcon`。忙碌用 `loading`。禁止 labeled 文案药丸；禁止 `unit-stack` 把 Save 甩到输入下一行。失败：CONSUMER_TREATY FieldBlock Save IconButton wraps under Input。对照 `#sandbox-field-save-icon`。",
   "globals.cardHeadPrimaryTitle": "打包与导出",
   "globals.cardHeadPrimaryPack": "打包并写入本机历史",
   "globals.cardHeadPrimaryDownload": "下载结果",

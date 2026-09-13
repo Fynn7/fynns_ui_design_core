@@ -391,10 +391,15 @@ alwaysApply: true
     （Validate / Deliver）仍可用 labeled Button。对照
     `#sandbox-card-chrome-icon-actions`。
 32b. **FieldBlock labeled Save key instead of IconButton+Tooltip** — FieldBlock /
-    `unit-stack` + `--end-align` 下自明「Save key / Save token / 保存密钥」
+    `--end-align` 下自明「Save key / Save token / 保存密钥」
     （含 **tonal** / ghost / primary 带标签 Button）→ **`IconButton` +
     `Tooltip` + `SaveIcon`**（忙碌用 `loading`）；禁止贴文案药丸。对照
     `#sandbox-field-save-icon`（≥ **0.5.248**）。
+32c. **FieldBlock Save IconButton wraps under Input** — 密钥 Save 必须与
+    `Input` **同一行**：`.fynns-control-cluster--end-align` + Input
+    `className="fynns-control-cluster__grow"`（reveal 仍用 `trailing` sm）+
+    Save IconButton。禁止 `unit-stack` 把 Save 甩到输入下方。对照
+    `#sandbox-field-save-icon`（≥ **0.5.252**）。
 33. **Card head primary IconButton leftmost in control-cluster** — Card /
     Collapsible `actions` 多盘簇：`variant="primary"` 必须 **LTR 末位**（贴尾）；
     次要 ghost/tonal 在前。禁止主色盘排在下载/开文件夹等 ghost 左侧。对照

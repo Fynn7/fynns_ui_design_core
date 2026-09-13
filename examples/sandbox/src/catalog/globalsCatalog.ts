@@ -405,6 +405,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "copy",
       "clipboard",
       "Save key",
+      "same-row save",
       "IconButton",
       "primary end",
     ],
