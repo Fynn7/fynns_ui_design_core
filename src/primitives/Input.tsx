@@ -69,10 +69,12 @@ export const Input = forwardRef(function Input(
       ...extra,
     );
 
-  const bareInput = (opts: {
-    inShell?: boolean;
-    hostClassName?: string | undefined;
-  }) => (
+  const bareInput = (
+    opts: {
+      inShell?: boolean;
+      hostClassName?: string | undefined;
+    } = {},
+  ) => (
     <input
       {...rest}
       id={inputId}
