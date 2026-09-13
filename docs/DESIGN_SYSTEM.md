@@ -115,15 +115,19 @@ belong in a consumer’s own doc.
    **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
    stays on that host even at the left/right edge (no PageScroll chaining mid
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
-   fade (≥ 0.5.135):**
-   capped CodeBlock / Textarea /
-   NavigationDrawer body soft-mask top+bottom when content overflows
+   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**):**
+   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`**
+   soft-mask top+bottom when content overflows mid-scroll
    (`data-fade-top` / `data-fade-bottom`, length
-   `--fynns-layout-scroll-edge-fade-length`) — not a hard clip. Textarea /
-   input hosts hide the native bar only (no overlay rail). Do **not**
-   use `scrollbar-gutter: stable` / `both-edges`. NavigationDrawer keeps
-   `--fynns-navdrawer-pad-inline` (10dp) only. Vertical scroll hosts must pin
-   `overflow-x: clip` (not bare `overflow: auto`).
+   `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
+   (≥ **0.5.247**); zero consumer props / private mask CSS**. Not a hard clip
+   into TopAppBar / canvas floor. Do **not** invent consumer `mask-image` on
+   `.fynns-page-scroll`, and do **not** replace destination catalogs with a bare
+   `overflow:auto` host that hard-clips. Textarea / input hosts hide the native
+   bar only (no overlay rail). Do **not** use `scrollbar-gutter: stable` /
+   `both-edges`. NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (10dp)
+   only. Vertical scroll hosts must pin `overflow-x: clip` (not bare
+   `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
    `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
@@ -668,15 +672,36 @@ belong in a consumer’s own doc.
   `#layouts-demo-shell`.
 - **DON'T** park mode / session delete (or other row `IconButton`s) on
   `NavigationDrawerItem` `badge` — `badge` is **counts / marks only**. Row
-  actions use `trailing` ghost **sm** `IconButton` (List `--with-end` overlay
-  reveal ≥ **0.5.221**; disk clamp ≥ **0.5.225**: destination pill is **40dp**,
-  so trailing actions stay **32dp** — never default **md** / 40dp, which would
-  kiss the pill **block** edges; ≥ **0.5.234** also keeps ≥ **`space-xs`**
-  (**4dp**) clear on the **inline-end** so the hover circle never tangents the
-  stadium end curve). Idle-hidden on fine pointer; hover / focus-within;
+  actions use `trailing` ghost **sm** `IconButton` / `DropdownMenu` `iconOnly`
+  (List `--with-end` overlay reveal ≥ **0.5.221**; disk clamp ≥ **0.5.225**:
+  destination pill is **40dp**, so trailing actions stay **32dp** — never
+  default **md** / 40dp; ≥ **0.5.234** also keeps ≥ **`space-xs`** (**4dp**)
+  clear on the **inline-end**; ≥ **0.5.245** fades with
+  `--fynns-navdrawer-actions-reveal` / `--fynns-duration-slow` — **not**
+  `duration-fast` snap; 1/2/3 disks auto-reserve; menu-open
+  `:has([aria-expanded="true"])` keeps trailing visible while a portaled
+  More menu is open). Idle-hidden on fine pointer; hover / focus-within;
   coarse always visible; action is a **sibling** of the destination button —
   never nested. Live `#layouts-demo-navigation-drawer`. Failure:
   CONSUMER_TREATY NavigationDrawerItem badge IconButton always visible.
+- **DON'T** leave a mode / session **trash** (or other destructive) IconButton
+  as the only always-on-hover row action when a **More (`…`)** menu can hold
+  it — **information redundancy** / ChatGPT-style chrome: prefer
+  `MoreHorizontalIcon` + `DropdownMenu` `iconOnly` for secondary / destructive
+  ops; optional 1–2 high-frequency shortcuts (Rename / Pin) may sit beside
+  More. Menu rows = **icon + label**; section with `DropdownMenuSeparator`;
+  delete = `DropdownMenuItem` `tone="danger"`. Do **not** invent consumer CSS
+  for the fade. Live `#layouts-demo-navigation-drawer` (More-only /
+  Rename+More / Pin+Rename+More). Failure: CONSUMER_TREATY
+  NavigationDrawerItem always-visible trash / no more-menu.
+- **DON'T** park an always-visible ghost **Trash** next to primary **New**
+  (Plus) on session / history `--toolbar-end` — ChatGPT-style chrome keeps
+  **New** as the only primary create affordance; bulk delete belongs in a
+  toolbar `MoreHorizontalIcon` `DropdownMenu` (`tone="danger"`) or is omitted
+  (≥ **0.5.246**). Catalog tools may still show sort / refresh / bulk-select
+  beside New — **not** a lone trash twin. Live `#layouts-demo-navigation-drawer`
+  (session chrome sample). Failure: CONSUMER_TREATY mode drawer toolbar
+  trash+new twin.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body
@@ -1194,8 +1219,9 @@ rules such as timeline-catalog). Live index: `#list`.
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
-| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp; default **md** 40dp toolbar disks |
-| Mode / session row delete | `NavigationDrawerItem` `trailing` ghost **sm** IconButton (32dp; core clamps ≥ **0.5.225**; end clear ≥ **0.5.234**); `--with-end` overlay (≥ **0.5.221**) | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash; nested button inside Item; default **md** 40dp disk kissing the 40dp pill; hover disk tangent to stadium end |
+| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk / sort / refresh OK; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228**); chrome↔next = search-gap **8dp** (≥ **0.5.222**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad; tools↔Item crushed to 4dp; default **md** 40dp toolbar disks |
+| Session / history drawer chrome | `--toolbar-end` = optional **More (`…`)** (bulk delete `tone="danger"`) + **primary New** only (≥ **0.5.246**) — ChatGPT New-chat parity | `#layouts-demo-navigation-drawer` session sample | Always-visible Trash + Plus twin; delete-all as equal ghost disk beside New |
+| Mode / session row actions | `NavigationDrawerItem` `trailing` ghost **sm** (32dp; clamp ≥ **0.5.225**; end clear ≥ **0.5.234**); idle-hidden + **slow** fade (`actions-reveal` ≥ **0.5.245**); prefer **More (`…`)** + `DropdownMenu` (icon+label, separator, `tone="danger"` delete); optional Rename/Pin beside More; 1/2/3 disk reserve | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash as sole trailing; nested button inside Item; md 40dp disk; `duration-fast` snap fade; consumer private opacity CSS |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
@@ -1204,6 +1230,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
+| PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band; 8dp gap; open Select keeps head center (≥ **0.5.227**) | `#sandbox-card-head-select` | Title/CTA yanked by Select `data-expanded` grid |
 | Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |

@@ -385,7 +385,7 @@ const en = {
     "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (min(70dvh, 40rem); page catalogs grow with prose).",
   "layoutChrome.scrollEdgeFadeLength": "Scroll-edge fade",
   "layoutChrome.scrollEdgeFadeLengthHint":
-    "--fynns-layout-scroll-edge-fade-length — soft mask on overflowing CodeBlock / Textarea / NavigationDrawer body (data-fade-top/bottom).",
+    "--fynns-layout-scroll-edge-fade-length — soft mask on overflowing CodeBlock / Textarea / NavigationDrawer body / PageScroll (data-fade-top/bottom; PageScroll ≥ 0.5.247).",
   "layoutChrome.listWellMaxHeight": "List well max height",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — soft cap for long in-Card Lists (20rem). Short catalogs use FillColumn page scroll — do not nest fynns-scroll on a one-row List.",
@@ -659,7 +659,7 @@ const en = {
   "globals.busyRegionFieldStart": "Show field busy",
   "globals.busyRegionFieldStop": "Clear field busy",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). The content column **fills the page-scroll pane** (inset only; `--fynns-layout-content-max-width` default **`none`** ≥ **0.5.186** — no soft ~1180dp gutters). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. Tokens ≥ 0.4.58.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). The content column **fills the page-scroll pane** (inset only; `--fynns-layout-content-max-width` default **`none`** ≥ **0.5.186** — no soft ~1180dp gutters). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. **Mid-scroll edge fade is built into `PageScroll` (≥ 0.5.247) — zero consumer config:** scroll this stage mid-pane → automatic `data-fade-top` + `data-fade-bottom` (NavigationDrawer family). Do not invent consumer mask CSS. Tokens ≥ 0.4.58.",
   "globals.pageScrollToolLabel": "Tool",
   "globals.pageScrollToolAria": "Sample tool mode",
   "globals.pageScrollToolA": "Mode A",
@@ -1434,6 +1434,7 @@ const en = {
   "globals.menuSortName": "Name",
   "globals.menuSortUpdated": "Updated",
   "globals.menuRename": "Rename",
+  "globals.menuDelete": "Delete",
   "globals.menuHelp":
     "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; long labels ellipsize; Select 0.5.238 parity). Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
   "globals.menuFieldMatchLabel": "Sample discrete pick",
@@ -1498,7 +1499,25 @@ const en = {
   "globals.navDrawerModeNewTip": "New entry",
   "globals.navDrawerModeEntryAlpha": "Sample entry A",
   "globals.navDrawerModeEntryBeta": "Sample entry B",
+  "globals.navDrawerModeEntryGamma": "Sample entry C",
   "globals.navDrawerModeEntryDelete": "Delete entry",
+  "globals.navDrawerModeEntryMore": "More actions",
+  "globals.navDrawerModeEntryRename": "Rename",
+  "globals.navDrawerModeEntryPin": "Pin",
+  "globals.navDrawerModeEntryShare": "Share",
+  "globals.navDrawerModeEntrySettings": "Settings",
+  "globals.navDrawerModeEntryHome": "Open home",
+  "globals.navDrawerModeEntryPinMenu": "Pin entry",
+  "globals.navDrawerModeTrailingHelp":
+    "Row trailing: idle-hidden; hover fades in (slow). Prefer More (…) — put delete in the menu (danger). Live recipes: More-only / Rename+More / Pin+Rename+More.",
+  "globals.navDrawerSessionAria": "Sample session sidebar",
+  "globals.navDrawerSessionToolsAria": "Sample session sidebar tools",
+  "globals.navDrawerSessionMore": "More session actions",
+  "globals.navDrawerSessionDeleteAll": "Delete all sessions",
+  "globals.navDrawerSessionNew": "New session",
+  "globals.navDrawerSessionEntry": "Sample session",
+  "globals.navDrawerSessionToolbarHelp":
+    "Session chrome: keep primary New visible; put Delete all in toolbar More (danger) — never Trash+Plus twin (ChatGPT New-chat).",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -2736,7 +2755,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（min(70dvh, 40rem)；页面目录随正文长高）。",
   "layoutChrome.scrollEdgeFadeLength": "滚动边缘渐隐",
   "layoutChrome.scrollEdgeFadeLengthHint":
-    "--fynns-layout-scroll-edge-fade-length — CodeBlock / Textarea / NavigationDrawer 正文溢出时的软遮罩（data-fade-top/bottom）。",
+    "--fynns-layout-scroll-edge-fade-length — CodeBlock / Textarea / NavigationDrawer / PageScroll 正文溢出时的软遮罩（data-fade-top/bottom；PageScroll ≥ 0.5.247）。",
   "layoutChrome.listWellMaxHeight": "列表井最大高度",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — Card 内长 List 软上限（20rem）。短目录用 FillColumn 页滚动——不要给单行 List 再套 fynns-scroll。",
@@ -3008,7 +3027,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFieldStart": "显示字段 busy",
   "globals.busyRegionFieldStop": "清除字段 busy",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。内容列**铺满页滚窗格**（仅 inset；`--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止 ~1180dp 居中阅读条留白）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。令牌 ≥ 0.4.58。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。内容列**铺满页滚窗格**（仅 inset；`--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止 ~1180dp 居中阅读条留白）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。**中段滚动渐隐已封装进 `PageScroll`（≥ 0.5.247）— 消费仓零配置：** 滚到舞台中段即自动 `data-fade-top` + `data-fade-bottom`（与侧栏同族）；禁止私有 mask。令牌 ≥ 0.4.58。",
   "globals.pageScrollToolLabel": "工具",
   "globals.pageScrollToolAria": "样例工具模式",
   "globals.pageScrollToolA": "模式 A",
@@ -3778,6 +3797,7 @@ const zh: Record<MessageKey, string> = {
   "globals.menuSortName": "名称",
   "globals.menuSortUpdated": "更新时间",
   "globals.menuRename": "重命名",
+  "globals.menuDelete": "删除",
   "globals.menuHelp":
     "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；长标签省略；对齐 Select 0.5.238）。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
   "globals.menuFieldMatchLabel": "示例离散选择",
@@ -3842,7 +3862,25 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerModeNewTip": "新建条目",
   "globals.navDrawerModeEntryAlpha": "示例条目 A",
   "globals.navDrawerModeEntryBeta": "示例条目 B",
+  "globals.navDrawerModeEntryGamma": "示例条目 C",
   "globals.navDrawerModeEntryDelete": "删除条目",
+  "globals.navDrawerModeEntryMore": "更多操作",
+  "globals.navDrawerModeEntryRename": "重命名",
+  "globals.navDrawerModeEntryPin": "置顶",
+  "globals.navDrawerModeEntryShare": "分享",
+  "globals.navDrawerModeEntrySettings": "设置",
+  "globals.navDrawerModeEntryHome": "打开主页",
+  "globals.navDrawerModeEntryPinMenu": "置顶条目",
+  "globals.navDrawerModeTrailingHelp":
+    "行尾：未悬停隐藏；悬停慢速渐显。优先「更多 (…)」——删除进菜单（danger）。活示例：仅 More / 重命名+More / 置顶+重命名+More。",
+  "globals.navDrawerSessionAria": "示例会话侧栏",
+  "globals.navDrawerSessionToolsAria": "示例会话侧栏工具",
+  "globals.navDrawerSessionMore": "更多会话操作",
+  "globals.navDrawerSessionDeleteAll": "删除全部会话",
+  "globals.navDrawerSessionNew": "新建会话",
+  "globals.navDrawerSessionEntry": "示例会话",
+  "globals.navDrawerSessionToolbarHelp":
+    "会话顶栏：只常显新建；全部删除进 More（danger）——禁止 Trash+Plus 双盘（对齐 ChatGPT New-chat）。",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":

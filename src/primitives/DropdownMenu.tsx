@@ -414,6 +414,11 @@ export type DropdownMenuItemProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon?: ReactNode;
   /** Keep the menu open after activate (default closes). */
   closeOnSelect?: boolean;
+  /**
+   * Semantic tone. `danger` paints icon + label with `--fynns-color-danger`
+   * (ChatGPT-style destructive More-menu rows). Default is neutral text.
+   */
+  tone?: "default" | "danger";
 };
 
 export function DropdownMenuItem({
@@ -421,6 +426,7 @@ export function DropdownMenuItem({
   children,
   className,
   closeOnSelect = true,
+  tone = "default",
   onClick,
   ...rest
 }: DropdownMenuItemProps) {
@@ -431,7 +437,11 @@ export function DropdownMenuItem({
       {...rest}
       type="button"
       role="menuitem"
-      className={join("fynns-menu-item", className)}
+      className={join(
+        "fynns-menu-item",
+        tone === "danger" && "fynns-menu-item--danger",
+        className,
+      )}
       onClick={(event) => {
         onClick?.(event);
         if (!event.defaultPrevented && closeOnSelect) ctx?.close();

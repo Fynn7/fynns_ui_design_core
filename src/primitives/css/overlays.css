@@ -182,6 +182,39 @@
   cursor: not-allowed;
 }
 
+.fynns-menu-item--danger {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-menu-item--danger .fynns-menu-item-icon,
+.fynns-menu-item--danger .fynns-menu-item-leading {
+  color: var(--fynns-color-danger);
+}
+
+.fynns-menu-item--danger:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-danger) var(--fynns-state-hover),
+    transparent
+  );
+}
+
+.fynns-menu-item--danger:focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-danger) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-menu-item--danger:hover:not(:disabled):focus-visible {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-danger) var(--fynns-state-hover),
+    transparent
+  );
+}
+
 .fynns-menu-item-icon,
 .fynns-menu-item-leading {
   display: inline-flex;

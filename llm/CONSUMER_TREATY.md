@@ -79,6 +79,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | NavigationDrawer Search↔Item vacant band | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawer Card Collapsible stack kissed | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawerItem badge IconButton always visible | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
+| NavigationDrawerItem always-visible trash / no more-menu | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
+| mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#sandbox-field-header-inline-infohint` |
 | env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
 | env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
@@ -114,6 +116,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | recipe catalog fat Card FieldHint essays / ChipSet tag soup | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-recipe-catalog` / `#list` |
 | ListItem trailing IconButtons stacked vertically | AGENTS shells / Hard rules | `#list` |
 | page-scroll host flush with Card | AGENTS Card / Collapsible | `#page-scroll` |
+| PageScroll mid-scroll hard clip (no edge fade) | DESIGN_SYSTEM Hard rules / Scrollbar | `#page-scroll` |
 | PageScroll Card sheet-max-width under ControlRow | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll form Card chat-max-width column | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |
 | PageScroll content-column soft reading-width gutters | DESIGN_SYSTEM Hard rules / Card | `#page-scroll` |

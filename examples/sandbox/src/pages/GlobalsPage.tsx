@@ -1885,6 +1885,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               icon={<TrashIcon />}
+              tone="danger"
               onClick={() =>
                 snackbar(t("globals.splitBtnDeleteToast"), {
                   dismissAriaLabel: t("globals.snackbarDismiss"),
@@ -2209,11 +2210,15 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   {t("globals.menuSortUpdated")}
                 </DropdownMenuCheckboxItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem icon={<PencilIcon />}>
-                {t("globals.menuRename")}
-              </DropdownMenuItem>
-            </DropdownMenu>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem icon={<PencilIcon />}>
+              {t("globals.menuRename")}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+              {t("globals.menuDelete")}
+            </DropdownMenuItem>
+          </DropdownMenu>
             <Tooltip content={t("globals.menuIconStripTip")}>
               <span>
                 <DropdownMenu
@@ -2288,7 +2293,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               {t("globals.contextMenuPaste")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem icon={<TrashIcon />}>
+            <DropdownMenuItem icon={<TrashIcon />} tone="danger">
               {t("globals.contextMenuDelete")}
             </DropdownMenuItem>
           </ContextMenu>
@@ -6684,9 +6689,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                         headline={t("globals.listThreeLine")}
                         supportingText={t("globals.listThreeLineSupporting")}
                       />
+                      <ListItem
+                        headline={t("globals.listCatalogProject")}
+                        supportingText={t("globals.listCatalogProjectPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogConfig")}
+                        supportingText={t("globals.listCatalogConfigPath")}
+                      />
                     </List>
                   </Card>
                   <Card title={t("globals.pageScrollCardTitle2")}>
+                    <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
+                  </Card>
+                  <Card title={t("globals.pageScrollCardTitle")}>
                     <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
                   </Card>
               </PageScroll>

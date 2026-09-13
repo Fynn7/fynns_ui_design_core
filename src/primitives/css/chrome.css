@@ -2628,6 +2628,7 @@
 .fynns-nav-drawer-item-host--with-end {
   /* Always sm (32dp) — never md 40dp inside a 40dp pill. */
   --fynns-navdrawer-end-action-disk: 2rem;
+  --fynns-navdrawer-end-action-count: 1;
   /*
    * End clear (≥ **0.5.234**): hover disk must **not** share the pill outer
    * edge — a 32dp circle flush to a stadium end is tangent (forbidden).
@@ -2635,11 +2636,66 @@
    * only the IconButton state layer insets by `space-xs` (4dp).
    */
   --fynns-navdrawer-end-action-clear: var(--fynns-space-xs);
+  /* Reserve scales with 1/2/3 disks (List `--with-end` parity ≥ **0.5.245**). */
   --fynns-navdrawer-end-actions-reserve: calc(
     var(--fynns-layout-control-cluster-gap) +
-      var(--fynns-navdrawer-end-action-disk) +
+      (
+        var(--fynns-navdrawer-end-action-disk) *
+        var(--fynns-navdrawer-end-action-count)
+      ) +
+      (
+        var(--fynns-layout-control-cluster-gap) *
+        max(0, var(--fynns-navdrawer-end-action-count) - 1)
+      ) +
       var(--fynns-navdrawer-end-action-clear)
   );
+}
+
+/* Multi-disk trailing clusters (Rename + More, Pin + Rename + More, …). */
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end .fynns-control-cluster > :nth-child(2)
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end > .fynns-btn--icon + .fynns-btn--icon
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end
+      > .fynns-tooltip-trigger
+      + .fynns-tooltip-trigger
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end
+      > .fynns-tooltip-trigger
+      + .fynns-menu-root
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end > .fynns-btn--icon + .fynns-menu-root
+  ) {
+  --fynns-navdrawer-end-action-count: 2;
+}
+
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end .fynns-control-cluster > :nth-child(3)
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end
+      > .fynns-tooltip-trigger
+      + .fynns-tooltip-trigger
+      + .fynns-tooltip-trigger
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end
+      > .fynns-tooltip-trigger
+      + .fynns-tooltip-trigger
+      + .fynns-menu-root
+  ),
+.fynns-nav-drawer-item-host--with-end:has(
+    .fynns-nav-drawer-item-trailing--end
+      > .fynns-btn--icon
+      + .fynns-btn--icon
+      + .fynns-menu-root
+  ) {
+  --fynns-navdrawer-end-action-count: 3;
 }
 
 .fynns-nav-drawer-item-host--with-end > .fynns-nav-drawer-item-trailing--end {
@@ -2649,11 +2705,13 @@
   z-index: 1;
   display: inline-flex;
   align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
   /* Clear pill outer so hover wash ≠ stadium end curve (≥ **0.5.234**). */
   padding-inline-end: var(--fynns-navdrawer-end-action-clear);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+  /* Perceptible ChatGPT-style fade (≥ **0.5.245** — not duration-fast snap). */
+  transition: opacity var(--fynns-navdrawer-actions-reveal) var(--fynns-ease-out);
 }
 
 /* Clamp any IconButton (incl. default md) to sm disk — consumer size prop
@@ -2673,6 +2731,9 @@
 
 .fynns-nav-drawer-item-host--with-end:hover > .fynns-nav-drawer-item-trailing--end,
 .fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item-trailing--end,
+/* Portaled DropdownMenu moves focus out of host — keep trailing while open. */
+.fynns-nav-drawer-item-host--with-end:has([aria-expanded="true"])
   > .fynns-nav-drawer-item-trailing--end {
   opacity: 1;
   pointer-events: auto;
@@ -2683,11 +2744,13 @@
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
     color var(--fynns-duration-fast) var(--fynns-ease-standard),
-    padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+    padding-inline-end var(--fynns-navdrawer-actions-reveal) var(--fynns-ease-out);
 }
 
 .fynns-nav-drawer-item-host--with-end:hover > .fynns-nav-drawer-item,
-.fynns-nav-drawer-item-host--with-end:focus-within > .fynns-nav-drawer-item {
+.fynns-nav-drawer-item-host--with-end:focus-within > .fynns-nav-drawer-item,
+.fynns-nav-drawer-item-host--with-end:has([aria-expanded="true"])
+  > .fynns-nav-drawer-item {
   padding-inline-end: var(--fynns-navdrawer-end-actions-reserve);
 }
 
@@ -2695,6 +2758,8 @@
 .fynns-nav-drawer-item-host--with-end:hover
   > .fynns-nav-drawer-item:not(:disabled):not(.fynns-nav-drawer-item--active),
 .fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item:not(:disabled):not(.fynns-nav-drawer-item--active),
+.fynns-nav-drawer-item-host--with-end:has([aria-expanded="true"])
   > .fynns-nav-drawer-item:not(:disabled):not(.fynns-nav-drawer-item--active) {
   background: color-mix(
     in srgb,
@@ -2707,6 +2772,8 @@
 .fynns-nav-drawer-item-host--with-end:hover
   > .fynns-nav-drawer-item--active:not(:disabled),
 .fynns-nav-drawer-item-host--with-end:focus-within
+  > .fynns-nav-drawer-item--active:not(:disabled),
+.fynns-nav-drawer-item-host--with-end:has([aria-expanded="true"])
   > .fynns-nav-drawer-item--active:not(:disabled) {
   background: color-mix(
     in srgb,

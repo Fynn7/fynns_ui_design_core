@@ -2086,13 +2086,20 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--fynns-duration-fast) var(--fynns-ease-out);
+  /* Perceptible fade (≥ **0.5.245** — not duration-fast snap). */
+  transition: opacity var(--fynns-list-actions-reveal) var(--fynns-ease-out);
 }
 
 .fynns-list-item-host--with-end:hover > .fynns-list-item-trailing--end,
 .fynns-list-item-host--with-end:focus-within > .fynns-list-item-trailing--end,
 .fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item-trailing--end,
 .fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item-trailing--end,
+/* Portaled DropdownMenu moves focus out of host — keep trailing while open. */
+.fynns-list-item-host--with-end:has([aria-expanded="true"])
+  > .fynns-list-item-trailing--end,
+.fynns-list-item-host--with-end:has([aria-expanded="true"])
   > .fynns-list-item-row
   > .fynns-list-item-trailing--end {
   opacity: 1 !important;
@@ -2103,7 +2110,7 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host--with-end > .fynns-list-item-row > .fynns-list-item {
   /* Idle: full-bleed copy. Reveal: clear under the measured end cluster. */
   padding-inline-end: var(--fynns-space-xs);
-  transition: padding-inline-end var(--fynns-duration-fast) var(--fynns-ease-out);
+  transition: padding-inline-end var(--fynns-list-actions-reveal) var(--fynns-ease-out);
 }
 
 /*
@@ -2140,6 +2147,10 @@ a.fynns-breadcrumb-link:visited {
 .fynns-list-item-host--with-end:focus-within > .fynns-list-item,
 .fynns-list-item-host--with-end:hover > .fynns-list-item-row > .fynns-list-item,
 .fynns-list-item-host--with-end:focus-within
+  > .fynns-list-item-row
+  > .fynns-list-item,
+.fynns-list-item-host--with-end:has([aria-expanded="true"]) > .fynns-list-item,
+.fynns-list-item-host--with-end:has([aria-expanded="true"])
   > .fynns-list-item-row
   > .fynns-list-item,
 .fynns-list-item-host--with-end:has(

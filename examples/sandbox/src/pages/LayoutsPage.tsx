@@ -67,6 +67,8 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  MoreHorizontalIcon,
   snackbar,
 } from "@fynns/ui";
 import { useState, type ReactNode } from "react";
@@ -136,7 +138,9 @@ export function LayoutsPage() {
   const [modeDrawerSideFilter, setModeDrawerSideFilter] = useState<
     "all" | "alpha" | "beta"
   >("all");
-  const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta">("alpha");
+  const [modeDrawerEntry, setModeDrawerEntry] = useState<"alpha" | "beta" | "gamma">(
+    "alpha",
+  );
   const [modeDrawerCatalogFail, setModeDrawerCatalogFail] = useState(false);
   const [bulkDemoSelectMode, setBulkDemoSelectMode] = useState(true);
   const [bulkDemoChecked, setBulkDemoChecked] = useState<Record<BulkDemoKey, boolean>>({
@@ -807,50 +811,248 @@ export function LayoutsPage() {
                   </div>
                 ) : (
                   <>
+                    {/* More-only — delete lives in the menu (danger). */}
                     <NavigationDrawerItem
                       icon={<FileIcon />}
                       label={t("globals.navDrawerModeEntryAlpha")}
                       active={modeDrawerEntry === "alpha"}
                       onClick={() => setModeDrawerEntry("alpha")}
                       trailing={
-                        <Tooltip content={t("globals.navDrawerModeEntryDelete")}>
-                          <IconButton
-                            size="sm"
-                            variant="ghost"
-                            aria-label={t("globals.navDrawerModeEntryDelete")}
+                        <DropdownMenu
+                          trigger={<MoreHorizontalIcon />}
+                          ariaLabel={t("globals.navDrawerModeEntryMore")}
+                          align="end"
+                          iconOnly
+                          size="sm"
+                          variant="ghost"
+                        >
+                          <DropdownMenuItem
+                            icon={<TrashIcon />}
+                            tone="danger"
                             onClick={(event) => {
                               event.stopPropagation();
                             }}
                           >
-                            <TrashIcon />
-                          </IconButton>
-                        </Tooltip>
+                            {t("globals.navDrawerModeEntryDelete")}
+                          </DropdownMenuItem>
+                        </DropdownMenu>
                       }
                     />
+                    {/* Rename shortcut + More — complex menu (icons, separator, danger). */}
                     <NavigationDrawerItem
                       icon={<FileIcon />}
                       label={t("globals.navDrawerModeEntryBeta")}
                       active={modeDrawerEntry === "beta"}
                       onClick={() => setModeDrawerEntry("beta")}
                       trailing={
-                        <Tooltip content={t("globals.navDrawerModeEntryDelete")}>
-                          <IconButton
+                        <>
+                          <Tooltip content={t("globals.navDrawerModeEntryRename")}>
+                            <IconButton
+                              size="sm"
+                              variant="ghost"
+                              aria-label={t("globals.navDrawerModeEntryRename")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              <PencilIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <DropdownMenu
+                            trigger={<MoreHorizontalIcon />}
+                            ariaLabel={t("globals.navDrawerModeEntryMore")}
+                            align="end"
+                            iconOnly
                             size="sm"
                             variant="ghost"
-                            aria-label={t("globals.navDrawerModeEntryDelete")}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                            }}
                           >
-                            <TrashIcon />
-                          </IconButton>
-                        </Tooltip>
+                            <DropdownMenuItem
+                              icon={<UploadIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryShare")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              icon={<PencilIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryRename")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              icon={<SettingsIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntrySettings")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              icon={<FolderOpenIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryHome")}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              icon={<ArchiveIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryPinMenu")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              icon={<TrashIcon />}
+                              tone="danger"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryDelete")}
+                            </DropdownMenuItem>
+                          </DropdownMenu>
+                        </>
+                      }
+                    />
+                    {/* Three disks — Pin + Rename + More (reserve + slow fade). */}
+                    <NavigationDrawerItem
+                      icon={<FileIcon />}
+                      label={t("globals.navDrawerModeEntryGamma")}
+                      active={modeDrawerEntry === "gamma"}
+                      onClick={() => setModeDrawerEntry("gamma")}
+                      trailing={
+                        <>
+                          <Tooltip content={t("globals.navDrawerModeEntryPin")}>
+                            <IconButton
+                              size="sm"
+                              variant="ghost"
+                              aria-label={t("globals.navDrawerModeEntryPin")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              <ArchiveIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip content={t("globals.navDrawerModeEntryRename")}>
+                            <IconButton
+                              size="sm"
+                              variant="ghost"
+                              aria-label={t("globals.navDrawerModeEntryRename")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              <PencilIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <DropdownMenu
+                            trigger={<MoreHorizontalIcon />}
+                            ariaLabel={t("globals.navDrawerModeEntryMore")}
+                            align="end"
+                            iconOnly
+                            size="sm"
+                            variant="ghost"
+                          >
+                            <DropdownMenuItem
+                              icon={<SettingsIcon />}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntrySettings")}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              icon={<TrashIcon />}
+                              tone="danger"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                            >
+                              {t("globals.navDrawerModeEntryDelete")}
+                            </DropdownMenuItem>
+                          </DropdownMenu>
+                        </>
                       }
                     />
                   </>
                 )}
               </NavigationDrawer>
             </div>
+            <SandboxHelp text={t("globals.navDrawerModeTrailingHelp")} />
+            <div
+              id="sandbox-navdrawer-session-chrome"
+              className="sandbox-globals-navdrawer"
+              style={{
+                display: "flex",
+                width: "fit-content",
+                maxWidth: "100%",
+                height: "14rem",
+                border: "1px solid var(--fynns-color-border)",
+                borderRadius: "var(--fynns-radius-md)",
+                overflow: "hidden",
+                background: "var(--fynns-color-app-bg)",
+              }}
+            >
+              <NavigationDrawer
+                variant="standard"
+                ariaLabel={t("globals.navDrawerSessionAria")}
+              >
+                <div
+                  className="fynns-control-cluster fynns-control-cluster--toolbar-end"
+                  aria-label={t("globals.navDrawerSessionToolsAria")}
+                >
+                  <DropdownMenu
+                    trigger={<MoreHorizontalIcon />}
+                    ariaLabel={t("globals.navDrawerSessionMore")}
+                    align="end"
+                    iconOnly
+                    size="sm"
+                    variant="ghost"
+                  >
+                    <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                      {t("globals.navDrawerSessionDeleteAll")}
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                  <Tooltip content={t("globals.navDrawerSessionNew")}>
+                    <IconButton
+                      size="sm"
+                      variant="primary"
+                      aria-label={t("globals.navDrawerSessionNew")}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+                <NavigationDrawerItem
+                  icon={<FileIcon />}
+                  label={t("globals.navDrawerSessionEntry")}
+                  active
+                  trailing={
+                    <DropdownMenu
+                      trigger={<MoreHorizontalIcon />}
+                      ariaLabel={t("globals.navDrawerModeEntryMore")}
+                      align="end"
+                      iconOnly
+                      size="sm"
+                      variant="ghost"
+                    >
+                      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                        {t("globals.navDrawerModeEntryDelete")}
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  }
+                />
+              </NavigationDrawer>
+            </div>
+            <SandboxHelp text={t("globals.navDrawerSessionToolbarHelp")} />
             <div
               className="sandbox-globals-navdrawer"
               style={{
