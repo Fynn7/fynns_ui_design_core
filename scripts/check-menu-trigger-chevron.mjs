@@ -58,6 +58,37 @@ if (/\.fynns-menu-trigger-label\s*\{[^}]*line-height:\s*1(?:\s|;|})/s.test(css))
   fail(".fynns-menu-trigger-label must not set line-height: 1.");
 }
 
+const labelRule = css.match(/\.fynns-menu-trigger-label\s*\{[^}]+\}/s);
+if (!labelRule) {
+  fail("missing .fynns-menu-trigger-label rule in overlays.css.");
+}
+if (!/display:\s*inline-flex/i.test(labelRule[0])) {
+  fail(
+    ".fynns-menu-trigger-label must be inline-flex (leading glyph + label center ≥ 0.5.258).",
+  );
+}
+if (!/align-items:\s*center/i.test(labelRule[0])) {
+  fail(".fynns-menu-trigger-label must align-items: center.");
+}
+if (!/fynns-menu-trigger-leading/.test(tsx)) {
+  fail("DropdownMenu must render .fynns-menu-trigger-leading for leadingIcon.");
+}
+if (!/leadingIcon/.test(tsx)) {
+  fail("DropdownMenu must accept leadingIcon prop (≥ 0.5.258).");
+}
+
+const chromePath = path.join(root, "src/primitives/css/chrome.css");
+const chrome = fs.readFileSync(chromePath, "utf8");
+if (
+  /\.fynns-menu-trigger-label\s*>\s*\.fynns-overflow-tip[^{]*\{[^}]*(?<![-\w])width:\s*0/s.test(
+    chrome,
+  )
+) {
+  fail(
+    ".fynns-menu-trigger-label > OverflowTip must not use width:0 (collapses content-sized toolbar labels).",
+  );
+}
+
 console.log(
-  "check:menu-trigger-chevron: ok (fynns-icon + trailing slot + ChevronDown + snug LH)",
+  "check:menu-trigger-chevron: ok (fynns-icon + trailing slot + leading flex label + ChevronDown + snug LH)",
 );

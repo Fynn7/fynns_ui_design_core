@@ -314,6 +314,12 @@ alwaysApply: true
     `.fynns-menu-trigger-label` 用 `--fynns-line-height-snug`，禁止
     `line-height: 1` + OverflowTip `overflow:hidden`）。禁止消费仓改
     tip-label padding。对照 `#sandbox-menu-field-match`。
+26a4e. **Menu trigger leading icon misaligned** —
+    带标签 Menu 前置图标 + 文案必须垂直居中（≥ **0.5.258**：`leadingIcon`
+    → `.fynns-menu-trigger-leading`；label 为 `inline-flex`）。禁止把
+    `<>图标 文案</>` 塞进 `trigger` 赌 baseline，或消费仓给
+    `.fynns-menu-trigger-label` 写 `align-items` / `translateY`。对照
+    `#sandbox-menu-leading-icon` / `#menu`。
 26a5. **truncated option lacks ellipsis Tooltip** —
     Select / Autocomplete / SearchBar 结果行 / Menu 项 / 带标签 Menu 触发器
     溢出必须 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.240**）；禁止

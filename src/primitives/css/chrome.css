@@ -3684,6 +3684,23 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 /*
+ * Labeled Menu trigger is inline-flex (≥ **0.5.258** leading glyph + label).
+ * Tip must shrink under matchTriggerWidth, but **never** `width: 0` — toolbar
+ * content-sized menus would collapse the visible label to empty.
+ */
+.fynns-menu-trigger-label > .fynns-overflow-tip,
+.fynns-menu-trigger-label > .fynns-overflow-tip-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-menu-trigger-label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  width: auto;
+}
+
+/*
  * Block / single-line clip hosts: tip fills the host (host already has
  * min-width:0 + overflow). Never `width: 0` here.
  * Includes Select trigger / NavDrawer / Command / Chat artifact labels that
@@ -3691,8 +3708,6 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
  */
 .fynns-select-trigger-text > .fynns-overflow-tip,
 .fynns-select-trigger-text > .fynns-overflow-tip-label,
-.fynns-menu-trigger-label > .fynns-overflow-tip,
-.fynns-menu-trigger-label > .fynns-overflow-tip-label,
 .fynns-nav-drawer-label > .fynns-overflow-tip,
 .fynns-nav-drawer-label > .fynns-overflow-tip-label,
 .fynns-command-item-label > .fynns-overflow-tip,

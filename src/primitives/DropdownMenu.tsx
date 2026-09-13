@@ -173,6 +173,12 @@ export function MenuSurface({
 export type DropdownMenuProps = {
   /** Trigger label / content (rendered inside the trigger button). */
   trigger: ReactNode;
+  /**
+   * Optional leading glyph on a **labeled** trigger (16dp slot, vertically
+   * centered with the label — ≥ **0.5.258**). Prefer this over stuffing an
+   * icon into `trigger` as a fragment. Ignored when `iconOnly`.
+   */
+  leadingIcon?: ReactNode;
   /** Menu body — items, groups, separators, labels. */
   children: ReactNode;
   ariaLabel?: string;
@@ -211,14 +217,16 @@ export type DropdownMenuProps = {
  * M3 Menu — trigger + portaled surface (groups, separators, checkbox items).
  * Outside-click / Escape dismiss; arrow keys move between items.
  * Labeled triggers auto-append a trailing chevron that rotates open
- * (≥ **0.5.253**). Form FieldBlock hosts auto-match menu width to the trigger
- * (≥ **0.5.239**). Long catalogs: panel caps height + `fynns-scroll` (visible
- * flyout overlay rails ≥ **0.5.251**). Huge catalogs — filter / window in the
- * consumer.
+ * (≥ **0.5.253**). Optional `leadingIcon` centers a 16dp glyph with the
+ * label (≥ **0.5.258**). Form FieldBlock hosts auto-match menu width to the
+ * trigger (≥ **0.5.239**). Long catalogs: panel caps height + `fynns-scroll`
+ * (visible flyout overlay rails ≥ **0.5.251**). Huge catalogs — filter /
+ * window in the consumer.
  * @see https://m3.material.io/components/menus/overview
  */
 export function DropdownMenu({
   trigger,
+  leadingIcon,
   children,
   ariaLabel = "Menu",
   align = "start",
@@ -396,7 +404,14 @@ export function DropdownMenu({
           onClick={() => setOpen(!open)}
           onKeyDown={onTriggerKeyDown}
         >
-          <span className="fynns-menu-trigger-label">{triggerBody}</span>
+          <span className="fynns-menu-trigger-label">
+            {leadingIcon != null && leadingIcon !== false ? (
+              <span className="fynns-menu-trigger-leading" aria-hidden="true">
+                {leadingIcon}
+              </span>
+            ) : null}
+            {triggerBody}
+          </span>
           <span className="fynns-menu-trigger-trailing" aria-hidden="true">
             <ChevronDownIcon className="fynns-menu-trigger-chevron" />
           </span>
