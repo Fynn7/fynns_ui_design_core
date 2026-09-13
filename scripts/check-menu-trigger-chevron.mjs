@@ -58,6 +58,64 @@ if (/\.fynns-menu-trigger-label\s*\{[^}]*line-height:\s*1(?:\s|;|})/s.test(css))
   fail(".fynns-menu-trigger-label must not set line-height: 1.");
 }
 
+const labelRule = css.match(/\.fynns-menu-trigger-label\s*\{[^}]+\}/s);
+if (!labelRule) {
+  fail("missing .fynns-menu-trigger-label rule in overlays.css.");
+}
+if (!/display:\s*inline-flex/i.test(labelRule[0])) {
+  fail(
+    ".fynns-menu-trigger-label must be inline-flex (leading glyph + label center ≥ 0.5.258).",
+  );
+}
+if (!/align-items:\s*center/i.test(labelRule[0])) {
+  fail(".fynns-menu-trigger-label must align-items: center.");
+}
+if (!/fynns-menu-trigger-leading/.test(tsx)) {
+  fail("DropdownMenu must render .fynns-menu-trigger-leading for leadingIcon.");
+}
+if (!/leadingIcon/.test(tsx)) {
+  fail("DropdownMenu must accept leadingIcon prop (≥ 0.5.258).");
+}
+
+const leading = css.match(/\.fynns-menu-trigger-leading\s*\{[^}]+\}/s);
+if (!leading) {
+  fail("missing .fynns-menu-trigger-leading rule in overlays.css.");
+}
+if (!/display:\s*inline-flex/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must be inline-flex.");
+}
+if (!/align-items:\s*center/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must align-items: center.");
+}
+if (!/width:\s*var\(--fynns-size-icon\)/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must size to --fynns-size-icon (16dp).");
+}
+
+/* iconOnly path must not render the labeled leading/trailing chrome. */
+const iconOnlyBranch = tsx.match(
+  /iconOnly\s*\?\s*\([\s\S]*?\)\s*:\s*\([\s\S]*?fynns-menu-trigger-label[\s\S]*?\)/,
+);
+if (!iconOnlyBranch) {
+  fail(
+    "DropdownMenu must keep labeled trigger (with leading/label) on the non-iconOnly branch only.",
+  );
+}
+if (/fynns-menu-trigger-leading/.test(iconOnlyBranch[0].split(") : (")[0] ?? "")) {
+  fail("iconOnly branch must not render .fynns-menu-trigger-leading.");
+}
+
+const chromePath = path.join(root, "src/primitives/css/chrome.css");
+const chrome = fs.readFileSync(chromePath, "utf8");
+if (
+  /\.fynns-menu-trigger-label\s*>\s*\.fynns-overflow-tip[^{]*\{[^}]*(?<![-\w])width:\s*0/s.test(
+    chrome,
+  )
+) {
+  fail(
+    ".fynns-menu-trigger-label > OverflowTip must not use width:0 (collapses content-sized toolbar labels).",
+  );
+}
+
 console.log(
-  "check:menu-trigger-chevron: ok (fynns-icon + trailing slot + ChevronDown + snug LH)",
+  "check:menu-trigger-chevron: ok (fynns-icon + trailing/leading slots + flex label + ChevronDown + snug LH)",
 );

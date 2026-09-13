@@ -32,14 +32,19 @@
 /*
  * Labeled Menu trigger (≥ **0.5.253**): same stadium Button chrome, plus a
  * trailing chevron so the control reads as a menu (not a dead label).
+ * Leading glyph + label (≥ **0.5.258**): label is a flex row so icon+text
+ * share one cross-axis center (Chip / menu-item recipe) — never block +
+ * baseline SVG soup.
  */
 .fynns-menu-trigger-btn.fynns-btn {
   gap: var(--fynns-layout-control-cluster-gap);
 }
 
 .fynns-menu-trigger-label {
-  display: block;
+  display: inline-flex;
   flex: 1 1 auto;
+  align-items: center;
+  gap: var(--fynns-space-2);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -50,6 +55,20 @@
    * + overflow:hidden clips Latin descenders (g / y / p) — ≥ **0.5.255**.
    */
   line-height: var(--fynns-line-height-snug);
+}
+
+.fynns-menu-trigger-leading {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+.fynns-menu-trigger-label > svg,
+.fynns-menu-trigger-label > .fynns-icon {
+  flex-shrink: 0;
 }
 
 /*

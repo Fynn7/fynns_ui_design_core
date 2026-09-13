@@ -2223,6 +2223,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               {t("globals.menuDelete")}
             </DropdownMenuItem>
           </DropdownMenu>
+            <div id="sandbox-menu-leading-icon">
+              <DropdownMenu
+                leadingIcon={<RefreshIcon />}
+                trigger={t("globals.menuLeadingTrigger")}
+                ariaLabel={t("globals.menuLeadingAria")}
+                variant="ghost"
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.menuOpen")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.menuRename")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            </div>
             <Tooltip content={t("globals.menuIconStripTip")}>
               <span>
                 <DropdownMenu
