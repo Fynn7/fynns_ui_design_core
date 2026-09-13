@@ -1,4 +1,4 @@
-﻿---
+---
 description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
 alwaysApply: true
 ---
@@ -38,6 +38,14 @@ alwaysApply: true
    定位分体面板、半壳拼接）。对照 sandbox `#select` / `#menu`；看起来不对 →
    **只**在 `fynns_ui_design_core` 约束 + 发布。失败模式：CONSUMER_TREATY
    consumer restyles keep-set chrome radius。
+4c. **Select / Autocomplete 已软废弃（硬 — ≥ 0.5.236）**：仍导出 + Globals
+   `#select` / `#autocomplete` 解剖（`InlineAlert` 警示），但**强烈不建议**用
+   于**新**消费 UI。离散选项 → **`DropdownMenu`**（`#menu`）；可筛选 /
+   命令式 → **`SearchBar`** / **`CommandPalette`**。发现现有 `Select` /
+   `Autocomplete` → **推荐迁移**到上述最新式。例外：Pagination
+   `.fynns-pagination-bar` 每页条数可暂留 stock Select（直至 Menu 版 pager
+   配方）。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu
+   SearchBar。
 5. 样式只用 `var(--fynns-*)`。正文/chrome 继承 `--fynns-font-ui`；代码
    `--fynns-font-mono`；**禁止**主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
@@ -257,6 +265,11 @@ alwaysApply: true
 26d. **consumer restyles keep-set chrome radius** — **禁止**消费仓自改 Select /
     SearchBar / Menu 等 keep-set 圆角与展开铬（≥ **0.5.195**）。对照 `#select`
     / `#menu`。
+26e. **Select Autocomplete deprecated prefer Menu SearchBar** — **禁止**新屏
+    继续用 soft-deprecated `Select` / `Autocomplete`（≥ **0.5.236**）；改
+    `DropdownMenu` / `SearchBar` / `CommandPalette`。现有命中 → 推荐迁移。
+    Pagination 每页条数可暂留 Select。对照 `#select` / `#autocomplete` /
+    `#menu` / `#search-bar`。
 27. **outcome Chip as status** — success / fail / OK / ready 结果信号用
     **`.fynns-list-item-status`**（默认绿；失败 `data-tone="danger"`）+ 可选
     `CheckCircleIcon` / `AlertTriangleIcon` — **禁止** `Chip` 任意 variant 或

@@ -1283,8 +1283,10 @@ const en = {
   "globals.autocompleteAria": "Sample autocomplete",
   "globals.autocompletePlaceholder": "Filter colors…",
   "globals.autocompleteEmpty": "No matches",
+  "globals.autocompleteDeprecatedAlert":
+    "Deprecated (≥ 0.5.236): Autocomplete is kept for anatomy only — strongly discouraged. Prefer SearchBar (#search-bar) for type-to-filter, or CommandPalette for command pickers. Do not start new consumer screens on Autocomplete.",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — click/type to open, filter, then pick. Keeps SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Select uses a portaled `.fynns-select-menu` ≥ **0.5.208**).",
+    "DEPRECATED anatomy (≥ **0.5.236**) — still live for chrome teaching, but **strongly discouraged**. Prefer **SearchBar** (`#search-bar`) or **CommandPalette**. Historical: M3 Autocomplete — click/type to open, filter, then pick; docked `.fynns-search-bar--expanded` joined capsule (Select uses portaled `.fynns-select-menu` ≥ **0.5.208**). Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar.",
   "globals.autocompleteSelected": "Selected: {value}",
   "globals.autocompleteOptTeal": "Teal",
   "globals.autocompleteOptCyan": "Cyan",
@@ -2250,8 +2252,10 @@ const en = {
   "globals.segmentedGrid": "Grid",
   "globals.segmentedList": "List",
   "globals.selectDisabledAria": "Disabled select",
+  "globals.selectDeprecatedAlert":
+    "Deprecated (≥ 0.5.236): Select is kept for anatomy + Pagination carve-out only — strongly discouraged for new UI. Prefer DropdownMenu (#menu) for discrete picks. Do not start new consumer screens on Select (pager rows-per-page may keep stock Select until a Menu-based recipe lands).",
   "globals.selectHelp":
-    "Stock Keep-set Select — M3 Exposed Dropdown: 40dp outlined shell + **portaled** `.fynns-select-menu` (temporary elevated surface; trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = max(option-measure, live shell width)** — matches a full-width form field ≥ **0.5.220**; still grows past a narrow trigger for long labels ≥ **0.5.209**, viewport-capped). Field stays in-flow — **not** SearchBar’s docked `.fynns-search-bar--expanded` joined capsule (Autocomplete keeps that). Supports string or `{ value, label, disabled? }` options. No native supporting/error — field hints use Autocomplete. **Consumers must not** restyle `.fynns-select` / `.fynns-select-menu` radius, padding, shadow, overflow, or invent private absolute docks — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu narrower than stretched trigger. Live authority for pager rows-per-page too (`#pagination`). Wide-field short options: `#sandbox-select-wide-short`.",
+    "DEPRECATED anatomy (≥ **0.5.236**) — still live for chrome teaching + Pagination `.fynns-pagination-bar` carve-out, but **strongly discouraged** for new product UI. Prefer **DropdownMenu** (`#menu`). Historical stock: M3 Exposed Dropdown — 40dp outlined shell + **portaled** `.fynns-select-menu` (trigger **min-width** = widest option via `--fynns-select-measure-min` ≥ **0.5.210**; menu **min-width = max(option-measure, live shell width)** ≥ **0.5.220**). Field stays in-flow — **not** SearchBar’s docked joined capsule. **Consumers must not** restyle keep-set chrome. Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar. Wide-field short options: `#sandbox-select-wide-short`.",
   "globals.selectWideShortAria": "Select with short options in a wide host",
   "globals.selectWideShortOptLow": "low (daily)",
   "globals.selectWideShortOptMed": "medium",
@@ -3616,8 +3620,10 @@ const zh: Record<MessageKey, string> = {
   "globals.autocompleteAria": "示例自动完成",
   "globals.autocompletePlaceholder": "筛选颜色…",
   "globals.autocompleteEmpty": "无匹配",
+  "globals.autocompleteDeprecatedAlert":
+    "已废弃（≥ 0.5.236）：Autocomplete 仅保留解剖展示 — 强烈不建议使用。可筛选请改用 SearchBar（#search-bar）；命令式点选请用 CommandPalette。禁止在新消费屏继续用 Autocomplete。",
   "globals.autocompleteHelp":
-    "M3 Autocomplete — 点击/输入展开，筛选后点选。仍用 SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Select ≥ **0.5.208** 改为门户 `.fynns-select-menu`）。",
+    "已废弃解剖（≥ **0.5.236**）— 仍保留铬教学，但**强烈不建议**。优先 **SearchBar**（`#search-bar`）或 **CommandPalette**。历史：M3 Autocomplete — 点击/输入展开，筛选后点选；docked `.fynns-search-bar--expanded` 连体胶囊（Select ≥ **0.5.208** 为门户 `.fynns-select-menu`）。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar。",
   "globals.autocompleteSelected": "已选：{value}",
   "globals.autocompleteOptTeal": "青绿",
   "globals.autocompleteOptCyan": "青色",
@@ -4569,8 +4575,10 @@ const zh: Record<MessageKey, string> = {
   "globals.segmentedGrid": "网格",
   "globals.segmentedList": "列表",
   "globals.selectDisabledAria": "禁用选择器",
+  "globals.selectDeprecatedAlert":
+    "已废弃（≥ 0.5.236）：Select 仅保留解剖 + Pagination 例外 — 强烈不建议用于新 UI。离散选项请改用 DropdownMenu（#menu）。禁止在新消费屏继续用 Select（分页每页条数可暂留 stock Select，直至 Menu 版 pager 配方落地）。",
   "globals.selectHelp":
-    "Stock Keep-set Select — M3 Exposed Dropdown：40dp outlined shell + **门户** `.fynns-select-menu`（临时 elevated 表面；触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = max(option-measure, live shell 宽)** — 对齐全宽表单字段 ≥ **0.5.220**；长标签仍可宽于窄触发器 ≥ **0.5.209**，视口封顶）。字段留在文档流 — **不是** SearchBar 的 docked `.fynns-search-bar--expanded` 连体胶囊（Autocomplete 仍用连体）。支持字符串或 `{ value, label, disabled? }`。无原生 supporting/error — 字段提示用 Autocomplete。**消费仓禁止**覆写 `.fynns-select` / `.fynns-select-menu` 圆角 / padding / shadow / overflow，也禁止自建私有 absolute dock — CONSUMER_TREATY consumer restyles keep-set chrome radius / Pagination Select invents absolute overlay / Select menu narrower than stretched trigger。分页每页条数也以本解剖为准（`#pagination`）。宽宿主短选项：`#sandbox-select-wide-short`。",
+    "已废弃解剖（≥ **0.5.236**）— 仍保留铬教学 + Pagination `.fynns-pagination-bar` 例外，但**强烈不建议**用于新产品 UI。优先 **DropdownMenu**（`#menu`）。历史 stock：M3 Exposed Dropdown — 40dp outlined shell + **门户** `.fynns-select-menu`（触发器 **min-width** = 最宽选项 `--fynns-select-measure-min` ≥ **0.5.210**；菜单 **min-width = max(option-measure, live shell 宽)** ≥ **0.5.220**）。字段留在文档流 — **不是** SearchBar 连体胶囊。**消费仓禁止**覆写 keep-set 铬。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu SearchBar。宽宿主短选项：`#sandbox-select-wide-short`。",
   "globals.selectWideShortAria": "宽宿主中的短选项选择器",
   "globals.selectWideShortOptLow": "low（日常）",
   "globals.selectWideShortOptMed": "medium",

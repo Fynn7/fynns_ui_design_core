@@ -47,11 +47,18 @@ function optionLabel(option: AutocompleteOption): string {
 }
 
 /**
+ * @deprecated Soft-deprecated ≥ **0.5.236** — still exported and taught on
+ * Globals `#autocomplete`, but **strongly discouraged** for new consumer UI.
+ * Prefer **`SearchBar`** (`#search-bar`) for type-to-filter, or
+ * **`CommandPalette`** for command pickers. Do **not** start new screens on
+ * Autocomplete. Failure: CONSUMER_TREATY Select Autocomplete deprecated prefer
+ * Menu SearchBar.
+ *
  * M3 Autocomplete — filterable text field + docked suggestion list.
  * Reuses the same SearchBar expand shell as `Select` (field hairline +
  * `.fynns-expand`); form density matches Input (40dp outlined), not chrome
  * SearchBar 56dp. Opens on click / type / ArrowDown (like Select), not on
- * focus alone. Prefer `Select` when typing is not needed.
+ * focus alone.
  */
 export function Autocomplete({
   value,

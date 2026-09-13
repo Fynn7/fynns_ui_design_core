@@ -1,4 +1,4 @@
-﻿# Design system（完整 SoT）
+# Design system（完整 SoT）
 
 > 本文由原根目录胖 `AGENTS.md` 迁出。OpenCode **常驻**只加载根目录精简 [`AGENTS.md`](../AGENTS.md)；需要完整 Hard rules / 组件目录时再 Read 本文件。其它仓应 **链接** 本文或 `llm/CONSUME.md`，勿整份复制。
 
@@ -512,6 +512,14 @@ belong in a consumer’s own doc.
   capability → core first.
   Live `#select` / `#menu`. Failure: CONSUMER_TREATY consumer restyles keep-set
   chrome radius.
+- **DON'T** start **new** consumer screens on soft-deprecated **`Select`** /
+  **`Autocomplete`** (≥ **0.5.236**) — still exported + taught on Globals
+  `#select` / `#autocomplete` with `InlineAlert` warning, but prefer
+  **`DropdownMenu`** (`#menu`) for discrete picks and **`SearchBar`** /
+  **`CommandPalette`** for type-to-filter / commands. Temporary carve-out:
+  Pagination `.fynns-pagination-bar` rows-per-page may keep stock Select until
+  a Menu-based pager recipe lands. Failure: CONSUMER_TREATY Select Autocomplete
+  deprecated prefer Menu SearchBar.
 - **DON'T** bake the page-size noun into every Select option (`Rows: 10`,
   `Sessions: 50`, `每页 100 行`) — options are **digits only**; noun once via
   sibling `.fynns-table-meta` + `ariaLabel`. Live `#pagination`. Failure:
@@ -835,8 +843,10 @@ classes.
   FabMenu / FabMenuItem
 - **Fields:** Input, Textarea (default width 100%, autoGrow, soft
   `--fynns-layout-textarea-max-height` ≥ **0.5.103**; `spellCheck={false}`
-  default), FieldHeader / FieldBlock, Select (content min-width floor; cluster
-  `__grow` disables floor), Autocomplete, OtpInput, NumberInput, SearchBar /
+  default), FieldHeader / FieldBlock, Select (**soft-deprecated ≥ 0.5.236** —
+  anatomy + Pagination carve-out; prefer `DropdownMenu`), Autocomplete
+  (**soft-deprecated ≥ 0.5.236** — prefer `SearchBar` / `CommandPalette`),
+  OtpInput, NumberInput, SearchBar /
   SearchBarResult, Switch (dense track; `labelSide`), Checkbox, Radio, Chip /
   ChipSet (`assist`|`filter`|`input`|`suggestion` — never table-cell status),
   Slider, ToggleGroup, Tabs (M3 Primary underline)
