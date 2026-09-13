@@ -96,6 +96,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "matchTriggerWidth",
       "sandbox-scroll-menu-stack",
       "scroll-overlay",
+      "flyout scroll",
     ],
   },
   {

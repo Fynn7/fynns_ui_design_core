@@ -2267,10 +2267,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </div>
           <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
         </div>
-        <div
-          id="sandbox-scroll-menu-stack"
-          className="sandbox-globals-row sandbox-globals-row--stack"
-        >
+        <div id="sandbox-scroll-menu-stack">
           <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
           <div className="sandbox-scroll-menu-stack fynns-scroll">
             <FieldStack>
@@ -2294,6 +2291,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       "sample-model-j",
                       "sample-model-k",
                       "sample-model-l",
+                      "sample-model-m",
+                      "sample-model-n",
+                      "sample-model-o",
+                      "sample-model-p",
                     ] as const
                   ).map((id) => (
                     <DropdownMenuItem

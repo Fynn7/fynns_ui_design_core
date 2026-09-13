@@ -167,6 +167,7 @@
   --fynns-z-modal: 60;
   --fynns-z-scroll-overlay: 62;
   --fynns-z-modal-flyout: 65;
+  --fynns-z-scroll-overlay-flyout: 66;
   --fynns-z-toast: 70;
   --fynns-z-tooltip: 8000;
   --fynns-duration-instant: 1ms;
@@ -851,11 +852,17 @@ button {
   position: fixed;
   inset: 0;
   /* Above modal (60) so Dialog / Drawer / Sheet scroll hosts keep visible thumbs;
-   * below modal-flyout (65) so Select / DropdownMenu clear the rail (≥ **0.5.249**;
-   * was `--fynns-z-toast` and painted through open menus). Below toast / tooltip. */
+   * below modal-flyout (65) so page rails clear open Select / Menu (>= 0.5.249;
+   * was --fynns-z-toast and painted through open menus). Below toast / tooltip. */
   z-index: var(--fynns-z-scroll-overlay);
   pointer-events: none;
   overflow: hidden;
+}
+
+/* Flyout host thumbs (Menu / Select list) — second portal above modal-flyout
+ * so the panel own rail is not buried under z=65 (>= 0.5.251). */
+.fynns-scroll-overlay-portal--flyout {
+  z-index: var(--fynns-z-scroll-overlay-flyout);
 }
 
 .fynns-scroll-rail {

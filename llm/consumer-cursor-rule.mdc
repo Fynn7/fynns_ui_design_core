@@ -1,4 +1,4 @@
----
+﻿---
 description: @fynns/ui consumer hard contract — paste into any app that consumes the design system
 alwaysApply: true
 ---
@@ -154,11 +154,15 @@ alwaysApply: true
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
    （无 props、无私有 mask / scroll 监听）。禁止硬裁切；禁止裸 `overflow:auto`
    替代 PageScroll。对照 `#page-scroll`。
-7b5. **overlay scrollbar paints above Select/Menu flyout** — `.fynns-scroll`
+7b5. **overlay scrollbar paints above Select/Menu flyout** — 页级 `.fynns-scroll`
    overlay 门户用 `--fynns-z-scroll-overlay`（在 modal 之上、**modal-flyout
-   之下**，≥ **0.5.249**）。禁止消费仓把滚动条 / 私有 rail 抬到 Menu /
+   之下**，≥ **0.5.249**）。禁止消费仓把页轨 / 私有 rail 抬到 Menu /
    Select 之上；勿把门户改回 `--fynns-z-toast`。对照
    `#sandbox-scroll-menu-stack`。
+7b6. **Menu/Select flyout scroll thumb buried under panel** — 飞层宿主自身的
+   overlay 轨走第二门户 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251**，
+   高于 modal-flyout、低于 toast）。禁止把菜单定高滚动做成“能滚但看不见条”；
+   禁止再发明菜单 Show more。对照 `#sandbox-scroll-menu-stack`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照

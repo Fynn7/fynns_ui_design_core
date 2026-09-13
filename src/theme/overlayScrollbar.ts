@@ -75,13 +75,16 @@ const states = new WeakMap<HTMLElement, HostState>();
 let started = false;
 let finePointer = false;
 let portal: HTMLDivElement | null = null;
+let flyoutPortal: HTMLDivElement | null = null;
 
 /** Cross-bundle / HMR singleton (module locals alone still race two portals). */
 const GLOBAL_PORTAL = "__fynnsOverlayScrollPortal";
+const GLOBAL_FLYOUT_PORTAL = "__fynnsOverlayScrollFlyoutPortal";
 const GLOBAL_STARTED = "__fynnsOverlayScrollStarted";
 
 type OverlayGlobals = {
   [GLOBAL_PORTAL]?: HTMLDivElement;
+  [GLOBAL_FLYOUT_PORTAL]?: HTMLDivElement;
   [GLOBAL_STARTED]?: boolean;
 };
 
@@ -250,8 +253,9 @@ function railHorizontallyOverlaps(
 }
 
 /**
- * Portal rails sit at `--fynns-z-scroll-overlay` (above modal, below
- * modal-flyout). Collect chrome bands that
+ * Page / modal portal rails sit at `--fynns-z-scroll-overlay` (above modal,
+ * below modal-flyout). Flyout hosts (Menu / Select) use a second portal at
+ * `--fynns-z-scroll-overlay-flyout` (≥ **0.5.251**). Collect chrome bands that
  * must occlude overlay Y rails (shell TopAppBar, dialog head, section heads).
  */
 function overlayChromeHeadsForHost(host: HTMLElement): HTMLElement[] {
@@ -462,43 +466,65 @@ function handleWheelAxisX(
   scheduleUpdate(host, state);
 }
 
-function ensurePortal(): HTMLDivElement {
+function isFlyoutScrollHost(host: HTMLElement): boolean {
+  return (
+    host.classList.contains("fynns-menu") ||
+    host.classList.contains("fynns-select-list") ||
+    host.classList.contains("fynns-select-menu") ||
+    host.classList.contains("fynns-command-list")
+  );
+}
+
+function ensurePortal(flyout = false): HTMLDivElement {
   const g = overlayGlobals();
-  if (portal && portal.isConnected) {
-    g[GLOBAL_PORTAL] = portal;
-    return portal;
+  const className = flyout
+    ? "fynns-scroll-overlay-portal fynns-scroll-overlay-portal--flyout"
+    : "fynns-scroll-overlay-portal";
+  const globalKey = flyout ? GLOBAL_FLYOUT_PORTAL : GLOBAL_PORTAL;
+  let cached = flyout ? flyoutPortal : portal;
+
+  if (cached && cached.isConnected) {
+    g[globalKey] = cached;
+    return cached;
   }
-  if (g[GLOBAL_PORTAL]?.isConnected) {
-    portal = g[GLOBAL_PORTAL]!;
-    return portal;
+  if (g[globalKey]?.isConnected) {
+    cached = g[globalKey]!;
+    if (flyout) flyoutPortal = cached;
+    else portal = cached;
+    return cached;
   }
+
   /* Vite HMR / dual `@fynns/ui` graphs used to append a second portal — two Y
    * thumbs park on the same PageScroll edge (right-edge 滚动条重影). */
-  const existing = [
-    ...document.querySelectorAll<HTMLDivElement>(".fynns-scroll-overlay-portal"),
-  ];
+  const selector = flyout
+    ? ".fynns-scroll-overlay-portal--flyout"
+    : ".fynns-scroll-overlay-portal:not(.fynns-scroll-overlay-portal--flyout)";
+  const existing = [...document.querySelectorAll<HTMLDivElement>(selector)];
   if (existing.length > 0) {
-    portal = existing[0]!;
+    cached = existing[0]!;
     for (let i = 1; i < existing.length; i++) {
       existing[i]!.remove();
     }
-    g[GLOBAL_PORTAL] = portal;
-    return portal;
+    if (flyout) flyoutPortal = cached;
+    else portal = cached;
+    g[globalKey] = cached;
+    return cached;
   }
-  portal = document.createElement("div");
-  portal.className = "fynns-scroll-overlay-portal";
-  portal.setAttribute("aria-hidden", "true");
-  document.body.appendChild(portal);
-  /* Re-check after append: a racing importer may have added another. */
-  const raced = [
-    ...document.querySelectorAll<HTMLDivElement>(".fynns-scroll-overlay-portal"),
-  ];
-  portal = raced[0]!;
+
+  cached = document.createElement("div");
+  cached.className = className;
+  cached.setAttribute("aria-hidden", "true");
+  document.body.appendChild(cached);
+
+  const raced = [...document.querySelectorAll<HTMLDivElement>(selector)];
+  cached = raced[0]!;
   for (let i = 1; i < raced.length; i++) {
     raced[i]!.remove();
   }
-  g[GLOBAL_PORTAL] = portal;
-  return portal;
+  if (flyout) flyoutPortal = cached;
+  else portal = cached;
+  g[globalKey] = cached;
+  return cached;
 }
 
 type BoundHostState = HostState & { hostId: string };
@@ -808,7 +834,7 @@ function attach(host: HTMLElement) {
   const hostId = newHostId();
   host.setAttribute(HOST_ATTR, "");
   host.setAttribute(HOST_ID_ATTR, hostId);
-  const root = ensurePortal();
+  const root = ensurePortal(isFlyoutScrollHost(host));
   const y = makeRail("y");
   const x = makeRail("x");
   y.rail.setAttribute(HOST_ID_ATTR, hostId);

@@ -1,4 +1,4 @@
-# Design system（完整 SoT）
+﻿# Design system（完整 SoT）
 
 > 本文由原根目录胖 `AGENTS.md` 迁出。OpenCode **常驻**只加载根目录精简 [`AGENTS.md`](../AGENTS.md)；需要完整 Hard rules / 组件目录时再 Read 本文件。其它仓应 **链接** 本文或 `llm/CONSUME.md`，勿整份复制。
 
@@ -95,11 +95,16 @@ belong in a consumer’s own doc.
    `.fynns-scroll` are hidden** so they never steal content width. Overlay thumbs
    are painted by `src/theme/overlayScrollbar.ts` (fixed portal rails at
    `--fynns-z-scroll-overlay` — above `--fynns-z-modal`, **below**
-   `--fynns-z-modal-flyout` so Select / DropdownMenu never sit under the rail
-   ≥ **0.5.249**; was wrongly `--fynns-z-toast`). Portal `pointer-events: none`,
-   rails re-enable so thumbs can be dragged / track-clicked. **One portal only**
+   `--fynns-z-modal-flyout` so **page** rails never sit on Select / DropdownMenu
+   ≥ **0.5.249**; was wrongly `--fynns-z-toast`). **Flyout scroll hosts**
+   (`.fynns-menu` / `.fynns-select-list`) use a **second** portal at
+   `--fynns-z-scroll-overlay-flyout` (above modal-flyout, below toast) so the
+   panel’s own thumb stays visible while scrolling (≥ **0.5.251**). Portal
+   `pointer-events: none`,
+   rails re-enable so thumbs can be dragged / track-clicked. **One portal per
+   tier only**
    (≥ **0.5.200** — Vite HMR / dual import must not stack a second
-   `.fynns-scroll-overlay-portal` or PageScroll shows twin Y thumbs). **Modal
+   page `.fynns-scroll-overlay-portal` or PageScroll shows twin Y thumbs). **Modal
    Dialog open:** suppress overlay rails for scroll hosts **outside** the open
    modal layer (≥ **0.5.33**) — otherwise PageScroll rails behind Dialog paint a
    phantom idle thumb. **Modal `.fynns-dialog-body`:** suppress thumb until panel
@@ -645,6 +650,14 @@ belong in a consumer’s own doc.
   `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
   because ListItems are taller: foot **after** the List (unit-stack sibling);
   short lists / Dialog / `Pagination` exempt. Live `#list`.
+- **DON'T** open a **DropdownMenu** that paints a near-viewport item tower —
+  panel caps `max-height: min(70dvh, 20rem)` + `fynns-scroll` (≥ **0.5.250**);
+  overlay thumbs for the menu itself use `--fynns-z-scroll-overlay-flyout`
+  (≥ **0.5.251**). Do **not** invent consumer Show-more / private menu
+  virtualizers for ordinary catalogs (~dozens of rows). Huge catalogs (filter /
+  search / async window) belong in the **consumer**. Failure: CONSUMER_TREATY
+  Menu/Select flyout scroll thumb buried under panel. Live
+  `#sandbox-scroll-menu-stack`.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
   placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](../.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
@@ -1208,6 +1221,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card; wheel→X default (≥ **0.5.184**) | `#table` | Surface + FieldHeader fake head; invent consumer wheel remappers |
 | Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
 | Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
+| Long DropdownMenu catalog | Capped `fynns-scroll` panel + flyout overlay rails (≥ **0.5.251**); huge lists filter/window in consumer | `#sandbox-scroll-menu-stack` | Near-viewport dump; invisible menu thumb; consumer Show-more / premature core virtualizer |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |

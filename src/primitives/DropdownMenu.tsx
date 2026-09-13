@@ -159,7 +159,7 @@ export function MenuSurface({
         {...(!presenting ? { inert: true } : {})}
         data-side={dataSide}
         data-state={presenting ? "open" : "closing"}
-        className={join("fynns-menu", className)}
+        className={join("fynns-menu", "fynns-scroll", className)}
         style={style}
         onKeyDown={onMenuKeyDown}
       >
@@ -211,6 +211,8 @@ export type DropdownMenuProps = {
  * M3 Menu — trigger + portaled surface (groups, separators, checkbox items).
  * Outside-click / Escape dismiss; arrow keys move between items.
  * Form FieldBlock hosts auto-match menu width to the trigger (≥ **0.5.239**).
+ * Long catalogs: panel caps height + `fynns-scroll` (visible flyout overlay
+ * rails ≥ **0.5.251**). Huge catalogs — filter / window in the consumer.
  * @see https://m3.material.io/components/menus/overview
  */
 export function DropdownMenu({
@@ -455,6 +457,8 @@ export function DropdownMenuItem({
   );
 }
 
+DropdownMenuItem.displayName = "DropdownMenuItem";
+
 export type DropdownMenuCheckboxItemProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   "role" | "aria-checked"
@@ -510,6 +514,8 @@ export function DropdownMenuCheckboxItem({
     </button>
   );
 }
+
+DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
 
 export type DropdownMenuLabelProps = HTMLAttributes<HTMLDivElement>;
 
@@ -574,3 +580,5 @@ export function DropdownMenuGroup({
     </div>
   );
 }
+
+DropdownMenuGroup.displayName = "DropdownMenuGroup";
