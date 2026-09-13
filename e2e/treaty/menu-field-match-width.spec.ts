@@ -85,12 +85,17 @@ test("FieldBlock DropdownMenu matches narrow trigger; long item ellipsizes", asy
       const tipLabel = longItem?.querySelector(
         ".fynns-overflow-tip-label",
       ) as HTMLElement | null;
+      const chevCs = chev ? getComputedStyle(chev) : null;
+      const chevTransform = chevCs?.transform ?? "";
       return {
         ok: true as const,
         triggerWidth: tb.width,
         menuWidth: mb.width,
         leftDelta: Math.abs(mb.left - tb.left),
         hasChevron: Boolean(chev),
+        chevRotated:
+          chevTransform.includes("matrix") &&
+          !/^matrix\(1,\s*0,\s*0,\s*1,/.test(chevTransform),
         chevMidVsLabel:
           cr && lr
             ? Math.abs(cr.top + cr.height / 2 - (lr.top + lr.height / 2))
@@ -110,6 +115,7 @@ test("FieldBlock DropdownMenu matches narrow trigger; long item ellipsizes", asy
     expect(geometry.ok).toBe(true);
     if (!geometry.ok) return;
     expect(geometry.hasChevron).toBe(true);
+    expect(geometry.chevRotated).toBe(true);
     expect(geometry.longItemVisible).toBe(true);
     expect(geometry.menuMatchesTrigger).toBe(true);
     expect(geometry.leftDelta).toBeLessThan(2);

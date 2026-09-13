@@ -60,7 +60,19 @@ export const Input = forwardRef(function Input(
   const hint = errorText ?? supportingText;
   const needsShell = !!(leading || trailing || hint);
 
-  const input = (
+  const inputClass = (...extra: Array<string | false | null | undefined>) =>
+    join(
+      "fynns-input",
+      size === "sm" && "fynns-input--sm",
+      variant === "filled" && "fynns-input--filled",
+      isInvalid && "fynns-input--invalid",
+      ...extra,
+    );
+
+  const bareInput = (opts: {
+    inShell?: boolean;
+    hostClassName?: string | undefined;
+  }) => (
     <input
       {...rest}
       id={inputId}
@@ -68,18 +80,14 @@ export const Input = forwardRef(function Input(
       spellCheck={spellCheck}
       aria-invalid={isInvalid || undefined}
       aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
-      className={join(
-        "fynns-input",
-        size === "sm" && "fynns-input--sm",
-        variant === "filled" && "fynns-input--filled",
-        isInvalid && "fynns-input--invalid",
-        !!(leading || trailing) && "fynns-input--in-shell",
-        className,
+      className={inputClass(
+        opts.inShell && "fynns-input--in-shell",
+        opts.hostClassName,
       )}
     />
   );
 
-  if (!needsShell) return input;
+  if (!needsShell) return bareInput({ hostClassName: className });
 
   return (
     <div
@@ -99,25 +107,11 @@ export const Input = forwardRef(function Input(
           )}
         >
           {leading ? <span className="fynns-field-affix fynns-field-affix--leading">{leading}</span> : null}
-          <input
-            {...rest}
-            id={inputId}
-            ref={ref}
-            spellCheck={spellCheck}
-            aria-invalid={isInvalid || undefined}
-            aria-describedby={hint ? join(ariaDescribedBy, hintId) : ariaDescribedBy}
-            className={join(
-              "fynns-input",
-              size === "sm" && "fynns-input--sm",
-              variant === "filled" && "fynns-input--filled",
-              isInvalid && "fynns-input--invalid",
-              "fynns-input--in-shell",
-            )}
-          />
+          {bareInput({ inShell: true })}
           {trailing ? <span className="fynns-field-affix fynns-field-affix--trailing">{trailing}</span> : null}
         </div>
       ) : (
-        input
+        bareInput()
       )}
       {hint ? (
         <p

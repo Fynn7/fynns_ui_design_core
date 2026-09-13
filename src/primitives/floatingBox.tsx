@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Floating placement geometry (tooltips, menus).
  * Not a Content sheet Popover — that API was purged.
  */
