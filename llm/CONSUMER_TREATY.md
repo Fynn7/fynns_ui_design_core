@@ -240,6 +240,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | AGENTS shells / Hard rules | `#form-recipe` |
 | overlay scrollbar paints through chrome heads | DESIGN_SYSTEM Hard rules | `#drawer-nested-scroll` |
+| overlay scrollbar paints above Select/Menu flyout | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | modal Dialog scrollbar flash on enter | AGENTS Dialog / overlays | `#timeline` |
 | table row action not sharing one trailing edge | AGENTS shells / Hard rules | `#table` |
 | table map cluster top-hugged in a tall cell | DESIGN_SYSTEM Hard rules | `#table` |

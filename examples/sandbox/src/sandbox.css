@@ -910,6 +910,19 @@
   max-width: 10rem;
 }
 
+/* Teach overlay scroll rails stay under Menu/Select (≥ 0.5.249). */
+.sandbox-scroll-menu-stack {
+  max-height: 11rem;
+  overflow: auto;
+  padding-inline-end: var(--fynns-scrollbar-size);
+  border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
+  border-radius: var(--fynns-radius-md);
+  padding: var(--fynns-space-md);
+  background: var(--fynns-color-surface-1);
+  min-width: 0;
+  max-width: 18rem;
+}
+
 /* Teach Select menu match (≥ 0.5.220): wide field + short options — menu ≈ shell.
  * Control → teaching/supporting copy uses field-hint-gap (8dp) — never flush
  * under the shell (≥ **0.5.230**). */

@@ -834,7 +834,7 @@ const en = {
   "globals.drawerNestedScrollDigest": "Digests",
   "globals.drawerNestedScrollCard": "Mounted sample card",
   "globals.drawerNestedScrollHelp":
-    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Live `#drawer-nested-scroll`.",
+    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Open menus/Selects clear rails via `--fynns-z-scroll-overlay` under `--fynns-z-modal-flyout` (≥ **0.5.249** — live `#sandbox-scroll-menu-stack`). Live `#drawer-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -1441,6 +1441,18 @@ const en = {
   "globals.menuFieldMatchAria": "Sample field menu",
   "globals.menuFieldMatchHelp":
     "FieldBlock + DropdownMenu (≥ **0.5.239**): portaled menu **width = live trigger** (same as Select ≥ **0.5.238**). Narrow host + long item → ellipsis — do **not** leave a menu wider than the field. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.",
+  "globals.scrollMenuStackLabel": "Sample model",
+  "globals.scrollMenuStackAria": "Sample model menu",
+  "globals.scrollMenuStackFillerA":
+    "Filler row A — keeps the capped host overflowing so the overlay Y rail is visible.",
+  "globals.scrollMenuStackFillerB":
+    "Filler row B — open the menu and confirm the rail stays under the flyout.",
+  "globals.scrollMenuStackFillerC":
+    "Filler row C — rails use --fynns-z-scroll-overlay (not toast).",
+  "globals.scrollMenuStackFillerD":
+    "Filler row D — Snackbar/toast still sits above menus.",
+  "globals.scrollMenuStackHelp":
+    "**Overlay scroll under Menu (≥ 0.5.249):** `.fynns-scroll-overlay-portal` uses `--fynns-z-scroll-overlay` (above modal, **below** modal-flyout). Open this long DropdownMenu over a scrolling host — the Y rail must **not** paint through the menu. Failure: CONSUMER_TREATY overlay scrollbar paints above Select/Menu flyout. Live `#sandbox-scroll-menu-stack`.",
   "globals.menuIconStripTip": "Overflow (icon-only menu)",
   "globals.menuIconStripAria": "Overflow menu",
   "globals.sheetOpen": "Open bottom sheet",
@@ -3210,7 +3222,7 @@ const zh: Record<MessageKey, string> = {
   "globals.drawerNestedScrollDigest": "摘要",
   "globals.drawerNestedScrollCard": "已挂载示例卡片",
   "globals.drawerNestedScrollHelp":
-    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。活样例 `#drawer-nested-scroll`。",
+    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。菜单/Select 经 `--fynns-z-scroll-overlay` 低于 `--fynns-z-modal-flyout` 清开轨道（≥ **0.5.249** — 对照 `#sandbox-scroll-menu-stack`）。活样例 `#drawer-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
@@ -3812,6 +3824,18 @@ const zh: Record<MessageKey, string> = {
   "globals.menuFieldMatchAria": "示例字段菜单",
   "globals.menuFieldMatchHelp":
     "FieldBlock + DropdownMenu（≥ **0.5.239**）：门户菜单 **width = live trigger**（同 Select ≥ **0.5.238**）。窄宿主 + 长项 → 省略号 — **禁止**菜单宽于字段。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger。",
+  "globals.scrollMenuStackLabel": "示例模型",
+  "globals.scrollMenuStackAria": "示例模型菜单",
+  "globals.scrollMenuStackFillerA":
+    "填充行 A — 让定高宿主溢出，露出 overlay Y 轨。",
+  "globals.scrollMenuStackFillerB":
+    "填充行 B — 打开菜单确认轨道在飞层之下。",
+  "globals.scrollMenuStackFillerC":
+    "填充行 C — 轨道用 --fynns-z-scroll-overlay（不是 toast）。",
+  "globals.scrollMenuStackFillerD":
+    "填充行 D — Snackbar/toast 仍在菜单之上。",
+  "globals.scrollMenuStackHelp":
+    "**Overlay 滚动在 Menu 之下（≥ 0.5.249）：** `.fynns-scroll-overlay-portal` 用 `--fynns-z-scroll-overlay`（高于 modal、**低于** modal-flyout）。在可滚动宿主上打开长 DropdownMenu — Y 轨**不得**画穿菜单。失败：CONSUMER_TREATY overlay scrollbar paints above Select/Menu flyout。对照 `#sandbox-scroll-menu-stack`。",
   "globals.menuIconStripTip": "溢出（图标菜单）",
   "globals.menuIconStripAria": "溢出菜单",
   "globals.sheetOpen": "打开底部表单",

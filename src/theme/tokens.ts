@@ -350,9 +350,16 @@ export const Z_TOKENS = {
   popover: "50",
   modal: "60",
   /**
+   * Fixed `.fynns-scroll` overlay rails (portal). Above `modal` so Dialog /
+   * Drawer / Sheet scroll hosts keep visible thumbs; **below** `modal-flyout`
+   * so portaled Select / DropdownMenu never paint under the rail (≥ **0.5.249**;
+   * was incorrectly `--fynns-z-toast`).
+   */
+  "scroll-overlay": "62",
+  /**
    * Portaled Select / DropdownMenu temporary surfaces that must clear an open
-   * Dialog / Drawer / FullscreenDialog (`modal`). Between modal and toast so
-   * Snackbar stays on top. ≥ **0.5.213**.
+   * Dialog / Drawer / FullscreenDialog (`modal`) **and** scroll-overlay rails.
+   * Between scroll-overlay and toast so Snackbar stays on top. ≥ **0.5.213**.
    */
   "modal-flyout": "65",
   toast: "70",

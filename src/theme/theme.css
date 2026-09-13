@@ -165,6 +165,7 @@
   --fynns-z-sticky: 45;
   --fynns-z-popover: 50;
   --fynns-z-modal: 60;
+  --fynns-z-scroll-overlay: 62;
   --fynns-z-modal-flyout: 65;
   --fynns-z-toast: 70;
   --fynns-z-tooltip: 8000;
@@ -850,8 +851,9 @@ button {
   position: fixed;
   inset: 0;
   /* Above modal (60) so Dialog / Drawer / Sheet scroll hosts keep visible thumbs;
-   * below tooltip (8000). Portal ignores hits; rails re-enable for drag. */
-  z-index: var(--fynns-z-toast);
+   * below modal-flyout (65) so Select / DropdownMenu clear the rail (≥ **0.5.249**;
+   * was `--fynns-z-toast` and painted through open menus). Below toast / tooltip. */
+  z-index: var(--fynns-z-scroll-overlay);
   pointer-events: none;
   overflow: hidden;
 }

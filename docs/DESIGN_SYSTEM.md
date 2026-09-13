@@ -94,19 +94,21 @@ belong in a consumer’s own doc.
    common source of visual drift — never ship them. **Native classic bars on
    `.fynns-scroll` are hidden** so they never steal content width. Overlay thumbs
    are painted by `src/theme/overlayScrollbar.ts` (fixed portal rails at
-   `--fynns-z-toast` so Dialog / Drawer / Sheet hosts stay above
-   `--fynns-z-modal`; portal `pointer-events: none`, rails re-enable so thumbs
-   can be dragged / track-clicked). **One portal only** (≥ **0.5.200** — Vite
-   HMR / dual import must not stack a second `.fynns-scroll-overlay-portal` or
-   PageScroll shows twin Y thumbs). **Modal Dialog open:** suppress overlay rails
-   for scroll hosts **outside** the open modal layer (≥ **0.5.33**) — otherwise
-   PageScroll rails behind Dialog paint a phantom idle thumb. **Modal
-   `.fynns-dialog-body`:** suppress thumb until panel enter settles (≥ **0.5.34**,
-   mount + `transitionend` ≥ **0.5.35**); on fine pointer reveal on **host hover
-   only** — not `:focus-within` from the focus trap. **Nested scroll in Drawer /
-   FullscreenDialog:** Y rails clamp below overlay chrome heads (TopAppBar,
-   dialog head, Card / Collapsible heads, nav headlines ≥ **0.5.134**) — live
-   `#drawer-nested-scroll` + Layouts `#layouts-demo-shell`. Fine pointer + hover:
+   `--fynns-z-scroll-overlay` — above `--fynns-z-modal`, **below**
+   `--fynns-z-modal-flyout` so Select / DropdownMenu never sit under the rail
+   ≥ **0.5.249**; was wrongly `--fynns-z-toast`). Portal `pointer-events: none`,
+   rails re-enable so thumbs can be dragged / track-clicked. **One portal only**
+   (≥ **0.5.200** — Vite HMR / dual import must not stack a second
+   `.fynns-scroll-overlay-portal` or PageScroll shows twin Y thumbs). **Modal
+   Dialog open:** suppress overlay rails for scroll hosts **outside** the open
+   modal layer (≥ **0.5.33**) — otherwise PageScroll rails behind Dialog paint a
+   phantom idle thumb. **Modal `.fynns-dialog-body`:** suppress thumb until panel
+   enter settles (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine
+   pointer reveal on **host hover only** — not `:focus-within` from the focus
+   trap. **Nested scroll in Drawer / FullscreenDialog:** Y rails clamp below
+   overlay chrome heads (TopAppBar, dialog head, Card / Collapsible heads, nav
+   headlines ≥ **0.5.134**) — live `#drawer-nested-scroll` /
+   `#sandbox-scroll-menu-stack`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
    **Wheel → horizontal (≥ 0.5.184 / trap at edge ≥ **0.5.186**):**
    `.fynns-scroll` hosts with horizontal overflow map a dominant vertical wheel

@@ -154,6 +154,11 @@ alwaysApply: true
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
    （无 props、无私有 mask / scroll 监听）。禁止硬裁切；禁止裸 `overflow:auto`
    替代 PageScroll。对照 `#page-scroll`。
+7b5. **overlay scrollbar paints above Select/Menu flyout** — `.fynns-scroll`
+   overlay 门户用 `--fynns-z-scroll-overlay`（在 modal 之上、**modal-flyout
+   之下**，≥ **0.5.249**）。禁止消费仓把滚动条 / 私有 rail 抬到 Menu /
+   Select 之上；勿把门户改回 `--fynns-z-toast`。对照
+   `#sandbox-scroll-menu-stack`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照

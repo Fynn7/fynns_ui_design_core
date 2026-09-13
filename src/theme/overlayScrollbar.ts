@@ -250,7 +250,8 @@ function railHorizontallyOverlaps(
 }
 
 /**
- * Portal rails sit at `--fynns-z-toast` (above modal). Collect chrome bands that
+ * Portal rails sit at `--fynns-z-scroll-overlay` (above modal, below
+ * modal-flyout). Collect chrome bands that
  * must occlude overlay Y rails (shell TopAppBar, dialog head, section heads).
  */
 function overlayChromeHeadsForHost(host: HTMLElement): HTMLElement[] {
@@ -290,7 +291,8 @@ function overlayChromeHeadsForHost(host: HTMLElement): HTMLElement[] {
 
 /**
  * Shrink the Y rail below every overlapping overlay-chrome head so portal thumbs
- * (z-toast) never paint through TopAppBar / dialog / Card / Collapsible titles.
+ * (`--fynns-z-scroll-overlay`) never paint through TopAppBar / dialog / Card /
+ * Collapsible titles.
  */
 function clampVerticalRailBelowOverlayChrome(
   host: HTMLElement,

@@ -1557,6 +1557,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
   const [menuStarred, setMenuStarred] = useState(true);
   const [menuNotify, setMenuNotify] = useState(false);
+  const [scrollMenuModel, setScrollMenuModel] = useState("sample-model-a");
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
@@ -2265,6 +2266,51 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </FieldBlock>
           </div>
           <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
+        </div>
+        <div
+          id="sandbox-scroll-menu-stack"
+          className="sandbox-globals-row sandbox-globals-row--stack"
+        >
+          <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
+          <div className="sandbox-scroll-menu-stack fynns-scroll">
+            <FieldStack>
+              <FieldBlock label={t("globals.scrollMenuStackLabel")}>
+                <DropdownMenu
+                  ariaLabel={t("globals.scrollMenuStackAria")}
+                  trigger={scrollMenuModel}
+                  matchTriggerWidth
+                >
+                  {(
+                    [
+                      "sample-model-a",
+                      "sample-model-b",
+                      "sample-model-c",
+                      "sample-model-d",
+                      "sample-model-e",
+                      "sample-model-f",
+                      "sample-model-g",
+                      "sample-model-h",
+                      "sample-model-i",
+                      "sample-model-j",
+                      "sample-model-k",
+                      "sample-model-l",
+                    ] as const
+                  ).map((id) => (
+                    <DropdownMenuItem
+                      key={id}
+                      onClick={() => setScrollMenuModel(id)}
+                    >
+                      {id}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenu>
+              </FieldBlock>
+              <FieldHint>{t("globals.scrollMenuStackFillerA")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerB")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerC")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerD")}</FieldHint>
+            </FieldStack>
+          </div>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
         </GlobalsDemo>
