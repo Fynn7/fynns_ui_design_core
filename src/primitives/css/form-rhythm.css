@@ -219,6 +219,14 @@
   white-space: nowrap;
 }
 
+.fynns-control-row__label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
 .fynns-control-row__controls {
   display: flex;
   flex-wrap: wrap;
@@ -259,6 +267,32 @@
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.fynns-control-cluster > .fynns-table-meta > .fynns-overflow-tip,
+.fynns-control-cluster > .fynns-table-meta > .fynns-overflow-tip-label,
+.fynns-table-meta > .fynns-overflow-tip,
+.fynns-table-meta > .fynns-overflow-tip-label {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Cluster end-pack: tip must shrink with the meta cell (flex row). */
+.fynns-control-cluster > .fynns-table-meta > .fynns-overflow-tip.fynns-tooltip-trigger {
+  flex: 1 1 0;
+  width: 0;
+}
+
+/* Lone / unit-stack meta: fill the block host (never width:0). */
+.fynns-table-meta > .fynns-overflow-tip.fynns-tooltip-trigger {
+  width: 100%;
+  flex: none;
 }
 
 /* Explicit start pack — probe value grids / rare LTR reading strips. */

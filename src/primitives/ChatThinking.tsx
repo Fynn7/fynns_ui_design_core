@@ -6,6 +6,7 @@ import {
 import { resolveThinkingLabel } from "./chatThinkingPolicy";
 import { useStatusTreeOpen } from "./useStatusTreeOpen";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { OverflowTip } from "./OverflowTip";
 
 export type ChatThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
   /** Thought body (caller-owned summary — core does not parse markdown). */
@@ -118,8 +119,9 @@ export function ChatThinking({
     ) : null;
 
   const labelNode = (
-    <span
+    <OverflowTip
       key={resolvedLabel}
+      content={resolvedLabel}
       className={join(
         "fynns-chat-thinking-label",
         streaming && "fynns-chat-thinking-label--streaming",
@@ -127,7 +129,7 @@ export function ChatThinking({
       )}
     >
       {resolvedLabel}
-    </span>
+    </OverflowTip>
   );
 
   if (!hasBody) {

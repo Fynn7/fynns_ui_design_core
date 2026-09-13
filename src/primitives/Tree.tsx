@@ -15,6 +15,7 @@ import {
   type RefObject,
 } from "react";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { OverflowTip } from "./OverflowTip";
 
 const TREE_TOGGLE_EVENT = "fynns-tree-toggle";
 
@@ -352,7 +353,9 @@ export function TreeItem({
             {icon}
           </span>
         ) : null}
-        <span className="fynns-tree-item-label">{label}</span>
+        <span className="fynns-tree-item-label">
+          <OverflowTip content={label}>{label}</OverflowTip>
+        </span>
       </button>
       {trailing != null ? (
         <span className="fynns-tree-item-trailing">{trailing}</span>

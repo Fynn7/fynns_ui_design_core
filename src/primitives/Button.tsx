@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ForwardedRef, ReactNode } from "react";
 import { forwardRef } from "react";
 import { Spinner } from "./Loading";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 /**
  * Button primitive. The single source of truth for `<button>` styling across
@@ -61,6 +62,7 @@ export const Button = forwardRef(function Button(
     typeof rest["aria-label"] === "string" && rest["aria-label"].length > 0
       ? rest["aria-label"]
       : "Loading";
+  const labelTip = !iconOnly ? overflowTipText(children) : null;
   const classes = [
     "fynns-btn",
     VARIANT_CLASS[resolvedVariant],
@@ -73,6 +75,15 @@ export const Button = forwardRef(function Button(
   ]
     .filter(Boolean)
     .join(" ");
+  const labelNode = (
+    <span className="fynns-btn-label">
+      {labelTip != null ? (
+        <OverflowTip content={labelTip}>{children}</OverflowTip>
+      ) : (
+        children
+      )}
+    </span>
+  );
   return (
     <button
       {...rest}
@@ -95,7 +106,7 @@ export const Button = forwardRef(function Button(
       ) : iconOnly ? (
         children
       ) : (
-        <span className="fynns-btn-label">{children}</span>
+        labelNode
       )}
     </button>
   );

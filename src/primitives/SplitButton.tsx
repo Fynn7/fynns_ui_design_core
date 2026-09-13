@@ -2,6 +2,7 @@ import { useCallback, useState, type ReactNode } from "react";
 import { Button, type ButtonSize } from "./Button";
 import { DropdownMenu } from "./DropdownMenu";
 import { ChevronDownIcon } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type SplitButtonVariant = "primary" | "tonal" | "default" | "elevated";
 export type SplitButtonSize = ButtonSize;
@@ -104,7 +105,13 @@ export function SplitButton({
             {leadingIcon}
           </span>
         ) : null}
-        <span className="fynns-splitbtn-main-label">{label}</span>
+        <span className="fynns-splitbtn-main-label">
+          {overflowTipText(label) != null ? (
+            <OverflowTip content={String(label)}>{label}</OverflowTip>
+          ) : (
+            label
+          )}
+        </span>
       </Button>
       <DropdownMenu
         className="fynns-splitbtn-menu-root"

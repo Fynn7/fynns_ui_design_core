@@ -14,6 +14,7 @@ import {
 import { trailingIsRowAction } from "./catalogRowGeometry";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
 
 /** True when any nested destination (or nested group) reports `active`. */
@@ -40,8 +41,13 @@ function syncNavDrawerAccountLabelFade(root: ParentNode) {
   root
     .querySelectorAll<HTMLElement>(".fynns-nav-drawer-footer-account-label")
     .forEach((el) => {
-      if (el.scrollWidth > el.clientWidth + 1) el.setAttribute("data-fade", "");
-      else el.removeAttribute("data-fade");
+      const measure =
+        el.querySelector<HTMLElement>(".fynns-overflow-tip-label") ?? el;
+      if (measure.scrollWidth > measure.clientWidth + 1) {
+        el.setAttribute("data-fade", "");
+      } else {
+        el.removeAttribute("data-fade");
+      }
     });
 }
 
@@ -283,11 +289,14 @@ export function NavigationDrawerHeadline({
 export type NavigationDrawerGroupProps = {
   /**
    * Group title (visible + accessible name for the disclose control).
-   * **Short name only** — do not pad with `· N` / counts / parenthetical
+   * Prefer a **short string** — do not pad with `· N` / counts / parenthetical
    * glosses unless the user explicitly asks. Unread → nested Item `badge`
    * only when required (AGENTS Hard rules).
+   * Strings get `OverflowTip` when truncated (≥ **0.5.241**). Pass a
+   * `ReactNode` only when you need custom chrome; wrap long path copy in
+   * `OverflowTip` yourself (or use a string so core tips it).
    */
-  label: string;
+  label: ReactNode;
   /**
    * Optional leading glyph — any node (folder, globe, sparkles, …).
    * Does **not** own the disclose chevron (trailing, always present).
@@ -327,6 +336,7 @@ export function NavigationDrawerGroup({
   const containsActive = hasActiveDestination(children);
   /** Collapsed folder hides the active leaf — surface selection on the trigger. */
   const showActiveOnTrigger = containsActive && !isOpen;
+  const labelTip = overflowTipText(label);
 
   const toggle = () => {
     const next = !isOpen;
@@ -363,7 +373,11 @@ export function NavigationDrawerGroup({
           </span>
         ) : null}
         <span className="fynns-nav-drawer-label" id={labelId}>
-          {label}
+          {labelTip != null ? (
+            <OverflowTip content={labelTip}>{label}</OverflowTip>
+          ) : (
+            label
+          )}
         </span>
         <span className="fynns-nav-drawer-group-chevron" aria-hidden>
           <ChevronRightIcon size={ICON_SIZE} />
@@ -492,7 +506,7 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
         </span>
       ) : null}
       <span className="fynns-nav-drawer-label" id={labelId}>
-        {label}
+        <OverflowTip content={label}>{label}</OverflowTip>
       </span>
       {badgeNode}
     </button>

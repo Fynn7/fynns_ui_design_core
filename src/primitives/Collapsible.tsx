@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useId, useState } from "react";
 import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 /** Visible section shell (`card`) or structure-only host (`plain`). */
 export type CollapsibleChrome = "card" | "plain";
@@ -89,6 +90,7 @@ export function Collapsible({
   const isOpen = isControlled ? open : internalOpen;
   const hasIcon = icon != null;
   const plain = chrome === "plain";
+  const titleTip = overflowTipText(title);
 
   const toggle = () => {
     const next = !isOpen;
@@ -120,7 +122,13 @@ export function Collapsible({
             {hasIcon ? <span className="fynns-collapsible-icon">{icon}</span> : null}
             <ChevronRightIcon className="fynns-collapsible-chevron" size={ICON_SIZE} />
           </span>
-          <span className="fynns-collapsible-title">{title}</span>
+          <span className="fynns-collapsible-title">
+            {titleTip != null ? (
+              <OverflowTip content={titleTip}>{title}</OverflowTip>
+            ) : (
+              title
+            )}
+          </span>
         </button>
         {actions ? <div className="fynns-collapsible-actions">{actions}</div> : null}
       </div>

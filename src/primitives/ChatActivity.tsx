@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import { ChevronRightIcon, FileIcon, ICON_SIZE, WrenchIcon } from "./icons";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { DURATION_TOKENS } from "../theme/motionTokens";
 import {
   anyPriorIndex,
@@ -178,12 +179,19 @@ export function ChatActivityArtifact({
   className,
   ...rest
 }: ChatActivityArtifactProps) {
+  const artifactTip = overflowTipText(children);
   const body = (
     <>
       <span className="fynns-chat-activity-artifact-icon" aria-hidden>
         {icon ?? <FileIcon size={ICON_SIZE} />}
       </span>
-      <span className="fynns-chat-activity-artifact-label">{children}</span>
+      <span className="fynns-chat-activity-artifact-label">
+        {artifactTip != null ? (
+          <OverflowTip content={artifactTip}>{children}</OverflowTip>
+        ) : (
+          children
+        )}
+      </span>
     </>
   );
   const classes = join("fynns-chat-activity-artifact", className);
@@ -468,7 +476,13 @@ export function ChatActivityStep({
               {leading}
             </span>
             <div className="fynns-chat-activity-headline">
-              <span className="fynns-chat-activity-step-label">{label}</span>
+              <span className="fynns-chat-activity-step-label">
+                {overflowTipText(label) != null ? (
+                  <OverflowTip content={String(label)}>{label}</OverflowTip>
+                ) : (
+                  label
+                )}
+              </span>
               {artifact}
             </div>
           </div>
@@ -666,18 +680,26 @@ export function ChatActivity({
     typeof label === "string" || typeof label === "number"
       ? String(label)
       : undefined;
-  const labelNode = (
-    <span
-      key={labelKey}
-      className={join(
-        "fynns-chat-activity-label",
-        streaming && "fynns-chat-activity-label--streaming",
-        "fynns-chat-activity-label--swap",
-      )}
-    >
-      {label}
-    </span>
+  const labelTip = overflowTipText(label);
+  const labelClass = join(
+    "fynns-chat-activity-label",
+    streaming && "fynns-chat-activity-label--streaming",
+    "fynns-chat-activity-label--swap",
   );
+  const labelNode =
+    labelTip != null ? (
+      <OverflowTip
+        key={labelKey}
+        content={labelTip}
+        className={labelClass}
+      >
+        {label}
+      </OverflowTip>
+    ) : (
+      <span key={labelKey} className={labelClass}>
+        {label}
+      </span>
+    );
 
   return (
     <div

@@ -1,7 +1,7 @@
 /**
  * Select portaled menu:
- * - ≥ **0.5.209**: grows past a narrow trigger for long option labels
- * - ≥ **0.5.220**: matches a stretched full-width field (not a short-label chip)
+ * - ≥ **0.5.238**: menu width = live trigger shell (long labels ellipsize)
+ * - ≥ **0.5.220** / ≥ **0.5.244**: matches a stretched fullWidth field (not a short-label chip)
  * Sandbox: #select / #sandbox-select-wide-short
  */
 import { test, expect } from "@playwright/test";
@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 });
 });
 
-test("Select menu grows past narrow trigger for long option labels", async ({
+test("Select menu matches narrow trigger; long option ellipsizes", async ({
   page,
 }) => {
   await openGlobalsDemo(page, "select", "select");
@@ -44,21 +44,27 @@ test("Select menu grows past narrow trigger for long option labels", async ({
       const longOpt = [...menuEl.querySelectorAll("[role='option']")].find(
         (o) => (o.textContent || "").trim().length > 20,
       ) as HTMLElement | undefined;
+      const tipLabel = longOpt?.querySelector(
+        ".fynns-overflow-tip-label",
+      ) as HTMLElement | null;
       return {
         fieldWidth: fb.width,
         menuWidth: mb.width,
         longOptionVisible: Boolean(longOpt),
-        longOptionOverflows:
-          longOpt != null &&
-          longOpt.scrollWidth <= longOpt.clientWidth + 1,
-        menuWiderThanField: mb.width > fb.width + 8,
+        longOptionEllipsizes:
+          tipLabel != null && tipLabel.scrollWidth > tipLabel.clientWidth + 1,
+        hasOverflowTip: Boolean(
+          longOpt?.querySelector(".fynns-overflow-tip, .fynns-tooltip-trigger"),
+        ),
+        menuMatchesField: Math.abs(mb.width - fb.width) < 8,
       };
     });
     expect(geometry).toBeTruthy();
     if (!geometry) return;
     expect(geometry.longOptionVisible).toBe(true);
-    expect(geometry.menuWiderThanField).toBe(true);
-    expect(geometry.longOptionOverflows).toBe(true);
+    expect(geometry.menuMatchesField).toBe(true);
+    expect(geometry.longOptionEllipsizes).toBe(true);
+    expect(geometry.hasOverflowTip).toBe(true);
   }).toPass({ timeout: 10_000 });
 });
 

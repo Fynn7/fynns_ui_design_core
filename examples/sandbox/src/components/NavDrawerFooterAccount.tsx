@@ -1,4 +1,4 @@
-import { Avatar, IconButton, SettingsIcon, Tooltip } from "@fynns/ui";
+import { Avatar, IconButton, OverflowTip, SettingsIcon, Tooltip } from "@fynns/ui";
 import type { ReactNode } from "react";
 
 export type NavDrawerFooterAccountProps = {
@@ -42,7 +42,7 @@ export function NavDrawerFooterAccount({
         )}
         {showLabel ? (
           <span className="fynns-nav-drawer-footer-account-label">
-            {accountLabel}
+            <OverflowTip content={accountLabel}>{accountLabel}</OverflowTip>
           </span>
         ) : null}
       </div>

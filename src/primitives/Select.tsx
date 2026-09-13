@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 import { ChevronDownIcon } from "./icons";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
 import { useFloatingBoxPosition } from "./floatingBox";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 /** Keep in sync with `--fynns-duration-flyout` / DropdownMenu `FLYOUT_TRANSITION_MS`. */
 const FLYOUT_TRANSITION_MS = 160;
@@ -70,14 +71,12 @@ function flyoutExitMs(): number {
  * (see docs/DESIGN_SYSTEM.md / sandbox `#field-header`).
  * Replaces native `<select>`.
  *
- * Trigger width floors to the widest option (or placeholder) so switching
- * values does not resize the control when the host is content-sized — and so
- * the shell stays aligned under Grid / form fill (≥ **0.5.210** absolute
- * `--fynns-select-measure-min`, not `min(100%, …)`).
- * Open menu: **min-width = max(option-measure floor, trigger shell width)**
- * (≥ **0.5.220** — M3 Exposed Dropdown matches the field; retires the
- * 0.5.216 “hug short labels under a wide shell” chip). Still grows past a
- * narrow trigger when labels are long (`width: max-content`, viewport-capped).
+ * Trigger width floors to the widest option (or placeholder) via absolute
+ * `--fynns-select-measure-min` (≥ **0.5.210** — not `min(100%, …)`).
+ * Open menu: **width = live trigger shell width** (≥ **0.5.238** — same length
+ * as the field; long option labels ellipsize inside). Stretched short-option
+ * fields still match (≥ **0.5.220**). Retires ≥ **0.5.209** “grow past a
+ * narrow trigger”.
  * @see https://m3.material.io/components/menus/overview
  * @see https://developer.android.com/reference/kotlin/androidx/compose/material3/ExposedDropdownMenuBox.composable
  */
@@ -143,14 +142,10 @@ export function Select({
     if (max > 0) setMinWidthPx(max);
   }, [options, placeholder, shrinkInCluster]);
 
-  /** While open, track the live shell width so the menu matches a stretched field. */
+  /** While open, track the live shell width so the menu matches the field. */
   useLayoutEffect(() => {
-    if (shrinkInCluster) {
-      setShellWidthPx(null);
-      return;
-    }
     /* Keep last shell width through the exit animation (`open` false but still
-     * `mounted`) so the menu does not flash to option-measure chip width. */
+     * `mounted`) so the menu does not flash to a content chip. */
     if (!open) return;
     const shell = shellRef.current;
     if (!shell) return;
@@ -167,20 +162,15 @@ export function Select({
       ro?.disconnect();
       window.removeEventListener("resize", sync);
     };
-  }, [open, shrinkInCluster]);
+  }, [open]);
 
   useEffect(() => {
     if (!mounted) setShellWidthPx(null);
   }, [mounted]);
 
-  const menuMinWidthPx = (() => {
-    if (shrinkInCluster) return null;
-    const parts = [minWidthPx, shellWidthPx].filter(
-      (n): n is number => n != null && n > 0,
-    );
-    if (parts.length === 0) return null;
-    return Math.max(...parts);
-  })();
+  /** Menu panel = shell width (not option-measure max-content grow). */
+  const menuWidthPx =
+    shellWidthPx != null && shellWidthPx > 0 ? shellWidthPx : null;
 
   useEffect(() => {
     if (open) {
@@ -291,13 +281,11 @@ export function Select({
                 ? ({
                     top: displayPos.top,
                     left: displayPos.left,
-                    /* Floor = max(option-measure, live shell width) so a
-                     * stretched FieldBlock does not spawn a short-label
-                     * floating chip under the trigger (≥ **0.5.220**). Long
-                     * labels still grow past a narrow trigger via CSS
-                     * `width: max-content`. */
-                    ...(menuMinWidthPx != null
-                      ? { minWidth: `${menuMinWidthPx}px` }
+                    /* Width = live shell so header and list share one length
+                     * (≥ **0.5.238**). Long labels ellipsize inside — do not
+                     * max-content grow past a narrow trigger. */
+                    ...(menuWidthPx != null
+                      ? { width: `${menuWidthPx}px` }
                       : null),
                     ...(displayPos.maxWidth
                       ? { maxWidth: `${displayPos.maxWidth}px` }
@@ -309,6 +297,8 @@ export function Select({
             {normalized.map((option, index) => {
               const selected = option.value === value;
               const active = index === activeIndex;
+              const label = option.label ?? option.value;
+              const tip = overflowTipText(label, option.value);
               return (
                 <button
                   key={option.value}
@@ -326,7 +316,11 @@ export function Select({
                   onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => !option.disabled && pick(option.value)}
                 >
-                  {option.label ?? option.value}
+                  {tip != null ? (
+                    <OverflowTip content={tip}>{label}</OverflowTip>
+                  ) : (
+                    label
+                  )}
                 </button>
               );
             })}
@@ -400,7 +394,16 @@ export function Select({
           onClick={toggleOpen}
           onKeyDown={onTriggerKeyDown}
         >
-          <span className="fynns-select-trigger-text">{displayValue}</span>
+          <span className="fynns-select-trigger-text">
+            {(() => {
+              const tip = overflowTipText(displayValue, value || placeholder);
+              return tip != null ? (
+                <OverflowTip content={tip}>{displayValue}</OverflowTip>
+              ) : (
+                displayValue
+              );
+            })()}
+          </span>
         </button>
         <span
           className={join(

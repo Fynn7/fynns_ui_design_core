@@ -1209,6 +1209,30 @@ a.fynns-chat-activity-artifact:hover {
   overflow: hidden;
 }
 
+.fynns-chat-citation-card-snippet:has(> .fynns-overflow-tip) {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.fynns-chat-citation-card-snippet > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+}
+
+.fynns-chat-citation-card-snippet .fynns-overflow-tip-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 .fynns-chat-citation-preview {
   display: flex;
   flex-direction: column;

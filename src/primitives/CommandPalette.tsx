@@ -6,6 +6,7 @@ import type {
 import { Fragment, useEffect, useId, useMemo, useRef, useState } from "react";
 import { DialogFrame } from "./DialogFrame";
 import { SearchIcon } from "./icons";
+import { OverflowTip } from "./OverflowTip";
 
 export type CommandPaletteItem = {
   /** Stable id — used for `aria-activedescendant` and keys. */
@@ -276,10 +277,14 @@ export function CommandPalette({
                     </span>
                   ) : null}
                   <span className="fynns-command-item-text">
-                    <span className="fynns-command-item-label">{item.label}</span>
+                    <span className="fynns-command-item-label">
+                      <OverflowTip content={item.label}>{item.label}</OverflowTip>
+                    </span>
                     {item.description ? (
                       <span className="fynns-command-item-description">
-                        {item.description}
+                        <OverflowTip content={item.description}>
+                          {item.description}
+                        </OverflowTip>
                       </span>
                     ) : null}
                   </span>

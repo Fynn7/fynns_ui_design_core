@@ -3432,12 +3432,11 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 
 /*
  * Portaled Select listbox — independent elevated surface (M3 Menu Level-2
- * grammar via flyout shadow). Not in-flow. Width: max-content with JS
- * min-width = max(option-measure floor, live trigger shell width) so a
- * stretched FieldBlock matches the Exposed Dropdown field (≥ **0.5.220**;
- * retires 0.5.216 short-label chip). Still grows past a narrow trigger for
- * long labels. Viewport `maxWidth` from floatingBox. Options nowrap so long
- * labels widen the panel instead of ellipsizing to the shell.
+ * grammar via flyout shadow). Not in-flow. Width is set in JS to the **live
+ * trigger shell** so header and options share one length (≥ **0.5.238**;
+ * stretched short-option fields still match ≥ **0.5.220**). Long labels
+ * ellipsize inside the panel — do **not** `max-content` grow past a narrow
+ * field (retires ≥ **0.5.209** growth). Viewport `maxWidth` from floatingBox.
  * z = `--fynns-z-modal-flyout` (≥ **0.5.213**) so menus clear Dialog /
  * Drawer overlays (`--fynns-z-modal`); page Autocomplete panels stay on
  * `--fynns-z-dropdown`.
@@ -3449,7 +3448,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: var(--fynns-searchbar-results-gap);
-  width: max-content;
+  /* JS sets `width` to shell — leave auto until measured. */
+  width: auto;
+  max-width: 100vw;
   max-height: var(--fynns-searchbar-results-max-height);
   /* Equal block inset (≥ **0.5.229**) — former 0.75rem end left a thicker
    * gap under the last option than above the first. */
@@ -3466,9 +3467,154 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
 }
 
 .fynns-select-menu .fynns-select-option {
-  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/*
+ * Truncating label + optional Tooltip (≥ **0.5.240**). Flex parents cannot
+ * ellipsize raw text nodes — put copy in `.fynns-overflow-tip-label`. When
+ * truncated, `OverflowTip` wraps with `.fynns-overflow-tip` (Tooltip trigger).
+ *
+ * Base tip must NOT use `width: 0` / `flex: 1 1 0` — that collapses to a
+ * zero box inside block hosts (`.fynns-table-meta`, unit-stack). Flex-row
+ * shrink hosts opt in via the parent-scoped rules below (≥ **0.5.241**).
+ */
+.fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-overflow-tip-label {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+ * Flex-row hosts ONLY: tip is a flex child — `width: 0` + grow so ellipsis
+ * works. Block clip hosts (Select trigger text, NavDrawer label, Command
+ * labels, …) must NOT be listed here — `width: 0` collapses them to empty
+ * shells (≥ **0.5.243** sandbox Select regression).
+ */
+.fynns-search-bar-result > .fynns-overflow-tip,
+.fynns-search-bar-result > .fynns-overflow-tip-label,
+.fynns-select-option > .fynns-overflow-tip,
+.fynns-select-option > .fynns-overflow-tip-label,
+.fynns-menu-item-label > .fynns-overflow-tip,
+.fynns-menu-item-label > .fynns-overflow-tip-label {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/*
+ * Block / single-line clip hosts: tip fills the host (host already has
+ * min-width:0 + overflow). Never `width: 0` here.
+ * Includes Select trigger / NavDrawer / Command / Chat artifact labels that
+ * look like flex *children* but are not flex *containers* (≥ **0.5.243**).
+ */
+.fynns-select-trigger-text > .fynns-overflow-tip,
+.fynns-select-trigger-text > .fynns-overflow-tip-label,
+.fynns-nav-drawer-label > .fynns-overflow-tip,
+.fynns-nav-drawer-label > .fynns-overflow-tip-label,
+.fynns-command-item-label > .fynns-overflow-tip,
+.fynns-command-item-label > .fynns-overflow-tip-label,
+.fynns-command-item-description > .fynns-overflow-tip,
+.fynns-command-item-description > .fynns-overflow-tip-label,
+.fynns-chat-activity-artifact-label > .fynns-overflow-tip,
+.fynns-chat-activity-artifact-label > .fynns-overflow-tip-label,
+.fynns-card-title > .fynns-overflow-tip,
+.fynns-card-title > .fynns-overflow-tip-label,
+.fynns-collapsible-title > .fynns-overflow-tip,
+.fynns-collapsible-title > .fynns-overflow-tip-label,
+.fynns-top-app-bar-title > .fynns-overflow-tip,
+.fynns-top-app-bar-title > .fynns-overflow-tip-label,
+.fynns-code-block-label > .fynns-overflow-tip,
+.fynns-code-block-label > .fynns-overflow-tip-label,
+.fynns-list-item-headline > .fynns-overflow-tip,
+.fynns-list-item-headline > .fynns-overflow-tip-label,
+.fynns-list-item-supporting > .fynns-overflow-tip,
+.fynns-list-item-supporting > .fynns-overflow-tip-label,
+.fynns-list-item-trailing-text > .fynns-overflow-tip,
+.fynns-list-item-trailing-text > .fynns-overflow-tip-label,
+.fynns-list-item-overline > .fynns-overflow-tip,
+.fynns-list-item-overline > .fynns-overflow-tip-label,
+.fynns-control-row__label > .fynns-overflow-tip,
+.fynns-control-row__label > .fynns-overflow-tip-label,
+.fynns-breadcrumb-current > .fynns-overflow-tip,
+.fynns-breadcrumb-current > .fynns-overflow-tip-label,
+.fynns-switch--label-end .fynns-switch-label > .fynns-overflow-tip,
+.fynns-switch--label-end .fynns-switch-label > .fynns-overflow-tip-label,
+.fynns-datepicker-title > .fynns-overflow-tip,
+.fynns-datepicker-title > .fynns-overflow-tip-label,
+.fynns-timeline-item-headline > .fynns-overflow-tip,
+.fynns-timeline-item-headline > .fynns-overflow-tip-label,
+.fynns-timeline-item-supporting > .fynns-overflow-tip,
+.fynns-timeline-item-supporting > .fynns-overflow-tip-label,
+.fynns-timeline-item-trailing-text > .fynns-overflow-tip,
+.fynns-timeline-item-trailing-text > .fynns-overflow-tip-label,
+.fynns-tree-item-label > .fynns-overflow-tip,
+.fynns-tree-item-label > .fynns-overflow-tip-label,
+.fynns-chat-citation-chip-label > .fynns-overflow-tip,
+.fynns-chat-citation-chip-label > .fynns-overflow-tip-label,
+.fynns-chat-citation-card-publisher > .fynns-overflow-tip,
+.fynns-chat-citation-card-publisher > .fynns-overflow-tip-label,
+.fynns-chat-citation-card-title > .fynns-overflow-tip,
+.fynns-chat-citation-card-title > .fynns-overflow-tip-label,
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow > .fynns-overflow-tip,
+.fynns-list-item-headline > .fynns-control-cluster > .fynns-control-cluster__grow > .fynns-overflow-tip-label,
+.fynns-nav-drawer-footer-account-label > .fynns-overflow-tip,
+.fynns-nav-drawer-footer-account-label > .fynns-overflow-tip-label {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Cancel Tooltip's inline-flex on block clip hosts (keep fill width). */
+.fynns-select-trigger-text > .fynns-overflow-tip.fynns-tooltip-trigger,
+.fynns-nav-drawer-label > .fynns-overflow-tip.fynns-tooltip-trigger,
+.fynns-command-item-label > .fynns-overflow-tip.fynns-tooltip-trigger,
+.fynns-command-item-description > .fynns-overflow-tip.fynns-tooltip-trigger,
+.fynns-chat-activity-artifact-label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+}
+
+.fynns-nav-drawer-footer-account-label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: 0 1 auto;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.fynns-nav-drawer-footer-account-label > .fynns-overflow-tip-label,
+.fynns-nav-drawer-footer-account-label
+  > .fynns-overflow-tip
+  > .fynns-overflow-tip-label {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Chat / thinking header labels are flex children — tip must shrink. */
+.fynns-chat-activity-trigger > .fynns-overflow-tip,
+.fynns-chat-thinking-trigger > .fynns-overflow-tip,
+.fynns-chat-thinking-row > .fynns-overflow-tip {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  width: auto;
 }
 
 .fynns-select-menu[data-side="top"] {
@@ -3595,6 +3741,7 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   align-items: center;
   gap: var(--fynns-space-sm);
   width: 100%;
+  min-width: 0;
   min-height: 2.5rem;
   margin: 0;
   padding-block: var(--fynns-space-sm);
@@ -3609,6 +3756,8 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   text-align: start;
   cursor: pointer;
   appearance: none;
+  /* Ellipsis lives on `.fynns-overflow-tip-label` (flex children, not here). */
+  overflow: hidden;
 }
 
 .fynns-search-bar-result:hover:not(:disabled),

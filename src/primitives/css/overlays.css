@@ -6,6 +6,28 @@
 }
 
 /*
+ * Form FieldBlock replacement (≥ **0.5.239**): root + labeled trigger fill the
+ * control column so the portaled menu can match live trigger width.
+ */
+.fynns-field-block .fynns-menu-root,
+.fynns-menu-root--match-trigger {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.fynns-field-block .fynns-menu-root > .fynns-btn:not(.fynns-btn--icon),
+.fynns-menu-root--match-trigger > .fynns-btn:not(.fynns-btn--icon) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
+
+/*
  * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
  * state layers never kiss the outer edge.
  * Portaled to body — use `--fynns-z-modal-flyout` (≥ **0.5.213**) so open
@@ -26,6 +48,30 @@
   background: var(--fynns-color-surface-2);
   box-shadow: var(--fynns-shadow-flyout);
   transform-origin: top center;
+}
+
+/*
+ * FieldBlock / matchTriggerWidth (≥ **0.5.239**): JS sets exact width — drop the
+ * content-fit min/max so the panel cannot grow past a narrow trigger or shrink
+ * under a stretched form field.
+ */
+.fynns-menu.fynns-menu--match-trigger {
+  min-width: 0;
+  max-width: none;
+  overflow-x: clip;
+}
+
+.fynns-menu.fynns-menu--match-trigger .fynns-menu-item {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.fynns-menu.fynns-menu--match-trigger .fynns-menu-item-label {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fynns-menu[data-side="top"] {
@@ -152,11 +198,13 @@
 }
 
 .fynns-menu-item-label {
-  display: inline-flex;
-  flex: 1 1 auto;
+  display: flex;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: var(--fynns-space-sm);
-  min-width: 0;
 }
 
 /* ---------- Tooltip / InfoHint ---------- */
@@ -1139,6 +1187,33 @@
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+}
+
+/* OverflowTip owns the clamp when message is a string (≥ **0.5.241**). */
+.fynns-snackbar__message:has(> .fynns-overflow-tip) {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
+
+.fynns-snackbar__message > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-snackbar__message .fynns-overflow-tip-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .fynns-snackbar__trailing {

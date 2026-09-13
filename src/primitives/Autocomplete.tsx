@@ -11,6 +11,7 @@ import {
 import { ChevronDownIcon } from "./icons";
 import { mergeScrollSurfaceClass } from "../theme/scrollbar";
 import { observeInputEllipsisRefresh } from "./inputEllipsis";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type AutocompleteOption = {
   value: string;
@@ -286,6 +287,8 @@ export function Autocomplete({
                 filtered.map((option, index) => {
                   const selectedRow = option.value === value;
                   const active = index === activeIndex;
+                  const label = optionLabel(option);
+                  const tip = overflowTipText(label, option.value);
                   return (
                     <button
                       key={option.value}
@@ -304,7 +307,11 @@ export function Autocomplete({
                       onMouseEnter={() => setActiveIndex(index)}
                       onClick={() => !option.disabled && pick(option)}
                     >
-                      {optionLabel(option)}
+                      {tip != null ? (
+                        <OverflowTip content={tip}>{label}</OverflowTip>
+                      ) : (
+                        label
+                      )}
                     </button>
                   );
                 })

@@ -41,6 +41,27 @@
   white-space: nowrap;
 }
 
+/* OverflowTip inside the label (≥ **0.5.241**): cancel global flex width:0
+ * so idle content-sized Buttons keep intrinsic width; capped hosts still
+ * ellipsize via `.fynns-btn-label` / tip-label. */
+.fynns-btn-label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fynns-btn-label > .fynns-overflow-tip-label,
+.fynns-btn-label > .fynns-overflow-tip > .fynns-overflow-tip-label {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .fynns-btn-label > svg {
   display: inline-block;
   vertical-align: -0.125em;
@@ -498,7 +519,19 @@
 
 .fynns-splitbtn-main-label {
   display: inline-block;
+  min-width: 0;
+  max-width: 100%;
   line-height: var(--fynns-line-height-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fynns-splitbtn-main-label > .fynns-overflow-tip.fynns-tooltip-trigger {
+  display: block;
+  flex: none;
+  width: 100%;
+  min-width: 0;
 }
 
 .fynns-splitbtn-menu-root.fynns-menu-root {

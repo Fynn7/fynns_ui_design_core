@@ -1601,6 +1601,9 @@ a.fynns-breadcrumb-link:visited {
   font-weight: var(--fynns-font-weight-medium);
   line-height: var(--fynns-line-height-snug);
   color: var(--fynns-color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fynns-list-item-headline {

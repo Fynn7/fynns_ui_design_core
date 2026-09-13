@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
   /** Row caption (short section / field name — preserve caller casing). */
@@ -17,14 +18,24 @@ export type ControlRowProps = HTMLAttributes<HTMLDivElement> & {
  * Card / Dialog rows. Prefer one `.fynns-control-cluster` for the action
  * strip — clusters **default end-pack** (≥ **0.5.158**); start only when the
  * product explicitly opts in (`controlsAlign="start"` / `--start-align`).
+ * String `label` uses `OverflowTip` when clipped (≥ **0.5.241**).
  */
 export function ControlRow({ label, children, className, ...rest }: ControlRowProps) {
+  const labelTip = overflowTipText(label);
   return (
     <div
       className={["fynns-control-row", className ?? ""].filter(Boolean).join(" ")}
       {...rest}
     >
-      <div className="fynns-control-row__label">{label}</div>
+      <div className="fynns-control-row__label">
+        {labelTip != null ? (
+          <OverflowTip content={labelTip} className="fynns-control-row__label-text">
+            {label}
+          </OverflowTip>
+        ) : (
+          label
+        )}
+      </div>
       <div className="fynns-control-row__controls">{children}</div>
     </div>
   );

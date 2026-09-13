@@ -136,6 +136,7 @@ import {
   REVEAL_MORE_LIST_DEFAULT_STEP,
   ToggleGroup,
   Tooltip,
+  OverflowTip,
   TrashIcon,
   UndoIcon,
   UploadIcon,
@@ -2232,6 +2233,31 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Tooltip>
           </div>
         </div>
+        <div
+          id="sandbox-menu-field-match"
+          className="sandbox-globals-row sandbox-globals-row--stack"
+        >
+          <div className="sandbox-select-narrow-host">
+            <FieldBlock label={t("globals.menuFieldMatchLabel")}>
+              <DropdownMenu
+                ariaLabel={t("globals.menuFieldMatchAria")}
+                trigger={t("globals.autocompleteOptTeal")}
+                matchTriggerWidth
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptTeal")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptCyan")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.selectLongOption")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+            </FieldBlock>
+          </div>
+          <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
+        </div>
         <SandboxHelp text={t("globals.menuHelp")} />
         </GlobalsDemo>
         <GlobalsDemo id="context-menu">
@@ -2819,9 +2845,21 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onChange={setSegmentNarrow}
               options={[
                 { value: "all", label: t("globals.segmentedNarrowAll") },
-                { value: "alpha", label: t("globals.segmentedNarrowAlpha") },
-                { value: "beta", label: t("globals.segmentedNarrowBeta") },
-                { value: "gamma", label: t("globals.segmentedNarrowGamma") },
+                {
+                  value: "alpha",
+                  label: t("globals.segmentedNarrowAlpha"),
+                  tip: t("globals.segmentedNarrowAlpha"),
+                },
+                {
+                  value: "beta",
+                  label: t("globals.segmentedNarrowBeta"),
+                  tip: t("globals.segmentedNarrowBeta"),
+                },
+                {
+                  value: "gamma",
+                  label: t("globals.segmentedNarrowGamma"),
+                  tip: t("globals.segmentedNarrowGamma"),
+                },
               ]}
             />
           </div>
@@ -3702,37 +3740,52 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                       <div className="fynns-unit-stack">
                         <ControlStack columns={1}>
                           <ControlRow label={t("globals.activitySlotRegion")}>
-                            <Tooltip content={t("globals.activitySlotRegionTip")}>
+                            <div className="fynns-control-cluster">
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                aria-label={t("globals.activitySlotRegionTip")}
+                                aria-label={t("globals.activitySlotRegionValue")}
                               >
                                 {t("globals.activitySlotRegionValue")}
                               </Button>
-                            </Tooltip>
+                              <InfoHint
+                                size="sm"
+                                content={t("globals.activitySlotRegionTip")}
+                                ariaLabel={t("globals.activitySlotRegionTip")}
+                              />
+                            </div>
                           </ControlRow>
                           <ControlRow label={t("globals.activitySlotMode")}>
-                            <Tooltip content={t("globals.activitySlotModeTip")}>
+                            <div className="fynns-control-cluster">
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                aria-label={t("globals.activitySlotModeTip")}
+                                aria-label={t("globals.activitySlotModeValue")}
                               >
                                 {t("globals.activitySlotModeValue")}
                               </Button>
-                            </Tooltip>
+                              <InfoHint
+                                size="sm"
+                                content={t("globals.activitySlotModeTip")}
+                                ariaLabel={t("globals.activitySlotModeTip")}
+                              />
+                            </div>
                           </ControlRow>
                           <ControlRow label={t("globals.activitySlotStatus")}>
-                            <Tooltip content={t("globals.activitySlotStatusTip")}>
+                            <div className="fynns-control-cluster">
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                aria-label={t("globals.activitySlotStatusTip")}
+                                aria-label={t("globals.activitySlotStatusValue")}
                               >
                                 {t("globals.activitySlotStatusValue")}
                               </Button>
-                            </Tooltip>
+                              <InfoHint
+                                size="sm"
+                                content={t("globals.activitySlotStatusTip")}
+                                ariaLabel={t("globals.activitySlotStatusTip")}
+                              />
+                            </div>
                           </ControlRow>
                         </ControlStack>
                       </div>
@@ -4187,6 +4240,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             />
           </List>
           <SandboxHelp text={t("globals.listRunSummaryHelp")} />
+          <div id="sandbox-list-run-summary-narrow">
           <List
             aria-label={t("globals.listRunSummaryAria")}
             trailingMetaAlign="start"
@@ -4199,7 +4253,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     {t("globals.listRunSummaryOk")}
                   </span>
                   <span className="fynns-control-cluster__grow">
-                    {t("globals.listRunSummaryModel")}
+                    <OverflowTip content={t("globals.listRunSummaryModel")}>
+                      {t("globals.listRunSummaryModel")}
+                    </OverflowTip>
                   </span>
                   <span className="fynns-table-meta">
                     <span>{t("globals.listRunSummaryDuration")}</span>
@@ -4219,7 +4275,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     {t("globals.listRunSummaryFail")}
                   </span>
                   <span className="fynns-control-cluster__grow">
-                    {t("globals.listRunSummaryModelB")}
+                    <OverflowTip content={t("globals.listRunSummaryModelB")}>
+                      {t("globals.listRunSummaryModelB")}
+                    </OverflowTip>
                   </span>
                   <span className="fynns-table-meta">
                     <span>{t("globals.listRunSummaryDurationB")}</span>
@@ -4239,7 +4297,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     {t("globals.listRunSummaryOk")}
                   </span>
                   <span className="fynns-control-cluster__grow">
-                    {t("globals.listRunSummaryModelOverflow")}
+                    <OverflowTip content={t("globals.listRunSummaryModelOverflow")}>
+                      {t("globals.listRunSummaryModelOverflow")}
+                    </OverflowTip>
                   </span>
                   <span className="fynns-table-meta">
                     <BarChartIcon aria-hidden />
@@ -4256,6 +4316,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               onClick={() => setListId("run-overflow")}
             />
           </List>
+          </div>
           <Dialog
             open={listCatalogEditOpen}
             onOpenChange={setListCatalogEditOpen}
@@ -5189,7 +5250,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             >
               <div className="fynns-unit-stack">
                 <FieldHint>{t("globals.cardHintBodyLead")}</FieldHint>
-                <span className="fynns-table-meta">{t("globals.cardHintBodyMeta")}</span>
+                <span className="fynns-table-meta">
+                  <OverflowTip content={t("globals.cardHintBodyMeta")}>
+                    {t("globals.cardHintBodyMeta")}
+                  </OverflowTip>
+                </span>
               </div>
             </Card>
           </div>
@@ -7389,7 +7454,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ariaLabel={t("globals.codeLangDemoAria")}
                 value={codeLangDemo}
                 onChange={setCodeLangDemo}
-                fullWidth
                 options={[
                   { value: "py", label: t("globals.codeLangDemoPy") },
                   { value: "ts", label: t("globals.codeLangDemoTs") },
@@ -8030,14 +8094,18 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     {t("globals.rhythmActionEndMetaReadyTitle")}
                   </span>
                   <span className="fynns-table-meta">
-                    {t("globals.rhythmActionEndMetaReady")}
+                    <OverflowTip content={t("globals.rhythmActionEndMetaReady")}>
+                      {t("globals.rhythmActionEndMetaReady")}
+                    </OverflowTip>
                   </span>
                 </div>
               </ControlRow>
               <ControlRow label={t("globals.rhythmActionEndPending")}>
                 <div className="fynns-control-cluster">
                   <span className="fynns-table-meta">
-                    {t("globals.rhythmActionEndMetaPending")}
+                    <OverflowTip content={t("globals.rhythmActionEndMetaPending")}>
+                      {t("globals.rhythmActionEndMetaPending")}
+                    </OverflowTip>
                   </span>
                   <Button size="sm" variant="tonal">
                     {t("globals.rhythmActionEndConfigure")}

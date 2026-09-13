@@ -88,7 +88,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
     id: "menu",
     categoryId: "actions",
     label: "DropdownMenu",
-    keywords: ["菜单", "dropdown", "menu"],
+    keywords: ["菜单", "dropdown", "menu", "fieldblock", "matchTriggerWidth"],
   },
   {
     id: "context-menu",
