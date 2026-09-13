@@ -1,4 +1,4 @@
-﻿# Breaking purge — public surface = Globals + Layouts + Preview
+# Breaking purge — public surface = Globals + Layouts + Preview
 
 **Authoritative migration guide** for agents and humans after the destructive
 export cleanup. Do not reintroduce purged symbols into `src/index.ts` without a

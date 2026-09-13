@@ -1,4 +1,4 @@
-﻿# Design system（完整 SoT）
+# Design system（完整 SoT）
 
 > 本文由原根目录胖 `AGENTS.md` 迁出。OpenCode **常驻**只加载根目录精简 [`AGENTS.md`](../AGENTS.md)；需要完整 Hard rules / 组件目录时再 Read 本文件。其它仓应 **链接** 本文或 `llm/CONSUME.md`，勿整份复制。
 

@@ -1,4 +1,4 @@
-﻿# Consumer treaty — pasteable `@fynns/ui` contract
+# Consumer treaty — pasteable `@fynns/ui` contract
 
 **Purpose:** give any consumer repo a short, always-on agent rule so it obeys
 `@fynns/ui` even when nobody opens `AGENTS.md` / `CONSUME.md`.
