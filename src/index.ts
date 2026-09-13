@@ -333,11 +333,13 @@ export {
   NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
+  NavigationDrawerNewChat,
 } from "./primitives/NavigationDrawer";
 export type {
   NavigationDrawerGroupProps,
   NavigationDrawerHeadlineProps,
   NavigationDrawerItemProps,
+  NavigationDrawerNewChatProps,
   NavigationDrawerProps,
 } from "./primitives/NavigationDrawer";
 export { Divider } from "./primitives/Divider";

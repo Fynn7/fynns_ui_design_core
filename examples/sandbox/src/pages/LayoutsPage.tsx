@@ -38,6 +38,7 @@ import {
   NavigationDrawerGroup,
   NavigationDrawerHeadline,
   NavigationDrawerItem,
+  NavigationDrawerNewChat,
   PencilIcon,
   PlusIcon,
   RefreshIcon,
@@ -1005,32 +1006,23 @@ export function LayoutsPage() {
                 variant="standard"
                 ariaLabel={t("globals.navDrawerSessionAria")}
               >
-                <div
-                  className="fynns-control-cluster fynns-control-cluster--toolbar-end"
-                  aria-label={t("globals.navDrawerSessionToolsAria")}
-                >
-                  <DropdownMenu
-                    trigger={<MoreHorizontalIcon />}
-                    ariaLabel={t("globals.navDrawerSessionMore")}
-                    align="end"
-                    iconOnly
-                    size="sm"
-                    variant="ghost"
-                  >
-                    <DropdownMenuItem icon={<TrashIcon />} tone="danger">
-                      {t("globals.navDrawerSessionDeleteAll")}
-                    </DropdownMenuItem>
-                  </DropdownMenu>
-                  <Tooltip content={t("globals.navDrawerSessionNew")}>
-                    <IconButton
+                <NavigationDrawerNewChat
+                  label={t("globals.navDrawerSessionNew")}
+                  trailing={
+                    <DropdownMenu
+                      trigger={<MoreHorizontalIcon />}
+                      ariaLabel={t("globals.navDrawerSessionMore")}
+                      align="end"
+                      iconOnly
                       size="sm"
-                      variant="primary"
-                      aria-label={t("globals.navDrawerSessionNew")}
+                      variant="ghost"
                     >
-                      <PlusIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
+                      <DropdownMenuItem icon={<TrashIcon />} tone="danger">
+                        {t("globals.navDrawerSessionDeleteAll")}
+                      </DropdownMenuItem>
+                    </DropdownMenu>
+                  }
+                />
                 <NavigationDrawerItem
                   icon={<FileIcon />}
                   label={t("globals.navDrawerSessionEntry")}

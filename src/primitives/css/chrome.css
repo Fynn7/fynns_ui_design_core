@@ -2244,6 +2244,8 @@
 .fynns-nav-drawer-body > * + .fynns-control-cluster--toolbar-end,
 .fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end) + *,
 .fynns-nav-drawer-body > * + *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > .fynns-nav-drawer-new-chat + *,
+.fynns-nav-drawer-body > * + .fynns-nav-drawer-new-chat,
 .fynns-nav-drawer-body > .fynns-control-row + *,
 .fynns-nav-drawer-body > * + .fynns-control-row,
 .fynns-nav-drawer-body > *:has(> .fynns-control-row) + *,
@@ -2258,6 +2260,7 @@
 .fynns-nav-drawer-body > .fynns-toggle-group,
 .fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end,
 .fynns-nav-drawer-body > *:has(.fynns-control-cluster--toolbar-end),
+.fynns-nav-drawer-body > .fynns-nav-drawer-new-chat,
 .fynns-nav-drawer-body > .fynns-control-row,
 .fynns-nav-drawer-body > *:has(> .fynns-control-row) {
   flex-shrink: 0;
@@ -2312,6 +2315,107 @@
 }
 
 .fynns-nav-drawer-body .fynns-control-cluster--toolbar-end .fynns-btn--icon svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+}
+
+/*
+ * Session / history **New chat** (≥ **0.5.256**): ChatGPT-style full-width
+ * labeled create row. Direct drawer-body child; search-gap peer (not Item
+ * section-gap). Leading Plus + label; optional trailing More (sm). Do **not**
+ * restyle in consumers — use `NavigationDrawerNewChat`. Live:
+ * `#sandbox-navdrawer-session-chrome`.
+ */
+.fynns-nav-drawer-new-chat {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-layout-control-cluster-gap);
+  width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.fynns-nav-drawer-new-chat-trigger {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--fynns-navdrawer-item-gap);
+  min-width: 0;
+  min-height: var(--fynns-navdrawer-item-height);
+  height: var(--fynns-navdrawer-item-height);
+  margin: 0;
+  padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
+  padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
+  border: 1px solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-3xl);
+  background: transparent;
+  color: var(--fynns-color-text);
+  font: inherit;
+  font-weight: var(--fynns-font-weight-medium);
+  text-align: start;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--fynns-duration-fast) var(--fynns-ease-standard),
+    border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
+    color var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-nav-drawer-new-chat-trigger:hover:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-hover),
+    transparent
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--fynns-color-border) 70%,
+    var(--fynns-color-text)
+  );
+}
+
+.fynns-nav-drawer-new-chat-trigger:active:not(:disabled) {
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-pressed),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-new-chat-trigger:focus-visible {
+  outline: none;
+  background: color-mix(
+    in srgb,
+    var(--fynns-color-text) var(--fynns-state-focus),
+    transparent
+  );
+}
+
+.fynns-nav-drawer-new-chat-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fynns-nav-drawer-new-chat-trailing {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.fynns-nav-drawer-new-chat-trailing .fynns-btn--icon {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+}
+
+.fynns-nav-drawer-new-chat-trailing .fynns-btn--icon svg {
   width: var(--fynns-size-icon);
   height: var(--fynns-size-icon);
 }
