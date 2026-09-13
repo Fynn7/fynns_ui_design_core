@@ -27,6 +27,23 @@
   );
 }
 
+/*
+ * Affix chrome owns that edge (password reveal, leading glyph, …) — drop the
+ * text field-pad so disks sit on capsule-chrome like SearchBar / NumberInput
+ * steppers (≥ 0.5.237). Clip hover wash to the shell radius.
+ * !important: beat consumer `.hub-*` / app padding|margin “贴边” overrides
+ * (same anti-misuse hardness as List idle-pad locks).
+ */
+.fynns-field-shell:has(.fynns-field-affix--trailing) {
+  padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline) !important;
+  overflow: hidden;
+}
+
+.fynns-field-shell:has(.fynns-field-affix--leading) {
+  padding-inline-start: var(--fynns-layout-capsule-chrome-pad-inline) !important;
+  overflow: hidden;
+}
+
 .fynns-field-shell--sm {
   min-height: 2rem;
   height: 2rem;
@@ -65,13 +82,16 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  /* Lock: consumer negative margin must not pull disks past capsule-chrome. */
+  margin: 0 !important;
   color: var(--fynns-color-text-muted);
 }
 
 /*
  * In-field affix IconButtons (password reveal, clear, …): shell min-height is
  * 40dp (`--fynns-size-icon-target`); default md 40dp disk fills the row.
- * Always paint sm (32dp) — matches label-row FieldHeader actions.
+ * Always paint sm (32dp) — matches label-row FieldHeader actions / toolbar-end
+ * clamp (≥ 0.5.131 / 0.5.235 pattern).
  */
 .fynns-field-affix .fynns-btn--icon {
   width: var(--fynns-layout-field-header-action-row-min-height);
@@ -79,6 +99,11 @@
   height: var(--fynns-layout-field-header-action-row-min-height);
   min-height: var(--fynns-layout-field-header-action-row-min-height);
   padding: 0;
+}
+
+.fynns-field-affix .fynns-btn--icon svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 .fynns-field-hint {

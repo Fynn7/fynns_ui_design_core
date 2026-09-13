@@ -2356,8 +2356,13 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
         <GlobalsDemo id="input">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <Input placeholder={t("globals.inputPlaceholder")} aria-label={t("globals.inputAria")} />
+          <Input
+            id="sandbox-input-plain"
+            placeholder={t("globals.inputPlaceholder")}
+            aria-label={t("globals.inputAria")}
+          />
             <Input
+              id="sandbox-input-leading-affix"
               variant="filled"
               size="sm"
               leading={<SettingsIcon aria-hidden />}
@@ -2371,6 +2376,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               placeholder={t("globals.inputInvalidPlaceholder")}
               aria-label={t("globals.inputInvalidAria")}
             />
+            <SandboxHelp text={t("globals.inputHelp")} />
           </div>
         </GlobalsDemo>
         <GlobalsDemo id="select">

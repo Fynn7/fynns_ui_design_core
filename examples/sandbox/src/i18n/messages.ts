@@ -573,7 +573,7 @@ const en = {
   "globals.passwordShow": "Show password",
   "globals.passwordHide": "Hide password",
   "globals.passwordHelp":
-    "Compose Input `trailing` with EyeIcon / EyeOffIcon — not a separate primitive.",
+    "Compose Input `trailing` with EyeIcon / EyeOffIcon — not a separate primitive. Affix-owned shell edge (≥ **0.5.237**): `--fynns-layout-capsule-chrome-pad-inline` (**4dp**) only — same flush as SearchBar / NumberInput steppers; do **not** leave the eye on full text `capsule + field-pad` (**16dp**) or invent consumer negative margin / private end pad. Contrast: plain `#input` keeps **16dp** text pad. Failure: CONSUMER_TREATY Input trailing affix far from shell edge.",
   "globals.emptyTitle": "No projects yet",
   "globals.emptyDescription": "Create a project to see it listed here.",
   "globals.emptyAction": "Create project",
@@ -1278,6 +1278,8 @@ const en = {
     "`InfoHint` — informational affordance (M3: Tooltip on a help anchor). Icon-only uses the same 40dp ghost icon target and 16dp glyph as `IconButton md` (`cursor: help` — not an action). Pass `label` for a plain text trigger. Dense rows may use `size=\"sm\"`. **`tone=\"danger\"`** tints the “i” for Fail / error detail beside short `OK`/`Fail` status rows (probe strips — live `#rhythm`). Card / Collapsible `actions`: **≤1** InfoHint with a **short** tip — do not stack twin “i” icons or dump multi-topic essays (body FieldHint instead). The ControlRow + Switch + trailing i sample is InfoHint anatomy only — not a Dialog / Preferences row recipe (see Open Dialog with close).",
   "globals.inputPlaceholder": "Input",
   "globals.inputAria": "Sample input",
+  "globals.inputHelp":
+    "Plain Input keeps text `capsule + field-pad` (**16dp**). When `leading` / `trailing` owns an edge (≥ **0.5.237**), that side drops to `--fynns-layout-capsule-chrome-pad-inline` (**4dp**) — SearchBar / NumberInput stepper flush. Do **not** invent consumer end pad / negative margin. Live contrast: this demo (plain + leading) vs `#password` (trailing eye). Failure: CONSUMER_TREATY Input trailing affix far from shell edge.",
   "globals.selectAria": "Sample select",
   "globals.selectLongOption": "sample-workspace-with-a-long-catalog-name",
   "globals.autocompleteAria": "Sample autocomplete",
@@ -3615,6 +3617,8 @@ const zh: Record<MessageKey, string> = {
     "`InfoHint` — 信息型帮助（M3：Tooltip 锚在帮助触发器上）。无可见名称时与 `IconButton md` 同 40dp 圆形热区 + 16dp 字标（`cursor: help`，非动作按钮）；传 `label` 则为纯文字触发。密排行可用 `size=\"sm\"`。**`tone=\"danger\"`** 将 “i” 染红，用于短 `OK`/`Fail` 状态行旁的 Fail / 错误详情（探测条 — 见 `#rhythm`）。Card / Collapsible `actions`：**最多一个** InfoHint，且 tip **要短** — 禁止并排两个「i」、禁止气泡堆多主题长文（改放正文 FieldHint）。下方 ControlRow + Switch + 尾随 i 只演示 InfoHint 解剖，不是 Dialog / Preferences 行配方（见「打开 Dialog（关闭）」）。",
   "globals.inputPlaceholder": "输入框",
   "globals.inputAria": "示例输入",
+  "globals.inputHelp":
+    "无 affix 的 Input 保持文案 `capsule + field-pad`（**16dp**）。当 `leading` / `trailing` 占用一边（≥ **0.5.237**），该侧收成 `--fynns-layout-capsule-chrome-pad-inline`（**4dp**）— 与 SearchBar / NumberInput 步进器同 flush。**禁止**消费侧自造 end pad / 负 margin。活对照：本样例（plain + leading）与 `#password`（trailing 眼睛）。失败模式：CONSUMER_TREATY Input trailing affix far from shell edge。",
   "globals.selectAria": "示例选择",
   "globals.selectLongOption": "示例工作区-带较长目录名的项目",
   "globals.autocompleteAria": "示例自动完成",

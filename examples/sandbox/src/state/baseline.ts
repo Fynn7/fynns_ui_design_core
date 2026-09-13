@@ -299,9 +299,9 @@ const LAYOUT_KEY_ROLES: Record<EditableLayoutKey, string> = {
   "strip-pad-inline":
     "Long-strip · Banner / InlineAlert / Snackbar / ChatComposer collapsed text + expanded text edge",
   "capsule-chrome-pad-inline":
-    "Capsule chrome · SearchBar / ChatComposer collapsed shell (Send/mic flush, ~4dp)",
+    "Capsule chrome · SearchBar IconButtons + Input affix-owned field-shell edges (~4dp; ≥ 0.5.237)",
   "field-pad-inline":
-    "Form field · Input / field-shell pad step (12dp; CSS adds capsule 4dp for Select parity)",
+    "Form field · Input text-edge pad step (12dp; CSS adds capsule 4dp; affix side drops to capsule only)",
   "field-pad-block":
     "Form field · Textarea vertical pad (12dp — not Input sm zero block)",
   "textarea-max-height":
