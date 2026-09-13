@@ -1,5 +1,14 @@
 /* Domain: actions — extracted from primitives.css */
 /* ---------- Button ---------- */
+/**
+ * Core icon glyphs (`icons.tsx` → `.fynns-icon`): block box so stroke SVGs
+ * never sit on the inline baseline (Menu / Select / Split chevron “歪”).
+ */
+.fynns-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
 .fynns-btn {
   position: relative;
   z-index: 0;
@@ -62,7 +71,8 @@
   white-space: nowrap;
 }
 
-.fynns-btn-label > svg {
+.fynns-btn-label > svg,
+.fynns-btn-label > .fynns-icon {
   display: inline-block;
   vertical-align: -0.125em;
   margin-inline-end: var(--fynns-space-2);

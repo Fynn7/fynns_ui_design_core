@@ -370,8 +370,11 @@
   align-items: center;
 }
 
-.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow) {
-  /* Pin row actions to the 40dp Select shell band (menu portaled ≥ 0.5.208). */
+.fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow),
+.fynns-control-cluster--end-align:has(
+    > .fynns-menu-root.fynns-control-cluster__grow
+  ) {
+  /* Pin row actions to the 40dp Select / Menu field shell band. */
   align-items: flex-start;
 }
 
@@ -387,6 +390,7 @@
 }
 
 .fynns-control-cluster--end-align > .fynns-select.fynns-control-cluster__grow,
+.fynns-control-cluster--end-align > .fynns-menu-root.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-textarea.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-field.fynns-control-cluster__grow,
 .fynns-control-cluster--end-align > .fynns-input.fynns-control-cluster__grow {
@@ -400,10 +404,18 @@
   flex-shrink: 0;
 }
 
-/* sm IconButton (32dp) optical center on the 40dp Select trigger band only. */
+/* sm IconButton (32dp) optical center on the 40dp Select / Menu trigger band. */
 .fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
 .fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
+  > .fynns-btn--sm.fynns-btn--icon,
+.fynns-control-cluster--end-align:has(
+    > .fynns-menu-root.fynns-control-cluster__grow
+  )
+  > :not(.fynns-control-cluster__grow):has(.fynns-btn--sm.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(
+    > .fynns-menu-root.fynns-control-cluster__grow
+  )
   > .fynns-btn--sm.fynns-btn--icon {
   margin-block-start: calc((var(--fynns-size-icon-target) - 2rem) / 2);
 }
@@ -424,12 +436,20 @@
   align-self: center;
 }
 
-/* Select + row action: sibling IconButton stays on the trigger band when the
-   grow item stacks results — not vertically centered in trigger + list.
-   Textarea + row action uses center (below) — autoGrow wells can exceed 40dp. */
+/* Select / Field Menu + row action: sibling IconButton stays on the trigger
+   band when the grow item stacks results — not vertically centered in
+   trigger + list. Textarea + row action uses center (below). */
 .fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
   > .fynns-tooltip-trigger:has(.fynns-btn--icon),
 .fynns-control-cluster--end-align:has(> .fynns-select.fynns-control-cluster__grow)
+  > .fynns-btn--icon,
+.fynns-control-cluster--end-align:has(
+    > .fynns-menu-root.fynns-control-cluster__grow
+  )
+  > .fynns-tooltip-trigger:has(.fynns-btn--icon),
+.fynns-control-cluster--end-align:has(
+    > .fynns-menu-root.fynns-control-cluster__grow
+  )
   > .fynns-btn--icon {
   align-self: flex-start;
 }

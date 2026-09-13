@@ -84,7 +84,13 @@ export function Tooltip({
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipId = useId();
-  const pos = useFloatingBoxPosition(anchorRef.current, floatingEl, open, { side, align, offset: 6 });
+  const pos = useFloatingBoxPosition(anchorRef.current, floatingEl, open, {
+    side,
+    align,
+    offset: 6,
+    /* Wrapper span — measure the child control, not the tip host. */
+    anchorMode: "controlChild",
+  });
   const placementReady = floatingEl != null && floatingEl.offsetWidth > 0;
   const [caretPos, setCaretPos] = useState<number | null>(null);
 

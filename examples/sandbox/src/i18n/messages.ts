@@ -1436,11 +1436,14 @@ const en = {
   "globals.menuRename": "Rename",
   "globals.menuDelete": "Delete",
   "globals.menuHelp":
-    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; long labels ellipsize; Select 0.5.238 parity). **Long catalogs** use capped `fynns-scroll` panel (`max-height: min(70dvh, 20rem)`) with a **visible** flyout overlay rail (≥ **0.5.251**) — `#sandbox-scroll-menu-stack`. Huge lists: filter / window in the consumer. Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
+    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Labeled triggers** auto-append a trailing chevron that rotates open (≥ **0.5.253**; trailing flex slot + block icon ≥ **0.5.254**). **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; left flush with trigger ≥ **0.5.254**; long labels ellipsize; Select 0.5.238 parity). **Long catalogs** use capped `fynns-scroll` panel (`max-height: min(70dvh, 20rem)`) with a **visible** flyout overlay rail (≥ **0.5.251**) — `#sandbox-scroll-menu-stack`. Huge lists: filter / window in the consumer. Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
   "globals.menuFieldMatchLabel": "Sample discrete pick",
   "globals.menuFieldMatchAria": "Sample field menu",
   "globals.menuFieldMatchHelp":
-    "FieldBlock + DropdownMenu (≥ **0.5.239**): portaled menu **width = live trigger** (same as Select ≥ **0.5.238**). Narrow host + long item → ellipsis — do **not** leave a menu wider than the field. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.",
+    "FieldBlock + DropdownMenu (≥ **0.5.239** / ≥ **0.5.253** / ≥ **0.5.254**): portaled menu **width = live trigger** and **left flush**; labeled trigger keeps stadium Button chrome and shows a **trailing chevron** in a flex slot (rotates open; block SVG) so it reads as a menu — do **not** leave plain text with no arrow, leave a menu wider/shifted vs the field, or invent `translateY` chevron nudges. Narrow host + long item → ellipsis. End-align `__grow` Menu + refresh IconButton stays on the trigger band. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger / labeled DropdownMenu missing chevron / DropdownMenu panel left-shifted vs trigger / Menu chevron optically high.",
+  "globals.menuFieldRefreshLabel": "Sample pick with refresh",
+  "globals.menuFieldRefreshAria": "Sample field menu with refresh",
+  "globals.menuFieldRefreshTip": "Refresh sample list",
   "globals.scrollMenuStackLabel": "Sample model",
   "globals.scrollMenuStackAria": "Sample model menu",
   "globals.scrollMenuStackFillerA":
@@ -3819,11 +3822,14 @@ const zh: Record<MessageKey, string> = {
   "globals.menuRename": "重命名",
   "globals.menuDelete": "删除",
   "globals.menuHelp":
-    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；长标签省略；对齐 Select 0.5.238）。**长目录**用定高 `fynns-scroll` 面板（`max-height: min(70dvh, 20rem)`）+ **可见** flyout overlay 轨（≥ **0.5.251**）— `#sandbox-scroll-menu-stack`。超长列表：消费仓自行筛选 / 窗口化。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
+    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**带标签触发器**自动附 trailing chevron，打开时旋转（≥ **0.5.253**；trailing flex 槽 + block 块盒 ≥ **0.5.254**）。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；左缘齐平 ≥ **0.5.254**；长标签省略；对齐 Select 0.5.238）。**长目录**用定高 `fynns-scroll` 面板（`max-height: min(70dvh, 20rem)`）+ **可见** flyout overlay 轨（≥ **0.5.251**）— `#sandbox-scroll-menu-stack`。超长列表：消费仓自行筛选 / 窗口化。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
   "globals.menuFieldMatchLabel": "示例离散选择",
   "globals.menuFieldMatchAria": "示例字段菜单",
   "globals.menuFieldMatchHelp":
-    "FieldBlock + DropdownMenu（≥ **0.5.239**）：门户菜单 **width = live trigger**（同 Select ≥ **0.5.238**）。窄宿主 + 长项 → 省略号 — **禁止**菜单宽于字段。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger。",
+    "FieldBlock + DropdownMenu（≥ **0.5.239** / ≥ **0.5.253** / ≥ **0.5.254**）：门户菜单 **width = live trigger** 且 **左缘齐平**；带标签触发器保持胶囊 Button，并在 flex 槽显示 **trailing chevron**（打开旋转；块盒 SVG），让人一眼看出是菜单 — **禁止**纯文案无箭头、菜单宽于/左偏字段，或自造 `translateY` 光学微调。窄宿主 + 长项 → 省略号。End-align `__grow` Menu + 刷新 IconButton 仍贴在触发器行带。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger / labeled DropdownMenu missing chevron / DropdownMenu panel left-shifted vs trigger / Menu chevron optically high。",
+  "globals.menuFieldRefreshLabel": "示例选择（带刷新）",
+  "globals.menuFieldRefreshAria": "示例字段菜单（带刷新）",
+  "globals.menuFieldRefreshTip": "刷新示例列表",
   "globals.scrollMenuStackLabel": "示例模型",
   "globals.scrollMenuStackAria": "示例模型菜单",
   "globals.scrollMenuStackFillerA":

@@ -542,6 +542,29 @@ belong in a consumer’s own doc.
   Toolbar / `iconOnly` menus stay content-fit. Do **not** invent consumer
   `width` / `min-width` on `.fynns-menu`. Live `#sandbox-menu-field-match`.
   Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.
+- **DON'T** leave a FieldBlock / match-width `DropdownMenu` panel **left-shifted**
+  vs the trigger — floating default is `anchorMode: "element"` (≥ **0.5.254**);
+  `anchorTargetRect` seatbelt measures `button` / `[aria-haspopup]` as **self**,
+  never the inset label child. Do **not** invent consumer `left` / `transform`
+  on `.fynns-menu`. Live `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
+  DropdownMenu panel left-shifted vs trigger.
+- **DON'T** ship a labeled `DropdownMenu` trigger with **no trailing chevron**
+  — users cannot tell it is a menu. Core ≥ **0.5.253** auto-appends
+  `ChevronDownIcon` in a trailing flex slot (Select recipe) and rotates it when
+  open; `iconOnly` stays glyph-only. Do **not** invent consumer chevron markup /
+  CSS. Live `#menu` / `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
+  labeled DropdownMenu missing chevron.
+- **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
+  (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
+  (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
+  **not** invent consumer `transform: translateY` optical nudges. Failure:
+  CONSUMER_TREATY Menu chevron optically high.
+- **DON'T** clip Latin descenders on a labeled `DropdownMenu` trigger
+  (`g` / `y` / `p` look flat) — `.fynns-menu-trigger-label` uses
+  `--fynns-line-height-snug` (≥ **0.5.255**), never `line-height: 1` with
+  `overflow: hidden` + OverflowTip. Do **not** invent consumer padding /
+  line-height on `.fynns-overflow-tip-label`. Live `#sandbox-menu-field-match`.
+  Failure: CONSUMER_TREATY Menu trigger clips descenders.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`
@@ -1227,6 +1250,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
 | Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
 | Long DropdownMenu catalog | Capped `fynns-scroll` panel + flyout overlay rails (≥ **0.5.251**); huge lists filter/window in consumer | `#sandbox-scroll-menu-stack` | Near-viewport dump; invisible menu thumb; consumer Show-more / premature core virtualizer |
+| FieldBlock DropdownMenu trigger | matchTriggerWidth (≥ **0.5.239**) + labeled chevron rotate (≥ **0.5.253**) + panel left flush + icon block / trailing slot (≥ **0.5.254**) + label snug line-height (≥ **0.5.255**) | `#sandbox-menu-field-match` / `#menu` | Menu width ≠ trigger; labeled trigger without chevron; panel left-shifted; chevron optically high; Latin descenders clipped |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |

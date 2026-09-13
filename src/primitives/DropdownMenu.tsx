@@ -15,7 +15,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Button, type ButtonSize, type ButtonVariant } from "./Button";
-import { CheckIcon } from "./icons";
+import { CheckIcon, ChevronDownIcon } from "./icons";
 import { useFloatingBoxPosition, type Align } from "./floatingBox";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
@@ -210,9 +210,11 @@ export type DropdownMenuProps = {
 /**
  * M3 Menu — trigger + portaled surface (groups, separators, checkbox items).
  * Outside-click / Escape dismiss; arrow keys move between items.
- * Form FieldBlock hosts auto-match menu width to the trigger (≥ **0.5.239**).
- * Long catalogs: panel caps height + `fynns-scroll` (visible flyout overlay
- * rails ≥ **0.5.251**). Huge catalogs — filter / window in the consumer.
+ * Labeled triggers auto-append a trailing chevron that rotates open
+ * (≥ **0.5.253**). Form FieldBlock hosts auto-match menu width to the trigger
+ * (≥ **0.5.239**). Long catalogs: panel caps height + `fynns-scroll` (visible
+ * flyout overlay rails ≥ **0.5.251**). Huge catalogs — filter / window in the
+ * consumer.
  * @see https://m3.material.io/components/menus/overview
  */
 export function DropdownMenu({
@@ -251,6 +253,8 @@ export function DropdownMenu({
     side: "bottom",
     align: floatingAlign,
     offset: 6,
+    /* Default is element (≥ 0.5.254); keep explicit for labeled label+chevron. */
+    anchorMode: "element",
   });
   // Keep last box while MenuSurface plays exit (hook clears box when `open` is false).
   const lastPosRef = useRef(pos);
@@ -377,6 +381,8 @@ export function DropdownMenu({
           type="button"
           className={join(
             "fynns-btn",
+            "fynns-menu-trigger-btn",
+            open && "fynns-menu-trigger-btn--open",
             resolvedVariant && `fynns-btn--${resolvedVariant}`,
             size === "sm" && "fynns-btn--sm",
             size === "lg" && "fynns-btn--lg",
@@ -390,7 +396,10 @@ export function DropdownMenu({
           onClick={() => setOpen(!open)}
           onKeyDown={onTriggerKeyDown}
         >
-          {triggerBody}
+          <span className="fynns-menu-trigger-label">{triggerBody}</span>
+          <span className="fynns-menu-trigger-trailing" aria-hidden="true">
+            <ChevronDownIcon className="fynns-menu-trigger-chevron" />
+          </span>
         </button>
       )}
       <MenuSurface

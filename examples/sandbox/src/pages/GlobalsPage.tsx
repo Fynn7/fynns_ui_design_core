@@ -2265,6 +2265,35 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </DropdownMenu>
             </FieldBlock>
           </div>
+          <FieldBlock label={t("globals.menuFieldRefreshLabel")}>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <DropdownMenu
+                className="fynns-control-cluster__grow"
+                ariaLabel={t("globals.menuFieldRefreshAria")}
+                trigger={t("globals.autocompleteOptCyan")}
+                matchTriggerWidth
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptTeal")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptCyan")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.selectLongOption")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+              <Tooltip content={t("globals.menuFieldRefreshTip")}>
+                <IconButton
+                  aria-label={t("globals.menuFieldRefreshTip")}
+                  size="sm"
+                  variant="ghost"
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </FieldBlock>
           <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
         </div>
         <div id="sandbox-scroll-menu-stack">

@@ -94,6 +94,7 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "menu",
       "fieldblock",
       "matchTriggerWidth",
+      "chevron",
       "sandbox-scroll-menu-stack",
       "scroll-overlay",
       "flyout scroll",

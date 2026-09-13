@@ -49,6 +49,18 @@ export function estimatedFloatSize(vw: number): FloatingSize {
 
 /** Prefer the visible child control over the inline trigger wrapper when measuring. */
 export function anchorTargetRect(anchorEl: HTMLElement): DOMRect {
+  /*
+   * Seatbelt (≥ **0.5.254**): if the anchor is already the interactive control
+   * (labeled Menu button = label + chevron siblings), measure **itself** —
+   * never the first child (text span inset by padding → panel looks 歪).
+   */
+  if (
+    anchorEl.matches(
+      "button, [role='button'], [aria-haspopup], summary, a[href]",
+    )
+  ) {
+    return anchorEl.getBoundingClientRect();
+  }
   const child = anchorEl.firstElementChild;
   if (child instanceof HTMLElement) {
     const childRect = child.getBoundingClientRect();
@@ -443,8 +455,9 @@ export function useFloatingBoxPosition(
   open: boolean,
   opts: FloatingBoxOpts & {
     /**
-     * `controlChild` (default) — prefer the visible child control (Tooltip /
-     * Menu triggers). `element` — measure `anchorEl` itself (FabMenu toggle).
+     * `element` (default ≥ **0.5.254**) — measure `anchorEl` itself (Menu /
+     * Select / Fab). `controlChild` — prefer the visible child control inside
+     * a wrapper (Tooltip / OverflowTip trigger span).
      */
     anchorMode?: "controlChild" | "element";
     /**
@@ -460,7 +473,7 @@ export function useFloatingBoxPosition(
     align = "center",
     offset = 6,
     sides,
-    anchorMode = "controlChild",
+    anchorMode = "element",
     estimateWhenUnmeasured = true,
   } = opts;
   const sidesKey = sides?.join(",") ?? "";

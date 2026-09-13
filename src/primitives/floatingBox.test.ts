@@ -5,6 +5,7 @@ import {
   resolveAnchoredPosition,
   resolveFloatingBox,
   viewportFloatMaxWidth,
+  anchorTargetRect,
   type Align,
   type Side,
 } from "./floatingBox";
@@ -161,6 +162,20 @@ describe("resolveAnchoredPosition", () => {
     expect(box.left).toBeLessThan(anchor.right - size.width / 2);
   });
 
+  it("returns top-left box coords for bottom+start flush with the anchor left", () => {
+    const anchor = new DOMRect(120, 80, 200, 40);
+    const size = { width: 200, height: 160 };
+    const box = resolveFloatingBox(anchor, size, {
+      side: "bottom",
+      align: "start",
+      offset: 6,
+    });
+    assertFloatingBoxInViewport(box, size);
+    expect(box.side).toBe("bottom");
+    expect(Math.abs(box.left - anchor.left)).toBeLessThanOrEqual(1);
+    expect(box.top).toBeGreaterThanOrEqual(anchor.bottom + 6 - 1);
+  });
+
   it("returns a viewport maxWidth and clamps placement when the tip is wider than the window", () => {
     const anchor = new DOMRect(VW - 40, 120, 28, 28);
     const size = { width: VW + 80, height: 52 };
@@ -217,5 +232,47 @@ describe("resolveAnchoredPosition", () => {
       sides: ["top", "bottom"],
     });
     expect(box.side).toBe("top");
+  });
+});
+
+describe("anchorTargetRect seatbelt", () => {
+  it("measures a button with label+chevron siblings as the button itself", () => {
+    const btn = document.createElement("button");
+    btn.setAttribute("aria-haspopup", "menu");
+    const label = document.createElement("span");
+    label.textContent = "Model";
+    const chev = document.createElement("span");
+    btn.append(label, chev);
+    document.body.append(btn);
+    try {
+      btn.getBoundingClientRect = () => new DOMRect(40, 80, 200, 40);
+      label.getBoundingClientRect = () => new DOMRect(56, 92, 120, 16);
+      const r = anchorTargetRect(btn);
+      expect(r.left).toBe(40);
+      expect(r.width).toBe(200);
+      // Must not fall through to firstElementChild (inset label).
+      expect(r.left).not.toBe(56);
+      expect(r.width).not.toBe(120);
+    } finally {
+      btn.remove();
+    }
+  });
+
+  it("still prefers firstElementChild for a non-control wrapper", () => {
+    const wrap = document.createElement("span");
+    wrap.style.cssText = "position:fixed;left:10px;top:10px;display:inline-block";
+    const child = document.createElement("button");
+    child.style.cssText =
+      "position:relative;left:20px;top:0;width:48px;height:32px;display:block";
+    wrap.append(child);
+    document.body.append(wrap);
+    try {
+      const r = anchorTargetRect(wrap);
+      const cr = child.getBoundingClientRect();
+      expect(Math.abs(r.left - cr.left)).toBeLessThan(1);
+      expect(Math.abs(r.width - cr.width)).toBeLessThan(1);
+    } finally {
+      wrap.remove();
+    }
   });
 });

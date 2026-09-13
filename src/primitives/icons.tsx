@@ -9,7 +9,7 @@ export type IconProps = Omit<SVGProps<SVGSVGElement>, "ref"> & { size?: number }
 /** Default glyph size in CSS pixels — matches `--fynns-size-icon` (16dp). */
 export const ICON_SIZE = 16;
 
-function svgProps({ size = ICON_SIZE, ...rest }: IconProps) {
+function svgProps({ size = ICON_SIZE, className, ...rest }: IconProps) {
   return {
     width: size,
     height: size,
@@ -21,6 +21,7 @@ function svgProps({ size = ICON_SIZE, ...rest }: IconProps) {
     strokeLinejoin: "round" as const,
     "aria-hidden": true,
     ...rest,
+    className: ["fynns-icon", className].filter(Boolean).join(" "),
   };
 }
 
