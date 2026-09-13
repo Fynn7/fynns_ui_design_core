@@ -77,6 +77,33 @@ if (!/leadingIcon/.test(tsx)) {
   fail("DropdownMenu must accept leadingIcon prop (≥ 0.5.258).");
 }
 
+const leading = css.match(/\.fynns-menu-trigger-leading\s*\{[^}]+\}/s);
+if (!leading) {
+  fail("missing .fynns-menu-trigger-leading rule in overlays.css.");
+}
+if (!/display:\s*inline-flex/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must be inline-flex.");
+}
+if (!/align-items:\s*center/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must align-items: center.");
+}
+if (!/width:\s*var\(--fynns-size-icon\)/i.test(leading[0])) {
+  fail(".fynns-menu-trigger-leading must size to --fynns-size-icon (16dp).");
+}
+
+/* iconOnly path must not render the labeled leading/trailing chrome. */
+const iconOnlyBranch = tsx.match(
+  /iconOnly\s*\?\s*\([\s\S]*?\)\s*:\s*\([\s\S]*?fynns-menu-trigger-label[\s\S]*?\)/,
+);
+if (!iconOnlyBranch) {
+  fail(
+    "DropdownMenu must keep labeled trigger (with leading/label) on the non-iconOnly branch only.",
+  );
+}
+if (/fynns-menu-trigger-leading/.test(iconOnlyBranch[0].split(") : (")[0] ?? "")) {
+  fail("iconOnly branch must not render .fynns-menu-trigger-leading.");
+}
+
 const chromePath = path.join(root, "src/primitives/css/chrome.css");
 const chrome = fs.readFileSync(chromePath, "utf8");
 if (
@@ -90,5 +117,5 @@ if (
 }
 
 console.log(
-  "check:menu-trigger-chevron: ok (fynns-icon + trailing slot + leading flex label + ChevronDown + snug LH)",
+  "check:menu-trigger-chevron: ok (fynns-icon + trailing/leading slots + flex label + ChevronDown + snug LH)",
 );
