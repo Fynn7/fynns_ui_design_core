@@ -47,6 +47,7 @@ export {
   LayoutGridIcon,
   ListChecksIcon,
   MenuIcon,
+  MessageSquareIcon,
   MicIcon,
   MoonIcon,
   MoreHorizontalIcon,
