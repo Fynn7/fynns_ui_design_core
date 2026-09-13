@@ -28,8 +28,9 @@ alwaysApply: true
    与/或 `npm run consume:check -- --target <消费仓根>`。`consume:install` 会接线
    **`fynns-ui:gate`**（`--update` + `check-ui-exports` 硬门禁）到
    `predev`/`prebuild`/`postinstall`，避免旧 sibling 缺导出导致 Vite 能起、
-   浏览器白屏。脏 sibling → 硬失败；本机改 core 时用
-   `FYNNS_UI_SKIP_SIBLING_SYNC=1`。可选地板：`"fynnsUi": { "minVersion": "…" }`
+   浏览器白屏。脏 sibling / ahead tip → **软跳过同步**并双语提示（dev 可继续；
+   缺导出仍硬失败）。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。可选地板：
+   `"fynnsUi": { "minVersion": "…" }`
    （不能替代导出门禁）。E401 → 你还在走可选的 GitHub Packages 路径或残留
    auth `.npmrc` — 切回 sibling（Packages npm **即使 public 也要 token**，所以
    日常不用它）。见 `llm/CONSUME.md`。
