@@ -2335,6 +2335,8 @@
   width: 100%;
   min-width: 0;
   flex-shrink: 0;
+  /* Same sm disk as Item trailing / --toolbar-end (≥ 0.5.235). */
+  --fynns-navdrawer-end-action-disk: 2rem;
 }
 
 .fynns-nav-drawer-new-chat-trigger {
@@ -2408,10 +2410,10 @@
 }
 
 .fynns-nav-drawer-new-chat-trailing .fynns-btn--icon {
-  width: 2rem;
-  height: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
+  width: var(--fynns-navdrawer-end-action-disk);
+  height: var(--fynns-navdrawer-end-action-disk);
+  min-width: var(--fynns-navdrawer-end-action-disk);
+  min-height: var(--fynns-navdrawer-end-action-disk);
   padding: 0;
 }
 

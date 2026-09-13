@@ -579,30 +579,27 @@ export const NavigationDrawerNewChat = forwardRef(
     ref: ForwardedRef<HTMLButtonElement>,
   ) {
     const labelId = useId();
-    const resolvedAria = ariaLabel ?? label;
+    const busyLabel = ariaLabel ?? label;
     const trigger = (
       <button
         {...rest}
         ref={ref}
         type={type}
-        className={[
-          "fynns-nav-drawer-new-chat-trigger",
-          loading ? "fynns-nav-drawer-new-chat-trigger--loading" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
+        className="fynns-nav-drawer-new-chat-trigger"
         disabled={disabled || loading}
         aria-busy={loading || undefined}
-        aria-label={resolvedAria}
+        aria-label={ariaLabel}
         aria-labelledby={ariaLabel == null ? labelId : undefined}
       >
-        <span className="fynns-nav-drawer-icon" aria-hidden>
-          {loading ? (
-            <Spinner size="sm" label={resolvedAria} />
-          ) : (
+        {loading ? (
+          <span className="fynns-nav-drawer-icon">
+            <Spinner size="sm" label={busyLabel} />
+          </span>
+        ) : (
+          <span className="fynns-nav-drawer-icon" aria-hidden>
             <PlusIcon />
-          )}
-        </span>
+          </span>
+        )}
         <span className="fynns-nav-drawer-label" id={labelId}>
           <OverflowTip content={label}>{label}</OverflowTip>
         </span>
