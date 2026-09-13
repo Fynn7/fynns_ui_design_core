@@ -1,0 +1,56 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "output": {
+    "filePath": "repomix-agent-slim-advice.md",
+    "style": "markdown",
+    "compress": true,
+    "removeEmptyLines": true,
+    "removeComments": true,
+    "topFilesLength": 25,
+    "includeFullDirectoryStructure": true,
+    "instructionFilePath": "repomix.agent-slim-advice.instruction.md",
+    "headerText": "Agent-token slim-down advice pack for fynns_ui_design_core. Structure + agent surface docs; code compressed; bulky CSS/sandbox/tests omitted on purpose."
+  },
+  "include": [
+    "AGENTS.md",
+    "README.md",
+    "CLAUDE.md",
+    "package.json",
+    "docs/**/*.md",
+    "llm/**/*.md",
+    "llm/**/*.mdc",
+    "llm/**/*.json",
+    "openwiki/**/*.md",
+    ".cursor/rules/**/*.mdc",
+    ".cursor/skills/**/*.md",
+    ".cursor/commands/**/*.md",
+    "src/index.ts",
+    "repomix.*.config.json",
+    "llm/LOCAL_LLM.md"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "node_modules/**",
+      "dist/**",
+      "examples/**",
+      "e2e/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.css",
+      "src/theme/tokens.ts",
+      "src/primitives/**",
+      "src/layout/**",
+      "src/scheduling/**",
+      "package-lock.json",
+      ".tmp*/**",
+      ".tmp*",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.webp",
+      "repomix-*.md",
+      "repomix-output.*"
+    ]
+  }
+}

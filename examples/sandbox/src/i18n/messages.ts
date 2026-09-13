@@ -1529,10 +1529,10 @@ const en = {
   "globals.navDrawerSessionToolsAria": "Sample session sidebar tools",
   "globals.navDrawerSessionMore": "More session actions",
   "globals.navDrawerSessionDeleteAll": "Delete all sessions",
-  "globals.navDrawerSessionNew": "New session",
+  "globals.navDrawerSessionNew": "New chat",
   "globals.navDrawerSessionEntry": "Sample session",
   "globals.navDrawerSessionToolbarHelp":
-    "Session chrome: keep primary New visible; put Delete all in toolbar More (danger) — never Trash+Plus twin (ChatGPT New-chat).",
+    "Session chrome (≥ 0.5.256): NavigationDrawerNewChat = full-width labeled New chat (ChatGPT). Optional trailing More for Delete all (danger). Never Trash+Plus twin; never icon-only --toolbar-end for history.",
   "globals.navDrawerModeHideBuiltin": "Hide built-in",
   "globals.navDrawerModeHideBuiltinAria": "Hide built-in catalog entries",
   "globals.navDrawerModeHideBuiltinHint":
@@ -3915,10 +3915,10 @@ const zh: Record<MessageKey, string> = {
   "globals.navDrawerSessionToolsAria": "示例会话侧栏工具",
   "globals.navDrawerSessionMore": "更多会话操作",
   "globals.navDrawerSessionDeleteAll": "删除全部会话",
-  "globals.navDrawerSessionNew": "新建会话",
+  "globals.navDrawerSessionNew": "新会话",
   "globals.navDrawerSessionEntry": "示例会话",
   "globals.navDrawerSessionToolbarHelp":
-    "会话顶栏：只常显新建；全部删除进 More（danger）——禁止 Trash+Plus 双盘（对齐 ChatGPT New-chat）。",
+    "会话顶栏（≥ 0.5.256）：NavigationDrawerNewChat = ChatGPT 式满宽带文案新建。可选 trailing More 放全部删除（danger）。禁止 Trash+Plus 双盘；历史侧栏勿用仅图标的 --toolbar-end。",
   "globals.navDrawerModeHideBuiltin": "隐藏内置",
   "globals.navDrawerModeHideBuiltinAria": "隐藏内置目录条目",
   "globals.navDrawerModeHideBuiltinHint":

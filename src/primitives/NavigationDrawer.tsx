@@ -13,7 +13,8 @@ import {
 } from "react";
 import { trailingIsRowAction } from "./catalogRowGeometry";
 import { DialogFrame, type DrawerSide } from "./DialogFrame";
-import { ChevronRightIcon, ICON_SIZE } from "./icons";
+import { ChevronRightIcon, ICON_SIZE, PlusIcon } from "./icons";
+import { Spinner } from "./Loading";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { syncScrollEdgeFade } from "./scrollEdgeFade";
 
@@ -88,13 +89,17 @@ export type NavigationDrawerProps = {
    * Destinations as **direct** body children: `NavigationDrawerItem`,
    * `NavigationDrawerHeadline`, `NavigationDrawerGroup`, `Divider`, etc.
    * Item ↔ Item uses `--fynns-navdrawer-section-gap` (4dp). SearchBar /
-   * tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` host as a body
-   * sibling uses `--fynns-navdrawer-search-gap` (aliases layout
+   * tools / SyncSideFilter `ToggleGroup` / `--toolbar-end` host /
+   * `NavigationDrawerNewChat` as a body sibling uses
+   * `--fynns-navdrawer-search-gap` (aliases layout
    * `control-stack-gap` — 8dp; chrome band peers + chrome↔destinations;
    * wider than Item↔Item, not a 16dp kind-jump). Bare
-   * `.fynns-control-cluster--toolbar-end` / `.fynns-control-row` as **direct**
-   * children are covered (≥ **0.5.222**) — not only `:has()` wrappers.
+   * `.fynns-control-cluster--toolbar-end` / `.fynns-control-row` /
+   * `.fynns-nav-drawer-new-chat` as **direct** children are covered
+   * (≥ **0.5.222** / **0.5.256**) — not only `:has()` wrappers.
    * Do **not** wrap destinations in `.fynns-unit-stack`.
+   * Session / history create → `NavigationDrawerNewChat` (not icon-only
+   * `--toolbar-end`). Mode catalog tools still use `--toolbar-end`.
    */
   children?: ReactNode;
   /**
@@ -531,3 +536,87 @@ export const NavigationDrawerItem = forwardRef(function NavigationDrawerItem(
     </div>
   );
 });
+
+export type NavigationDrawerNewChatProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "children"
+> & {
+  /**
+   * Visible label (localized). Prefer short copy like `New chat` /
+   * `新会话` — ChatGPT sidebar grammar.
+   */
+  label: string;
+  /** Shows a spinner and disables the control. */
+  loading?: boolean;
+  /**
+   * Optional trailing chrome on the same row (typically `DropdownMenu`
+   * `iconOnly` `sm` More for delete-all). Keep delete out of a Trash+New
+   * twin — put bulk delete in More `tone="danger"` (≥ **0.5.246** / **0.5.256**).
+   */
+  trailing?: ReactNode;
+};
+
+/**
+ * ChatGPT-style **full-width labeled New chat** for session / history
+ * drawers. Direct `NavigationDrawer` body child (search-gap peer to Items).
+ * Leading Plus + label; optional `trailing` More. Do **not** replace with
+ * `--toolbar-end` icon-only Plus for chat history chrome (≥ **0.5.256**).
+ * Mode **catalog** sidebars (sort/refresh/bulk) still use `--toolbar-end`.
+ * Live: `#sandbox-navdrawer-session-chrome`.
+ */
+export const NavigationDrawerNewChat = forwardRef(
+  function NavigationDrawerNewChat(
+    {
+      label,
+      loading = false,
+      trailing,
+      className,
+      type = "button",
+      disabled,
+      "aria-label": ariaLabel,
+      ...rest
+    }: NavigationDrawerNewChatProps,
+    ref: ForwardedRef<HTMLButtonElement>,
+  ) {
+    const labelId = useId();
+    const busyLabel = ariaLabel ?? label;
+    const trigger = (
+      <button
+        {...rest}
+        ref={ref}
+        type={type}
+        className="fynns-nav-drawer-new-chat-trigger"
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel == null ? labelId : undefined}
+      >
+        {loading ? (
+          <span className="fynns-nav-drawer-icon">
+            <Spinner size="sm" label={busyLabel} />
+          </span>
+        ) : (
+          <span className="fynns-nav-drawer-icon" aria-hidden>
+            <PlusIcon />
+          </span>
+        )}
+        <span className="fynns-nav-drawer-label" id={labelId}>
+          <OverflowTip content={label}>{label}</OverflowTip>
+        </span>
+      </button>
+    );
+
+    return (
+      <div
+        className={["fynns-nav-drawer-new-chat", className ?? ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {trigger}
+        {trailing != null ? (
+          <span className="fynns-nav-drawer-new-chat-trailing">{trailing}</span>
+        ) : null}
+      </div>
+    );
+  },
+);

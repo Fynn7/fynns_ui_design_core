@@ -24,11 +24,16 @@
 | [`repomix.local-llm.config.json`](../repomix.local-llm.config.json) | **默认本地包**：短 AGENTS + layout + scheduling（无 tokens / llm / 全 primitives） | 宜 ≤ ~8k tokens |
 | [`repomix.scheduling.config.json`](../repomix.scheduling.config.json) | 只打 scheduling | 更小 |
 | [`repomix.primitives-compress.config.json`](../repomix.primitives-compress.config.json) | 全量 primitives 签名（compress） | **仍约 8 万 tokens** — 勿粘进 32k 本地会话；仅云端大 ctx 或按 `--include` 再裁 |
+| [`repomix.agent-slim-advice-lite.config.json`](../repomix.agent-slim-advice-lite.config.json) | **浏览器 LLM 瘦身咨询（推荐）**：Agent 面 + 全目录树，故意省略 DESIGN_SYSTEM / BREAKING_PURGE / sandbox | ~38k tokens |
+| [`repomix.agent-slim-advice.config.json`](../repomix.agent-slim-advice.config.json) | 同上但含 DESIGN_SYSTEM + 长 llm 文 | ~107k tokens — 仅超大 ctx |
 
 ```powershell
 cd D:\fynns_local_ws\fynns_ui_design_core
 npx --yes repomix -c repomix.local-llm.config.json
 npx --yes repomix -c repomix.scheduling.config.json
+# 浏览器 LLM「如何瘦身省 Agent token」：
+# npx --yes repomix -c repomix.agent-slim-advice-lite.config.json
+# npx --yes repomix --token-count-tree 500 --no-files -o repomix-token-hotspots.md --style markdown --include "AGENTS.md,README.md,docs/**,llm/**,openwiki/**,.cursor/**,src/**,examples/sandbox/src/**,scripts/**,package.json"
 # 按任务裁 primitives 示例（把需要的组件名写进 --include）:
 # npx --yes repomix -c repomix.primitives-compress.config.json --include "AGENTS.md,src/primitives/Button.tsx,src/primitives/List.tsx"
 ```

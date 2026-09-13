@@ -28,8 +28,9 @@ alwaysApply: true
    与/或 `npm run consume:check -- --target <消费仓根>`。`consume:install` 会接线
    **`fynns-ui:gate`**（`--update` + `check-ui-exports` 硬门禁）到
    `predev`/`prebuild`/`postinstall`，避免旧 sibling 缺导出导致 Vite 能起、
-   浏览器白屏。脏 sibling → 硬失败；本机改 core 时用
-   `FYNNS_UI_SKIP_SIBLING_SYNC=1`。可选地板：`"fynnsUi": { "minVersion": "…" }`
+   浏览器白屏。脏 sibling / ahead tip → **软跳过同步**并双语提示（dev 可继续；
+   缺导出仍硬失败）。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。可选地板：
+   `"fynnsUi": { "minVersion": "…" }`
    （不能替代导出门禁）。E401 → 你还在走可选的 GitHub Packages 路径或残留
    auth `.npmrc` — 切回 sibling（Packages npm **即使 public 也要 token**，所以
    日常不用它）。见 `llm/CONSUME.md`。
@@ -149,11 +150,12 @@ alwaysApply: true
    `tone="danger"`）；破坏性 / 次要操作进菜单，勿把垃圾桶当唯一 hover 动作
    （信息冗余）。可在 More 旁放 1–2 个高频快捷（Rename / Pin）。勿写消费仓
    私有渐显 CSS。对照 `#layouts-demo-navigation-drawer`。
-7b3. **mode drawer toolbar trash+new twin** — 会话 / 历史 `--toolbar-end` **只
-   常显** primary **新建** Plus；**禁止** ghost Trash「全部删除」与 Plus 并排
-   （ChatGPT New-chat）。全删 → 顶栏 `MoreHorizontalIcon` 菜单
-   `tone="danger"`（或省略入口）。目录 sort/refresh/bulk-select 仍可与 New
-   共存。对照 `#layouts-demo-navigation-drawer` session chrome。
+7b3. **mode drawer toolbar trash+new twin** — 会话 / 历史用
+   **`NavigationDrawerNewChat`**（满宽带文案 New chat，≥ **0.5.256**）；可选
+   `trailing` More 放全部删除 `tone="danger"`。**禁止** ghost Trash 与 Plus
+   并排；**禁止**历史侧栏再用 icon-only `--toolbar-end` 冒充 ChatGPT。目录
+   sort/refresh/bulk-select 仍用 `--toolbar-end` + Plus。对照
+   `#sandbox-navdrawer-session-chrome` / `#layouts-demo-navigation-drawer`。
 7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
    keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
