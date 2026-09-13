@@ -27,6 +27,15 @@ const ENTRY_FROM_PKG = "node_modules/@fynn7/ui-design-core/src/index.ts";
 const UPDATE_SCRIPT = "fynns-ui:check-update";
 const UPDATE_SCRIPT_CMD =
   "node node_modules/@fynn7/ui-design-core/scripts/check-ui-update.mjs || exit 0";
+const SYNC_SCRIPT = "fynns-ui:sync";
+const SYNC_SCRIPT_CMD =
+  "node node_modules/@fynn7/ui-design-core/scripts/ensure-sibling-ui-core.mjs --target . --update";
+const EXPORTS_SCRIPT = "fynns-ui:check-exports";
+const EXPORTS_SCRIPT_CMD =
+  "node node_modules/@fynn7/ui-design-core/scripts/check-ui-exports.mjs --target .";
+/** Hard predev/prebuild gate: sync sibling then verify @fynns/ui imports. */
+const GATE_SCRIPT = "fynns-ui:gate";
+const GATE_SCRIPT_CMD = `npm run ${SYNC_SCRIPT} && npm run ${EXPORTS_SCRIPT}`;
 const UPDATE_CACHE_FILE = ".fynns-ui-update-check.json";
 
 const SAFE_NPMRC =
@@ -512,12 +521,19 @@ function ensureDependency(pkgRoot, version, dryRun, log) {
   return true;
 }
 
-function prependLifecycleHook(existing, hookCmd) {
+function prependLifecycleHook(existing, hookCmd, alreadyMarkers) {
   if (!existing) return hookCmd;
-  if (existing.includes(UPDATE_SCRIPT) || existing.includes("check-ui-update.mjs")) return existing;
+  for (const marker of alreadyMarkers) {
+    if (existing.includes(marker)) return existing;
+  }
   return `${hookCmd} && ${existing}`;
 }
 
+/**
+ * Wire hard sibling sync + export gate on predev/prebuild/prepreview, plus soft
+ * registry notice (check-update) where useful. postinstall runs gate only
+ * (sync+exports) so install fails closed on missing barrel symbols.
+ */
 function wireUpdateHooks(pkgRoot, dryRun, log) {
   const pkgPath = path.join(pkgRoot, "package.json");
   const pkg = readConsumerPkg(pkgRoot);
@@ -527,16 +543,41 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   }
 
   const scripts = { ...(pkg.data.scripts || {}) };
-  const hookCmd = `npm run ${UPDATE_SCRIPT}`;
+  const gateCmd = `npm run ${GATE_SCRIPT}`;
+  const softCmd = `npm run ${UPDATE_SCRIPT}`;
   let changed = false;
 
-  if (scripts[UPDATE_SCRIPT] !== UPDATE_SCRIPT_CMD) {
-    scripts[UPDATE_SCRIPT] = UPDATE_SCRIPT_CMD;
-    changed = true;
+  const desired = {
+    [SYNC_SCRIPT]: SYNC_SCRIPT_CMD,
+    [EXPORTS_SCRIPT]: EXPORTS_SCRIPT_CMD,
+    [GATE_SCRIPT]: GATE_SCRIPT_CMD,
+    [UPDATE_SCRIPT]: UPDATE_SCRIPT_CMD,
+  };
+  for (const [name, cmd] of Object.entries(desired)) {
+    if (scripts[name] !== cmd) {
+      scripts[name] = cmd;
+      changed = true;
+    }
   }
 
-  for (const hook of ["predev", "prebuild", "prepreview", "postinstall"]) {
-    const next = prependLifecycleHook(scripts[hook], hookCmd);
+  const hardMarkers = [GATE_SCRIPT, SYNC_SCRIPT, "ensure-sibling-ui-core.mjs", "check-ui-exports.mjs"];
+  const softMarkers = [UPDATE_SCRIPT, "check-ui-update.mjs"];
+
+  for (const hook of ["predev", "prebuild", "prepreview"]) {
+    let next = scripts[hook];
+    // Soft notice after hard gate (never masks export failures).
+    next = prependLifecycleHook(next, softCmd, softMarkers);
+    next = prependLifecycleHook(next, gateCmd, hardMarkers);
+    if (next !== scripts[hook]) {
+      scripts[hook] = next;
+      changed = true;
+    }
+  }
+
+  {
+    const hook = "postinstall";
+    let next = scripts[hook];
+    next = prependLifecycleHook(next, gateCmd, hardMarkers);
     if (next !== scripts[hook]) {
       scripts[hook] = next;
       changed = true;
@@ -555,7 +596,7 @@ function wireUpdateHooks(pkgRoot, dryRun, log) {
   log.push({
     step: "update_hooks",
     status: dryRun ? "dry-run" : "patched",
-    detail: `${UPDATE_SCRIPT} + predev/prebuild/prepreview/postinstall`,
+    detail: `${GATE_SCRIPT} (sync+exports) + soft ${UPDATE_SCRIPT} on predev/prebuild/prepreview`,
   });
 }
 
@@ -621,9 +662,14 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
     ? { ...(pkg.data.dependencies || {}), ...(pkg.data.devDependencies || {}) }
     : {};
   if (!deps[PKG_NAME]) issues.push(`missing dependency ${PKG_NAME}`);
+  if (!pkg?.data.scripts?.[GATE_SCRIPT] && !pkg?.data.scripts?.[EXPORTS_SCRIPT]) {
+    issues.push(
+      `missing scripts.${GATE_SCRIPT} / ${EXPORTS_SCRIPT} — re-run consume:install (or --wire-only) to wire sibling sync + export gate`,
+    );
+  }
   if (!pkg?.data.scripts?.[UPDATE_SCRIPT]) {
     issues.push(
-      `missing scripts.${UPDATE_SCRIPT} — re-run consume:install (or --wire-only) to wire dev/build update notices`,
+      `missing scripts.${UPDATE_SCRIPT} — re-run consume:install (or --wire-only) to wire soft registry notices`,
     );
   }
   if (deps[PKG_NAME] && isLocalDependencySpec(deps[PKG_NAME])) {

@@ -52,11 +52,29 @@ index slugs **squashed drawer** + **wrong shell slot**.
    needs a packages token — never require it for “anyone clones the consumer”.
 5a. **Install freshness (mandatory before UI work):** ensure sibling exists and
     `file:` links; run
-    `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc`
+    `node scripts/ensure-sibling-ui-core.mjs --target <CONSUMER_ROOT> --install --npmrc --update`
     and/or `npm run consume:check -- --target <CONSUMER_ROOT>`. Fails when the
     dependency / alias is missing, or a legacy submodule tree remains.
     Re-paste [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) after
     treaty updates (installer does not overwrite an existing rule file).
+5b. **Sibling auto-sync + export hard gate (mandatory):** `consume:install`
+    wires `fynns-ui:gate` (`ensure-sibling --update` then
+    `check-ui-exports`) into consumer `predev` / `prebuild` / `prepreview` /
+    `postinstall`. Clean sibling worktrees **fast-forward** to
+    `origin/dev` (or `FYNNS_UI_CORE_REF`) via `git fetch` +
+    `git reset --hard FETCH_HEAD` so new barrel symbols (icons, etc.)
+    land before Vite starts — prevents blank-page
+    `does not provide an export named …`. Dirty sibling → hard fail (fix or
+    `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core locally; export check
+    still runs). Optional floor: consumer `package.json`
+    `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a
+    substitute for the export scan. Soft registry notice remains
+    `fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1`).
+    **Bootstrap note:** if a colleague’s sibling tip is older than the
+    `--update` / `check-ui-exports` scripts, consumer wrappers
+    (CV / agents-hub `scripts/fynns-ui-gate.mjs`) fall back to local
+    `fetch`+`reset --hard` once, then re-run the gate — do not leave
+    `predev` calling only an ancient ensure-sibling with unknown flags.
 6. **TypeScript:** consumer `compilerOptions.target` and `lib` must be **ES2022** (or later).
 7. **Do not** import deleted symbols — [`BREAKING_PURGE.md`](BREAKING_PURGE.md).
    Transient feedback: `snackbar` + `SnackbarHost`. Modals: `Dialog` /

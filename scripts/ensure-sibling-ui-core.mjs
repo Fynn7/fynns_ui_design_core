@@ -6,15 +6,23 @@
  * `<consumer-git-root>/../fynns_ui_design_core`, then can `npm install`
  * `@fynn7/ui-design-core@file:…` into a consumer package.
  *
+ * With `--update`, an existing clean sibling is fetched and fast-forwarded to
+ * `origin/<ref>` so consumers that already cloned an old tip pick up new barrel
+ * exports before Vite starts (avoids browser "does not provide an export named …").
+ *
  * GitHub Packages auth (NODE_AUTH_TOKEN) is NOT required. Anyone who clones a
  * consumer should clone/link this sibling over HTTPS and install — no PAT.
  *
  * Usage (from a core checkout, or after sibling already exists):
  *   node scripts/ensure-sibling-ui-core.mjs --target <consumer-pkg-or-root>
  *   node scripts/ensure-sibling-ui-core.mjs --target ../my-app/apps/web --install
+ *   node scripts/ensure-sibling-ui-core.mjs --target ../my-app/apps/web --update
  *
- * Consumer apps typically wrap this (or copy the clone+file: steps) into their
- * own setup / predev so first `npm run dev` is seamless. Reference:
+ * Env:
+ *   FYNNS_UI_CORE_REF — clone/update branch (default: dev)
+ *   FYNNS_UI_SKIP_SIBLING_SYNC=1 — skip --update (local core WIP); export gate still runs
+ *
+ * Consumer apps typically wrap this into setup / predev. Reference:
  * fynns_cv_generator/scripts/ensure-node.mjs
  */
 import fs from "node:fs";
@@ -45,12 +53,17 @@ Ensure sibling ../${SIBLING_DIRNAME} next to the consumer git root (public HTTPS
 clone — no NODE_AUTH_TOKEN). Optionally file:-link ${PKG_NAME} into the package.
 
 Options:
-  --target <dir>   Consumer package dir or path inside the consumer repo
-  --ref <branch>   Clone/update ref (default: ${DEFAULT_REF} or FYNNS_UI_CORE_REF)
-  --install        npm install ${PKG_NAME}@file:<sibling> into --target package
-  --npmrc          Write zero-token .npmrc beside the package (safe @fynn7 scope)
-  --json           JSON summary on stdout
+  --target <dir>         Consumer package dir or path inside the consumer repo
+  --ref <branch>         Clone/update ref (default: ${DEFAULT_REF} or FYNNS_UI_CORE_REF)
+  --update               Fetch + fast-forward an existing clean sibling to origin/<ref>
+  --min-version <semver> Fail if sibling package.json version is still below this
+  --install              npm install ${PKG_NAME}@file:<sibling> into --target package
+  --npmrc                Write zero-token .npmrc beside the package (safe @fynn7 scope)
+  --json                 JSON summary on stdout
   -h, --help
+
+Env:
+  FYNNS_UI_SKIP_SIBLING_SYNC=1  Skip --update (export check can still fail)
 `;
 }
 
@@ -58,6 +71,8 @@ function parseArgs(argv) {
   const out = {
     target: process.cwd(),
     ref: DEFAULT_REF,
+    update: false,
+    minVersion: null,
     install: false,
     npmrc: false,
     json: false,
@@ -73,6 +88,8 @@ function parseArgs(argv) {
     if (a === "-h" || a === "--help") out.help = true;
     else if (a === "--target") out.target = next();
     else if (a === "--ref") out.ref = next();
+    else if (a === "--update") out.update = true;
+    else if (a === "--min-version") out.minVersion = next();
     else if (a === "--install") out.install = true;
     else if (a === "--npmrc") out.npmrc = true;
     else if (a === "--json") out.json = true;
@@ -125,6 +142,47 @@ function siblingReady(dir) {
   return fs.existsSync(path.join(dir, "package.json"));
 }
 
+function readJson(filePath) {
+  try {
+    const raw = fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "");
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function parseSemver(v) {
+  const m = String(v || "")
+    .trim()
+    .replace(/^v/, "")
+    .match(/^(\d+)\.(\d+)\.(\d+)/);
+  if (!m) return null;
+  return [Number(m[1]), Number(m[2]), Number(m[3])];
+}
+
+function versionAtLeast(version, minimum) {
+  const left = parseSemver(version);
+  const right = parseSemver(minimum);
+  if (!left || !right) return false;
+  for (let i = 0; i < 3; i++) {
+    if (left[i] > right[i]) return true;
+    if (left[i] < right[i]) return false;
+  }
+  return true;
+}
+
+function readSiblingVersion(dir) {
+  return readJson(path.join(dir, "package.json"))?.version ?? null;
+}
+
+function resolveMinVersion(pkgRoot, cliMin) {
+  if (cliMin) return String(cliMin).trim() || null;
+  const pkg = readJson(path.join(pkgRoot, "package.json"));
+  const fromMeta = pkg?.fynnsUi?.minVersion;
+  if (fromMeta) return String(fromMeta).trim() || null;
+  return null;
+}
+
 function resolveCloneUrlCandidates(gitRoot) {
   const urls = [CANONICAL_GIT_URL];
   try {
@@ -146,6 +204,38 @@ function resolveCloneUrlCandidates(gitRoot) {
     /* keep canonical only */
   }
   return urls;
+}
+
+function isGitWorkTreeClean(dir) {
+  const r = run("git", ["status", "--porcelain"], dir, { allowFail: true, quiet: true });
+  return (r.status ?? 1) === 0 && !String(r.stdout ?? "").trim();
+}
+
+function updateSiblingCheckout(dir, ref, log) {
+  if (process.env.FYNNS_UI_SKIP_SIBLING_SYNC === "1") {
+    log.push({ step: "update", status: "skipped", reason: "FYNNS_UI_SKIP_SIBLING_SYNC=1", path: dir });
+    return { skipped: true };
+  }
+  if (!fs.existsSync(path.join(dir, ".git"))) {
+    throw new Error(
+      `${dir} is not a git checkout — cannot --update. Clone ${SIBLING_DIRNAME} or move it aside.`,
+    );
+  }
+  if (!isGitWorkTreeClean(dir)) {
+    throw new Error(
+      `${dir} has local changes; cannot auto-update sibling UI core.\n` +
+        `Commit/stash/discard there, or set FYNNS_UI_SKIP_SIBLING_SYNC=1 (export check may still fail),\n` +
+        `then retry npm run dev.`,
+    );
+  }
+  log.push({ step: "update", status: "start", path: dir, ref });
+  run("git", ["fetch", "--depth", "1", "origin", ref], dir);
+  // Hard-reset to FETCH_HEAD (worktree is clean). Prefer this over
+  // `checkout -B <ref>` so a second worktree can update while the primary
+  // checkout already holds branch <ref>.
+  run("git", ["reset", "--hard", "FETCH_HEAD"], dir);
+  log.push({ step: "update", status: "ok", path: dir, ref });
+  return { skipped: false };
 }
 
 function ensureSiblingCheckout(gitRoot, ref, log) {
@@ -178,6 +268,18 @@ function ensureSiblingCheckout(gitRoot, ref, log) {
     }
   }
   throw new Error(lastErr || `Failed to clone ${SIBLING_DIRNAME}`);
+}
+
+function assertMinVersion(dir, minVersion, log) {
+  if (!minVersion) return;
+  const version = readSiblingVersion(dir);
+  if (!version || !versionAtLeast(version, minVersion)) {
+    throw new Error(
+      `${PKG_NAME}@${version ?? "unknown"} in ${dir} is older than required ${minVersion}.\n` +
+        `Run with --update (clean worktree) or: git -C "${dir}" pull`,
+    );
+  }
+  log.push({ step: "min-version", status: "ok", version, minVersion });
 }
 
 function patchSafeSiblingNpmrc(text) {
@@ -234,8 +336,13 @@ function main() {
   const log = [];
   const pkgRoot = findPkgRoot(opts.target);
   const gitRoot = findGitRoot(pkgRoot);
+  const minVersion = resolveMinVersion(pkgRoot, opts.minVersion);
   try {
     const sibling = ensureSiblingCheckout(gitRoot, opts.ref, log);
+    if (opts.update) {
+      updateSiblingCheckout(sibling, opts.ref, log);
+    }
+    assertMinVersion(sibling, minVersion, log);
     if (opts.npmrc || opts.install) writeSafeNpmrc(pkgRoot, false, log);
     if (opts.install) installFromSibling(pkgRoot, sibling, log);
     const summary = {
@@ -243,15 +350,20 @@ function main() {
       mode: "sibling-file",
       pkgRoot,
       gitRoot,
-      sibling: path.resolve(gitRoot, "..", SIBLING_DIRNAME),
+      sibling: path.resolve(sibling),
+      version: readSiblingVersion(sibling),
+      minVersion,
       tokenRequired: false,
+      coreRoot: CORE_ROOT,
       log,
     };
     if (opts.json) process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
     else {
       console.log(
         `[fynns-ui] sibling ready (zero-token): ${summary.sibling}` +
-          (opts.install ? ` → linked into ${pkgRoot}` : ""),
+          (summary.version ? `@${summary.version}` : "") +
+          (opts.install ? ` → linked into ${pkgRoot}` : "") +
+          (opts.update ? " (updated)" : ""),
       );
     }
   } catch (err) {
@@ -262,4 +374,32 @@ function main() {
   }
 }
 
-main();
+const isDirectRun = (() => {
+  if (!process.argv[1]) return false;
+  try {
+    return (
+      fs.realpathSync(process.argv[1]).toLowerCase() ===
+      fs.realpathSync(fileURLToPath(import.meta.url)).toLowerCase()
+    );
+  } catch {
+    return false;
+  }
+})();
+
+if (isDirectRun) main();
+
+export {
+  PKG_NAME,
+  SIBLING_DIRNAME,
+  assertMinVersion,
+  findGitRoot,
+  findPkgRoot,
+  isGitWorkTreeClean,
+  parseSemver,
+  readSiblingVersion,
+  resolveMinVersion,
+  siblingDir,
+  siblingReady,
+  updateSiblingCheckout,
+  versionAtLeast,
+};

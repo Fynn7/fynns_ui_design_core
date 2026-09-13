@@ -29,12 +29,26 @@ reaches consumer apps.
 
 Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
 
-## Update notices (consumer dev/build)
+## Update notices + hard gate (consumer dev/build)
 
-`npm run consume:install` may wire **`fynns-ui:check-update`** into consumer
-`predev` / `prebuild` / `prepreview` / `postinstall`. On sibling/`file:` the
-registry lookup skips quietly without a token. Optional Packages lookup needs
-`NODE_AUTH_TOKEN` / `GITHUB_TOKEN`. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`.
+`npm run consume:install` wires:
+
+1. **`fynns-ui:gate`** (hard) — `ensure-sibling-ui-core.mjs --update` then
+   `check-ui-exports.mjs` on `predev` / `prebuild` / `prepreview` /
+   `postinstall`. Auto fast-forwards a **clean** sibling to `origin/dev`
+   (or `FYNNS_UI_CORE_REF`). Fails closed on dirty sibling, failed fetch, or
+   consumer `@fynns/ui` imports missing from the linked barrel.
+   Skip sync only while editing core locally: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
+   (export check still runs). Optional floor:
+   `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
+2. **`fynns-ui:check-update`** (soft) — registry notice on
+   `predev` / `prebuild` / `prepreview`. On sibling/`file:` the registry
+   lookup skips quietly without a token. Optional Packages lookup needs
+   `NODE_AUTH_TOKEN` / `GITHUB_TOKEN`. Silence: `FYNNS_UI_SKIP_UPDATE_CHECK=1`.
+
+**Do not** rely on a hand-maintained stale `MIN_UI_CORE_VERSION` alone —
+that is how consumers ship new imports against an old sibling and get a
+Vite-green / browser-red blank page.
 
 **Monorepo:** bump / link in the **app package** that owns `predev` (e.g.
 `apps/web`), not only at the git root — nested `node_modules` wins for Vite.
@@ -46,12 +60,15 @@ Edit this checkout (the sibling consumers already link). After landed
 consumer-visible changes:
 
 1. Bump `package.json` semver in the **same task** when you also publish.
-2. Consumers on sibling pick up changes via `git pull` in
-   `../fynns_ui_design_core` (or their ensure script). Optional: publish to
-   GitHub Packages for Packages-based workflows.
+2. Consumers on sibling pick up changes via **`fynns-ui:gate` / `--update`**
+   on next `npm run dev` (clean worktree), or `git pull` in
+   `../fynns_ui_design_core`. Optional: publish to GitHub Packages for
+   Packages-based workflows.
 3. Do **not** leave Vite pointing at a sibling path while `dependencies` still
    resolve a registry tarball — keep `file:` and alias both on
    `node_modules/@fynn7/ui-design-core/...`.
+4. While iterating on core next to a consumer: set
+   `FYNNS_UI_SKIP_SIBLING_SYNC=1` so predev does not reset your WIP tip.
 
 ## Legacy submodule bump workflows (removed)
 

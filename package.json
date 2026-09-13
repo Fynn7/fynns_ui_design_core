@@ -23,10 +23,14 @@
     "AGENTS.md",
     "llm",
     "README.md",
-    "scripts/check-ui-update.mjs"
+    "scripts/check-ui-update.mjs",
+    "scripts/check-ui-exports.mjs",
+    "scripts/ensure-sibling-ui-core.mjs"
   ],
   "bin": {
-    "fynns-ui-check-update": "./scripts/check-ui-update.mjs"
+    "fynns-ui-check-update": "./scripts/check-ui-update.mjs",
+    "fynns-ui-check-exports": "./scripts/check-ui-exports.mjs",
+    "fynns-ui-ensure-sibling": "./scripts/ensure-sibling-ui-core.mjs"
   },
   "scripts": {
     "gen:theme": "node scripts/gen-theme.mjs",
@@ -46,6 +50,7 @@
     "consume:check": "node scripts/install-as-npm.mjs --check",
     "consume:ensure-sibling": "node scripts/ensure-sibling-ui-core.mjs",
     "consume:check-update": "node scripts/check-ui-update.mjs",
+    "consume:check-exports": "node scripts/check-ui-exports.mjs",
     "prepublishOnly": "npm run check"
   },
   "peerDependencies": {
