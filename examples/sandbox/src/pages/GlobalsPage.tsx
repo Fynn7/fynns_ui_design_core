@@ -1606,6 +1606,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [cardChromeType, setCardChromeType] = useState("flat");
   const [cardChromeQuality, setCardChromeQuality] = useState("fast");
+  const [sampleToken, setSampleToken] = useState("");
+  const [sampleTokenVisible, setSampleTokenVisible] = useState(false);
+  const [sampleTokenSaving, setSampleTokenSaving] = useState(false);
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
@@ -5427,6 +5430,74 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </IconButton>
                   </Tooltip>
                 </div>
+              </FieldStack>
+            </Card>
+          </div>
+          <div id="sandbox-field-save-icon">
+            <SandboxHelp text={t("globals.fieldSaveIconHelp")} />
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.fieldSaveIconTitle")}
+            >
+              <FieldStack>
+                <FieldBlock label={t("globals.fieldSaveIconLabel")}>
+                  <div className="fynns-unit-stack">
+                    <Input
+                      type={sampleTokenVisible ? "text" : "password"}
+                      value={sampleToken}
+                      onChange={(event) => setSampleToken(event.target.value)}
+                      placeholder={t("globals.fieldSaveIconPlaceholder")}
+                      aria-label={t("globals.fieldSaveIconLabel")}
+                      trailing={
+                        <Tooltip
+                          content={
+                            sampleTokenVisible
+                              ? t("globals.fieldSaveIconHide")
+                              : t("globals.fieldSaveIconShow")
+                          }
+                        >
+                          <IconButton
+                            size="sm"
+                            aria-label={
+                              sampleTokenVisible
+                                ? t("globals.fieldSaveIconHide")
+                                : t("globals.fieldSaveIconShow")
+                            }
+                            disabled={sampleTokenSaving}
+                            onClick={() =>
+                              setSampleTokenVisible((visible) => !visible)
+                            }
+                          >
+                            {sampleTokenVisible ? (
+                              <EyeOffIcon size={16} aria-hidden />
+                            ) : (
+                              <EyeIcon size={16} aria-hidden />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                      }
+                    />
+                    <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                      <Tooltip content={t("globals.fieldSaveIconSave")}>
+                        <IconButton
+                          variant="tonal"
+                          loading={sampleTokenSaving}
+                          disabled={!sampleToken.trim()}
+                          aria-label={t("globals.fieldSaveIconSave")}
+                          onClick={() => {
+                            setSampleTokenSaving(true);
+                            window.setTimeout(() => {
+                              setSampleTokenSaving(false);
+                            }, 700);
+                          }}
+                        >
+                          <SaveIcon size={16} aria-hidden />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  </div>
+                </FieldBlock>
               </FieldStack>
             </Card>
           </div>

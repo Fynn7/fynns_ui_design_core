@@ -2076,6 +2076,14 @@ const en = {
   "globals.cardChromeIconQualityHigh": "High",
   "globals.cardChromeIconHelp":
     "**Self-evident Card chrome (hard ≥ 0.5.173):** copy / save-defaults / open-folder in Card `actions` or densified Select clusters = **`IconButton` + `Tooltip`** (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) — not labeled ghost `Button` text (**information redundancy** beside sibling icon disks). Keep labeled Buttons for primary workflow verbs (`Validate` / `Deliver`). Failure: CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip. Live `#sandbox-card-chrome-icon-actions`.",
+  "globals.fieldSaveIconTitle": "Sample credentials",
+  "globals.fieldSaveIconLabel": "Sample API token",
+  "globals.fieldSaveIconPlaceholder": "Paste a sample token",
+  "globals.fieldSaveIconShow": "Show plaintext",
+  "globals.fieldSaveIconHide": "Hide plaintext",
+  "globals.fieldSaveIconSave": "Save token",
+  "globals.fieldSaveIconHelp":
+    "**FieldBlock secret save (hard ≥ 0.5.248):** under FieldBlock / `unit-stack` + `.fynns-control-cluster--end-align`, self-evident Save key / Save token = **`IconButton` + `Tooltip` + `SaveIcon`** (busy → `loading`) — not labeled ghost **or** tonal `Button` text (`Save key`). Keep labeled Buttons for primary workflow verbs. Failure: CONSUMER_TREATY FieldBlock labeled Save key instead of IconButton+Tooltip. Live `#sandbox-field-save-icon`.",
   "globals.cardHeadPrimaryTitle": "Pack and export",
   "globals.cardHeadPrimaryPack": "Pack into local history",
   "globals.cardHeadPrimaryDownload": "Download result",
@@ -4425,6 +4433,14 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromeIconQualityHigh": "高质量",
   "globals.cardChromeIconHelp":
     "**自明 Card chrome（硬 ≥ 0.5.173）：** Card `actions` 或 densified Select 旁簇里的复制 / 保存默认 / 开文件夹 = **`IconButton` + `Tooltip`**（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）— 禁止 labeled ghost「复制 Prompt」「保存默认」（与旁侧图标盘 **信息冗余**）。主流程动词 CTA（Validate / Deliver）仍可用 labeled Button。失败：CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip。对照 `#sandbox-card-chrome-icon-actions`。",
+  "globals.fieldSaveIconTitle": "示例凭据",
+  "globals.fieldSaveIconLabel": "示例 API 令牌",
+  "globals.fieldSaveIconPlaceholder": "粘贴示例令牌",
+  "globals.fieldSaveIconShow": "显示明文",
+  "globals.fieldSaveIconHide": "隐藏明文",
+  "globals.fieldSaveIconSave": "保存令牌",
+  "globals.fieldSaveIconHelp":
+    "**FieldBlock 密钥保存（硬 ≥ 0.5.248）：** FieldBlock / `unit-stack` + `.fynns-control-cluster--end-align` 下自明「Save key / Save token / 保存密钥」= **`IconButton` + `Tooltip` + `SaveIcon`**（忙碌用 `loading`）— 禁止 labeled ghost **或** tonal 文案药丸。主流程动词 CTA 仍可用 labeled Button。失败：CONSUMER_TREATY FieldBlock labeled Save key instead of IconButton+Tooltip。对照 `#sandbox-field-save-icon`。",
   "globals.cardHeadPrimaryTitle": "打包与导出",
   "globals.cardHeadPrimaryPack": "打包并写入本机历史",
   "globals.cardHeadPrimaryDownload": "下载结果",

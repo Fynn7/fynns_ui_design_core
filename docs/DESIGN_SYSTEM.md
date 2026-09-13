@@ -442,15 +442,19 @@ belong in a consumer’s own doc.
   is for measured tile catalogs (`#code-block` tokens). Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   hugs max-content leaving dead gutter in form Surface.
-- **DON'T** paint self-evident Card chrome / densified form-cluster actions as
-  **labeled** ghost `Button`s (e.g. visible `Copy Prompt` / `Save defaults`
-  next to a folder IconButton or Select row) — **information redundancy**.
-  Use **`IconButton` + `Tooltip`** (+ `aria-label`): copy → `ClipboardIcon`;
-  save defaults / draft save → `SaveIcon`; open folder → `FolderOpenIcon`.
-  Keep **labeled** Buttons for primary workflow CTAs that need a verb on the
-  face (`Validate` / `Deliver` / Dialog feet). Live
-  `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions`. Failure:
-  CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip.
+- **DON'T** paint self-evident save / copy / open-folder actions as **labeled**
+  `Button`s (ghost **or** tonal / primary) in Card chrome, densified Select
+  clusters, **or FieldBlock / form `unit-stack` + `.fynns-control-cluster--end-align`**
+  (e.g. visible `Save key` / `Save defaults` / `Copy Prompt` under a secret
+  Input) — **information redundancy**. Use **`IconButton` + `Tooltip`**
+  (+ `aria-label`): copy → `ClipboardIcon`; save key / token / defaults /
+  draft → `SaveIcon` (busy → IconButton `loading`); open folder →
+  `FolderOpenIcon`. Keep **labeled** Buttons for primary workflow CTAs that
+  need a verb on the face (`Validate` / `Deliver` / Dialog feet / generate).
+  Live `#sandbox-card-chrome-icon-actions` / `#sandbox-field-save-icon` /
+  `#sandbox-card-draft-actions`. Failures: CONSUMER_TREATY Card chrome labeled
+  ghost Copy/Save instead of IconButton+Tooltip; **FieldBlock labeled Save key
+  instead of IconButton+Tooltip** (≥ **0.5.248**).
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
@@ -815,7 +819,7 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
-| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
+| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-field-save-icon`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
@@ -1227,7 +1231,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
-| Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
+| Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`); FieldBlock secret save too (≥ **0.5.248**) | `#sandbox-card-chrome-icon-actions` / `#sandbox-field-save-icon` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Copy Prompt` / `Save defaults` / `Save key` |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |

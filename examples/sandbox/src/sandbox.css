@@ -1297,6 +1297,7 @@
  */
 #sandbox-card-draft-actions,
 #sandbox-card-chrome-icon-actions,
+#sandbox-field-save-icon,
 #sandbox-card-head-primary-end {
   display: flex;
   flex-direction: column;
