@@ -115,15 +115,19 @@ belong in a consumer’s own doc.
    **on**; opt out `data-fynns-wheel-x="off"`. While H overflows, vertical wheel
    stays on that host even at the left/right edge (no PageScroll chaining mid
    hover — avoids thumb jump when sliding back). Live `#table`. **Scroll-edge
-   fade (≥ 0.5.135):**
-   capped CodeBlock / Textarea /
-   NavigationDrawer body soft-mask top+bottom when content overflows
+   fade (≥ 0.5.135; PageScroll ≥ **0.5.247**):**
+   capped CodeBlock / Textarea / NavigationDrawer body / **`PageScroll`**
+   soft-mask top+bottom when content overflows mid-scroll
    (`data-fade-top` / `data-fade-bottom`, length
-   `--fynns-layout-scroll-edge-fade-length`) — not a hard clip. Textarea /
-   input hosts hide the native bar only (no overlay rail). Do **not**
-   use `scrollbar-gutter: stable` / `both-edges`. NavigationDrawer keeps
-   `--fynns-navdrawer-pad-inline` (10dp) only. Vertical scroll hosts must pin
-   `overflow-x: clip` (not bare `overflow: auto`).
+   `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
+   (≥ **0.5.247**); zero consumer props / private mask CSS**. Not a hard clip
+   into TopAppBar / canvas floor. Do **not** invent consumer `mask-image` on
+   `.fynns-page-scroll`, and do **not** replace destination catalogs with a bare
+   `overflow:auto` host that hard-clips. Textarea / input hosts hide the native
+   bar only (no overlay rail). Do **not** use `scrollbar-gutter: stable` /
+   `both-edges`. NavigationDrawer keeps `--fynns-navdrawer-pad-inline` (10dp)
+   only. Vertical scroll hosts must pin `overflow-x: clip` (not bare
+   `overflow: auto`). Live `#page-scroll` (scroll mid-pane → both edges fade).
 5. **Always show loading / empty / error state.** Prefer `LinearProgress` /
    `CircularProgress` (inline / determinate), `BusyScrim` (fullscreen blocking) /
    `BusyRegion` (sectional **soft frosted blur** + tokenized gray mask
@@ -1226,6 +1230,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
+| PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |
 | Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band; 8dp gap; open Select keeps head center (≥ **0.5.227**) | `#sandbox-card-head-select` | Title/CTA yanked by Select `data-expanded` grid |
 | Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |

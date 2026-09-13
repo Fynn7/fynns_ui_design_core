@@ -1,4 +1,10 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  type HTMLAttributes,
+  type ReactNode,
+} from "react";
+import { clearScrollEdgeFade, syncScrollEdgeFade } from "./scrollEdgeFade";
 
 function join(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -26,13 +32,47 @@ export type PageScrollProps = HTMLAttributes<HTMLDivElement> & {
  * private `.hub-scroll` + `max-width` on the same node (that paints the rail
  * on the Card).
  *
- * Live: sandbox `#page-scroll`. Authority: AGENTS.md Content density /
- * `llm/CONSUMER_TREATY.md` **page-scroll host flush with Card**.
+ * **Edge fade is built-in (≥ 0.5.247) — zero consumer config.** Core syncs
+ * `data-fade-top` / `data-fade-bottom` on this host (same mask family as
+ * NavigationDrawer body). Apps only render `<PageScroll>…</PageScroll>`; do
+ * **not** add props, private `mask-image`, or scroll listeners for fade.
+ * Live: sandbox `#page-scroll`.
+ *
+ * Authority: DESIGN_SYSTEM Hard rules / `llm/CONSUMER_TREATY.md`
+ * **PageScroll mid-scroll hard clip (no edge fade)**.
  */
 export function PageScroll({ className, children, ...rest }: PageScrollProps) {
+  const hostRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const el = hostRef.current;
+    if (!el) return;
+    let raf = 0;
+    const sync = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        syncScrollEdgeFade(el);
+      });
+    };
+    syncScrollEdgeFade(el);
+    el.addEventListener("scroll", sync, { passive: true });
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    const column = el.querySelector(":scope > .fynns-content-column");
+    if (column instanceof HTMLElement) ro.observe(column);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      el.removeEventListener("scroll", sync);
+      ro.disconnect();
+      clearScrollEdgeFade(el);
+    };
+  }, []);
+
   return (
     <div
       {...rest}
+      ref={hostRef}
       className={join("fynns-page-scroll", "fynns-scroll", className)}
     >
       <div className="fynns-content-column">{children}</div>

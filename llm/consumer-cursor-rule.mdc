@@ -149,6 +149,11 @@ alwaysApply: true
    （ChatGPT New-chat）。全删 → 顶栏 `MoreHorizontalIcon` 菜单
    `tone="danger"`（或省略入口）。目录 sort/refresh/bulk-select 仍可与 New
    共存。对照 `#layouts-demo-navigation-drawer` session chrome。
+7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
+   keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
+   自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
+   （无 props、无私有 mask / scroll 监听）。禁止硬裁切；禁止裸 `overflow:auto`
+   替代 PageScroll。对照 `#page-scroll`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照

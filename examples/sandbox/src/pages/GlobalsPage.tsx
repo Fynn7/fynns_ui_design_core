@@ -6689,9 +6689,20 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                         headline={t("globals.listThreeLine")}
                         supportingText={t("globals.listThreeLineSupporting")}
                       />
+                      <ListItem
+                        headline={t("globals.listCatalogProject")}
+                        supportingText={t("globals.listCatalogProjectPath")}
+                      />
+                      <ListItem
+                        headline={t("globals.listCatalogConfig")}
+                        supportingText={t("globals.listCatalogConfigPath")}
+                      />
                     </List>
                   </Card>
                   <Card title={t("globals.pageScrollCardTitle2")}>
+                    <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
+                  </Card>
+                  <Card title={t("globals.pageScrollCardTitle")}>
                     <p style={{ margin: 0 }}>{t("globals.pageScrollCardBody")}</p>
                   </Card>
               </PageScroll>

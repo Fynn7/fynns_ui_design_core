@@ -1,9 +1,10 @@
 /**
- * Soft scroll-edge fade (NavigationDrawer / CodeBlock / Textarea).
+ * Soft scroll-edge fade (NavigationDrawer / CodeBlock / Textarea / PageScroll).
  *
  * Fixed overlay scrollbars live in a portal and ignore host overflow. Edge
  * fade is a CSS `mask-image` driven by `data-fade-top` / `data-fade-bottom`
  * so hard clips read as soft gradient into the well (Cursor-style).
+ * PageScroll hosts sync this mid-scroll (≥ **0.5.247**).
  */
 
 export function syncScrollEdgeFade(el: HTMLElement): void {

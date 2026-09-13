@@ -1652,7 +1652,9 @@
 .sandbox-page-scroll-stage {
   box-sizing: border-box;
   width: min(100%, 56rem);
-  height: 22rem;
+  /* Short enough that the live `#page-scroll` catalog always overflows so
+   * mid-scroll `data-fade-top`/`bottom` masks are teachable (≥ 0.5.247). */
+  height: 16rem;
   min-width: 0;
   border: var(--fynns-border-hairline) solid var(--fynns-color-border);
   border-radius: var(--fynns-radius-md);

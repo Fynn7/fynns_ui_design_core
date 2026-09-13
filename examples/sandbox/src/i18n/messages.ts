@@ -385,7 +385,7 @@ const en = {
     "--fynns-layout-textarea-max-height — autoGrow Textarea soft cap before inner scroll (min(70dvh, 40rem); page catalogs grow with prose).",
   "layoutChrome.scrollEdgeFadeLength": "Scroll-edge fade",
   "layoutChrome.scrollEdgeFadeLengthHint":
-    "--fynns-layout-scroll-edge-fade-length — soft mask on overflowing CodeBlock / Textarea / NavigationDrawer body (data-fade-top/bottom).",
+    "--fynns-layout-scroll-edge-fade-length — soft mask on overflowing CodeBlock / Textarea / NavigationDrawer body / PageScroll (data-fade-top/bottom; PageScroll ≥ 0.5.247).",
   "layoutChrome.listWellMaxHeight": "List well max height",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — soft cap for long in-Card Lists (20rem). Short catalogs use FillColumn page scroll — do not nest fynns-scroll on a one-row List.",
@@ -659,7 +659,7 @@ const en = {
   "globals.busyRegionFieldStart": "Show field busy",
   "globals.busyRegionFieldStop": "Clear field busy",
   "globals.pageScrollHelp":
-    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). The content column **fills the page-scroll pane** (inset only; `--fynns-layout-content-max-width` default **`none`** ≥ **0.5.186** — no soft ~1180dp gutters). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. Tokens ≥ 0.4.58.",
+    "Page catalogs: prefer **`PageScroll`** (or `.fynns-page-scroll` → `.fynns-content-column`). Host must be **edge-flush** with the pane (hub-main / FillColumn main) — never pad that ancestor horizontally or the overlay rail floats inset / sits on the Card. Side **and top/bottom** breath are on the content column (`padding: dialog-inset` — first **Card** must not sit flush under TopAppBar). When the **first** child is a standalone catalog **`ControlRow`**, pad-block-start drops to `--fynns-navdrawer-body-pad-block-start` so the ControlRow label midlines with the active NavigationDrawerItem (Layouts `#layouts-demo-shell`; ≥ 0.4.101). Page-scroll only adds padding-inline-end: scrollbar-size for the rail band. Nest Cards in the content column — Card stretches to the column (**≥ 0.5.141**). The content column **fills the page-scroll pane** (inset only; `--fynns-layout-content-max-width` default **`none`** ≥ **0.5.186** — no soft ~1180dp gutters). A section tool `ControlRow` + ToggleGroup and sibling Cards share one **right edge**. **Never** wrap destination Cards / form columns in `sheet-max-width` (BottomSheet only), `chat-max-width` (Chat host only ≥ **0.5.142**), or `dialog-max-width*`. **Mid-scroll edge fade is built into `PageScroll` (≥ 0.5.247) — zero consumer config:** scroll this stage mid-pane → automatic `data-fade-top` + `data-fade-bottom` (NavigationDrawer family). Do not invent consumer mask CSS. Tokens ≥ 0.4.58.",
   "globals.pageScrollToolLabel": "Tool",
   "globals.pageScrollToolAria": "Sample tool mode",
   "globals.pageScrollToolA": "Mode A",
@@ -2755,7 +2755,7 @@ const zh: Record<MessageKey, string> = {
     "--fynns-layout-textarea-max-height — autoGrow Textarea 内滚动前软上限（min(70dvh, 40rem)；页面目录随正文长高）。",
   "layoutChrome.scrollEdgeFadeLength": "滚动边缘渐隐",
   "layoutChrome.scrollEdgeFadeLengthHint":
-    "--fynns-layout-scroll-edge-fade-length — CodeBlock / Textarea / NavigationDrawer 正文溢出时的软遮罩（data-fade-top/bottom）。",
+    "--fynns-layout-scroll-edge-fade-length — CodeBlock / Textarea / NavigationDrawer / PageScroll 正文溢出时的软遮罩（data-fade-top/bottom；PageScroll ≥ 0.5.247）。",
   "layoutChrome.listWellMaxHeight": "列表井最大高度",
   "layoutChrome.listWellMaxHeightHint":
     "--fynns-layout-list-well-max-height — Card 内长 List 软上限（20rem）。短目录用 FillColumn 页滚动——不要给单行 List 再套 fynns-scroll。",
@@ -3027,7 +3027,7 @@ const zh: Record<MessageKey, string> = {
   "globals.busyRegionFieldStart": "显示字段 busy",
   "globals.busyRegionFieldStop": "清除字段 busy",
   "globals.pageScrollHelp":
-    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。内容列**铺满页滚窗格**（仅 inset；`--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止 ~1180dp 居中阅读条留白）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。令牌 ≥ 0.4.58。",
+    "页面目录：优先 **`PageScroll`**（或 `.fynns-page-scroll` → `.fynns-content-column`）。页滚宿主必须与窗格（hub-main / FillColumn main）**右缘对齐** — 禁止在页滚外包一层横向 padding（否则 overlay 轨会浮在窗格内侧或贴在 Card 上）。**左右与上下**呼吸都在内容列（`padding: dialog-inset` — 首张 **Card** 不得贴 TopAppBar）。当**首子**是独立目录 **`ControlRow`** 时，pad-block-start 降为 `--fynns-navdrawer-body-pad-block-start`，使 ControlRow 标签与活跃 NavigationDrawerItem 标签中线对齐（Layouts `#layouts-demo-shell`；≥ 0.4.101）。页滚仅 padding-inline-end: scrollbar-size 留给轨。Card 放在内容列内并**铺满列宽**（≥ **0.5.141**）。内容列**铺满页滚窗格**（仅 inset；`--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止 ~1180dp 居中阅读条留白）。分区工具 `ControlRow` + ToggleGroup 与下方 Card **共用右端**。**禁止**用 `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列，≥ **0.5.142**）、`dialog-max-width*` 收窄目的地表单 / Card 列。**中段滚动渐隐已封装进 `PageScroll`（≥ 0.5.247）— 消费仓零配置：** 滚到舞台中段即自动 `data-fade-top` + `data-fade-bottom`（与侧栏同族）；禁止私有 mask。令牌 ≥ 0.4.58。",
   "globals.pageScrollToolLabel": "工具",
   "globals.pageScrollToolAria": "样例工具模式",
   "globals.pageScrollToolA": "模式 A",
