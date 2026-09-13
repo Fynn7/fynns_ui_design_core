@@ -62,8 +62,13 @@ belong in a consumer’s own doc.
    **Field header actions:** M3 in-field icons (reveal password, refresh list,
    clear) belong in `Input` **`trailing`** — always **`IconButton` `size="sm"`**
    (32dp in the 40dp shell; core ≥ **0.5.131** caps affix disks even when `size`
-   is omitted). **Select + chevron** already ships a dropdown indicator — do
-   **not** stack refresh on `Select.trailing`. Use **`FieldBlock` +
+   is omitted). Core ≥ **0.5.237** also tightens that shell edge to
+   `--fynns-layout-capsule-chrome-pad-inline` (**4dp**) when an affix owns it —
+   same flush as SearchBar / NumberInput steppers; **DON'T** leave the eye on
+   full text `capsule + field-pad` (**16dp**), invent consumer end-pad / negative
+   margin on `.fynns-field-shell` / `.fynns-field-affix`, or clone reveal **outside**
+   `Input` `trailing`. Live `#password` / `#input`. **Select + chevron** already ships a dropdown
+   indicator — do **not** stack refresh on `Select.trailing`. Use **`FieldBlock` +
    `.fynns-control-cluster--end-align`**: Select with
    `className="fynns-control-cluster__grow"` + trailing `IconButton` sibling —
    live `#field-header` / `#form-recipe`. **Label-row actions** (expand / reset
@@ -458,24 +463,65 @@ belong in a consumer’s own doc.
   (or any consumer CSS that docks `.fynns-search-bar-panel` with
   `position:absolute; bottom:100%`, or restyles `.fynns-select-menu`) — use the
   **stock** Keep-set Select: 40dp shell + **portaled** `.fynns-select-menu`
-  (≥ **0.5.208** — M3 Exposed Dropdown; menu **min-width =
-  max(option-measure, live shell width)** ≥ **0.5.220** — matches a
-  full-width form trigger; still grows past a narrow trigger for long
-  labels (`width: max-content`) ≥ **0.5.209**;
+  (≥ **0.5.208** — M3 Exposed Dropdown; default **content width** ≥ **0.5.244**
+  via `--fynns-select-measure-min`; stretch only with `fullWidth`,
+  `.fynns-field-block`, or `.fynns-control-cluster__grow`; menu **width = live
+  shell** ≥ **0.5.238** — header and list share one length; long labels
+  ellipsize; retires ≥ **0.5.209** `max-content` grow past a narrow trigger;
+  stretched short-option fields still match ≥ **0.5.220**;
   trigger `--fynns-select-measure-min` absolute
   floor ≥ **0.5.210** — never `min(100%, …)` crush under Grid; retires both the
   0.5.151–0.5.193 upward panel fork, the 0.5.194–0.5.207 in-flow joined
   capsule, and the 0.5.216 short-label floating chip). Live `#select` /
   `#sandbox-select-wide-short` / `#pagination` /
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY Pagination
-  Select invents absolute overlay / Select menu narrower than stretched
+  Select invents absolute overlay / Select stretched without fullWidth /
+  Select menu narrower than stretched trigger / Select menu wider than narrow
   trigger.
+- **DON'T** treat a bare Select as a full-bleed form field — default is
+  **content width** (≥ **0.5.244**). Opt into stretch with `fullWidth`, place
+  the Select inside `.fynns-field-block`, or use `.fynns-control-cluster__grow`.
+  Do **not** invent consumer `width: 100%` on `.fynns-select`. Live `#select` /
+  `#sandbox-select-wide-short` / `#form-recipe`. Failure: CONSUMER_TREATY
+  Select stretched without fullWidth.
 - **DON'T** leave a portaled `.fynns-select-menu` narrower than a stretched
   form trigger when options are short — that reads as a duplicate floating
-  chip under the field. Core ≥ **0.5.220** floors the menu on
-  **max(option-measure, live shell width)**. Do **not** invent consumer
+  chip under the field. Core ≥ **0.5.238** sets menu **width = live shell**
+  (same as ≥ **0.5.220** stretch match). Do **not** invent consumer
   `min-width` / `width` overrides on the menu. Live `#sandbox-select-wide-short`.
   Failure: CONSUMER_TREATY Select menu narrower than stretched trigger.
+- **DON'T** let a portaled `.fynns-select-menu` grow wider than a narrow
+  trigger for long option labels — menu stays shell-width; labels ellipsize
+  (≥ **0.5.238**). Live `.sandbox-select-narrow-host` under `#select`.
+  Failure: CONSUMER_TREATY Select menu wider than narrow trigger.
+- **DON'T** hard-clip truncated Select / Autocomplete / SearchBar result /
+  Menu item / FieldBlock Menu trigger / Card·Collapsible title /
+  NavigationDrawerItem / **NavigationDrawerGroup** label / TopAppBar title /
+  Button string label / List string headline·supporting·trailing text /
+  CodeBlock label / CommandPalette item label·description /
+  ChatActivity·ChatThinking labels / Snackbar line-clamped message /
+  ControlRow string label / DatePicker month title / SplitButton main label /
+  TimelineItem string lines / Tree item label / Breadcrumb current·link /
+  Switch `labelSide=end` / ChatCitation chip publisher·card snippet without
+  `…` **and** a Tooltip of the full string (≥ **0.5.240** `OverflowTip` on
+  menus/fields; ≥ **0.5.242** expands the same pattern; ≥ **0.5.243** keeps
+  Select / NavDrawer / Command **trigger labels** visible — tip `width: 0`
+  only on true flex-row hosts — never `title=`).
+  `NavigationDrawerGroup` `label` is `ReactNode` (≥ **0.5.242**); prefer a
+  **string** so core wraps `OverflowTip` (full worktree path on hover) — do
+  **not** cast ReactNode `as unknown as string`. List `__grow` /
+  `.fynns-table-meta` ReactNode cells → wrap at the call site (sandbox
+  `#list` run-summary). Live `#select` / `#autocomplete` / `#search-bar` /
+  `#sandbox-menu-field-match` / `#card` / `#toggle-group` / `#activity` /
+  `#list` / `#layouts-demo-shell`. Failure: CONSUMER_TREATY truncated option
+  lacks ellipsis Tooltip / truncated chrome / list / snack label lacks
+  ellipsis Tooltip.
+- **DON'T** leave a FieldBlock `DropdownMenu` panel wider (or narrower) than
+  its labeled trigger — core ≥ **0.5.239** auto **matchTriggerWidth** under
+  `.fynns-field-block` (menu width = live trigger; long items ellipsize).
+  Toolbar / `iconOnly` menus stay content-fit. Do **not** invent consumer
+  `width` / `min-width` on `.fynns-menu`. Live `#sandbox-menu-field-match`.
+  Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`
@@ -505,13 +551,23 @@ belong in a consumer’s own doc.
   on `.fynns-pagination-bar` / `__start`. Live `#pagination`. Failure:
   CONSUMER_TREATY Pagination bar gaps crushed to 4dp.
 - **DON'T** (any consumer) locally restyle keep-set **chrome anatomy** —
-  especially Select / SearchBar / Autocomplete / DropdownMenu **border-radius**,
-  padding, shadow, overflow, or expand placement (no `.hub-*` / app CSS that
-  targets `.fynns-select`, `.fynns-select-menu`, `.fynns-search-bar`,
-  `.fynns-search-bar-panel`, `.fynns-menu`). Props + strings only; missing
-  capability → core first.
-  Live `#select` / `#menu`. Failure: CONSUMER_TREATY consumer restyles keep-set
-  chrome radius.
+  especially Select / SearchBar / Autocomplete / DropdownMenu / **Input
+  `.fynns-field-shell`** **border-radius**, padding, shadow, overflow, or
+  expand placement (no `.hub-*` / app CSS that targets `.fynns-select`,
+  `.fynns-select-menu`, `.fynns-search-bar`, `.fynns-search-bar-panel`,
+  `.fynns-menu`, **`.fynns-field-shell`**, **`.fynns-field-affix`**). Props +
+  strings only; missing capability → core first.
+  Live `#select` / `#menu` / `#password` / `#input`. Failure: CONSUMER_TREATY
+  consumer restyles keep-set chrome radius; Input trailing affix far from
+  shell edge.
+- **DON'T** invent consumer negative margin / private pad on
+  `.fynns-field-shell` / `.fynns-field-affix`, ship **md** IconButton in Input
+  `leading`/`trailing`, or clone reveal/clear **outside** `Input` `trailing`
+  (sibling eye, absolute overlay). Affix-owned edges use capsule-chrome only
+  (**4dp**, ≥ **0.5.237**); affix disks stay **sm** (**32dp**, core clamp ≥
+  **0.5.131**). Live `#password` / `#input`. Failure: CONSUMER_TREATY Input
+  trailing affix far from shell edge; Input trailing md IconButton in field
+  shell.
 - **DON'T** start **new** consumer screens on soft-deprecated **`Select`** /
   **`Autocomplete`** (≥ **0.5.236**) — still exported + taught on Globals
   `#select` / `#autocomplete` with `InlineAlert` warning, but prefer
@@ -585,8 +641,10 @@ belong in a consumer’s own doc.
   short status + `InfoHint` on the ControlRow. Settings Card policy: compress
   to Tooltip / label-row `InfoHint` `sm` (≤1 per head); `FieldHint` =
   one short line. Env keys: InfoHint on label row (danger when required empty);
-  no status Chip; Input trailing reveal = `sm` only. Live `#rhythm` /
-  `#sandbox-field-header-env-keys`.
+  no status Chip; Input trailing reveal = `sm` only inside `trailing` (never
+  a cloned eye outside the shell; never consumer pad/margin on
+  `.fynns-field-shell` / `.fynns-field-affix` — ≥ **0.5.237**). Live `#rhythm` /
+  `#sandbox-field-header-env-keys` / `#password`.
 - **DON'T** paint **named recipe / preset / pack catalogs** as a grid of fat
   Cards each dumping description + evidence + `id:` as stacked `FieldHint`s
   plus a `ChipSet` tag soup in `actions` — that is Path-catalog fat-Card
@@ -1122,7 +1180,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |
-| Env / config key FieldBlock | Key label + label-row InfoHint; Input trailing `sm` | `#sandbox-field-header-env-keys` | Status Chip; portal FieldHint under Input |
+| Env / config key FieldBlock | Key label + label-row InfoHint; Input trailing `sm` (in-shell only; capsule-chrome end ≥ **0.5.237**) | `#sandbox-field-header-env-keys` / `#password` | Status Chip; portal FieldHint under Input; md in-shell disk; consumer pad/neg-margin on field-shell; eye cloned outside `trailing` |
 | Select + refresh beside | end-align cluster + `__grow`; trail size match | `#field-header` | `Select.trailing` beside chevron; sm+md trail mix |
 | Repeatable Textarea + remove | end-align + `__grow` Textarea; add on label row | `#form-recipe` Highlights | Bare cluster (delete wraps under well) |
 | Multi-Card Dialog workflow | Sibling Cards in dialog body (flex-shrink 0) | `#form-recipe` Card stack | Crushed Cards to head height |
@@ -1301,9 +1359,10 @@ chrome (SearchBar beside IconButtons) →
 pad. Chat conversation column (thread + composer outer) → `dialog-inset` via
 `--fynns-chat-thread-pad-inline`; composer inset **must** alias the thread
 token so bubble end and composer shell end stay one vertical line. Form fields:
-`Input` / field-shell inline = `capsule-chrome-pad-inline` + `field-pad-inline`
-(4+12dp) so text start matches densified Select / Autocomplete; Textarea adds
-`field-pad-block` (12dp) and default autoGrow (soft cap
+`Input` / field-shell **text** edges = `capsule-chrome-pad-inline` +
+`field-pad-inline` (4+12dp) so text start matches densified Select /
+Autocomplete; an affix-owned edge drops to capsule-chrome only (≥ **0.5.237**).
+Textarea adds `field-pad-block` (12dp) and default autoGrow (soft cap
 `--fynns-layout-textarea-max-height` ≥ **0.5.103**). Centered Dialog /
 ConfirmDialog: head/foot/body **inline** `dialog-inset` (24dp); form hosts fill
 the `size` ceiling (prefer `size="lg"` for tall inspectors); ControlStack-only

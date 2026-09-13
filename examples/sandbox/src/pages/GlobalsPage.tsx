@@ -2443,6 +2443,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               className="sandbox-select-wide-host"
             >
               <Select
+                fullWidth
                 ariaLabel={t("globals.selectWideShortAria")}
                 value={selectWideShortValue}
                 options={[
@@ -7454,6 +7455,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                 ariaLabel={t("globals.codeLangDemoAria")}
                 value={codeLangDemo}
                 onChange={setCodeLangDemo}
+                fullWidth
                 options={[
                   { value: "py", label: t("globals.codeLangDemoPy") },
                   { value: "ts", label: t("globals.codeLangDemoTs") },

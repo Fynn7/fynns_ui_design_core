@@ -83,6 +83,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
 | env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
 | Input trailing md IconButton in field shell | AGENTS shells / Hard rules | `#field-header` |
+| Input trailing affix far from shell edge | AGENTS shells / Hard rules | `#password` / `#input` |
 | mode drawer tools↔filter crushed to 4dp | AGENTS shells / Hard rules | `#layouts-demo-navigation-drawer` |
 | ad-hoc Surface / inspector row chaos | AGENTS Card / Collapsible | `#info-hint` |
 | diagnostic prose wall (probe / connection) | DESIGN_SYSTEM Hard rules | `#rhythm` |
@@ -157,7 +158,12 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
 | Pagination bar wraps to two rows | AGENTS Toolbar / unit rhythm | `—` |
 | Pagination Select invents absolute overlay | DESIGN_SYSTEM Hard rules / Content density | `#pagination` / `#select` |
+| Select stretched without fullWidth | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.244**) | `#select` / `#sandbox-select-wide-short` / `#form-recipe` |
 | Select menu narrower than stretched trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` / `#select` |
+| Select menu wider than narrow trigger | DESIGN_SYSTEM Hard rules / Content density | `#select` (`.sandbox-select-narrow-host`) |
+| truncated option lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.240** menus/fields) | `#select` / `#autocomplete` / `#search-bar` / `#sandbox-menu-field-match` |
+| truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#sandbox-rhythm-action-end` |
+| DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-menu-field-match` / `#menu` |
 | Select supporting copy kisses trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` |
 | Card teaching help kisses shell | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end` |
 | table-meta overflows without ellipsis | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-table-meta-ellipsis` |

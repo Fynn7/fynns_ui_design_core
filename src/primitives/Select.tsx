@@ -32,6 +32,12 @@ export type SelectProps = {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  /**
+   * Stretch to the host width (`fynns-select--full`). Default is **content
+   * width** (measure floor). Form FieldBlock hosts and
+   * `.fynns-control-cluster__grow` also stretch without this prop.
+   */
+  fullWidth?: boolean;
   /** Optional trailing control inside the field shell (before chevron) — M3 in-field icon slot. */
   trailing?: ReactNode;
 };
@@ -71,8 +77,10 @@ function flyoutExitMs(): number {
  * (see docs/DESIGN_SYSTEM.md / sandbox `#field-header`).
  * Replaces native `<select>`.
  *
- * Trigger width floors to the widest option (or placeholder) via absolute
- * `--fynns-select-measure-min` (≥ **0.5.210** — not `min(100%, …)`).
+ * Default **content width** (≥ **0.5.244**): root hugs
+ * `--fynns-select-measure-min` (widest option / placeholder). Stretch only via
+ * `fullWidth`, `.fynns-field-block` host, or `.fynns-control-cluster__grow`.
+ * Trigger floor stays absolute (≥ **0.5.210** — not `min(100%, …)`).
  * Open menu: **width = live trigger shell width** (≥ **0.5.238** — same length
  * as the field; long option labels ellipsize inside). Stretched short-option
  * fields still match (≥ **0.5.220**). Retires ≥ **0.5.209** “grow past a
@@ -89,6 +97,7 @@ export function Select({
   disabled = false,
   placeholder = "Select",
   className,
+  fullWidth = false,
   trailing,
 }: SelectProps) {
   const normalized = options.map(normalize);
@@ -338,6 +347,7 @@ export function Select({
         open && "fynns-select--open",
         isDisabled && "fynns-search-bar--disabled",
         isDisabled && "fynns-select--disabled",
+        fullWidth && "fynns-select--full",
         className,
       )}
       data-expanded={open ? "true" : undefined}

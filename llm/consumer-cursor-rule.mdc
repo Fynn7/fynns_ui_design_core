@@ -31,13 +31,16 @@ alwaysApply: true
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
    `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新 sibling / bump。
-4b. **Keep-set 铬细节禁止自改（硬 — ≥ 0.5.195）**：禁止在消费仓「修」Select /
-   SearchBar / Autocomplete / DropdownMenu 的 **圆角 / padding / shadow /
-   overflow / 展开方位**（含 `.fynns-select` / `.fynns-search-bar` /
-   `.fynns-search-bar-panel` / `.fynns-menu` 的任何 `border-radius` 覆写、绝对
-   定位分体面板、半壳拼接）。对照 sandbox `#select` / `#menu`；看起来不对 →
-   **只**在 `fynns_ui_design_core` 约束 + 发布。失败模式：CONSUMER_TREATY
-   consumer restyles keep-set chrome radius。
+4b. **Keep-set 铬细节禁止自改（硬 — ≥ 0.5.195；Input affix ≥ 0.5.237）**：禁止在
+   消费仓「修」Select / SearchBar / Autocomplete / DropdownMenu / **Input
+   field-shell** 的 **圆角 / padding / shadow / overflow / 展开方位**（含
+   `.fynns-select` / `.fynns-search-bar` / `.fynns-search-bar-panel` /
+   `.fynns-menu` / **`.fynns-field-shell` / `.fynns-field-affix`** 的任何
+   `border-radius` / `padding` / `margin` 覆写、负 margin「贴边」、绝对定位分体
+   面板、半壳拼接）。对照 sandbox `#select` / `#menu` / `#password` / `#input`；
+   看起来不对 → **只**在 `fynns_ui_design_core` 约束 + 发布。失败模式：
+   CONSUMER_TREATY consumer restyles keep-set chrome radius；Input trailing
+   affix far from shell edge。
 4c. **Select / Autocomplete 已软废弃（硬 — ≥ 0.5.236）**：仍导出 + Globals
    `#select` / `#autocomplete` 解剖（`InlineAlert` 警示），但**强烈不建议**用
    于**新**消费 UI。离散选项 → **`DropdownMenu`**（`#menu`）；可筛选 /
@@ -193,7 +196,15 @@ alwaysApply: true
 14. **Select refresh crammed beside chevron** — Select + refresh →
     `.fynns-control-cluster--end-align` + `__grow`，勿 `Select.trailing`。
 15. **env key FieldHint / status Chip / Input trailing md** — 门户文案用标签行
-    `InfoHint`；缺 key → `tone="danger"`；reveal = `IconButton` `sm`。
+    `InfoHint`；缺 key → `tone="danger"`。**禁止** Input `trailing` / `leading`
+    用默认 **md** 40dp（reveal / clear / 任意壳内盘一律 **`IconButton` `sm`**；
+    core ≥ **0.5.131** 钳制）。Core ≥ **0.5.237** 端侧 affix 只留
+    capsule-chrome（**4dp**）— **禁止**消费仓负 margin / 私有 end pad「贴边」、
+    **禁止**覆写 `.fynns-field-shell` / `.fynns-field-affix` 的 padding/margin、
+    **禁止**在 `Input` `trailing` **外**克隆 eye / reveal（sibling 盘、绝对定位
+    叠层）。对照 `#password` / `#input` / `#sandbox-field-header-env-keys`。
+    失败模式：CONSUMER_TREATY Input trailing md IconButton in field shell；
+    Input trailing affix far from shell edge。
 16. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
 17. **Banner icon/dismiss top-pinned** — 多行 `supportingText` 时 icon 与
     dismiss X 须相对整行垂直居中；只用 `onDismiss`（X 在圆角条内），勿在条外
@@ -228,17 +239,50 @@ alwaysApply: true
 26. **Pagination Select invents absolute overlay** — `.fynns-pagination-bar`
     内每页 Select 必须是 **stock** Keep-set Select：40dp shell + 门户
     `.fynns-select-menu`（与 `#select` 同解剖，≥ **0.5.208** 门户；≥
-    **0.5.209** 长标签可宽于窄触发器；≥ **0.5.220** 菜单 **min-width =
-    max(option-measure, 触发器 shell 宽)**（对齐全宽表单字段，禁止短标签
-    浮芯片）；≥ **0.5.210**
-    触发器 `--fynns-select-measure-min` 绝对地板，禁止 `min(100%, …)` 压扁）。
+    **0.5.244** 默认 **内容宽**；≥ **0.5.238** 菜单 **width = live shell**
+    （头与列表同长；长标签省略号；废止 ≥ **0.5.209** 宽于窄触发器）；宽宿主
+    短选项仍对齐 ≥ **0.5.220**；≥ **0.5.210** 触发器
+    `--fynns-select-measure-min` 绝对地板，禁止 `min(100%, …)` 压扁）。
     **禁止** 自建 `position:absolute; bottom:100%` 对接
     `.fynns-search-bar-panel`，也禁止覆写 `.fynns-select-menu` 圆角 / 展开位置。
     对照 `#pagination` / `#select` / `#sandbox-select-wide-short`。
+26a0. **Select stretched without fullWidth** — 裸 Select 默认 **内容宽**
+    （≥ **0.5.244**）；铺满仅用 `fullWidth`、`.fynns-field-block` 或
+    `.fynns-control-cluster__grow`。**禁止** 消费仓给 `.fynns-select` 写
+    `width:100%`。对照 `#select` / `#sandbox-select-wide-short` /
+    `#form-recipe`。
 26a. **Select menu narrower than stretched trigger** —
-    门户菜单地板 = max(option-measure, live shell 宽)（≥ **0.5.220**）；
+    门户菜单 **width = live shell**（≥ **0.5.238** / ≥ **0.5.220**）；
     **禁止** 消费仓把 `.fynns-select-menu` 压成短标签芯片（或覆写
     `min-width` / `width` 破坏与触发器对齐）。对照 `#sandbox-select-wide-short`。
+26a1. **Select menu wider than narrow trigger** —
+    窄宿主下菜单不得 `max-content` 撑宽；长选项在壳内省略（≥ **0.5.238**）。
+    对照 `#select` `.sandbox-select-narrow-host`。
+26a4. **DropdownMenu wider than FieldBlock trigger** —
+    `.fynns-field-block` 内带标签 `DropdownMenu` 自动 **matchTriggerWidth**
+    （≥ **0.5.239**，对齐 Select 0.5.238）；长项省略。工具栏 / `iconOnly`
+    仍内容适配。禁止消费仓覆写 `.fynns-menu` 宽。对照 `#sandbox-menu-field-match`。
+26a5. **truncated option lacks ellipsis Tooltip** —
+    Select / Autocomplete / SearchBar 结果行 / Menu 项 / 带标签 Menu 触发器
+    溢出必须 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.240**）；禁止
+    `title=` 或硬裁无 tip。对照 `#select` / `#autocomplete` / `#search-bar` /
+    `#sandbox-menu-field-match`。
+26a6. **truncated chrome / list / snack label lacks ellipsis Tooltip** —
+    Card·Collapsible 标题、NavDrawerItem / **NavDrawerGroup** / TopAppBar
+    标题、Button 字符串标签、List 字符串 headline·supporting·trailing、
+    CodeBlock label、CommandPalette 项 label·description、
+    ChatActivity·ChatThinking 可见标签、Snackbar line-clamp、ControlRow
+    标签、DatePicker 月标题、SplitButton 主标签、TimelineItem / Tree /
+    Breadcrumb、Switch `labelSide=end`、ChatCitation chip publisher·card
+    snippet：溢出同样 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.243**；
+    Select 触发器标签须可见 — tip `width:0` 仅限真 flex 行宿主）；
+    Snackbar / citation snippet 用 `overflowAxis="y"`）。`NavigationDrawerGroup`
+    `label` 为 `ReactNode` — **优先传 string** 让 core 包 OverflowTip（完整
+    worktree 路径）；禁止 `as unknown as string`。List `__grow` / table-meta
+    ReactNode 在调用点包 OverflowTip。短可见 Toggle 标签仍可 omit `tip`；窄
+    fullWidth 长标签传 `tip={全文}`。对照 `#card` / `#list` /
+    `#layouts-demo-shell` / `#toggle-group` / `#activity` /
+    `#sandbox-rhythm-action-end`。
 26a2. **Select supporting copy kisses trigger** — 控件 → supporting / 教学
     文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）；优先
     `FieldBlock` + `FieldHint` / `ControlBlock` `description`。**禁止**在

@@ -391,10 +391,16 @@ input.fynns-input:focus::-webkit-scrollbar {
 }
 
 /* ---------- Select (SearchBar chrome + docked results; no SearchIcon) ---------- */
-.fynns-select {
+/*
+ * Select shares `.fynns-search-bar` chrome, which defaults to `width: 100%`.
+ * Dual-class selectors beat that so content-sized Select wins (≥ **0.5.244**).
+ */
+.fynns-select.fynns-search-bar {
   position: relative;
-  width: 100%;
   /*
+   * Default content width — hug the option-measure floor.
+   * Stretch only via `--full`, FieldBlock host, or cluster `__grow`.
+   *
    * Option-measure floor from Select.tsx `--fynns-select-measure-min`.
    * Must be an absolute length — **not** `min(100%, …)` (≥ **0.5.210**).
    * Percentage mins resolve as indefinite under Grid `max-content` tracks and
@@ -402,7 +408,30 @@ input.fynns-input:focus::-webkit-scrollbar {
    * menu still grew to the widest option (agents-hub Project cwd mismatch).
    * Cluster `__grow` clears the var in JS + sets `min-width: 0` in form-rhythm.
    */
+  width: max-content;
+  max-width: 100%;
   min-width: var(--fynns-select-measure-min, 0px);
+  box-sizing: border-box;
+}
+
+.fynns-select.fynns-search-bar.fynns-select--full {
+  width: 100%;
+  max-width: 100%;
+}
+
+/*
+ * Form FieldBlock host: Select fills the control band (recipe opt-in —
+ * no `fullWidth` prop required on every FieldBlock call site).
+ */
+.fynns-field-block .fynns-select.fynns-search-bar {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Explicit cluster stretch — fill leftover flex space. */
+.fynns-select.fynns-search-bar.fynns-control-cluster__grow {
+  width: 100%;
+  max-width: 100%;
 }
 
 /*
