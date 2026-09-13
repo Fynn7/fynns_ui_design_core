@@ -66,10 +66,11 @@ index slugs **squashed drawer** + **wrong shell slot**.
     strictly newer — e.g. stale shallow clones — `git reset --hard FETCH_HEAD`)
     so new barrel symbols (icons, etc.)
     land before Vite starts — prevents blank-page
-    `does not provide an export named …`. Dirty sibling or local tip ahead
-    without a newer remote semver → hard fail (fix or
-    `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core locally; export check
-    still runs). Optional floor: consumer `package.json`
+    `does not provide an export named …`. Dirty sibling / ahead tip →
+    **soft-skip** with a loud bilingual notice (dev continues; export check
+    still hard-fails on missing symbols). CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
+    restores hard-fail on dirty/ahead. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
+    while editing core. Optional floor: consumer `package.json`
     `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a
     substitute for the export scan. Soft registry notice remains
     `fynns-ui:check-update` (`FYNNS_UI_SKIP_UPDATE_CHECK=1`).

@@ -19,8 +19,9 @@
  *   node scripts/ensure-sibling-ui-core.mjs --target ../my-app/apps/web --update
  *
  * Env:
+ *   FYNNS_UI_SKIP_SIBLING_SYNC=1 — skip --update
+ *   FYNNS_UI_STRICT_SIBLING_SYNC=1 — hard-fail on dirty/ahead (default: soft-skip + notice)
  *   FYNNS_UI_CORE_REF — clone/update branch (default: dev)
- *   FYNNS_UI_SKIP_SIBLING_SYNC=1 — skip --update (local core WIP); export gate still runs
  *
  * Consumer apps typically wrap this into setup / predev. Reference:
  * fynns_cv_generator/scripts/ensure-node.mjs
@@ -63,7 +64,8 @@ Options:
   -h, --help
 
 Env:
-  FYNNS_UI_SKIP_SIBLING_SYNC=1  Skip --update (export check can still fail)
+  FYNNS_UI_SKIP_SIBLING_SYNC=1  Skip --update
+  FYNNS_UI_STRICT_SIBLING_SYNC=1  Hard-fail dirty/ahead (default soft-skip + notice)
 `;
 }
 
@@ -236,13 +238,73 @@ function readVersionAtRev(dir, rev) {
 
 /**
  * Fast-forward a clean sibling to origin/<ref>.
- * Prefers `merge --ff-only`. Only falls back to `reset --hard` when the remote
- * package.json semver is strictly newer (stale shallow clones that cannot FF)
- * — never discards a tip that is ahead/equal by version with unique commits.
+ * Prefers `git merge --ff-only`. Only falls back to `reset --hard` when the
+ * remote package.json semver is strictly newer (stale shallow clones).
+ *
+ * Dirty / ahead / diverged tips: **soft-skip** with a loud notice (dev continues;
+ * export gate still runs). Set FYNNS_UI_STRICT_SIBLING_SYNC=1 to hard-fail instead.
  */
+function printSyncSkipNotice({ reason, dir, detail }) {
+  const zh =
+    reason === "dirty"
+      ? "已跳过自动同步 sibling UI core（检测到本地未提交改动）"
+      : reason === "ahead"
+        ? "已跳过自动同步 sibling UI core（本地 tip 超前远端，拒绝丢弃）"
+        : reason === "diverged"
+          ? "已跳过自动同步 sibling UI core（无法快进到远端 tip）"
+          : reason === "env"
+            ? "已跳过自动同步 sibling UI core（FYNNS_UI_SKIP_SIBLING_SYNC=1）"
+            : "已跳过自动同步 sibling UI core";
+  const en =
+    reason === "dirty"
+      ? "Skipped auto-sync: sibling has local uncommitted changes."
+      : reason === "ahead"
+        ? "Skipped auto-sync: local tip is ahead of origin (refusing to discard)."
+        : reason === "diverged"
+          ? "Skipped auto-sync: cannot fast-forward to origin tip."
+          : reason === "env"
+            ? "Skipped auto-sync: FYNNS_UI_SKIP_SIBLING_SYNC=1."
+            : "Skipped auto-sync.";
+  const lines = [
+    "",
+    "┌─ @fynn7/ui-design-core sibling sync ───────────────────────────────",
+    `│  ${zh}`,
+    `│  ${en}`,
+    `│  path: ${dir}`,
+  ];
+  if (detail) lines.push(`│  detail: ${detail}`);
+  lines.push(
+    "│  Dev continues — export check still runs. Next clean `npm run dev`",
+    "│  will auto-sync. Or: commit/stash/discard in that repo.",
+    "│  下次清理后会自动同步。强制跳过提示: FYNNS_UI_SKIP_SIBLING_SYNC=1",
+    "│  CI 硬失败: FYNNS_UI_STRICT_SIBLING_SYNC=1",
+    "└──────────────────────────────────────────────────────────────────",
+    "",
+  );
+  console.warn(lines.join("\n"));
+}
+
+function isStrictSiblingSync() {
+  return process.env.FYNNS_UI_STRICT_SIBLING_SYNC === "1";
+}
+
+function softOrThrow(dir, reason, message, log, detail) {
+  if (isStrictSiblingSync()) {
+    throw new Error(message);
+  }
+  printSyncSkipNotice({ reason, dir, detail });
+  log.push({ step: "update", status: "skipped", reason, path: dir, detail: detail || null });
+  return { skipped: true, soft: true, reason };
+}
+
 function updateSiblingCheckout(dir, ref, log) {
   if (process.env.FYNNS_UI_SKIP_SIBLING_SYNC === "1") {
     log.push({ step: "update", status: "skipped", reason: "FYNNS_UI_SKIP_SIBLING_SYNC=1", path: dir });
+    printSyncSkipNotice({
+      reason: "env",
+      dir,
+      detail: "FYNNS_UI_SKIP_SIBLING_SYNC=1",
+    });
     return { skipped: true };
   }
   if (!fs.existsSync(path.join(dir, ".git"))) {
@@ -251,10 +313,13 @@ function updateSiblingCheckout(dir, ref, log) {
     );
   }
   if (!isGitWorkTreeClean(dir)) {
-    throw new Error(
+    return softOrThrow(
+      dir,
+      "dirty",
       `${dir} has local changes; cannot auto-update sibling UI core.\n` +
-        `Commit/stash/discard there, or set FYNNS_UI_SKIP_SIBLING_SYNC=1 (export check may still fail),\n` +
-        `then retry npm run dev.`,
+        `Commit/stash/discard there, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.\n` +
+        `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
+      log,
     );
   }
   log.push({ step: "update", status: "start", path: dir, ref });
@@ -283,17 +348,25 @@ function updateSiblingCheckout(dir, ref, log) {
     Boolean(localVer && remoteVer && !versionAtLeast(localVer, remoteVer) && localVer !== remoteVer);
 
   if (ahead != null && ahead > 0 && !remoteNewer) {
-    throw new Error(
+    return softOrThrow(
+      dir,
+      "ahead",
       `${dir} has ${ahead} local commit(s) not on origin/${ref}; refusing to discard them.\n` +
-        `Push/merge that tip, move the checkout aside, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.`,
+        `Push/merge that tip, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.\n` +
+        `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
+      log,
+      `${ahead} commit(s) ahead`,
     );
   }
 
   if (!remoteNewer) {
-    throw new Error(
+    return softOrThrow(
+      dir,
+      "diverged",
       `${dir} cannot fast-forward to origin/${ref} (diverged or shallow history).\n` +
-        `Manual: git -C "${dir}" pull --ff-only   or move the checkout aside and re-clone.\n` +
-        `Skip auto-sync while editing core: FYNNS_UI_SKIP_SIBLING_SYNC=1`,
+        `Manual: git -C "${dir}" pull --ff-only\n` +
+        `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
+      log,
     );
   }
 

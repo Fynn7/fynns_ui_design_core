@@ -38,12 +38,13 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
    `postinstall`. Auto fast-forwards a **clean** sibling to `origin/dev`
    (or `FYNNS_UI_CORE_REF`) with `git merge --ff-only` after fetch. Only if
    FF is impossible **and** remote `package.json` semver is strictly newer
-   (typical stale shallow clone) does it `reset --hard FETCH_HEAD`. Local
-   tips ahead without a newer remote semver → hard fail (never silent discard).
-   Also fails closed on dirty sibling, failed fetch, or consumer `@fynns/ui`
-   imports missing from the linked barrel. Skip sync only while editing core
-   locally: `FYNNS_UI_SKIP_SIBLING_SYNC=1` (export check still runs). Optional
-   floor: `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
+   (typical stale shallow clone) does it `reset --hard FETCH_HEAD`. Dirty /
+   ahead / diverged tips → **soft-skip** with a loud notice (dev continues;
+   export check still runs). `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those
+   cases (CI). Also fails closed on failed fetch or missing `@fynns/ui`
+   barrel symbols. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing
+   core. Optional floor: `"fynnsUi": { "minVersion": "…" }` in the consumer
+   package.json.
 2. **`fynns-ui:check-update`** (soft) — registry notice on
    `predev` / `prebuild` / `prepreview`. On sibling/`file:` the registry
    lookup skips quietly without a token. Optional Packages lookup needs
