@@ -221,7 +221,7 @@ See [`BREAKING_PURGE.md`](BREAKING_PURGE.md) and [`AGENTS.md`](../AGENTS.md).
 - Style only with `--fynns-*` from `src/theme/tokens.ts` (`npm run gen:theme`).
 - **Scroll hosts:** every `overflow: auto/scroll` surface must use `.fynns-scroll`
   (primitives already do). Importing `@fynns/ui` auto-starts overlay thumbs
-  (`ensureOverlayScrollbars` — fixed portal at `--fynns-z-toast`; native bars
+  (`ensureOverlayScrollbars` — fixed portal at `--fynns-z-scroll-overlay`; native bars
   hidden so they never steal width). Textarea / single-line inputs hide the
   native bar only (no overlay rail). Do not reintroduce classic bars or
   `scrollbar-gutter: stable`. Authority: AGENTS.md **Scrollbar discipline**.

@@ -8,6 +8,8 @@
 /*
  * Form FieldBlock replacement (≥ **0.5.239**): root + labeled trigger fill the
  * control column so the portaled menu can match live trigger width.
+ * Labeled triggers keep the historical `.fynns-btn` look and append a trailing
+ * chevron that rotates when open (≥ **0.5.253**).
  */
 .fynns-field-block .fynns-menu-root,
 .fynns-menu-root--match-trigger {
@@ -28,10 +30,69 @@
 }
 
 /*
+ * Labeled Menu trigger (≥ **0.5.253**): same stadium Button chrome, plus a
+ * trailing chevron so the control reads as a menu (not a dead label).
+ */
+.fynns-menu-trigger-btn.fynns-btn {
+  gap: var(--fynns-layout-control-cluster-gap);
+}
+
+.fynns-menu-trigger-label {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+  /*
+   * Never `line-height: 1` / `--fynns-line-height-tight` here: OverflowTip
+   * + overflow:hidden clips Latin descenders (g / y / p) — ≥ **0.5.255**.
+   */
+  line-height: var(--fynns-line-height-snug);
+}
+
+/*
+ * Trailing flex slot (Select / SearchBar recipe): fixed square + cross-axis
+ * center — no optical translate hacks. Chevron SVG is `.fynns-icon` (block).
+ */
+.fynns-menu-trigger-trailing {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  color: var(--fynns-color-text-muted);
+}
+
+.fynns-menu-trigger-chevron {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
+  transition: transform var(--fynns-duration-fast) var(--fynns-ease-standard);
+}
+
+.fynns-menu-trigger-btn--open > .fynns-menu-trigger-trailing .fynns-menu-trigger-chevron,
+.fynns-menu-trigger-btn[aria-expanded="true"]
+  > .fynns-menu-trigger-trailing
+  .fynns-menu-trigger-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fynns-menu-trigger-chevron {
+    transition: none;
+  }
+}
+
+/*
  * M3 Menu container: corner-large (16dp), elevation flyout, 8dp pad so item
  * state layers never kiss the outer edge.
  * Portaled to body — use `--fynns-z-modal-flyout` (≥ **0.5.213**) so open
  * menus clear Dialog / Drawer overlays (same as `.fynns-select-menu`).
+ * Cap height + `fynns-scroll` (≥ **0.5.250** / rails ≥ **0.5.251**) so long
+ * catalogs scroll inside the panel with a visible overlay thumb.
  */
 .fynns-menu {
   position: fixed;
@@ -39,10 +100,13 @@
   box-sizing: border-box;
   min-width: 12rem;
   max-width: min(20rem, calc(100vw - 1rem));
+  max-height: min(70dvh, 20rem);
   display: flex;
   flex-direction: column;
   gap: var(--fynns-space-2xs);
   padding: var(--fynns-space-sm);
+  overflow-x: clip;
+  overflow-y: auto;
   border: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
   border-radius: var(--fynns-radius-xl);
   background: var(--fynns-color-surface-2);

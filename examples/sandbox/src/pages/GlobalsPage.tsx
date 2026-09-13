@@ -1557,6 +1557,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [fabMenuAlignOpen, setFabMenuAlignOpen] = useState(false);
   const [menuStarred, setMenuStarred] = useState(true);
   const [menuNotify, setMenuNotify] = useState(false);
+  const [scrollMenuModel, setScrollMenuModel] = useState("sample-model-a");
   const [rhythmShowIcon, setRhythmShowIcon] = useState(true);
   const [rhythmShowActions, setRhythmShowActions] = useState(true);
   const [rhythmDisabled, setRhythmDisabled] = useState(false);
@@ -1606,6 +1607,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [cardChromeType, setCardChromeType] = useState("flat");
   const [cardChromeQuality, setCardChromeQuality] = useState("fast");
+  const [sampleToken, setSampleToken] = useState("");
+  const [sampleTokenVisible, setSampleTokenVisible] = useState(false);
+  const [sampleTokenSaving, setSampleTokenSaving] = useState(false);
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
@@ -2261,7 +2265,82 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </DropdownMenu>
             </FieldBlock>
           </div>
+          <FieldBlock label={t("globals.menuFieldRefreshLabel")}>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <DropdownMenu
+                className="fynns-control-cluster__grow"
+                ariaLabel={t("globals.menuFieldRefreshAria")}
+                trigger={t("globals.autocompleteOptCyan")}
+                matchTriggerWidth
+              >
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptTeal")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.autocompleteOptCyan")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {}}>
+                  {t("globals.selectLongOption")}
+                </DropdownMenuItem>
+              </DropdownMenu>
+              <Tooltip content={t("globals.menuFieldRefreshTip")}>
+                <IconButton
+                  aria-label={t("globals.menuFieldRefreshTip")}
+                  size="sm"
+                  variant="ghost"
+                >
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </FieldBlock>
           <SandboxHelp text={t("globals.menuFieldMatchHelp")} />
+        </div>
+        <div id="sandbox-scroll-menu-stack">
+          <SandboxHelp text={t("globals.scrollMenuStackHelp")} />
+          <div className="sandbox-scroll-menu-stack fynns-scroll">
+            <FieldStack>
+              <FieldBlock label={t("globals.scrollMenuStackLabel")}>
+                <DropdownMenu
+                  ariaLabel={t("globals.scrollMenuStackAria")}
+                  trigger={scrollMenuModel}
+                  matchTriggerWidth
+                >
+                  {(
+                    [
+                      "sample-model-a",
+                      "sample-model-b",
+                      "sample-model-c",
+                      "sample-model-d",
+                      "sample-model-e",
+                      "sample-model-f",
+                      "sample-model-g",
+                      "sample-model-h",
+                      "sample-model-i",
+                      "sample-model-j",
+                      "sample-model-k",
+                      "sample-model-l",
+                      "sample-model-m",
+                      "sample-model-n",
+                      "sample-model-o",
+                      "sample-model-p",
+                    ] as const
+                  ).map((id) => (
+                    <DropdownMenuItem
+                      key={id}
+                      onClick={() => setScrollMenuModel(id)}
+                    >
+                      {id}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenu>
+              </FieldBlock>
+              <FieldHint>{t("globals.scrollMenuStackFillerA")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerB")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerC")}</FieldHint>
+              <FieldHint>{t("globals.scrollMenuStackFillerD")}</FieldHint>
+            </FieldStack>
+          </div>
         </div>
         <SandboxHelp text={t("globals.menuHelp")} />
         </GlobalsDemo>
@@ -5427,6 +5506,73 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                     </IconButton>
                   </Tooltip>
                 </div>
+              </FieldStack>
+            </Card>
+          </div>
+          <div id="sandbox-field-save-icon">
+            <SandboxHelp text={t("globals.fieldSaveIconHelp")} />
+            <Card
+              className="sandbox-globals-card"
+              chrome="plain"
+              title={t("globals.fieldSaveIconTitle")}
+            >
+              <FieldStack>
+                <FieldBlock label={t("globals.fieldSaveIconLabel")}>
+                  <div className="fynns-control-cluster fynns-control-cluster--end-align">
+                    <Input
+                      className="fynns-control-cluster__grow"
+                      type={sampleTokenVisible ? "text" : "password"}
+                      value={sampleToken}
+                      onChange={(event) => setSampleToken(event.target.value)}
+                      placeholder={t("globals.fieldSaveIconPlaceholder")}
+                      aria-label={t("globals.fieldSaveIconLabel")}
+                      trailing={
+                        <Tooltip
+                          content={
+                            sampleTokenVisible
+                              ? t("globals.fieldSaveIconHide")
+                              : t("globals.fieldSaveIconShow")
+                          }
+                        >
+                          <IconButton
+                            size="sm"
+                            aria-label={
+                              sampleTokenVisible
+                                ? t("globals.fieldSaveIconHide")
+                                : t("globals.fieldSaveIconShow")
+                            }
+                            disabled={sampleTokenSaving}
+                            onClick={() =>
+                              setSampleTokenVisible((visible) => !visible)
+                            }
+                          >
+                            {sampleTokenVisible ? (
+                              <EyeOffIcon size={16} aria-hidden />
+                            ) : (
+                              <EyeIcon size={16} aria-hidden />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                      }
+                    />
+                    <Tooltip content={t("globals.fieldSaveIconSave")}>
+                      <IconButton
+                        variant="tonal"
+                        loading={sampleTokenSaving}
+                        disabled={!sampleToken.trim()}
+                        aria-label={t("globals.fieldSaveIconSave")}
+                        onClick={() => {
+                          setSampleTokenSaving(true);
+                          window.setTimeout(() => {
+                            setSampleTokenSaving(false);
+                          }, 700);
+                        }}
+                      >
+                        <SaveIcon size={16} aria-hidden />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </FieldBlock>
               </FieldStack>
             </Card>
           </div>

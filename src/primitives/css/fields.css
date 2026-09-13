@@ -516,6 +516,7 @@ input.fynns-input:focus::-webkit-scrollbar {
 
 .fynns-select-trigger-chevron {
   flex-shrink: 0;
+  display: block;
   width: var(--fynns-searchbar-icon-size);
   height: var(--fynns-searchbar-icon-size);
   color: var(--fynns-color-text-muted);

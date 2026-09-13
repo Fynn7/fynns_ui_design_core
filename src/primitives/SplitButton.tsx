@@ -115,6 +115,7 @@ export function SplitButton({
       </Button>
       <DropdownMenu
         className="fynns-splitbtn-menu-root"
+        iconOnly
         trigger={
           <ChevronDownIcon
             className="fynns-splitbtn-chevron"

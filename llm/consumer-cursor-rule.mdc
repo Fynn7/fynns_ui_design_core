@@ -154,6 +154,15 @@ alwaysApply: true
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
    （无 props、无私有 mask / scroll 监听）。禁止硬裁切；禁止裸 `overflow:auto`
    替代 PageScroll。对照 `#page-scroll`。
+7b5. **overlay scrollbar paints above Select/Menu flyout** — 页级 `.fynns-scroll`
+   overlay 门户用 `--fynns-z-scroll-overlay`（在 modal 之上、**modal-flyout
+   之下**，≥ **0.5.249**）。禁止消费仓把页轨 / 私有 rail 抬到 Menu /
+   Select 之上；勿把门户改回 `--fynns-z-toast`。对照
+   `#sandbox-scroll-menu-stack`。
+7b6. **Menu/Select flyout scroll thumb buried under panel** — 飞层宿主自身的
+   overlay 轨走第二门户 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251**，
+   高于 modal-flyout、低于 toast）。禁止把菜单定高滚动做成“能滚但看不见条”；
+   禁止再发明菜单 Show more。对照 `#sandbox-scroll-menu-stack`。
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照
@@ -278,6 +287,25 @@ alwaysApply: true
     `.fynns-field-block` 内带标签 `DropdownMenu` 自动 **matchTriggerWidth**
     （≥ **0.5.239**，对齐 Select 0.5.238）；长项省略。工具栏 / `iconOnly`
     仍内容适配。禁止消费仓覆写 `.fynns-menu` 宽。对照 `#sandbox-menu-field-match`。
+26a4a. **labeled DropdownMenu missing chevron** —
+    带标签 `DropdownMenu` 触发器必须有 trailing chevron + 打开旋转
+    （core ≥ **0.5.253** 自动注入；≥ **0.5.254** 进 `.fynns-menu-trigger-trailing`
+    槽）；`iconOnly` 除外。禁止消费仓自画 chevron 或剥掉 core 箭头。对照
+    `#menu` / `#sandbox-menu-field-match`。
+26a4b. **DropdownMenu panel left-shifted vs trigger** —
+    菜单面板左缘必须与触发器左缘齐平（≥ **0.5.254**：floating 默认
+    `anchorMode: "element"` + `anchorTargetRect` 对 button 测自身）。禁止
+    消费仓给 `.fynns-menu` 加 `left` / `transform`「纠偏」。对照
+    `#sandbox-menu-field-match`。
+26a4c. **Menu chevron optically high** —
+    禁止 inline SVG baseline 把 chevron「顶高」；core ≥ **0.5.254**
+    `.fynns-icon { display: block }` + trailing flex 槽。禁止消费仓
+    `translateY` 光学微调。对照 `#menu`。
+26a4d. **Menu trigger clips descenders** —
+    带标签 Menu 触发器文案不得裁掉 `g`/`y`/`p` 下沿（≥ **0.5.255**：
+    `.fynns-menu-trigger-label` 用 `--fynns-line-height-snug`，禁止
+    `line-height: 1` + OverflowTip `overflow:hidden`）。禁止消费仓改
+    tip-label padding。对照 `#sandbox-menu-field-match`。
 26a5. **truncated option lacks ellipsis Tooltip** —
     Select / Autocomplete / SearchBar 结果行 / Menu 项 / 带标签 Menu 触发器
     溢出必须 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.240**）；禁止
@@ -381,6 +409,16 @@ alwaysApply: true
     禁止 labeled ghost「复制 Prompt」「保存默认」信息冗余。主流程动词 CTA
     （Validate / Deliver）仍可用 labeled Button。对照
     `#sandbox-card-chrome-icon-actions`。
+32b. **FieldBlock labeled Save key instead of IconButton+Tooltip** — FieldBlock /
+    `--end-align` 下自明「Save key / Save token / 保存密钥」
+    （含 **tonal** / ghost / primary 带标签 Button）→ **`IconButton` +
+    `Tooltip` + `SaveIcon`**（忙碌用 `loading`）；禁止贴文案药丸。对照
+    `#sandbox-field-save-icon`（≥ **0.5.248**）。
+32c. **FieldBlock Save IconButton wraps under Input** — 密钥 Save 必须与
+    `Input` **同一行**：`.fynns-control-cluster--end-align` + Input
+    `className="fynns-control-cluster__grow"`（reveal 仍用 `trailing` sm）+
+    Save IconButton。禁止 `unit-stack` 把 Save 甩到输入下方。对照
+    `#sandbox-field-save-icon`（≥ **0.5.252**）。
 33. **Card head primary IconButton leftmost in control-cluster** — Card /
     Collapsible `actions` 多盘簇：`variant="primary"` 必须 **LTR 末位**（贴尾）；
     次要 ghost/tonal 在前。禁止主色盘排在下载/开文件夹等 ghost 左侧。对照

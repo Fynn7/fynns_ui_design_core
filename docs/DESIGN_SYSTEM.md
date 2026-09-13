@@ -94,19 +94,26 @@ belong in a consumer’s own doc.
    common source of visual drift — never ship them. **Native classic bars on
    `.fynns-scroll` are hidden** so they never steal content width. Overlay thumbs
    are painted by `src/theme/overlayScrollbar.ts` (fixed portal rails at
-   `--fynns-z-toast` so Dialog / Drawer / Sheet hosts stay above
-   `--fynns-z-modal`; portal `pointer-events: none`, rails re-enable so thumbs
-   can be dragged / track-clicked). **One portal only** (≥ **0.5.200** — Vite
-   HMR / dual import must not stack a second `.fynns-scroll-overlay-portal` or
-   PageScroll shows twin Y thumbs). **Modal Dialog open:** suppress overlay rails
-   for scroll hosts **outside** the open modal layer (≥ **0.5.33**) — otherwise
-   PageScroll rails behind Dialog paint a phantom idle thumb. **Modal
-   `.fynns-dialog-body`:** suppress thumb until panel enter settles (≥ **0.5.34**,
-   mount + `transitionend` ≥ **0.5.35**); on fine pointer reveal on **host hover
-   only** — not `:focus-within` from the focus trap. **Nested scroll in Drawer /
-   FullscreenDialog:** Y rails clamp below overlay chrome heads (TopAppBar,
-   dialog head, Card / Collapsible heads, nav headlines ≥ **0.5.134**) — live
-   `#drawer-nested-scroll` + Layouts `#layouts-demo-shell`. Fine pointer + hover:
+   `--fynns-z-scroll-overlay` — above `--fynns-z-modal`, **below**
+   `--fynns-z-modal-flyout` so **page** rails never sit on Select / DropdownMenu
+   ≥ **0.5.249**; was wrongly `--fynns-z-toast`). **Flyout scroll hosts**
+   (`.fynns-menu` / `.fynns-select-list`) use a **second** portal at
+   `--fynns-z-scroll-overlay-flyout` (above modal-flyout, below toast) so the
+   panel’s own thumb stays visible while scrolling (≥ **0.5.251**). Portal
+   `pointer-events: none`,
+   rails re-enable so thumbs can be dragged / track-clicked. **One portal per
+   tier only**
+   (≥ **0.5.200** — Vite HMR / dual import must not stack a second
+   page `.fynns-scroll-overlay-portal` or PageScroll shows twin Y thumbs). **Modal
+   Dialog open:** suppress overlay rails for scroll hosts **outside** the open
+   modal layer (≥ **0.5.33**) — otherwise PageScroll rails behind Dialog paint a
+   phantom idle thumb. **Modal `.fynns-dialog-body`:** suppress thumb until panel
+   enter settles (≥ **0.5.34**, mount + `transitionend` ≥ **0.5.35**); on fine
+   pointer reveal on **host hover only** — not `:focus-within` from the focus
+   trap. **Nested scroll in Drawer / FullscreenDialog:** Y rails clamp below
+   overlay chrome heads (TopAppBar, dialog head, Card / Collapsible heads, nav
+   headlines ≥ **0.5.134**) — live `#drawer-nested-scroll` /
+   `#sandbox-scroll-menu-stack`. Fine pointer + hover:
    idle-transparent thumbs with soft fade; touch / coarse keeps thumbs tinted.
    **Wheel → horizontal (≥ 0.5.184 / trap at edge ≥ **0.5.186**):**
    `.fynns-scroll` hosts with horizontal overflow map a dominant vertical wheel
@@ -442,15 +449,24 @@ belong in a consumer’s own doc.
   is for measured tile catalogs (`#code-block` tokens). Live
   `#sandbox-field-stack-grid-select`. Failure: CONSUMER_TREATY FieldStack Grid
   hugs max-content leaving dead gutter in form Surface.
-- **DON'T** paint self-evident Card chrome / densified form-cluster actions as
-  **labeled** ghost `Button`s (e.g. visible `Copy Prompt` / `Save defaults`
-  next to a folder IconButton or Select row) — **information redundancy**.
-  Use **`IconButton` + `Tooltip`** (+ `aria-label`): copy → `ClipboardIcon`;
-  save defaults / draft save → `SaveIcon`; open folder → `FolderOpenIcon`.
-  Keep **labeled** Buttons for primary workflow CTAs that need a verb on the
-  face (`Validate` / `Deliver` / Dialog feet). Live
-  `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions`. Failure:
-  CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip.
+- **DON'T** paint self-evident save / copy / open-folder actions as **labeled**
+  `Button`s (ghost **or** tonal / primary) in Card chrome, densified Select
+  clusters, **or FieldBlock / form `.fynns-control-cluster--end-align`**
+  (e.g. visible `Save key` / `Save defaults` / `Copy Prompt` beside a secret
+  Input) — **information redundancy**. Use **`IconButton` + `Tooltip`**
+  (+ `aria-label`): copy → `ClipboardIcon`; save key / token / defaults /
+  draft → `SaveIcon` (busy → IconButton `loading`); open folder →
+  `FolderOpenIcon`. **Secret save host (hard ≥ **0.5.252**):** one
+  `--end-align` row — `Input` with `className="fynns-control-cluster__grow"`
+  (optional reveal `trailing` sm) **then** Save `IconButton` on the **same
+  line**. Do **not** `unit-stack` the Save under the field. Keep **labeled**
+  Buttons for primary workflow CTAs that need a verb on the face (`Validate` /
+  `Deliver` / Dialog feet / generate). Live `#sandbox-card-chrome-icon-actions`
+  / `#sandbox-field-save-icon` / `#sandbox-card-draft-actions`. Failures:
+  CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of
+  IconButton+Tooltip; **FieldBlock labeled Save key instead of
+  IconButton+Tooltip** (≥ **0.5.248**); **FieldBlock Save IconButton wraps
+  under Input** (≥ **0.5.252**).
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
@@ -526,6 +542,29 @@ belong in a consumer’s own doc.
   Toolbar / `iconOnly` menus stay content-fit. Do **not** invent consumer
   `width` / `min-width` on `.fynns-menu`. Live `#sandbox-menu-field-match`.
   Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.
+- **DON'T** leave a FieldBlock / match-width `DropdownMenu` panel **left-shifted**
+  vs the trigger — floating default is `anchorMode: "element"` (≥ **0.5.254**);
+  `anchorTargetRect` seatbelt measures `button` / `[aria-haspopup]` as **self**,
+  never the inset label child. Do **not** invent consumer `left` / `transform`
+  on `.fynns-menu`. Live `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
+  DropdownMenu panel left-shifted vs trigger.
+- **DON'T** ship a labeled `DropdownMenu` trigger with **no trailing chevron**
+  — users cannot tell it is a menu. Core ≥ **0.5.253** auto-appends
+  `ChevronDownIcon` in a trailing flex slot (Select recipe) and rotates it when
+  open; `iconOnly` stays glyph-only. Do **not** invent consumer chevron markup /
+  CSS. Live `#menu` / `#sandbox-menu-field-match`. Failure: CONSUMER_TREATY
+  labeled DropdownMenu missing chevron.
+- **DON'T** leave Menu / Button icons riding the inline SVG baseline strut
+  (chevron looks 高 / 歪) — core icons default `.fynns-icon { display: block }`
+  (≥ **0.5.254**); Menu chevron lives in `.fynns-menu-trigger-trailing`. Do
+  **not** invent consumer `transform: translateY` optical nudges. Failure:
+  CONSUMER_TREATY Menu chevron optically high.
+- **DON'T** clip Latin descenders on a labeled `DropdownMenu` trigger
+  (`g` / `y` / `p` look flat) — `.fynns-menu-trigger-label` uses
+  `--fynns-line-height-snug` (≥ **0.5.255**), never `line-height: 1` with
+  `overflow: hidden` + OverflowTip. Do **not** invent consumer padding /
+  line-height on `.fynns-overflow-tip-label`. Live `#sandbox-menu-field-match`.
+  Failure: CONSUMER_TREATY Menu trigger clips descenders.
 - **DON'T** park supporting / muted helper copy **flush** under a Select (or
   other form control) at 0–4dp — control → hint uses
   `--fynns-layout-field-hint-gap` (**8dp**). Prefer `FieldBlock` + `FieldHint`
@@ -639,6 +678,14 @@ belong in a consumer’s own doc.
   `REVEAL_MORE_LIST_DEFAULT_INITIAL` / `_STEP` (**5** / **5**, ≥ **0.5.145**)
   because ListItems are taller: foot **after** the List (unit-stack sibling);
   short lists / Dialog / `Pagination` exempt. Live `#list`.
+- **DON'T** open a **DropdownMenu** that paints a near-viewport item tower —
+  panel caps `max-height: min(70dvh, 20rem)` + `fynns-scroll` (≥ **0.5.250**);
+  overlay thumbs for the menu itself use `--fynns-z-scroll-overlay-flyout`
+  (≥ **0.5.251**). Do **not** invent consumer Show-more / private menu
+  virtualizers for ordinary catalogs (~dozens of rows). Huge catalogs (filter /
+  search / async window) belong in the **consumer**. Failure: CONSUMER_TREATY
+  Menu/Select flyout scroll thumb buried under panel. Live
+  `#sandbox-scroll-menu-stack`.
 - **DON'T** paste **consumer product content** into core/sandbox — generic
   placeholders only. Rule: [`.cursor/rules/no-consumer-content.mdc`](../.cursor/rules/no-consumer-content.mdc).
 - **DON'T** stack diagnostic essays as FieldHint / muted `<p>` unit-stacks —
@@ -815,7 +862,7 @@ Failure: CONSUMER_TREATY consumer restyles keep-set chrome radius.
 | Busy hang guards (timeout/abort) | `#busy-paint`, `#sandbox-busy-task-timeout`, `#sandbox-busy-task-abort`, `#sandbox-busy-task-generation`, `#sandbox-button-loading-task`, `#sandbox-confirm-loading-trap`, `#sandbox-chat-busy-no-stop` |
 | CodeBlock file body | `#code-block` |
 | Env key FieldHeader | `#sandbox-field-header-env-keys` |
-| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-card-head-primary-end` |
+| Card head Select / draft / chrome icons | `#sandbox-card-head-select`, `#sandbox-card-draft-actions`, `#sandbox-card-chrome-icon-actions`, `#sandbox-field-save-icon`, `#sandbox-card-head-primary-end` |
 | Destination shell / EndAside | `#layouts-demo-shell`, `#layouts-demo-drill-in`, `#layouts-demo-fill-column` |
 | Mode drawer / bulk | `#layouts-demo-navigation-drawer` |
 | Mode drawer catalog load fail | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` |
@@ -1202,6 +1249,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Multi-column records | Table in `.fynns-table-wrap.fynns-scroll` inside Card; wheel→X default (≥ **0.5.184**) | `#table` | Surface + FieldHeader fake head; invent consumer wheel remappers |
 | Long data Table (>10 rows) | `useRevealMore` + `RevealMore` foot outside wrap (default 10/10; ≥ **0.5.144**) | `#table` | Dump all rows; foot inside H-scroll wrap; fake Pagination for reveal |
 | Long List catalog (>5 items) | `useRevealMore` + `RevealMore` after List (**5**/5 via `REVEAL_MORE_LIST_DEFAULT_*`; ≥ **0.5.145**) | `#list` | Dump all items; Table 10/10 defaults on tall ListItems |
+| Long DropdownMenu catalog | Capped `fynns-scroll` panel + flyout overlay rails (≥ **0.5.251**); huge lists filter/window in consumer | `#sandbox-scroll-menu-stack` | Near-viewport dump; invisible menu thumb; consumer Show-more / premature core virtualizer |
+| FieldBlock DropdownMenu trigger | matchTriggerWidth (≥ **0.5.239**) + labeled chevron rotate (≥ **0.5.253**) + panel left flush + icon block / trailing slot (≥ **0.5.254**) + label snug line-height (≥ **0.5.255**) | `#sandbox-menu-field-match` / `#menu` | Menu width ≠ trigger; labeled trigger without chevron; panel left-shifted; chevron optically high; Latin descenders clipped |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#field-header` | Card-body FieldHint essays |
@@ -1227,7 +1276,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
-| Self-evident copy / save / open folder | `IconButton` + `Tooltip` (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) | `#sandbox-card-chrome-icon-actions` / `#sandbox-card-draft-actions` | Labeled ghost `Copy Prompt` / `Save defaults` beside icon chrome |
+| Self-evident copy / save / open folder | `IconButton` + `Tooltip`; FieldBlock secret Save = same-row `--end-align` + Input `__grow` (≥ **0.5.252**) | `#sandbox-card-chrome-icon-actions` / `#sandbox-field-save-icon` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Save key`; Save wrapped under Input via `unit-stack` |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |

@@ -166,7 +166,11 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Select menu wider than narrow trigger | DESIGN_SYSTEM Hard rules / Content density | `#select` (`.sandbox-select-narrow-host`) |
 | truncated option lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.240** menus/fields) | `#select` / `#autocomplete` / `#search-bar` / `#sandbox-menu-field-match` |
 | truncated chrome / list / snack label lacks ellipsis Tooltip | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.243**) | `#card` / `#list` / `#select` / `#layouts-demo-shell` / `#toggle-group` / `#activity` / `#sandbox-rhythm-action-end` |
-| DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-menu-field-match` / `#menu` |
+| DropdownMenu wider than FieldBlock trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.239**) | `#sandbox-menu-field-match` / `#menu` |
+| labeled DropdownMenu missing chevron | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.253**) | `#menu` / `#sandbox-menu-field-match` |
+| DropdownMenu panel left-shifted vs trigger | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#sandbox-menu-field-match` / `#menu` |
+| Menu chevron optically high | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.254**) | `#menu` / `#sandbox-menu-field-match` |
+| Menu trigger clips descenders | DESIGN_SYSTEM Hard rules / Content density (≥ **0.5.255**) | `#sandbox-menu-field-match` / `#menu` |
 | Select supporting copy kisses trigger | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-select-wide-short` |
 | Card teaching help kisses shell | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` / `#sandbox-card-head-primary-end` |
 | table-meta overflows without ellipsis | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-card-table-meta-ellipsis` |
@@ -234,11 +238,15 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FieldStack Grid vertically centers short FieldBlock beside expanded Select | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
+| FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
+| FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#sandbox-field-save-icon` |
 | Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |
 | repeatable Textarea remove wraps below row | AGENTS CodeBlock | `#form-recipe` |
 | Dialog body Card stack crush | AGENTS Dialog / overlays | `#form-recipe` |
 | phantom PageScroll rail behind modal Dialog | AGENTS shells / Hard rules | `#form-recipe` |
 | overlay scrollbar paints through chrome heads | DESIGN_SYSTEM Hard rules | `#drawer-nested-scroll` |
+| overlay scrollbar paints above Select/Menu flyout | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
+| Menu/Select flyout scroll thumb buried under panel | DESIGN_SYSTEM Scrollbar discipline | `#sandbox-scroll-menu-stack` |
 | modal Dialog scrollbar flash on enter | AGENTS Dialog / overlays | `#timeline` |
 | table row action not sharing one trailing edge | AGENTS shells / Hard rules | `#table` |
 | table map cluster top-hugged in a tall cell | DESIGN_SYSTEM Hard rules | `#table` |

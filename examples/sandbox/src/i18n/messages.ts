@@ -834,7 +834,7 @@ const en = {
   "globals.drawerNestedScrollDigest": "Digests",
   "globals.drawerNestedScrollCard": "Mounted sample card",
   "globals.drawerNestedScrollHelp":
-    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Live `#drawer-nested-scroll`.",
+    "Drawer body scroll + nested CodeBlock: overlay Y rails clamp below shell TopAppBar, `.fynns-dialog-head`, and section heads so thumbs never paint over higher chrome when an outer scrollport moves. Page rails stay under menus via `--fynns-z-scroll-overlay`; menu/Select own thumbs use `--fynns-z-scroll-overlay-flyout` (≥ **0.5.251** — live `#sandbox-scroll-menu-stack`). Live `#drawer-nested-scroll`.",
   "globals.overlayHelp":
     "M3 dialogs: basic (`Dialog` / `ConfirmDialog`, radius-3xl, no default X) + full-screen (`FullscreenDialog`). First-child bordered well (CodeBlock) flush-starts under the title — `#fullscreen-flush`. Dismissible labeled rows = `Dialog` + `showCloseButton` + full-width ControlStack (trailing Switch aligns with X). Drawer / BottomSheet / DialogShell as needed. NavigationDrawer for destinations only.",
   "globals.dialogOpen": "Open dialog",
@@ -1436,11 +1436,26 @@ const en = {
   "globals.menuRename": "Rename",
   "globals.menuDelete": "Delete",
   "globals.menuHelp":
-    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; long labels ellipsize; Select 0.5.238 parity). Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
+    "M3 Menu (DropdownMenu): portaled surface with groups, separators, and checkbox items. Sort / filter rows with a leading kind glyph → `DropdownMenuCheckboxItem` **`icon`** prop (16dp `.fynns-menu-item-icon` — same band as plain `DropdownMenuItem`; label = text only). Check column + icon + label share one vertically centered row. Arrow keys move focus; Esc dismisses. Icon-only overflow → `iconOnly` ghost sm. **Labeled triggers** auto-append a trailing chevron that rotates open (≥ **0.5.253**; trailing flex slot + block icon ≥ **0.5.254**). **Form FieldBlock** hosts auto **matchTriggerWidth** (≥ **0.5.239** — menu width = live trigger; left flush with trigger ≥ **0.5.254**; long labels ellipsize; Select 0.5.238 parity). **Long catalogs** use capped `fynns-scroll` panel (`max-height: min(70dvh, 20rem)`) with a **visible** flyout overlay rail (≥ **0.5.251**) — `#sandbox-scroll-menu-stack`. Huge lists: filter / window in the consumer. Toolbar / `iconOnly` stay content-fit. Live `#sandbox-menu-field-match`.",
   "globals.menuFieldMatchLabel": "Sample discrete pick",
   "globals.menuFieldMatchAria": "Sample field menu",
   "globals.menuFieldMatchHelp":
-    "FieldBlock + DropdownMenu (≥ **0.5.239**): portaled menu **width = live trigger** (same as Select ≥ **0.5.238**). Narrow host + long item → ellipsis — do **not** leave a menu wider than the field. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger.",
+    "FieldBlock + DropdownMenu (≥ **0.5.239** / ≥ **0.5.253** / ≥ **0.5.254**): portaled menu **width = live trigger** and **left flush**; labeled trigger keeps stadium Button chrome and shows a **trailing chevron** in a flex slot (rotates open; block SVG) so it reads as a menu — do **not** leave plain text with no arrow, leave a menu wider/shifted vs the field, or invent `translateY` chevron nudges. Narrow host + long item → ellipsis. End-align `__grow` Menu + refresh IconButton stays on the trigger band. Failure: CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger / labeled DropdownMenu missing chevron / DropdownMenu panel left-shifted vs trigger / Menu chevron optically high.",
+  "globals.menuFieldRefreshLabel": "Sample pick with refresh",
+  "globals.menuFieldRefreshAria": "Sample field menu with refresh",
+  "globals.menuFieldRefreshTip": "Refresh sample list",
+  "globals.scrollMenuStackLabel": "Sample model",
+  "globals.scrollMenuStackAria": "Sample model menu",
+  "globals.scrollMenuStackFillerA":
+    "Filler row A — keeps the capped host overflowing so the overlay Y rail is visible.",
+  "globals.scrollMenuStackFillerB":
+    "Filler row B — open the menu: page rails stay under the flyout; the menu’s own thumb stays visible.",
+  "globals.scrollMenuStackFillerC":
+    "Filler row C — page rails use --fynns-z-scroll-overlay; menu rails use --fynns-z-scroll-overlay-flyout.",
+  "globals.scrollMenuStackFillerD":
+    "Filler row D — Snackbar/toast still sits above menus.",
+  "globals.scrollMenuStackHelp":
+    "**Menu scroll thumbs (≥ 0.5.251):** page `.fynns-scroll-overlay-portal` stays at `--fynns-z-scroll-overlay` (below modal-flyout). **Flyout hosts** (`.fynns-menu` / Select list) paint rails in a second portal at `--fynns-z-scroll-overlay-flyout` so the panel’s own thumb is visible while scrolling. Open this long DropdownMenu — hover/scroll and confirm the Y thumb on the menu edge. Failure: CONSUMER_TREATY Menu/Select flyout scroll thumb buried under panel. Live `#sandbox-scroll-menu-stack`.",
   "globals.menuIconStripTip": "Overflow (icon-only menu)",
   "globals.menuIconStripAria": "Overflow menu",
   "globals.sheetOpen": "Open bottom sheet",
@@ -2076,6 +2091,14 @@ const en = {
   "globals.cardChromeIconQualityHigh": "High",
   "globals.cardChromeIconHelp":
     "**Self-evident Card chrome (hard ≥ 0.5.173):** copy / save-defaults / open-folder in Card `actions` or densified Select clusters = **`IconButton` + `Tooltip`** (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) — not labeled ghost `Button` text (**information redundancy** beside sibling icon disks). Keep labeled Buttons for primary workflow verbs (`Validate` / `Deliver`). Failure: CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip. Live `#sandbox-card-chrome-icon-actions`.",
+  "globals.fieldSaveIconTitle": "Sample credentials",
+  "globals.fieldSaveIconLabel": "Sample API token",
+  "globals.fieldSaveIconPlaceholder": "Paste a sample token",
+  "globals.fieldSaveIconShow": "Show plaintext",
+  "globals.fieldSaveIconHide": "Hide plaintext",
+  "globals.fieldSaveIconSave": "Save token",
+  "globals.fieldSaveIconHelp":
+    "**FieldBlock secret save (hard ≥ 0.5.248 / same-row ≥ **0.5.252**):** one `.fynns-control-cluster--end-align` — `Input` `className=\"fynns-control-cluster__grow\"` (+ optional reveal `trailing` sm) **then** `IconButton` + `Tooltip` + `SaveIcon` on the **same row**. Busy → `loading`. Not labeled ghost/tonal text; not a `unit-stack` sibling under the field. Failure: CONSUMER_TREATY FieldBlock Save IconButton wraps under Input. Live `#sandbox-field-save-icon`.",
   "globals.cardHeadPrimaryTitle": "Pack and export",
   "globals.cardHeadPrimaryPack": "Pack into local history",
   "globals.cardHeadPrimaryDownload": "Download result",
@@ -3202,7 +3225,7 @@ const zh: Record<MessageKey, string> = {
   "globals.drawerNestedScrollDigest": "摘要",
   "globals.drawerNestedScrollCard": "已挂载示例卡片",
   "globals.drawerNestedScrollHelp":
-    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。活样例 `#drawer-nested-scroll`。",
+    "Drawer 正文滚动 + 嵌套 CodeBlock：overlay Y 轨道裁剪在 TopAppBar、`.fynns-dialog-head` 与分区标题下方，外层滚动时拇指不会画在更高 chrome 上。页轨经 `--fynns-z-scroll-overlay` 低于菜单；菜单/Select 自身拇指用 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251** — 对照 `#sandbox-scroll-menu-stack`）。活样例 `#drawer-nested-scroll`。",
   "globals.overlayHelp":
     "M3 对话框：basic（`Dialog` / `ConfirmDialog`，radius-3xl，默认无 X）+ full-screen（`FullscreenDialog`）。正文首个带边框井（CodeBlock）顶天贴标题 — `#fullscreen-flush`。可关闭的标签行 = `Dialog` + `showCloseButton` + 全宽 ControlStack（Switch 与 X 共 end 缘）。另有 Drawer / BottomSheet / DialogShell。目的地用 NavigationDrawer。",
   "globals.dialogOpen": "打开对话框",
@@ -3799,11 +3822,26 @@ const zh: Record<MessageKey, string> = {
   "globals.menuRename": "重命名",
   "globals.menuDelete": "删除",
   "globals.menuHelp":
-    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；长标签省略；对齐 Select 0.5.238）。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
+    "M3 Menu（DropdownMenu）：分组、分隔线、复选行。带种类图标的排序/筛选 → `DropdownMenuCheckboxItem` **`icon`**（16dp `.fynns-menu-item-icon`；label 仅文案）。勾选列 + 图标 + 文案同一行垂直居中。方向键移动焦点；Esc 关闭。溢出菜单 → `iconOnly` ghost sm。**带标签触发器**自动附 trailing chevron，打开时旋转（≥ **0.5.253**；trailing flex 槽 + block 块盒 ≥ **0.5.254**）。**表单 FieldBlock** 宿主自动 **matchTriggerWidth**（≥ **0.5.239** — 菜单宽 = live 触发器；左缘齐平 ≥ **0.5.254**；长标签省略；对齐 Select 0.5.238）。**长目录**用定高 `fynns-scroll` 面板（`max-height: min(70dvh, 20rem)`）+ **可见** flyout overlay 轨（≥ **0.5.251**）— `#sandbox-scroll-menu-stack`。超长列表：消费仓自行筛选 / 窗口化。工具栏 / `iconOnly` 仍内容适配。对照 `#sandbox-menu-field-match`。",
   "globals.menuFieldMatchLabel": "示例离散选择",
   "globals.menuFieldMatchAria": "示例字段菜单",
   "globals.menuFieldMatchHelp":
-    "FieldBlock + DropdownMenu（≥ **0.5.239**）：门户菜单 **width = live trigger**（同 Select ≥ **0.5.238**）。窄宿主 + 长项 → 省略号 — **禁止**菜单宽于字段。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger。",
+    "FieldBlock + DropdownMenu（≥ **0.5.239** / ≥ **0.5.253** / ≥ **0.5.254**）：门户菜单 **width = live trigger** 且 **左缘齐平**；带标签触发器保持胶囊 Button，并在 flex 槽显示 **trailing chevron**（打开旋转；块盒 SVG），让人一眼看出是菜单 — **禁止**纯文案无箭头、菜单宽于/左偏字段，或自造 `translateY` 光学微调。窄宿主 + 长项 → 省略号。End-align `__grow` Menu + 刷新 IconButton 仍贴在触发器行带。失败模式：CONSUMER_TREATY DropdownMenu wider than FieldBlock trigger / labeled DropdownMenu missing chevron / DropdownMenu panel left-shifted vs trigger / Menu chevron optically high。",
+  "globals.menuFieldRefreshLabel": "示例选择（带刷新）",
+  "globals.menuFieldRefreshAria": "示例字段菜单（带刷新）",
+  "globals.menuFieldRefreshTip": "刷新示例列表",
+  "globals.scrollMenuStackLabel": "示例模型",
+  "globals.scrollMenuStackAria": "示例模型菜单",
+  "globals.scrollMenuStackFillerA":
+    "填充行 A — 让定高宿主溢出，露出 overlay Y 轨。",
+  "globals.scrollMenuStackFillerB":
+    "填充行 B — 打开菜单：页轨仍在飞层之下；菜单自身拇指可见。",
+  "globals.scrollMenuStackFillerC":
+    "填充行 C — 页轨用 --fynns-z-scroll-overlay；菜单轨用 --fynns-z-scroll-overlay-flyout。",
+  "globals.scrollMenuStackFillerD":
+    "填充行 D — Snackbar/toast 仍在菜单之上。",
+  "globals.scrollMenuStackHelp":
+    "**菜单滚动拇指（≥ 0.5.251）：** 页级 `.fynns-scroll-overlay-portal` 仍用 `--fynns-z-scroll-overlay`（低于 modal-flyout）。**飞层宿主**（`.fynns-menu` / Select list）在第二门户 `--fynns-z-scroll-overlay-flyout` 画轨，滚动时面板自身拇指可见。打开本长 DropdownMenu — 悬停/滚动确认菜单右缘 Y 拇指。失败：CONSUMER_TREATY Menu/Select flyout scroll thumb buried under panel。对照 `#sandbox-scroll-menu-stack`。",
   "globals.menuIconStripTip": "溢出（图标菜单）",
   "globals.menuIconStripAria": "溢出菜单",
   "globals.sheetOpen": "打开底部表单",
@@ -4425,6 +4463,14 @@ const zh: Record<MessageKey, string> = {
   "globals.cardChromeIconQualityHigh": "高质量",
   "globals.cardChromeIconHelp":
     "**自明 Card chrome（硬 ≥ 0.5.173）：** Card `actions` 或 densified Select 旁簇里的复制 / 保存默认 / 开文件夹 = **`IconButton` + `Tooltip`**（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）— 禁止 labeled ghost「复制 Prompt」「保存默认」（与旁侧图标盘 **信息冗余**）。主流程动词 CTA（Validate / Deliver）仍可用 labeled Button。失败：CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip。对照 `#sandbox-card-chrome-icon-actions`。",
+  "globals.fieldSaveIconTitle": "示例凭据",
+  "globals.fieldSaveIconLabel": "示例 API 令牌",
+  "globals.fieldSaveIconPlaceholder": "粘贴示例令牌",
+  "globals.fieldSaveIconShow": "显示明文",
+  "globals.fieldSaveIconHide": "隐藏明文",
+  "globals.fieldSaveIconSave": "保存令牌",
+  "globals.fieldSaveIconHelp":
+    "**FieldBlock 密钥保存（硬 ≥ 0.5.248 / 同行 ≥ **0.5.252**）：** 一条 `.fynns-control-cluster--end-align` — `Input` `className=\"fynns-control-cluster__grow\"`（可选 reveal `trailing` sm）**再**同行 `IconButton` + `Tooltip` + `SaveIcon`。忙碌用 `loading`。禁止 labeled 文案药丸；禁止 `unit-stack` 把 Save 甩到输入下一行。失败：CONSUMER_TREATY FieldBlock Save IconButton wraps under Input。对照 `#sandbox-field-save-icon`。",
   "globals.cardHeadPrimaryTitle": "打包与导出",
   "globals.cardHeadPrimaryPack": "打包并写入本机历史",
   "globals.cardHeadPrimaryDownload": "下载结果",
