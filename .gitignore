@@ -10,6 +10,9 @@ examples/sandbox/dist
 repomix-local-llm.md
 repomix-scheduling.md
 repomix-primitives-compress.md
+repomix-agent-slim-advice.md
+repomix-agent-slim-advice-lite.md
+repomix-token-hotspots.md
 repomix-output.*
 repomix-core-essentials.*
 
