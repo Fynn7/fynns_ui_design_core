@@ -2281,12 +2281,16 @@
 }
 
 /*
- * Mode `--toolbar-end` strip (≥ **0.5.143** start; **end flush ≥ 0.5.228**):
- * start inset matches Item labels; **trailing** edge is the destination
- * **pill outer** (body content edge) — same as primary Plus, preference
- * Switch, and Item `--with-end` disks. Do **not** re-apply
- * `item-pad-inline-end` here (that inset Plus ~16dp short of the pill).
- * Cluster stays full-width + `justify-content: flex-end`. Live:
+ * Mode `--toolbar-end` strip (≥ **0.5.143** start; **end flush ≥ 0.5.228**;
+ * IconButton **sm** clamp ≥ **0.5.235**): start inset matches Item labels;
+ * **trailing** edge is the destination **pill outer** (body content edge) —
+ * same as primary Plus, preference Switch, and Item pill outer. Do **not**
+ * re-apply `item-pad-inline-end` here (that inset Plus ~16dp short of the
+ * pill). Cluster stays full-width + `justify-content: flex-end`.
+ *
+ * Density: drawer chrome tools are **sm** (**32dp**) — never default **md**
+ * (**40dp**). Matches destination Item height band without loud 40dp disks
+ * beside 40dp pills; consumer `size` prop cannot reintroduce md. Live:
  * `#layouts-demo-navigation-drawer`.
  */
 .fynns-nav-drawer-body > .fynns-control-cluster--toolbar-end,
@@ -2297,6 +2301,19 @@
   width: 100%;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: 0;
+}
+
+.fynns-nav-drawer-body .fynns-control-cluster--toolbar-end .fynns-btn--icon {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  padding: 0;
+}
+
+.fynns-nav-drawer-body .fynns-control-cluster--toolbar-end .fynns-btn--icon svg {
+  width: var(--fynns-size-icon);
+  height: var(--fynns-size-icon);
 }
 
 /*

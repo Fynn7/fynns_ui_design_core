@@ -618,6 +618,11 @@ belong in a consumer’s own doc.
   `space-xs` from that outer (≥ **0.5.234**) — do not flush the IconButton
   wash to the stadium end. Live `#layouts-demo-navigation-drawer`. Failure:
   CONSUMER_TREATY mode drawer Plus ≠ Item pill end.
+- **DON'T** ship mode `--toolbar-end` IconButtons at default **md** (**40dp**)
+  — drawer chrome tools are **sm** (**32dp**, core clamps ≥ **0.5.235**). Prefer
+  `size="sm"` in props; do not invent consumer overrides that restore 40dp
+  disks beside destination pills. Live `#layouts-demo-navigation-drawer`.
+  Failure: CONSUMER_TREATY mode drawer toolbar-end IconButton md.
 - **DON'T** let bare mode `--toolbar-end` / preference `ControlRow` as **direct**
   drawer-body children open only Item `section-gap` (**4dp**) before the next
   sibling — chrome ↔ destinations / filter must use `--fynns-navdrawer-search-gap`
@@ -1121,7 +1126,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Persistent strip + dismiss | `Banner` `onDismiss` (icon \| body \| X **center**) | `#banner` | Sibling X outside host; flex-start top-pin |
 | Error recovery | InlineAlert + hint + end-align reload | `#sandbox-inline-alert-recovery` | Start-aligned bare Button under alert |
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
-| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp |
+| Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228** — not item-pad-end inset); chrome↔next = search-gap **8dp** (≥ **0.5.222** bare cluster) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad while Item pill full-bleed; tools↔Item crushed to section-gap 4dp; default **md** 40dp toolbar disks |
 | Mode / session row delete | `NavigationDrawerItem` `trailing` ghost **sm** IconButton (32dp; core clamps ≥ **0.5.225**; end clear ≥ **0.5.234**); `--with-end` overlay (≥ **0.5.221**) | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash; nested button inside Item; default **md** 40dp disk kissing the 40dp pill; hover disk tangent to stadium end |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |

@@ -73,7 +73,9 @@ alwaysApply: true
   `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
   **0.5.137** 对齐 Item `item-pad-inline-start`；`--toolbar-end` 主新建 Plus、
   Switch 轨道与目的地 **Item pill 外缘**共右端（≥ **0.5.228** — **禁止**再给
-  toolbar / ControlRow 套 `item-pad-end` 把 Plus 缩进 16dp）。`--toolbar-end` /
+  toolbar / ControlRow 套 `item-pad-end` 把 Plus 缩进 16dp）。`--toolbar-end`
+  IconButton 一律 **sm** **32dp**（≥ **0.5.235** core 钳制 — **禁止**省略
+  `size` 落到默认 md 40dp）。`--toolbar-end` /
   偏好 `ControlRow` 作 drawer body **直接子**时与下一兄弟的间距是 `search-gap`
   **8dp**（≥ **0.5.222**）— **禁止**压成 Item `section-gap` 4dp，也勿仅为间距
   再包一层消费仓 tools 壳。对照 `#layouts-demo-navigation-drawer`。
@@ -128,6 +130,10 @@ alwaysApply: true
 7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
    偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
    **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照
+   `#layouts-demo-navigation-drawer`。
+7d. **mode drawer toolbar-end IconButton md** — 抽屉 `--toolbar-end` 工具盘
+   一律 **sm** **32dp**（≥ **0.5.235** core 钳制）；**禁止**省略 `size` 落到
+   默认 md 40dp（与目的地 40dp pill 并排过响）。对照
    `#layouts-demo-navigation-drawer`。
 8. **Dialog foot Delete leftmost** — Cancel 在左，主确认在右。
 8a. **Dialog exit clears title/body (flash)** — 勿在 `open→false` 同一拍清空

@@ -4,6 +4,9 @@
  * Item **pill outer** share one trailing edge (≥ **0.5.228**; supersedes
  * 0.5.143 item-pad-end inset). Sandbox: #layouts-demo-navigation-drawer.
  *
+ * Also asserts `--toolbar-end` IconButtons are **sm** **32dp** (core clamp ≥
+ * **0.5.235**). Slug: mode drawer toolbar-end IconButton md.
+ *
  * Also asserts trailing delete disk is **32dp** inside the **40dp**
  * destination pill with ≥4dp clear on top/bottom/end (≥ **0.5.225** size;
  * ≥ **0.5.234** inline-end — hover wash must not tangent the stadium end).
@@ -22,6 +25,7 @@ import {
 
 const SLUG = "mode drawer toolbar Plus ≠ Switch end";
 const PILL_SLUG = "mode drawer Plus ≠ Item pill end";
+const TOOL_SM_SLUG = "mode drawer toolbar-end IconButton md";
 const DISK_SLUG = "NavigationDrawerItem badge IconButton always visible";
 const GAP_SLUG = "mode drawer tools↔filter crushed to 4dp";
 
@@ -103,6 +107,40 @@ test(`${PILL_SLUG}: Plus right ≈ destination Item pill right`, async ({
       metrics!.delta,
       `${PILL_SLUG}: Plus right vs Item pill right (got Δ=${metrics!.delta}; toolsPadEnd=${metrics!.toolsPadEnd})`,
     ).toBeLessThanOrEqual(2);
+  }).toPass({ timeout: 10_000 });
+});
+
+test(`${TOOL_SM_SLUG}: toolbar-end IconButtons are 32dp sm`, async ({
+  page,
+}) => {
+  await openLayoutsDemo(page, "navigation-drawer");
+  const demo = layoutsDemo(page, "navigation-drawer");
+  await expect(demo).toBeVisible();
+
+  await expect(async () => {
+    const metrics = await demo.evaluate((host) => {
+      const mode = [...host.querySelectorAll(".fynns-nav-drawer")].find((el) =>
+        /mode|模式/i.test(el.getAttribute("aria-label") ?? ""),
+      );
+      if (!mode) return null;
+      const icons = [
+        ...mode.querySelectorAll(
+          ".fynns-control-cluster--toolbar-end .fynns-btn--icon",
+        ),
+      ] as HTMLElement[];
+      if (icons.length === 0) return null;
+      return icons.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { h: +r.height.toFixed(2), w: +r.width.toFixed(2) };
+      });
+    });
+    expect(metrics, TOOL_SM_SLUG).not.toBeNull();
+    for (const m of metrics!) {
+      expect(m.h).toBeGreaterThanOrEqual(31.5);
+      expect(m.h).toBeLessThanOrEqual(32.5);
+      expect(m.w).toBeGreaterThanOrEqual(31.5);
+      expect(m.w).toBeLessThanOrEqual(32.5);
+    }
   }).toPass({ timeout: 10_000 });
 });
 
