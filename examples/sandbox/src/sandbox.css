@@ -904,7 +904,8 @@
 
 /* Teach Select menu = shell (≥ 0.5.238): narrow host; long labels ellipsize. */
 .sandbox-select-narrow-host {
-  /* Cap host; Select uses fullWidth so long options ellipsize inside the shell. */
+  /* Cap host; Select uses `__grow` (clears measure floor + fills host) so long
+   * options ellipsize — `fullWidth` alone keeps measure min and can overflow. */
   width: 100%;
   max-width: 10rem;
 }

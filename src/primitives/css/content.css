@@ -655,7 +655,7 @@ a.fynns-breadcrumb-link:visited {
   min-width: max-content;
 }
 
-/* Select is width:100% by default — hug content in the pager meta row. */
+/* Select defaults to content width (≥ 0.5.244) — keep pager meta hug explicit. */
 .fynns-pagination-bar__start > .fynns-select {
   width: auto;
   max-width: none;
