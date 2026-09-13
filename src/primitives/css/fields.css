@@ -96,6 +96,8 @@
 .fynns-number-input-shell {
   /* Steppers own the end edge — keep start pad, tighten end to capsule. */
   padding-inline-end: var(--fynns-layout-capsule-chrome-pad-inline);
+  /* Clip stepper hover/press wash to the shell radius (end capsule curve). */
+  overflow: hidden;
 }
 
 .fynns-number-input-shell .fynns-number-input {
@@ -113,7 +115,11 @@
   flex-direction: column;
   align-self: stretch;
   width: var(--fynns-size-icon);
-  margin-block: var(--fynns-space-2xs);
+  /* Inset from capsule curve so hover wash stays inside the outer stroke. */
+  margin-block: var(--fynns-space-xs);
+  margin-inline-end: var(--fynns-space-xs);
+  border-radius: var(--fynns-radius-xs);
+  overflow: hidden;
   border-inline-start: var(--fynns-border-hairline) solid var(--fynns-color-outline-subtle);
 }
 
@@ -128,7 +134,8 @@
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--fynns-radius-xs);
+  /* Square corners — parent steppers clip + radius owns the hover silhouette. */
+  border-radius: 0;
   background: transparent;
   color: var(--fynns-color-text-muted);
   cursor: pointer;
