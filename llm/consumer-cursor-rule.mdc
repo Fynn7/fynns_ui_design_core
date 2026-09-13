@@ -24,10 +24,15 @@ alwaysApply: true
    `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`（空展开 → E401）；sibling
    模式用 `@fynn7:registry=https://registry.npmjs.org`。**禁止** git submodule 日常消费。
 2. **UI 工作前核安装**：确保 sibling 存在且 `file:` 已链；core
-   `node scripts/ensure-sibling-ui-core.mjs --target <消费仓包根> --install --npmrc`
-   与/或 `npm run consume:check -- --target <消费仓根>`。E401 → 你还在走可选的
-   GitHub Packages 路径或残留 auth `.npmrc` — 切回 sibling（Packages npm **即使
-   public 也要 token**，所以日常不用它）。见 `llm/CONSUME.md`。
+   `node scripts/ensure-sibling-ui-core.mjs --target <消费仓包根> --install --npmrc --update`
+   与/或 `npm run consume:check -- --target <消费仓根>`。`consume:install` 会接线
+   **`fynns-ui:gate`**（`--update` + `check-ui-exports` 硬门禁）到
+   `predev`/`prebuild`/`postinstall`，避免旧 sibling 缺导出导致 Vite 能起、
+   浏览器白屏。脏 sibling → 硬失败；本机改 core 时用
+   `FYNNS_UI_SKIP_SIBLING_SYNC=1`。可选地板：`"fynnsUi": { "minVersion": "…" }`
+   （不能替代导出门禁）。E401 → 你还在走可选的 GitHub Packages 路径或残留
+   auth `.npmrc` — 切回 sibling（Packages npm **即使 public 也要 token**，所以
+   日常不用它）。见 `llm/CONSUME.md`。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
    `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新 sibling / bump。
