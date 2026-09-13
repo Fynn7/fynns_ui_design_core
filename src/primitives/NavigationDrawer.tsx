@@ -114,6 +114,12 @@ export type NavigationDrawerProps = {
    * `#layouts-demo-shell` + SandboxShell.
    */
   footer?: ReactNode;
+  /**
+   * Forwarded to the scroll **body** (`.fynns-nav-drawer-body`) — e.g.
+   * session-list blank-area `ContextMenu`. Child destinations that call
+   * `stopPropagation` keep their own row menus.
+   */
+  onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
 };
 
 function DrawerSheet({
@@ -121,12 +127,14 @@ function DrawerSheet({
   footer,
   className,
   children,
+  onContextMenu,
   ...navRest
 }: {
   headline?: ReactNode;
   footer?: ReactNode;
   className?: string;
   children?: ReactNode;
+  onContextMenu?: HTMLAttributes<HTMLDivElement>["onContextMenu"];
 } & HTMLAttributes<HTMLElement>) {
   const bodyRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
@@ -192,7 +200,11 @@ function DrawerSheet({
       {headline != null && headline !== false ? (
         <div className="fynns-nav-drawer-headline">{headline}</div>
       ) : null}
-      <div ref={bodyRef} className="fynns-nav-drawer-body fynns-scroll">
+      <div
+        ref={bodyRef}
+        className="fynns-nav-drawer-body fynns-scroll"
+        onContextMenu={onContextMenu}
+      >
         {children}
       </div>
       {footer != null && footer !== false ? (
@@ -226,6 +238,7 @@ export function NavigationDrawer({
   ariaLabel,
   className,
   children,
+  onContextMenu,
 }: NavigationDrawerProps) {
   if (variant === "standard") {
     return (
@@ -236,6 +249,7 @@ export function NavigationDrawer({
           .filter(Boolean)
           .join(" ")}
         aria-label={ariaLabel}
+        onContextMenu={onContextMenu}
       >
         {children}
       </DrawerSheet>
@@ -260,7 +274,11 @@ export function NavigationDrawer({
       panelClassName={panelClass}
       ariaLabel={ariaLabel}
     >
-      <DrawerSheet headline={headline} footer={footer}>
+      <DrawerSheet
+        headline={headline}
+        footer={footer}
+        onContextMenu={onContextMenu}
+      >
         {children}
       </DrawerSheet>
     </DialogFrame>
