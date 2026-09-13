@@ -2320,11 +2320,12 @@
 }
 
 /*
- * Session / history **New chat** (≥ **0.5.256**): ChatGPT-style full-width
- * labeled create row. Direct drawer-body child; search-gap peer (not Item
- * section-gap). Leading Plus + label; optional trailing More (sm). Do **not**
- * restyle in consumers — use `NavigationDrawerNewChat`. Live:
- * `#sandbox-navdrawer-session-chrome`.
+ * Session / history **New chat** (≥ **0.5.256**; ghost / no border ≥ **0.5.257**):
+ * ChatGPT-style full-width labeled create row. Direct drawer-body child;
+ * search-gap peer (not Item section-gap). Leading Plus + label; optional
+ * trailing More (sm). Idle = transparent (no stroke); hover/press/focus =
+ * Item-like state-layer wash. Do **not** restyle in consumers — use
+ * `NavigationDrawerNewChat`. Live: `#sandbox-navdrawer-session-chrome`.
  */
 .fynns-nav-drawer-new-chat {
   box-sizing: border-box;
@@ -2352,7 +2353,7 @@
   margin: 0;
   padding-inline-start: var(--fynns-navdrawer-item-pad-inline-start);
   padding-inline-end: var(--fynns-navdrawer-item-pad-inline-end);
-  border: 1px solid var(--fynns-color-border);
+  border: 0;
   border-radius: var(--fynns-radius-3xl);
   background: transparent;
   color: var(--fynns-color-text);
@@ -2363,7 +2364,6 @@
   appearance: none;
   transition:
     background var(--fynns-duration-fast) var(--fynns-ease-standard),
-    border-color var(--fynns-duration-fast) var(--fynns-ease-standard),
     color var(--fynns-duration-fast) var(--fynns-ease-standard);
 }
 
@@ -2372,11 +2372,6 @@
     in srgb,
     var(--fynns-color-text) var(--fynns-state-hover),
     transparent
-  );
-  border-color: color-mix(
-    in srgb,
-    var(--fynns-color-border) 70%,
-    var(--fynns-color-text)
   );
 }
 
