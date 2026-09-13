@@ -2375,6 +2375,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="select">
           <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <InlineAlert
+              severity="warning"
+              message={t("globals.selectDeprecatedAlert")}
+            />
           <Select
             ariaLabel={t("globals.selectAria")}
             value="one"
@@ -2435,6 +2439,10 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="autocomplete">
           <div className="sandbox-globals-row sandbox-globals-row--stack">
+            <InlineAlert
+              severity="warning"
+              message={t("globals.autocompleteDeprecatedAlert")}
+            />
             <Autocomplete
               ariaLabel={t("globals.autocompleteAria")}
               placeholder={t("globals.autocompletePlaceholder")}

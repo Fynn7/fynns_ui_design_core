@@ -165,6 +165,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Pagination bar gaps crushed to 4dp | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | Pagination Select option repeats noun | DESIGN_SYSTEM Hard rules / Content density | `#pagination` |
 | consumer restyles keep-set chrome radius | DESIGN_SYSTEM Hard rules / Consumer apps | `#select` / `#menu` |
+| Select Autocomplete deprecated prefer Menu SearchBar | DESIGN_SYSTEM Hard rules / Consumer apps | `#select` / `#autocomplete` / `#menu` / `#search-bar` |
 | KPI stat grid stacks full-width (undefined layout token) | DESIGN_SYSTEM Hard rules | `—` |
 | DropdownMenu bare btn in IconButton strip | AGENTS Toolbar / unit rhythm | `#menu` |
 | sparse dashboard shortcut List | AGENTS Content density / List | `#list` |

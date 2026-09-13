@@ -54,6 +54,13 @@ function flyoutExitMs(): number {
 }
 
 /**
+ * @deprecated Soft-deprecated ≥ **0.5.236** — still exported and taught on
+ * Globals `#select`, but **strongly discouraged** for new consumer UI.
+ * Prefer **`DropdownMenu`** (`#menu`) for discrete picks. Temporary carve-out:
+ * Pagination `.fynns-pagination-bar` rows-per-page may keep stock Select until
+ * a Menu-based pager recipe lands. Failure: CONSUMER_TREATY Select Autocomplete
+ * deprecated prefer Menu SearchBar.
+ *
  * M3 Exposed Dropdown / Select — form-density field (40dp outlined shell) +
  * **portaled** elevated listbox (temporary surface). Trigger stays in-flow;
  * the menu does **not** push layout (not SearchBar’s docked joined capsule).
