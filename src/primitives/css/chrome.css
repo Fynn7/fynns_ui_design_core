@@ -2636,7 +2636,7 @@
    * only the IconButton state layer insets by `space-xs` (4dp).
    */
   --fynns-navdrawer-end-action-clear: var(--fynns-space-xs);
-  /* Reserve scales with 1/2/3 disks (List `--with-end` parity ≥ **0.5.240**). */
+  /* Reserve scales with 1/2/3 disks (List `--with-end` parity ≥ **0.5.245**). */
   --fynns-navdrawer-end-actions-reserve: calc(
     var(--fynns-layout-control-cluster-gap) +
       (
@@ -2710,7 +2710,7 @@
   padding-inline-end: var(--fynns-navdrawer-end-action-clear);
   opacity: 0;
   pointer-events: none;
-  /* Perceptible ChatGPT-style fade (≥ **0.5.240** — not duration-fast snap). */
+  /* Perceptible ChatGPT-style fade (≥ **0.5.245** — not duration-fast snap). */
   transition: opacity var(--fynns-navdrawer-actions-reveal) var(--fynns-ease-out);
 }
 

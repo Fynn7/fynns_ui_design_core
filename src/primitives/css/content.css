@@ -2086,7 +2086,7 @@ a.fynns-breadcrumb-link:visited {
   align-items: center;
   opacity: 0;
   pointer-events: none;
-  /* Perceptible fade (≥ **0.5.240** — not duration-fast snap). */
+  /* Perceptible fade (≥ **0.5.245** — not duration-fast snap). */
   transition: opacity var(--fynns-list-actions-reveal) var(--fynns-ease-out);
 }
 
