@@ -111,6 +111,8 @@ sandbox `#anchor`。
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`
 - **Dialog title top ≠ body-end IconButton** — 居中非 Confirm head 顶距 = `content-inset`（18dp，≥ **0.5.280**），与 body 底 / 尾部主 `IconButton` 下距齐；勿改 `.fynns-dialog-head` 或半 `dialog-inset`。`#overlays`
+- **BottomSheet title top ≠ actions bottom** — header 外缘顶距 = `sheet-actions-pad-bottom`（24dp，≥ **0.5.281**）；勿把 `sheet-header-gap` 当外缘。`#overlays`
+- **FillColumn header top-only inset** — Destination canvas header 块向等量 `dialog-inset`（≥ **0.5.281**）。`#sandbox-fill-column-guide`
 - **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** — 一簇最多一圈；busy 时 chrome 只 `disabled`；批量只留 Card 主 CTA。`#sandbox-list-repo-path-actions`
 - **IconButton busy swaps CircularProgress** — 用 stock `loading`；禁止嵌套 `CircularProgress`。`#icon-button`
 - **runBusyTask hang / Confirm trap / empty-as-busy** — 须 `timeoutMs`/`signal`/`onError`；Confirm 用 `runLoadingTask`+`onAbort`；ChatComposer `busy` 须 `onStop`。

@@ -279,6 +279,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | skinny form Dialog (tall FieldStack / CodeBlock) | DESIGN_SYSTEM catalog | `#form-recipe` |
 | Dialog body end-align footer clipped | DESIGN_SYSTEM hard-rules | `#form-recipe` |
 | Dialog title top ≠ body-end IconButton | DESIGN_SYSTEM hard-rules / Dialog | `#overlays` |
+| BottomSheet title top ≠ actions bottom | DESIGN_SYSTEM hard-rules / overlays | `#overlays` |
+| FillColumn header top-only inset | DESIGN_SYSTEM hard-rules / FillColumn | `#sandbox-fill-column-guide` |
 | vacant band under FullscreenDialog title | DESIGN_SYSTEM Dialog / overlays | `#fullscreen-flush` |
 | BusyRegion colored loading wash (consumer surface-*) | DESIGN_SYSTEM hard-rules | `#busy-region` |
 | BusyRegion empty cold-start mask island (贴图色块) | DESIGN_SYSTEM hard-rules | `#sandbox-busy-region-empty-no-mask` |

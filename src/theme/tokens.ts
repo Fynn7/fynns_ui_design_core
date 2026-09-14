@@ -1501,9 +1501,13 @@ export const LAYOUT_TOKENS = {
   /** Content inset (M3 24dp inline / 16dp block). */
   "sheet-pad-inline": "1.5rem",
   "sheet-pad-block": "1rem",
-  /** Gap between header stack elements (M3 12dp). */
+  /** Gap between header stack elements (M3 12dp). Not the outer title clearance. */
   "sheet-header-gap": "0.75rem",
-  /** Actions: top 16dp / bottom 24dp. */
+  /**
+   * Actions: top 16dp / bottom 24dp. Sheet header outer `padding-block-start`
+   * aliases the bottom (24dp) so title ink matches primary action bottom
+   * (≥ **0.5.281**).
+   */
   "sheet-actions-pad-top": "1rem",
   "sheet-actions-pad-bottom": "1.5rem",
   /** Cap to token width and viewport inset (2×8px margin — matches Popover VIEWPORT_MARGIN). */

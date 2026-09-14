@@ -114,13 +114,17 @@ token so bubble end and composer shell end stay one vertical line. Form fields:
 Autocomplete; an affix-owned edge drops to capsule-chrome only (≥ **0.5.237**).
 Textarea adds `field-pad-block` (12dp) and default autoGrow (soft cap
 `--fynns-layout-textarea-max-height` ≥ **0.5.103**). Centered Dialog /
-ConfirmDialog: head/foot/body **inline** `dialog-inset` (24dp); form hosts fill
+ConfirmDialog: head/foot/body **inline** `dialog-inset` (24dp); non-confirm
+head **block-start** = `content-inset` (18dp, ≥ **0.5.280**) so title ink
+matches body-end / trailing primary IconButton; form hosts fill
 the `size` ceiling (prefer `size="lg"` for tall inspectors); ControlStack-only
 bodies stay content-fit. FullscreenDialog inherits content-inset on head/body —
 **flush-start** when the first body child (or one unpadded fill wrapper’s first
 child) is a bordered well (`CodeBlock` / `Surface` / `.fynns-table-wrap`) — live
-`#fullscreen-flush`. BottomSheet: asymmetric `sheet-pad-*` (M3 block≠inline);
-no header|body divider (handle is enough). Do not invent rem literals for shell
+`#fullscreen-flush`. BottomSheet: header outer block-start aliases
+`sheet-actions-pad-bottom` (24dp, ≥ **0.5.281**) so title matches primary
+action bottom; `sheet-pad-*` still asymmetric inline≠block (M3); no header|body
+divider (handle is enough). Do not invent rem literals for shell
 **outer** insets (inter-section optical pads like head+body `space-sm` / foot
 `space-lg` are the documented exception). Sandbox Layout chrome GUI edits these
 via `SANDBOX_LAYOUT_AGENT_CATALOG` in `examples/sandbox/src/state/baseline.ts`.

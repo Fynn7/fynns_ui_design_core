@@ -5745,7 +5745,7 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           onClose={() => setDialogShellOpen(false)}
           ariaLabel={t("globals.dialogShellTitle")}
         >
-          <div className="sandbox-stack" style={{ padding: "var(--fynns-space-lg)" }}>
+          <div className="sandbox-stack" style={{ padding: "var(--fynns-layout-content-inset)" }}>
             <strong>{t("globals.dialogShellTitle")}</strong>
             <p style={{ margin: 0 }}>{t("globals.dialogShellBody")}</p>
             <Button size="sm" onClick={() => setDialogShellOpen(false)}>

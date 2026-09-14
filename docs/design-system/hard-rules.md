@@ -682,6 +682,15 @@
   `.fynns-dialog-head` pad or revive `dialog-inset/2`. Confirm heads keep
   full `dialog-inset`. Live `#overlays`. Failure: CONSUMER_TREATY Dialog
   title top ≠ body-end IconButton.
+- **DON'T** crush BottomSheet title top below actions bottom — header outer
+  `padding-block-start` aliases `--fynns-layout-sheet-actions-pad-bottom`
+  (**24dp**, ≥ **0.5.281**). Do not revive `sheet-header-gap` as the outer
+  title clearance. Live `#overlays`. Failure: CONSUMER_TREATY BottomSheet
+  title top ≠ actions bottom.
+- **DON'T** omit Destination FillColumn header `padding-block-end` on the
+  canvas host — use equal `dialog-inset` block (≥ **0.5.281**). Live
+  `#sandbox-fill-column-guide`. Failure: CONSUMER_TREATY FillColumn header
+  top-only inset.
 - **DON'T** (EndAside*): conditionally mount `{asideOpen && <EndAside>}` —
   toggle **`open` only** so width morph can run (core ≥ **0.5.86** morph track
   stays mounted in DestinationAppShell — never unmount on close). Don't remount

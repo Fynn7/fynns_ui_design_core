@@ -4343,7 +4343,9 @@ input.fynns-search-bar-input:focus::-webkit-scrollbar {
   > .fynns-fill-column-header:not(:has(> .fynns-page-scroll)) {
   box-sizing: border-box;
   padding-inline: var(--fynns-layout-dialog-inset);
-  padding-block-start: var(--fynns-layout-dialog-inset);
+  /* Symmetric dialog-inset on block (≥ **0.5.281**) — title/guide top clearance
+   * matches bottom breath above Chat / main (was start-only). */
+  padding-block: var(--fynns-layout-dialog-inset);
 }
 
 .fynns-destination-app-shell-canvas
