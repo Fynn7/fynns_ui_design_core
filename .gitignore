@@ -7,14 +7,12 @@ examples/sandbox/dist
 *.tgz
 
 # Local LLM repomix dumps (configs stay tracked)
-repomix-local-llm.md
-repomix-scheduling.md
-repomix-primitives-compress.md
-repomix-agent-slim-advice.md
-repomix-agent-slim-advice-lite.md
-repomix-token-hotspots.md
+repomix-*.md
 repomix-output.*
 repomix-core-essentials.*
+
+# OpenWiki local update stamp (generated)
+openwiki/.last-update.json
 
 # Playwright / Vitest artifacts
 test-results/
@@ -24,6 +22,7 @@ playwright/.cache/
 
 # Local research / measurement dumps (do not commit)
 .tmp/
+.tmp-*
 .cursor-audit/
 dialog-scroll-radius/
 .ship-pr-body*.md

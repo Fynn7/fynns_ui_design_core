@@ -9,23 +9,21 @@
     "topFilesLength": 30,
     "includeFullDirectoryStructure": true,
     "instructionFilePath": "repomix.agent-slim-advice.instruction.md",
-    "headerText": "LITE pack for browser LLMs (~target under 40k tokens). OMITTED on purpose (too large for paste): docs/DESIGN_SYSTEM.md (~32k tok), llm/BREAKING_PURGE.md (~19k), llm/consumer-cursor-rule.mdc (~11k), llm/CHAT_*.md, examples/sandbox (Globals~328KB, i18n~382KB), src/primitives+css, tokens.ts. Full directory tree is included. See companion hotspot section if present."
+    "headerText": "LITE pack for browser LLMs. Includes DESIGN_SYSTEM stub + slim BREAKING_PURGE. OMITTED: docs/design-system chapters, BREAKING_PURGE archive, consumer-cursor-rule, CHAT_*, machine JSON twins, examples/sandbox, primitives+css, tokens.ts."
   },
   "include": [
     "AGENTS.md",
     "README.md",
     "CLAUDE.md",
     "package.json",
+    "docs/DESIGN_SYSTEM.md",
     "docs/package-propagation.md",
-    "docs/submodule-propagation.md",
     "llm/LOCAL_LLM.md",
     "llm/CONSUME.md",
     "llm/CONSUMER_TREATY.md",
     "llm/PERF.md",
     "llm/AGENT_INTERFACES.md",
-    "llm/consume.json",
-    "llm/agent-interfaces.json",
-    "llm/wysiwyg-companion.json",
+    "llm/BREAKING_PURGE.md",
     "openwiki/**/*.md",
     ".cursor/rules/**/*.mdc",
     ".cursor/skills/**/*.md",
@@ -37,9 +35,12 @@
     "useGitignore": true,
     "useDefaultPatterns": true,
     "customPatterns": [
+      "examples/**",
+      ".tmp*",
+      "repomix-*.md",
+      "**/*.png",
       "node_modules/**",
       "dist/**",
-      "examples/**",
       "e2e/**",
       "**/*.test.ts",
       "**/*.test.tsx",
@@ -49,16 +50,16 @@
       "src/layout/**",
       "src/scheduling/**",
       "package-lock.json",
-      "docs/DESIGN_SYSTEM.md",
-      "llm/BREAKING_PURGE.md",
+      "docs/design-system/**",
+      "docs/archive/**",
+      "llm/archive/**",
       "llm/consumer-cursor-rule.mdc",
       "llm/CHAT_*.md",
       "llm/m3-draft-tokens.md",
       "llm/opencode-fynns-ui-consume.md",
-      ".tmp*/**",
-      ".tmp*",
-      "**/*.png",
-      "repomix-*.md"
+      "llm/agent-interfaces.json",
+      "llm/consume.json",
+      "llm/wysiwyg-companion.json"
     ]
   }
 }

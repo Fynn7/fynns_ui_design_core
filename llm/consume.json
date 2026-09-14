@@ -5,9 +5,9 @@
   "description": "Machine-readable API for agents: link @fynn7/ui-design-core from public sibling ../fynns_ui_design_core (file:) and wire Vite/tsconfig alias @fynns/ui. No NODE_AUTH_TOKEN for day-to-day. Optional GitHub Packages is publishers-only. Do not use git submodule. Short user prompts still require reading this contract before UI work.",
   "docs": {
     "human": "llm/CONSUME.md",
-    "designSystem": "AGENTS.md",
+    "designSystem": "docs/DESIGN_SYSTEM.md",
     "propagation": "docs/package-propagation.md",
-    "legacySubmodulePropagation": "docs/submodule-propagation.md",
+    "legacySubmodulePropagation": "docs/archive/submodule-propagation.md",
     "opencodeRule": "llm/opencode-fynns-ui-consume.md",
     "consumerTreaty": "llm/CONSUMER_TREATY.md",
     "consumerCursorRule": "llm/consumer-cursor-rule.mdc",

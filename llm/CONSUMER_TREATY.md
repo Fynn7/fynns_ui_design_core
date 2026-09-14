@@ -324,10 +324,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) | Install zero-token sibling `file:` + hard consume rules |
-| [`consume.json`](consume.json) | Machine contract |
-| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Custom highlight + CodeBlock language |
-| [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |
-| [`opencode-fynns-ui-consume.md`](opencode-fynns-ui-consume.md) | Short-prompt reminder |
-| [`AGENTS.md`](../AGENTS.md) | Tokens + keep-set + Hard rules |
+| [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install |
 | [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Pasteable always-on consumer rule |
+| [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / density SoT index |
+| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight) |
+| [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |

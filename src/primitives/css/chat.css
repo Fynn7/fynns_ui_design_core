@@ -844,7 +844,39 @@
   line-height: 0;
 }
 
+/*
+ * Opaque rail punch under the mark / glyph (≥ **0.5.275**). Pulse / complete
+ * fade the *child* only — never this wash — so a flashing node cannot reveal
+ * the hairline rail (Timeline disc mask parity).
+ */
+.fynns-chat-activity-node::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  width: calc(
+    var(--fynns-timeline-node-size) +
+      (2 * var(--fynns-timeline-node-mask-outset))
+  );
+  height: calc(
+    var(--fynns-timeline-node-size) +
+      (2 * var(--fynns-timeline-node-mask-outset))
+  );
+  translate: -50% -50%;
+  border-radius: var(--fynns-radius-round);
+  background: var(--fynns-timeline-node-mask);
+  pointer-events: none;
+}
+
+/* Optional tool glyph on a done step — same accent as Timeline node glyphs. */
+.fynns-chat-activity-step--done .fynns-chat-activity-node {
+  color: var(--fynns-color-accent);
+}
+
 .fynns-chat-activity-node > * {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   max-height: 100%;
 }
@@ -859,20 +891,32 @@
 .fynns-chat-activity-mark {
   box-sizing: border-box;
   flex-shrink: 0;
-  width: var(--fynns-space-sm);
-  height: var(--fynns-space-sm);
+  /* Match Timeline default disc (`--fynns-timeline-node-size`). */
+  width: var(--fynns-timeline-node-size);
+  height: var(--fynns-timeline-node-size);
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-text-muted);
 }
 
-/* Pulse only while the step is actively streaming / holding. */
+/*
+ * Pulse only the mark fill (opacity + scale). Node `::before` wash stays
+ * opaque so the rail never shows through mid-flash.
+ */
 .fynns-chat-activity-step--active .fynns-chat-activity-mark,
 .fynns-chat-activity-step--hold .fynns-chat-activity-mark {
   animation: fynns-chat-thinking-mark-pulse
     var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
 }
 
-.fynns-chat-activity-step--done .fynns-chat-activity-mark,
+/*
+ * Done nodes = Timeline disc chrome (≥ **0.5.274**): accent fill. Rail mask
+ * lives on `.fynns-chat-activity-node::before` (≥ **0.5.275**).
+ */
+.fynns-chat-activity-step--done .fynns-chat-activity-mark {
+  animation: none;
+  background: var(--fynns-color-accent);
+}
+
 .fynns-chat-activity-step--pending .fynns-chat-activity-mark {
   animation: none;
   background: var(--fynns-color-border-strong);
@@ -896,7 +940,11 @@
   line-height: var(--fynns-line-height-snug);
 }
 
-.fynns-chat-activity-step--done .fynns-chat-activity-step-label,
+.fynns-chat-activity-step--done .fynns-chat-activity-step-label {
+  /* Completed copy stays readable — accent lives on the node (Timeline parity). */
+  color: var(--fynns-color-text);
+}
+
 .fynns-chat-activity-step--pending .fynns-chat-activity-step-label {
   color: var(--fynns-color-text-muted);
 }

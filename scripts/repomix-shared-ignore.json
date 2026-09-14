@@ -1,0 +1,16 @@
+{
+  "description": "Shared ignore.customPatterns that every tracked repomix.*.config.json must include (check-repomix-base.mjs).",
+  "requiredCustomPatterns": [
+    "examples/**",
+    ".tmp*",
+    "repomix-*.md",
+    "**/*.png"
+  ],
+  "configs": [
+    "repomix.local-llm.config.json",
+    "repomix.scheduling.config.json",
+    "repomix.primitives-compress.config.json",
+    "repomix.agent-slim-advice.config.json",
+    "repomix.agent-slim-advice-lite.config.json"
+  ]
+}

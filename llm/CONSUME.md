@@ -1,7 +1,7 @@
 # LLM / agent: consume `@fynns/ui` (zero-token sibling)
 
 **Single source of truth for *installing* this design system into any app repo.**  
-Design language & component catalog remain in [`AGENTS.md`](../AGENTS.md).  
+Design language & component catalog remain in [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md).  
 Machine contract: [`consume.json`](consume.json).  
 **Consumer-agent doc + custom-highlight map:** [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) / [`agent-interfaces.json`](agent-interfaces.json).  
 **Publish / version bumps:** [`docs/package-propagation.md`](../docs/package-propagation.md).

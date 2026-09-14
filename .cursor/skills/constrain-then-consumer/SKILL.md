@@ -13,9 +13,10 @@ disable-model-invocation: true
 When a consumer UI is wrong (wrong primitive, density, alignment, host),
 **do not** only patch the app. Same-task loop — **all steps** are hard:
 
-1. **Core constraint** — `AGENTS.md` (catalog / Content density / Hard rules).
-2. **Failure mode index** — `llm/CONSUMER_TREATY.md` (slug → AGENTS + sandbox
-   `#anchor`). Do not reintroduce long treaty essays; fix the rule in AGENTS /
+1. **Core constraint** — `docs/DESIGN_SYSTEM.md` (+ `docs/design-system/` chapter)
+   for Hard rules / Content density; slim `AGENTS.md` only as always-on summary.
+2. **Failure mode index** — `llm/CONSUMER_TREATY.md` (slug → DESIGN_SYSTEM + sandbox
+   `#anchor`). Do not reintroduce long treaty essays; fix the rule in DESIGN_SYSTEM /
    core CSS, then add/update the index row if the slug is new.
 3. **Pasteable** — `llm/consumer-cursor-rule.mdc`, then **re-paste** into the
    consumer `.cursor/rules/fynns-ui-consumer.mdc` (installer does not overwrite).

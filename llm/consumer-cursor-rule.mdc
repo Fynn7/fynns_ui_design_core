@@ -5,62 +5,45 @@ alwaysApply: true
 
 # @fynns/ui 消费仓硬性条约（复制即用）
 
-本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节在
-`@fynn7/ui-design-core`（`AGENTS.md`、`llm/CONSUME.md`、`llm/PERF.md`）。
-失败模式 slug 索引：`llm/CONSUMER_TREATY.md`（长文已迁出；细节在 `docs/DESIGN_SYSTEM.md` Hard rules + sandbox）。
+本文件是**消费仓**侧对 `@fynns/ui` 的补充合同。权威细节：
+`docs/DESIGN_SYSTEM.md`、`llm/CONSUME.md`、`llm/PERF.md`。失败模式 slug 索引：
+`llm/CONSUMER_TREATY.md`（细节 → Hard rules + sandbox，勿把 AGENTS 当 SoT）。
 
 **可见 UI 标点（硬）：** 强烈不推荐中间点 **`·`** 与破折号 **`—`**（装饰性
-**`–`** 当字段粘合符同禁）——含 **Card / Collapsible `title`**、FieldBlock
-标签、List 文案、目的地名。标题 = **人会说的短分区名**（`系统提示` /
-`消息`），禁止电报式粘合 `系统提示 · 14,279 字` / `消息 · 2` /
-`Name · N`。计数 / 字数 / token / 路径 → 正文 `.fynns-table-meta`（对照
-`#card` meta-in-body）。组织 → `supportingText`，日期 →
-`trailingSupportingText`（`2025-10 - 2026-03`）。禁止 `Org · dates`。空
-trail 用 ASCII `-`。
+**`–`** 当字段粘合符同禁）——含 Card / Collapsible `title`、FieldBlock 标签、List
+文案、目的地名。标题 = 人会说的短分区名；计数 / 字数 / token / 路径 → 正文
+`.fynns-table-meta`（`#card`）。组织 → `supportingText`，日期 →
+`trailingSupportingText`（`2025-10 - 2026-03`）。禁止 `Org · dates`。空 trail 用
+ASCII `-`。
 
 ## 安装与 API
 
-1. **零 token 日常消费（默认）**：依赖 **`@fynn7/ui-design-core`** 来自同级公开仓
-   `../fynns_ui_design_core` 的 **`file:`** 链接；Vite/tsconfig **`@fynns/ui`** →
-   `node_modules/@fynn7/ui-design-core/src/index.ts`。首跑 setup/dev 应自动 clone
-   sibling。**禁止**要求 `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` / `gh` packages 登录才能
-   `npm install` / `npm run dev`。**.npmrc 禁止**提交
-   `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`（空展开 → E401）；sibling
-   模式用 `@fynn7:registry=https://registry.npmjs.org`。**禁止** git submodule 日常消费。
-2. **UI 工作前核安装**：确保 sibling 存在且 `file:` 已链；core
-   `node scripts/ensure-sibling-ui-core.mjs --target <消费仓包根> --install --npmrc --update`
-   与/或 `npm run consume:check -- --target <消费仓根>`。`consume:install` 会接线
-   **`fynns-ui:gate`**（`--update` + `check-ui-exports` 硬门禁）到
-   `predev`/`prebuild`/`postinstall`，避免旧 sibling 缺导出导致 Vite 能起、
-   浏览器白屏。脏 sibling / ahead tip → **软跳过同步**并双语提示（dev 可继续；
-   缺导出仍硬失败）。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。可选地板：
-   `"fynnsUi": { "minVersion": "…" }`
-   （不能替代导出门禁）。E401 → 你还在走可选的 GitHub Packages 路径或残留
-   auth `.npmrc` — 切回 sibling（Packages npm **即使 public 也要 token**，所以
-   日常不用它）。见 `llm/CONSUME.md`。
+1. **零 token 日常消费（默认）**：`@fynn7/ui-design-core` 来自同级
+   `../fynns_ui_design_core` 的 **`file:`**；Vite/tsconfig `@fynns/ui` →
+   `node_modules/@fynn7/ui-design-core/src/index.ts`。禁止要求
+   `NODE_AUTH_TOKEN` / Packages 登录才能 install/dev；**.npmrc 禁止**提交
+   authToken 行；sibling 用 `@fynn7:registry=https://registry.npmjs.org`。禁止
+   git submodule 日常消费。
+2. **UI 工作前核安装**：sibling + `file:`；core
+   `ensure-sibling-ui-core.mjs --target <根> --install --npmrc --update` 与/或
+   `npm run consume:check -- --target <根>`。`consume:install` 接线
+   `fynns-ui:gate` 到 predev/prebuild/postinstall。脏 sibling → 软跳过同步；缺
+   导出仍硬失败。CI：`FYNNS_UI_STRICT_SIBLING_SYNC=1`。E401 → 切回 sibling。见
+   `llm/CONSUME.md`。
 3. Vite：`resolve.dedupe: ["react", "react-dom"]`；`tsconfig` ≥ **ES2022**。
 4. **只走公开 API**：props / children / 本地文案。禁止本地重写 `.fynns-*`、禁止
-   `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新 sibling / bump。
-4b. **Keep-set 铬细节禁止自改（硬 — ≥ 0.5.195；Input affix ≥ 0.5.237）**：禁止在
-   消费仓「修」Select / SearchBar / Autocomplete / DropdownMenu / **Input
-   field-shell** 的 **圆角 / padding / shadow / overflow / 展开方位**（含
-   `.fynns-select` / `.fynns-search-bar` / `.fynns-search-bar-panel` /
-   `.fynns-menu` / **`.fynns-field-shell` / `.fynns-field-affix`** 的任何
-   `border-radius` / `padding` / `margin` 覆写、负 margin「贴边」、绝对定位分体
-   面板、半壳拼接）。对照 sandbox `#select` / `#menu` / `#password` / `#input`；
-   看起来不对 → **只**在 `fynns_ui_design_core` 约束 + 发布。失败模式：
-   CONSUMER_TREATY consumer restyles keep-set chrome radius；Input trailing
-   affix far from shell edge。
-4c. **Select / Autocomplete 已软废弃（硬 — ≥ 0.5.236）**：仍导出 + Globals
-   `#select` / `#autocomplete` 解剖（`InlineAlert` 警示），但**强烈不建议**用
-   于**新**消费 UI。离散选项 → **`DropdownMenu`**（`#menu`）；可筛选 /
-   命令式 → **`SearchBar`** / **`CommandPalette`**。发现现有 `Select` /
-   `Autocomplete` → **推荐迁移**到上述最新式。例外：Pagination
-   `.fynns-pagination-bar` 每页条数可暂留 stock Select（直至 Menu 版 pager
-   配方）。失败模式：CONSUMER_TREATY Select Autocomplete deprecated prefer Menu
-   SearchBar。
-5. 样式只用 `var(--fynns-*)`。正文/chrome 继承 `--fynns-font-ui`；代码
-   `--fynns-font-mono`；**禁止**主界面 serif。
+   `@radix-ui/*` / `sonner`、禁止复活已 purge API。缺能力 → 先在 core 加，再刷新
+   sibling / bump。
+4b. **Keep-set 铬细节禁止自改（硬）**：禁止在消费仓「修」Select / SearchBar /
+   Autocomplete / DropdownMenu / **Input field-shell** 的圆角 / padding / shadow /
+   overflow / 展开方位（含 `.fynns-select` / `.fynns-search-bar*` / `.fynns-menu` /
+   `.fynns-field-shell` / `.fynns-field-affix`）。对照 `#select` / `#menu` /
+   `#password` / `#input`；不对 → **只**在 core 约束。
+4c. **Select / Autocomplete 已软废弃（硬）**：新 UI 勿用。离散选项 →
+   `DropdownMenu`（`#menu`）；可筛选 / 命令式 → `SearchBar` / `CommandPalette`。
+   现有命中 → 推荐迁移。例外：Pagination 每页条数可暂留 stock Select。
+5. 样式只用 `var(--fynns-*)`。正文/chrome `--fynns-font-ui`；代码
+   `--fynns-font-mono`；禁止主界面 serif。
 6. 瞬时反馈：`snackbar` + `<SnackbarHost />`。
 
 ## 加载与忙碌（硬）
@@ -68,479 +51,177 @@ trail 用 ASCII `-`。
 | 场景 | 用 | 禁止 |
 | --- | --- | --- |
 | 全屏阻塞 | `BusyScrim` | EmptyState + 圈 |
-| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell，或 PageScroll → content-column；≥ **0.5.136** 滚口 min-height + 薄包装透传） | `fill` 塞进 unit-stack / Card；FieldHint + busy 同井；PageScroll 内 fill 高度链断 → BusyStack 贴顶溢出 |
+| 栏目冷启动 | `BusyRegion` `fill`（FillColumn / shell / PageScroll→content-column） | `fill` 塞 unit-stack / Card；FieldHint + busy 同井；高度链断 |
 | Dialog/Card 正文加载 | `BusyRegion`（定高才 `fill`） | 裸 `CircularProgress`；busy 内叠 Select/Pagination |
 | 刷新已有表面 | BusyRegion 只包 List/表 | 整 Card（含脚栏）包进 busy |
 | 一宿主进度 | 环 **或** 条（linear+value） | 双进度；BusyRegion + chrome `loading` 同叠 |
-| Hang / 超时 | `runBusyTask`/`runLoadingTask` + **`timeoutMs`/`signal`/`onError`**（≥ **0.5.177**）→ **先清 busy** 再错误表面 | 永久 BusyRegion/Scrim/`loading`；空数据当 loading |
-| BusyRegion 遮罩 | core `--fynns-color-busy-region-mask` + 轻 blur（≥ **0.5.181**）；**空冷启动**无 children → 无 wash（≥ **0.5.191**，只画圈+文案） | 消费仓私造 `surface-*` / 深色 scrim；复用 BusyScrim `--fynns-color-overlay`；空 BusyRegion 内容定高「贴图色块」 |
-| 栏目冷启动失败 | 清 busy → `InlineAlert` + 短 hint + 末端 Retry（≥ **0.5.178**） | 永久 fill；EmptyState 当加载失败壳；静默空态 |
-| 错误表面 | 瞬时 → `snackbar`；面板恢复 → `InlineAlert`+Retry；生成失败 → `ChatMessage.error`+`onRetry`；机器码留消费方 `AppError { code, message }` 再映射表面 | 用 snackbar 代替面板恢复；EmptyState 当 500；AppError 码塞进 `@fynns/ui`；只有笼统「失败」无 code/detail |
+| Hang / 超时 | `runBusyTask`/`runLoadingTask` + `timeoutMs`/`signal`/`onError` → **先清 busy** 再错误表面 | 永久 BusyRegion/Scrim/`loading`；空数据当 loading |
+| BusyRegion 遮罩 | core `--fynns-color-busy-region-mask` + 轻 blur；空冷启动无 children → 无 wash | 私造 surface/scrim；复用 BusyScrim overlay；空区贴图色块 |
+| 栏目冷启动失败 | 清 busy → `InlineAlert` + hint + 末端 Retry | 永久 fill；EmptyState 当失败壳；静默空态 |
+| 错误表面 | 瞬时 → snackbar；面板 → InlineAlert+Retry；生成 → `ChatMessage.error`+`onRetry`；机器码留消费方 `AppError` | snackbar 代替面板恢复；EmptyState 当 500；码塞进 `@fynns/ui` |
 
-对照 sandbox `#busy-region` / `#sandbox-pane-load-error` / `#busy-paint` / `#sandbox-busy-task-timeout`。
+对照 `#busy-region` / `#sandbox-pane-load-error` / `#busy-paint` /
+`#sandbox-busy-task-timeout`。
 
 ## Shell（硬）
 
-- 绿田默认 **`DestinationAppShell`**：目的地 = 可调整宽抽屉 **或** 全关
-  `hidden` — **禁止**窄屏 densify 成 unlabeled `NavigationRail`。
-- **`nav` = 目的地 only**；正文 → `children`；检查器 → `EndAside`。
-  “Clipped” = M3 拓扑，不是文字裁切。
-- Settings：**仅** `navFooter` 齿轮；Settings 体 = 软件偏好（语言/外观/账号）。
-  功能配置走独立目的地。语言开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。
-  Footer `Avatar` 的 `name` = **可见**账户标签全文（多词首尾字母大写缩写 ≥
-  **0.5.214**）— **禁止**另传截断名（标签 `Agents Hub` 却 `name="Hub"` →
-  `HU`）。对照 `#layouts-demo-shell` / `#avatar`。
-- 模式侧栏偏好（隐藏内置）：**单行** `ControlRow` + `InfoHint` `sm` + 仅轨道
-  `Switch` — **禁止** `ControlBlock` 长 `description`。标签左缘由 core ≥
-  **0.5.137** 对齐 Item `item-pad-inline-start`；`--toolbar-end` 主新建 Plus、
-  Switch 轨道与目的地 **Item pill 外缘**共右端（≥ **0.5.228** — **禁止**再给
-  toolbar / ControlRow 套 `item-pad-end` 把 Plus 缩进 16dp）。`--toolbar-end`
-  IconButton 一律 **sm** **32dp**（≥ **0.5.235** core 钳制 — **禁止**省略
-  `size` 落到默认 md 40dp）。`--toolbar-end` /
-  偏好 `ControlRow` 作 drawer body **直接子**时与下一兄弟的间距是 `search-gap`
-  **8dp**（≥ **0.5.222**）— **禁止**压成 Item `section-gap` 4dp，也勿仅为间距
-  再包一层消费仓 tools 壳。对照 `#layouts-demo-navigation-drawer`。
-- 模式侧栏 SyncSideFilter：`ToggleGroup` `compact` `fullWidth` +
-  **`showCheck={false}`** + **省略 option `tip`**；可见标签用**短**名
-  （全部 / 标记字形）— **禁止**等分列塞长产品名（core ≥ **0.5.140** 会
-  ellipsis + 12dp compact pad，仍应短标签）。对照
-  `#layouts-demo-navigation-drawer` / `#toggle-group`。
-- 模式侧栏目录加载失败：目的地换成**短** `InlineAlert` + `InfoHint`
-  `tone="danger"`（长诊断：端口 / 日志路径）+ **末端对齐** Retry（≥
-  **0.5.215**）— **禁止**把完整后端长文塞进 `InlineAlert.message`。对照
-  `#sandbox-navdrawer-mode-catalog-fail`。主画布栏目冷启动仍用
-  `#sandbox-pane-load-error`。
-- `EndAside`：只切 `open` — **禁止** `{open && <EndAside>}`；toggle 勿触发
-  workspace `BusyRegion` boot。窄检查器：一个主 CTA + IconButton/菜单，勿堆三条
-  labeled Button。对照 `#layouts-demo-shell`。
+- 绿田默认 **`DestinationAppShell`**：目的地 = 可调宽抽屉 **或** `hidden` —
+  **禁止**窄屏 densify 成 unlabeled `NavigationRail`。
+- **`nav` = 目的地 only**；正文 → `children`；检查器 → `EndAside`。“Clipped” =
+  M3 拓扑，不是文字裁切。
+- Settings：**仅** `navFooter` 齿轮；体 = 软件偏好。功能配置走独立目的地。语言
+  开关在 Settings 内 `ToggleGroup` — **禁止** TopAppBar。Footer `Avatar`
+  `name` = **可见**账户标签全文 — **禁止**另传截断名。对照 `#layouts-demo-shell`
+  / `#avatar`。
+- 模式侧栏偏好：单行 `ControlRow` + `InfoHint` `sm` + 仅轨道 `Switch` — 禁止
+  `ControlBlock` 长 description。标签左缘对齐 Item pad；`--toolbar-end` 主新建
+  Plus / Switch 与目的地 Item pill **共右端** — 禁止再套 `item-pad-end`。
+  `--toolbar-end` IconButton 一律 **sm** **32dp**。`--toolbar-end` / 偏好
+  ControlRow 作 body 直接子时与下一兄弟间距 = `search-gap` **8dp**。对照
+  `#layouts-demo-navigation-drawer`。
+- SyncSideFilter：`ToggleGroup` `compact` `fullWidth` + `showCheck={false}` +
+  省略 option `tip`；短可见标签。对照 `#layouts-demo-navigation-drawer` /
+  `#toggle-group`。
+- 模式目录加载失败：短 `InlineAlert` + `InfoHint` `tone="danger"` + 末端 Retry —
+  禁止长后端文塞进 `message`。对照 `#sandbox-navdrawer-mode-catalog-fail`。
+- `EndAside`：只切 `open` — 禁止 `{open && <EndAside>}`；toggle 勿触发 workspace
+  BusyRegion boot。窄检查器：一主 CTA + IconButton/菜单。对照
+  `#layouts-demo-shell`。
 
-## Top-20 失败模式（消费仓最常踩）
+## 常见失败模式（slug 索引）
 
-其余 slug → `llm/CONSUMER_TREATY.md` 索引表；正文 → `AGENTS.md` Hard rules。
+其余细节 → `llm/CONSUMER_TREATY.md` + `docs/design-system/hard-rules.md` +
+sandbox `#anchor`。
 
-1. **sandbox-only aesthetics** — 勿只改 sandbox overrides；token 进 `tokens.ts`。
-2. **squashed drawer / icon-only rail densify** — 拥挤 → `hidden`，勿假 rail。
-3. **drawer sheet headline under TopAppBar** — DestinationAppShell 勿传
-   `drawerHeadline`。
-4. **hub-split / catalog edit as silent PageScroll** — 列表保持挂载；编辑 →
-   `Dialog` `size="lg"` + `showCloseButton`（长流程才 FullscreenDialog）。
-4b. **drill-in / mode sidebar hard-swap** — 根目的地 ↔ 模式目录侧栏换 body 时
-   必须给 `ClippedNavShell` 传 **`navKey`** + **`navDirection`**（≥ **0.5.183**），
-   定宽列内 Shared Axis X（短滑 + fade）；退出用 `"back"`。禁止硬切，也禁止
-   关轨再开冒充钻入。≥ **0.5.198** 出层立即隐藏；≥ **0.5.201** 从 prepare
-   首帧起隐藏；≥ **0.5.202** morph 全程不给 nav-axis 内宿主画 portal Y 轨
-   （避免 incoming 透明位移帧闪轨）。对照 `#layouts-demo-drill-in`。
-5. **fat Surface / Card per catalog row** — 路径/书签/配方/预设 → 一个 `List` of
-   `ListItem`（短 `supportingText`；长文 / id → Dialog 或 `InfoHint`）。禁止每项
-   一张胖 Card + 多段 `FieldHint` 长文 + `ChipSet` 标签汤。对照 `#list` /
-   `#sandbox-list-recipe-catalog`。
-6. **org · dates glued / UI · — punctuation / Card title · meta** — 槽位分开；
-   禁用 `·`/`—` 粘合。Card/Collapsible `title` 只放短名；计数/token → 正文
-   `.fynns-table-meta`（`#card`）。
-6b. **trailingSupportingText right-hug drift** — 日期 / 时间戳目录必须
-   `List` / `Timeline` **`trailingMetaAlign="start"`**（固定列 start-ink ≥
-   **0.5.223**）。状态 / kind → `overline`；**禁止**把 `已完成, 2025-10 - 2026-03`
-   粘进 trailing。对照 `#list` org+dates / `#timeline`。
-7. **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏
-   Cancel → Delete → Save；勿 rail `--with-end` 铅笔/垃圾桶。对照 `#timeline`。
-7b. **NavigationDrawerItem badge IconButton always visible** — 模式 / 会话行
-   动作用 `NavigationDrawerItem` **`trailing`** ghost **sm** IconButton /
-   `DropdownMenu` `iconOnly`（+ Tooltip；≥ **0.5.225** 核心把 trailing 盘钳到
-   **32dp**；≥ **0.5.234** 再留 **`space-xs`（4dp）** inline-end）。List
-   `--with-end` 叠层揭示（≥ **0.5.221**）；≥ **0.5.245** 用
-   `--fynns-navdrawer-actions-reveal`（slow）渐显，禁止 `duration-fast` 闪现。
-   **禁止**把删除塞进 `badge`（`badge` 只放计数 / 圆点）。对照
-   `#layouts-demo-navigation-drawer`。
-7b2. **NavigationDrawerItem always-visible trash / no more-menu** — 行尾优先
-   **More（`…`）** + `DropdownMenu`（icon+文案、`DropdownMenuSeparator`、删除
-   `tone="danger"`）；破坏性 / 次要操作进菜单，勿把垃圾桶当唯一 hover 动作
-   （信息冗余）。可在 More 旁放 1–2 个高频快捷（Rename / Pin）。勿写消费仓
-   私有渐显 CSS。对照 `#layouts-demo-navigation-drawer`。
-7b3. **mode drawer toolbar trash+new twin** — 会话 / 历史用
-   **`NavigationDrawerNewChat`**（满宽带文案 New chat，**ghost 无描边**，≥
-   **0.5.256** / **0.5.257**）；可选 `trailing` More 放全部删除
-   `tone="danger"`。**禁止** ghost Trash 与 Plus 并排；**禁止**历史侧栏再用
-   icon-only `--toolbar-end` 冒充 ChatGPT。目录 sort/refresh/bulk-select 仍用
-   `--toolbar-end` + Plus。对照 `#sandbox-navdrawer-session-chrome` /
-   `#layouts-demo-navigation-drawer`。
-7b3a. **chat product / session host wrong tree** — chat / 会话历史类默认：
-   **`ClippedNavShell`** + 会话 `NavigationDrawer`（`NavigationDrawerNewChat`
-   + EmptyState|Items + footer 账号）+ 主列 **`FillColumn` → `Chat`**。
-   **新会话：** 问候 + soft starters + `ChatComposer` 放进 `ChatThread.empty`
-   居中堆栈（收起 dock 行）；有消息后 composer 贴在 `ChatThread` 下。扁平目的地
-   根仍用 `DestinationAppShell`。禁止 PageScroll 当 chat 主滚、composer 进
-   FillColumn `footer`、Chip starters。对照 `#layouts-demo-chat-product`。
-7b3b. **chat aside host wrong tree** — 侧栏为主题屏的 chat：`DestinationAppShell`
-   + **`EndAside`** → `.fynns-chat-host--fill` → `Chat`，新会话 landing 与
-   `#layouts-demo-chat-product` 相同。主画布占位即可。禁止跳过
-   `chat-host--fill`、composer 进 FillColumn `footer`。对照
-   `#layouts-demo-chat-aside`。
-7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
-   keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
-   自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
-   （无 props、无私有 mask / scroll 监听）。禁止硬裁切；禁止裸 `overflow:auto`
-   替代 PageScroll。对照 `#page-scroll`。
-7b5. **overlay scrollbar paints above Select/Menu flyout** — 页级 `.fynns-scroll`
-   overlay 门户用 `--fynns-z-scroll-overlay`（在 modal 之上、**modal-flyout
-   之下**，≥ **0.5.249**）。禁止消费仓把页轨 / 私有 rail 抬到 Menu /
-   Select 之上；勿把门户改回 `--fynns-z-toast`。对照
-   `#sandbox-scroll-menu-stack`。
-7b6. **Menu/Select flyout scroll thumb buried under panel** — 飞层宿主自身的
-   overlay 轨走第二门户 `--fynns-z-scroll-overlay-flyout`（≥ **0.5.251**，
-   高于 modal-flyout、低于 toast）。禁止把菜单定高滚动做成“能滚但看不见条”；
-   禁止再发明菜单 Show more。对照 `#sandbox-scroll-menu-stack`。
-7c. **mode drawer tools↔filter crushed to 4dp** — 裸 `--toolbar-end` /
-   偏好 `ControlRow` 作 body 直接子时，下一兄弟须 `search-gap` **8dp**（≥
-   **0.5.222**）；勿压成 Item 4dp，勿私有 tools 壳凑间距。对照
-   `#layouts-demo-navigation-drawer`。
-7d. **mode drawer toolbar-end IconButton md** — 抽屉 `--toolbar-end` 工具盘
-   一律 **sm** **32dp**（≥ **0.5.235** core 钳制）；**禁止**省略 `size` 落到
-   默认 md 40dp（与目的地 40dp pill 并排过响）。对照
-   `#layouts-demo-navigation-drawer`。
-8. **Dialog foot Delete leftmost** — Cancel 在左，主确认在右。
-8a. **Dialog exit clears title/body (flash)** — 勿在 `open→false` 同一拍清空
-    title/body；`DialogFrame` 退出约 240ms 仍绘 props，内容保留到下次打开。
-    禁止把 Confirm 标题当 Dialog 标题 fallback。对照
-    `#sandbox-list-recipe-catalog`。
-9. **twin Button loading rings / BusyRegion + chrome loading** — 一簇最多一圈；
-   BusyRegion 等待时 chrome 只 `disabled`。
-9z. **Card batch CTA + ListItem row twin loading rings** — **严禁信息冗余（硬 ≥
-    0.5.265）：** 同一批重建 / 刷新任务**禁止** Card/Collapsible `actions` 主
-    `Button` `loading` **与** 每一行（或多行）Rebuild `IconButton` `loading`
-    同时转圈。批量 → 只留 Card 主 CTA 一圈，行只 `disabled`；单行 → 只该行
-    IconButton 一圈，Card 主钮只 `disabled`。禁止 `loading={busy==="run"}`
-    绑在头按钮和每行 Refresh 上。对照 `#sandbox-list-repo-path-actions`。
-9a. **IconButton busy swaps CircularProgress instead of loading** — IconButton
-    忙碌用 stock **`loading`**（Spinner；iconOnly 仅圈）。**禁止**把 children
-    换成嵌套 `CircularProgress`（尤其 `variant="primary"` / `danger` —
-    accent 环贴 accent 底会变成「空白盘」；core ≥ **0.5.217** 会把嵌套环
-    改成 `currentColor` 兜底，但 API 仍是 `loading`）。对照 `#icon-button` /
-    `#sandbox-iconbutton-primary-loading`。
-9b. **runBusyTask hang / Confirm trap / empty-as-busy** — 长任务用
-   `timeoutMs`/`signal`/`onError`（≥ **0.5.177**）；Button/Confirm 用
-   `runLoadingTask` + Confirm `onAbort`；禁止空数据当永久 BusyRegion；
-   栏目冷启动失败 → `#sandbox-pane-load-error`（≥ **0.5.178**）；
-   `ChatComposer` `busy` 必须配对 `onStop`。对照 `#sandbox-busy-task-timeout`
-   / `#sandbox-confirm-loading-trap`。
-10. **section-body IconButton sm / labeled generate Button** — PageScroll 段级
-    ControlRow：`label` 已命名分区时只用 **md** ghost IconButton + Tooltip；
-    禁止 `sm` 盘或 labeled primary/tonal 生成药丸。同页 catalog + List trailing
-    共用 md。对照 `#rhythm` morph。
-10b. **ControlRow unsolicited item count** — **严禁信息冗余（硬 ≥ 0.5.266）：**
-    目录 / 分区 `ControlRow` 顶栏 = **标签 + IconButton 簇**；**禁止**在
-    Plus / 导入 / 清空 / 刷新旁塞裸 `{n}` / `.length` 的 `.fynns-table-meta`，
-    **禁止**把 `(N)` / `N/M` 写进 `label`（List / EmptyState 已表达条数）。
-    仅当产品明确要计数（用户要求、选中 tally、分页范围、命名运维 KPI）才
-    显示 — 放 Card/Collapsible **正文** `.fynns-table-meta`，勿塞进动作簇。
-    对照 `#rhythm` catalog / `#sandbox-rhythm-catalog`。
-10c. **provider Manage flat dump** — **严禁信息冗余（硬 ≥ 0.5.267 / Save 同行 ≥ 0.5.268；模型下拉 ≥ **0.5.269**；Save ghost sm ≥ **0.5.271**）：**
-    凭证型提供商 Manage：当前 provider 用偏好 `ControlRow` → 需要时画密码
-    `FieldBlock`（eye 在 `trailing`）+ **同一行** `--end-align`：`Input`
-    `__grow` **再** `SaveIcon` IconButton **`ghost` `sm`**（禁止 tonal/md；
-    禁止 `unit-stack` 把 Save 甩到输入下方）→ 模型用 `FieldBlock` +
-    **`DropdownMenu`** `__grow` + 刷新 sm IconButton（对齐 bachelor-thesis /
-    GSC；**禁止**把模型画成可选 `List` 墙；新 UI 勿用软废弃 `Select`）→ 失败
-    `InlineAlert` → 一条 Verify。
-    **禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入；
-    **禁止**全提供商 OK/Fail 墙与 `default=` 调试。状态标勿用 `Chip`。对照
-    `#provider-settings`。
-11. **service control status Chip + label / CLI probe FieldHint** — 状态只在
-    `ControlRow` `label`（`可用`/`未安装`）；控件簇只有 labeled Button（+ 可选
-    路径 meta）；禁止工具名当 label + 状态 Chip + 下方 `FieldHint` 复述
-    `tool：error` — 详情用行内 `InfoHint`。规则见 DESIGN_SYSTEM Hard rules。
-11b. **ControlRow / control-cluster Buttons left-packed** — `.fynns-control-cluster`
-    **默认右齐**（≥ **0.5.158**）。禁止把 labeled Button / meta+CTA 贴在 label
-    下左侧。`controlsAlign="start"` **仅**用于探测 / path / 结果标值网格（勿
-    给安装 / 服务 CTA 栈加 `start` — ≥ **0.5.205** 即使误加也会右齐）。对照
-    `#rhythm` end-align。
-11c. **ControlRow label crushed to 2px sliver** — form-host / standalone label
-    轨地板 `--fynns-layout-control-row-label`（≥ **0.5.159**）；簇内长 path
-    `.fynns-table-meta` 收缩 + 省略（≥ **0.5.175**），禁止 end-pack nowrap
-    向左溢出盖住「就绪」。完整路径用 `InfoHint`。对照 `#rhythm` end-align。
-11c2. **table-meta overflows without ellipsis** — keep-set `.fynns-table-meta`
-    单行省略（≥ **0.5.231**：`overflow: hidden` + `text-overflow: ellipsis` +
-    `min-width: 0` / `max-width: 100%`）。Card / unit-stack / 窄宿主必须显示
-    `…`，禁止硬裁切无省略号；长文案用 Tooltip / InfoHint / FieldHint。**禁止**
-    消费仓覆写去掉 ellipsis。对照 `#sandbox-card-table-meta-ellipsis`。
-11d. **path meta paints over ControlRow label** — 同上；窄 Card 内 WinGet /
-    长 exe 路径最易复现。对照 `#rhythm` end-align。
-12. **FieldHint restates ToggleGroup / Tabs labels** — 禁止栏目 `FieldHint` /
-    section lead 复述可见分段选项名（「A / B / C；三 Tab」）。控件已命名模式；
-    TopAppBar `InfoHint` 可留短范围说明但勿列选项。对照 `#rhythm` Surface。
-12b. **section FieldHint restates TopAppBar InfoHint** — **严禁信息冗余（硬）：**
-    顶栏 `trailing` `InfoHint`（页面说明）已有分区 tip 时，**禁止**再在正文首行
-    用同源 / 改写 `FieldHint` / section-lead / **`FieldBlock` `description`**
-    复述（含「与某 Tab 共用列表」等改写）。分区说明只留顶栏「i」；FieldBlock
-    仅可保留 tip **未写**的操作说明（浏览 / 粘贴路径）。对照
-    `#layouts-demo-shell`。
-12c. **ListItem overline restates trailing status** — **严禁信息冗余（硬）：**
-    路径 / 仓 `ListItem` 的状态 / 空态只放 **`overline` 一次**；**禁止**再在
-    `trailingSupportingText` 写同义状态（如 overline「尚无构建记录」+ trailing
-    「未构建」）。trailing meta 只放互补 kind / wiki / 日期。对照
-    `#sandbox-list-repo-path-actions`。
-13. **private labeled Button cluster gap** — 用公共 `.fynns-control-cluster`
-    （labeled 间距 8dp），勿私有 4dp 克隆。
-14. **Select refresh crammed beside chevron** — Select + refresh →
-    `.fynns-control-cluster--end-align` + `__grow`，勿 `Select.trailing`。
-15. **env key FieldHint / status Chip / Input trailing md** — 门户文案用标签行
-    `InfoHint`；缺 key → `tone="danger"`。**禁止** Input `trailing` / `leading`
-    用默认 **md** 40dp（reveal / clear / 任意壳内盘一律 **`IconButton` `sm`**；
-    core ≥ **0.5.131** 钳制）。Core ≥ **0.5.237** 端侧 affix 只留
-    capsule-chrome（**4dp**）— **禁止**消费仓负 margin / 私有 end pad「贴边」、
-    **禁止**覆写 `.fynns-field-shell` / `.fynns-field-affix` 的 padding/margin、
-    **禁止**在 `Input` `trailing` **外**克隆 eye / reveal（sibling 盘、绝对定位
-    叠层）。对照 `#password` / `#input` / `#env-check` / `#provider-settings`。
-    失败模式：CONSUMER_TREATY Input trailing md IconButton in field shell；
-    Input trailing affix far from shell edge。
-16. **InlineAlert beside List in ControlStack** — 告警在目录上方全宽兄弟。
-17. **Banner icon/dismiss top-pinned** — 多行 `supportingText` 时 icon 与
-    dismiss X 须相对整行垂直居中；只用 `onDismiss`（X 在圆角条内），勿在条外
-    再放一颗关闭。对照 `#banner`。
-18. **EndAside instant open / close / BusyRegion flash** — 切 `open`；fetch
-    勿绑 `asideOpen`。
-19. **EndAside dense labeled Button / ControlRow label crush / tonal disks** —
-    `label=""`；一主 CTA；图标 ghost；导出用 `UploadIcon` 菜单。
-19b. **EndAside PageScroll Card flush to pane bottom** — PageScroll 检查器 /
-    EndAside 内 Card **禁止**贴齐窗格底边。靠 `.fynns-content-column` 的
-    `--fynns-layout-dialog-inset` block pad；core ≥ **0.5.263** 把
-    `.fynns-page-scroll > .fynns-content-column` 设为 `flex: 0 0 auto` +
-    `min-height: 100%`（禁止在滚动宿主上 `flex:1` 吃掉 pad-block-end）。
-    对照 `#layouts-demo-shell` EndAside。
-20. **PageScroll multi-field brief Collapsible / `#form-recipe-page-scroll`** —
-    **禁止**：PageScroll 上叠 ≥3 个带 description 的 `FieldBlock`「要点问卷」
-    Collapsible（已 purge）。多列记录 → `#table`；短表单 → `#form-recipe`
-    Card / Collapsible / Dialog。
-21. **Textarea for a suffixed file body / fixed-height on page scroll** —
-    有扩展名 → `CodeBlock`；页内默认 autoGrow。
-22. **canvas FillColumn megacard zero inset** — `header` 只放紧凑预览带，勿整工作流 Card 贴边。
-23. **PageScroll Card sheet/chat/dialog-max under ControlRow** — 目的地
-    PageScroll 上 Card **铺满** `.fynns-content-column`（core ≥ **0.5.141**/
-    **0.5.142**）；内容列本身 **铺满** 页滚窗格（inset 除外；
-    `--fynns-layout-content-max-width` 默认 **`none`** ≥ **0.5.186** — 禁止
-    复活 ~1180dp 居中阅读条）。禁止给 `hub-col` / BusyRegion 子树套
-    `sheet-max-width`（仅 BottomSheet）、`chat-max-width`（仅 Chat 主列）、
-    `dialog-max-width*`（仅 Dialog）或私有 rem `maxWidth`；工具条 ControlRow +
-    ToggleGroup 与下方 Card **右端对齐**；无工具条的表单页同样铺满内容列。
-    FullscreenDialog 正文直接子项亦 **横向铺满**（≥ **0.5.186**）。
-    对照 `#page-scroll` / `#overlays`。
-24. **long Table dumps all rows** — Card / PageScroll 数据表可 >10 行时用
-    `useRevealMore` + `RevealMore`（默认 10/10，≥ **0.5.144**）：app `slice`；
-    脚在 `.fynns-table-wrap` **外**；默认 **tonal** **md**（≥ **0.5.147** tonal；
-    **0.5.149** 恢复 md）；文案本地化（`更多`）。短表 / Dialog / 真 `Pagination`
-    豁免。对照 `#table`。
-25. **long List dumps all rows** — Card / PageScroll List 可 >5 条时同机制，
-    但传 `REVEAL_MORE_LIST_DEFAULT_*`（**5**/5，≥ **0.5.145**）：脚在 List
-    **后**；短列表 / Dialog / 真分页豁免。对照 `#list`。
-26. **Pagination Select invents absolute overlay** — `.fynns-pagination-bar`
-    内每页 Select 必须是 **stock** Keep-set Select：40dp shell + 门户
-    `.fynns-select-menu`（与 `#select` 同解剖，≥ **0.5.208** 门户；≥
-    **0.5.244** 默认 **内容宽**；≥ **0.5.238** 菜单 **width = live shell**
-    （头与列表同长；长标签省略号；废止 ≥ **0.5.209** 宽于窄触发器）；宽宿主
-    短选项仍对齐 ≥ **0.5.220**；≥ **0.5.210** 触发器
-    `--fynns-select-measure-min` 绝对地板，禁止 `min(100%, …)` 压扁）。
-    **禁止** 自建 `position:absolute; bottom:100%` 对接
-    `.fynns-search-bar-panel`，也禁止覆写 `.fynns-select-menu` 圆角 / 展开位置。
-    对照 `#pagination` / `#select` / `#sandbox-select-wide-short`。
-26a0. **Select stretched without fullWidth** — 裸 Select 默认 **内容宽**
-    （≥ **0.5.244**）；铺满仅用 `fullWidth`、`.fynns-field-block` 或
-    `.fynns-control-cluster__grow`。**禁止** 消费仓给 `.fynns-select` 写
-    `width:100%`。对照 `#select` / `#sandbox-select-wide-short` /
-    `#form-recipe`。
-26a. **Select menu narrower than stretched trigger** —
-    门户菜单 **width = live shell**（≥ **0.5.238** / ≥ **0.5.220**）；
-    **禁止** 消费仓把 `.fynns-select-menu` 压成短标签芯片（或覆写
-    `min-width` / `width` 破坏与触发器对齐）。对照 `#sandbox-select-wide-short`。
-26a1. **Select menu wider than narrow trigger** —
-    窄宿主下菜单不得 `max-content` 撑宽；长选项在壳内省略（≥ **0.5.238**）。
-    对照 `#select` `.sandbox-select-narrow-host`。
-26a4. **DropdownMenu wider than FieldBlock trigger** —
-    `.fynns-field-block` 内带标签 `DropdownMenu` 自动 **matchTriggerWidth**
-    （≥ **0.5.239**，对齐 Select 0.5.238）；长项省略。工具栏 / `iconOnly`
-    仍内容适配。禁止消费仓覆写 `.fynns-menu` 宽。对照 `#sandbox-menu-field-match`。
-26a4a. **labeled DropdownMenu missing chevron** —
-    带标签 `DropdownMenu` 触发器必须有 trailing chevron + 打开旋转
-    （core ≥ **0.5.253** 自动注入；≥ **0.5.254** 进 `.fynns-menu-trigger-trailing`
-    槽）；`iconOnly` 除外。禁止消费仓自画 chevron 或剥掉 core 箭头。对照
-    `#menu` / `#sandbox-menu-field-match`。
-26a4b. **DropdownMenu panel left-shifted vs trigger** —
-    菜单面板左缘必须与触发器左缘齐平（≥ **0.5.254**：floating 默认
-    `anchorMode: "element"` + `anchorTargetRect` 对 button 测自身）。禁止
-    消费仓给 `.fynns-menu` 加 `left` / `transform`「纠偏」。对照
-    `#sandbox-menu-field-match`。
-26a4c. **Menu chevron optically high** —
-    禁止 inline SVG baseline 把 chevron「顶高」；core ≥ **0.5.254**
-    `.fynns-icon { display: block }` + trailing flex 槽。禁止消费仓
-    `translateY` 光学微调。对照 `#menu`。
-26a4d. **Menu trigger clips descenders** —
-    带标签 Menu 触发器文案不得裁掉 `g`/`y`/`p` 下沿（≥ **0.5.255**：
-    `.fynns-menu-trigger-label` 用 `--fynns-line-height-snug`，禁止
-    `line-height: 1` + OverflowTip `overflow:hidden`）。禁止消费仓改
-    tip-label padding。对照 `#sandbox-menu-field-match`。
-26a4e. **Menu trigger leading icon misaligned** —
-    带标签 Menu 前置图标 + 文案必须垂直居中（≥ **0.5.258**：`leadingIcon`
-    → `.fynns-menu-trigger-leading`；label 为 `inline-flex`）。禁止把
-    `<>图标 文案</>` 塞进 `trigger` 赌 baseline，或消费仓给
-    `.fynns-menu-trigger-label` 写 `align-items` / `translateY`。对照
-    `#sandbox-menu-leading-icon` / `#menu`。
-26a5. **truncated option lacks ellipsis Tooltip** —
-    Select / Autocomplete / SearchBar 结果行 / Menu 项 / 带标签 Menu 触发器
-    溢出必须 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.240**）；禁止
-    `title=` 或硬裁无 tip。对照 `#select` / `#autocomplete` / `#search-bar` /
-    `#sandbox-menu-field-match`。
-26a6. **truncated chrome / list / snack label lacks ellipsis Tooltip** —
-    Card·Collapsible 标题、NavDrawerItem / **NavDrawerGroup** / TopAppBar
-    标题、Button 字符串标签、List 字符串 headline·supporting·trailing、
-    CodeBlock label、CommandPalette 项 label·description、
-    ChatActivity·ChatThinking 可见标签、Snackbar line-clamp、ControlRow
-    标签、DatePicker 月标题、SplitButton 主标签、TimelineItem / Tree /
-    Breadcrumb、Switch `labelSide=end`、ChatCitation chip publisher·card
-    snippet：溢出同样 `…` + **Tooltip 全文**（`OverflowTip`，≥ **0.5.243**；
-    Select 触发器标签须可见 — tip `width:0` 仅限真 flex 行宿主）；
-    Snackbar / citation snippet 用 `overflowAxis="y"`）。`NavigationDrawerGroup`
-    `label` 为 `ReactNode` — **优先传 string** 让 core 包 OverflowTip（完整
-    worktree 路径）；禁止 `as unknown as string`。List `__grow` / table-meta
-    ReactNode 在调用点包 OverflowTip。短可见 Toggle 标签仍可 omit `tip`；窄
-    fullWidth 长标签传 `tip={全文}`。对照 `#card` / `#list` /
-    `#layouts-demo-shell` / `#toggle-group` / `#activity` /
-    `#rhythm` end-align。
-26a2. **Select supporting copy kisses trigger** — 控件 → supporting / 教学
-    文案用 `--fynns-layout-field-hint-gap`（**8dp**，≥ **0.5.230**）；优先
-    `FieldBlock` + `FieldHint` / `ControlBlock` `description`。**禁止**在
-    拉伸 Select（或其它表单控件）下贴 0–4dp 的 muted `<p>`。对照
-    `#sandbox-select-wide-short`。
-26a3. **Card teaching help kisses shell** — Card 壳 ↔ 上方/下方 teaching /
-    muted helper 用 `--fynns-layout-unit-stack-gap`（**16dp**，≥ **0.5.233**）；
-    **不要**把 control→hint 的 `field-hint-gap`（8dp）套在整卡教学带上。
-    **禁止** Card 与 `<p>` / SandboxHelp 作无 gap / ≤8dp 的 block 兄弟。对照
-    `#sandbox-card-draft-actions` / `#sandbox-card-chrome-icon-actions` /
-    `#sandbox-card-head-primary-end`。
-26b. **Pagination Select siblings center on expanded height** — 名词
-    `.fynns-table-meta` / 范围 `FieldHint` / 页码 discs 与 Select **shell
-    （40dp）** 同带；core ≥ **0.5.197** 钉 `__start` 到 trigger-band；≥
-    **0.5.208** 菜单已门户化、不再撑高宿主。**禁止** 消费仓给 `__start` 写
-    `align-items: center`。对照 `#pagination`。
-26b2. **Pagination bar gaps crushed to 4dp** — 名词|Select|范围用
-    `action-cluster-gap`（**8dp**）；start↔页码 discs 用 `unit-stack-gap`
-    （**16dp**，≥ **0.5.202**）。**禁止** 消费仓把 `.fynns-pagination-bar` /
-    `__start` 压回 IconButton 的 4dp `control-cluster-gap`。对照 `#pagination`。
-26c. **Pagination Select option repeats noun** — options 仅数字（`10`/`50`/
-    `100`）；名词一次放 sibling `.fynns-table-meta` + `ariaLabel` — **禁止**
-    `Sessions: N` / `Rows: N` / `每页 N 行` 写进每个 option。对照 `#pagination`。
-26d. **consumer restyles keep-set chrome radius** — **禁止**消费仓自改 Select /
-    SearchBar / Menu 等 keep-set 圆角与展开铬（≥ **0.5.195**）。对照 `#select`
-    / `#menu`。
-26e. **Select Autocomplete deprecated prefer Menu SearchBar** — **禁止**新屏
-    继续用 soft-deprecated `Select` / `Autocomplete`（≥ **0.5.236**）；改
-    `DropdownMenu` / `SearchBar` / `CommandPalette`。现有命中 → 推荐迁移。
-    Pagination 每页条数可暂留 Select。对照 `#select` / `#autocomplete` /
-    `#menu` / `#search-bar`。
-27. **outcome Chip as status** — success / fail / OK / ready 结果信号用
-    **`.fynns-list-item-status`**（默认绿；失败 `data-tone="danger"`）+ 可选
-    `CheckCircleIcon` / `AlertTriangleIcon` — **禁止** `Chip` 任意 variant 或
-    消费仓 `StatusChip` 冒充 Badge。对照 `#list` run-summary / `#provider-settings。
-28. **ControlStack probe meta end-hug / kind mix** — 安装可用性与后端就绪分栈
-    + `Divider`；探测栈 `controlsAlign="start"` + `columns`=格数；禁止
-    `columns={1}` 单 cluster 混 path / 结果标 / FieldHint。对照
-    `#provider-settings`。
-29. **List path catalog Switch+Chip+danger disk soup** — 路径/仓目录行：
-    trailing **仅** ghost **md** IconButton 簇；启用 → leading `Checkbox`；
-    状态/kind → overline / `trailingSupportingText` / `.fynns-table-meta`；
-    禁止 headline 里 `Chip` / 自造 `CatalogBadges`；禁止 `IconButton`
-    `danger` 实心盘（删 = ghost + `ConfirmDialog`）。对照
-    `#sandbox-list-repo-path-actions`。
-30. **List scroll-well trailing meta kisses overlay rail** — 高度封顶的
-    `List` + `fynns-scroll`：禁止 `trailingSupportingText` / `.fynns-table-meta`
-    贴 overlay Y 轨。core ≥ **0.5.171** 在 list end 预留 `--fynns-scrollbar-size`
-   ；有行内 meta 时 `--with-end` idle 保持 `list-pad-inline`。勿自造消费仓
-    end pad。对照 `#sandbox-list-repo-path-actions`。
-30a. **List scroll-well overflow-y spill overlaps siblings** — 封顶
-    `List` + `fynns-scroll` + `list-well-max-height*`：禁止行画出井外盖住下一段
-    说明 / 下一 List。core ≥ **0.5.224** `overflow-y: auto`（仅 clip X 时 Y 仍
-    为 visible）。勿靠消费仓 `overflow:hidden` 外包「修」。对照
-    `#sandbox-list-repo-path-actions`。
-30b. **List trailingSupportingText underlaps --with-end IconButtons** — 短
-    status / kind（Builtin / Current）+ `--with-end` IconButton：悬停 / 触控
-    显盘时 meta 不得压在下载/预览盘下。core ≥ **0.5.207** 修正 idle
-    `:has(meta)` specificity。禁止消费仓 `z-index` / meta margin「修」。
-    对照 `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
-30c. **ListItem Tab focus ring cracked by --with-end overlay** — Tab 聚焦
-    List 行时 focus 环不得裂开 / 被 end IconButton 打断。core ≥ **0.5.218**
-    在 flat host 上画 inset `box-shadow`；with-detail ≥ **0.5.219** 画在
-    `.fynns-list-item-row`（非外包 detail 的 host）。禁止消费仓自造
-    `.fynns-list-item` outline / shadow「修」。对照
-    `#sandbox-list-recipe-catalog` / `#sandbox-list-status-action`。
-31. **FieldStack Grid vertically centers short FieldBlock beside expanded Select** —
-    FieldStack→`Grid` 多列 FieldBlock：core ≥ **0.5.172** `.fynns-grid`
-    `align-items: start`；禁止消费仓把 Grid 改回 `center`（一侧 Select 展开后
-    矮列垂直居中、标签错层）。对照 `#sandbox-field-stack-grid-select`。
-31b. **FieldStack Grid hugs max-content leaving dead gutter in form Surface** —
-    FieldStack→`Grid` `x={N}`：core ≥ **0.5.211** 固定列数铺满父级（等分
-    `minmax(0, 1fr)`），Select `width: 100%`，measure 只做地板。禁止消费仓
-    自造 `width:100%` / `1fr`「修」短岛 + 宽 Surface 死边。表单 FieldBlock
-    **不要**用 `equalCells` 或其他变式 — 对照 `#form-recipe` /
-    `#sandbox-field-stack-grid-select`。
-32. **Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip** —
-    Card `actions` / densified Select 旁簇：自明动作（复制、保存默认、开文件夹）
-    用 `IconButton` + `Tooltip`（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）；
-    禁止 labeled ghost「复制 Prompt」「保存默认」信息冗余。主流程动词 CTA
-    （Validate / Deliver）仍可用 labeled Button。对照
-    `#sandbox-card-chrome-icon-actions`。
-32b. **FieldBlock labeled Save key instead of IconButton+Tooltip** — FieldBlock /
-    Manage 下自明「Save key / Save token / 保存密钥」
-    （含 **tonal** / ghost / primary 带标签 Button）→ **`IconButton` +
-    `Tooltip` + `SaveIcon`**，**`variant="ghost"` `size="sm"`**（忙碌用
-    `loading`；与模型刷新盘同铬，禁止 tonal/md 40dp）；禁止贴文案药丸。对照
-    `#provider-settings`（≥ **0.5.248** / chrome ≥ **0.5.271**）。
-32b2. **FieldBlock Save IconButton wraps under Input** — 密钥 Save 必须与
-    `Input` **同一行**：`.fynns-control-cluster--end-align` + Input
-    `className="fynns-control-cluster__grow"`（reveal 仍用 `trailing` sm）+
-    Save `IconButton` `ghost` `sm`。禁止 `unit-stack` 把 Save 甩到输入下方。对照
-    `#provider-settings`（≥ **0.5.252** / **0.5.268** / **0.5.271**）。
-32c. **`#rhythm` morph + cover-letter twin strips** — **禁止**：PageScroll 上
-    两条几乎同构的「ControlRow 节名 + md ghost IconButton 簇」。节正文 chrome
-    对照 `#sandbox-rhythm-catalog`。
-33. **Card head primary IconButton leftmost in control-cluster** — Card /
-    Collapsible `actions` 多盘簇：`variant="primary"` 必须 **LTR 末位**（贴尾）；
-    次要 ghost/tonal 在前。禁止主色盘排在下载/开文件夹等 ghost 左侧。对照
-    `#sandbox-card-head-primary-end`。
+- **sandbox-only aesthetics** — 勿只改 sandbox overrides；token 进 `tokens.ts`。
+- **squashed drawer / icon-only rail densify** — 拥挤 → `hidden`，勿假 rail。
+- **drawer sheet headline under TopAppBar** — DestinationAppShell 勿传
+  `drawerHeadline`。
+- **hub-split / catalog edit as silent PageScroll** — 列表保持挂载；编辑 →
+  `Dialog` `size="lg"` + `showCloseButton`。
+- **drill-in / mode sidebar hard-swap** — 换 body 须 `navKey` + `navDirection`；
+  退出用 `"back"`；禁止硬切。对照 `#layouts-demo-drill-in`。
+- **fat Surface / Card per catalog row** — 路径/书签/配方 → 一个 `List` of
+  `ListItem`；禁止每项胖 Card + FieldHint 长文 + ChipSet。对照 `#list` /
+  `#sandbox-list-recipe-catalog`。
+- **org · dates / UI · — punctuation / Card title · meta** — 槽位分开；禁用
+  `·`/`—` 粘合。对照 `#card` / `#list`。
+- **trailingSupportingText right-hug drift** — 日期目录须
+  `trailingMetaAlign="start"`；状态/kind → `overline`。对照 `#list` /
+  `#timeline`。
+- **Timeline row hover edit/delete** — 编辑在 Dialog 脚栏；勿 rail `--with-end`
+  铅笔/垃圾桶。对照 `#timeline`。
+- **NavigationDrawerItem badge IconButton always visible** — 行动作用
+  `trailing` ghost sm / More-menu；**禁止**删进 `badge`。对照
+  `#layouts-demo-navigation-drawer`。
+- **NavigationDrawerItem always-visible trash / no more-menu** — 行尾优先 More
+  + `DropdownMenu`（删 `tone="danger"`）；破坏性进菜单。对照
+  `#layouts-demo-navigation-drawer`。
+- **mode drawer toolbar trash+new twin** — 会话用 `NavigationDrawerNewChat`；
+  可选 trailing More 放全部删除；禁止 Trash+Plus 并排。对照
+  `#sandbox-navdrawer-session-chrome`。
+- **chat product / session host wrong tree** —
+  `ClippedNavShell` + 会话 drawer + `FillColumn` → `Chat`；禁止 PageScroll 当
+  chat 主滚、composer 进 FillColumn `footer`。对照 `#layouts-demo-chat-product`。
+- **chat aside host wrong tree** — `DestinationAppShell` + `EndAside` →
+  `.fynns-chat-host--fill` → `Chat`。对照 `#layouts-demo-chat-aside`。
+- **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；
+  禁止裸 `overflow:auto`。对照 `#page-scroll`。
+- **overlay scrollbar above Select/Menu flyout** — 页轨 z 在 modal-flyout 下；
+  飞层轨用 scroll-overlay-flyout。对照 `#sandbox-scroll-menu-stack`。
+- **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；
+  toolbar-end 盘 sm 32dp。对照 `#layouts-demo-navigation-drawer`。
+- **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；
+  `open→false` 同拍勿清空 title/body。对照 `#sandbox-list-recipe-catalog`。
+- **twin loading rings / BusyRegion + chrome loading / Card batch + row twin** —
+  一簇最多一圈；BusyRegion 等待时 chrome 只 `disabled`；批量只留 Card 主 CTA。
+  对照 `#sandbox-list-repo-path-actions`。
+- **IconButton busy swaps CircularProgress** — 用 stock `loading`；禁止嵌套
+  `CircularProgress`。对照 `#icon-button`。
+- **runBusyTask hang / Confirm trap / empty-as-busy** — 长任务须
+  `timeoutMs`/`signal`/`onError`；Confirm 用 `runLoadingTask` + `onAbort`；
+  ChatComposer `busy` 须配对 `onStop`。
+- **section-body IconButton sm / ControlRow unsolicited item count** —
+  段级只用 md ghost + Tooltip；顶栏禁止裸 `{n}` / `(N)` 塞动作簇。对照
+  `#rhythm` / `#sandbox-rhythm-catalog`。
+- **provider Manage flat dump** — ControlRow → 密码 FieldBlock + 同行 Input
+  `__grow` + Save `IconButton` ghost sm → 模型 `DropdownMenu` + 刷新 → Verify；
+  禁止 List 墙 / Chip 状态 / Dialog 代密钥。对照 `#provider-settings`。
+- **service control status Chip + label / ControlRow left-packed / label crush** —
+  状态只在 `label`；簇默认右齐；长 path meta 省略 + InfoHint。对照 `#rhythm`。
+- **FieldHint restates ToggleGroup / TopAppBar InfoHint / ListItem overline
+  restates trailing** — 禁止同源复述。对照 `#rhythm` / `#layouts-demo-shell` /
+  `#sandbox-list-repo-path-actions`。
+- **private labeled Button cluster gap / Select refresh crammed** — 用
+  `.fynns-control-cluster`（+ `--end-align` / `__grow`）。对照 `#rhythm`。
+- **env key FieldHint / Input trailing md / affix far from edge** — 门户文案用
+  标签行 InfoHint；壳内盘一律 `IconButton` `sm`；禁止负 margin / 壳外克隆 eye。
+  对照 `#password` / `#input` / `#env-check`。
+- **InlineAlert beside List / Banner icon top-pinned** — 告警全宽兄弟在上；多行
+  Banner icon/X 垂直居中。对照 `#banner`。
+- **EndAside instant open / dense labeled / Card flush bottom** — 切 `open`；
+  `label=""` + 一主 CTA；PageScroll 内 Card 勿贴窗格底。对照
+  `#layouts-demo-shell`。
+- **PageScroll multi-field Collapsible / Textarea for file body / FillColumn
+  megacard / Card sheet-max under ControlRow** — 短表单走 `#form-recipe`；有扩展
+  名用 `CodeBlock`；内容列铺满页滚，禁止 sheet/chat/dialog-max。对照
+  `#page-scroll`。
+- **long Table/List dumps all rows** — Table `RevealMore` 10/10；List 5/5。对照
+  `#table` / `#list`。
+- **Pagination Select invents overlay / option repeats noun / gaps crushed** —
+  stock Select；options 仅数字；间距 8/16dp。对照 `#pagination`。
+- **Select stretched without fullWidth / menu width mismatch / supporting
+  kisses** — 铺满用 `fullWidth`/`__grow`；菜单 width=live shell；hint 用
+  `field-hint-gap`。对照 `#select` / `#sandbox-select-wide-short`。
+- **DropdownMenu FieldBlock width / missing chevron / panel shift / chrome
+  clip** — matchTriggerWidth；core 注入 chevron；禁止消费仓 left/transform/
+  translateY。对照 `#menu` / `#sandbox-menu-field-match`。
+- **truncated option / chrome label lacks OverflowTip** — 溢出须 `…` + Tooltip
+  全文；禁止 `title=`。对照 `#select` / `#card` / `#list`。
+- **consumer restyles keep-set chrome / Select Autocomplete deprecated** —
+  铬改只在 core；新屏用 Menu/SearchBar。对照 `#select` / `#menu`。
+- **outcome Chip as status / List path Switch+Chip+danger soup** — 结果标用
+  `.fynns-list-item-status`；目录 trailing 仅 ghost md 簇。对照 `#list` /
+  `#sandbox-list-repo-path-actions`。
+- **List scroll-well meta/rail / spill / underlap / focus ring crack** —
+  勿私造 end pad / overflow / z-index。对照 `#sandbox-list-repo-path-actions` /
+  `#sandbox-list-status-action`。
+- **FieldStack Grid centers / hugs max-content** — Grid `align-items: start`；
+  列铺满父级；勿消费仓改回 center/`1fr` 赌。对照
+  `#sandbox-field-stack-grid-select` / `#form-recipe`。
+- **Card chrome labeled Copy/Save / FieldBlock Save wraps / primary leftmost** —
+  自明动作用 `IconButton`+Tooltip；Save 与 Input 同行 ghost sm；primary 盘 LTR
+  末位。对照 `#sandbox-card-chrome-icon-actions` / `#provider-settings` /
+  `#sandbox-card-head-primary-end`。
+- **`#rhythm` morph + twin strips** — 禁止 PageScroll 上两条同构 ControlRow 节名
+  + md 簇。对照 `#sandbox-rhythm-catalog`。
+- **Chat empty starters as Chip** — 空线程 starter 用满宽可点 `Surface`
+  soft/padded/interactive；勿 Chip / 勿复活 `ChatStarterPrompts`。对照 `#chat`。
 
 ## 表单与密度（短）
 
 - 语义分组用 **`FieldStack`** + kind 跳跃时 `Divider`。对照 `#form-recipe`。
 - 工具条：`ControlStack` / `ControlRow` / `.fynns-control-cluster` /
-  `ControlBlock` `description`（hint 在标签列）。对照 `#rhythm`。
-- List 目录 kind → **leading 图标** + meta；禁止 start tick / 包 `div` /
-  Chip 当状态。结果标 → `.fynns-list-item-status`。多指标 trailing →
-  `.fynns-list-item-trailing-stats`。
+  `ControlBlock` `description`。对照 `#rhythm`。
+- List 目录 kind → leading 图标 + meta；禁止 start tick / Chip 当状态。结果标 →
+  `.fynns-list-item-status`。多指标 trailing → `.fynns-list-item-trailing-stats`。
 - Card/Collapsible 嵌套表面子级 → `chrome="plain"`（plain ≠ flush）。
-- PageScroll 分区 Card：勿用 `sheet-max-width` / `chat-max-width` / dialog-max
-  收窄；内容列铺满页滚（≥ **0.5.186**）；与上方 ControlRow 同列宽。
-  FullscreenDialog 设置栈亦横向铺满，勿 sheet-max / 内容宽列。
-- 长数据 Table：`useRevealMore` + `RevealMore`（10/10），勿一次铺开。对照 `#table`。
-  宽表横向溢出：core ≥ **0.5.184** 默认纵向滚轮 → `scrollLeft`（边缘仍拦截，≥
-  **0.5.186**）；勿自造 wheel 劫持。关闭：`data-fynns-wheel-x="off"`。对照
-  `#table`。
-- 长 List：`useRevealMore` + `RevealMore`（**5**/5），勿一次铺开。对照 `#list`。
+- PageScroll 分区 Card：勿用 sheet/chat/dialog-max 收窄；内容列铺满页滚；与上方
+  ControlRow 同列宽。FullscreenDialog 设置栈亦横向铺满。
+- 长 Table：`useRevealMore` + `RevealMore`（10/10）。宽表横向溢出：默认纵向滚轮
+  → `scrollLeft`；关闭 `data-fynns-wheel-x="off"`。对照 `#table`。
+- 长 List：`useRevealMore` + `RevealMore`（**5**/5）。对照 `#list`。
 
 ## Chat（短）
 
-主栏气泡列宽 / composer 布局权威：`llm/CHAT_COMPOSER_LAYOUT.md`。
-ARIA：`llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
-**产品壳（chat / 会话历史默认）：** `ClippedNavShell` + 会话
-`NavigationDrawer`（`NavigationDrawerNewChat` …）+ `FillColumn` → `Chat`。
-对照 `#layouts-demo-chat-product`。扁平目的地根仍用 `DestinationAppShell`。
-**新会话 landing：** 问候 + soft starter + composer 同进 `ChatThread.empty`
-居中；有消息后 composer 改回 `ChatThread` 下 dock。
-空线程示例 prompt：在 `ChatThread.empty` 用满宽可点 `Surface`
-`variant="soft"` `padded` `interactive`（外缘 = `.fynns-chat-composer-shell`，留在
-`.fynns-chat-thread-inner` pad 内，勿负 margin 顶出对齐 form；内边距四边等距
-`content-inset`；轮播：**M3 Shared Axis Y**（入场 in-flow 上移≈40% + fade /
-`--fynns-duration-slow` + `--fynns-ease-out`；出场绝对层上移≈40% + fade /
-`--fynns-duration-base`；勿 <12dp 微移；reduced-motion 瞬时换）；
-`interactive` = 大按钮 state-layer hover/press；勿 rem/`px` / 勿 Chip /
-勿复活 `ChatStarterPrompts`）。
-对照 `#chat`。
-勿在消费仓用私有 CSS「修」body stack gap。
+主栏气泡列宽 / composer：`llm/CHAT_COMPOSER_LAYOUT.md`。ARIA：
+`llm/CHAT_ARIA_PARITY.md`。优先 `ChatMessage markdown` / `ChatMarkdown`。
+产品壳默认：`ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat`
+…）+ `FillColumn` → `Chat`（`#layouts-demo-chat-product`）；扁平根仍用
+`DestinationAppShell`。新会话：问候 + text starter + composer 进
+`ChatThread.empty` 居中；有消息后 composer 贴 `ChatThread` 下。空线程 starter：
+满宽可点 `Surface` soft/padded/interactive（M3 Shared Axis Y 轮播；勿 Chip /
+勿 `ChatStarterPrompts`）。对照 `#chat`。勿私有 CSS「修」body stack gap。
 
 ## 性能
 

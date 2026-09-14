@@ -76,8 +76,8 @@ npm run check:perf-sandbox
 ```
 
 Fails the sandbox when inspector `defaultOpen` / probe-on-host regressions
-return. Consumers: follow the rules above; bump the submodule pin when core
-fixes ship.
+return. Consumers: follow the rules above; refresh the sibling `file:` link
+(or bump/publish `@fynn7/ui-design-core`) when core fixes ship.
 
 ## Related
 
