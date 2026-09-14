@@ -1608,7 +1608,7 @@ const en = {
     "Drawer body Card + `.fynns-unit-stack` of stacked Collapsible shells (≥ **0.5.125**): nested unit-stack keeps `--fynns-layout-unit-stack-gap` (**16dp**) — core remaps **only** direct `.fynns-nav-drawer-body > .fynns-unit-stack` to `section-gap` (4dp) for mistaken destination lists. Live: `#sandbox-navdrawer-card-collapsible-stack` (fourth column).",
   "globals.shellPageHintAria": "Page help",
   "globals.shellPageHint":
-    "Sample destination help — put section copy on the TopAppBar InfoHint **once**; do **not** twin a page/section FieldHint (or section-lead) with the same tip (information redundancy — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint). Also do not twin another section InfoHint in the mode drawer tools strip.",
+    "Sample destination help — put section copy on the TopAppBar InfoHint **once**; do **not** twin a page/section FieldHint, section-lead, or FieldBlock description with the same tip (information redundancy — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint). Also do not twin another section InfoHint in the mode drawer tools strip.",
   "globals.shellTitle": "Clipped shell",
   "globals.shellNavAria": "Sample clipped destinations",
   "globals.shellNavMode": "Destinations open (off = hidden)",
@@ -1958,8 +1958,10 @@ const en = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "Sample path catalog",
   "globals.listCatalogStaticHelp":
-    "**Path / repo catalog (hard ≥ 0.5.168; scroll rail ≥ 0.5.171; spill ≥ **0.5.224**):** `interactive={false}` still parks end actions on the trailing sibling — one `.fynns-control-cluster` of ghost **md** IconButtons (same 40dp baseline). Status = overline; kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **never** Chip / consumer badge soup in the headline. Enable-for-batch = leading **`Checkbox`** — **never** Switch jammed beside IconButtons. Delete = ghost + ConfirmDialog — **never** `IconButton` `danger` filled disk. Capped wells: `List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto** (rows must not paint over the next help) + meta clears the overlay Y rail (core reserves `--fynns-scrollbar-size`; do not invent consumer end pad). Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings. Live `#sandbox-list-repo-path-actions`.",
+    "**Path / repo catalog (hard ≥ 0.5.168; scroll rail ≥ 0.5.171; spill ≥ **0.5.224**; status once ≥ **0.5.264**; batch CTA ≥ **0.5.265**):** `interactive={false}` still parks end actions on the trailing sibling — one `.fynns-control-cluster` of ghost **md** IconButtons (same 40dp baseline). Status / empty = **`overline` once** — **never** also put a status synonym in `trailingSupportingText` (e.g. “Not built yet” + “Not built”). Kind/wiki = complementary `trailingSupportingText` / `.fynns-table-meta` — **never** Chip / consumer badge soup in the headline. Enable-for-batch = leading **`Checkbox`** — **never** Switch jammed beside IconButtons. Delete = ghost + ConfirmDialog — **never** `IconButton` `danger` filled disk. Batch run (≥ **0.5.265**): Card primary Button `loading` only — row Refresh IconButtons stay **disabled without `loading`** (no twin rings). Single-row Refresh may show its own ring. Capped wells: `List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto** (rows must not paint over the next help) + meta clears the overlay Y rail (core reserves `--fynns-scrollbar-size`; do not invent consumer end pad). Failure: CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings. Live `#sandbox-list-repo-path-actions`.",
   "globals.listCatalogStaticAria": "Sample static path catalog with end actions",
+  "globals.listRepoPathCardTitle": "Repositories",
+  "globals.listRepoPathBatchRebuild": "Rebuild selected",
   "globals.listRepoPathOverline": "Not run yet",
   "globals.listRepoPathName": "sample-repo",
   "globals.listRepoPathPath": "~/Documents/sample-repo",
@@ -4024,7 +4026,7 @@ const zh: Record<MessageKey, string> = {
     "Drawer body 内 Card + `.fynns-unit-stack` 堆叠 Collapsible（≥ **0.5.125**）：嵌套 unit-stack 保持 `--fynns-layout-unit-stack-gap`（**16dp**）— core **仅**把直接子级 `.fynns-nav-drawer-body > .fynns-unit-stack` 重映射为 `section-gap`（4dp），避免误包目的地列表。样例：`#sandbox-navdrawer-card-collapsible-stack`（第四列）。",
   "globals.shellPageHintAria": "页面说明",
   "globals.shellPageHint":
-    "示例目的地说明 — 分区帮助只放 TopAppBar InfoHint **一次**；**禁止**再在正文首行用同源 / 改写 FieldHint 复述（信息冗余 — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint）。也不要在模式侧栏工具条再放一个分区 InfoHint。",
+    "示例目的地说明 — 分区帮助只放 TopAppBar InfoHint **一次**；**禁止**再在正文首行用同源 / 改写 FieldHint / section-lead / FieldBlock description 复述（信息冗余 — CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint）。也不要在模式侧栏工具条再放一个分区 InfoHint。",
   "globals.shellTitle": "裁切壳",
   "globals.shellNavAria": "裁切壳示例目的地",
   "globals.shellNavMode": "打开目的地（关 = 完全收起）",
@@ -4362,8 +4364,10 @@ const zh: Record<MessageKey, string> = {
   "globals.listShortcutCardUrlPath": "https://example.com/docs",
   "globals.listCatalogAria": "路径目录示例",
   "globals.listCatalogStaticHelp":
-    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 = overline；kind/wiki = `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings。对照 `#sandbox-list-repo-path-actions`。",
+    "**路径 / 仓目录（硬 ≥ 0.5.168；滚动轨 ≥ 0.5.171；防溢出 ≥ **0.5.224**；状态一次 ≥ **0.5.264**；批量 CTA ≥ **0.5.265**）：** `interactive={false}` 仍把 end 操作放在 trailing 兄弟槽 — 一个 `.fynns-control-cluster` 全是 ghost **md** IconButton（同 40dp 基线）。状态 / 空态 = **`overline` 一次** — **禁止**再在 `trailingSupportingText` 写同义状态（如「尚未运行」+「未构建」）。kind/wiki = 互补的 `trailingSupportingText` / `.fynns-table-meta` — **禁止** headline 里 Chip / 自造 badge。批量启用 = leading **`Checkbox`** — **禁止** Switch 夹在 IconButton 中间。删除 = ghost + ConfirmDialog — **禁止** `IconButton` `danger` 实心盘。批量运行（≥ **0.5.265**）：仅 Card primary Button `loading` — 行内 Refresh IconButton **只 disabled、不带 `loading`**（禁止双环）。单行 Refresh 可自带环。封顶井：`List` + `fynns-scroll` + `list-well-max-height*` — **overflow-y: auto**（行不得画出井外盖住下一段说明）+ meta 须离开 overlay Y 轨（core 预留 `--fynns-scrollbar-size`；勿自造消费仓 end pad）。失败：CONSUMER_TREATY List path catalog Switch+Chip+danger disk soup / List scroll-well trailing meta kisses overlay rail / List scroll-well overflow-y spill overlaps siblings / ListItem overline restates trailing status / Card batch CTA + ListItem row twin loading rings。对照 `#sandbox-list-repo-path-actions`。",
   "globals.listCatalogStaticAria": "带 end 操作的静态路径目录示例",
+  "globals.listRepoPathCardTitle": "仓库",
+  "globals.listRepoPathBatchRebuild": "立刻重建勾选",
   "globals.listRepoPathOverline": "尚未运行",
   "globals.listRepoPathName": "sample-repo",
   "globals.listRepoPathPath": "~/Documents/sample-repo",

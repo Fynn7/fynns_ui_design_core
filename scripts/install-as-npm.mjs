@@ -335,8 +335,16 @@ function ensureNpmrc(pkgRoot, dryRun, log, { packages = false } = {}) {
   const npmrcPath = path.join(pkgRoot, ".npmrc");
   if (!packages) {
     const current = fs.existsSync(npmrcPath) ? readText(npmrcPath) : "";
-    const pointsAtPackages = /npm\.pkg\.github\.com/.test(current);
-    const hasEmptyAuth = /_authToken=\$\{NODE_AUTH_TOKEN\}/.test(current);
+    const activeLines = String(current)
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((t) => t && !t.startsWith("#"));
+    const pointsAtPackages = activeLines.some((t) =>
+      /^@fynn7:registry=.*npm\.pkg\.github\.com/i.test(t),
+    );
+    const hasEmptyAuth = activeLines.some((t) =>
+      /^\/\/npm\.pkg\.github\.com\/:_authToken=\$\{NODE_AUTH_TOKEN\}/i.test(t),
+    );
     const alreadySafe =
       /@fynn7:registry=https:\/\/registry\.npmjs\.org/i.test(current) &&
       !pointsAtPackages &&
@@ -346,6 +354,10 @@ function ensureNpmrc(pkgRoot, dryRun, log, { packages = false } = {}) {
       return;
     }
     const next = current.trim() ? patchSafeSiblingNpmrc(current) : SAFE_NPMRC;
+    if (next === current) {
+      log.push({ step: "npmrc", status: "ok", file: npmrcPath, detail: "unchanged" });
+      return;
+    }
     writeText(npmrcPath, next, dryRun);
     log.push({
       step: "npmrc",

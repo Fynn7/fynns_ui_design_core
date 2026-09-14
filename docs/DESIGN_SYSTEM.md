@@ -375,6 +375,15 @@ belong in a consumer’s own doc.
   spinner-only for iconOnly); stack BusyRegion/BusyScrim with chrome `loading`
   on the same wait host — **one** progress chrome per wait. Live `#rhythm`
   end-align / `#busy-region`.
+- **DON'T** twin the same in-flight wait as **Card / Collapsible `actions`
+  primary `loading`** **and** every (or many) path-catalog row rebuild
+  `IconButton` `loading` — **information redundancy (hard)** (≥ **0.5.265**).
+  One shared batch task → **one** ring on the batch CTA; list rows stay
+  `disabled` **without** `loading`. One per-row rebuild → ring **only** on that
+  row's IconButton; Card primary stays `disabled` without a second ring. Never
+  `loading={busy === "run"}` on both the head Button and every row Refresh.
+  Live `#sandbox-list-repo-path-actions`. Failure: CONSUMER_TREATY Card batch
+  CTA + ListItem row twin loading rings.
 - **DON'T** swap `IconButton` children for a nested `CircularProgress` while
   busy — use the stock **`loading`** prop (Spinner; iconOnly = spinner-only).
   Nesting `CircularProgress` on `variant="primary"` / `danger` paints an
@@ -734,13 +743,24 @@ belong in a consumer’s own doc.
   TopAppBar `InfoHint` may keep a short **scope** tip that does **not** list
   those labels. Live `#rhythm` (Surface + ToggleGroup — no sibling FieldHint
   naming Catalog / Mirror).
-- **DON'T** paint a page/section `FieldHint` / section-lead that **restates**
-  the same tip already on TopAppBar `trailing` `InfoHint`（页面说明）—
-  **information redundancy (hard)**. Section / destination help lives **once**:
-  TopAppBar InfoHint only. Do **not** twin the identical (or paraphrased) copy
-  as the first body `FieldHint`. Live `#layouts-demo-shell` (TopAppBar InfoHint;
-  main canvas has **no** sibling lead restating that tip). Failure:
-  CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint.
+- **DON'T** paint a page/section `FieldHint` / section-lead / **`FieldBlock`
+  `description`** / ControlBlock `description` that **restates** the same tip
+  already on TopAppBar `trailing` `InfoHint`（页面说明）— **information
+  redundancy (hard)**. Section / destination help lives **once**: TopAppBar
+  InfoHint only. Do **not** twin the identical (or paraphrased) copy as the
+  first body lead **or** as a FieldBlock description (e.g. “shared with Tab X”
+  when the bar tip already says the list is shared). FieldBlock description may
+  keep **ops-only** copy (browse / paste path) that is **not** in the bar tip.
+  Live `#layouts-demo-shell` (TopAppBar InfoHint; main canvas has **no** sibling
+  lead / FieldBlock description restating that tip). Failure: CONSUMER_TREATY
+  section FieldHint restates TopAppBar InfoHint.
+- **DON'T** twin the same empty/status signal on a `ListItem` in both `overline`
+  **and** `trailingSupportingText` (e.g. overline “尚无构建记录” + trailing
+  “未构建”) — **information redundancy (hard)**. Status / empty → **`overline`
+  once**; kind / wiki / complementary marks → `trailingSupportingText` /
+  `.fynns-table-meta`; dates / build timestamps → trailing meta (or omit when
+  unbuilt). Live `#sandbox-list-repo-path-actions`. Failure: CONSUMER_TREATY
+  ListItem overline restates trailing status.
 - **DON'T** put Settings both as root NavigationDrawerItem **and** footer gear
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
@@ -1045,6 +1065,7 @@ classes.
   | Known % / unknown wait | `linear`+`value` / default `circular`; chrome `min(20rem,100%)` | Stack ring+bar; nest progress in `message` |
   | Button/icon slot | Inline Spinner via `loading` + **`runLoadingTask` / `useLoadingTask`** (≥ **0.5.177**) | Page-level CircularProgress in the slot; bare `setLoading(true)` with no timeout/abort clear path |
   | Multi-action footer | **At most one** `loading` in cluster | Twin `loading={busy}` rings |
+  | Card batch CTA + path List rows | **One** ring: batch → Card primary only; per-row → that IconButton only (≥ **0.5.265**) | Card `loading` **and** every row Refresh `loading` for the same run |
   | Section wait + chrome | BusyRegion only; header/foot `disabled` without `loading` | BusyRegion + chrome loading |
   | Zero-result catalog | `EmptyState` (`fill` if sole pane body) | EmptyState as loading; content-sized EmptyState as sole canvas child |
   | Hang / cancel guard | `runBusyTask` / `runLoadingTask` with `timeoutMs` and/or `signal` (+ `onError` for toast) | Forever BusyRegion/Scrim/`loading` when fetch never settles; empty catalog painted as BusyRegion |
@@ -1290,7 +1311,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Data shape | Use | Sandbox | Forbidden (one line) |
 | --- | --- | --- | --- |
 | Name + path + optional row actions | Two-line `List` / `ListItem`; trailing ghost **md** IconButtons; `--with-end` overlay | `#list` / `#page-scroll` / `#sandbox-list-repo-path-actions` | Fat Card/Surface per entry; Divider between items; trailing `sm` on same page as catalog `md`; Switch+Chip+danger disk soup in trailing; meta kissing scroll rail |
-| Repo path + enable + end actions | Overline status; name + path; meta in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only; capped wells = `List` + `fynns-scroll` + `list-well-max-height*` | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete; private end pad to “fix” scrollbar kiss |
+| Repo path + enable + end actions | Overline status **once**; complementary kind/wiki (not a status synonym) in `trailingSupportingText`; enable = leading `Checkbox`; trailing = ghost **md** only; batch rebuild → **one** Card primary `loading` (rows disabled, no row rings) ≥ **0.5.265**; capped wells = `List` + `fynns-scroll` + `list-well-max-height*` | `#sandbox-list-repo-path-actions` | Switch mid IconButton cluster; Chip in headline; `IconButton` `danger` filled delete; overline+trailing both saying “未构建”; Card CTA + every row Refresh both `loading`; private end pad to “fix” scrollbar kiss |
+| Section / page help | TopAppBar `trailing` `InfoHint` **once** (short scope tip) | `#layouts-demo-shell` | Page/section `FieldHint` / section-lead / FieldBlock `description` restating the same TopAppBar tip |
 | Expandable catalog / nested records | Same List + `detail`; expand morph; multi-metric → `trailing-stats` | `#list` tree | `ul > div`; unmount `detail`; headline-tail count beside `--with-end` |
 | Title + org + date range | Org in `supportingText`; **status/kind → `overline`**; dates **only** in `trailingSupportingText` + `trailingMetaAlign="start"` (fixed start-ink column ≥ **0.5.223**) | `#list` org+dates / `#timeline` | Glue org·dates; status glued into date trailing; omit `trailingMetaAlign`; private `text-align`/width on trailing meta |
 | Short status + row action | Short meta + `--with-end`; omit `trailingMetaAlign`; hover reserve clears meta (≥ **0.5.207**) | `#list` status+action / `#sandbox-list-recipe-catalog` | `trailingMetaAlign="start"` on status+action; meta under IconButtons |
@@ -1299,7 +1321,6 @@ rules such as timeline-catalog). Live index: `#list`.
 | Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
 | Dashboard shortcut links | One Card wrapping one path List | `#list` shortcut Card | Button cluster + empty headline-only rows |
-| Section / page help | TopAppBar `trailing` `InfoHint` **once** (short scope tip) | `#layouts-demo-shell` | Page/section `FieldHint` / section-lead restating the same TopAppBar tip |
 | Named recipe / preset / pack catalog | One Card + `List` / `ListItem`; one-line `supportingText`; kind in meta; long copy / id → Dialog or InfoHint; end IconButtons | `#sandbox-list-recipe-catalog` / `#list` | Fat Card per recipe + stacked FieldHint essays + ChipSet tag soup; section FieldHint restating TopAppBar |
 | Catalog kind (builtin) | Leading icon + meta; host pill selected | `#list` kind | Start tick / inset rail / Chip as kind |
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |

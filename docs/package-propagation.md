@@ -36,15 +36,19 @@ Do **not** commit `_authToken=${NODE_AUTH_TOKEN}` (empty env → E401).
 1. **`fynns-ui:gate`** (hard) — `ensure-sibling-ui-core.mjs --update` then
    `check-ui-exports.mjs` on `predev` / `prebuild` / `prepreview` /
    `postinstall`. Auto fast-forwards a **clean** sibling to `origin/dev`
-   (or `FYNNS_UI_CORE_REF`) with `git merge --ff-only` after fetch. Only if
-   FF is impossible **and** remote `package.json` semver is strictly newer
-   (typical stale shallow clone) does it `reset --hard FETCH_HEAD`. Dirty /
-   ahead / diverged tips → **soft-skip** with a loud notice (dev continues;
-   export check still runs). `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those
-   cases (CI). Also fails closed on failed fetch or missing `@fynns/ui`
-   barrel symbols. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing
-   core. Optional floor: `"fynnsUi": { "minVersion": "…" }` in the consumer
-   package.json.
+   (or `FYNNS_UI_CORE_REF`) with `git merge --ff-only` after fetch. If FF is
+   impossible and remote `package.json` semver is **≥** local (stale shallow
+   / diverged consumer tip, including equal versions), it
+   `reset --hard FETCH_HEAD`. **Pure-ahead** / local-semver-newer diverged
+   tips → **soft-skip** with disposable `reset --hard` recovery in the notice.
+   **Dirty** = tracked sibling changes only (untracked `.tmp-*` ignored) →
+   soft-skip with commit/stash/discard guidance (not hard-reset); committing
+   the consumer does not clear sibling dirt. Dev continues; export check still
+   runs.
+   `FYNNS_UI_STRICT_SIBLING_SYNC=1` hard-fails those cases (CI). Also
+   fails closed on failed fetch or missing `@fynns/ui` barrel symbols.
+   Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1` while editing core. Optional
+   floor: `"fynnsUi": { "minVersion": "…" }` in the consumer package.json.
 2. **`fynns-ui:check-update`** (soft) — registry notice on
    `predev` / `prebuild` / `prepreview`. On sibling/`file:` the registry
    lookup skips quietly without a token. Optional Packages lookup needs
