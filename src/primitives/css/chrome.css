@@ -898,7 +898,9 @@
 /* Basic / confirm: no chrome title-bar strip and **no** head|body divider
  * (M3 basic dialog is a single surface — do not paint a Card-like hairline).
  * Outer inline → `--fynns-layout-dialog-inset`. Non-confirm head: block-start
- * dialog-inset/2, block-end 0 (40dp close owns row height when present).
+ * **content-inset** (18dp) so title ink top clearance matches body
+ * `padding-block-end` / trailing primary IconButton bottom clearance on
+ * form Dialogs without a foot (≥ **0.5.280** — was dialog-inset/2 = 12dp).
  * Confirm head overrides block-start to full dialog-inset. `head + body`
  * pad-top space-sm (close row already leaves optical space under the title);
  * foot block-end space-lg (optical under Buttons). Body
@@ -908,7 +910,7 @@
   background: transparent;
   border-bottom: none;
   padding-inline: var(--fynns-layout-dialog-inset);
-  padding-block-start: calc(var(--fynns-layout-dialog-inset) / 2);
+  padding-block-start: var(--fynns-layout-content-inset);
   padding-block-end: 0;
   align-items: center;
 }
@@ -992,8 +994,8 @@
 }
 
 /* Confirm: start-aligned title (M3 centers only with dialog icon).
- * Full dialog-inset on block-start so the title clears the panel radius
- * (non-confirm centered heads keep inset/2). */
+ * Full dialog-inset on block-start so the larger confirm title clears the
+ * panel radius (non-confirm heads use content-inset to match body end). */
 .fynns-dialog-panel--centered > .fynns-dialog-head--confirm {
   padding-block-start: var(--fynns-layout-dialog-inset);
 }

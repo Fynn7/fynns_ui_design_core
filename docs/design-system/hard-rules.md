@@ -674,6 +674,14 @@
   keep content until the next open. Never reuse a Confirm title as a Dialog
   title fallback (exit flash / wrong head). Live `#sandbox-list-recipe-catalog`.
   Failure: CONSUMER_TREATY Dialog exit clears title/body (flash).
+- **DON'T** crush centered `Dialog` title top clearance below body end —
+  non-confirm `.fynns-dialog-head` `padding-block-start` is
+  `--fynns-layout-content-inset` (**18dp**, ≥ **0.5.280**) so title ink top
+  matches body `padding-block-end` / trailing primary `IconButton` bottom
+  inset on form Dialogs without a foot. Do **not** patch consumer
+  `.fynns-dialog-head` pad or revive `dialog-inset/2`. Confirm heads keep
+  full `dialog-inset`. Live `#overlays`. Failure: CONSUMER_TREATY Dialog
+  title top ≠ body-end IconButton.
 - **DON'T** (EndAside*): conditionally mount `{asideOpen && <EndAside>}` —
   toggle **`open` only** so width morph can run (core ≥ **0.5.86** morph track
   stays mounted in DestinationAppShell — never unmount on close). Don't remount
