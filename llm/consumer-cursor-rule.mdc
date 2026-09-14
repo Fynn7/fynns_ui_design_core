@@ -106,6 +106,7 @@ sandbox `#anchor`。
 - **chat product / aside host wrong tree** — 会话：`ClippedNavShell`+drawer+`FillColumn`→`Chat`；侧栏主题：`DestinationAppShell`+`EndAside`→`.fynns-chat-host--fill`→`Chat`。禁止 PageScroll 当 chat 主滚、composer 进 FillColumn `footer`。`#layouts-demo-chat-product` / `#layouts-demo-chat-aside`
 - **FillColumn guide Surface flush to Chat** — 短 soft Surface / 预览 → `header`；Chat → `children`；禁止 `children` 兄弟 + `paddingBottom:0` 贴死 ChatActivity。`#layouts-demo-fill-column` / `#sandbox-fill-column-guide`
 - **PageScroll mid-scroll hard clip** — 只用 keep-set `PageScroll`（渐隐已封装）；禁止裸 `overflow:auto`。`#page-scroll`
+- **FillColumn header mid-scroll hard clip** — canvas 封顶的 `header` 渐隐已封装（≥ **0.5.278**）；禁止私有 `mask-image`。`#sandbox-fill-column-guide`
 - **overlay scrollbar above / buried under Select/Menu** — 页轨 z 在 modal-flyout 下；飞层轨用 scroll-overlay-flyout。`#sandbox-scroll-menu-stack`
 - **mode drawer tools↔filter crushed / toolbar-end md** — body 直接子间距 8dp；toolbar-end 盘 sm 32dp。`#layouts-demo-navigation-drawer`
 - **Dialog foot Delete leftmost / exit clears title** — Cancel 左、主确认右；`open→false` 同拍勿清空 title/body。`#sandbox-list-recipe-catalog`

@@ -43,7 +43,8 @@
 | `tool_output` | `max_lines 300 / max_bytes 12000` | 单次工具输出 ≤ ≈3k tokens，超出落盘只回预览 |
 | `compaction` | `auto + prune`，`preserve_recent_tokens 3000` | 真要压缩时只保留很短的近期上下文 |
 | `plugin: []`，`mcp: {}` | 停用 oh-my-opencode-slim 与内置 MCP | 单卡 8 GB 跑不起多代理；每个子代理都要再付一次 system prompt |
-| `instructions` | 4 个短规则（含 `rules/fynns-ui-consume.md` → 指向本仓 `llm/CONSUME.md`） | 消费仓里也能找到入口 |
+| `permission.external_directory` | **仅**允许 `D:/fynns_local_ws/fynns_ui_design_core/**` | 绿地可读 sibling UI core；**禁止**整棵 `fynns_local_ws`（含各仓 `node_modules`）|
+| `instructions` | 4 个短规则（含 `search-budget.md` 禁父目录 recurse + `fynns-ui-consume.md` → `llm/CONSUME.md`） | 软约束 + 消费入口 |
 
 恢复旧多代理配置：把 `.bak-before-plain-lms-*` 拷回 `opencode.json` / `tui.json` 即可。
 
