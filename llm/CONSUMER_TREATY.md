@@ -82,6 +82,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | NavigationDrawerItem always-visible trash / no more-menu | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
 | chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
+| chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#sandbox-field-header-inline-infohint` |
 | env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
 | env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |

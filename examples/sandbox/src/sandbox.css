@@ -949,19 +949,23 @@
 }
 
 /*
- * New-chat landing (product chrome): collapse docked composer row — input
- * lives in the empty stack with greeting + soft starter (ChatGPT rhythm).
+ * New-chat landing (product chrome): collapse docked composer row — greeting
+ * + soft starter centered above; ChatComposer pinned to the column bottom
+ * with the same `--fynns-chat-composer-inset-block` as a docked Chat composer
+ * (FillColumn / active thread). Hosts: `#layouts-demo-chat-product` /
+ * `#layouts-demo-chat-aside`.
  */
-.sandbox-chat-product-stage .fynns-chat.sandbox-chat--landing {
+.sandbox-chat-landing-host .fynns-chat.sandbox-chat--landing {
   grid-template-rows: minmax(0, 1fr);
   grid-template-areas: "thread";
 }
 
-.sandbox-chat-product-stage .fynns-chat.sandbox-chat--landing .fynns-chat-thread {
-  padding-bottom: var(--fynns-chat-thread-pad-block);
+/* Composer owns the bottom inset — do not double with thread pad-bottom. */
+.sandbox-chat-landing-host .fynns-chat.sandbox-chat--landing .fynns-chat-thread {
+  padding-bottom: 0;
 }
 
-.sandbox-chat-product-stage
+.sandbox-chat-landing-host
   .fynns-chat-thread:has(
     > .fynns-chat-thread-inner > .sandbox-chat-empty--landing
   )
@@ -976,12 +980,25 @@
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  gap: var(--fynns-chat-composer-offset);
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.sandbox-chat-empty-landing-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   gap: var(--fynns-layout-unit-stack-gap);
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
 .sandbox-chat-empty-composer {
+  flex: 0 0 auto;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -993,6 +1010,8 @@
   margin-inline: 0;
   padding-inline: 0;
   padding-block: 0;
+  /* Match docked `.fynns-chat > .fynns-chat-composer` bottom inset. */
+  padding-bottom: var(--fynns-chat-composer-inset-block);
 }
 
 .sandbox-chat-starters {
@@ -1691,6 +1710,42 @@
 .sandbox-chat-product-stage .fynns-destination-app-shell-canvas > .fynns-fill-column {
   flex: 1 1 auto;
   min-height: 0;
+}
+
+/*
+ * Aside chat product (`#layouts-demo-chat-aside`): DestinationAppShell with
+ * EndAside hosting the same new-chat landing (`.fynns-chat-host--fill`).
+ */
+.sandbox-chat-aside-product-stage {
+  box-sizing: border-box;
+  width: min(100%, 56rem);
+  height: 36rem;
+  min-width: 0;
+  border: var(--fynns-border-hairline) solid var(--fynns-color-border);
+  border-radius: var(--fynns-radius-md);
+  overflow: hidden;
+  background: var(--fynns-color-app-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sandbox-chat-aside-product-stage > .fynns-destination-app-shell,
+.sandbox-chat-aside-product-stage > .fynns-clipped-nav-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.sandbox-chat-aside-product-stage .fynns-destination-app-shell-canvas {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.sandbox-chat-aside-product-stage .fynns-end-aside > .fynns-chat-host--fill {
+  min-height: 0;
+  height: 100%;
 }
 
 /*

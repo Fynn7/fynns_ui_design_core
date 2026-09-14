@@ -22,6 +22,7 @@ import { useLocale } from "../i18n";
 import { SandboxHelp } from "./SandboxHelp";
 import { NavDrawerFooterAccount } from "./NavDrawerFooterAccount";
 import { ChatEmptySurfaceStarters } from "./ChatEmptySurfaceStarters";
+import { ChatNewChatLandingEmpty } from "./ChatNewChatLandingEmpty";
 
 /**
  * Chat product / session host recipe — composite of recent session chrome +
@@ -82,7 +83,7 @@ export function ChatProductLayoutsDemo() {
     setDraft("");
   };
 
-  /** New-chat landing: greeting + soft starter + composer as one centered stack. */
+  /** New-chat landing: centered greeting + starter; composer pinned bottom. */
   const isNewChatLanding = sessionsEmpty;
 
   const composer = (
@@ -119,7 +120,7 @@ export function ChatProductLayoutsDemo() {
           }}
         />
       </div>
-      <div className="sandbox-chat-product-stage">
+      <div className="sandbox-chat-product-stage sandbox-chat-landing-host">
         {/*
          * New-chat landing matches product chrome without TopAppBar
          * (drawer + FillColumn→Chat only — same keep-set tree as CV chat).
@@ -245,11 +246,10 @@ export function ChatProductLayoutsDemo() {
               >
                 <ChatThread
                   empty={
-                    <div className="sandbox-chat-empty sandbox-chat-empty--landing">
-                      <EmptyState title={t("globals.chatEmpty")} />
-                      <ChatEmptySurfaceStarters
-                        ariaLabel={t("globals.chatStarterAria")}
+                    isNewChatLanding ? (
+                      <ChatNewChatLandingEmpty
                         items={starterItems}
+                        composer={composer}
                         onSelect={(prompt) => {
                           snackbar(
                             t("globals.chatStarterSent", { prompt }),
@@ -259,12 +259,23 @@ export function ChatProductLayoutsDemo() {
                           );
                         }}
                       />
-                      {isNewChatLanding ? (
-                        <div className="sandbox-chat-empty-composer">
-                          {composer}
-                        </div>
-                      ) : null}
-                    </div>
+                    ) : (
+                      <div className="fynns-unit-stack sandbox-chat-empty">
+                        <EmptyState title={t("globals.chatEmpty")} />
+                        <ChatEmptySurfaceStarters
+                          ariaLabel={t("globals.chatStarterAria")}
+                          items={starterItems}
+                          onSelect={(prompt) => {
+                            snackbar(
+                              t("globals.chatStarterSent", { prompt }),
+                              {
+                                dismissAriaLabel: t("globals.snackbarDismiss"),
+                              },
+                            );
+                          }}
+                        />
+                      </div>
+                    )
                   }
                 />
                 {isNewChatLanding ? null : composer}

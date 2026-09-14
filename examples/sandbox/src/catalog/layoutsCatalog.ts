@@ -66,6 +66,21 @@ export const LAYOUTS_DEMOS: readonly LayoutsDemoEntry[] = [
     ],
   },
   {
+    id: "chat-aside",
+    label: "Chat aside host",
+    keywords: [
+      "chat",
+      "aside",
+      "EndAside",
+      "侧栏",
+      "inspector chat",
+      "chat-host--fill",
+      "new chat",
+      "starters",
+      "composer",
+    ],
+  },
+  {
     id: "fill-column",
     label: "FillColumn",
     keywords: [

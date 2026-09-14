@@ -107,7 +107,19 @@ const en = {
   "layouts.chatProductDeleteAllToast": "Cleared sample sessions",
   "layouts.chatProductSettingsToast": "Settings (sample)",
   "layouts.chatProductHelp":
-    "**Chat product / session host (default for chat-like UIs):** `ClippedNavShell` + session `NavigationDrawer` (`NavigationDrawerNewChat` full-width labeled New chat, **ghost / no border** ≥ 0.5.257; optional trailing More → Delete all `tone=\"danger\"`; empty list = `EmptyState` sm; row trailing prefer More; footer = account + settings) + main `FillColumn` → `Chat`. **New-chat landing:** omit TopAppBar; vertically centered greeting `EmptyState` + soft `Surface` `padded` `interactive` starters + `ChatComposer` **inside** `ChatThread.empty` (collapse docked composer row). Active thread: composer docks under `ChatThread` inside Chat — never FillColumn `footer`. Flat **destination** roots stay on `DestinationAppShell`; session-history chat / drill-in hand-compose this tree (CV-style `navKey` ok). Forbidden: Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer outside Chat. Anatomy dual-host → Globals `#chat`.",
+    "**Chat product / session host (default for chat-like UIs):** `ClippedNavShell` + session `NavigationDrawer` (`NavigationDrawerNewChat` full-width labeled New chat, **ghost / no border** ≥ 0.5.257; optional trailing More → Delete all `tone=\"danger\"`; empty list = `EmptyState` sm; row trailing prefer More; footer = account + settings) + main `FillColumn` → `Chat`. **New-chat landing:** omit TopAppBar; greeting `EmptyState` + soft `Surface` `padded` `interactive` starters **centered above**; `ChatComposer` **inside** `ChatThread.empty` pinned bottom with the same `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse docked composer row). Active thread: composer docks under `ChatThread` inside Chat — never FillColumn `footer`. Flat **destination** roots stay on `DestinationAppShell`; session-history chat / drill-in hand-compose this tree (CV-style `navKey` ok). Forbidden: Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer outside Chat. Anatomy dual-host → Globals `#chat`. Aside-host twin (same landing) → `#layouts-demo-chat-aside`.",
+  "layouts.chatAsideOpen": "Show EndAside chat",
+  "layouts.chatAsideToggle": "Toggle chat aside",
+  "layouts.chatAsideShellTitle": "Sample workspace",
+  "layouts.chatAsideNavAria": "Sample destinations",
+  "layouts.chatAsideDestHome": "Home",
+  "layouts.chatAsideChatLabel": "Aside chat thread",
+  "layouts.chatAsideComposerAria": "Aside chat message",
+  "layouts.chatAsideCanvasTitle": "Main canvas",
+  "layouts.chatAsideCanvasBody":
+    "Placeholder work surface. The EndAside chat is the product theme — same new-chat landing as the session host demo.",
+  "layouts.chatAsideHelp":
+    "**Chat aside host:** `DestinationAppShell` + **`EndAside`** → `.fynns-chat-host--fill` → `Chat` with the **same** new-chat landing as `#layouts-demo-chat-product` (greeting + soft starters centered above; `ChatComposer` inside `ChatThread.empty` pinned bottom with docked `--fynns-chat-composer-inset-block`). Main canvas stays a generic placeholder. Bubble ceiling 100% in aside. Do **not** put composer in FillColumn `footer` or use PageScroll as chat scroll. Session-history full-page chat stays on `#layouts-demo-chat-product`. Anatomy dual-host → Globals `#chat`.",
   "layouts.drillHelp":
     "Drill-in (ClippedNavShell): tap Catalog → pass `navKey` + `navDirection` so the drawer body Shared-Axis-X slides (short travel + fade; track width stays open — not close→swap→open); mode exit = TopAppBar back with `navDirection=\"back\"`. Do not hard-swap drawer content while open. Main stays full-width detail (EmptyState until a row is selected). Do not put list|detail in the main canvas with --fynns-layout-list-pane-width (legacy hub-split). Flat root-only apps stay on DestinationAppShell; any dynamic nav body uses ClippedNavShell + `navKey` + app state.",
   "layouts.drillNavAria": "Sample destinations",
@@ -2530,7 +2542,19 @@ const zh: Record<MessageKey, string> = {
   "layouts.chatProductDeleteAllToast": "已清空示例会话",
   "layouts.chatProductSettingsToast": "设置（示例）",
   "layouts.chatProductHelp":
-    "**Chat 产品 / 会话宿主（chat 类默认）：** `ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat` 满宽带文案新建，**ghost 无描边** ≥ 0.5.257；可选 trailing More → 全部删除 `tone=\"danger\"`；空列表 = `EmptyState` sm；行尾优先 More；footer = 账号 + 设置）+ 主列 `FillColumn` → `Chat`。**新会话空态：** 省略 TopAppBar；垂直居中问候 `EmptyState` + soft `Surface` `padded` `interactive` starters + `ChatComposer` 放进 `ChatThread.empty`（收起底部 dock 行）。有消息线程：composer 贴在 `ChatThread` 下、仍在 Chat 内 — 勿放进 FillColumn `footer`。扁平**目的地**根仍用 `DestinationAppShell`；会话历史 chat / 钻入手组本树（可用 CV 式 `navKey`）。禁止：Trash+Plus 双盘；Chip / 复活 ChatStarterPrompts；用 PageScroll 当 chat 主滚；composer 落在 Chat 外。主/侧气泡解剖 → Globals `#chat`。",
+    "**Chat 产品 / 会话宿主（chat 类默认）：** `ClippedNavShell` + 会话 `NavigationDrawer`（`NavigationDrawerNewChat` 满宽带文案新建，**ghost 无描边** ≥ 0.5.257；可选 trailing More → 全部删除 `tone=\"danger\"`；空列表 = `EmptyState` sm；行尾优先 More；footer = 账号 + 设置）+ 主列 `FillColumn` → `Chat`。**新会话空态：** 省略 TopAppBar；问候 `EmptyState` + soft `Surface` `padded` `interactive` starters **居中在上方**；`ChatComposer` 放进 `ChatThread.empty` 并贴底，下边距与 docked Chat composer 同为 `--fynns-chat-composer-inset-block`（收起底部 dock 行）。有消息线程：composer 贴在 `ChatThread` 下、仍在 Chat 内 — 勿放进 FillColumn `footer`。扁平**目的地**根仍用 `DestinationAppShell`；会话历史 chat / 钻入手组本树（可用 CV 式 `navKey`）。禁止：Trash+Plus 双盘；Chip / 复活 ChatStarterPrompts；用 PageScroll 当 chat 主滚；composer 落在 Chat 外。主/侧气泡解剖 → Globals `#chat`。侧栏宿主同构 landing → `#layouts-demo-chat-aside`。",
+  "layouts.chatAsideOpen": "显示 EndAside 对话",
+  "layouts.chatAsideToggle": "切换对话侧栏",
+  "layouts.chatAsideShellTitle": "示例工作区",
+  "layouts.chatAsideNavAria": "示例目的地",
+  "layouts.chatAsideDestHome": "首页",
+  "layouts.chatAsideChatLabel": "侧栏对话线程",
+  "layouts.chatAsideComposerAria": "侧栏对话消息",
+  "layouts.chatAsideCanvasTitle": "主画布",
+  "layouts.chatAsideCanvasBody":
+    "占位工作面。EndAside 对话才是产品主题屏 — 与会话宿主 demo 同一套新会话空态。",
+  "layouts.chatAsideHelp":
+    "**Chat 侧栏宿主：** `DestinationAppShell` + **`EndAside`** → `.fynns-chat-host--fill` → `Chat`，新会话空态与 `#layouts-demo-chat-product` **相同**（问候 + soft starters 居中上方；`ChatComposer` 进 `ChatThread.empty` 贴底，下边距同 docked `--fynns-chat-composer-inset-block`）。主画布仅占位。aside 气泡顶宽 100%。禁止 composer 进 FillColumn `footer`、用 PageScroll 当 chat 主滚。全页会话历史仍用 `#layouts-demo-chat-product`。主/侧气泡解剖 → Globals `#chat`。",
   "layouts.drillHelp":
     "钻入导航（ClippedNavShell）：点 Catalog → 传 `navKey` + `navDirection`，侧栏 body 做 Shared Axis X（短位移 + 淡入淡出；轨宽保持打开 — 禁止关轨再开）；退出模式 = TopAppBar 返回 + `navDirection=\"back\"` — 禁止塞进 NavigationDrawer.headline。禁止在打开态硬切侧栏内容。主区始终全宽详情（未选时 EmptyState）。禁止在主画布用 --fynns-layout-list-pane-width 做 list|detail（旧 hub-split）。仅扁平根目的地用 DestinationAppShell；任何动态侧栏内容用手拼 ClippedNavShell + `navKey` + 应用状态。",
   "layouts.drillNavAria": "示例目的地",

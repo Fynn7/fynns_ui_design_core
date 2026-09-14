@@ -170,6 +170,11 @@ trail 用 ASCII `-`。
    居中堆栈（收起 dock 行）；有消息后 composer 贴在 `ChatThread` 下。扁平目的地
    根仍用 `DestinationAppShell`。禁止 PageScroll 当 chat 主滚、composer 进
    FillColumn `footer`、Chip starters。对照 `#layouts-demo-chat-product`。
+7b3b. **chat aside host wrong tree** — 侧栏为主题屏的 chat：`DestinationAppShell`
+   + **`EndAside`** → `.fynns-chat-host--fill` → `Chat`，新会话 landing 与
+   `#layouts-demo-chat-product` 相同。主画布占位即可。禁止跳过
+   `chat-host--fill`、composer 进 FillColumn `footer`。对照
+   `#layouts-demo-chat-aside`。
 7b4. **PageScroll mid-scroll hard clip (no edge fade)** — 目的地目录只用
    keep-set **`PageScroll`**。**渐隐已封装在 core（≥ 0.5.247）** — 中段滚动
    自动 `data-fade-top` / `data-fade-bottom`（与侧栏同族），**消费仓零配置**
