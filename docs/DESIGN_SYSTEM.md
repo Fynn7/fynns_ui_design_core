@@ -206,12 +206,19 @@ belong in a consumer’s own doc.
     **inside Settings**.
     **UI punctuation (hard — visible chrome only):** strongly **do not** use
     middle-dot **`·`** or em-dash **`—`** (or decorative en-dash **`–`** as a
-    field joiner) in labels, `supportingText`, destination names, or status
-    cells. Prefer **layout** to separate unrelated meta (org in
-    `supportingText`, dates in `trailingSupportingText`). Date ranges use ASCII
-    hyphen with spaces (`2025-10 - 2026-03`) or locale words; empty trail marks
-    use ASCII **`-`**. Counts / badges stay on `badge` / body meta — never
-    `Name · N`. Docs / comments may still use English em dashes.
+    field joiner) in **any** visible product chrome — including Card /
+    Collapsible **`title`**, FieldBlock / ControlRow labels, List headlines /
+    `supportingText`, destination names, Menu triggers, and status cells.
+    **Natural-language titles (hard):** a title/label is a **short section
+    name a person would say** (`System prompt`, `Messages`, `Tools`) — never a
+    telegraphic glue of name + count / chars / tokens / path
+    (`系统提示 · 14,279 字`, `消息 · 2`, `Name · N`). Prefer **layout** to
+    separate unrelated meta (counts / branch / token estimates → Card body
+    `.fynns-table-meta` or List slots; org in `supportingText`, dates in
+    `trailingSupportingText`). Date ranges use ASCII hyphen with spaces
+    (`2025-10 - 2026-03`) or locale words; empty trail marks use ASCII **`-`**.
+    Counts / badges stay on `badge` / body meta. Docs / comments may still use
+    English em dashes. Live: sandbox `#card` meta-in-body + `#list` org+dates.
     **Sandbox / core demos must stay product-agnostic:** never paste consumer
     app copy into Globals, Preview, Layout templates, or primitive defaults —
     invent generic placeholders (see Hard rules /
@@ -303,6 +310,13 @@ belong in a consumer’s own doc.
   content-gap **4dp** / **8dp** (3-line), optical `--fynns-list-end-actions-gap`
   (≥ **0.5.62**); no 40dp empty leading column. Duration units **spaced**
   (`1m 47s`, never `1m47s`). Live `#list`.
+- **DON'T** glue name + count / chars / tokens / path into Card or Collapsible
+  `title` (or FieldBlock label) with middle-dot **`·`** / em-dash **`—`** /
+  decorative **`–`** — e.g. `系统提示 · 14,279 字 ≈ 3,887 token`,
+  `消息 messages · 2`, `Tools · 12`. `title` = short natural name only; put
+  metrics in the **body** as `.fynns-table-meta` (or List trailing / `badge`).
+  Live `#card` meta-in-body. Failure: CONSUMER_TREATY Card title · meta glued /
+  UI · — punctuation in chrome.
 - **DON'T** glue org + dates in one `supportingText` with `·` / `–` / `—` —
   org under title; dates → `trailingSupportingText` + `trailingMetaAlign="start"`
   on mixed-length date catalogs (core **start**-aligns glyphs in a **fixed**
@@ -720,6 +734,13 @@ belong in a consumer’s own doc.
   TopAppBar `InfoHint` may keep a short **scope** tip that does **not** list
   those labels. Live `#rhythm` (Surface + ToggleGroup — no sibling FieldHint
   naming Catalog / Mirror).
+- **DON'T** paint a page/section `FieldHint` / section-lead that **restates**
+  the same tip already on TopAppBar `trailing` `InfoHint`（页面说明）—
+  **information redundancy (hard)**. Section / destination help lives **once**:
+  TopAppBar InfoHint only. Do **not** twin the identical (or paraphrased) copy
+  as the first body `FieldHint`. Live `#layouts-demo-shell` (TopAppBar InfoHint;
+  main canvas has **no** sibling lead restating that tip). Failure:
+  CONSUMER_TREATY section FieldHint restates TopAppBar InfoHint.
 - **DON'T** put Settings both as root NavigationDrawerItem **and** footer gear
   — `navFooter` only; Settings = software chrome (locale/appearance/account);
   feature config = own destination; language not in TopAppBar. Live
@@ -757,6 +778,16 @@ belong in a consumer’s own doc.
   `--toolbar-end` — **not** a lone trash twin. Live
   `#sandbox-navdrawer-session-chrome`. Failure: CONSUMER_TREATY mode drawer
   toolbar trash+new twin.
+- **DON'T** invent a chat / session-history product layout that skips the
+  keep-set tree — default = **`ClippedNavShell`** + session
+  `NavigationDrawer` (`NavigationDrawerNewChat` …) + **`FillColumn` → `Chat`**.
+  New-chat landing = greeting + soft starters + `ChatComposer` inside
+  `ChatThread.empty` (centered); active thread docks composer under
+  `ChatThread` inside Chat. Flat destination roots stay on
+  `DestinationAppShell`. Do **not** put composer in FillColumn `footer`, use
+  `PageScroll` as chat main scroll, Chip starters, or Trash+Plus twin. Live
+  `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY chat product /
+  session host wrong tree.
 - **DON'T** inset mode `--toolbar-end` Plus (or preference Switch) with Item
   `item-pad-inline-end` so it sits ~16dp short of destination **Item pill
   outer** — Plus / Switch / **pill outer** share one trailing edge (body
@@ -820,8 +851,12 @@ belong in a consumer’s own doc.
   band). Don't paint secondary IconButtons / `iconOnly` menu triggers as
   `tonal` / `primary` — default **ghost**. Don't put PageScroll in EndAside
   without the height chain (track flex + `max-height:100%`, aside `height:100%`,
-  PageScroll `flex:1` `min-height:0` `overflow-y:auto` — ≥ **0.5.93**). Live
-  `#layouts-demo-shell`.
+  PageScroll `flex:1` `min-height:0` `overflow-y:auto` — ≥ **0.5.93**). Don't
+  let PageScroll Cards sit flush on the EndAside / scrollport **bottom** —
+  `.fynns-content-column` keeps `--fynns-layout-dialog-inset` block pad, and
+  core ≥ **0.5.263** sizes that column `flex: 0 0 auto` + `min-height: 100%`
+  so pad-block-end joins scroll overflow (never `flex:1` inside the scrolling
+  host, which ate bottom breath). Live `#layouts-demo-shell`.
 - **DON'T** pad destination labels with redundant meta (`· N`, parenthetical
   glosses) unless asked — short name + optional Item `badge`. Don't pass
   `drawerHeadline` / sheet `headline` under DestinationAppShell / TopAppBar
@@ -1072,6 +1107,20 @@ classes.
     (`--fynns-duration-base` / `--fynns-ease-emphasized`); reduced-motion =
     instant. `interactive` = Button-grammar state-layer hover/press. Do **not**
     use `Chip`/`ChipSet` or a dedicated starter primitive. Live `#chat` Empty.
+  - **Product / session host (default for chat-like UIs):** compose
+    **`ClippedNavShell`** (or drill-in with `navKey`; omit TopAppBar on
+    new-chat landing) + session **`NavigationDrawer`**
+    (`NavigationDrawerNewChat` ghost labeled New chat + optional More; empty
+    list `EmptyState` sm; row trailing prefer More; footer account) + main
+    **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` +
+    soft starters **centered above**; **`ChatComposer` inside `ChatThread.empty`**
+    pinned to the column bottom with the same
+    `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse
+    docked composer row). Active thread: composer under `ChatThread` inside
+    Chat. Flat **destination** roots stay on `DestinationAppShell`. Do **not**
+    put `ChatComposer` in FillColumn `footer` or use `PageScroll` as the chat
+    main scroll. Live `#layouts-demo-chat-product`. Failure: CONSUMER_TREATY
+    chat product / session host wrong tree.
   - **Main vs aside:** **main** = column ceiling `--fynns-layout-chat-max-width`
     (**48rem**); user bubble **70%** of host (`radius-22`,
     `--fynns-color-chat-user-bubble`); composer **100%** of same host
@@ -1250,6 +1299,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Outcome / readiness signal (OK/Fail) | `.fynns-list-item-status` (± `data-tone="danger"`) | `#list` run-summary / `#rhythm` status | `Chip` suggestion/assist / consumer StatusChip as fake Badge |
 | Catalog create / edit | Keep list mounted → `Dialog` `lg` (+ FullscreenDialog for long) | `#timeline` / `#form-recipe` | Silent PageScroll replace with ghost “back” |
 | Dashboard shortcut links | One Card wrapping one path List | `#list` shortcut Card | Button cluster + empty headline-only rows |
+| Section / page help | TopAppBar `trailing` `InfoHint` **once** (short scope tip) | `#layouts-demo-shell` | Page/section `FieldHint` / section-lead restating the same TopAppBar tip |
 | Named recipe / preset / pack catalog | One Card + `List` / `ListItem`; one-line `supportingText`; kind in meta; long copy / id → Dialog or InfoHint; end IconButtons | `#sandbox-list-recipe-catalog` / `#list` | Fat Card per recipe + stacked FieldHint essays + ChipSet tag soup; section FieldHint restating TopAppBar |
 | Catalog kind (builtin) | Leading icon + meta; host pill selected | `#list` kind | Start tick / inset rail / Chip as kind |
 | List row type stack | Gaps 4/8/16dp + optical end-actions | `#list` | Private gaps; 40dp empty leading |
@@ -1278,6 +1328,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Service / process / CLI probe | Label = short status only; labeled Buttons (+ optional path meta); detail `InfoHint` | `#rhythm` service | Tool-name label + status Chip + FieldHint essay |
 | Mode drawer tools | `--toolbar-end` as **direct** body sibling (or tools host); primary Plus last; ListChecksIcon bulk / sort / refresh OK; tools IconButtons **sm** **32dp** (core ≥ **0.5.235**); Plus / Switch / Item **pill outer** one trailing edge (≥ **0.5.228**); chrome↔next = search-gap **8dp** (≥ **0.5.222**) | `#layouts-demo-navigation-drawer` | Clipboard for bulk; twin page InfoHints; Plus inset by item-pad; tools↔Item crushed to 4dp; default **md** 40dp toolbar disks |
 | Session / history drawer chrome | **`NavigationDrawerNewChat`** full-width labeled New chat, **ghost / no border** (≥ **0.5.256**; ghost ≥ **0.5.257**); optional `trailing` More (bulk delete `tone="danger"`) — never Trash+Plus twin; never icon-only `--toolbar-end` for history (catalog tools still use `--toolbar-end`) | `#sandbox-navdrawer-session-chrome` / `#layouts-demo-navigation-drawer` | Outlined New chat stroke; always-visible Trash + Plus twin; history chrome as end-hug Plus-only strip |
+| Chat product / session host | **`ClippedNavShell`** (flat session or drill-in `navKey`; **`topBar={null}`** on new-chat landing — body fills shell ≥ **0.5.261**) + session `NavigationDrawer` (`NavigationDrawerNewChat` + EmptyState\|Items + footer account) + main **`FillColumn` → `Chat`**. **New-chat landing:** greeting `EmptyState` + soft interactive Surface starters **centered above**; **`ChatComposer` inside `ChatThread.empty`** pinned to the column bottom with the same `--fynns-chat-composer-inset-block` as a docked Chat composer (collapse docked composer row via landing class). Active thread: composer docks under `ChatThread` **inside** Chat. Destination lists stay on `DestinationAppShell` | `#layouts-demo-chat-product` | Trash+Plus twin; Chip / revived ChatStarterPrompts; PageScroll as chat main scroll; composer in FillColumn `footer`; inventing a non–keep-set chat shell |
+| Chat aside host | **`DestinationAppShell`** + **`EndAside`** → `.fynns-chat-host--fill` → `Chat` with the **same** new-chat landing as the session host (greeting + soft starters + composer in `ChatThread.empty`). Main canvas = generic placeholder. Aside bubble ceiling 100% | `#layouts-demo-chat-aside` | Composer in FillColumn `footer`; PageScroll as chat scroll; skipping `.fynns-chat-host--fill`; inventing a third chat shell |
 | Mode / session row actions | `NavigationDrawerItem` `trailing` ghost **sm** (32dp; clamp ≥ **0.5.225**; end clear ≥ **0.5.234**); idle-hidden + **slow** fade (`actions-reveal` ≥ **0.5.245**); prefer **More (`…`)** + `DropdownMenu` (icon+label, separator, `tone="danger"` delete); optional Rename/Pin beside More; 1/2/3 disk reserve | `#layouts-demo-navigation-drawer` | Delete in `badge`; always-visible trash as sole trailing; nested button inside Item; md 40dp disk; `duration-fast` snap fade; consumer private opacity CSS |
 | Bulk-select rows | Checkbox in icon/leading; checked ≠ active/selected | `#layouts-demo-navigation-drawer` | `active={checked}` wall |
 | Mode drawer preference | ControlRow + InfoHint sm + track-only Switch; label start inset = Item `item-pad-inline-start` (core ≥ **0.5.137**); Switch end = `--toolbar-end` Plus = Item pill outer (≥ **0.5.228**) | `#layouts-demo-navigation-drawer` / `#info-hint` | ControlBlock multi-sentence description; flush on body `pad-inline` only; Switch / Plus short of Item pill |
@@ -1288,10 +1340,10 @@ rules such as timeline-catalog). Live index: `#list`.
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief | Collapsible + body md save | `#form-recipe-page-scroll` | Static tall Card; md on Collapsible head |
 | PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |
-| Titled section shell | Card/Collapsible; short title; ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | Mixed sm/md trail; path/count in title; Card column narrower than sibling tool ToggleGroup or content-column |
+| Titled section shell | Card/Collapsible; **short natural-language title** only; counts / chars / tokens / path → body `.fynns-table-meta` (live meta-in-body); ≤1 InfoHint; same trail size; **full content-column width** (never `sheet-max-width` / `chat-max-width` / dialog-max on destination `hub-col`) | `#card` / `#field-header` / `#page-scroll` | `Title · N` / `Title · chars ≈ tokens`; path/count glued in title; Mixed sm/md trail; Card column narrower than sibling tool ToggleGroup or content-column |
 | Card head Select + Button | Trigger-band; 8dp gap; open Select keeps head center (≥ **0.5.227**) | `#sandbox-card-head-select` | Title/CTA yanked by Select `data-expanded` grid |
 | Untitled well / preview | `Surface` (`soft` = surface-2; `padded` = equal content-inset) | `#surface` | Surface as List-row substitute; Banner as clickable prompt; rem pad on Surface |
-| Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` **`interactive`** in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout; large-button state layer) | `#chat` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad; static soft without hover |
+| Empty-thread chat starters | `EmptyState` + soft `Surface` `padded` **`interactive`** in `empty` (outer = `.fynns-chat-composer-shell`; stay in thread-inner pad; never form breakout; large-button state layer) | `#chat` / `#layouts-demo-chat-product` / `#fill-column` | Chip/ChipSet; revived `ChatStarterPrompts`; flush with form; rem pad; static soft without hover |
 | In-content editor\|preview | `SplitPane` | `#split-pane` | Hand-rolled resize; EndAside inside Card |
 | File / settings hierarchy | `Tree` / `TreeItem` | `#tree` | NavDrawer for file trees; HubTreeDisclosure |
 | Chronological timeline | Timeline flat|detail; edit in Dialog | `#timeline` | Lettered A/B/C shells; rail hover edit icons |

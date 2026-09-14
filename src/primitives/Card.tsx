@@ -3,7 +3,12 @@ import type { CollapsibleChrome } from "./Collapsible";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 
 export type CardProps = {
-  /** Header title in the static lead row (same role as Collapsible `title`). */
+  /**
+   * Header title in the static lead row (same role as Collapsible `title`).
+   * **Short natural-language section name only** — never glue counts / chars /
+   * tokens / path with middle-dot `·` (`系统提示 · 14,279 字`). Put metrics in
+   * the body as `.fynns-table-meta` (sandbox `#card` meta-in-body).
+   */
   title: ReactNode;
   /**
    * Optional glyph in the disclose slot (~16dp / `--fynns-size-icon`).

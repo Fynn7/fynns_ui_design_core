@@ -7,7 +7,10 @@ import { OverflowTip, overflowTipText } from "./OverflowTip";
 export type CollapsibleChrome = "card" | "plain";
 
 export type CollapsibleProps = {
-  /** Header content shown in the always-visible trigger row. */
+  /** Header content shown in the always-visible trigger row.
+   * Short natural-language name only — never glue counts / tokens with `·`
+   * (same rule as Card `title`; sandbox `#card` meta-in-body).
+   */
   title: ReactNode;
   /**
    * Optional glyph that occupies the disclose slot at rest (same place as the

@@ -32,7 +32,9 @@ export type ClippedNavShellProps = {
   navMode: ClippedNavShellNavMode;
   /**
    * Full-bleed top row — typically `TopAppBar` (leading = nav toggle,
-   * title = brand, trailing = actions). Spans the window above the nav|main grid.
+   * title = brand, trailing = actions). Spans the window above the nav|main
+   * grid. Pass `null` / omit content for new-chat landing without a bar
+   * (body becomes the sole grid child and fills the shell).
    */
   topBar: ReactNode;
   /**

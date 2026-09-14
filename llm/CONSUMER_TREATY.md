@@ -81,6 +81,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | NavigationDrawerItem badge IconButton always visible | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | NavigationDrawerItem always-visible trash / no more-menu | DESIGN_SYSTEM Hard rules | `#layouts-demo-navigation-drawer` |
 | mode drawer toolbar trash+new twin | DESIGN_SYSTEM Hard rules / NavigationDrawerNewChat ≥ 0.5.256 | `#sandbox-navdrawer-session-chrome` |
+| chat product / session host wrong tree | DESIGN_SYSTEM Content density / Chat product | `#layouts-demo-chat-product` |
+| chat aside host wrong tree | DESIGN_SYSTEM Content density / Chat aside | `#layouts-demo-chat-aside` |
 | FieldHeader inline InfoHint kissed | AGENTS forms / FieldStack | `#sandbox-field-header-inline-infohint` |
 | env key FieldHint under input (hint split) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
 | env key status Chip (information redundancy) | AGENTS forms / FieldStack | `#sandbox-field-header-env-keys` |
@@ -102,7 +104,8 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | Timeline hover pill flush text (zero inner pad) | AGENTS Timeline / timeline-catalog | `#timeline` |
 | Timeline disc not centered on copy | AGENTS Timeline / timeline-catalog | `#timeline` |
 | Timeline row hover edit/delete icons | AGENTS Timeline / timeline-catalog | `#timeline` |
-| UI · — punctuation in chrome | AGENTS Language / Hard rules | `#list` |
+| UI · — punctuation in chrome | AGENTS Language / Hard rules | `#list` / `#card` |
+| Card title · meta glued | AGENTS Language / Hard rules | `#card` |
 | trailingSupportingText right-hug drift | AGENTS shells / Hard rules | `#list` |
 | inspector Select open yanks trailing | AGENTS / DESIGN_SYSTEM Hard rules | `#sandbox-list-inspector-trailing` |
 | Card head Select open yanks title band | AGENTS / DESIGN_SYSTEM Hard rules | `#sandbox-card-head-select` |
@@ -156,6 +159,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | List scroll-well overflow-y spill overlaps siblings | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-list-repo-path-actions` |
 | ControlStack probe meta end-hug / kind mix (Available+Backend; path/chips/hint cluster) | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-probe-kinds` / `#rhythm` status |
 | FieldHint restates ToggleGroup / Tabs labels (information redundancy) | DESIGN_SYSTEM Hard rules / Content density | `#rhythm` |
+| section FieldHint restates TopAppBar InfoHint | DESIGN_SYSTEM Hard rules / Content density | `#layouts-demo-shell` |
 | ControlRow IconButton crushed to ellipse | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | end-align IconButton strip crushed | AGENTS Toolbar / unit rhythm | `#rhythm` |
 | Pagination crushed or stacked off-spec | AGENTS Toolbar / unit rhythm | `#pagination` |
@@ -304,6 +308,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | EndAside toggle workspace BusyRegion flash | AGENTS Busy/Loading | `#layouts-demo-shell` |
 | ControlRow labeled Button cluster overflow (Card / EndAside) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside PageScroll no scroll | AGENTS shells / Hard rules | `#layouts-demo-shell` |
+| EndAside PageScroll Card flush to pane bottom | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside dense labeled Button strip (information redundancy) | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside ControlRow label crush | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | EndAside icon tonal disks | AGENTS shells / Hard rules | `#layouts-demo-shell` |
