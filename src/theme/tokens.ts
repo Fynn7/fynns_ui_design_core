@@ -1402,7 +1402,8 @@ export const LAYOUT_TOKENS = {
    * Soft mask length for scroll-edge fade (`data-fade-top` / `data-fade-bottom`)
    * on CodeBlock / Textarea / **PageScroll** (≥ **0.5.247**) / **FillColumn
    * header** (≥ **0.5.278**) / NavigationDrawer body (via alias) — not a hard
-   * clip.
+   * clip. Textarea uses a multi-layer mask (≥ **0.5.282**) so the hairline
+   * stroke stays opaque while content fades.
    */
   "scroll-edge-fade-length": "1.5rem",
   /**

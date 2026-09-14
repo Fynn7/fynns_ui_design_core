@@ -103,7 +103,9 @@ belong in a consumer’s own doc.
    (`data-fade-top` / `data-fade-bottom`, length
    `--fynns-layout-scroll-edge-fade-length`) — **built into `PageScroll`
    (≥ **0.5.247**) and FillColumn header (≥ **0.5.278**); zero consumer props /
-   private mask CSS**. Not a hard clip
+   private mask CSS**. Masks keep the outer `--fynns-border-hairline` strip
+   opaque (≥ **0.5.282**) so Textarea / bordered wells do **not** fade their
+   stroke with the content. Not a hard clip
    into TopAppBar / canvas floor / Chat. Do **not** invent consumer `mask-image` on
    `.fynns-page-scroll` / `.fynns-fill-column-header`, and do **not** replace
    destination catalogs with a bare

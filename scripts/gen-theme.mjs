@@ -242,11 +242,14 @@ button {
  * token; NavDrawer reads navdrawer alias so overriding
  * --fynns-navdrawer-body-fade-length still applies. PageScroll ≥ 0.5.247;
  * FillColumn header ≥ 0.5.278.
+ *
+ * Textarea uses a separate multi-layer mask (≥ 0.5.282): opaque hairline
+ * frame + inset content fade — a single vertical mask would erase side
+ * strokes in the fade band.
  */
 .fynns-code-block-pre[data-fade-bottom],
 .fynns-code-block-input[data-fade-bottom],
 .fynns-code-block-highlight[data-fade-bottom],
-.fynns-textarea[data-fade-bottom],
 .fynns-page-scroll[data-fade-bottom],
 .fynns-fill-column-header[data-fade-bottom] {
   -webkit-mask-image: linear-gradient(
@@ -281,7 +284,6 @@ button {
 .fynns-code-block-pre[data-fade-top],
 .fynns-code-block-input[data-fade-top],
 .fynns-code-block-highlight[data-fade-top],
-.fynns-textarea[data-fade-top],
 .fynns-page-scroll[data-fade-top],
 .fynns-fill-column-header[data-fade-top] {
   -webkit-mask-image: linear-gradient(
@@ -316,7 +318,6 @@ button {
 .fynns-code-block-pre[data-fade-top][data-fade-bottom],
 .fynns-code-block-input[data-fade-top][data-fade-bottom],
 .fynns-code-block-highlight[data-fade-top][data-fade-bottom],
-.fynns-textarea[data-fade-top][data-fade-bottom],
 .fynns-page-scroll[data-fade-top][data-fade-bottom],
 .fynns-fill-column-header[data-fade-top][data-fade-bottom] {
   -webkit-mask-image: linear-gradient(
@@ -350,6 +351,174 @@ button {
     #000 calc(100% - var(--fynns-navdrawer-body-fade-length)),
     transparent 100%
   );
+}
+
+
+.fynns-textarea[data-fade-bottom] {
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+      transparent 100%
+    );
+  -webkit-mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  -webkit-mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+      transparent 100%
+    );
+  mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  mask-repeat: no-repeat;
+  mask-composite: add;
+}
+
+.fynns-textarea[data-fade-top] {
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 var(--fynns-layout-scroll-edge-fade-length),
+      #000 100%
+    );
+  -webkit-mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  -webkit-mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 var(--fynns-layout-scroll-edge-fade-length),
+      #000 100%
+    );
+  mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  mask-repeat: no-repeat;
+  mask-composite: add;
+}
+
+.fynns-textarea[data-fade-top][data-fade-bottom] {
+  -webkit-mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 var(--fynns-layout-scroll-edge-fade-length),
+      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+      transparent 100%
+    );
+  -webkit-mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  -webkit-mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(#000, #000),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 var(--fynns-layout-scroll-edge-fade-length),
+      #000 calc(100% - var(--fynns-layout-scroll-edge-fade-length)),
+      transparent 100%
+    );
+  mask-size:
+    100% var(--fynns-border-hairline),
+    100% var(--fynns-border-hairline),
+    var(--fynns-border-hairline) 100%,
+    var(--fynns-border-hairline) 100%,
+    calc(100% - 2 * var(--fynns-border-hairline))
+      calc(100% - 2 * var(--fynns-border-hairline));
+  mask-position:
+    0 0,
+    0 100%,
+    0 0,
+    100% 0,
+    var(--fynns-border-hairline) var(--fynns-border-hairline);
+  mask-repeat: no-repeat;
+  mask-composite: add;
 }
 
 .fynns-sr-only {
