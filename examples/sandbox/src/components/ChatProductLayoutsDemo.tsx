@@ -123,7 +123,7 @@ export function ChatProductLayoutsDemo() {
       <div className="sandbox-chat-product-stage sandbox-chat-landing-host">
         {/*
          * New-chat landing matches product chrome without TopAppBar
-         * (drawer + FillColumn→Chat only — same keep-set tree as CV chat).
+         * (drawer + FillColumn→Chat only — same keep-set tree as product chat).
          */}
         <ClippedNavShell
           className="fynns-destination-app-shell"
