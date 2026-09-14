@@ -130,13 +130,12 @@ as a hard fail.
 
 | FillColumn guide Surface flush to Chat (≥ **0.5.277**) | Short soft `Surface` / compact preview above Chat → `FillColumn` **`header`**; Chat (+ optional `ChatActivity`) → `children`. Core gaps header↔main and main siblings with `unit-stack-gap`. Do **not** stack the form as a `children` sibling with `paddingBottom: 0`. Live: `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`. Re-paste `consumer-cursor-rule.mdc`. |
 
-Older version-churn rows (ChatMessage, Pagination Select history, NavDrawer footer tunes, …) live in [llm/archive/BREAKING_PURGE_ARCHIVE.md](archive/BREAKING_PURGE_ARCHIVE.md).
+Older version-churn rows (ChatMessage, Pagination Select history, NavDrawer footer tunes, …) were archived and then removed from the tree — recover them from git history (`git log --all -- llm/archive/BREAKING_PURGE_ARCHIVE.md`) if ever needed.
 
 When a **new** behavioral break ships, add a short row here (and keep ## Removed → how consumers should fix machine-checked). Do not paste multi-version history essays back into this file.
 
 ## Related docs
 
 - Design language SoT: [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) (+ [`docs/design-system/`](../docs/design-system/))
-- Behavioral churn history: [`archive/BREAKING_PURGE_ARCHIVE.md`](archive/BREAKING_PURGE_ARCHIVE.md)
 - Install contract: [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json)
 - Doc catalog: [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md)

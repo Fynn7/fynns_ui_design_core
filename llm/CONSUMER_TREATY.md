@@ -325,8 +325,10 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 
 | Doc | Role |
 | --- | --- |
-| [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install |
+| [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json) | Install + greenfield skeleton |
+| [`consumer-AGENTS.md`](consumer-AGENTS.md) | Consumer `AGENTS.md` template (OpenCode / local models) |
 | [`consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Pasteable always-on consumer rule |
 | [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / density SoT index |
-| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight) |
+| [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | **Full documentation catalog** (+ CodeBlock highlight + `api.mjs`) |
 | [`PERF.md`](PERF.md) | Shells / inspectors / catalogs |
+| [`LOCAL_LLM.md`](LOCAL_LLM.md) | LM Studio + OpenCode local-model budgets |

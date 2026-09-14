@@ -1,0 +1,6 @@
+# ripgrep-only ignore (also honoured by OpenCode / Cursor grep tools).
+# Keeps huge generated / i18n blobs out of search results so a single grep
+# cannot flood a small-model context. Search them explicitly with `rg --no-ignore`.
+package-lock.json
+examples/sandbox/src/i18n/messages.ts
+src/theme/theme.css

@@ -1,69 +1,42 @@
-# @fynns/ui-design-core
+# @fynn7/ui-design-core
 
 Fynn's shared **dark-teal UI design system**: canonical `--fynns-*` tokens +
-self-developed React primitives (no `radix`, no `sonner`). This repo is
-**public**. Day-to-day consumers link a sibling checkout (`file:`) + Vite alias
-`@fynns/ui`. GitHub Packages (`@fynn7/ui-design-core`) remains optional for
-publish / bump workflows (Packages still needs a token even when the git repo
-is public).
+self-developed React primitives (no `radix`, no `sonner`). Public repo.
+Consumers link a sibling checkout (`file:`) and import through the Vite alias
+`@fynns/ui`; GitHub Packages (`@fynn7/ui-design-core`) is optional for
+publishers only.
 
-## Authority docs
-
-Full catalog: [`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md).
+## Where to read
 
 | Need | Doc |
 | --- | --- |
-| Design language, Hard rules, keep-set | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)（常驻摘要 [`AGENTS.md`](AGENTS.md)；本地小模型 [`llm/LOCAL_LLM.md`](llm/LOCAL_LLM.md)） |
-| Install / consume | [`llm/CONSUME.md`](llm/CONSUME.md) |
-| Consumer pasteable rule + failure index | [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc), [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) |
-| Breaking purge | [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md) |
-| Perf (shells / inspectors) | [`llm/PERF.md`](llm/PERF.md) |
+| Install into an app / greenfield skeleton | [`llm/CONSUME.md`](llm/CONSUME.md) |
+| Props of any export | `node scripts/api.mjs <Name>` (`--list`, `--search`, `--tokens`) |
+| Design language, Hard rules, keep-set | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md) (resident summary: [`AGENTS.md`](AGENTS.md)) |
+| Consumer failure-mode index / pasteable rule | [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md), [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc) |
+| Deleted APIs → replacements | [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md) |
 | Publish / bumps | [`docs/package-propagation.md`](docs/package-propagation.md) |
-| Agent wiki nav | [`openwiki/quickstart.md`](openwiki/quickstart.md) |
-| Glossary | [`CONTEXT.md`](CONTEXT.md) |
+| Local LLM (LM Studio + OpenCode) | [`llm/LOCAL_LLM.md`](llm/LOCAL_LLM.md) |
+| Full doc catalog | [`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md) |
 
-## Install (consumer)
-
-**Zero-token (preferred for apps like CV Generator):** clone this repo next to the
-consumer (`../fynns_ui_design_core`, usually `dev`) and `file:`-link it. No
-`NODE_AUTH_TOKEN`. CV Generator first `npm run dev` (or optional `npm run setup`)
-auto-clones the sibling when missing.
+## Install (consumer, zero-token)
 
 ```bash
-git clone https://github.com/Fynn7/fynns_ui_design_core.git
-# then from the consumer, or via that app's setup script:
-# npm install @fynn7/ui-design-core@file:../fynns_ui_design_core
+git clone https://github.com/Fynn7/fynns_ui_design_core.git   # next to your app
+node ../fynns_ui_design_core/scripts/ensure-sibling-ui-core.mjs --target . --install --npmrc --json
+node ../fynns_ui_design_core/scripts/install-as-npm.mjs --target . --sibling --json
 ```
 
-**Packages publish / bump** (optional):
+No `NODE_AUTH_TOKEN`, no git submodule. Details and the app skeleton:
+[`llm/CONSUME.md`](llm/CONSUME.md).
 
-```bash
-# from a checkout of this repo (needs NODE_AUTH_TOKEN / GITHUB_TOKEN read:packages)
-npm run consume:install -- --target ../my-app --json
-npm run consume:check -- --target ../my-app --json
-```
-
-Manual Packages path: `.npmrc` → `@fynn7:registry=https://npm.pkg.github.com` +
-auth token; `npm install @fynn7/ui-design-core`; Vite alias `@fynns/ui` →
-`node_modules/@fynn7/ui-design-core/src/index.ts`. Full steps: [`llm/CONSUME.md`](llm/CONSUME.md).
-
-**Do not** use a git submodule for day-to-day consume. Legacy submodule notes
-(archived): [`docs/archive/submodule-propagation.md`](docs/archive/submodule-propagation.md).
-
-## Local sandbox
+## Develop here
 
 ```bash
 npm install
-npm run sandbox          # aesthetic / Globals playground
-npm run check            # typecheck + wysiwyg + perf-sandbox + no-consumer
+npm run sandbox          # Globals / Layouts / Preview playground (= public surface)
+npm run check            # typecheck + wysiwyg + perf + no-consumer + doc-links + unit + e2e
 npm run gen:theme        # tokens.ts → theme.css
 ```
 
-Public surface = sandbox Globals + Layouts + Preview only
-(`npm run check:wysiwyg`).
-
-## Package
-
-- Name: `@fynn7/ui-design-core` (GitHub Packages)
-- Alias for app imports: `@fynns/ui`
-- Publish: [`docs/package-propagation.md`](docs/package-propagation.md)
+Public API = what the sandbox demos (`npm run check:wysiwyg`).

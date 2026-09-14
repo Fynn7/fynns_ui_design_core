@@ -14,6 +14,8 @@ Authority: slim [`AGENTS.md`](../../AGENTS.md) + full SoT
 rule: [`llm/consumer-cursor-rule.mdc`](../../llm/consumer-cursor-rule.mdc).
 Purge / migration: [`llm/BREAKING_PURGE.md`](../../llm/BREAKING_PURGE.md).
 Publish: [`docs/package-propagation.md`](../../docs/package-propagation.md).
+Props lookup (local models): `node scripts/api.mjs <Name>` — see
+[`llm/LOCAL_LLM.md`](../../llm/LOCAL_LLM.md).
 
 ## Hard (always)
 

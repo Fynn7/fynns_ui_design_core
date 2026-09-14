@@ -1,7 +1,6 @@
 /*
  * Keep-set primitive styles. Domain files live under ./css/ — edit there;
  * this barrel only @imports (order matters for cascade).
- * Regenerate domains: node scripts/split-primitives-css.mjs (from a monolith).
  */
 @import "./css/motion.css";
 @import "./css/actions.css";

@@ -68,6 +68,8 @@ Options:
   --json             JSON summary on stdout
   -h, --help         Show help
 
+Also writes (when missing) .cursor/rules/fynns-ui-consumer.mdc and AGENTS.md
+(from llm/consumer-AGENTS.md) at the consumer git root.
 Day-to-day: no NODE_AUTH_TOKEN. See llm/CONSUME.md + scripts/ensure-sibling-ui-core.mjs.
 `;
 }
@@ -665,6 +667,22 @@ function ensureConsumerRule(gitRoot, dryRun, log, { force = false } = {}) {
   });
 }
 
+/**
+ * Consumer `AGENTS.md` (OpenCode / local models) from llm/consumer-AGENTS.md.
+ * Written only when the app has none — never overwrites a hand-written file.
+ */
+function ensureConsumerAgentsMd(gitRoot, dryRun, log) {
+  const src = path.join(CORE_ROOT, "llm", "consumer-AGENTS.md");
+  const dest = path.join(gitRoot, "AGENTS.md");
+  if (!fs.existsSync(src)) return;
+  if (fs.existsSync(dest)) {
+    log.push({ step: "agents_md", status: "ok", detail: "exists (left untouched)" });
+    return;
+  }
+  if (!dryRun) fs.copyFileSync(src, dest);
+  log.push({ step: "agents_md", status: dryRun ? "dry-run" : "written", file: dest });
+}
+
 function pickVite(opts, gitRoot) {
   if (opts.vite) return path.resolve(opts.vite);
   if (opts.viteFrom) {
@@ -869,6 +887,7 @@ function main() {
     wireTsconfig(tsconfigFile, rel, opts.dryRun, log);
   }
   ensureConsumerRule(gitRoot, opts.dryRun, log, { force: opts.syncConsumerRule });
+  ensureConsumerAgentsMd(gitRoot, opts.dryRun, log);
   if (opts.syncConsumerRule && opts.wireOnly) {
     const summary = {
       ok: true,

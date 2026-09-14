@@ -25,12 +25,14 @@
     "README.md",
     "scripts/check-ui-update.mjs",
     "scripts/check-ui-exports.mjs",
-    "scripts/ensure-sibling-ui-core.mjs"
+    "scripts/ensure-sibling-ui-core.mjs",
+    "scripts/api.mjs"
   ],
   "bin": {
     "fynns-ui-check-update": "./scripts/check-ui-update.mjs",
     "fynns-ui-check-exports": "./scripts/check-ui-exports.mjs",
-    "fynns-ui-ensure-sibling": "./scripts/ensure-sibling-ui-core.mjs"
+    "fynns-ui-ensure-sibling": "./scripts/ensure-sibling-ui-core.mjs",
+    "fynns-ui-api": "./scripts/api.mjs"
   },
   "scripts": {
     "gen:theme": "node scripts/gen-theme.mjs",
@@ -41,10 +43,10 @@
     "check:menu-trigger-chevron": "node scripts/check-menu-trigger-chevron.mjs",
     "check:no-consumer": "node scripts/check-no-consumer.mjs",
     "check:doc-links": "node scripts/check-doc-links.mjs",
-    "check:repomix-base": "node scripts/check-repomix-base.mjs",
+    "api": "node scripts/api.mjs",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "check": "npm run typecheck && npm run check:wysiwyg && npm run check:perf-sandbox && npm run check:no-consumer && npm run check:doc-links && npm run check:repomix-base && npm run check:pagination-select && npm run check:menu-trigger-chevron && npm run test:unit && npm run test:e2e",
+    "check": "npm run typecheck && npm run check:wysiwyg && npm run check:perf-sandbox && npm run check:no-consumer && npm run check:doc-links && npm run check:pagination-select && npm run check:menu-trigger-chevron && npm run test:unit && npm run test:e2e",
     "lint": "eslint .",
     "sandbox": "vite --config examples/sandbox/vite.config.ts",
     "sandbox:build": "vite build --config examples/sandbox/vite.config.ts",

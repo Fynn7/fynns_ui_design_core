@@ -6,14 +6,6 @@ dist
 examples/sandbox/dist
 *.tgz
 
-# Local LLM repomix dumps (configs stay tracked)
-repomix-*.md
-repomix-output.*
-repomix-core-essentials.*
-
-# OpenWiki local update stamp (generated)
-openwiki/.last-update.json
-
 # Playwright / Vitest artifacts
 test-results/
 playwright-report/
@@ -26,13 +18,4 @@ playwright/.cache/
 .cursor-audit/
 dialog-scroll-radius/
 .ship-pr-body*.md
-scripts/_focus-verify/
-scripts/_scale-out/
-# leftover local dumps from deleted one-shot verifiers
-scripts/_audit-shots/*.png
-scripts/_audit-shots/*.json
-scripts/_audit-*.mjs
-scripts/_tmp-*/
-scripts/_verify-*/
-scripts/_tmp-*.json
-
+scripts/_*

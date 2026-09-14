@@ -44,12 +44,17 @@ if (!hasDesignSystem) {
 
 const SCAN = [
   "AGENTS.md",
-  "CLAUDE.md",
   "README.md",
+  "CONTEXT.md",
   "llm/AGENT_INTERFACES.md",
+  "llm/CONSUME.md",
+  "llm/consumer-AGENTS.md",
   "llm/CONSUMER_TREATY.md",
   "llm/BREAKING_PURGE.md",
+  "llm/LOCAL_LLM.md",
+  "llm/PERF.md",
   "docs/DESIGN_SYSTEM.md",
+  "docs/package-propagation.md",
 ];
 
 const LINK_RE = /\[([^\]]*)\]\(([^)]+)\)/g;
