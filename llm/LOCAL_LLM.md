@@ -14,30 +14,28 @@
 2. 需要色值 / 某组件实现时 **按路径 Read**，不要整包 `src/theme/tokens.ts` 或全部 primitives。
 3. Grep **必须**带仓库根 `path`；禁止搜 `C:\Users\…` 或跨仓乱扫。
 4. 需要契约 / breaking 时再 Read `llm/*.md`，勿打进常驻 repomix。
+5. 完整 Hard rules → [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) stub，再进 [`docs/design-system/`](../docs/design-system/) 子页；全量文档地图 → [`AGENT_INTERFACES.md`](AGENT_INTERFACES.md)。
 
 ## Repomix（可选，按任务裁剪）
 
-配置在仓库根：
+配置在仓库根。共享 ignore 底线见 [`scripts/repomix-shared-ignore.json`](../scripts/repomix-shared-ignore.json)（`npm run check:repomix-base`）。
 
 | 配置 | 用途 | 预期量级 |
 |------|------|----------|
-| [`repomix.local-llm.config.json`](../repomix.local-llm.config.json) | **默认本地包**：短 AGENTS + layout + scheduling（无 tokens / llm / 全 primitives） | 宜 ≤ ~8k tokens |
+| [`repomix.local-llm.config.json`](../repomix.local-llm.config.json) | **默认本地包**：短 AGENTS + layout + scheduling | 宜 ≤ ~8k tokens |
 | [`repomix.scheduling.config.json`](../repomix.scheduling.config.json) | 只打 scheduling | 更小 |
-| [`repomix.primitives-compress.config.json`](../repomix.primitives-compress.config.json) | 全量 primitives 签名（compress） | **仍约 8 万 tokens** — 勿粘进 32k 本地会话；仅云端大 ctx 或按 `--include` 再裁 |
-| [`repomix.agent-slim-advice-lite.config.json`](../repomix.agent-slim-advice-lite.config.json) | **浏览器 LLM 瘦身咨询（推荐）**：Agent 面 + 全目录树，故意省略 DESIGN_SYSTEM / BREAKING_PURGE / sandbox | ~38k tokens |
-| [`repomix.agent-slim-advice.config.json`](../repomix.agent-slim-advice.config.json) | 同上但含 DESIGN_SYSTEM + 长 llm 文 | ~107k tokens — 仅超大 ctx |
+| [`repomix.primitives-compress.config.json`](../repomix.primitives-compress.config.json) | 全量 primitives 签名（compress） | **仍约 8 万 tokens** — 勿粘进 32k 本地会话 |
+| [`repomix.agent-slim-advice-lite.config.json`](../repomix.agent-slim-advice-lite.config.json) | 浏览器 LLM 瘦身咨询：Agent 面 + stub SoT + 目录树 | 目标 ≪ 原 ~38k |
+| [`repomix.agent-slim-advice.config.json`](../repomix.agent-slim-advice.config.json) | 含 DESIGN_SYSTEM 子页 + pasteable rule；排除 archive / JSON 孪生 | 显著低于原 ~107k |
 
 ```powershell
 cd D:\fynns_local_ws\fynns_ui_design_core
 npx --yes repomix -c repomix.local-llm.config.json
 npx --yes repomix -c repomix.scheduling.config.json
-# 浏览器 LLM「如何瘦身省 Agent token」：
 # npx --yes repomix -c repomix.agent-slim-advice-lite.config.json
-# npx --yes repomix --token-count-tree 500 --no-files -o repomix-token-hotspots.md --style markdown --include "AGENTS.md,README.md,docs/**,llm/**,openwiki/**,.cursor/**,src/**,examples/sandbox/src/**,scripts/**,package.json"
-# 按任务裁 primitives 示例（把需要的组件名写进 --include）:
 # npx --yes repomix -c repomix.primitives-compress.config.json --include "AGENTS.md,src/primitives/Button.tsx,src/primitives/List.tsx"
 ```
 
-输出文件已 gitignore。跑完看 summary 的 **真实 token 数**；粘进本地会话前确认 **≪ 8k**。
+输出文件已 gitignore（`repomix-*.md`）。跑完看 summary 的 **真实 token 数**；粘进本地会话前确认 **≪ 8k**。
 
 **结构性建议：** 多数 OpenCode 任务 **不必** 先 repomix；精简 `AGENTS.md` + 工具按需 Read/Grep 通常更省、更少触发 compaction。

@@ -82,6 +82,7 @@ function parseArgs(argv) {
     skipInstall: false,
     wireOnly: false,
     check: false,
+    syncConsumerRule: false,
     dryRun: false,
     json: false,
     help: false,
@@ -105,6 +106,7 @@ function parseArgs(argv) {
       out.skipInstall = true;
       out.wireOnly = true;
     } else if (a === "--check") out.check = true;
+    else if (a === "--sync-consumer-rule") out.syncConsumerRule = true;
     else if (a === "--dry-run") out.dryRun = true;
     else if (a === "--json") out.json = true;
     else if (a === "--sibling") {
@@ -627,19 +629,40 @@ function ensureUpdateCacheGitignored(gitRoot, dryRun, log) {
   log.push({ step: "update_cache_gitignore", status: dryRun ? "dry-run" : "patched" });
 }
 
-function ensureConsumerRule(gitRoot, dryRun, log) {
-  const dest = path.join(gitRoot, ".cursor", "rules", "fynns-ui-consumer.mdc");
-  if (fs.existsSync(dest)) {
-    log.push({ step: "cursor_rule", status: "ok", detail: "exists" });
+function consumerRulePaths(gitRoot) {
+  return {
+    dest: path.join(gitRoot, ".cursor", "rules", "fynns-ui-consumer.mdc"),
+    src: path.join(CORE_ROOT, "llm", "consumer-cursor-rule.mdc"),
+  };
+}
+
+function hashFile(filePath) {
+  return createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
+}
+
+function ensureConsumerRule(gitRoot, dryRun, log, { force = false } = {}) {
+  const { dest, src } = consumerRulePaths(gitRoot);
+  if (!fs.existsSync(src)) return;
+  if (fs.existsSync(dest) && !force) {
+    const same = hashFile(dest) === hashFile(src);
+    log.push({
+      step: "cursor_rule",
+      status: same ? "ok" : "stale",
+      detail: same
+        ? "exists (hash match)"
+        : "exists but differs from core — re-run with --sync-consumer-rule",
+    });
     return;
   }
-  const src = path.join(CORE_ROOT, "llm", "consumer-cursor-rule.mdc");
-  if (!fs.existsSync(src)) return;
   if (!dryRun) {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.copyFileSync(src, dest);
   }
-  log.push({ step: "cursor_rule", status: dryRun ? "dry-run" : "written", file: dest });
+  log.push({
+    step: "cursor_rule",
+    status: dryRun ? "dry-run" : force ? "synced" : "written",
+    file: dest,
+  });
 }
 
 function pickVite(opts, gitRoot) {
@@ -669,7 +692,7 @@ function pickTsconfig(opts, gitRoot, viteFile) {
   return hits.find((p) => path.basename(p) === "tsconfig.json") || hits[0] || null;
 }
 
-function checkMode(pkgRoot, viteFile, tsconfigFile) {
+function checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot) {
   const issues = [];
   const pkg = readConsumerPkg(pkgRoot);
   const deps = pkg
@@ -741,6 +764,19 @@ function checkMode(pkgRoot, viteFile, tsconfigFile) {
       "legacy git submodule packages/fynns_ui_design_core still present — remove after switching aliases to node_modules",
     );
   }
+  const ruleRoot = gitRoot || pkgRoot;
+  const { dest, src } = consumerRulePaths(ruleRoot);
+  if (!fs.existsSync(src)) {
+    issues.push(`core pasteable rule missing: ${src}`);
+  } else if (!fs.existsSync(dest)) {
+    issues.push(
+      "missing .cursor/rules/fynns-ui-consumer.mdc — re-run consume:install or --sync-consumer-rule",
+    );
+  } else if (hashFile(dest) !== hashFile(src)) {
+    issues.push(
+      "fynns-ui-consumer.mdc hash ≠ core llm/consumer-cursor-rule.mdc — sync with: npm run consume:install -- --target <root> --sync-consumer-rule --wire-only",
+    );
+  }
   return { ok: issues.length === 0, issues };
 }
 
@@ -792,7 +828,7 @@ function main() {
   const tsconfigFile = pickTsconfig(opts, pkgRoot, viteFile);
 
   if (opts.check) {
-    const result = checkMode(pkgRoot, viteFile, tsconfigFile);
+    const result = checkMode(pkgRoot, viteFile, tsconfigFile, gitRoot);
     const out = {
       ok: result.ok,
       action: "check",
@@ -832,7 +868,25 @@ function main() {
     if (!rel.startsWith(".")) rel = `./${rel}`;
     wireTsconfig(tsconfigFile, rel, opts.dryRun, log);
   }
-  ensureConsumerRule(gitRoot, opts.dryRun, log);
+  ensureConsumerRule(gitRoot, opts.dryRun, log, { force: opts.syncConsumerRule });
+  if (opts.syncConsumerRule && opts.wireOnly) {
+    const summary = {
+      ok: true,
+      action: "sync-consumer-rule",
+      consumerRoot: pkgRoot,
+      gitRoot,
+      dryRun: opts.dryRun,
+      log,
+    };
+    if (opts.json) console.log(JSON.stringify(summary, null, 2));
+    else {
+      console.log(opts.dryRun ? "[dry-run] consumer rule sync planned" : "consumer rule sync done");
+      for (const step of log) {
+        console.log(`  ${step.step}: ${step.status}${step.detail ? ` (${step.detail})` : ""}`);
+      }
+    }
+    process.exit(0);
+  }
   if (!opts.check) {
     wireUpdateHooks(pkgRoot, opts.dryRun, log);
     ensureUpdateCacheGitignored(gitRoot, opts.dryRun, log);

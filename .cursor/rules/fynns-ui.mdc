@@ -38,4 +38,6 @@ Publish: [`docs/package-propagation.md`](../../docs/package-propagation.md).
   DESIGN_SYSTEM sections — do not re-paste catalogs into this file.
 
 When unsure about a primitive or density recipe: **Read `docs/DESIGN_SYSTEM.md`**
-(Content density / Hard rules) rather than guessing from memory.
+then the matching `docs/design-system/` chapter (`hard-rules.md` /
+`content-density.md` / …) rather than guessing from memory.
+Full doc catalog: `llm/AGENT_INTERFACES.md`.

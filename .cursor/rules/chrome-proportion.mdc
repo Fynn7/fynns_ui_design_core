@@ -37,5 +37,6 @@ or similar dense chrome lists in this repo:
 
 ## Authority
 
-Full checklist: [`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md) → **Chrome type & row proportion**.
+Full checklist: [`docs/design-system/chrome-proportion.md`](../../docs/design-system/chrome-proportion.md)
+(index: [`docs/DESIGN_SYSTEM.md`](../../docs/DESIGN_SYSTEM.md)).
 Live sample: sandbox `#command-palette` (`COMMAND_TOKENS` / `--fynns-command-*`).
