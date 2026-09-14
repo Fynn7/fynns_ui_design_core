@@ -454,6 +454,17 @@ belong in a consumer’s own doc.
   labeled CTA stays for Dialog feet / unlabeled action rows. Same page:
   catalog ControlRow + List trailing + section strip share **md**. Live
   `#rhythm` morph + cover-letter.
+- **DON'T** park bare item counts (`.fynns-table-meta` with `{n}` / `.length`)
+  in catalog / section `ControlRow` clusters beside IconButtons (add /
+  import / clear / refresh), and **don't** bake `(N)` / `N/M` into the row
+  `label`, when the sibling List / EmptyState already communicates
+  cardinality — **information redundancy (hard)** (≥ **0.5.266**) unless the
+  product explicitly requires a count (user asked, selection tally, pagination
+  range, or an ops KPI the product named). Section chrome = **label +
+  IconButtons only**. When a count *is* required, prefer Card / Collapsible
+  **body** `.fynns-table-meta` (never glue into `title` / action cluster).
+  Live `#rhythm` catalog. Failure: CONSUMER_TREATY ControlRow unsolicited
+  item count.
 - **DON'T** put sibling FieldBlocks in a `Grid` that vertically **centers** when
   a sibling cell grows taller — core ≥ **0.5.172** defaults `.fynns-grid` to
   `align-items: start` so labels share one top edge (Hub Inspector agent | cwd
@@ -1338,8 +1349,8 @@ rules such as timeline-catalog). Live index: `#list`.
 | Repeatable Textarea + remove | end-align + `__grow` Textarea; add on label row | `#form-recipe` Highlights | Bare cluster (delete wraps under well) |
 | Multi-Card Dialog workflow | Sibling Cards in dialog body (flex-shrink 0) | `#form-recipe` Card stack | Crushed Cards to head height |
 | Toolbar strip (name + control + note) | ControlStack / ControlRow / ControlBlock | `#rhythm` | Hand-rolled flex; full-bleed FieldHint row |
-| Catalog list chrome | Standalone ControlRow + md IconButton cluster | `#rhythm` catalog | Content-sized island; private hub-spread |
-| PageScroll section-body chrome | Named ControlRow + md ghost IconButtons only | `#rhythm` morph | sm disks; labeled primary generate pill |
+| Catalog list chrome | Standalone ControlRow + md IconButton cluster (**no** bare count meta / `(N)` in label unless product requires) | `#rhythm` catalog | Content-sized island; private hub-spread; `{n}` / `.length` `.fynns-table-meta` beside Plus/import/clear; `Servers (3/3)` label |
+| PageScroll section-body chrome | Named ControlRow + md ghost IconButtons only | `#rhythm` morph | sm disks; labeled primary generate pill; unsolicited count meta |
 | Section strip + hint + body | `.fynns-unit-stack` (16dp) | `#rhythm` morph + hint | Bare ControlRow + sibling FieldHint (0 gap) |
 | Narrow EndAside Card actions | `label=""`; one primary Button; ghost sm icons; UploadIcon export | `#layouts-demo-shell` aside | Visible label crush; tonal icons; DownloadIcon export |
 | Chrome locale switch | Settings ToggleGroup en/zh | `#layouts-demo-shell` | TopAppBar language control |

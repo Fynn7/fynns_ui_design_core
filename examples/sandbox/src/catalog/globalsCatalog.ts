@@ -702,6 +702,11 @@ export const GLOBALS_DEMOS: readonly GlobalsDemoEntry[] = [
       "action-end",
       "right-align",
       "右齐",
+      "catalog",
+      "count",
+      "table-meta",
+      "信息冗余",
+      "unsolicited",
     ],
   },
   {

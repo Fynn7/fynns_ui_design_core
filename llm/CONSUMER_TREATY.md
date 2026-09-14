@@ -95,6 +95,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | language control in TopAppBar | AGENTS shells / Hard rules | `#layouts-demo-shell` |
 | Select language pill in TopAppBar | AGENTS shells / Hard rules | `—` |
 | catalog ControlRow actions float mid-left | AGENTS Content density / List | `#rhythm` |
+| ControlRow unsolicited item count | DESIGN_SYSTEM Hard rules / Content density | `#sandbox-rhythm-catalog` / `#rhythm` |
 | org · dates glued in supportingText | AGENTS Language / Hard rules | `#list` |
 | List rail / ChatActivity as timeline | AGENTS Chat / llm/CHAT_* | `#timeline` |
 | lettered timeline A/B/C / list-detail | AGENTS Timeline / timeline-catalog | `#timeline` |

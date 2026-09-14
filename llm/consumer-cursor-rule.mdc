@@ -223,8 +223,16 @@ trail 用 ASCII `-`。
    `ChatComposer` `busy` 必须配对 `onStop`。对照 `#sandbox-busy-task-timeout`
    / `#sandbox-confirm-loading-trap`。
 10. **section-body IconButton sm / labeled generate Button** — PageScroll 段级
-    动作 = 默认 `md` ghost IconButton + Tooltip；勿 `sm` 盘或 labeled primary
-    生成 pill。对照 `#rhythm`。
+    ControlRow：`label` 已命名分区时只用 **md** ghost IconButton + Tooltip；
+    禁止 `sm` 盘或 labeled primary/tonal 生成药丸。同页 catalog + List trailing
+    共用 md。对照 `#rhythm` morph。
+10b. **ControlRow unsolicited item count** — **严禁信息冗余（硬 ≥ 0.5.266）：**
+    目录 / 分区 `ControlRow` 顶栏 = **标签 + IconButton 簇**；**禁止**在
+    Plus / 导入 / 清空 / 刷新旁塞裸 `{n}` / `.length` 的 `.fynns-table-meta`，
+    **禁止**把 `(N)` / `N/M` 写进 `label`（List / EmptyState 已表达条数）。
+    仅当产品明确要计数（用户要求、选中 tally、分页范围、命名运维 KPI）才
+    显示 — 放 Card/Collapsible **正文** `.fynns-table-meta`，勿塞进动作簇。
+    对照 `#rhythm` catalog / `#sandbox-rhythm-catalog`。
 11. **service control status Chip + label / CLI probe FieldHint** — 状态只在
     `ControlRow` `label`（`可用`/`未安装`）；控件簇只有 labeled Button（+ 可选
     路径 meta）；禁止工具名当 label + 状态 Chip + 下方 `FieldHint` 复述

@@ -7887,36 +7887,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ControlBlock>
         </Surface>
         <SandboxHelp text={t("globals.rhythmCatalogHelp")} />
-        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
-          <ControlRow label={t("globals.rhythmCatalogLabel")}>
-            <div className="fynns-control-cluster">
-              <Tooltip content={t("globals.rhythmCatalogBulk")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmCatalogBulk")}
-                >
-                  <ListChecksIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmCatalogRefresh")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmCatalogRefresh")}
-                >
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmCatalogAdd")}>
-                <IconButton
-                  variant="primary"
-                  aria-label={t("globals.rhythmCatalogAdd")}
-                >
-                  <PlusIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </ControlRow>
-        </Surface>
+        <div id="sandbox-rhythm-catalog">
+          <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
+            <ControlRow label={t("globals.rhythmCatalogLabel")}>
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.rhythmCatalogBulk")}>
+                  <IconButton
+                    variant="ghost"
+                    aria-label={t("globals.rhythmCatalogBulk")}
+                  >
+                    <ListChecksIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.rhythmCatalogRefresh")}>
+                  <IconButton
+                    variant="ghost"
+                    aria-label={t("globals.rhythmCatalogRefresh")}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.rhythmCatalogAdd")}>
+                  <IconButton
+                    variant="primary"
+                    aria-label={t("globals.rhythmCatalogAdd")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            </ControlRow>
+          </Surface>
+        </div>
         <SandboxHelp text={t("globals.rhythmMorphHelp")} />
         <div className="fynns-unit-stack sandbox-globals-rhythm-morph-stack">
           <ControlRow label={t("globals.rhythmMorphLabel")}>

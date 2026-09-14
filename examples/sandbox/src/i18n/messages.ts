@@ -1070,12 +1070,12 @@ const en = {
   "globals.rhythmSurfaceHelp":
     "Padded Surface + single-row ControlBlock: supporting copy stays in the name column; the ToggleGroup / action cluster is vertically centered on name + hint — even when this column is narrow. **Do not** put a sibling FieldHint that only lists the ToggleGroup option labels (information redundancy — failure mode: CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels).",
   "globals.rhythmCatalogHelp":
-    "**Catalog list chrome (hard):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). Do not leave a content-sized island with actions mid-left.",
-  "globals.rhythmCatalogLabel": "Servers (3/3)",
+    "**Catalog list chrome (hard ≥ 0.5.266):** standalone `ControlRow` (not inside `ControlStack`) fills the host — label `1fr`, IconButtons in one `.fynns-control-cluster` hug the trailing edge (**md** default — match List trailing on the same page). **Do not** park bare `{n}` / `.length` `.fynns-table-meta` beside Plus/import/clear, and **do not** bake `(N)` / `N/M` into the label — List / EmptyState already show cardinality (**information redundancy**; CONSUMER_TREATY ControlRow unsolicited item count). Counts only when the product explicitly requires them. Do not leave a content-sized island with actions mid-left.",
+  "globals.rhythmCatalogLabel": "Servers",
   "globals.rhythmCatalogBulk": "Bulk select",
   "globals.rhythmCatalogRefresh": "Refresh list",
   "globals.rhythmCatalogAdd": "Add server",
-  "globals.rhythmMorphLabel": "Key points (19)",
+  "globals.rhythmMorphLabel": "Key points",
   "globals.rhythmMorphRefresh": "Re-extract key points",
   "globals.rhythmMorphCopy": "Copy posting text",
   "globals.rhythmMorphAction": "Import / re-extract",
@@ -3489,12 +3489,12 @@ const zh: Record<MessageKey, string> = {
   "globals.rhythmSurfaceHelp":
     "带 pad 的 Surface + 单行 ControlBlock：说明留在名称列；ToggleGroup / 操作簇对名称+说明纵向居中 — 即使这一列偏窄。**禁止**再放一条只复述 ToggleGroup 选项名的兄弟 FieldHint（信息冗余 — 失败模式：CONSUMER_TREATY FieldHint restates ToggleGroup / Tabs labels）。",
   "globals.rhythmCatalogHelp":
-    "**目录列表顶栏（硬）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。不要留内容宽小岛、按钮停在标签旁。",
-  "globals.rhythmCatalogLabel": "服务器（3/3）",
+    "**目录列表顶栏（硬 ≥ 0.5.266）：** 独立 `ControlRow`（不在 `ControlStack` 内）填满宿主 — 标签 `1fr`，IconButton 放进一个 `.fynns-control-cluster` 贴尾（**md** 默认 — 与同页 List trailing 一致）。**禁止**在 Plus / 导入 / 清空旁塞裸 `{n}` / `.length` 的 `.fynns-table-meta`，**禁止**把 `(N)` / `N/M` 写进标签 — List / EmptyState 已表达条数（**信息冗余**；CONSUMER_TREATY ControlRow unsolicited item count）。仅当产品明确要计数时才显示。不要留内容宽小岛、按钮停在标签旁。",
+  "globals.rhythmCatalogLabel": "服务器",
   "globals.rhythmCatalogBulk": "批量选择",
   "globals.rhythmCatalogRefresh": "刷新列表",
   "globals.rhythmCatalogAdd": "新增服务器",
-  "globals.rhythmMorphLabel": "关键技能点（19）",
+  "globals.rhythmMorphLabel": "关键技能点",
   "globals.rhythmMorphRefresh": "重新抽取关键点",
   "globals.rhythmMorphCopy": "复制招聘原文",
   "globals.rhythmMorphAction": "导入 / 重新抽取",
