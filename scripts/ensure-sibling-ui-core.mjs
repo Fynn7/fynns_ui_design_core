@@ -20,7 +20,7 @@
  *
  * Env:
  *   FYNNS_UI_SKIP_SIBLING_SYNC=1 — skip --update
- *   FYNNS_UI_STRICT_SIBLING_SYNC=1 — hard-fail on dirty/ahead (default: soft-skip + notice)
+ *   FYNNS_UI_STRICT_SIBLING_SYNC=1 — hard-fail on dirty/ahead/diverged (default: soft-skip + notice)
  *   FYNNS_UI_CORE_REF — clone/update branch (default: dev)
  *
  * Consumer apps typically wrap this into setup / predev. Reference:
@@ -65,7 +65,7 @@ Options:
 
 Env:
   FYNNS_UI_SKIP_SIBLING_SYNC=1  Skip --update
-  FYNNS_UI_STRICT_SIBLING_SYNC=1  Hard-fail dirty/ahead (default soft-skip + notice)
+  FYNNS_UI_STRICT_SIBLING_SYNC=1  Hard-fail dirty/ahead/diverged (default soft-skip + notice)
 `;
 }
 
@@ -237,21 +237,45 @@ function readVersionAtRev(dir, rev) {
 }
 
 /**
- * Fast-forward a clean sibling to origin/<ref>.
- * Prefers `git merge --ff-only`. Only falls back to `reset --hard` when the
- * remote package.json semver is strictly newer (stale shallow clones).
+ * Decide what --update should do after `merge --ff-only` fails on a clean tree.
  *
- * Dirty / ahead / diverged tips: **soft-skip** with a loud notice (dev continues;
- * export gate still runs). Set FYNNS_UI_STRICT_SIBLING_SYNC=1 to hard-fail instead.
+ * - pure ahead (origin is ancestor of HEAD): never discard — soft-skip
+ * - diverged / shallow / behind: reset when remote package.json semver is
+ *   **>=** local (equal versions used to soft-skip forever → consumer dead loop)
+ * - local semver strictly newer on a non-ff tip: soft-skip (do not downgrade)
  */
-function printSyncSkipNotice({ reason, dir, detail }) {
+function decideSiblingSyncAction({ ahead, behind, localVer, remoteVer }) {
+  const pureAhead = ahead != null && ahead > 0 && behind === 0;
+  if (pureAhead) {
+    return { action: "skip", reason: "ahead" };
+  }
+  const remoteSameOrNewer = Boolean(
+    localVer && remoteVer && versionAtLeast(remoteVer, localVer),
+  );
+  if (remoteSameOrNewer) {
+    return { action: "reset", reason: "remote-same-or-newer" };
+  }
+  return { action: "skip", reason: "diverged" };
+}
+
+/**
+ * Fast-forward a clean sibling to origin/<ref>.
+ * Prefers `git merge --ff-only`. Falls back to `git reset --hard` when FF is
+ * impossible and remote package.json semver is **>=** local (stale shallow /
+ * diverged consumer checkouts). Pure ahead tips still soft-skip.
+ *
+ * Dirty / pure-ahead / local-newer diverged tips: **soft-skip** with a loud
+ * notice (dev continues; export gate still runs). Set
+ * FYNNS_UI_STRICT_SIBLING_SYNC=1 to hard-fail instead.
+ */
+function printSyncSkipNotice({ reason, dir, detail, ref = DEFAULT_REF }) {
   const zh =
     reason === "dirty"
       ? "已跳过自动同步 sibling UI core（检测到本地未提交改动）"
       : reason === "ahead"
         ? "已跳过自动同步 sibling UI core（本地 tip 超前远端，拒绝丢弃）"
         : reason === "diverged"
-          ? "已跳过自动同步 sibling UI core（无法快进到远端 tip）"
+          ? "已跳过自动同步 sibling UI core（本地 semver 新于远端，拒绝降级）"
           : reason === "env"
             ? "已跳过自动同步 sibling UI core（FYNNS_UI_SKIP_SIBLING_SYNC=1）"
             : "已跳过自动同步 sibling UI core";
@@ -261,7 +285,7 @@ function printSyncSkipNotice({ reason, dir, detail }) {
       : reason === "ahead"
         ? "Skipped auto-sync: local tip is ahead of origin (refusing to discard)."
         : reason === "diverged"
-          ? "Skipped auto-sync: cannot fast-forward to origin tip."
+          ? "Skipped auto-sync: local semver is newer than origin (refusing to downgrade)."
           : reason === "env"
             ? "Skipped auto-sync: FYNNS_UI_SKIP_SIBLING_SYNC=1."
             : "Skipped auto-sync.";
@@ -273,10 +297,22 @@ function printSyncSkipNotice({ reason, dir, detail }) {
     `│  path: ${dir}`,
   ];
   if (detail) lines.push(`│  detail: ${detail}`);
+  if (reason === "ahead" || reason === "diverged") {
+    lines.push(
+      `│  若这些本地提交不需要（同事机常见）:`,
+      `│    git -C "${dir}" fetch origin ${ref} && git -C "${dir}" reset --hard FETCH_HEAD`,
+      `│  If those local commits are disposable (typical on consumer machines):`,
+      `│    git -C "${dir}" fetch origin ${ref} && git -C "${dir}" reset --hard FETCH_HEAD`,
+    );
+  } else {
+    lines.push(
+      "│  Dev continues — export check still runs. Next clean `npm run dev`",
+      "│  will auto-sync. Or: commit/stash/discard in that repo.",
+      "│  下次清理后会自动同步。",
+    );
+  }
   lines.push(
-    "│  Dev continues — export check still runs. Next clean `npm run dev`",
-    "│  will auto-sync. Or: commit/stash/discard in that repo.",
-    "│  下次清理后会自动同步。强制跳过提示: FYNNS_UI_SKIP_SIBLING_SYNC=1",
+    "│  强制跳过提示: FYNNS_UI_SKIP_SIBLING_SYNC=1",
     "│  CI 硬失败: FYNNS_UI_STRICT_SIBLING_SYNC=1",
     "└──────────────────────────────────────────────────────────────────",
     "",
@@ -288,11 +324,11 @@ function isStrictSiblingSync() {
   return process.env.FYNNS_UI_STRICT_SIBLING_SYNC === "1";
 }
 
-function softOrThrow(dir, reason, message, log, detail) {
+function softOrThrow(dir, reason, message, log, detail, ref) {
   if (isStrictSiblingSync()) {
     throw new Error(message);
   }
-  printSyncSkipNotice({ reason, dir, detail });
+  printSyncSkipNotice({ reason, dir, detail, ref });
   log.push({ step: "update", status: "skipped", reason, path: dir, detail: detail || null });
   return { skipped: true, soft: true, reason };
 }
@@ -304,6 +340,7 @@ function updateSiblingCheckout(dir, ref, log) {
       reason: "env",
       dir,
       detail: "FYNNS_UI_SKIP_SIBLING_SYNC=1",
+      ref,
     });
     return { skipped: true };
   }
@@ -320,10 +357,16 @@ function updateSiblingCheckout(dir, ref, log) {
         `Commit/stash/discard there, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.\n` +
         `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
       log,
+      null,
+      ref,
     );
   }
   log.push({ step: "update", status: "start", path: dir, ref });
-  run("git", ["fetch", "--depth", "1", "origin", ref], dir);
+  // Prefer a normal fetch so ff-only can see ancestry; fall back to shallow.
+  const deepFetch = run("git", ["fetch", "origin", ref], dir, { allowFail: true, quiet: true });
+  if ((deepFetch.status ?? 1) !== 0) {
+    run("git", ["fetch", "--depth", "1", "origin", ref], dir);
+  }
 
   const head = gitRevParse(dir, "HEAD");
   const tip = gitRevParse(dir, "FETCH_HEAD");
@@ -342,44 +385,47 @@ function updateSiblingCheckout(dir, ref, log) {
   }
 
   const ahead = gitRevListCount(dir, "FETCH_HEAD..HEAD");
+  const behind = gitRevListCount(dir, "HEAD..FETCH_HEAD");
   const localVer = readSiblingVersion(dir);
   const remoteVer = readVersionAtRev(dir, "FETCH_HEAD");
-  const remoteNewer =
-    Boolean(localVer && remoteVer && !versionAtLeast(localVer, remoteVer) && localVer !== remoteVer);
+  const decision = decideSiblingSyncAction({ ahead, behind, localVer, remoteVer });
+  const countDetail = `ahead=${ahead ?? "?"} behind=${behind ?? "?"} local=${localVer ?? "?"} remote=${remoteVer ?? "?"}`;
 
-  if (ahead != null && ahead > 0 && !remoteNewer) {
+  if (decision.action === "skip" && decision.reason === "ahead") {
     return softOrThrow(
       dir,
       "ahead",
       `${dir} has ${ahead} local commit(s) not on origin/${ref}; refusing to discard them.\n` +
-        `Push/merge that tip, or set FYNNS_UI_SKIP_SIBLING_SYNC=1.\n` +
-        `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
+        `If disposable: git -C "${dir}" reset --hard FETCH_HEAD\n` +
+        `Or set FYNNS_UI_SKIP_SIBLING_SYNC=1. Strict: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
       log,
-      `${ahead} commit(s) ahead`,
+      countDetail,
+      ref,
     );
   }
 
-  if (!remoteNewer) {
-    return softOrThrow(
-      dir,
-      "diverged",
-      `${dir} cannot fast-forward to origin/${ref} (diverged or shallow history).\n` +
-        `Manual: git -C "${dir}" pull --ff-only\n` +
-        `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
-      log,
-    );
+  if (decision.action === "reset") {
+    run("git", ["reset", "--hard", "FETCH_HEAD"], dir);
+    log.push({
+      step: "update",
+      status: "ok",
+      path: dir,
+      ref,
+      detail: `reset --hard (remote ${remoteVer} >= local ${localVer}; ${countDetail})`,
+    });
+    return { skipped: false };
   }
 
-  // Stale shallow sibling: remote package.json is strictly newer — safe upgrade path.
-  run("git", ["reset", "--hard", "FETCH_HEAD"], dir);
-  log.push({
-    step: "update",
-    status: "ok",
-    path: dir,
+  return softOrThrow(
+    dir,
+    "diverged",
+    `${dir} cannot fast-forward to origin/${ref} (local semver newer than remote).\n` +
+      `If disposable: git -C "${dir}" reset --hard FETCH_HEAD\n` +
+      `Strict hard-fail: FYNNS_UI_STRICT_SIBLING_SYNC=1`,
+    log,
+    countDetail,
     ref,
-    detail: `reset --hard (remote ${remoteVer} > local ${localVer})`,
-  });
-  return { skipped: false };
+  );
 }
 
 function ensureSiblingCheckout(gitRoot, ref, log) {
@@ -445,20 +491,45 @@ function patchSafeSiblingNpmrc(text) {
   return next.endsWith("\n") ? next : `${next}\n`;
 }
 
+function isActiveNpmrcLine(line) {
+  const t = String(line || "").trim();
+  return Boolean(t) && !t.startsWith("#");
+}
+
+/** True only for uncommented @fynn7 → GitHub Packages registry lines. */
+function npmrcHasActivePackagesRegistry(text) {
+  return String(text || "")
+    .split(/\r?\n/)
+    .some((line) => isActiveNpmrcLine(line) && /^@fynn7:registry=.*npm\.pkg\.github\.com/i.test(line.trim()));
+}
+
+/** True only for uncommented empty-token auth lines (comments in SAFE_NPMRC must not match). */
+function npmrcHasActiveEmptyAuth(text) {
+  return String(text || "")
+    .split(/\r?\n/)
+    .some(
+      (line) =>
+        isActiveNpmrcLine(line) &&
+        /^\/\/npm\.pkg\.github\.com\/:_authToken=\$\{NODE_AUTH_TOKEN\}/i.test(line.trim()),
+    );
+}
+
 function writeSafeNpmrc(pkgRoot, dryWrite, log) {
   const npmrcPath = path.join(pkgRoot, ".npmrc");
   const current = fs.existsSync(npmrcPath) ? fs.readFileSync(npmrcPath, "utf8") : "";
-  const pointsAtPackages = /npm\.pkg\.github\.com/.test(current);
-  const hasEmptyAuth = /_authToken=\$\{NODE_AUTH_TOKEN\}/.test(current);
   const alreadySafe =
     /@fynn7:registry=https:\/\/registry\.npmjs\.org/i.test(current) &&
-    !pointsAtPackages &&
-    !hasEmptyAuth;
+    !npmrcHasActivePackagesRegistry(current) &&
+    !npmrcHasActiveEmptyAuth(current);
   if (alreadySafe) {
     log.push({ step: "npmrc", status: "ok", file: npmrcPath });
     return;
   }
   const next = current.trim() ? patchSafeSiblingNpmrc(current) : SAFE_NPMRC;
+  if (next === current) {
+    log.push({ step: "npmrc", status: "ok", file: npmrcPath, detail: "unchanged" });
+    return;
+  }
   if (!dryWrite) fs.writeFileSync(npmrcPath, next, "utf8");
   log.push({ step: "npmrc", status: "patched", file: npmrcPath });
 }
@@ -536,9 +607,12 @@ export {
   PKG_NAME,
   SIBLING_DIRNAME,
   assertMinVersion,
+  decideSiblingSyncAction,
   findGitRoot,
   findPkgRoot,
   isGitWorkTreeClean,
+  npmrcHasActiveEmptyAuth,
+  npmrcHasActivePackagesRegistry,
   parseSemver,
   readSiblingVersion,
   resolveMinVersion,

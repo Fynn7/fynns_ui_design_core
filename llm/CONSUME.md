@@ -62,14 +62,19 @@ index slugs **squashed drawer** + **wrong shell slot**.
     `check-ui-exports`) into consumer `predev` / `prebuild` / `prepreview` /
     `postinstall`. Clean sibling worktrees **fast-forward** to
     `origin/dev` (or `FYNNS_UI_CORE_REF`) via `git fetch` +
-    `git merge --ff-only` (or, only when remote `package.json` semver is
-    strictly newer — e.g. stale shallow clones — `git reset --hard FETCH_HEAD`)
+    `git merge --ff-only` (or, when FF is impossible and remote
+    `package.json` semver is **≥** local — stale shallow / diverged
+    consumer tips — `git reset --hard FETCH_HEAD`)
     so new barrel symbols (icons, etc.)
     land before Vite starts — prevents blank-page
-    `does not provide an export named …`. Dirty sibling / ahead tip →
-    **soft-skip** with a loud bilingual notice (dev continues; export check
-    still hard-fails on missing symbols). CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
-    restores hard-fail on dirty/ahead. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
+    `does not provide an export named …`. Dirty sibling / **pure-ahead** tip
+    (origin is ancestor of HEAD) / local-semver-newer diverged tip →
+    **soft-skip** with a loud bilingual notice that includes the disposable
+    `reset --hard FETCH_HEAD` recovery (dev continues; export check
+    still hard-fails on missing symbols). Equal-semver diverged tips used to
+    soft-skip forever (colleague dead loop); they now reset to origin.
+    CI: `FYNNS_UI_STRICT_SIBLING_SYNC=1`
+    restores hard-fail on dirty/ahead/diverged. Optional: `FYNNS_UI_SKIP_SIBLING_SYNC=1`
     while editing core. Optional floor: consumer `package.json`
     `"fynnsUi": { "minVersion": "0.5.x" }` / `--min-version` — **not** a
     substitute for the export scan. Soft registry notice remains
