@@ -473,14 +473,18 @@ belong in a consumer’s own doc.
   **information redundancy (hard)** (≥ **0.5.267**). Manage surface = short
   Card title (≤1 InfoHint) → preference **`ControlRow`** for active provider →
   credential **when needed** as password `FieldBlock` (eye in `trailing`) +
-  end-align Save **under** the field (GSC `GeminiApiKeyField` / live
-  `#provider-settings` — **not** a connection-chip + Dialog; **do not** revive
-  a competing `#sandbox-field-save-icon` credentials Card)
-  → models as a **selectable `List`** → fail = `InlineAlert` (success silent)
-  → one end-align Verify. Omit debug meta. Status marks when needed =
+  **same-row** end-align Save (`Input` `fynns-control-cluster__grow` then
+  `SaveIcon` IconButton — hard ≥ **0.5.252** / **0.5.268**; live
+  `#provider-settings` — **not** a connection-chip / Add Dialog; **not**
+  `unit-stack` Save under the field)
+  → model as `FieldBlock` + **`DropdownMenu`** (`__grow`) + refresh sm
+  IconButton (bachelor-thesis / GSC Connection-and-model; **not** a
+  selectable `List` wall of model chips; keep-set prefers Menu over soft-
+  deprecated `Select`) → fail = `InlineAlert` (success silent) → one
+  end-align Verify. Omit debug meta. Status marks when needed =
   `.fynns-list-item-status`, **not** `Chip`. Runtime composer pickers are a
   **different** surface. Live `#provider-settings`. Failure: CONSUMER_TREATY
-  provider Manage flat dump.
+  provider Manage flat dump; **FieldBlock Save IconButton wraps under Input**.
 - **DON'T** put sibling FieldBlocks in a `Grid` that vertically **centers** when
   a sibling cell grows taller — core ≥ **0.5.172** defaults `.fynns-grid` to
   `align-items: start` so labels share one top edge (Hub Inspector agent | cwd
@@ -506,16 +510,19 @@ belong in a consumer’s own doc.
   Input) — **information redundancy**. Use **`IconButton` + `Tooltip`**
   (+ `aria-label`): copy → `ClipboardIcon`; save key / token / defaults /
   draft → `SaveIcon` (busy → IconButton `loading`); open folder →
-  `FolderOpenIcon`. **Credential Manage Save (hard ≥ **0.5.267**):** password
-  `FieldBlock` + eye in `trailing` + **end-align Save under the field** (live
-  `#provider-settings`) — not labeled text; do **not** revive a second
-  same-row credentials Card (`#sandbox-field-save-icon` purged). Keep
-  **labeled** Buttons for primary workflow CTAs that need a verb on the face
-  (`Validate` / `Deliver` / Dialog feet / generate). Live
-  `#sandbox-card-chrome-icon-actions` / `#provider-settings` /
+  `FolderOpenIcon`. **Secret / Manage Save (hard ≥ **0.5.252** / **0.5.268** /
+  chrome ≥ **0.5.271**):** one `.fynns-control-cluster--end-align` — `Input`
+  with `className="fynns-control-cluster__grow"` (optional reveal `trailing`
+  sm) **then** Save `IconButton` `variant="ghost"` `size="sm"` on the **same
+  line** (match model-refresh / in-field sm disks — **not** tonal 40dp). Do
+  **not** `unit-stack` the Save under the field. Keep **labeled** Buttons for
+  primary workflow CTAs that need a verb on the face (`Validate` / `Deliver` /
+  Dialog feet / generate).
+  Live `#sandbox-card-chrome-icon-actions` / `#provider-settings` /
   `#sandbox-card-draft-actions`. Failures: CONSUMER_TREATY Card chrome labeled
   ghost Copy/Save instead of IconButton+Tooltip; **FieldBlock labeled Save key
-  instead of IconButton+Tooltip**.
+  instead of IconButton+Tooltip**; **FieldBlock Save IconButton wraps under
+  Input**.
 - **DON'T** put `variant="primary"` (filled) **leading** a multi-control
   `.fynns-control-cluster` in Card / Collapsible `actions` (or densified head
   strips) — LTR order is secondary ghost/tonal IconButtons **then primary last**
@@ -1187,9 +1194,12 @@ classes.
   - **Message extras:** `streaming` = last-glyph color pulse only while answer
     text exists + `aria-busy`; `error`/`onRetry` = failed-generation footer;
     `thinking`/`ChatThinking` = single-block reasoning (Wave 1); `ChatActivity`/
-    Step/Artifact = multi-step tool tree (Wave 2 — label tense: **active** =
-    *-ing*, **done** = past; header may summarize latest completed milestone
-    while later step still streams). `citations`/`ChatCitations`/
+    Step = multi-step tool tree (Wave 2 — **minimal** ≥ **0.5.272**: default
+    status **mark** + continuous rail, no default tool icons / file artifacts;
+    step band **2rem** + gap `unit-stack-gap` ≥ **0.5.273**;
+    optional `icon` / `ChatActivityArtifact` for rare dense hosts; label tense:
+    **active** = *-ing*, **done** = past; header may summarize latest completed
+    milestone while later step still streams). `citations`/`ChatCitations`/
     `ChatCitationChip` under assistant (Tooltip `side="bottom"`). Idle
     `actions`: IconButton + Tooltip for Copy / Regenerate + More menu.
     Body sibling stack gap **16dp** from core — bare strings promoted to
@@ -1359,7 +1369,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | FieldBlock DropdownMenu trigger | matchTriggerWidth (≥ **0.5.239**) + labeled chevron rotate (≥ **0.5.253**) + panel left flush + icon block / trailing slot (≥ **0.5.254**) + label snug line-height (≥ **0.5.255**) + **`leadingIcon`** flex row (≥ **0.5.258**) | `#sandbox-menu-field-match` / `#sandbox-menu-leading-icon` / `#menu` | Menu width ≠ trigger; labeled trigger without chevron; panel left-shifted; chevron optically high; Latin descenders clipped; leading glyph baseline-misaligned vs label |
 | Table cell status + action | `.fynns-table-meta` + end-align cluster | `#table` | Chip as cell status |
 | Form / preference options | FieldStack (+ Divider on kind jumps) | `#form-recipe` | Flat Card-per-field |
-| Credentialed provider Manage | Provider ControlRow + password FieldBlock + Save under field + model List + Verify | `#provider-settings` | Connection-chip / Add Dialog instead of password field; all-provider OK/Fail wall; `default=` footer; status Chip |
+| Credentialed provider Manage | Provider ControlRow + password FieldBlock + **same-row** Save + model `DropdownMenu` + refresh + Verify | `#provider-settings` | Model as selectable `List` wall; connection-chip / Add Dialog; Save under Input via `unit-stack`; all-provider OK/Fail wall; `default=` footer; status Chip |
 | Settings scope / field policy | InfoHint on Card/Field actions; short FieldHint only | `#form-recipe` / `#info-hint` | Card-body FieldHint essays; Manage mega-Card under `#field-header` |
 | Env / config key FieldBlock | Key label + label-row InfoHint; Input trailing `sm` (in-shell only; capsule-chrome end ≥ **0.5.237**) | `#env-check` / `#password` / `#provider-settings` | Status Chip; portal FieldHint under Input; md in-shell disk; consumer pad/neg-margin on field-shell; eye cloned outside `trailing`; revived `#sandbox-field-header-env-keys` |
 | Select + refresh beside | end-align cluster + `__grow`; trail size match | `#form-recipe` | `Select.trailing` beside chevron; sm+md trail mix |
@@ -1385,7 +1395,7 @@ rules such as timeline-catalog). Live index: `#list`.
 | Mode SyncSideFilter | Omit option `tip`; `showCheck={false}`; **short** visible labels (All / marks); core ≥ **0.5.140** fullWidth shrink + ellipsis + compact pad 12dp | `#layouts-demo-navigation-drawer` / `#toggle-group` | tip collisions; long product names in equal columns; flush compact 8dp pad |
 | Mode drawer catalog load fail | Short `InlineAlert` + `InfoHint` `danger` detail + end-align Retry (≥ **0.5.215**); keep tools | `#sandbox-navdrawer-mode-catalog-fail` / `#layouts-demo-navigation-drawer` | Full backend essay in `InlineAlert.message`; EmptyState as load-fail |
 | Draft discard / save | Card `actions` on owning Card | `#sandbox-card-draft-actions` | Orphan end-align outside any Card |
-| Self-evident copy / save / open folder | `IconButton` + `Tooltip`; credential Manage Save = under-field end-align (`#provider-settings`) | `#sandbox-card-chrome-icon-actions` / `#provider-settings` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Save key`; revived `#sandbox-field-save-icon` |
+| Self-evident copy / save / open folder | `IconButton` + `Tooltip`; FieldBlock secret Save = same-row `--end-align` + Input `__grow` + Save `ghost` `sm` (≥ **0.5.252** / **0.5.268** / **0.5.271**) | `#sandbox-card-chrome-icon-actions` / `#provider-settings` / `#sandbox-card-draft-actions` | Labeled ghost/tonal `Save key`; tonal/md Save disk; Save wrapped under Input via `unit-stack` |
 | Card head mixed IconButtons | Secondary ghost → **`primary` last** (LTR end) | `#sandbox-card-head-primary-end` | Filled primary leftmost of download/folder ghosts |
 | PageScroll multi-field brief (≥3 FieldBlocks) | **Forbidden** — use `#table` or short `#form-recipe` hosts | `#table` / `#form-recipe` | Revived `#form-recipe-page-scroll` Collapsible questionnaire stack |
 | PageScroll mid-scroll edges | Core soft-mask `data-fade-top`/`bottom` (≥ **0.5.247**) | `#page-scroll` | Hard clip under TopAppBar; consumer private `mask-image`; bare overflow host |

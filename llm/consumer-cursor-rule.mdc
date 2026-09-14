@@ -233,11 +233,15 @@ trail 用 ASCII `-`。
     仅当产品明确要计数（用户要求、选中 tally、分页范围、命名运维 KPI）才
     显示 — 放 Card/Collapsible **正文** `.fynns-table-meta`，勿塞进动作簇。
     对照 `#rhythm` catalog / `#sandbox-rhythm-catalog`。
-10c. **provider Manage flat dump** — **严禁信息冗余（硬 ≥ 0.5.267）：**
+10c. **provider Manage flat dump** — **严禁信息冗余（硬 ≥ 0.5.267 / Save 同行 ≥ 0.5.268；模型下拉 ≥ **0.5.269**；Save ghost sm ≥ **0.5.271**）：**
     凭证型提供商 Manage：当前 provider 用偏好 `ControlRow` → 需要时画密码
-    `FieldBlock`（eye 在 `trailing`）+ 字段下方 end-align Save（对齐 GSC
-    `GeminiApiKeyField`）→ 模型用可选 **`List`** → 失败 `InlineAlert` →
-    一条 Verify。**禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入；
+    `FieldBlock`（eye 在 `trailing`）+ **同一行** `--end-align`：`Input`
+    `__grow` **再** `SaveIcon` IconButton **`ghost` `sm`**（禁止 tonal/md；
+    禁止 `unit-stack` 把 Save 甩到输入下方）→ 模型用 `FieldBlock` +
+    **`DropdownMenu`** `__grow` + 刷新 sm IconButton（对齐 bachelor-thesis /
+    GSC；**禁止**把模型画成可选 `List` 墙；新 UI 勿用软废弃 `Select`）→ 失败
+    `InlineAlert` → 一条 Verify。
+    **禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入；
     **禁止**全提供商 OK/Fail 墙与 `default=` 调试。状态标勿用 `Chip`。对照
     `#provider-settings`。
 11. **service control status Chip + label / CLI probe FieldHint** — 状态只在
@@ -484,9 +488,14 @@ trail 用 ASCII `-`。
 32b. **FieldBlock labeled Save key instead of IconButton+Tooltip** — FieldBlock /
     Manage 下自明「Save key / Save token / 保存密钥」
     （含 **tonal** / ghost / primary 带标签 Button）→ **`IconButton` +
-    `Tooltip` + `SaveIcon`**（忙碌用 `loading`）；禁止贴文案药丸。凭证 Manage
-    权威 = 字段下方 end-align Save（`#provider-settings`）。**禁止**复活
-    `#sandbox-field-save-icon` / `#field-header` Manage 大 Card。
+    `Tooltip` + `SaveIcon`**，**`variant="ghost"` `size="sm"`**（忙碌用
+    `loading`；与模型刷新盘同铬，禁止 tonal/md 40dp）；禁止贴文案药丸。对照
+    `#provider-settings`（≥ **0.5.248** / chrome ≥ **0.5.271**）。
+32b2. **FieldBlock Save IconButton wraps under Input** — 密钥 Save 必须与
+    `Input` **同一行**：`.fynns-control-cluster--end-align` + Input
+    `className="fynns-control-cluster__grow"`（reveal 仍用 `trailing` sm）+
+    Save `IconButton` `ghost` `sm`。禁止 `unit-stack` 把 Save 甩到输入下方。对照
+    `#provider-settings`（≥ **0.5.252** / **0.5.268** / **0.5.271**）。
 32c. **`#rhythm` morph + cover-letter twin strips** — **禁止**：PageScroll 上
     两条几乎同构的「ControlRow 节名 + md ghost IconButton 簇」。节正文 chrome
     对照 `#sandbox-rhythm-catalog`。

@@ -895,8 +895,9 @@ const en = {
     "`Surface` — generic bordered / tonal well for any children (forms, iframe, BusyRegion). Variants: `outlined` / `filled` / `elevated` / `soft` (surface-2, same paint as Banner default). Default unpadded; `padded` = equal `--fynns-layout-content-inset` on all edges (never rem/`px` or mixed block/inline). `interactive` = M3 state-layer hover/press (large-button grammar; works under a parent `button`). Prefer Card when you need a static title / icon / actions head. Empty-thread chat starters: full-width soft `Surface` `padded` `interactive` in `ChatThread.empty` (live `#chat`).",
   "globals.fieldHeaderLabel": "Bare FieldHeader",
   "globals.fieldHeaderPlaceholder": "Control under FieldHeader",
+  "globals.fieldHeaderReveal": "Show value",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` anatomy only (label row above a control). Settings / credential / env / Select+refresh / OK·Fail probe walls → `#form-recipe` / `#provider-settings` / `#env-check` / `#info-hint` — do **not** revive a Manage mega-Card under this slug. Live `#field-header`.",
+    "`FieldHeader` anatomy only (label row above a control). Trailing in-field IconButtons stay **sm** (32dp) — live `#sandbox-field-header-api-key`. Settings / credential / env / Select+refresh / OK·Fail probe walls → `#form-recipe` / `#provider-settings` / `#env-check` / `#info-hint` — do **not** revive a Manage mega-Card under this slug. Live `#field-header`.",
   "globals.surfaceFieldPlaceholder": "Any control inside",
   "globals.surfaceFieldAria": "Sample field in Surface",
   "globals.surfaceAction": "Action",
@@ -1721,10 +1722,13 @@ const en = {
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "Here is a short outline based on the activity tree above — dummy copy only.",
+  "globals.activityArtifactOptionalTitle": "Optional artifact capsule",
+  "globals.activityArtifactOptionalHelp":
+    "Rare dense hosts may still pass `ChatActivityArtifact` — prefer the minimal mark+label tree above. Do not revive tool icons or file chips as the default `#activity` teach.",
   "globals.activitySimulate": "Simulate activity tree",
   "globals.activityReset": "Reset done tree",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (Cursor-style status tree). **Label tense (consumer-owned):** each **step** `active` = progressive (*Calling the function…*, *Gathering context…*, *Presenting the plan…*); `done` = past (*Ran the script*, *Created memory file*, *Presented plan*). Swap the string when `status` flips — core does not rewrite tense. The **header** may stay past for the latest completed milestone even while streaming (e.g. *Updated plan with details* above an *Executing…* / *Presenting…* row). Collapsible header + vertical rail + `ChatActivityStep` rows. Pass a stable `key` per logical step so rows do not morph. Pass `icon` (any ReactNode) per step — this demo uses File / Pencil / Wrench / Search / FolderOpen; omit → default wrench (`done`/`pending`) or status mark (`active`); `null` → empty node. While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then glyph + artifact complete over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter` (opacity only; shells snap open, no height morph). Optional `ChatActivityArtifact` capsule + description. Description may host `ControlStack` / `ControlRow` + long ghost Buttons — core truncates with ellipsis in narrow hosts (EndAside); keep the full string on Tooltip / `aria-label`. Slot via `ChatMessage.thinking` (alone or beside `ChatThinking`). Keep `ChatThinking` for single-block reasoning — do not overload it into a timeline. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
+    "**ChatActivity** — Wave 2 multi-step agent / tool-call chain (minimal status tree ≥ **0.5.272**). **Label tense (consumer-owned):** each **step** `active` = progressive (*Calling the function…*, *Gathering context…*, *Presenting the plan…*); `done` = past (*Ran the script*, *Created memory file*, *Presented plan*). Swap the string when `status` flips — core does not rewrite tense. The **header** may stay past for the latest completed milestone even while streaming. Collapsible header + vertical rail (node-center → next node-center) + `ChatActivityStep` rows. Pass a stable `key` per logical step. **Default chrome:** omit `icon` → status **mark** (dot); omit `artifact` — this demo teaches the minimal tree (no tool glyphs, no file capsules). Optional `icon` / `ChatActivityArtifact` remain for rare dense hosts (see collapsed sample below). While streaming, instant-complete `done` steps still play the active mark for `--fynns-chatmessage-activity-step-min-busy`, then settle over `--fynns-chatmessage-activity-complete`. Later steps stay queued until that play finishes, then fade in over `--fynns-chatmessage-activity-enter`. Description may host `ControlStack` / `ControlRow` + long ghost Buttons — core truncates with ellipsis in narrow hosts (EndAside); keep the full string on Tooltip / `aria-label`. Slot via `ChatMessage.thinking`. Keep `ChatThinking` for single-block reasoning. Geometry: `CHATMESSAGE_TOKENS` `activity-*`. See AGENTS.md **Label tense**.",
   "globals.chatAsideLabel": "Aside (~22rem) — bubble 100% / composer 100%",
   "globals.chatAsideUserBody":
     "Long user turns fill this aside’s content width — same track as the composer below (not the main column).",
@@ -2031,9 +2035,9 @@ const en = {
     "**Self-evident Card chrome (hard ≥ 0.5.173):** copy / save-defaults / open-folder in Card `actions` or densified Select clusters = **`IconButton` + `Tooltip`** (`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`) — not labeled ghost `Button` text (**information redundancy** beside sibling icon disks). Keep labeled Buttons for primary workflow verbs (`Validate` / `Deliver`). Failure: CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip. Live `#sandbox-card-chrome-icon-actions`.",
   "globals.providerSettingsTitle": "Sample providers",
   "globals.providerSettingsScopeTip":
-    "Manage surface: pick a provider, connect credentials when needed, enable models from a list. Runtime composer pickers stay out of this Card.",
+    "Manage surface: pick a provider, connect credentials when needed, choose a model from a Menu. Runtime composer pickers stay out of this Card.",
   "globals.providerSettingsHelp":
-    "**Credentialed provider Manage (hard ≥ 0.5.267):** preference `ControlRow` for active provider → **when needed** password `FieldBlock` (eye in `trailing`) + end-align Save under the field — GSC `GeminiApiKeyField` anatomy; configured placeholder, draft clears after save → models as selectable `List` → fail = `InlineAlert` (success silent) → one Verify. Do **not** replace the key field with connection chips / Add Dialog, nor paint every-provider OK/Fail walls. Failure: CONSUMER_TREATY provider Manage flat dump. Live `#provider-settings`.",
+    "**Credentialed provider Manage (hard ≥ 0.5.267 / same-row Save ≥ **0.5.268** / model Menu ≥ **0.5.269** / Save `ghost` `sm` ≥ **0.5.271**):** preference `ControlRow` for active provider → **when needed** password `FieldBlock` (eye in `trailing`) + **same-row** `.fynns-control-cluster--end-align` — `Input` `fynns-control-cluster__grow` **then** `SaveIcon` IconButton `ghost` `sm` (never tonal/md; never `unit-stack` under the field) → model `FieldBlock` + `DropdownMenu` `__grow` + refresh sm (bachelor-thesis / GSC; **not** a selectable model `List` wall; prefer Menu over soft-deprecated `Select`) → fail = `InlineAlert` (success silent) → one Verify. Do **not** replace the key field with connection chips / Add Dialog, nor paint every-provider OK/Fail walls. Failure: CONSUMER_TREATY provider Manage flat dump; FieldBlock Save IconButton wraps under Input. Live `#provider-settings`.",
   "globals.providerSettingsActive": "Provider",
   "globals.providerSettingsLocal": "Sample local runtime",
   "globals.providerSettingsCloud": "Sample cloud API",
@@ -2046,7 +2050,9 @@ const en = {
   "globals.providerSettingsKeyHide": "Hide plaintext",
   "globals.providerSettingsKeySave": "Save key",
   "globals.providerSettingsKeySaving": "Saving…",
-  "globals.providerSettingsModel": "Models",
+  "globals.providerSettingsModel": "Model",
+  "globals.providerSettingsModelRefresh": "Refresh model list",
+  "globals.providerSettingsModelRefreshing": "Refreshing model list…",
   "globals.providerSettingsFailTip":
     "Sample bridge is not reachable. Start the local helper, then verify again.",
   "globals.providerSettingsProbe": "Verify connection",
@@ -3238,8 +3244,9 @@ const zh: Record<MessageKey, string> = {
     "`Surface` — 通用描边 / 色调井，可包任意子节点（表单、iframe、BusyRegion）。变体：`outlined` / `filled` / `elevated` / `soft`（surface-2，与 Banner default 同色）。默认无内边距；`padded` = 四边等距 `--fynns-layout-content-inset`（勿 rem/`px` 或块/行向混用）。`interactive` = M3 state-layer hover/press（大按钮语法；可包在父级 `button` 下）。需要静态 title / icon / actions 头时用 Card。空线程示例 prompt：在 `ChatThread.empty` 用满宽 soft `Surface` `padded` `interactive`（对照 `#chat`）。",
   "globals.fieldHeaderLabel": "裸 FieldHeader",
   "globals.fieldHeaderPlaceholder": "FieldHeader 下的控件",
+  "globals.fieldHeaderReveal": "显示内容",
   "globals.fieldHeaderHelp":
-    "`FieldHeader` 仅解剖（控件上方标签行）。设置 / 凭证 / env / Select+刷新 / OK·Fail 探测墙 → `#form-recipe` / `#provider-settings` / `#env-check` / `#info-hint` — **禁止**在本 slug 复活 Manage 大 Card。对照 `#field-header`。",
+    "`FieldHeader` 仅解剖（控件上方标签行）。字段内 trailing IconButton 保持 **sm**（32dp）— 对照 `#sandbox-field-header-api-key`。设置 / 凭证 / env / Select+刷新 / OK·Fail 探测墙 → `#form-recipe` / `#provider-settings` / `#env-check` / `#info-hint` — **禁止**在本 slug 复活 Manage 大 Card。对照 `#field-header`。",
   "globals.surfaceFieldPlaceholder": "井内任意控件",
   "globals.surfaceFieldAria": "Surface 内示例字段",
   "globals.surfaceAction": "操作",
@@ -4052,10 +4059,13 @@ const zh: Record<MessageKey, string> = {
   "globals.activityArtifactPlan": "plan.md",
   "globals.activityAnswer":
     "根据上方活动树整理的一短段大纲 — 仅为假数据文案。",
+  "globals.activityArtifactOptionalTitle": "可选 Artifact 胶囊",
+  "globals.activityArtifactOptionalHelp":
+    "罕见密集宿主仍可传 `ChatActivityArtifact` — 优先用上方极简「点 + 文案」树。勿把工具图标 / 文件胶囊当 `#activity` 默认教学。",
   "globals.activitySimulate": "模拟活动树",
   "globals.activityReset": "重置为完成树",
   "globals.activityHelp":
-    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（Cursor 式状态树）。**标签时态（消费仓）：** 每步 `active` = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在展示计划…*）；`done` = 完成时（*已运行脚本*、*已创建记忆文件*、*已展示计划*）。`status` 翻转时立刻换文案 — core 不改写时态。**header** 可在仍 streaming 时用过去时总结最近完成的里程碑（例如上方 *已用细节更新计划*，下方仍有 *正在展示…* 行）。可折叠标题 + 竖向 rail + `ChatActivityStep` 行。每步逻辑行需要稳定 `key`，避免行身份变形。每步 `icon` 为任意 ReactNode — 本样例用 File / Pencil / Wrench / Search / FolderOpen；省略 → 默认扳手（`done`/`pending`）或状态点（`active`）；`null` → 空节点。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 播完成图标与胶囊。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入（仅透明度；行高瞬间到位，无高度形变）。可选 `ChatActivityArtifact` 胶囊 + 说明。说明区可挂 `ControlStack` / `ControlRow` + 长文案 ghost Button — 窄宿主（EndAside）内 core 会 ellipsis 截断；完整文案放 Tooltip / `aria-label`。经 `ChatMessage.thinking` 挂载（可单独或与 `ChatThinking` 并用）。单块推理仍用 `ChatThinking` — 不要把它塞成时间线。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
+    "**ChatActivity** — Wave 2 多步骤 Agent / tool 调用链（极简状态树 ≥ **0.5.272**）。**标签时态（消费仓）：** 每步 `active` = 进行时（*正在调用函数…*、*正在收集上下文…*、*正在展示计划…*）；`done` = 完成时（*已运行脚本*、*已创建记忆文件*、*已展示计划*）。`status` 翻转时立刻换文案 — core 不改写时态。**header** 可在仍 streaming 时用过去时总结最近完成的里程碑。可折叠标题 + 竖向 rail（节点中心 → 下一节点中心）+ `ChatActivityStep` 行。每步逻辑行需要稳定 `key`。**默认铬：** 省略 `icon` → 状态**点**；省略 `artifact` — 本样例教极简树（无工具图标、无文件胶囊）。可选 `icon` / `ChatActivityArtifact` 仅留给罕见密集宿主（见下方收起样例）。流式时瞬间完成的 `done` 步仍会先播状态点，最短 `--fynns-chatmessage-activity-step-min-busy`，再以 `--fynns-chatmessage-activity-complete` 落定。后续步排队等到这轮播完，再以 `--fynns-chatmessage-activity-enter` 淡入。说明区可挂 `ControlStack` / `ControlRow` + 长文案 ghost Button — 窄宿主（EndAside）内 core 会 ellipsis 截断；完整文案放 Tooltip / `aria-label`。经 `ChatMessage.thinking` 挂载。单块推理仍用 `ChatThinking`。几何：`CHATMESSAGE_TOKENS` `activity-*`。见 AGENTS.md **Label tense**。",
   "globals.chatAsideLabel": "侧栏（~22rem）— 气泡 100% / composer 100%",
   "globals.chatAsideUserBody": "长用户气泡占满本侧栏内容宽，与下方 composer 同轨（不是主栏宽）。",
   "globals.chatAsideAssistantBody": "下方 composer 占满侧栏内容轨的 100%。",
@@ -4357,9 +4367,9 @@ const zh: Record<MessageKey, string> = {
     "**自明 Card chrome（硬 ≥ 0.5.173）：** Card `actions` 或 densified Select 旁簇里的复制 / 保存默认 / 开文件夹 = **`IconButton` + `Tooltip`**（`ClipboardIcon` / `SaveIcon` / `FolderOpenIcon`）— 禁止 labeled ghost「复制 Prompt」「保存默认」（与旁侧图标盘 **信息冗余**）。主流程动词 CTA（Validate / Deliver）仍可用 labeled Button。失败：CONSUMER_TREATY Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip。对照 `#sandbox-card-chrome-icon-actions`。",
   "globals.providerSettingsTitle": "示例提供商",
   "globals.providerSettingsScopeTip":
-    "Manage 面：选择提供商、需要时连接凭据、用列表启用模型。运行时作曲器旁的 picker 不在此 Card。",
+    "Manage 面：选择提供商、需要时连接凭据、用下拉选择模型。运行时作曲器旁的 picker 不在此 Card。",
   "globals.providerSettingsHelp":
-    "**凭证型提供商 Manage（硬 ≥ 0.5.267）：** 当前 provider 用偏好 `ControlRow` → **需要时**画密码 `FieldBlock`（eye 在 `trailing`）+ 字段下方 end-align Save — 对齐 GSC `GeminiApiKeyField`；已配置用占位提示，保存后清空草稿 → 模型用可选 `List` → 失败 `InlineAlert`（成功静默）→ 一条验证。**禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入，也禁止全提供商 OK/Fail 墙。失败：CONSUMER_TREATY provider Manage flat dump。对照 `#provider-settings`。",
+    "**凭证型提供商 Manage（硬 ≥ 0.5.267 / Save 同行 ≥ **0.5.268** / 模型下拉 ≥ **0.5.269** / Save `ghost` `sm` ≥ **0.5.271**）：** 当前 provider 用偏好 `ControlRow` → **需要时**画密码 `FieldBlock`（eye 在 `trailing`）+ **同一行** `.fynns-control-cluster--end-align` — `Input` `fynns-control-cluster__grow` **再** `SaveIcon` IconButton `ghost` `sm`（禁止 tonal/md；禁止 `unit-stack` 甩到输入下方）；已配置用占位提示，保存后清空草稿 → 模型用 `FieldBlock` + `DropdownMenu` `__grow` + 刷新 sm（对齐 bachelor-thesis / GSC；**禁止**模型可选 `List` 墙；新 UI 勿用软废弃 `Select`）→ 失败 `InlineAlert`（成功静默）→ 一条验证。**禁止**用「未设置/添加」连接态或 Dialog 取代密钥输入，也禁止全提供商 OK/Fail 墙。失败：CONSUMER_TREATY provider Manage flat dump；FieldBlock Save IconButton wraps under Input。对照 `#provider-settings`。",
   "globals.providerSettingsActive": "提供商",
   "globals.providerSettingsLocal": "示例本地运行时",
   "globals.providerSettingsCloud": "示例云 API",
@@ -4373,6 +4383,8 @@ const zh: Record<MessageKey, string> = {
   "globals.providerSettingsKeySave": "保存密钥",
   "globals.providerSettingsKeySaving": "保存中…",
   "globals.providerSettingsModel": "模型",
+  "globals.providerSettingsModelRefresh": "刷新模型列表",
+  "globals.providerSettingsModelRefreshing": "正在刷新模型列表…",
   "globals.providerSettingsFailTip":
     "示例桥不可达。先启动本机助手，再验证。",
   "globals.providerSettingsProbe": "验证连接",

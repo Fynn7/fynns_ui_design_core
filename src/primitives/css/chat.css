@@ -656,6 +656,7 @@
   gap: 0;
   padding-block: var(--fynns-chatmessage-thinking-body-pad-block);
   opacity: 0;
+  overflow: visible;
   transition: opacity var(--fynns-duration-fast) var(--fynns-ease-emphasized);
 }
 
@@ -671,6 +672,12 @@
 .fynns-chat-activity-step-shell {
   width: 100%;
   transition: none;
+  overflow: visible;
+}
+
+/* Open shells must not clip the center→center rail into the next row. */
+.fynns-chat-activity-step-shell[data-state="open"] > .fynns-expand-inner {
+  overflow: visible;
 }
 
 .fynns-chat-activity-step-shell:not(:last-child) .fynns-chat-activity-step {
@@ -687,14 +694,16 @@
   flex-direction: column;
   max-width: 100%;
   min-width: 0;
+  /* Rail extends into the next step's upper half — do not clip stubs. */
+  overflow: visible;
 }
 
 /*
  * Icon | headline band — form-style floor + optional measured max across
  * open steps (`--fynns-chat-activity-step-row-height` on the steps root).
- * Glyph, label, and artifact vertically center in the band. Description is
+ * Glyph / mark and label vertically center in the band. Description is
  * a sibling under the band (indented to the copy column) so it does not
- * pull the icon mid-description. Rail starts at the centered icon bottom.
+ * pull the mark mid-description. Rail runs node-center → next node-center.
  */
 .fynns-chat-activity-step-row {
   display: grid;
@@ -780,11 +789,13 @@
 }
 
 /*
- * Rail segments between icons only — never a continuous line punched with a
- * fixed surface (`app-bg` mismatched canvas / EndAside / bubble hosts).
- * Runs from icon bottom through the step padding (former flex gap) to the
- * next open shell. Queued last shells stay `0fr` / `data-state="closed"`
- * and must not extend the rail.
+ * Vertical rail between open steps (≥ **0.5.273**): node-center → next
+ * node-center through `activity-step-gap` (unit-stack 16dp) over a
+ * `2rem` mark|headline band. Prior: icon-bottom→step-bottom stubs, then
+ * 16dp hug + 0.75rem gap still read stubby. Segments only — never a
+ * continuous line punched with a fixed surface (`app-bg` mismatched
+ * canvas / EndAside / bubble hosts). Queued last shells stay `0fr` /
+ * `data-state="closed"` and must not extend the rail.
  */
 .fynns-chat-activity-step-shell:has(
     + .fynns-chat-activity-step-shell[data-state="open"]
@@ -796,16 +807,23 @@
   inset-inline-start: calc(
     (var(--fynns-size-icon) / 2) - (var(--fynns-border-hairline) / 2)
   );
-  /* Centered icon in the equalized / floor band → bottom of the node. */
   top: calc(
-    (
-        max(
-          var(--fynns-chatmessage-activity-step-min-height),
-          var(--fynns-chat-activity-step-row-height, 0px)
-        ) + var(--fynns-size-icon)
-      ) / 2
+    max(
+      var(--fynns-chatmessage-activity-step-min-height),
+      var(--fynns-chat-activity-step-row-height, 0px)
+    ) / 2
   );
-  bottom: 0;
+  bottom: calc(
+    -1 *
+      (
+        var(--fynns-chatmessage-activity-step-gap) +
+          max(
+            var(--fynns-chatmessage-activity-step-min-height),
+            var(--fynns-chat-activity-step-row-height, 0px)
+          ) /
+          2
+      )
+  );
   width: var(--fynns-border-hairline);
   background: var(--fynns-color-border-strong);
   pointer-events: none;
@@ -845,8 +863,19 @@
   height: var(--fynns-space-sm);
   border-radius: var(--fynns-radius-round);
   background: var(--fynns-color-text-muted);
+}
+
+/* Pulse only while the step is actively streaming / holding. */
+.fynns-chat-activity-step--active .fynns-chat-activity-mark,
+.fynns-chat-activity-step--hold .fynns-chat-activity-mark {
   animation: fynns-chat-thinking-mark-pulse
     var(--fynns-duration-presentation-hint) var(--fynns-ease-in-out) infinite;
+}
+
+.fynns-chat-activity-step--done .fynns-chat-activity-mark,
+.fynns-chat-activity-step--pending .fynns-chat-activity-mark {
+  animation: none;
+  background: var(--fynns-color-border-strong);
 }
 
 .fynns-chat-activity-headline {

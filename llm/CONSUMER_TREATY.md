@@ -248,7 +248,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | FieldStack Grid hugs max-content leaving dead gutter in form Surface | AGENTS FieldStack / Grid | `#sandbox-field-stack-grid-select` |
 | Card chrome labeled ghost Copy/Save instead of IconButton+Tooltip | AGENTS Card / Hard rules | `#sandbox-card-chrome-icon-actions` |
 | FieldBlock labeled Save key instead of IconButton+Tooltip | DESIGN_SYSTEM Hard rules | `#provider-settings` |
-| revived `#sandbox-field-save-icon` credentials Card | DESIGN_SYSTEM Hard rules | `#provider-settings` |
+| FieldBlock Save IconButton wraps under Input | DESIGN_SYSTEM Hard rules | `#provider-settings` |
 | revived `#field-header` Manage mega-Card / OK·Fail wall | DESIGN_SYSTEM Hard rules | `#field-header` / `#provider-settings` |
 | `#rhythm` morph + cover-letter twin section strips | DESIGN_SYSTEM Hard rules | `#sandbox-rhythm-catalog` |
 | Card head primary IconButton leftmost in control-cluster | AGENTS Card / Hard rules | `#sandbox-card-head-primary-end` |

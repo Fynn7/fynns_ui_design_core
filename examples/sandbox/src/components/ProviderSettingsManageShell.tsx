@@ -8,13 +8,11 @@ import {
   EyeIcon,
   EyeOffIcon,
   FieldBlock,
-  FieldHeader,
   IconButton,
   InfoHint,
   InlineAlert,
   Input,
-  List,
-  ListItem,
+  RefreshIcon,
   SaveIcon,
   Tooltip,
 } from "@fynns/ui";
@@ -59,9 +57,10 @@ const SAMPLE_MODELS: Record<"local" | "cloud", readonly string[]> = {
 };
 
 /**
- * Living Manage-surface recipe.
- * Provider preference row → (when needed) password FieldBlock + Save
- * (GSC `GeminiApiKeyField` anatomy) → selectable model List → Verify.
+ * Living Manage-surface recipe (aligned with bachelor-thesis / GSC
+ * Connection-and-model: provider row → credential when needed → model
+ * DropdownMenu + refresh — not a selectable List wall).
+ * Secret Save stays same-row (`--end-align` + Input `__grow`, ≥ 0.5.252).
  * Live: Globals `#provider-settings`.
  */
 export function ProviderSettingsManageShell() {
@@ -72,6 +71,7 @@ export function ProviderSettingsManageShell() {
   const [keyDraft, setKeyDraft] = useState("");
   const [keyVisible, setKeyVisible] = useState(false);
   const [keySaving, setKeySaving] = useState(false);
+  const [modelRefreshing, setModelRefreshing] = useState(false);
   const [probing, setProbing] = useState(false);
   const [probe, setProbe] = useState<ProbeState>("idle");
 
@@ -90,6 +90,14 @@ export function ProviderSettingsManageShell() {
       const list = SAMPLE_MODELS[id as "local" | "cloud"];
       setModel(list[0]!);
     }
+  };
+
+  const refreshModels = () => {
+    if (!meta.hasModels || modelRefreshing) return;
+    setModelRefreshing(true);
+    window.setTimeout(() => {
+      setModelRefreshing(false);
+    }, 450);
   };
 
   const runProbe = () => {
@@ -145,10 +153,9 @@ export function ProviderSettingsManageShell() {
 
         {meta.needsKey ? (
           <FieldBlock label={t("globals.providerSettingsKeyLabel")}>
-            {/* GSC GeminiApiKeyField: password Input + eye trailing; Save
-                end-aligned under the field (not a Dialog / connection chip). */}
-            <div className="fynns-unit-stack">
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
               <Input
+                className="fynns-control-cluster__grow"
                 type={keyVisible ? "text" : "password"}
                 autoComplete="off"
                 spellCheck={false}
@@ -187,48 +194,72 @@ export function ProviderSettingsManageShell() {
                   </Tooltip>
                 }
               />
-              <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                <Tooltip
-                  content={
+              <Tooltip
+                content={
+                  keySaving
+                    ? t("globals.providerSettingsKeySaving")
+                    : t("globals.providerSettingsKeySave")
+                }
+              >
+                <IconButton
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  loading={keySaving}
+                  disabled={keySaving || !keyDraft.trim()}
+                  aria-label={
                     keySaving
                       ? t("globals.providerSettingsKeySaving")
                       : t("globals.providerSettingsKeySave")
                   }
+                  onClick={saveKey}
                 >
-                  <IconButton
-                    type="button"
-                    variant="tonal"
-                    loading={keySaving}
-                    disabled={keySaving || !keyDraft.trim()}
-                    aria-label={
-                      keySaving
-                        ? t("globals.providerSettingsKeySaving")
-                        : t("globals.providerSettingsKeySave")
-                    }
-                    onClick={saveKey}
-                  >
-                    <SaveIcon aria-hidden />
-                  </IconButton>
-                </Tooltip>
-              </div>
+                  <SaveIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
             </div>
           </FieldBlock>
         ) : null}
 
         {meta.hasModels ? (
-          <div className="fynns-unit-stack">
-            <FieldHeader label={t("globals.providerSettingsModel")} />
-            <List aria-label={t("globals.providerSettingsModel")}>
-              {models.map((m) => (
-                <ListItem
-                  key={m}
-                  headline={m}
-                  selected={model === m}
-                  onClick={() => setModel(m)}
-                />
-              ))}
-            </List>
-          </div>
+          <FieldBlock label={t("globals.providerSettingsModel")}>
+            <div className="fynns-control-cluster fynns-control-cluster--end-align">
+              <DropdownMenu
+                className="fynns-control-cluster__grow"
+                trigger={model}
+                ariaLabel={t("globals.providerSettingsModel")}
+                matchTriggerWidth
+                disabled={models.length === 0}
+              >
+                {models.map((m) => (
+                  <DropdownMenuItem key={m} onClick={() => setModel(m)}>
+                    {m}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenu>
+              <Tooltip
+                content={
+                  modelRefreshing
+                    ? t("globals.providerSettingsModelRefreshing")
+                    : t("globals.providerSettingsModelRefresh")
+                }
+              >
+                <IconButton
+                  size="sm"
+                  loading={modelRefreshing}
+                  disabled={modelRefreshing}
+                  aria-label={
+                    modelRefreshing
+                      ? t("globals.providerSettingsModelRefreshing")
+                      : t("globals.providerSettingsModelRefresh")
+                  }
+                  onClick={refreshModels}
+                >
+                  <RefreshIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            </div>
+          </FieldBlock>
         ) : null}
 
         {probe === "fail" ? (

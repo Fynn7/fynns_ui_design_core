@@ -1389,6 +1389,24 @@
 }
 
 /*
+ * Card head Select + labeled CTA (≥ **0.5.73** / open-stable ≥ **0.5.227**):
+ * needs room for title + Select trigger + sm Button — 22rem IconButton
+ * strip cap still crushes the title to 0 and clips the CTA. Live
+ * `#sandbox-card-head-select`.
+ */
+#sandbox-card-head-select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  max-width: 28rem;
+  justify-self: start;
+  width: 100%;
+}
+
+/*
  * table-meta ellipsis teach host (≥ **0.5.231**): force a narrow Card so
  * keep-set `.fynns-table-meta` must show `…` (not hard-clip). No SandboxHelp
  * sibling — do not share the Card↔help gap rule above.

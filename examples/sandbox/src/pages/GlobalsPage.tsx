@@ -139,7 +139,6 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
-  WrenchIcon,
   ControlBlock,
   ControlRow,
   ControlStack,
@@ -3582,40 +3581,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <ChatActivityStep
                     key="create"
                     status="done"
-                    icon={<FileIcon />}
                     label={t("globals.activityStepCreate")}
-                    artifact={
-                      <ChatActivityArtifact>
-                        {t("globals.activityArtifactPlan")}
-                      </ChatActivityArtifact>
-                    }
                   />
                 ) : null}
                 {activityPhase >= 2 ? (
                   <ChatActivityStep
                     key="update"
                     status="done"
-                    icon={<PencilIcon />}
                     label={t("globals.activityStepUpdate")}
-                    artifact={
-                      <ChatActivityArtifact>
-                        {t("globals.activityArtifactPlan")}
-                      </ChatActivityArtifact>
-                    }
                   />
                 ) : null}
                 <ChatActivityStep
                   key="live"
                   status={activityPhase >= 3 ? "done" : "active"}
-                  icon={
-                    activityPhase >= 3 ? (
-                      <WrenchIcon />
-                    ) : activityPhase <= 0 ? (
-                      <SearchIcon />
-                    ) : activityPhase === 1 ? (
-                      <FolderOpenIcon />
-                    ) : undefined
-                  }
                   label={
                     activityPhase >= 3
                       ? t("globals.activityStepPresentDone")
@@ -3730,6 +3708,36 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.activityHelp")} />
+          <Collapsible
+            title={t("globals.activityArtifactOptionalTitle")}
+            chrome="plain"
+            defaultOpen={false}
+          >
+            <div className="sandbox-activity-narrow fynns-unit-stack">
+              <SandboxHelp text={t("globals.activityArtifactOptionalHelp")} />
+              <ChatMessage
+                role="assistant"
+                thinking={
+                  <ChatActivity
+                    label={t("globals.activityHeaderDone")}
+                    defaultOpen
+                  >
+                    <ChatActivityStep
+                      status="done"
+                      label={t("globals.activityStepUpdate")}
+                      artifact={
+                        <ChatActivityArtifact>
+                          {t("globals.activityArtifactPlan")}
+                        </ChatActivityArtifact>
+                      }
+                    />
+                  </ChatActivity>
+                }
+              >
+                {t("globals.activityAnswer")}
+              </ChatMessage>
+            </div>
+          </Collapsible>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="chat-citations">
@@ -5585,12 +5593,25 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         <div className="sandbox-globals-row sandbox-globals-row--stack">
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
-            htmlFor="sandbox-field-header-bare"
+            htmlFor="sandbox-field-header-api-key"
           />
           <Input
-            id="sandbox-field-header-bare"
+            id="sandbox-field-header-api-key"
+            type="password"
+            autoComplete="off"
+            spellCheck={false}
             placeholder={t("globals.fieldHeaderPlaceholder")}
             aria-label={t("globals.fieldHeaderLabel")}
+            trailing={
+              <Tooltip content={t("globals.fieldHeaderReveal")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.fieldHeaderReveal")}
+                >
+                  <EyeIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            }
           />
           <SandboxHelp text={t("globals.fieldHeaderHelp")} />
         </div>
