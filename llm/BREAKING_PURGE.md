@@ -126,7 +126,9 @@ as a hard fail.
 
 | Change | Consumer fix |
 | --- | --- |
-| ChatActivity minimal tree / step band / done accent / pulse rail mask (≥ **0.5.272**–**0.5.275**) | Default step chrome = status **mark** + continuous rail (node-center → next). Do **not** default tool icons or require `ChatActivityArtifact`. Step band **2rem**; gap = `unit-stack-gap`. **Done** marks = Timeline `--fynns-color-accent`. Opaque `node::before` wash under pulsing marks. Live: `#activity`. Re-paste `consumer-cursor-rule.mdc`. |
+| ChatActivity minimal tree / step band / done accent / pulse rail mask (≥ **0.5.272**–**0.5.275**); pending wash + rail end (≥ **0.5.276**) | Default step chrome = status **mark** + continuous rail (node-center → next). Do **not** default tool icons or require `ChatActivityArtifact`. Step band **2rem**; gap = `unit-stack-gap`. **Done** marks = Timeline `--fynns-color-accent`. Opaque `node::before` wash under pulsing / pending marks (never whole-step `opacity`). Rail `bottom` = half next band only (gap already in padding — no stub past last mark). Live: `#activity`. Re-paste `consumer-cursor-rule.mdc`. |
+
+| FillColumn guide Surface flush to Chat (≥ **0.5.277**) | Short soft `Surface` / compact preview above Chat → `FillColumn` **`header`**; Chat (+ optional `ChatActivity`) → `children`. Core gaps header↔main and main siblings with `unit-stack-gap`. Do **not** stack the form as a `children` sibling with `paddingBottom: 0`. Live: `#layouts-demo-fill-column` / `#sandbox-fill-column-guide`. Re-paste `consumer-cursor-rule.mdc`. |
 
 Older version-churn rows (ChatMessage, Pagination Select history, NavDrawer footer tunes, …) live in [llm/archive/BREAKING_PURGE_ARCHIVE.md](archive/BREAKING_PURGE_ARCHIVE.md).
 

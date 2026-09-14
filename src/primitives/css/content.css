@@ -4427,6 +4427,9 @@ a.fynns-breadcrumb-link:visited {
   min-height: 0;
   overflow: hidden;
   box-sizing: border-box;
+  /* header ↔ main ↔ footer (≥ **0.5.277**). Destination canvas already set
+   * the same gap; keep it on the primitive so every host breathes. */
+  gap: var(--fynns-layout-unit-stack-gap);
 }
 
 .fynns-fill-column-header,
@@ -4442,6 +4445,10 @@ a.fynns-breadcrumb-link:visited {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  /* Guide / form Surface stacked above Chat inside `children` must not flush
+   * (CV `paddingBottom: 0` anti-pattern). Prefer `header` for above-chat
+   * chrome; this gap still rescues sibling stacks in main (≥ **0.5.277**). */
+  gap: var(--fynns-layout-unit-stack-gap);
 }
 
 .fynns-fill-column-main > .fynns-chat,

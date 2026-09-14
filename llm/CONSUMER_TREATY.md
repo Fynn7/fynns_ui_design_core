@@ -293,6 +293,7 @@ Details → **docs/DESIGN_SYSTEM.md Hard rules** (or the DESIGN_SYSTEM / topic c
 | EmptyState parks top-left in destination canvas | DESIGN_SYSTEM hard-rules | `#empty-state` |
 | master–detail / content max-width token missing | DESIGN_SYSTEM Hard rules | `#layouts-demo-drill-in` |
 | canvas FillColumn megacard zero inset | DESIGN_SYSTEM hard-rules | `#layouts-demo-fill-column` |
+| FillColumn guide Surface flush to Chat | DESIGN_SYSTEM hard-rules / Content density | `#layouts-demo-fill-column` / `#sandbox-fill-column-guide` |
 | IconButton loading spinner + glyph overlap | DESIGN_SYSTEM form-rhythm | `#rhythm` |
 | IconButton busy swaps CircularProgress instead of loading | DESIGN_SYSTEM Hard rules / Busy | `#icon-button` / `#sandbox-iconbutton-primary-loading` |
 | bare ControlRow + FieldHint zero gap (PageScroll section) | DESIGN_SYSTEM forms / FieldStack | `#rhythm` |
