@@ -806,8 +806,12 @@ export const CHATMESSAGE_TOKENS = {
    */
   "activity-gap": "0.375rem",
   "activity-trigger-gap": "0.375rem",
-  /** Vertical gap between step rows. */
-  "activity-step-gap": "0.5rem",
+  /**
+   * Vertical gap between step rows (rail spans this + half next band).
+   * Aliases `unit-stack-gap` (16dp) — same breath as Timeline `item-gap`
+   * (≥ **0.5.273**). Prior 0.75rem + 16dp band left stubby connectors.
+   */
+  "activity-step-gap": "var(--fynns-layout-unit-stack-gap)",
   /** Gap between step node and headline / description column. */
   "activity-node-gap": "0.5rem",
   /** Gap between step title and optional description. */
@@ -818,14 +822,14 @@ export const CHATMESSAGE_TOKENS = {
   "activity-artifact-pad-inline": "0.375rem",
   "activity-artifact-pad-block": "0.125rem",
   /**
-   * Step icon|headline band floor — form-cluster style `max(floor, content)`.
-   * Sized for the artifact capsule (xs + snug + pad + hairline borders) so
-   * rows without a chip still match chip rows; never a fixed `height`.
-   * `ChatActivity` may raise `--fynns-chat-activity-step-row-height` to the
-   * measured max across open steps (wrap / multi-line).
+   * Step mark|headline band floor — `2rem` / sm control (not bare
+   * `--fynns-size-icon`). A 16dp hug + short gap made 618×28 letterbox
+   * rows and stubby rails (≥ **0.5.273**). Artifact chips no longer
+   * inflate the default floor (minimal tree ≥ **0.5.272**).
+   * `ChatActivity` may raise `--fynns-chat-activity-step-row-height` to
+   * the measured max across open steps (wrap / multi-line).
    */
-  "activity-step-min-height":
-    "max(var(--fynns-size-icon), calc((var(--fynns-font-size-xs) * var(--fynns-line-height-snug)) + (2 * var(--fynns-chatmessage-activity-artifact-pad-block)) + (2 * var(--fynns-border-hairline))))",
+  "activity-step-min-height": "2rem",
   /**
    * While `ChatActivity` is streaming, a step that arrives already `done`
    * (instant tool) still shows the active mark for at least this long

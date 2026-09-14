@@ -110,7 +110,6 @@ import {
   Radio,
   RefreshIcon,
   MoreHorizontalIcon,
-  PersonIcon,
   SaveIcon,
   SearchIcon,
   Select,
@@ -140,7 +139,6 @@ import {
   TrashIcon,
   UndoIcon,
   UploadIcon,
-  WrenchIcon,
   ControlBlock,
   ControlRow,
   ControlStack,
@@ -164,6 +162,7 @@ import { SandboxHelp } from "../components/SandboxHelp";
 import { ChartAnalyticsDemo } from "../components/ChartAnalyticsDemo";
 import { ChatEmptySurfaceStarters } from "../components/ChatEmptySurfaceStarters";
 import { IconsLibraryDemo } from "../components/IconsLibraryDemo";
+import { ProviderSettingsManageShell } from "../components/ProviderSettingsManageShell";
 import { TokenList } from "../components/TokenList";
 import {
   demoElementId,
@@ -1328,18 +1327,9 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [nestedPrompt, setNestedPrompt] = useState(
     "Sample multiline body for the nested Card + FieldBlock recipe.",
   );
-  const [fieldHeaderSelect, setFieldHeaderSelect] = useState("a");
   const [cardModeBodySide, setCardModeBodySide] = useState<"primary" | "secondary">(
     "primary",
   );
-  const [fieldHeaderRegion, setFieldHeaderRegion] = useState("alpha");
-  const [fieldHeaderEndpoint, setFieldHeaderEndpoint] = useState(
-    "https://api.example.com",
-  );
-  const [fieldHeaderApiKey, setFieldHeaderApiKey] = useState("");
-  const [fieldHeaderReveal, setFieldHeaderReveal] = useState(false);
-  const [fieldHeaderEnvReveal, setFieldHeaderEnvReveal] = useState(false);
-  const [fieldHeaderDetailOn, setFieldHeaderDetailOn] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [confirmDisabled, setConfirmDisabled] = useState(false);
@@ -1384,9 +1374,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [rhythmFooterBusy, setRhythmFooterBusy] = useState<
     null | "secondary" | "primary"
   >(null);
-  const [rhythmMorphBusy, setRhythmMorphBusy] = useState(false);
-  const [rhythmServiceRunning, setRhythmServiceRunning] = useState(false);
-  const [rhythmServiceBusy, setRhythmServiceBusy] = useState(false);
   const [rhythmSource, setRhythmSource] = useState("catalog");
   const [formRegion, setFormRegion] = useState("Europe");
   const [formDisplayName, setFormDisplayName] = useState("Sandbox user");
@@ -1430,9 +1417,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
   const [cardHeadRevision, setCardHeadRevision] = useState("rev-a");
   const [cardChromeType, setCardChromeType] = useState("flat");
   const [cardChromeQuality, setCardChromeQuality] = useState("fast");
-  const [sampleToken, setSampleToken] = useState("");
-  const [sampleTokenVisible, setSampleTokenVisible] = useState(false);
-  const [sampleTokenSaving, setSampleTokenSaving] = useState(false);
   const [listInspectorKindMapped, setListInspectorKindMapped] = useState("skill");
   const [timelineEditOpen, setTimelineEditOpen] = useState(false);
   const [timelineEditName, setTimelineEditName] = useState("");
@@ -3597,40 +3581,19 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
                   <ChatActivityStep
                     key="create"
                     status="done"
-                    icon={<FileIcon />}
                     label={t("globals.activityStepCreate")}
-                    artifact={
-                      <ChatActivityArtifact>
-                        {t("globals.activityArtifactPlan")}
-                      </ChatActivityArtifact>
-                    }
                   />
                 ) : null}
                 {activityPhase >= 2 ? (
                   <ChatActivityStep
                     key="update"
                     status="done"
-                    icon={<PencilIcon />}
                     label={t("globals.activityStepUpdate")}
-                    artifact={
-                      <ChatActivityArtifact>
-                        {t("globals.activityArtifactPlan")}
-                      </ChatActivityArtifact>
-                    }
                   />
                 ) : null}
                 <ChatActivityStep
                   key="live"
                   status={activityPhase >= 3 ? "done" : "active"}
-                  icon={
-                    activityPhase >= 3 ? (
-                      <WrenchIcon />
-                    ) : activityPhase <= 0 ? (
-                      <SearchIcon />
-                    ) : activityPhase === 1 ? (
-                      <FolderOpenIcon />
-                    ) : undefined
-                  }
                   label={
                     activityPhase >= 3
                       ? t("globals.activityStepPresentDone")
@@ -3745,6 +3708,36 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Button>
           </div>
           <SandboxHelp text={t("globals.activityHelp")} />
+          <Collapsible
+            title={t("globals.activityArtifactOptionalTitle")}
+            chrome="plain"
+            defaultOpen={false}
+          >
+            <div className="sandbox-activity-narrow fynns-unit-stack">
+              <SandboxHelp text={t("globals.activityArtifactOptionalHelp")} />
+              <ChatMessage
+                role="assistant"
+                thinking={
+                  <ChatActivity
+                    label={t("globals.activityHeaderDone")}
+                    defaultOpen
+                  >
+                    <ChatActivityStep
+                      status="done"
+                      label={t("globals.activityStepUpdate")}
+                      artifact={
+                        <ChatActivityArtifact>
+                          {t("globals.activityArtifactPlan")}
+                        </ChatActivityArtifact>
+                      }
+                    />
+                  </ChatActivity>
+                }
+              >
+                {t("globals.activityAnswer")}
+              </ChatMessage>
+            </div>
+          </Collapsible>
         </div>
         </GlobalsDemo>
         <GlobalsDemo id="chat-citations">
@@ -5393,73 +5386,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </FieldStack>
             </Card>
           </div>
-          <div id="sandbox-field-save-icon">
-            <SandboxHelp text={t("globals.fieldSaveIconHelp")} />
-            <Card
-              className="sandbox-globals-card"
-              chrome="plain"
-              title={t("globals.fieldSaveIconTitle")}
-            >
-              <FieldStack>
-                <FieldBlock label={t("globals.fieldSaveIconLabel")}>
-                  <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                    <Input
-                      className="fynns-control-cluster__grow"
-                      type={sampleTokenVisible ? "text" : "password"}
-                      value={sampleToken}
-                      onChange={(event) => setSampleToken(event.target.value)}
-                      placeholder={t("globals.fieldSaveIconPlaceholder")}
-                      aria-label={t("globals.fieldSaveIconLabel")}
-                      trailing={
-                        <Tooltip
-                          content={
-                            sampleTokenVisible
-                              ? t("globals.fieldSaveIconHide")
-                              : t("globals.fieldSaveIconShow")
-                          }
-                        >
-                          <IconButton
-                            size="sm"
-                            aria-label={
-                              sampleTokenVisible
-                                ? t("globals.fieldSaveIconHide")
-                                : t("globals.fieldSaveIconShow")
-                            }
-                            disabled={sampleTokenSaving}
-                            onClick={() =>
-                              setSampleTokenVisible((visible) => !visible)
-                            }
-                          >
-                            {sampleTokenVisible ? (
-                              <EyeOffIcon size={16} aria-hidden />
-                            ) : (
-                              <EyeIcon size={16} aria-hidden />
-                            )}
-                          </IconButton>
-                        </Tooltip>
-                      }
-                    />
-                    <Tooltip content={t("globals.fieldSaveIconSave")}>
-                      <IconButton
-                        variant="tonal"
-                        loading={sampleTokenSaving}
-                        disabled={!sampleToken.trim()}
-                        aria-label={t("globals.fieldSaveIconSave")}
-                        onClick={() => {
-                          setSampleTokenSaving(true);
-                          window.setTimeout(() => {
-                            setSampleTokenSaving(false);
-                          }, 700);
-                        }}
-                      >
-                        <SaveIcon size={16} aria-hidden />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                </FieldBlock>
-              </FieldStack>
-            </Card>
-          </div>
           <div id="sandbox-card-head-primary-end">
             <SandboxHelp text={t("globals.cardHeadPrimaryHelp")} />
             <Card
@@ -5665,270 +5591,27 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
         </GlobalsDemo>
         <GlobalsDemo id="field-header">
         <div className="sandbox-globals-row sandbox-globals-row--stack">
-          <Card
-            title={t("globals.fieldHeaderCardTitle")}
-            actions={
-              <InfoHint
-                content={t("globals.fieldHeaderCardScopeInfo")}
-                ariaLabel={t("globals.fieldHeaderCardScopeAria")}
-              />
-            }
-          >
-            <FieldStack>
-              <FieldBlock
-                label={t("globals.fieldHeaderProviderLabel")}
-                htmlFor="sandbox-field-header-provider"
-              >
-                <Select
-                  id="sandbox-field-header-provider"
-                  ariaLabel={t("globals.fieldHeaderProviderLabel")}
-                  options={[
-                    { value: "alpha", label: t("globals.fieldHeaderRegionAlpha") },
-                    { value: "beta", label: t("globals.fieldHeaderRegionBeta") },
-                  ]}
-                  value={fieldHeaderRegion}
-                  onChange={setFieldHeaderRegion}
-                />
-              </FieldBlock>
-              <FieldBlock
-                label={t("globals.fieldHeaderBaseUrlLabel")}
-                htmlFor="sandbox-field-header-base-url"
-              >
-                <Input
-                  id="sandbox-field-header-base-url"
-                  value={fieldHeaderEndpoint}
-                  onChange={(event) => setFieldHeaderEndpoint(event.target.value)}
-                  aria-label={t("globals.fieldHeaderBaseUrlLabel")}
-                />
-              </FieldBlock>
-              <FieldBlock label={t("globals.fieldHeaderApiKeyLabel")} htmlFor="sandbox-field-header-api-key">
-                <Input
-                  id="sandbox-field-header-api-key"
-                  type={fieldHeaderReveal ? "text" : "password"}
-                  value={fieldHeaderApiKey}
-                  onChange={(event) => setFieldHeaderApiKey(event.target.value)}
-                  aria-label={t("globals.fieldHeaderApiKeyLabel")}
-                  autoComplete="off"
-                  trailing={
-                    <Tooltip content={t("globals.fieldHeaderRevealTip")}>
-                      <IconButton
-                        size="sm"
-                        aria-label={t("globals.fieldHeaderRevealTip")}
-                        onClick={() => setFieldHeaderReveal((v) => !v)}
-                      >
-                        {fieldHeaderReveal ? (
-                          <EyeOffIcon aria-hidden />
-                        ) : (
-                          <EyeIcon aria-hidden />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-                  }
-                />
-              </FieldBlock>
-              <FieldBlock
-                id="sandbox-field-header-env-keys"
-                label={t("globals.fieldHeaderEnvTokenLabel")}
-                htmlFor="sandbox-field-header-env-token"
-                actions={
-                  <InfoHint
-                    size="sm"
-                    content={t("globals.fieldHeaderEnvTokenTip")}
-                    ariaLabel={t("globals.fieldHeaderEnvTokenAria")}
-                  />
-                }
-              >
-                <Input
-                  id="sandbox-field-header-env-token"
-                  type={fieldHeaderEnvReveal ? "text" : "password"}
-                  value="••••••••"
-                  readOnly
-                  aria-label={t("globals.fieldHeaderEnvTokenLabel")}
-                  autoComplete="off"
-                  trailing={
-                    <Tooltip content={t("globals.fieldHeaderRevealTip")}>
-                      <IconButton
-                        size="sm"
-                        aria-label={t("globals.fieldHeaderRevealTip")}
-                        onClick={() => setFieldHeaderEnvReveal((v) => !v)}
-                      >
-                        {fieldHeaderEnvReveal ? (
-                          <EyeOffIcon aria-hidden />
-                        ) : (
-                          <EyeIcon aria-hidden />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-                  }
-                />
-              </FieldBlock>
-              <FieldBlock
-                label={t("globals.fieldHeaderEnvAppLabel")}
-                htmlFor="sandbox-field-header-env-app"
-                actions={
-                  <InfoHint
-                    size="sm"
-                    tone="danger"
-                    content={t("globals.fieldHeaderEnvAppTip")}
-                    ariaLabel={t("globals.fieldHeaderEnvAppAria")}
-                  />
-                }
-              >
-                <Input
-                  id="sandbox-field-header-env-app"
-                  value=""
-                  readOnly
-                  aria-label={t("globals.fieldHeaderEnvAppLabel")}
-                  autoComplete="off"
-                />
-              </FieldBlock>
-              <FieldBlock
-                label={t("globals.fieldHeaderCatalogLabel")}
-                htmlFor="sandbox-field-header-select"
-                actions={
-                  <InfoHint
-                    size="sm"
-                    content={t("globals.fieldHeaderCatalogPolicyInfo")}
-                    ariaLabel={t("globals.fieldHeaderCatalogPolicyAria")}
-                  />
-                }
-              >
-                <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                  <Select
-                    id="sandbox-field-header-select"
-                    className="fynns-control-cluster__grow"
-                    ariaLabel={t("globals.fieldHeaderCatalogLabel")}
-                    placeholder={t("globals.fieldHeaderSelectPlaceholder")}
-                    value={fieldHeaderSelect}
-                    onChange={setFieldHeaderSelect}
-                    options={[
-                      { value: "a", label: "Option A" },
-                      { value: "b", label: "Option B" },
-                    ]}
-                  />
-                  <Tooltip content={t("globals.fieldHeaderReloadTip")}>
-                    <IconButton
-                      size="sm"
-                      aria-label={t("globals.fieldHeaderReloadAria")}
-                    >
-                      <RefreshIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </FieldBlock>
-              <FieldBlock
-                label={t("globals.fieldHeaderNotesLabel")}
-                htmlFor="sandbox-field-header-notes"
-                actions={
-                  <Tooltip content={t("globals.fieldHeaderActionTip")}>
-                    <IconButton size="sm" aria-label={t("globals.fieldHeaderActionTip")}>
-                      <UndoIcon aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                }
-              >
-                <Textarea
-                  id="sandbox-field-header-notes"
-                  aria-label={t("globals.fieldHeaderNotesLabel")}
-                  minRows={2}
-                />
-              </FieldBlock>
-              <FieldBlock
-                id="sandbox-field-header-inline-infohint"
-                label={
-                  <>
-                    <span className="fynns-control-row__label-text">
-                      {t("globals.fieldHeaderMountedLabel")}
-                    </span>
-                    <InfoHint
-                      size="sm"
-                      content={t("globals.fieldHeaderMountedTip")}
-                      ariaLabel={t("globals.fieldHeaderMountedAria")}
-                    />
-                  </>
-                }
-                actions={
-                  <Tooltip content={t("globals.fieldHeaderMountedActionTip")}>
-                    <IconButton
-                      size="sm"
-                      aria-label={t("globals.fieldHeaderMountedActionTip")}
-                    >
-                      <FileIcon aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                }
-              >
-                <FieldHint>{t("globals.fieldHeaderMountedBody")}</FieldHint>
-              </FieldBlock>
-            </FieldStack>
-            <FieldStack>
-              <ControlStack columns={1}>
-                <ControlRow
-                  label={
-                    <>
-                      <span className="fynns-control-row__label-text">
-                        {t("globals.fieldHeaderPrefLabel")}
-                      </span>
-                      <InfoHint
-                        size="sm"
-                        content={t("globals.fieldHeaderPrefTip")}
-                        ariaLabel={t("globals.fieldHeaderPrefAria")}
-                      />
-                    </>
-                  }
-                >
-                  <Switch
-                    label=""
-                    ariaLabel={t("globals.fieldHeaderPrefLabel")}
-                    checked={fieldHeaderDetailOn}
-                    onCheckedChange={setFieldHeaderDetailOn}
-                  />
-                </ControlRow>
-              </ControlStack>
-            </FieldStack>
-            <ControlStack columns={1}>
-              <ControlRow label={t("globals.fieldHeaderProbeAlpha")}>
-                <div className="fynns-control-cluster">
-                  <span className="fynns-table-meta">
-                    {t("globals.fieldHeaderProbeOk")}
-                  </span>
-                  <InfoHint
-                    size="sm"
-                    content={t("globals.fieldHeaderProbeAlphaTip")}
-                    ariaLabel={t("globals.fieldHeaderProbeAlphaTip")}
-                  />
-                </div>
-              </ControlRow>
-              <ControlRow label={t("globals.fieldHeaderProbeBeta")}>
-                <div className="fynns-control-cluster">
-                  <span className="fynns-table-meta">
-                    {t("globals.fieldHeaderProbeFail")}
-                  </span>
-                  <InfoHint
-                    size="sm"
-                    tone="danger"
-                    content={t("globals.fieldHeaderProbeBetaTip")}
-                    ariaLabel={t("globals.fieldHeaderProbeBetaTip")}
-                  />
-                </div>
-              </ControlRow>
-              <ControlRow label={t("globals.fieldHeaderProbeIdle")}>
-                <div className="fynns-control-cluster">
-                  <span className="fynns-table-meta">
-                    {t("globals.fieldHeaderProbeIdleMeta")}
-                  </span>
-                </div>
-              </ControlRow>
-            </ControlStack>
-          </Card>
           <FieldHeader
             label={t("globals.fieldHeaderLabel")}
-            htmlFor="sandbox-field-header-bare"
+            htmlFor="sandbox-field-header-api-key"
           />
           <Input
-            id="sandbox-field-header-bare"
+            id="sandbox-field-header-api-key"
+            type="password"
+            autoComplete="off"
+            spellCheck={false}
             placeholder={t("globals.fieldHeaderPlaceholder")}
             aria-label={t("globals.fieldHeaderLabel")}
+            trailing={
+              <Tooltip content={t("globals.fieldHeaderReveal")}>
+                <IconButton
+                  size="sm"
+                  aria-label={t("globals.fieldHeaderReveal")}
+                >
+                  <EyeIcon size={16} aria-hidden />
+                </IconButton>
+              </Tooltip>
+            }
           />
           <SandboxHelp text={t("globals.fieldHeaderHelp")} />
         </div>
@@ -7887,137 +7570,38 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           </ControlBlock>
         </Surface>
         <SandboxHelp text={t("globals.rhythmCatalogHelp")} />
-        <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
-          <ControlRow label={t("globals.rhythmCatalogLabel")}>
-            <div className="fynns-control-cluster">
-              <Tooltip content={t("globals.rhythmCatalogBulk")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmCatalogBulk")}
-                >
-                  <ListChecksIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmCatalogRefresh")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmCatalogRefresh")}
-                >
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmCatalogAdd")}>
-                <IconButton
-                  variant="primary"
-                  aria-label={t("globals.rhythmCatalogAdd")}
-                >
-                  <PlusIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </ControlRow>
-        </Surface>
-        <SandboxHelp text={t("globals.rhythmMorphHelp")} />
-        <div className="fynns-unit-stack sandbox-globals-rhythm-morph-stack">
-          <ControlRow label={t("globals.rhythmMorphLabel")}>
-            <div className="fynns-control-cluster">
-              <Tooltip content={t("globals.rhythmMorphRefresh")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmMorphRefresh")}
-                  loading={rhythmMorphBusy}
-                  disabled={rhythmMorphBusy}
-                  onClick={() => {
-                    setRhythmMorphBusy(true);
-                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-                  }}
-                >
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmMorphCopy")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmMorphCopy")}
-                  disabled={rhythmMorphBusy}
-                >
-                  <ClipboardIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip content={t("globals.rhythmMorphAction")}>
-                <IconButton
-                  variant="ghost"
-                  aria-label={t("globals.rhythmMorphAction")}
-                  disabled={rhythmMorphBusy}
-                  onClick={() => {
-                    setRhythmMorphBusy(true);
-                    window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-                  }}
-                >
-                  <UploadIcon aria-hidden />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </ControlRow>
-          <FieldHint>{t("globals.rhythmMorphSectionHint")}</FieldHint>
+        <div id="sandbox-rhythm-catalog">
           <Surface variant="outlined" padded className="sandbox-globals-rhythm-catalog">
-            {t("globals.rhythmMorphBodySample")}
+            <ControlRow label={t("globals.rhythmCatalogLabel")}>
+              <div className="fynns-control-cluster">
+                <Tooltip content={t("globals.rhythmCatalogBulk")}>
+                  <IconButton
+                    variant="ghost"
+                    aria-label={t("globals.rhythmCatalogBulk")}
+                  >
+                    <ListChecksIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.rhythmCatalogRefresh")}>
+                  <IconButton
+                    variant="ghost"
+                    aria-label={t("globals.rhythmCatalogRefresh")}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content={t("globals.rhythmCatalogAdd")}>
+                  <IconButton
+                    variant="primary"
+                    aria-label={t("globals.rhythmCatalogAdd")}
+                  >
+                    <PlusIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            </ControlRow>
           </Surface>
         </div>
-        <SandboxHelp text={t("globals.rhythmCoverLetterHelp")} />
-        <ControlRow
-          label={t("globals.rhythmCoverLetterLabel")}
-          className="sandbox-globals-rhythm-cover-letter"
-        >
-          <div className="fynns-control-cluster">
-            <Tooltip content={t("globals.rhythmCoverLetterSave")}>
-              <IconButton aria-label={t("globals.rhythmCoverLetterSave")}>
-                <SaveIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.rhythmCoverLetterExport")}>
-              <DropdownMenu
-                iconOnly
-                size="md"
-                trigger={<UploadIcon />}
-                ariaLabel={t("globals.rhythmCoverLetterExport")}
-              >
-                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportWord")}</DropdownMenuItem>
-                <DropdownMenuItem>{t("globals.rhythmCoverLetterExportPdf")}</DropdownMenuItem>
-              </DropdownMenu>
-            </Tooltip>
-            <Tooltip content={t("globals.rhythmCoverLetterPrompt")}>
-              <IconButton
-                variant="ghost"
-                aria-label={t("globals.rhythmCoverLetterPrompt")}
-              >
-                <FileIcon aria-hidden />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.rhythmCoverLetterRecipient")}>
-              <IconButton
-                variant="ghost"
-                aria-label={t("globals.rhythmCoverLetterRecipient")}
-              >
-                <PersonIcon aria-hidden />
-              </IconButton>
-            </Tooltip>
-            <Tooltip content={t("globals.rhythmCoverLetterGenerate")}>
-              <IconButton
-                variant="ghost"
-                aria-label={t("globals.rhythmCoverLetterGenerate")}
-                loading={rhythmMorphBusy}
-                disabled={rhythmMorphBusy}
-                onClick={() => {
-                  setRhythmMorphBusy(true);
-                  window.setTimeout(() => setRhythmMorphBusy(false), 2000);
-                }}
-              >
-                <SparklesIcon aria-hidden />
-              </IconButton>
-            </Tooltip>
-          </div>
-        </ControlRow>
         <SandboxHelp text={t("globals.rhythmEndAlignHelp")} />
         <Surface variant="outlined" padded>
           <div className="fynns-control-cluster fynns-control-cluster--end-align">
@@ -8068,228 +7652,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
             </Tooltip>
           </div>
         </Surface>
-        <SandboxHelp text={t("globals.rhythmStatusHelp")} />
-        <SandboxHelp text={t("globals.rhythmServiceHelp")} />
-        <Card className="sandbox-globals-rhythm" title={t("globals.rhythmServiceTitle")}>
-          <ControlRow
-            label={
-              rhythmServiceRunning
-                ? t("globals.rhythmServicePid")
-                : t("globals.rhythmServiceStopped")
-            }
-          >
-            <div className="fynns-control-cluster">
-              <Button
-                size="sm"
-                variant="primary"
-                disabled={rhythmServiceBusy || rhythmServiceRunning}
-                loading={rhythmServiceBusy && !rhythmServiceRunning}
-                onClick={() => {
-                  setRhythmServiceBusy(true);
-                  window.setTimeout(() => {
-                    setRhythmServiceRunning(true);
-                    setRhythmServiceBusy(false);
-                  }, 900);
-                }}
-              >
-                {t("globals.rhythmServiceStart")}
-              </Button>
-              <Button
-                size="sm"
-                variant="tonal"
-                disabled={rhythmServiceBusy || !rhythmServiceRunning}
-                onClick={() => {
-                  setRhythmServiceBusy(true);
-                  window.setTimeout(() => {
-                    setRhythmServiceRunning(false);
-                    setRhythmServiceBusy(false);
-                  }, 900);
-                }}
-              >
-                {t("globals.rhythmServiceStop")}
-              </Button>
-              <Button
-                size="sm"
-                variant="default"
-                disabled={rhythmServiceBusy}
-                loading={rhythmServiceBusy && rhythmServiceRunning}
-                onClick={() => {
-                  setRhythmServiceBusy(true);
-                  window.setTimeout(() => {
-                    setRhythmServiceRunning(true);
-                    setRhythmServiceBusy(false);
-                  }, 900);
-                }}
-              >
-                {t("globals.rhythmServiceRestart")}
-              </Button>
-            </div>
-          </ControlRow>
-        </Card>
-        <SandboxHelp text={t("globals.rhythmActionEndHelp")} />
-        <div id="sandbox-rhythm-action-end">
-          <Card
-            className="sandbox-globals-rhythm"
-            title={t("globals.rhythmActionEndTitle")}
-          >
-            {/* ControlStack + long meta — label must stay ≥ control-row-label
-                (never a 2px “就绪” sliver). Failure mode: CONSUMER_TREATY
-                ControlRow label crushed to 2px. */}
-            <ControlStack columns={1}>
-              <ControlRow label={t("globals.rhythmActionEndReady")}>
-                <div className="fynns-control-cluster">
-                  <span className="fynns-table-meta">
-                    {t("globals.rhythmActionEndMetaReadyTitle")}
-                  </span>
-                  <span className="fynns-table-meta">
-                    <OverflowTip content={t("globals.rhythmActionEndMetaReady")}>
-                      {t("globals.rhythmActionEndMetaReady")}
-                    </OverflowTip>
-                  </span>
-                </div>
-              </ControlRow>
-              <ControlRow label={t("globals.rhythmActionEndPending")}>
-                <div className="fynns-control-cluster">
-                  <span className="fynns-table-meta">
-                    <OverflowTip content={t("globals.rhythmActionEndMetaPending")}>
-                      {t("globals.rhythmActionEndMetaPending")}
-                    </OverflowTip>
-                  </span>
-                  <Button size="sm" variant="tonal">
-                    {t("globals.rhythmActionEndConfigure")}
-                  </Button>
-                </div>
-              </ControlRow>
-              <ControlRow label={t("globals.rhythmActionEndReady")}>
-                <div className="fynns-control-cluster">
-                  <Button size="sm" variant="default">
-                    {t("globals.rhythmActionEndRefresh")}
-                  </Button>
-                </div>
-              </ControlRow>
-            </ControlStack>
-          </Card>
-        </div>
-        <SandboxHelp text={t("globals.rhythmInstallCtaEndHelp")} />
-        <div id="sandbox-rhythm-install-cta-end">
-          <Card
-            className="sandbox-globals-rhythm"
-            title={t("globals.rhythmInstallCtaEndTitle")}
-          >
-            {/* Anti-demo: controlsAlign=start + labeled install Button — core
-                ≥ 0.5.205 still end-packs. Prefer omitting start on CTA stacks.
-                Failure mode: CONSUMER_TREATY left-packed Buttons. */}
-            <ControlStack columns={2} controlsAlign="start">
-              <ControlRow label={t("globals.rhythmInstallCtaEndNotInstalled")}>
-                <Button size="sm" variant="ghost">
-                  {t("globals.rhythmInstallCtaEndInstall")}
-                </Button>
-                <InfoHint
-                  size="sm"
-                  content={t("globals.rhythmInstallCtaEndHint")}
-                  ariaLabel={t("globals.rhythmInstallCtaEndHint")}
-                />
-              </ControlRow>
-            </ControlStack>
-          </Card>
-        </div>
-        <Card className="sandbox-globals-rhythm" title={t("globals.rhythmStatusTitle")}>
-          <ControlStack columns={2} controlsAlign="start">
-            <ControlRow label={t("globals.rhythmStatusBehind")}>
-              <span className="fynns-list-item-status" data-tone="danger">
-                <AlertTriangleIcon aria-hidden />
-                {t("globals.rhythmStatusFail")}
-              </span>
-              <InfoHint
-                size="sm"
-                tone="danger"
-                content={t("globals.rhythmStatusBehindTip")}
-                ariaLabel={t("globals.rhythmStatusBehindTip")}
-              />
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmStatusCi")}>
-              <span className="fynns-list-item-status" data-tone="danger">
-                <AlertTriangleIcon aria-hidden />
-                {t("globals.rhythmStatusFail")}
-              </span>
-              <InfoHint
-                size="sm"
-                tone="danger"
-                content={t("globals.rhythmStatusCiTip")}
-                ariaLabel={t("globals.rhythmStatusCiTip")}
-              />
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmStatusProtection")}>
-              <span className="fynns-list-item-status">
-                <CheckCircleIcon aria-hidden />
-                {t("globals.rhythmStatusOk")}
-              </span>
-              <InfoHint
-                size="sm"
-                content={t("globals.rhythmStatusProtectionTip")}
-                ariaLabel={t("globals.rhythmStatusProtectionTip")}
-              />
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmStatusLocal")}>
-              <span
-                className="sandbox-globals-rhythm-status-empty"
-                aria-label={t("globals.rhythmStatusLocalEmpty")}
-              >
-                —
-              </span>
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmStatusReady")}>
-              <span className="fynns-list-item-status">
-                <CheckCircleIcon aria-hidden />
-                {t("globals.rhythmStatusOk")}
-              </span>
-              <InfoHint
-                size="sm"
-                content={t("globals.rhythmStatusReadyTip")}
-                ariaLabel={t("globals.rhythmStatusReadyTip")}
-              />
-            </ControlRow>
-            <ControlRow label={t("globals.rhythmSyncNow")}>
-              <Tooltip content={t("globals.rhythmSyncNowTip")}>
-                <IconButton
-                  variant="primary"
-                  aria-label={t("globals.rhythmSyncNowTip")}
-                >
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </ControlRow>
-          </ControlStack>
-        </Card>
-        <SandboxHelp text={t("globals.rhythmProbeKindsHelp")} />
-        <div id="sandbox-rhythm-probe-kinds">
-          <Card
-            className="sandbox-globals-rhythm"
-            title={t("globals.rhythmProbeKindsTitle")}
-          >
-            <div className="fynns-unit-stack">
-              <ControlStack columns={1} controlsAlign="start">
-                <ControlRow label={t("globals.rhythmProbeAvailable")}>
-                  <span className="fynns-table-meta">{t("globals.rhythmProbePath")}</span>
-                </ControlRow>
-              </ControlStack>
-              <Divider />
-              <ControlStack columns={3} controlsAlign="start">
-                <ControlRow label={t("globals.rhythmProbeBackend")}>
-                  <span className="fynns-list-item-status">
-                    <CheckCircleIcon aria-hidden />
-                    {t("globals.rhythmProbeRuntimeOk")}
-                  </span>
-                  <span className="fynns-list-item-status" data-tone="danger">
-                    <AlertTriangleIcon aria-hidden />
-                    {t("globals.rhythmProbeEndpointFail")}
-                  </span>
-                  <span className="fynns-table-meta">{t("globals.rhythmProbeModelMeta")}</span>
-                </ControlRow>
-              </ControlStack>
-            </div>
-          </Card>
-        </div>
         <SandboxHelp text={t("globals.rhythmGridHelp")} />
         <Grid x={2} y={2} gap="sm">
           <Button size="sm">{t("globals.rhythmGridA")}</Button>
@@ -8298,6 +7660,11 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
           <Button size="sm" variant="default">{t("globals.rhythmGridD")}</Button>
         </Grid>
         <SandboxHelp text={t("globals.rhythmAgentHint")} />
+        </GlobalsDemo>
+
+        <GlobalsDemo id="provider-settings">
+          <SandboxHelp text={t("globals.providerSettingsHelp")} />
+          <ProviderSettingsManageShell />
         </GlobalsDemo>
 
         <GlobalsDemo id="form-recipe">
@@ -8457,65 +7824,6 @@ export function GlobalsPage({ searchFocusTick = 0 }: GlobalsPageProps) {
               </Button>
             </div>
           </Dialog>
-          <GlobalsDemo id="form-recipe-page-scroll">
-            <SandboxHelp text={t("globals.formRecipePageScrollHelp")} />
-            <div className="sandbox-globals-form-recipe-page-scroll fynns-unit-stack">
-              <Collapsible
-                className="sandbox-globals-form-recipe"
-                title={t("globals.formRecipeBriefTitle")}
-                defaultOpen
-              >
-                <FieldStack>
-                  {(
-                    [
-                      ["globals.formRecipeBriefField1", "globals.formRecipeBriefField1Desc"],
-                      ["globals.formRecipeBriefField2", "globals.formRecipeBriefField2Desc"],
-                      ["globals.formRecipeBriefField3", "globals.formRecipeBriefField3Desc"],
-                      ["globals.formRecipeBriefField4", "globals.formRecipeBriefField4Desc"],
-                      ["globals.formRecipeBriefField5", "globals.formRecipeBriefField5Desc"],
-                    ] as const
-                  ).map(([labelKey, descKey], index) => (
-                    <FieldBlock
-                      key={labelKey}
-                      label={t(labelKey)}
-                      description={t(descKey)}
-                    >
-                      <Textarea
-                        minRows={1}
-                        aria-label={t(labelKey)}
-                        defaultValue={index === 0 ? "Sample fact line" : ""}
-                      />
-                    </FieldBlock>
-                  ))}
-                </FieldStack>
-                <div className="fynns-control-cluster fynns-control-cluster--end-align">
-                  <Tooltip content={t("globals.formRecipeBriefSave")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.formRecipeBriefSave")}
-                    >
-                      <SaveIcon />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </Collapsible>
-              <ControlRow label={t("globals.formRecipePageScrollStageLabel")}>
-                <div className="fynns-control-cluster">
-                  <Tooltip content={t("globals.formRecipePageScrollGenerate")}>
-                    <IconButton
-                      variant="ghost"
-                      aria-label={t("globals.formRecipePageScrollGenerate")}
-                    >
-                      <SparklesIcon aria-hidden />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </ControlRow>
-              <Surface variant="outlined" padded>
-                {t("globals.formRecipePageScrollBody")}
-              </Surface>
-            </div>
-          </GlobalsDemo>
           <SandboxHelp text={t("globals.formRecipeHelp")} />
         </GlobalsDemo>
       </>

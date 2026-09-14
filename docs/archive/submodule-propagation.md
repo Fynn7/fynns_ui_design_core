@@ -8,6 +8,9 @@
 > `.github/ui-consumers.json`. Keep this file only as a migration note for
 > consumers that still have a `packages/fynns_ui_design_core` (or `gui/…`)
 > git submodule and/or a leftover `repository_dispatch` handler.
+>
+> Official `scripts/install-as-submodule.*` helpers were removed — use plain
+> `git submodule` yourself only if you must stay on the legacy path.
 
 ## Legacy model (do not use)
 

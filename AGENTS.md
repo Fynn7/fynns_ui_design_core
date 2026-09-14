@@ -49,7 +49,6 @@
 
 | 需要 | 打开 |
 |------|------|
-| 完整 Hard rules / 组件目录 | `docs/DESIGN_SYSTEM.md` |
-| 安装进消费仓 | `llm/CONSUME.md` |
-| breaking / purge | `llm/BREAKING_PURGE.md` |
-| 发版传播 | `docs/package-propagation.md` |
+| 完整 Hard rules / 组件目录 | `docs/DESIGN_SYSTEM.md`（再进 `docs/design-system/` 子页） |
+| 安装 / 条约 / breaking / 文档全表 | `llm/AGENT_INTERFACES.md` |
+| 本地小模型 / repomix | `llm/LOCAL_LLM.md` |

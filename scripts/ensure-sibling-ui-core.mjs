@@ -24,7 +24,7 @@
  *   FYNNS_UI_CORE_REF — clone/update branch (default: dev)
  *
  * Consumer apps typically wrap this into setup / predev. Reference:
- * fynns_cv_generator/scripts/ensure-node.mjs
+ * cv_generator/scripts/ensure-node.mjs
  */
 import fs from "node:fs";
 import path from "node:path";

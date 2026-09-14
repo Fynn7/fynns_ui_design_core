@@ -1376,7 +1376,6 @@
  */
 #sandbox-card-draft-actions,
 #sandbox-card-chrome-icon-actions,
-#sandbox-field-save-icon,
 #sandbox-card-head-primary-end {
   display: flex;
   flex-direction: column;
@@ -1385,6 +1384,24 @@
   box-sizing: border-box;
   grid-column: 1 / -1;
   max-width: 22rem;
+  justify-self: start;
+  width: 100%;
+}
+
+/*
+ * Card head Select + labeled CTA (≥ **0.5.73** / open-stable ≥ **0.5.227**):
+ * needs room for title + Select trigger + sm Button — 22rem IconButton
+ * strip cap still crushes the title to 0 and clips the CTA. Live
+ * `#sandbox-card-head-select`.
+ */
+#sandbox-card-head-select {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fynns-layout-unit-stack-gap);
+  min-width: 0;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  max-width: 28rem;
   justify-self: start;
   width: 100%;
 }
@@ -1576,13 +1593,6 @@
 }
 
 .sandbox-globals-form-recipe {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.sandbox-globals-form-recipe-page-scroll {
-  /* Fill parent — never sheet-max / 40rem reading strip (AGENTS content-column). */
   width: 100%;
   max-width: 100%;
   min-width: 0;

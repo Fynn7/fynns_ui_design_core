@@ -13,7 +13,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { ChevronRightIcon, FileIcon, ICON_SIZE, WrenchIcon } from "./icons";
+import { ChevronRightIcon, FileIcon, ICON_SIZE } from "./icons";
 import { OverflowTip, overflowTipText } from "./OverflowTip";
 import { DURATION_TOKENS } from "../theme/motionTokens";
 import {
@@ -64,10 +64,13 @@ export type ChatActivityStepProps = Omit<
   /** @default "done" */
   status?: ChatActivityStepStatus;
   /**
-   * Leading glyph (`any` ReactNode — consumers swap per tool / situation).
-   * Omit → `WrenchIcon` for `done` / `pending`, soft status mark for
-   * `active`. Pass `null` for an empty node (rail still connects). Node
-   * box is `--fynns-size-icon`; SVG descendants are sized to that token.
+   * Leading glyph (`any` ReactNode — consumers may still pass a tool icon).
+   * Omit → minimal status **mark** (dot) for every status — no default
+   * wrench / file glyphs (hard ≥ **0.5.272**). Pass `null` for an empty
+   * node (rail still connects). Node box is `--fynns-size-icon`; SVG
+   * descendants are sized to that token. Prefer omit + label only; keep
+   * `ChatActivityArtifact` for rare file chips — sandbox `#activity`
+   * teaches the minimal tree (no icons, no artifacts).
    */
   icon?: ReactNode | null;
   /**
@@ -418,14 +421,10 @@ export function ChatActivityStep({
 
   const visualStatus: ChatActivityStepStatus = holding ? "active" : status;
   const leading =
-    icon === null ? null : holding ? (
-      <span className="fynns-chat-activity-mark" aria-hidden />
-    ) : icon !== undefined ? (
+    icon === null ? null : icon !== undefined ? (
       icon
-    ) : visualStatus === "active" ? (
-      <span className="fynns-chat-activity-mark" aria-hidden />
     ) : (
-      <WrenchIcon size={ICON_SIZE} />
+      <span className="fynns-chat-activity-mark" aria-hidden />
     );
 
   const onStepAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
@@ -533,12 +532,7 @@ export function ChatActivityStep({
  * ```tsx
  * <ChatMessage role="assistant" thinking={
  *   <ChatActivity label="Updated plan with details" streaming={busy}>
- *     <ChatActivityStep
- *       status="done"
- *       icon={<FileIcon />}
- *       label="Updated memory file"
- *       artifact={<ChatActivityArtifact>plan.md</ChatActivityArtifact>}
- *     />
+ *     <ChatActivityStep status="done" label="Updated memory file" />
  *     <ChatActivityStep
  *       status="active"
  *       label="Updating the plan"

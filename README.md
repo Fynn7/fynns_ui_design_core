@@ -9,9 +9,11 @@ is public).
 
 ## Authority docs
 
+Full catalog: [`llm/AGENT_INTERFACES.md`](llm/AGENT_INTERFACES.md).
+
 | Need | Doc |
 | --- | --- |
-| Design language, Hard rules, keep-set | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)（OpenCode 常驻用精简 [`AGENTS.md`](AGENTS.md)；本地小模型见 [`llm/LOCAL_LLM.md`](llm/LOCAL_LLM.md)） |
+| Design language, Hard rules, keep-set | [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md)（常驻摘要 [`AGENTS.md`](AGENTS.md)；本地小模型 [`llm/LOCAL_LLM.md`](llm/LOCAL_LLM.md)） |
 | Install / consume | [`llm/CONSUME.md`](llm/CONSUME.md) |
 | Consumer pasteable rule + failure index | [`llm/consumer-cursor-rule.mdc`](llm/consumer-cursor-rule.mdc), [`llm/CONSUMER_TREATY.md`](llm/CONSUMER_TREATY.md) |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](llm/BREAKING_PURGE.md) |
@@ -46,7 +48,7 @@ auth token; `npm install @fynn7/ui-design-core`; Vite alias `@fynns/ui` →
 `node_modules/@fynn7/ui-design-core/src/index.ts`. Full steps: [`llm/CONSUME.md`](llm/CONSUME.md).
 
 **Do not** use a git submodule for day-to-day consume. Legacy submodule notes
-(archived): [`docs/submodule-propagation.md`](docs/submodule-propagation.md).
+(archived): [`docs/archive/submodule-propagation.md`](docs/archive/submodule-propagation.md).
 
 ## Local sandbox
 

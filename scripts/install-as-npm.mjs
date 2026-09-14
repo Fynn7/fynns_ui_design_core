@@ -12,6 +12,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { semverLt, walkInstallChain } from "./check-ui-update.mjs";
@@ -61,7 +62,8 @@ Options:
   --vite-from <dir>  Directory that contains vite.config.*
   --skip-install     Only wire configs / .npmrc (dependency already present)
   --wire-only        Same as --skip-install
-  --check            Validate dep + alias; exit 1 if incomplete
+  --check            Validate dep + alias + consumer-rule hash; exit 1 if incomplete
+  --sync-consumer-rule  Force overwrite .cursor/rules/fynns-ui-consumer.mdc from core
   --dry-run          Print actions without writing
   --json             JSON summary on stdout
   -h, --help         Show help

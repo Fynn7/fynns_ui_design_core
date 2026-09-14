@@ -14,6 +14,7 @@ const root = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const DENY = [
   // Named consumer products / repos (as demo subject — not incidental docs)
   "fynns_cv_generator",
+  "cv_generator",
   "cv generator",
   "cv-generator",
   "gsc-live-preview",

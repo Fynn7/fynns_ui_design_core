@@ -1,14 +1,16 @@
 # Consumer-agent interfaces
 
-**Authoritative index** for agents working in apps that consume `@fynns/ui`.  
+**Authoritative documentation catalog** for agents working in apps that consume `@fynns/ui`.  
 Machine twin: [`agent-interfaces.json`](agent-interfaces.json).
+
+Design language SoT is [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) (index) + [`docs/design-system/`](../docs/design-system/) — **not** the slim root [`AGENTS.md`](../AGENTS.md).
 
 Two interfaces:
 
 1. **Documentation** — every natural-language doc in this package (table below).
 2. **Technical** — lightweight custom `CodeBlock` highlighting for app-owned languages (line-command / Raycaster `.gsc` shape).
 
-Install wiring stays in [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json). Design language stays in [`AGENTS.md`](../AGENTS.md).
+Install wiring stays in [`CONSUME.md`](CONSUME.md) / [`consume.json`](consume.json).
 
 ---
 
@@ -18,26 +20,34 @@ Read by role; do not duplicate specs across files — follow the links.
 
 | Role | Path | Use when |
 | --- | --- | --- |
-| Agent interfaces (this file) | [`llm/AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Need the dual-interface map or custom highlight recipe |
+| Agent interfaces (this file) | [`llm/AGENT_INTERFACES.md`](AGENT_INTERFACES.md) | Full documentation map or custom highlight recipe |
 | Agent interfaces (JSON) | [`llm/agent-interfaces.json`](agent-interfaces.json) | Machine catalog of docs + technical exports |
-| Design system | [`AGENTS.md`](../AGENTS.md) | Tokens, keep-set, UX rules |
-| Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts — avoid jank |
-| Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
+| Design system SoT (index) | [`docs/DESIGN_SYSTEM.md`](../docs/DESIGN_SYSTEM.md) | Hard rules / catalog / density — start here, then open a subpage |
+| Design system chapters | [`docs/design-system/`](../docs/design-system/) | Split SoT chapters (philosophy, hard-rules, …) |
+| Agent always-on slim | [`AGENTS.md`](../AGENTS.md) | OpenCode resident summary only — not full SoT |
 | Consume install | [`llm/CONSUME.md`](CONSUME.md) | Zero-token sibling `file:` + Vite alias |
 | Consume install (JSON) | [`llm/consume.json`](consume.json) | Machine install / check contract |
+| Consumer failure slug index | [`llm/CONSUMER_TREATY.md`](CONSUMER_TREATY.md) | Failure-mode slug → sandbox / DESIGN_SYSTEM |
+| Pasteable consumer rule | [`llm/consumer-cursor-rule.mdc`](consumer-cursor-rule.mdc) | Paste into consumer `.cursor/rules/` |
 | Breaking purge | [`llm/BREAKING_PURGE.md`](BREAKING_PURGE.md) | Deleted / restored public APIs |
+| Breaking purge archive | [`llm/archive/BREAKING_PURGE_ARCHIVE.md`](archive/BREAKING_PURGE_ARCHIVE.md) | Older behavioral churn history |
+| Frontend performance | [`llm/PERF.md`](PERF.md) | Shells, inspectors, catalogs, live token drafts |
+| Local LLM / repomix | [`llm/LOCAL_LLM.md`](LOCAL_LLM.md) | Small-model budgets + repomix configs |
 | Short-prompt rule | [`llm/opencode-fynns-ui-consume.md`](opencode-fynns-ui-consume.md) | Always open CONSUME on short UI prompts |
 | Package propagation | [`docs/package-propagation.md`](../docs/package-propagation.md) | Publish / version bumps |
-| Submodule propagation (archived) | [`docs/submodule-propagation.md`](../docs/submodule-propagation.md) | Legacy git-submodule pin bumps only |
+| Submodule notes (archived) | [`docs/archive/submodule-propagation.md`](../docs/archive/submodule-propagation.md) | Legacy git-submodule only |
 | OpenWiki index | [`openwiki/index.md`](../openwiki/index.md) | In-package agent wiki hub |
 | OpenWiki quickstart | [`openwiki/quickstart.md`](../openwiki/quickstart.md) | Start coding in this package |
 | OpenWiki architecture | [`openwiki/architecture/overview.md`](../openwiki/architecture/overview.md) | Package structure |
 | Add primitive | [`openwiki/workflows/add-primitive.md`](../openwiki/workflows/add-primitive.md) | New component workflow |
 | OpenWiki consume | [`openwiki/operations/consume.md`](../openwiki/operations/consume.md) | Consume ops notes |
 | OpenWiki brief | [`openwiki/INSTRUCTIONS.md`](../openwiki/INSTRUCTIONS.md) | Wiki regeneration brief |
-| Cursor rule | [`.cursor/rules/fynns-ui.mdc`](../.cursor/rules/fynns-ui.mdc) | Always-on pointer → AGENTS (catalog on demand) |
+| Cursor rule | [`.cursor/rules/fynns-ui.mdc`](../.cursor/rules/fynns-ui.mdc) | Always-on pointer → AGENTS + DESIGN_SYSTEM |
 | OpenCode rule | [`.opencode/rules/fynns-ui.md`](../.opencode/rules/fynns-ui.md) | OpenCode mirror of constraints |
-| Claude entry | [`CLAUDE.md`](../CLAUDE.md) | Short entry → AGENTS + CONSUME |
+| Claude entry | [`CLAUDE.md`](../CLAUDE.md) | Short entry → AGENTS + DESIGN_SYSTEM + CONSUME |
+| Repo entry | [`README.md`](../README.md) | Package overview / sandbox |
+
+Chat-only deep dives (read only when the task hits Chat): [`CHAT_ARIA_PARITY.md`](CHAT_ARIA_PARITY.md), [`CHAT_COMPOSER_LAYOUT.md`](CHAT_COMPOSER_LAYOUT.md), [`CHAT_USER_EDIT_UX.md`](CHAT_USER_EDIT_UX.md).
 
 ---
 

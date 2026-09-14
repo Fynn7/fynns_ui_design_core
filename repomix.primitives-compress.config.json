@@ -17,6 +17,10 @@
     "useGitignore": true,
     "useDefaultPatterns": true,
     "customPatterns": [
+      "examples/**",
+      ".tmp*",
+      "repomix-*.md",
+      "**/*.png",
       "**/*.test.ts",
       "**/*.test.tsx",
       "**/*.css",

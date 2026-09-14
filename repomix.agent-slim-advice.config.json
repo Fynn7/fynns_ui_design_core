@@ -9,17 +9,19 @@
     "topFilesLength": 25,
     "includeFullDirectoryStructure": true,
     "instructionFilePath": "repomix.agent-slim-advice.instruction.md",
-    "headerText": "Agent-token slim-down advice pack for fynns_ui_design_core. Structure + agent surface docs; code compressed; bulky CSS/sandbox/tests omitted on purpose."
+    "headerText": "Agent-token slim-down advice pack for fynns_ui_design_core. Structure + agent surface docs; code compressed; bulky CSS/sandbox/tests/machine JSON twins omitted on purpose. DESIGN_SYSTEM is the stub index only — chapters under docs/design-system/."
   },
   "include": [
     "AGENTS.md",
     "README.md",
     "CLAUDE.md",
     "package.json",
-    "docs/**/*.md",
+    "docs/DESIGN_SYSTEM.md",
+    "docs/design-system/**/*.md",
+    "docs/package-propagation.md",
+    "docs/archive/**/*.md",
     "llm/**/*.md",
     "llm/**/*.mdc",
-    "llm/**/*.json",
     "openwiki/**/*.md",
     ".cursor/rules/**/*.mdc",
     ".cursor/skills/**/*.md",
@@ -32,9 +34,12 @@
     "useGitignore": true,
     "useDefaultPatterns": true,
     "customPatterns": [
+      "examples/**",
+      ".tmp*",
+      "repomix-*.md",
+      "**/*.png",
       "node_modules/**",
       "dist/**",
-      "examples/**",
       "e2e/**",
       "**/*.test.ts",
       "**/*.test.tsx",
@@ -44,13 +49,13 @@
       "src/layout/**",
       "src/scheduling/**",
       "package-lock.json",
-      ".tmp*/**",
-      ".tmp*",
-      "**/*.png",
+      "llm/archive/**",
+      "llm/CHAT_*.md",
+      "llm/agent-interfaces.json",
+      "llm/consume.json",
+      "llm/wysiwyg-companion.json",
       "**/*.jpg",
-      "**/*.webp",
-      "repomix-*.md",
-      "repomix-output.*"
+      "**/*.webp"
     ]
   }
 }
